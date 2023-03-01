@@ -47,3 +47,54 @@ UPDATE `quest_template` SET `SpecialFlags` = 0 WHERE `entry` = 40709;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2724
 UPDATE `creature_display_info_addon` SET `combat_reach` = 1.4375, `bounding_radius` = 1.15 WHERE `display_id` in (18177, 18008, 18005, 18007, 18007, 18006, 18008, 18004, 18004, 18244, 18244, 18493, 18773);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2640
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 2673;
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 2674;
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 12426;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2912
+-- quests on tel'abim doesnt give extra gold at max level #2912
+
+UPDATE `quest_template` SET `Title` = 'The Ape Bounty', `RewXP` = 5250, `RewMoneyMaxLevel` = 31500 WHERE `entry` = 40724;
+UPDATE `quest_template` SET `Title` = 'The Spitefin Bounty', `RewXP` = 5000, `RewMoneyMaxLevel` = 30000 WHERE `entry` = 40725;
+UPDATE `quest_template` SET `Title` = 'The Backup Seal-Valve', `RewXP` = 2500, `RewMoneyMaxLevel` = 15000 WHERE `entry` = 40726;
+UPDATE `quest_template` SET `Title` = 'Derelict Supplies', `RewXP` = 5100, `RewMoneyMaxLevel` = 30600 WHERE `entry` = 40727;
+UPDATE `quest_template` SET `Title` = 'Highvale Rise', `RewXP` = 5750, `RewMoneyMaxLevel` = 34500 WHERE `entry` = 40728;
+UPDATE `quest_template` SET `Title` = 'Collecting Specimens', `RewXP` = 4800, `RewMoneyMaxLevel` = 28800 WHERE `entry` = 40729;
+UPDATE `quest_template` SET `Title` = 'Early Testing', `RewXP` = 1850, `RewMoneyMaxLevel` = 11100 WHERE `entry` = 40730;
+UPDATE `quest_template` SET `Title` = 'A Costly Favor', `RewXP` = 1050, `RewMoneyMaxLevel` = 6300 WHERE `entry` = 40731;
+UPDATE `quest_template` SET `Title` = 'Two Favors For The Price of One', `RewXP` = 5100, `RewMoneyMaxLevel` = 30600 WHERE `entry` = 40732;
+UPDATE `quest_template` SET `Title` = 'Gargantuan Information!', `RewXP` = 500, `RewMoneyMaxLevel` = 3000 WHERE `entry` = 40733;
+UPDATE `quest_template` SET `Title` = 'A Must Have Discovery', `RewXP` = 5550, `RewMoneyMaxLevel` = 33300 WHERE `entry` = 40734;
+UPDATE `quest_template` SET `Title` = 'The Micro Filter Tazzo-Scope', `RewXP` = 3550, `RewMoneyMaxLevel` = 21300 WHERE `entry` = 40735;
+UPDATE `quest_template` SET `Title` = 'Gargantuan Studies', `RewXP` = 2550, `RewMoneyMaxLevel` = 15300 WHERE `entry` = 40736;
+UPDATE `quest_template` SET `Title` = 'The Final Test', `RewXP` = 2150, `RewMoneyMaxLevel` = 12900 WHERE `entry` = 40737;
+UPDATE `quest_template` SET `Title` = 'News for Danonzo!', `RewXP` = 2150, `RewMoneyMaxLevel` = 12900 WHERE `entry` = 40738;
+UPDATE `quest_template` SET `Title` = 'The Tel\'abim Banana Transmutation', `RewXP` = 0, `RewMoneyMaxLevel` = 0 WHERE `entry` = 40739;
+UPDATE `quest_template` SET `Title` = 'Tel\'abim Transmutations!', `RewXP` = 0, `RewMoneyMaxLevel` = 0 WHERE `entry` = 40740;
+UPDATE `quest_template` SET `Title` = 'Shipments on Time', `RewXP` = 5000, `RewMoneyMaxLevel` = 30000 WHERE `entry` = 40741;
+UPDATE `quest_template` SET `Title` = 'The Work Must Continue', `RewXP` = 5000, `RewMoneyMaxLevel` = 30000 WHERE `entry` = 40742;
+UPDATE `quest_template` SET `Title` = 'Translating The Unknown', `RewXP` = 1875, `RewMoneyMaxLevel` = 11250 WHERE `entry` = 40749;
+UPDATE `quest_template` SET `Title` = 'An Exile\'s Regret', `RewXP` = 1375, `RewMoneyMaxLevel` = 8250 WHERE `entry` = 40750;
+UPDATE `quest_template` SET `Title` = 'Danonzo\'s Tel\'Abim Surprise', `RewXP` = 3500, `RewMoneyMaxLevel` = 21000 WHERE `entry` = 40752;
+UPDATE `quest_template` SET `Title` = 'Danonzo\'s Tel\'Abim Delight', `RewXP` = 3500, `RewMoneyMaxLevel` = 21000 WHERE `entry` = 40753;
+UPDATE `quest_template` SET `Title` = 'Danonzo\'s Tel\'Abim Medley', `RewXP` = 3500, `RewMoneyMaxLevel` = 21000 WHERE `entry` = 40754;
+UPDATE `quest_template` SET `Title` = 'Operation Screwfuse 1000', `RewXP` = 3500, `RewMoneyMaxLevel` = 21000 WHERE `entry` = 40755;
+UPDATE `quest_template` SET `Title` = 'Operation FIX Screwfuse 1000', `RewXP` = 300, `RewMoneyMaxLevel` = 1800 WHERE `entry` = 40756;
+UPDATE `quest_template` SET `Title` = 'Operation Help Jabbey 2', `RewXP` = 5450, `RewMoneyMaxLevel` = 32700 WHERE `entry` = 40758;
+UPDATE `quest_template` SET `Title` = 'Operation Return to Screwfuse', `RewXP` = 450, `RewMoneyMaxLevel` = 2700 WHERE `entry` = 40759;
+UPDATE `quest_template` SET `Title` = 'Operation Final Repairs', `RewXP` = 1250, `RewMoneyMaxLevel` = 7500 WHERE `entry` = 40760;
+UPDATE `quest_template` SET `Title` = 'Secrets of the Dark Iron Desecrator', `RewXP` = 650, `RewMoneyMaxLevel` = 3900 WHERE `entry` = 40761;
+UPDATE `quest_template` SET `Title` = 'The Dark Iron Desecrator', `RewXP` = 500, `RewMoneyMaxLevel` = 3000 WHERE `entry` = 40762;
+UPDATE `quest_template` SET `Title` = 'To heal a Soul', `RewXP` = 5875, `RewMoneyMaxLevel` = 35250 WHERE `entry` = 40751;
+UPDATE `quest_template` SET `Title` = 'King Morogo Thunderfoot!', `RewXP` = 6500, `RewMoneyMaxLevel` = 39000 WHERE `entry` = 40785;
+UPDATE `quest_template` SET `Title` = 'An Opportunity to Dig Deep', `RewXP` = 4875, `RewMoneyMaxLevel` = 29250 WHERE `entry` = 40763;
+UPDATE `quest_template` SET `Title` = 'Azotha Gold', `RewXP` = 4500, `RewMoneyMaxLevel` = 27000 WHERE `entry` = 40764;
+UPDATE `quest_template` SET `Title` = 'Finding Bixxle!', `RewXP` = 650, `RewMoneyMaxLevel` = 3900 WHERE `entry` = 40765;
+UPDATE `quest_template` SET `Title` = 'A Report From Bixxle', `RewXP` = 1400, `RewMoneyMaxLevel` = 8400 WHERE `entry` = 40766;
+UPDATE `quest_template` SET `Title` = 'Final Flight of the Venomflayer', `RewXP` = 5200, `RewMoneyMaxLevel` = 31200 WHERE `entry` = 40767;
+UPDATE `quest_template` SET `Title` = 'Intercepting Wavecrest', `RewXP` = 5400, `RewMoneyMaxLevel` = 32400 WHERE `entry` = 40768;
+UPDATE `quest_template` SET `Title` = 'Chillwind Armor', `RewXP` = 5250, `RewMoneyMaxLevel` = 31500 WHERE `entry` = 40769;
+UPDATE `quest_template` SET `Title` = 'Murloc-Monkey Wars', `RewXP` = 5850, `RewMoneyMaxLevel` = 35100 WHERE `entry` = 40770;
+UPDATE `quest_template` SET `Title` = 'The Missing Friend!', `RewXP` = 5850, `RewMoneyMaxLevel` = 35100 WHERE `entry` = 40771;
