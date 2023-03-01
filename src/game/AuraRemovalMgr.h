@@ -48,6 +48,7 @@ public:                                                 // Initialisation
 
 public:                                                 // Accessors
     void PlayerEnterMap(uint32 mapId, Player* pPlayer);
+    void RemoveForbiddenAuras(uint32 mapId, Unit* pTarget, Team team);
 
 private:
     // <map ID, aura ID>
