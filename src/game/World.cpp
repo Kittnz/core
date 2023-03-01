@@ -1637,10 +1637,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadNpcGossips();                            // must be after load Creature and LoadNPCText
     sLog.outString("Loading gossip scripts...");
     sScriptMgr.LoadGossipScripts();                         // must be before gossip menu options
-    sLog.outString("Loading gossip menus...");
-    sObjectMgr.LoadGossipMenu();
-    sLog.outString("Loading gossip menu items...");
-    sObjectMgr.LoadGossipMenuItems();
+    sObjectMgr.LoadGossipMenus();
     sLog.outString("Loading vendor templates...");
     sObjectMgr.LoadVendorTemplates();                       // must be after load ItemTemplate
     sLog.outString("Loading vendors...");
