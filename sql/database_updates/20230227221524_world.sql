@@ -35,3 +35,5 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (61191, 0, 0, 0, 0);
 -- NPC Foulhide Mystic (61250) give 1900 mana.
 update creature_template set mana_min = 1900, mana_max = 1900 where entry in (61250);
+-- Remove spell 12887 from NPC 61244.
+update creature_spells set spellid_1 = 0, probability_1 = 0, casttarget_1 = 0, castflags_1 = 0, delayrepeatmin_1 = 0, delayrepeatmax_1 = 0 where entry = 180115;
