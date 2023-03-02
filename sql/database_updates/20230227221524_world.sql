@@ -33,3 +33,5 @@ update creature_template set subname = 'Castellan of Karazhan' where entry in (6
 update creature_template set display_id1 = 61191 where entry in (61251,61252,61253);
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
 (61191, 0, 0, 0, 0);
+-- NPC Foulhide Mystic (61250) give 1900 mana.
+update creature_template set mana_min = 1900, mana_max = 1900 where entry in (61250);
