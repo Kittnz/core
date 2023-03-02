@@ -39,3 +39,27 @@ update creature_template set mana_min = 1900, mana_max = 1900 where entry in (61
 update creature_spells set spellid_1 = 0, probability_1 = 0, casttarget_1 = 0, castflags_1 = 0, delayrepeatmin_1 = 0, delayrepeatmax_1 = 0 where entry = 180115;
 -- NPC 61233, casts 16866 every 11 seconds instead of 8.
 update creature_spells set delayrepeatmin_1 = 11, delayrepeatmax_1 = 11 where entry = 180109;
+-- change scale of 61243 to 1.5
+-- change scale of 61253 to 1.5
+update creature_template set scale = 1.5 where entry in (61243,61253);
+-- change scale of 61244 to 1.6
+-- change scale of 61237 to 1.6
+-- change scale of 61252 to 1.6
+update creature_template set scale = 1.6 where entry in (61244,61237,61252);
+-- change scale of 61245 to 1.3
+-- change scale of 61228 to 1.3
+-- change scale of 61238 to 1.3
+update creature_template set scale = 1.3 where entry in (61245,61228,61238);
+-- change scale of 61246 to 1.7
+update creature_template set scale = 1.7 where entry in (61246);
+-- change scale of 61247 to 1.8
+update creature_template set scale = 1.8 where entry in (61247);
+-- change scale of 61227 to 1.1
+-- change scale of 61234 to 1.1
+-- change scale of 61229 to 1.1
+update creature_template set scale = 1.1 where entry in (61227,61234,61229);
+-- change scale of 61236 to 1.4
+-- change scale of 61251 to 1.4
+update creature_template set scale = 1.4 where entry in (61236,61251);
+-- change scale of 61235 to 1
+update creature_template set scale = 0 where entry in (61247);
