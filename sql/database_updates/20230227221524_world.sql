@@ -29,3 +29,7 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- NPC Moroes (Entry 61225, entry 61226), change subname to .
 update creature_template set subname = 'Castellan of Karazhan' where entry in (61225,61226);
+-- display ID for npc 61251, 61252, 61253 shows as a wisp and is incorrect, it should be 61191.
+update creature_template set display_id1 = 61191 where entry in (61251,61252,61253);
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(61191, 0, 0, 0, 0);
