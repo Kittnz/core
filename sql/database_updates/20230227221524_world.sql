@@ -27,3 +27,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there, not often I get visitors in the Opera Hall.$B$BYou want to hear any music? It\'s been a while since I have had the chance to test my skills in this place, with the lack of people and all. I promise you it will be great, I am a famous musician after all.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- NPC Moroes (Entry 61225, entry 61226), change subname to .
+update creature_template set subname = 'Castellan of Karazhan' where entry in (61225,61226);
