@@ -63,3 +63,5 @@ update creature_template set scale = 1.1 where entry in (61227,61234,61229);
 update creature_template set scale = 1.4 where entry in (61236,61251);
 -- change scale of 61235 to 1
 update creature_template set scale = 0 where entry in (61247);
+-- Make the following NPC's BOSSES that have skull shown over their level: NPC ENTRY 61221, 61222, 61223, 61224, 61225, 61226.
+update creature_template set rank = 3 where entry in (61221,61222,61223,61224,61225,61226);
