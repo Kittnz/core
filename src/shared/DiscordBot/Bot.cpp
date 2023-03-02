@@ -35,7 +35,16 @@ namespace DiscordBot
             return;
 
         //Fix callback check for rate limiting
-        _core->message_create(dpp::message(channelId, message));
+        _core->message_create(dpp::message(channelId, message), [](const confirmation_callback_t& confirmation)
+            {
+                //rate-limited.
+                if (confirmation.http_info.status == 429)
+                {
+
+                }
+
+                utility::log_error()(confirmation);
+            });
     }
 
     void Bot::Stop()
