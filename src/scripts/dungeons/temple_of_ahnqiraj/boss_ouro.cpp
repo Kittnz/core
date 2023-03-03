@@ -291,8 +291,18 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             if (m_uiSandBlastTimer < uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0, SPELL_SANDBLAST, SELECT_FLAG_PLAYER))
+                {
+                    if (!pTarget->IsAlive())
+                        m_creature->MonsterYell("Error: Sand Blast on Dead Target");
+
                     if (DoCastSpellIfCan(pTarget, SPELL_SANDBLAST) == CAST_OK)
+                    {
                         m_uiSandBlastTimer = urand(SANDBLAST_TIMER_MIN, SANDBLAST_TIMER_MAX);
+                        char txt[128] = {};
+                        sprintf(txt, "Sand Blast at %s (%g threat)", pTarget->GetName(), m_creature->GetThreatManager().getThreat(pTarget));
+                        m_creature->PMonsterEmote(txt, pTarget, true);
+                    }
+                }
             }
             else
                 m_uiSandBlastTimer -= uiDiff;
