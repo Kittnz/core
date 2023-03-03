@@ -75,3 +75,6 @@ replace into creature_involvedrelation	(id, quest) values (80243, 40795);
 update quest_template set requiredclasses = 16 where entry = 40795;
 -- npc Moroes (Entry 61225, 61226) add ghost visual
 update creature_template set auras = '9617' where entry in (61225,61226);
+-- npc Moroes (Entry 61225, 61226) display ID 19167 shows as a wisp and needs to be fixed.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(19167, 0, 0, 0, 0);
