@@ -73,3 +73,5 @@ replace into creature_questrelation		(id, quest) values (80213, 40795);
 replace into creature_involvedrelation	(id, quest) values (80243, 40795);
 
 update quest_template set requiredclasses = 16 where entry = 40795;
+-- npc Moroes (Entry 61225, 61226) add ghost visual
+update creature_template set auras = '9617' where entry in (61225,61226);
