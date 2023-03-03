@@ -78,3 +78,33 @@ update creature_template set auras = '9617' where entry in (61225,61226);
 -- npc Moroes (Entry 61225, 61226) display ID 19167 shows as a wisp and needs to be fixed.
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
 (19167, 0, 0, 0, 0);
+-- (PLEASE MAKE SURE TO ACTIVATE/FIX THE FOLLOWING DISPLAY IDS 19139-19166, THEY ARE ALL CUSTOM AND WILL SHOW AS WISPS))
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(19139, 0, 0, 0, 0),
+(19140, 0, 0, 0, 0),
+(19141, 0, 0, 0, 0),
+(19142, 0, 0, 0, 0),
+(19143, 0, 0, 0, 0),
+(19144, 0, 0, 0, 0),
+(19145, 0, 0, 0, 0),
+(19146, 0, 0, 0, 0),
+(19147, 0, 0, 0, 0),
+(19148, 0, 0, 0, 0),
+(19149, 0, 0, 0, 0),
+(19150, 0, 0, 0, 0),
+(19151, 0, 0, 0, 0),
+(19152, 0, 0, 0, 0),
+(19153, 0, 0, 0, 0),
+(19154, 0, 0, 0, 0),
+(19155, 0, 0, 0, 0),
+(19156, 0, 0, 0, 0),
+(19157, 0, 0, 0, 0),
+(19158, 0, 0, 0, 0),
+(19159, 0, 0, 0, 0),
+(19160, 0, 0, 0, 0),
+(19161, 0, 0, 0, 0),
+(19162, 0, 0, 0, 0),
+(19163, 0, 0, 0, 0),
+(19164, 0, 0, 0, 0),
+(19165, 0, 0, 0, 0),
+(19166, 0, 0, 0, 0);
