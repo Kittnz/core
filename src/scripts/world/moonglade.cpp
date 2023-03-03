@@ -22,7 +22,9 @@
  EndScriptData */
 
 /* ContentData
+ npc_bunthen_plainswind
  npc_great_bear_spirit
+ npc_silva_filnaveth
  EndContentData */
 
 #include "scriptPCH.h"
@@ -94,6 +96,7 @@ enum KeeperRemulosData
     SPELL_ERANIKUS_REDEEMED      = 25846, // transform Eranikus
   //SPELL_MOONGLADE_TRANQUILITY  = unk,   // spell which acts as a spotlight over Eranikus after he is redeemed
     SPELL_THROW_NIGHTMARE_OBJECT = 25004,
+    SPELL_MASS_HEALING           = 25839, // by Tyrande
 
     NPC_ERANIKUS_TYRANT     = 15491,
     NPC_NIGHTMARE_PHANTASM  = 15629, // shadows summoned during the event - should cast 17228 and 21307
@@ -101,6 +104,7 @@ enum KeeperRemulosData
     NPC_TYRANDE_WHISPERWIND = 15633, // appears with the priestess during the event to help the players - should cast healing spells
     NPC_ELUNE_PRIESTESS     = 15634,
     NPC_MALFURION           = 15362,
+    NPC_NIGHTHAVEN_DEFENDER = 15495,
 
     QUEST_NIGHTMARE_MANIFESTS = 8736,
     QUEST_WAKING_LEGENDS      = 8447,
@@ -225,6 +229,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         Reset();
     }
 
+    std::vector<uint64> summonedGUIDs;
     uint32 m_uiHealTimer;
     uint32 m_uiStarfireTimer;
     uint32 m_uiShadesummonTimer;
@@ -278,6 +283,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
             m_uiQuestComplete = 0;
             m_uiDispawnTimer = 0;
             m_bEventWLFinished = false;
+            summonedGUIDs.clear();
 
             m_uiMalfurionGUID.Clear();
 
@@ -307,23 +313,35 @@ struct npc_keeper_remulosAI : public npc_escortAI
         switch (pSummoned->GetEntry())
         {
             case NPC_ERANIKUS_TYRANT:
+            {
                 m_uiEranikusGUID = pSummoned->GetObjectGuid();
                 // Make Eranikus unattackable first
                 pSummoned->AddAura(17131); // hover
                 pSummoned->SetFly(true);
                 pSummoned->MonsterMove(aEranikusLocations[0].m_fX, aEranikusLocations[0].m_fY, aEranikusLocations[0].m_fZ);
-                pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 pSummoned->SetRespawnDelay(DAY);
                 break;
+            }
             case NPC_NIGHTMARE_PHANTASM:
+            {
                 pSummoned->AI()->AttackStart(m_creature);
                 pSummoned->SetRespawnDelay(DAY);
+                summonedGUIDs.push_back(pSummoned->GetGUID());
                 break;
+            }
+            case NPC_NIGHTHAVEN_DEFENDER:
+            {
+                summonedGUIDs.push_back(pSummoned->GetGUID());
+                break;
+            }
             case NPC_MALFURION:
+            {
                 m_uiMalfurionGUID = pSummoned->GetObjectGuid();
                 pSummoned->AddAura(10665);
                 pSummoned->AddAura(24999);
                 break;
+            }
         }
     }
 
@@ -362,6 +380,15 @@ struct npc_keeper_remulosAI : public npc_escortAI
             // despawn the summons
             if (Creature* pEranikus = m_creature->GetMap()->GetCreature(m_uiEranikusGUID))
                 pEranikus->AI()->EnterEvadeMode();
+
+            // despawn manifests
+            for (auto&& itr : summonedGUIDs)
+                if (Creature* manifest = me->GetMap()->GetCreature(itr))
+                    manifest->ForcedDespawn();
+
+            summonedGUIDs.clear();
+
+            me->SetFactionTemplateId(996); // restore default faction
             m_idQuestActive = 0;
         }
         if (m_idQuestActive == QUEST_WAKING_LEGENDS)
@@ -471,10 +498,18 @@ struct npc_keeper_remulosAI : public npc_escortAI
         if (Player* pPlayer = GetPlayerForEscort())
             pPlayer->GroupEventHappens(QUEST_NIGHTMARE_MANIFESTS, pTarget);
 
+        // despawn manifests
+        for (auto&& itr : summonedGUIDs)
+            if (Creature* manifest = me->GetMap()->GetCreature(itr))
+                manifest->ForcedDespawn();
+
+        summonedGUIDs.clear();
+        me->SetFactionTemplateId(996); // restore default faction
+
         m_uiOutroTimer = 3000;
     }
 
-    void UpdateEscortAI(uint32 const uiDiff) override
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
@@ -491,10 +526,6 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         case 1:
                             // Despawn Remulos after the outro is finished - he will respawn automatically at his home position after a few min
                             DoScriptText(SAY_REMULOS_OUTRO_2, m_creature);
-                            //m_creature->ForcedDespawn(3000);
-                            // Alita : piqué ce morceau de code à ScriptedFollowerAI.h, car NON il ne se replaçait pas forcément correctement (p-etre lié à mon code dans evade mode)
-                            //Ustaag <Nostalrius> : vilain fix des mobs qui voulaient pas respawn à leur point de spawn
-                            //m_creature->DealDamage(m_creature, m_creature->GetMaxHealth(),nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                             m_creature->NearTeleportTo(m_creature->GetHomePosition());
                             m_creature->ForcedDespawn();
                             m_uiOutroTimer = 0;
@@ -524,54 +555,50 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         ++m_uiSummonCount;
                         SetEscortPaused(false);
                         m_bIsFirstWave = false;
+                        m_uiShadesummonTimer = 15000;
+                        return;
                     }
 
                     // Summon 3 shades per turn until the maximum summon turns are reached
                     float fX, fY, fZ;
-                    // Randomize the summon point - guesswork; not used //Alita, I'm convinced there's some randomness to add.
-                    //uint8 uiSummonPoint = roll_chance_i(70) ? MAX_SHADOWS : urand(MAX_SHADOWS + 1, 2*MAX_SHADOWS - 1);
-
-                    uint8 randomShadowNumber = urand(3, MAX_SHADOWS);
 
                     //Alita : four possible zones : in front of the building, accross the bridge(not far from the platform), another farther away, and next to player(well since the player is supposed to be with Remulos).
                     //I beleive there is also a loner, but oh well.
                     if (m_uiSummonCount < MAX_SUMMON_TURNS)
                     {
-
-
-                        if (m_uiSummonCount % 2)
+                        switch (m_uiSummonCount % 2)
                         {
-                            // Niralthas - in phase 2 each other wave will spawn 1 Phantasm at player location and rest outside
- 
-                            if (Player* pPlayer = GetPlayerForEscort())
-                            {
-                                float plfX, plfY, plfZ;
-                                plfX = pPlayer->GetPositionX();
-                                plfY = pPlayer->GetPositionY();
-                                plfZ = pPlayer->GetPositionZ();
-
-                                for (uint8 i = 0; i < 2; ++i)
+                            case 0:
+                                if (Player* pPlayer = GetPlayerForEscort())
                                 {
-                                    m_creature->GetRandomPoint(plfX, plfY, plfZ, 20.0f, fX, fY, fZ);
-                                    m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ + 2, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                                    float plfX, plfY, plfZ;
+                                    plfX = pPlayer->GetPositionX();
+                                    plfY = pPlayer->GetPositionY();
+                                    plfZ = pPlayer->GetPositionZ();
+                                    for (uint8 i = 0; i < MAX_SHADOWS; ++i)
+                                    {
+                                        m_creature->GetRandomPoint(plfX, plfY, plfZ, 20.0f, fX, fY, fZ);
+                                        m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ + 2, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                                    }
                                 }
+                                break;
+                            case 1:
                                 uint8 randomSummonPoint = urand(3, 5);
-
-                                // Niralthas - Spawn rest (randomShadowNumber -1) of Phantasms outside
-                                for (uint8 i = 0; i < randomShadowNumber -1; ++i)
+                                for (uint8 i = 0; i < MAX_SHADOWS; ++i)
                                 {
                                     m_creature->GetRandomPoint(aShadowsLocations[randomSummonPoint].m_fX, aShadowsLocations[randomSummonPoint].m_fY, aShadowsLocations[randomSummonPoint].m_fZ, 10.0f, fX, fY, fZ);
                                     m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
-                                } else { 
-
-                                // Niralthas - Spawn all Phantasms outside every other wave
-                                for (uint8 i = 0; i < randomShadowNumber; ++i)
-                                    {
-                                                m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
-                                    }           m_creature->GetRandomPoint(aShadowsLocations[randomSummonPoint].m_fX, aShadowsLocations[randomSummonPoint].m_fY, aShadowsLocations[randomSummonPoint].m_fZ, 10.0f, fX, fY, fZ);
                                 }
-                           }
+                                break;
+                        }
                         ++m_uiSummonCount;
+                    }
+
+                    // also summon 2 guards near the shadows
+                    for (uint8 i = 0; i < 2; i++)
+                    {
+                        m_creature->SummonCreature(NPC_NIGHTHAVEN_DEFENDER, fX, fY, fZ, 0.0f,
+                                                   TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60 * IN_MILLISECONDS);
                     }
 
                     // If all the shades were summoned then set Eranikus in combat
@@ -583,11 +610,12 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         if (Creature* pEranikus = m_creature->GetMap()->GetCreature(m_uiEranikusGUID))
                         {
                             pEranikus->GetMotionMaster()->MovePoint(POINT_ID_ERANIKUS_COMBAT, aEranikusLocations[2].m_fX, aEranikusLocations[2].m_fY, aEranikusLocations[2].m_fZ);
+                            //pEranikus->SetByteFlag(UNIT_FIELD_BYTES_1, 3, 0);
                             pEranikus->RemoveAurasDueToSpell(17131);
                         }
                     }
                     else
-                        m_uiShadesummonTimer = urand(20000, 30000);
+                        m_uiShadesummonTimer = urand(25000, 35000);
                 }
                 else
                     m_uiShadesummonTimer -= uiDiff;
@@ -602,7 +630,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         m_uiTransitionTimer = 0;
 
                         pEranikus->SetWalk(true);
-                        pEranikus->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        pEranikus->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                         pEranikus->AI()->AttackStart(m_creature);
                     }
                 }
@@ -651,7 +679,8 @@ struct npc_keeper_remulosAI : public npc_escortAI
         }
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+
+    void UpdateAI(const uint32 uiDiff) override
     {
         npc_escortAI::UpdateAI(uiDiff);
 
@@ -963,7 +992,7 @@ CreatureAI* GetAI_npc_keeper_remulos(Creature* pCreature)
     return new npc_keeper_remulosAI(pCreature);
 }
 
-bool QuestAccept_npc_keeper_remulos(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
+bool QuestAccept_npc_keeper_remulos(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
 {
     m_idQuestActive = pQuest->GetQuestId();
 
@@ -1009,16 +1038,16 @@ enum EranikusData
 {
     NPC_KEEPER_REMULOS = 11832,
 
-    SPELL_ACID_BREATH       = 24839,
-    SPELL_NOXIOUS_BREATH    = 24818,
+    SPELL_ACID_BREATH = 24839,
+    SPELL_NOXIOUS_BREATH = 24818,
     SPELL_SHADOWBOLT_VOLLEY = 25586,
     SPELL_ARCANE_CHANNELING = 23017, // used by Tyrande - not sure if it's the right id
 
     FACTION_FRIENDLY = 35,
-    MAX_PRIESTESS    = 7,
+    MAX_PRIESTESS = 7,
 
-    POINT_ID_TYRANDE_HEAL       = 5, // 0,
-    POINT_ID_TYRANDE_ABSOLUTION = 6, // 1,
+    POINT_ID_TYRANDE_HEAL = 5,//0,
+    POINT_ID_TYRANDE_ABSOLUTION = 6,//1,
 };
 
 struct boss_eranikusAI : public ScriptedAI
@@ -1087,7 +1116,7 @@ struct boss_eranikusAI : public ScriptedAI
             // redeem eranikus
             m_uiEventTimer = 5000;
             m_creature->SetFactionTemplateId(FACTION_FRIENDLY);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_PACIFIED);
         }
         else
         {
@@ -1183,6 +1212,7 @@ struct boss_eranikusAI : public ScriptedAI
                     // Unmont, yell and prepare to channel the spell on Eranikus
                     DoScriptText(SAY_TYRANDE_HEAL, pSummoned);
                     pSummoned->Unmount();
+                    pSummoned->CastSpell(pSummoned, SPELL_MASS_HEALING, false);
                     m_uiTyrandeMoveTimer = 5000;
                 }
                 // Unmount the priestess - unk what is their exact purpose (maybe healer)
@@ -1213,7 +1243,7 @@ struct boss_eranikusAI : public ScriptedAI
         m_uiEventTimer = 11000;
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiEventTimer)
         {
@@ -1289,13 +1319,13 @@ struct boss_eranikusAI : public ScriptedAI
         //Alita : make sure he prefers targets he can hit. TO REMOVE WHEN AGGRO MECANICS WILL DO THE JOB.
         Unit* pTarget = m_creature->GetVictim();
 
-        if (!m_creature->IsWithinMeleeRange(pTarget))
+        if (!m_creature->CanReachWithMeleeAutoAttack(pTarget))
         {
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (const auto itr : tList)
             {
                 if (Unit* pAttacker = m_creature->GetMap()->GetUnit(itr->getUnitGuid()))
-                    if (m_creature->IsWithinMeleeRange(pAttacker))
+                    if (m_creature->CanReachWithMeleeAutoAttack(pAttacker))
                         m_creature->GetThreatManager().modifyThreatPercent(pAttacker, 5);
             }
         }
@@ -1397,7 +1427,7 @@ CreatureAI* GetAI_boss_eranikus(Creature* pCreature)
 
 void AddSC_moonglade()
 {
-    Script* pNewScript;
+    Script *pNewScript;
 
     pNewScript = new Script;
     pNewScript->Name = "npc_great_bear_spirit";
