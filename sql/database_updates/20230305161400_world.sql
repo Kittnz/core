@@ -31,3 +31,6 @@ UPDATE `quest_template` SET `OfferRewardText` = 'I can breathe a sigh of relief.
 UPDATE `creature_template` SET `loot_id` = 2673 WHERE `entry` = 2673;
 UPDATE `creature_template` SET `loot_id` = 2674 WHERE `entry` = 2674;
 UPDATE `creature_template` SET `loot_id` = 12426 WHERE `entry` = 12426;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2606
+UPDATE `item_template` SET `class` = 7, `subclass` = 1, `bonding` = 0 WHERE `entry` = 17411;
