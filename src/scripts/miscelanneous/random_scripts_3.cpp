@@ -1,5 +1,6 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
+#include "GuardAI.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -5730,6 +5731,22 @@ bool QuestRewarded_npc_deckmaster_darkhollow(Player* pPlayer, Creature* pQuestGi
     return false;
 }
 
+struct npc_horde_defenderAI : public GuardAI
+{
+    npc_horde_defenderAI(Creature* c) : GuardAI(c) { }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        // do not attack non pvp flagged players
+        if (pWho->IsPlayer() && !pWho->IsPvP())
+            return;
+
+        GuardAI::MoveInLineOfSight(pWho);
+    }
+};
+
+CreatureAI* GetAI_npc_horde_defender(Creature* creature) { return new npc_horde_defenderAI(creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -6433,5 +6450,10 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_carlos_matos";
     newscript->pGossipHello = &GossipHello_npc_carlos_matos;
     newscript->pGossipSelect = &GossipSelect_npc_carlos_matos;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_horde_defender";
+    newscript->GetAI = &GetAI_npc_horde_defender;
     newscript->RegisterSelf();
 }
