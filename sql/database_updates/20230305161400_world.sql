@@ -38,3 +38,6 @@ UPDATE `item_template` SET `class` = 7, `subclass` = 1, `bonding` = 0 WHERE `ent
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2594
 UPDATE `creature_template` SET `pickpocket_loot_id` = 1711, `fire_res` = 10, `nature_res` = 10, `frost_res` = 10, `shadow_res` = 10, `arcane_res` = 10, `gold_min` = 127, `gold_max` = 171 WHERE `entry` = 60878;
 UPDATE `creature_template` SET `unit_flags` = 32832 WHERE `entry` = 60878;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2926
+UPDATE `spell_template` SET `description` = 'Creates a Spellstone for the caster.  When equipped and used, the Spellstone removes all magic effects from the caster and will absorb $128s2 magic damage for $128d.  In addition, equipping the Spellstone improves your chance to get a critical strike with spells by $18384s1%.\n\nConjured items disappear if logged out for more than 15 minutes.' WHERE `entry` = 2362;
