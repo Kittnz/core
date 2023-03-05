@@ -34,3 +34,7 @@ UPDATE `creature_template` SET `loot_id` = 12426 WHERE `entry` = 12426;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2606
 UPDATE `item_template` SET `class` = 7, `subclass` = 1, `bonding` = 0 WHERE `entry` = 17411;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2594
+UPDATE `creature_template` SET `pickpocket_loot_id` = 1711, `fire_res` = 10, `nature_res` = 10, `frost_res` = 10, `shadow_res` = 10, `arcane_res` = 10, `gold_min` = 127, `gold_max` = 171 WHERE `entry` = 60878;
+UPDATE `creature_template` SET `unit_flags` = 32832 WHERE `entry` = 60878;
