@@ -18,3 +18,6 @@ UPDATE `quest_template` SET `ObjectiveText1` = '', `ObjectiveText2` = '' WHERE `
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2950
 UPDATE `creature_template` SET `armor` = 1200, `faction` = 12, `type` = 7 WHERE `entry` = 50028;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2945
+UPDATE `creature_template` SET `armor` = 1480 WHERE `entry` = 7328;
