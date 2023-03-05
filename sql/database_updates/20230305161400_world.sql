@@ -15,3 +15,6 @@ UPDATE `spell_template` SET `description` = 'The sword must be reforged before i
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2949
 UPDATE `quest_template` SET `ObjectiveText1` = '', `ObjectiveText2` = '' WHERE `entry` = 60074;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2950
+UPDATE `creature_template` SET `armor` = 1200, `faction` = 12, `type` = 7 WHERE `entry` = 50028;
