@@ -21,3 +21,8 @@ UPDATE `creature_template` SET `armor` = 1200, `faction` = 12, `type` = 7 WHERE 
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2945
 UPDATE `creature_template` SET `armor` = 1480 WHERE `entry` = 7328;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2928
+UPDATE `quest_template` SET `Details` = 'For thousands of years I have kept my watch over this place. I have seen the world change around me, and most of the old city be swept beneath the waves. The magic that once ran through this place has been dampened and is almost non-existent.$B$BWith the rising waters my studies have been increasingly difficult. To keep watch over this tower is to protect it, and with the growing threat of the invasive ocean species my time has been more toward survival then study.$B$BI ask for assistance in this matter. Slay the murloc, the hydra and the crab beasts around the area to preserve this tower if even for a moment longer.' WHERE `entry` = 40243;
+
+UPDATE `quest_template` SET `OfferRewardText` = 'I can breathe a sigh of relief. At one time I could walk the entirety of the beach, I could journey through the buried ruins of the old city, now submerged beneath the waves, but now, I am confined to this very tower. Perhaps one day I will be free to journey again.' WHERE `entry` = 40243;
