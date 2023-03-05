@@ -3152,6 +3152,9 @@ bool GossipHello_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature)
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
+    if (pPlayer)
+        pCreature->SetFacingToObject(pPlayer);
+
     if (pPlayer->GetQuestStatus(40529) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60767, 1, 1))
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Hand him the letter.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
