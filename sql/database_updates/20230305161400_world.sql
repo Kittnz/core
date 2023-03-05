@@ -43,3 +43,5 @@ UPDATE `creature_template` SET `unit_flags` = 32832 WHERE `entry` = 60878;
 UPDATE `spell_template` SET `description` = 'Creates a Spellstone for the caster.  When equipped and used, the Spellstone removes all magic effects from the caster and will absorb $128s2 magic damage for $128d.  In addition, equipping the Spellstone improves your chance to get a critical strike with spells by $18384s1%.\n\nConjured items disappear if logged out for more than 15 minutes.' WHERE `entry` = 2362;
 
 UPDATE `item_template` SET `stackable` = 30 WHERE `entry` = 3692;
+
+UPDATE gameobject SET spawntimesecsmin = 5, spawntimesecsmax = 10 WHERE id  = 2010888; -- Lighthouse Oil Barrel
