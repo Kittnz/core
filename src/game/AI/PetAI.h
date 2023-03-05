@@ -23,8 +23,6 @@
 #define MANGOS_PETAI_H
 
 #include "CreatureAI.h"
-#include "ObjectGuid.h"
-#include "Timer.h"
 
 class Creature;
 class Spell;
@@ -36,6 +34,7 @@ enum ePetSelectTargetReason : uint8
     PSTR_FAIL_PASSIVE,
     PSTR_FAIL_NO_OWNER,
     PSTR_FAIL_RETURNING,
+    PSTR_SUCCESS_THREAT_LIST,
     PSTR_SUCCESS_OWNER_ATTACKER,
     PSTR_SUCCESS_AGGRO_RANGE,
 };
@@ -44,9 +43,9 @@ class PetAI : public CreatureAI
 {
     public:
 
-        explicit PetAI(Creature *c);
+        explicit PetAI(Creature* c);
 
-        void MoveInLineOfSight(Unit *) {}
+        void MoveInLineOfSight(Unit*) {}
         void EnterEvadeMode() {}
 
         void KilledUnit(Unit* /*victim*/);
@@ -56,8 +55,8 @@ class PetAI : public CreatureAI
         void OwnerAttacked(Unit* target);
         void AttackedBy(Unit* attacker);
 
-        void UpdateAI(const uint32);
-        static int Permissible(const Creature *);
+        void UpdateAI(uint32 const);
+        static int Permissible(Creature const*);
 
     private:
         bool _needToStop() const;
@@ -65,9 +64,8 @@ class PetAI : public CreatureAI
 
         void UpdateAllies();
 
-        bool hasMelee;
-        std::set<uint64> m_AllySet;
         uint32 m_updateAlliesTimer;
+        std::set<uint64> m_AllySet;
 
         std::pair<Unit*, ePetSelectTargetReason> SelectNextTarget(bool allowAutoSelect) const;
         void HandleReturnMovement();
