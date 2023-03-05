@@ -72,3 +72,26 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '4', '0', '0', '0',
  '0', '1', NULL);
 
+-- Alleana Moonfeather, display ID 1932, faction 80, level 45 elite, humanoid, scale 1 , quest/gossip flags, gossip text : "Greetings, $r! I do hope you weren't planning to pay for flight travel  from me, were you?" 
+REPLACE INTO creature_template VALUES
+(61292, 1932, 0, 0, 0, 0, 'Alleana Moonfeather', NULL, 0, 45, 45, 5544, 5544, 0, 0, 2725, 80, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 229, 295, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.48, 70.785, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Treats for Training
+delete from quest_template where entry = 40798;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40798,2,331,30,25,0,0,'Treats for Training','Greetings! Has my sister sent you? No? Oh, my brother then?$B$BYou haven\'t met them? Then who are you? Oh... well, allow me to introduce myself too. I am Alleana Moonfeather, youngest of the family! My siblings have already earned the mantle of hippogryph master, but… I am finding my training extremely difficult since my mentor was…$B$B<She trails off for a moment, before looking straight back up.>$B$BI miss him, but I must continue! For my family’s reputation, and for his memory. It really is difficult without the proper guidance though. We raise fledgelings from a very young age, so they will be bonded to us and follow our guidance. Make no mistake, they belong to nature first and foremost, but we Kaldorei have a strong bond that allows us to share burdens!$B$BThat is, if they would listen to me. I think it’s their diet, they need the proper food to be trained and socialised. Please, could you bring me a variety of foods for these little ones?','5 Chunks of Crawler Marrow from Zoram Strand, 5 Heaven Peaches, 5 Bear Viscera and 5 Giant Strider Wings from Darkshore to Alleana Moonfeather in Forest Song.','Hello again!','Did you carry all that in your backpack? Never mind, thank you kindly, $n.',61157,5,61158,5,61159,5,61160,5, 0,0,0,0,0,0,0,0, 0,0, 0,2300,69,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61292, 40798);
+replace into creature_involvedrelation	(id, quest) values (61292, 40798);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61157,941,'Chunk of Crawler Marrow',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0),
+(61158,941,'Heaven Peach',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0),
+(61159,941,'Bear Viscera',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0),
+(61160,941,'Giant Strider Wing',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(3814, 61157, -40, 0, 1, 1, 0),
+(3812, 61157, -40, 0, 1, 1, 0),
+(3809, 61159, -25, 0, 1, 1, 0),
+(3811, 61159, -50, 0, 1, 1, 0),
+(2323, 61160, -50, 0, 1, 1, 0);
