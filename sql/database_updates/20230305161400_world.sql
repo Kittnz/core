@@ -9,3 +9,6 @@ UPDATE `creature_template` SET `armor` = 1373 WHERE `entry` = 7329;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2947
 UPDATE `quest_template` SET `Details` = 'It has come to my attention that a dark magic has been growing in power within the region. Our Analyser Wigglestip has documented an extensive amount of magic being introduced into the area.$B$BThere is no doubt that the Shadowsworn would be the ones utilizing such forces. Those that gather around the Altar of Storms are to blame, and our reports only confirm that.$B$BI need someone to dispatch of the Dreadweavers that spread the corruption. Who knows what plans they have in motion, but I do not intend to sit around to find out.' WHERE `entry` = 40434;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2948
+UPDATE `spell_template` SET `description` = 'The sword must be reforged before it can be used. Reforging the sword requires 4 Steel Bars, 4 Strong Flux, 2 Elemental Fire and 2 Heavy Grinding Stones.' WHERE `entry` = 11923;
