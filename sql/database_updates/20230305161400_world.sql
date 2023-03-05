@@ -12,3 +12,6 @@ UPDATE `quest_template` SET `Details` = 'It has come to my attention that a dark
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2948
 UPDATE `spell_template` SET `description` = 'The sword must be reforged before it can be used. Reforging the sword requires 4 Steel Bars, 4 Strong Flux, 2 Elemental Fire and 2 Heavy Grinding Stones.' WHERE `entry` = 11923;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2949
+UPDATE `quest_template` SET `ObjectiveText1` = '', `ObjectiveText2` = '' WHERE `entry` = 60074;
