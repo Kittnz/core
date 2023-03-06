@@ -326,6 +326,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand factionCommandTable[] =
+    {
+        { "atwar",            SEC_DEVELOPER,     false, &ChatHandler::HandleFactionAtWarCommand,         "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
+
     static ChatCommand creatureGroupsCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcGroupAddCommand,         "", nullptr },
@@ -758,6 +765,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "who",            SEC_OBSERVER,        true, &ChatHandler::HandleWhoCommand,                  "", nullptr },
         { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
         { "removecorpses",  SEC_ADMINISTRATOR,   false, &ChatHandler::HandleRemoveCorpsesCommand,       "", nullptr },
+        { "faction",        SEC_DEVELOPER,       false, nullptr,                                        "", factionCommandTable },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 
