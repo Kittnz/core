@@ -569,7 +569,6 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         switch (m_uiSummonCount % 2)
                         {
                             case 0:
-                            {
                                 if (Player* pPlayer = GetPlayerForEscort())
                                 {
                                     float plfX, plfY, plfZ;
@@ -590,9 +589,8 @@ struct npc_keeper_remulosAI : public npc_escortAI
                                     m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
                                 }
                                 break;
-                            }
+                                
                             case 1:
-                            {
                                 uint8 randomSummonPoint = urand(3, 5);
                                 for (uint8 i = 0; i < MAX_SHADOWS; ++i)
                                 {
@@ -600,7 +598,6 @@ struct npc_keeper_remulosAI : public npc_escortAI
                                     m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
                                 }
                                 break;
-                            }
                         }
                         ++m_uiSummonCount;
                     }
