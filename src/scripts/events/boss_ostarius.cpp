@@ -1025,6 +1025,8 @@ constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
 constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
 constexpr auto OSTARIUS_ENTRY = 80935;
 
+static time_t lastOstariusSummonTime = 0;
+
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
     bool showQuestMenu = false;
@@ -1063,7 +1065,7 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
     //check if we already have an active event..
     if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
     {
-        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress)
+        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress && ((lastOstariusSummonTime + 7 * DAY) < sWorld.GetGameTime()))
             player->PrepareQuestMenu(pGo->GetObjectGuid());
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -1108,7 +1110,7 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         else
             second_item_added = true;
 
-        if (!first_item_added || !second_item_added)
+        if (!first_item_added || !second_item_added || ((lastOstariusSummonTime + 7 * DAY) > sWorld.GetGameTime()))
         {
             player->RemoveQuest(40107);
             player->RemoveQuest(40115);
@@ -1121,6 +1123,8 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         // Summon pedestal NPC to start encounter RP phase.
         if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
         {
+            lastOstariusSummonTime = sWorld.GetGameTime();
+
             if (auto pedestalAI = dynamic_cast<npc_uldum_pedestalAI*>(c->AI()))
                 pedestalAI->Start();
             // If vanilla quest line NPC is on-top of the pedestal, despawn him.
