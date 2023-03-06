@@ -262,7 +262,7 @@ UPDATE `quest_template` SET `RewMoneyMaxLevel` = 10800 WHERE `entry` = 40797;
 
 -- Nerf some insane numbers:
 
-DELETE FROM `quest_template WHERE `entry` = 50226;
+DELETE FROM `quest_template` WHERE `entry` = 50226;
 
 UPDATE `quest_template` SET `RewXP` = 6667, `RewMoneyMaxLevel` = 40002 WHERE `entry` = 50322;
 UPDATE `quest_template` SET `RewXP` = 6667, `RewMoneyMaxLevel` = 40002 WHERE `entry` = 50323;
