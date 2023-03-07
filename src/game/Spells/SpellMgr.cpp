@@ -2407,6 +2407,32 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
             */
             return SPELL_CAST_OK;
         }
+        // Disable big mounts in cities.
+        case 46211:
+        case 46212:
+        case 46504:
+        case 46505:
+        case 46506:
+        case 46507:
+        case 46508:
+        case 46509:
+        case 46510:
+        case 46511:
+        case 46512:
+        case 46513:
+        {
+            switch (player->GetCachedAreaId())
+            {
+                case 1497: // Undercity
+                case 1519: // Stormwind City
+                case 1537: // Ironforge
+                case 1637: // Orgrimmar
+                case 1638: // Thunder Bluff
+                case 1657: // Darnassus
+                    return SPELL_FAILED_NO_MOUNTS_ALLOWED;
+            }
+            return SPELL_CAST_OK;
+        }
     }
 
     if (caster)

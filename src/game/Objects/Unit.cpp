@@ -1264,7 +1264,15 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pThisCreature->AI()->KilledUnit(pVictim);
 
     // Call AI OwnerKilledUnit (for any current summoned minipet/guardian/protector)
-    PetOwnerKilledUnit(pVictim);
+    if (pPlayerTap)
+    {
+        Pet* pet = pPlayerTap->GetPet();
+        if (pet && pet->IsAlive() && pet->isControlled())
+        {
+            pet->AI()->KilledUnit(pVictim);
+            PetOwnerKilledUnit(pVictim);
+        }
+    }
     
     // 10% XP loss on death in Turtle Mode
     if (pPlayerVictim && pPlayerVictim->HasChallenge(CHALLENGE_SLOW_AND_STEADY) && !pPlayerVictim->InBattleGround() && !pPlayerTap)
@@ -7609,11 +7617,11 @@ float Unit::ApplyTotalThreatModifier(float threat, SpellSchoolMask schoolMask)
 
 //======================================================================
 
-void Unit::AddThreat(Unit* pVictim, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const *threatSpell /*= nullptr*/)
+void Unit::AddThreat(Unit* target, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const *threatSpell /*= nullptr*/)
 {
     // Only mobs can manage threat lists
-    if (CanHaveThreatList() && IsInMap(pVictim))
-        m_ThreatManager.addThreat(pVictim, threat, crit, schoolMask, threatSpell, false);
+    if (CanHaveThreatList() && IsInMap(target))
+        m_ThreatManager.addThreat(target, threat, crit, schoolMask, threatSpell, false);
 }
 
 //======================================================================
