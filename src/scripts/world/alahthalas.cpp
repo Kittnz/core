@@ -116,16 +116,280 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
     return false;
 }
 
+enum
+{
+    NPC_FELSTONE_GUARDINA_1 = 60426,
+    NPC_FELSTONE_GUARDINA_2 = 60427,
+    NPC_DRALOX_FELSTAR = 60425,
+    QUEST_BREAKING_THE_FELSTAR = 40377,
+    GO_CORRUPTED_FELSTONE = 2010883,
+    GO_IVENT_TRIGGER_1 = 2010698,
+    GO_IVENT_TRIGGER_2 = 2010699,
+    NPC_EVENT_TRIGGER = 604250,
+    NPC_HELPER = 60429,
+    //60429
+};
+
+static float firstWaveCoords[2][5] =
+{
+    {NPC_FELSTONE_GUARDINA_1, 3549.72f, -1560.13f, 169.80f, 3.85f},
+    {NPC_FELSTONE_GUARDINA_2, 3558.34f, -1567.86f, 172.00f, 3.37f}
+};
+
+static float secondWaveCoords[2][5] =
+{
+    {NPC_FELSTONE_GUARDINA_1, 3558.34f, -1567.86f, 172.00f, 3.37f},
+    {NPC_FELSTONE_GUARDINA_2, 3549.72f, -1560.13f, 169.80f, 3.85f}
+};
+
+static float lastWaveCoords[3][5] =
+{
+    {NPC_HELPER, 3515.17f, -1600.66f, 169.37f, 2.76f},
+    {NPC_HELPER, 3533.07f, -1603.13f, 172.10f, 1.40f},
+    {NPC_HELPER, 3526.66f, -1601.96f, 170.83f, 1.73f},
+};
+
+/*####
+# npc_triggerQuest5321
+####*/
+
+struct npc_triggerQuest40377AI : public ScriptedAI
+{
+    npc_triggerQuest40377AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    bool eventInProggress;
+    bool firstWave;
+    bool secondWave;
+    bool thirdWave;
+    bool lastWave;
+
+    GuidList m_lSummonedCreatureFirstWave;
+    GuidList m_lSummonedCreatureSecondWave;
+    GuidList m_lSummonedCreatureLastWave;
+
+    bool GetEventInProggress()
+    {
+        return eventInProggress;
+    }
+
+    bool GetFirstWave()
+    {
+        return firstWave;
+    }
+
+    bool GetSecondWave()
+    {
+        return secondWave;
+    }
+
+    bool GetThirdWave()
+    {
+        return thirdWave;
+    }
+
+    bool GetLastWave()
+    {
+        return lastWave;
+    }
+
+    void SetEventInProggress(bool value)
+    {
+        eventInProggress = value;
+    }
+
+    void SetFirstWave(bool value)
+    {
+        firstWave = value;
+    }
+
+    void SetSecondWave(bool value)
+    {
+        secondWave = value;
+    }
+
+    void SetThirdWave(bool value)
+    {
+        thirdWave = value;
+    }
+
+    void SetLastWave(bool value)
+    {
+        lastWave = value;
+    }
+
+    void JustSummoned(Creature* pSummoned) override
+    {
+        if (pSummoned->GetEntry() == NPC_FELSTONE_GUARDINA_1 || pSummoned->GetEntry() == NPC_FELSTONE_GUARDINA_2 || pSummoned->GetEntry() == NPC_HELPER)
+        {
+            if (firstWave)
+            {
+                m_lSummonedCreatureFirstWave.push_back(pSummoned->GetObjectGuid());
+            }
+
+            if (secondWave)
+            {
+                m_lSummonedCreatureSecondWave.push_back(pSummoned->GetObjectGuid());
+            }
+
+            if (lastWave)
+            {
+                m_lSummonedCreatureLastWave.push_back(pSummoned->GetObjectGuid());
+            }
+        }
+    }
+
+    void SummonedCreatureJustDied(Creature* pSummoned) override
+    {
+        if (firstWave)
+        {
+            m_lSummonedCreatureFirstWave.remove(pSummoned->GetObjectGuid());
+
+            if (m_lSummonedCreatureFirstWave.empty())
+            {
+                StartSecondWave();
+            }
+        }
+        else if (secondWave)
+        {
+            m_lSummonedCreatureSecondWave.remove(pSummoned->GetObjectGuid());
+
+            if (m_lSummonedCreatureSecondWave.empty())
+            {
+                StartThirdWave();
+            }
+        }
+        else if (lastWave)
+        {
+            m_lSummonedCreatureLastWave.remove(pSummoned->GetObjectGuid());
+        }
+    }
+
+    void StartEvent(Player* pPlayer)
+    {
+        eventInProggress = true;
+        firstWave = true;
+
+        for (auto& firstWaveCoord : firstWaveCoords)
+        {
+            if (Creature* summonedCreature = m_creature->SummonCreature(firstWaveCoord[0], firstWaveCoord[1], firstWaveCoord[2], firstWaveCoord[3], firstWaveCoord[4], TEMPSUMMON_CORPSE_DESPAWN))
+            {
+                summonedCreature->AI()->AttackStart(pPlayer);
+            }
+        }
+    }
+
+    void StartSecondWave()
+    {
+        firstWave = false;
+        secondWave = true;
+        Player* pPlayer = m_creature->FindNearestPlayer(30.0f);
+        for (auto& secondWaveCoord : secondWaveCoords)
+        {
+            if (Creature* summonedCreature = m_creature->SummonCreature(secondWaveCoord[0], secondWaveCoord[1], secondWaveCoord[2], secondWaveCoord[3], secondWaveCoord[4], TEMPSUMMON_CORPSE_DESPAWN))
+            {
+                if (pPlayer && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
+                    summonedCreature->AI()->AttackStart(pPlayer);
+            }
+        }
+    }
+
+    void StartThirdWave()
+    {
+        secondWave = false;
+        thirdWave = true;
+        if (Creature* summonedCreature = m_creature->SummonCreature(NPC_DRALOX_FELSTAR, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 0.15 * MINUTE * IN_MILLISECONDS))
+        {
+            if (Player* pPlayer = m_creature->FindNearestPlayer(30.0f))
+            {
+                if (pPlayer && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
+                {
+                    summonedCreature->AI()->AttackStart(pPlayer);
+                    summonedCreature->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", pPlayer);
+                }
+
+            }
+        }
+    }
+
+    void StartLastWave(Creature* pCreature)
+    {
+        thirdWave = false;
+        lastWave = true;
+        bool yell = false;
+        for (auto& lastWaveCoord : lastWaveCoords)
+        {
+            if (Creature* summonedCreature = m_creature->SummonCreature(lastWaveCoord[0], lastWaveCoord[1], lastWaveCoord[2], lastWaveCoord[3], lastWaveCoord[4], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS))
+            {
+                if (Creature* pdraloxFelstart = m_creature->FindNearestCreature(NPC_DRALOX_FELSTAR, 35.0f))
+                {
+                    summonedCreature->AI()->AttackStart(pdraloxFelstart);
+
+                    if (!yell)
+                    {
+                        summonedCreature->MonsterSay("You do not stand alone friend! Let's take this creature down!");
+                        yell = true;
+                    }
+                }
+            }
+        }
+    }
+
+    void DespawnHelper()
+    {
+        bool yell = false;
+        for (auto& helperGUID : m_lSummonedCreatureLastWave)
+        {
+            if (Creature* helper = m_creature->GetMap()->GetCreature(helperGUID))
+            {
+                if (!yell)
+                {
+                    helper->MonsterSay("We will warn the Sentinels about the Felstone, go now!");
+                    yell = true;
+                }
+
+                helper->DespawnOrUnsummon(5000);
+            }
+        }
+        m_lSummonedCreatureLastWave.clear();
+    }
+
+    void Reset() override 
+    {
+        eventInProggress = false;
+        firstWave = false;
+        secondWave = false;
+        thirdWave = false;
+        lastWave = false;
+        m_lSummonedCreatureFirstWave.clear();
+        m_lSummonedCreatureSecondWave.clear();
+        DespawnHelper();
+    }
+};
+
+CreatureAI* GetAI_npc_triggerQuest40377(Creature* pCreature)
+{
+    return new npc_triggerQuest40377AI(pCreature);
+}
+
 bool GOHello_go_felstone(Player* pPlayer, GameObject* pGo)
 {
-    GameObject* menu_holder = pPlayer->FindNearestGameObject(2010698, 30.0F);
-    GameObject* event_running = pPlayer->FindNearestGameObject(2010699, 80.0F);
-    if (pGo->GetEntry() == 2010883)
+    if (pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
     {
-        if (pPlayer->GetQuestStatus(40377) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
+        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
+            {
+                bool eventInProggress = pTriggerAI->GetEventInProggress();
+
+                if (!eventInProggress && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
+                {
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                    pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+                }
+            }
         }
     }
     return true;
@@ -135,25 +399,16 @@ bool GOSelect_go_felstone(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pGo->GetEntry() == 2010883)
+        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
         {
-            pPlayer->SummonGameObject(2010698, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
             {
-                DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                    gob->SummonCreature(60426, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_CORPSE_DESPAWN);
-                    gob->SummonCreature(60427, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_CORPSE_DESPAWN);
-                    });
+                bool eventInProggress = pTriggerAI->GetEventInProggress();
 
-                DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                    gob->SummonCreature(60426, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_CORPSE_DESPAWN);
-                    gob->SummonCreature(60427, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_CORPSE_DESPAWN);
-                    });
-
-                DoAfterTime(pPlayer, 81 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                    gob->SummonCreature(60425, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 0.15 * MINUTE * IN_MILLISECONDS);
-                    if (Creature* dralox_felstar = player->FindNearestCreature(60425, 30.0F))
-                        dralox_felstar->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", player);
-                    });
+                if (!eventInProggress && pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
+                {
+                    pTriggerAI->StartEvent(pPlayer);
+                }
             }
         }
     }
@@ -165,20 +420,32 @@ struct npc_dralox_felstarAI : public ScriptedAI
 {
     npc_dralox_felstarAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset() { }
+    void Reset() 
+    {
+        if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
+        {
+            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
+            {
+                pTriggerAI->Reset();
+            }
+        }
+    }
     void UpdateAI(const uint32 diff)
     {
-        GameObject* event_running = m_creature->FindNearestGameObject(2010699, 30.0F);
-        if (m_creature->GetHealthPercent() > 70 && m_creature->GetHealthPercent() < 75)
+        if (m_creature->GetHealthPercent() > 50 && m_creature->GetHealthPercent() < 75)
         {
-            if (!event_running)
+            if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
             {
-                m_creature->SummonGameObject(2010699, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
-                Creature* mob_one = m_creature->SummonCreature(60429, 3515.17F, -1600.66F, 169.37F, 2.76F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-                Creature* mob_two = m_creature->SummonCreature(60429, 3533.07F, -1603.13F, 172.10F, 1.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-                Creature* mob_three = m_creature->SummonCreature(60429, 3526.66F, -1601.96F, 170.83F, 1.73F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-                if (mob_one)
-                    mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
+                if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
+                {
+                    bool eventInProggress = pTriggerAI->GetEventInProggress();
+                    bool thirdWave = pTriggerAI->GetThirdWave();
+
+                    if (eventInProggress && thirdWave)
+                    {
+                        pTriggerAI->StartLastWave(m_creature);
+                    }
+                }
             }
         }
         DoMeleeAttackIfReady();
@@ -186,20 +453,10 @@ struct npc_dralox_felstarAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->MonsterSay("NO! Thousands of years of planning!");
-        Creature* mob_one = m_creature->FindNearestCreature(60429, 20.0F);
-        Creature* mob_two = m_creature->FindNearestCreature(60429, 20.0F);
-        Creature* mob_three = m_creature->FindNearestCreature(60429, 20.0F);
 
-        if (mob_one && mob_two && mob_three)
-        {
-            mob_one->MonsterSay("We will warn the Sentinels about the Felstone, go now!");
-            mob_one->ForcedDespawn();
-            mob_two->ForcedDespawn();
-            mob_three->ForcedDespawn();
-        }
+        Reset();
     }
     void EnterCombat() {}
-    void JustRespawned() { Reset(); }
 };
 
 CreatureAI* GetAI_npc_dralox_felstar(Creature* _Creature) { return new npc_dralox_felstarAI(_Creature); }
@@ -697,6 +954,11 @@ void AddSC_alahthalas()
     newscript->Name = "go_felstone";
     newscript->pGOHello = &GOHello_go_felstone;
     newscript->pGOGossipSelect = &GOSelect_go_felstone;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_triggerQuest40377";
+    newscript->GetAI = &GetAI_npc_triggerQuest40377;
     newscript->RegisterSelf();
 
 }
