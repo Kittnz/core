@@ -579,3 +579,260 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61274, 7733, 100, 0, 0, 5);
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61274, 7734, 500, 356, 50, 0);
 
+REPLACE INTO creature_template VALUES
+(61293, 10554, 0, 0, 0, 0, 'Basutei', 'SQUAD', 0, 60, 60, 3997, 4120, 0, 0, 3640, 290, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72, 99, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61294, 3007, 0, 0, 0, 0, 'Ogren Redbeard', 'SQUAD', 0, 47, 47, 2487, 2487, 0, 0, 2246, 290, 16385, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 98, 0, 212, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.6944, 87.5798, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61295, 1734, 0, 0, 0, 0, 'Codger of Shadows', 'SQUAD', 0, 32, 32, 1221, 1221, 0, 0, 1291, 290, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 88, 106, 0, 132, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61296, 2637, 0, 0, 0, 0, 'Nyhm', 'SQUAD', 0, 57, 57, 3758, 3758, 0, 0, 3334, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 258, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61297, 12919, 0, 0, 0, 0, 'Lee Roy', 'SQUAD', 0, 59, 59, 3997, 3997, 0, 0, 3454, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61298, 856, 0, 0, 0, 0, 'Mysterious Sheep', 'SQUAD', 0, 7, 7, 137, 137, 0, 0, 198, 290, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41385; set @magic_number = 61298;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Watame did nothing wrong!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41384; set @magic_number = 61293;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'So, there I was, the Silithus Desert, Hundreds of miles from the Civilization. No food, no water. But I Basutei a Paladin of SQUAD must push forward to fulfill the Prophecy... Man, this hill is kicking my Ass!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Vendor list: Codger of Shadows.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 2593, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 2594, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 2595, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 2596, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 2723, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 4600, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61295, 8766, 0, 0, 0, 0);
+-- Vendor list: Ogren Redbeard.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2320, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2321, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2324, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2325, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2678, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2692, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 2928, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3371, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3372, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3713, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3777, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4289, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4291, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4340, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4342, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4399, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 4400, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6217, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6260, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 6532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 7005, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 8343, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 8925, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 14341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 18256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61294, 50231, 0, 0, 0, 0);
+
+REPLACE INTO creature_template VALUES
+(61299, 2132, 0, 0, 0, 0, 'Tharmula Cloudwinds', 'Thunderhorn Clan', 0, 37, 37, 1536, 1536, 0, 0, 1340, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61300, 9339, 0, 0, 0, 0, 'Ambassador Arenia Boughshadow', 'Thunderhorn Clan', 0, 47, 47, 2487, 2487, 0, 0, 2246, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 98, 0, 212, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.6944, 87.5798, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61301, 2095, 0, 0, 0, 0, 'Echami Roosttender', 'Thunderhorn Clan', 0, 41, 41, 1981, 1981, 0, 0, 2397, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61302, 2087, 0, 0, 0, 0, 'Windserpent Tender Fahemi', 'Thunderhorn Clan', 0, 50, 50, 2990, 2990, 0, 0, 4400, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61303, 2106, 0, 0, 0, 0, 'Spirit Guide Khana', 'Thunderhorn Clan', 0, 34, 34, 1300, 1300, 0, 0, 1350, 290, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61304, 2703, 0, 0, 0, 0, 'Wind Serpent', 'Thunderhorn Clan', 0, 32, 32, 1221, 1221, 0, 0, 1291, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 88, 106, 0, 132, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61305, 503, 0, 0, 0, 0, 'Boinklett', 'Thunderhorn Clan', 0, 7, 7, 137, 137, 0, 0, 198, 290, 0, 1, 1.14286, 0.6, 18, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61306, 503, 0, 0, 0, 0, 'Boinker', 'Thunderhorn Clan', 0, 14, 14, 328, 328, 0, 0, 528, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41386; set @magic_number = 61303;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ah, welcome, weary traveler! It is good to see you on Thunderhorn Peak. Evil stirs within Azeroth, and the times ahead are troublesome, but we can be assured that daring adventures help the ailing Earth Mother and soothe her pain. Ambassador Boughshadow is also working ever so hard to help new members of the Alliance find their place here within our ranks. Anyone willing to heal the Earth Mother is welcome.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Vendor list: Echami Roosttender.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 2593, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 2594, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 2595, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 2596, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 2723, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 4600, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61301, 8766, 0, 0, 0, 0);
+-- Vendor list: Tharmula Cloudwinds.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2320, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2321, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2324, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2325, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2678, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2692, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 2928, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3371, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3372, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3713, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3777, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4289, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4291, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4340, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4342, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4399, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 4400, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6217, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6260, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 6532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 7005, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 8343, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 8925, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 14341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 18256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61299, 50231, 0, 0, 0, 0);
+
+REPLACE INTO creature_template VALUES
+(61307, 146, 0, 0, 0, 0, 'The Unseen', 'Hard Chores', 0, 51, 51, 2979, 2979, 0, 0, 3052, 290, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61308, 13951, 0, 0, 0, 0, 'Ghostly Caretaker', 'Hard Chores', 0, 52, 52, 3082, 3082, 0, 0, 2669, 290, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61309, 12430, 11649, 0, 0, 0, 'Fallen Hero', 'Hard Chores', 0, 59, 59, 3997, 3997, 0, 0, 3454, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41387; set @magic_number = 61307;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Here lie our fallen mortal heroes of Azeroth. May their souls rest in peace.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Vendor list: Ghostly Caretaker.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2320, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2321, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2324, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2325, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2678, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2692, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 2928, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3371, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3372, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3713, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3777, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4289, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4291, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4340, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4342, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4399, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 4400, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6217, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6260, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 6532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 7005, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 8343, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 8925, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 14341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 18256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61308, 50231, 0, 0, 0, 0);
+
+REPLACE INTO creature_template VALUES
+(61310, 4071, 0, 0, 0, 0, 'Huckleberry', 'Farmers Market', 0, 25, 25, 712, 712, 0, 0, 1026, 290, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61311, 3755, 0, 0, 0, 0, 'El Choppa', 'Farmers Market', 0, 32, 32, 1221, 1221, 0, 0, 1291, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 88, 106, 0, 132, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61312, 10180, 0, 0, 0, 0, 'Hayllary', 'Farmers Market', 0, 37, 37, 1536, 1536, 0, 0, 1340, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61313, 10089, 0, 0, 0, 0, 'Kenny', 'Farmers Market', 0, 34, 34, 1300, 1300, 0, 0, 1350, 31, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61314, 4558, 0, 0, 0, 0, 'Bo Peep', 'Farmers Market', 0, 32, 32, 1221, 1221, 0, 0, 1291, 290, 0, 0, 1.14286, 0, 18, 5, 0, 0, 1, 88, 106, 0, 132, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61315, 16354, 0, 0, 0, 0, 'Jolly Rancher', 'Farmers Market', 0, 43, 43, 2059, 2059, 0, 0, 2311, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 66, 85, 0, 182, 1, 2000, 2000, 1, 512, 0, 0, 2, 0, 0, 0, 59.7872, 82.2074, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41388; set @magic_number = 61313;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Muffled speech.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Vendor list: El Choppa.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2320, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2321, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2324, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2325, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2678, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2692, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 2928, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3371, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3372, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3713, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3777, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4289, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4291, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4340, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4342, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4399, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 4400, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6217, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6260, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 6532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 7005, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 8343, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 8925, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 14341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 18256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61311, 50231, 0, 0, 0, 0);
+-- Vendor list: Huckleberry.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 2593, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 2594, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 2595, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 2596, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 2723, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 4600, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 8766, 0, 0, 0, 0);
+-- change npc 'Dolvan Bracewind' to be humanoid, give him 2500 mana.
+update creature_template set type = 7, mana_min = 2500, mana_max = 2500 where entry = 61137;
