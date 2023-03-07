@@ -5327,7 +5327,7 @@ void Aura::HandleRangedAmmoHaste(bool apply, bool /*Real*/)
 
     Item* ranged_weapon = GetTarget()->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
 
-    if (!ranged_weapon || ranged_weapon->GetProto()->AmmoType == 0)
+    if ((!ranged_weapon || ranged_weapon->GetProto()->AmmoType == 0) && apply)
         return;
 
     if (apply)

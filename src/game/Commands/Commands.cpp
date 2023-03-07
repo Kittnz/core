@@ -9242,6 +9242,8 @@ bool ChatHandler::HandleLookupFactionCommand(char* args)
     return true;
 }
 
+
+
 bool ChatHandler::HandleModifyRepCommand(char* args)
 {
     if (!*args)
@@ -12426,6 +12428,36 @@ bool ChatHandler::HandleMmapsNearCommand(char* args)
     }
 
     return true;
+}
+
+bool ChatHandler::HandleFactionAtWarCommand(char* args)
+{
+    auto player = GetSelectedPlayer();
+
+    if (!player)
+    {
+        SendSysMessage("No Player selected.");
+        return false;
+    }
+
+    uint32 factionId;
+    bool onOff;
+
+    if (!ExtractUInt32(&args, factionId) || !ExtractOnOff(&args, onOff))
+    {
+        SendSysMessage("Wrong Syntax. Syntax: <factionId> on/off");
+        return false;
+    }
+
+    if (!player->GetReputationMgr().SetAtWar(factionId, onOff))
+    {
+        SendSysMessage("Setting at war failed.");
+        return false;
+    }
+
+    player->SendFactionAtWar(factionId, onOff);
+    return true;
+
 }
 
 

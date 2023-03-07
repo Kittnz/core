@@ -119,10 +119,10 @@ enum BG_SV_Sounds
 
 enum BG_SV_Locations
 {
-    SV_BASE_HUMAN = 700,
-    SV_BASE_ORC = 701,
-    SV_GRAVEYARD_HUMAN = 702,
-    SV_GRAVEYARD_ORC = 703,
+    SV_BASE_HUMAN = 930,
+    SV_BASE_ORC = 931,
+    SV_GRAVEYARD_HUMAN = 932,
+    SV_GRAVEYARD_ORC = 933,
 };
 
 Position const BG_SV_NodePositions[BG_SV_DYNAMIC_NODES_COUNT] =

@@ -30,6 +30,7 @@
 #include "CreatureAI.h"
 #include "Util.h"
 #include "CharacterDatabaseCache.h"
+#include "AuraRemovalMgr.h"
 
 //numbers represent minutes * 100 while happy (you get 100 loyalty points per min while happy)
 uint32 const LevelUpLoyalty[6] =
@@ -382,15 +383,12 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     owner->SetPet(this);                                    // in DB stored only full controlled creature
     DEBUG_LOG("New Pet has guid %u", GetGUIDLow());
 
-    if (owner->GetTypeId() == TYPEID_PLAYER)
-    {
-        if (owner->IsMounted())
-            m_enabled = false;
+    if (owner->IsMounted())
+        m_enabled = false;
 
-        ((Player*)owner)->PetSpellInitialize();
-        if (((Player*)owner)->GetGroup())
-            ((Player*)owner)->SetGroupUpdateFlag(GROUP_UPDATE_PET);
-    }
+    ((Player*)owner)->PetSpellInitialize();
+    if (((Player*)owner)->GetGroup())
+        ((Player*)owner)->SetGroupUpdateFlag(GROUP_UPDATE_PET);
 
     m_loading = false;
 
@@ -431,7 +429,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     }
 
     //track overspent points, if too many then reset all.
-    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1 && GetOwnerGuid().IsPlayer())
+    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1)
     {
         CharmInfo* charmInfo = GetCharmInfo();
 
@@ -457,6 +455,8 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
             GetOwner()->ToPlayer()->PetSpellInitialize();
         }
     }
+
+    sAuraRemovalMgr.RemoveForbiddenAuras(GetMapId(), this, owner->GetTeam());
 
     m_pTmpCache = nullptr;
     return true;
