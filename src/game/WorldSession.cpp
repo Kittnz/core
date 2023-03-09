@@ -77,7 +77,7 @@ bool MapSessionFilter::Process(WorldPacket * packet)
 /// WorldSession constructor
 WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip) :
     m_muteTime(mute_time), m_connected(true), m_disconnectTimer(0), m_who_recvd(false),
-    m_ah_list_recvd(false), _scheduleBanLevel(0),
+    m_ah_list_recvd(false), _scheduleBanLevel(0), m_lastMailOpenTime(0),
     _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(sec), _accountId(id), _logoutTime(0), m_inQueue(false),
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_cheatData(nullptr),
