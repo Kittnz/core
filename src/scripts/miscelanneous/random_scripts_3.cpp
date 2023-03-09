@@ -5797,6 +5797,19 @@ bool GossipSelect_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+bool QuestRewarded_npc_brolthan_ironglade(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40806) // Kaldorei Relics
+    {
+        pQuestGiver->MonsterSay("Do you sense the sense of relief in the air now? You should feel proud!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -5805,6 +5818,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_brolthan_ironglade";
     newscript->pGossipHello = &GossipHello_npc_brolthan_ironglade;
     newscript->pGossipSelect = &GossipSelect_npc_brolthan_ironglade;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_brolthan_ironglade;
     newscript->RegisterSelf();
 
     newscript = new Script;
