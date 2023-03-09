@@ -195,3 +195,43 @@ DELETE FROM `gossip_scripts` WHERE `id`=41389;
 replace INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (41389, 0, 0, 8, 60031, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Sharptalon - Give Quest Credit');
 
+-- Patience is the Key
+delete from quest_template where entry = 40801;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40801,2,331,26,25,0,0,'Patience is the Key','You may see ruins around here, $c, but what I see is far different. I see a reminder of a lost civilization, a Kaldorei race that was strong, ordered, unified, unparalleled in might. And now, just across the hills, I see the horde invading our sacred lands.$B$BBut that is not what has happened. Instead we bicker with the sentinels while the horde spreads like a disease, ravaging parts of our ancient homelands. Sentinels throwing young lives away like they were meaningless. If Fandral was here, he would have those upstarts whipped into line in a moment.$B$BAnyway, what brings you to Forest Song? Are you here to help?','Listen to what Brother Ironglade and Commander Starwind have to say. Make a choice on the best course of action. Siding with one will likely make the other unreceptive to you.','I suppose you are going to be as unhelpful as the sentinels then?','Impressive to see one with an ounce of sensibility around here. Thank you, $n.',0,0,0,0,0,0,0,0, 60032,1,0,0,0,0,0,0, 0,0, 0,500,69,10,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61147, 40801);
+replace into creature_involvedrelation	(id, quest) values (61147, 40801);
+
+UPDATE quest_template SET objectivetext1 = 'Listen to what Brother Ironglade and Commander Starwind have to say' WHERE entry = 40801;
+
+update creature_template set script_name = 'npc_brolthan_ironglade' where entry = 61147;
+
+replace INTO creature_template VALUES
+(60032, 328, 0, 0, 0, 0, 'quest_40801_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- What seems to be the matter between the druids and the sentinels here in Forest Song?
+set @magic_number = 30082;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It\'s a matter of strategy and value of life. That\'s what this all comes down to. Starwind has rallied those who she commands, made their blood boil with speeches about glory and defending the homeland. Noble, but we are not some troll berserkers! We are Kaldorei, noble, strong, intelligent. It is with the greatest of pain in my chest I see apprentices and young sentinel sisters, some barely past their first century, racing off to skirmish with orcs and goblins in the felled trees of our homeland.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox (continued): Then why not help them? Commander Starwind wishes the druids to fight with the sentinels!
+set @magic_number = 30083;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Of course we could help them. We could charge into the fray with the others, into a maelstrom of steel and claws, blood and rage. We could grab the horde where they are strongest, and use our brute strength to expel them. But to think I would give the call, to be responsible for loss of life when it is so preventable? Then you are as foolish as her.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Option (continued): So you will just stand here and do nothing?
+set @magic_number = 30084;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'No! There are weaknesses we can exploit, key parts of the horde war machine we can destroy, leaving them helpless. We can win this war with minimal danger. As I mentioned, the hawk does not stand in front of the fox and fight on its terms...');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox (continued): The sentinels will merely be a distraction then. Their loss of blood will be a way to strike at the backlines?
+set @magic_number = 30085;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Precisely. It may seem cold and calculated to think of it like that, but I am not the one who sent young sisters into a pointless battle. My conscience is clear; this will be the quickest and most effective way of winning. Trust me, even if that brash commander does not!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox(continued, grants quest completion on clicking): I must think about this.
+set @magic_number = 30086;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Of course, speak to Commander Starwind if you haven\'t already. But know this - every hour that goes by, another chosen of Elune will be laying clover-clad.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- COMPLETING THIS QUEST PREVENTS     “Pressure is the Key” FROM BEING COMPLETED.
