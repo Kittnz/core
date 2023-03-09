@@ -87,47 +87,44 @@ struct npc_kerlonianAI : public FollowerAI
     npc_kerlonianAI(Creature* pCreature) : FollowerAI(pCreature)
     {
         Reset();
-        waveFirst = false;
-        waveLast = false;
-        reached = false;
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
     }
 
     uint32 m_uiFallAsleepTimer;
-
-    std::list<ObjectGuid> m_lGuidCurrentWorldTriggers;
-
-    bool waveFirst;
-    bool waveLast;
-    bool reached;
+    bool m_waveFirst;
+    bool m_waveLast;
+    bool m_reached;
 
     bool GetWaveFirst()
     {
-        return waveFirst;
+        return m_waveFirst;
     }
 
     bool GetWaveLast()
     {
-        return waveLast;
+        return m_waveLast;
     }
 
     bool GetReached()
     {
-        return reached;
+        return m_reached;
     }
 
     void SetWaveFirst(bool value)
     {
-        waveFirst = value;
+        m_waveFirst = value;
     }
 
     void SetWaveLast(bool value)
     {
-        waveLast = value;
+        m_waveLast = value;
     }
 
     void SetReached(bool value)
     {
-        reached = value;
+        m_reached = value;
     }
 
     Player* GetLeader()
@@ -144,6 +141,9 @@ struct npc_kerlonianAI : public FollowerAI
 
     void JustRespawned() override
     {
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         FollowerAI::JustRespawned();
     }
