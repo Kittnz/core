@@ -148,6 +148,29 @@ struct npc_kerlonianAI : public FollowerAI
         FollowerAI::JustRespawned();
     }
 
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        FollowerAI::MoveInLineOfSight(pWho);
+
+        if (!m_creature->GetVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_LILADRIS)
+        {
+            if (m_creature->IsWithinDistInMap(pWho, INTERACTION_DISTANCE * 5))
+            {
+                if (Player* pPlayer = GetLeaderForFollower())
+                {
+                    if (pPlayer->GetQuestStatus(QUEST_SLEEPER_AWAKENED) == QUEST_STATUS_INCOMPLETE)
+                        pPlayer->GroupEventHappens(QUEST_SLEEPER_AWAKENED, m_creature);
+
+                    DoScriptText(SAY_KER_END, m_creature);
+
+                    SetReached(true);
+                }
+
+                SetFollowComplete();
+            }
+        }
+    }
+
     void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (HasFollowState(STATE_FOLLOW_INPROGRESS | STATE_FOLLOW_PAUSED) && pSpell->Id == SPELL_AWAKEN)
