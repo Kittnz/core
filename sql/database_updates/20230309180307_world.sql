@@ -44,3 +44,6 @@ UPDATE quest_template SET
 Details = 'Greetings mon! It never hurts to be prepared, even with powerful regeneration powers like we have. We don''t really know why, but sometimes those powers fail in the middle of battle and we''ll need a crutch.$B$BThere''s a purple flower that grows around Ashenvale that some call rosemary, but I think it''s better to call it useful. We can turn that flower into a powerful salve that empowers our regeneration for a short time. Like potions, but better!$B$BGrab a handful and bring them back to me.',
 Objectives = 'Collect 10 Rosemary Flowers and 10 Toad Oils, then bring everything to Warleader Zol''majin'
 WHERE entry = 80304;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2980
+UPDATE `item_template` SET `display_id` = 50659 WHERE `entry` = 51792;
