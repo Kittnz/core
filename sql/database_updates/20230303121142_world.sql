@@ -242,3 +242,86 @@ replace into creature_questrelation		(id, quest) values (61147, 40802);
 replace into creature_involvedrelation	(id, quest) values (61147, 40802);
 
 update creature_template set unit_flags = 0, flags_extra = 0 where entry = 12864;
+
+-- The Mortal Strike
+delete from quest_template where entry = 40803;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40802,40803,2,331,31,25,0,0,'The Mortal Strike','The time has come to end this conflict with one decisive blow. Well, two actually. I have done some searching of my own while you were gone, and while the sentinels were off playing hero. There are two leaders of this operation, and both will need to be brought low and executed, if we are to know peace once more in these glades. You must find their Commander, a brutish orc by the name of Grushak, somewhere to the south of the Camp. And plotting from the Keep itself, is a shaman by the name of Grimeye.$B$BIf you need companions to help you assassinate these targets, I certainly would not blame you. In fact, I would view it as very wise indeed - for every failed attempt will certainly make our lives a lot more difficult afterwards.','Slay Commander Grushak and Farseer Grimeye for Brolthan Ironglade at Forest Song in Ashenvale.','I pray you return with good news, $n?','I knew I could count on you, from the moment we began to talk. Truly you have earned Elune\'s favor this day, and I will make sure the word is spread of your deeds. My thanks, $n.',0,0,0,0,0,0,0,0, 70023,1,70027,1,0,0,0,0, 0,0, 0,2900,69,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61147, 40803);
+replace into creature_involvedrelation	(id, quest) values (61147, 40803);
+
+update quest_template set type = 1 where entry = 40803;
+
+update creature_template set unit_flags = 0, flags_extra = 0, rank = 1, level_min = 30, level_max = 30, health_min = 7640, health_max = 7640, dmg_min = 129, dmg_max = 166, attack_power = 122 where entry = 70023;
+update creature_template set unit_flags = 0, flags_extra = 0, rank = 1, level_min = 31, level_max = 31, health_min = 7800, health_max = 7800, dmg_min = 129, dmg_max = 166, attack_power = 122 where entry = 70027;
+
+-- Victory, Such as it is
+delete from quest_template where entry = 40804;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40803,40804,2,331,30,25,0,0,'Victory, Such as it is','Your task for helping Forest Song and ending this stalemate is at an end. However, I cannot think of anyone more appropriate to send word to Fandral Staghelm than you, $n. You did a significant portion of the work, and you deserve that portion of the praise too.$B$BGo, now. The path to Teldrassil is a long, albeit beautiful, one. Take the time for some rest and relaxation, perhaps, enjoy the verdant canopies of our ancient oaks. Once you board the ship and make it to Teldrassil, you will find the Arch Druid in the Cenarion Enclave of our beautiful capital. Here, this report should explain what transpired. Give it to him, but be a bit wary of his temper.','Take the Sealed Forest Song Report to Arch Druid Fandral Staghelm in Darnassus.','Speak swiftly, I have numerous other burdens upon my shoulders, if you are going to add to them, I demand you at least do so and leave quickly.','Ah, the nasty business in Southern Ashenvale has come to an end, has it? Let me see what Brolthan Ironglade has achieved.',61161,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61161,1, 0,600,69,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61147, 40804);
+replace into creature_involvedrelation	(id, quest) values ( 3516, 40804);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61161,3020,'Sealed Forest Song Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Price of Leadership
+delete from quest_template where entry = 40805;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40804,40805,2,1657,30,25,0,0,'The Price of Leadership','After reading this report, it is clear that the sentinel presence has been less than helpful in this area of our homelands. Not only have they refused to follow the tactical plans suggested by Brolthan Ironglade, but the display of unthinking bravado has led to the death of many sisters and daughters. To lose the blood of kin is a pain I know all too well.$B$BI know not if this was a simple mistake on Commander Starwind\'s part, nor if it was deliberate and reckless misconduct, but either way, having one less character like her in a leadership position will only solidify the Kaldorei as a traditional and united force. One fewer supporter of this new way of living, spread by that fool Tyrande and her ilk. And so, she must take the fall for her rash actions. I will make the changes to the records here, while you bring my notice to the commander. Inform Brolthan Ironglade to present you with a suitable reward, too.$B$BI do not care if you think me heavy-handed or cruel, $c. Hopefully this situation will teach you something about viewing the greater picture at hand.','Bring Fandral\'s Letter to Commander Starwind in Forest Song.','Ah, $n! I hear we have you to thank for bringing this conflict to an end!','We must rest and meditate at some point, you and I. I would very much like to... what is this? A letter from The Arch Druid?',61162,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61162,1, 0,600,69,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values ( 3516, 40805);
+replace into creature_involvedrelation	(id, quest) values (61143, 40805);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61162,13430,'Fandral\'s Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50563);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50563, 'Commander Starwind,$B$BI will keep this brief. Your disgraceful and rash abuse of power to send young sisters into battle needlessly has been reported to the Priestesses and to the High Sentinel. Bearing in mind your record until now of countless centuries.', 50564),
+(50564, 'It is deemed appropriate that you are stripped of all leadership responsibilities. Return to Darnassus for your new assignment. Your final command shall be to inform all sentinels to leave the sacred site of Forest Song for good, and explain that your shameful actions do not reflect poorly on them.$B$BArch Druid Fandral Staghelm.', 0);
+
+-- Kaldorei Relics
+delete from quest_template where entry = 40806;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40805,40806,2,331,30,25,0,0,'Kaldorei Relics','<Her silver eyes grow wide, while her skin grows red. She grinds her teeth together and throws the letter to the floor.>$B$BSo that is the Elune-damned thanks I get after all this time? To take the fall for that belligerent, conniving druid? Oh, I will tell my sisters we will leave this place alright, don\'t expect to see us here again. And don\'t think I won\'t take this up with Lady Whisperwind either, she must smell foul play in the air. Now, get out of my sight, $n. You\'ve done enough around here.','Return to Brolthan Ironglade for a reward.','You returned for your reward, I take it? Yes, I thought as much.','Here, take one of these as a token of our appreciation for your efforts.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,1000,69,450,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61163,1,61164,1,61165,1,61166,1, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61143, 40806);
+replace into creature_involvedrelation	(id, quest) values (61147, 40806);
+
+replace into item_template values
+ ('61163', '2', '15', 'Kaldorei Side-Blade', '', '32075', '2', '0', '1', '29392', '7348', '13', '-1', '-1', '34',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1500', '0',
+ '0', '23', '31', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61164', '2', '10', 'Priestess of Elune\'s Staff', '', '24923', '2', '0', '1', '39360', '9840', '17', '-1', '-1', '34',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '0',
+ '0', '48', '77', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9345', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '85', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61165', '2', '2', 'Bow of the Night Huntress', '', '20714', '2', '0', '1', '27860', '6965', '15', '-1', '-1', '34',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '100',
+ '2', '28', '37', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '5', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '65', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61166', '2', '7', 'Captain\'s Moonglaive', '', '4289', '2', '0', '1', '36032', '9008', '21', '-1', '-1', '34',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '40', '58', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
