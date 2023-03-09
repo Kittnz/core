@@ -21,3 +21,21 @@ Details = 'A few months ago, a mysterious blind man moved into an abandoned shac
 WHERE entry = 40485;
 
 UPDATE item_template SET flags = 2048 WHERE entry = 4527;
+UPDATE item_template SET stackable = 30 WHERE entry =5798;
+
+-- whoops, alchemists stone
+update item_template set spellid_1 = 17619, spelltrigger_1 = 1 where entry = 13503; -- Alchemists' Stone
+
+UPDATE `quest_template` SET `RewXP` = 4000 WHERE `entry` = 50311;
+UPDATE `quest_template` SET `RewXP` = 4000 WHERE `entry` = 50313;
+
+-- Remove old duplicate vendor entries
+delete from npc_vendor where item in (80060, 50520, 51230);
+
+-- Insert new entries to vendor template
+insert into npc_vendor_template values (101, 0, 50520, 0, 0, 0, 0);
+insert into npc_vendor_template values (101, 0, 51230, 0, 0, 0, 80000);
+insert into npc_vendor_template values (101, 0, 80060, 0, 0, 0, 0);
+
+-- Set vendor template for glyph masters
+update creature_template set vendor_id = 101 where entry between 51540 and 51547;
