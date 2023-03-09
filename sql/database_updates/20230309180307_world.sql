@@ -39,3 +39,8 @@ insert into npc_vendor_template values (101, 0, 80060, 0, 0, 0, 0);
 
 -- Set vendor template for glyph masters
 update creature_template set vendor_id = 101 where entry between 51540 and 51547;
+
+UPDATE quest_template SET
+Details = 'Greetings mon! It never hurts to be prepared, even with powerful regeneration powers like we have. We don''t really know why, but sometimes those powers fail in the middle of battle and we''ll need a crutch.$B$BThere''s a purple flower that grows around Ashenvale that some call rosemary, but I think it''s better to call it useful. We can turn that flower into a powerful salve that empowers our regeneration for a short time. Like potions, but better!$B$BGrab a handful and bring them back to me.',
+Objectives = 'Collect 10 Rosemary Flowers and 10 Toad Oils, then bring everything to Warleader Zol''majin'
+WHERE entry = 80304;
