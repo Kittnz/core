@@ -384,7 +384,8 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
         (sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
     {
-        SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
+        GetPlayer()->GetSession()->SendNotification("You cannot use the mailbox yet.");
         return;
     }
 
