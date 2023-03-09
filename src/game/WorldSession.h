@@ -934,6 +934,7 @@ class WorldSession
 
         WhisperTargetLimits _whisper_targets;
 
+        time_t m_lastMailOpenTime;
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
         bool m_playerLoading;                               // code processed in LoginPlayer
