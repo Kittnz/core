@@ -10385,6 +10385,12 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     if (HasLowerSecurity(target))
         return false;
 
+    if (target->GetGUID() == 1)
+    {
+        SendSysMessage("Nice try, fish.");
+        return false;
+    }
+
     bool force = extraArgs.find("force") != std::string::npos;
 
     // [Hardcore] Prevent death caused by getting disconnected while in-fight
@@ -13789,6 +13795,12 @@ bool ChatHandler::HandleTransferCommand(char* args)
         {
             Field* fields = result->Fetch();
             uint32 guid = fields[0].GetUInt32();
+
+            if (guid == 1)
+            {
+                SendSysMessage("Nope, can't move Torta.");
+                return false;
+            }
 
             uint32 accountId = sAccountMgr.GetId(accountName);
 
