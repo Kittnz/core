@@ -9557,6 +9557,11 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
     PSendSysMessage(LANG_NPC_MOTION_TYPE, MotionMaster::GetMovementGeneratorTypeName(moveType), moveType);
     if (!pTarget->movespline->Finalized())
         PSendSysMessage("Spline Origin: %s", pTarget->movespline->GetMovementOrigin());
+    if (pTarget->IsTemporarySummon())
+    {
+        TempSummonType despawnType = static_cast<TemporarySummon*>(pTarget)->GetDespawnType();
+        PSendSysMessage("Despawn Type: %s (%u)", TempSummonTypeToString(despawnType), despawnType);
+    }
     pTarget->AI()->GetAIInformation(*this);
 
     return true;
