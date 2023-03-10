@@ -231,14 +231,24 @@ bool GOHello_go_orb_of_command(Player* pPlayer, GameObject* /*pGo*/)
 ## go_resonite_cask
 ######*/
 
-bool GOHello_go_resonite_cask(Player* /*pPlayer*/, GameObject* pGO)
+bool GOHello_go_resonite_cask(Player* pPlayer, GameObject* pGO)
 {
     if (!pGO)
         return true;
 
     if (pGO->GetGoType() == GAMEOBJECT_TYPE_GOOBER)
     {
-        pGO->SummonCreature(11920, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+        if (pPlayer->GetQuestStatus(6481) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (Creature* pCreature = pPlayer->FindNearestCreature(11920, 30.0f))
+            {
+                return false;
+            }
+            else
+            {
+                pGO->SummonCreature(11920, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+            }
+        }
     }
 
     return true;
