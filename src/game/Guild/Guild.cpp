@@ -595,7 +595,8 @@ void Guild::BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint
 
         MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
 
-        if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+        if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+            pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
             pl->GetSession()->SendPacket(&data);
     }
 
