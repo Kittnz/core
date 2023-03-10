@@ -925,7 +925,7 @@ struct npc_uldum_pedestalAI : public ScriptedAI
             {
                 TogglePedestal();
                 Reset();
-                me->DeleteLater();
+                me->DespawnOrUnsummon();
             }
 
             return;
@@ -939,46 +939,46 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                 // "Plates present, scanning for item validation...";
                 // "Plates authentication complete. Unlocking the gates...";
                 // "Activating Gate Keeper to greet the guests...";
-            case PEDESTAL_EVENT_INTRO_1:
-            {
-                me->MonsterSay(PED_TEXT_1);
-                PlaySound(me, SOUND_PED_TEXT_1);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_2:
-            {
-                me->MonsterSay(PED_TEXT_2);
-                PlaySound(me, SOUND_PED_TEXT_2);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
-                DoCast(nullptr, 25425, true);
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_3:
-            {
-                me->MonsterSay(PED_TEXT_3);
-                PlaySound(me, SOUND_PED_TEXT_3);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_4:
-            {
-                me->MonsterSay(PED_TEXT_4);
-                PlaySound(me, SOUND_PED_TEXT_4);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
-                break;
-            }
-            case PEDESTAL_EVENT_BOSS_SPAWN:
-            {
-                if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                case PEDESTAL_EVENT_INTRO_1:
                 {
-                    ostarius->AI()->JustRespawned();
-                    ostarius->SetInCombatWith(me->GetVictim());
+                    me->MonsterSay(PED_TEXT_1);
+                    PlaySound(me, SOUND_PED_TEXT_1);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
+                    break;
                 }
+                case PEDESTAL_EVENT_INTRO_2:
+                {
+                    me->MonsterSay(PED_TEXT_2);
+                    PlaySound(me, SOUND_PED_TEXT_2);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
+                    DoCast(nullptr, 25425, true);
+                    break;
+                }
+                case PEDESTAL_EVENT_INTRO_3:
+                {
+                    me->MonsterSay(PED_TEXT_3);
+                    PlaySound(me, SOUND_PED_TEXT_3);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
+                    break;
+                }
+                case PEDESTAL_EVENT_INTRO_4:
+                {
+                    me->MonsterSay(PED_TEXT_4);
+                    PlaySound(me, SOUND_PED_TEXT_4);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
+                    break;
+                }
+                case PEDESTAL_EVENT_BOSS_SPAWN:
+                {
+                    if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                    {
+                        ostarius->AI()->JustRespawned();
+                        ostarius->SetInCombatWith(me->GetVictim());
+                    }
 
-                me->DeleteLater();
-                break;
-            }
+                    me->DespawnOrUnsummon();
+                    break;
+                }
             }
         }
     }
@@ -1138,7 +1138,7 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         }
 
         // Summon pedestal NPC to start encounter RP phase.
-        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
+        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 120000))
         {
             lastOstariusSummonTime = sWorld.GetGameTime();
 
