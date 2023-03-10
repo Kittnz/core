@@ -970,7 +970,7 @@ struct npc_uldum_pedestalAI : public ScriptedAI
             }
             case PEDESTAL_EVENT_BOSS_SPAWN:
             {
-                if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
+                if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
                 {
                     ostarius->AI()->JustRespawned();
                     ostarius->SetInCombatWith(me->GetVictim());
@@ -1077,8 +1077,25 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 
 bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+    switch (uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF + 1:
+        {
+            if (player->IsGameMaster())
+            {
+                lastOstariusSummonTime = 0;
+                player->GetSession()->SendNotification("Ostarius cooldown has been reset.");
+            }
+            else
+                player->GetSession()->SendNotification("Ostarius is on cooldown and cannot be summoned yet.");
+            break;
+        }
+        case GOSSIP_ACTION_INFO_DEF + 2:
+        {
+            pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+            break;
+        }
+    }
 
     player->CLOSE_GOSSIP_MENU();
     return true;
