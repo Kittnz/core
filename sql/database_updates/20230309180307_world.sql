@@ -31,11 +31,12 @@ UPDATE `quest_template` SET `RewXP` = 4000 WHERE `entry` = 50313;
 
 -- Remove old duplicate vendor entries
 delete from npc_vendor where item in (80060, 50520, 51230);
+delete from npc_vendor where entry = 101;
 
 -- Insert new entries to vendor template
-insert into npc_vendor_template values (101, 0, 50520, 0, 0, 0, 0);
-insert into npc_vendor_template values (101, 0, 51230, 0, 0, 0, 80000);
-insert into npc_vendor_template values (101, 0, 80060, 0, 0, 0, 0);
+replace into npc_vendor_template values (101, 0, 50520, 0, 0, 0, 0);
+replace into npc_vendor_template values (101, 0, 51230, 0, 0, 0, 80000);
+replace into npc_vendor_template values (101, 0, 80060, 0, 0, 0, 0);
 
 -- Set vendor template for glyph masters
 update creature_template set vendor_id = 101 where entry between 51540 and 51547;
