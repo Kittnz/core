@@ -1852,18 +1852,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 
-                        m_caster->SummonGameObject((m_caster->ToPlayer()->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
+                        m_caster->SummonGameObject((m_caster->ToPlayer()->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, false);
 
                         uint32 currvalue = 0;
                         currvalue = m_caster->ToPlayer()->GetSkillValue(142);
 
                         switch (currvalue)
                         {
-                        case 150: break;
-                        default:
-                            currvalue++;
-                            m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
-                            break;
+                            case 150:
+                                break;
+                            default:
+                                currvalue++;
+                                m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
+                                break;
                         }
                     }
                     return;
