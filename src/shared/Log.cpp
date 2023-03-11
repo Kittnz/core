@@ -134,7 +134,7 @@ void Log::LogDiscord(LogFile type, std::string log)
 #ifdef USING_DISCORD_BOT
     static const std::unordered_map<LogFile, uint64_t> ChannelLookup =
     {
-        {LOG_MONEY_TRADES, 1078715732013105252}
+       // {LOG_MONEY_TRADES, 1078715732013105252}
     };
 
     if (ChannelLookup.find(type) == ChannelLookup.end())
