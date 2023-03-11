@@ -417,3 +417,5 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61147, 40812);
 replace into creature_involvedrelation	(id, quest) values (61143, 40812);
+-- Quest 'The Blackhorn Conflict' change completion text, add money reward of 25 silver.
+update quest_template set offerrewardtext = 'You have done well, their actions could have sown chaos in the region. Here, take these coins as thanks from us here in Theramore.', reworreqmoney = 2500 where entry = 40688;
