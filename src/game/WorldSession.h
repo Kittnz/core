@@ -334,6 +334,9 @@ class WorldSession
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
+        void LoadIPHistory();
+        void CheckSuspiciousLogins();
+
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
 
@@ -570,6 +573,8 @@ class WorldSession
         uint32 m_idleTime;
 
         uint32 m_lastUpdateTime;
+
+        std::unordered_map<std::string, std::pair<uint32, bool>> m_ipHistory;
 
     public:                                                 // opcodes handlers
 

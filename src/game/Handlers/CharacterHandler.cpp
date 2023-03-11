@@ -858,6 +858,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     //if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
         //sTransmog.LoadTransmog(pCurrChar);
 
+    LoadIPHistory();
+    CheckSuspiciousLogins();
+
     ALL_SESSION_SCRIPTS(this, OnLogin(pCurrChar));
 }
 

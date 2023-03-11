@@ -887,6 +887,12 @@ bool AuthSocket::_HandleLogonProof()
         delete result;
         OPENSSL_free((void*)K_hex);
 
+
+        
+        LoginDatabase.PExecute("INSERT INTO `account_ip_logins` (`account_id`, `account_ip`, `login_count`) VALUES (%u, '%s', 1) ON DUPLICATE KEY UPDATE `login_count` = `login_count` + 1",
+            _accountId, get_remote_address().c_str());
+
+
         ///- Finish SRP6 and send the final result to the client
         sha.Initialize();
         sha.UpdateBigNumbers(&A, &M, &K, nullptr);
