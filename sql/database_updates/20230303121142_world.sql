@@ -325,3 +325,44 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '25', '0', '0', '0',
  '0', '1', NULL);
+
+-- Pressure is the Key
+delete from quest_template where entry = 40807;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40807,2,331,26,25,0,0,'Pressure is the Key','A new face around these parts, ishnu-alah. My name is Commander Starwind, and normally I would be out on patrol somewhere or training with my sister sentinels but... unfortunately, I am stuck here trying to convince that pig-headed, cowardly druid Ironglade to assist us with the war on our doorstep. To think that would even require a conversation! The Horde fell our ancient trees, befouling Elune\'s beauty. Naturally many of us are already locked in combat, and someone - or something - needs to break this deadlock. It pains me to say that we are losing lives hour by hour.$B$BMaybe you can talk some sense into him, or perhaps if you are capable enough, join us in war? I am sure you will be well rewarded if so.','Listen to what Commander Starwind and Brother Brolthan have to say. Make a choice on the best course of action. Siding with one will likely make the other unreceptive to you.','So? Interested in turning the tide?','Now that\'s what I like to hear! Grab your weaponry, $n.',0,0,0,0,0,0,0,0, 60033,1,0,0,0,0,0,0, 0,0, 0,600,69,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61143, 40807);
+replace into creature_involvedrelation	(id, quest) values (61143, 40807);
+
+UPDATE quest_template SET objectivetext1 = 'Listen to what Commander Starwind and Brother Ironglade have to say' WHERE entry = 40807;
+
+update creature_template set script_name = 'npc_commander_starwind' where entry = 61143;
+
+replace INTO creature_template VALUES
+(60033, 328, 0, 0, 0, 0, 'quest_40807_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Clickbox: What seems to be the matter between the sentinels and the druids here in Forest Song?
+set @magic_number = 30087;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The moment our scouts reported the incursions into our land, I rallied those stationed nearby. Indecision has led to the Horde developing outposts and building lumber mills!$B$BNo more, we say. Most of us have already gone to fight, but Ironglade speaks about hatching some master plan, of deception and whatever. Well, while he talks from the comfort of his chair, we are busy fighting. And the coward refuses to help, he wishes us to retreat and regroup!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox (continued): Then why not retreat? Brolthan Ironglade wishes to aid once everyone is back to Forest Song safely!
+set @magic_number = 30088;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '$c, you don\'t know much about our way of fighting, do you? We can blend into the shadows under the canopy of the trees, strike when we need to strike.$B$BThere is strength in this: a retreating sister will be aided by unseen arrows and knives. If we all retreat, the blood lost so far will be for nought, and many of us will be killed and captured in the process. Absolutely not.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox (continued): So you will just continue fighting without a plan, without regrouping?
+set @magic_number = 30089;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We haven\'t got a choice. I will not show the Horde our backs, or have to explain away the cowardice of retreat, nor will I allow them a chance to capture us as we flee. Lend me your strength, if he will not. Let us break the back of the Horde and show them what it means to trespass into Kaldorei land.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox (continued): The druids will be merely bystanders then, while the sentinels sacrifice themselves for glory?
+set @magic_number = 30090;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Glory is a consequence, we sacrifice for our homeland. And I would much rather make those greenskins die for our homeland than us. Are you in agreement, or do you wish to tarry and delay like the others, while we are actually struggling?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+-- Clickbox(continued, grants quest completion on clicking): I must think about this.
+set @magic_number = 30091;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Feel free, but hurry. Talk to Brolthan IronGlade. Come back when you are ready to fight, with or without him.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+update quest_template set exclusivegroup = 40801 where entry in (40801,40807);
