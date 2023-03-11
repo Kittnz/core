@@ -13,3 +13,10 @@ UPDATE `quest_template` SET `RewRepFaction1` = 69, `RewRepValue1` = 125 WHERE `e
 UPDATE `quest_template` SET `RequestItemsText` = 'Each day we must stay vigilant to combat the growing darkness.', `OfferRewardText` = 'This has been a long time coming, I would have never imagined this monster would be removed from the world this soon.$B$BYou may have the potential to follow in my footsteps, given your prowess in finding demons.' WHERE `entry` = 40398;
 
 UPDATE `quest_template` SET `Details` = 'You have done me a great service in gathering this artifact from amongst those demonic worshippers. It will be better served in my hands, rather than to serve evil.$B$BI may have used you for my own good, but I am not a traitor, and I will make it worth your while now that you have achieved what I desired. I will forge for you a Glaive in my namesake, one that can slay all manner of the Burning Legion. But, I will not depart with such a weapon so easily, I require one last exchange.$B$BDeep within the Sunken Temple are the guardians of the Green Dragonflight, corrupted, and twisted from their long slumber in the Emerald Dream. One of their defenders, Hazzas is one I knew long ago, he is a powerful being, and should not be tormented any longer.$B$BBring me his heart, and free him from torment, only then will you earn your reward.', `OfferRewardText` = 'The Heart of Hazzas, you are resourceful $r, much more than I would have ever anticipated, now then, to forge your weapon,as I had promised.' WHERE `entry` = 40400;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2993
+
+UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60920;
+UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60921;
+UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60922;
+
