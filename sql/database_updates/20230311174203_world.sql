@@ -20,3 +20,6 @@ UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60920;
 UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60921;
 UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60922;
 
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/867
+
+UPDATE `game_event` SET `start_time` = '2020-03-31 00:19:48' WHERE `entry` = 152;
