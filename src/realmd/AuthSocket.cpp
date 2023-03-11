@@ -425,7 +425,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     lockFlags = (LockFlag)(uint32(lockFlags) | ALWAYS_ENFORCE);
 
                 if (((lockFlags & TOTP) != TOTP && (lockFlags & FIXED_PIN) != FIXED_PIN))
-                    lockFlags = (LockFlag)(uint32(lockFlags) | TOTP);
+                    lockFlags = (LockFlag)(uint32(lockFlags) | FIXED_PIN);
             }
 
             if (lockFlags & IP_LOCK)
@@ -518,6 +518,32 @@ bool AuthSocket::_HandleLogonChallenge()
                     if ((!locked && ((lockFlags & ALWAYS_ENFORCE) == ALWAYS_ENFORCE)) || _geoUnlockPIN)
                     {
                         promptPin = true; // prompt if the lock hasn't been triggered but ALWAYS_ENFORCE is set
+                    }
+
+                    //force 2FA for staff accounts.
+                    if (securityRank >= SEC_OBSERVER && lockFlags == FIXED_PIN)
+                    {
+                        std::string address = get_remote_address();
+                        LoginDatabase.escape_string(address);
+
+
+                        auto result = LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+
+                        if (result)
+                        {
+                            auto fields = result->Fetch();
+                            uint64 expiresAt = fields[0].GetUInt64();
+                            if (static_cast<time_t>(expiresAt) < time(nullptr)) // expired.
+                            {
+                                LoginDatabase.DirectPExecute("DELETE FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+                                promptPin = true;
+                            }
+                            else
+                                promptPin = false;
+                            delete result;
+                        }
+                        else
+                            promptPin = true;
                     }
 
                     if (promptPin)
