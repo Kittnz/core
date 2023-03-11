@@ -521,7 +521,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     //force 2FA for staff accounts.
-                    if (securityRank >= SEC_OBSERVER && lockFlags == FIXED_PIN)
+                    if (securityRank >= forcePinAccountRank || lockFlags == FIXED_PIN)
                     {
                         std::string address = get_remote_address();
                         LoginDatabase.escape_string(address);
