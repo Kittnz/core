@@ -15,8 +15,11 @@ namespace DiscordBot
 
     Bot::~Bot()
     {
+        _running = false;
         for (auto handler : _handlers)
             delete handler;
+
+        _workerThread.join();
     }
 
     void Bot::AddHandler(BaseCommandHandler* handler)
@@ -29,29 +32,68 @@ namespace DiscordBot
         return _core.get();
     }
 
-    void Bot::SendMessageToChannel(uint64_t channelId, std::string message)
+    void Bot::SendMessageToChannel(uint64_t channelId, std::string message, MessagePriority priority)
     {
         if (!_core)
             return;
 
-        //Fix callback check for rate limiting
-        _core->message_create(dpp::message(channelId, message), [](const confirmation_callback_t& confirmation)
+        dpp::message m(channelId, message);
+        CreateMessage(std::move(m), priority);
+    }
+
+    void Bot::CreateMessage(dpp::message message, MessagePriority priority)
+    {
+        _core->message_create(message, [priority, this, message](const confirmation_callback_t& confirmation) mutable
             {
                 //rate-limited.
-                if (confirmation.http_info.status == 429)
+                if (confirmation.http_info.status != 200)
                 {
-
+                    // if the message is important we should requeue it so it still gets through next call.
+                    if (priority == MessagePriority::Requeue)
+                    {
+                        RequeueMessage(std::move(message));
+                    }
                 }
 
                 utility::log_error()(confirmation);
             });
     }
 
+
+    void Bot::RequeueMessage(dpp::message&& message)
+    {
+        std::unique_lock l{ _requeueLock };
+        _requeuedMessages.push(std::move(message));
+    }
+
+    void Bot::WorkerThread()
+    {
+        while (_running)
+        {
+            if (!_requeuedMessages.empty())
+            {
+                std::unique_lock l{ _requeueLock };
+                while (!_requeuedMessages.empty())
+                {
+                    const auto& message = _requeuedMessages.front();
+
+                    _core->message_create(message);
+
+
+                    _requeuedMessages.pop();
+
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds{ 700 });
+        }
+    }
+    
     void Bot::Stop()
     {
         if (!_core)
             return;
 
+        _running = false;
         _core->shutdown();
     }
 
@@ -82,10 +124,13 @@ namespace DiscordBot
             BaseCommandHandler::RegisterAll(*this);
         });
 
-        
-
-
         _core->start(true);
+
+        _running = true;
+
+        _workerThread = std::thread{
+            &Bot::WorkerThread, this
+        };
     }
 
 }
