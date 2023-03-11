@@ -1660,12 +1660,14 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     }
                     case 2584:                              // Waiting to Resurrect
                     {
-                        // for cases where aura would re-apply and player is no longer in BG
-                        if (Unit* caster = GetCaster())
+                        if (Player* player = target->ToPlayer())
                         {
-                            if (Player* player = caster->ToPlayer())
-                                if (!player->InBattleGround() && !player->InGurubashiArena(true))
-                                    player->RemoveAurasDueToSpell(2584);
+                            target->CombatStop();
+                            target->GetHostileRefManager().deleteReferences();
+
+                            // for cases where aura would re-apply and player is no longer in BG
+                            if (!player->InBattleGround() && !player->InGurubashiArena(true))
+                                player->RemoveAurasDueToSpell(2584);
                         }
                         return;
                     }
