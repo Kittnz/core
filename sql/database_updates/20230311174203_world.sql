@@ -23,3 +23,11 @@ UPDATE `creature_template` SET `loot_id` = 7397 WHERE `entry` = 60922;
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/867
 
 UPDATE `game_event` SET `start_time` = '2020-03-31 00:19:48' WHERE `entry` = 152;
+
+ UPDATE `spell_template` SET `name`='Pattern: Shadowskin Boots' WHERE (`entry`='47241');
+ UPDATE `spell_template` SET `castingTimeIndex`='14' WHERE (`entry`='47241');
+ 
+ UPDATE `spell_template` SET `description`='Begins taming a beast to be your companion. Your armor is reduced by $s3% while you focus on taming the beast for $d. Once tamed, the beast will be very unhappy and disloyal. Try feeding the pet immediately to make it happy.' WHERE `entry`='1515'; 
+ 
+ UPDATE gameobject SET spawntimesecsmin = 5, spawntimesecsmax = 5 WHERE id = 2086;
+ UPDATE gameobject SET spawntimesecsmin = 5, spawntimesecsmax = 5 WHERE id = 2087;
