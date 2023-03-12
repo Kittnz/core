@@ -636,6 +636,10 @@ void WorldSession::LogoutPlayer(bool Save)
             m_masterPlayer->SetSocial(nullptr);
         }
 
+        if (Guild* guild = sGuildMgr.GetGuildById(m_masterPlayer->GetGuildId()))
+            guild->RemoveFromCache(m_masterPlayer);
+
+
         m_masterPlayer->SaveToDB();
         delete m_masterPlayer;
         m_masterPlayer = nullptr;
@@ -697,6 +701,7 @@ void WorldSession::CheckSuspiciousLogins()
     if (ipHistoryItr == m_ipHistory.end())
     {
         //This should never happen but if it somehow does it's not a main IP.
+        return;
     }
 
     const auto& [count, isMain] = ipHistoryItr->second;
