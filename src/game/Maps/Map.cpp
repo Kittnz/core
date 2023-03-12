@@ -745,7 +745,7 @@ inline void Map::UpdateCells(uint32 map_diff)
 
     if (IsContinent() && m_motionThreads->status() == ThreadPool::Status::READY && !unitsMvtUpdate.empty())
     {
-        for (std::set<Unit*>::iterator it = unitsMvtUpdate.begin(); it != unitsMvtUpdate.end(); it++)
+        for (auto it = unitsMvtUpdate.begin(); it != unitsMvtUpdate.end(); it++)
             m_motionThreads << [it,diff](){
                  if ((*it)->IsInWorld())
                     (*it)->GetMotionMaster()->UpdateMotionAsync(diff);
