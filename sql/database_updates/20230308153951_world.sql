@@ -58,3 +58,11 @@ REPLACE INTO `creature` VALUES (2574732,92145,0,0,0,0,-14071.1,2970.84,8.32502,3
 -- Changes by TAMMO
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417392047170314, 0.900000);
 REPLACE INTO `gameobject` VALUES ( 4006666, 2004461, 0, -8252.61, -231.152, 269.261, 5.63866, 0, 0, 0.316714, -0.948521, 25, 25, 100, 1, 0, 0);
+
+-- Changes by WILL
+DELETE FROM creature WHERE guid=2574726;
+DELETE FROM creature_addon WHERE guid=2574726;
+DELETE FROM creature_movement WHERE id=2574726;
+DELETE FROM game_event_creature WHERE guid=2574726;
+DELETE FROM game_event_creature_data WHERE guid=2574726;
+DELETE FROM creature_battleground WHERE guid=2574726;
