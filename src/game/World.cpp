@@ -1229,6 +1229,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
 
+    setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", true);
+
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
@@ -1427,6 +1429,9 @@ void World::SetInitialWorldSettings()
 
     sLog.outInfo("Beginning character name cleanup...");
     CharacterDatabaseCleaner::FreeInactiveCharacterNames();
+
+    if (getConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY))
+        sObjectMgr.BackupCharacterInventory();
 
     ///- Loading shop tables
     sLog.outString("Loading shop...");
