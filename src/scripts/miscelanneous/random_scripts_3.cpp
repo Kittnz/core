@@ -3102,9 +3102,12 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
             {
                 pQuestGiver->CastSpell(pQuestGiver, 13540, false); // Green Channeling
                 Creature* harvest_reaper = pQuestGiver->FindNearestCreature(60871, 30.0F);
-                harvest_reaper->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-                harvest_reaper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                harvest_reaper->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+                if (harvest_reaper)
+                {
+                    harvest_reaper->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+                    harvest_reaper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+                    harvest_reaper->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+                }
             }, 10000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
