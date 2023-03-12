@@ -247,7 +247,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     {
         SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_ENOUGH_MONEY);
         WorldPacket data;
-        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, "Sending mail prevented. You might be a victim of a scam addon.");
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, "Sending mail prevented. You might be a victim of a scam addon. Please use a different mail subject!");
         GetPlayer()->GetSession()->SendPacket(&data);
         delete req;
         return;
