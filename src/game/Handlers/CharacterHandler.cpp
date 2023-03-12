@@ -714,6 +714,10 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
         if (!pCurrChar->HasGMDisabledSocials())
             sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+
+
+        if (Guild* guild = sGuildMgr.GetGuildById(pCurrChar->GetGuildId()))
+            guild->AddToCache(GetMasterPlayer());
     }
 
     if (!alreadyOnline)
