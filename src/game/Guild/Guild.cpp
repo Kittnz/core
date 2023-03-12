@@ -588,16 +588,41 @@ void Guild::BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, msg.c_str(), Language(language), pPlayer->GetChatTag(), pPlayer->GetObjectGuid(), pPlayer->GetName());
 
-    for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+    if (IsMemberCacheEnabled())
     {
-        if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
-            continue;
+        for (auto itr = m_onlineMemberCache.begin(); itr != m_onlineMemberCache.end(); ++itr)
+        {
+            auto pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, *itr));
 
-        MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+            if (!pl)
+                continue;
 
-        if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
-            pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
-            pl->GetSession()->SendPacket(&data);
+            auto memberItr = members.find(*itr);
+
+            if (memberItr == members.end())
+                continue;
+
+            if (!HasRankRight(memberItr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+            
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
+    }
+    else
+    {
+        for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+        {
+            if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+
+            MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
     }
 
     for (const auto& gmGuid : m_GmListeners)
@@ -810,6 +835,9 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
 
         totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
         totalSize += info.Slot->PublicNote.length() + 1 + info.Slot->OfficerNote.length() + 1;
+
+        if (totalSize >= MAX_UNCOMPRESSED_PACKET_SIZE)
+            break;
     }
 
     const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
