@@ -836,3 +836,10 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61310, 8766, 0, 0, 0, 0);
 -- change npc 'Dolvan Bracewind' to be humanoid, give him 2500 mana.
 update creature_template set type = 7, mana_min = 2500, mana_max = 2500 where entry = 61137;
+-- Drifting Avatar of Sand, display ID 5327, faction 16, level 63 elite, elemental, scale 1.2 (Has 49033 HP, 20199 mana, 4033 armor, 50 nature resistance)
+-- Temporal Dust, display ID 5327, faction 16, level 61 elite, elemental, scale 2.4 (Has 9302 HP, 1562 mana, 2103 armor, 50 nature resistance)
+-- Echo of Time, display ID 16162 , faction 16, level 62 elite, elemental, scale 2 (Has 18088 hp, 1902 mana, 1900 armor, 50 arcane resistance)
+REPLACE INTO creature_template VALUES
+(61316, 5327, 0, 0, 0, 0, 'Drifting Avatar of Sand', NULL, 0, 63, 63, 49033, 49033, 20199, 20199, 4033, 16, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 906, 1182, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 61316, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61317, 5327, 0, 0, 0, 0, 'Temporal Dust', NULL, 0, 61, 61, 9302, 9302, 1562, 1562, 2103, 16, 0, 1, 1.14286, 2.4, 20, 5, 0, 1, 1, 708, 937, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 4, 0, 61317, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61318, 16162, 0, 0, 0, 0, 'Echo of Time', NULL, 0, 62, 62, 18088, 18088, 1902, 1902, 1900, 16, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 809, 1070, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 61318, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
