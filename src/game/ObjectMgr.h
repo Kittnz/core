@@ -1533,6 +1533,8 @@ class ObjectMgr
         void IncreaseShellCoinCount() { if (m_shellCoinCount < SHELL_COIN_MAX_COUNT) m_shellCoinCount++; }
         void DecreaseShellCoinCount() { if (m_shellCoinCount > 0) m_shellCoinCount--; }
 
+        void BackupCharacterInventory();
+
     protected:
 
         // first free id for selected id type

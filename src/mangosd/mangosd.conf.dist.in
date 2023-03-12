@@ -1932,6 +1932,10 @@ CharDelete.MinLevel = 10
 
 CharDelete.KeepDays = 90
 
+# Make a copy of character_inventory table on startup.
+
+BackupCharacterInventory = 1
+
 # BeginnersGuilds. This feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
 
 BeginnersGuilds = 1
