@@ -1996,7 +1996,6 @@ DynamicRespawn.PlayersMaxLevelDiff = 5
 Spells.CCDelay = 200
 
 Hardcore.Disable.Duel = 0
-Hardcore.LevelupAnnounceMinLevel = 20
 
 PTR = 0
 
