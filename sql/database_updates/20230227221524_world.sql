@@ -842,4 +842,107 @@ update creature_template set type = 7, mana_min = 2500, mana_max = 2500 where en
 REPLACE INTO creature_template VALUES
 (61316, 5327, 0, 0, 0, 0, 'Drifting Avatar of Sand', NULL, 0, 63, 63, 49033, 49033, 20199, 20199, 4033, 16, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 906, 1182, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 61316, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61317, 5327, 0, 0, 0, 0, 'Temporal Dust', NULL, 0, 61, 61, 9302, 9302, 1562, 1562, 2103, 16, 0, 1, 1.14286, 2.4, 20, 5, 0, 1, 1, 708, 937, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 4, 0, 61317, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61318, 16162, 0, 0, 0, 0, 'Echo of Time', NULL, 0, 62, 62, 18088, 18088, 1902, 1902, 1900, 16, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 809, 1070, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 61318, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61318, 16162, 0, 0, 0, 0, 'Echo of Time', NULL, 0, 62, 62, 18088, 18088, 1902, 1902, 1900, 16, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 809, 1070, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 61318, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61319, 9792, 0, 0, 0, 0, 'Master Blacksmith Rolfen', NULL, 0, 62, 62, 44000, 44000, 0, 0, 4391, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 61319, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 2142, 2803, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61320, 3254, 0, 0, 0, 0, 'Duke Rothlen', NULL, 0, 53, 53, 2550, 2550, 0, 0, 3202, 35, 3, 1.1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 104, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61321, 5074, 0, 0, 0, 0, 'Judge Freelan Carlisle', NULL, 0, 44, 44, 4278, 4278, 0, 0, 2082, 35, 3, 1, 1.14286, 0, 18, 5, 0, 1, 1, 269, 346, 0, 194, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61322, 5038, 0, 0, 0, 0, 'Councilman Kyleson', NULL, 0, 58, 58, 3875, 3875, 0, 0, 3408, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61323, 6703, 0, 0, 0, 0, 'Countess Tillia Earlwake', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61324, 11930, 11929, 0, 0, 0, 'Spectral Noble', NULL, 0, 50, 50, 2990, 2990, 0, 0, 4400, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20315; set @weapon_1 = 15863; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61321;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20314; set @weapon_1 = 15975; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61320;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20313; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61319;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41393; set @magic_number = 61323;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You know what the biggest shame about being a wandering spirit is?$B$BI would say it is the lack of fine food and drink. I suppose the company is lacking as well, perhaps you can change things around here.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41392; set @magic_number = 61322;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do you hear that, the incessant howling of the wind? Has someone left a window open?!$B$BFetch for a servant immediately, and fix this damned racket.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41391; set @magic_number = 61321;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'In my lifetime I committed all manner of crime under the guise of justice. I took bribes, laundered gold through the treasury, and did all manner of evil to gain my position.$B$BIf I could start again I would, but now I am stuck to forever think about what could have been, and what wrong roads I have taken in my short life.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41390; set @magic_number = 61320;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'These dark hallways hold more than meets the eye. Keep your wits about you, unless you want to end up walking this place for an eternity.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- NPC Solnius (entry 60748), set faction to 35, give gossip flags, gossip text : "Do you know where you are walking mortal? This place has been here long before your races existence. The Emerald Sanctum is a hallowed ground. Your mere steps upon the verdant grass tarnishes the beauty of this place. Your vile smell lingers upon the air.$B$BYou must leave, it will not be long until the rest of the Green Dragonflight is awoken.$B$BOur eternal duty has arrived, and as The Awakener, I have put out the call to stir those lost in slumber. They will arrive, it is only a matter of time now, and you will not get in the way, $r.$B$BDarkness swirls, festering upon the sleepless realm, I will put an end to it.
+update creature_template set faction = 35, npc_flags = 1 where entry = 60748;
+
+set @gossip_menu_id = 41394; set @magic_number = 60748;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do you know where you are walking mortal? This place has been here long before your races existence. The Emerald Sanctum is a hallowed ground. Your mere steps upon the verdant grass tarnishes the beauty of this place. Your vile smell lingers upon the air.$B$BYou must leave, it will not be long until the rest of the Green Dragonflight is awoken.$B$BOur eternal duty has arrived, and as The Awakener, I have put out the call to stir those lost in slumber. They will arrive, it is only a matter of time now, and you will not get in the way, $r.$B$BDarkness swirls, festering upon the sleepless realm, I will put an end to it.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Remove quests 50240, and 50241.
+delete from quest_template where entry in (50240,50241);
+delete from creature_questrelation where quest in (50240,50241);
+delete from creature_involvedrelation where quest in (50240,50241);
+-- Create new gobject with the name 'Gilneas City' shown on hover with the following model HumanSignPostPoint05.mdx
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2011035, 5, 24352, 'Gilneas City', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'Ravenshire' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011036, 5, 24352, 'Ravenshire', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'Greyshire' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011037, 5, 24352, 'Greyshire', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'The Greymane Wall' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011038, 5, 24352, 'The Greymane Wall', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'Stillward Church' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011039, 5, 24352, 'Stillward Church', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'Dryrock Valley' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011040, 5, 24352, 'Dryrock Valley', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject with the name 'Shademore Tavern' shown on hover with the following model HumanSignPostPoint05.mdx
+(2011041, 5, 24352, 'Shademore Tavern', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Create new gobject called 'Gilneas Memorial Stone' with the display ID 478, it is readable, use stone background, contains the following pagetext.
+(2011042, 9, 478, 'Gilneas Memorial Stone', 0, 0, 1, 50567, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50567, 'We stand here today to honor their sacrifice, to remember their selflessness, their unwavering determination, and their unyielding spirit that embodied the very essence of Gilneas.$B$BTheir devotion to their country and their fellow citizens was unparalleled. Their sacrifice, however, was not in vain, for Gilneas is now stronger than ever before. These brave soldiers have left a lasting legacy, one that will continue to inspire and guide us as we move forward.$B$BWe must remain steadfast in our resolve to rebuild and move forward. We have proven that we are resilient, and our will is iron. Gilneas will endure.$B$BI am grateful for the trust you have placed in me during these challenging times.$B$BYour King - Genn', 0);
+-- Add the following items
+replace into item_template values
+ ('61173', '7', '0', 'Premium Chocolate', '', '66185', '1', '0', '1', '700', '175', '0', '-1', '-1', '35',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61174', '0', '0', 'Medivh\'s Merlot', '', '29439', '1', '0', '1', '3200', '800', '0', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61175', '0', '0', 'Medivh\'s Merlot Blue', '', '29435', '1', '0', '1', '3200', '800', '0', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
