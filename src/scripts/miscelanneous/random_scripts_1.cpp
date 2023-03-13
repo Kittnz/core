@@ -960,20 +960,24 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
     std::string HordePlayerName{ "H_Empty" };
     std::string AlliancePlayerName{ "A_Empty" };
 
-    QueryResult* result_h = CharacterDatabase.PQuery("SELECT characters.name FROM characters JOIN bounty_quest_targets ON characters.guid = bounty_quest_targets.horde_player WHERE bounty_quest_targets.id = 1");
-    QueryResult* result_a = CharacterDatabase.PQuery("SELECT characters.name FROM characters JOIN bounty_quest_targets ON characters.guid = bounty_quest_targets.alliance_player WHERE bounty_quest_targets.id = 1");
+
+    QueryResult* result = CharacterDatabase.Query("SELECT horde_player, alliance_player FROM bounty_quest_targets WHERE id = 1");
+    if (result)
+    {
+        auto playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[0].GetUInt32());
+        if (playerData)
+            HordePlayerName = playerData->sName;
+
+        playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[1].GetUInt32());
+        if (playerData)
+            AlliancePlayerName = playerData->sName;
+        delete result;
+    }
+    
 
     switch (pPlayer->GetTeam())
     {
     case ALLIANCE:
-
-        if (result_h)
-        {
-            Field* fields = result_h->Fetch();
-            HordePlayerName = fields[0].GetString();
-        }
-        delete result_h;
-
         if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
         {
             std::stringstream WantedHordePlayerName;
@@ -988,13 +992,6 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         break;
 
     case HORDE:
-
-        if (result_a)
-        {
-            Field* fields = result_a->Fetch();
-            AlliancePlayerName = fields[0].GetString();
-        }
-        delete result_a;
 
         if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
         {
