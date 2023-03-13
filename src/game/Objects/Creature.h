@@ -825,6 +825,7 @@ class Creature : public Unit
             else
                 ClearCreatureState(CSTATE_COMBAT_WITH_ZONE);
         }
+        void LogDeath(Unit* pKiller) const;
         // Smartlog end
 
         Unit* SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags = SELECT_FLAG_NO_TOTEM) const;

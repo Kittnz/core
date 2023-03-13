@@ -2632,6 +2632,46 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
     return true;
 }
 
+void Creature::LogDeath(Unit* pKiller) const
+{
+    // by default we log bosses only
+    if (!IsWorldBoss() && !HasExtraFlag(CREATURE_FLAG_EXTRA_INSTANCE_BIND))
+        return;
+
+    if (pKiller)
+    {
+        if (Player* pPlayer = pKiller->GetCharmerOrOwnerPlayerOrPlayerItself())
+        {
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                std::string groupMemberNames;
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        // Not self.
+                        if (pMember == pPlayer)
+                            continue;
+
+                        if (!groupMemberNames.empty())
+                            groupMemberNames += ", ";
+
+                        groupMemberNames += pMember->GetName() + std::string(" (Guid: ") + std::to_string(pMember->GetGUIDLow()) + ")";
+                    }
+                }
+
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) in group with: %s", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow(), groupMemberNames.c_str());
+            }
+            else
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) not in group.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow());
+        }
+        else
+            sLog.outRaid("[Map %u] [Instance %u] %s killed by %s.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pKiller->GetGuidStr().c_str());
+    }
+    else
+        sLog.outRaid("[Map %u] [Instance %u] %s died on its own.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str());
+}
+
 Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags) const
 {
     return SelectAttackingTarget(target, position, sSpellMgr.GetSpellEntry(spellId), selectFlags);

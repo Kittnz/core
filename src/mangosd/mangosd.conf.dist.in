@@ -384,6 +384,14 @@ HonorLogFile = "honor.log"
 
 HonorLogTimestamp = 0
 
+# RaidLogFile. RaidLogFile name.
+
+RaidLogFile = "raid.log"
+
+# RaidLogTimestamp. RaidLogTimestamp with timestamp of server start in name.
+
+RaidLogTimestamp = 0
+
 # LogFilter. Log filtes.
 
 LogFilter_TransportMoves = 1
