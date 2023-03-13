@@ -1216,7 +1216,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
     
     setConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL, "Hardcore.Disable.Duel", false);
-    setConfig(CONFIG_UINT32_HARDCORE_LEVELUP_ANNOUNCE_MIN_LEVEL, "Hardcore.LevelupAnnounceMinLevel", 20);
 
     setConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT, "BattlegroundSV.MaxSparks", 100);
 

@@ -22492,9 +22492,6 @@ void Player::MailHardcoreModeRewards(uint32 level)
 
 void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 {
-    if (level < sWorld.getConfig(CONFIG_UINT32_HARDCORE_LEVELUP_ANNOUNCE_MIN_LEVEL))
-        return;
-
     switch (level)
     {
         case 20:
