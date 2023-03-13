@@ -37,8 +37,13 @@ namespace DiscordBot
         if (!_core)
             return;
 
-        dpp::message m(channelId, message);
-        CreateMessage(std::move(m), priority);
+        std::string NormalizedMessage = NormalizeString(message);
+
+        if (!NormalizedMessage.empty())
+        {
+            dpp::message m(channelId, NormalizedMessage);
+            CreateMessage(std::move(m), priority);
+        }
     }
 
     void Bot::CreateMessage(dpp::message message, MessagePriority priority)
