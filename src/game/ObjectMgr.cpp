@@ -9398,5 +9398,7 @@ void ObjectMgr::BackupCharacterInventory()
 {
     sLog.outInfo("Making copy of character_inventory table.");
     CharacterDatabase.DirectPExecute("TRUNCATE `character_inventory_copy`");
+    CharacterDatabase.DirectPExecute("ALTER TABLE `character_inventory_copy` DISABLE KEYS");
     CharacterDatabase.DirectPExecute("INSERT INTO `character_inventory_copy` SELECT * FROM `character_inventory`");
+    CharacterDatabase.DirectPExecute("ALTER TABLE `character_inventory_copy` ENABLE KEYS");
 }
