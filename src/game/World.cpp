@@ -1430,9 +1430,6 @@ void World::SetInitialWorldSettings()
     sLog.outInfo("Beginning character name cleanup...");
     CharacterDatabaseCleaner::FreeInactiveCharacterNames();
 
-    if (getConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY))
-        sObjectMgr.BackupCharacterInventory();
-
     ///- Loading shop tables
     sLog.outString("Loading shop...");
     sObjectMgr.LoadShop();
