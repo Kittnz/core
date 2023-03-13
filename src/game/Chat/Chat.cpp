@@ -139,6 +139,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "deleted",        SEC_DEVELOPER,     true, nullptr,                                         "", characterDeletedCommandTable },
         { "erase",          SEC_CONSOLE,       true,  &ChatHandler::HandleCharacterEraseCommand,      "", nullptr },
+        { "diffitems",      SEC_OBSERVER,      true,  &ChatHandler::HandleCharacterDiffItemsCommand,  "", nullptr },
         { "reputation",     SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
         { "hasitem",        SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
         { "fillflys",       SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterFillFlysCommand,   "", nullptr },
