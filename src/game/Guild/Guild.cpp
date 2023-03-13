@@ -258,7 +258,7 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         pl->SetInGuild(m_Id);
         pl->SetRank(newmember.RankId);
         pl->SetGuildIdInvited(0);
-        AddToCache(plGuid);
+        AddToCache(lowguid);
     }
 
     UpdateAccountsNumber();
