@@ -717,7 +717,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
 
         if (Guild* guild = sGuildMgr.GetGuildById(pCurrChar->GetGuildId()))
-            guild->AddToCache(GetMasterPlayer());
+            guild->AddToCache(GetMasterPlayer()->GetGUIDLow());
     }
 
     if (!alreadyOnline)

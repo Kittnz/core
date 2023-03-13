@@ -637,7 +637,7 @@ void WorldSession::LogoutPlayer(bool Save)
         }
 
         if (Guild* guild = sGuildMgr.GetGuildById(m_masterPlayer->GetGuildId()))
-            guild->RemoveFromCache(m_masterPlayer);
+            guild->RemoveFromCache(m_masterPlayer->GetGUIDLow());
 
 
         m_masterPlayer->SaveToDB();

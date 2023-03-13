@@ -344,16 +344,14 @@ class Guild
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
         ObjectGuid GetGuildInviter(ObjectGuid playerGuid) const;
 
-        void AddToCache(MasterPlayer* player)
+        void AddToCache(uint32 guidLow)
         {
-            if (IsMemberCacheEnabled())
-                m_onlineMemberCache.insert(player->GetGUIDLow());
+            m_onlineMemberCache.insert(guidLow);
         }
 
-        void RemoveFromCache(MasterPlayer* player)
+        void RemoveFromCache(uint32 guidLow)
         {
-            if (IsMemberCacheEnabled())
-                m_onlineMemberCache.erase(player->GetGUIDLow());
+            m_onlineMemberCache.erase(guidLow);
         }
 
         bool IsMemberCacheEnabled() const
