@@ -1556,16 +1556,16 @@ namespace MaNGOS
 
             bool operator()(Unit* u)
             {
-                if (!m_me->IsHostileTo(u))
-                    return false;
-
-                if (!u->IsVisibleForOrDetect(m_me, m_me, false))
-                    return false;
-
                 if (!u->IsWithinDistInMap(m_me, std::min(m_me->GetAttackDistance(u), m_dist), true, SizeFactor::None))
                     return false;
 
                 if (!u->IsTargetable(true, m_me->IsCharmerOrOwnerPlayerOrPlayerItself()))
+                    return false;
+
+                if (!m_me->IsHostileTo(u))
+                    return false;
+
+                if (!u->IsVisibleForOrDetect(m_me, m_me, false))
                     return false;
 
                 if (m_ignoreCivilians && u->IsCreature() && static_cast<Creature*>(u)->IsCivilian())
