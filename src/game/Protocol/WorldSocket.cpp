@@ -219,8 +219,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     id = fields[0].GetUInt32();
     security = sAccountMgr.GetSecurity(id); //fields[1].GetUInt16 ();
-    if (security > SEC_ADMINISTRATOR)                       // prevent invalid security settings in DB
-        security = SEC_ADMINISTRATOR;
+    if (security > SEC_SIGMACHAD)                       // prevent invalid security settings in DB
+        security = SEC_SIGMACHAD;
 
     K.SetHexStr(fields[2].GetString());
 
