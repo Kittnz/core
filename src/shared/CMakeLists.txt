@@ -64,6 +64,7 @@ set (shared_SRCS
     Log.cpp
     PosixDaemon.cpp
     ThreadPool.cpp
+    BS_thread_pool.hpp
     Util.cpp
     Duration.h
     Auth/ARC4.cpp

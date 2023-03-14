@@ -27,6 +27,16 @@ EndContentData */
 
 #include "scriptPCH.h"
 
+enum
+{
+    SPELL_SPIRIT_SHOCK          = 10794,
+    SPELL_FEL_CURSE             = 12938,
+    NPC_SERVANT_OF_RAZELIKH     = 7668,
+    NPC_SERVANT_OF_GROL         = 7669,
+    NPC_SERVANT_OF_ALLISTARJ    = 7670,
+    NPC_SERVANT_OF_SEVINE       = 7671
+};
+
 struct ThadiusGrimshadeAI : public ScriptedAI
 {
     ThadiusGrimshadeAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -159,22 +169,84 @@ bool GOHello_go_stone_of_binding(Player* pPlayer, GameObject* pGo)
     switch(pGo->GetEntry())
     {
         case 141812:
-            pCreature = pGo->FindNearestCreature(7668, 30.000000, true);//servant of razelikh
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_RAZELIKH, 30.0f, true);//servant of razelikh
             break;
         case 141857:
-            pCreature = pGo->FindNearestCreature(7669, 30.000000, true);//servant of grol
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_GROL, 30.0f, true);//servant of grol
             break;
         case 141858:
-            pCreature = pGo->FindNearestCreature(7670, 30.000000, true);//servant of allistarj
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_ALLISTARJ, 30.0f, true);//servant of allistarj
             break;
         case 141859:
-            pCreature = pGo->FindNearestCreature(7671, 30.000000, true);//servant of sevine
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_SEVINE, 30.0f, true);//servant of sevine
             break;
     }
     if (pCreature)
-        pCreature->CastSpell(pCreature, 12938, true);
+        pCreature->CastSpell(pCreature, SPELL_FEL_CURSE, true);
     return false;
 }
+
+struct ServantAI : public ScriptedAI
+{
+    ServantAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    bool m_freezed;
+
+    void Reset() override
+    {
+        m_freezed = false;
+    }
+
+    void JustRespawned() override
+    {
+        Reset();
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_creature->HealthBelowPct(15) && !m_freezed)
+        {
+            DoCastSpellIfCan(m_creature, SPELL_SPIRIT_SHOCK);
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_creature->HealthBelowPctDamaged(10, uiDamage))
+        {
+            uiDamage = 0;
+        }
+    }
+
+    void SpellHit(WorldObject* pCaster, SpellEntry const* pSpell) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (pSpell->Id == SPELL_FEL_CURSE && m_creature->HasAura(SPELL_SPIRIT_SHOCK))
+        {
+            if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+                pPlayer->DoKillUnit(m_creature);
+        }
+    }
+};
+
+CreatureAI* GetAI_servant(Creature* pCreature)
+{
+    return new ServantAI(pCreature);
+}
+
 void AddSC_blasted_lands()
 {
     Script *newscript;
@@ -188,5 +260,10 @@ void AddSC_blasted_lands()
     newscript = new Script;
     newscript->Name = "go_stone_of_binding";
     newscript->pGOHello = &GOHello_go_stone_of_binding;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_servant";
+    newscript->GetAI = &GetAI_servant;
     newscript->RegisterSelf();
 }

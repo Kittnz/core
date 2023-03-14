@@ -218,7 +218,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), m_creatureGroup(nullptr),
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     m_lastLeashExtensionTime(nullptr), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
-    m_detectionDistance(20.0f), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
+    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
     m_reputationId(-1), m_gossipMenuId(0), m_castingTargetGuid(0)
 {
     m_regenTimer = 200;
@@ -775,20 +775,15 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                     m_corpseDecayTimer -= update_diff;
             }
 
-            if (m_pacifiedTimer <= update_diff)
-                m_pacifiedTimer = 0;
-            else
-                m_pacifiedTimer -= update_diff;
+            if (m_pacifiedTimer)
+            {
+                if (m_pacifiedTimer <= update_diff)
+                    m_pacifiedTimer = 0;
+                else
+                    m_pacifiedTimer -= update_diff;
+            }
 
             Unit::Update(update_diff, diff);
-
-            if (GetVictim())
-            {
-                float x, y, z;
-                GetRespawnCoord(x, y, z, nullptr, nullptr);
-                if (GetDistance(x, y, z) > 10.0f)
-                    CallForHelp(m_callForHelpDist);
-            }
 
             // creature can be dead after Unit::Update call
             // CORPSE/DEAD state will processed at next tick (in other case death timer will be updated unexpectedly)
@@ -800,30 +795,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             ModifyAuraState(AURA_STATE_HEALTHLESS_10_PERCENT, hpPercent < 11.0f);
             ModifyAuraState(AURA_STATE_HEALTHLESS_5_PERCENT, hpPercent < 6.0f);
 
-            bool unreachableTarget = !i_motionMaster.empty() &&
-                GetVictim() && !HasExtraFlag(CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE) &&
-                GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE &&
-                !HasDistanceCasterMovement() &&
-                (!CanReachWithMeleeAutoAttack(GetVictim()) || !IsWithinLOSInMap(GetVictim())) &&
-                !GetMotionMaster()->GetCurrent()->IsReachable();
-
-            // No evade mode for pets.
-            if (unreachableTarget && GetCharmerOrOwnerGuid().IsPlayer())
-                unreachableTarget = false;
-            if (unreachableTarget)
-                if (GetVictim())
-                    if (Player* victimPlayer = GetVictim()->ToPlayer())
-                        if(victimPlayer->GetSession()->GetAntiCheat()->IsInKnockBack())
-                            unreachableTarget = false;
-            if (unreachableTarget)
-            {
-                m_TargetNotReachableTimer += update_diff;
-                if (GetMapId() == 30 && CanHaveThreatList() && m_TargetNotReachableTimer > 1000) // Alterac Valley exploit fix
-                    GetThreatManager().modifyThreatPercent(GetVictim(), -101);
-            }
-            else
-                m_TargetNotReachableTimer = 0;
-
+            bool unreachableTarget = false;
             bool leash = false;
             if (HasCreatureState(CSTATE_COMBAT))
             {
@@ -840,7 +812,39 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                     else if (HasCreatureState(CSTATE_COMBAT_WITH_ZONE))
                         SetInCombatWithZone(false);
                 }
+
+                if (GetVictim())
+                {
+                    if (m_callForHelpTimer <= update_diff)
+                    {
+                        m_callForHelpTimer = 1000;
+
+                        float x, y, z;
+                        GetRespawnCoord(x, y, z, nullptr, nullptr);
+                        if (GetDistance(x, y, z) > 10.0f)
+                            CallForHelp(m_callForHelpDist);
+                    }
+                    else
+                        m_callForHelpTimer -= update_diff;
+
+                    unreachableTarget = !i_motionMaster.empty() &&
+                        !HasExtraFlag(CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE) &&
+                        i_motionMaster.GetCurrent()->GetMovementGeneratorType() == CHASE_MOTION_TYPE &&
+                        !i_motionMaster.GetCurrent()->IsReachable() &&
+                        !HasDistanceCasterMovement() && !GetCharmerOrOwnerGuid().IsPlayer() &&
+                        (!CanReachWithMeleeAutoAttack(GetVictim()) || !IsWithinLOSInMap(GetVictim())) &&
+                        !(GetVictim()->IsPlayer() && static_cast<Player*>(GetVictim())->GetSession()->GetAntiCheat()->IsInKnockBack());
+                }
             }
+
+            if (unreachableTarget)
+            {
+                m_TargetNotReachableTimer += update_diff;
+                if (GetMapId() == 30 && CanHaveThreatList() && m_TargetNotReachableTimer > 1000) // Alterac Valley exploit fix
+                    GetThreatManager().modifyThreatPercent(GetVictim(), -101);
+            }
+            else
+                m_TargetNotReachableTimer = 0;
 
             if (AI())
             {
@@ -1795,8 +1799,8 @@ float Creature::GetAttackDistance(Unit const* pTarget) const
     int32 leveldif = int32(targetlevel) - int32(creaturelevel);
 
     // "The maximum Aggro Radius has a cap of 25 levels under. Example: A level 30 char has the same Aggro Radius of a level 5 char on a level 60 mob."
-    if (leveldif < - 25)
-        leveldif = -25;
+    if (leveldif < - MAX_LEVEL_DIFF_FOR_AGGRO_RANGE)
+        leveldif = - MAX_LEVEL_DIFF_FOR_AGGRO_RANGE;
 
     // "The aggro radius of a mob having the same level as the player is roughly 18 yards"
     float const detectionRange = GetDetectionRange();
@@ -2550,30 +2554,27 @@ void Creature::SetInCombatWithZone(bool initialPulse)
         return;
 
     if (!HasCreatureState(CSTATE_COMBAT_WITH_ZONE))
+    {
         UpdateCombatWithZoneState(true);
+
+        // Attack closest player first.
+        // Prevent case where boss runs to somebody who just entered raid.
+        if (initialPulse && !GetVictim() && AI())
+        {
+            if (Player* pPlayer = FindNearestHostilePlayer(MAX_VISIBILITY_DISTANCE))
+                AI()->AttackStart(pPlayer);
+        }
+    }
 
     for (const auto& i : PlList)
     {
         if (Player* pPlayer = i.getSource())
         {
-            if (pPlayer->IsGameMaster())
-                continue;
-
             if (!initialPulse && pPlayer->IsInCombat())
                 continue;
 
-            if (pPlayer->IsAlive() && !IsFriendlyTo(pPlayer))
-            {
-                if (IsInCombat())
-                {
-                    pPlayer->SetInCombatWith(this);
-                    AddThreat(pPlayer);
-                }
-                else if (AI())
-                {
-                    AI()->AttackStart(pPlayer);
-                }
-            }
+            if (IsValidAttackTarget(pPlayer))
+                EnterCombatWithTarget(pPlayer);
         }
     }
 }
@@ -2630,6 +2631,46 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
         return pSpellInfo->IsTargetInRange(this, pTarget);
 
     return true;
+}
+
+void Creature::LogDeath(Unit* pKiller) const
+{
+    // by default we log bosses only
+    if (!IsWorldBoss() && !HasExtraFlag(CREATURE_FLAG_EXTRA_INSTANCE_BIND))
+        return;
+
+    if (pKiller)
+    {
+        if (Player* pPlayer = pKiller->GetCharmerOrOwnerPlayerOrPlayerItself())
+        {
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                std::string groupMemberNames;
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        // Not self.
+                        if (pMember == pPlayer)
+                            continue;
+
+                        if (!groupMemberNames.empty())
+                            groupMemberNames += ", ";
+
+                        groupMemberNames += pMember->GetName() + std::string(" (Guid: ") + std::to_string(pMember->GetGUIDLow()) + ")";
+                    }
+                }
+
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) in group with: %s", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow(), groupMemberNames.c_str());
+            }
+            else
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) not in group.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow());
+        }
+        else
+            sLog.outRaid("[Map %u] [Instance %u] %s killed by %s.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pKiller->GetGuidStr().c_str());
+    }
+    else
+        sLog.outRaid("[Map %u] [Instance %u] %s died on its own.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str());
 }
 
 Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags) const
@@ -3375,8 +3416,8 @@ Unit* Creature::SelectNearestHostileUnitInAggroRange(bool useLOS, bool ignoreCiv
     TypeContainerVisitor<MaNGOS::UnitLastSearcher<MaNGOS::NearestHostileUnitInAggroRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
     TypeContainerVisitor<MaNGOS::UnitLastSearcher<MaNGOS::NearestHostileUnitInAggroRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
-    cell.Visit(p, world_unit_searcher, *GetMap(), *this, MAX_VISIBILITY_DISTANCE);
-    cell.Visit(p, grid_unit_searcher, *GetMap(), *this, MAX_VISIBILITY_DISTANCE);
+    cell.Visit(p, world_unit_searcher, *GetMap(), *this, GetDetectionRange() + MAX_LEVEL_DIFF_FOR_AGGRO_RANGE);
+    cell.Visit(p, grid_unit_searcher, *GetMap(), *this, GetDetectionRange() + MAX_LEVEL_DIFF_FOR_AGGRO_RANGE);
 
     return target;
 }
@@ -3571,6 +3612,17 @@ void Creature::ResetCombatTime(bool combat)
         ++m_combatResetCount;
     else
         m_combatResetCount = 0;
+}
+
+void Creature::EnterCombatWithTarget(Unit* pVictim)
+{
+    if (!GetVictim() && AI())
+        AI()->AttackStart(pVictim);
+    else if (GetVictim() != pVictim)
+    {
+        AddThreat(pVictim);
+        pVictim->SetInCombatWith(this);
+    }
 }
 
 bool Creature::canStartAttack(Unit const* who, bool force) const

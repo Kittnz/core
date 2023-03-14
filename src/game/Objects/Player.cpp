@@ -22494,7 +22494,6 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 {
     switch (level)
     {
-        case 10:
         case 20:
         case 30:
         case 40:

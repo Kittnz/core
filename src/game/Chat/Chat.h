@@ -292,6 +292,7 @@ class ChatHandler
         bool HandleCharacterDeletedListNameCommand(char* args);
         bool HandleCharacterDeletedRestoreCommand(char* args);
         bool HandleCharacterEraseCommand(char* args);
+        bool HandleCharacterDiffItemsCommand(char* args);
         bool HandleCharacterRenameCommand(char* args);
         bool HandleCharacterReputationCommand(char* args);
         bool HandleCharacterHasItemCommand(char* args);

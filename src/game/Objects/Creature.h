@@ -507,6 +507,8 @@ enum TemporaryFactionFlags                                  // Used at real fact
     TEMPFACTION_ALL,
 };
 
+#define MAX_LEVEL_DIFF_FOR_AGGRO_RANGE 25
+
 class ThreatListProcesser
 {
     public:
@@ -803,6 +805,7 @@ class Creature : public Unit
         void SendZoneUnderAttackMessage(Player* attacker);
 
         void SetInCombatWithZone(bool initialPulse = true);
+        void EnterCombatWithTarget(Unit* pTarget);
         bool canStartAttack(Unit const* who, bool force) const;
         bool _IsTargetAcceptable(Unit const *target) const;
         bool canCreatureAttack(Unit const *pVictim, bool force) const;
@@ -825,6 +828,7 @@ class Creature : public Unit
             else
                 ClearCreatureState(CSTATE_COMBAT_WITH_ZONE);
         }
+        void LogDeath(Unit* pKiller) const;
         // Smartlog end
 
         Unit* SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags = SELECT_FLAG_NO_TOTEM) const;
@@ -1071,6 +1075,7 @@ class Creature : public Unit
         uint32 m_playerDamageTaken;
         uint32 m_nonPlayerDamageTaken;
         
+        uint32 m_callForHelpTimer;
         float m_callForHelpDist;
         float m_leashDistance;
         float m_detectionDistance;

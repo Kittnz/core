@@ -1489,6 +1489,30 @@ bool GossipSelect_npc_jorn_skyseer(Player* pPlayer, Creature* pCreature, uint32 
     return true;
 }
 
+enum
+{
+    AURA_AIR_BUBBLES = 17775
+};
+
+struct go_bubbling_fissureAI : public GameObjectAI
+{
+    go_bubbling_fissureAI(GameObject* pGo) : GameObjectAI(pGo) {}
+
+    void UpdateAI(uint32 const diff) override
+    {
+        if (Player* player = me->FindNearestPlayer(5.0f))
+        {
+            if (!player->HasAura(AURA_AIR_BUBBLES))
+                player->AddAura(AURA_AIR_BUBBLES);
+        }
+    }
+};
+
+GameObjectAI* GetAIgo_bubbling_fissure(GameObject* pGo)
+{
+    return new go_bubbling_fissureAI(pGo);
+}
+
 
 void AddSC_the_barrens()
 {
@@ -1579,5 +1603,10 @@ void AddSC_the_barrens()
     newscript->Name = "npc_jorn_skyseer";
     newscript->pGossipHello = &GossipHello_npc_jorn_skyseer;
     newscript->pGossipSelect = &GossipSelect_npc_jorn_skyseer;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_bubbling_fissure";
+    newscript->GOGetAI = &GetAIgo_bubbling_fissure;
     newscript->RegisterSelf();
 }

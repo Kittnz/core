@@ -13,6 +13,13 @@
 
 namespace DiscordBot
 {
+    enum class MessagePriority : uint32
+    {
+        Drop,
+        Requeue
+    };
+
+
     constexpr uint32_t MaxMessageLength = 2000;
     
     class BaseCommandHandler;
@@ -31,9 +38,13 @@ namespace DiscordBot
         Bot(Bot&&) = delete;
 
         void Setup(std::string token);
-        void SendMessageToChannel(uint64_t channelId, std::string message);
+        void SendMessageToChannel(uint64_t channelId, std::string message, MessagePriority priority = MessagePriority::Drop);
         void Stop();
 
+        void WorkerThread();
+
+
+        void RequeueMessage(dpp::message&& message);
 
 
         dpp::cluster* GetCore() const;
@@ -41,6 +52,9 @@ namespace DiscordBot
         void AddHandler(BaseCommandHandler* handler);
 
     private:
+
+        void CreateMessage(dpp::message message, MessagePriority priority);
+
         Bot() = default;
 
         std::unique_ptr<dpp::cluster> _core;
@@ -49,6 +63,13 @@ namespace DiscordBot
 
         std::vector<BaseCommandHandler*> _handlers;
         std::string _commandOutput;
+
+        std::queue<dpp::message> _requeuedMessages;
+        std::mutex _requeueLock;
+
+        std::thread _workerThread;
+
+        bool _running = false;
     };
 }
 

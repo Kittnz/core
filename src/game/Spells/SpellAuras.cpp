@@ -52,6 +52,7 @@
 #include "ZoneScript.h"
 #include "PlayerAI.h"
 #include "Anticheat.h"
+#include "LoveIsInTheAir.h"
 
 using namespace Spells;
 
@@ -1659,12 +1660,14 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     }
                     case 2584:                              // Waiting to Resurrect
                     {
-                        // for cases where aura would re-apply and player is no longer in BG
-                        if (Unit* caster = GetCaster())
+                        if (Player* player = target->ToPlayer())
                         {
-                            if (Player* player = caster->ToPlayer())
-                                if (!player->InBattleGround() && !player->InGurubashiArena(true))
-                                    player->RemoveAurasDueToSpell(2584);
+                            target->CombatStop();
+                            target->GetHostileRefManager().deleteReferences();
+
+                            // for cases where aura would re-apply and player is no longer in BG
+                            if (!player->InBattleGround() && !player->InGurubashiArena(true))
+                                player->RemoveAurasDueToSpell(2584);
                         }
                         return;
                     }
@@ -4429,22 +4432,53 @@ void Aura::HandlePeriodicTriggerSpell(bool apply, bool /*Real*/)
 
     Unit *target = GetTarget();
 
-    if (!apply)
+    if (apply)
     {
         switch (GetId())
         {
-            case 23620: // Burning Adrenaline
-                if (m_removeMode == AURA_REMOVE_BY_DEATH)
-                    target->CastSpell(target, 23478, true);
-                return;
-            case 9712:  // Thaumaturgy Channel
+            case 26869: // Amorous (Love is in the Air)
             {
-                if (Unit* caster = GetCaster()) 
-                    caster->CastSpell(caster, 21029, true, 0, this); 
+                if (Creature* pCreature = target->ToCreature())
+                {
+                    if (uint32 gossipMenuId = GetLoveIsInTheAirGossipForCreature(pCreature->GetEntry(), pCreature->GetGender()))
+                    {
+                        pCreature->SetDefaultGossipMenuId(gossipMenuId);
+                        pCreature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    }
+                }
                 break;
             }
-            default:
+        }
+    }
+    else
+    {
+        switch (GetId())
+        {
+            case 9712:  // Thaumaturgy Channel
+            {
+                if (Unit* caster = GetCaster())
+                    caster->CastSpell(caster, 21029, true, 0, this);
                 break;
+            }
+            case 23620: // Burning Adrenaline
+            {
+                if (m_removeMode == AURA_REMOVE_BY_DEATH)
+                    target->CastSpell(target, 23478, true);
+                break;
+            }
+            case 26869: // Amorous (Love is in the Air)
+            {
+                if (Creature* pCreature = target->ToCreature())
+                {
+                    if (CreatureInfo const* pInfo = pCreature->GetCreatureInfo())
+                    {
+                        pCreature->SetDefaultGossipMenuId(pInfo->gossip_menu_id);
+                        if (!(pInfo->npc_flags & UNIT_NPC_FLAG_GOSSIP))
+                            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    }
+                }
+                break;
+            }
         }
     }
 }

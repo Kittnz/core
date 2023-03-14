@@ -1189,9 +1189,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 {
                     if (!m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS))
                     {
-                        if (!unit->IsInCombat())
-                            unit->AttackedBy(pRealUnitCaster);
-
+                        unit->AttackedBy(pRealUnitCaster);
                         unit->AddThreat(pRealUnitCaster);
                         unit->SetInCombatWithAggressor(pRealUnitCaster);
                     }
@@ -1523,7 +1521,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
 
     if (!effectMask)
     {
-        if (pRealUnitCaster && !unit->IsInCombat())
+        if (pRealUnitCaster)
             unit->AttackedBy(pRealUnitCaster);
 
         return;
@@ -1604,9 +1602,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                     {
                         if (!m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS))
                         {
-                            if (!unit->IsInCombat())
-                                unit->AttackedBy(pRealUnitCaster);
-
+                            unit->AttackedBy(pRealUnitCaster);
                             unit->AddThreat(pRealUnitCaster);
                             unit->SetInCombatWithAggressor(pRealUnitCaster);
                         }

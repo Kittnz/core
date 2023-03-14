@@ -188,7 +188,8 @@ enum AccountTypes
     SEC_MODERATOR      = 2,
     SEC_DEVELOPER      = 3,
     SEC_ADMINISTRATOR  = 4,
-    SEC_CONSOLE        = 5,                               
+    SEC_SIGMACHAD      = 5,
+    SEC_CONSOLE        = 6,                               
 };
 
 // Used in mangosd/realmd

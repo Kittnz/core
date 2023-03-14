@@ -160,8 +160,16 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
+    uint32 now = WorldTimer::getMSTime();
     uint32 type;
     uint32 lang;
+
+    auto LogPerformance = [&now, type, lang](const std::string& message)
+    {
+        uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
+        if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
+            sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_MESSAGECHAT with type %u, lang %u, message %s.", type, lang, message.c_str());
+    };
 
     recv_data >> type;
     recv_data >> lang;
@@ -423,6 +431,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			{
 				_player->SendAddonMessage("TW_GUILDBANK", "Player:Unguilded");
 			}
+
+            LogPerformance(msg);
 			return;
 
 		}
@@ -451,7 +461,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			Creature *target = _player->GetSelectedCreature();
 
 			_player->SendAddonMessage(prefix, target->GetDebuffs());
-
+            LogPerformance(msg);
 			return;
 
 		}
@@ -485,8 +495,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (strstr(msg.c_str(), "Entries:"))
 			{
+                static const re2::RE2 shopEntriesPattern = "[^0-9]*([0-9]+).*";
                 std::string categoryIDString = msg;
-                re2::RE2::GlobalReplace(&categoryIDString, "[^0-9]*([0-9]+).*", R"(\1)");
+                re2::RE2::GlobalReplace(&categoryIDString, shopEntriesPattern, R"(\1)");
 
                 //std::string categoryIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 				uint8 categoryID = 0;
@@ -529,8 +540,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (strstr(msg.c_str(), "Buy:"))
 			{
+                static const re2::RE2 shopBuyPattern = "[^0-9]*([0-9]+).*";
                 std::string itemIDString = msg;
-                re2::RE2::GlobalReplace(&itemIDString, "[^0-9]*([0-9]+).*", R"(\1)");
+                re2::RE2::GlobalReplace(&itemIDString, shopBuyPattern, R"(\1)");
 
 				//std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 				uint32 itemID = 0;
@@ -552,7 +564,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 				_player->SendAddonMessage(prefix, result);
 
 			}
-
+            LogPerformance(msg);
 			return;
 
 		}
@@ -615,7 +627,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 std::string titleIDstring = msg;
 
-                re2::RE2::GlobalReplace(&titleIDstring, "[^0-9]*([0-9]+).*", R"(\1)");
+                static const re2::RE2 changeTitlePattern = "[^0-9]*([0-9]+).*";
+
+                re2::RE2::GlobalReplace(&titleIDstring, changeTitlePattern, R"(\1)");
                // std::string titleIDstring = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
                 int titleID = 0;
 
@@ -641,6 +655,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 _player->SendEarnedTitles();
                 return;
             }
+            LogPerformance(msg);
         }
     }
 
@@ -671,7 +686,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 msg = msg.substr(msg.find("limit=") + 6, 2);   // 6 = "limit=".length(), 2 = read only 2 digits
 
                 std::string limitString = msg;
-                re2::RE2::GlobalReplace(&limitString, "[^0-9]*([0-9]+).*", R"(\1)");
+
+                static const re2::RE2 limitPattern = "[^0-9]*([0-9]+).*";
+                re2::RE2::GlobalReplace(&limitString, limitPattern, R"(\1)");
 
                // std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 
@@ -689,7 +706,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
 			
 
-			if (limit <= 0 || limit > 20) // 1-99, in practice 4-11
+			if (limit <= 0 || limit > 15) // 1-99, in practice 4-11
 				return;
 
 			ThreatManager::UnitDetailedThreatSituation(
@@ -697,6 +714,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 				_player, 
 				limit,
 				tankMode);
+
+            LogPerformance(msg);
 
 			return;
 		}
@@ -1160,6 +1179,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             break;
         }
     }
+    LogPerformance(msg);
 
 }
 

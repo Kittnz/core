@@ -444,11 +444,7 @@ void CreatureLinkingHolder::DoCreatureLinkingEvent(CreatureLinkingEvent eventTyp
                 case LINKING_EVENT_AGGRO:
                     if (pMaster->IsControlledByPlayer())
                         return;
-
-                    if (pMaster->IsInCombat())
-                        pMaster->SetInCombatWith(pEnemy);
-                    else
-                        pMaster->AI()->AttackStart(pEnemy);
+                    pMaster->EnterCombatWithTarget(pEnemy);
                     break;
                 case LINKING_EVENT_EVADE:
                     if (!pMaster->IsAlive())

@@ -326,6 +326,45 @@ std::string TimeToTimestampStr(time_t t)
     return std::string(buf);
 }
 
+std::string NormalizeString(const std::string& InStr)
+{
+    std::wstring WideString;
+    bool bConversionOk = Utf8toWStr(InStr, WideString);
+    if (!bConversionOk)
+    {
+        sLog.outError("Can't normalize string %s. Someone hacking, or DB corrupted", InStr.c_str());
+        return "";
+    }
+
+    std::wstring ClearedWideString;
+    ClearedWideString.reserve(WideString.size());
+    for (wchar_t ch : WideString)
+    {
+        if (isExtendedLatinCharacter(ch) || 
+            isCyrillicCharacter(ch) || 
+            isEastAsianCharacter(ch)
+            || (ch == 0x5B || ch == 0x5D || ch == 0x3A || ch == 0x2E || ch == 0x2C)) // Symbols: [ ] : . ,
+        {
+            ClearedWideString.push_back(ch);
+        }
+        else
+        {
+            ClearedWideString.push_back(L'?');
+        }
+    }
+
+    std::string result;
+
+    bConversionOk = WStrToUtf8(ClearedWideString, result);
+	if (!bConversionOk)
+	{
+		sLog.outError("Can't convert back to UTF8 %s. Someone hacking, or core goes crazy", InStr.c_str());
+		return "";
+	}
+
+    return result;
+}
+
 /// Check if the string is a valid ip address representation
 bool IsIPAddress(char const* ipaddress)
 {
