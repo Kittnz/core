@@ -428,6 +428,9 @@ void AccountMgr::LoadFingerprintBanList(bool silent)
 
 bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler)
 {
+    // add fingerprint to reason
+    reason = std::to_string(fingerprint) + " - " + reason;
+
     auto accountNames = sWorld.GetAccountNamesByFingerprint(fingerprint);
     for (auto it = accountNames.begin(); it != accountNames.end(); )
     {
