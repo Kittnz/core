@@ -507,6 +507,8 @@ enum TemporaryFactionFlags                                  // Used at real fact
     TEMPFACTION_ALL,
 };
 
+#define MAX_LEVEL_DIFF_FOR_AGGRO_RANGE 25
+
 class ThreatListProcesser
 {
     public:
@@ -803,6 +805,7 @@ class Creature : public Unit
         void SendZoneUnderAttackMessage(Player* attacker);
 
         void SetInCombatWithZone(bool initialPulse = true);
+        void EnterCombatWithTarget(Unit* pTarget);
         bool canStartAttack(Unit const* who, bool force) const;
         bool _IsTargetAcceptable(Unit const *target) const;
         bool canCreatureAttack(Unit const *pVictim, bool force) const;

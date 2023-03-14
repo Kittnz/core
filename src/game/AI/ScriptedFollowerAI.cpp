@@ -102,16 +102,7 @@ void FollowerAI::MoveInLineOfSight(Unit* pWho)
             float fAttackRadius = m_creature->GetAttackDistance(pWho);
             if (m_creature->IsWithinDistInMap(pWho, fAttackRadius, true, SizeFactor::None) && m_creature->IsWithinLOSInMap(pWho))
             {
-                if (!m_creature->GetVictim())
-                {
-                    pWho->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                    AttackStart(pWho);
-                }
-                else if (m_creature->GetMap()->IsDungeon())
-                {
-                    pWho->SetInCombatWith(m_creature);
-                    m_creature->AddThreat(pWho);
-                }
+                m_creature->EnterCombatWithTarget(pWho);
             }
         }
     }
