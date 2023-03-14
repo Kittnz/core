@@ -111,3 +111,11 @@ REPLACE INTO `creature` VALUES (2574747,80871,0,0,0,150,-14751,13399.7,16.3015,2
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -5374.353027, `position_y` = -3730.963867, `position_z` = 300.127594, `orientation` = 1.993208 WHERE `guid` = 8197;
 UPDATE `creature` SET `position_x` = -5372.674805, `position_y` = -3735.864746, `position_z` = 301.924652, `orientation` = 1.921733 WHERE `guid` = 8197;
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2562895;
+DELETE FROM creature_addon WHERE guid=2562895;
+DELETE FROM creature_movement WHERE id=2562895;
+DELETE FROM game_event_creature WHERE guid=2562895;
+DELETE FROM game_event_creature_data WHERE guid=2562895;
+DELETE FROM creature_battleground WHERE guid=2562895;
