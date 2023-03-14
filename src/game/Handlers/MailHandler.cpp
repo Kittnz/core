@@ -242,6 +242,17 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         return;
     }
 
+    // try to prevent addon scam https://github.com/EinBaum/WoW-Scams
+    if (req->money && ((req->subject.size() == 1 && req->body.empty()) || (m_lastMailOpenTime + 1 >= sWorld.GetGameTime())))
+    {
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_ENOUGH_MONEY);
+        WorldPacket data;
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, "Sending mail prevented. You might be a victim of a scam addon. Please use a different mail subject!");
+        GetPlayer()->GetSession()->SendPacket(&data);
+        delete req;
+        return;
+    }
+
     if (req->receiverPtr)
     {
         // hardcore players interaction (additional checks for online receivers)
@@ -384,7 +395,8 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
         (sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
     {
-        SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
+        GetPlayer()->GetSession()->SendNotification("You cannot use the mailbox yet.");
         return;
     }
 
@@ -833,6 +845,7 @@ void WorldSession::HandleGetMailList(WorldPacket& recv_data)
     WorldPacket data(SMSG_MAIL_LIST_RESULT, (200));         // guess size
     data << uint8(0);                                       // mail's count
     time_t cur_time = time(nullptr);
+    m_lastMailOpenTime = cur_time;
 
     for (PlayerMails::iterator itr = pl->GetMailBegin(); itr != pl->GetMailEnd(); ++itr)
     {

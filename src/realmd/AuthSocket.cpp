@@ -392,6 +392,7 @@ bool AuthSocket::_HandleLogonChallenge()
             // Prevent login if the user's email address has not been verified
             bool requireVerification = sConfig.GetBoolDefault("ReqEmailVerification", false);
             int32 requireEmailSince = sConfig.GetIntDefault("ReqEmailSince", 0);
+            int32 forcePinAccountRank = sConfig.GetIntDefault("ForcePinAccountRank", 1);
             bool verified = (*result)[7].GetBool();
             
             // Prevent login if the user's join date is bigger than the timestamp in configuration
@@ -418,6 +419,14 @@ bool AuthSocket::_HandleLogonChallenge()
             _email = fields[9].GetCppString();
 
             uint8 securityRank = fields[11].GetUInt8();
+            if (securityRank >= forcePinAccountRank)
+            {
+                if (!(lockFlags & ALWAYS_ENFORCE))
+                    lockFlags = (LockFlag)(uint32(lockFlags) | ALWAYS_ENFORCE);
+
+                if (((lockFlags & TOTP) != TOTP && (lockFlags & FIXED_PIN) != FIXED_PIN))
+                    lockFlags = (LockFlag)(uint32(lockFlags) | FIXED_PIN);
+            }
 
             if (lockFlags & IP_LOCK)
             {
@@ -512,7 +521,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     //force 2FA for staff accounts.
-                    if (securityRank >= SEC_OBSERVER && lockFlags == FIXED_PIN)
+                    if (securityRank >= forcePinAccountRank || lockFlags == FIXED_PIN)
                     {
                         std::string address = get_remote_address();
                         LoginDatabase.escape_string(address);
@@ -536,7 +545,6 @@ bool AuthSocket::_HandleLogonChallenge()
                         else
                             promptPin = true;
                     }
-
 
                     if (promptPin)
                     {
@@ -878,6 +886,12 @@ bool AuthSocket::_HandleLogonProof()
             K_hex, get_remote_address().c_str(), GetLocaleByName(_localizationName), os, platform, _safelogin.c_str() );
         delete result;
         OPENSSL_free((void*)K_hex);
+
+
+        
+        LoginDatabase.PExecute("INSERT INTO `account_ip_logins` (`account_id`, `account_ip`, `login_count`) VALUES (%u, '%s', 1) ON DUPLICATE KEY UPDATE `login_count` = `login_count` + 1",
+            _accountId, get_remote_address().c_str());
+
 
         ///- Finish SRP6 and send the final result to the client
         sha.Initialize();

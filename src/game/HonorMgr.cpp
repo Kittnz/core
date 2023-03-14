@@ -314,6 +314,9 @@ void HonorMaintenancer::DoMaintenance()
     if (!m_markerToStart)
         return;
 
+    if (sWorld.getConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY))
+        sObjectMgr.BackupCharacterInventory();
+
     sLog.outHonor("[MAINTENANCE] Honor maintenance starting.");
 
     sLog.outHonor("[MAINTENANCE] Load weekly players scores.");

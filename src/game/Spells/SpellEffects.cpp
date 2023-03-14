@@ -1859,11 +1859,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                         switch (currvalue)
                         {
-                        case 150: break;
-                        default:
-                            currvalue++;
-                            m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
-                            break;
+                            case 150:
+                                break;
+                            default:
+                                currvalue++;
+                                m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
+                                break;
                         }
                     }
                     return;

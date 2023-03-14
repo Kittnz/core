@@ -9557,6 +9557,11 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
     PSendSysMessage(LANG_NPC_MOTION_TYPE, MotionMaster::GetMovementGeneratorTypeName(moveType), moveType);
     if (!pTarget->movespline->Finalized())
         PSendSysMessage("Spline Origin: %s", pTarget->movespline->GetMovementOrigin());
+    if (pTarget->IsTemporarySummon())
+    {
+        TempSummonType despawnType = static_cast<TemporarySummon*>(pTarget)->GetDespawnType();
+        PSendSysMessage("Despawn Type: %s (%u)", TempSummonTypeToString(despawnType), despawnType);
+    }
     pTarget->AI()->GetAIInformation(*this);
 
     return true;
@@ -10384,6 +10389,12 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     // check online security
     if (HasLowerSecurity(target))
         return false;
+
+    if (target->GetGUID() == 1)
+    {
+        SendSysMessage("Nice try, fish.");
+        return false;
+    }
 
     bool force = extraArgs.find("force") != std::string::npos;
 
@@ -13790,6 +13801,12 @@ bool ChatHandler::HandleTransferCommand(char* args)
             Field* fields = result->Fetch();
             uint32 guid = fields[0].GetUInt32();
 
+            if (guid == 1)
+            {
+                SendSysMessage("Nope, can't move Torta.");
+                return false;
+            }
+
             uint32 accountId = sAccountMgr.GetId(accountName);
 
             // Account must exist
@@ -15411,6 +15428,95 @@ bool ChatHandler::HandleNpcTemplateSetLeashRangeCommand(char* args)
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     sWorld.ExecuteUpdate("UPDATE `creature_template` SET `leash_range`=%g WHERE `entry`=%u", range, pTemplate->entry);
     PSendSysMessage("Updated template leash_range of %s to %g.", pCreature->GetName(), range);
+
+    return true;
+}
+
+bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
+{
+    char* nameStr = ExtractLiteralArg(&args);
+    if (!nameStr)
+        return false;
+
+    Player* target;
+    ObjectGuid targetGuid;
+    std::string targetName;
+    if (!ExtractPlayerTarget(&nameStr, &target, &targetGuid, &targetName))
+        return false;
+
+    std::map<uint32 /*guid*/, uint32 /*entry*/> newItems;
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `item`, `item_template` FROM `character_inventory` WHERE `guid`=%u", targetGuid.GetCounter()));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemGuid = fields[0].GetUInt32();
+            uint32 itemEntry = fields[1].GetUInt32();
+            newItems.insert({ itemGuid, itemEntry });
+        } while (result->NextRow());
+    }
+
+    std::map<uint32 /*guid*/, uint32 /*entry*/> oldItems;
+    result.reset(CharacterDatabase.PQuery("SELECT `item`, `item_template` FROM `character_inventory_copy` WHERE `guid`=%u", targetGuid.GetCounter()));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemGuid = fields[0].GetUInt32();
+            uint32 itemEntry = fields[1].GetUInt32();
+            oldItems.insert({ itemGuid, itemEntry });
+        } while (result->NextRow());
+    }
+
+    PSendSysMessage("Newly obtained items for %s:", targetName.c_str());
+    for (auto const& itr : newItems)
+    {
+        if (oldItems.find(itr.first) == oldItems.end())
+        {
+            ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr.second);
+            if (!pProto)
+            {
+                PSendSysMessage("%u - [UNKNOWN]", itr.second);
+                continue;
+            }
+
+            if (m_session)
+            {
+                uint32 color = ItemQualityColors[pProto->Quality];
+                std::ostringstream itemStr;
+                itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+                PSendSysMessage("%u - %s", itr.second, itemStr.str().c_str());
+            }
+            else
+                PSendSysMessage("%u - %s", itr.second, pProto->Name1);
+        }
+    }
+
+    PSendSysMessage("No longer owned items for %s:", targetName.c_str());
+    for (auto const& itr : oldItems)
+    {
+        if (newItems.find(itr.first) == newItems.end())
+        {
+            ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr.second);
+            if (!pProto)
+            {
+                PSendSysMessage("%u - [UNKNOWN]", itr.second);
+                continue;
+            }
+
+            if (m_session)
+            {
+                uint32 color = ItemQualityColors[pProto->Quality];
+                std::ostringstream itemStr;
+                itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+                PSendSysMessage("%u - %s", itr.second, itemStr.str().c_str());
+            }
+            else
+                PSendSysMessage("%u - %s", itr.second, pProto->Name1);
+        }
+    }
 
     return true;
 }

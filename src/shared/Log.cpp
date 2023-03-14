@@ -56,7 +56,7 @@ LogFilterData logFilterData[LOG_FILTER_COUNT] =
 };
 
 Log::Log() :
-    logfile(nullptr), gmLogfile(nullptr), dberLogfile(nullptr), wardenLogfile(nullptr), anticheatLogfile(nullptr), honorLogfile(nullptr), m_colored(false), m_includeTime(false), m_wardenDebug(false), m_gmlog_per_account(false)
+    logfile(nullptr), gmLogfile(nullptr), dberLogfile(nullptr), wardenLogfile(nullptr), anticheatLogfile(nullptr), honorLogfile(nullptr), raidLogFile(nullptr), m_colored(false), m_includeTime(false), m_wardenDebug(false), m_gmlog_per_account(false)
 {
     for (int i = 0; i < LOG_MAX_FILES; ++i)
     {
@@ -134,7 +134,7 @@ void Log::LogDiscord(LogFile type, std::string log)
 #ifdef USING_DISCORD_BOT
     static const std::unordered_map<LogFile, uint64_t> ChannelLookup =
     {
-        {LOG_MONEY_TRADES, 1078715732013105252}
+       // {LOG_MONEY_TRADES, 1078715732013105252}
     };
 
     if (ChannelLookup.find(type) == ChannelLookup.end())
@@ -313,6 +313,7 @@ void Log::Initialize()
     wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a+");
     anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a+");
     discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a+");
+    raidLogFile = openLogFile("RaidLogFile", "RaidLogTimestamp", "a+");
     logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a+");
     logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a+");
     logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a+");
@@ -551,6 +552,30 @@ void Log::outHonor(const char *str, ...)
 
         fprintf(honorLogfile, "\n" );
         fflush(honorLogfile);
+    }
+}
+
+void Log::outRaid(const char* str, ...)
+{
+    if (!str)
+        return;
+
+    // only logged to file
+    if (raidLogFile)
+    {
+        std::shared_lock<std::shared_mutex> l{ logLock };
+
+        outTimestamp(raidLogFile);
+        fprintf(raidLogFile, "%s", "");
+
+        va_list ap;
+
+        va_start(ap, str);
+        vfprintf(raidLogFile, str, ap);
+        va_end(ap);
+
+        fprintf(raidLogFile, "\n");
+        fflush(raidLogFile);
     }
 }
 

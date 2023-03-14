@@ -2088,19 +2088,8 @@ bool Map::ScriptCommand_AssistUnit(const ScriptInfo& script, WorldObject* source
     if (!pAttacker)
         return false;
 
-    if (Unit* pVictim = pSource->GetVictim())
-    {
-        if (pVictim == pAttacker)
-            return false;
-
-        if (pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
-            pSource->AddThreat(pAttacker);
-    }
-    else
-    {
-        if (pSource->AI() && pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
-            pSource->AI()->AttackStart(pAttacker);
-    }
+    if (pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
+        pSource->EnterCombatWithTarget(pAttacker);
 
     return false;
 }

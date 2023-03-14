@@ -222,6 +222,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outInfo(char const* str, ...) ATTR_PRINTF(2,3);
         void outHonor(char const* str, ...) ATTR_PRINTF(2, 3);
         void outError(char const* err, ...) ATTR_PRINTF(2,3);
+        void outRaid(char const* str, ...) ATTR_PRINTF(2, 3);
         void outBasic(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 1
         void outDetail(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 2
         void outDebug(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 3
@@ -265,6 +266,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;
+        FILE* raidLogFile;
         FILE* logFiles[LOG_MAX_FILES];
         bool  timestampPrefix[LOG_MAX_FILES];
 

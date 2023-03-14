@@ -137,3 +137,7 @@ GeolockGUID = ""
 #   This is not needed except for when proxies are being used.
 
 HostAddressOverride = "0.0.0.0"
+
+#   Force 2FA for accounts with rank.
+
+ForcePinAccountRank = 1

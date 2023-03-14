@@ -258,6 +258,7 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         pl->SetInGuild(m_Id);
         pl->SetRank(newmember.RankId);
         pl->SetGuildIdInvited(0);
+        AddToCache(lowguid);
     }
 
     UpdateAccountsNumber();
@@ -588,15 +589,39 @@ void Guild::BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, msg.c_str(), Language(language), pPlayer->GetChatTag(), pPlayer->GetObjectGuid(), pPlayer->GetName());
 
-    for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+    if (IsMemberCacheEnabled())
     {
-        if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
-            continue;
+        for (auto const& guidLow : m_onlineMemberCache)
+        {
+            auto pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, guidLow));
+            if (!pl)
+                continue;
 
-        MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+            auto memberItr = members.find(guidLow);
+            if (memberItr == members.end())
+                continue;
 
-        if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
-            pl->GetSession()->SendPacket(&data);
+            if (!HasRankRight(memberItr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+            
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
+    }
+    else
+    {
+        for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+        {
+            if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+
+            MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
     }
 
     for (const auto& gmGuid : m_GmListeners)
@@ -794,6 +819,8 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     totalSize += sizeof(uint32); // m_ranks.size()
     totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
 
+    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
+
     for (auto itr = members.begin(); itr != members.end(); ++itr)
     {
         TempMemberInfo info;
@@ -803,17 +830,18 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
 
         if (info.Member && !info.Member->HasGMDisabledSocials())
         {
+            totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
+            totalSize += info.Slot->PublicNote.length();
+            if (sendOfficerNote)
+                totalSize += info.Slot->OfficerNote.length();
+
             onlineMemberCache.emplace_back(info);
             ++onlineMembers;
         }
-
-        totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
-        totalSize += info.Slot->PublicNote.length() + 1 + info.Slot->OfficerNote.length() + 1;
     }
 
     const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
-    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
-
+    
     auto writeMemberData = [inPacketCap, sendOfficerNote](WorldPacket& data, TempMemberInfo const& member) -> bool
     {
         if (!inPacketCap)
@@ -848,7 +876,6 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
         data << uint32(ritr->Rights);
 
-
     //sort the members from highest to lowest rank if over limit.
     if (!inPacketCap)
     {
@@ -877,6 +904,7 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
         session->SendPacket(&data);
     else
         BroadcastPacket(&data);
+
     DEBUG_LOG("WORLD: Sent (SMSG_GUILD_ROSTER) (ONLY FOR ONLINE)");
 }
 

@@ -97,6 +97,8 @@ std::string secsToTimeString(time_t timeInSecs, bool shortText = false, bool hou
 uint32 TimeStringToSecs(std::string const& timestring);
 std::string TimeToTimestampStr(time_t t);
 
+std::string NormalizeString(const std::string& InStr);
+
 
 template<typename ... Args>
 std::string string_format(const std::string& format, Args ... args)

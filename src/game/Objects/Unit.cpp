@@ -1300,6 +1300,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
         if (!pCreatureVictim->IsPet())
         {
+            pCreatureVictim->LogDeath(this);
             pCreatureVictim->UpdateCombatState(false);
             pCreatureVictim->UpdateCombatWithZoneState(false);
 

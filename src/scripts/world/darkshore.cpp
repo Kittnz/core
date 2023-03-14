@@ -87,47 +87,44 @@ struct npc_kerlonianAI : public FollowerAI
     npc_kerlonianAI(Creature* pCreature) : FollowerAI(pCreature)
     {
         Reset();
-        waveFirst = false;
-        waveLast = false;
-        reached = false;
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
     }
 
     uint32 m_uiFallAsleepTimer;
-
-    std::list<ObjectGuid> m_lGuidCurrentWorldTriggers;
-
-    bool waveFirst;
-    bool waveLast;
-    bool reached;
+    bool m_waveFirst;
+    bool m_waveLast;
+    bool m_reached;
 
     bool GetWaveFirst()
     {
-        return waveFirst;
+        return m_waveFirst;
     }
 
     bool GetWaveLast()
     {
-        return waveLast;
+        return m_waveLast;
     }
 
     bool GetReached()
     {
-        return reached;
+        return m_reached;
     }
 
     void SetWaveFirst(bool value)
     {
-        waveFirst = value;
+        m_waveFirst = value;
     }
 
     void SetWaveLast(bool value)
     {
-        waveLast = value;
+        m_waveLast = value;
     }
 
     void SetReached(bool value)
     {
-        reached = value;
+        m_reached = value;
     }
 
     Player* GetLeader()
@@ -144,8 +141,34 @@ struct npc_kerlonianAI : public FollowerAI
 
     void JustRespawned() override
     {
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         FollowerAI::JustRespawned();
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        FollowerAI::MoveInLineOfSight(pWho);
+
+        if (!m_creature->GetVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_LILADRIS)
+        {
+            if (m_creature->IsWithinDistInMap(pWho, INTERACTION_DISTANCE * 5))
+            {
+                if (Player* pPlayer = GetLeaderForFollower())
+                {
+                    if (pPlayer->GetQuestStatus(QUEST_SLEEPER_AWAKENED) == QUEST_STATUS_INCOMPLETE)
+                        pPlayer->GroupEventHappens(QUEST_SLEEPER_AWAKENED, m_creature);
+
+                    DoScriptText(SAY_KER_END, m_creature);
+
+                    SetReached(true);
+                }
+
+                SetFollowComplete();
+            }
+        }
     }
 
     void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override

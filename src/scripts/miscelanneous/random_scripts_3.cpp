@@ -3102,9 +3102,12 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
             {
                 pQuestGiver->CastSpell(pQuestGiver, 13540, false); // Green Channeling
                 Creature* harvest_reaper = pQuestGiver->FindNearestCreature(60871, 30.0F);
-                harvest_reaper->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-                harvest_reaper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                harvest_reaper->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+                if (harvest_reaper)
+                {
+                    harvest_reaper->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+                    harvest_reaper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+                    harvest_reaper->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+                }
             }, 10000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -5747,9 +5750,149 @@ struct npc_horde_defenderAI : public GuardAI
 
 CreatureAI* GetAI_npc_horde_defender(Creature* creature) { return new npc_horde_defenderAI(creature); }
 
+bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE) // Patience is the Key
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61147, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not help them? Commander Starwind wishes the druids to fight with the sentinels!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30082, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just stand here and do nothing?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30083, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The sentinels will merely be a distraction then. Their loss of blood will be a way to strike at the backlines?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30084, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30085, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30086, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60032); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool QuestRewarded_npc_brolthan_ironglade(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40806) // Kaldorei Relics
+    {
+        pQuestGiver->MonsterSay("Do you sense the sense of relief in the air now? You should feel proud!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_commander_starwind(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE) // Pressure is the Key
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61143, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_commander_starwind(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not retreat? Brolthan Ironglade wishes to aid once everyone is back to Forest Song safely!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30087, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just continue fighting without a plan, without regrouping?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30088, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The druids will be merely bystanders then, while the sentinels sacrifice themselves for glory?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30089, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30090, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30091, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60033); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool QuestRewarded_npc_commander_starwind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40812) // Kaldorei Weaponry
+    {
+        pQuestGiver->MonsterSay("Hey! We should meditate together some time. We are cut from the same cloth, you and I.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_commander_starwind";
+    newscript->pGossipHello = &GossipHello_npc_commander_starwind;
+    newscript->pGossipSelect = &GossipSelect_npc_commander_starwind;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_commander_starwind;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_brolthan_ironglade";
+    newscript->pGossipHello = &GossipHello_npc_brolthan_ironglade;
+    newscript->pGossipSelect = &GossipSelect_npc_brolthan_ironglade;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_brolthan_ironglade;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_deckmaster_darkhollow";

@@ -11,6 +11,9 @@
 #include "Chat.h"
 #include "Util.h"
 #include "AddonHandler.h"
+#ifdef USING_DISCORD_BOT
+#include "DiscordBot/Bot.hpp"
+#endif
 
 #include <memory>
 #include <string>
@@ -156,6 +159,11 @@ class NullSessionAnticheat : public SessionAnticheatInterface
         // addon checksum verification
         bool ReadAddonInfo(WorldPacket* source, WorldPacket& target) override
         {
+#ifdef USING_DISCORD_BOT
+            std::string Message = string_format("[Fingerprint]: Account ID %u, IP %s reading addoninfo has no sessionAnticheat. Fingerprint will be 0.", _session->GetAccountId(), _session->GetRemoteAddress().c_str());
+            sDiscordBot->SendMessageToChannel(1083954369503973416, Message,
+                DiscordBot::MessagePriority::Requeue);
+#endif
             sAddOnHandler.BuildAddonPacket(source, &target);
             return true;
         }

@@ -218,6 +218,8 @@ struct RankInfo
     uint32 Rights;
 };
 
+constexpr uint32 OnlineMemberCache = 1000;
+
 class Guild
 {
     public:
@@ -342,6 +344,21 @@ class Guild
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
         ObjectGuid GetGuildInviter(ObjectGuid playerGuid) const;
 
+        void AddToCache(uint32 guidLow)
+        {
+            m_onlineMemberCache.insert(guidLow);
+        }
+
+        void RemoveFromCache(uint32 guidLow)
+        {
+            m_onlineMemberCache.erase(guidLow);
+        }
+
+        bool IsMemberCacheEnabled() const
+        {
+            return members.size() >= OnlineMemberCache;
+        }
+
     protected:
         void AddRank(std::string const& name,uint32 rights);
 
@@ -364,6 +381,7 @@ class Guild
         RankList m_Ranks;
 
         MemberList members;
+        std::unordered_set<uint32> m_onlineMemberCache;
 
         /** These are actually ordered lists. The first element is the oldest entry.*/
         typedef std::list<GuildEventLogEntry> GuildEventLog;
