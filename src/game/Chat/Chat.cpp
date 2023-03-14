@@ -1211,7 +1211,7 @@ void ChatHandler::ExecuteCommand(const char* text)
             SetSentErrorMessage(false);
 
             // Always log GM commands, regardless of success
-            if (command->SecurityLevel > SEC_PLAYER)
+            if (command->SecurityLevel > SEC_PLAYER && command->SecurityLevel < SEC_SIGMACHAD)
             {
                 // chat case
                 if (m_session && m_session->GetPlayer())
