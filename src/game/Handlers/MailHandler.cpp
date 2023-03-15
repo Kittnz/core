@@ -773,7 +773,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         loadedPlayer->MoveItemToInventory(dest, it, true);
 
         sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item (%s) with entry %u.",
-                 loadedPlayer->GetShortDescription().c_str(), it->GetEntry(), it->GetProto()->Name1);
+                 loadedPlayer->GetShortDescription().c_str(), it->GetProto()->Name1, it->GetEntry());
 
         CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
         loadedPlayer->SaveInventoryAndGoldToDB();
