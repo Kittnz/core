@@ -1229,7 +1229,7 @@ void World::LoadConfigSettings(bool reload)
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
 
-    setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", true);
+    setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
