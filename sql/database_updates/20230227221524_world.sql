@@ -1228,3 +1228,9 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50598, 'Their friendship grew over the years, and when Garalon gave birth to the kingdom of Gilneas, Aldrin was named Lord of Ravenshire and rightful leader of the Ravenwood Keep. Strategically placed at the border of the lands and surrounded by the Great Sea, Aldrin would make sure that the highest and most respectable tradition of his family would be that every Ravenwood was to be the shield of the realm until its very last man. And that the lawbreakers would have to face the fury and the loyalty of the raven that would rather cut its own wings than disrespect the word of the King.', 50599),
 (50599, 'On the day the last sparks of life had left Garaleon\'s body Aldrin became teacher and mentor to the young prince. Not only did he make sure that the heir was ready to take over the legacy of his father but he also employed his own flesh and blood to the young prince and had sworn his entire bloodline to always be in the service of Greymane.', 50600),
 (50600, 'A bond would be forged further throughout history between these two families. A Greymane will always stand atop the throne of Gilneas and a Ravenwood would always be at their side. ', 0);
+-- Set hp of Echo of Kael'thas Sunstrider to 10684.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65118;
+-- Set hp of Echo of Lady Vashj to 10986.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65119;
+-- Set hp of Echo of the Lich King to 11322.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65117;
