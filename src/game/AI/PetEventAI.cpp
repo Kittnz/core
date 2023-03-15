@@ -43,6 +43,10 @@ void PetEventAI::MoveInLineOfSight(Unit* pWho)
     if (m_creature->GetCharmInfo() && m_creature->GetCharmInfo()->IsReturning())
         return;
 
+    // Turtle: Checked inside CanInitiateAttack on vmangos.
+    if (!m_creature->HasReactState(REACT_AGGRESSIVE))
+        return;
+
     if (m_creature->GetDistanceZ(pWho) > CREATURE_Z_ATTACK_RANGE)
         return;
 
