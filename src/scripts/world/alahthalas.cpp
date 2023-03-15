@@ -28,9 +28,12 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
             pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
 
             Creature* vestia = pGo->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-            vestia = pPlayer->FindNearestCreature(60666, 30.0F);
+            if (!vestia)
+                vestia = pPlayer->FindNearestCreature(60666, 30.0F);
+            if (!vestia)
+                return false;
 
-            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+            vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
                     if (vestia)
                     {
@@ -38,7 +41,7 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                         vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
                     }
                 }, 5000);
-            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+            vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
                     if (vestia)
                     {
@@ -46,38 +49,27 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                         vestia->MonsterSay("This is it, keep me safe!");
                     }
                 }, 13000);
-            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+            pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    if (vestia)
-                    {
-                        //vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                        Creature* ogre_1 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                        //ogre_1->AI()->AttackStart(vestia);
-                    }
+                    //vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+                    Creature* ogre_1 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    //ogre_1->AI()->AttackStart(vestia);
                 }, 15000);
-            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+            pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    if (vestia)
-                    {
-                        Creature* ogre_2 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                    }
+                    Creature* ogre_2 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+
                 }, 30000);
-            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+            vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    if (vestia)
-                    {
-                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                        vestia->MonsterSay("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.");
-                    }
+                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                    vestia->MonsterSay("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.");
                 }, 31000);
-            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+            pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    if (vestia)
-                    {
-                        Creature* ogre_3 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                    }
+                    Creature* ogre_3 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
                 }, 45000);
-            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+            vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
                     if (vestia)
                     {
@@ -85,22 +77,16 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                         vestia->MonsterSay("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!");
                     }
                 }, 46000);
-            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+            pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    if (vestia)
-                    {
-                        Creature* tuwhak = pGo->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                        tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
-                    }
+                    Creature* tuwhak = pGo->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
                 }, 60000);
-            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+            vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    if (vestia)
-                    {
-                        vestia->CastSpell(vestia, 1449, false);
-                    }
+                    vestia->CastSpell(vestia, 1449, false);
                 }, 100000);
-            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer]() {
                 Creature* vestia = player->FindNearestCreature(60666, 30.0F);
                 if (vestia)
                 {
@@ -468,32 +454,37 @@ bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* bolvar, Quest const* pQ
     if (pQuest->GetQuestId() == 40379 && !pPlayer->FindNearestCreature(60667, 30.0F))
     {
         Creature* anduin = bolvar->FindNearestCreature(1747, 30.0F);        
-        if (!anduin) return false;
+        if (!anduin)
+            return false;
         Creature* vereesa = bolvar->SummonCreature(60667, -8443.82F, 336.08F, 122.16F, 5.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 50 * IN_MILLISECONDS);
+        if (!vereesa)
+            return false;
+
         bolvar->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
-        anduin->m_Events.AddLambdaEventAtOffset([bolvar, anduin]() 
+        anduin->m_Events.AddLambdaEventAtOffset([anduin]() 
             {
             anduin->MonsterSay("Vereesa Windrunner, do your promise that from this day forward your people will join the Alliance and fight for it no matter the hardships it may bring?");
             anduin->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 2000);
-        vereesa->m_Events.AddLambdaEventAtOffset([bolvar, vereesa]() 
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]() 
             {
             vereesa->MonsterSay("Arrogance and isolation doomed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
             vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
             }, 15000);
-        anduin->m_Events.AddLambdaEventAtOffset([bolvar, anduin]() 
+        anduin->m_Events.AddLambdaEventAtOffset([anduin]() 
             {
             anduin->MonsterSay("Well spoken. Well-spoken. Then it is my honor to officially proclaim the Quel'dorei of Alah'thalas a full-fledged member of the Grand Alliance!");
             anduin->HandleEmote(EMOTE_ONESHOT_APPLAUD);
             }, 30000);
-        vereesa->m_Events.AddLambdaEventAtOffset([bolvar, vereesa]() 
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]() 
             {
             vereesa->MonsterSay("The honor is mine, and on behalf of my people I thank you all.");
             vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 45000);
         bolvar->m_Events.AddLambdaEventAtOffset([bolvar]() 
-            { bolvar->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER); 
+            {
+            bolvar->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER); 
             }, 50000);
     }
     return true;
@@ -506,9 +497,17 @@ bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const
     if (pQuest->GetQuestId() == 40384 && !pPlayer->FindNearestCreature(10, 50.0F))
     {
         Creature* controller = alunasha->SummonCreature(10, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        if (!controller)
+            return false;
         Creature* vereesa = alunasha->SummonCreature(60667, 4272.49F, -2815.05F, 82.31F, 2.62F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        if (!vereesa)
+            return false;
         Creature* tyrande = alunasha->SummonCreature(60669, 4273.26F, -2807.21F, 82.31F, 3.48F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        if (!tyrande)
+            return false;
         Creature* citizen= alunasha->FindNearestCreature(60436, 50.0F);
+        if (!citizen)
+            return false;
 
         alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
             {
@@ -537,13 +536,13 @@ bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const
                 alunasha->CastSpell(alunasha, 5906, false);
             }, 18000);
 
-        alunasha->m_Events.AddLambdaEventAtOffset([alunasha, citizen]()
+        citizen->m_Events.AddLambdaEventAtOffset([citizen]()
             {
                 citizen->MonsterSay("I feel...Renewed? Can the goddess do this?, Finally I can focus on casting better spells., This reminds me of the Sunwell.");
                 citizen->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 25000);
 
-        alunasha->m_Events.AddLambdaEventAtOffset([alunasha, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("I feel so light. My mind is free from having to focus on not losing myself. I wish to thank you for all you have done. Know that you will always be considered a close friend of Quel'Dorei, and while we may not know what awaits us, I hope that we can call on you if the need arises.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -559,19 +558,20 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
     if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(10, 50.0F))
     {
         Creature* controller = tyrande->SummonCreature(10, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        if (!controller)
+            return false;
         Creature* vestia = tyrande->SummonCreature(60666, 9667.24F, 2527.82F, 1360.00F, 3.77F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        if (!vestia)
+            return false;
         Creature* vereesa = tyrande->SummonCreature(60667, 9671.61F, 2524.67F, 1360.00F, 3.15F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        if (!vereesa)
+            return false;
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+        vestia->m_Events.AddLambdaEventAtOffset([vestia]()
             {
                 vestia->MonsterSay("High Priestess, the adventurer beside me, has proven a valuable ally and has worked tirelessly in order to assist us in purifying the Moonwell of Elder'thalas. In return, he only asks that we consider building a Moonwell in Alah'Thalas. I even brought a container filled with sacred water.");
                 vestia->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 1000);
-
-        //tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
-        //    {
-        //        tyrande->SummonGameObject(2010879, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 159, true);
-        //    }, 8000);
 
         tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
             {
@@ -579,7 +579,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 15000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+        vestia->m_Events.AddLambdaEventAtOffset([vestia]()
             {
                 vestia->MonsterSay("High Priestess, please, the Quel'dorei have changed, they only seek.");
                 vestia->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -591,13 +591,13 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 35000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("Pardon me, High Priestess.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 40000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("I come on behalf of my people. I can no longer let others do the talking for me.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_BOW);
@@ -609,7 +609,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 55000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("Ten thousand years ago, my ancestors did unspeakable things, but now they are dead. Our kingdom has perished, along with our old ways. The mistakes they made haunt us to this day. We need a font of magic, not to use it, but to help us heal. If it helps, then the Sisterhood can manage the well.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -621,13 +621,13 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 75000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("High Priestess, please! We are both parts of the Alliance, but more than that, we are kin. We have been arrogant in our ways, and we have paid for it dearly. We only seek one chance, a chance to prove that we can be better.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 90000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("My people are dying, there are so few of us left, and this curse is slowly devouring us. I need your help to secure the future for them, for, without it, we will slowly succumb to the curse and fade.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
@@ -639,7 +639,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 115000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+        vestia->m_Events.AddLambdaEventAtOffset([vestia]()
             {
                 vestia->MonsterSay("Does that mean...?");
                 vestia->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -651,7 +651,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 130000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+        vereesa->m_Events.AddLambdaEventAtOffset([vereesa]()
             {
                 vereesa->MonsterSay("I do not object, $N's aid has been fundamental to the survival of Alah'thalas. Thank you, High Priestess.");
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -714,7 +714,9 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
     if (pQuest->GetQuestId() == 40386 && !pPlayer->FindNearestCreature(10, 50.0F)) // Scourge!
     {
         Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600 * IN_MILLISECONDS);
-        
+        if (!controller)
+            return false;
+
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_CORPSE_DESPAWN);
@@ -722,9 +724,11 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
-                Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
-                commander->SetWalk(true);
-                commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                if (Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN))
+                {
+                    commander->SetWalk(true);
+                    commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                }
                 pQuestGiver->MonsterSay("Here they come, hold your ground!");
             }, 1000);
 
@@ -743,9 +747,11 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->MonsterSay("Endirina-dor Highborne!");
-                Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
-                lady_ripper->SetWalk(true);
-                lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                if (Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN))
+                {
+                    lady_ripper->SetWalk(true);
+                    lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                }
             }, 140000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -762,9 +768,11 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->MonsterSay("Begone, spawn of darkness!");
-                Creature* frostshiv = pQuestGiver->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                frostshiv->SetWalk(true);
-                frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                if (Creature* frostshiv = pQuestGiver->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS))
+                {
+                    frostshiv->SetWalk(true);
+                    frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                }
             }, 200000);
 
     }

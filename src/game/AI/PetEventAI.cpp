@@ -43,6 +43,10 @@ void PetEventAI::MoveInLineOfSight(Unit* pWho)
     if (m_creature->GetCharmInfo() && m_creature->GetCharmInfo()->IsReturning())
         return;
 
+    // Turtle: Checked inside CanInitiateAttack on vmangos.
+    if (!m_creature->HasReactState(REACT_AGGRESSIVE))
+        return;
+
     if (m_creature->GetDistanceZ(pWho) > CREATURE_Z_ATTACK_RANGE)
         return;
 
@@ -68,14 +72,24 @@ void PetEventAI::AttackStart(Unit* pWho)
     if (m_creature->IsPet() && !static_cast<Pet*>(m_creature)->IsEnabled())
         return;
 
-    if (pWho == m_creature->GetCharmerOrOwner())
+    Unit* pOwner = m_creature->GetCharmerOrOwner();
+    if (pWho == pOwner)
         return;
 
-    if (m_creature->HasReactState(REACT_PASSIVE) && m_creature->GetCharmInfo() && !m_creature->GetCharmInfo()->IsCommandAttack())
-        return;
+    if (m_creature->GetCharmInfo() && !m_creature->GetCharmInfo()->IsCommandAttack())
+    {
+        // Passive - passive pets can attack if told to
+        if (m_creature->HasReactState(REACT_PASSIVE))
+            return;
 
-    if (pWho->HasAuraPetShouldAvoidBreaking() && m_creature->GetCharmerOrOwner() && m_creature->GetCharmerOrOwner()->IsAlive())
-        return;
+        // Player's pet should not attack PvP flagged target unless told to
+        if (!m_creature->IsPvP() && pWho->IsPvP() && pOwner && pOwner->IsPlayer())
+            return;
+
+        // CC - mobs under crowd control can be attacked if owner commanded
+        if (pWho->HasAuraPetShouldAvoidBreaking() && pOwner && pOwner->IsAlive())
+            return;
+    }
 
     if (m_creature->Attack(pWho, m_bMeleeAttack))
     {
@@ -83,7 +97,7 @@ void PetEventAI::AttackStart(Unit* pWho)
         m_creature->SetInCombatWith(pWho);
         pWho->SetInCombatWith(m_creature);
 
-        if (Player* pOwner = ToPlayer(m_creature->GetCharmerOrOwner()))
+        if (pOwner && pOwner->IsPlayer())
         {
             if (!pOwner->IsInCombat())
             {
@@ -245,15 +259,12 @@ void PetEventAI::MovementInform(uint32 moveType, uint32 data)
 {
     CreatureEventAI::MovementInform(moveType, data);
 
-    if (!m_creature->GetCharmInfo() || !m_creature->GetCharmerOrOwner())
-        return;
-
     // Receives notification when pet reaches owner
     if (moveType == FOLLOW_MOTION_TYPE)
     {
         // If data is owner's GUIDLow then we've reached follow point,
         // otherwise we're probably chasing a creature.
-        if ((data == m_creature->GetCharmerOrOwner()->GetGUIDLow()) && m_creature->GetCharmInfo()->IsReturning())
+        if (m_creature->GetCharmInfo() && m_creature->GetCharmInfo()->IsReturning() && data == m_creature->GetCharmerOrOwnerGuid().GetCounter())
         {
             m_creature->GetCharmInfo()->SetIsReturning(false);
         }
