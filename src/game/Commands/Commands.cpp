@@ -70,6 +70,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "GuidObjectScaling.h"
+#include "PlayerDump.h"
 #include "revision.h"
 #include "Auth/base32.h"
 #include <cctype>
@@ -15517,6 +15518,151 @@ bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
             else
                 PSendSysMessage("%u - %s", itr.second, pProto->Name1);
         }
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandlePDumpLoadCommand(char *args)
+{
+    char* file = ExtractQuotedOrLiteralArg(&args);
+    if (!file)
+        return false;
+
+    std::string account_name;
+    uint32 account_id = ExtractAccountId(&args, &account_name);
+    if (!account_id)
+        return false;
+
+    char* name_str = ExtractLiteralArg(&args);
+
+    uint32 lowguid = 0;
+    std::string name;
+
+    if (name_str)
+    {
+        name = name_str;
+        // normalize the name if specified and check if it exists
+        if (!normalizePlayerName(name))
+        {
+            PSendSysMessage(LANG_INVALID_CHARACTER_NAME);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (ObjectMgr::CheckPlayerName(name, true) != CHAR_NAME_SUCCESS)
+        {
+            PSendSysMessage(LANG_INVALID_CHARACTER_NAME);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (*args)
+        {
+            if (!ExtractUInt32(&args, lowguid))
+                return false;
+
+            if (!lowguid)
+            {
+                PSendSysMessage(LANG_INVALID_CHARACTER_GUID);
+                SetSentErrorMessage(true);
+                return false;
+            }
+
+            ObjectGuid guid = ObjectGuid(HIGHGUID_PLAYER, lowguid);
+
+            if (sObjectMgr.GetPlayerAccountIdByGUID(guid))
+            {
+                PSendSysMessage(LANG_CHARACTER_GUID_IN_USE, lowguid);
+                SetSentErrorMessage(true);
+                return false;
+            }
+        }
+    }
+
+    switch (PlayerDumpReader().LoadDump(file, account_id, name, lowguid))
+    {
+        case DUMP_SUCCESS:
+            PSendSysMessage(LANG_COMMAND_IMPORT_SUCCESS);
+            break;
+        case DUMP_FILE_OPEN_ERROR:
+            PSendSysMessage(LANG_FILE_OPEN_FAIL, file);
+            SetSentErrorMessage(true);
+            return false;
+        case DUMP_FILE_BROKEN:
+            PSendSysMessage(LANG_DUMP_BROKEN, file);
+            SetSentErrorMessage(true);
+            return false;
+        case DUMP_TOO_MANY_CHARS:
+            PSendSysMessage(LANG_ACCOUNT_CHARACTER_LIST_FULL, account_name.c_str(), account_id);
+            SetSentErrorMessage(true);
+            return false;
+        default:
+            PSendSysMessage(LANG_COMMAND_IMPORT_FAILED);
+            SetSentErrorMessage(true);
+            return false;
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandlePDumpWriteCommand(char *args)
+{
+    if (!*args)
+        return false;
+
+    char* file = ExtractQuotedOrLiteralArg(&args);
+    if (!file)
+        return false;
+
+    char* p2 = ExtractLiteralArg(&args);
+
+    uint32 lowguid;
+    ObjectGuid guid;
+    // character name can't start from number
+    if (!ExtractUInt32(&p2, lowguid))
+    {
+        std::string name = ExtractPlayerNameFromLink(&p2);
+        if (name.empty())
+        {
+            SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        guid = sObjectMgr.GetPlayerGuidByName(name);
+        if (!guid)
+        {
+            PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        lowguid = guid.GetCounter();
+    }
+    else
+        guid = ObjectGuid(HIGHGUID_PLAYER, lowguid);
+
+    if (!sObjectMgr.GetPlayerAccountIdByGUID(guid))
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    switch (PlayerDumpWriter().WriteDump(file, lowguid))
+    {
+        case DUMP_SUCCESS:
+            PSendSysMessage(LANG_COMMAND_EXPORT_SUCCESS);
+            break;
+        case DUMP_FILE_OPEN_ERROR:
+            PSendSysMessage(LANG_FILE_OPEN_FAIL, file);
+            SetSentErrorMessage(true);
+            return false;
+        default:
+            PSendSysMessage(LANG_COMMAND_EXPORT_FAILED);
+            SetSentErrorMessage(true);
+            return false;
     }
 
     return true;
