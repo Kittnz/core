@@ -240,6 +240,12 @@ inline bool isBasicLatinCharacter(wchar_t wchar)
     return false;
 }
 
+
+inline bool isPrintableAsciiCharacter(wchar_t wchar)
+{
+    return wchar >= 0x20 && wchar <= 0x7E;
+}
+
 inline bool isExtendedLatinCharacter(wchar_t wchar)
 {
     if (isBasicLatinCharacter(wchar))
