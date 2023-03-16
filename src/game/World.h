@@ -1084,6 +1084,10 @@ class World
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
 
+        // Automatic Player Dump
+        void SchedulePlayerDump(uint32 guidLow);
+        void AutoPDumpWorker();
+
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
         void RemoveShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.erase(guid); }
@@ -1226,6 +1230,10 @@ class World
         uint32 m_anticrashRearmTimer = 0;
         std::unique_ptr<std::thread> m_charDbWorkerThread;
         std::thread m_autoCommitThread;
+        std::thread m_autoPDumpThread;
+        std::mutex m_autoPDumpMutex;
+        std::set<uint32> m_autoPDumpPendingGuids;
+        std::set<uint32> m_autoPDumpAllGuids;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
