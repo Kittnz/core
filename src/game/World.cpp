@@ -1235,6 +1235,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
+    m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
+
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
@@ -3919,7 +3921,7 @@ void World::AutoPDumpWorker()
         {
             char fileName[64] = {};
             sprintf(fileName, "Char%u-%u.bak", guid, (uint32)GetGameTime());
-            switch (PlayerDumpWriter().WriteDump(fileName, guid))
+            switch (PlayerDumpWriter().WriteDump(sWorld.GetPDumpDirectory() + "/" + fileName, guid))
             {
                 case DUMP_SUCCESS:
                     break;

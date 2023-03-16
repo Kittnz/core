@@ -15534,7 +15534,7 @@ bool ChatHandler::HandlePDumpListCommand(char* args)
     sprintf(fileName, "Char%u-", guidLow);
 
     PSendSysMessage("Searching for pdumps for guid %u:", guidLow);
-    if (ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT("./")))
+    if (ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT(sWorld.GetPDumpDirectory().c_str())))
     {
         ACE_DIRENT* dp;
 
@@ -15608,7 +15608,7 @@ bool ChatHandler::HandlePDumpLoadCommand(char *args)
         }
     }
 
-    switch (PlayerDumpReader().LoadDump(file, account_id, name, lowguid))
+    switch (PlayerDumpReader().LoadDump(sWorld.GetPDumpDirectory() + "/" + file, account_id, name, lowguid))
     {
         case DUMP_SUCCESS:
             PSendSysMessage(LANG_COMMAND_IMPORT_SUCCESS);
@@ -15678,7 +15678,7 @@ bool ChatHandler::HandlePDumpWriteCommand(char *args)
         return false;
     }
 
-    switch (PlayerDumpWriter().WriteDump(file, lowguid))
+    switch (PlayerDumpWriter().WriteDump(sWorld.GetPDumpDirectory() + "/" + file, lowguid))
     {
         case DUMP_SUCCESS:
             PSendSysMessage(LANG_COMMAND_EXPORT_SUCCESS);
