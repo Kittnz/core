@@ -335,13 +335,15 @@ std::string NormalizeString(const std::string& InStr)
         return "";
     }
 
+
     std::wstring ClearedWideString;
     ClearedWideString.reserve(WideString.size());
     for (wchar_t ch : WideString)
     {
         if (isExtendedLatinCharacter(ch) || 
             isCyrillicCharacter(ch) || 
-            isEastAsianCharacter(ch)
+            isEastAsianCharacter(ch) ||
+            isNumericOrSpace(ch) 
             || (ch == 0x5B || ch == 0x5D || ch == 0x3A || ch == 0x2E || ch == 0x2C || ch == 0x20 || ch == 0xD)) // Symbols: [ ] : . , SPC CR
         {
             ClearedWideString.push_back(ch);
