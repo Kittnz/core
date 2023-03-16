@@ -793,6 +793,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE, "BeginnersGuildHorde", 0);
     setConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE, "BeginnersGuildAlliance", 0);
 
+    setConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING, "Account.ShowWarningAge", 3);
+
     setConfig(CONFIG_BOOL_PTR, "PTR", false);
 
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
