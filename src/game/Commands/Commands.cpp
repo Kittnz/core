@@ -84,6 +84,7 @@
 #include <sstream>
 #include <ctime>
 #include "Anticheat/Anticheat.h"
+#include <ace/OS_NS_dirent.h>
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -15518,6 +15519,33 @@ bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
             else
                 PSendSysMessage("%u - %s", itr.second, pProto->Name1);
         }
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandlePDumpListCommand(char* args)
+{
+    uint32 guidLow = 0;
+    if (!ExtractUInt32(&args, guidLow))
+        return false;
+
+    char fileName[32] = {};
+    sprintf(fileName, "Char%u-", guidLow);
+
+    PSendSysMessage("Searching for pdumps for guid %u:", guidLow);
+    if (ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT("./")))
+    {
+        ACE_DIRENT* dp;
+
+        while (!!(dp = ACE_OS::readdir(dirp)))
+            if (strstr(dp->d_name, fileName))
+                PSendSysMessage("- %s", dp->d_name);
+
+#ifndef _WIN32
+        // this causes a crash on Windows, so just accept a minor memory leak for now
+        ACE_OS::closedir(dirp);
+#endif
     }
 
     return true;

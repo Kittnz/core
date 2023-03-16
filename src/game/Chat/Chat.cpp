@@ -423,6 +423,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand pdumpCommandTable[] =
     {
+        { "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpListCommand,           "", nullptr },
         { "load",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpLoadCommand,           "", nullptr },
         { "write",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpWriteCommand,          "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
