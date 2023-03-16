@@ -446,6 +446,9 @@ class ChatHandler
 
         bool HandleUnitSpeedInfoCommand(char* args);
 
+        bool HandlePDumpLoadCommand(char* args);
+        bool HandlePDumpWriteCommand(char* args);
+
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
         bool HandleQuestCompleteCommand(char* args);
