@@ -207,6 +207,7 @@ void AccountMgr::Load()
 
     LoadAccountNames();
     LoadAccountBanList();
+    LoadAccountWarnings();
     LoadIPBanList();
     LoadFingerprintBanList();
 }
@@ -391,6 +392,23 @@ void AccountMgr::LoadAccountBanList(bool silent)
         if (unbandate == bandate)
             unbandate = 0xFFFFFFFF;
         m_accountBanned[fields[0].GetUInt32()] = unbandate;
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountWarnings(bool silent)
+{
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 && (`banreason` LIKE \"WARN:%\") ORDER BY `bandate`"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountWarnings.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountWarnings[fields[0].GetUInt32()] = fields[1].GetCppString().substr(5, fields[1].GetCppString().size() - 5);
     } while (banresult->NextRow());
 }
 

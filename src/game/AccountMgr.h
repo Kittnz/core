@@ -103,11 +103,20 @@ class AccountMgr
         void LoadIPBanList(bool silent=false);
         void LoadAccountBanList(bool silent=false);
         void LoadFingerprintBanList(bool silent = false);
+        void LoadAccountWarnings(bool silent = false);
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
         void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
-        
+        void WarnAccount(uint32 acc, std::string reason) { m_accountWarnings[acc] = reason; }
+        char const* GetWarningText(uint32 acc) const
+        {
+            auto itr = m_accountWarnings.find(acc);
+            if (itr != m_accountWarnings.end())
+                return itr->second.c_str();
+            return nullptr;
+        }
+
         void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
         bool BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
         void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
@@ -130,6 +139,7 @@ class AccountMgr
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
+        std::map<uint32, std::string> m_accountWarnings;
         std::map<std::string, uint32> m_accountNameToId;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;

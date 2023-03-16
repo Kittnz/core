@@ -4232,6 +4232,7 @@ bool ChatHandler::HandleWarnCharacterCommand(char* args)
 
     MangosStrings mstring = LANG_WARN_INFORM;
     sWorld.WarnAccount(playerData->uiAccount, authorName, reason, "WARN");
+    sAccountMgr.WarnAccount(playerData->uiAccount, reason);
 
     if (target)
     {
