@@ -623,7 +623,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (char const* warning = sAccountMgr.GetWarningText(GetAccountId()))
     {
-        ChatHandler(pCurrChar).PSendSysMessage("|cFFFF5500 Your account has received a warning: %s |r", warning);
+        ChatHandler(pCurrChar).PSendSysMessage("|cFFFF5500Your account has received a warning: %s |r", warning);
         SendNotification("WARNING: %s", warning);
     }
 
