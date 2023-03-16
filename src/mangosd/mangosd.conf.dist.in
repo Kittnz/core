@@ -19,6 +19,10 @@ LogsDir = "../logs"
 
 HonorDir = "../honor"
 
+# PDumpDir. Folder to store pdump files.
+
+PDumpDir = "../pdump"
+
 # HardcoreModeLogFile. HardcoreModeLogFile name.
 
 HardcoreModeLogFile = "hardcore.log"

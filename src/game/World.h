@@ -1023,6 +1023,7 @@ class World
         static uint32 GetRelocationAINotifyDelay() { return m_relocation_ai_notify_delay; }
 
         std::string const& GetWardenModuleDirectory() const { return m_wardenModuleDirectory; }
+        std::string const& GetPDumpDirectory() const { return m_autoPDumpDirectory; }
         std::string const& GetWorldUpdatesDirectory() const { return m_worldUpdatesDirectory; }
         std::string const& GetWorldUpdatesMigration() const { return m_worldUpdatesMigration; }
         MigrationFile& GetMigration() { return m_worldMigration; };
@@ -1197,6 +1198,7 @@ class World
         std::string m_dataPath;
         std::string m_honorPath;
         std::string m_wardenModuleDirectory;
+        std::string m_autoPDumpDirectory;
         std::string m_worldUpdatesDirectory;
         std::string m_worldUpdatesMigration;
         MigrationFile m_worldMigration;
