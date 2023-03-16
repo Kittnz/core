@@ -81,6 +81,7 @@
 #include "Database/AutoUpdater.hpp"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
+#include "PlayerDump.h"
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
 
@@ -213,6 +214,9 @@ void World::InternalShutdown()
 
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
+
+    if (m_autoPDumpThread.joinable())
+        m_autoPDumpThread.join();
 
 #ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
@@ -1231,6 +1235,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
+    m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
+
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
@@ -1835,6 +1841,7 @@ void World::SetInitialWorldSettings()
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
+    m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
 
     if (getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
         m_autoCommitThread = std::thread(&autoCommitWorkerThread);
@@ -3883,4 +3890,46 @@ bool World::ExecuteUpdate(char const* format, ...)
 
     GetMigration().AddRow(szQuery);
     return WorldDatabase.PExecuteLog(szQuery);
+}
+
+void World::SchedulePlayerDump(uint32 guidLow)
+{
+    // Don't backup character multiple times per session.
+    if (m_autoPDumpAllGuids.find(guidLow) != m_autoPDumpAllGuids.end())
+        return;
+
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    m_autoPDumpPendingGuids.insert(guidLow);
+    m_autoPDumpAllGuids.insert(guidLow);
+}
+
+void World::AutoPDumpWorker()
+{
+    CharacterDatabase.ThreadStart();
+    while (!IsStopped())
+    {
+        std::this_thread::sleep_for(5s);
+        
+        std::set<uint32> dumpGuids;
+
+        {
+            std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+            std::swap(dumpGuids, m_autoPDumpPendingGuids);
+        }
+
+        for (auto const& guid : dumpGuids)
+        {
+            char fileName[64] = {};
+            sprintf(fileName, "Char%u-%u.bak", guid, (uint32)GetGameTime());
+            switch (PlayerDumpWriter().WriteDump(sWorld.GetPDumpDirectory() + "/" + fileName, guid))
+            {
+                case DUMP_SUCCESS:
+                    break;
+                default:
+                    sLog.outError("Failed to dump character %u.", guid);
+                    break;
+            }
+        }
+    }
+    CharacterDatabase.ThreadEnd();
 }
