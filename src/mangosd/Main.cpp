@@ -42,6 +42,7 @@
 DatabaseType WorldDatabase;                                 ///< Accessor to the world database
 DatabaseType CharacterDatabase;                             ///< Accessor to the character database
 DatabaseType LoginDatabase;                                 ///< Accessor to the realm/login database
+DatabaseType LogsDatabase;                                  ///< Accessor to the Logs database
 
 uint32 realmID;                                             ///< Id of the realm
 

@@ -32,6 +32,7 @@ HardcoreModeLogFile = "hardcore.log"
 LoginDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_logon"
 WorldDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_world"
 CharacterDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_chars"
+LogsDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_logs"
 
 # DB Auto-updater
 
@@ -50,12 +51,14 @@ AutoCommit.Minutes = 0
 LoginDatabase.Connections = 4
 WorldDatabase.Connections = 1
 CharacterDatabase.Connections = 6
+LogsDatabase.Connections = 2
 
 # Database.WorkerThreads. Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
 
 LoginDatabase.WorkerThreads = 2
 WorldDatabase.WorkerThreads = 1
 CharacterDatabase.WorkerThreads = 4
+LogsDatabase.WorkerThreads = 6
 
 # MaxPingTime. Settings for maximum database-ping interval.
 
@@ -2026,3 +2029,10 @@ WhisperTargets.DecayTime = 1800
 #        Hyjal Default: 40 (Level)
 
 WhisperTargets.BypassLevel = 40
+
+
+#    Account.ShowWarningAge
+#        Amount of days a warning will be shown to the player upon logging in from the moment the warning was given.
+#        Default: 3
+
+Account.ShowWarningAge = 3

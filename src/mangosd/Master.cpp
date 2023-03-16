@@ -134,6 +134,7 @@ int Master::Run()
     CharacterDatabase.AllowAsyncTransactions();
     WorldDatabase.AllowAsyncTransactions();
     LoginDatabase.AllowAsyncTransactions();
+    LogsDatabase.AllowAsyncTransactions();
 
     ///- Catch termination signals
     _HookSignals();
@@ -248,6 +249,7 @@ int Master::Run()
     CharacterDatabase.StopServer();
     WorldDatabase.StopServer();
     LoginDatabase.StopServer();
+    LogsDatabase.StopServer();
 
     sLog.outString("Halting process...");
 
@@ -371,11 +373,13 @@ bool Master::_StartDB()
 
     if (!StartDB("World", WorldDatabase) ||
         !StartDB("Character", CharacterDatabase) ||
-        !StartDB("Login", LoginDatabase))
+        !StartDB("Login", LoginDatabase) ||
+        !StartDB("Logs", LogsDatabase))
     {
         WorldDatabase.HaltDelayThread();
         CharacterDatabase.HaltDelayThread();
         LoginDatabase.HaltDelayThread();
+        LogsDatabase.HaltDelayThread();
         return false;
     }
 
