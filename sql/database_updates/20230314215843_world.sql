@@ -19,3 +19,7 @@ UPDATE creature SET spawntimesecsmin = 180,spawntimesecsmax = 180 WHERE id IN (2
 UPDATE quest_template SET objectives = 'Gather 3 Ancient Dust for the Forgotten Keeper at the Ruins of Zeth in Badlands.', RequestItemsText = 'Do not pity them.' WHERE entry = 40712;
 
 REPLACE INTO `creature` VALUES (2574732,92145,0,0,0,0,-14071.1,2970.84,8.32502,3.59494,120,120,0,100,100,0,0,0);
+
+UPDATE creature SET spawntimesecsmin = 120,spawntimesecsmax = 120 WHERE guid IN (44988, 44990, 45020, 44611, 44617, 44626, 45038, 44581, 44766, 44739, 2569248, 44786, 15080);
+UPDATE creature SET spawntimesecsmin = 120,spawntimesecsmax = 120 WHERE id IN (1535, 1536, 1537, 1538, 1539, 1540, 1660, 1941, 1674, 1675);
+UPDATE gameobject SET spawntimesecsmin = 30,spawntimesecsmax = 30 WHERE guid IN (180226, 180227);
