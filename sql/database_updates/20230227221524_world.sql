@@ -1503,5 +1503,12 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
-
-
+-- Create object 'Medivh's Merlot' that looks like object 'Orcbarrel03', this object should have a respawn time of 4 days, scale 0.8, drops between 2-5 Medivh's Merlot.
+-- Create object 'Medivh's Merlot Blue' that looks like object 'InnBarrel', this object should have a respawn time of 4 days, scale 0.8, drops between 2-5 Medivh's Merlot Blue.
+REPLACE INTO gameobject_template VALUES
+(2011043, 3, 24691, 'Medivh\'s Merlot', 0, 4, 0.8, 43, 2011043, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2011044, 3, 23262, 'Medivh\'s Merlot Blue', 0, 4, 0.8, 43, 2011044, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO gameobject_loot_template VALUES
+(2011043, 61174, 100, 0, 2, 5, 0),
+(2011044, 61175, 100, 0, 2, 5, 0);
+update gameobject set spawntimesecsmin = 345600, spawntimesecsmax = 345600 where id in (2011043,2011043);
