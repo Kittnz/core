@@ -401,7 +401,7 @@ void AccountMgr::LoadAccountWarnings(bool silent)
     uint32 maxAge = sWorld.getConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING);
 
 
-    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 && (`banreason` LIKE \"WARN:%\") WHERE `bandate` > UNIX_TIMESTAMP(NOW() - INTERVAL %u DAY) ORDER BY `bandate`", maxAge));
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 AND (`banreason` LIKE \"WARN:%\") AND `bandate` > UNIX_TIMESTAMP(NOW() - INTERVAL %u DAY) ORDER BY `bandate`", maxAge));
 
     if (!banresult)
     {
