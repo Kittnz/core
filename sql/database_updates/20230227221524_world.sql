@@ -946,3 +946,590 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+REPLACE INTO item_template VALUES
+(61176, 12, 0, 'The First Greymane', '', 1155, 1, 0, 1, 3200, 800, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 50568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50568, 'Out of the seven nations that were originally part of the Empire of Arathor, Gilneas stands out as the one that had to fight the hardest for its independence. While Lordaeron was able to secure its freedom through the influence of its nobles, the people of Gilneas had to make great sacrifices to gain their independence.', 50569),
+(50569, 'Although the exact dates of these events have been lost to the sands of time, it is a source of great pride for Gilneas to know that it gained its independence before other notable nations like Alterac or Kul Tiras. The people of Gilneas were among the first to break free from the yoke of Arathorian nobility and enjoy the full benefits of self-rule.', 50570),
+(50570, 'According to legend, the Greymane dynasty that ruled Gilneas was founded by Garalon, a minor noble who owned an insignificant plot of land in the southern part of the country. Over time, Garalon\'s influence grew and he became known as a skilled fighter, wise judge, and honorable opponent. His exploits became the stuff of legend even in his own time. However, he grew increasingly tired of the corrupt Arathorian nobles who sought to exploit and oppress his homeland.', 50571),
+(50571, 'Eventually, Garalon gathered other like-minded lords from Gilneas to form a rebellion against the corrupt Arathorian king, Thoradin III, and his followers. Many lords were hesitant to join the rebellion, but Garalon was able to persuade them and eventually declared himself the King of Gilneas.', 50572),
+(50572, 'This was an affront that could not be tolerated by Arathor, which sent its army to pacify Gilneas. Numerous battles were fought on the peninsula, but despite the bravery and courage of Gilneas\' men, the odds seemed stacked against them. Arathor had a numerical advantage and was able to overwhelm the Gilnean armies. The Battle of Ravenswood was lost and the Gilnean army was scattered, seemingly without hope.', 50573),
+(50573, 'But the young Gilnean king was not deterred. He rebuilt his strength and rallied the morale of his men. The final battle was fought on the hills of Stillward. Greymane assumed a defensive position on the hilltop, with cavalry hiding in the nearby forest. The Arathorian forces were over four times larger and better equipped, and they rushed Garalon\'s positions without considering their own men. The Gilnean forces fought valiantly, killing thousands of Arathorians, but it was not enough. The enemy flowed onto the hills and threatened to surround Greymane\'s army.', 50574),
+(50574, 'Thankfully, the cavalry in the woods emerged from hiding to turn the tide of the battle. They galloped out of the forest, charging straight into the Arathorian army. Caught off guard, the Arathorians\' formation was shattered. Although they attempted to retreat, the Gilneans gave them no quarter and sought revenge for their previous losses. Thousands of Arathorians were killed, including their king, Thoradin III, who pleaded for mercy but received none.', 50575),
+(50575, 'In the end, Gilneas emerged victorious, and the young prince of Arathor soon came to sue for peace. Gilneas was granted its independence and joined Dalaran as one of the independent human nations. Garalon became the king of the newly founded nation, and the Greymane dynasty was born.', 50576),
+(50576, 'As the newly founded kingdom of Gilneas began to thrive, it faced yet another challenge. The nobles of Dalaran, who saw a land ripe for exploitation, attacked Gilneas without warning or declaration of war. This was a clear violation of the rules of engagement and displayed the dishonorable nature of the Dalaranian people. The mages of Dalaran, believing they could easily win the war with their magical abilities, underestimated the strength of the Gilnean army. The first battle of Ebonmere was a complete massacre of the Dalaranian soldiers, and their mages were hanged on trees from the city of Gilneas to the kingdom\'s border, as a reminder to never approach Gilneas again.', 50577),
+(50577, 'Despite the victory over Dalaran, the young king of Gilneas was not able to rest for long. Various nobles of the land were not always loyal to the king, and some rebelled against his rule. However, King Garalon\'s power was too great, and he managed to subdue them all with the help of his favored general, Lord Ravenwood.$B$BLater in his life, King Garalon focused on reforming the administration of Gilneas. He introduced many new laws and helped the poor populace of the southern regions. Under his rule, Gilneas grew stronger than ever before, and he even supported our Kul Tiran and Alteraci brothers during their wars of independence.', 50578),
+(50578, 'However, tragedy struck when King Garalon was assassinated at the age of 43 by the very Alteraci nobles he had supported just years before. This incident sparked a major war between the two nations that lasted for many decades and ravaged both kingdoms. The war between Gilneas and Alterac was one of the bloodiest and most brutal in the history of the seven human kingdoms, leaving a lasting impact on the region for centuries to come.', 50579),
+(50579, 'Despite the conflict, King Garalon\'s legacy lived on. He is remembered as a just and honorable ruler who fought for the independence of his people and stood up against tyranny and oppression. His leadership and military prowess helped establish the Greymane dynasty, which would go on to rule Gilneas for generations to come. Even in death, Garalon remained a symbol of hope and inspiration for the people of Gilneas, who continued to honor his memory long after he was gone.', 0);
+
+replace into item_template values
+ ('61177', '9', '6', 'Recipe: Potion of Quickness', '', '1097', '3', '0', '1', '100000', '25000', '0', '-1', '-1', '60',
+ '0', '171', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61178', '9', '4', 'Plans: Thorium Spurs', '', '1097', '3', '0', '1', '140000', '35000', '0', '-1', '-1', '60',
+ '0', '164', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61179', '9', '1', 'Pattern: Enchanted Armor Kit', '', '1097', '3', '0', '1', '140000', '35000', '0', '-1', '-1', '60',
+ '0', '165', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61180', '9', '8', 'Formula: Enchant Cape - Greater Arcane Resistance', '', '7798', '3', '0', '1', '140000', '35000', '0', '-1', '-1', '60',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61181', '0', '0', 'Potion of Quickness', '', '292', '1', '0', '1', '5000', '1250', '0', '-1', '-1', '60',
+ '50', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61182', '0', '0', 'Thorium Spurs', '', '22757', '2', '0', '1', '4000', '1000', '0', '-1', '-1', '55',
+ '0', '164', '275', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61183', '0', '0', 'Enchanted Armor Kit', '', '23763', '3', '0', '1', '20000', '5000', '0', '-1', '-1', '60',
+ '50', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61184', '15', '0', 'The Scythe of Elune', '', '20536', '5', '0', '1', '0', '0', '0', '-1', '-1', '90',
+ '60', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61185', '2', '5', 'Dawnstone Hammer', '', '23401', '4', '0', '1', '367224', '91806', '17', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '32', '6', '13',
+ '4', '9', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '142', '212', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '18042', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '120', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61186', '4', '1', 'Gloves of Unwinding Mystery', '', '26436', '4', '0', '1', '65244', '16311', '10', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '64', '0', '0', '0',
+ '0', '0', '0', '23727', '1', '0', '0', '-1', '0', '-1', '8384', '1', '0', '0', '-1', '0', '-1', '9397', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '7', '0', '0', '0', '35', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61187', '4', '1', 'Intricate Gyroscope Goggles', 'Interlocking mechanisms increase sight picture at long ranges!', '19563', '4', '0', '1', '115856', '28964', '1', '-1', '-1', '65',
+ '60', '202', '300', '0', '0', '0', '0', '0', '0', '1', '0', '3', '18', '5', '15',
+ '7', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '78', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '21434', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '7', '0', '0', '0', '60', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61188', '4', '2', 'Inscribed Runic Bracers', '', '27048', '4', '0', '1', '71808', '17952', '9', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '6', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '86', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '9141', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61189', '9', '4', 'Plans: Dawnstar Hammer', '', '1097', '4', '0', '1', '200000', '50000', '0', '-1', '-1', '65',
+ '0', '164', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61190', '9', '2', 'Pattern: Gloves of Unwinding Mystery', '', '1097', '4', '0', '1', '200000', '50000', '0', '-1', '-1', '65',
+ '0', '197', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61191', '9', '3', 'Schematic: Intricate Gyroscope Goggles', '', '1097', '4', '0', '1', '200000', '50000', '0', '-1', '-1', '65',
+ '0', '202', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61192', '9', '1', 'Pattern: Inscribed Runic Bracers', '', '1097', '4', '0', '1', '200000', '50000', '0', '-1', '-1', '65',
+ '0', '165', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61193', '4', '0', 'Verdant Eye Necklace', '', '66201', '4', '0', '1', '255020', '63755', '2', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '18049', '1', '0', '0', '-1', '0', '-1', '14521', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61194', '4', '0', 'The Heart of Dreams', '', '20896', '4', '0', '1', '347732', '86933', '12', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '7598', '1', '0', '0', '-1', '0', '-1', '21596', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61195', '4', '0', 'Ring of Nordrassil', '', '66267', '4', '0', '1', '344476', '86119', '11', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '22', '4', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '120', '0', '0', '0',
+ '0', '0', '0', '13670', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61196', '1', '0', 'Bag of Vastless Concious', '', '20503', '3', '0', '1', '100000', '25000', '0', '-1', '-1', '60',
+ '55', '0', '0', '0', '0', '0', '0', '0', '1', '1', '22', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61197', '7', '0', 'Fading Dream Fragment', '', '1405', '3', '0', '1', '20000', '5000', '0', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61198', '7', '0', 'Small Dream Shard', '', '3809', '2', '0', '1', '4000', '1000', '0', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61199', '7', '0', 'Bright Dream Shard', '', '1262', '3', '0', '1', '20000', '5000', '0', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+REPLACE INTO item_template VALUES
+(61200, 12, 0, 'Chronicles of the National Emblem', '', 918, 1, 0, 1, 2000, 500, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 50580, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50580, 'The origins of the rune found on the Gilnean flag have long been shrouded in mystery and have yet to be fully understood. There are a variety of theories regarding its genesis and significance, with some suggesting that it is a symbol of the first Greymane, while others argue that it was invented by the wise Pellars. Still, others speculate that it may have been a glyph of a primitive god worshipped by humans before the advent of the Light.', 50581),
+(50581, 'As a renowned explorer and archaeologist, I sought to uncover the true origins of this symbol and its meaning for the human race as a whole. However, my research into the early history of Gilneas proved to be challenging, as much of it was poorly documented and contained contradictory information.', 50582),
+(50582, 'Nevertheless, I discovered that Garalon Greymane, the first king of Gilneas, claimed independence from Arathor approximately 100 years after the latter\'s formation and that the Gilnean rune was already present on his sword\'s hilt. This suggests that the symbol predates the establishment of the Gilneas nation and was possibly associated with the Greymane family.', 50583),
+(50583, 'However, my research also revealed the existence of pre-Arathorian artifacts that bore the same symbol. These objects, which ranged from ritual daggers and urns to animal skulls, were found in a variety of locations both within and beyond the kingdom of Gilneas. As such, it is unlikely that they all belonged to the Greymane family. Instead, it seems that the symbol may have been used in primitive magical rituals that predated the learning of arcane arts from Quel\'Dorei.', 50584),
+(50584, 'The history of human magic before the High Elves\' arrival is not well-known, but it is believed to have resembled the primitive magic of trolls or kobolds. Given this, it is probable that the symbol had a special meaning and may have been associated with some primitive god or being.', 50585),
+(50585, 'Further research led me to Quel\'Thalas, where I gained access to two elven manuscripts that shed light on the primitive humans\' history. One sketch in particular closely resembled the Gilnean crest, and its accompanying text suggested that the symbol was used by powerful sorcerers who wielded dark magics and summoned otherworldly beings. While the manuscript did not specify the sorcerers\' race, I deduced that they must have been human.', 50586),
+(50586, 'Unfortunately, my research was cut short, as the elves forbade me from continuing my investigations, possibly out of fear of what I had discovered. Subsequent events, including the First War, demanded my attention, and I had to put my inquiry on hold.', 50587),
+(50587, 'Despite these setbacks, I remain determined to uncover the truth behind these human mages, the powers they possessed, and why the Gilnean royal house chose the symbol for their crest. There is much to discover, and I am confident that with persistence and patience, I will uncover the answers.', 0);
+
+REPLACE INTO item_template VALUES
+(61201, 12, 0, 'The Tale of Warmongerer', '', 1134, 1, 0, 1, 2400, 600, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 50588, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50588, 'There was once a brave Gilnean fisherman named Danavar. He lived in the coastal village of Seahaven with his wife and son. However, one day, a terrible tragedy struck when fish men known as Mur\'gul invaded Gilneas from the sea. Danavar\'s wife and son were killed in the attack, leaving him with only his daughter.', 50589),
+(50589, 'At that time, Gilneas was poorly defended as the Army had been depleted after the Calamity of the North. The few troops that were available were covering the land border and were unaware of the true threat from the sea.', 50590),
+(50590, 'With his harpoon and other simple tools, Danavar rallied as many fishermen as he could to form a militia. Together, they moved on the offensive, holding the line against the Mur\'gul invasion. More and more people joined Danavar\'s militia, and eventually, the Royal Army received news of the invasion and relocated south to fight the menace.', 50591),
+(50591, 'The Armies assistance broke the ranks of the Mur\'gul, forcing them back into the seas. But Danavar wanted more than just victory; he wanted revenge for the death of his wife and son. So, he rallied the fishermen to attack the enemy, boarding their fishing boats armed with their trusted harpoons.', 50592),
+(50592, 'With their skilled aim, they chased the Mur\'gul relentlessly, even into the depths of the sea. Danavar and his fishermen slaughtered the majority of the retreating Mur\'gul, and he returned to Gilneas a hero. The King was grateful for Danavar\'s bravery and granted him knighthood. He was dubbed the Warmongerer in reference to his original profession as a fishmonger.', 50593),
+(50593, 'Danavar moved to Gilneas City with his daughter and served the royal family. Seahaven was never rebuilt, but his daughter grew up well and later married into the Ravenwood family. To ensure Gilneas would never fear the seas again, the King commissioned the creation of the Black Fleet in honor of Danavar\'s bravery. ', 0);
+
+REPLACE INTO item_template VALUES
+(61202, 12, 0, 'Aldrin, Protector of the Realm', '', 3426, 1, 0, 1, 2800, 700, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 50594, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50594, 'As the first crack of dawn had embraced the new realm named Gilneas, many stories and songs were made to honor the noble Garalon. He that through fire and blood had succeeded to win the independence of the lands he was born in.', 50595),
+(50595, 'Although history mentions Aldrin as general of the rebel army, only whispers and myths were spread about his true character. It is believed that Aldrin was one of the unlucky children abandoned in Ravenswood, as tribute paid to the myth known as the Wolf-Serpent. Against all odds and fate itself Aldrin managed to survive and was adopted by the Greymane nobility as the son of the cupbearer.', 50596),
+(50596, 'Betrayed by his own nature Aldrin would not have been able to take over his adoptive fathers task. His calling was to battle, a calling that convinced the young Greymane to employ him as his personal bodyguard. From then the two teenagers were to bond through intensive combat and strategy training as rivals. A rivalry that slowly turned into a brothership.', 50597),
+(50597, 'On the day that Garaleon walked the steps towards the leadership of his lands he named Aldrin his knight, and later had him become the general of the rebel army that was to defeat the Great Empire of Arathor. If Garaleon was the sword of the realm, Aldrin would be its shield. If Garaleon was the jury, Aldrin was the executioner.', 50598),
+(50598, 'Their friendship grew over the years, and when Garalon gave birth to the kingdom of Gilneas, Aldrin was named Lord of Ravenshire and rightful leader of the Ravenwood Keep. Strategically placed at the border of the lands and surrounded by the Great Sea, Aldrin would make sure that the highest and most respectable tradition of his family would be that every Ravenwood was to be the shield of the realm until its very last man. And that the lawbreakers would have to face the fury and the loyalty of the raven that would rather cut its own wings than disrespect the word of the King.', 50599),
+(50599, 'On the day the last sparks of life had left Garaleon\'s body Aldrin became teacher and mentor to the young prince. Not only did he make sure that the heir was ready to take over the legacy of his father but he also employed his own flesh and blood to the young prince and had sworn his entire bloodline to always be in the service of Greymane.', 50600),
+(50600, 'A bond would be forged further throughout history between these two families. A Greymane will always stand atop the throne of Gilneas and a Ravenwood would always be at their side. ', 0);
+-- Set hp of Echo of Kael'thas Sunstrider to 10684.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65118;
+-- Set hp of Echo of Lady Vashj to 10986.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65119;
+-- Set hp of Echo of the Lich King to 11322.
+update creature_template set health_min = 10684, health_max = 10684 where entry = 65117;
+-- Item Plans: Dawnstar Hammer (61189), rename to Plans: Dawnstone Hammer.
+update item_template set name = 'Dawnstone Hammer' where entry = 61189;
+-- New Sanctum Items (Dragunovi).
+-- Libram of the Dreamguard
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61203, 'Libram of the Dreamguard', '', 4, 7, 1, 4, 34959, 1, 60, 0, -1, -1, 108425, 27106, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 45838, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Totem of the Stonebreaker
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61204, 'Totem of the Stonebreaker', '', 4, 9, 1, 4, 17919, 1, 60, 0, -1, -1, 105314, 26328, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 48100, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Ring of Nature's Duality
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (61205, 'Ring of Nature\'s Duality', '', 4, 0, 1, 4, 31576, 1, 60, 0, -1, -1, 416243, 104060, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 5, 10, 17993, 1, 0, 0, -1, 0, -1, 18035, 1, 0, 0, -1, 0, -1, 14521, 1, 0, 0, 0, 0, -1, 0, 0, 0);
+-- Robe of the Dreamways
+replace into item_template values
+ ('61206', '4', '1', 'Robe of the Dreamways', '', '61116', '4', '0', '1', '191456', '47864', '5', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '21', '6', '17',
+ '7', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '112', '0', '0', '0',
+ '0', '0', '0', '18054', '1', '0', '0', '-1', '0', '-1', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Jadestone Helmet
+ replace into item_template values
+ ('61207', '4', '4', 'Jadestone Helmet', '', '36244', '4', '0', '1', '163324', '40831', '1', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '16', '4', '15',
+ '7', '32', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '673', '0', '0', '0',
+ '0', '0', '0', '13670', '1', '0', '0', '-1', '0', '-1', '13384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Staff of the Dreamer
+ replace into item_template values
+ ('61208', '2', '10', 'Staff of the Dreamer', '', '66319', '4', '0', '1', '786900', '196725', '17', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '25', '6', '32',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '128', '218', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '15',
+ '0', '0', '0', '23264', '1', '0', '0', '-1', '0', '-1', '14521', '1', '0', '0', '-1', '0', '-1', '0', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '120', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Dreamshard
+ replace into item_template values
+ ('61209', '4', '0', 'Dreamshard', 'Past the point of cleansing, a small glimpse is enough to induce nightmares.', '35843', '4', '0', '1', '326453', '81613', '12', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10',
+ '0', '0', '0', '18053', '1', '0', '0', '1800000', '0', '-1', '23727', '1', '0', '0', '0', '0', '-1', '9159', '0',
+ '0', '0', '1800000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Veil of Nightmare
+ replace into item_template values
+ ('61210', '4', '0', 'Veil of Nightmare', '', '23057', '4', '0', '1', '128428', '32107', '16', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '57', '0', '0', '-10',
+ '0', '0', '0', '14049', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Sandals of Lucidity
+ replace into item_template values
+ ('61211', '4', '1', 'Sandals of Lucidity', '', '16822', '4', '0', '1', '187220', '46805', '8', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '16', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '79', '0', '0', '0',
+ '0', '0', '0', '21631', '1', '0', '0', '-1', '0', '-1', '14521', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Sanctum Bark Wraps
+ replace into item_template values
+ ('61212', '4', '2', 'Sanctum Bark Wraps', '', '28370', '4', '0', '1', '119336', '29834', '9', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '17', '4', '6',
+ '7', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '88', '0', '0', '0',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Talonwind Gauntlets
+ replace into item_template values
+ ('61213', '4', '3', 'Talonwind Gauntlets', '', '27299', '4', '0', '1', '163856', '40964', '10', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '19', '6', '14',
+ '7', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '301', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '50', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Mantle of the Wakener
+ replace into item_template values
+ ('61214', '4', '2', 'Mantle of the Wakener', 'Once worn to usher in the Awakening.', '5928', '4', '0', '1', '204832', '51208', '3', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '6', '11',
+ '7', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '166', '0', '0', '0',
+ '0', '0', '0', '15715', '1', '0', '0', '-1', '0', '-1', '9359', '1', '0', '0', '-1', '0', '-1', '21348', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '70', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('61215', '15', '0', 'Head of Solnius', '', '66380', '4', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('61216', '7', '0', 'Dreamsteel Bar', '', '66378', '2', '0', '1', '8000', '2000', '0', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- NPC Drifting Avatar of Sand, change scale to 2.4
+update creature_template set scale = 2.4 where entry = 61316;
+-- NPC Temporal Dust, change scale to 1.3
+update creature_template set scale = 1.3 where entry = 61317;
+-- Item Small Dream Shard, add jewelry material effect.
+update item_template set material = 4 where entry = 61198;
+-- Item Medivh's Merlot, add liquid material effect , increase stack size to 20.
+update item_template set material = 3, stackable = 20 where entry = 61174;
+-- Item Medivh's Merlot Blue, add liquid material effect , increase stack size to 20 .
+update item_template set material = 3, stackable = 20 where entry = 61175;
+-- Item Premium Chocolate, add default wood effect.
+update item_template set material = 2 where entry = 61173;
+
+replace into item_template values
+ ('61217', '9', '8', 'Formula: Enchant Chest: Mighty Mana', '', '7798', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61218', '9', '6', 'Recipe: Elixir of Greater Nature Power', '', '1097', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '171', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61219', '9', '8', 'Formula: Enchant Boots Superior Stamina', '', '7798', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61220', '9', '8', 'Formula: Enchant Boots - Greater Spirit', '', '7798', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61221', '9', '8', 'Formula: Enchant Bracer - Greater Deflection', '', '7798', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61222', '9', '6', 'Recipe: Dreamshard Elixir', '', '1097', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '171', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61223', '9', '6', 'Recipe: Lucidity Potion', '', '1097', '3', '0', '1', '30000', '7500', '0', '-1', '-1', '60',
+ '0', '171', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61224', '0', '0', 'Dreamshard Elixir', '', '1275', '1', '0', '1', '5000', '1250', '0', '-1', '-1', '56',
+ '46', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61225', '0', '0', 'Lucidity Potion', '', '19520', '1', '0', '1', '5000', '1250', '0', '-1', '-1', '56',
+ '46', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61226', '9', '0', 'Book: Smelt Dreamsteel', '', '3114', '2', '0', '1', '50000', '12500', '0', '-1', '-1', '60',
+ '0', '186', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61227', '9', '2', 'Book: Craft Dreamthread', '', '3114', '2', '0', '1', '50000', '12500', '0', '-1', '-1', '60',
+ '0', '197', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61228', '9', '1', 'Book: Craft Dreamhide', '', '3114', '2', '0', '1', '50000', '12500', '0', '-1', '-1', '60',
+ '0', '165', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61229', '7', '0', 'Dreamhide', '', '20915', '2', '0', '1', '8000', '2000', '0', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61230', '7', '0', 'Dreamthread', '', '19492', '2', '0', '1', '8000', '2000', '0', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- Create object 'Medivh's Merlot' that looks like object 'Orcbarrel03', this object should have a respawn time of 4 days, scale 0.8, drops between 2-5 Medivh's Merlot.
+-- Create object 'Medivh's Merlot Blue' that looks like object 'InnBarrel', this object should have a respawn time of 4 days, scale 0.8, drops between 2-5 Medivh's Merlot Blue.
+REPLACE INTO gameobject_template VALUES
+(2011043, 3, 24691, 'Medivh\'s Merlot', 0, 4, 0.8, 43, 2011043, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2011044, 3, 23262, 'Medivh\'s Merlot Blue', 0, 4, 0.8, 43, 2011044, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO gameobject_loot_template VALUES
+(2011043, 61174, 100, 0, 2, 5, 0),
+(2011044, 61175, 100, 0, 2, 5, 0);
+update gameobject set spawntimesecsmin = 345600, spawntimesecsmax = 345600 where id in (2011043,2011043);
+-- Lantho Talonmoon <Shard Harmonizer>, display ID 2686, faction 35, level 58, scale 1, humanoid, quest/gossip flags, gossip text : "The Emerald Dream and Nordrassil are linked together, the land itself is enchanted by the magic of that realm. Dream Shards are evidence of this, a powerful substance of pure emerald energy which can only be found here, in Hyjal.$B$B It is my duty to harmonize Small Dream Shards into Bright Dream Shards, if you come along any in your travels, seek me out.
+-- Ralathius, display ID 7863, faction 35, level 61 elite, scale 1, dragonkin, quest/gossip flags, gossip text : "Hidden beneath the veil, a great shadow lurks within the dream, already much of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream, I have resisted it's temptations already, but not all are willed so strong. (Weapon 13709, has 8302 mana)
+REPLACE INTO creature_template VALUES
+(61325, 2686, 0, 0, 0, 0, 'Lantho Talonmoon', 'Shard Harmonizer', 0, 58, 58, 3875, 3875, 0, 0, 3408, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61326, 7863, 0, 0, 0, 0, 'Ralathius', NULL, 0, 61, 61, 9302, 9302, 8302, 8302, 2103, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 708, 937, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20316; set @weapon_1 = 13709; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61326;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41396; set @magic_number = 61326;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hidden beneath the veil, a great shadow lurks within the dream, already much of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream, I have resisted it\'s temptations already, but not all are willed so strong.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41395; set @magic_number = 61325;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Emerald Dream and Nordrassil are linked together, the land itself is enchanted by the magic of that realm. Dream Shards are evidence of this, a powerful substance of pure emerald energy which can only be found here, in Hyjal.$B$BIt is my duty to harmonize Small Dream Shards into Bright Dream Shards, if you come along any in your travels, seek me out.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;

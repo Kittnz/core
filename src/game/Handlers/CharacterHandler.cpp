@@ -621,6 +621,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         DEBUG_LOG("WORLD: Sent motd (SMSG_MOTD)");
     }
 
+    if (char const* warning = sAccountMgr.GetWarningText(GetAccountId()))
+    {
+        ChatHandler(pCurrChar).PSendSysMessage("|cFFFF5500 Your account has received a warning: %s |r", warning);
+        SendNotification("WARNING: %s", warning);
+    }
+
     if (Guild* guild = sGuildMgr.GetGuildById(pCurrChar->GetGuildId()))
     {
         WorldPacket data(SMSG_GUILD_EVENT, (2 + guild->GetMOTD().size() + 1));
