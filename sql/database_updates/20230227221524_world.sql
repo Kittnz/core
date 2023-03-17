@@ -1234,3 +1234,5 @@ update creature_template set health_min = 10684, health_max = 10684 where entry 
 update creature_template set health_min = 10684, health_max = 10684 where entry = 65119;
 -- Set hp of Echo of the Lich King to 11322.
 update creature_template set health_min = 10684, health_max = 10684 where entry = 65117;
+-- Item Plans: Dawnstar Hammer (61189), rename to Plans: Dawnstone Hammer.
+update item_template set name = 'Dawnstone Hammer' where entry = 61189;
