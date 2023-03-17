@@ -268,6 +268,7 @@ void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
+void AddSC_instance_emerald_sanctum();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
@@ -585,6 +586,7 @@ void AddScripts()
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
+    AddSC_instance_emerald_sanctum();
 
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
