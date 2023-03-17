@@ -1236,3 +1236,101 @@ update creature_template set health_min = 10684, health_max = 10684 where entry 
 update creature_template set health_min = 10684, health_max = 10684 where entry = 65117;
 -- Item Plans: Dawnstar Hammer (61189), rename to Plans: Dawnstone Hammer.
 update item_template set name = 'Dawnstone Hammer' where entry = 61189;
+-- New Sanctum Items (Dragunovi).
+-- Libram of the Dreamguard
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61203, 'Libram of the Dreamguard', '', 4, 7, 1, 4, 34959, 1, 60, 0, -1, -1, 108425, 27106, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 45838, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Totem of the Stonebreaker
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61204, 'Totem of the Stonebreaker', '', 4, 9, 1, 4, 17919, 1, 60, 0, -1, -1, 105314, 26328, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 48100, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Ring of Nature's Duality
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (61205, 'Ring of Nature\'s Duality', '', 4, 0, 1, 4, 31576, 1, 60, 0, -1, -1, 416243, 104060, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 5, 10, 17993, 1, 0, 0, -1, 0, -1, 18035, 1, 0, 0, -1, 0, -1, 14521, 1, 0, 0, 0, 0, -1, 0, 0, 0);
+-- Robe of the Dreamways
+replace into item_template values
+ ('61206', '4', '1', 'Robe of the Dreamways', '', '61116', '4', '0', '1', '191456', '47864', '5', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '21', '6', '17',
+ '7', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '112', '0', '0', '0',
+ '0', '0', '0', '18054', '1', '0', '0', '-1', '0', '-1', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Jadestone Helmet
+ replace into item_template values
+ ('61207', '4', '4', 'Jadestone Helmet', '', '36244', '4', '0', '1', '163324', '40831', '1', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '16', '4', '15',
+ '7', '32', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '673', '0', '0', '0',
+ '0', '0', '0', '13670', '1', '0', '0', '-1', '0', '-1', '13384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Staff of the Dreamer
+ replace into item_template values
+ ('61208', '2', '10', 'Staff of the Dreamer', '', '66319', '4', '0', '1', '786900', '196725', '17', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '25', '6', '32',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '128', '218', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '15',
+ '0', '0', '0', '23264', '1', '0', '0', '-1', '0', '-1', '14521', '1', '0', '0', '-1', '0', '-1', '0', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '120', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Dreamshard
+ replace into item_template values
+ ('61209', '4', '0', 'Dreamshard', 'Past the point of cleansing, a small glimpse is enough to induce nightmares.', '35843', '4', '0', '1', '326453', '81613', '12', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10',
+ '0', '0', '0', '18053', '1', '0', '0', '1800000', '0', '-1', '23727', '1', '0', '0', '0', '0', '-1', '9159', '0',
+ '0', '0', '1800000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Veil of Nightmare
+ replace into item_template values
+ ('61210', '4', '0', 'Veil of Nightmare', '', '23057', '4', '0', '1', '128428', '32107', '16', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '57', '0', '0', '-10',
+ '0', '0', '0', '14049', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Sandals of Lucidity
+ replace into item_template values
+ ('61211', '4', '1', 'Sandals of Lucidity', '', '16822', '4', '0', '1', '187220', '46805', '8', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '16', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '79', '0', '0', '0',
+ '0', '0', '0', '21631', '1', '0', '0', '-1', '0', '-1', '14521', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Sanctum Bark Wraps
+ replace into item_template values
+ ('61212', '4', '2', 'Sanctum Bark Wraps', '', '28370', '4', '0', '1', '119336', '29834', '9', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '17', '4', '6',
+ '7', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '88', '0', '0', '0',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Talonwind Gauntlets
+ replace into item_template values
+ ('61213', '4', '3', 'Talonwind Gauntlets', '', '27299', '4', '0', '1', '163856', '40964', '10', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '19', '6', '14',
+ '7', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '301', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '50', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ -- Mantle of the Wakener
+ replace into item_template values
+ ('61214', '4', '2', 'Mantle of the Wakener', 'Once worn to usher in the Awakening.', '5928', '4', '0', '1', '204832', '51208', '3', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '6', '11',
+ '7', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '166', '0', '0', '0',
+ '0', '0', '0', '15715', '1', '0', '0', '-1', '0', '-1', '9359', '1', '0', '0', '-1', '0', '-1', '21348', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '70', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
