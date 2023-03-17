@@ -1355,5 +1355,12 @@ replace into item_template values
 update creature_template set scale = 2.4 where entry = 61316;
 -- NPC Temporal Dust, change scale to 1.3
 update creature_template set scale = 1.3 where entry = 61317;
-
+-- Item Small Dream Shard, add jewelry material effect.
+update item_template set material = 4 where entry = 61198;
+-- Item Medivh's Merlot, add liquid material effect , increase stack size to 20.
+update item_template set material = 3, stackable = 20 where entry = 61174;
+-- Item Medivh's Merlot Blue, add liquid material effect , increase stack size to 20 .
+update item_template set material = 3, stackable = 20 where entry = 61175;
+-- Item Premium Chocolate, add default wood effect.
+update item_template set material = 2 where entry = 61173;
 
