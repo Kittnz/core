@@ -1512,3 +1512,24 @@ REPLACE INTO gameobject_loot_template VALUES
 (2011043, 61174, 100, 0, 2, 5, 0),
 (2011044, 61175, 100, 0, 2, 5, 0);
 update gameobject set spawntimesecsmin = 345600, spawntimesecsmax = 345600 where id in (2011043,2011043);
+-- Lantho Talonmoon <Shard Harmonizer>, display ID 2686, faction 35, level 58, scale 1, humanoid, quest/gossip flags, gossip text : "The Emerald Dream and Nordrassil are linked together, the land itself is enchanted by the magic of that realm. Dream Shards are evidence of this, a powerful substance of pure emerald energy which can only be found here, in Hyjal.$B$B It is my duty to harmonize Small Dream Shards into Bright Dream Shards, if you come along any in your travels, seek me out.
+-- Ralathius, display ID 7863, faction 35, level 61 elite, scale 1, dragonkin, quest/gossip flags, gossip text : "Hidden beneath the veil, a great shadow lurks within the dream, already much of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream, I have resisted it's temptations already, but not all are willed so strong. (Weapon 13709, has 8302 mana)
+REPLACE INTO creature_template VALUES
+(61325, 2686, 0, 0, 0, 0, 'Lantho Talonmoon', 'Shard Harmonizer', 0, 58, 58, 3875, 3875, 0, 0, 3408, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61326, 7863, 0, 0, 0, 0, 'Ralathius', NULL, 0, 61, 61, 9302, 9302, 8302, 8302, 2103, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 708, 937, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20316; set @weapon_1 = 13709; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61326;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41396; set @magic_number = 61326;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hidden beneath the veil, a great shadow lurks within the dream, already much of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream, I have resisted it\'s temptations already, but not all are willed so strong.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41395; set @magic_number = 61325;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Emerald Dream and Nordrassil are linked together, the land itself is enchanted by the magic of that realm. Dream Shards are evidence of this, a powerful substance of pure emerald energy which can only be found here, in Hyjal.$B$BIt is my duty to harmonize Small Dream Shards into Bright Dream Shards, if you come along any in your travels, seek me out.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
