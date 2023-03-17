@@ -421,6 +421,14 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand pdumpCommandTable[] =
+    {
+        { "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpListCommand,           "", nullptr },
+        { "load",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpLoadCommand,           "", nullptr },
+        { "write",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpWriteCommand,          "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand questCommandTable[] =
     {
         { "add",            SEC_DEVELOPER, false, &ChatHandler::HandleQuestAddCommand,            "", nullptr },
@@ -650,6 +658,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "modify",         SEC_DEVELOPER,       false, nullptr,                                        "", modifyCommandTable   },
         { "npc",            SEC_DEVELOPER,       false, nullptr,                                        "", npcCommandTable      },
         { "unit",           SEC_DEVELOPER,       false, nullptr,                                        "", unitCommandTable      },
+        { "pdump",          SEC_ADMINISTRATOR,   true,  nullptr,                                        "", pdumpCommandTable    },
         { "quest",          SEC_DEVELOPER,       false, nullptr,                                        "", questCommandTable    },
         { "reload",         SEC_ADMINISTRATOR,   true,  nullptr,                                        "", reloadCommandTable   },
         { "reset",          SEC_DEVELOPER,       true,  nullptr,                                        "", resetCommandTable    },

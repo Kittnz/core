@@ -1023,6 +1023,7 @@ class World
         static uint32 GetRelocationAINotifyDelay() { return m_relocation_ai_notify_delay; }
 
         std::string const& GetWardenModuleDirectory() const { return m_wardenModuleDirectory; }
+        std::string const& GetPDumpDirectory() const { return m_autoPDumpDirectory; }
         std::string const& GetWorldUpdatesDirectory() const { return m_worldUpdatesDirectory; }
         std::string const& GetWorldUpdatesMigration() const { return m_worldUpdatesMigration; }
         MigrationFile& GetMigration() { return m_worldMigration; };
@@ -1083,6 +1084,10 @@ class World
 
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
+
+        // Automatic Player Dump
+        void SchedulePlayerDump(uint32 guidLow);
+        void AutoPDumpWorker();
 
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
@@ -1193,6 +1198,7 @@ class World
         std::string m_dataPath;
         std::string m_honorPath;
         std::string m_wardenModuleDirectory;
+        std::string m_autoPDumpDirectory;
         std::string m_worldUpdatesDirectory;
         std::string m_worldUpdatesMigration;
         MigrationFile m_worldMigration;
@@ -1226,6 +1232,10 @@ class World
         uint32 m_anticrashRearmTimer = 0;
         std::unique_ptr<std::thread> m_charDbWorkerThread;
         std::thread m_autoCommitThread;
+        std::thread m_autoPDumpThread;
+        std::mutex m_autoPDumpMutex;
+        std::set<uint32> m_autoPDumpPendingGuids;
+        std::set<uint32> m_autoPDumpAllGuids;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
