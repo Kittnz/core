@@ -29,8 +29,8 @@ INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`,
 DELETE FROM `generic_scripts` WHERE `id`=3940;
 INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (3940, 0, 0, 4, 46, 256, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Blackwood Corrupted: Add Immune To Player Flag'),
-(3940, 0, 1, 3, 2, 0, 5, 0, 175336, 40, 11, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 'The Blackwood Corrupted: Move to Purified Food'),
-(3940, 0, 0, 22, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Blackwood Corrupted: Set Faction to Friendly'),
+(3940, 0, 1, 22, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Blackwood Corrupted: Set Faction to Friendly'),
+(3940, 0, 2, 3, 2, 0, 5, 0, 175336, 40, 11, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 'The Blackwood Corrupted: Move to Purified Food'),
 (3940, 12, 0, 20, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2169, 'The Blackwood Corrupted: Move Home'),
 (3940, 100, 0, 22, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Blackwood Corrupted: Reset Faction'),
 (3940, 100, 0, 4, 46, 256, 2, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Blackwood Corrupted: Remove Immune to Player Flag');
