@@ -155,6 +155,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
     GuidList m_lSummonedCreatureFirstWave;
     GuidList m_lSummonedCreatureSecondWave;
     GuidList m_lSummonedCreatureLastWave;
+    ObjectGuid m_DraloxFelstart;
 
     bool GetEventInProggress()
     {
@@ -227,7 +228,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned) override
+    void SummonedCreatureDespawn(Creature* pSummoned) override
     {
         if (firstWave)
         {
@@ -251,6 +252,9 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         {
             m_lSummonedCreatureLastWave.remove(pSummoned->GetObjectGuid());
         }
+
+        if (pSummoned->GetObjectGuid() == m_DraloxFelstart)
+            Reset();
     }
 
     void StartEvent(Player* pPlayer)
@@ -288,6 +292,8 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         thirdWave = true;
         if (Creature* summonedCreature = m_creature->SummonCreature(NPC_DRALOX_FELSTAR, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 0.15 * MINUTE * IN_MILLISECONDS))
         {
+            m_DraloxFelstart = summonedCreature->GetObjectGuid();
+
             if (Player* pPlayer = m_creature->FindNearestPlayer(100.0f))
             {
                 if (pPlayer && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
@@ -309,7 +315,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         {
             if (Creature* summonedCreature = m_creature->SummonCreature(lastWaveCoord[0], lastWaveCoord[1], lastWaveCoord[2], lastWaveCoord[3], lastWaveCoord[4], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS))
             {
-                if (Creature* pdraloxFelstart = m_creature->FindNearestCreature(NPC_DRALOX_FELSTAR, 100.0f))
+                if (Creature* pdraloxFelstart = m_creature->GetMap()->GetCreature(m_DraloxFelstart))
                 {
                     summonedCreature->AI()->AttackStart(pdraloxFelstart);
 
@@ -351,6 +357,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         lastWave = false;
         m_lSummonedCreatureFirstWave.clear();
         m_lSummonedCreatureSecondWave.clear();
+        m_DraloxFelstart.Clear();
         DespawnHelper();
     }
 };
