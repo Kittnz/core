@@ -10,3 +10,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 -- Remove ghost visual on npc 61325
 update creature_template set auras = NULL where entry = 61325;
+
+-- The Cook, display ID 3377, faction 35, level 54, undead, scale 1, quest flags (Has ghost visual)
+REPLACE INTO creature_template VALUES
+(61328, 3377, 0, 0, 0, 0, 'The Cook', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3216, 35, 2, 1, 1.14286, 0, 20, 5, 40, 0, 1, 106, 136, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');

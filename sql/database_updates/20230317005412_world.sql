@@ -76,3 +76,14 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61225, 61231, -100, 0, 1, 1, 0);
+
+-- The Key to Karazhan III
+delete from quest_template where entry = 40819;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40818,40819,2,2562,60,58,0,0,'The Key to Karazhan III','I sense that you possess Medivh\'s key. Though I am unsure how you came into its possession, I must warn you: not all is what it seems, and the powers residing in Upper Chambers are beyond your comprehension.$B$BWhen Medivh was younger, he often hosted a certain Kirin Tor mage in the tower. His name was Vandol, and if anyone could be able to repair the key, it\'s him.$B$BMake haste, for there are ominous noises emanating from the Upper Chambers, and I fear that the situation there will only become worse.','Find someone from the Kirin Tor who might know something about Vandol. Dalaran could be a good place to start your search.','Yes?','Hmmm, Vandol, you say?',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,19100,3150,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61328, 40819);
+replace into creature_involvedrelation	(id, quest) values (2543 , 40819);
+
+update quest_template set requiredraces = 589 where entry = 40819;
+
+
