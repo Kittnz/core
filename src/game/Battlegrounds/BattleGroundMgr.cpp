@@ -445,14 +445,18 @@ bool BattleGroundQueue::InviteGroupToBG(GroupQueueInfo * ginfo, BattleGround * b
         // loop through the players
         for (GroupQueueInfoPlayers::iterator itr = ginfo->Players.begin(); itr != ginfo->Players.end(); ++itr)
         {
-            // set invited player counters
-            bg->IncreaseInvitedCount(ginfo->GroupTeam);
-
             // get the player
             Player* plr = ObjectAccessor::FindPlayerNotInWorld(itr->first);
             // if offline, skip him
             if (!plr)
                 continue;
+
+            // if already in battleground, skip him
+            if (plr->InBattleGround())
+                continue;
+
+            // set invited player counters
+            bg->IncreaseInvitedCount(ginfo->GroupTeam);
 
             // invite the player
             PlayerInvitedToBGUpdateAverageWaitTime(ginfo, bracket_id);
@@ -972,21 +976,14 @@ void BattleGroundMgr::Update(uint32 diff)
     // update scheduled queues
     if (!m_QueueUpdateScheduler.empty())
     {
-        std::vector<uint32> scheduled;
-        {
-            //create mutex
-            //ACE_Guard<ACE_Thread_Mutex> guard(SchedulerLock);
-            //copy vector and clear the other
-            scheduled = std::vector<uint32>(m_QueueUpdateScheduler);
-            m_QueueUpdateScheduler.clear();
-            //release lock
-        }
+        std::vector<uint64> scheduled;
+        std::swap(scheduled, m_QueueUpdateScheduler);
 
-        for (uint32 i : scheduled)
+        for (uint8 i = 0; i < scheduled.size(); i++)
         {
-            BattleGroundQueueTypeId bgQueueTypeId = BattleGroundQueueTypeId(i >> 16 & 255);
-            BattleGroundTypeId bgTypeId = BattleGroundTypeId((i >> 8) & 255);
-            BattleGroundBracketId bracket_id = BattleGroundBracketId(i & 255);
+            BattleGroundQueueTypeId bgQueueTypeId = BattleGroundQueueTypeId(scheduled[i] >> 16 & 255);
+            BattleGroundTypeId bgTypeId = BattleGroundTypeId((scheduled[i] >> 8) & 255);
+            BattleGroundBracketId bracket_id = BattleGroundBracketId(scheduled[i] & 255);
             m_BattleGroundQueues[bgQueueTypeId].Update(bgTypeId, bracket_id);
         }
     }
@@ -995,7 +992,7 @@ void BattleGroundMgr::Update(uint32 diff)
 void BattleGroundMgr::BuildBattleGroundStatusPacket(WorldPacket* data, BattleGround *bg, uint8 queueSlot, uint8 statusId, uint32 time1, uint32 time2)
 {
     // we can be in 3 queues in same time...
-    if (statusId == 0 || !bg)
+    if (statusId == STATUS_NONE || !bg)
     {
         data->Initialize(SMSG_BATTLEFIELD_STATUS, 4 * 2);
         *data << uint32(queueSlot);                         // queue id (0...2)
@@ -1549,21 +1546,10 @@ void BattleGroundMgr::ToggleTesting()
 
 void BattleGroundMgr::ScheduleQueueUpdate(BattleGroundQueueTypeId bgQueueTypeId, BattleGroundTypeId bgTypeId, BattleGroundBracketId bracket_id)
 {
-    //ACE_Guard<ACE_Thread_Mutex> guard(SchedulerLock);
-    //we will use only 1 number created of bgTypeId and queue_id
-    uint32 schedule_id = (bgQueueTypeId << 16) | (bgTypeId << 8) | bracket_id;
-    bool found = false;
-    for (uint32 i : m_QueueUpdateScheduler)
-    {
-        if (i == schedule_id)
-        {
-            found = true;
-            break;
-        }
-    }
+    uint64 const schedule_id = ((uint64)bgQueueTypeId << 16) | ((uint64)bgTypeId << 8) | (uint64)bracket_id;
 
-    if (!found)
-        m_QueueUpdateScheduler.push_back(schedule_id);
+    if (std::find(m_QueueUpdateScheduler.begin(), m_QueueUpdateScheduler.end(), schedule_id) == m_QueueUpdateScheduler.end())
+        m_QueueUpdateScheduler.emplace_back(schedule_id);
 }
 
 uint32 BattleGroundMgr::GetPrematureFinishTime() const
