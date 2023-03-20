@@ -346,8 +346,8 @@ void Antispam::ProcessMessages(uint32 diff)
                         {
                             if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
                             {
-                                std::string logChat = sWorld.FormatLoggedChat(pSender->GetSession(), "Chan", messageBlock.msg, nullptr, 0, channel->GetName().c_str());
-                                sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                               // std::string logChat = sWorld.FormatLoggedChat(pSender->GetSession(), "Chan", messageBlock.msg, nullptr, 0, channel->GetName().c_str());
+                               // sWorld.SendDiscordMessage(1075224002013962250, logChat);
                             }
                         }
 
