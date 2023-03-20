@@ -198,6 +198,7 @@ void AccountMgr::Load()
         case SEC_MODERATOR:
         case SEC_DEVELOPER:
         case SEC_ADMINISTRATOR:
+        case SEC_SIGMACHAD:
             if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
                 m_accountSecurity[accountId] < secu)
                 m_accountSecurity[accountId] = secu;
@@ -593,7 +594,7 @@ bool AccountMgr::IsGMAccount(uint32 gmlevel)
 
 bool AccountMgr::IsAdminAccount(uint32 gmlevel)
 {
-    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE;
+    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE || gmlevel == SEC_SIGMACHAD;
 }
 
 bool AccountMgr::IsConsoleAccount(uint32 gmlevel)
