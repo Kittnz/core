@@ -4,3 +4,6 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61325, 40813);
 replace into creature_involvedrelation	(id, quest) values (61325, 40813);
+
+-- quest Kaldorei Weaponry (entry 40813) rename to Shard Harmonization.
+update quest_template set title = 'Shard Harmonization' where entry = 40813;
