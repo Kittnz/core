@@ -413,16 +413,7 @@ struct npc_dralox_felstarAI : public ScriptedAI
 {
     npc_dralox_felstarAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset() 
-    {
-        if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))
-        {
-            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
-            {
-                pTriggerAI->Reset();
-            }
-        }
-    }
+    void Reset() {}
     void UpdateAI(const uint32 diff)
     {
         if (m_creature->GetHealthPercent() > 50 && m_creature->GetHealthPercent() < 75)
@@ -446,8 +437,6 @@ struct npc_dralox_felstarAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->MonsterSay("NO! Thousands of years of planning!");
-
-        Reset();
     }
     void EnterCombat() {}
 };
