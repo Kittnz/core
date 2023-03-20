@@ -8,3 +8,5 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We must a
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+-- Remove ghost visual on npc 61325
+update creature_template set auras = NULL where entry = 61325;
