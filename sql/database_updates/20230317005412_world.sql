@@ -7,3 +7,11 @@ replace into creature_involvedrelation	(id, quest) values (61325, 40813);
 
 -- quest Kaldorei Weaponry (entry 40813) rename to Shard Harmonization.
 update quest_template set title = 'Shard Harmonization' where entry = 40813;
+
+-- Enchanted Leather Collection
+delete from quest_template where entry = 40814;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40814,2,616,60,55,0,1,'Enchanted Leather Collection','Druidic magic requires concentration, skill, the blessing of nature, and a touch of Enchanted Leather.$B$BWe go through our stocks fairly quickly here at Nordrassil when the needs arise and it is my duty to keep us ready.$B$BIf you are willing to assist, I can trade a Bright Dream Shard in exchange for ten Enchanted Leather at any time.','Gather 10 Enchanted Leather for Tanalla Sagebranch at Nordanaar in Hyjal.','Have you had any luck $c?','Hmm, everything seems to be in order here, your assistance to our efforts is well appreciated, here, take this.',12810,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,450,0,0,0,0,0,0,0,0,0,0,0, 61199,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61327, 40814);
+replace into creature_involvedrelation	(id, quest) values (61327, 40814);
+
