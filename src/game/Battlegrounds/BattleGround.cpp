@@ -950,7 +950,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
     if (pPlayer)
     {
         // Do next only if found in battleground
-        pPlayer->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE);  // We're not in BG.
+        pPlayer->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE, PLAYER_MAX_BATTLEGROUND_QUEUES);  // We're not in BG.
         // reset destination bg team
         pPlayer->SetBGTeam(TEAM_NONE);
 
