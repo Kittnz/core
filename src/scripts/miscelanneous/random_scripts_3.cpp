@@ -5976,6 +5976,85 @@ bool GossipSelect_npc_dolvan_bracewind(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 40829) // The Key to Karazhan X
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 35 * IN_MILLISECONDS);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->SummonCreature(61330, -4595.88f, -4706.26f, 57.67f, 3.52F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 27 * IN_MILLISECONDS);
+                    pQuestGiver->SummonCreature(61331, -4597.55f, -4709.26f, 57.67f, 2.00F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 27 * IN_MILLISECONDS);
+                }, 2000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I invoke the powers of the Council of Tirisfal!");
+                }, 7000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_CONCUIL_SPIRIT_1 = pQuestGiver->FindNearestCreature(61330, 40.0F);
+
+                    if (!NPC_CONCUIL_SPIRIT_1)
+                        return;
+
+                    NPC_CONCUIL_SPIRIT_1->CastSpell(NPC_CONCUIL_SPIRIT_1, 23017, false); // Arcane Channeling
+                }, 12000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_CONCUIL_SPIRIT_2 = pQuestGiver->FindNearestCreature(61331, 40.0F);
+
+                    if (!NPC_CONCUIL_SPIRIT_2)
+                        return;
+
+                    NPC_CONCUIL_SPIRIT_2->CastSpell(NPC_CONCUIL_SPIRIT_2, 23017, false); // Arcane Channeling
+                }, 12000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Aranal, ledel! Endorel aluminor, endala finel endal!");
+                }, 17000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Karazhan, selama am'oronor! Fala'andu, fallah.");
+                }, 23000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+                }, 31000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("It is done. The key is whole once more.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 33000);
+
+            DoAfterTime(pQuestGiver, 34 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60040); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -5984,6 +6063,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_dolvan_bracewind";
     newscript->pGossipHello = &GossipHello_npc_dolvan_bracewind;
     newscript->pGossipSelect = &GossipSelect_npc_dolvan_bracewind;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_dolvan_bracewind;
     newscript->RegisterSelf();
 
     newscript = new Script;
