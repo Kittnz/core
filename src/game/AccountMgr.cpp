@@ -209,6 +209,7 @@ void AccountMgr::Load()
     LoadAccountNames();
     LoadAccountBanList();
     LoadAccountWarnings();
+    LoadAccountIP();
     LoadIPBanList();
     LoadFingerprintBanList();
 }
@@ -414,6 +415,24 @@ void AccountMgr::LoadAccountWarnings(bool silent)
     {
         Field* fields = banresult->Fetch();
         m_accountWarnings[fields[0].GetUInt32()] = fields[1].GetCppString().substr(5, fields[1].GetCppString().size() - 5);
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountIP()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `last_ip` FROM `account` WHERE `last_ip` != '0.0.0.0'"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountIp.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountIp[fields[0].GetUInt32()] = fields[1].GetCppString();
     } while (banresult->NextRow());
 }
 
