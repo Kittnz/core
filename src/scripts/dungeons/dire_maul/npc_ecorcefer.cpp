@@ -7,7 +7,7 @@
 
 enum
 {
-    GO_DOOR = 179549,
+    GO_DOOR = 176907,
     NPC_IRONBARK_THE_REDEEMED = 14241,
 };
 struct npc_ecorceferAI : public ScriptedAI
