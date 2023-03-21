@@ -246,3 +246,21 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (11496, 61232, -100, 0, 1, 1, 0);
+
+-- The Key to Karazhan IX
+delete from quest_template where entry = 40828;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40827,40828,2,2562,60,58,0,0,'The Key to Karazhan IX','<Dolvan labors over the key, his expression contorting with disappointment as time passes.>$B$BI cannot comprehend. This does not work. I believed I was well-versed in the sorcery of Medivh, but alas, I have been proven wrong. This man possessed great talent, if only...$B$BBut I digress. We must repair the key, and there remains one final possibility that comes to mind.$B$BI require a rare tome, penned in times long past by Aegwynn, entitled "Treatise on Magical Locks and Keys". It has been lost since the destruction of Dalaran, but whispers suggest it is now held by none other than Lord Victor Nefarius...$B$BThis is our only chance. Retrieve the tome.','Find "Treatise on Magical Locks and Keys" and bring it back to Vandol. It is rumored to be kept in Blackwing Lair.','It is believed that Lord Victor Nefarius dwells within Blackrock Mountain, where he exerts authority over his armies of Blackrock orcs, as well as other terrifying and repulsive creatures.','I don\'t believe it. "Treatise on Magical Locks and Keys”, written by the venerable Aegwynn herself. In my own hands, after all this time.$B$BAllow me to peruse the pages of this ancient text. I am certain that the knowledge contained within its worn and weathered pages was utilized by Medivh in the forging of this key. By studying the techniques and methods outlined in the tome, we should be able to replicate the process and repair it.',61233,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,73000,12150,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61137, 40828);
+replace into creature_involvedrelation	(id, quest) values (61137, 40828);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61233,3154,'Treatise on Magical Locks and Keys',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2011049, 3, 30715, 'Treatise on Magical Locks and Keys', 0, 4, 1, 43, 2011049, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2011049,61233,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 3600, spawntimesecsmax = 3600 where ID = 2011049;
