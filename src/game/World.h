@@ -1055,7 +1055,6 @@ class World
 
         void LoadAccountData();
 
-
         std::unordered_set<std::string> GetAccountNamesByFingerprint(uint32 fingerprint) const;
         void AddFingerprint(uint32 fingerprint, std::string accountName);
 
@@ -1089,6 +1088,8 @@ class World
         // Automatic Player Dump
         void SchedulePlayerDump(uint32 guidLow);
         void AutoPDumpWorker();
+        void UnlockCharacter(uint32 guidLow);
+        bool IsCharacterLocked(uint32 guidLow);
 
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
@@ -1236,7 +1237,7 @@ class World
         std::thread m_autoPDumpThread;
         std::mutex m_autoPDumpMutex;
         std::set<uint32> m_autoPDumpPendingGuids;
-        std::set<uint32> m_autoPDumpAllGuids;
+        std::set<uint32> m_lockedCharacterGuids;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
