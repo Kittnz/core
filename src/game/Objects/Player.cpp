@@ -15148,7 +15148,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
         Relocate(_loc.x, _loc.y, _loc.z, _loc.o);
 
         // We are not in BG anymore
-        SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE);
+        SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE, PLAYER_MAX_BATTLEGROUND_QUEUES);
         // remove outdated DB data in DB
         _SaveBGData();
     }

@@ -199,6 +199,7 @@ void AccountMgr::Load()
         case SEC_MODERATOR:
         case SEC_DEVELOPER:
         case SEC_ADMINISTRATOR:
+        case SEC_SIGMACHAD:
             if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
                 m_accountSecurity[accountId] < secu)
                 m_accountSecurity[accountId] = secu;
@@ -399,7 +400,11 @@ void AccountMgr::LoadAccountBanList(bool silent)
 
 void AccountMgr::LoadAccountWarnings(bool silent)
 {
-    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 && (`banreason` LIKE \"WARN:%\") ORDER BY `bandate`"));
+
+    uint32 maxAge = sWorld.getConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING);
+
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 AND (`banreason` LIKE \"WARN:%\") AND `bandate` > UNIX_TIMESTAMP(NOW() - INTERVAL %u DAY) ORDER BY `bandate`", maxAge));
 
     if (!banresult)
     {
@@ -591,7 +596,7 @@ bool AccountMgr::IsGMAccount(uint32 gmlevel)
 
 bool AccountMgr::IsAdminAccount(uint32 gmlevel)
 {
-    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE;
+    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE || gmlevel == SEC_SIGMACHAD;
 }
 
 bool AccountMgr::IsConsoleAccount(uint32 gmlevel)

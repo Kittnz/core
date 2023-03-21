@@ -277,7 +277,7 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket & /*recv_
     // empty opcode
     //DEBUG_LOG("WORLD: Recvd MSG_BATTLEGROUND_PLAYER_POSITIONS Message");
 
-    BattleGround *bg = _player->GetBattleGround();
+    BattleGround* bg = _player->GetBattleGround();
     if (!bg)                                                // can't be received if player not in battleground
         return;
 
@@ -476,8 +476,26 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
             if (BattleGround *currentBg = _player->GetBattleGround())
                 currentBg->RemovePlayerAtLeave(_player->GetObjectGuid(), false, true);
 
+            for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; i++)
+            {
+                auto playerBgQueueTypeId = _player->GetBattleGroundQueueTypeId(i);
+                if (playerBgQueueTypeId != BATTLEGROUND_QUEUE_NONE && playerBgQueueTypeId != bgQueueTypeId)
+                {
+                    BattleGroundQueue& oldBgQueue = sBattleGroundMgr.m_BattleGroundQueues[playerBgQueueTypeId];
+                    BattleGroundTypeId oldBgTypeId = BattleGroundMgr::BGTemplateId(playerBgQueueTypeId);
+                    BattleGround* oldBg = sBattleGroundMgr.GetBattleGroundTemplate(oldBgTypeId);
+                    uint32 oldQueueSlot = _player->GetBattleGroundQueueIndex(playerBgQueueTypeId);
+
+                    WorldPacket data;
+                    _player->RemoveBattleGroundQueueId(playerBgQueueTypeId);
+                    oldBgQueue.RemovePlayer(_player->GetObjectGuid(), true);
+                    sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, oldBg, oldQueueSlot, STATUS_NONE, 0, 0);
+                    _player->GetSession()->SendPacket(&data);
+                }
+            }
+
             // set the destination instance id
-            _player->SetBattleGroundId(bg->GetInstanceID(), bgTypeId);
+            _player->SetBattleGroundId(bg->GetInstanceID(), bgTypeId, queueSlot);
             // set the destination team
             _player->SetBGTeam(ginfo.GroupTeam);
             
@@ -537,37 +555,35 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
     DEBUG_LOG("WORLD: Battleground status");
 
     WorldPacket data;
-    // we must update all queues here
-    BattleGround *bg = nullptr;
+
+    if (BattleGround* bg = _player->GetBattleGround())
+    {
+        if (bg->GetPlayers().count(_player->GetObjectGuid()))
+        {
+            sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, _player->GetCurrentBattlegroundQueueSlot(), STATUS_IN_PROGRESS, bg->GetEndTime(), bg->GetStartTime());
+            SendPacket(&data);
+        }
+    }
+
+    // for queued bgs send STATUS_WAIT_JOIN or STATUS_WAIT_QUEUE
     for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
     {
+        // check if in queue
         BattleGroundQueueTypeId bgQueueTypeId = _player->GetBattleGroundQueueTypeId(i);
         if (!bgQueueTypeId)
             continue;
 
-        BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
-        if (bgTypeId == _player->GetBattleGroundTypeId())
-        {
-            bg = _player->GetBattleGround();
-            //so i must use bg pointer to get that information
-            if (bg)
-            {
-                // this line is checked, i only don't know if GetStartTime is changing itself after bg end!
-                // send status in BattleGround
-                sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, i, STATUS_IN_PROGRESS, bg->GetEndTime(), bg->GetStartTime());
-                SendPacket(&data);
-                continue;
-            }
-        }
-        //we are sending update to player about queue - he can be invited there!
         //get GroupQueueInfo for queue status
         BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
         GroupQueueInfo ginfo;
         if (!bgQueue.GetPlayerGroupInfoData(_player->GetObjectGuid(), &ginfo))
             continue;
+
+        BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
+
         if (ginfo.IsInvitedToBGInstanceGUID)
         {
-            bg = sBattleGroundMgr.GetBattleGround(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
+            BattleGround* bg = sBattleGroundMgr.GetBattleGround(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
             if (!bg)
                 continue;
             uint32 remainingTime = WorldTimer::getMSTimeDiff(WorldTimer::getMSTime(), ginfo.RemoveInviteTime);
@@ -577,9 +593,10 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
         }
         else
         {
-            bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
+            BattleGround* bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
             if (!bg)
                 continue;
+
             uint32 avgTime = bgQueue.GetAverageQueueWaitTime(&ginfo, _player->GetBattleGroundBracketIdFromLevel(bgTypeId));
             // send status in BattleGround Queue
             sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, i, STATUS_WAIT_QUEUE, avgTime, WorldTimer::getMSTimeDiff(ginfo.JoinTime, WorldTimer::getMSTime()));
