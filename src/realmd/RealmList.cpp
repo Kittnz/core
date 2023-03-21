@@ -148,7 +148,7 @@ void RealmList::UpdateRealms(bool init)
             UpdateRealm(
                 fields[0].GetUInt32(), fields[1].GetCppString(), realmAddress, fields[3].GetUInt32(),
                 fields[4].GetUInt8(), RealmFlags(realmflags), fields[6].GetUInt8(),
-                (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR),
+                (allowedSecurityLevel <= SEC_SIGMACHAD ? AccountTypes(allowedSecurityLevel) : SEC_SIGMACHAD),
                 fields[8].GetFloat());
 
             if(init)

@@ -6090,7 +6090,7 @@ bool ChatHandler::HandleSummonCommand(char* args)
 
         if (pMap->IsBattleGround())
         {
-            pTarget->SetBattleGroundId(pPlayer->GetBattleGroundId(), pPlayer->GetBattleGroundTypeId());
+            pTarget->SetBattleGroundId(pPlayer->GetBattleGroundId(), pPlayer->GetBattleGroundTypeId(), PLAYER_MAX_BATTLEGROUND_QUEUES);
             // remember current position as entry point for return at bg end teleportation
             if (!pTarget->GetMap()->IsBattleGround())
                 pTarget->SetBattleGroundEntryPoint();
@@ -6179,7 +6179,7 @@ bool ChatHandler::HandleGonameCommand(char* args)
             // when porting out from the bg, it will be reset to 0
             if (pPlayer->GetBattleGroundId() != pTarget->GetBattleGroundId())
             {
-                pPlayer->SetBattleGroundId(pTarget->GetBattleGroundId(), pTarget->GetBattleGroundTypeId());
+                pPlayer->SetBattleGroundId(pTarget->GetBattleGroundId(), pTarget->GetBattleGroundTypeId(), PLAYER_MAX_BATTLEGROUND_QUEUES);
                 teleFlags |= TELE_TO_FORCE_MAP_CHANGE;
             }
 

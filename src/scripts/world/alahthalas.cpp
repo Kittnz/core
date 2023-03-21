@@ -155,6 +155,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
     GuidList m_lSummonedCreatureFirstWave;
     GuidList m_lSummonedCreatureSecondWave;
     GuidList m_lSummonedCreatureLastWave;
+    ObjectGuid m_DraloxFelstart;
 
     bool GetEventInProggress()
     {
@@ -227,7 +228,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned) override
+    void SummonedCreatureDespawn(Creature* pSummoned) override
     {
         if (firstWave)
         {
@@ -251,6 +252,9 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         {
             m_lSummonedCreatureLastWave.remove(pSummoned->GetObjectGuid());
         }
+
+        if (pSummoned->GetObjectGuid() == m_DraloxFelstart)
+            Reset();
     }
 
     void StartEvent(Player* pPlayer)
@@ -271,7 +275,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
     {
         firstWave = false;
         secondWave = true;
-        Player* pPlayer = m_creature->FindNearestPlayer(30.0f);
+        Player* pPlayer = m_creature->FindNearestPlayer(100.0f);
         for (auto& secondWaveCoord : secondWaveCoords)
         {
             if (Creature* summonedCreature = m_creature->SummonCreature(secondWaveCoord[0], secondWaveCoord[1], secondWaveCoord[2], secondWaveCoord[3], secondWaveCoord[4], TEMPSUMMON_CORPSE_DESPAWN))
@@ -288,7 +292,9 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         thirdWave = true;
         if (Creature* summonedCreature = m_creature->SummonCreature(NPC_DRALOX_FELSTAR, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 0.15 * MINUTE * IN_MILLISECONDS))
         {
-            if (Player* pPlayer = m_creature->FindNearestPlayer(30.0f))
+            m_DraloxFelstart = summonedCreature->GetObjectGuid();
+
+            if (Player* pPlayer = m_creature->FindNearestPlayer(100.0f))
             {
                 if (pPlayer && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
                 {
@@ -309,7 +315,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         {
             if (Creature* summonedCreature = m_creature->SummonCreature(lastWaveCoord[0], lastWaveCoord[1], lastWaveCoord[2], lastWaveCoord[3], lastWaveCoord[4], TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS))
             {
-                if (Creature* pdraloxFelstart = m_creature->FindNearestCreature(NPC_DRALOX_FELSTAR, 35.0f))
+                if (Creature* pdraloxFelstart = m_creature->GetMap()->GetCreature(m_DraloxFelstart))
                 {
                     summonedCreature->AI()->AttackStart(pdraloxFelstart);
 
@@ -351,6 +357,7 @@ struct npc_triggerQuest40377AI : public ScriptedAI
         lastWave = false;
         m_lSummonedCreatureFirstWave.clear();
         m_lSummonedCreatureSecondWave.clear();
+        m_DraloxFelstart.Clear();
         DespawnHelper();
     }
 };
@@ -364,7 +371,7 @@ bool GOHello_go_felstone(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
     {
-        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
+        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))
         {
             if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
             {
@@ -385,7 +392,7 @@ bool GOSelect_go_felstone(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
+        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))
         {
             if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
             {
@@ -406,21 +413,12 @@ struct npc_dralox_felstarAI : public ScriptedAI
 {
     npc_dralox_felstarAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset() 
-    {
-        if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
-        {
-            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
-            {
-                pTriggerAI->Reset();
-            }
-        }
-    }
+    void Reset() {}
     void UpdateAI(const uint32 diff)
     {
         if (m_creature->GetHealthPercent() > 50 && m_creature->GetHealthPercent() < 75)
         {
-            if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 30.0f))
+            if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))
             {
                 if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
                 {
@@ -439,8 +437,6 @@ struct npc_dralox_felstarAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->MonsterSay("NO! Thousands of years of planning!");
-
-        Reset();
     }
     void EnterCombat() {}
 };

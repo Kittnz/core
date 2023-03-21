@@ -809,6 +809,7 @@ struct BGData
     std::set<uint32>   bgAfkReporter;
     uint8              bgAfkReportedCount = 0;
     time_t             bgAfkReportedTimer = 0;
+    uint32             bgQueueSlot = PLAYER_MAX_BATTLEGROUND_QUEUES;
 
     Team bgTeam = TEAM_NONE;                                ///< What side the player will be added to, saved
 
@@ -2486,6 +2487,7 @@ public:
         bool InBattleGround()       const                { return m_bgData.bgInstanceID != 0; }
         uint32 GetBattleGroundId()  const                { return m_bgData.bgInstanceID; }
         BattleGroundTypeId GetBattleGroundTypeId() const { return m_bgData.bgTypeID; }
+        uint32 GetCurrentBattlegroundQueueSlot() const { return m_bgData.bgQueueSlot; }
         BattleGround* GetBattleGround() const;
 
         static uint32 GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId);
@@ -2531,10 +2533,11 @@ public:
             return GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES;
         }
 
-        void SetBattleGroundId(uint32 val, BattleGroundTypeId bgTypeId)
+        void SetBattleGroundId(uint32 val, BattleGroundTypeId bgTypeId, uint32 queueSlot)
         {
             m_bgData.bgInstanceID = val;
             m_bgData.bgTypeID = bgTypeId;
+            m_bgData.bgQueueSlot = queueSlot;
             m_bgData.m_needSave = true;
         }
         uint32 AddBattleGroundQueueId(BattleGroundQueueTypeId val)
