@@ -43,6 +43,7 @@
 #include "AccountMgr.h"
 #include "Config/Config.h"
 #include "Shop/ShopMgr.h"
+#include "GMTicketMgr.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/rapidjson.h"
@@ -729,6 +730,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
 			_player->_transmogMgr->HandleAddonMessages(msg);
 			return;
+        }
+    }
+
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "GM_ADDON")) // prefix
+        {
+            if (strstr(msg.c_str(), "GET_TICKETS"))
+                sTicketMgr->SendTicketsInAddonMessage(_player);
+            return;
         }
     }
 

@@ -27,6 +27,7 @@
 #include "World.h"
 #include "Player.h"
 #include "Opcodes.h"
+#include "AccountMgr.h"
 #include "Database/DatabaseImpl.h"
 
 inline float GetAge(uint64 t) { return float(time(nullptr) - t) / DAY; }
@@ -152,6 +153,31 @@ void GmTicket::SendResponse(WorldSession* session) const
     WritePacket(data);
     session->SendPacket(&data);
     ChatHandler(session).SendSysMessage(LANG_YOUR_TICKET_RESPONDED);
+}
+
+std::string GmTicket::FormatAddonMessage() const
+{
+    std::stringstream ss;
+
+    // tickets;;id;;playerName;;playeraccountname;;playerip;;playerlevel;;playeremail;;playerforumusername;;ticket_message
+
+    ss << "tickets;;" << _id << ";;" << _playerName << ";;";
+
+    uint32 accId = sObjectMgr.GetPlayerAccountIdByGUID(_playerGuid);
+    std::string accName;
+    sAccountMgr.GetName(accId, accName);
+    ss << accName << ";;" << sAccountMgr.GetAccountIP(accId) << ";;";
+
+    if (PlayerCacheData const* pPlayerCache = sObjectMgr.GetPlayerDataByGUID(_playerGuid))
+        ss << pPlayerCache->uiLevel << ";;";
+    else
+        ss << "0;;";
+
+    ss << sAccountMgr.GetAccountEmail(accId) << ";;";
+    ss << sAccountMgr.GetForumName(accId) << ";;";
+    ss << _message;
+
+    return ss.str();
 }
 
 std::string GmTicket::FormatMessageString(ChatHandler& handler, bool detailed) const
@@ -395,6 +421,15 @@ void TicketMgr::RemoveTicket(uint32 ticketId)
         _ticketList.erase(ticketId);
         delete ticket;
     }
+}
+
+void TicketMgr::SendTicketsInAddonMessage(Player* pPlayer) const
+{
+    pPlayer->SendAddonMessage("GM_ADDON", "tickets;;start");
+    for (const auto& itr : _ticketList)
+        if (!itr.second->IsClosed() && !itr.second->IsCompleted())
+            pPlayer->SendAddonMessage("GM_ADDON", itr.second->FormatAddonMessage());
+    pPlayer->SendAddonMessage("GM_ADDON", "tickets;;end");
 }
 
 void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly, uint8 category) const
