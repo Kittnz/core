@@ -105,6 +105,8 @@ class AccountMgr
         void LoadFingerprintBanList(bool silent = false);
         void LoadAccountWarnings(bool silent = false);
         void LoadAccountIP();
+        void LoadAccountEmail();
+        void LoadAccountForumName();
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
@@ -116,6 +118,30 @@ class AccountMgr
             if (itr != m_accountWarnings.end())
                 return itr->second.c_str();
             return nullptr;
+        }
+
+        std::string GetForumName(uint32 acc) const
+        {
+            auto itr = m_accountForumName.find(acc);
+            if (itr != m_accountForumName.end())
+                return itr->second;
+            return "none";
+        }
+
+        std::string GetAccountEmail(uint32 acc) const
+        {
+            auto itr = m_accountEmail.find(acc);
+            if (itr != m_accountEmail.end())
+                return itr->second;
+            return "none@none";
+        }
+
+        std::string GetAccountIP(uint32 acc) const
+        {
+            auto itr = m_accountIp.find(acc);
+            if (itr != m_accountIp.end())
+                return itr->second;
+            return "0.0.0.0";
         }
 
         // returns true if previous ip was different
@@ -158,6 +184,8 @@ class AccountMgr
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
+        std::map<uint32, std::string> m_accountEmail;
+        std::map<uint32, std::string> m_accountForumName;
         std::map<uint32, std::string> m_accountIp;
         std::map<uint32, std::string> m_accountWarnings;
         std::map<std::string, uint32> m_accountNameToId;
