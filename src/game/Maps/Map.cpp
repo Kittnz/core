@@ -2120,6 +2120,9 @@ bool DungeonMap::Add(Player *player)
     // this will acquire the same mutex so it cannot be in the previous block
     Map::Add(player);
 
+    if (IsRaid())
+        ChatHandler(player).SendSysMessage("There is a grace period of 10 minutes allowing you to trade raid loot to others in case its wrongly assigned.");
+
     //everything checked and added. scale now.
     sAutoScaler->Scale(this);
 

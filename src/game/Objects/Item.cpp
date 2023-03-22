@@ -861,10 +861,16 @@ bool Item::IsEquipped() const
     return !IsInBag() && m_slot < EQUIPMENT_SLOT_END;
 }
 
+bool Item::CanBeTradedEvenIfSoulBound() const
+{
+    return m_tradeAllowedUntil > sWorld.GetGameTime();
+}
+
 bool Item::CanBeTraded() const
 {
-    if (IsSoulBound())
+    if (IsSoulBound() && !CanBeTradedEvenIfSoulBound())
         return false;
+
     if (IsBag() && (Player::IsBagPos(GetPos()) || !((Bag const*)this)->IsEmpty()))
         return false;
 
@@ -1036,6 +1042,11 @@ Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)
         if (pItem->Create(lowGuid, item, player ? player->GetObjectGuid() : ObjectGuid()))
         {
             pItem->SetCount(count);
+
+            // Turtle:: Make raid looted items not appear soul bound.
+            if (player && player->GetMap()->IsRaid())
+                pItem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+
             return pItem;
         }
         else
@@ -1070,7 +1081,7 @@ bool Item::IsBindedNotWith(Player const* player) const
         return true;
 
     // not binded item
-    if (!IsSoulBound())
+    if (!IsSoulBound() || CanBeTradedEvenIfSoulBound())
         return false;
 
     return true;
