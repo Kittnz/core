@@ -325,3 +325,34 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50627, 'Redoran gifted many trinkets of his people to the Gilneans, which they treasured, awed by the artisanship of dwarven-craft.$B$BRichest of Redoran\'s gifts was a bejeweled mithril crown he gifted to the ruling Greymane Queen, Elaena the Good. So charmed was Elaena that throughout her reign she never again unwearied her head.', 50628),
 (50628, 'When Redoran and his people made ready to depart, they were halted by Queen Elaena who, for their generosity to the people of Gilneas, gifted them a place in Gelnor and to Redoran a seat at her court. The dwarves were glad to accept and Redoran ever shared Elaena\'s trust and council.', 50629),
 (50629, 'After over two centuries, dwarves and humans in Gelnor have adopted many of each other\'s customs.$B$BThe dwarves have taken to the worship of the Light, albeit in hewn caverns of carven stone rather than churches, and the humans became excellent wood-carvers and gryphon riders, if more inclined to long lances rather than thunderhammers.$B$BIt is said that to this day, dwarves and humans live there in Gelnor as one Gilnean kin, their fates entwined until the breaking of the world.', 0);
+
+-- Remaining Sanctum Items
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (61237, 'Mallet of the Awakening', 'Covered in moss, biding its time.', 2, 4, 1, 4, 66381, 1, 60, 0, -1, -1, 581347, 145336, 21, 3, 0, 0, 1, 1, 0, 72, 135, 1800, 0, 0, 105, 0, 0, 0, 76, 0, 65, 0, 0, 0, 0, 0, 0, 7, 10, 13675, 1, 0, 0, -1, 0, -1, 28112, 1, 0, 0, -1, 0, -1, 0, 0, 0); -- Mallet of the Awakening
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, random_property, required_reputation_faction, required_reputation_rank) values (61238, 'Scaleshield of Green', '', 4, 6, 6, 4, 66359, 1, 60, 0, -1, -1, 382551, 95637, 14, 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 120, 2853, 43, 0, 76, 0, 65, 0, 0, 15, 0, 0, 0, 3, 11, 4, 11, 5, 11, 6, 12, 7, 11, 0, 0, 0); -- Scaleshield of the Green
+replace into item_template values
+ ('61239', '4', '3', 'Ancient Jade Leggings', '', '13206', '4', '0', '1', '275016', '68754', '7', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '26', '4', '21',
+ '6', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '408', '0', '0', '0',
+ '0', '0', '0', '15775', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '9416', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '105', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+-- Sanctum Changes
+update item_template set stat_value1 = 18, stat_value2 = 6 where entry = 61195; -- Ring of Nordrassil
+update item_template set spellid_2 = 13679, spellid_3 = 14521, spelltrigger_3 = 1, spellid_4 = 21362, spelltrigger_4 = 1 where entry = 61208; -- Staff of the Dreamer
+update item_template set stat_value1 = 14, stat_value2 = 15 where entry = 61212; -- Sanctum Bark Wraps
+update item_template set spellid_1 = 17367, stat_value1 = 6 where entry = 61193; -- Verdant Eye Necklace
+update item_template set name = 'Bag of the Vast Conscious' where entry = 61196; -- Bag of Vastless Concious
+update item_template set stat_value1 = 14, stat_value2 = 14, spellid_1 = 17493 where entry = 61206; -- Robe of the Dreamways
+update item_template set stat_value1 = 12, nature_res = 10, spellid_1 = 9336 where entry = 61210; -- Veil of Nightmare
+update item_template set stat_value1 = 20, stat_value2 = 16, stat_value3 = 17, stat_type2 = 5 where entry = 61213; -- Talonwind Gauntlets
+update item_template set stat_value1 = 17, stat_value2 = 16, spellid_1 = 23729, spellid_2 = 18384 where entry = 61211; -- Sandals of Lucidity
+update item_template set stat_value1 = 7, spellid_4 = 14521, spellid_3 = 18384 where entry = 61205; -- Ring of Nature's Duality
+update item_template set display_id = 61041 where entry = 61184; -- Scythe of Elune
+update item_template set stat_value2 = 14, spellid_2 = 23727, spellid_1 = 18049, stat_value3 = 12 where entry = 61214; -- Mantle of the Wakener
+-- Buff Summon Items to Trinket
+update item_template set quality = 3, inventory_type = 12, class = 4, disenchant_id = 43, spellcharges_1 = -1, spellcooldown_1 = 1800000 where entry = 3456; -- Dog Whistle
+update item_template set inventory_type = 12, class = 4, disenchant_id = 4, spellcharges_1 = -1, spellcooldown_1 = 1800000 where entry = 1187; -- Spiked Collar
+update item_template set inventory_type = 12, class = 4, disenchant_id = 10, spellcharges_1 = -1, spellcooldown_1 = 1800000 where entry = 15778; -- Mechanical Yeti
+update item_template set inventory_type = 12, class = 4, disenchant_id = 10, spellcharges_1 = -1, spellcooldown_1 = 3600000 where entry = 21325; -- Mechanical Greench
