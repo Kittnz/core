@@ -790,6 +790,25 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
             }
         }
     }
+    else if (isType(TYPEMASK_ITEM))
+    {
+        for (uint16 index = 0; index < m_valuesCount; ++index)
+        {
+            if (updateMask->GetBit(index))
+            {
+                if (index == ITEM_FIELD_FLAGS)
+                {
+                    uint32 dynFlags = m_uint32Values[ITEM_FIELD_FLAGS];
+                    if ((dynFlags & ITEM_DYNFLAG_BINDED) && static_cast<Item const*>(this)->CanBeTradedEvenIfSoulBound())
+                        dynFlags &= ~ITEM_DYNFLAG_BINDED;
+                    *data << dynFlags;
+                }
+                else
+                    // send in current format (float as float, uint32 as uint32)
+                    *data << m_uint32Values[index];
+            }
+        }
+    }
     else                                                    // other objects case (no special index checks)
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)

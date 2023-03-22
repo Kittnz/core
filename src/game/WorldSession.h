@@ -355,6 +355,11 @@ class WorldSession
             return (_logoutTime > 0 && currTime >= _logoutTime + 20);
         }
 
+        void SetShouldBackupCharacters(bool on)
+        {
+            m_shouldBackupCharacters = on;
+        }
+
         void LogoutPlayer(bool Save);
         void KickPlayer();
         // Session can be safely deleted if returns false
@@ -967,6 +972,7 @@ class WorldSession
         uint32          _charactersCount;
         uint32          _characterMaxLevel;
         bool m_fingerprintBanned = false;
+        bool m_shouldBackupCharacters = false;
 
         enum ClientHashStep
         {

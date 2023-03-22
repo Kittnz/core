@@ -166,6 +166,9 @@ void WorldSession::HandleCharEnum(QueryResult * result)
             if (_characterMaxLevel < level)
                 _characterMaxLevel = level;
 
+            if (m_shouldBackupCharacters && level > 30)
+                sWorld.SchedulePlayerDump(guidlow);
+
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());
             if (Player::BuildEnumData(result, &data))
                 ++num;
@@ -174,6 +177,8 @@ void WorldSession::HandleCharEnum(QueryResult * result)
 
         delete result;
     }
+
+    m_shouldBackupCharacters = false;
 
     data.put<uint8>(0, num);
     _charactersCount = num;
@@ -406,6 +411,14 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
 
     uint32 lowguid = guid.GetCounter();
 
+    if (sWorld.IsCharacterLocked(lowguid))
+    {
+        WorldPacket data(SMSG_CHAR_DELETE, 1);
+        data << (uint8)CHAR_DELETE_FAILED_LOCKED_FOR_TRANSFER;
+        SendPacket(&data);
+        return;
+    }
+
     PlayerCacheData* cacheData = sObjectMgr.GetPlayerDataByGUID(lowguid);
     if (!cacheData)
         return; // Character not found
@@ -437,16 +450,14 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     ObjectGuid playerGuid;
     recv_data >> playerGuid;
 
-    if (PlayerLoading() || GetPlayer() != nullptr)
+    if (PlayerLoading() || GetPlayer() != nullptr ||
+        !playerGuid.IsPlayer() || sWorld.IsCharacterLocked(playerGuid.GetCounter()))
     {
         WorldPacket data(SMSG_CHARACTER_LOGIN_FAILED, 1);
         data << (uint8)1;
         SendPacket(&data);
         return;
     }
-
-    if (!playerGuid.IsPlayer())
-        return;
 
     DEBUG_LOG("WORLD: Recvd Player Logon Message");
 

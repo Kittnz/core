@@ -3896,13 +3896,21 @@ bool World::ExecuteUpdate(char const* format, ...)
 
 void World::SchedulePlayerDump(uint32 guidLow)
 {
-    // Don't backup character multiple times per session.
-    if (m_autoPDumpAllGuids.find(guidLow) != m_autoPDumpAllGuids.end())
-        return;
-
     std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
     m_autoPDumpPendingGuids.insert(guidLow);
-    m_autoPDumpAllGuids.insert(guidLow);
+    m_lockedCharacterGuids.insert(guidLow);
+}
+
+void World::UnlockCharacter(uint32 guidLow)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    m_lockedCharacterGuids.erase(guidLow);
+}
+
+bool World::IsCharacterLocked(uint32 guidLow)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    return m_lockedCharacterGuids.find(guidLow) != m_lockedCharacterGuids.end();
 }
 
 void World::AutoPDumpWorker()
@@ -3931,6 +3939,7 @@ void World::AutoPDumpWorker()
                     sLog.outError("Failed to dump character %u.", guid);
                     break;
             }
+            UnlockCharacter(guid);
         }
     }
     CharacterDatabase.ThreadEnd();
