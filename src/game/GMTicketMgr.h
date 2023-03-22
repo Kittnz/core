@@ -144,6 +144,7 @@ public:
     void SendResponse(WorldSession* session) const;
 
     void TeleportTo(Player* player) const;
+    std::string FormatAddonMessage() const;
     std::string FormatMessageString(ChatHandler& handler, bool detailed = false) const;
     std::string FormatMessageString(ChatHandler& handler, const char* szClosedName, const char* szAssignedToName, const char* szUnassignedName, const char* szDeletedName, const char* szCompletedName) const;
     const char* GetTicketCategoryName(TicketType category) const;
@@ -264,6 +265,7 @@ public:
     void ShowList(ChatHandler& handler, bool onlineOnly, uint8 category = 0) const;
     void ShowClosedList(ChatHandler& handler) const;
     void ShowEscalatedList(ChatHandler& handler) const;
+    void SendTicketsInAddonMessage(Player* pPlayer) const;
 
     void SendTicket(WorldSession* session, GmTicket* ticket) const;
     void ReloadTicket(uint32 ticketId);

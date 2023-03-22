@@ -211,6 +211,8 @@ void AccountMgr::Load()
     LoadAccountBanList();
     LoadAccountWarnings();
     LoadAccountIP();
+    LoadAccountForumName();
+    LoadAccountEmail();
     LoadIPBanList();
     LoadFingerprintBanList();
 }
@@ -435,6 +437,42 @@ void AccountMgr::LoadAccountIP()
     {
         Field* fields = banresult->Fetch();
         m_accountIp[fields[0].GetUInt32()] = fields[1].GetCppString();
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountForumName()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `forum_username` FROM `account` WHERE `forum_username` != ''"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountForumName.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountForumName[fields[0].GetUInt32()] = fields[1].GetCppString();
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountEmail()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `email` FROM `account` WHERE `email` != ''"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountEmail.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountEmail[fields[0].GetUInt32()] = fields[1].GetCppString();
     } while (banresult->NextRow());
 }
 
