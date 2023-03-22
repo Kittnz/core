@@ -578,6 +578,8 @@ class ChatHandler
         bool HandleKickPlayerCommand(char* args);
 
         // GM Tickets commands
+        bool HandleGMTicketAssignToCommand(char* args);
+        bool HandleGMTicketUnAssignCommand(char* args);
         bool ViewTicketByIdOrName(char* ticketId, char* name);
         bool ViewTicket(GmTicket* ticket);
         bool HandleGMTicketListCommand(char* args);
