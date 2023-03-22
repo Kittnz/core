@@ -356,3 +356,10 @@ update item_template set quality = 3, inventory_type = 12, class = 4, disenchant
 update item_template set inventory_type = 12, class = 4, disenchant_id = 4, spellcharges_1 = -1, spellcooldown_1 = 1800000 where entry = 1187; -- Spiked Collar
 update item_template set inventory_type = 12, class = 4, disenchant_id = 10, spellcharges_1 = -1, spellcooldown_1 = 1800000 where entry = 15778; -- Mechanical Yeti
 update item_template set inventory_type = 12, class = 4, disenchant_id = 10, spellcharges_1 = -1, spellcooldown_1 = 3600000 where entry = 21325; -- Mechanical Greench
+
+-- set respawn time of object Medivh's Merlot (2011043) to 5 days.
+update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where id = 2011043;
+-- set respawn time of object Medivh's Merlot Blue (2011044) to 5 days.
+update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where id = 2011044;
+-- set respawn time of GUIDS 5013491, 5013492, 5013493 to 5 days.
+update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where guid in (5013491,5013492,5013493);
