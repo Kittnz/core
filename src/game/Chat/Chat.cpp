@@ -594,6 +594,8 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand ticketCommandTable[] =
     {
+        { "assign",        SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketAssignToCommand,         "", nullptr },
+        { "unassign",      SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketUnAssignCommand,         "", nullptr },
         { "close",         SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },
         { "list",          SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketListCommand,             "", nullptr },
         { "onlinelist",    SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketsOnlineListCommand,      "", nullptr},
