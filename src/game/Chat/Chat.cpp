@@ -780,6 +780,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
         { "removecorpses",  SEC_ADMINISTRATOR,   false, &ChatHandler::HandleRemoveCorpsesCommand,       "", nullptr },
         { "faction",        SEC_DEVELOPER,       false, nullptr,                                        "", factionCommandTable },
+        { "banprint",       SEC_ADMINISTRATOR,   false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 
