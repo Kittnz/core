@@ -441,11 +441,13 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand petCommandTable[] =
     {
+        { "learnspell",     SEC_DEVELOPER,     false, &ChatHandler::HandlePetLearnSpellCommand,        "", nullptr },
+        { "unlearnspell",   SEC_DEVELOPER,     false, &ChatHandler::HandlePetUnlearnSpellCommand,      "", nullptr },
         { "list",           SEC_DEVELOPER,     true,  &ChatHandler::HandlePetListCommand,              "", nullptr },
         { "rename",         SEC_DEVELOPER,     true,  &ChatHandler::HandlePetRenameCommand,            "", nullptr },
         { "delete",         SEC_DEVELOPER,     true,  &ChatHandler::HandlePetDeleteCommand,            "", nullptr },
-        { "loyalty",        SEC_DEVELOPER,     true,  &ChatHandler::HandlePetLoyaltyCommand,            "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                         "", nullptr }
+        { "loyalty",        SEC_DEVELOPER,     false, &ChatHandler::HandlePetLoyaltyCommand,           "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                         "", nullptr }
     };
 
     static ChatCommand reloadCommandTable[] =

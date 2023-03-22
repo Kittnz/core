@@ -13376,6 +13376,48 @@ bool ChatHandler::HandlePetLoyaltyCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandlePetLearnSpellCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Pet* pet = GetSelectedPet();
+    if (!pet)
+        return false;
+
+    int32 spellId;
+    if (!ExtractOptInt32(&args, spellId, 1))
+        return false;
+
+    if (pet->LearnSpell(spellId))
+        PSendSysMessage("Added spell %u to pet %s.", spellId, pet->GetName());
+    else
+        PSendSysMessage("Failed to add spell %u to pet %s.", spellId, pet->GetName());
+
+    return true;
+}
+
+bool ChatHandler::HandlePetUnlearnSpellCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Pet* pet = GetSelectedPet();
+    if (!pet)
+        return false;
+
+    int32 spellId;
+    if (!ExtractOptInt32(&args, spellId, 1))
+        return false;
+
+    if (pet->unlearnSpell(spellId, false, true))
+        PSendSysMessage("Removed spell %u from pet %s.", spellId, pet->GetName());
+    else
+        PSendSysMessage("Failed to remove spell %u from pet %s.", spellId, pet->GetName());
+
+    return true;
+}
+
 bool ChatHandler::HandlePetDeleteCommand(char* args)
 {
     uint32 petId;
