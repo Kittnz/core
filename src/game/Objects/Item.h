@@ -374,6 +374,10 @@ class Item : public Object
         uint32 GetTransmogrification() const { return transmogrifyId; }
         void SetTransmogrification(uint32 value) { transmogrifyId = value; }
 
+        uint32 GetOriginMapId() const { return m_obtainedFromMapId; }
+        void SetCanTradeWithRaidUntil(time_t tradeUntil, uint32 mapId) { m_tradeAllowedUntil = tradeUntil; m_obtainedFromMapId = mapId; }
+        bool CanBeTradedEvenIfSoulBound() const;
+
     private:
         uint32 transmogrifyId;
         bool generatedLoot;
@@ -383,6 +387,8 @@ class Item : public Object
         int16 uQueuePos;
         bool mb_in_trade;                                   // true if item is currently in trade-window
         ItemLootUpdateState m_lootState;
+        time_t m_tradeAllowedUntil = 0;
+        uint32 m_obtainedFromMapId = 0;
 };
 
 #endif

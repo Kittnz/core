@@ -31,6 +31,7 @@
 #include "Spell.h"
 #include "SocialMgr.h"
 #include "Language.h"
+#include "Chat.h"
 
 void WorldSession::SendTradeStatus(TradeStatus status)
 {
@@ -163,6 +164,17 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
 
                 // store
                 trader->MoveItemToInventory(traderDst, myItems[i], true, true);
+
+                // Turtle: dont allow trading raid item anymore
+                if (myItems[i]->IsSoulBound() && myItems[i]->CanBeTradedEvenIfSoulBound())
+                {
+                    myItems[i]->SetCanTradeWithRaidUntil(0, 0);
+
+                    WorldPacket data;
+                    std::string announce = _player->GetName() + std::string(" trades item ") + std::to_string(myItems[i]->GetEntry()) + " to " + trader->GetName() + ".";
+                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                    _player->GetMap()->SendToPlayers(&data);
+                }
             }
 
             if (hisItems[i])
@@ -182,6 +194,17 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
 
                 // store
                 _player->MoveItemToInventory(playerDst, hisItems[i], true, true);
+
+                // Turtle: dont allow trading raid item anymore
+                if (hisItems[i]->IsSoulBound() && hisItems[i]->CanBeTradedEvenIfSoulBound())
+                {
+                    hisItems[i]->SetCanTradeWithRaidUntil(0, 0);
+
+                    WorldPacket data;
+                    std::string announce = trader->GetName() + std::string(" trades item ") + std::to_string(hisItems[i]->GetEntry()) + " to " + _player->GetName() + ".";
+                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                    _player->GetMap()->SendToPlayers(&data);
+                }
             }
         }
         else
@@ -728,6 +751,14 @@ void WorldSession::HandleSetTradeItemOpcode(WorldPacket& recvPacket)
     // check cheating, can't fail with correct client operations
     Item* item = _player->GetItemByPos(bag, slot);
     if (!item || (tradeSlot != TRADE_SLOT_NONTRADED && !item->CanBeTraded()))
+    {
+        SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
+        return;
+    }
+
+    // Turtle: soulbound items can be temporarily traded with people from same raid
+    if (item->IsSoulBound() &&
+        _player->GetBoundInstanceSaveForSelfOrGroup(item->GetOriginMapId()) != my_trade->GetTrader()->GetBoundInstanceSaveForSelfOrGroup(item->GetOriginMapId()))
     {
         SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
         return;

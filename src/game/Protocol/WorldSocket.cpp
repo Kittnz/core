@@ -326,6 +326,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Crypt.SetKey(K.AsByteArray());
     m_Crypt.Init();
 
+    m_Session->SetShouldBackupCharacters(sAccountMgr.UpdateAccountIP(id, GetRemoteAddress()));
     m_Session->SetUsername(account);
     m_Session->SetEmail(email);
     m_Session->SetGameBuild(BuiltNumberClient);
