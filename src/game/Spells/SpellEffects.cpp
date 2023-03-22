@@ -5983,6 +5983,8 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         if (it != viableTargets.end())
                             viableTargets.erase(it);
                         num_targets -= 1;
+
+                        maintank->RemoveAurasDueToSpell(27819); // remove Detonate Mana aura
                         maintank->CastSpell(maintank, 28409, true); // modifies scale
                         m_casterUnit->CastSpell(maintank, 28410, true); // applies dmg and healing mod, as well as the charm itself
                     }
@@ -5993,6 +5995,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         Unit* target = viableTargets[rand];
                         viableTargets.erase(viableTargets.begin() + rand);
 
+                        target->RemoveAurasDueToSpell(27819); // remove Detonate Mana aura
                         target->CastSpell(target, 28409, true); // modifies scale
                         m_casterUnit->CastSpell(target, 28410, true); // applies dmg and healing mod, as well as the charm itself
                     }
