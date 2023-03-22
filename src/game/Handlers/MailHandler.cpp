@@ -377,7 +377,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 			}
 		}
 
-        if (!item->CanBeTraded())
+        if (!item->CanBeTraded() || item->IsSoulBound())
         {
             SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
             return;
