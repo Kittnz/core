@@ -456,6 +456,8 @@ class ChatHandler
         bool HandleQuestStatusCommand(char* args);
         bool HandleQuestTestCommand(char* args);
 
+        bool HandlePetLearnSpellCommand(char* args);
+        bool HandlePetUnlearnSpellCommand(char* args);
         bool HandlePetListCommand(char* args);
         bool HandlePetRenameCommand(char* args);
         bool HandlePetDeleteCommand(char* args);
@@ -576,6 +578,8 @@ class ChatHandler
         bool HandleKickPlayerCommand(char* args);
 
         // GM Tickets commands
+        bool HandleGMTicketAssignToCommand(char* args);
+        bool HandleGMTicketUnAssignCommand(char* args);
         bool ViewTicketByIdOrName(char* ticketId, char* name);
         bool ViewTicket(GmTicket* ticket);
         bool HandleGMTicketListCommand(char* args);
