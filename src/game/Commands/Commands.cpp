@@ -5314,6 +5314,112 @@ bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, uint32 simCount)
     return true;
 }
 
+bool ChatHandler::HandleGMTicketAssignToCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    char* ticketIdStr = strtok((char*)args, " ");
+    uint32 ticketId = atoi(ticketIdStr);
+
+    std::string target(GetSession() ? GetSession()->GetPlayerName() : "");
+    char* targetStr = strtok(nullptr, " ");
+    if (targetStr)
+        target = targetStr;
+    if (target.empty())
+        return false;
+
+    if (!normalizePlayerName(target))
+        return false;
+
+    GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
+    if (!ticket || ticket->IsClosed())
+    {
+        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        return true;
+    }
+
+    ObjectGuid targetGuid = sObjectMgr.GetPlayerGuidByName(target);
+    uint32 accountId = sObjectMgr.GetPlayerAccountIdByGUID(targetGuid);
+
+    // If already assigned, leave
+    if (ticket->IsAssignedTo(targetGuid))
+    {
+        PSendSysMessage(LANG_COMMAND_TICKETASSIGNERROR_B, ticket->GetId());
+        return true;
+    }
+
+    // If assigned to different player other than current, leave
+    //! Console can override though
+    Player* player = GetSession() ? GetSession()->GetPlayer() : nullptr;
+    if (player && ticket->IsAssignedNotTo(player->GetGUID()))
+    {
+        PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.c_str());
+        return true;
+    }
+
+    // Assign ticket
+    ticket->SetAssignedTo(targetGuid, sAccountMgr.GetSecurity(accountId) == sWorld.getConfig(CONFIG_UINT32_GMTICKETS_ADMIN_SECURITY));
+    ticket->SaveToDB();
+    sTicketMgr->UpdateLastChange();
+
+    std::string msg = ticket->FormatMessageString(*this, nullptr, target.c_str(), nullptr, nullptr, nullptr);
+    sWorld.SendGMTicketText(msg.c_str());
+    return true;
+}
+
+bool ChatHandler::HandleGMTicketUnAssignCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    uint32 ticketId = atoi(args);
+    GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
+    if (!ticket || ticket->IsClosed())
+    {
+        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        return true;
+    }
+    // Ticket must be assigned
+    if (!ticket->IsAssigned())
+    {
+        PSendSysMessage(LANG_COMMAND_TICKETNOTASSIGNED, ticket->GetId());
+        return true;
+    }
+
+    // Get security level of player, whom this ticket is assigned to
+    uint32 security = SEC_PLAYER;
+    Player* assignedPlayer = ticket->GetAssignedPlayer();
+    if (assignedPlayer)
+        security = assignedPlayer->GetSession()->GetSecurity();
+    else
+    {
+        ObjectGuid guid = ticket->GetAssignedToGUID();
+        uint32 accountId = sObjectMgr.GetPlayerAccountIdByGUID(guid);
+        security = sAccountMgr.GetSecurity(accountId);
+    }
+
+    // Check security
+    //! If no m_session present it means we're issuing this command from the console
+    uint32 mySecurity = GetSession() ? GetSession()->GetSecurity() : SEC_CONSOLE;
+    if (security > mySecurity)
+    {
+        SendSysMessage(LANG_COMMAND_TICKETUNASSIGNSECURITY);
+        return true;
+    }
+
+    std::string assignedTo = ticket->GetAssignedToName(); // copy assignedto name because we need it after the ticket has been unnassigned
+    ticket->SetUnassigned();
+    ticket->SaveToDB();
+    sTicketMgr->UpdateLastChange();
+
+    std::string msg = ticket->FormatMessageString(*this, nullptr, assignedTo.c_str(),
+                                                  GetSession() ? GetSession()->GetPlayer()->GetName() : "Console", nullptr, nullptr);
+    sWorld.SendGMTicketText(msg.c_str());
+
+    return true;
+}
+
 bool ChatHandler::HandleGMTicketListCommand(char* args)
 {
     static const std::unordered_map<std::string, uint8> categories
@@ -13372,6 +13478,48 @@ bool ChatHandler::HandlePetLoyaltyCommand(char* args)
         return false;
 
     pet->ModifyLoyalty(loyaltyPoints);
+
+    return true;
+}
+
+bool ChatHandler::HandlePetLearnSpellCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Pet* pet = GetSelectedPet();
+    if (!pet)
+        return false;
+
+    int32 spellId;
+    if (!ExtractOptInt32(&args, spellId, 1))
+        return false;
+
+    if (pet->LearnSpell(spellId))
+        PSendSysMessage("Added spell %u to pet %s.", spellId, pet->GetName());
+    else
+        PSendSysMessage("Failed to add spell %u to pet %s.", spellId, pet->GetName());
+
+    return true;
+}
+
+bool ChatHandler::HandlePetUnlearnSpellCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Pet* pet = GetSelectedPet();
+    if (!pet)
+        return false;
+
+    int32 spellId;
+    if (!ExtractOptInt32(&args, spellId, 1))
+        return false;
+
+    if (pet->unlearnSpell(spellId, false, true))
+        PSendSysMessage("Removed spell %u from pet %s.", spellId, pet->GetName());
+    else
+        PSendSysMessage("Failed to remove spell %u from pet %s.", spellId, pet->GetName());
 
     return true;
 }

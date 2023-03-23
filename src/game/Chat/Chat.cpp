@@ -441,11 +441,13 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand petCommandTable[] =
     {
+        { "learnspell",     SEC_DEVELOPER,     false, &ChatHandler::HandlePetLearnSpellCommand,        "", nullptr },
+        { "unlearnspell",   SEC_DEVELOPER,     false, &ChatHandler::HandlePetUnlearnSpellCommand,      "", nullptr },
         { "list",           SEC_DEVELOPER,     true,  &ChatHandler::HandlePetListCommand,              "", nullptr },
         { "rename",         SEC_DEVELOPER,     true,  &ChatHandler::HandlePetRenameCommand,            "", nullptr },
         { "delete",         SEC_DEVELOPER,     true,  &ChatHandler::HandlePetDeleteCommand,            "", nullptr },
-        { "loyalty",        SEC_DEVELOPER,     true,  &ChatHandler::HandlePetLoyaltyCommand,            "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                         "", nullptr }
+        { "loyalty",        SEC_DEVELOPER,     false, &ChatHandler::HandlePetLoyaltyCommand,           "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                         "", nullptr }
     };
 
     static ChatCommand reloadCommandTable[] =
@@ -592,6 +594,8 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand ticketCommandTable[] =
     {
+        { "assign",        SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketAssignToCommand,         "", nullptr },
+        { "unassign",      SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketUnAssignCommand,         "", nullptr },
         { "close",         SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },
         { "list",          SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketListCommand,             "", nullptr },
         { "onlinelist",    SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketsOnlineListCommand,      "", nullptr},
@@ -776,6 +780,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
         { "removecorpses",  SEC_ADMINISTRATOR,   false, &ChatHandler::HandleRemoveCorpsesCommand,       "", nullptr },
         { "faction",        SEC_DEVELOPER,       false, nullptr,                                        "", factionCommandTable },
+        { "banprint",       SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
+        { "unbanprint",     SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 
