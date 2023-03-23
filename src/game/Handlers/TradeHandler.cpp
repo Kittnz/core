@@ -168,7 +168,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 // Turtle: dont allow trading raid item anymore
                 if (myItems[i]->IsSoulBound() && myItems[i]->CanBeTradedEvenIfSoulBound())
                 {
-                    myItems[i]->SetCanTradeWithRaidUntil(0, 0);
+                    myItems[i]->ResetSoulBoundTradeData();
 
                     WorldPacket data;
                     std::string announce = _player->GetName() + std::string(" trades item ") + std::to_string(myItems[i]->GetEntry()) + " to " + trader->GetName() + ".";
@@ -198,7 +198,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 // Turtle: dont allow trading raid item anymore
                 if (hisItems[i]->IsSoulBound() && hisItems[i]->CanBeTradedEvenIfSoulBound())
                 {
-                    hisItems[i]->SetCanTradeWithRaidUntil(0, 0);
+                    hisItems[i]->ResetSoulBoundTradeData();
 
                     WorldPacket data;
                     std::string announce = trader->GetName() + std::string(" trades item ") + std::to_string(hisItems[i]->GetEntry()) + " to " + _player->GetName() + ".";
@@ -757,8 +757,10 @@ void WorldSession::HandleSetTradeItemOpcode(WorldPacket& recvPacket)
     }
 
     // Turtle: soulbound items can be temporarily traded with people from same raid
-    if (item->IsSoulBound() && ((_player->GetMapId() != item->GetOriginMapId()) || (_player->GetGroup() != my_trade->GetTrader()->GetGroup()) ||
-        (_player->GetBoundInstanceSaveForSelfOrGroup(item->GetOriginMapId()) != my_trade->GetTrader()->GetBoundInstanceSaveForSelfOrGroup(item->GetOriginMapId()))))
+    if (item->IsSoulBound() &&
+        ((_player->GetMapId() != item->GetOriginMapId()) ||
+        (_player->GetGroup() != my_trade->GetTrader()->GetGroup()) ||
+        !item->CanTradeSoulBoundToPlayer(my_trade->GetTrader()->GetObjectGuid())))
     {
         SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
         return;

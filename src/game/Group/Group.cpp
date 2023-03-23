@@ -38,6 +38,7 @@
 #include "LFGMgr.h"
 #include "LFGHandler.h"
 #include "Chat.h"
+#include "Logging/DatabaseLogger.hpp"
 
 #include <array>
 
@@ -1084,6 +1085,23 @@ void Group::CountSingleLooterRoll(Roll* roll)
             --roll->getLoot()->unlootedCount;
             sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                 player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+            sDBLogger->LogLoot(
+                {
+                    player->GetGUIDLow(),
+                    player->GetName(),
+                    player->GetSession()->GetAccountId(),
+                    player->GetSession()->GetRemoteAddress(),
+                    LogLoot::SourceType(roll->lootedTargetGUID),
+                    roll->lootedTargetGUID.GetCounter(),
+                    roll->lootedTargetGUID.GetEntry(),
+                    0,
+                    item->itemid,
+                    item->count,
+                    LogLoot::TypeRoll
+                });
+            
+
             if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                 player->OnReceivedItem(newItem);
         }
@@ -1145,6 +1163,22 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     --roll->getLoot()->unlootedCount;
                     sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+                    sDBLogger->LogLoot(
+                        {
+                            player->GetGUIDLow(),
+                            player->GetName(),
+                            player->GetSession()->GetAccountId(),
+                            player->GetSession()->GetRemoteAddress(),
+                            LogLoot::SourceType(roll->lootedTargetGUID),
+                            roll->lootedTargetGUID.GetCounter(),
+                            roll->lootedTargetGUID.GetEntry(),
+                            0,
+                            item->itemid,
+                            item->count,
+                            LogLoot::TypeRoll
+                        });
+
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                         player->OnReceivedItem(newItem);
                 }
@@ -1196,6 +1230,22 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     --roll->getLoot()->unlootedCount;
                     sLog.out(LOG_LOOTS, "%s wins greed roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+                    sDBLogger->LogLoot(
+                        {
+                            player->GetGUIDLow(),
+                            player->GetName(),
+                            player->GetSession()->GetAccountId(),
+                            player->GetSession()->GetRemoteAddress(),
+                            LogLoot::SourceType(roll->lootedTargetGUID),
+                            roll->lootedTargetGUID.GetCounter(),
+                            roll->lootedTargetGUID.GetEntry(),
+                            0,
+                            item->itemid,
+                            item->count,
+                            LogLoot::TypeRoll
+                        });
+
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                         player->OnReceivedItem(newItem);
                 }
