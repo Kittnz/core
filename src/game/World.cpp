@@ -84,6 +84,8 @@
 #include "PlayerDump.h"
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
+#include "re2/re2.h"
+#include "Logging/DatabaseLogger.hpp"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -795,6 +797,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING, "Account.ShowWarningAge", 3);
 
+    setConfig(CONFIG_UINT32_HIGH_LEVEL_CHARACTER, "Account.HighLevelCharacter", 30);
+
     setConfig(CONFIG_BOOL_PTR, "PTR", false);
 
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
@@ -1393,6 +1397,121 @@ void World::RestoreLostGOs()
 
 }
 
+void ExportLogs()
+{
+    //Let's start with loot logs..
+    constexpr uint32 MaxLineLength = 8092;
+    std::string logfn = sConfig.GetStringDefault("LootsLogFile", "");
+
+    std::string logsDir = sConfig.GetStringDefault("LogsDir", "");
+    if (!logsDir.empty())
+    {
+        if ((logsDir.at(logsDir.length() - 1) != '/') && (logsDir.at(logsDir.length() - 1) != '\\'))
+            logsDir.append("/");
+    }
+
+    std::string path = logsDir + logfn;
+
+
+    
+    std::ios::sync_with_stdio(false);
+
+    {
+        static const re2::RE2 lootPattern = R"((\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) (\w+):(\d+) \[\w+:(\d+)@(\d+.\d+.\d+.\d)\] (gets|loots) (\S+) \[loot from (Creature|Item|Gameobject) \((?:Entry: (\d+))? ?Guid: (\d+)\)\])";
+        std::ifstream file(path);
+        std::string line;
+
+        std::vector<std::string> insertValues;
+
+
+        if (file.is_open())
+        {
+            while (std::getline(file, line))
+            {
+                LootLogEntry logEntry;
+                std::string dateTime;
+                std::string lootOrMoneyString;
+                std::string lootContentString;
+                std::string enumString;
+                uint32 entry = 0;
+
+                if (!re2::RE2::PartialMatch(line, lootPattern, &dateTime, &logEntry.receiverName, &logEntry.receiverGuid, &logEntry.receiverAccountId, &logEntry.receiverIp, &lootOrMoneyString,
+                 &lootContentString, &enumString, &entry, &logEntry.sourceGuid))
+                {
+                    //redo the match for some off-logs where we dont have entry but have the rest.
+                    if (!re2::RE2::PartialMatch(line, lootPattern, &dateTime, &logEntry.receiverName, &logEntry.receiverGuid, &logEntry.receiverAccountId, &logEntry.receiverIp, &lootOrMoneyString,
+                        &lootContentString, &enumString, nullptr, &logEntry.sourceGuid))
+                    {
+                        continue;
+                    }
+
+                }
+
+                //format even further..
+                logEntry.sourceEntry = entry;
+
+                const bool isMoneyLog = lootOrMoneyString == "gets";
+
+                if (isMoneyLog)
+                {
+                    auto idx = 0;
+                    uint32 gold = 0, silver = 0, copper = 0;
+                    if (size_t goldPos = lootContentString.find_first_of('g'); goldPos != std::string::npos)
+                    {
+                        gold = atoi(lootContentString.substr(idx, goldPos - idx).c_str());
+                        idx = goldPos + 1;
+                    }
+
+                    if (size_t silverPos = lootContentString.find_first_of('s'); silverPos != std::string::npos)
+                    {
+                        silver = atoi(lootContentString.substr(idx, silverPos - idx).c_str());
+                        idx = silverPos + 1;
+                    }
+
+                    if (size_t copperPos = lootContentString.find_first_of('c'); copperPos != std::string::npos)
+                    {
+                        copper = atoi(lootContentString.substr(idx, copperPos - idx).c_str());
+                    }
+
+                    logEntry.money = (gold * GOLD) + (silver * SILVER) + copper;
+                }
+                else
+                {
+                    static const re2::RE2 itemLootPattern = R"((\d+)x(\d+))";
+                    re2::RE2::PartialMatch(lootContentString, itemLootPattern, &logEntry.itemCount, &logEntry.itemEntry);
+                }
+
+                if (enumString == "Gameobject")
+                    logEntry.sourceType = LogLoot::SourceGameObject;
+                else if (enumString == "Item")
+                    logEntry.sourceType = LogLoot::SourceItem;
+                else
+                    logEntry.sourceType = LogLoot::SourceCreature;
+
+                
+
+                insertValues.push_back(string_format("('%s', '%s', %u, %u, '%s', '%s', %u, %u, %u, %u, %u, '%s')", dateTime.c_str(), logEntry.receiverName.c_str(), logEntry.receiverGuid, logEntry.receiverAccountId, logEntry.receiverIp.c_str(), logEntry.sourceType.data(),
+                    logEntry.sourceGuid, logEntry.sourceEntry, logEntry.money, logEntry.itemEntry, logEntry.itemCount, logEntry.lootType.data()));
+
+                if (insertValues.size() >= 500)
+                {
+                    std::string multiValueInsert = "INSERT INTO `character_loot` (`date_time`, `receiver_name`, `receiver_guid`, `receiver_account_id`, `receiver_ip`, `source_type`, `source_guid`, `source_entry`, `money`, `item_entry`, `item_count`, `loot_type`) VALUES";
+                    multiValueInsert.reserve(MaxLineLength * 48);
+                    for (const auto& elem : insertValues)
+                    {
+                        multiValueInsert += elem;
+                        multiValueInsert += ',';
+                    }
+                    multiValueInsert[multiValueInsert.length() - 1] = ';'; // change , to ; for last value.
+                    insertValues.clear();
+                    LogsDatabase.Execute(multiValueInsert.c_str());
+                }
+
+            }
+        }
+    }
+}
+
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
@@ -1404,6 +1523,14 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Loading config...");
     LoadConfigSettings();
+
+
+    if (sConfig.GetIntDefault("Logs.Export", 0) == 1)
+    {
+        sLog.outString("Initializing Log Exporter.. The server will shutdown after completion.");
+        ExportLogs();
+        return;
+    }
 
     ///- Check the existence of the map files for all races start areas.
     if (!MapManager::ExistMapAndVMap(0, -6240.32f, 331.033f) ||
@@ -1417,6 +1544,7 @@ void World::SetInitialWorldSettings()
         Log::WaitBeforeContinueIfNeed();
         exit(1);
     }
+
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     sLog.outString("Loading MaNGOS strings...");

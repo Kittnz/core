@@ -85,6 +85,7 @@
 #include "GameEventMgr.h"
 #include "events/event_naxxramas.h"
 #include "events/event_wareffort.h"
+#include "Logging/DatabaseLogger.hpp"
 
 #include <sstream>
 
@@ -22074,6 +22075,35 @@ void Player::LootMoney(int32 money, Loot* loot)
     WorldObject const* target = loot->GetLootTarget();
     sLog.out(LOG_LOOTS, "%s gets %ug%us%uc [loot from %s]",
              GetShortDescription().c_str(), money / 100000, (money / 100) % 100, money % 100, target ? target->GetGuidStr().c_str() : "NULL");
+
+
+    if (money > 0)
+    {
+        auto guid = target->GetObjectGuid();
+        auto lootType = LogLoot::TypeKill;
+
+        if (guid.GetHigh() == HIGHGUID_ITEM)
+            lootType = LogLoot::TypeProfession;
+
+        if (guid.GetHigh() == HIGHGUID_GAMEOBJECT)
+            lootType = LogLoot::TypeContainer;
+
+        sDBLogger->LogLoot(
+            {
+                GetGUIDLow(),
+                GetName(),
+                GetSession()->GetAccountId(),
+                GetSession()->GetRemoteAddress(),
+                LogLoot::SourceType(target->GetObjectGuid()),
+                guid.GetCounter(),
+                guid.GetEntry(),
+                static_cast<uint32>(money),
+                0,
+                0,
+                lootType
+            });
+    }
+
     LogModifyMoney(money, "Loot", target ? target->GetObjectGuid() : ObjectGuid());
 }
 

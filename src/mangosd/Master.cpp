@@ -45,8 +45,11 @@
 #include "Util.h"
 #include "MassMailMgr.h"
 #include "DBCStores.h"
+#include "re2/re2.h"
 
 
+#include <fstream>
+#include <iostream>
 #include <ace/OS_NS_signal.h>
 #include <ace/TP_Reactor.h>
 #include <ace/Dev_Poll_Reactor.h>
@@ -96,6 +99,7 @@ Master::Master()
 Master::~Master()
 {
 }
+
 
 /// Main function
 int Master::Run()
