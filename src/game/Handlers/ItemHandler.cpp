@@ -307,6 +307,7 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
 
     // Turtle: save destroyed items so they can be restored
     if (save && (count <= pItem->GetCount()) &&
+        !pProto->Duration && !pProto->Map && !pProto->Area &&
         (pProto->Quality >= ITEM_QUALITY_RARE || pProto->StartQuest))
         CharacterDatabase.PExecute("INSERT INTO `character_destroyed_items` (`player_guid`, `item_entry`, `stack_count`, `time`) VALUES (%u, %u, %u, %u)", _player->GetGUIDLow(), pProto->ItemId, count ? count : pItem->GetCount(), uint64(sWorld.GetGameTime()));
 
