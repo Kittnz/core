@@ -159,7 +159,7 @@ std::string GmTicket::FormatAddonMessage() const
 {
     std::stringstream ss;
 
-    // tickets;;id;;playerName;;playeraccountname;;playerip;;playerlevel;;playeremail;;playerforumusername;;ticket_message
+    // tickets;;id;;playerName;;playeraccountname;;playerip;;playerlevel;;playeremail;;playerforumusername;;assigned_gm_name_or_0_for_not_assigned;;ticket_message
 
     ss << "tickets;;" << _id << ";;" << _playerName << ";;";
 
@@ -175,6 +175,13 @@ std::string GmTicket::FormatAddonMessage() const
 
     ss << sAccountMgr.GetAccountEmail(accId) << ";;";
     ss << sAccountMgr.GetForumName(accId) << ";;";
+
+    std::string name;
+    if (sObjectMgr.GetPlayerNameByGUID(_assignedTo, name))
+        ss << name << ";;";
+    else
+        ss << "0;;";
+
     ss << _message;
 
     return ss.str();
