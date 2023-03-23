@@ -1045,7 +1045,20 @@ Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)
 
             // Turtle:: Make raid looted items not appear soul bound.
             if (player && player->GetMap()->IsRaid())
-                pItem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+            {
+                if (Group * pGroup = (Group*)player->GetGroup())
+                {
+                    pItem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetMapId() == player->GetMapId())
+                                pItem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                        }
+                    }
+                }
+            }
 
             return pItem;
         }
