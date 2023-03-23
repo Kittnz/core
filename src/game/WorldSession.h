@@ -551,6 +551,8 @@ class WorldSession
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
 
+        bool HasHighLevelCharacter() const;
+
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
         bool ReceivedWhoRequest() const { return m_who_recvd; }
         bool m_who_recvd;
@@ -973,6 +975,7 @@ class WorldSession
         uint32          _characterMaxLevel;
         bool m_fingerprintBanned = false;
         bool m_shouldBackupCharacters = false;
+        uint32 m_highestCharLevel = 0;
 
         enum ClientHashStep
         {

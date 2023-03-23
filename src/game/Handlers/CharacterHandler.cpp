@@ -149,11 +149,18 @@ public:
     }
 } chrHandler;
 
+bool WorldSession::HasHighLevelCharacter() const
+{
+    return m_highestCharLevel >= sWorld.getConfig(CONFIG_UINT32_HIGH_LEVEL_CHARACTER);
+}
+
 void WorldSession::HandleCharEnum(QueryResult * result)
 {
     WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
 
     uint8 num = 0;
+
+    m_highestCharLevel = 0;
 
     data << num;
 
@@ -168,6 +175,8 @@ void WorldSession::HandleCharEnum(QueryResult * result)
 
             if (m_shouldBackupCharacters && level > 30)
                 sWorld.SchedulePlayerDump(guidlow);
+
+            m_highestCharLevel = std::max(level, m_highestCharLevel);
 
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());
             if (Player::BuildEnumData(result, &data))

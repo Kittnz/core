@@ -119,6 +119,7 @@ set (game_SRCS
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
     LFG/LFGMgr.cpp
+    Logging/DatabaseLogger.cpp
     Mail/Mail.cpp
     Mail/MassMailMgr.cpp
     MapNodes/AbstractPlayer.cpp
