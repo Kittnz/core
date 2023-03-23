@@ -15688,7 +15688,7 @@ bool ChatHandler::HandlePDumpListCommand(char* args)
 
         while (!!(dp = ACE_OS::readdir(dirp)))
             if (strstr(dp->d_name, fileName))
-                PSendSysMessage("- %s", dp->d_name);
+                PSendSysMessage("- %s", playerLink(dp->d_name).c_str());
 
 #ifndef _WIN32
         // this causes a crash on Windows, so just accept a minor memory leak for now
