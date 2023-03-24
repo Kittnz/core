@@ -379,12 +379,7 @@ class Item : public Object
         bool CanBeTradedEvenIfSoulBound() const;
         void AddPlayerToAllowedTradeList(ObjectGuid guid) { m_canBeTradedWithPlayers.insert(guid); }
         bool CanTradeSoulBoundToPlayer(ObjectGuid guid) const { return m_canBeTradedWithPlayers.find(guid) != m_canBeTradedWithPlayers.end(); }
-        void ResetSoulBoundTradeData()
-        {
-            m_tradeAllowedUntil = 0;
-            m_obtainedFromMapId = 0;
-            m_canBeTradedWithPlayers.clear();
-        }
+        void ResetSoulBoundTradeData();
 
     private:
         uint32 transmogrifyId;

@@ -861,6 +861,16 @@ bool Item::IsEquipped() const
     return !IsInBag() && m_slot < EQUIPMENT_SLOT_END;
 }
 
+void Item::ResetSoulBoundTradeData()
+{
+    m_tradeAllowedUntil = 0;
+    m_obtainedFromMapId = 0;
+    m_canBeTradedWithPlayers.clear();
+    ForceValuesUpdateAtIndex(ITEM_FIELD_FLAGS);
+    if (Player* owner = GetOwner())
+        SendCreateUpdateToPlayer(owner);
+}
+
 bool Item::CanBeTradedEvenIfSoulBound() const
 {
     return m_tradeAllowedUntil > sWorld.GetGameTime();

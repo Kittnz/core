@@ -757,7 +757,7 @@ void WorldSession::HandleSetTradeItemOpcode(WorldPacket& recvPacket)
     }
 
     // Turtle: soulbound items can be temporarily traded with people from same raid
-    if (item->IsSoulBound() &&
+    if (tradeSlot != TRADE_SLOT_NONTRADED && item->IsSoulBound() &&
         ((_player->GetMapId() != item->GetOriginMapId()) ||
         (_player->GetGroup() != my_trade->GetTrader()->GetGroup()) ||
         !item->CanTradeSoulBoundToPlayer(my_trade->GetTrader()->GetObjectGuid())))
