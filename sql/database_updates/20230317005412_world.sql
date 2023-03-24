@@ -373,3 +373,5 @@ update item_template set display_id = 1216 where entry = 61232;
 update item_template set quality = 3 where entry = 61234;
 -- item 'Upper Karazhan Tower Key' should not have the label 'quest item'.
 update item_template set bonding = 1 where entry = 61234;
+-- object 'Treatise on Magical Locks and Keys' change display model to 'Generalbook01'.
+update gameobject_template set displayid = 24025 where entry = 2011049;
