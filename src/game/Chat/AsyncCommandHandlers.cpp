@@ -215,7 +215,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         data->latency, localeNames[data->loc], data->two_factor_enabled.c_str());
     if (!data->email.empty())
         cHandler.PSendSysMessage("Email: %s", data->email.c_str());
-    cHandler.PSendSysMessage("Current Fingerprint: %u%s", data->fingerprint, data->isFingerprintBanned ? " (BANNED)" : "");
+    cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
     cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
