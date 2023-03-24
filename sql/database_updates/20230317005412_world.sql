@@ -363,3 +363,7 @@ update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where
 update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where id = 2011044;
 -- set respawn time of GUIDS 5013491, 5013492, 5013493 to 5 days.
 update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where guid in (5013491,5013492,5013493);
+-- Quest 'Enchanted Thorium Collection' change main description second paragraph 'Nordranaar' to 'Nordanaar'.
+update quest_template set details = 'Our enemies on Hyjal continue to grow, day after day. I may not know how to craft a weapon, but I do know our druidic weapons require quite a lot of Enchanted Thorium, and it is my duty to make sure we are prepared.$B$BIf you are willing to help us here in Nordanaar, I can trade a Bright Dream Shard in exchange for ten Enchanted Thorium at any time.' where entry = 40815;
+-- Quest 'Mooncloth Collection' change 'Nordranaar' to 'Nordanaar in the first paragraph.
+update quest_template set details = 'The beautiful fabric of Mooncloth has often eluded us with its rarity and is in quite high demand for all sorts of purpose. If you could get your hands on a single piece, it would go quite a long way for us in Nordanaar.$B$BI could even exchange you with a single Bright Dream Shard to make it worth your while. If you end up finding one, let me know!' where entry = 40816;
