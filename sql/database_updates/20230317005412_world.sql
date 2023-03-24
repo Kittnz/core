@@ -367,3 +367,9 @@ update gameobject set spawntimesecsmin = 432000, spawntimesecsmax = 432000 where
 update quest_template set details = 'Our enemies on Hyjal continue to grow, day after day. I may not know how to craft a weapon, but I do know our druidic weapons require quite a lot of Enchanted Thorium, and it is my duty to make sure we are prepared.$B$BIf you are willing to help us here in Nordanaar, I can trade a Bright Dream Shard in exchange for ten Enchanted Thorium at any time.' where entry = 40815;
 -- Quest 'Mooncloth Collection' change 'Nordranaar' to 'Nordanaar in the first paragraph.
 update quest_template set details = 'The beautiful fabric of Mooncloth has often eluded us with its rarity and is in quite high demand for all sorts of purpose. If you could get your hands on a single piece, it would go quite a long way for us in Nordanaar.$B$BI could even exchange you with a single Bright Dream Shard to make it worth your while. If you end up finding one, let me know!' where entry = 40816;
+-- item 'Arcanized Gems' change display ID to 1216.
+update item_template set display_id = 1216 where entry = 61232;
+-- item 'Upper Karazhan Tower Key' set rarity to rare, blue.
+update item_template set quality = 3 where entry = 61234;
+-- item 'Upper Karazhan Tower Key' should not have the label 'quest item'.
+update item_template set bonding = 1 where entry = 61234;
