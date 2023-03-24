@@ -189,6 +189,24 @@ void LootStore::LoadLootTable()
     }
 }
 
+void LootStore::AddLoot(uint32 entry, uint32 itemid, float chanceOrQuestChance, int8 group, uint16 conditionId, int32 mincountOrRef, uint8 maxcount)
+{
+    LootStoreItem storeitem = LootStoreItem(itemid, chanceOrQuestChance, group, conditionId, mincountOrRef, maxcount);
+
+    if (!storeitem.IsValid(*this, entry))           // Validity checks
+        return;
+
+    auto tab = m_LootTemplates.find(entry);
+    if (tab == m_LootTemplates.end())
+    {
+        std::pair< LootTemplateMap::iterator, bool > pr = m_LootTemplates.insert(LootTemplateMap::value_type(entry, new LootTemplate));
+        tab = pr.first;
+    }
+
+    // Adds current row to the template
+    tab->second->AddEntry(storeitem);
+}
+
 bool LootStore::HaveQuestLootFor(uint32 loot_id) const
 {
     LootTemplateMap::const_iterator itr = m_LootTemplates.find(loot_id);
@@ -1449,8 +1467,16 @@ void LoadLootTemplates_Fishing()
     LootTemplates_Fishing.LoadAndCollectLootIds(ids_set);
 
     for (auto itr = sAreaStorage.begin<AreaEntry>(); itr < sAreaStorage.end<AreaEntry>(); ++itr)
+    {
         if (ids_set.find(itr->Id) != ids_set.end())
-                ids_set.erase(itr->Id);
+        {
+            // Turtle: add tiny chance to fish up a fake ashbringer in random area
+            if (itr->AreaLevel >= 45 && roll_chance_u(10))
+                LootTemplates_Fishing.AddLoot(itr->Id, 51216, 0.01f, 0, 0, 1, 1);
+
+            ids_set.erase(itr->Id);
+        }
+    }
 
     // by default (look config options) fishing at fail provide junk loot, entry 0 use for store this loot
     ids_set.erase(0);

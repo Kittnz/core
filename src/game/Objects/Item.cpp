@@ -253,7 +253,7 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
 
     SetUInt32Value(ITEM_FIELD_STACK_COUNT, 1);
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, itemProto->MaxDurability);
-    SetUInt32Value(ITEM_FIELD_DURABILITY, itemProto->MaxDurability);
+    SetUInt32Value(ITEM_FIELD_DURABILITY, (itemProto->ExtraFlags & ITEM_EXTRA_CREATE_BROKEN) ? 0 : itemProto->MaxDurability);
 
     for (int i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
         SetSpellCharges(i, itemProto->Spells[i].SpellCharges);
@@ -859,6 +859,16 @@ uint8 Item::GetBagSlot() const
 bool Item::IsEquipped() const
 {
     return !IsInBag() && m_slot < EQUIPMENT_SLOT_END;
+}
+
+void Item::ResetSoulBoundTradeData()
+{
+    m_tradeAllowedUntil = 0;
+    m_obtainedFromMapId = 0;
+    m_canBeTradedWithPlayers.clear();
+    ForceValuesUpdateAtIndex(ITEM_FIELD_FLAGS);
+    if (Player* owner = GetOwner())
+        SendCreateUpdateToPlayer(owner);
 }
 
 bool Item::CanBeTradedEvenIfSoulBound() const
