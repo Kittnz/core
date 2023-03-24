@@ -382,7 +382,8 @@ enum ItemExtraFlags
     ITEM_EXTRA_MAIL_STATIONERY     = 0x01,      // Used as icon or background for mails
     ITEM_EXTRA_IGNORE_QUEST_STATUS = 0x02,      // No quest status will be checked when this item drops
     ITEM_EXTRA_NOT_OBTAINABLE      = 0x04,      // Never obtainable by players in vanilla
-    ITEM_EXTRA_ALL                 = 0x07       // All used flags, used to check DB data (mask all above flags)
+    ITEM_EXTRA_CREATE_BROKEN       = 0x08,      // Item starts with 0 durability instead of max
+    ITEM_EXTRA_ALL                 = 0x0F       // All used flags, used to check DB data (mask all above flags)
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
