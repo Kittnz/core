@@ -733,7 +733,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
-    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty() && GetSecurity() > SEC_PLAYER)
     {
         if (strstr(msg.c_str(), "GM_ADDON")) // prefix
         {
