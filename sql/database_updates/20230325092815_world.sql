@@ -254,3 +254,4 @@ UPDATE `item_template` SET `max_count` = 1 WHERE `entry` = 60559;
 UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;
 
 UPDATE `spell_template` SET `description` = 'Right Click to summon and dismiss your Little Cow.' WHERE `entry` = 46482;
+UPDATE `spell_template` SET `description` = 'Summons and dismisses a rideable Panther. This mount changes depending on your Riding skill.' WHERE `entry` = 10787;
