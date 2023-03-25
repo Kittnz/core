@@ -14091,6 +14091,13 @@ bool ChatHandler::HandleReloadGmLevelsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleReloadGmTicketTemplatesCommand(char* args)
+{
+    sTicketMgr->LoadTicketTemplates();
+    SendSysMessage("GM ticket templates reloaded.");
+    return true;
+}
+
 bool ChatHandler::HandleMountCommand(char* /*args*/)
 {
     Player* player = m_session->GetPlayer();

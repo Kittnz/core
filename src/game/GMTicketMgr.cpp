@@ -518,3 +518,46 @@ void TicketMgr::ReloadTicket(uint32 ticketId)
     _reloadTicketsSet.insert(ticketId);
     CharacterDatabase.AsyncPQueryUnsafe(this, &TicketMgr::ReloadTicketCallback, "SELECT " TICKET_TABLE_FIELDS " FROM gm_tickets WHERE ticketId = '%u'", ticketId);
 }
+
+void TicketMgr::LoadTicketTemplates()
+{
+    m_ticketTemplates.clear();
+
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT MAX(id) FROM `gm_ticket_template`"));
+
+    if (!result)
+        return;
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        m_ticketTemplates.resize(id + 1);
+
+    } while (result->NextRow());
+
+    result.reset(WorldDatabase.Query("SELECT `id`, `name`, `text` FROM `gm_ticket_template`"));
+
+    if (!result)
+        return;
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        std::string name = fields[1].GetCppString();
+        std::string text = fields[2].GetCppString();
+
+        m_ticketTemplates[id] = std::make_pair(name, text);
+
+    } while (result->NextRow());
+}
+
+void TicketMgr::SendTicketTemplatesInAddonMessage(Player* pPlayer) const
+{
+    pPlayer->SendAddonMessage("GM_ADDON", "tickets;;start");
+    for (uint32 i = 0; i < m_ticketTemplates.size(); i++)
+        if (m_ticketTemplates[i].first.empty())
+            pPlayer->SendAddonMessage("GM_ADDON", "tickets;;" + std::to_string(i) + ";;" + m_ticketTemplates[i].first + ";;" + m_ticketTemplates[i].second);
+    pPlayer->SendAddonMessage("GM_ADDON", "tickets;;end");
+}

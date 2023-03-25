@@ -739,6 +739,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (strstr(msg.c_str(), "GET_TICKETS"))
                 sTicketMgr->SendTicketsInAddonMessage(_player);
+            else if (strstr(msg.c_str(), "GET_TEMPLATES"))
+                sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
             return;
         }
     }

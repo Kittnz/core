@@ -460,9 +460,10 @@ ChatCommand * ChatHandler::getCommandTable()
         { "variables",                    SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadVariablesCommand,               "", nullptr },
         { "shop",                         SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
-        { "bgplayers",                    SEC_ADMINISTRATOR,    true, &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
-        { "gmlevels",                     SEC_ADMINISTRATOR,    true, &ChatHandler::HandleReloadGmLevelsCommand,                   "", nullptr},
-        { "housing",                      SEC_DEVELOPER,        true, &ChatHandler::HandleReloadHousingCommand,                  "", nullptr},
+        { "bgplayers",                    SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
+        { "gmlevels",                     SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadGmLevelsCommand,                "", nullptr},
+        { "gm_ticket_template",           SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadGmTicketTemplatesCommand,       "", nullptr},
+        { "housing",                      SEC_DEVELOPER,        true,  &ChatHandler::HandleReloadHousingCommand,                 "", nullptr},
         { nullptr,                       0,                     false, nullptr,                                                  "", nullptr }
     };
 
