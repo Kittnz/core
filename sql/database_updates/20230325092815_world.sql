@@ -257,3 +257,19 @@ UPDATE `spell_template` SET `description` = 'Right Click to summon and dismiss y
 UPDATE `spell_template` SET `description` = 'Summons and dismisses a rideable Panther. This mount changes depending on your Riding skill.' WHERE `entry` = 10787;
 
 update item_template set disenchant_id = 7 where entry = 81342; -- Archivist Mantle
+
+UPDATE quest_template SET NextQuestInChain = 40713 WHERE entry = 40712;
+UPDATE quest_template SET NextQuestInChain = 40714 WHERE entry = 40713;
+UPDATE quest_template SET NextQuestInChain = 40715 WHERE entry = 40714;
+UPDATE quest_template SET NextQuestInChain = 40716 WHERE entry = 40715;
+UPDATE quest_template SET NextQuestInChain = 40717 WHERE entry = 40716;
+
+REPLACE INTO `areatrigger_tavern` (`id`, `name`) VALUES (4310, 'Tel\'Abim - Tel Co. Basecamp');
+REPLACE INTO `areatrigger_template` (`id`, `map_id`, `x`, `y`, `z`, `radius`) VALUES (4310, 1, -8849.208, 
+-6506.475, 12.809, 15); 
+
+DELETE FROM creature_questrelation WHERE quest = 80720 AND id = 5653;
+
+REPLACE INTO `creature_questrelation` (`id`, `quest`) VALUES (14402, 80720);
+REPLACE INTO `creature_questrelation` (`id`, `quest`) VALUES (14403, 80720);
+REPLACE INTO `creature_questrelation` (`id`, `quest`) VALUES (14404, 80720);
