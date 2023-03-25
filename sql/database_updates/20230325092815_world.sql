@@ -252,3 +252,5 @@ UPDATE `quest_template` SET `Details` = 'We sent out a crew weeks ago to begin d
 UPDATE `item_template` SET `max_count` = 1 WHERE `entry` = 60559;
 
 UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;
+
+UPDATE `spell_template` SET `description` = 'Right Click to summon and dismiss your Little Cow.' WHERE `entry` = 46482;
