@@ -2072,7 +2072,7 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress)
+    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress && _triggerPrintSave)
     {
         auto activeProcCount = 0;
         for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
