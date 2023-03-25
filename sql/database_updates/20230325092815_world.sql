@@ -221,3 +221,34 @@ update item_template set stat_type2 = 0, stat_value2 = 0, stat_value1 = 0, stat_
 UPDATE `spell_template` SET `effectBasePoints1`='29', `description`='Increases your attack speed by $s1% for $d but become stunned for $46267d afterward.' WHERE (`entry`='46266');
 
  UPDATE `spell_template` SET `effectBasePoints1`='29', `description`='Increases chance to dodge by $s1% for $d.' WHERE (`entry`='46296');
+ 
+UPDATE `creature` SET `spawntimesecsmin` = 350, `spawntimesecsmax` = 350 WHERE `guid` = 92852;
+UPDATE `creature` SET `spawntimesecsmin` = 350, `spawntimesecsmax` = 350 WHERE `guid` = 92850;
+
+UPDATE `quest_template` SET `Type` = 1 WHERE `entry` = 40785;
+
+UPDATE `item_template` SET `display_id` = 34954 WHERE `entry` = 61094;
+
+UPDATE `item_template` SET `display_id` = 25481 WHERE `entry` = 61160;
+UPDATE `item_template` SET `display_id` = 1116 WHERE `entry` = 61159;
+UPDATE `item_template` SET `display_id` = 24221 WHERE `entry` = 61157;
+
+UPDATE `quest_template` SET `ReqItemId2` = '16168 ' WHERE `entry` = 40798;
+
+UPDATE `quest_template` SET `RewRepFaction1` = 0, `RewRepValue1` = 0 WHERE `entry` = 969;
+
+update quest_template set QuestFlags = 40648  where entry = 40519;
+
+update item_template set stackable = 10 where entry = 59997; -- Dwarven Writings
+UPDATE `quest_template` SET `ReqItemCount1` = 10 WHERE `entry` = 80400;
+
+UPDATE `quest_template` SET `Objectives` = 'Search for Najhaz the Raider, kill him, and reclaim the Eldarath Harmonization Gem for Keeper Iselus at the Tower of Eldara in Azshara.', `Details` = 'I have communed with those closest to me once again, and I am thankful they are safe. More work needs to be done, and hopefully you can be of assistance to me. The Eldarath Harmonization Gem was stolen a long time ago, a band of Naga Raiders led by one named Najhaz. He was able to break my seal upon the tower door and take the Harmonization Gem before I could return to stop him.$B$BIf we Keepers of Azshara are ever meant to travel long distances within the area, this Gem will need to be returned. No doubt that Najhaz the Raider will be among his kin along the shore to the west, kill him, and reclaim the Harmonization Gem for me.' WHERE `entry` = 40245;
+
+UPDATE `creature_template` SET `health_min` = 2554, `health_max` = 2554, `armor` = 1350 WHERE `entry` = 70023;
+UPDATE `creature_template` SET `health_min` = 2624, `health_max` = 2624, `armor` = 961 WHERE `entry` = 70027;
+
+UPDATE `quest_template` SET `Details` = 'We sent out a crew weeks ago to begin doing some studies over the ruins down west and they haven\'t showed up yet, not even a peep.$B$BThe desert is a dangerous place so now rumor is going around they may have met some terrible fate. It is possible I suppose!$B$BWhat is really important is what we sent out with them, you see, when we trust someone, we usually give them some valueable gear, something worth a lot of coin, you dig?$B$BI need you to go out there and find that crew, or more importantly, get the Turbo-Scan Filtronomitor from whatever is left!$B$BThey should have been down near Eastmoon Ruins, check around there.' WHERE `entry` = 40589;
+
+UPDATE `item_template` SET `max_count` = 1 WHERE `entry` = 60559;
+
+UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;

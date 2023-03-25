@@ -277,7 +277,7 @@ struct npc_den_commanderAI : ScriptedAI
                 {
                 case 0:
                 {
-                    m_creature->PMonsterSay("Lok-Narash! Arms steady! Fire!");
+                    m_creature->PMonsterSay("Lok-Narash! Arms steady! Shoot!");
                     uint32 rand = urand(5000, 15000);
                     m_uiDialogueTimer2 = rand;
                     m_uiTick2++;
@@ -285,7 +285,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 case 1:
                 {
-                    m_creature->PMonsterSay("The night elves are quick. Fire ahead of their movements!");
+                    m_creature->PMonsterSay("The night elves are quick. Shoot ahead of their movements!");
                     uint32 rand = urand(25000, 60000);
                     m_uiDialogueTimer2 = rand;
                     m_uiTick2 = 0;
