@@ -1830,6 +1830,7 @@ void World::SetInitialWorldSettings()
 	sTicketMgr->LoadTickets();
     sLog.outString("Loading surveys...");
 	sTicketMgr->LoadSurveys();
+    sTicketMgr->LoadTicketTemplates();
     sLog.outString("Returning old mails...");
 	sObjectMgr.ReturnOrDeleteOldMails(false);
     sLog.outString("Loading quest start scripts...");

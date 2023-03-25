@@ -262,6 +262,9 @@ public:
     void Initialize();
     void ResetTickets();
 
+    void LoadTicketTemplates();
+    void SendTicketTemplatesInAddonMessage(Player* pPlayer) const;
+
     void ShowList(ChatHandler& handler, bool onlineOnly, uint8 category = 0) const;
     void ShowClosedList(ChatHandler& handler) const;
     void ShowEscalatedList(ChatHandler& handler) const;
@@ -282,6 +285,7 @@ protected:
     uint32 _openTicketCount;
     uint64 _lastChange;
     std::set<uint32> _reloadTicketsSet;
+    std::vector<std::pair<std::string, std::string>> m_ticketTemplates;
 };
 
 #define sTicketMgr TicketMgr::instance()
