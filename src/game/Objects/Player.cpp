@@ -22077,7 +22077,7 @@ void Player::LootMoney(int32 money, Loot* loot)
              GetShortDescription().c_str(), money / 100000, (money / 100) % 100, money % 100, target ? target->GetGuidStr().c_str() : "NULL");
 
 
-    if (money > 0)
+    if (money > 0 && target)
     {
         auto guid = target->GetObjectGuid();
         auto lootType = LogLoot::TypeKill;

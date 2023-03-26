@@ -56,6 +56,7 @@ struct PInfoData
     bool online = false;
     bool isHardcore = false;
     bool isFingerprintBanned = false;
+    bool isSuspicious = false;
 
     bool hasAccount = false;
     std::string two_factor_enabled;
@@ -65,6 +66,7 @@ struct PInfoData
     AccountTypes security = SEC_PLAYER;
     std::string last_login;
     std::string target_name;
+    
 };
 
 /**

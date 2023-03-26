@@ -1241,6 +1241,23 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
+
+    setConfig(CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA, "Analysis.StopOnCorrectExtendedData", false);
+    setConfig(CONFIG_BOOL_ANALYSIS_DO_SHARED_DATA_DETAILED_REPORT, "Analysis.DoSharedDataDetailedReport", false);
+    setConfig(CONFIG_BOOL_ANALYSIS_ALLOW_RELAXED_IP, "Analysis.AllowRelaxedIp", true);
+    setConfig(CONFIG_BOOL_ANALYSIS_LOG_DISCORD_SUMMARY, "Analysis.AlwaysLogDiscordSummary", false);
+    setConfig(CONFIG_BOOL_ANALYSIS_PING_ON_WARNING, "Analysis.PingOnWarning", false);
+    setConfig(CONFIG_BOOL_ANALYSIS_AUTOMATIC_PUNIHSMENT, "Analysis.AutomaticMark", false);
+
+
+    setConfig(CONFIG_UINT32_ACCOUNT_TRUSTED_IP_PERCENTAGE, "Analysis.TrustedIpPercentageLogins", 25);
+    setConfig(CONFIG_UINT32_ANALYSIS_NO_FINGERPRINT_MATCH_WEIGHT, "Analysis.NoFingerPrintMatchWeight", 150);
+    setConfig(CONFIG_UINT32_ANALYSIS_NO_EXTENDED_DATA_MATCH_WEIGHT, "Analysis.NoExtendedDataMatchWeight", 150);
+    setConfig(CONFIG_UINT32_ANALYSIS_NO_CPU_DATA_WEIGHT, "Analysis.NoCpuDataWeight", 10);
+    setConfig(CONFIG_UINT32_ANALYSIS_NO_CPU_DATA_MATCH_WEIGHT, "Analysis.NoCpuDataMatchWeight", 150);
+    setConfig(CONFIG_UINT32_ANALYSIS_NO_EXTENDED_DATA_WEIGHT, "Analysis.NoExtendedDataWeight", 10);
+    setConfig(CONFIG_UINT32_ANALYSIS_WARNING_THRESHOLD, "Analysis.WarningThreshold", 300);
+
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
@@ -1830,6 +1847,7 @@ void World::SetInitialWorldSettings()
 	sTicketMgr->LoadTickets();
     sLog.outString("Loading surveys...");
 	sTicketMgr->LoadSurveys();
+    sTicketMgr->LoadTicketTemplates();
     sLog.outString("Returning old mails...");
 	sObjectMgr.ReturnOrDeleteOldMails(false);
     sLog.outString("Loading quest start scripts...");
