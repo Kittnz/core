@@ -2,9 +2,9 @@
 #include "Database/DatabaseImpl.h"
 #include "DiscordBot/Bot.hpp" 
 #include "re2/re2.h"
-#include "AccountAnalyser.hpp"
-
+#include "WorldSession.h"
 #include "World.h"
+#include "AccountAnalyser.hpp"
 
 template <typename T>
 bool Eq(T v, T g)
