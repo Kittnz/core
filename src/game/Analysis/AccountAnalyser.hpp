@@ -1,5 +1,8 @@
 #pragma once
+#include "Common.h"
+#include "SharedDefines.h"
 #include <atomic>
+
 
 class WorldSession;
 
