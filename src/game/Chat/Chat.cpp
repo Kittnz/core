@@ -1866,7 +1866,7 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std:
     switch (msgtype)
     {
         case CHAT_MSG_MONSTER_WHISPER:
-        //case CHAT_MSG_RAID_BOSS_WHISPER:
+        case CHAT_MSG_RAID_BOSS_WHISPER:
         case CHAT_MSG_RAID_BOSS_EMOTE:
         case CHAT_MSG_MONSTER_EMOTE:
             MANGOS_ASSERT(senderName);
