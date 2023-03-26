@@ -867,8 +867,10 @@ void Item::ResetSoulBoundTradeData()
     m_obtainedFromMapId = 0;
     m_canBeTradedWithPlayers.clear();
     ForceValuesUpdateAtIndex(ITEM_FIELD_FLAGS);
-    if (Player* owner = GetOwner())
-        SendCreateUpdateToPlayer(owner);
+    //#TODO_CRASH: SendCreateUpdateToPlayer can crash server, and we don't know why
+    // Item is valid, but probably invoking this function here is not safe
+//     if (Player* owner = GetOwner())
+//         SendCreateUpdateToPlayer(owner);
 }
 
 bool Item::CanBeTradedEvenIfSoulBound() const
