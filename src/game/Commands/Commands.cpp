@@ -10157,6 +10157,37 @@ bool ChatHandler::HandleCrashCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleMarkSuspiciousCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* chr = GetSelectedPlayer();
+    if (!chr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+        chr->GetSession()->MarkSuspicious();
+    else
+        chr->GetSession()->UnmarkSuspicious();
+
+    PSendSysMessage("Player is now %s", chr->GetSession()->IsSuspicious() ? "SUSPICIOUS" : "NOT SUSPICIOUS");
+
+    return true;
+}
+
 bool ChatHandler::HandleWhoCommand(char* args)
 {
     uint32 areaId;

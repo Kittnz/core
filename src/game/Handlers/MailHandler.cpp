@@ -145,6 +145,9 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
+    if (IsSuspicious())
+        return;
+
     WorldSession::AsyncMailSendRequest* req = new WorldSession::AsyncMailSendRequest();
     req->accountId = GetAccountId();
     req->senderGuid = GetMasterPlayer()->GetObjectGuid();

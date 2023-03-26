@@ -282,7 +282,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint32>();
 
-    if (IsFingerprintBanned())
+    if (IsFingerprintBanned() || IsSuspicious())
         return;
 
     TradeData* my_trade = _player->m_trade;

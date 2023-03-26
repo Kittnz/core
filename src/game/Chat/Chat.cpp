@@ -783,6 +783,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "faction",        SEC_DEVELOPER,       false, nullptr,                                        "", factionCommandTable },
         { "banprint",       SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
         { "unbanprint",     SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,      "", nullptr },
+        { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

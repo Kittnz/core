@@ -60,6 +60,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
         data->isHardcore = target->IsHardcore();
         data->fingerprint = target->GetSession()->GetAntiCheat()->GetFingerprint();
         data->isFingerprintBanned = target->GetSession()->IsFingerprintBanned();
+        data->isSuspicious = target->GetSession()->IsSuspicious();
         if (session->GetSecurity() >= SEC_ADMINISTRATOR)
             data->email = target->GetSession()->GetEmail();
 
@@ -217,6 +218,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         cHandler.PSendSysMessage("Email: %s", data->email.c_str());
     cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
     cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
+    cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
     uint32 money = data->money;
