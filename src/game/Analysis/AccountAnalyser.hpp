@@ -3,6 +3,9 @@
 #include "SharedDefines.h"
 #include <atomic>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <type_traits>
 
 
 class WorldSession;
