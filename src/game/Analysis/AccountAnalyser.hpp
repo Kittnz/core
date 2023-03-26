@@ -105,8 +105,8 @@ public:
 
     uint32& RescheduleTimer() { return _rescheduleTimer; }
 
-    static void LoadFingerprintsCallback(QueryResult* result, AccountAnalyser*);
-    static void LoadIPHistoryCallback(QueryResult* result, AccountAnalyser* analyser);
+    static void LoadFingerprintsCallback(QueryResult* result, uint32 SessionID);
+    static void LoadIPHistoryCallback(QueryResult* result, uint32 SessionID);
 
 private:
     WorldSession* _session;

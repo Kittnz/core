@@ -21,17 +21,21 @@ bool AllVal(Check t, Args... args)
 
 AccountAnalyser::AccountAnalyser(WorldSession* session) : _session(session), _accountId(session->GetAccountId()) {}
 
-void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, AccountAnalyser* analyser)
+void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, uint32 SessionID)
 {
+	WorldSession* AccountSession = sWorld.FindSession(SessionID);
+	if (AccountSession == nullptr)
+	{
+		return;
+	}
+
     if (!result)
     {
-        ++analyser->m_loadStep;
+        ++AccountSession->_analyser->m_loadStep;
         return;
     }
 
-
-
-    analyser->_loadedSamples.reserve(result->GetRowCount());
+    AccountSession->_analyser->_loadedSamples.reserve(result->GetRowCount());
     do {
         auto fields = result->Fetch();
         
@@ -83,23 +87,29 @@ void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, AccountAnaly
             useCpuData
         };
         
-        analyser->_fingerprintSampleLookup.insert(fingerprint);
+        AccountSession->_analyser->_fingerprintSampleLookup.insert(fingerprint);
 
-        analyser->_loadedSamples.push_back(std::move(info));
+        AccountSession->_analyser->_loadedSamples.push_back(std::move(info));
         //we wont get itr invalidation so we can safely ref all of this info.
 
     } while (result->NextRow());
 
-    ++analyser->m_loadStep;
+    ++AccountSession->_analyser->m_loadStep;
     
     delete result;
 }
 
-void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, AccountAnalyser* analyser)
+void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, uint32 SessionID)
 {
+    WorldSession* AccountSession = sWorld.FindSession(SessionID);
+    if (AccountSession == nullptr)
+    {
+        return;
+    }
+
     if (!result)
     {
-        ++analyser->m_loadStep;
+        ++AccountSession->_analyser->m_loadStep;
         return;
     }
 
@@ -122,13 +132,13 @@ void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, AccountAnalyser
         else
             isTrusted = false;
 
-        analyser->_ipHistory.insert({ ip, value });
+        AccountSession->_analyser->_ipHistory.insert({ ip, value });
 
     } while (result->NextRow());
 
-    analyser->_totalLogins = totalLogins;
+    AccountSession->_analyser->_totalLogins = totalLogins;
 
-    ++analyser->m_loadStep;
+    ++AccountSession->_analyser->m_loadStep;
 
     delete result;
 }
@@ -336,9 +346,9 @@ void AccountAnalyser::LoadFromDB()
 
     //Get extended fingerprint history first.
     LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadFingerprintsCallback,
-        this, string_format("SELECT * FROM `system_fingerprint_usage` WHERE `account` = %u", _session->GetAccountId()).c_str());
+        _session->GetAccountId(), string_format("SELECT * FROM `system_fingerprint_usage` WHERE `account` = %u", _session->GetAccountId()).c_str());
 
     LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadIPHistoryCallback,
-        this, string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = %u  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
+        _session->GetAccountId(), string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = %u  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
 
 }
