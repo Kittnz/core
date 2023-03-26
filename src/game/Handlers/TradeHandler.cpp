@@ -171,9 +171,15 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                     myItems[i]->ResetSoulBoundTradeData();
 
                     WorldPacket data;
-                    std::string announce = _player->GetName() + std::string(" trades item ") + std::string((const char*)myItems[i]->GetProto()->Name1) + " to " + trader->GetName() + ".";
-                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
-                    _player->GetMap()->SendToPlayers(&data);
+                    auto proto = myItems[i]->GetProto();
+
+                    if (proto && proto->Name1)
+                    {
+                        WorldPacket data;
+                        std::string announce = _player->GetName() + std::string(" trades item ") + std::string((const char*)myItems[i]->GetProto()->Name1) + " to " + trader->GetName() + ".";
+                        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                        _player->GetMap()->SendToPlayers(&data);
+                    }
                 }
             }
 
@@ -201,9 +207,14 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                     hisItems[i]->ResetSoulBoundTradeData();
 
                     WorldPacket data;
-                    std::string announce = trader->GetName() + std::string(" trades item ") + std::string((const char*)hisItems[i]->GetProto()->Name1) + " to " + _player->GetName() + ".";
-                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
-                    _player->GetMap()->SendToPlayers(&data);
+                    auto proto = hisItems[i]->GetProto();
+
+                    if (proto && proto->Name1)
+                    {
+                        std::string announce = trader->GetName() + std::string(" trades item ") + std::string((const char*)hisItems[i]->GetProto()->Name1) + " to " + _player->GetName() + ".";
+                        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                        _player->GetMap()->SendToPlayers(&data);
+                    }
                 }
             }
         }
