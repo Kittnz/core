@@ -38,6 +38,7 @@ option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
+option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -85,6 +86,18 @@ endif()
 if(MSVC)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
 endif(MSVC)
+
+# Giperion: Enable address sanitizer if requested
+if(USE_ADDRESS_SANITIZER)
+if(MSVC)
+	add_compile_options(/fsanitize=address)
+	add_link_options(/fsanitize=address)
+else()
+	add_compile_options(-fsanitize=address)
+	add_link_options(-fsanitize=address)
+endif(MSVC)
+
+endif()
 
 if(WIN32)
   if(MSVC)
