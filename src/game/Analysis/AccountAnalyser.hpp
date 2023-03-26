@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include <atomic>
+#include <unordered_map>
 
 
 class WorldSession;
