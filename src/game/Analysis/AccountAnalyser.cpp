@@ -1,8 +1,8 @@
-#include "AccountAnalyser.hpp"
 #include "Database/DatabaseEnv.h"
 #include "Database/DatabaseImpl.h"
 #include "DiscordBot/Bot.hpp" 
 #include "re2/re2.h"
+#include "AccountAnalyser.hpp"
 
 #include "World.h"
 
