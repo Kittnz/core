@@ -96,6 +96,7 @@ public:
 
     AnalysisInfo& GetCurrentSample() { return _currentSample; }
 
+    uint32& RescheduleTimer() { return _rescheduleTimer; }
 
     static void LoadFingerprintsCallback(QueryResult* result, AccountAnalyser*);
     static void LoadIPHistoryCallback(QueryResult* result, AccountAnalyser* analyser);
@@ -113,6 +114,8 @@ private:
     bool _enabled = false; // only enable if we get any data at all from client.
 
     uint32 _totalLogins = 0;
+    uint32 _rescheduleTimer = 0;
+
     constexpr static int LoadSteps = 2;
 
     bool IsLoaded() const { return m_loadStep.load(std::memory_order_acquire) >= LoadSteps; }

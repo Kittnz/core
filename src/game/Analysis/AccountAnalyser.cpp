@@ -23,7 +23,10 @@ AccountAnalyser::AccountAnalyser(WorldSession* session) : _session(session), _ac
 void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, AccountAnalyser* analyser)
 {
     if (!result)
+    {
+        ++analyser->m_loadStep;
         return;
+    }
 
 
 
@@ -94,7 +97,10 @@ void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, AccountAnaly
 void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, AccountAnalyser* analyser)
 {
     if (!result)
+    {
+        ++analyser->m_loadStep;
         return;
+    }
 
     uint32 totalLogins = 0;
     do {
@@ -130,6 +136,12 @@ void AccountAnalyser::Initialize()
 {
     if (!_enabled)
         return;
+
+    if (m_loadStep != LoadSteps) // not loaded yet.. reschedule in 500 ms.
+    {
+        _rescheduleTimer = 500;
+        return;
+    }
 
     if (_totalLogins < 20 || _loadedSamples.size() < 20)
         return;
