@@ -68,6 +68,7 @@ set (game_SRCS
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
+	Analysis/AccountAnalyser.cpp
     Autoscaling/AutoScaler.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
@@ -241,6 +242,7 @@ set (game_SRCS
     Weather.h
     World.h
     WorldSession.h
+	Analysis/AccountAnalyser.hpp
     AI/AggressorAI.h
     AI/CreatureAI.h
     AI/CreatureAIImpl.h

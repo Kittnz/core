@@ -260,6 +260,9 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
 
     uint16 pos = (bag << 8) | slot;
 
+    if (IsSuspicious())
+        return;
+
     // prevent drop unequipable items (in combat, for example) and non-empty bags
     if (_player->IsEquipmentPos(pos) || _player->IsBagPos(pos))
     {
@@ -542,7 +545,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
     // prevent possible overflow, as mangos uses uint32 for item count
     uint32 count = _count;
 
-    if (!itemGuid || !GetPlayer()->IsInWorld())
+    if (!itemGuid || !GetPlayer()->IsInWorld() || IsSuspicious())
         return;
 
     Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR);

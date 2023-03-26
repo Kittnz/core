@@ -259,6 +259,8 @@ class ChatHandler
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
 
+        bool HandleMarkSuspiciousCommand(char* args);
+
         // Reload        
         bool HandleReloadShopCommand(char* args);
 
