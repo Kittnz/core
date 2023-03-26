@@ -442,7 +442,6 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
     char newguid[20], chraccount[20], newpetid[20], currpetid[20], lastpetid[20];
 
     // make sure the same guid doesn't already exist and is safe to use
-    bool incHighest = true;
     if (guid != 0 && guid < sObjectMgr.m_CharGuids.GetNextAfterMaxUsed())
     {
         result = CharacterDatabase.PQuery("SELECT * FROM `characters` WHERE `guid` = '%u'", guid);
@@ -451,7 +450,6 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
             guid = sObjectMgr.GeneratePlayerLowGuid();
             delete result;
         }
-        else incHighest = false;
     }
     else
         guid = sObjectMgr.GeneratePlayerLowGuid();
@@ -707,12 +705,6 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
     }
 
     CharacterDatabase.CommitTransaction();
-
-    //FIXME: current code with post-updating guids not safe for future per-map threads
-    sObjectMgr.m_ItemTextIds.Set(sObjectMgr.GenerateItemTextID() + itemTexts.size());
-
-    if (incHighest)
-        sObjectMgr.m_CharGuids.Set(sObjectMgr.m_CharGuids.GetNextAfterMaxUsed() + 1);
 
     fclose(fin);
 
