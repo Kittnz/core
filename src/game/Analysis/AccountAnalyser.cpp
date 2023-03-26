@@ -4,6 +4,7 @@
 #include "re2/re2.h"
 #include "WorldSession.h"
 #include "World.h"
+#include "Player.h"
 #include "AccountAnalyser.hpp"
 
 template <typename T>
