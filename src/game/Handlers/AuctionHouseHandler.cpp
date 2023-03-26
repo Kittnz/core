@@ -57,6 +57,9 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
         return;
     }
 
+    if (IsSuspicious())
+        return;
+
     // remove fake death
     if (GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
@@ -287,7 +290,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     recv_data >> buyout;
     recv_data >> etime;
 
-    if (!bid || !etime)
+    if (!bid || !etime || IsSuspicious())
         return;                                             // check for cheaters
 
     // Client limit
@@ -466,6 +469,9 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
         sLog.outInfo("HandleAuctionPlaceBid - auctionHouseEntry missing WTF! [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;
     }
+
+    if (IsSuspicious())
+        return;
 
     // always return pointer
     AuctionHouseObject* auctionHouse = sAuctionMgr.GetAuctionsMap(auctionHouseEntry);

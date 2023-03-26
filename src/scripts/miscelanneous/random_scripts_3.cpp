@@ -5694,7 +5694,7 @@ bool QuestRewarded_npc_baron_telraz(Player* pPlayer, Creature* pQuestGiver, Ques
 
     if (pQuest->GetQuestId() == 40785) // King Morogo Thunderfoot!
     {
-        pQuestGiver->MonsterSay("Look kid, I may have doubted you at first, and well the entire time you were here, but you got results, and actually dealt with that blasted Morogo for us. It's nice to have someone around here that can get there feet down and work for a change! Nice work.");
+        pQuestGiver->MonsterSay("Look kid, I may have doubted you at first, and well the entire time you were here, but you got results, and actually dealt with that blasted Morogo for us. It's nice to have someone around here that can get their feet down and work for a change! Nice work.");
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 

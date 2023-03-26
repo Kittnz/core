@@ -33,6 +33,7 @@
 #include "GossipDef.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WhisperTargetLimits.h"
+#include "Analysis/AccountAnalyser.hpp"
 
 
 #include <optional>
@@ -334,8 +335,9 @@ class WorldSession
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
-        void LoadIPHistory();
-        void CheckSuspiciousLogins();
+        void MarkSuspicious() { m_suspicious = true; }
+        void UnmarkSuspicious() { m_suspicious = false; }
+        bool IsSuspicious() const { return m_suspicious; }
 
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
@@ -580,8 +582,9 @@ class WorldSession
         uint32 m_idleTime;
 
         uint32 m_lastUpdateTime;
+        bool m_suspicious = false;
 
-        std::unordered_map<std::string, std::pair<uint32, bool>> m_ipHistory;
+        std::unique_ptr<AccountAnalyser> _analyser;
 
     public:                                                 // opcodes handlers
 

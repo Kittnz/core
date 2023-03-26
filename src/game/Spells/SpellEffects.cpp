@@ -5696,6 +5696,15 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                                 pTonk->m_spells[3] = 25024;
                                 break;
                         }
+                        if (m_originalCasterGUID.IsGameObject())
+                        {
+                            if (Player* player = pTonk->FindNearestPlayer(5))
+                            {
+                                if (player->HasAuraType(SPELL_AURA_MOD_ROOT) && !player->HasAura(24937))
+                                    player->CastSpell(pTonk, 24937, true);
+                            }
+                        }
+                        else
                         m_caster->CastSpell(pTonk, 24937, true);
                     }
                     return;

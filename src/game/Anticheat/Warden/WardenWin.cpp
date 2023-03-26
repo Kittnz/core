@@ -24,6 +24,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Player.h"
 #include "AccountMgr.h"
+#include "Analysis/AccountAnalyser.hpp"
 
 #include <string>
 #include <vector>
@@ -2072,12 +2073,36 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress)
+    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress && _triggerPrintSave)
     {
         auto activeProcCount = 0;
         for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
             if (!!(_sysInfo.dwActiveProcessorMask & (1 << i)))
                 ++activeProcCount;
+
+        if (!_sharedData)
+            _sharedData = std::make_unique<SharedDataCompact>();
+
+        auto& sample = _session->_analyser->GetCurrentSample();
+
+        sample.activeCpus = activeProcCount;
+        sample.cpuType = CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision);
+        sample.enclaveMask = _sharedData->EnclaveFeatureMask;
+        sample.mitPolicies = _sharedData->MitigationPolicies;
+        sample.numPhysicalPages = _sharedData->NumberOfPhysicalPages;
+        sample.pageSize = _sysInfo.dwPageSize;
+        sample.qpcData = _sharedData->QpcData;
+        sample.sharedDataFlags = _sharedData->SharedDataFlags;
+        sample.suiteMask = _sharedData->SuiteMask;
+        sample.timeZoneBias = _sharedData->TimeZoneBias.LowPart;
+        sample.totalCpus = _sysInfo.dwNumberOfProcessors;
+        sample.unparkedCpuCount = _sharedData->UnparkedProcessorCount;
+        sample.useCpuData = !sample.cpuType.empty();
+        sample.useExtendedData = sample.pageSize != 0;
+
+        //by now we should have all current sample data, mix n match.
+        _session->_analyser->Initialize();
+
 
         LoginDatabase.BeginTransaction();
 
@@ -2087,9 +2112,6 @@ void WardenWin::Update()
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
             "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData` ) "
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        if (!_sharedData)
-            _sharedData = std::make_unique<SharedDataCompact>();
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());

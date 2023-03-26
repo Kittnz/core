@@ -733,12 +733,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
-    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty() && GetSecurity() > SEC_PLAYER)
     {
         if (strstr(msg.c_str(), "GM_ADDON")) // prefix
         {
             if (strstr(msg.c_str(), "GET_TICKETS"))
                 sTicketMgr->SendTicketsInAddonMessage(_player);
+            else if (strstr(msg.c_str(), "GET_TEMPLATES"))
+                sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
             return;
         }
     }

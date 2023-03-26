@@ -259,6 +259,8 @@ class ChatHandler
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
 
+        bool HandleMarkSuspiciousCommand(char* args);
+
         // Reload        
         bool HandleReloadShopCommand(char* args);
 
@@ -613,6 +615,7 @@ class ChatHandler
         bool HandleSaleCommand(char* args);
         bool HandleReloadBgAmounts(char* args);
         bool HandleReloadGmLevelsCommand(char* args);
+        bool HandleReloadGmTicketTemplatesCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
