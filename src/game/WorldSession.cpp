@@ -266,6 +266,18 @@ bool WorldSession::Update(PacketFilter& updater)
     if (m_Socket && !m_Socket->IsClosed() && m_antiCheat)
         m_antiCheat->Update(WorldTimer::getMSTimeDiffToNow(m_lastUpdateTime));
 
+    if (_analyser->RescheduleTimer())
+    {
+        uint32 diff = WorldTimer::getMSTimeDiffToNow(m_lastUpdateTime);
+        if (diff > _analyser->RescheduleTimer())
+        {
+            _analyser->RescheduleTimer() = 0;
+            _analyser->Initialize();
+        }
+        else
+            _analyser->RescheduleTimer() -= diff;
+    }
+
     m_lastUpdateTime = WorldTimer::getMSTime();
 
     //check if we are safe to proceed with logout
