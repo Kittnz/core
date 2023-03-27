@@ -163,7 +163,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 trader->LogItem(myItems[i], LogItemAction::TradeReceived);
 
                 // store
-                trader->MoveItemToInventory(traderDst, myItems[i], true, true);
+                myItems[i] = trader->MoveItemToInventory(traderDst, myItems[i], true, true);
 
                 // Turtle: dont allow trading raid item anymore
                 if (myItems[i]->IsSoulBound() && myItems[i]->CanBeTradedEvenIfSoulBound())
@@ -199,7 +199,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 _player->LogItem(hisItems[i], LogItemAction::TradeReceived);
 
                 // store
-                _player->MoveItemToInventory(playerDst, hisItems[i], true, true);
+                hisItems[i] = _player->MoveItemToInventory(playerDst, hisItems[i], true, true);
 
                 // Turtle: dont allow trading raid item anymore
                 if (hisItems[i]->IsSoulBound() && hisItems[i]->CanBeTradedEvenIfSoulBound())
