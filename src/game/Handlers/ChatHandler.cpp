@@ -741,6 +741,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 sTicketMgr->SendTicketsInAddonMessage(_player);
             else if (strstr(msg.c_str(), "GET_TEMPLATES"))
                 sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
+            else if (char const* pSubString = strstr(msg.c_str(), "PLAYER_INFO:"))
+                sAccountMgr.SendPlayerInfoInAddonMessage(pSubString + strlen("PLAYER_INFO:"), _player);
             return;
         }
     }
