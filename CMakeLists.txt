@@ -83,19 +83,19 @@ if(NOT MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 # Giperion: Set Edit and Continue by default for all windows debug builds
-if(MSVC)
+if(MSVC AND NOT USE_ADDRESS_SANITIZER)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
-endif(MSVC)
+endif(MSVC AND NOT USE_ADDRESS_SANITIZER)
 
 # Giperion: Enable address sanitizer if requested
 if(USE_ADDRESS_SANITIZER)
-if(MSVC)
-	add_compile_options(/fsanitize=address)
-	add_link_options(/fsanitize=address)
-else()
-	add_compile_options(-fsanitize=address)
-	add_link_options(-fsanitize=address)
-endif(MSVC)
+	if(MSVC)
+		add_compile_options(/fsanitize=address /Zi)
+		add_link_options(/INCREMENTAL:NO) #disable some options required for correct ASan working for MSVC
+	else()
+		add_compile_options(-fsanitize=address)
+		add_link_options(-fsanitize=address)
+	endif(MSVC)
 
 endif()
 
