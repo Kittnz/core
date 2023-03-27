@@ -1166,7 +1166,7 @@ class Player final: public Unit
         bool IsFlying() const { return m_isFlying; }
         bool m_isFlying = false;
         // in trade, auction, guild bank, mail....
-        void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
+        Item* MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
         void DestroyItem(uint8 bag, uint8 slot, bool update);
         void DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check = false, const bool check_bank = false);
         void DestroyItemCount(Item* item, uint32& count, bool update);
