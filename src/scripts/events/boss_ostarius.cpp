@@ -40,6 +40,8 @@ void DeleteObject(WorldObject* object, std::vector<ObjectGuid> &list)
     object->DeleteLater();
 }
 
+static time_t lastOstariusSummonTime = 0;
+
 struct boss_ostariusAI : public ScriptedAI
 {
     explicit boss_ostariusAI(Creature *c) : ScriptedAI(c)
@@ -127,6 +129,9 @@ struct boss_ostariusAI : public ScriptedAI
 
     void OnRemoveFromWorld() override
     {
+        if (m_creature->IsAlive())
+            lastOstariusSummonTime = 0;
+
         DespawnSummons();
     }
 
@@ -1024,8 +1029,6 @@ constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
 constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
 constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
 constexpr auto OSTARIUS_ENTRY = 80935;
-
-static time_t lastOstariusSummonTime = 0;
 
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
