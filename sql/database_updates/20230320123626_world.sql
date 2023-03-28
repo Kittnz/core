@@ -3287,30 +3287,103 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61368, 5956, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61368, 18567, 0, 0, 0, 0);
 
--- Dark Ranger Anya, level 60, displayid 18728, faction 68, humanoid, scale 1, quest/gossip flags, gossip text: "Glory to the Dark Lady, $c. What do you need?"
--- 
--- Blackthorn, level 60, displayid 19137, faction 68, humanoid, scale 1, quest/gossip flags, gossip text: "Finally the Dark Lady sends some competent assistance. Do not be so surprised about my appearance. Yes, this body lives, but I am fully committed to the Horde and the Dark Lady."
--- 
--- Livia Strongarm, level 42, displayid 4858, faction 68, humanoid, scale 1, quest/gossip flags, gossip text:  "If the boss says you're good, then who am I to judge? I for one am not a fan of this land. So I'd prefer if we could finish our business and skedaddle as soon as possible."
--- 
--- Luke Agamand, level 43, displayid 508, faction 68, humanoid, scale 1, quest/gossip flags, gossip text:  "I've seen it all the past four years. As long as I get some good loot, I don't care who I work for. Now, are you here to make yourself useful to the boss or what?" (Weapon 4023)
--- 
--- Blackthorn Footpad, level 42, displayid 208, faction 68, humanoid, scale 1 (weapon: 2496, weapon2: 17185)
--- 
--- Greta Longpike - level 15, displayid 3647, faction 35, humanoid, scale 1, quest/gossip flags, gossip text: "Well, this is a fine day here in Gilneas, isn't it? Take care if you leave town, alright?"
+REPLACE INTO creature_template VALUES
+(61374, 18728, 0, 0, 0, 0, 'Dark Ranger Anya', NULL, 0, 60, 60, 4120, 4120, 0, 0, 3500, 68, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61375, 19137, 0, 0, 0, 0, 'Blackthorn', NULL, 0, 60, 60, 4120, 4120, 0, 0, 3500, 68, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61376, 4858, 0, 0, 0, 0, 'Livia Strongarm', NULL, 0, 42, 42, 1981, 1981, 0, 0, 2246, 68, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61377, 508, 0, 0, 0, 0, 'Luke Agamand', NULL, 0, 43, 43, 1981, 1981, 0, 0, 2246, 68, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61378, 208, 0, 0, 0, 0, 'Blackthorn Footpad', NULL, 0, 42, 42, 1981, 1981, 0, 0, 2246, 68, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61379, 3647, 0, 0, 0, 0, 'Greta Longpike', NULL, 0, 15, 15, 328, 328, 0, 0, 660, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61380, 4319, 0, 0, 0, 0, 'Odon Shademoore', NULL, 0, 5, 5, 102, 102, 0, 0, 145, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61381, 1571, 0, 0, 0, 0, 'Frell Rosewick', NULL, 0, 38, 38, 1599, 1599, 0, 0, 1780, 84, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61382, 1715, 0, 0, 0, 0, 'Cook Harry', NULL, 0, 35, 35, 1342, 1342, 0, 0, 1373, 84, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61383, 1509, 0, 0, 0, 0, 'Maxwell Givings', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 84, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61384, 1731, 0, 0, 0, 0, 'Donald Rosewick', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 84, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61385, 4319, 0, 0, 0, 0, 'Darrow Shademoore', NULL, 0, 47, 47, 2487, 2487, 0, 0, 2246, 84, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 98, 0, 212, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.6944, 87.5798, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61386, 1573, 0, 0, 0, 0, 'Father Oblen', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1200, 84, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61387, 4319, 0, 0, 0, 0, 'Brother Elias', 'Scarlet Crusade Emissary', 0, 45, 45, 2217, 2217, 0, 0, 2725, 84, 3, 1, 1.14286, 0, 30, 30, 100, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
--- Odon Shademoore, display id 4319, faction 35, level 5, humanoid, scale 1
--- 
--- Frell Rosewick, display id 1571, faction 84, level 38, humanoid, scale 1, quest/gossip flags, greeting text: "The Shademoore's have been extremely generous with their support, but I am afraid it isn't doing much to quell my worries."
+set @equip_template = 20339; set @weapon_1 = 2705; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61383;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
--- Cook Harry, display id 1715, faction 84, level 35, humanoid, scale 1, humanoid, scale 1, quest/gossip flags, gossip text : "Gilnean cooking is some of the finest in the world, though not all will find our ingredients enjoyable."
--- 
--- Maxwell Givings, display id 1509, faction 84, level 36, humanoid, scale 1, quest/gossip flags, gossip text : "I have seen enough in my life to know what is right and what is wrong. It is my belief that the king has taken his matters much too far.$B$BI was once part of the Greymane cause. I now know the truth of the lies I was told.", weapon: 2705
--- -
--- Donald Rosewick, display ID 1731, faction 84, level 36, humanoid, scale 1, quest/greeting flags, greeting text : "What a time for the wheel to go loose, huh? I must say, you're a sight for sore eyes."
--- 
--- Darrow Shademoore, display id 4319, faction 84, level 47, humanoid, scale 1, quest/gossip flags, greeting text: "Why hello there, and welcome to Shademoore Tavern. Guests are somewhat infrequent these days, but we are still happy to have you.$B$BMake yourself at home. If you need anything, come and see me.
+set @equip_template = 20338; set @weapon_1 = 2496; set @weapon_2 = 17185; set @weapon_3 = 0; set @creature = 61378;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
--- Father Oblen, display ID 1573, faction 84 , level 30, humanoid, scale 1, quest/gossip flags, gossip text : "It is hard to spread the word of the Light these days, especially with such troubled minds.$B$BI am sure such hard times will pass before long."
--- 
--- Brother Elias <Scarlet Crusade Emissary>, display id , faction 84, level 45, humanoid, scale 1, quest/gossip flags, gossip text : "I am here to do my part on behalf of the Scarlet Crusade.$B$BIf you have the will to recover Lordaeron from the clutches of death and vile taint, speak with me, and perhaps you can be of use."
+set @equip_template = 20337; set @weapon_1 = 4023; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61377;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41414; set @magic_number = 61387;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am here to do my part on behalf of the Scarlet Crusade.$B$BIf you have the will to recover Lordaeron from the clutches of death and vile taint, speak with me, and perhaps you can be of use.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41413; set @magic_number = 61386;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is hard to spread the word of the Light these days, especially with such troubled minds.$B$BI am sure such hard times will pass before long.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41412; set @magic_number = 61385;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there, and welcome to Shademoore Tavern. Guests are somewhat infrequent these days, but we are still happy to have you.$B$BMake yourself at home. If you need anything, come and see me.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41411; set @magic_number = 61384;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What a time for the wheel to go loose, huh? I must say, you\'re a sight for sore eyes.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41410; set @magic_number = 61383;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have seen enough in my life to know what is right and what is wrong. It is my belief that the king has taken his matters much too far.$B$BI was once part of the Greymane cause. I now know the truth of the lies I was told.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41409; set @magic_number = 61382;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Gilnean cooking is some of the finest in the world, though not all will find our ingredients enjoyable.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41408; set @magic_number = 61381;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Shademoore\'s have been extremely generous with their support, but I am afraid it isn\'t doing much to quell my worries.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41407; set @magic_number = 61378;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, this is a fine day here in Gilneas, isn\'t it? Take care if you leave town, alright?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41406; set @magic_number = 61377;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I\'ve seen it all the past four years. As long as I get some good loot, I don\'t care who I work for. Now, are you here to make yourself useful to the boss or what?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41405; set @magic_number = 61376;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'If the boss says you\'re good, then who am I to judge? I for one am not a fan of this land. So I\'d prefer if we could finish our business and skedaddle as soon as possible.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41404; set @magic_number = 61375;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Finally the Dark Lady sends some competent assistance. Do not be so surprised about my appearance. Yes, this body lives, but I am fully committed to the Horde and the Dark Lady.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41403; set @magic_number = 61374;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Glory to the Dark Lady, $c. What do you need?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
