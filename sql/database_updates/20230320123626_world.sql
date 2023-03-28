@@ -3125,3 +3125,36 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- npc Vilemusk Hellcaller set scale to 1.8
+update creature_template set scale = 1.8 where entry = 61341;
+-- npc Vilemusk Shadowstalker set scale to 1.6
+update creature_template set scale = 1.6 where entry = 61340;
+-- npc Vilemusk Felsworn set scale to 1.6
+update creature_template set scale = 1.6 where entry = 61339;
+-- npc Vilemusk Satyr set scale to 1.4
+update creature_template set scale = 1.4 where entry = 61338;
+-- npc Barkskin pathfinder, set scale to 1.5
+update creature_template set scale = 1.5 where entry = 61343;
+-- npc Barkskin Avenger, set scale to 1.6
+update creature_template set scale = 1.6 where entry = 61344;
+-- npc Barkskin Gardener, set scale to 1.5
+update creature_template set scale = 1.5 where entry = 61345;
+-- npc Barkskin Den Watcher set scale to 1.5
+update creature_template set scale = 1.5 where entry = 61346;
+-- npc Barkskin Windtalker set scale to 1.6
+update creature_template set scale = 1.6 where entry = 61347;
+-- npc Dreadlord Commander set scale to 2
+update creature_template set scale = 2 where entry = 61353;
+-- npc Enduring Doomguard set scale to 2.4
+update creature_template set scale = 2.4 where entry = 61352;
+-- npc Relentless Temptress set scale to 2
+update creature_template set scale = 2 where entry = 61350;
+-- npc Solnius, change scale to 1.3
+update creature_template set scale = 1.3 where entry = 60748;
+-- change display ID of Master Blacksmith Rolfen (entry 61319) to 2048
+update creature_template set display_id1 = 2048 where entry = 61319;
+-- npc Barkskin Ursa set scale to 1.8, make creature elite, set stats accordingly.
+delete from creature_template where entry = 61342;
+REPLACE INTO creature_template VALUES
+(61342, 18733, 0, 0, 0, 0, 'Barkskin Ursa', NULL, 0, 61, 62, 17088, 18088, 0, 0, 3900, 82, 0, 1, 1.14286, 1.8, 20, 5, 0, 1, 1, 751, 809, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 61342, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
