@@ -1602,6 +1602,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             m_position.o = o;
         }
 
+        UpdateVelocity();
         // Anticheat sanction
        // std::stringstream reason;
        // uint32 cheatAction = GetCheatData()->Update(p_time, reason);
@@ -2055,6 +2056,157 @@ bool Player::ToggleDND()
         SetGroupUpdateFlag(GROUP_UPDATE_FLAG_STATUS);
 
     return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND);
+}
+
+bool Player::IsBasicallyInactive(bool bIncludeChat /*= false*/) const
+{
+	const uint32 InactivityMovementTimerBG = 4 * MINUTE * IN_MILLISECONDS;
+	const uint32 InactivityMovementTimerOther = 5 * MINUTE * IN_MILLISECONDS;
+
+	uint32 InactivityTimer = InactivityMovementTimerOther;
+	if (Map* map = FindMap())
+	{
+		if (map->IsBattleGround())
+		{
+			InactivityTimer = InactivityMovementTimerBG;
+		}
+	}
+
+	//cache current time
+	uint32 currentTime = WorldTimer::getMSTime();
+
+	//Maybe character casting something, staying in one position?
+	bool bCastedSpellsRecently = (currentTime - m_lastSpellTimer) < InactivityTimer;
+	bool bMovedRecently = (currentTime - m_lastMovementTimer) < InactivityTimer;
+	if (bMovedRecently)
+	{
+		//Check for velocity, if it's too low - player is using anti-afk tool
+
+		if (m_velocityPer3Min < 0.6f)
+		{
+			//Do check with current position, character can move just recently
+
+			uint32 currentTime = WorldTimer::getMSTime();
+			uint32 deltaTimeForVelocity = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
+			float freshVelocity = GetVelocity(deltaTimeForVelocity, m_last3MinPosition);
+			if (freshVelocity > 0.6f)
+			{
+				bMovedRecently = true;
+			}
+			else
+			{
+				bMovedRecently = false;
+			}
+		}
+		else
+		{
+			bMovedRecently = true;
+		}
+	}
+
+	bool bInactive = !bCastedSpellsRecently && !bMovedRecently;
+
+	//If we considering as inactive, but asked to check chat
+	if (bIncludeChat && bInactive)
+	{
+		bInactive = (currentTime - m_lastChatMessageTimer) > InactivityTimer;
+	}
+
+	return bInactive;
+}
+
+void Player::UpdateMovementActivityTimer()
+{
+    m_lastMovementTimer = WorldTimer::getMSTime();
+}
+
+void Player::UpdateSpellActivityTimer()
+{
+    m_lastSpellTimer = WorldTimer::getMSTime();
+}
+
+void Player::UpdateChatActivityTimer()
+{
+    m_lastChatMessageTimer = WorldTimer::getMSTime();
+}
+
+void Player::UpdateVelocity()
+{
+	///PER SECOND
+	uint32 currentTime = WorldTimer::getMSTime();
+	uint32 deltaTime = (currentTime - m_lastUpdatedVelocityPerSecondTimer);
+
+	//#HACKFIX: Don't calculate velocity on transport now. Client sometimes send weird things
+	if (GetTransport() != nullptr) return;
+
+	//#HACKFIX: Deeprun Tram is weird place, don't calculate velocity here
+	if (GetMapId() == 369) return;
+
+    if (IsTaxiFlying())
+    {
+        UpdateSavedVelocityPositionToCurrentPos();
+        return;
+    }
+
+	if (deltaTime > 1000)
+	{
+		m_velocity = GetVelocity(deltaTime, m_lastSecondPosition);
+
+		WorldLocation CurrentPos;
+		GetPosition(CurrentPos);
+		m_lastSecondPosition = CurrentPos;
+
+		//ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocity);
+		m_lastUpdatedVelocityPerSecondTimer = currentTime;
+	}
+
+	///PER 3 MIN
+	deltaTime = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
+	if (deltaTime > 3 * MINUTE * IN_MILLISECONDS)
+	{
+		m_velocityPer3Min = GetVelocity(deltaTime, m_last3MinPosition);
+
+		WorldLocation CurrentPos;
+		GetPosition(CurrentPos);
+		m_last3MinPosition = CurrentPos;
+
+		//ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocityPer3Min);
+		m_lastUpdatedVelocityPer3MinTimer = currentTime;
+	}
+}
+
+void Player::UpdateSavedVelocityPositionToCurrentPos()
+{
+	WorldLocation CurrentPos;
+	GetPosition(CurrentPos);
+
+	m_lastSecondPosition = CurrentPos;
+	m_last3MinPosition = CurrentPos;
+
+    uint32 currentTime = WorldTimer::getMSTime();
+    m_lastUpdatedVelocityPerSecondTimer = currentTime;
+    m_lastUpdatedVelocityPer3MinTimer = currentTime;
+}
+
+float Player::GetVelocity(uint32 deltaTime, const WorldLocation& PrevPos) const
+{
+	float fltCurrentTime = float(deltaTime) / 1000.0f;
+
+	if (fltCurrentTime < 0.001f)
+		return 0.0f;
+
+	WorldLocation CurrentPos;
+	GetPosition(CurrentPos);
+
+	float dx = CurrentPos.x - PrevPos.x;
+	float dy = CurrentPos.y - PrevPos.y;
+	float dist = sqrt((dx * dx) + (dy * dy));
+
+	//FIX: float divide can have bad result if value almost zero
+	if (dist < 0.1f)
+		return 0.0f;
+
+	return dist / fltCurrentTime;
 }
 
 uint8 Player::GetChatTag() const
@@ -2517,6 +2669,11 @@ void Player::AddToWorld()
     ///- It will crash when updating the ObjectAccessor
     ///- The player should only be added when logging in
     Unit::AddToWorld();
+
+	uint32 CurrentTime = WorldTimer::getMSTime();
+	m_lastMovementTimer = CurrentTime;
+	m_lastSpellTimer = CurrentTime;
+	m_lastChatMessageTimer = CurrentTime;
 
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {

@@ -50,6 +50,7 @@
 #include <G3D/Box.h>
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>
+#include "SuspiciousStatisticMgr.h"
 
 bool QuaternionData::isUnit() const
 {
@@ -1650,6 +1651,8 @@ void GameObject::Use(Unit* user)
                     // 1) skill must be >= base_zone_skill
                     // 2) if skill == base_zone_skill => 5% chance
                     // 3) chance is linear dependence from (base_zone_skill-skill)
+
+                    sSuspiciousStatisticMgr.OnFishingAttempt(player);
 
                     uint32 zone, subzone;
                     GetZoneAndAreaId(zone, subzone);
