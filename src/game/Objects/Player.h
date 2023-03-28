@@ -2393,6 +2393,101 @@ public:
         bool ToggleDND();
         bool IsAFK() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK); }
         bool IsDND() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND); }
+
+        // Inactivity start
+
+        //************************************
+        // Desc:    Check if player is online, but doesn't actually do anything in 5 min (4 in BG)
+        //          That includes movement, spell and (if requested) chat activity
+        //          Check for movement is anti-afk proof
+        // Returns:   bool
+        // Parameter: bool bIncludeChat: if true, we check the chat activity as well
+        //************************************
+        bool IsBasicallyInactive(bool bIncludeChat = false) const;
+
+		uint32 m_lastMovementTimer = 0;
+		uint32 m_lastSpellTimer = 0;
+		uint32 m_lastChatMessageTimer = 0;
+
+		//************************************
+		// Desc:    Last time when player moved in milliseconds. Call WorldTimer::getMSTime() - GetLastMovementTime() to get delta
+		// Returns:   uint32
+		//************************************
+		uint32 GetLastMovementTime() const
+		{
+			return m_lastMovementTimer;
+		}
+
+        //************************************
+		// Desc:    Last time when player casted spell in milliseconds. Call WorldTimer::getMSTime() - GetLastSpellCastedTime() to get delta
+		// Returns:   uint32
+		//************************************
+		uint32 GetLastSpellCastedTime() const
+		{
+			return m_lastSpellTimer;
+		}
+
+        //************************************
+		// Desc:    Last time when player send a chat message in milliseconds. Call WorldTimer::getMSTime() - GetLastChatMessageTime() to get delta
+		// Returns:   uint32
+		//************************************
+		uint32 GetLastChatMessageTime() const
+		{
+			return m_lastChatMessageTimer;
+		}
+
+        // Internal functions that assign timer to current time
+		void UpdateMovementActivityTimer();
+		void UpdateSpellActivityTimer();
+		void UpdateChatActivityTimer();
+        void UpdateVelocity();
+        void UpdateSavedVelocityPositionToCurrentPos();
+
+        //velocity per second
+		float m_velocity = 0.0f;
+
+		//velocity per 3 min
+		float m_velocityPer3Min = 0.0f;
+
+		//************************************
+		// Desc:    Internal function which calculates 2D velocity. Doesn't change player
+		// Returns:   Calculated delta
+		// Parameter: uint32 deltaTime : in milliseconds
+		// Parameter: const WorldLocation & PrevPos : previous position
+		//************************************
+		float GetVelocity(uint32 deltaTime, const WorldLocation& PrevPos) const;
+
+
+		//************************************
+		// Desc:    A very approximate 2D velocity, which doesn't account a lot of things
+		// Returns:   float
+		//************************************
+		float GetVelocityPerSecond() const
+		{
+			return m_velocity;
+		}
+
+        //************************************
+		// Desc:    A very approximate 2D velocity, which doesn't account a lot of things. Calculated once per 3 min.
+        // NOTE:    We just compare previous position, so if player moved a 1000 units and then go back in less then 3 min, then his velocity will be 0
+		// Returns:   float
+		//************************************
+		float GetVelocityPer3Min() const
+		{
+			return m_velocityPer3Min;
+		}
+
+		uint32 m_lastUpdatedVelocityPerSecondTimer = 0;
+		uint32 m_lastUpdatedVelocityPer3MinTimer = 0;
+
+		WorldLocation m_lastSecondPosition;
+		WorldLocation m_last3MinPosition;
+
+        // if we already reported a player moving too fast - don't do that again
+        bool bIsReportedAsSpeedhacker = false;
+
+		// Inactivity end
+
         uint8 GetChatTag() const;
 
         float GetYellRange() const;

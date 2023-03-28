@@ -472,6 +472,8 @@ if(USE_ANTICHEAT)
       Anticheat/AnticheatChatCommands.h
       Anticheat/AnticheatChatCommandsFunctions.cpp
       Anticheat/AnticheatChatCommandsFunctions.h
+      Anticheat/SuspiciousStatisticMgr.h
+      Anticheat/SuspiciousStatisticMgr.cpp
       Anticheat/Config.cpp
       Anticheat/Config.hpp
       Anticheat/cyclic.hpp
