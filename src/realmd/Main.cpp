@@ -45,14 +45,47 @@
 #include <ace/Acceptor.h>
 #include <ace/SOCK_Acceptor.h>
 
+#include "ace/MMAP_Memory_Pool.h"
+#include "ace/Shared_Memory_MM.h"
+#include "ace/ACE.h"
+#include "ace/Malloc_T.h"
+
 #ifdef USE_SENDGRID
 #include "MailerService.h"
 #include <curl/curl.h>
 #endif
 
+
+#include <iostream>
+
 #ifndef WIN32
 #include "PosixDaemon.h"
 #endif
+
+template <typename T>
+class SharedMemoryAllocator : public std::allocator<T>
+{
+public:
+    typedef size_t size_type;
+    typedef T* pointer;
+    typedef const T* const_pointer;
+
+    SharedMemoryAllocator(ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block>& memory_pool)
+        : memory_allocator_(memory_pool) {}
+
+    pointer allocate(size_type n, const void* hint = 0) {
+        return static_cast<pointer>(memory_allocator_.malloc(n * sizeof(T)));
+    }
+
+    void deallocate(pointer p, size_type n) {
+        memory_allocator_.free(p);
+    }
+
+private:
+    ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block>& memory_allocator_;
+};
+
+
 
 bool StartDB();
 void UnhookSignals();
@@ -220,6 +253,28 @@ extern int main(int argc, char **argv)
 
         sLog.outString( "Daemon PID: %u\n", pid );
     }
+
+#if 0
+    ACE_MMAP_Memory_Pool_Options opt;
+    opt.unique_ = true;
+
+    ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block> memory_allocator_{ "twow_pool", "twow_pool", &opt };
+
+    using pair_t = std::pair<const uint32, std::array<uint8, 20>>;
+    using shm_umap = std::unordered_map<uint32, std::array<uint8, 20>, std::hash<uint32>, std::equal_to<uint32>,
+        SharedMemoryAllocator<pair_t>>;
+
+
+    void* map;
+    shm_umap* mp = nullptr;
+    int val = memory_allocator_.find("sessionkey_store", map);
+    mp = (shm_umap*)map;
+
+    if (mp)
+    {
+        auto itr = mp->find(5);
+    }
+#endif
 
     ///- Initialize the database connection
     if(!StartDB())
