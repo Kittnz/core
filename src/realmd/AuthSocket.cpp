@@ -140,6 +140,8 @@ typedef struct AuthHandler
 
 std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B, 0x21, 0x57, 0xFC, 0x37, 0x3F, 0xB3, 0x69, 0xCD, 0xD2, 0xF1 } };
 
+static std::unordered_map<std::string, std::pair<std::string, uint32>> keyCache;
+
 /// Constructor - set the N and g values for SRP6
 AuthSocket::AuthSocket() : promptPin(false), gridSeed(0), _geoUnlockPIN(0), _accountId(0), _lastRealmListRequest(0)
 {
@@ -882,9 +884,12 @@ bool AuthSocket::_HandleLogonProof()
         const char* K_hex = K.AsHexStr();
         const char* os = reinterpret_cast<char *>(&_os); // no injection as there are only two possible values
         const char* platform = reinterpret_cast<char*>(&_platform); // no injection as there are only two possible values
-        auto result = LoginDatabase.PQuery("UPDATE account SET sessionkey = '%s', last_ip = '%s', last_login = NOW(), locale = '%u', failed_logins = 0, os = '%s', platform = '%s' WHERE username = '%s'",
+        LoginDatabase.DirectPExecute("UPDATE account SET sessionkey = '%s', last_ip = '%s', last_login = NOW(), locale = '%u', failed_logins = 0, os = '%s', platform = '%s' WHERE username = '%s'",
             K_hex, get_remote_address().c_str(), GetLocaleByName(_localizationName), os, platform, _safelogin.c_str() );
-        delete result;
+        
+
+        keyCache[_safelogin] = { K_hex, _accountId };
+
         OPENSSL_free((void*)K_hex);
 
 
@@ -996,20 +1001,18 @@ bool AuthSocket::_HandleReconnectChallenge()
     EndianConvert(ch->build);
     _build = ch->build;
 
-    QueryResult *result = LoginDatabase.PQuery ("SELECT sessionkey,id FROM account WHERE username = '%s'", _safelogin.c_str ());
+    auto itr = keyCache.find(_safelogin);
 
     // Stop if the account is not found
-    if (!result)
+    if (itr == keyCache.end())
     {
         sLog.outError("[ERROR] user %s tried to login and we cannot find his session key in the database.", _login.c_str());
         close_connection();
         return false;
     }
 
-    Field* fields = result->Fetch ();
-    K.SetHexStr (fields[0].GetString ());
-    _accountId = fields[1].GetUInt32();
-    delete result;
+    K.SetHexStr (itr->second.first.c_str());
+    _accountId = itr->second.second;
 
     ///- All good, await client's proof
     _status = STATUS_RECON_PROOF;
