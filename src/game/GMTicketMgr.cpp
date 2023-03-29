@@ -27,7 +27,6 @@
 #include "World.h"
 #include "Player.h"
 #include "Opcodes.h"
-#include "AccountMgr.h"
 #include "Database/DatabaseImpl.h"
 
 inline float GetAge(uint64 t) { return float(time(nullptr) - t) / DAY; }
@@ -159,22 +158,14 @@ std::string GmTicket::FormatAddonMessage() const
 {
     std::stringstream ss;
 
-    // tickets;;id;;playerName;;playeraccountname;;playerip;;playerlevel;;playeremail;;playerforumusername;;assigned_gm_name_or_0_for_not_assigned;;ticket_message
+    // tickets;;id;;name;;playeronlinestatus;;ticketassignedstatus;;tickettimestamp;;ticket_text
 
     ss << "tickets;;" << _id << ";;" << _playerName << ";;";
 
-    uint32 accId = sObjectMgr.GetPlayerAccountIdByGUID(_playerGuid);
-    std::string accName;
-    sAccountMgr.GetName(accId, accName);
-    ss << accName << ";;" << sAccountMgr.GetAccountIP(accId) << ";;";
-
-    if (PlayerCacheData const* pPlayerCache = sObjectMgr.GetPlayerDataByGUID(_playerGuid))
-        ss << pPlayerCache->uiLevel << ";;";
+    if (ObjectAccessor::FindPlayer(_playerGuid))
+        ss << "online;;";
     else
-        ss << "0;;";
-
-    ss << sAccountMgr.GetAccountEmail(accId) << ";;";
-    ss << sAccountMgr.GetForumName(accId) << ";;";
+        ss << "offline;;";
 
     std::string name;
     if (sObjectMgr.GetPlayerNameByGUID(_assignedTo, name))
@@ -182,6 +173,7 @@ std::string GmTicket::FormatAddonMessage() const
     else
         ss << "0;;";
 
+    ss << _createTime << ";;";
     ss << _message;
 
     return ss.str();

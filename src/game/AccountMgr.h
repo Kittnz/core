@@ -107,6 +107,7 @@ class AccountMgr
         void LoadAccountIP();
         void LoadAccountEmail();
         void LoadAccountForumName();
+        void SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer);
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }

@@ -168,41 +168,27 @@ bool changetoknth(std::string &str, int n, char const* with, bool insert = false
     return true;
 }
 
-uint32 registerNewGuid(uint32 oldGuid, std::map<uint32, uint32>& guidMap, uint32 hiGuid)
+uint32 registerNewGuid(uint32 oldGuid, std::map<uint32, uint32>& guidMap, uint32 newguid)
 {
     std::map<uint32, uint32>::const_iterator itr = guidMap.find(oldGuid);
     if (itr != guidMap.end())
         return itr->second;
 
-    uint32 newguid = hiGuid + guidMap.size();
     guidMap[oldGuid] = newguid;
     return newguid;
 }
 
-bool changeGuid(std::string &str, int n, std::map<uint32, uint32>& guidMap, uint32 hiGuid, bool nonzero = false)
+bool changeGuid(std::string &str, int n, std::map<uint32, uint32>& guidMap, uint32 newGuid, bool nonzero = false)
 {
     char chritem[20];
     uint32 oldGuid = atoi(getnth(str, n).c_str());
     if (nonzero && oldGuid == 0)
         return true;                                        // not an error
 
-    uint32 newGuid = registerNewGuid(oldGuid, guidMap, hiGuid);
+    newGuid = registerNewGuid(oldGuid, guidMap, newGuid);
     snprintf(chritem, 20, "%u", newGuid);
 
     return changenth(str, n, chritem, false, nonzero);
-}
-
-bool changetokGuid(std::string &str, int n, std::map<uint32, uint32>& guidMap, uint32 hiGuid, bool nonzero = false)
-{
-    char chritem[20];
-    uint32 oldGuid = atoi(gettoknth(str, n).c_str());
-    if (nonzero && oldGuid == 0)
-        return true;                                        // not an error
-
-    uint32 newGuid = registerNewGuid(oldGuid, guidMap, hiGuid);
-    snprintf(chritem, 20, "%u", newGuid);
-
-    return changetoknth(str, n, chritem, false, nonzero);
 }
 
 std::string CreateDumpString(char const* tableName, QueryResult* result)
@@ -456,19 +442,17 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
     char newguid[20], chraccount[20], newpetid[20], currpetid[20], lastpetid[20];
 
     // make sure the same guid doesn't already exist and is safe to use
-    bool incHighest = true;
     if (guid != 0 && guid < sObjectMgr.m_CharGuids.GetNextAfterMaxUsed())
     {
         result = CharacterDatabase.PQuery("SELECT * FROM `characters` WHERE `guid` = '%u'", guid);
         if (result)
         {
-            guid = sObjectMgr.m_CharGuids.GetNextAfterMaxUsed();
+            guid = sObjectMgr.GeneratePlayerLowGuid();
             delete result;
         }
-        else incHighest = false;
     }
     else
-        guid = sObjectMgr.m_CharGuids.GetNextAfterMaxUsed();
+        guid = sObjectMgr.GeneratePlayerLowGuid();
 
     // normalize the name if specified and check if it exists
     if (!normalizePlayerName(name))
@@ -604,20 +588,20 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                 if (!changenth(line, 1, newguid))           // character_inventory.guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
 
-                if (!changeGuid(line, 2, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed(), true))
+                if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid(), true))
                     ROLLBACK(DUMP_FILE_BROKEN);             // character_inventory.bag update
-                if (!changeGuid(line, 4, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 4, items, sObjectMgr.GenerateItemLowGuid()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // character_inventory.item update
                 break;
             }
             case DTT_ITEM:
             {
                 // item, owner, data field:item, owner guid
-                if (!changeGuid(line, 1, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 1, items, sObjectMgr.GenerateItemLowGuid()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // item_instance.guid update
                 if (!changenth(line, 3, newguid))           // item_instance.owner_guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
-                if (!changeGuid(line, 13, itemTexts, sObjectMgr.m_ItemTextIds.GetNextAfterMaxUsed(), true))           // item_instance.text update
+                if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
                     ROLLBACK(DUMP_FILE_BROKEN);
                 break;
             }
@@ -625,14 +609,14 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
             {
                 if (!changenth(line, 1, newguid))           // character_gifts.guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
-                if (!changeGuid(line, 2, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // character_gifts.item_guid update
                 break;
             }
             case DTT_ITEM_LOOT:
             {
                 // item, owner
-                if (!changeGuid(line, 1, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 1, items, sObjectMgr.GenerateItemLowGuid()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // item_loot.guid update
                 if (!changenth(line, 2, newguid))           // item_Loot.owner_guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
@@ -681,19 +665,19 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
             }
             case DTT_MAIL:                                  // mail
             {
-                if (!changeGuid(line, 1, mails, sObjectMgr.m_MailIds.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 1, mails, sObjectMgr.GenerateMailID()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // mail.id update
                 if (!changenth(line, 6, newguid))           // mail.receiver update
                     ROLLBACK(DUMP_FILE_BROKEN);
-                if (!changeGuid(line, 8, itemTexts, sObjectMgr.m_ItemTextIds.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 8, itemTexts, sObjectMgr.GenerateItemTextID()))
                     ROLLBACK(DUMP_FILE_BROKEN);
                 break;
             }
             case DTT_MAIL_ITEM:                             // mail_items
             {
-                if (!changeGuid(line, 1, mails, sObjectMgr.m_MailIds.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 1, mails, sObjectMgr.GenerateMailID()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // mail_items.id
-                if (!changeGuid(line, 2, items, sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid()))
                     ROLLBACK(DUMP_FILE_BROKEN);             // mail_items.item_guid
                 if (!changenth(line, 4, newguid))           // mail_items.receiver
                     ROLLBACK(DUMP_FILE_BROKEN);
@@ -702,7 +686,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
             case DTT_ITEM_TEXT:                             // item_text
             {
                 // id
-                if (!changeGuid(line, 1, itemTexts, sObjectMgr.m_ItemTextIds.GetNextAfterMaxUsed()))
+                if (!changeGuid(line, 1, itemTexts, sObjectMgr.GenerateItemTextID()))
                     ROLLBACK(DUMP_FILE_BROKEN);
 
                 // add it to cache
@@ -721,14 +705,6 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
     }
 
     CharacterDatabase.CommitTransaction();
-
-    //FIXME: current code with post-updating guids not safe for future per-map threads
-    sObjectMgr.m_ItemGuids.Set(sObjectMgr.m_ItemGuids.GetNextAfterMaxUsed() + items.size());
-    sObjectMgr.m_MailIds.Set(sObjectMgr.m_MailIds.GetNextAfterMaxUsed() +  mails.size());
-    sObjectMgr.m_ItemTextIds.Set(sObjectMgr.m_ItemTextIds.GetNextAfterMaxUsed() + itemTexts.size());
-
-    if (incHighest)
-        sObjectMgr.m_CharGuids.Set(sObjectMgr.m_CharGuids.GetNextAfterMaxUsed() + 1);
 
     fclose(fin);
 

@@ -194,6 +194,8 @@ class ChatHandler
         bool HandleServiceDeleteCharacters(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
+		bool HandleDebugSetInstanceDataCommand(char* args);
+		bool HandleCharacterInactivityDataCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
@@ -634,6 +636,16 @@ class ChatHandler
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
+
+		///Suspicious statistic commands
+
+		bool HandleSuspiciousEnable(char* args);
+		bool HandleSuspiciousMovementEnable(char* args);
+		bool HandleSuspiciousMovementDetectValue(char* args);
+		bool HandleSuspiciousFishingEnable(char* args);
+		bool HandleSuspiciousKilledNPC(char* args);
+		bool HandleSuspiciousFishers(char* args);
+        bool HandleSuspiciousNotify(char* args);
 
         // Shop info
         bool HandleGetShopLogs(char* args);
