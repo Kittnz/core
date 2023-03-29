@@ -72,6 +72,7 @@ class GuildMgr
         Petition* GetPetitionByCharterGuid(const ObjectGuid& charterGuid);
         Petition* GetPetitionById(uint32 id);
         Petition* GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid);
+        PetitionSignature* GetSignatureForPlayerGuid(const ObjectGuid& guid);
 
         void LoadGuilds();
         void LoadPetitions();
@@ -123,6 +124,7 @@ public:
     PetitionSignature* GetSignatureForPlayer(Player* player);
     PetitionSignature* GetSignatureForAccount(uint32 accountId);
     void AddSignature(PetitionSignature* signature);
+    void DeleteSignature(PetitionSignature* signature);
     bool AddNewSignature(Player* player);
 
     bool IsComplete() const { return m_signatures.size() == sWorld.getConfig(CONFIG_UINT32_MIN_PETITION_SIGNS); }
@@ -149,8 +151,10 @@ public:
     PetitionSignature(Petition* petition, Player* player);
 
     void SaveToDB();
+    void DeleteFromDB();
 
     const ObjectGuid& GetSignatureGuid() { return m_playerGuid; }
+    Petition* GetSignaturePetition() { return m_petition; }
     uint32 GetSignatureAccountId() const { return m_playerAccount; }
 
 private:
