@@ -393,7 +393,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
 
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
-    sLog.out(LOG_CHAR, "Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
+    sLog.out(LOG_CHAR, "[%s:%d@%s] Create Character:[%s] (guid: %u)", GetUsername(), GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     delete pNewChar;                                        // created only to call SaveToDB()
 }
 
@@ -449,7 +449,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
 
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Delete Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
-    sLog.out(LOG_CHAR, "Account: %d (IP: %s) Delete Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
+    sLog.out(LOG_CHAR, "[%s:%d@%s] Delete Character:[%s] (guid: %u)", GetUsername(), GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
 
     // If the character is online (ALT-F4 logout for example)
     if (Player* onlinePlayer = sObjectAccessor.FindPlayer(guid))
@@ -864,8 +864,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     std::string IP_str = GetRemoteAddress();
 
-    sLog.out(LOG_CHAR, "Account: %d (IP: %s) Login Character:[%s] (guid: %u)%s",
-             GetAccountId(), IP_str.c_str(), pCurrChar->GetName(), pCurrChar->GetGUIDLow(), alreadyOnline ? " Player was already online" : "");
+    sLog.out(LOG_CHAR, "[%s:%d@%s] Login Character:[%s] (guid: %u)%s",
+             GetUsername(), GetAccountId(), IP_str.c_str(), pCurrChar->GetName(), pCurrChar->GetGUIDLow(), alreadyOnline ? " Player was already online" : "");
     if (!alreadyOnline && !pCurrChar->IsStandingUp() && !pCurrChar->HasUnitState(UNIT_STAT_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
@@ -1048,7 +1048,7 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uin
     CharacterDatabase.PExecute("UPDATE characters set name = '%s', at_login = at_login & ~ %u WHERE guid ='%u'", newname.c_str(), uint32(AT_LOGIN_RENAME), guidLow);
     CharacterDatabase.CommitTransaction();
 
-    sLog.out(LOG_CHAR, "Account: %d (IP: %s) Character:[%s] (guid:%u) Changed name to: %s", session->GetAccountId(), session->GetRemoteAddress().c_str(), oldname.c_str(), guidLow, newname.c_str());
+    sLog.out(LOG_CHAR, "[%s:%d@%s] Character:[%s] (guid:%u) Changed name to: %s", session->GetUsername(), session->GetAccountId(), session->GetRemoteAddress().c_str(), oldname.c_str(), guidLow, newname.c_str());
 
     WorldPacket data(SMSG_CHAR_RENAME, 1 + 8 + (newname.size() + 1));
     data << uint8(RESPONSE_SUCCESS);
