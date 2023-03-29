@@ -32,7 +32,8 @@
 #include "Player.h"
 #include "Creature.h"
 #include "Group.h"
-#incude "WorldSession.h"
+#include "WorldSession.h"
+#include "ObjectMgr.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
