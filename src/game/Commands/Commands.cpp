@@ -11472,6 +11472,8 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
 
             PSendSysMessage(LANG_RENAME_PLAYER, GetNameLink(target).c_str());
             target->SetAtLoginFlag(AT_LOGIN_RENAME);
+            // Notify the player about the rename.
+            ChatHandler(target).PSendSysMessage("Your character has been flagged for a rename. Please make sure to logout, read our rules, and select a new appropriate name.");
             CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target->GetGUIDLow());
         }
         else
@@ -11483,7 +11485,8 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
             std::string oldNameLink = playerLink(target_name);
 
             PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
-            CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
+            // If the player is offline, also forcefully set the current name to be just the chracter's guid.
+            CharacterDatabase.PExecute("UPDATE characters SET name = guid, at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
         }
     }
     else
