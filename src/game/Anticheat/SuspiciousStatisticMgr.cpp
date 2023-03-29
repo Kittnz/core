@@ -29,6 +29,11 @@
 #include "Language.h"
 #include "Chat.h"
 
+#include "Player.h"
+#include "Creature.h"
+#include "Group.h"
+#incude "WorldSession.h"
+
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
 #endif
@@ -142,7 +147,7 @@ void SuspiciousStatisticMgr::OnFishingAttempt(Player* player)
     if (!bEnable || !bFishingEnable) return;
 
     //Player ptr is always valid
-    ACE_Guard<ACE_Thread_Mutex> guard(FishingTimeCounterMapGuard);
+    std::lock_guard<std::mutex> guard(FishingTimeCounterMapGuard);
 
     auto pTimestampIter = FishingTimeCounterMap.find(player->GetGUIDLow());
     if (pTimestampIter != FishingTimeCounterMap.end())
