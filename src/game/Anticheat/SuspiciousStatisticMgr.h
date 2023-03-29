@@ -25,6 +25,11 @@
 #pragma once
 #include "Common.h"
 
+class Player;
+class Unit;
+struct MovementInfo;
+
+
 namespace SuspiciousType
 {
     enum Value
@@ -138,7 +143,7 @@ protected:
     //Store time when player fishing. Key - player low guid, Value - MS timestamp
     std::unordered_map<uint32, FishingTracker> FishingTimeCounterMap;
 
-    ACE_Thread_Mutex FishingTimeCounterMapGuard;
+    std::mutex FishingTimeCounterMapGuard;
 
     //Players that already reported by stat system. Have protection by FishingTimeCounterMapGuard
     std::vector<uint32> FishingReportedPlayers;
