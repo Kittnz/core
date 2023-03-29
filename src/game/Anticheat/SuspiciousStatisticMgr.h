@@ -25,6 +25,8 @@
 #pragma once
 #include "Common.h"
 
+#include <mutex>
+
 class Player;
 class Unit;
 struct MovementInfo;
