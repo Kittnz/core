@@ -190,7 +190,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         SendNotification(LANG_UNKNOWN_LANGUAGE);
         return;
     }
-    if (_player && langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
+    if (langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
     {
         SendNotification(LANG_NOT_LEARNED_LANGUAGE);
         return;
@@ -207,7 +207,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     {
 
         // send in universal language if player in .gmon mode (ignore spell effects)
-        if (_player && _player->IsGameMaster())
+        if (_player->IsGameMaster())
             lang = LANG_UNIVERSAL;
         else
         {
@@ -237,19 +237,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
 
             // but overwrite it by SPELL_AURA_MOD_LANGUAGE auras (only single case used)
-            if (_player)
-            {
-                Unit::AuraList const& ModLangAuras = _player->GetAurasByType(SPELL_AURA_MOD_LANGUAGE);
-                if (!ModLangAuras.empty())
-                    lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
-            }
+			Unit::AuraList const& ModLangAuras = _player->GetAurasByType(SPELL_AURA_MOD_LANGUAGE);
+			if (!ModLangAuras.empty())
+				lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
         }
 
         if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
         {
-            auto currTime = time(nullptr);
+            time_t currTime = time(nullptr);
 
-            if (GetPlayer() && !GetPlayer()->CanSpeak()) // Muted
+            if (!_player->CanSpeak()) // Muted
             {
                 std::string timeStr = "";
 
@@ -265,6 +262,13 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
         }
     }
+
+	if (type != CHAT_MSG_AFK &&
+        type != CHAT_MSG_DND &&
+        lang != LANG_ADDON)
+	{
+		_player->UpdateChatActivityTimer();
+	}
 
     std::string msg, channel, to;
     // Message parsing
@@ -333,6 +337,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{
+        // Giperion to Someone who wrote that: Why you didn't finish?
+#if 0
         if (msg.find(debuffPrefix) != std::string::npos)
         {
             auto payload = msg.substr(debuffPrefix.length() + 1); // skip tab too of prefix, so + 1.
@@ -354,6 +360,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
 
         }
+#endif
 
 		if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
 		{
@@ -741,6 +748,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 sTicketMgr->SendTicketsInAddonMessage(_player);
             else if (strstr(msg.c_str(), "GET_TEMPLATES"))
                 sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
+            else if (char const* pSubString = strstr(msg.c_str(), "PLAYER_INFO:"))
+                sAccountMgr.SendPlayerInfoInAddonMessage(pSubString + strlen("PLAYER_INFO:"), _player);
             return;
         }
     }

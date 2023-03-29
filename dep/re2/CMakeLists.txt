@@ -86,6 +86,8 @@ set(RE2_HEADERS
     re2/stringpiece.h
     )
 
+SET_TARGET_PROPERTIES (re2 PROPERTIES FOLDER "3rd Party")
+
 #install(FILES ${RE2_HEADERS}
  #       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/re2)
 #install(TARGETS re2 EXPORT re2Targets

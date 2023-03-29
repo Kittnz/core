@@ -37,6 +37,7 @@
 #include "MoveSpline.h"
 #include "Geometry.h"
 #include "Anticheat/Movement/Movement.hpp"
+#include "SuspiciousStatisticMgr.h"
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket& /*recvData*/)
 {
@@ -117,6 +118,8 @@ void WorldSession::HandleMoveWorldportAckOpcode()
         t->UpdatePassengerPosition(GetPlayer());
     else
         GetPlayer()->Relocate(loc.x, loc.y, loc.z, loc.o);
+
+    GetPlayer()->UpdateSavedVelocityPositionToCurrentPos();
 
     GetPlayer()->SendInitialPacketsBeforeAddToMap();
     // the CanEnter checks are done in TeleporTo but conditions may change
@@ -336,6 +339,12 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
             m_moveRejectTime = WorldTimer::getMSTime();
             return;
         }
+    }
+
+    if (pPlayerMover != nullptr)
+    {
+		//If anticheat says ok, we still can detect suspisious activities over time
+	    sSuspiciousStatisticMgr.OnMovement(pPlayerMover, movementInfo);
     }
 
     // This is required for proper movement extrapolation
@@ -914,6 +923,8 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket& recvData)
             m_moveRejectTime = WorldTimer::getMSTime();
             return;
         }
+
+        sSuspiciousStatisticMgr.OnMovement(_player, movementInfo);
     }
 
     HandleMoverRelocation(pMover, movementInfo);
@@ -1038,6 +1049,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                 if (Transport* t = pPlayerMover->GetMap()->GetTransport(movementInfo.GetTransportGuid()))
                 {
                     t->AddPassenger(pPlayerMover);
+                    pPlayerMover->UpdateSavedVelocityPositionToCurrentPos();
                     if (Pet* pPet = pPlayerMover->GetPet())
                         pPet->Unsummon(PET_SAVE_REAGENTS, pPlayerMover);
                     if (Pet* pMiniPet = pPlayerMover->GetMiniPet())
@@ -1065,6 +1077,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
         else if (pPlayerMover->GetTransport())
         {
             pPlayerMover->GetTransport()->RemovePassenger(pPlayerMover);
+            pPlayerMover->UpdateSavedVelocityPositionToCurrentPos();
             if (Pet* pet = pPlayerMover->GetPet())
             {
                 // If moving on transport, stop it.
@@ -1092,6 +1105,8 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
 
         pPlayerMover->SetPosition(movementInfo.GetPos().x, movementInfo.GetPos().y, movementInfo.GetPos().z, movementInfo.GetPos().o);
         pPlayerMover->m_movementInfo = movementInfo;
+
+        pPlayerMover->UpdateMovementActivityTimer();
 
         // Nostalrius - antiundermap1
         if (movementInfo.HasMovementFlag(MOVEFLAG_FALLINGFAR))

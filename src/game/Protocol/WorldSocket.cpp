@@ -31,6 +31,7 @@
 #include "AddonHandler.h"
 #include "Anticheat/Anticheat.h"
 
+
 #include "Opcodes.h"
 #include "MangosSocketImpl.h"
 
@@ -38,9 +39,12 @@
 
 template class MangosSocket<WorldSession, WorldSocket, AuthCrypt>;
 
+
+
 int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 {
     MANGOS_ASSERT(new_pct);
+
 
     // manage memory ;)
     std::unique_ptr<WorldPacket> aptr(new_pct);
@@ -222,7 +226,11 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (security > SEC_SIGMACHAD)                       // prevent invalid security settings in DB
         security = SEC_SIGMACHAD;
 
+    auto str = fields[2].GetString();
+
     K.SetHexStr(fields[2].GetString());
+
+    auto vec = K.AsByteArray();
 
     if (K.AsByteArray().empty())
     {
@@ -335,6 +343,16 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetPlatform(clientPlatform);
     m_Session->LoadTutorialsData();
     m_Session->InitAntiCheatSession(&K);
+
+
+    //TWoW Jamey
+    //Clear out sessionkey once we're done with it. Keep it in memory only.
+    //Ideally sessionkey shouldn't even be in the DB. It's only used for auth to communicate to world.
+    //Exposing it leaves a big security hole as it allows free login.
+    //Should be sent over IPC / MMAP. 
+
+
+    LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
 
     //m_Session->InitWarden(&K);
 

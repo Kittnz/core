@@ -69,6 +69,7 @@
 
 #include <math.h>
 #include <stdarg.h>
+#include "SuspiciousStatisticMgr.h"
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
 {
@@ -1035,6 +1036,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pGroupTap = pPlayerTap->GetGroup();
     }
 
+
     // Nostalrius: Loots desactives / map (retire ici l'XP et les reputs)
     bool allowLoot = !sObjectMgr.IsMapLootDisabled(GetMapId());
     // call kill spell proc event (before real die and combat stop to triggering auras removed at death/combat stop)
@@ -1097,6 +1099,15 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
         }
 
         pPlayerTap->SendDirectMessage(&data);
+
+		if (GetMap()->IsDungeon())
+		{
+			sSuspiciousStatisticMgr.OnNpcKilledInDungeon((Player*)this, pVictim);
+		}
+		else
+		{
+			sSuspiciousStatisticMgr.OnNpcKilledInWorld((Player*)this, pVictim);
+		}
 
         if (pCreatureVictim)
         {
@@ -9954,6 +9965,7 @@ void Unit::TeleportPositionRelocation(float x, float y, float z, float orientati
     {
         player->SetPosition(x, y, z, orientation, true);
         player->m_movementInfo.ChangePosition(x, y, z, orientation);
+        player->UpdateSavedVelocityPositionToCurrentPos();
     }
     else if (crea)
     {

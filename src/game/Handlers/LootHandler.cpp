@@ -177,6 +177,35 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         if (!item->freeforall)
             item->is_looted = true;
 
+
+        // Turtle:: Make raid looted items not appear soul bound.
+        //Fun times are over, restrict to non-stackable and non party-loot.
+
+        if (player && player->GetMap()->IsRaid())
+        {
+            auto itemProto = newitem->GetProto();
+            if (itemProto)
+            {
+                if (!item->freeforall && itemProto->Stackable <= 1)
+                {
+                    if (Group* pGroup = (Group*)player->GetGroup())
+                    {
+                        newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember->GetMapId() == player->GetMapId())
+                                    newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                            }
+                        }
+                    }
+                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                    newitem->SendCreateUpdateToPlayer(player);
+                }
+            }
+        }
+
         --loot->unlootedCount;
 
 

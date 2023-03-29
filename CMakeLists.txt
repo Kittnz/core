@@ -38,6 +38,7 @@ option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
+option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -82,9 +83,21 @@ if(NOT MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 # Giperion: Set Edit and Continue by default for all windows debug builds
-if(MSVC)
+if(MSVC AND NOT USE_ADDRESS_SANITIZER)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
-endif(MSVC)
+endif(MSVC AND NOT USE_ADDRESS_SANITIZER)
+
+# Giperion: Enable address sanitizer if requested
+if(USE_ADDRESS_SANITIZER)
+	if(MSVC)
+		add_compile_options(/fsanitize=address /Zi)
+		add_link_options(/INCREMENTAL:NO) #disable some options required for correct ASan working for MSVC
+	else()
+		add_compile_options(-fsanitize=address)
+		add_link_options(-fsanitize=address)
+	endif(MSVC)
+
+endif()
 
 if(WIN32)
   if(MSVC)

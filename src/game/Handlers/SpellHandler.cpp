@@ -422,6 +422,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // Nostalrius : Ivina
     spell->SetClientStarted(true);
     spell->prepare(std::move(targets));
+    _player->UpdateSpellActivityTimer();
     ALL_SESSION_SCRIPTS(this, OnSpellCasted(spellId));
 }
 

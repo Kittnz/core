@@ -598,6 +598,14 @@ void vutf8printf(FILE *out, const char *str, va_list* ap)
 
     CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], uint32(wtemp_len + 1));
     fprintf(out, "%s", temp_buf);
+
+    //Giperion: God knows how many times I reimplement that function in various mangos forks
+	if (IsDebuggerPresent())
+	{
+		OutputDebugStringW(wtemp_buf);
+		OutputDebugStringW(L"\n");
+	}
+
 #else
     vfprintf(out, str, *ap);
 #endif

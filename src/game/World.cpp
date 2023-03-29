@@ -86,6 +86,7 @@
 #include "Anticheat/Config.hpp"
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
+#include "SuspiciousStatisticMgr.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -1258,6 +1259,12 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ANALYSIS_NO_EXTENDED_DATA_WEIGHT, "Analysis.NoExtendedDataWeight", 10);
     setConfig(CONFIG_UINT32_ANALYSIS_WARNING_THRESHOLD, "Analysis.WarningThreshold", 300);
 
+    setConfig(CONFIG_BOOL_SUSPICIOUS_ENABLE, "Suspicious.Enable", true);
+    setConfig(CONFIG_BOOL_SUSPICIOUS_MOVEMENT_ENABLE, "Suspicious.Movement.Enable", true);
+    setConfig(CONFIG_BOOL_SUSPICIOUS_FISHING_ENABLE, "Suspicious.Fishing.Enable", true);
+    setConfig(CONFIG_BOOL_SUSPICIOUS_NPC_KILLED_ENABLE, "Suspicious.Npckilling.Enable", true);
+    setConfig(CONFIG_FLOAT_SUSPICIOUS_MOVEMENTSPEED_REPORT_THRESHOLD, "Suspicious.Movement.MovementSpeedThreshold", 100.0f);
+
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
@@ -1990,6 +1997,8 @@ void World::SetInitialWorldSettings()
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
+
+	sSuspiciousStatisticMgr.Initialize();
 
     if (getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
         m_autoCommitThread = std::thread(&autoCommitWorkerThread);

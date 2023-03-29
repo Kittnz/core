@@ -85,6 +85,7 @@
 #include <ctime>
 #include "Anticheat/Anticheat.h"
 #include <ace/OS_NS_dirent.h>
+#include "SuspiciousStatisticMgr.h"
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -15881,3 +15882,173 @@ bool ChatHandler::HandlePDumpWriteCommand(char *args)
 
     return true;
 }
+
+bool ChatHandler::HandleDebugSetInstanceDataCommand(char* args)
+{
+	if (WorldSession* session = GetSession())
+	{
+		if (Player* player = session->GetPlayer())
+		{
+			if (InstanceData* pInstData = player->GetInstanceData())
+			{
+				uint32 Param1;
+				uint32 Param2;
+				if (!ExtractUInt32(&args, Param1))
+					return false;
+				if (!ExtractUInt32(&args, Param2))
+					return false;
+				pInstData->SetData(Param1, Param2);
+			}
+		}
+	}
+	return true;
+}
+
+bool ChatHandler::HandleCharacterInactivityDataCommand(char* args)
+{
+	if (WorldSession* session = GetSession())
+	{
+		if (Player* player = session->GetPlayer())
+		{
+			if (Player* selectedPlayer = player->GetSelectedPlayer())
+			{
+				uint32 currentTime = WorldTimer::getMSTime();
+
+				uint32 deltaSpellCasted = WorldTimer::getMSTimeDiff(selectedPlayer->GetLastSpellCastedTime(), currentTime);
+				uint32 deltaMovement = WorldTimer::getMSTimeDiff(selectedPlayer->GetLastMovementTime(), currentTime);
+				uint32 deltaMessageChat = WorldTimer::getMSTimeDiff(selectedPlayer->GetLastChatMessageTime(), currentTime);
+
+				float flDeltaSpellCasted = 0.0f;
+				float flDeltaMovement = 0.0f;
+				float flDeltaMessageChat = 0.0f;
+
+				auto SafeTransformFloat = [](uint32 deltaTime) -> float
+				{
+					if (deltaTime != 0)
+					{
+						return float(deltaTime) / 1000.0f;
+					}
+
+					return 0.0f;
+				};
+
+				flDeltaSpellCasted = SafeTransformFloat(deltaSpellCasted);
+				flDeltaMovement = SafeTransformFloat(deltaMovement);
+				flDeltaMessageChat = SafeTransformFloat(deltaMessageChat);
+
+				float VelocityPerSecond = selectedPlayer->GetVelocityPerSecond();
+				float VelocityPer3Min = selectedPlayer->GetVelocityPer3Min();
+
+				bool bInactivityResult = selectedPlayer->IsBasicallyInactive();
+
+				PSendSysMessage("Player \"%s\" Delta spell: %f; Delta Movement: %f; Delta Chat: %f; VelocityPerSecond: %f; VelocityPer3Min: %f; Is Basically Inactive: %s",
+					selectedPlayer->GetName(), flDeltaSpellCasted, flDeltaMovement, flDeltaMessageChat, VelocityPerSecond, VelocityPer3Min, GetOnOffStr(bInactivityResult));
+
+				return true;
+			}
+		}
+	}
+
+    PSendSysMessage("Select player which you want to inspect");
+
+	return false;
+}
+
+bool ChatHandler::HandleSuspiciousEnable(char* args)
+{
+	bool bEnable = true;
+	if (!ExtractOnOff(&args, bEnable)) return false;
+
+	sSuspiciousStatisticMgr.SetEnable(bEnable);
+	PSendSysMessage("Suspicious statistic global detection is %s", ChatHandler::GetOnOffStr(bEnable));
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousMovementEnable(char* args)
+{
+	bool bEnable = true;
+	if (!ExtractOnOff(&args, bEnable)) return false;
+
+	sSuspiciousStatisticMgr.SetMovementEnable(bEnable);
+	PSendSysMessage("Suspicious statistic movement anomaly detection is %s", ChatHandler::GetOnOffStr(bEnable));
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousMovementDetectValue(char* args)
+{
+	float MovementDetectValue = 100.0f;
+    if (!ExtractFloat(&args, MovementDetectValue))
+    {
+        float CurrentDetectionValue = sSuspiciousStatisticMgr.GetMovementDetectValue();
+		PSendSysMessage("Current detection value is %f", CurrentDetectionValue);
+
+        return true;
+    }
+
+	sSuspiciousStatisticMgr.SetMovementDetectValue(MovementDetectValue);
+	PSendSysMessage("Suspicious statistic movement detection value set to %f", MovementDetectValue);
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousFishingEnable(char* args)
+{
+	bool bEnable = true;
+	if (!ExtractOnOff(&args, bEnable)) return false;
+
+	sSuspiciousStatisticMgr.SetFishingEnable(bEnable);
+	PSendSysMessage("Suspicious statistic fishing detection is %s", ChatHandler::GetOnOffStr(bEnable));
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousKilledNPC(char* args)
+{
+	bool bEnable = true;
+	if (!ExtractOnOff(&args, bEnable)) return false;
+
+	sSuspiciousStatisticMgr.SetNpcKilledEnable(bEnable);
+	PSendSysMessage("Suspicious statistic NPC kill detection is %s", ChatHandler::GetOnOffStr(bEnable));
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousFishers(char* args)
+{
+	if (WorldSession* session = GetSession())
+	{
+		if (Player* player = session->GetPlayer())
+		{
+			sSuspiciousStatisticMgr.PrintAllActiveFishers(player);
+		}
+	}
+	return true;
+}
+
+bool ChatHandler::HandleSuspiciousNotify(char* args)
+{
+	if (WorldSession* session = GetSession())
+	{
+		if (Player* player = session->GetPlayer())
+		{
+			bool bEnable = true;
+			if (!ExtractOnOff(&args, bEnable)) return false;
+
+			uint32 flags = session->GetAccountFlags();
+
+			if (bEnable)
+			{
+				session->SetAccountFlags(flags | ACCOUNT_FLAG_SHOW_SUSPICIOUS);
+				LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u",
+					session->GetAccountId(), ACCOUNT_FLAG_SHOW_SUSPICIOUS);
+				SendSysMessage("Suspicious statistic messages will be shown");
+			}
+			else
+			{
+				session->SetAccountFlags(flags & ~ACCOUNT_FLAG_SHOW_SUSPICIOUS);
+				LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = %u",
+					session->GetAccountId(), ACCOUNT_FLAG_SHOW_SUSPICIOUS);
+				SendSysMessage("Suspicious statistic messages will be hidden");
+			}
+		}
+	}
+	return true;
+}
+

@@ -720,3 +720,33 @@ bool AccountPersistentData::CanMail(uint32 targetAccount)
     uint32 allowedScore = sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS);
     return totalScore < allowedScore;
 }
+
+void AccountMgr::SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer)
+{
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(playerName);
+    if (guid.IsEmpty())
+        return;
+
+    PlayerCacheData const* pPlayerCache = sObjectMgr.GetPlayerDataByGUID(guid);
+    if (!pPlayerCache)
+        return;
+
+    std::stringstream ss;
+
+    // playerinfo;;guid;;account;;ip;;level;;email;;forumusername;;race;;class
+
+    ss << "playerinfo;;" << guid.GetCounter() << ";;";
+
+    uint32 accId = pPlayerCache->uiAccount;
+    std::string accName;
+    GetName(accId, accName);
+    ss << accName << ";;"
+       << GetAccountIP(accId) << ";;"
+       << pPlayerCache->uiLevel << ";;"
+       << GetAccountEmail(accId) << ";;"
+       << GetForumName(accId) << ";;"
+       << pPlayerCache->uiRace << ";;"
+       << pPlayerCache->uiClass;
+
+    pPlayer->SendAddonMessage("GM_ADDON", ss.str());
+}

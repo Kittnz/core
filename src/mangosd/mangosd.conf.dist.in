@@ -2036,3 +2036,14 @@ WhisperTargets.BypassLevel = 40
 #        Default: 3
 
 Account.ShowWarningAge = 3
+
+# Suspicious Manager features
+Suspicious.Enable = 1
+Suspicious.Movement.Enable = 1
+Suspicious.Fishing.Enable = 1
+Suspicious.Npckilling.Enable = 1
+
+# If player reach speed higher then this - it will be reported
+# For reference - walking speed is 8 units per second
+# Please note, that calculation is not precise!
+Suspicious.Movement.MovementSpeedThreshold = 100.0
