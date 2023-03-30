@@ -10,3 +10,7 @@ UPDATE `creature_template` SET `type` = 1 WHERE `entry` = 7553;
 UPDATE `creature_template` SET `type` = 1 WHERE `entry` = 7554;
 UPDATE `creature_template` SET `type` = 1 WHERE `entry` = 7555;
 UPDATE `creature_template` SET `type` = 1 WHERE `entry` = 7556;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3121
+
+UPDATE `creature_template` SET `skinning_loot_id` = 213 WHERE `entry` = 3865;
