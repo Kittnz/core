@@ -200,10 +200,6 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
             return GuildAddStatus::ALREADY_IN_GUILD;
     }
 
-    // If this player is the owner of a guild charter, delete it entirely before joining the guild.
-    if (Petition* petition = sGuildMgr.GetPetitionByOwnerGuid(plGuid))
-        sGuildMgr.DeletePetition(petition);
-
     // When joining a guild, remove this player from any petition that could have previously signed.
     if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(plGuid))
     {
