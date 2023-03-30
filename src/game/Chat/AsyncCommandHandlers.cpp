@@ -57,7 +57,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
 
         data->target_guid = target->GetObjectGuid();
         data->online = true;
-        data->isHardcore = target->IsHardcore();
+        data->m_hardcoreStatus = target->GetHardcoreStatus();
         data->fingerprint = target->GetSession()->GetAntiCheat()->GetFingerprint();
         data->isFingerprintBanned = target->GetSession()->IsFingerprintBanned();
         data->isSuspicious = target->GetSession()->IsSuspicious();
@@ -70,7 +70,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
     {
         data->target_guid = target_guid;
         CharacterDatabase.AsyncPQuery(&PInfoHandler::HandlePlayerLookupResult, data,
-                   //  0          1      2      3        4     5
+                   //  0          1      2      3        4     5   6
             "SELECT totaltime, level, money, account, race, class, mortality_status FROM characters WHERE guid = '%u'",
             target_guid.GetCounter());
     }
@@ -91,8 +91,7 @@ void PInfoHandler::HandlePlayerLookupResult(QueryResult *result, PInfoData *data
     data->accId = fields[3].GetUInt32();
     data->race = fields[4].GetUInt8();
     data->class_ = fields[5].GetUInt8();
-    uint32 mort_status = fields[6].GetUInt32();
-    data->isHardcore = mort_status == HARDCORE_MODE_STATUS_ALIVE || mort_status == HARDCORE_MODE_STATUS_DEAD;
+    data->m_hardcoreStatus = fields[6].GetUInt32();
     const auto accData = sWorld.FindAccountData(data->accId);
     
     if (accData)
@@ -217,7 +216,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     if (!data->email.empty())
         cHandler.PSendSysMessage("Email: %s", data->email.c_str());
     cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
-    cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
+    cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);

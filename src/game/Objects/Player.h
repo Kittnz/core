@@ -684,6 +684,22 @@ enum HardcoreStatus : uint8
     HARDCORE_MODE_STATUS_DEAD     = 3,
 };
 
+inline char const* HardcoreStatusToString(uint8 status)
+{
+    switch (status)
+    {
+        case HARDCORE_MODE_STATUS_NONE:
+            return "None";
+        case HARDCORE_MODE_STATUS_ALIVE:
+            return "Alive";
+        case HARDCORE_MODE_STATUS_IMMORTAL:
+            return "Immortal";
+        case HARDCORE_MODE_STATUS_DEAD:
+            return "Dead";
+    }
+    return "UNKNOWN";
+}
+
 enum PlayerTitles : uint8
 {
     TITLE_PROTECTOR_OF_STORMWIND = 1,
