@@ -70,7 +70,7 @@
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
 #include "MovementPacketSender.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 #include "Config/Config.h"
 #include "ZoneScript.h"
 #include "ZoneScriptMgr.h"

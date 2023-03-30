@@ -51,7 +51,7 @@
 #include "Channel.h"
 #include "AccountMgr.h"
 #include "MasterPlayer.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 #include "Anticheat/Warden/Warden.hpp"
 
 #ifdef USING_DISCORD_BOT

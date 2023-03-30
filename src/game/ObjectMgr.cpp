@@ -51,7 +51,7 @@
 #include "InstanceData.h"
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 
 #include <limits>
 
