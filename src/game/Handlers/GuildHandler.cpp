@@ -220,13 +220,6 @@ void WorldSession::HandleGuildAcceptOpcode(WorldPacket& /*recvPacket*/)
     guild->LogGuildEvent(GUILD_EVENT_LOG_JOIN_GUILD, GetPlayer()->GetObjectGuid());
 
     guild->BroadcastEvent(GE_JOINED, player->GetObjectGuid(), player->GetName());
-
-    // When joining a guild, remove this player from any petition that could have previously signed.
-    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(player->GetObjectGuid()))
-    {
-        signature->DeleteFromDB();
-        signature->GetSignaturePetition()->DeleteSignature(signature);
-    }
 }
 
 void WorldSession::HandleGuildDeclineOpcode(WorldPacket& /*recvPacket*/)

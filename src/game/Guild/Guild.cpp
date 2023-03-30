@@ -200,9 +200,16 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
             return GuildAddStatus::ALREADY_IN_GUILD;
     }
 
-    // remove all player signs from another petitions
-    // this will be prevent attempt joining player to many guilds and corrupt guild data integrity
-    Player::RemovePetitionsAndSigns(plGuid);
+    // If this player is the owner of a guild charter, delete it entirely before joining the guild.
+    if (Petition* petition = sGuildMgr.GetPetitionByOwnerGuid(plGuid))
+        sGuildMgr.DeletePetition(petition);
+
+    // When joining a guild, remove this player from any petition that could have previously signed.
+    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(plGuid))
+    {
+        signature->DeleteFromDB();
+        signature->GetSignaturePetition()->DeleteSignature(signature);
+    }
 
     uint32 lowguid = plGuid.GetCounter();
 
