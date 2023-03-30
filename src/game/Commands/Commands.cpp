@@ -11485,7 +11485,7 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
             std::string oldNameLink = playerLink(target_name);
 
             PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
-            // If the player is offline, also forcefully set the current name to be just the chracter's guid.
+            // If the player is offline, also forcefully set the current name to be just the character's guid.
             CharacterDatabase.PExecute("UPDATE characters SET name = guid, at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
         }
     }
