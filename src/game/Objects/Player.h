@@ -689,13 +689,13 @@ inline char const* HardcoreStatusToString(uint8 status)
     switch (status)
     {
         case HARDCORE_MODE_STATUS_NONE:
-            "None";
+            return "None";
         case HARDCORE_MODE_STATUS_ALIVE:
-            "Alive";
+            return "Alive";
         case HARDCORE_MODE_STATUS_IMMORTAL:
-            "Immortal";
+            return "Immortal";
         case HARDCORE_MODE_STATUS_DEAD:
-            "Dead";
+            return "Dead";
     }
     return "UNKNOWN";
 }
