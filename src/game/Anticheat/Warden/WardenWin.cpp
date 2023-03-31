@@ -2073,31 +2073,39 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress && _triggerPrintSave)
+    if (!_sysInfoSaved && _triggerPrintSave)
     {
+        bool hasSysInfo = _sysInfo.lpMaximumApplicationAddress > 0;
+
         auto activeProcCount = 0;
-        for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
-            if (!!(_sysInfo.dwActiveProcessorMask & (1 << i)))
-                ++activeProcCount;
+        if (hasSysInfo)
+        {
+            for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
+                if (!!(_sysInfo.dwActiveProcessorMask & (1 << i)))
+                    ++activeProcCount;
+        }
+        else
+            activeProcCount = _sharedData->UnparkedProcessorCount;
 
         if (!_sharedData)
             _sharedData = std::make_unique<SharedDataCompact>();
 
         auto& sample = _session->_analyser->GetCurrentSample();
+        
 
         sample.activeCpus = activeProcCount;
-        sample.cpuType = CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision);
+        sample.cpuType = hasSysInfo ? CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision) : "N/A";
         sample.enclaveMask = _sharedData->EnclaveFeatureMask;
         sample.mitPolicies = _sharedData->MitigationPolicies;
         sample.numPhysicalPages = _sharedData->NumberOfPhysicalPages;
-        sample.pageSize = _sysInfo.dwPageSize;
+        sample.pageSize = hasSysInfo ? _sysInfo.dwPageSize : 4096;
         sample.qpcData = _sharedData->QpcData;
         sample.sharedDataFlags = _sharedData->SharedDataFlags;
         sample.suiteMask = _sharedData->SuiteMask;
         sample.timeZoneBias = _sharedData->TimeZoneBias.LowPart;
-        sample.totalCpus = _sysInfo.dwNumberOfProcessors;
+        sample.totalCpus = hasSysInfo ? _sysInfo.dwNumberOfProcessors : activeProcCount;
         sample.unparkedCpuCount = _sharedData->UnparkedProcessorCount;
-        sample.useCpuData = !sample.cpuType.empty();
+        sample.useCpuData = hasSysInfo;
         sample.useExtendedData = sample.pageSize != 0;
 
         //by now we should have all current sample data, mix n match.
