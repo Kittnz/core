@@ -6921,7 +6921,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Uni
         m_realCasterGuid = m_casterGuid;
 
     m_applyTime = time(nullptr);
-    m_isPassive = IsPassiveSpell(GetId()) || spellproto->Attributes == 0x80;
+    m_isPassive = IsPassiveSpell(GetId()) || (spellproto->Attributes == SPELL_ATTR_HIDDEN_CLIENTSIDE && spellproto->DurationIndex == 21);
     m_isDeathPersist = spellproto->IsDeathPersistentSpell();
     m_isSingleTarget = spellproto->HasSingleTargetAura();
     m_procCharges = spellproto->procCharges;
