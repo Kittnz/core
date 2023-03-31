@@ -207,18 +207,18 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     auto const remote_ip = fields[3].GetCppString();
 
     ///- Re-check ip locking (same check as in realmd).
-    if (fields[4].GetUInt8() == 1)  // if ip is locked
-    {
-        if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
-        {
-            packet.Initialize(SMSG_AUTH_RESPONSE, 1);
-            packet << uint8(AUTH_FAILED);
-            SendPacket(packet);
 
-            delete result;
-            BASIC_LOG("WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
-            return -1;
-        }
+    //This should always be checked regardless of IP locking.
+    //If the last_ip that was just modified by authserver is different than the client sending CMSG_AUTH_SESSION that's never okay.
+    if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
+    {
+        packet.Initialize(SMSG_AUTH_RESPONSE, 1);
+        packet << uint8(AUTH_FAILED);
+        SendPacket(packet);
+
+        delete result;
+        BASIC_LOG("WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
+        return -1;
     }
 
     id = fields[0].GetUInt32();
