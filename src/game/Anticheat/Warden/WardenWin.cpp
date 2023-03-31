@@ -2125,11 +2125,11 @@ void WardenWin::Update()
         stmt.addUInt32(_session->GetAccountId());
         stmt.addString(_session->GetRemoteAddress());
         stmt.addUInt32(realmID);
-        stmt.addString(ArchitectureString(_sysInfo.wProcessorArchitecture));
-        stmt.addString(CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision));
+        stmt.addString(hasSysInfo ? ArchitectureString(_sysInfo.wProcessorArchitecture) : "x86");
+        stmt.addString(sample.cpuType);
         stmt.addUInt32(activeProcCount);
-        stmt.addUInt32(_sysInfo.dwNumberOfProcessors);
-        stmt.addUInt32(_sysInfo.dwPageSize);
+        stmt.addUInt32(sample.totalCpus);
+        stmt.addUInt32(sample.pageSize);
         stmt.addUInt32(_sharedData->TimeZoneBias.LowPart);
         stmt.addUInt32(_sharedData->LargePageMinimum);
         stmt.addUInt32(_sharedData->SuiteMask);
