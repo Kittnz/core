@@ -12,3 +12,5 @@ update creature_loot_template set item = 16045 where item = 10605 and entry in (
 delete from creature_loot_template where item = 81315 and entry = 639;
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (643, 81315, -100, 6, 1, 1, 0);
+-- Make https://database.turtle-wow.org/?item=51217 drop from with 100% chance, add them to separate loot group: npc=5709
+update creature_loot_template set groupid = 2 where entry = 5709 and item = 10454;
