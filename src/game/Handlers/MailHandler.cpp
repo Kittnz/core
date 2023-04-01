@@ -505,7 +505,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     CharacterDatabase.CommitTransaction();
 
     sLog.out(LOG_MAIL_AH,
-            "HandleSendMailCallback [%s:%d@%s] %s sent a mail (%s:%u (%u) & %u copper) to %s:%u",
+            "HandleSendMailCallback [%s:%u@%s] %s sent a mail (%s:%u (%u) & %u copper) to %s:%u",
              GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), GetPlayer()->GetName(), item ? item->GetProto()->Name1 : "EMPTY", item ? item->GetEntry() : 0,
              item ? item->GetCount() : 0, req->money, req->receiver.GetString().c_str(), rc_account);
 }
