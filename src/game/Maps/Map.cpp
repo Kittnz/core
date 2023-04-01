@@ -3272,7 +3272,7 @@ void Map::CrashUnload()
         if (player)
         {
             WorldSession* session = player->GetSession();
-            sLog.out(LOG_CHAR, "[%s:%d@%s] Logout Character:[%s] (guid: %u)", session->GetUsername(), session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
+            sLog.out(LOG_CHAR, "[%s:%d@%s] Logout Character:[%s] (guid: %u)", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
             session->SetPlayer(nullptr);
             player->SaveInventoryAndGoldToDB(); // Prevent possible exploits
             player->UninviteFromGroup();
