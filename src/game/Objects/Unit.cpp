@@ -6402,7 +6402,8 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
     if (!touchOnly)
     {
-        SetInCombatState(pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
+        bool const victimIsPlayerOrPet = pVictim->IsCharmerOrOwnerPlayerOrPlayerItself();
+        SetInCombatState(victimIsPlayerOrPet && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
 
         // pet owner should not enter combat on spell missile launching
         if (!combatTimer)
@@ -6422,9 +6423,11 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
             if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
             {
-                if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+                if (pOwner->IsTargetable(true, victimIsPlayerOrPet) && !pOwner->IsFeigningDeathSuccessfully())
                     pVictim->AddThreat(pOwner);
-                pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER, false);
+
+                uint32 const defaultCombatTime = victimIsPlayerOrPet ? UNIT_PVP_COMBAT_TIMER : UNIT_COMBAT_CHECK_TIMER_MAX;
+                pOwner->SetInCombatWithVictim(pVictim, false, std::max(defaultCombatTime, combatTimer), false);
             }
         }
     }
