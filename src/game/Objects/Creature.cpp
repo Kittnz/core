@@ -2270,10 +2270,10 @@ bool Creature::CanInitiateAttack()
     return true;
 }
 
-class DynamicRespawnRatesChecker
+class DynamicRespawnRatesPlayerChecker
 {
 public:
-    DynamicRespawnRatesChecker(Creature* crea) : _count(0), _hasNearbyEscort(false)
+    DynamicRespawnRatesPlayerChecker(Creature* crea) : _count(0), _hasNearbyEscort(false)
     {
         _myLevel = crea->GetLevel();
         _maxLevelDiff = sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_LEVELDIFF);
@@ -2300,6 +2300,31 @@ private:
     uint32 _myLevel;
     uint32 _maxLevelDiff;
     bool _hasNearbyEscort;
+};
+
+class DynamicRespawnRatesCreatureChecker
+{
+public:
+    DynamicRespawnRatesCreatureChecker(uint32 entry)
+        : m_entry(entry), m_aliveCount(0), m_deadCount(0)
+    {}
+    void operator()(Creature* u)
+    {
+        if (u->GetEntry() != m_entry)
+            return;
+
+        if (u->IsAlive())
+            m_aliveCount++;
+        else
+            m_deadCount++;
+    }
+
+    uint32 GetAliveCount() const { return m_aliveCount; }
+    uint32 GetDeadCount() const { return m_deadCount; }
+private:
+    uint32 m_entry;
+    uint32 m_aliveCount;
+    uint32 m_deadCount;
 };
 
 void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
@@ -2335,30 +2360,42 @@ void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
     if (delay < sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_MIN_RESPAWN_TIME))
         return;
 
-    DynamicRespawnRatesChecker check(this);
-    MaNGOS::PlayerWorker<DynamicRespawnRatesChecker> searcher(check);
+    DynamicRespawnRatesPlayerChecker check(this);
+    MaNGOS::PlayerWorker<DynamicRespawnRatesPlayerChecker> searcher(check);
     Cell::VisitWorldObjects(this, searcher, checkRange);
 
     // No dynamic respawns around an in progress escort
     if (check.HasNearbyEscort())
         return;
 
-    int32 count = check.GetCount();
-    count -= sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_THRESHOLD);
-    if (count <= 0)
+    uint32 playerCount = check.GetCount();
+    if (playerCount < sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_THRESHOLD))
         return;
 
-    uint32 originalDelay = delay;
-
     float maxReductionRate = sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_MAX_REDUCTION_RATE);
-    float reductionRate = count * sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_PERCENT_PER_PLAYER) / 100.0f;
-    if (reductionRate > maxReductionRate)
+
+    DynamicRespawnRatesCreatureChecker check2(GetEntry());
+    MaNGOS::CreatureWorker<DynamicRespawnRatesCreatureChecker> worker(this, check2);
+    Cell::VisitGridObjects(this, worker, checkRange);
+
+    float reductionRate;
+    if ((check2.GetAliveCount() < check2.GetDeadCount()) &&
+        (check2.GetAliveCount() < playerCount))
+    {
         reductionRate = maxReductionRate;
+    }
+    else
+    {
+        reductionRate = playerCount * sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_PERCENT_PER_PLAYER) / 100.0f;
+        if (reductionRate > maxReductionRate)
+            reductionRate = maxReductionRate;
+    }
 
     // Invalid configuration
     if (reductionRate < 0)
         return;
 
+    uint32 originalDelay = delay;
     uint32 reduction = static_cast<uint32>(reductionRate * originalDelay);
     if (reduction >= delay)
         delay = 0;
