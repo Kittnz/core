@@ -33,3 +33,12 @@ UPDATE `item_template` SET `display_id` = 20825 WHERE `entry` = 81290;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3090
 
 UPDATE `broadcast_text` SET `male_text` = 'Come forth, ye dreamers and claim your vengeance!' WHERE `entry` = 10881;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3092
+
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 6109;
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 12397;
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 14887;
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 14888;
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 14889;
+UPDATE `creature_template` SET `gold_min` = 1300000, `gold_max` = 1820000 WHERE `entry` = 14890;
