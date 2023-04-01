@@ -1126,6 +1126,31 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
         return;
     }
 
+    // Turtle:: Make raid looted items not appear soul bound.
+    const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem) {
+        if (player->GetMap()->IsRaid())
+        {
+            auto itemProto = newitem->GetProto();
+            if (itemProto)
+            {
+                if (!lootItem.freeforall && itemProto->Stackable <= 1)
+                {
+                    newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                    for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetMapId() == player->GetMapId())
+                                newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                        }
+                    }
+                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                    newitem->SendCreateUpdateToPlayer(player);
+                }
+            }
+        }
+    };
+
     //end of the roll
     if (roll->totalNeed > 0)
     {
@@ -1164,6 +1189,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
+
                     sDBLogger->LogLoot(
                         {
                             player->GetGUIDLow(),
@@ -1180,7 +1206,10 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                         });
 
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
+                    {
+                        CheckSoulboundException(player, *item, newItem);
                         player->OnReceivedItem(newItem);
+                    }
                 }
                 else
                 {
@@ -1247,7 +1276,10 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                         });
 
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
+                    {
+                        CheckSoulboundException(player, *item, newItem);
                         player->OnReceivedItem(newItem);
+                    }
                 }
                 else
                 {
