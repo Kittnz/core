@@ -21,3 +21,7 @@ UPDATE `creature_template` SET `skinning_loot_id` = 745 WHERE `entry` = 1063;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3118
 
 UPDATE `creature_template` SET `armor` = 2999 WHERE `entry` = 3581;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3117
+
+UPDATE `quest_template` SET `ZoneOrSort` = 331 WHERE `entry` = 40569;
