@@ -17,3 +17,7 @@ UPDATE quest_template SET RewRepValue1 = 200 WHERE entry = 40384;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3119
 
 UPDATE `creature_template` SET `skinning_loot_id` = 745 WHERE `entry` = 1063;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3118
+
+UPDATE `creature_template` SET `armor` = 2999 WHERE `entry` = 3581;
