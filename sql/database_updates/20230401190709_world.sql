@@ -29,3 +29,7 @@ UPDATE `quest_template` SET `ZoneOrSort` = 331 WHERE `entry` = 40569;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3129
 
 UPDATE `item_template` SET `display_id` = 20825 WHERE `entry` = 81290;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3090
+
+UPDATE `broadcast_text` SET `male_text` = 'Come forth, ye dreamers and claim your vengeance!' WHERE `entry` = 10881;
