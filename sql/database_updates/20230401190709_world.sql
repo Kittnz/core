@@ -25,3 +25,7 @@ UPDATE `creature_template` SET `armor` = 2999 WHERE `entry` = 3581;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3117
 
 UPDATE `quest_template` SET `ZoneOrSort` = 331 WHERE `entry` = 40569;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3129
+
+UPDATE `item_template` SET `display_id` = 20825 WHERE `entry` = 81290;
