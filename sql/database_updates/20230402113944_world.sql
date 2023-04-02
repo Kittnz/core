@@ -3,3 +3,7 @@ UPDATE `quest_template` SET `Details` = 'So, $N, the footprints were definitely 
 UPDATE `creature_template` SET `scale` = 1.3 WHERE `entry` = 51545;
 
 UPDATE `gameobject_template` SET `name` = 'Little sproutling. It yearns for fertile soil!' WHERE `entry` = 1000337;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3053
+
+UPDATE `quest_template` SET `RewChoiceItemCount3` = 1 WHERE `entry` = 40677;
