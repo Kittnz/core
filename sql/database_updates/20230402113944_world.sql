@@ -16,3 +16,7 @@ UPDATE `quest_template` SET `QuestFlags` = 8 WHERE `entry` IN ( 39000, 39001, 40
 
 UPDATE `spell_template` SET `description` = 'Shape the Abyssal Wave with the Unmelting Ice.' WHERE `entry` = 56532;
 UPDATE `spell_template` SET `description` = 'Combine the Abyssal Wind with the Unyielding Gust.' WHERE `entry` = 56533;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3085
+
+UPDATE `quest_template` SET `ReqCreatureOrGOId2` = 0, `ReqCreatureOrGOId3` = 0, `ReqCreatureOrGOId4` = 0, `ReqCreatureOrGOCount2` = 0, `ReqCreatureOrGOCount3` = 0, `ReqCreatureOrGOCount4` = 0 WHERE `entry` = 70033;
