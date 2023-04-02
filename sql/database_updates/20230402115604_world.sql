@@ -132,3 +132,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91961, 30052, 0.0025, 0, -30052, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91961, 30053, 0.0025, 0, -30053, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91961, 60248, -30, 0, 1, 1, 0);
+-- Add Greetings to Caer Darrow NPCs 11285.
+update creature_template set npc_flags = 3, gossip_menu_id = 11285 where entry = 11285;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (11285, 4117, '0'); 
