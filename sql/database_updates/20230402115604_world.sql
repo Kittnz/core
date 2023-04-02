@@ -134,4 +134,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91961, 60248, -30, 0, 1, 1, 0);
 -- Add Greetings to Caer Darrow NPCs 11285.
 update creature_template set npc_flags = 3, gossip_menu_id = 11285 where entry = 11285;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (11285, 4117, '0'); 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (11285, 4117, '0');
+-- Surf Gliders drop level 38-40 gear even though they're level 50. #2979.
+delete from creature_loot_template where entry = 5431 and mincountorref in (-30015,-30025,-30027,-30029);
