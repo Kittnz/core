@@ -78,7 +78,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "account",        SEC_DEVELOPER,      true,  &ChatHandler::HandleBanAccountCommand,          "", nullptr },
         { "allip",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleBanAllIPCommand,            "", nullptr },
         { "character",      SEC_DEVELOPER,      true,  &ChatHandler::HandleBanCharacterCommand,        "", nullptr },
-        { "fingerprint",    SEC_DEVELOPER,      true,  &ChatHandler::HandleBanFingerprintCommand,      "", nullptr },
+        { "fingerprint",    SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleBanFingerprintCommand,      "", nullptr },
         { "ip",             SEC_DEVELOPER,      true,  &ChatHandler::HandleBanIPCommand,               "", nullptr },
         { "warn",           SEC_MODERATOR,      true,  &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
@@ -801,8 +801,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
         { "removecorpses",  SEC_ADMINISTRATOR,   false, &ChatHandler::HandleRemoveCorpsesCommand,       "", nullptr },
         { "faction",        SEC_DEVELOPER,       false, nullptr,                                        "", factionCommandTable },
-        { "banprint",       SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
-        { "unbanprint",     SEC_DEVELOPER,       false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,      "", nullptr },
+        { "banprint",       SEC_ADMINISTRATOR,       false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
+        { "unbanprint",     SEC_ADMINISTRATOR,       false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };

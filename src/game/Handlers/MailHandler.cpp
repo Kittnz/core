@@ -494,6 +494,13 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         req->COD = 0;
         ProcessAnticheatAction("MailCheck", "Attempt to send COD mail without any item", CHEAT_ACTION_INFO_LOG);
     }
+
+    sLog.out(LOG_MAIL_AH,
+        "HandleSendMailCallback [%s:%u@%s] %s sent a mail (%s:%u (%u) & %u copper) to %s:%u",
+        GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), GetPlayer()->GetName(), item ? item->GetProto()->Name1 : "EMPTY", item ? item->GetEntry() : 0,
+        item ? item->GetCount() : 0, req->money, req->receiver.GetString().c_str(), rc_account);
+
+
     // will delete item or place to receiver mail list
     draft
     .SetMoney(req->money)

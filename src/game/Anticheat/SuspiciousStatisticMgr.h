@@ -29,7 +29,7 @@
 
 class Player;
 class Unit;
-struct MovementInfo;
+class MovementInfo;
 
 
 namespace SuspiciousType

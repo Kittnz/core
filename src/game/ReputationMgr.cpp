@@ -295,11 +295,17 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
             {
                 if (repTemplate->faction[i])
                 {
-                    if (m_player->GetReputationRank(repTemplate->faction[i]) <= ReputationRank(repTemplate->faction_rank[i]))
+                    FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(repTemplate->faction[i]);
+                    if (factionEntry && m_player->GetReputationRank(repTemplate->faction[i]) <= ReputationRank(repTemplate->faction_rank[i]))
                     {
                         // bonuses are already given, so just modify standing by rate
                         int32 spilloverRep = standing * repTemplate->faction_rate[i];
-                        SetOneFactionReputation(sObjectMgr.GetFactionEntry(repTemplate->faction[i]), spilloverRep, incremental);
+                        SetOneFactionReputation(factionEntry, spilloverRep, incremental);
+
+                        // report spillover rep to client
+                        FactionStateList::iterator faction = m_factions.find(RepListID(factionEntry->reputationListID));
+                        if (faction != m_factions.end())
+                            SendState(&faction->second);
                     }
                 }
             }
@@ -312,7 +318,6 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
     if (faction != m_factions.end())
     {
         res = SetOneFactionReputation(factionEntry, standing, incremental);
-        // only this faction gets reported to client, even if it has no own visible standing
         SendState(&faction->second);
     }
 

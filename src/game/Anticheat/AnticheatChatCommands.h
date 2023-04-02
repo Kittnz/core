@@ -12,7 +12,7 @@ static ChatCommand anticheatFingerprintCommandTable[] =
     { "list",      SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintListCommand,      "", nullptr },
     { "history",   SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintHistoryCommand,      "", nullptr },
     { "ahistory",  SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAHistoryCommand,      "", nullptr },
-    { "autoban",  SEC_ADMINISTRATOR, false, nullptr,                                            "", anticheatFingerprintAutobanCommandTable },
+    { "autoban",   SEC_CONSOLE, false, nullptr,                                            "", anticheatFingerprintAutobanCommandTable },
     { nullptr,   0,                  false, nullptr,                                             "", nullptr },
 };
 

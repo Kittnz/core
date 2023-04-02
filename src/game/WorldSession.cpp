@@ -51,7 +51,7 @@
 #include "Channel.h"
 #include "AccountMgr.h"
 #include "MasterPlayer.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 #include "Anticheat/Warden/Warden.hpp"
 
 #ifdef USING_DISCORD_BOT
@@ -231,7 +231,7 @@ bool WorldSession::ForcePlayerLogoutDelay()
 {
     if (!sWorld.IsStopped() && GetPlayer() && GetPlayer()->FindMap() && GetPlayer()->IsInWorld() && sPlayerBotMgr.ForceLogoutDelay())
     {
-        sLog.out(LOG_CHAR, "Account: %d (IP: %s) Lost socket for character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
+        sLog.out(LOG_CHAR, "[%s:%u@%s] Lost socket for character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
 
         if (GetPlayer()->IsHardcore())
             m_disconnectTimer = 10000;
@@ -488,7 +488,7 @@ void WorldSession::LogoutPlayer(bool Save)
     {
         bool inWorld = _player->IsInWorld() && _player->FindMap();
 
-        sLog.out(LOG_CHAR, "Account: %d (IP: %s) Logout Character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
+        sLog.out(LOG_CHAR, "[%s:%u@%s] Logout Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
         if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
             DoLootRelease(lootGuid);
 

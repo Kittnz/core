@@ -312,6 +312,19 @@ Petition* GuildMgr::GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid)
     return nullptr;
 }
 
+PetitionSignature* GuildMgr::GetSignatureForPlayerGuid(const ObjectGuid& guid)
+{
+    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    for (const auto& iter : m_petitionMap)
+    {
+        Petition* petition = iter.second;
+        if (PetitionSignature* petitionSignature = petition->GetSignatureForPlayerGuid(guid))
+            return petitionSignature;
+    }
+
+    return nullptr;
+}
+
 bool Petition::LoadFromDB(QueryResult* result)
 {
     if (!result)
@@ -418,6 +431,12 @@ void Petition::AddSignature(PetitionSignature* signature)
     m_signatures.push_back(signature);
 }
 
+void Petition::DeleteSignature(PetitionSignature* signature)
+{
+    m_signatures.remove(signature);
+    delete signature;
+}
+
 bool Petition::AddNewSignature(Player* player)
 {
     if (IsComplete())
@@ -441,4 +460,11 @@ void PetitionSignature::SaveToDB()
 {
     CharacterDatabase.PExecute("INSERT INTO petition_sign (ownerguid, petitionguid, playerguid, player_account) VALUES ('%u', '%u', '%u','%u')",
         m_petition->GetOwnerGuid().GetCounter(), m_petition->GetId(), m_playerGuid.GetCounter(), m_playerAccount);
+}
+
+void PetitionSignature::DeleteFromDB()
+{
+    CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM petition_sign WHERE ownerguid = '%u'", m_playerGuid.GetCounter());
+    CharacterDatabase.CommitTransaction();
 }
