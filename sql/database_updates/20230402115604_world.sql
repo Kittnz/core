@@ -10,3 +10,5 @@ delete from creature_loot_template where entry = 921 and item = 2926;
 update item_template set allowable_race = 589 where entry = 61153;
 -- Set respawn timer of Carver Molson to 5m.
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where ID = 60878;
+-- Quest 80411 is offered as NextQuestInChain from  quest 80410, yet the quest is not available to a Level 60 High Elf Paladin. All criteria should be met for the quest.
+update quest_template set maxlevel = 0 where entry = 80411;
