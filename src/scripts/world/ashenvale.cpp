@@ -882,7 +882,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                 }
                 case PHASE_3:
                 {
-                    if (Creature* pMurgut{ me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000) })
+                    if (Creature* pMurgut = me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
                     {
                         float fX{}, fY{}, fZ{};
                         me->GetPosition(fX, fY, fZ);
@@ -890,7 +890,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                         pMurgut->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
                         pMurgut->SetHomePosition(fX, fY, fZ, 0);
 
-                        pMurgut->SetRespawnDelay(125000);
+                        pMurgut->SetRespawnDelay(305);
 
                         if (GameObject* pGo{ me->FindNearestGameObject(GO_KARANG_S_BANNER, 100.f) })
                         {
@@ -899,7 +899,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                         }
                     }
 
-                    m_uiPhaseTimer = 120000;
+                    m_uiPhaseTimer = 300000;
                     break;
                 }
                 case PHASE_4:

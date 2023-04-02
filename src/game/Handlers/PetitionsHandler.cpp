@@ -351,6 +351,13 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
         return;
     }
 
+    // Before signing a new signature, delete any previous existing one.
+    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(_player->GetObjectGuid()))
+    {
+        signature->DeleteFromDB();
+        signature->GetSignaturePetition()->DeleteSignature(signature);
+    }
+
     if (petition->AddNewSignature(_player))
     {
         DEBUG_LOG("PETITION SIGN: %u by %s", petition->GetId(), _player->GetGuidStr().c_str());

@@ -272,18 +272,18 @@ events/event_dreadsteed.h
 events/quest_stormwind_rendezvous.cpp
 events/quest_stormwind_rendezvous.h
 
-miscelanneous/areatrigger_scripts.cpp
-miscelanneous/gameobject_scripts.cpp
-miscelanneous/feature_custom_spell_test.cpp
-miscelanneous/feature_gardening.cpp
-miscelanneous/feature_transmog.h
-miscelanneous/ptr.cpp
-miscelanneous/random_scripts_0.cpp
-miscelanneous/random_scripts_1.cpp
-miscelanneous/random_scripts_2.cpp
-miscelanneous/random_scripts_3.cpp
-miscelanneous/custom_teleports.cpp
-miscelanneous/custom_exploration_triggers.cpp
+miscellaneous/areatrigger_scripts.cpp
+miscellaneous/gameobject_scripts.cpp
+miscellaneous/feature_custom_spell_test.cpp
+miscellaneous/feature_gardening.cpp
+miscellaneous/feature_transmog.h
+miscellaneous/ptr.cpp
+miscellaneous/random_scripts_0.cpp
+miscellaneous/random_scripts_1.cpp
+miscellaneous/random_scripts_2.cpp
+miscellaneous/random_scripts_3.cpp
+miscellaneous/custom_teleports.cpp
+miscellaneous/custom_exploration_triggers.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp

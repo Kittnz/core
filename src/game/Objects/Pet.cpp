@@ -401,7 +401,10 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     {
         SetByteValue(UNIT_FIELD_BYTES_1, 1, m_pTmpCache->loyalty);
 
-        SetUInt32Value(UNIT_FIELD_FLAGS, m_pTmpCache->renamed ? UNIT_FLAG_PET_ABANDON : UNIT_FLAG_PET_RENAME | UNIT_FLAG_PET_ABANDON);
+        if (m_pTmpCache->renamed)
+            RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
+        else
+            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
 
         SetTP(m_pTmpCache->trainpoint);
 
@@ -409,17 +412,6 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         SetPower(POWER_HAPPINESS, m_pTmpCache->curhappiness);
         SetPowerType(POWER_FOCUS);
     }
-
-    if (getPetType() != MINI_PET)
-    {
-        if (owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
-            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-        else
-            RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-    }
-
-    if (owner->IsPvP())
-        SetPvP(true);
 
     // Save pet for resurrection by spirit healer.
     if (IsPermanentPetFor(owner))
@@ -1540,6 +1532,8 @@ bool Pet::InitStatsForLevel(const uint32 petlevel, Unit* owner)
             SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
         else
             RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+
+        SetPvP(owner->IsPvP());
     }
 
     UpdateAllStats();

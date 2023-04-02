@@ -6402,7 +6402,8 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
     if (!touchOnly)
     {
-        SetInCombatState(pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
+        bool const victimIsPlayerOrPet = pVictim->IsCharmerOrOwnerPlayerOrPlayerItself();
+        SetInCombatState(victimIsPlayerOrPet && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
 
         // pet owner should not enter combat on spell missile launching
         if (!combatTimer)
@@ -6422,9 +6423,11 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
             if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
             {
-                if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+                if (pOwner->IsTargetable(true, victimIsPlayerOrPet) && !pOwner->IsFeigningDeathSuccessfully())
                     pVictim->AddThreat(pOwner);
-                pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER, false);
+
+                uint32 const defaultCombatTime = victimIsPlayerOrPet ? UNIT_PVP_COMBAT_TIMER : UNIT_COMBAT_CHECK_TIMER_MAX;
+                pOwner->SetInCombatWithVictim(pVictim, false, std::max(defaultCombatTime, combatTimer), false);
             }
         }
     }
@@ -6805,7 +6808,7 @@ bool Unit::CanDetectInvisibilityOf(Unit const* u) const
         if (worldBoss->IsWorldBoss())
             return true;
 
-    if (uint32 mask = (m_detectInvisibilityMask & u->m_invisibilityMask))
+    if (uint32 mask = u->m_invisibilityMask)
     {
         for (int32 i = 0; i < 32; ++i)
         {
@@ -6821,10 +6824,13 @@ bool Unit::CanDetectInvisibilityOf(Unit const* u) const
 
             // find invisibility detect level
             int32 detectLevel = 0;
-            Unit::AuraList const& dAuras = GetAurasByType(SPELL_AURA_MOD_INVISIBILITY_DETECTION);
-            for (const auto& itr : dAuras)
-                if (itr->GetModifier()->m_miscvalue == i && detectLevel < itr->GetModifier()->m_amount)
-                    detectLevel = itr->GetModifier()->m_amount;
+            if (((1 << i) & m_detectInvisibilityMask) != 0)
+            {
+                Unit::AuraList const& dAuras = GetAurasByType(SPELL_AURA_MOD_INVISIBILITY_DETECTION);
+                for (const auto& itr : dAuras)
+                    if (itr->GetModifier()->m_miscvalue == i && detectLevel < itr->GetModifier()->m_amount)
+                        detectLevel = itr->GetModifier()->m_amount;
+            }
 
             if (i == 6 && IsPlayer())     // special drunk detection case
                 detectLevel = ((Player*)this)->GetDrunkValue();

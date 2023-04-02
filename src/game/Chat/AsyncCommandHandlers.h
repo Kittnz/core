@@ -54,7 +54,7 @@ struct PInfoData
     uint32 m_accountId;
     uint32 fingerprint = 0;
     bool online = false;
-    bool isHardcore = false;
+    uint32 m_hardcoreStatus = false;
     bool isFingerprintBanned = false;
     bool isSuspicious = false;
 

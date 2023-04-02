@@ -70,7 +70,7 @@
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
 #include "MovementPacketSender.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 #include "Config/Config.h"
 #include "ZoneScript.h"
 #include "ZoneScriptMgr.h"
@@ -4862,6 +4862,10 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
     // bones will be deleted by corpse/bones deleting thread shortly
     sObjectAccessor.ConvertCorpseForPlayer(playerguid);
 
+    // the player was uninvited already on logout so just remove from group
+    if (Group* group = sObjectMgr.GetGroupByMember(playerguid))
+        RemoveFromGroup(group, playerguid);
+
     // remove from guild
     if (Guild* guild = sGuildMgr.GetPlayerGuild(playerguid))
     {
@@ -4872,12 +4876,18 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
         }
     }
 
-    // the player was uninvited already on logout so just remove from group
-    if (Group* group = sObjectMgr.GetGroupByMember(playerguid))
-        RemoveFromGroup(group, playerguid);
+    // If this player is the owner of a guild charter, also delete it entirely.
+    if (Petition* petition = sGuildMgr.GetPetitionByOwnerGuid(playerguid))
+        sGuildMgr.DeletePetition(petition);
 
-    // remove signs from petitions (also remove petitions if owner);
-    RemovePetitionsAndSigns(playerguid);
+    // Remove this player from any petition that could have previously signed.
+    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(playerguid))
+    {
+        signature->DeleteFromDB();
+        signature->GetSignaturePetition()->DeleteSignature(signature);
+    }
+
+    // Delete player from cache.
     sObjectMgr.DeletePlayerFromCache(lowguid);
 
     switch (charDelete_method)
@@ -15070,7 +15080,10 @@ void Player::_LoadBGData(QueryResult* result)
     /* bgInstanceID, bgTeam, x, y, z, o, map */
     m_bgData.bgInstanceID = fields[0].GetUInt32();
     m_bgData.bgTeam       = Team(fields[1].GetUInt32());
-    if (MaNGOS::IsValidMapCoord(fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat(), fields[5].GetFloat()))
+
+    MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(fields[6].GetUInt32());
+    if (mapEntry && !mapEntry->IsBattleGround() &&
+        MaNGOS::IsValidMapCoord(fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat(), fields[5].GetFloat()))
         m_bgData.joinPos      = WorldLocation(fields[6].GetUInt32(),    // Map
                                               fields[2].GetFloat(),     // X
                                               fields[3].GetFloat(),     // Y
@@ -16887,7 +16900,7 @@ void Player::SaveToDB(bool online, bool force)
 
     uberInsert.addUInt32(uint32(m_atLoginFlags));
 
-    uberInsert.addUInt32(IsInWorld() ? GetZoneId() : GetCachedZoneId());
+    uberInsert.addUInt32(GetCachedZoneId());
 
     uberInsert.addUInt64(uint64(m_deathExpireTime));
 
@@ -18138,42 +18151,6 @@ void Player::SendProficiency(ItemClass itemClass, uint32 itemSubclassMask) const
     WorldPacket data(SMSG_SET_PROFICIENCY, 1 + 4);
     data << uint8(itemClass) << uint32(itemSubclassMask);
     GetSession()->SendPacket(&data);
-}
-
-void Player::RemovePetitionsAndSigns(ObjectGuid guid)
-{
-    uint32 lowguid = guid.GetCounter();
-
-    // Blocking query, can cause lag at character deletion if MySQL table is locked.
-    /*
-    QueryResult *result = CharacterDatabase.PQuery("SELECT ownerguid,petitionguid FROM petition_sign WHERE playerguid = '%u'", lowguid);
-    if (result)
-    {
-        do                                                  // this part effectively does nothing, since the deletion / modification only takes place _after_ the PetitionQuery. Though I don't know if the result remains intact if I execute the delete query beforehand.
-        {
-            // and SendPetitionQueryOpcode reads data from the DB
-            Field *fields = result->Fetch();
-            ObjectGuid ownerguid   = ObjectGuid(HIGHGUID_PLAYER, fields[0].GetUInt32());
-            ObjectGuid petitionguid = ObjectGuid(HIGHGUID_ITEM, fields[1].GetUInt32());
-
-            // send update if charter owner in game
-            Player* owner = sObjectMgr.GetPlayer(ownerguid);
-            if (owner)
-                owner->GetSession()->SendPetitionQueryOpcode(petitionguid);
-
-        }
-        while (result->NextRow());
-
-        delete result;
-
-        CharacterDatabase.PExecute("DELETE FROM petition_sign WHERE playerguid = '%u'", lowguid);
-    }
-    */
-
-    CharacterDatabase.BeginTransaction();
-    CharacterDatabase.PExecute("DELETE FROM petition WHERE ownerguid = '%u'", lowguid);
-    CharacterDatabase.PExecute("DELETE FROM petition_sign WHERE ownerguid = '%u'", lowguid);
-    CharacterDatabase.CommitTransaction();
 }
 
 void Player::SetRestBonus(float rest_bonus_new)

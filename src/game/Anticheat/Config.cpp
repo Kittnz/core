@@ -64,7 +64,7 @@ AnticheatConfig::AnticheatConfig()
 
 void AnticheatConfig::loadConfigSettings()
 {
-    setConfig(CONFIG_BOOL_AC_ENABLED, "Enable", false);
+    setConfig(CONFIG_BOOL_AC_ENABLED, "Enable", true);
     setConfig(CONFIG_BOOL_AC_MOVEMENT_USE_EXTRAPOLATION, "Movement.UseExtrapolation", false);
     setConfig(CONFIG_BOOL_AC_MOVEMENT_SPEED_HACK_ENABLED, "Movement.SpeedHack.Enable", false);
     setConfig(CONFIG_BOOL_AC_ANTISPAM_ENABLED, "Antispam.Enable", false);
