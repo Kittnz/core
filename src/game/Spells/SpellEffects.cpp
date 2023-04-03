@@ -2330,6 +2330,21 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }   
                     return;
                 }
+                case 29999: // Goblin Radio KABOOM-Box X23B76
+                {
+                    if (m_CastItem)
+                    {
+                        float x, y, z;
+                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
+                        x += 2.0F * cos(m_caster->ToPlayer()->GetOrientation());
+                        y += 2.0F * sin(m_caster->ToPlayer()->GetOrientation());
+                        switch (m_CastItem->GetEntry())
+                        {
+                        case 51021: m_caster->ToPlayer()->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
+                        case 10585: m_caster->ToPlayer()->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
+                        }
+                    }
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
