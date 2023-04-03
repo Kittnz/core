@@ -88,6 +88,7 @@ replace into shop_items values
 (66, 3, 50005, 'Summon: Repair Bot', 200),
 (67, 3, 50007, 'Summon: Bank (Mule)', 200),
 (68, 3, 51421, 'Summon: Bank (Kodo)', 200),
+(69, 3, 51306, 'Large Pouch of Fashion Coins', 200),
 -- Glyphs
 (86, 4, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (87, 4, 51266, 'Druid: Glyph of the Ice Bear', 100),
