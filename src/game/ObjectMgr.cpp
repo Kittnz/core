@@ -6557,6 +6557,16 @@ void ObjectMgr::LoadReservedPlayersNames()
     while (result->NextRow());
 }
 
+void ObjectMgr::AddReservedName(std::string name)
+{
+    std::wstring wstr;
+    if (!Utf8toWStr(name, wstr))
+        return;
+
+    wstrToLower(wstr);
+    m_ReservedNames.insert(wstr);
+}
+
 bool ObjectMgr::IsReservedName(std::string const& name) const
 {
     std::wstring wstr;
