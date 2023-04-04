@@ -60,3 +60,5 @@ REPLACE INTO creature_questrelation (id, quest) VALUES (80799, 80300);
 DELETE FROM creature_involvedrelation WHERE id = 5885 AND quest = 80300;
 
 REPLACE INTO `creature` VALUES (2574945,80799,0,0,0,1,1903.91,-4134.42,40.9188,5.55899,120,120,0,100,100,0,0,0);
+
+UPDATE quest_template SET ReqCreatureOrGoId1 = -3000242 WHERE entry = 80301;
