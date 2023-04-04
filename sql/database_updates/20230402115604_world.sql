@@ -137,3 +137,5 @@ update creature_template set npc_flags = 3, gossip_menu_id = 11285 where entry =
 replace into gossip_menu (entry, text_id, condition_id) VALUES (11285, 4117, '0');
 -- Surf Gliders drop level 38-40 gear even though they're level 50. #2979.
 delete from creature_loot_template where entry = 5431 and mincountorref in (-30015,-30025,-30027,-30029);
+-- Set respawn timer of Benedict's Chest to 5sec.
+update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where ID = 3239;
