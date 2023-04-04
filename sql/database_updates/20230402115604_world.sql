@@ -139,3 +139,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (11285, 4117, '0'
 delete from creature_loot_template where entry = 5431 and mincountorref in (-30015,-30025,-30027,-30029);
 -- Set respawn timer of Benedict's Chest to 5sec.
 update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where ID = 3239;
+-- Fix 3 minute respawn timer overworld chest in Darkshore (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 10800, spawntimesecsmax = 11100 WHERE guid = 4010039;
