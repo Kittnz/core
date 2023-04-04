@@ -661,10 +661,16 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
+    static ChatCommand blacklistCommandTable[] =
+    {
+        { "name",              SEC_ADMINISTRATOR,       true, &ChatHandler::HandleBlacklistNameCommand,     "", nullptr},
+        { nullptr,             0,                     false, nullptr,                                       "", nullptr }
+    };
 
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,          true,  nullptr,                                        "", accountCommandTable  },
+        { "blacklist",      SEC_ADMINISTRATOR,   true,  nullptr,                                        "", blacklistCommandTable  },
         { "cast",           SEC_DEVELOPER,       false, nullptr,                                        "", castCommandTable     },
         { "character",      SEC_DEVELOPER,       true,  nullptr,                                        "", characterCommandTable},
         { "rename",         SEC_MODERATOR,       true,  &ChatHandler::HandleCharacterRenameCommand,     "", nullptr},

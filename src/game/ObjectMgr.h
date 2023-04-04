@@ -1235,6 +1235,7 @@ class ObjectMgr
         // reserved names
         void LoadReservedPlayersNames();
         bool IsReservedName(std::string const& name) const;
+        void AddReservedName(std::string name);
 
         // name with valid structure and symbols
         static uint8 CheckPlayerName(std::string const& name, bool create = false);
