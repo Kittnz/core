@@ -149,3 +149,6 @@ UPDATE quest_template SET RewXP = 100 WHERE entry = 80307;
 UPDATE quest_template SET RewXP = 800 WHERE entry = 80308;
 UPDATE quest_template SET RewXP = 200 WHERE entry = 80309;
 UPDATE quest_template SET RewXP = 500 WHERE entry = 80310;
+-- Slight chaining fix and cleanup for Silvermoon quests (RMJ).
+UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 80251;
+UPDATE quest_template SET PrevQuestId = -40371 WHERE entry BETWEEN 40372 AND 40375;
