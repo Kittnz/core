@@ -576,6 +576,7 @@ class ChatHandler
         bool HandleAddItemSetCommand(char* args);
 
         bool HandleDiscBotStopCommand(char* args);
+        bool HandleBlacklistNameCommand(char* args);
 
         bool HandleBankCommand(char* args);
         bool HandleChangeWeatherCommand(char* args);

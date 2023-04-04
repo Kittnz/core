@@ -52,6 +52,25 @@ void BattleGroundBR::StartingEventCloseDoors()
     //GetBgMap()->SetVisibilityDistance(45.0f);
 }
 
+inline void ResetUnitHealthAndPower(Unit* pUnit)
+{
+    if (!pUnit->IsAlive())
+        return;
+
+    pUnit->SetHealth(pUnit->GetMaxHealth());
+
+    if (pUnit->GetMaxPower(POWER_MANA))
+        pUnit->SetPower(POWER_MANA, pUnit->GetMaxPower(POWER_MANA));
+
+    switch (pUnit->GetPowerType())
+    {
+        case POWER_FOCUS:
+        case POWER_ENERGY:
+            pUnit->SetPower(pUnit->GetPowerType(), pUnit->GetMaxPower(pUnit->GetPowerType()));
+            break;
+    }
+}
+
 void BattleGroundBR::StartingEventOpenDoors()
 {
     // Reset visibility distance back to normal.
@@ -62,12 +81,12 @@ void BattleGroundBR::StartingEventOpenDoors()
     // Notice we do not reset cooldowns here, like on AddPlayer() due to potential abuse.
     for (auto& itr : GetPlayers())
     {
-        if (Player* plr = sObjectMgr.GetPlayer(itr.first))
+        if (Player* pPlayer = sObjectMgr.GetPlayer(itr.first))
         {
-            plr->SetHealth(plr->GetMaxHealth());
+            ResetUnitHealthAndPower(pPlayer);
 
-            if (plr->GetPowerType() == POWER_MANA)
-                plr->SetPower(POWER_MANA, plr->GetMaxPower(POWER_MANA));
+            if (Pet* pPet = pPlayer->GetPet())
+                ResetUnitHealthAndPower(pPet);
         }
     }
 }

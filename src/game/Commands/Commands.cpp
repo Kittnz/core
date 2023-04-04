@@ -16055,3 +16055,16 @@ bool ChatHandler::HandleSuspiciousNotify(char* args)
 	return true;
 }
 
+bool ChatHandler::HandleBlacklistNameCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    std::string name = args;
+    sObjectMgr.AddReservedName(name);
+    WorldDatabase.escape_string(name);
+    WorldDatabase.PExecute("REPLACE INTO `reserved_name` (`name`) VALUES ('%s')", name.c_str());
+
+    PSendSysMessage("Name %s has been blacklisted.", name.c_str());
+    return true;
+}

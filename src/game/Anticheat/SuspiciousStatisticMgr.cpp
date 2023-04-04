@@ -41,10 +41,9 @@
 
 INSTANTIATE_SINGLETON_1(SuspiciousStatisticMgr);
 
-void FormatPlayerNameToLink(const char* InPlayerName, char* OutPlayerLink, size_t OutBufferSize)
+std::string FormatPlayerNameToLink(const char* InPlayerName)
 {
-    int FormattedStrLen = snprintf(OutPlayerLink, OutBufferSize, "|cffffc0c0|Hplayer:%s|h[%s]|h|r", InPlayerName, InPlayerName);
-    OutPlayerLink[FormattedStrLen] = 0;
+    return string_format("|cffffc0c0|Hplayer:%s|h[%s]|h|r", InPlayerName, InPlayerName);
 }
 
 void SuspiciousStatisticMgr::Initialize()
@@ -111,15 +110,12 @@ void SuspiciousStatisticMgr::OnNpcKilledInDungeon(Player* player, Unit* NPC)
 
                         if (boostedPlayer != nullptr)
                         {
-                            const char* boostDesc = nullptr;
                             std::stringstream message;
 
-                            char PlayerLink[64] = { 0 };
-                            FormatPlayerNameToLink(boostedPlayer->GetName(), PlayerLink, sizeof(PlayerLink));
+                            std::string Link = FormatPlayerNameToLink(boostedPlayer->GetName());
                             message << "Boosted player name: "
-                                    << PlayerLink;
-                            boostDesc = message.str().c_str();
-                            RecordSuspiciousActivity(SuspiciousType::BOOSTING, player, boostedPlayer ? boostedPlayer->GetGUIDLow() : 0, 0, boostDesc);
+                                    << Link;
+                            RecordSuspiciousActivity(SuspiciousType::BOOSTING, player, boostedPlayer ? boostedPlayer->GetGUIDLow() : 0, 0, message.str().c_str());
                         }
 
                         return;
@@ -238,8 +234,7 @@ void SuspiciousStatisticMgr::PrintAllActiveFishers(Player* receiver)
             float flDeltaSinceLastFishAttempt = float(currentTime - tracker.LastAttemptTimestamp);
             flDeltaSinceLastFishAttempt /= 1000.0f;
 
-            char PlayerLink[64] = { 0 };
-            FormatPlayerNameToLink(fisher->GetName(), PlayerLink, sizeof(PlayerLink));
+            std::string PlayerLink =FormatPlayerNameToLink(fisher->GetName());
             std::stringstream ss;
             ss << "Player:" << PlayerLink
                 << " Start fishing " << flDeltaSinceStart
@@ -264,8 +259,10 @@ void SuspiciousStatisticMgr::RecordSuspiciousActivity(SuspiciousType::Value type
     //GM announce
     std::stringstream message;
 
-    char PlayerLink[64] = {0};
-    FormatPlayerNameToLink(player->GetName(), PlayerLink, sizeof(PlayerLink));
+    if (!player || !player->GetSession())
+        return;
+
+    std::string PlayerLink = FormatPlayerNameToLink(player->GetName());
 
     message << "Player:" << PlayerLink
         << " IP: " << player->GetSession()->GetRemoteAddress()

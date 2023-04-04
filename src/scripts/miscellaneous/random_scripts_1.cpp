@@ -3889,7 +3889,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
 
 bool GossipHello_npc_deino(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestRewardStatus(80300)) // A Tusken Affair
+    if (pPlayer->GetQuestRewardStatus(80302)) // To Amani'Alor!
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Open a portal to Amani'Alor.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
@@ -3922,7 +3922,7 @@ bool GossipSelect_npc_deino(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 
 bool GOHello_go_portal_amanialor(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestRewardStatus(80300)) // A Tusken Affair
+    if (pPlayer->GetQuestRewardStatus(80302)) // To Amani'Alor!
         pPlayer->TeleportTo(1, 2862.1F, 2450.4F, 148.33F, 0.33F);
     return true;
 }

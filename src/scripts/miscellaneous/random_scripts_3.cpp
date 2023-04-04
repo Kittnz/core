@@ -4859,48 +4859,41 @@ bool GossipSelect_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (!pPlayer->FindNearestCreature(10, 30.0F))
-        {
-            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 89 * IN_MILLISECONDS);
-
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("The land you see today used to be called the Kingdom of Corthan. For generations, every man that deserved the title of Marauder King was named Corthan, as the name of the land that he was to rule and serve for the rest of his life.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 2000);
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("For many generations we had exactly what we wanted, we were a kingdom of war and of battle! Our thirst for combat was like no other. We were men of conquest and yet we never expanded our territory. Every defeated enemy knew its place.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 30000);
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("As Keeper of the Living Flame for generations our sons and daughters were named either Zeth or Zetharia and they were meant to be the very image of our religion. You've probably noticed that when we first spoke I said the curse of Zetharia. Indeed, it was my daughter that cursed us all into an eternity of undeath.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 44000);
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("It is quite a long story. Zetharia had always loved Corthan, she knew nothing better on this world of ours, as our ancestors, the Azotha had left us on it, for better or worse. Her love of Corthan made her go mad. I had convinced the King that a union between him and the daughter of the Keeper would greatly help the kingdom and yet on the day of their marriage, Corthan showed up with his commoner mistress.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 58000);
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("I truthfully bear no ill mind to our king, friend. We do not choose those we love. But Zetharia, she had not taken well to this betrayal, as she called it.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 72000);
-            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-                {
-                    pCreature->MonsterSay("A dreadful pact Zetharia had committed, with the Lord of the Everlasting Death, and so she had cursed Corthan, his wife, and his kingdom to eternal undeath for the rest of time... Now, here we remain, lost to drift through time.");
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 81000);
-            DoAfterTime(pPlayer, 89 * IN_MILLISECONDS, [player = pPlayer]() {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60010))
-                    player->KilledMonster(cInfo, ObjectGuid());
-                });
-        }
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30102, pCreature->GetGUID());
     }
 
-    pPlayer->CLOSE_GOSSIP_MENU();
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30103, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30104, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30105, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->SEND_GOSSIP_MENU(30106, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30107, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60010); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
     return true;
 }
 
