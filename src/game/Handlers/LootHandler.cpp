@@ -707,6 +707,7 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
                     }
                     //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
                     newitem->SendCreateUpdateToPlayer(_player);
+                    newitem->SendCreateUpdateToPlayer(target);
                 }
             }
         }
