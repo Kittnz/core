@@ -154,3 +154,35 @@ UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 80251;
 UPDATE quest_template SET PrevQuestId = -40371 WHERE entry BETWEEN 40372 AND 40375;
 -- NPC Trenton Lighthammer rotated to forge's side.
 update creature set orientation = 2.8972 where ID = 7804;
+-- Convert NPC Say in the script associated with https://database.turtle-wow.org/?quest=40714 into gossip pages instead.
+delete from broadcast_text where entry in (30102,30103,30104,30105,30106,30107);
+delete from npc_text where ID in (30102,30103,30104,30105,30106,30107);
+replace into broadcast_text (entry, Male_Text) values
+(30102, 'The land you see today used to be called the Kingdom of Corthan. For generations, every man that deserved the title of Marauder King was named Corthan, as the name of the land that he was to rule and serve for the rest of his life.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30102, 30102);
+
+replace into broadcast_text (entry, Male_Text) values
+(30103, 'For many generations we had exactly what we wanted, we were a kingdom of war and of battle! Our thirst for combat was like no other. We were men of conquest and yet we never expanded our territory. Every defeated enemy knew its place.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30103, 30103);
+
+replace into broadcast_text (entry, Male_Text) values
+(30104, 'As Keeper of the Living Flame for generations our sons and daughters were named either Zeth or Zetharia and they were meant to be the very image of our religion. You\'ve probably noticed that when we first spoke I said the curse of Zetharia. Indeed, it was my daughter that cursed us all into an eternity of undeath.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30104, 30104);
+
+replace into broadcast_text (entry, Male_Text) values
+(30105, 'It is quite a long story. Zetharia had always loved Corthan, she knew nothing better on this world of ours, as our ancestors, the Azotha had left us on it, for better or worse. Her love of Corthan made her go mad.$B$BI had convinced the King that a union between him and the daughter of the Keeper would greatly help the kingdom and yet on the day of their marriage, Corthan showed up with his commoner mistress.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30105, 30105);
+
+replace into broadcast_text (entry, Male_Text) values
+(30106, 'I truthfully bear no ill mind to our king, friend. We do not choose those we love. But Zetharia, she had not taken well to this betrayal, as she called it.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30106, 30106);
+
+replace into broadcast_text (entry, Male_Text) values
+(30107, 'A dreadful pact Zetharia had committed, with the Lord of the Everlasting Death, and so she had cursed Corthan, his wife, and his kingdom to eternal undeath for the rest of time... Now, here we remain, lost to drift through time.');
+replace into npc_text (ID, BroadcastTextID0) values
+(30107, 30107);
