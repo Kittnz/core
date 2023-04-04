@@ -141,3 +141,11 @@ delete from creature_loot_template where entry = 5431 and mincountorref in (-300
 update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where ID = 3239;
 -- Fix 3 minute respawn timer overworld chest in Darkshore (RMJ).
 UPDATE gameobject SET spawntimesecsmin = 10800, spawntimesecsmax = 11100 WHERE guid = 4010039;
+-- Deekin's quest XP edits (RMJ).
+UPDATE quest_template SET RewXP = 150 WHERE entry = 40366;
+UPDATE quest_template SET RewXP = 100 WHERE entry = 80305;
+UPDATE quest_template SET RewXP = 100 WHERE entry = 80306;
+UPDATE quest_template SET RewXP = 100 WHERE entry = 80307;
+UPDATE quest_template SET RewXP = 800 WHERE entry = 80308;
+UPDATE quest_template SET RewXP = 200 WHERE entry = 80309;
+UPDATE quest_template SET RewXP = 500 WHERE entry = 80310;
