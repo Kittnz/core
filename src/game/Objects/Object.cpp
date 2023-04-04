@@ -600,6 +600,15 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
 
                     *data << uint32(appendValue);
                 }
+
+                else if (index == OBJECT_FIELD_SCALE_X)
+                {
+                    //limit scale to 2.0f if none are GM
+                    if (GetTypeId() == TYPEID_PLAYER && (!ToPlayer()->IsGameMaster() && !target->IsGameMaster()) && m_floatValues[index] > 2.0f)
+                        *data << 2.f;
+                    else
+                        *data << m_uint32Values[index];
+                }
                 // FIXME: Some values at server stored in float format but must be sent to client in uint32 format
                 else if (index >= UNIT_FIELD_BASEATTACKTIME && index <= UNIT_FIELD_RANGEDATTACKTIME)
                 {
