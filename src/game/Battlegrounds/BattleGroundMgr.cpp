@@ -693,12 +693,22 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
         else
             ++itrOffline;
     }
-    //if no players in queue - do nothing
-    if (m_QueuedGroups[bracket_id][BG_QUEUE_PREMADE_ALLIANCE].empty() &&
-            m_QueuedGroups[bracket_id][BG_QUEUE_PREMADE_HORDE].empty() &&
-            m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE].empty() &&
-            m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_HORDE].empty())
+
+    // if no players in queue - do nothing
+    if (IsAllQueuesEmpty(bracket_id))
         return;
+
+    auto InviteAllGroupsToBg = [this](BattleGround* bg)
+    {
+        // invite those selection pools
+        for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
+        {
+            for (auto const& citr : m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups)
+            {
+                InviteGroupToBG(citr, bg, citr->GroupTeam);
+            }
+        }
+    };
 
     if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_RANDOMIZE))
     {
@@ -733,10 +743,7 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
             FillPlayersToBG(bg, bracket_id);
 
             // now everything is set, invite players
-            for (const auto itr : m_SelectionPools[BG_TEAM_ALLIANCE].SelectedGroups)
-                InviteGroupToBG(itr, bg, itr->GroupTeam);
-            for (const auto itr : m_SelectionPools[BG_TEAM_HORDE].SelectedGroups)
-                InviteGroupToBG(itr, bg, itr->GroupTeam);
+            InviteAllGroupsToBg(bg);
 
             if (!bg->HasFreeSlots())
             {
@@ -748,7 +755,7 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
 
     // finished iterating through the bgs with free slots, maybe we need to create a new bg
 
-    BattleGround * bg_template = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
+    BattleGround* bg_template = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     if (!bg_template)
     {
         sLog.outError("Battleground: Update: bg template not found for %u", bgTypeId);
@@ -804,36 +811,37 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
 
     uint32 q_min_level = Player::GetMinLevelForBattleGroundBracketId(bracket_id, bgTypeId);
     uint32 q_max_level = Player::GetMaxLevelForBattleGroundBracketId(bracket_id, bgTypeId);
+
+    //check if there is premade against premade match
+    if (CheckPremadeMatch(bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam))
     {
-        //check if there is premade against premade match
-        if (CheckPremadeMatch(bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam))
+        //create new battleground
+        BattleGround* bg2 = sBattleGroundMgr.CreateNewBattleGround(bgTypeId, bracket_id);
+        if (!bg2)
         {
-            //create new battleground
-            BattleGround * bg2 = sBattleGroundMgr.CreateNewBattleGround(bgTypeId, bracket_id);
-            if (!bg2)
-            {
-                sLog.outError("BattleGroundQueue::Update - Cannot create battleground: %u", bgTypeId);
-                return;
-            }
-            //invite those selection pools
-            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
-                for (const auto itr : m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups)
-                    InviteGroupToBG(itr, bg2, itr->GroupTeam);
-            //start bg
-            bg2->SetLevelRange(q_min_level, q_max_level - 1);
-            bg2->StartBattleGround();
+            sLog.outError("BattleGroundQueue::Update - Cannot create battleground: %u", bgTypeId);
+            return;
         }
+        //invite those selection pools
+        InviteAllGroupsToBg(bg2);
+
+        //start bg
+        bg2->SetLevelRange(q_min_level, q_max_level - 1);
+        bg2->StartBattleGround();
+
+        // clear structures
+        m_SelectionPools[TEAM_ALLIANCE].Init();
+        m_SelectionPools[TEAM_HORDE].Init();
     }
+
 
     for (int attempt = 0; attempt < normalMatchesCreationAttempts; ++attempt)
     {
-        m_SelectionPools[BG_TEAM_ALLIANCE].Init();
-        m_SelectionPools[BG_TEAM_HORDE].Init();
         // if there are enough players in pools, start new battleground or non rated arena
         if (CheckNormalMatch(bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam))
         {
             // we successfully created a pool
-            BattleGround * bg2 = sBattleGroundMgr.CreateNewBattleGround(bgTypeId, bracket_id);
+            BattleGround* bg2 = sBattleGroundMgr.CreateNewBattleGround(bgTypeId, bracket_id);
             if (!bg2)
             {
                 sLog.outError("BattleGroundQueue::Update - Cannot create battleground: %u", bgTypeId);
@@ -841,13 +849,15 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
             }
 
             // invite those selection pools
-            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
-                for (const auto itr : m_SelectionPools[BG_TEAM_ALLIANCE + i].SelectedGroups)
-                    InviteGroupToBG(itr, bg2, itr->GroupTeam);
+            InviteAllGroupsToBg(bg2);
 
             // start bg
             bg2->SetLevelRange(q_min_level, q_max_level - 1);
             bg2->StartBattleGround();
+
+            // clear structures
+            m_SelectionPools[BG_TEAM_ALLIANCE].Init();
+            m_SelectionPools[BG_TEAM_HORDE].Init();
         }
     }
 }
@@ -979,7 +989,7 @@ void BattleGroundMgr::Update(uint32 diff)
         std::vector<uint64> scheduled;
         std::swap(scheduled, m_QueueUpdateScheduler);
 
-        for (uint8 i = 0; i < scheduled.size(); i++)
+        for (uint64 i = 0; i < scheduled.size(); i++)
         {
             BattleGroundQueueTypeId bgQueueTypeId = BattleGroundQueueTypeId(scheduled[i] >> 16 & 255);
             BattleGroundTypeId bgTypeId = BattleGroundTypeId((scheduled[i] >> 8) & 255);
@@ -1784,4 +1794,15 @@ bool BattleGroundQueue::PlayerLoggedIn(Player* player)
 
     itr->second.online          = true;
     return true;
+}
+
+bool BattleGroundQueue::IsAllQueuesEmpty(BattleGroundBracketId bracket_id)
+{
+    uint8 queueEmptyCount = 0;
+
+    for (uint8 i = 0; i < BG_QUEUE_MAX; i++)
+        if (m_QueuedGroups[bracket_id][i].empty())
+            queueEmptyCount++;
+
+    return queueEmptyCount == BG_QUEUE_MAX;
 }
