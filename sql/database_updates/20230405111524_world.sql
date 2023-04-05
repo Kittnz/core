@@ -4,3 +4,8 @@ update creature_template set display_id1 = 18174 where entry in (61251,61252,612
 update creature_template set display_id1 = 18677 where entry = 61387;
 -- NPC Odon Shademoore (61380) change display ID to 221
 update creature_template set display_id1 = 221 where entry = 61380;
+-- npc 61374, npc 61375 error incorrect syntax
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(18174, 0, 0, 0, 0),
+(18728, 0, 0, 0, 0),
+(19137, 0, 0, 0, 0);
