@@ -14,3 +14,7 @@ update creature_template set scale = 0 where entry = 61381;
 -- Make 2h sword weapon, grey quality with display ID 60981 with the name 'Blackwald Sword - Monster'
 REPLACE INTO item_template VALUES
 (61242, 2, 8, 'Monster - Sword2H, Blackwald Sword', '', 60981, 1, 0, 1, 21, 4, 17, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+-- Add Greeting to npc 61259.
+delete from broadcast_text where entry = 61259;
+REPLACE INTO broadcast_text VALUES
+(61259, 'Gilneas has seen dark days, but with newfound allies such as yourself, there remains hope yet. I feared the Alliance would have abandoned us, yet here we stand.$B$BI will bend no knee to these Alteraci scum. We will prevail.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
