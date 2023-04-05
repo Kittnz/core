@@ -67,7 +67,8 @@ enum BattleGroundQueueGroupTypes
     BG_QUEUE_PREMADE_ALLIANCE   = 0,
     BG_QUEUE_PREMADE_HORDE      = 1,
     BG_QUEUE_NORMAL_ALLIANCE    = 2,
-    BG_QUEUE_NORMAL_HORDE       = 3
+    BG_QUEUE_NORMAL_HORDE       = 3,
+    BG_QUEUE_MAX                = 6
 };
 #define BG_QUEUE_GROUP_TYPES_COUNT 4
 
@@ -99,6 +100,7 @@ class BattleGroundQueue
         bool GetPlayerGroupInfoData(ObjectGuid guid, GroupQueueInfo* ginfo);
         void PlayerLoggedOut(ObjectGuid guid);
         bool PlayerLoggedIn(Player* player);
+        bool IsAllQueuesEmpty(BattleGroundBracketId bracket_id);
 
         //mutex that should not allow changing private data, nor allowing to update Queue during private data change.
         std::recursive_mutex m_Lock;
