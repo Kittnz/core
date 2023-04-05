@@ -2999,6 +2999,8 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                         }
                     }
                 }
+                else if (pPlayer == pTarget)
+                    targetUnitMap.push_back(pTarget);
             }
             
             break;
