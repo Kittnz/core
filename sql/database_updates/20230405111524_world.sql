@@ -11,3 +11,6 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (19137, 0, 0, 0, 0);
 -- NPC Frell Rosewick, change scale to 1
 update creature_template set scale = 0 where entry = 61381;
+-- Make 2h sword weapon, grey quality with display ID 60981 with the name 'Blackwald Sword - Monster'
+REPLACE INTO item_template VALUES
+(61242, 2, 8, 'Monster - Sword2H, Blackwald Sword', '', 60981, 1, 0, 1, 21, 4, 17, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
