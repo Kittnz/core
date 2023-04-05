@@ -18,3 +18,7 @@ REPLACE INTO item_template VALUES
 delete from broadcast_text where entry = 61259;
 REPLACE INTO broadcast_text VALUES
 (61259, 'Gilneas has seen dark days, but with newfound allies such as yourself, there remains hope yet. I feared the Alliance would have abandoned us, yet here we stand.$B$BI will bend no knee to these Alteraci scum. We will prevail.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Add Greeting to npc 61257.
+delete from broadcast_text where entry = 61257;
+REPLACE INTO broadcast_text VALUES
+(61257, 'It shall always be a Greymane who sits atop the Gilnean throne. It is by the will of my Lord that this will come to pass once again.$B$BI admit, I have little trust in outsiders, but I realize such attitudes have doomed us to these times we live in.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
