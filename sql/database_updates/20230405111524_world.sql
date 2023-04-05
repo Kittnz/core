@@ -9,3 +9,5 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (18174, 0, 0, 0, 0),
 (18728, 0, 0, 0, 0),
 (19137, 0, 0, 0, 0);
+-- NPC Frell Rosewick, change scale to 1
+update creature_template set scale = 0 where entry = 61381;
