@@ -1554,6 +1554,7 @@ class Player final: public Unit
         void LearnSpellHighRank(uint32 spellid);
         uint32 GetSpellRank(SpellEntry const* spellInfo) final;
 
+        bool HasDamagingWeaponProc() const;
         void CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier = 1.0f);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
 
