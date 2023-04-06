@@ -18,26 +18,6 @@ Antispam& Antispam::Instance()
     return antispam;
 }
 
-static inline void ReplaceAll(std::string &str, const std::string& from, const std::string& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::string::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
-}
-
-static inline void ReplaceAllW(std::wstring &str, const std::wstring& from, const std::wstring& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
-}
-
 void AntispamAsyncWorker(Antispam *antispam)
 {
     using namespace std::chrono_literals;
