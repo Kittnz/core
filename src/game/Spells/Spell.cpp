@@ -8140,6 +8140,11 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
 {
     if (m_casterUnit && target != m_casterUnit && m_spellInfo->IsPositiveSpell())
     {
+        // Do not let steam tonk mortar hit players.
+        // Triggered by npc 16121 summoned by spell 25003.
+        if (m_spellInfo->Id == 27745 && target->IsPlayer())
+            return false;
+
         // prevent buffing low level players with group wide buffs
         if (m_casterUnit->IsPlayer() && !m_CastItem && !m_IsTriggeredSpell && target != m_targets.getUnitTarget())
         {
