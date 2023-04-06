@@ -2349,6 +2349,14 @@ struct AV_NpcEventAI : public npc_escortAI
 
     void UpdateEscortAI(uint32 const uiDiff) override
     {
+        // Prevent Arch Druid Renferal and related mobs from staying at the graveyard.
+        // https://github.com/slowtorta/turtlewow-bug-tracker/issues/2232
+        if (m_creature->GetDistance(669.77f, -308.61f, 30.29f) < 10.0f)
+        {
+            Position home = m_creature->GetHomePosition();
+            m_creature->MonsterMove(home.x, home.y, home.z);
+        }
+
         switch (m_creature->GetEntry())
         {
             /** Aerial creature */

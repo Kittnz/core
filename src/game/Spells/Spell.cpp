@@ -2966,25 +2966,43 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         }
         case TARGET_UNIT_RAID_AND_CLASS:
         {
-            Player* targetPlayer = m_targets.getUnitTarget() && m_targets.getUnitTarget()->IsPlayer()
-                                   ? (Player*)m_targets.getUnitTarget() : nullptr;
-
-            Group* pGroup = targetPlayer ? targetPlayer->GetGroup() : nullptr;
-            if (pGroup)
+            if (Unit* pTarget = m_targets.getUnitTarget())
             {
-                for (GroupReference *itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                Player* pPlayer = pTarget->ToPlayer();
+                if (!pPlayer)
                 {
-                    Player* Target = itr->getSource();
-
-                    // IsHostileTo check m_duel and controlled by enemy
-                    if (Target && targetPlayer->IsWithinDistInMap(Target, radius) &&
-                            targetPlayer->GetClass() == Target->GetClass() &&
-                            !m_caster->IsHostileTo(Target))
-                        targetUnitMap.push_back(Target);
+                    targetUnitMap.push_back(pTarget);
+                    pPlayer = pTarget->GetCharmerOrOwnerPlayer();
                 }
+
+                Group* pGroup = pPlayer ? pPlayer->GetGroup() : nullptr;
+                if (pGroup)
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            // IsHostileTo check m_duel and controlled by enemy
+                            if (pTarget->IsWithinDistInMap(pMember, radius) &&
+                                pTarget->GetClass() == pMember->GetClass() &&
+                                !m_caster->IsHostileTo(pMember))
+                                targetUnitMap.push_back(pMember);
+
+                            if (Pet* pPet = pMember->GetPet())
+                            {
+                                if (pPet != pTarget &&
+                                    pTarget->IsWithinDistInMap(pPet, radius) &&
+                                    pTarget->GetClass() == pPet->GetClass() &&
+                                    !m_caster->IsHostileTo(pPet))
+                                    targetUnitMap.push_back(pPet);
+                            }
+                        }
+                    }
+                }
+                else if (pPlayer == pTarget)
+                    targetUnitMap.push_back(pTarget);
             }
-            else if (m_targets.getUnitTarget())
-                targetUnitMap.push_back(m_targets.getUnitTarget());
+            
             break;
         }
         case TARGET_LOCATION_DATABASE:

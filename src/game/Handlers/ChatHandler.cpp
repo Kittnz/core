@@ -325,6 +325,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
+    //temp workaround to move RP addons to their correct LANG, the addons are broken rn.
+    if (msg.find("MR:") != std::string::npos || msg.find("TR:") != std::string::npos)
+        lang = LANG_ADDON;
+
+
     /** Enable various spam chat detections */
     if (lang != LANG_ADDON)
     {
@@ -332,6 +337,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         replaceAll(msg, "\r", "");
     }
 
+   
     const std::string debuffPrefix = "TW_Debuff";
 
 	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
