@@ -146,19 +146,6 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to) 
-{
-    if (from.empty())
-        return;
-
-    size_t start_pos = 0;
-    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length();
-    }
-}
-
-
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
     uint32 now = WorldTimer::getMSTime();
@@ -333,11 +320,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     /** Enable various spam chat detections */
     if (lang != LANG_ADDON)
     {
-        replaceAll(msg, "\n", "");
-        replaceAll(msg, "\r", "");
+        ReplaceAll(msg, "\n", "");
+        ReplaceAll(msg, "\r", "");
     }
 
-   
     const std::string debuffPrefix = "TW_Debuff";
 
 	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD

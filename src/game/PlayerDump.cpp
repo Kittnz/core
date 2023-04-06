@@ -181,7 +181,8 @@ uint32 registerNewGuid(uint32 oldGuid, std::map<uint32, uint32>& guidMap, uint32
 bool changeGuid(std::string &str, int n, std::map<uint32, uint32>& guidMap, uint32 newGuid, bool nonzero = false)
 {
     char chritem[20];
-    uint32 oldGuid = atoi(getnth(str, n).c_str());
+    std::string guidStr = getnth(str, n);
+    uint32 oldGuid = guidStr.empty() ? 0 : std::stoul(guidStr);
     if (nonzero && oldGuid == 0)
         return true;                                        // not an error
 
@@ -259,7 +260,10 @@ void StoreGUID(QueryResult* result, uint32 data, uint32 field, std::set<uint32>&
 {
     Field* fields = result->Fetch();
     std::string dataStr = fields[data].GetCppString();
-    uint32 guid = atoi(gettoknth(dataStr, field).c_str());
+    std::string guidStr = gettoknth(dataStr, field);
+    if (guidStr.empty())
+        return;
+    uint32 guid = std::stoul(guidStr);
     if (guid)
         guids.insert(guid);
 }
@@ -635,10 +639,10 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                     snprintf(lastpetid, 20, "%s", currpetid);
                 }
 
-                std::map<uint32, uint32> :: const_iterator petids_iter = petids.find(atoi(currpetid));
+                std::map<uint32, uint32> :: const_iterator petids_iter = petids.find(strtoul(currpetid, nullptr, 10));
 
                 if (petids_iter == petids.end())
-                    petids.insert(PetIdsPair(atoi(currpetid), atoi(newpetid)));
+                    petids.insert(PetIdsPair(strtoul(currpetid, nullptr, 10), strtoul(newpetid, nullptr, 10)));
 
                 if (!changenth(line, 1, newpetid))          // character_pet.id update
                     ROLLBACK(DUMP_FILE_BROKEN);
@@ -652,7 +656,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                 snprintf(currpetid, 20, "%s", getnth(line, 1).c_str());
 
                 // lookup currpetid and match to new inserted pet id
-                std::map<uint32, uint32> :: const_iterator petids_iter = petids.find(atoi(currpetid));
+                std::map<uint32, uint32> :: const_iterator petids_iter = petids.find(strtoul(currpetid, nullptr, 10));
                 if (petids_iter == petids.end())            // couldn't find new inserted id
                     ROLLBACK(DUMP_FILE_BROKEN);
 
@@ -690,7 +694,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                     ROLLBACK(DUMP_FILE_BROKEN);
 
                 // add it to cache
-                uint32 id = atoi(getnth(line, 1).c_str());
+                uint32 id = std::stoul(getnth(line, 1));
                 std::string text = getnth(line, 2);
                 sObjectMgr.AddItemText(id, text);
                 break;
@@ -700,6 +704,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                 break;
         }
 
+        ReplaceAll(line, "INSERT", "REPLACE");
         if (!CharacterDatabase.Execute(line.c_str()))
             ROLLBACK(DUMP_FILE_BROKEN);
     }

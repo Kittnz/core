@@ -526,6 +526,26 @@ bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str)
     return true;
 }
 
+void ReplaceAll(std::string& str, const std::string& from, const std::string& to)
+{
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::string::npos)
+    {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
+}
+
+void ReplaceAllW(std::wstring& str, const std::wstring& from, const std::wstring& to)
+{
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
+    {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
+}
+
 typedef wchar_t const* const* wstrlist;
 
 bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
