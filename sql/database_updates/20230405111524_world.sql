@@ -557,3 +557,66 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- New NPC for PTR.
+REPLACE INTO creature_template VALUES
+(61393, 20285, 20286, 0, 0, 0, 'Greymane Watcher', NULL, 0, 40, 41, 1828, 1902, 0, 0, 2033, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 72, 93, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 7, 0, 0, 0, 61393, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 71, 98, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61394, 3613, 0, 0, 0, 0, 'Greymane Worker', NULL, 0, 42, 44, 2059, 2138, 0, 0, 2477, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.0272, 79.7874, 100, 7, 0, 61394, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 70, 96, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61395, 20279, 20280, 0, 0, 0, 'Greymane Miner', NULL, 0, 39, 40, 1677, 1752, 0, 0, 2921, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 70, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 61395, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 70, 96, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61396, 20299, 20300, 0, 0, 0, 'Greymane Taskmaster', NULL, 0, 44, 44, 2117, 2117, 0, 0, 2625, 14, 0, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 61396, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61397, 20269, 20270, 0, 0, 0, 'Greymane Enforcer', NULL, 0, 41, 42, 1981, 2059, 0, 0, 2397, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 97, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.984, 83.853, 100, 7, 0, 61397, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61398, 20262, 0, 0, 0, 0, 'Cannoneer Rileson', NULL, 0, 42, 42, 1881, 1981, 0, 0, 2246, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 61398, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61399, 10795, 0, 0, 0, 0, 'Foulhide Miner', NULL, 0, 39, 40, 1677, 1752, 0, 0, 2921, 61, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 56, 70, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 61399, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 70, 96, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61400, 20271, 20272, 0, 0, 0, 'Enslaved Worker', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1188, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 61400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20352; set @weapon_1 = 2901; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61400;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20351; set @weapon_1 = 2901; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61399;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20350; set @weapon_1 = 7945; set @weapon_2 = 2081; set @weapon_3 = 0; set @creature = 61398;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20349; set @weapon_1 = 7945; set @weapon_2 = 15530; set @weapon_3 = 0; set @creature = 61397;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20348; set @weapon_1 = 1197; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61396;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20347; set @weapon_1 = 2901; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61395;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20346; set @weapon_1 = 1938; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61394;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20345; set @weapon_1 = 4948; set @weapon_2 = 6203; set @weapon_3 = 0; set @creature = 61393;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20262, 0, 0, 0, 0),
+(20265, 0, 0, 0, 0),
+(20267, 0, 0, 0, 0),
+(20269, 0, 0, 0, 0),
+(20271, 0, 0, 0, 0),
+(20273, 0, 0, 0, 0),
+(20279, 0, 0, 0, 0),
+(20281, 0, 0, 0, 0),
+(20285, 0, 0, 0, 0),
+(20299, 0, 0, 0, 0),
+(20266, 0, 0, 0, 0),
+(20268, 0, 0, 0, 0),
+(20270, 0, 0, 0, 0),
+(20272, 0, 0, 0, 0),
+(20274, 0, 0, 0, 0),
+(20280, 0, 0, 0, 0),
+(20282, 0, 0, 0, 0),
+(20286, 0, 0, 0, 0),
+(20300, 0, 0, 0, 0);
