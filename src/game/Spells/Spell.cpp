@@ -8144,6 +8144,8 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
         // Triggered by npc 16121 summoned by spell 25003.
         if (m_spellInfo->Id == 27745 && target->IsPlayer())
             return false;
+        if (m_spellInfo->Id == 25099 && target->IsPlayer())
+            return false;
 
         // prevent buffing low level players with group wide buffs
         if (m_casterUnit->IsPlayer() && !m_CastItem && !m_IsTriggeredSpell && target != m_targets.getUnitTarget())
