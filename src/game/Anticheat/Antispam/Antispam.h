@@ -170,7 +170,7 @@ class Antispam : public AntispamInterface
         bool m_banEnabled;
         bool m_mergeAllWhispers;
 
-        std::vector<re2::RE2> m_regexBlacklist;
+        std::vector<std::unique_ptr<re2::RE2>> m_regexBlacklist;
         StringSet m_blackList;
         StringMap m_replacement;
         ScoreMap m_scores[MSG_TYPE_MAX];
