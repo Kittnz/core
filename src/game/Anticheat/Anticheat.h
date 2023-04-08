@@ -72,6 +72,7 @@ public:
 
     virtual void BlacklistWord(std::string word) {};
     virtual void WhitelistWord(std::string word) {};
+    virtual void AddRegexBlacklist(std::string) {};
 };
 
 // interface to anticheat session (one for each world session)

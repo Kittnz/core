@@ -56,7 +56,10 @@ void Antispam::LoadFromDB()
         do
         {
             auto fields = result->Fetch();
-            m_blackList.insert(fields[0].GetCppString());
+            if (fields[1].GetBool())
+                m_regexBlacklist.emplace_back(fields[0].GetString()); // immediately create the regex pattern for precompiled matching
+            else
+                m_blackList.insert(fields[0].GetCppString());
         }
         while (result->NextRow());
         delete result;
@@ -64,6 +67,10 @@ void Antispam::LoadFromDB()
 
     sLog.outString(">> %u blacklist words loaded", m_blackList.size());
     sLog.outString();
+
+    sLog.outString(">> %u regex blacklist patterns loaded", m_regexBlacklist.size());
+    sLog.outString();
+
 
     sLog.outString("Loading table 'antispam_replacement'");
     m_replacement.clear();
@@ -497,6 +504,15 @@ bool Antispam::FilterMessage(const std::string &msg)
         }
     }
 
+    for (const auto& pattern : m_regexBlacklist)
+    {
+        if (re2::RE2::PartialMatch(origMsg, pattern) || re2::RE2::PartialMatch(normMsg, pattern))
+        {
+            block = true;
+            break;
+        }
+    }
+
     if (!block)
     {
         for (auto& word : m_scores[MSG_TYPE_NORMALIZED])
@@ -612,4 +628,11 @@ void Antispam::WhitelistWord(std::string word)
 
     LoginDatabase.escape_string(word);
     LoginDatabase.PExecute("DELETE FROM `antispam_blacklist` WHERE `word` = '%s'", word.c_str());
+}
+
+void Antispam::AddRegexBlacklist(std::string pattern)
+{
+    m_regexBlacklist.push_back(std::move(pattern));
+    LoginDatabase.escape_string(pattern);
+    LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`, `regex`) VALUES ('%s', 1)", pattern.c_str());
 }
