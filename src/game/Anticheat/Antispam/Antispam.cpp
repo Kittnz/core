@@ -12,6 +12,8 @@
 #include "Anticheat.h"
 #include "Antispam.h"
 
+#include <any>
+
 Antispam& Antispam::Instance()
 {
     static Antispam antispam;
@@ -166,6 +168,10 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     if (chatType == A_CHAT_TYPE_MAX)
         return true;
 
+    //dont process self-whispers. Often used by RMT.
+    if (chatType == A_CHAT_TYPE_WHISPER && from && to && from->GetObjectGuid().GetCounter() == to->GetObjectGuid().GetCounter())
+        return true;
+
     if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
         return true;
 
@@ -217,6 +223,34 @@ void Antispam::ProcessMessages(uint32 diff)
         std::lock_guard<std::mutex> guard(m_messageMutex);
         std::swap(m_messageQueue, tempMessageQueue);
     }
+
+
+
+    const auto SendShadowPacket = [](ObjectGuid fromGuid, const std::string& message, uint8 spamType)
+    {
+        MasterPlayer* sender = ObjectAccessor::FindMasterPlayer(fromGuid);
+        if (!sender)
+            return;
+
+        switch (spamType)
+        {
+            case AntispamChatTypes::A_CHAT_TYPE_CHANNEL:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, message, LANG_UNIVERSAL, sender->GetChatTag(), fromGuid, nullptr, ObjectGuid(), "", 
+                    sender->GetName(), 0);
+                sender->GetSession()->SendPacket(&data);
+            }break;
+
+            case AntispamChatTypes::A_CHAT_TYPE_GUILD:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, message, LANG_UNIVERSAL, sender->GetChatTag(), sender->GetObjectGuid(), sender->GetName());
+                sender->GetSession()->SendPacket(&data);
+            }break;
+        }
+
+    };
 
     for (auto const& messageBlock : tempMessageQueue)
     {
@@ -273,6 +307,7 @@ void Antispam::ProcessMessages(uint32 diff)
                     if (FilterMessage(itr->second.msg))
                     {
                         ApplySanction(itr->second, DETECT_SEPARATED);
+                        SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                         m_messageBlocks[type].erase(itr);
                         continue;
                     }
@@ -284,6 +319,7 @@ void Antispam::ProcessMessages(uint32 diff)
                 else if (FilterMessage(messageBlock.msg))
                 {
                     ApplySanction(messageBlock, DETECT_STANDARD);
+                    SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                     continue;
                 }
                 else
@@ -292,12 +328,14 @@ void Antispam::ProcessMessages(uint32 diff)
             else if (FilterMessage(messageBlock.msg))
             {
                 ApplySanction(messageBlock, DETECT_STANDARD);
+                SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                 continue;
             }
         }
         else if (FilterMessage(messageBlock.msg))
         {
             ApplySanction(messageBlock, DETECT_STANDARD);
+            SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
             continue;
         }
         else if (!m_frequencyCount)
