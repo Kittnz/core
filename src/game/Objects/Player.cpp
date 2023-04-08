@@ -13552,7 +13552,7 @@ void Player::AddQuest(Quest const *pQuest, Object *questGiver)
         questStatusData.m_timer = 0;
 
     // Set PvP flag for PvP quests
-    if (pQuest->GetType() == QUEST_TYPE_PVP)
+    if (pQuest->GetType() == QUEST_TYPE_PVP && !IsHardcore())
         UpdatePvP(true, true);
 
     SetQuestSlot(log_slot, quest_id, qtime);
