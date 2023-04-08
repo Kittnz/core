@@ -227,6 +227,9 @@ bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str);
 // size==real string size
 bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str);
 
+void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
+void ReplaceAllW(std::wstring& str, const std::wstring& from, const std::wstring& to);
+
 // set string to "" if invalid utf8 sequence
 size_t utf8length(std::string& utf8str);
 void utf8truncate(std::string& utf8str, size_t len);

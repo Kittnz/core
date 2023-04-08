@@ -1623,6 +1623,7 @@ class ObjectMgr
         TaxiNodesStore          m_TaxiNodes;
 
         ItemTransmogrifyTemplateMap     m_itemTransmogs;
+        std::atomic_uint m_transmogId = 0;
 
         int DBCLocaleIndex;
 

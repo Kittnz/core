@@ -12,30 +12,12 @@
 #include "Anticheat.h"
 #include "Antispam.h"
 
+#include <any>
+
 Antispam& Antispam::Instance()
 {
     static Antispam antispam;
     return antispam;
-}
-
-static inline void ReplaceAll(std::string &str, const std::string& from, const std::string& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::string::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
-}
-
-static inline void ReplaceAllW(std::wstring &str, const std::wstring& from, const std::wstring& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
 }
 
 void AntispamAsyncWorker(Antispam *antispam)
@@ -74,7 +56,10 @@ void Antispam::LoadFromDB()
         do
         {
             auto fields = result->Fetch();
-            m_blackList.insert(fields[0].GetCppString());
+            if (fields[1].GetBool())
+                m_regexBlacklist.emplace_back(fields[0].GetString()); // immediately create the regex pattern for precompiled matching
+            else
+                m_blackList.insert(fields[0].GetCppString());
         }
         while (result->NextRow());
         delete result;
@@ -82,6 +67,10 @@ void Antispam::LoadFromDB()
 
     sLog.outString(">> %u blacklist words loaded", m_blackList.size());
     sLog.outString();
+
+    sLog.outString(">> %u regex blacklist patterns loaded", m_regexBlacklist.size());
+    sLog.outString();
+
 
     sLog.outString("Loading table 'antispam_replacement'");
     m_replacement.clear();
@@ -186,6 +175,10 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     if (chatType == A_CHAT_TYPE_MAX)
         return true;
 
+    //dont process self-whispers. Often used by RMT.
+    if (chatType == A_CHAT_TYPE_WHISPER && from && to && from->GetObjectGuid().GetCounter() == to->GetObjectGuid().GetCounter())
+        return true;
+
     if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
         return true;
 
@@ -237,6 +230,34 @@ void Antispam::ProcessMessages(uint32 diff)
         std::lock_guard<std::mutex> guard(m_messageMutex);
         std::swap(m_messageQueue, tempMessageQueue);
     }
+
+
+
+    const auto SendShadowPacket = [](ObjectGuid fromGuid, const std::string& message, uint8 spamType)
+    {
+        MasterPlayer* sender = ObjectAccessor::FindMasterPlayer(fromGuid);
+        if (!sender)
+            return;
+
+        switch (spamType)
+        {
+            case AntispamChatTypes::A_CHAT_TYPE_CHANNEL:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, message, LANG_UNIVERSAL, sender->GetChatTag(), fromGuid, nullptr, ObjectGuid(), "", 
+                    sender->GetName(), 0);
+                sender->GetSession()->SendPacket(&data);
+            }break;
+
+            case AntispamChatTypes::A_CHAT_TYPE_GUILD:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, message, LANG_UNIVERSAL, sender->GetChatTag(), sender->GetObjectGuid(), sender->GetName());
+                sender->GetSession()->SendPacket(&data);
+            }break;
+        }
+
+    };
 
     for (auto const& messageBlock : tempMessageQueue)
     {
@@ -293,6 +314,7 @@ void Antispam::ProcessMessages(uint32 diff)
                     if (FilterMessage(itr->second.msg))
                     {
                         ApplySanction(itr->second, DETECT_SEPARATED);
+                        SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                         m_messageBlocks[type].erase(itr);
                         continue;
                     }
@@ -304,6 +326,7 @@ void Antispam::ProcessMessages(uint32 diff)
                 else if (FilterMessage(messageBlock.msg))
                 {
                     ApplySanction(messageBlock, DETECT_STANDARD);
+                    SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                     continue;
                 }
                 else
@@ -312,12 +335,14 @@ void Antispam::ProcessMessages(uint32 diff)
             else if (FilterMessage(messageBlock.msg))
             {
                 ApplySanction(messageBlock, DETECT_STANDARD);
+                SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                 continue;
             }
         }
         else if (FilterMessage(messageBlock.msg))
         {
             ApplySanction(messageBlock, DETECT_STANDARD);
+            SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
             continue;
         }
         else if (!m_frequencyCount)
@@ -479,6 +504,15 @@ bool Antispam::FilterMessage(const std::string &msg)
         }
     }
 
+    for (const auto& pattern : m_regexBlacklist)
+    {
+        if (re2::RE2::PartialMatch(origMsg, pattern) || re2::RE2::PartialMatch(normMsg, pattern))
+        {
+            block = true;
+            break;
+        }
+    }
+
     if (!block)
     {
         for (auto& word : m_scores[MSG_TYPE_NORMALIZED])
@@ -594,4 +628,11 @@ void Antispam::WhitelistWord(std::string word)
 
     LoginDatabase.escape_string(word);
     LoginDatabase.PExecute("DELETE FROM `antispam_blacklist` WHERE `word` = '%s'", word.c_str());
+}
+
+void Antispam::AddRegexBlacklist(std::string pattern)
+{
+    m_regexBlacklist.push_back(std::move(pattern));
+    LoginDatabase.escape_string(pattern);
+    LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`, `regex`) VALUES ('%s', 1)", pattern.c_str());
 }

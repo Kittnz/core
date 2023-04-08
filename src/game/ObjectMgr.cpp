@@ -9036,7 +9036,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 {
     m_itemTransmogs.clear();
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID`, `SourceID` FROM `item_transmogrify_template`"));
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID`, `SourceID` FROM `item_transmogrify_template` ORDER BY `ID` DESC"));
 
     if (!result)
         return;
@@ -9052,6 +9052,9 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 
         ItemPrototype* copy = new ItemPrototype;
         ItemPrototype const* base = GetItemPrototype(ItemID);
+
+        if (!m_transmogId)
+            m_transmogId = ID;
 
         if (!base)
             continue;
@@ -9069,16 +9072,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 
 uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourceDisplayId, uint32 sourceItemId)
 {
-    // find max id
-    uint32 destId = 100000;
-    for (const auto& itr : m_itemTransmogs)
-    {
-        if (itr.first > destId)
-            destId = itr.first;
-    }
-
-    // use next
-    ++destId;
+    uint32 destId = ++m_transmogId;
 
     ItemPrototype* copy = new ItemPrototype;
     ItemPrototype const* base = GetItemPrototype(destItemId);
@@ -9097,7 +9091,8 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
 
     m_itemTransmogs[destId] = copy;
 
-    sWorld.SendUpdateSingleItem(destId);
+    //Whoever wrote this should be burned at the stake.
+    //sWorld.SendUpdateSingleItem(destId);
     WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`, `SourceID`) VALUES ('%u','%u','%u', '%u')", 
         destId, destItemId, sourceDisplayId, sourceItemId);
 

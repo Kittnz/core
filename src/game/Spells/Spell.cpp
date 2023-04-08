@@ -1231,7 +1231,11 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     // All weapon based abilities can trigger weapon procs,
     // even if they do no damage, or break on damage, like Sap.
     // https://www.youtube.com/watch?v=klMsyF_Kz5o
-    bool triggerWeaponProcs = m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON;
+    bool triggerWeaponProcs = m_caster->IsPlayer() && m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON &&
+        // Turtle: Do not proc weapon enchants if current spell is not damaging, but we have damaging weapon proc.
+        // This is custom behavior. There are multiple threads on blizzard forums of people complaining about
+        // Sap proccing their weapon or poisons, and thus breaking itself, so this is a blizzlike problem.
+        (m_damage || !static_cast<Player*>(m_casterUnit)->HasDamagingWeaponProc());
 
     // All calculated do it!
     // Do healing and triggers
@@ -8136,6 +8140,13 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
 {
     if (m_casterUnit && target != m_casterUnit && m_spellInfo->IsPositiveSpell())
     {
+        // Do not let steam tonk mortar hit players.
+        // Triggered by npc 16121 summoned by spell 25003.
+        if (m_spellInfo->Id == 27745 && target->IsPlayer())
+            return false;
+        if (m_spellInfo->Id == 25099 && target->IsPlayer())
+            return false;
+
         // prevent buffing low level players with group wide buffs
         if (m_casterUnit->IsPlayer() && !m_CastItem && !m_IsTriggeredSpell && target != m_targets.getUnitTarget())
         {

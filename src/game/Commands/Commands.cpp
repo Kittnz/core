@@ -4259,6 +4259,8 @@ bool ChatHandler::HandleWarnCharacterCommand(char* args)
         }
     }
 
+    PSendSysMessage("Player %s warned.", playerData->sName);
+
     return true;
 }
 

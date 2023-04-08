@@ -576,7 +576,10 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     SetPlayer(pCurrChar);
     m_antiCheat->NewPlayer();
 
-    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+
+    //WE DO NOT NEED TO SEND ALL POSSIBLE TRANSMOGS TO ANY PLAYER ON LOGIN
+    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHh
+    /*if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
     {
         std::vector<uint32> entries;
         for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyTemplateMap())
@@ -584,7 +587,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
         if (!entries.empty())
             sWorld.SendUpdateMultipleItems(entries, this);
-    }
+    }*/
 
     if (pCurrMasterPlayer)
     {
