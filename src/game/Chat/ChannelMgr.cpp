@@ -116,13 +116,13 @@ void ChannelMgr::CreateDefaultChannels()
 {
     GetOrCreateChannel("Warden")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("Anticrash")->SetSecurityLevel(SEC_DEVELOPER);
-    GetOrCreateChannel("Antiflood")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Antiflood")->SetSecurityLevel(SEC_MODERATOR);
     GetOrCreateChannel("ItemsCheck")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("GoldDupe")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("SAC")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("MailsAC")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("BotsDetector")->SetSecurityLevel(SEC_DEVELOPER);
-    GetOrCreateChannel("ChatSpam")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("ChatSpam")->SetSecurityLevel(SEC_MODERATOR);
     GetOrCreateChannel("LowLevelBots")->SetSecurityLevel(SEC_DEVELOPER);
 
     for (const auto& channel : channels)

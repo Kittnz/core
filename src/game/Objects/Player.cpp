@@ -7916,6 +7916,68 @@ void Player::UpdateEquipSpellsAtFormChange()
     }
 }
 
+bool Player::HasDamagingWeaponProc() const
+{
+    Item* item = GetWeaponForAttack(BASE_ATTACK, true, true);
+    if (!item)
+        return false;
+
+    ItemPrototype const* proto = item->GetProto();
+    if (!proto)
+        return false;
+
+    for (const auto& spellData : proto->Spells)
+    {
+        // no spell
+        if (!spellData.SpellId)
+            continue;
+
+        // wrong triggering type
+        if (spellData.SpellTrigger != ITEM_SPELLTRIGGER_CHANCE_ON_HIT)
+            continue;
+
+        SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellData.SpellId);
+        if (!spellInfo)
+        {
+            sLog.outError("WORLD: unknown Item spellid %i", spellData.SpellId);
+            continue;
+        }
+
+        if (HasSpellCooldown(spellData.SpellId))
+            continue;
+
+        if (spellInfo->IsDirectDamageSpell() || spellInfo->HasAura(SPELL_AURA_PERIODIC_DAMAGE))
+            return true;
+    }
+
+    // item combat enchantments
+    for (int e_slot = 0; e_slot < MAX_ENCHANTMENT_SLOT; ++e_slot)
+    {
+        uint32 enchant_id = item->GetEnchantmentId(EnchantmentSlot(e_slot));
+        SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id);
+        if (!pEnchant) continue;
+        for (int s = 0; s < 3; ++s)
+        {
+            uint32 proc_spell_id = pEnchant->spellid[s];
+
+            if (pEnchant->type[s] != ITEM_ENCHANTMENT_TYPE_COMBAT_SPELL)
+                continue;
+
+            SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proc_spell_id);
+            if (!spellInfo)
+            {
+                sLog.outError("Player::CastItemCombatSpell Enchant %i, cast unknown spell %i", pEnchant->ID, proc_spell_id);
+                continue;
+            }
+
+            if (spellInfo->IsDirectDamageSpell() || spellInfo->HasAura(SPELL_AURA_PERIODIC_DAMAGE))
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier)
 {
     Item *item = GetWeaponForAttack(attType, true, true);
