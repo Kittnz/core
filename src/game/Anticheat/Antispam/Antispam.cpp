@@ -57,7 +57,7 @@ void Antispam::LoadFromDB()
         {
             auto fields = result->Fetch();
             if (fields[1].GetBool())
-                m_regexBlacklist.emplace_back(fields[0].GetString()); // immediately create the regex pattern for precompiled matching
+                m_regexBlacklist.emplace_back(std::make_unique<re2::RE2>(fields[0].GetString())); // immediately create the regex pattern for precompiled matching
             else
                 m_blackList.insert(fields[0].GetCppString());
         }
@@ -506,7 +506,7 @@ bool Antispam::FilterMessage(const std::string &msg)
 
     for (const auto& pattern : m_regexBlacklist)
     {
-        if (re2::RE2::PartialMatch(origMsg, pattern) || re2::RE2::PartialMatch(normMsg, pattern))
+        if (re2::RE2::PartialMatch(origMsg, *pattern) || re2::RE2::PartialMatch(normMsg, *pattern))
         {
             block = true;
             break;
@@ -632,7 +632,7 @@ void Antispam::WhitelistWord(std::string word)
 
 void Antispam::AddRegexBlacklist(std::string pattern)
 {
-    m_regexBlacklist.push_back(std::move(pattern));
+    m_regexBlacklist.push_back(std::make_unique<re2::RE2>(std::move(pattern)));
     LoginDatabase.escape_string(pattern);
     LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`, `regex`) VALUES ('%s', 1)", pattern.c_str());
 }
