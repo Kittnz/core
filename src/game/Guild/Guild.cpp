@@ -804,7 +804,8 @@ void Guild::Disband()
     sGuildMgr.RemoveGuild(m_Id);
 }
 
-void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
+
+WorldPacket Guild::BuildOnlineRosterPacket(bool sendOfficerNote)
 {
     struct TempMemberInfo
     {
@@ -822,7 +823,6 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     totalSize += sizeof(uint32); // m_ranks.size()
     totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
 
-    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
 
     for (auto itr = members.begin(); itr != members.end(); ++itr)
     {
@@ -844,7 +844,7 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     }
 
     const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
-    
+
     auto writeMemberData = [inPacketCap, sendOfficerNote](WorldPacket& data, TempMemberInfo const& member) -> bool
     {
         if (!inPacketCap)
@@ -902,6 +902,26 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     }
 
     data.put<uint32>(countPos, finalCount);
+    return data;
+}
+
+void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
+{
+    //This is for public guilds that are huge.
+    //We will send cached results and only update on world ticks every x ms.
+    const bool sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
+    const bool canSendCache = (sendOfficerNote && m_cachedOfficerRosterPacket) || (!sendOfficerNote && m_cachedRosterPacket);
+
+    if (IsRosterCacheEnabled() && canSendCache)
+    {
+        if (session)
+            session->SendPacket(sendOfficerNote ? m_cachedOfficerRosterPacket.get() :  m_cachedRosterPacket.get());
+        else
+            BroadcastPacket(sendOfficerNote ? m_cachedOfficerRosterPacket.get() : m_cachedRosterPacket.get());
+        return;
+    }
+
+    auto data = BuildOnlineRosterPacket(sendOfficerNote);
 
     if (session)
         session->SendPacket(&data);
@@ -911,8 +931,30 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     DEBUG_LOG("WORLD: Sent (SMSG_GUILD_ROSTER) (ONLY FOR ONLINE)");
 }
 
+void Guild::UpdateCaches(uint32 diff)
+{
+    if (!IsMemberCacheEnabled())
+        return;
+
+    //do the timer check in Guild instead of Mgr to allow for dynamic cache expiry in future per guild.
+
+    if (m_cacheTimer < diff)
+    {
+        //refresh cache
+        auto nonOfficerData = BuildOnlineRosterPacket(false);
+        auto officerData = BuildOnlineRosterPacket(true);
+
+        m_cachedOfficerRosterPacket = std::make_unique<WorldPacket>(std::move(officerData));
+        m_cachedRosterPacket = std::make_unique<WorldPacket>(std::move(nonOfficerData));
+        m_cacheTimer = CacheExpiryMs;
+    }
+    else
+        m_cacheTimer -= diff;
+}
+
 void Guild::Roster(WorldSession *session /*= nullptr*/)
 {
+
     struct TempMemberInfo
     {
         ObjectGuid Guid;

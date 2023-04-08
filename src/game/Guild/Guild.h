@@ -219,6 +219,8 @@ struct RankInfo
 };
 
 constexpr uint32 OnlineMemberCache = 1000;
+constexpr uint32 RosterCache = 1000;
+constexpr uint32 CacheExpiryMs = 4000;
 
 class Guild
 {
@@ -334,6 +336,10 @@ class Guild
             else
                 Roster(session);
         }
+
+        
+        void UpdateCaches(uint32 diff);
+        WorldPacket BuildOnlineRosterPacket(bool sendOfficerNote);
         void Roster(WorldSession *session = nullptr);          // nullptr = broadcast
         void TempRosterOnline(WorldSession* session = nullptr);          // nullptr = broadcast
         void Query(WorldSession *session);
@@ -359,6 +365,11 @@ class Guild
             return members.size() >= OnlineMemberCache;
         }
 
+        bool IsRosterCacheEnabled() const
+        {
+            return members.size() >= RosterCache;
+        }
+
     protected:
         void AddRank(std::string const& name,uint32 rights);
 
@@ -379,6 +390,10 @@ class Guild
         uint32 m_accountsNumber;                            // 0 used as marker for need lazy calculation at request
 
         RankList m_Ranks;
+
+        std::unique_ptr<WorldPacket> m_cachedRosterPacket;
+        std::unique_ptr<WorldPacket> m_cachedOfficerRosterPacket;
+        uint32 m_cacheTimer = CacheExpiryMs;
 
         MemberList members;
         std::unordered_set<uint32> m_onlineMemberCache;

@@ -259,6 +259,11 @@ void GuildMgr::Update(uint32 diff)
 		SaveGuildBanks();
 	else
 		m_guildBankSaveTimer -= diff;
+
+    for (const auto& [key, guild] : m_GuildMap)
+    {
+        guild->UpdateCaches(diff);
+    }
 }
 
 void GuildMgr::SaveGuildBanks()
