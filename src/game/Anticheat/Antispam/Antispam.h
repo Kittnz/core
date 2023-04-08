@@ -8,6 +8,7 @@
 #include "World.h"
 #include "ChannelMgr.h"
 #include "Anticheat.h"
+#include "re2/re2.h"
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -122,6 +123,7 @@ class Antispam : public AntispamInterface
 
         void BlacklistWord(std::string word) override;
         void WhitelistWord(std::string word) override;
+        void AddRegexBlacklist(std::string pattern) override;
 
         StringSet const* GetMutedMessagesForAccount(uint32 accountId) override
         {
@@ -168,6 +170,7 @@ class Antispam : public AntispamInterface
         bool m_banEnabled;
         bool m_mergeAllWhispers;
 
+        std::vector<re2::RE2> m_regexBlacklist;
         StringSet m_blackList;
         StringMap m_replacement;
         ScoreMap m_scores[MSG_TYPE_MAX];
