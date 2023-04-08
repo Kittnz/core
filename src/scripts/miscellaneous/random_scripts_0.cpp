@@ -1524,6 +1524,11 @@ struct npc_summon_possessedAI : ScriptedAI
 
         ScriptedAI::JustDied(pKiller);
     }
+
+    void AttackStart(Unit* pTarget) override
+    {
+
+    }
 };
 
 CreatureAI* GetAI_npc_summon_possessed(Creature* pCreature)
