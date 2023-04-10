@@ -839,3 +839,10 @@ Details = 'During the Second War, Kul Tiras proudly put an end to Orgrim Doomham
 RequestItemsText = 'If it were within my power, I would nail their entire race to stakes and watch the life burn out of them. The way my people burned. The way my father died.',
 OfferRewardText = 'The souls of our honored dead sing of your name, $c.$B$BBut there shall be no peace for me, not until all of Lord Daelin''s murderers are dead and their accursed nations gone with them.'
 WHERE entry = 40793;
+-- Quest 'The Scales of War'. Please update with the following text (by Calevarn).
+UPDATE quest_template SET
+Details = 'It has been three hard years since Lord Daelin brought us to these Light-forsaken shores. The strength of our Expeditionary Fleet has been duly tested against the orcs and their miserable allies, while I was able to find little to no resources in my absence.$B$BIf I am to win this war, or at the least secure a westward bulwark against our most hated enemy, then I cannot fight alone.$B$BVice Admiral Renhoff is an old friend of mine, and he holds great sway within Kul Tiras.$B$BI need you to find him in Stormwind and deliver this letter to him, to plead our case, to ensure that all our sacrifices are not in vain.',
+Objectives = 'Bring the Sealed Kul Tiran Letter to Vice Admiral Renhoff at the Kul Tiran Embassy in the Stormwind Harbor.',
+RequestItemsText = 'What is it? Can I help you?',
+OfferRewardText = 'Alverold lives?! Tides be thanked!$B$BWith the fall of Lord Daelin, we thought the western cause lost. Indeed, many in Kul Tiras have elected to divert our attention north.$B$BIt will not be easy to persuade them to support the Kalimdor Expedition again; it is far more likely that they will demand Alverold''s return for his assistance in the northern realms instead.$B$BStill, I will do what I can and send word to Alverold once I have news.$B$BYou have Kul Tiras'' gratitude, $N.'
+WHERE entry = 40794;
