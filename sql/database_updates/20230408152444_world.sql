@@ -579,3 +579,11 @@ REPLACE INTO `gameobject` VALUES ( 5013615, 2003285, 0, -8308.55, 548.132, 99.60
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417372318171247, 0.800000);
 REPLACE INTO `gameobject` VALUES ( 5013615, 2003285, 0, -8308.55, 548.132, 99.6024, 5.39608, 0, 0, 0.429152, -0.903232, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5013615, 2003285, 0, -8308.55, 548.132, 99.4024, 5.39608, 0, 0, 0.429152, -0.903232, 300, 300, 100, 1, 0, 0);
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2574985;
+DELETE FROM creature_addon WHERE guid=2574985;
+DELETE FROM creature_movement WHERE id=2574985;
+DELETE FROM game_event_creature WHERE guid=2574985;
+DELETE FROM game_event_creature_data WHERE guid=2574985;
+DELETE FROM creature_battleground WHERE guid=2574985;
