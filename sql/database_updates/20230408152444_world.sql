@@ -587,3 +587,162 @@ DELETE FROM creature_movement WHERE id=2574985;
 DELETE FROM game_event_creature WHERE guid=2574985;
 DELETE FROM game_event_creature_data WHERE guid=2574985;
 DELETE FROM creature_battleground WHERE guid=2574985;
+DELETE FROM creature WHERE guid=2574984;
+DELETE FROM creature_addon WHERE guid=2574984;
+DELETE FROM creature_movement WHERE id=2574984;
+DELETE FROM game_event_creature WHERE guid=2574984;
+DELETE FROM game_event_creature_data WHERE guid=2574984;
+DELETE FROM creature_battleground WHERE guid=2574984;
+DELETE FROM creature WHERE guid=2574983;
+DELETE FROM creature_addon WHERE guid=2574983;
+DELETE FROM creature_movement WHERE id=2574983;
+DELETE FROM game_event_creature WHERE guid=2574983;
+DELETE FROM game_event_creature_data WHERE guid=2574983;
+DELETE FROM creature_battleground WHERE guid=2574983;
+DELETE FROM creature WHERE guid=2574982;
+DELETE FROM creature_addon WHERE guid=2574982;
+DELETE FROM creature_movement WHERE id=2574982;
+DELETE FROM game_event_creature WHERE guid=2574982;
+DELETE FROM game_event_creature_data WHERE guid=2574982;
+DELETE FROM creature_battleground WHERE guid=2574982;
+REPLACE INTO `creature` VALUES (2574993,61397,0,0,0,815,-1159.31,2260.73,182.985,0.924578,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2574994,61392,0,0,0,815,-1162.19,2256.91,182.865,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574994;
+DELETE FROM creature_addon WHERE guid=2574994;
+DELETE FROM creature_movement WHERE id=2574994;
+DELETE FROM game_event_creature WHERE guid=2574994;
+DELETE FROM game_event_creature_data WHERE guid=2574994;
+DELETE FROM creature_battleground WHERE guid=2574994;
+DELETE FROM creature WHERE guid=2574993;
+DELETE FROM creature_addon WHERE guid=2574993;
+DELETE FROM creature_movement WHERE id=2574993;
+DELETE FROM game_event_creature WHERE guid=2574993;
+DELETE FROM game_event_creature_data WHERE guid=2574993;
+DELETE FROM creature_battleground WHERE guid=2574993;
+REPLACE INTO `creature` VALUES (2574997,61397,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574997;
+DELETE FROM creature_addon WHERE guid=2574997;
+DELETE FROM creature_movement WHERE id=2574997;
+DELETE FROM game_event_creature WHERE guid=2574997;
+DELETE FROM game_event_creature_data WHERE guid=2574997;
+DELETE FROM creature_battleground WHERE guid=2574997;
+REPLACE INTO `creature` VALUES (2574998,61396,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574998;
+DELETE FROM creature_addon WHERE guid=2574998;
+DELETE FROM creature_movement WHERE id=2574998;
+DELETE FROM game_event_creature WHERE guid=2574998;
+DELETE FROM game_event_creature_data WHERE guid=2574998;
+DELETE FROM creature_battleground WHERE guid=2574998;
+REPLACE INTO `creature` VALUES (2574999,61395,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574999;
+DELETE FROM creature_addon WHERE guid=2574999;
+DELETE FROM creature_movement WHERE id=2574999;
+DELETE FROM game_event_creature WHERE guid=2574999;
+DELETE FROM game_event_creature_data WHERE guid=2574999;
+DELETE FROM creature_battleground WHERE guid=2574999;
+REPLACE INTO `creature` VALUES (2575000,61394,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575000;
+DELETE FROM creature_addon WHERE guid=2575000;
+DELETE FROM creature_movement WHERE id=2575000;
+DELETE FROM game_event_creature WHERE guid=2575000;
+DELETE FROM game_event_creature_data WHERE guid=2575000;
+DELETE FROM creature_battleground WHERE guid=2575000;
+REPLACE INTO `creature` VALUES (2575001,61393,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575001;
+DELETE FROM creature_addon WHERE guid=2575001;
+DELETE FROM creature_movement WHERE id=2575001;
+DELETE FROM game_event_creature WHERE guid=2575001;
+DELETE FROM game_event_creature_data WHERE guid=2575001;
+DELETE FROM creature_battleground WHERE guid=2575001;
+REPLACE INTO `creature` VALUES (2575002,61390,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575002;
+DELETE FROM creature_addon WHERE guid=2575002;
+DELETE FROM creature_movement WHERE id=2575002;
+DELETE FROM game_event_creature WHERE guid=2575002;
+DELETE FROM game_event_creature_data WHERE guid=2575002;
+DELETE FROM creature_battleground WHERE guid=2575002;
+REPLACE INTO `creature` VALUES (2575003,61389,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575003;
+DELETE FROM creature_addon WHERE guid=2575003;
+DELETE FROM creature_movement WHERE id=2575003;
+DELETE FROM game_event_creature WHERE guid=2575003;
+DELETE FROM game_event_creature_data WHERE guid=2575003;
+DELETE FROM creature_battleground WHERE guid=2575003;
+REPLACE INTO `creature` VALUES (2575004,61388,0,0,0,815,-1161.52,2257.8,182.87,0.924578,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575004;
+DELETE FROM creature_addon WHERE guid=2575004;
+DELETE FROM creature_movement WHERE id=2575004;
+DELETE FROM game_event_creature WHERE guid=2575004;
+DELETE FROM game_event_creature_data WHERE guid=2575004;
+DELETE FROM creature_battleground WHERE guid=2575004;
+REPLACE INTO `creature` VALUES (2575008,61375,0,0,0,815,-1152.32,2262.77,182.85,0.281337,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575008;
+DELETE FROM creature_addon WHERE guid=2575008;
+DELETE FROM creature_movement WHERE id=2575008;
+DELETE FROM game_event_creature WHERE guid=2575008;
+DELETE FROM game_event_creature_data WHERE guid=2575008;
+DELETE FROM creature_battleground WHERE guid=2575008;
+REPLACE INTO `creature` VALUES (2575009,61374,0,0,0,815,-1154.77,2263.13,183.086,3.27292,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575009;
+DELETE FROM creature_addon WHERE guid=2575009;
+DELETE FROM creature_movement WHERE id=2575009;
+DELETE FROM game_event_creature WHERE guid=2575009;
+DELETE FROM game_event_creature_data WHERE guid=2575009;
+DELETE FROM creature_battleground WHERE guid=2575009;
+DELETE FROM creature WHERE guid=2574976;
+DELETE FROM creature_addon WHERE guid=2574976;
+DELETE FROM creature_movement WHERE id=2574976;
+DELETE FROM game_event_creature WHERE guid=2574976;
+DELETE FROM game_event_creature_data WHERE guid=2574976;
+DELETE FROM creature_battleground WHERE guid=2574976;
+DELETE FROM creature WHERE guid=2574963;
+DELETE FROM creature_addon WHERE guid=2574963;
+DELETE FROM creature_movement WHERE id=2574963;
+DELETE FROM game_event_creature WHERE guid=2574963;
+DELETE FROM game_event_creature_data WHERE guid=2574963;
+DELETE FROM creature_battleground WHERE guid=2574963;
+UPDATE `creature` SET `position_x` = -2169.861328, `position_y` = 2048.881836, `position_z` = 32.221630, `orientation` = 0.239989 WHERE `guid` = 2574681;
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 11030, 2744, 0, -12127.5, 533.338, -48.4113, -2.28638, 0, 0, 0.909961, -0.414693, 900, 900, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013616, 2744, 0, -12174, 721.733, -48.3535, 3.20794, 0, 0, 0.99945, -0.033168, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013617, 2744, 0, -12225.8, 677.885, -70.8694, 5.37721, 0, 0, 0.437654, -0.899144, 300, 300, 100, 1, 0, 0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575010,6139,0,0,0,0,-1196.28,2068.98,101.116,3.18911,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575010;
+DELETE FROM creature_addon WHERE guid=2575010;
+DELETE FROM creature_movement WHERE id=2575010;
+DELETE FROM game_event_creature WHERE guid=2575010;
+DELETE FROM game_event_creature_data WHERE guid=2575010;
+DELETE FROM creature_battleground WHERE guid=2575010;
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 5013618, 2744, 0, -12207.9, 635.705, -67.4674, 1.52011, 0, 0, 0.688963, 0.724797, 300, 300, 100, 1, 0, 0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575011,61399,0,0,0,0,-1196.28,2068.98,101.116,3.18911,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575012,61392,0,0,0,0,-1197.87,2062.39,101.171,2.84747,120,120,0,100,100,0,0,0);
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 5013619, 2744, 0, -12138, 636.121, -70.0238, 1.95366, 0, 0, 0.828728, 0.559652, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013620, 2744, 0, -12162.1, 672.74, -72.3371, 5.88772, 0, 0, 0.196447, -0.980514, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013621, 2744, 0, -12109.1, 536.174, -58.1302, 4.07396, 0, 0, 0.89329, -0.449481, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013622, 2744, 0, -12161.6, 582.922, -28.9052, 0.48783, 0, 0, 0.241504, 0.9704, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013623, 2744, 0, -12203.8, 531.543, -67.5786, 2.41127, 0, 0, 0.934065, 0.357102, 300, 300, 100, 1, 0, 0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575013,61399,0,0,0,0,-905.898,1575.45,42.1207,4.61852,120,120,0,100,100,0,0,0);
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 5013624, 2744, 0, -12282, 507.015, -79.7405, 1.1617, 0, 0, 0.548735, 0.835996, 300, 300, 100, 1, 0, 0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575014,61392,0,0,0,0,-903.154,1575.57,41.5839,4.63815,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575015,61362,0,0,0,0,-901.022,1574.53,41.3586,4.64208,120,120,0,100,100,0,0,0);
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 5013625, 2744, 0, -12331.3, 500.068, -91.4341, 1.69891, 0, 0, 0.750921, 0.660392, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013626, 2744, 0, -12389.1, 537.486, -109.735, 1.28815, 0, 0, 0.600459, 0.799656, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013627, 2744, 0, -12430.6, 593.029, -102.724, 2.21493, 0, 0, 0.894568, 0.446933, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5013628, 2744, 0, -12550.2, 623.411, -100.805, 4.2978, 0, 0, 0.837499, -0.546439, 300, 300, 100, 1, 0, 0);
