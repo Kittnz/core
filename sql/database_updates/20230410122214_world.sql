@@ -833,3 +833,9 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60901, 30008, 5, 0, -30008, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60901, 30037, 5, 0, -30037, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60901, 3770, 5.181, 0, 1, 1, 0);
+-- Quest 'The Dragonmaw Conflict'. Please update with the following text (by Calevarn).
+UPDATE quest_template SET
+Details = 'During the Second War, Kul Tiras proudly put an end to Orgrim Doomhammer''s ramshackle fleet. Others, however, eluded our grasp: The craven orcs of the Dragonmaw Clan, who brought us untold ruin astride their winged slave-beasts, took flight into the dark corners of the world.$B$BAll Kul Tiras craves vengeance against them, as it was by their fire that so many of our noble comrades faced agonizing deaths at sea.$B$BThe same fate was served to my own father, and I have not forgotten...$B$BIn the Wetlands, these Dragonmaw animals have had the gall to finally scurry out of their hiding holes. For this error, I will have their heads.$B$BDo this, and you will prove yourself a friend of Kul Tiras.',
+RequestItemsText = 'If it were within my power, I would nail their entire race to stakes and watch the life burn out of them. The way my people burned. The way my father died.',
+OfferRewardText = 'The souls of our honored dead sing of your name, $c.$B$BBut there shall be no peace for me, not until all of Lord Daelin''s murderers are dead and their accursed nations gone with them.'
+WHERE entry = 40793;
