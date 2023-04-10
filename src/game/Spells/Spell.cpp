@@ -6194,6 +6194,12 @@ SpellCastResult Spell::CheckCast(bool strict)
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't build here.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
+                    float range = 20.0F;
+                    if (m_caster->FindNearestGameObject(1000001, range) || m_caster->FindNearestGameObject(1000236, range))
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You cannot build tents too close to other tents.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
                 }
                 else if (m_spellInfo->Id == 46062) // Simple Wooden Planter 
                 {
