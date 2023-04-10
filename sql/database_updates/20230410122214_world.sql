@@ -930,3 +930,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91790, 9259, 20, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91790, 4338, 23.6832, 0, 1, 2, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91790, 1520, 29.9452, 0, 1, 1, 0);
+-- Respawning timer for wreckage near Steamweedle Port and other like this increased to 900 sec.
+update gameobject set spawntimesecsmin = 900, spawntimesecsmax = 900 where guid in (18071,18082,18083,18084,18085,18086,48231,48232,18070,50310,50311);
+
+
