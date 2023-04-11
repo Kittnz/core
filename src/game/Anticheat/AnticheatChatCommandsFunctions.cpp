@@ -311,7 +311,20 @@ bool ChatHandler::HandleAnticheatBlacklistCommand(char* args)
     }
 
     strToUpper(args, strlen(args));
-    pAntispam->BlacklistWord(args);
+
+    char* blacklistArg = ExtractQuotedArg(&args);
+    if (!blacklistArg)
+        return false;
+
+    std::string blacklistedWord = blacklistArg;
+
+    if (blacklistedWord.empty() || blacklistedWord.find_first_not_of(' ') == std::string::npos)
+    {
+        SendSysMessage("Bad word. Please use quotes to add the word to blacklist.");
+        return false;
+    }
+
+    pAntispam->BlacklistWord(blacklistedWord.c_str());
 
     PSendSysMessage("Added '%s' to antispam blacklist.", args);
     return true;
