@@ -73,7 +73,9 @@ dungeons/dire_maul/dreadsteed_ritual.cpp
 dungeons/dire_maul/instance_dire_maul.cpp
 dungeons/dire_maul/npc_ecorcefer.cpp
 dungeons/dire_maul/npc_pusillin.cpp
+dungeons/emerald_sanctum/emerald_sanctum.h
 dungeons/emerald_sanctum/instance_emerald_sanctum.cpp
+dungeons/emerald_sanctum/boss_solnius.cpp
 dungeons/gnomeregan/boss_thermaplugg.cpp
 dungeons/gnomeregan/gnomeregan.cpp
 dungeons/gnomeregan/gnomeregan.h
