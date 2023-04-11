@@ -49,6 +49,7 @@ class WorldSession;
 class Player;
 class Guild;
 struct AreaEntry;
+struct MessageBlock;
 
 typedef std::unordered_set<std::string> StringSet;
 
@@ -60,7 +61,7 @@ public:
     virtual void LoadConfig() {}
 
     virtual std::string NormalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
-    virtual bool FilterMessage(std::string const& msg) { return 0; }
+    virtual bool FilterMessage(MessageBlock const& msg) { return 0; }
 
     virtual bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) { return true; }
 
