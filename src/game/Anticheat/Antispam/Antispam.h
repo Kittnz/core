@@ -108,7 +108,7 @@ class Antispam : public AntispamInterface
         void LoadConfig() override;
         
         std::string NormalizeMessage(const std::string& msg, uint32 mask = 0) override;
-        bool FilterMessage(const std::string &msg) override;
+        bool FilterMessage(MessageBlock const& msg) override;
         
         bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) override;
 
