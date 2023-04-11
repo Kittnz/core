@@ -58,3 +58,4 @@ UPDATE `creature` SET `position_x` = -8662.799805, `position_y` = 672.824097, `p
 UPDATE `creature` SET `position_x` = -8663.704102, `position_y` = 674.387695, `position_z` = 100.139717, `orientation` = 5.144641 WHERE `guid` = 2575020;
 UPDATE `creature` SET `position_x` = -8654.532227, `position_y` = 667.607605, `position_z` = 101.760254, `orientation` = 6.272469 WHERE `guid` = 2575022;
 UPDATE `creature` SET `position_x` = -8652.144531, `position_y` = 677.017090, `position_z` = 101.760254, `orientation` = 5.848353 WHERE `guid` = 2575023;
+REPLACE INTO `gameobject` VALUES ( 5013691, 2001781, 0, -11014.4, -1351.7, 58.7029, 4.15746, 0, 0, 0.873752, -0.486371, 300, 300, 100, 1, 0, 0);
