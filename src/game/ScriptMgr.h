@@ -336,7 +336,7 @@ enum eScriptCommand
     SCRIPT_COMMAND_DESPAWN_GAMEOBJECT       = 81,           // source = GameObject (from datalong, provided source or target)
                                                             // datalong = db_guid
                                                             // datalong2 = despawn_delay
-    SCRIPT_COMMAND_LOAD_GAMEOBJECT          = 82,           // source = Map
+    SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN    = 82,           // source = Map
                                                             // datalong = db_guid
     SCRIPT_COMMAND_QUEST_CREDIT             = 83,           // source = Player (from provided source or target)
                                                             // target = WorldObject (from provided source or target)
@@ -356,6 +356,9 @@ enum eScriptCommand
     SCRIPT_COMMAND_START_SCRIPT_ON_GROUP    = 90,           // source = Unit
                                                             // datalong1-4 = generic_script id
                                                             // dataint1-4 = chance (total cant be above 100)
+    SCRIPT_COMMAND_LOAD_CREATURE_SPAWN      = 91,           // source = Map
+                                                            // datalong = db_guid
+                                                            // datalong2 = (bool) with_group
 
     SCRIPT_COMMAND_MAX,
 
@@ -1036,7 +1039,7 @@ struct ScriptInfo
             uint32 respawnDelay;                            // datalong2
         } despawnGo;
 
-        struct                                              // SCRIPT_COMMAND_LOAD_GAMEOBJECT (82)
+        struct                                              // SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN (82)
         {
             uint32 goGuid;                                  // datalong
         } loadGo;
@@ -1071,6 +1074,12 @@ struct ScriptInfo
             uint32 animId;                                  // datalong
         } playCustomAnim;
 
+        struct                                              // SCRIPT_COMMAND_LOAD_CREATURE_SPAWN (91)
+        {
+            uint32 dbGuid;                                  // datalong
+            uint32 withGroup;                               // datalong2
+        } loadCreature;
+
         struct
         {
             uint32 data[9];
@@ -1098,7 +1107,7 @@ struct ScriptInfo
         {
             case SCRIPT_COMMAND_RESPAWN_GAMEOBJECT: return respawnGo.goGuid;
             case SCRIPT_COMMAND_DESPAWN_GAMEOBJECT: return despawnGo.goGuid;
-            case SCRIPT_COMMAND_LOAD_GAMEOBJECT: return loadGo.goGuid;
+            case SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN: return loadGo.goGuid;
             case SCRIPT_COMMAND_OPEN_DOOR: return openDoor.goGuid;
             case SCRIPT_COMMAND_CLOSE_DOOR: return closeDoor.goGuid;
             default: return 0;

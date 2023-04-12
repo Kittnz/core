@@ -1122,14 +1122,14 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 }
                 break;
             }
-            case SCRIPT_COMMAND_LOAD_GAMEOBJECT:
+            case SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN:
             {
                 GameObjectData const* data = sObjectMgr.GetGOData(tmp.GetGOGuid());
                 if (!data)
                 {
                     if (!sObjectMgr.IsExistingGameObjectGuid(tmp.GetGOGuid()))
                     {
-                        sLog.outErrorDb("Table `%s` has invalid gameobject (GUID: %u) in SCRIPT_COMMAND_LOAD_GAMEOBJECT for script id %u", tablename, tmp.GetGOGuid(), tmp.id);
+                        sLog.outErrorDb("Table `%s` has invalid gameobject (GUID: %u) in SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN for script id %u", tablename, tmp.GetGOGuid(), tmp.id);
                         continue;
                     }
                     else
@@ -1158,6 +1158,25 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                         tablename, tmp.setGoState.state, tmp.id);
                     continue;
                 }
+                break;
+            }
+            case SCRIPT_COMMAND_LOAD_CREATURE_SPAWN:
+            {
+                if (!sObjectMgr.GetCreatureData(tmp.loadCreature.dbGuid))
+                {
+                    if (!sObjectMgr.IsExistingCreatureGuid(tmp.loadCreature.dbGuid))
+                    {
+                        sLog.outErrorDb("Table `%s` using invalid creature guid in datalong (%u) in SCRIPT_COMMAND_LOAD_CREATURE_SPAWN for script id %u",
+                            tablename, tmp.loadCreature.dbGuid, tmp.id);
+                        continue;
+                    }
+                    else
+                    {
+                        DisableScriptAction(tmp);
+                        break;
+                    }
+                }
+
                 break;
             }
         }
