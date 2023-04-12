@@ -5181,7 +5181,7 @@ bool QuestAccept_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Ques
 
     if (pQuest->GetQuestId() == 40737) //  The Final Test
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -5213,7 +5213,7 @@ bool QuestAccept_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Ques
             {
                 pQuestGiver->MonsterSay("We have done it, the secrets of the Gargantuan Banana are unlocked and at our finger tips! Can you believe what we have done today?! For your help, I'll make them for you any time, just bring me the required materials, and they are yours.");
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
             }, 23000);
 
         return true;
