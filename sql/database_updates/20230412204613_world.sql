@@ -2197,3 +2197,4 @@ DELETE FROM creature_movement WHERE id=2575612;
 DELETE FROM game_event_creature WHERE guid=2575612;
 DELETE FROM game_event_creature_data WHERE guid=2575612;
 DELETE FROM creature_battleground WHERE guid=2575612;
+UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=86400 WHERE `guid`=2575596;
