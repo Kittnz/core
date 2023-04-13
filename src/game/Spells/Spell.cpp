@@ -5733,7 +5733,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             else if (IsExplicitlySelectedUnitTarget(j) && !m_spellInfo->CanTargetAliveState(target->IsAlive()))
                 return SPELL_FAILED_BAD_TARGETS;
-            else if (Player* caster = m_caster->ToPlayer(); caster && caster->IsHardcore() && !caster->IsPvP() && IsExplicitlySelectedUnitTarget(j) && target->IsPvP())
+            else if (Player* caster = m_caster->ToPlayer();
+                     caster && caster->IsHardcore() && !caster->IsPvP() &&
+                     IsExplicitlySelectedUnitTarget(j) && target->IsPvP() &&
+                     target->IsCharmerOrOwnerPlayerOrPlayerItself())
             {
                 // maybe send custom message here?
                 return SPELL_FAILED_BAD_TARGETS;
