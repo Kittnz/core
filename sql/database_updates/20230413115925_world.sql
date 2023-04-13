@@ -23,3 +23,5 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 (2011052, 9, 218, 'Joshua the Redeemer', 0, 0, 1, 50630, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50630, 'Hierophant Joshua the Redeemer was the holiest man that ever walked the land of Gilneas: Through his blessed sermons he brought salvation to our country, illuminating our souls in the grace of the Holy Light. May our elder brother rest in sacred peace, and when the darkest of days fall upon our city, may his hallowed memory bring solace to our troubled hearts.', 0);
+-- Npc Elaroth Ranworth (entry 61258), change gossip text to:
+update broadcast_text set male_text = 'Welcome to my lighthouse.$B$BI should warn you, I may not have the most welcoming accommodations. I simply keep the fire burning to guide ships from hitting the shoal.$B$BWhat brings you here, anyway?' WHERE entry = 61258;
