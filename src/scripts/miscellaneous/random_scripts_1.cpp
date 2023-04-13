@@ -756,7 +756,7 @@ struct go_survival_tent : public GameObjectAI
             if (m_uiUpdateTimer < uiDiff)
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
                 Cell::VisitWorldObjects(me, searcher, 10.0f);
@@ -764,7 +764,7 @@ struct go_survival_tent : public GameObjectAI
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000425)));
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000675)));
                 }
                 m_uiUpdateTimer = 1000;
             }
