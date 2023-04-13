@@ -2219,3 +2219,30 @@ UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=86400 WHERE `
 
 -- Changes by GHEOR
 REPLACE INTO `creature` VALUES (2575614,7395,0,0,0,451,16920.7,15589.7,73.34,6.11025,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575614;
+DELETE FROM creature_addon WHERE guid=2575614;
+DELETE FROM creature_movement WHERE id=2575614;
+DELETE FROM game_event_creature WHERE guid=2575614;
+DELETE FROM game_event_creature_data WHERE guid=2575614;
+DELETE FROM creature_battleground WHERE guid=2575614;
+REPLACE INTO `creature` VALUES (2575615,10017,0,0,0,451,16918.5,15590.1,73.3238,5.63115,120,120,5,100,100,1,0,0);
+DELETE FROM creature WHERE guid=2575615;
+DELETE FROM creature_addon WHERE guid=2575615;
+DELETE FROM creature_movement WHERE id=2575615;
+DELETE FROM game_event_creature WHERE guid=2575615;
+DELETE FROM game_event_creature_data WHERE guid=2575615;
+DELETE FROM creature_battleground WHERE guid=2575615;
+REPLACE INTO `creature` VALUES (2575616,7395,0,0,0,451,16918.2,15590.8,73.294,5.70262,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575616;
+DELETE FROM creature_addon WHERE guid=2575616;
+DELETE FROM creature_movement WHERE id=2575616;
+DELETE FROM game_event_creature WHERE guid=2575616;
+DELETE FROM game_event_creature_data WHERE guid=2575616;
+DELETE FROM creature_battleground WHERE guid=2575616;
+REPLACE INTO `creature` VALUES (2575617,7026,0,0,0,451,16920.2,15600.5,72.6893,2.53276,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575617;
+DELETE FROM creature_addon WHERE guid=2575617;
+DELETE FROM creature_movement WHERE id=2575617;
+DELETE FROM game_event_creature WHERE guid=2575617;
+DELETE FROM game_event_creature_data WHERE guid=2575617;
+DELETE FROM creature_battleground WHERE guid=2575617;
