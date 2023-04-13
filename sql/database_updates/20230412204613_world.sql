@@ -2216,3 +2216,6 @@ UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=86400 WHERE `
 UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=86400 WHERE `guid`=2575611;
 REPLACE INTO `creature` VALUES (2575613,91932,0,0,0,800,-11219.7,-1575.75,-1.46346,1.55842,120,120,5,100,100,1,0,0);
 UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=86400 WHERE `guid`=2575613;
+
+-- Changes by GHEOR
+REPLACE INTO `creature` VALUES (2575614,7395,0,0,0,451,16920.7,15589.7,73.34,6.11025,120,120,0,100,100,0,0,0);
