@@ -605,7 +605,9 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                 {
                     //limit scale to 2.0f if none are GM
                     if (GetTypeId() == TYPEID_PLAYER && (!ToPlayer()->IsGameMaster() && !target->IsGameMaster()) && m_floatValues[index] > 2.0f)
-                        *data << 2.f;
+                        *data << 2.0f;
+                    else if (GetTypeId() == TYPEID_PLAYER && (!ToPlayer()->IsGameMaster() && !target->IsGameMaster()) && m_floatValues[index] < 0.5f)
+                        *data << 0.5f;
                     else
                         *data << m_uint32Values[index];
                 }

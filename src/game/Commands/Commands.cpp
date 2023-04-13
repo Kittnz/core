@@ -4259,7 +4259,7 @@ bool ChatHandler::HandleWarnCharacterCommand(char* args)
         }
     }
 
-    PSendSysMessage("Player %s warned.", playerData->sName);
+    PSendSysMessage("Player %s warned.", playerData->sName.c_str());
 
     return true;
 }

@@ -3636,22 +3636,24 @@ struct npc_sunchaserAI : public ScriptedAI
     void Reset() { }
     void UpdateAI(const uint32 diff)
     {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
         if (m_creature->GetHealthPercent() < 50)
         {
-            m_creature->CombatStop(true);
-            m_creature->ClearInCombat();
+            GiveQuestCredit();
             m_creature->SetFactionTemplateId(104);
+            EnterEvadeMode();
+            return;
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        
         DoMeleeAttackIfReady();
     }
     void JustDied(Unit*) override { }
     void EnterCombat() { }
 
-    void OnCombatStop()
+    void GiveQuestCredit()
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-
         ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
         for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
         {
@@ -3659,10 +3661,7 @@ struct npc_sunchaserAI : public ScriptedAI
             if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
             {
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60382))
-                {
                     pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                    pUnit->ToPlayer()->CombatStop(true);
-                }
             }
         }
     }
@@ -3677,10 +3676,6 @@ struct npc_sellick_vossAI : public ScriptedAI
     npc_sellick_vossAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
     void Reset() {}
-    void UpdateAI(const uint32 diff)
-    {
-        DoMeleeAttackIfReady();
-    }
     void Aggro(Unit* who)
     {
         m_creature->MonsterSay("Theramore was weak, to side with the Horde is betrayal after all who died! We will not be stopped so easily, the Vengeful Mariner will not forget!");
@@ -5181,7 +5176,7 @@ bool QuestAccept_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Ques
 
     if (pQuest->GetQuestId() == 40737) //  The Final Test
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -5213,7 +5208,7 @@ bool QuestAccept_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Ques
             {
                 pQuestGiver->MonsterSay("We have done it, the secrets of the Gargantuan Banana are unlocked and at our finger tips! Can you believe what we have done today?! For your help, I'll make them for you any time, just bring me the required materials, and they are yours.");
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
             }, 23000);
 
         return true;

@@ -197,6 +197,7 @@ static constexpr uint32 abominationSpawnMs[NUM_UNDEAD_SPAWNS] =
 // milliseconds since pull for each soulweaver spawn
 static constexpr uint32 soulweaverSpawnMs[NUM_UNDEAD_SPAWNS] =
 {
+    14000,
     44000,
     68000,
     97000,
@@ -209,7 +210,6 @@ static constexpr uint32 soulweaverSpawnMs[NUM_UNDEAD_SPAWNS] =
     256000,
     271000,
     285000,
-    294000,
     300000,
 };
 
