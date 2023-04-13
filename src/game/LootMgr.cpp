@@ -1165,27 +1165,48 @@ LootStoreItem const * LootTemplate::LootGroup::Roll(Loot const& loot) const
     return nullptr;                                            // Empty drop from the group
 }
 
+inline bool ItemStartsQuest(uint32 itemId)
+{
+    ItemPrototype const* pItem = sObjectMgr.GetItemPrototype(itemId);
+    if (!pItem)
+        return false;
+
+    return pItem->StartQuest != 0;
+}
+
 // True if group includes at least 1 quest drop entry
 bool LootTemplate::LootGroup::HasQuestDrop() const
 {
     for (const auto& i : ExplicitlyChanced)
-        if (i.needs_quest)
+        if (i.needs_quest || ItemStartsQuest(i.itemid))
             return true;
     for (const auto& i : EqualChanced)
-        if (i.needs_quest)
+        if (i.needs_quest || ItemStartsQuest(i.itemid))
             return true;
     return false;
+}
+
+inline bool ItemStartsQuestPlayerHasNotDone(Player const* pPlayer, uint32 itemId)
+{
+    ItemPrototype const* pItem = sObjectMgr.GetItemPrototype(itemId);
+    if (!pItem)
+        return false;
+
+    if (!pItem->StartQuest)
+        return false;
+
+    return !pPlayer->GetQuestRewardStatus(pItem->StartQuest);
 }
 
 // True if group includes at least 1 quest drop entry for active quests of the player
 bool LootTemplate::LootGroup::HasQuestDropForPlayer(Player const* player) const
 {
     for (const auto& i : ExplicitlyChanced)
-        if (player->HasQuestForItem(i.itemid))
+        if (player->HasQuestForItem(i.itemid) || ItemStartsQuestPlayerHasNotDone(player, i.itemid))
             return true;
 
     for (const auto& i : EqualChanced)
-        if (player->HasQuestForItem(i.itemid))
+        if (player->HasQuestForItem(i.itemid) || ItemStartsQuestPlayerHasNotDone(player, i.itemid))
             return true;
 
     return false;
@@ -1334,7 +1355,7 @@ bool LootTemplate::HasQuestDrop(LootTemplateMap const& store, uint8 groupId) con
             if (Referenced->second->HasQuestDrop(store, itr.group))
                 return true;
         }
-        else if (itr.needs_quest)
+        else if (itr.needs_quest || ItemStartsQuest(itr.itemid))
             return true;                                    // quest drop found
     }
 
@@ -1367,7 +1388,7 @@ bool LootTemplate::HasQuestDropForPlayer(LootTemplateMap const& store, Player co
             if (Referenced->second->HasQuestDropForPlayer(store, player, itr.group))
                 return true;
         }
-        else if (player->HasQuestForItem(itr.itemid))
+        else if (player->HasQuestForItem(itr.itemid) || ItemStartsQuestPlayerHasNotDone(player, itr.itemid))
             return true;                                    // active quest drop found
     }
 

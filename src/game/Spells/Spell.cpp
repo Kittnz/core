@@ -5733,6 +5733,11 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             else if (IsExplicitlySelectedUnitTarget(j) && !m_spellInfo->CanTargetAliveState(target->IsAlive()))
                 return SPELL_FAILED_BAD_TARGETS;
+            else if (Player* caster = m_caster->ToPlayer(); caster && caster->IsHardcore() && !caster->IsPvP() && IsExplicitlySelectedUnitTarget(j) && target->IsPvP())
+            {
+                // maybe send custom message here?
+                return SPELL_FAILED_BAD_TARGETS;
+            }
         }
 
         //check creature type
@@ -6187,6 +6192,12 @@ SpellCastResult Spell::CheckCast(bool strict)
                         m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetInstanceId())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't build here.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                    float range = 25.0F;
+                    if (m_caster->FindNearestGameObject(1000001, range) || m_caster->FindNearestGameObject(1000236, range))
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You cannot build tents too close to other tents.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }

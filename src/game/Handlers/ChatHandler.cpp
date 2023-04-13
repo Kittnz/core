@@ -1003,7 +1003,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         return;
                     }
 
-                    if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+                    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
                     {
                         ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
                         return;

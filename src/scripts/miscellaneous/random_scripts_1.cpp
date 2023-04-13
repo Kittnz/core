@@ -739,18 +739,15 @@ struct go_survival_tent : public GameObjectAI
             if (m_uiUpdateTimer < uiDiff)
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 15.0f);
+                Cell::VisitWorldObjects(me, searcher, 10.0f);
 
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
-                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000060)));
-                    else
-                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000125)));
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000575)));
                 }
                 m_uiUpdateTimer = 1000;
             }
@@ -5916,8 +5913,11 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     if (pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-    if (pPlayer->HasSpell(SPELL_WAR_MODE) && !pPlayer->GetQuestRewardStatus(55055))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+    if (pPlayer->HasSpell(SPELL_WAR_MODE))
+    {
+        if (pPlayer->GetLevel() == 60 || !pPlayer->GetQuestStatus(55055) == QUEST_STATUS_COMPLETE)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+    }
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;

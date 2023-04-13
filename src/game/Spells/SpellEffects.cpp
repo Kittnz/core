@@ -6805,6 +6805,51 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex eff_idx)
     }
     */
 
+    if (m_triggeredByAuraSpell && m_caster->IsCreature())
+    {
+        switch (m_triggeredByAuraSpell->Id)
+        {
+            // Flametongue Totem Passive
+            case 8229: // Rank 1
+            case 8251: // Rank 2
+            case 10524: // Rank 3
+            case 16388: // Rank 4
+            // Windfury Totem Passive
+            case 8515: // Rank 1
+            case 10609: // Rank 2
+            case 10612: // Rank 3
+            {
+                if (Unit* pOwner = m_casterUnit->GetOwner())
+                {
+                    if (pOwner != unitTarget)
+                    {
+                        auto AddTemporaryAura = [](Unit* pTarget, uint32 spellId)
+                        {
+                            if (SpellAuraHolder* holder = pTarget->GetSpellAuraHolder(spellId))
+                            {
+                                if (!holder->IsPermanent())
+                                    holder->SetAuraDuration(10000);
+                            }
+                            else if (SpellAuraHolder* pAura = pTarget->AddAura(spellId))
+                            {
+                                pAura->SetPassive(false);
+                                pAura->SetPermanent(false);
+                                pAura->SetAuraMaxDuration(10000);
+                                pAura->SetAuraDuration(10000);
+                            }
+                        };
+
+                        if (pOwner->HasAura(29192))
+                            AddTemporaryAura(unitTarget, 29192);
+                        else if (pOwner->HasAura(29193))
+                            AddTemporaryAura(unitTarget, 29193);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     if (m_spellInfo->EffectMiscValue[eff_idx])
     {
         uint32 enchant_id = m_spellInfo->EffectMiscValue[eff_idx];

@@ -57,7 +57,7 @@ void Antispam::LoadFromDB()
         {
             auto fields = result->Fetch();
             if (fields[1].GetBool())
-                m_regexBlacklist.emplace_back(fields[0].GetString()); // immediately create the regex pattern for precompiled matching
+                m_regexBlacklist.emplace_back(std::make_unique<re2::RE2>(fields[0].GetString())); // immediately create the regex pattern for precompiled matching
             else
                 m_blackList.insert(fields[0].GetCppString());
         }
@@ -311,7 +311,7 @@ void Antispam::ProcessMessages(uint32 diff)
                     itr->second.msg.append(messageBlock.msg);
                     itr->second.count++;
 
-                    if (FilterMessage(itr->second.msg))
+                    if (FilterMessage(itr->second))
                     {
                         ApplySanction(itr->second, DETECT_SEPARATED);
                         SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
@@ -323,7 +323,7 @@ void Antispam::ProcessMessages(uint32 diff)
                         m_messageBlocks[type].erase(itr);
 
                 }
-                else if (FilterMessage(messageBlock.msg))
+                else if (FilterMessage(messageBlock))
                 {
                     ApplySanction(messageBlock, DETECT_STANDARD);
                     SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
@@ -332,14 +332,14 @@ void Antispam::ProcessMessages(uint32 diff)
                 else
                     m_messageBlocks[type][lowGuidPair] = messageBlock;
             }
-            else if (FilterMessage(messageBlock.msg))
+            else if (FilterMessage(messageBlock))
             {
                 ApplySanction(messageBlock, DETECT_STANDARD);
                 SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                 continue;
             }
         }
-        else if (FilterMessage(messageBlock.msg))
+        else if (FilterMessage(messageBlock))
         {
             ApplySanction(messageBlock, DETECT_STANDARD);
             SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
@@ -486,10 +486,10 @@ std::string Antispam::NormalizeMessage(const std::string& msg, uint32 mask)
     return newMsg;
 }
 
-bool Antispam::FilterMessage(const std::string &msg)
+bool Antispam::FilterMessage(MessageBlock const& msgBlock)
 {
-    auto normMsg = NormalizeMessage(msg);
-    auto origMsg = NormalizeMessage(msg, m_originalNormalizeMask);
+    auto normMsg = NormalizeMessage(msgBlock.msg);
+    auto origMsg = NormalizeMessage(msgBlock.msg, m_originalNormalizeMask);
 
     bool block = false;
     uint32 score = 0;
@@ -500,15 +500,17 @@ bool Antispam::FilterMessage(const std::string &msg)
             normMsg.find(word) != std::string::npos)
         {
             block = true;
+            sLog.outSpam("[Acc %u][Char %u] Blocked because of blacklisted word \'%s\'.", msgBlock.fromAccount, msgBlock.fromGuid.GetCounter(), word.c_str());
             break;
         }
     }
 
     for (const auto& pattern : m_regexBlacklist)
     {
-        if (re2::RE2::PartialMatch(origMsg, pattern) || re2::RE2::PartialMatch(normMsg, pattern))
+        if (re2::RE2::PartialMatch(origMsg, *pattern) || re2::RE2::PartialMatch(normMsg, *pattern))
         {
             block = true;
+            sLog.outSpam("[Acc %u][Char %u] Blocked because of blacklisted regex \'%s\'.", msgBlock.fromAccount, msgBlock.fromGuid.GetCounter(), pattern->pattern().c_str());
             break;
         }
     }
@@ -632,7 +634,7 @@ void Antispam::WhitelistWord(std::string word)
 
 void Antispam::AddRegexBlacklist(std::string pattern)
 {
-    m_regexBlacklist.push_back(std::move(pattern));
+    m_regexBlacklist.push_back(std::make_unique<re2::RE2>(std::move(pattern)));
     LoginDatabase.escape_string(pattern);
     LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`, `regex`) VALUES ('%s', 1)", pattern.c_str());
 }
