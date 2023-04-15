@@ -7,11 +7,11 @@ struct boss_solniusAI : public ScriptedAI
 {
 	boss_solniusAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
-		//m_pInstance = pCreature->GetInstanceData();
+		m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
 		Reset();
 	}
 
-	//InstanceData* m_pInstance;
+	ScriptedInstance* m_pInstance;
 	uint32 m_uiCorrosiveBoltTimer;
 	uint32 m_uiEmeraldRotTimer;
 	uint32 m_uiAcidBreathTimer;
@@ -21,6 +21,8 @@ struct boss_solniusAI : public ScriptedAI
 	bool phaseTwo;
 	bool phaseThree;
 	bool phaseFour;
+	bool envPhaseTwo;
+	bool envPhaseThree;
 
 	void Reset() override
 	{
@@ -33,6 +35,12 @@ struct boss_solniusAI : public ScriptedAI
 		phaseTwo = false;
 		phaseThree = false;
 		phaseFour = false;
+		envPhaseTwo = false;
+		envPhaseThree = false;
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
+		m_creature->SetFactionTemplateId(7);
+		m_creature->SetDisplayId(m_creature->GetNativeDisplayId());
+		m_creature->SetTauntImmunity(false);
 	}
 
 	std::vector<Player*> GetRandomPlayers(Map::PlayerList const& playerList, int8 count)
@@ -59,6 +67,36 @@ struct boss_solniusAI : public ScriptedAI
 		}
 
 		return randomPlayers;
+	}
+
+	void Aggro(Unit* pWho) override
+	{
+		if (m_creature->GetMapId() != 807)
+			return;
+
+		if (m_creature->GetEntry() != NPC_SANCTUM_DREAMER)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_DREAMER))
+				odd->AI()->AttackStart(pWho);
+		if (m_creature->GetEntry() != NPC_SANCTUM_DRAGONKIN)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_DRAGONKIN))
+				odd->AI()->AttackStart(pWho);
+		if (m_creature->GetEntry() != NPC_SANCTUM_WYRM)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_WYRM))
+				odd->AI()->AttackStart(pWho);
+		if (m_creature->GetEntry() != NPC_SANCTUM_WYRMKIN)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_WYRMKIN))
+				odd->AI()->AttackStart(pWho);
+		if (m_creature->GetEntry() != NPC_SANCTUM_SCALEBANE)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_SCALEBANE))
+				odd->AI()->AttackStart(pWho);
+		if (m_creature->GetEntry() != NPC_SANCTUM_SUPRESSOR)
+			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_SUPRESSOR))
+				odd->AI()->AttackStart(pWho);
+	}
+
+	void JustDied(Unit* pWho)
+	{
+		m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -113,6 +151,13 @@ struct boss_solniusAI : public ScriptedAI
 
 		if (phaseTwo)
 		{
+			if (!envPhaseTwo)
+			{
+				m_creature->SetDisplayId(MODEL_DRAGON);
+				m_creature->SetTauntImmunity(true);
+				envPhaseTwo = true;
+			}
+
 			if (m_uiAcidBreathTimer < uiDiff)
 			{
 				if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACID_BREATH) == CAST_OK)
@@ -151,7 +196,13 @@ struct boss_solniusAI : public ScriptedAI
 
 		if (phaseThree)
 		{
-
+			if (!envPhaseThree)
+			{
+				m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+				m_creature->GetMotionMaster()->MoveTargetedHome();
+				m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
+				envPhaseThree = true;
+			}
 		}
 
 		if (phaseFour)
@@ -184,6 +235,11 @@ struct boss_solniusAI : public ScriptedAI
 	}
 };
 
+CreatureAI* GetAI_boss_solnius(Creature* pCreature)
+{
+	return new boss_solniusAI(pCreature);
+}
+
 #define GOSSIP_ITEM_START_FIGHT "I have come to put an end to you, and stop this ritual."
 
 bool GossipHello_boss_solnius(Player* pPlayer, Creature* pCreature)
@@ -202,7 +258,13 @@ bool GossipSelect_boss_solnius(Player* pPlayer, Creature* pCreature, uint32 uiSe
 	{
 		case GOSSIP_ACTION_INFO_DEF + 1:
 		{
-
+			if (ScriptedInstance* pInstance = (ScriptedInstance*)pCreature->GetInstanceData())
+				if (Creature* boss_solnius = pInstance->GetCreature(pInstance->GetData64(DATA_SOLNIUS)))
+				{
+					boss_solnius->MonsterYell("You think you can interfere with my eternal duty? The awakening has been fortold long before your kind has existed mortals, you shall regret setting foot on our hallowed ground!");
+					boss_solnius->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
+					boss_solnius->SetFactionTemplateId(14);
+				}
 		}
 	}
 
@@ -215,6 +277,7 @@ void AddSC_boss_solnius()
 
 	newscript = new Script;
 	newscript->Name = "boss_solnius";
+	newscript->GetAI = &GetAI_boss_solnius;
 	newscript->pGossipHello = &GossipHello_boss_solnius;
 	newscript->pGossipSelect = &GossipSelect_boss_solnius;
 	newscript->RegisterSelf();

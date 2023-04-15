@@ -9,24 +9,10 @@ struct instance_emerald_sanctum : public ScriptedInstance
 	}
 
 	uint64 m_uiSolniusGUID;
-	uint64 m_uiSanctumDreamerGUID;
-	uint64 m_uiSanctumDragonkinGUID;
-	uint64 m_uiSanctumWyrmGUID;
-	uint64 m_uiSanctumSupressorGUID;
-	uint64 m_uiSanctumWyrmkinGUID;
-	uint64 m_uiSanctumScalebaneGUID;
-	uint64 m_uiErenniusGUID;
 
 	void Initialize() override
 	{
 		m_uiSolniusGUID = 0;
-		m_uiSanctumDreamerGUID = 0;
-		m_uiSanctumDragonkinGUID = 0;
-		m_uiSanctumWyrmGUID = 0;
-		m_uiSanctumSupressorGUID = 0;
-		m_uiSanctumWyrmkinGUID = 0;
-		m_uiSanctumScalebaneGUID = 0;
-		m_uiErenniusGUID = 0;
 	}
 
 	void OnCreatureCreate(Creature* pCreature) override
@@ -37,25 +23,13 @@ struct instance_emerald_sanctum : public ScriptedInstance
 				m_uiSolniusGUID = pCreature->GetGUID();
 				break;
 			case NPC_SANCTUM_DREAMER:
-				m_uiSanctumDreamerGUID = pCreature->GetGUID();
-				break;
 			case NPC_SANCTUM_DRAGONKIN:
-				m_uiSanctumDragonkinGUID = pCreature->GetGUID();
-				break;
 			case NPC_SANCTUM_WYRM:
-				m_uiSanctumWyrmGUID = pCreature->GetGUID();
-				break;
 			case NPC_SANCTUM_SUPRESSOR:
-				m_uiSanctumSupressorGUID = pCreature->GetGUID();
-				break;
 			case NPC_SANCTUM_WYRMKIN:
-				m_uiSanctumWyrmkinGUID = pCreature->GetGUID();
-				break;
 			case NPC_SANCTUM_SCALEBANE:
-				m_uiSanctumScalebaneGUID = pCreature->GetGUID();
-				break;
 			case NPC_ERENNIUS:
-				m_uiErenniusGUID = pCreature->GetGUID();
+				m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
 				break;
 		}
 	}
@@ -66,20 +40,6 @@ struct instance_emerald_sanctum : public ScriptedInstance
 		{
 			case DATA_SOLNIUS:
 				return m_uiSolniusGUID;
-			case DATA_SANCTUM_DREAMER:
-				return m_uiSanctumDreamerGUID;
-			case DATA_SANCTUM_DRAGONKIN:
-				return m_uiSanctumDragonkinGUID;
-			case DATA_SANCTUM_WYRM:
-				return m_uiSanctumWyrmGUID;
-			case DATA_SANCTUM_SUPRESSOR:
-				return m_uiSanctumSupressorGUID;
-			case DATA_SANCTUM_WYRMKIN:
-				return m_uiSanctumWyrmkinGUID;
-			case DATA_SANCTUM_SCALEBANE:
-				return m_uiSanctumScalebaneGUID;
-			case DATA_ERENNIUS:
-				return m_uiErenniusGUID;
 		}
 	}
 };
