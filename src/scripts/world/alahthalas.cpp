@@ -6,10 +6,21 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
+enum
+{
+    NPC_VESTIA = 60666,
+    NPC_FURIOUS_OGRE = 60430,
+    NPC_TUWHAK = 60431,
+    NPC_INVISIBLE_CONTROLLER = 10
+};
+
 bool GOHello_go_sacred_water(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010815)
     {
+        if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+            return false;
+
         if (pPlayer->GetQuestStatus(40382) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Use Bowl of Sacred Water.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -25,11 +36,14 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
     {
         if (pGo->GetEntry() == 2010815)
         {
-            pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+            if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+                return false;
 
-            Creature* vestia = pGo->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_INVISIBLE_CONTROLLER, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+
+            Creature* vestia = pGo->SummonCreature(NPC_VESTIA, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
             if (!vestia)
-                vestia = pPlayer->FindNearestCreature(60666, 30.0F);
+                vestia = pPlayer->FindNearestCreature(NPC_VESTIA, 30.0F);
             if (!vestia)
                 return false;
 
@@ -51,14 +65,15 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 13000);
             pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    //vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                    Creature* ogre_1 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                    //ogre_1->AI()->AttackStart(vestia);
+                    if (Creature* pOgre1 = pGo->SummonCreature(NPC_FURIOUS_OGRE, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+                        if (Player* pPlayer = pOgre1->FindNearestHostilePlayer(50.0f))
+                            pOgre1->AI()->AttackStart(pPlayer);
                 }, 15000);
             pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    Creature* ogre_2 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-
+                    if (Creature* pOgre2 = pGo->SummonCreature(NPC_FURIOUS_OGRE, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+                        if (Player* pPlayer = pOgre2->FindNearestHostilePlayer(50.0f))
+                            pOgre2->AI()->AttackStart(pPlayer);
                 }, 30000);
             vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
@@ -67,7 +82,9 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 31000);
             pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    Creature* ogre_3 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    if (Creature* pOgre3 = pGo->SummonCreature(NPC_FURIOUS_OGRE, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+                        if (Player* pPlayer = pOgre3->FindNearestHostilePlayer(50.0f))
+                            pOgre3->AI()->AttackStart(pPlayer);
                 }, 45000);
             vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
@@ -79,8 +96,12 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 46000);
             pGo->m_Events.AddLambdaEventAtOffset([pGo]()
                 {
-                    Creature* tuwhak = pGo->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
+                    if (Creature* pTuwhak = pGo->SummonCreature(NPC_TUWHAK, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+                    {
+                        pTuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
+                        if (Player* pPlayer = pTuwhak->FindNearestHostilePlayer(50.0f))
+                            pTuwhak->AI()->AttackStart(pPlayer);
+                    }
                 }, 60000);
             vestia->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
@@ -88,7 +109,7 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 100000);
             DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer]()
                 {
-                    Creature* vestia = player->FindNearestCreature(60666, 30.0F);
+                    Creature* vestia = player->FindNearestCreature(NPC_VESTIA, 30.0F);
                     if (vestia)
                     {
                         vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
@@ -505,9 +526,9 @@ bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const
 {
     if (!alunasha) return false;
 
-    if (pQuest->GetQuestId() == 40384 && !pPlayer->FindNearestCreature(10, 50.0F))
+    if (pQuest->GetQuestId() == 40384 && !pPlayer->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 50.0F))
     {
-        Creature* controller = alunasha->SummonCreature(10, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        Creature* controller = alunasha->SummonCreature(NPC_INVISIBLE_CONTROLLER, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
         if (!controller)
             return false;
         Creature* vereesa = alunasha->SummonCreature(60667, 4272.49F, -2815.05F, 82.31F, 2.62F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
@@ -566,9 +587,9 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 {
     if (!tyrande) return false;
 
-    if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(10, 50.0F))
+    if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 50.0F))
     {
-        Creature* controller = tyrande->SummonCreature(10, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        Creature* controller = tyrande->SummonCreature(NPC_INVISIBLE_CONTROLLER, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
         if (!controller)
             return false;
         Creature* vestia = tyrande->SummonCreature(60666, 9667.24F, 2527.82F, 1360.00F, 3.77F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
@@ -722,9 +743,9 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 40386 && !pPlayer->FindNearestCreature(10, 50.0F)) // Scourge!
+    if (pQuest->GetQuestId() == 40386 && !pPlayer->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 50.0F)) // Scourge!
     {
-        Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600 * IN_MILLISECONDS);
+        Creature* controller = pQuestGiver->SummonCreature(NPC_INVISIBLE_CONTROLLER, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600 * IN_MILLISECONDS);
         if (!controller)
             return false;
 
