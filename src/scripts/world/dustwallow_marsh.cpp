@@ -1227,6 +1227,7 @@ struct npc_tabethaAI : ScriptedAI
         npc_tabethaAI::Reset();
     }
 
+    uint32  m_uiNotInteractibleTimer;
     uint32  m_uiManaSurgeSpawnTimer;
     uint32  m_uiManaSurgesEventTimer;
     uint8   m_uiWaveCount;
@@ -1293,7 +1294,26 @@ struct npc_tabethaAI : ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_uiManaSurgesInProcess) return;
+        // Prevent Tabetha from getting stuck in uninteractible state.
+        if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP) ||
+            !m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER))
+        {
+            if (m_uiNotInteractibleTimer)
+            {
+                if (m_uiNotInteractibleTimer <= uiDiff)
+                {
+                    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+                    m_uiNotInteractibleTimer = 0;
+                }
+                else
+                    m_uiNotInteractibleTimer -= uiDiff;
+            }
+            else
+                m_uiNotInteractibleTimer = 120000;
+        }
+
+        if (!m_uiManaSurgesInProcess)
+            return;
 
         // respawn Mana Rift
         if (!m_uiManaRiftRespawned)
