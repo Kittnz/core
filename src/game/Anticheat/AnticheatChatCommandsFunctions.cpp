@@ -326,7 +326,7 @@ bool ChatHandler::HandleAnticheatBlacklistCommand(char* args)
 
     pAntispam->BlacklistWord(blacklistedWord.c_str());
 
-    PSendSysMessage("Added '%s' to antispam blacklist.", args);
+    PSendSysMessage("Added '%s' to antispam blacklist.", blacklistedWord.c_str());
     return true;
 }
 
