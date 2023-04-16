@@ -1238,6 +1238,7 @@ struct npc_tabethaAI : ScriptedAI
 
     void Reset() override
     {
+        m_uiNotInteractibleTimer = 0;
         m_uiManaSurgeSpawnTimer = urand(1000, 5000);
         m_uiManaSurgesEventTimer = 10 * MINUTE*IN_MILLISECONDS + 100;
         m_uiWaveCount = 1;
