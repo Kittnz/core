@@ -86,15 +86,30 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 {
                     vestia->CastSpell(vestia, 1449, false);
                 }, 100000);
-            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer]() {
-                Creature* vestia = player->FindNearestCreature(60666, 30.0F);
-                if (vestia)
+            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer]()
                 {
-                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                    vestia->MonsterSay("It is done. Please go back to Feathermoon Stronghold. I shall meet you there.");
-                }
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
-                    player->KilledMonster(cInfo, ObjectGuid());
+                    Creature* vestia = player->FindNearestCreature(60666, 30.0F);
+                    if (vestia)
+                    {
+                        vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                        vestia->MonsterSay("It is done. Please go back to Feathermoon Stronghold. I shall meet you there.");
+                    }
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
+                    {
+                        player->KilledMonster(cInfo, ObjectGuid());
+
+                        if (Group* pGroup = player->GetGroup())
+                        {
+                            for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                if (Player* pMember = itr->getSource())
+                                {
+                                    if (pMember->GetObjectGuid() != player->GetObjectGuid())
+                                        pMember->KilledMonster(cInfo, ObjectGuid());
+                                }
+                            }
+                        }
+                    }
                 });
         }
     }
