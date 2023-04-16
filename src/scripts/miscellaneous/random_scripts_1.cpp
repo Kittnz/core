@@ -5936,6 +5936,11 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
     }
 
+    // info about glyphs
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
 }
@@ -5968,6 +5973,24 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
             pPlayer->CompleteQuest(55055);
             pPlayer->RemoveSpell(SPELL_WAR_MODE, false, false);
         }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52129, pCreature->GetGUID());
+        return true;
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52130, pCreature->GetGUID());
+        return true;
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52131, pCreature->GetGUID());
+        return true;
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
