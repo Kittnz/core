@@ -312,3 +312,6 @@ DELETE FROM creature_battleground WHERE guid=2575758;
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -1679.638428, `position_y` = 2870.805664, `position_z` = 83.061050, `orientation` = 3.322676 WHERE `guid` = 28907;
+
+-- Changes by DAMIAN
+REPLACE INTO `gameobject` VALUES ( 5013752, 2001784, 0, -11001.9, -1346.43, 53.6589, 4.21794, 0, 0, 0.858646, -0.512569, 300, 300, 100, 1, 0, 0);
