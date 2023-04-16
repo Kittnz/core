@@ -250,12 +250,12 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand instanceCommandTable[] =
     {
-        { "continents",     SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleInstanceContinentsCommand,  "", nullptr },
-        { "listbinds",      SEC_ADMINISTRATOR,     false, &ChatHandler::HandleInstanceListBindsCommand,   "", nullptr },
-        { "unbind",         SEC_ADMINISTRATOR,     false, &ChatHandler::HandleInstanceUnbindCommand,      "", nullptr },
-        { "groupunbind",    SEC_ADMINISTRATOR, false, &ChatHandler::HandleInstanceGroupUnbindCommand, "", nullptr },
-        { "stats",          SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleInstanceStatsCommand,       "", nullptr },
-        { "perfinfos",      SEC_ADMINISTRATOR,    false, &ChatHandler::HandleInstancePerfInfosCommand,   "", nullptr },
+        { "continents",     SEC_DEVELOPER,    true,  &ChatHandler::HandleInstanceContinentsCommand,  "", nullptr },
+        { "listbinds",      SEC_DEVELOPER,     false, &ChatHandler::HandleInstanceListBindsCommand,   "", nullptr },
+        { "unbind",         SEC_DEVELOPER,     false, &ChatHandler::HandleInstanceUnbindCommand,      "", nullptr },
+        { "groupunbind",    SEC_DEVELOPER,    false, &ChatHandler::HandleInstanceGroupUnbindCommand, "", nullptr },
+        { "stats",          SEC_DEVELOPER,    true,  &ChatHandler::HandleInstanceStatsCommand,       "", nullptr },
+        { "perfinfos",      SEC_DEVELOPER,    false, &ChatHandler::HandleInstancePerfInfosCommand,   "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -479,7 +479,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shop",                         SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
         { "bgplayers",                    SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
-        { "gmlevels",                     SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadGmLevelsCommand,                "", nullptr},
+        { "gmlevels",                     SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadGmLevelsCommand,                "", nullptr},
         { "gm_ticket_template",           SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadGmTicketTemplatesCommand,       "", nullptr},
         { "housing",                      SEC_DEVELOPER,        true,  &ChatHandler::HandleReloadHousingCommand,                 "", nullptr},
         { nullptr,                       0,                     false, nullptr,                                                  "", nullptr }
