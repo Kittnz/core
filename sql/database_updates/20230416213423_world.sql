@@ -16,3 +16,6 @@ DELETE FROM creature_movement WHERE id=2574103;
 DELETE FROM game_event_creature WHERE guid=2574103;
 DELETE FROM game_event_creature_data WHERE guid=2574103;
 DELETE FROM creature_battleground WHERE guid=2574103;
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2575746,61375,0,0,0,0,-1181.5,2738.73,33.3837,3.6798,120,120,0,100,100,0,0,0);
