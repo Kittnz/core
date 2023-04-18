@@ -1480,3 +1480,5 @@ REPLACE INTO `gameobject` VALUES ( 5014175, 2008508, 1, -2223.09, 788.392, 154.8
 DELETE FROM gameobject WHERE guid = '5008626';
 DELETE FROM game_event_gameobject WHERE guid = '5008626';
 DELETE FROM gameobject_battleground WHERE guid = '5008626';
+REPLACE INTO `gameobject` VALUES ( 5014176, 2010914, 0, -5078.73, 503.598, 403.034, 0.297111, 0, 0, 0.14801, 0.988986, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (881,-5097.475586,464.898804,403.929504,0.550871,0,'tinkernew');
