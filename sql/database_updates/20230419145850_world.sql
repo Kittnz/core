@@ -58,3 +58,11 @@ Objectives = 'Slay Sir Danuvis and bring the Head of Alverold to Warbringer Dar'
 RequestItemsText = 'I have not forgotten Alverold''s heinous pyres. Give him and the last of his expedition what they deserve!',
 OfferRewardText = '<Dar''nakk holds the head of Alverold aloft.>$B$BHere you are, pinkskin. Burn in your hell, knowing it was the Horde who vanquished you.$B$BWe orcs are here to stay, you make sure you remember that when you bring my regards to Daelin!$B$B<Dar''nakk looks back to you.>$B$BNow, you and I shall have a talk.'
 WHERE entry = 40674;
+-- https://database.turtle-wow.org/?quest=40675 Please update with the following text:
+UPDATE quest_template SET
+Title = 'A Hero''s Reward',
+Details = 'Your dedication to the Horde and your courage in battle are both beyond question.$B$BYou have earned one of the highest honors Orgrimmar can bestow: A Lok''tra shall be composed of your victory at Anchor''s Edge, forevermore to be sung by our people in memory of what transpired there.$B$BBut that cannot be your only reward.$B$BThe Warchief wishes to see you again — he is known to be generous to his loyal warriors.',
+Objectives = 'Speak with Thrall in Orgrimmar and claim your reward.',
+RequestItemsText = 'Here you are. Hail, $N!',
+OfferRewardText = 'I feel sorrow in having to be forced to violence a second time in so few years.$B$BBut I feel no shame in ordering the deaths of our enemies when our sovereignty is infringed. A war in the defense of our people is a just war.$B$BTake pride in your bravery, $N! For I now name you Champion of the Horde and give you this mighty signet as recognition of your triumphs! Bear it with honor!'
+WHERE entry = 40675;
