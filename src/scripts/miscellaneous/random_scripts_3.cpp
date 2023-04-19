@@ -1905,89 +1905,79 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(0, 4993.68F, -6042.01F, 89.09F, 0, 3.0F, 2.05F);
-            }
-            });
-        DoAfterTime(pPlayer, 2.3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->SetWalk(true);
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4993.68F, -6042.01F, 89.09F, 0, 3.0F, 2.05F);
+            }, 1000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 4985.88F, -6026.60F, 88.69F, 0, 3.0F, 0.61F);
-            }
-            });
-        DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4985.88F, -6026.60F, 88.69F, 0, 3.0F, 0.61F);
+            }, 2300);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 4993.11F, -6020.67F, 89.27F, 0, 3.0F, 0.14F);
-            }
-            });
-        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4993.11F, -6020.67F, 89.27F, 0, 3.0F, 0.14F);
+            }, 7000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 5009.55F, -6018.99F, 86.59F, 0, 3.0F, 0.11F);
-            }
-            });
-        DoAfterTime(pPlayer, 19 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 5009.55F, -6018.99F, 86.59F, 0, 3.0F, 0.11F);
+            }, 11000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterYell("Spirits of Azshara, heed my call. Tell me, what is happening to this land.");
-                npc->HandleEmote(EMOTE_ONESHOT_SHOUT);
-            }
-            });
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterYell("Spirits of Azshara, heed my call. Tell me, what is happening to this land.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_SHOUT);
+            }, 19000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->SummonGameObject(2000745, npc->GetPositionX(), npc->GetPositionY(), npc->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 36, true);
-            }
-            });
-        DoAfterTime(pPlayer, 27 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->SummonGameObject(2000745, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 36, true);
+            }, 23000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterSay("I see... A radiant city... full of people…");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterSay("I see... A radiant city... full of people…");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 27000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterSay("They are dying... A great wave swallows them all.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 43 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterSay("They are dying... A great wave swallows them all.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 35000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterSay("Magical energies, waning, blue crystals... A roar.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 51 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterSay("Magical energies, waning, blue crystals... A roar.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 43000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterSay("A shadow... Of a dragon?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 59 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterSay("A shadow... Of a dragon?");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 51000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->MonsterSay("This is all... I need a rest.");
-                npc->HandleEmote(EMOTE_STATE_KNEEL);
-            }
-            });
-        DoAfterTime(pPlayer, 67 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->MonsterSay("This is all... I need a rest.");
+                pQuestGiver->HandleEmote(EMOTE_STATE_KNEEL);
+            }, 59000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 4993.11F, -6020.67F, 89.27F, 0, 3.0F, 3.28F);
-            }
-            });
-        DoAfterTime(pPlayer, 71.7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4993.11F, -6020.67F, 89.27F, 0, 3.0F, 3.28F);
+            }, 67000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 4985.88F, -6026.60F, 88.69F, 0, 3.0F, 3.75F);
-            }
-            });
-        DoAfterTime(pPlayer, 75.7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4985.88F, -6026.60F, 88.69F, 0, 3.0F, 3.75F);
+            }, 71700);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                npc->GetMotionMaster()->MovePoint(0, 4994.63F, -6041.35F, 89.09F, 0, 3.0F, 4.20F);
-            }
-            });
+                pQuestGiver->GetMotionMaster()->MovePoint(0, 4994.63F, -6041.35F, 89.09F, 0, 3.0F, 4.20F);
+            }, 75700);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }, 79500);
+
         DoAfterTime(pPlayer, 80 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 npc->GetMotionMaster()->MovePoint(0, 4992.68F, -6045.22F, 89.02F, 0, 3.0F, 2.46F);
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60342))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
             });
     }

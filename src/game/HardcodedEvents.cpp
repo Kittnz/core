@@ -2119,6 +2119,27 @@ void RacePlayer::LeaveRaceMode()
 			pl->RemovePetActionBar();
             pl->RemoveFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER);
 		}
+        else
+        {
+            pl = sObjectAccessor.FindPlayerNotInWorld(guid);
+            if (pl)
+            {
+                pl->AddDelayedOperation(
+                    [](Player* pl)
+                    {
+                        pl->SetFly(false);
+                        pl->SetDisplayId(pl->GetNativeDisplayId());
+                        pl->SetRooted(false);
+                        pl->Unmount(false);
+                        pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);
+                        pl->UpdateSpeed(MOVE_RUN, false, 1.0f);
+                        pl->SetCharm(nullptr);
+                        pl->RemovePetActionBar();
+                        pl->RemoveFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER);
+                    }
+                );
+            }
+        }
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
 		{

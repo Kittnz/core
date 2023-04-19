@@ -1777,6 +1777,8 @@ class Player final: public Unit
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
 
+        std::vector<std::function<void(Player* player)>> m_delayedCustomOps;
+
         uint32 m_DelayedOperations;
         bool m_bCanDelayTeleport;
         bool m_bHasDelayedTeleport;
@@ -1884,6 +1886,12 @@ class Player final: public Unit
 
         bool TeleportToBGEntryPoint();
         void RestorePendingTeleport();
+
+        template <typename T, typename = std::enable_if_t<std::is_invocable_v<T, Player*>>>
+        void AddDelayedOperation(T operation)
+        {
+            m_delayedCustomOps.emplace_back(operation);
+        }
 
         void UpdateZone(uint32 newZone,uint32 newArea);
         void UpdateArea(uint32 newArea);

@@ -1492,8 +1492,8 @@ void LoadLootTemplates_Fishing()
         if (ids_set.find(itr->Id) != ids_set.end())
         {
             // Turtle: add tiny chance to fish up a fake ashbringer in random area
-            if (itr->AreaLevel >= 45 && roll_chance_u(10))
-                LootTemplates_Fishing.AddLoot(itr->Id, 51216, 0.01f, 0, 0, 1, 1);
+            //if (itr->AreaLevel >= 45 && roll_chance_u(10))
+            //    LootTemplates_Fishing.AddLoot(itr->Id, 51216, 0.01f, 0, 0, 1, 1);
 
             ids_set.erase(itr->Id);
         }
