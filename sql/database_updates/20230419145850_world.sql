@@ -66,3 +66,11 @@ Objectives = 'Speak with Thrall in Orgrimmar and claim your reward.',
 RequestItemsText = 'Here you are. Hail, $N!',
 OfferRewardText = 'I feel sorrow in having to be forced to violence a second time in so few years.$B$BBut I feel no shame in ordering the deaths of our enemies when our sovereignty is infringed. A war in the defense of our people is a just war.$B$BTake pride in your bravery, $N! For I now name you Champion of the Horde and give you this mighty signet as recognition of your triumphs! Bear it with honor!'
 WHERE entry = 40675;
+-- https://database.turtle-wow.org/?quest=40789 Please update with the following text:
+UPDATE quest_template SET
+Title = 'The Deeds of Sir Danuvis',
+Details = 'It has been a long and exhausting journey. I have fought many battles, and vanquished many foes.$B$BBefore I left my home, I yearned to behold the Cathedral of Light following its restoration. Instead, I was told I would be sent here, rather than to the Embassy in Stormwind. I will not lie to say it hurt me, for I fear I may not see it at the end of all this.$B$BI would still like to pay homage to the Cathedral, however, and I ask you, friend, to do it for me.$B$BBring this tome containing all of my deeds to the Cathedral of Stormwind, and let it be recorded, lest I fall unremembered on this forsaken edge of the world.',
+Objectives = 'Bring The Deeds of Sir Danuvis to the Cathedral of Light in Stormwind.',
+RequestItemsText = 'Light''s blessings, $N. Have you come to join our service?',
+OfferRewardText = 'A Kul Tiran paladin gave you this book?$B$BIn Kul Tiras, the Holy Light is not as widespread as it is in Stormwind and Lordaeron; places where the tradition of the faith has long been established.$B$BYet I am gladdened to see that our church has touched the heart of such a worthy man. I will make sure all its contents are kept safe in our archives.$B$BThank you, and may the Light ever be with you, $N.'
+WHERE entry = 40789;
