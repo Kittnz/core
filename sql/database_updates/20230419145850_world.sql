@@ -30,3 +30,11 @@ Objectives = 'Speak with Thrall in Orgrimmar about the Kul Tiran threat.',
 RequestItemsText = 'Lok-regar no''gal, $r. I bid you welcome.',
 OfferRewardText = 'I see you carry Dar''nakk''s commendation. I''ve never known him to grant such accolades freely.$B$BYou did well in defending our coasts, and for that the Horde owes you its gratitude.'
 WHERE entry = 40667;
+-- https://database.turtle-wow.org/?quest=40671 Please update with the following text:
+UPDATE quest_template SET
+Title = 'A War Worth Fighting',
+Details = 'There are few things I loathe more than needless war, $N. It might be an irony to you, for the title I bear, but I saw what horrors wake in men and women when ashes and bloodshed are all that is left of their lives.$B$BI led my people to Kalimdor because I wished to give our children a better world to grow into. I believe that world is still within reach: Woe betide anyone that would threaten it!$B$BI have sent envoys to treat peace with Alverold, to make him see sense. Return to Dar''nakk, and if Alverold refuses... it can only be victory or death.',
+Objectives = 'Report back to Warbringer Dar''nakk in Razor Hill.',
+RequestItemsText = 'You return, and not a moment too soon.',
+OfferRewardText = 'I advised the Warchief against the sending of envoys. It was no use with a man like Alverold.$B$BOur men were cowardly assailed under the flag of peace. Those treacherous Kul Tirans tied them to stakes, soaked them in tar and burned them living on the shore.$B$BNow we hold nothing back, now we put an end to them!'
+WHERE entry = 40671;
