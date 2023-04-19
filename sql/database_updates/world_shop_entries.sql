@@ -153,7 +153,6 @@ replace into shop_items values
 (241, 6, 13584, 'Diablo Stone', 80),
 (242, 6, 13583, 'Panda Collar', 80),
 (243, 6, 20371, 'Murky', 80),
-(244, 6, 23713, 'Hippogryph Hatchling', 80),
 (245, 6, 19055, 'Tiny Green Dragon', 80),
 (246, 6, 50013, 'Bone Golem', 80),
 (247, 6, 50019, 'Moonkin Hatchling', 80),

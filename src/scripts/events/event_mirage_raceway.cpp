@@ -27,14 +27,14 @@ bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
         if (p_Player->GetQuestStatus(GOBLIN_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
-        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join the Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
         if (p_Player->GetQuestStatus(GNOME_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
-        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join the Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave the race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
         p_Player->PrepareQuestMenu(p_Creature->GetGUID());

@@ -2626,6 +2626,13 @@ void Player::ProcessDelayedOperations()
     if (m_DelayedOperations == 0)
         return;
 
+    for (const auto& operation : m_delayedCustomOps)
+    {
+        operation(this);
+    }
+
+    m_delayedCustomOps.clear();
+
     if (m_DelayedOperations & DELAYED_RESURRECT_PLAYER)
     {
         ResurrectPlayer(0.0f, false);
