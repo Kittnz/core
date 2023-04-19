@@ -82,3 +82,7 @@ Objectives = 'Find the Deserter''s Hideout and slay 9 Deserter Turncoats and 9 D
 RequestItemsText = 'Have the wretches been dealt with, $c?',
 OfferRewardText = 'You fight well and kill better, $N. With you at our side, who knows, we might even conquer Theramore a second time over!'
 WHERE entry = 40689;
+-- https://database.turtle-wow.org/?npc=61026 Please update with the following name:
+UPDATE creature_template SET Name = 'Warbringer Dar''nakk' WHERE entry = 61026;
+-- https://database.turtle-wow.org/?npc=60902 Please update with the following name:
+UPDATE creature_template SET Name = 'Sir Danuvis' WHERE entry = 60902;
