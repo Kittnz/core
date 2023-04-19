@@ -32,6 +32,9 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
     void JustDied(Unit *killer) override {
         me->SetVisibility(VISIBILITY_ON);
         me->MonsterSendTextToZone("Rip, RIP, I will rip you apart!", CHAT_MSG_MONSTER_SAY);
+
+        // Summon Vault Armory Equipment
+        me->SummonGameObject(2010867, -46.262f, 179.477f, -40.0506f, 4.72486f, 0, 0, 0.702685f, -0.711501f, 86400, false);
     }
 
     void UpdateAI(uint32 diff) override {
