@@ -7,4 +7,9 @@ WHERE entry = 80396;
 DELETE FROM creature_questrelation WHERE quest = 787;
 DELETE FROM creature_involvedrelation WHERE quest = 787;
 UPDATE quest_template SET RequiredRaces = 434 WHERE entry = 4641;
-
+-- https://database.turtle-wow.org/?item=61097 Please update with the following name:
+UPDATE item_template SET Name = 'The Deeds of Sir Danuvis' WHERE entry = 61097;
+-- https://database.turtle-wow.org/?item=60917 Please update with the following name:
+UPDATE item_template SET Name = 'Ring of Durotar' WHERE entry = 60917;
+-- https://database.turtle-wow.org/?item=60912 Please update with the following name:
+UPDATE item_template SET Name = 'Warbringer''s Commendation' WHERE entry = 60912;
