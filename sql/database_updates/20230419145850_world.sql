@@ -23,3 +23,10 @@ WHERE entry = 40665;
 UPDATE quest_template SET
 Objectives = 'Gather 6 Bundles of Expedition Supplies for Warbringer Dar''nakk in Razor Hill in Durotar.'
 WHERE entry = 40666;
+-- https://database.turtle-wow.org/?quest=40667 Please update with the following text:
+UPDATE quest_template SET
+Details = 'You have made glorious battle upon our enemies, $N.$B$BThe Horde honors those who bear our banner so proudly. For your might, I bestow upon you this commendation. Wear it well, for your next task will take you to our great Orgrimmar.$B$BIn the Valley of Wisdom, our Warchief waits for tidings of the ongoing Kul Tiran conflict. Tell him all you have done and all you have learned.',
+Objectives = 'Speak with Thrall in Orgrimmar about the Kul Tiran threat.',
+RequestItemsText = 'Lok-regar no''gal, $r. I bid you welcome.',
+OfferRewardText = 'I see you carry Dar''nakk''s commendation. I''ve never known him to grant such accolades freely.$B$BYou did well in defending our coasts, and for that the Horde owes you its gratitude.'
+WHERE entry = 40667;
