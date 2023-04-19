@@ -38,3 +38,9 @@ Objectives = 'Report back to Warbringer Dar''nakk in Razor Hill.',
 RequestItemsText = 'You return, and not a moment too soon.',
 OfferRewardText = 'I advised the Warchief against the sending of envoys. It was no use with a man like Alverold.$B$BOur men were cowardly assailed under the flag of peace. Those treacherous Kul Tirans tied them to stakes, soaked them in tar and burned them living on the shore.$B$BNow we hold nothing back, now we put an end to them!'
 WHERE entry = 40671;
+-- https://database.turtle-wow.org/?quest=40672 Please update with the following text:
+UPDATE quest_template SET
+Details = 'There is an island south of the Echo Isles the pinkskins have come to call Anchor''s Edge.$B$BThe time for planning and talking is over.$B$BTravel to Anchor''s Edge with as many comrades as you can find and kill every Kul Tiran armed with either blade or spell. Take the rest prisoner. That is my command!$B$BGO FORTH FOR THE HORDE, FOR BLOOD AND THUNDER!',
+Objectives = 'Slay 8 Expedition Sailors, 6 Expedition Clerics, and 10 Expedition Soldiers for Warbringer Dar''nakk in Razor Hill.',
+OfferRewardText = 'If my duties did not keep me here, I would have gladly joined you in the thrill of battle.$B$BYou have delivered the Warchief''s reckoning to our enemies. For that, the whole Horde shall sing your praise.'
+WHERE entry = 40672;
