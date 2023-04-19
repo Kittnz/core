@@ -40,3 +40,6 @@ REPLACE INTO `gameobject` VALUES ( 5014184, 2006692, 1, -2211.6, 684.866, 140.03
 DELETE FROM gameobject WHERE guid = '5014184';
 DELETE FROM game_event_gameobject WHERE guid = '5014184';
 DELETE FROM gameobject_battleground WHERE guid = '5014184';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5014185, 2001530, 451, 16840.5, 15679.4, 67.4329, 2.47778, 0, 0, 0.945423, 0.325846, 300, 300, 100, 1, 0, 0);
