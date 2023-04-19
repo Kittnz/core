@@ -44,3 +44,10 @@ Details = 'There is an island south of the Echo Isles the pinkskins have come to
 Objectives = 'Slay 8 Expedition Sailors, 6 Expedition Clerics, and 10 Expedition Soldiers for Warbringer Dar''nakk in Razor Hill.',
 OfferRewardText = 'If my duties did not keep me here, I would have gladly joined you in the thrill of battle.$B$BYou have delivered the Warchief''s reckoning to our enemies. For that, the whole Horde shall sing your praise.'
 WHERE entry = 40672;
+-- https://database.turtle-wow.org/?quest=40673 Please update with the following text:
+UPDATE quest_template SET
+Details = 'If we wish to utterly dismantle the Expedition Fleet, then we must crush the head of the snake: Captains, commanders, officers and other figures of interest. The Shattered Hand Clan was kind enough to provide me with a list of their names.$B$BGo to Anchor''s Edge, south of the Echo Isles in southeastern Durotar.$B$BOnce you arrive, you must look for and kill Hydromancer Shaleborn and Deckmaster Darkhollow, along with any breathing officer on the isle .$B$BTheir whole leadership shall crumble!',
+Objectives = 'Slay 10 Expedition Officers, Hydromancer Shaleborn, and Deckmaster Darkhollow for Warbringer Dar''nakk in Razor Hill.',
+RequestItemsText = 'It must be done, their leaders must die. They, more than the luckless footsoldiers they throw at us, are at fault for the persecution of our people.$B$BDo not forget it.',
+OfferRewardText = 'It is done, then. With their chain of command gone, it might take months for their expedition to re-organize.$B$BWe shall not give them such a luxury.'
+WHERE entry = 40673;
