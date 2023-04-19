@@ -19,3 +19,7 @@ UPDATE item_template SET Dmg_Min1 = 39, Dmg_Max1 = 72, Delay = 1900 WHERE entry 
 UPDATE quest_template SET
 Objectives = 'Slay 7 Expedition Scouts and 7 Expedition Commandos for Warbringer Dar''nakk in Razor Hill in Durotar.'
 WHERE entry = 40665;
+-- https://database.turtle-wow.org/?quest=40666 Please update with the following text:
+UPDATE quest_template SET
+Objectives = 'Gather 6 Bundles of Expedition Supplies for Warbringer Dar''nakk in Razor Hill in Durotar.'
+WHERE entry = 40666;
