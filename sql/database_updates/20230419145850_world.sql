@@ -13,3 +13,5 @@ UPDATE item_template SET Name = 'The Deeds of Sir Danuvis' WHERE entry = 61097;
 UPDATE item_template SET Name = 'Ring of Durotar' WHERE entry = 60917;
 -- https://database.turtle-wow.org/?item=60912 Please update with the following name:
 UPDATE item_template SET Name = 'Warbringer''s Commendation' WHERE entry = 60912;
+-- Deekin changes for https://database.turtle-wow.org/?item=51767.
+UPDATE item_template SET Dmg_Min1 = 39, Dmg_Max1 = 72, Delay = 1900 WHERE entry = 51767;
