@@ -74,3 +74,11 @@ Objectives = 'Bring The Deeds of Sir Danuvis to the Cathedral of Light in Stormw
 RequestItemsText = 'Light''s blessings, $N. Have you come to join our service?',
 OfferRewardText = 'A Kul Tiran paladin gave you this book?$B$BIn Kul Tiras, the Holy Light is not as widespread as it is in Stormwind and Lordaeron; places where the tradition of the faith has long been established.$B$BYet I am gladdened to see that our church has touched the heart of such a worthy man. I will make sure all its contents are kept safe in our archives.$B$BThank you, and may the Light ever be with you, $N.'
 WHERE entry = 40789;
+-- https://database.turtle-wow.org/?quest=40689 Please update with the following text:
+UPDATE quest_template SET
+Title = 'Theramore Deserters',
+Details = 'We have learned that desertion is rife in the ranks of Theramore. Human weakness makes itself clear to see.$B$BBut do not take those to be good news, $c, as those cravens are only quitting their posts to come harry us here.$B$BAlready their rabble draws close past the border established by the truce in Dustwallow. We cannot allow them to go any further.$B$BVenture southeast of Brackenwall and punish them. Ensure they think twice about trespassing again.',
+Objectives = 'Find the Deserter''s Hideout and slay 9 Deserter Turncoats and 9 Deserter Exiles for Nazeer Bloodpike in Brackenwall Village.',
+RequestItemsText = 'Have the wretches been dealt with, $c?',
+OfferRewardText = 'You fight well and kill better, $N. With you at our side, who knows, we might even conquer Theramore a second time over!'
+WHERE entry = 40689;
