@@ -15,3 +15,7 @@ UPDATE item_template SET Name = 'Ring of Durotar' WHERE entry = 60917;
 UPDATE item_template SET Name = 'Warbringer''s Commendation' WHERE entry = 60912;
 -- Deekin changes for https://database.turtle-wow.org/?item=51767.
 UPDATE item_template SET Dmg_Min1 = 39, Dmg_Max1 = 72, Delay = 1900 WHERE entry = 51767;
+-- https://database.turtle-wow.org/?quest=40665 Please update with the following text:
+UPDATE quest_template SET
+Objectives = 'Slay 7 Expedition Scouts and 7 Expedition Commandos for Warbringer Dar''nakk in Razor Hill in Durotar.'
+WHERE entry = 40665;
