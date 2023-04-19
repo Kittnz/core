@@ -51,3 +51,10 @@ Objectives = 'Slay 10 Expedition Officers, Hydromancer Shaleborn, and Deckmaster
 RequestItemsText = 'It must be done, their leaders must die. They, more than the luckless footsoldiers they throw at us, are at fault for the persecution of our people.$B$BDo not forget it.',
 OfferRewardText = 'It is done, then. With their chain of command gone, it might take months for their expedition to re-organize.$B$BWe shall not give them such a luxury.'
 WHERE entry = 40673;
+-- https://database.turtle-wow.org/?quest=40674 Please update with the following text:
+UPDATE quest_template SET
+Details = 'You have bested their warriors, killed their champions, breached the heart of their stronghold.$B$BOnly one deed remains to be done: Alverold himself must follow Daelin Proudmoore to the grave.$B$BHe is likely to be hiding in the most fortified structure on Anchor''s Edge, guarded by a paladin knight known as Danuvis.$B$BEnd them both, then return to me with Alverold''s head.',
+Objectives = 'Slay Sir Danuvis and bring the Head of Alverold to Warbringer Dar''nakk in Razor Hill.',
+RequestItemsText = 'I have not forgotten Alverold''s heinous pyres. Give him and the last of his expedition what they deserve!',
+OfferRewardText = '<Dar''nakk holds the head of Alverold aloft.>$B$BHere you are, pinkskin. Burn in your hell, knowing it was the Horde who vanquished you.$B$BWe orcs are here to stay, you make sure you remember that when you bring my regards to Daelin!$B$B<Dar''nakk looks back to you.>$B$BNow, you and I shall have a talk.'
+WHERE entry = 40674;
