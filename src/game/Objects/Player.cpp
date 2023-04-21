@@ -7961,7 +7961,7 @@ bool Player::HasDamagingWeaponProc() const
         if (HasSpellCooldown(spellData.SpellId))
             continue;
 
-        if (spellInfo->IsDirectDamageSpell() || spellInfo->HasAura(SPELL_AURA_PERIODIC_DAMAGE))
+        if (spellInfo->IsDirectDamageSpell() || spellInfo->HasDamagingAura())
             return true;
     }
 
@@ -7985,7 +7985,7 @@ bool Player::HasDamagingWeaponProc() const
                 continue;
             }
 
-            if (spellInfo->IsDirectDamageSpell() || spellInfo->HasAura(SPELL_AURA_PERIODIC_DAMAGE))
+            if (spellInfo->IsDirectDamageSpell() || spellInfo->HasDamagingAura())
                 return true;
         }
     }
@@ -23820,6 +23820,42 @@ uint32 Player::GetTotalQuestCount()
     return std::count_if(mQuestStatus.begin(), mQuestStatus.end(), [](decltype(mQuestStatus)::value_type value) -> bool {
         return value.second.uState != QUEST_DELETED && value.second.m_rewarded;
     });
+}
+
+void Player::CastHighestStealthRank()
+{
+    // get highest rank of the Stealth spell
+    SpellEntry const* stealthSpellEntry = nullptr;
+    for (const auto& itr : m_spells)
+    {
+        // only highest rank is shown in spell book, so simply check if shown in spell book
+        if (!itr.second.active || itr.second.disabled || itr.second.state == PLAYERSPELL_REMOVED)
+            continue;
+
+        SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(itr.first);
+        if (!spellInfo)
+            continue;
+
+        if (spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_STEALTH>())
+        {
+            stealthSpellEntry = spellInfo;
+            break;
+        }
+    }
+
+    // no Stealth spell found
+    if (!stealthSpellEntry)
+        return;
+
+    // not if prevented by faerie fire
+    if (IsImmuneToSpell(stealthSpellEntry, true))
+        return;
+
+    // reset cooldown on it if needed
+    if (!HasSpellCooldown(stealthSpellEntry->Id))
+        RemoveSpellCooldown(stealthSpellEntry->Id);
+
+    CastSpell(this, stealthSpellEntry, true);
 }
 
 void Player::ClearTemporaryWarWithFactions()
