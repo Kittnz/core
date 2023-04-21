@@ -1558,6 +1558,9 @@ class Player final: public Unit
         void CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier = 1.0f);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
 
+        // needed by vanish and improved sap
+        void CastHighestStealthRank();
+
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
         PlayerSpellMap      & GetSpellMap() { return m_spells; }
 

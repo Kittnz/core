@@ -6790,7 +6790,7 @@ void Unit::UpdateVisibilityAndView()
 
     GetViewPoint().Call_UpdateVisibilityForOwner();
     UpdateObjectVisibility();
-    ScheduleAINotify(0);
+    ScheduleAINotify(1); // must not be 0 for improved sap to work
     GetViewPoint().Event_ViewPointVisibilityChanged();
 }
 
