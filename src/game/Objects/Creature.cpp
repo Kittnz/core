@@ -1971,9 +1971,9 @@ void Creature::Respawn()
     UnitVisibility currentVis = GetVisibility();
     SetVisibility(VISIBILITY_RESPAWN);
     SetUnitMovementFlags(MOVEFLAG_NONE);
-    UpdateObjectVisibility();
+    CheckPendingVisibilityAndViewUpdate();                  // will call UpdateObjectVisibility
     SetVisibility(currentVis);                              // restore visibility state
-    UpdateObjectVisibility();
+    CheckPendingVisibilityAndViewUpdate();                  // will call UpdateObjectVisibility
 
     if (IsDespawned())
     {
