@@ -702,6 +702,7 @@ class Unit : public WorldObject
         UnitVisibility GetVisibility() const { return m_Visibility; }
         void SetVisibility(UnitVisibility x);
         void UpdateVisibilityAndView() override;
+        void CheckPendingVisibilityAndViewUpdate();
 
         // common function for visibility checks for player/creatures with detection code
         bool IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const* viewPoint, bool detect, bool inVisibleList = false, bool* alert = nullptr) const final;

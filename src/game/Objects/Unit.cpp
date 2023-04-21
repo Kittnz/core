@@ -245,6 +245,8 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     if (!IsInWorld())
         return;
 
+    CheckPendingVisibilityAndViewUpdate();
+
     // Nostalrius : systeme de contresort des mobs.
     // Boucle 1 pour regler les timers
     for (auto& it : m_prohibitSpell)
@@ -272,7 +274,7 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     m_Events.Update(update_diff);
     _UpdateSpells(update_diff);
 
-    CleanupDeletedAuras();
+    CleanupDeletedAuras();    
 
     if (m_lastManaUseTimer)
     {
@@ -6764,7 +6766,6 @@ bool Unit::IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const*
 
 void Unit::UpdateVisibilityAndView()
 {
-
     static const AuraType auratypes[] = {SPELL_AURA_BIND_SIGHT, SPELL_AURA_FAR_SIGHT, SPELL_AURA_NONE};
     for (AuraType const* type = &auratypes[0]; *type != SPELL_AURA_NONE; ++type)
     {
@@ -6790,16 +6791,30 @@ void Unit::UpdateVisibilityAndView()
 
     GetViewPoint().Call_UpdateVisibilityForOwner();
     UpdateObjectVisibility();
-    ScheduleAINotify(1); // must not be 0 for improved sap to work
+    ScheduleAINotify(0);
     GetViewPoint().Event_ViewPointVisibilityChanged();
+}
+
+void Unit::CheckPendingVisibilityAndViewUpdate()
+{
+    if (HasUnitState(UNIT_STAT_PENDING_VIS_UPDATE))
+    {
+        ClearUnitState(UNIT_STAT_PENDING_VIS_UPDATE);
+        UpdateVisibilityAndView();
+    }
 }
 
 void Unit::SetVisibility(UnitVisibility x)
 {
+    // more than 1 change per update, handle previous
+    // but skip ON state when its overwritten within same update
+    if (IsInWorld() && HasUnitState(UNIT_STAT_PENDING_VIS_UPDATE) && m_Visibility != VISIBILITY_ON)
+        UpdateVisibilityAndView();
+    
     m_Visibility = x;
 
-    if (IsInWorld())
-        UpdateVisibilityAndView();
+    if (IsInWorld() && !HasUnitState(UNIT_STAT_PENDING_VIS_UPDATE))
+        AddUnitState(UNIT_STAT_PENDING_VIS_UPDATE);
 }
 
 bool Unit::CanDetectInvisibilityOf(Unit const* u) const
