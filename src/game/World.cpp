@@ -1420,9 +1420,8 @@ void World::RestoreLostGOs()
         for (auto obj : guidLinkage)
         {
             obj.second->SaveToDB(obj.second->GetMapId());
-        } 
+        }
     }
-
 }
 
 void ExportLogs()
@@ -1721,8 +1720,8 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPetCreateSpells();
     sLog.outString("Loading creatures...");
     sObjectMgr.LoadCreatures();
-    sLog.outString("Loading creature addons...");    
-    sObjectMgr.LoadCreatureAddons();                        // must be after LoadCreatureTemplates() and LoadCreatures()    
+    sLog.outString("Loading creature addons...");
+    sObjectMgr.LoadCreatureAddons();                        // must be after LoadCreatureTemplates() and LoadCreatures()
     sCreatureGroupsManager->Load();
     sLog.outString("Loading gameobjects...");
     sObjectMgr.LoadGameobjects();
@@ -1742,7 +1741,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading quest greetings...");
     sObjectMgr.LoadQuestGreetings();
     sLog.outString("Loading trainer greetings...");
-    sObjectMgr.LoadTrainerGreetings();    
+    sObjectMgr.LoadTrainerGreetings();
     sGameEventMgr.LoadFromDB();
     sLog.outString("Loading scaling...");
     sGuidObjectScaling->LoadFromDB();
@@ -1759,7 +1758,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading quest area trigger...");
     sObjectMgr.LoadQuestAreaTriggers();                     // must be after LoadQuests
     sLog.outString("Loading custom graveyards...");
-    sObjectMgr.LoadCustomGraveyards();                   
+    sObjectMgr.LoadCustomGraveyards();
     sLog.outString("Loading tavern area triggers...");
     sObjectMgr.LoadTavernAreaTriggers();
     sLog.outString("Loading battlegroun entry triggers...");
@@ -1776,7 +1775,7 @@ void World::SetInitialWorldSettings()
     sSpellMgr.LoadSpellAffects();
     sLog.outString("Loading spell pet auras...");
     sSpellMgr.LoadSpellPetAuras();
-    sLog.outString("Loading player info...");    
+    sLog.outString("Loading player info...");
     sObjectMgr.LoadPlayerInfo();
     sLog.outString("Loading exploration base XP...");
     sObjectMgr.LoadExplorationBaseXP();
@@ -1792,7 +1791,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPetLevelInfo();
     sLog.outString("Loading player corpses...");
 	sObjectMgr.LoadCorpses();
-    sLog.outString("Loading loot tables...");    
+    sLog.outString("Loading loot tables...");
     LootIdSet ids_set;
     LoadLootTables(ids_set);
     sLog.outString("Loading custom character skins...");
@@ -1814,7 +1813,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadTrainers();                              // must be after load CreatureTemplate, TrainerTemplate
     sLog.outString("Loading creature movement scripts...");
     sScriptMgr.LoadCreatureMovementScripts();
-    sLog.outString("Loading waypoints...");    
+    sLog.outString("Loading waypoints...");
     sWaypointMgr.Load();
     sLog.outString("Loading localization data...");
     sObjectMgr.LoadBroadcastTextLocales();
@@ -1877,10 +1876,10 @@ void World::SetInitialWorldSettings()
     sScriptMgr.LoadGenericScripts();
     sLog.outString("Loading creature EventAI scripts...");
     sScriptMgr.LoadCreatureEventAIScripts();
-    sScriptMgr.CheckAllScriptTexts(); 
+    sScriptMgr.CheckAllScriptTexts();
     sLog.outString("Loading creature EventAI events...");
     sEventAIMgr.LoadCreatureEventAI_Events();
-    sScriptMgr.Initialize();    
+    sScriptMgr.Initialize();
     sLog.outString("Loading aura removal handler...");
     sAuraRemovalMgr.LoadFromDB();
     sLog.outString("Loading daily quests handler...");
@@ -2305,7 +2304,7 @@ void World::Update(uint32 diff)
     if (getConfig(CONFIG_BOOL_CLEANUP_TERRAIN))
         sTerrainMgr.Update(diff);
 
-	sGuildMgr.Update(diff);  
+	sGuildMgr.Update(diff);
 }
 
 /// Send a packet to all players (except self if mentioned)
@@ -2323,7 +2322,7 @@ void World::SendGlobalMessage(WorldPacket *packet, WorldSession *self, uint32 te
             }
         }
     }
-} 
+}
 
 namespace MaNGOS
 {
