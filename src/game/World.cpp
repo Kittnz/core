@@ -137,7 +137,8 @@ World::World():
     m_gameDay((m_gameTime + m_timeZoneOffset) / DAY),
     m_startTime(m_gameTime),
     m_defaultDbcLocale(LOCALE_enUS),
-    m_timeRate(1.0f)
+    m_timeRate(1.0f),
+    m_canProcessAsyncPackets(false)
 {
     m_ShutdownMask = 0;
     m_ShutdownTimer = 0;
@@ -220,6 +221,9 @@ void World::InternalShutdown()
 
     if (m_autoPDumpThread.joinable())
         m_autoPDumpThread.join();
+
+    if (m_asyncPacketsThread.joinable())
+        m_asyncPacketsThread.join();
 
 #ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
@@ -1997,6 +2001,7 @@ void World::SetInitialWorldSettings()
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
+    m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
 
 	sSuspiciousStatisticMgr.Initialize();
 
@@ -2067,6 +2072,29 @@ void World::DetectDBCLang()
     
 }
 
+void World::ProcessAsyncPackets()
+{
+    while (!sWorld.IsStopped())
+    {
+        do
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        } while (!m_canProcessAsyncPackets);
+        
+        for (auto const& itr : m_sessions)
+        {
+            WorldSession* pSession = itr.second;
+
+            MapSessionFilter updater(pSession);
+            updater.SetProcessType(PACKET_PROCESS_DB_QUERY);
+            pSession->ProcessPackets(updater);
+
+            if (!m_canProcessAsyncPackets)
+                break;
+        }
+    }
+}
+
 /// Update the World !
 void World::Update(uint32 diff)
 {
@@ -2093,12 +2121,16 @@ void World::Update(uint32 diff)
         sAuctionMgr.Update();
     }
 
+    m_canProcessAsyncPackets = false;
+
     /// <li> Handle session updates
     uint32 updateSessionsTime = WorldTimer::getMSTime();
     UpdateSessions(diff);
     updateSessionsTime = WorldTimer::getMSTimeDiffToNow(updateSessionsTime);
     if (getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE) && updateSessionsTime > getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE))
         sLog.out(LOG_PERFORMANCE, "Update sessions: %ums", updateSessionsTime);
+
+    m_canProcessAsyncPackets = true;
 
     /// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
@@ -2273,7 +2305,7 @@ void World::Update(uint32 diff)
     if (getConfig(CONFIG_BOOL_CLEANUP_TERRAIN))
         sTerrainMgr.Update(diff);
 
-	sGuildMgr.Update(diff);
+	sGuildMgr.Update(diff);  
 }
 
 /// Send a packet to all players (except self if mentioned)

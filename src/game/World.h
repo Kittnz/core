@@ -1257,6 +1257,9 @@ class World
         std::mutex m_autoPDumpMutex;
         std::set<uint32> m_autoPDumpPendingGuids;
         std::set<uint32> m_lockedCharacterGuids;
+        std::thread m_asyncPacketsThread;
+        bool m_canProcessAsyncPackets;
+        void ProcessAsyncPackets();
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
