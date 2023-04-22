@@ -137,7 +137,8 @@ World::World():
     m_gameDay((m_gameTime + m_timeZoneOffset) / DAY),
     m_startTime(m_gameTime),
     m_defaultDbcLocale(LOCALE_enUS),
-    m_timeRate(1.0f)
+    m_timeRate(1.0f),
+    m_canProcessAsyncPackets(false)
 {
     m_ShutdownMask = 0;
     m_ShutdownTimer = 0;
@@ -220,6 +221,9 @@ void World::InternalShutdown()
 
     if (m_autoPDumpThread.joinable())
         m_autoPDumpThread.join();
+
+    if (m_asyncPacketsThread.joinable())
+        m_asyncPacketsThread.join();
 
 #ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
@@ -1416,9 +1420,8 @@ void World::RestoreLostGOs()
         for (auto obj : guidLinkage)
         {
             obj.second->SaveToDB(obj.second->GetMapId());
-        } 
+        }
     }
-
 }
 
 void ExportLogs()
@@ -1717,8 +1720,8 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPetCreateSpells();
     sLog.outString("Loading creatures...");
     sObjectMgr.LoadCreatures();
-    sLog.outString("Loading creature addons...");    
-    sObjectMgr.LoadCreatureAddons();                        // must be after LoadCreatureTemplates() and LoadCreatures()    
+    sLog.outString("Loading creature addons...");
+    sObjectMgr.LoadCreatureAddons();                        // must be after LoadCreatureTemplates() and LoadCreatures()
     sCreatureGroupsManager->Load();
     sLog.outString("Loading gameobjects...");
     sObjectMgr.LoadGameobjects();
@@ -1738,7 +1741,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading quest greetings...");
     sObjectMgr.LoadQuestGreetings();
     sLog.outString("Loading trainer greetings...");
-    sObjectMgr.LoadTrainerGreetings();    
+    sObjectMgr.LoadTrainerGreetings();
     sGameEventMgr.LoadFromDB();
     sLog.outString("Loading scaling...");
     sGuidObjectScaling->LoadFromDB();
@@ -1755,7 +1758,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading quest area trigger...");
     sObjectMgr.LoadQuestAreaTriggers();                     // must be after LoadQuests
     sLog.outString("Loading custom graveyards...");
-    sObjectMgr.LoadCustomGraveyards();                   
+    sObjectMgr.LoadCustomGraveyards();
     sLog.outString("Loading tavern area triggers...");
     sObjectMgr.LoadTavernAreaTriggers();
     sLog.outString("Loading battlegroun entry triggers...");
@@ -1772,7 +1775,7 @@ void World::SetInitialWorldSettings()
     sSpellMgr.LoadSpellAffects();
     sLog.outString("Loading spell pet auras...");
     sSpellMgr.LoadSpellPetAuras();
-    sLog.outString("Loading player info...");    
+    sLog.outString("Loading player info...");
     sObjectMgr.LoadPlayerInfo();
     sLog.outString("Loading exploration base XP...");
     sObjectMgr.LoadExplorationBaseXP();
@@ -1788,7 +1791,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPetLevelInfo();
     sLog.outString("Loading player corpses...");
 	sObjectMgr.LoadCorpses();
-    sLog.outString("Loading loot tables...");    
+    sLog.outString("Loading loot tables...");
     LootIdSet ids_set;
     LoadLootTables(ids_set);
     sLog.outString("Loading custom character skins...");
@@ -1810,7 +1813,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadTrainers();                              // must be after load CreatureTemplate, TrainerTemplate
     sLog.outString("Loading creature movement scripts...");
     sScriptMgr.LoadCreatureMovementScripts();
-    sLog.outString("Loading waypoints...");    
+    sLog.outString("Loading waypoints...");
     sWaypointMgr.Load();
     sLog.outString("Loading localization data...");
     sObjectMgr.LoadBroadcastTextLocales();
@@ -1873,10 +1876,10 @@ void World::SetInitialWorldSettings()
     sScriptMgr.LoadGenericScripts();
     sLog.outString("Loading creature EventAI scripts...");
     sScriptMgr.LoadCreatureEventAIScripts();
-    sScriptMgr.CheckAllScriptTexts(); 
+    sScriptMgr.CheckAllScriptTexts();
     sLog.outString("Loading creature EventAI events...");
     sEventAIMgr.LoadCreatureEventAI_Events();
-    sScriptMgr.Initialize();    
+    sScriptMgr.Initialize();
     sLog.outString("Loading aura removal handler...");
     sAuraRemovalMgr.LoadFromDB();
     sLog.outString("Loading daily quests handler...");
@@ -1997,6 +2000,7 @@ void World::SetInitialWorldSettings()
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
+    m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
 
 	sSuspiciousStatisticMgr.Initialize();
 
@@ -2067,6 +2071,29 @@ void World::DetectDBCLang()
     
 }
 
+void World::ProcessAsyncPackets()
+{
+    while (!sWorld.IsStopped())
+    {
+        do
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        } while (!m_canProcessAsyncPackets);
+        
+        for (auto const& itr : m_sessions)
+        {
+            WorldSession* pSession = itr.second;
+
+            MapSessionFilter updater(pSession);
+            updater.SetProcessType(PACKET_PROCESS_DB_QUERY);
+            pSession->ProcessPackets(updater);
+
+            if (!m_canProcessAsyncPackets)
+                break;
+        }
+    }
+}
+
 /// Update the World !
 void World::Update(uint32 diff)
 {
@@ -2093,12 +2120,16 @@ void World::Update(uint32 diff)
         sAuctionMgr.Update();
     }
 
+    m_canProcessAsyncPackets = false;
+
     /// <li> Handle session updates
     uint32 updateSessionsTime = WorldTimer::getMSTime();
     UpdateSessions(diff);
     updateSessionsTime = WorldTimer::getMSTimeDiffToNow(updateSessionsTime);
     if (getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE) && updateSessionsTime > getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE))
         sLog.out(LOG_PERFORMANCE, "Update sessions: %ums", updateSessionsTime);
+
+    m_canProcessAsyncPackets = true;
 
     /// <li> Update uptime table
     if (m_timers[WUPDATE_UPTIME].Passed())
@@ -2291,7 +2322,7 @@ void World::SendGlobalMessage(WorldPacket *packet, WorldSession *self, uint32 te
             }
         }
     }
-} 
+}
 
 namespace MaNGOS
 {

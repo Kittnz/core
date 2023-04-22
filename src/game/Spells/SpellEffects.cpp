@@ -2888,43 +2888,9 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
             unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_DECREASE_SPEED);
             unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_STALKED);
 
-            // if this spell is given to NPC it must handle rest by it's own AI
-            if (unitTarget->GetTypeId() != TYPEID_PLAYER)
-                return;
+            if (Player* pPlayer = unitTarget->ToPlayer())
+                pPlayer->CastHighestStealthRank();
 
-            // get highest rank of the Stealth spell
-            SpellEntry const* stealthSpellEntry = nullptr;
-            const PlayerSpellMap& sp_list = ((Player*)unitTarget)->GetSpellMap();
-            for (const auto& itr : sp_list)
-            {
-                // only highest rank is shown in spell book, so simply check if shown in spell book
-                if (!itr.second.active || itr.second.disabled || itr.second.state == PLAYERSPELL_REMOVED)
-                    continue;
-
-                SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(itr.first);
-                if (!spellInfo)
-                    continue;
-
-                if (spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_STEALTH>())
-                {
-                    stealthSpellEntry = spellInfo;
-                    break;
-                }
-            }
-
-            // no Stealth spell found
-            if (!stealthSpellEntry)
-                return;
-
-            // not if prevented by faerie fire
-            if (unitTarget->IsImmuneToSpell(stealthSpellEntry, true))
-                return;
-
-            // reset cooldown on it if needed
-            if (((Player*)unitTarget)->HasSpellCooldown(stealthSpellEntry->Id))
-                ((Player*)unitTarget)->RemoveSpellCooldown(stealthSpellEntry->Id);
-
-            m_caster->CastSpell(unitTarget, stealthSpellEntry, true);
             return;
         }
         // just skip
@@ -6384,6 +6350,10 @@ void Spell::EffectSanctuary(SpellEffectIndex eff_idx)
     }
     else
         unitTarget->DoResetThreat();
+
+    // Vanished - From Improved Sap
+    if (m_spellInfo->Id == 14093 && unitTarget->IsPlayer())
+        static_cast<Player*>(unitTarget)->CastHighestStealthRank();
 
     AddExecuteLogInfo(eff_idx, ExecuteLogInfo(unitTarget->GetObjectGuid()));
 }

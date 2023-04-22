@@ -505,6 +505,10 @@ bool SpellEntry::IsCCSpell() const
     if (HasEffect(SPELL_EFFECT_INTERRUPT_CAST))
         return false;
 
+    // dont delay sap effect
+    if (IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>())
+        return false;
+
     switch (GetDiminishingReturnsGroup(false))
     {
         case DIMINISHING_NONE:

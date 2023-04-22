@@ -1235,7 +1235,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         // Turtle: Do not proc weapon enchants if current spell is not damaging, but we have damaging weapon proc.
         // This is custom behavior. There are multiple threads on blizzard forums of people complaining about
         // Sap proccing their weapon or poisons, and thus breaking itself, so this is a blizzlike problem.
-        (m_damage || !static_cast<Player*>(m_casterUnit)->HasDamagingWeaponProc());
+        ((m_damage && !m_spellInfo->HasAttribute(SPELL_ATTR_STOP_ATTACK_TARGET)) || !static_cast<Player*>(m_casterUnit)->HasDamagingWeaponProc());
 
     // All calculated do it!
     // Do healing and triggers
@@ -8937,16 +8937,6 @@ void Spell::RemoveStealthAuras()
     {
         bool doUnaura = m_casterUnit->HasAuraType(SPELL_AURA_MOD_STEALTH);
 
-        if (doUnaura && m_casterUnit->IsPlayer()
-                && m_spellInfo->SpellIconID == 249  // Assommer
-           )
-        {
-            // Improved sap
-            if (m_casterUnit->HasAura(14076))  // Rang 1
-                doUnaura = (urand(0, 99) > 50);
-            else if (m_casterUnit->HasAura(14094))  // Rang 2
-                doUnaura = false;
-        }
         if (doUnaura)
             m_casterUnit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
     }

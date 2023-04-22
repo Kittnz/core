@@ -146,11 +146,6 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
     recv_data >> entry;
     recv_data >> guid;
 
-    Creature *unit = _player->GetMap()->GetAnyTypeCreature(guid);
-
-    //if (unit == nullptr)
-    //    sLog.outDebug( "WORLD: HandleCreatureQueryOpcode - (%u) NO SUCH UNIT! (GUID: %u, ENTRY: %u)", uint32(GUID_LOPART(guid)), guid, entry );
-
     CreatureInfo const *ci = ObjectMgr::GetCreatureTemplate(entry);
     if (ci)
     {
@@ -185,10 +180,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         data << uint32(ci->rank);                           // Creature Rank (elite, boss, etc)
         data << uint32(0);                                  // unknown        wdbFeild11
         data << uint32(ci->pet_spell_list_id);              // Id from CreatureSpellData.dbc    wdbField12
-        if (unit)
-            data << unit->GetUInt32Value(UNIT_FIELD_DISPLAYID); //DisplayID      wdbFeild13
-        else
-            data << uint32(Creature::ChooseDisplayId(ci));  // workaround, way to manage models must be fixed
+        data << uint32(Creature::ChooseDisplayId(ci));      // workaround, way to manage models must be fixed
 
         data << uint8(ci->civilian);                       //wdbFeild14
         data << uint8(ci->racial_leader);
@@ -315,8 +307,6 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
     recv_data >> guid;
 
     DETAIL_LOG("WORLD: CMSG_NPC_TEXT_QUERY ID '%u'", textID);
-
-    _player->SetTargetGuid(guid);
 
     NpcText const* pGossip = sObjectMgr.GetNpcText(textID);
 
