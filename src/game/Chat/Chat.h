@@ -742,7 +742,7 @@ class ChatHandler
         bool GetDeletedCharacterInfoList(DeletedInfoList& foundList, bool useName, std::string searchString = "");
         std::string GenerateDeletedCharacterGUIDsWhereStr(DeletedInfoList::const_iterator& itr, DeletedInfoList::const_iterator const& itr_end);
         void HandleCharacterDeletedListHelper(DeletedInfoList const& foundList);
-        void HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo);
+        void HandleCharacterDeletedRestoreHelper(DeletedInfo& delInfo);
 
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
 

@@ -440,6 +440,20 @@ namespace Spells
         return false;
     }
 
+    inline bool IsDamagingAuraEffect(uint32 effectName)
+    {
+        switch (effectName)
+        {
+            case SPELL_AURA_PERIODIC_DAMAGE:
+            case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
+            case SPELL_AURA_PERIODIC_LEECH:
+            case SPELL_AURA_PERIODIC_HEALTH_FUNNEL:
+                return true;
+        }
+
+        return false;
+    }
+
     // Spell deals damage directly and could kill target instantly.
     inline bool IsEffectThatCanCrit(uint32 effectName)
     {
@@ -751,6 +765,15 @@ public:
                 return false;
         
         return hasAura;
+    }
+
+    inline bool HasDamagingAura() const
+    {
+        for (uint32 i : EffectApplyAuraName)
+            if (Spells::IsDamagingAuraEffect(i))
+                return true;
+
+        return false;
     }
 
     bool IsCustomSpell() const
