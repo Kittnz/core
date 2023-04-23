@@ -4338,18 +4338,6 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
     return false;
 }
 
-bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetRace() == RACE_HIGH_ELF || pPlayer->GetReputationRank(269) == 7)
-    {
-        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
-        return true;
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    pCreature->MonsterSayToPlayer("My unicorns are for sale only to the elves of the Silvermoon Remnants and to their exalted allies.", pPlayer);
-    return true;
-}
-
 bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -7643,11 +7631,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "go_kheyna_wormhole";
     newscript->pGOHello = &GOHello_go_kheyna_wormhole;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_vanira_unicorn_vendor";
-    newscript->pGossipHello = &GossipHello_npc_vanira_unicorn_vendor;
     newscript->RegisterSelf();
 
     newscript = new Script;
