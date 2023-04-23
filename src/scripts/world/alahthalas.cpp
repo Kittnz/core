@@ -589,6 +589,8 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 
     if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 50.0F))
     {
+        tyrande->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+
         Creature* controller = tyrande->SummonCreature(NPC_INVISIBLE_CONTROLLER, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
         if (!controller)
             return false;
@@ -693,6 +695,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
             {
                 tyrande->MonsterSay("You may go now, Lady Windrunner. We shall meet again. Great. ");
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+                tyrande->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
             }, 155000);
     }
     return true;
