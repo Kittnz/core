@@ -2506,8 +2506,8 @@ bool ChatHandler::HandleAuraCommand(char* args)
         return false;
     }
 
-    // Only allow admins to use auras in other players
-    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
+    // Only allow devs to use auras in other players
+    if (GetSession()->GetSecurity() < SEC_DEVELOPER)
         target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
