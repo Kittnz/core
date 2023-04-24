@@ -196,16 +196,17 @@ void WorldSession::SendPacket(WorldPacket const* packet)
 void WorldSession::QueuePacket(WorldPacket* newPacket)
 {
     OpcodeHandler const& opHandle = opcodeTable[newPacket->GetOpcode()];
-    if (opHandle.packetProcessing >= PACKET_PROCESS_MAX_TYPE)
+    uint32 const processing = opHandle.packetProcessing;
+    if (processing >= PACKET_PROCESS_MAX_TYPE)
     {
         sLog.outError("SESSION: opcode %s (0x%.4X) will be skipped",
                       LookupOpcodeName(newPacket->GetOpcode()),
                       newPacket->GetOpcode());
+        delete newPacket;
         return;
     }
-    m_lastReceivedPacketTime = newPacket->GetPacketTime();
 
-    uint32 processing = opHandle.packetProcessing;
+    m_lastReceivedPacketTime = newPacket->GetPacketTime();
     _recvQueue[processing].add(newPacket);
 }
 
