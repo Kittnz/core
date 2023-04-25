@@ -158,6 +158,7 @@ public:
 
             std::string pname = pPlayer->GetName();
             std::wstring wpname;
+            wpname.reserve(pname.size());
             if (!Utf8toWStr(pname, wpname))
                 continue;
             wstrToLower(wpname);
@@ -167,6 +168,7 @@ public:
 
             std::string gname = sGuildMgr.GetGuildNameById(pPlayer->GetGuildId());
             std::wstring wgname;
+            wgname.reserve(gname.size());
             if (!Utf8toWStr(gname, wgname))
                 continue;
             wstrToLower(wgname);

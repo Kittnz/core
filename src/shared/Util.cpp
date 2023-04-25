@@ -583,6 +583,7 @@ bool consoleToUtf8(const std::string& conStr, std::string& utf8str)
 bool Utf8FitTo(const std::string& str, std::wstring search)
 {
     std::wstring temp;
+    temp.reserve(str.size());
 
     if (!Utf8toWStr(str, temp))
         return false;
