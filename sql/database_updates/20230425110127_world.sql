@@ -30,3 +30,5 @@ UPDATE quest_template SET NextQuestInChain = 0, NextQuestId = 0, PrevQuestId = 4
 
 -- Set the following npc entries to scale 1, they are currently TINY.
 update creature_template set scale = 1 where entry in (61393,61395,61396,61400);
+-- Change display ID of item entry 61236 to 1317.
+update item_template set display_id = 1317 where entry = 61236;
