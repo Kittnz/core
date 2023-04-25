@@ -407,18 +407,10 @@ bool GOHello_go_felstone(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
     {
-        if (Creature* pCreature = pPlayer->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))
+        if (pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
         {
-            if (npc_triggerQuest40377AI* pTriggerAI = dynamic_cast<npc_triggerQuest40377AI*>(pCreature->AI()))
-            {
-                bool eventInProggress = pTriggerAI->GetEventInProggress();
-
-                if (!eventInProggress && pPlayer->GetQuestStatus(QUEST_BREAKING_THE_FELSTAR) == QUEST_STATUS_INCOMPLETE)
-                {
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                    pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
-                }
-            }
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
         }
     }
     return true;
@@ -434,7 +426,13 @@ bool GOSelect_go_felstone(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
             {
                 bool eventInProggress = pTriggerAI->GetEventInProggress();
 
-                if (!eventInProggress && pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
+                if (eventInProggress)
+                {
+                    pPlayer->GetSession()->SendNotification("Event in progress!");
+                    return false;
+                }
+
+                if (pGo->GetEntry() == GO_CORRUPTED_FELSTONE)
                 {
                     pTriggerAI->StartEvent(pPlayer);
                 }
