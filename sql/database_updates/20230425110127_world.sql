@@ -27,3 +27,6 @@ UPDATE quest_template SET NextQuestInChain = 40828, NextQuestId = 0, PrevQuestId
 UPDATE quest_template SET NextQuestInChain = 40829, NextQuestId = 0, PrevQuestId = 40827 WHERE entry = 40828;
 -- The Key to Karazhan X
 UPDATE quest_template SET NextQuestInChain = 0, NextQuestId = 0, PrevQuestId = 40828 WHERE entry = 40829;
+
+-- Set the following npc entries to scale 1, they are currently TINY.
+update creature_template set scale = 1 where entry in (61393,61395,61396,61400);
