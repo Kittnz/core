@@ -130,3 +130,6 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (18640, 0, 0, 0, 0);
 -- NPC Therum Deepforge add quest flags.
 update creature_template set npc_flags = 19 where entry = 5511;
+-- Display ID 20278 INCORRECT SYNTAX ERROR.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20278, 0, 0, 0, 0);
