@@ -977,6 +977,7 @@ bool WorldSession::AllowPacket(uint16 opcode)
         case MSG_PETITION_RENAME:
         case CMSG_SEND_MAIL:
         case CMSG_PLAYER_LOGIN:
+        case CMSG_GMTICKET_UPDATETEXT:
             _floodPacketsCount[FLOOD_VERY_SLOW_OPCODES]++;
         // no break, since slow packets are also very slow packets.
         case CMSG_LOGOUT_REQUEST:
