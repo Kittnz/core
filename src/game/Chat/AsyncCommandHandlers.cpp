@@ -63,6 +63,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
         data->isSuspicious = target->GetSession()->IsSuspicious();
         if (session->GetSecurity() >= SEC_ADMINISTRATOR)
             data->email = target->GetSession()->GetEmail();
+        data->m_hasUsedClickToMove = target->GetSession()->HasUsedClickToMove();
 
         HandleDataAfterPlayerLookup(data);
     }
@@ -218,6 +219,8 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
     cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
+    if (data->m_hasUsedClickToMove)
+        cHandler.SendSysMessage("Using Click To Move!");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
     uint32 money = data->money;
