@@ -674,6 +674,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     target = this;
                     break;
                 }
+                // Vampirism
+                case 45420:
+                case 45421:
+                case 45422:
+                case 45423:
+                case 45424:
+                {
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // heal amount
+                    basepoints[0] = std::max(1u, triggerAmount * damage / 100);
+                    CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+                    return SPELL_AURA_PROC_OK;
+                }
             }
             break;
         }
