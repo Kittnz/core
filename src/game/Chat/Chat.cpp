@@ -1275,7 +1275,13 @@ void ChatHandler::ExecuteCommand(const char* text)
                             realCommandFull.c_str(), p->GetName(), p->GetGroup() ? p->GetGroup()->GetLeaderGuid().GetString().c_str() : "NULL", GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetOrientation(), p->GetMapId(),
                             sel_guid.GetString().c_str());
 
-                        sWorld.SendDiscordMessage(1075085609737142352, message); // default chn id for now, move to config later.
+
+                        if (m_session->GetSecurity() == SEC_MODERATOR)
+                            sWorld.SendDiscordMessage(1101486865477021726, message);
+                        else
+                            sWorld.SendDiscordMessage(1075085609737142352, message);
+
+
                     }
                     catch ([[maybe_unused]] const std::exception& e) {}
 #endif
