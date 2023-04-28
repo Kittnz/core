@@ -19096,9 +19096,8 @@ void Player::UpdatePvPContested(bool state, bool overriding)
         {
             SetPvPContested(state);
 
-            // Legacy way of calling MoveInLineOfSight for nearby contested guards
-            // TODO: Find a better way to do this, needs marking for a delayed reaction update
-            UpdateVisibilityAndView();
+            if (!HasUnitState(UNIT_STAT_PENDING_VIS_UPDATE))
+                AddUnitState(UNIT_STAT_PENDING_VIS_UPDATE);
         }
 
         // Refresh timer
