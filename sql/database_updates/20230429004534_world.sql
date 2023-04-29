@@ -306,3 +306,6 @@ DELETE FROM creature_movement WHERE id=2575825;
 DELETE FROM game_event_creature WHERE guid=2575825;
 DELETE FROM game_event_creature_data WHERE guid=2575825;
 DELETE FROM creature_battleground WHERE guid=2575825;
+DELETE FROM gameobject WHERE guid = '9522';
+DELETE FROM game_event_gameobject WHERE guid = '9522';
+DELETE FROM gameobject_battleground WHERE guid = '9522';
