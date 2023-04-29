@@ -642,3 +642,78 @@ DELETE FROM creature_movement WHERE id=2575901;
 DELETE FROM game_event_creature WHERE guid=2575901;
 DELETE FROM game_event_creature_data WHERE guid=2575901;
 DELETE FROM creature_battleground WHERE guid=2575901;
+
+-- Changes by DRAGUNOVI
+DELETE FROM creature WHERE guid=2575900;
+DELETE FROM creature_addon WHERE guid=2575900;
+DELETE FROM creature_movement WHERE id=2575900;
+DELETE FROM game_event_creature WHERE guid=2575900;
+DELETE FROM game_event_creature_data WHERE guid=2575900;
+DELETE FROM creature_battleground WHERE guid=2575900;
+DELETE FROM creature WHERE guid=2575897;
+DELETE FROM creature_addon WHERE guid=2575897;
+DELETE FROM creature_movement WHERE id=2575897;
+DELETE FROM game_event_creature WHERE guid=2575897;
+DELETE FROM game_event_creature_data WHERE guid=2575897;
+DELETE FROM creature_battleground WHERE guid=2575897;
+REPLACE INTO `creature` VALUES (2575904,61389,0,0,0,815,-1154.57,2385.58,182.202,3.55962,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575905,61389,0,0,0,815,-1156.14,2391.32,182.584,3.78817,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575906,61364,0,0,0,815,-1147.86,2384.8,181.878,3.14257,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = -1151.083496, `position_y` = 2390.369873, `position_z` = 182.092178, `orientation` = 3.580030 WHERE `guid` = 2575906;
+REPLACE INTO `creature` VALUES (2575907,61364,0,0,0,815,-1098.49,2373.11,183.96,2.27232,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = -1098.758423, `position_y` = 2373.005615, `position_z` = 183.954742, `orientation` = 1.844278 WHERE `guid` = 2575907;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575907, 1);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575907, 8);
+UPDATE `creature` SET `position_x` = -1099.134521, `position_y` = 2373.826172, `position_z` = 183.949112, `orientation` = 2.079530 WHERE `guid` = 2575907;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575907, 7);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575907, 8);
+REPLACE INTO `creature` VALUES (2575908,61389,0,0,0,815,-1089.52,2371.28,184.509,4.30825,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+UPDATE `creature` SET `position_x` = -1089.583008, `position_y` = 2371.558350, `position_z` = 184.821136, `orientation` = 4.349770 WHERE `guid` = 2575908;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+
+-- Changes by SHANG
+UPDATE `creature` SET `position_x` = -1163.012939, `position_y` = 2394.450684, `position_z` = 182.959885, `orientation` = 4.204846 WHERE `guid` = 2575905;
+UPDATE `creature` SET `position_x` = -1154.256836, `position_y` = 2382.122314, `position_z` = 182.434891, `orientation` = 2.350519 WHERE `guid` = 2575904;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 4);
+UPDATE `creature` SET `position_x` = -1089.567139, `position_y` = 2370.952881, `position_z` = 184.106049, `orientation` = 4.304925 WHERE `guid` = 2575908;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575909,61389,0,0,0,815,-1123.93,2389.65,182.852,2.05599,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575910,61389,0,0,0,815,-1123.31,2392.2,182.864,4.04584,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 4);
+UPDATE `creature` SET `position_x` = -1089.443359, `position_y` = 2371.239502, `position_z` = 184.516800, `orientation` = 4.304925 WHERE `guid` = 2575908;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575911,61364,0,0,0,815,-1125.7,2391.39,182.848,5.82083,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 4);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2575912,61364,0,0,0,815,-1112.83,2359.9,183.439,0.436177,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2575913,61364,0,0,0,815,-1111.97,2362.59,183.638,4.36722,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575912;
+DELETE FROM creature_addon WHERE guid=2575912;
+DELETE FROM creature_movement WHERE id=2575912;
+DELETE FROM game_event_creature WHERE guid=2575912;
+DELETE FROM game_event_creature_data WHERE guid=2575912;
+DELETE FROM creature_battleground WHERE guid=2575912;
+REPLACE INTO `creature` VALUES (2575914,61364,0,0,0,815,-1112.69,2360.39,183.499,1.20501,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1089.457275, `position_y` = 2371.413330, `position_z` = 184.095016, `orientation` = 4.699395 WHERE `guid` = 2575908;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 2);
+UPDATE `creature` SET `position_x` = -1089.627808, `position_y` = 2371.446533, `position_z` = 184.100433, `orientation` = 4.212430 WHERE `guid` = 2575908;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+UPDATE `creature` SET `position_x` = -1089.454102, `position_y` = 2371.765869, `position_z` = 184.312439, `orientation` = 4.341711 WHERE `guid` = 2575908;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+UPDATE `creature` SET `position_x` = -1089.532837, `position_y` = 2371.674072, `position_z` = 184.094604, `orientation` = 4.321304 WHERE `guid` = 2575908;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575908, 6);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575913, 378);
