@@ -332,31 +332,6 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
     return true;
 }
 
-bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->HasItemCount(51425, 1, false))
-    {
-        if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
-        {
-            pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-            pPlayer->PlayDirectSound(1204, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
-            {
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-                pPlayer->DestroyItemCount(51425, 1, true);
-                return true;
-            }
-        }
-        else
-        {
-            pPlayer->GetSession()->SendNotification("Requires Stormwind Fountain.");
-            return false;
-        }
-    }
-
-    return true;
-}
-
 bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {    
     float x, y, z;
@@ -7974,11 +7949,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_holy_wings";
     newscript->pItemUseSpell = &ItemUseSpell_item_holy_wings;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_elwynn_coin";
-    newscript->pItemUseSpell = &ItemUseSpell_item_elwynn_coin;
     newscript->RegisterSelf();
 
     newscript = new Script;

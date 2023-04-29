@@ -2001,6 +2001,27 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->ToPlayer()->TeleportTo(1, 16247.7F, 16305.58F, 20.89F, 3.47F);
                     return;
                 }
+                case 48304: // Teresa's Copper Coin
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        if (m_CastItem)
+                        {
+                            if (GameObject* pObject = m_caster->ToPlayer()->FindNearestGameObject(1000220, 3.0F))
+                            {
+                                m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+                                m_caster->ToPlayer()->PlayDirectSound(1204, m_caster->ToPlayer());
+                                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
+                                {
+                                    m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                                    m_forceConsumeItem = true;
+                                }
+                            }
+                            m_caster->ToPlayer()->GetSession()->SendNotification("Requires Stormwind Fountain.");                            
+                        }
+                    }
+                    return;
+                }
                 case 46002: // Goblin Brainwashing Device
                 {
                     if (m_caster && m_caster->IsPlayer())
