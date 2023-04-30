@@ -2116,3 +2116,256 @@ REPLACE INTO `creature` VALUES (2576168,61388,0,0,0,815,-956.301,2987.73,182.891
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2576169,61390,0,0,0,815,-934.939,2946.67,207.689,4.99758,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+DELETE FROM creature WHERE guid=2576167;
+DELETE FROM creature_addon WHERE guid=2576167;
+DELETE FROM creature_movement WHERE id=2576167;
+DELETE FROM game_event_creature WHERE guid=2576167;
+DELETE FROM game_event_creature_data WHERE guid=2576167;
+DELETE FROM creature_battleground WHERE guid=2576167;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576170,61417,0,0,0,815,-933.273,2973.24,182.954,3.30504,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576171,61365,0,0,0,815,-951.513,2984.49,182.895,4.00347,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576172,61417,0,0,0,815,-934.875,2971.25,182.954,1.69131,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -951.575439, `position_y` = 2983.663330, `position_z` = 182.888367, `orientation` = 4.019176 WHERE `guid` = 2576171;
+DELETE FROM creature WHERE guid=2576168;
+DELETE FROM creature_addon WHERE guid=2576168;
+DELETE FROM creature_movement WHERE id=2576168;
+DELETE FROM game_event_creature WHERE guid=2576168;
+DELETE FROM game_event_creature_data WHERE guid=2576168;
+DELETE FROM creature_battleground WHERE guid=2576168;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576173,61417,0,0,0,815,-936.46,2974.48,182.915,5.69683,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576174,61365,0,0,0,815,-957.016,2987.54,182.887,4.06709,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576162, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576163, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576159, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576158, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576160, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576166, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576169, 378);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576175,61394,0,0,0,815,-1266.75,2540.17,183.727,4.87295,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576175, 173);
+REPLACE INTO `creature` VALUES (2576176,61394,0,0,0,815,-1265.76,2548.74,183.338,2.33769,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576177,61394,0,0,0,815,-1266.17,2551.15,183.327,4.76143,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576178,61394,0,0,0,815,-1267.52,2549.92,183.329,5.92382,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576179,61394,0,0,0,815,-1258.07,2554.81,183.328,0.157424,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576177, 389);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576177, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576176, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576178, 378);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576180,61394,0,0,0,815,-1258.94,2547.59,184.554,0.272877,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576181,61394,0,0,0,815,-1272.34,2551.72,183.868,5.20046,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2576180, 8);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2576181, 8);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576179, 69);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576182,61394,0,0,0,815,-1241.85,2559.91,183.359,5.23189,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576183,61384,0,0,0,815,-1293.13,2522.99,182.788,4.94461,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576183;
+DELETE FROM creature_addon WHERE guid=2576183;
+DELETE FROM creature_movement WHERE id=2576183;
+DELETE FROM game_event_creature WHERE guid=2576183;
+DELETE FROM game_event_creature_data WHERE guid=2576183;
+DELETE FROM creature_battleground WHERE guid=2576183;
+REPLACE INTO `creature` VALUES (2576184,61394,0,0,0,815,-1293.13,2522.99,182.788,4.94461,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576182, 233);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576184, 173);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576182, 234);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576185,61394,0,0,0,815,-1295.05,2526.5,182.576,6.13763,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576186,61394,0,0,0,815,-1293.64,2525.03,182.694,2.20514,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576187,61394,0,0,0,815,-1284.02,2537.48,183.973,5.96326,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576175, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576184, 234);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576187, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576070, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576065, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576093, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576090, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576063, 234);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576062, 234);
+REPLACE INTO `creature` VALUES (2576188,61394,0,0,0,815,-1195.61,2602.55,184.186,5.64282,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576188, 234);
+REPLACE INTO `creature` VALUES (2576189,61394,0,0,0,815,-1200.03,2601.05,183.976,4.40896,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576189, 234);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576190,61394,0,0,0,815,-1220.89,2640.73,183.655,3.11053,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576190, 234);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576191,61394,0,0,0,815,-1239.78,2600.02,182.991,1.69306,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1222.195801, `position_y` = 2640.659912, `position_z` = 183.576340, `orientation` = 3.188284 WHERE `guid` = 2576190;
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576191, 69);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1239.438232, `position_y` = 2600.441895, `position_z` = 182.901352, `orientation` = 1.561287 WHERE `guid` = 2576191;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576192,61394,0,0,0,815,-1473.31,2383.13,182.865,3.39267,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576192, 234);
+REPLACE INTO `creature` VALUES (2576193,61394,0,0,0,815,-1468.82,2385.42,182.865,2.00644,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576193, 69);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1451.251953, `position_y` = 2394.519287, `position_z` = 183.178268, `orientation` = 2.442503 WHERE `guid` = 2575986;
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2574881;
+DELETE FROM creature_addon WHERE guid=2574881;
+DELETE FROM creature_movement WHERE id=2574881;
+DELETE FROM game_event_creature WHERE guid=2574881;
+DELETE FROM game_event_creature_data WHERE guid=2574881;
+DELETE FROM creature_battleground WHERE guid=2574881;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575221;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575221;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575221;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=234 WHERE `guid`=2575221;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=234 WHERE `guid`=2575221;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575221;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575228;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575221;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575220;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575219;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575219;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575227;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575226;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575212;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575216;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575229;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575215;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575211;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575210;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575211;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575212;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575216;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575229;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575215;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575210;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575206;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575201;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575207;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575196;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575204;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575199;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575205;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575198;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575201;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575195;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575196;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575191;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575190;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575195;
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575193;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575194;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575194;
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575193;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575190;
