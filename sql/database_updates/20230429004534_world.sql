@@ -2432,3 +2432,4 @@ DELETE FROM creature_battleground WHERE guid=2575851;
 UPDATE `creature` SET `position_x` = -944.874512, `position_y` = 2940.641602, `position_z` = 144.996033, `orientation` = 2.164157 WHERE `guid` = 2576135;
 UPDATE `creature` SET `position_x` = -947.803955, `position_y` = 2948.335449, `position_z` = 144.994568, `orientation` = 4.226610 WHERE `guid` = 2576136;
 UPDATE `creature` SET `position_x` = -947.652832, `position_y` = 2978.436523, `position_z` = 153.535950, `orientation` = 1.220891 WHERE `guid` = 2576147;
+REPLACE INTO `creature` VALUES (2576194,691,0,0,0,0,-5041.66,489.532,406.991,0.825362,120,120,5,100,100,1,0,0);
