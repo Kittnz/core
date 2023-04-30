@@ -39,8 +39,8 @@ bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
+    pPlayer->SEND_GOSSIP_MENU(60002, pCreature->GetGUID());
     return true;
 }
 
