@@ -1063,7 +1063,6 @@ class Player final: public Unit
         InventoryResult _CanStoreItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, uint32 entry, uint32 count, Item* pItem = nullptr, bool swap = false, uint32* no_space_count = nullptr) const;
         void ApplyEquipCooldown(Item* pItem);
         bool CheckAmmoCompatibility(ItemPrototype const* ammo_proto) const;
-        void SetVirtualItemSlot(uint8 i, Item* item);
         void QuickEquipItem(uint16 pos, Item* pItem);
         void VisualizeItem(uint8 slot, Item* pItem);
         void SetVisibleItemSlot(uint8 slot, Item* pItem);
@@ -1084,7 +1083,6 @@ class Player final: public Unit
     public:
         Item* AddItem(uint32 itemId, uint32 count = 1);
         void InterruptSpellsWithCastItem(Item* item);
-        void SetSheath(SheathState sheathed) override;     // overwrite Unit version
         uint8 FindEquipSlot(ItemPrototype const* proto, uint32 slot, bool swap) const;
         uint32 GetItemCount(uint32 item, bool inBankAlso = false, Item* skipItem = nullptr) const;
         Item* GetItemByGuid(ObjectGuid guid) const;
@@ -1841,11 +1839,8 @@ class Player final: public Unit
         uint32 m_longSightSpell;
 
         // Homebind coordinates
-        uint32 m_homebindMapId;
+        WorldLocation m_homebind;
         uint16 m_homebindAreaId;
-        float m_homebindX;
-        float m_homebindY;
-        float m_homebindZ;
 
         // knockback/jumping states
         bool launched;
@@ -1933,8 +1928,8 @@ class Player final: public Unit
             o = m_recallO;
         };
 
-        void SetHomebindToLocation(WorldLocation const& loc, uint32 area_id);
-        void RelocateToHomebind() { SetLocationMapId(m_homebindMapId); Relocate(m_homebindX, m_homebindY, m_homebindZ); }
+        void SetHomebindToLocation(WorldLocation const& loc, uint32 areaId);
+        void RelocateToHomebind() { SetLocationMapId(m_homebind.mapId); Relocate(m_homebind.x, m_homebind.y, m_homebind.z); }
         bool TeleportToHomebind(uint32 options = 0, bool hearthCooldown = true);
 
         // currently visible objects at player client
@@ -1990,7 +1985,7 @@ class Player final: public Unit
         Position m_lastSafePosition;
         bool  m_undermapPosValid;
 
-        uint32 GetHomeBindMap() const { return m_homebindMapId; }
+        uint32 GetHomeBindMap() const { return m_homebind.mapId; }
         uint16 GetHomeBindAreaId() const { return m_homebindAreaId; }
 
         void SendSummonRequest(ObjectGuid summonerGuid, uint32 mapId, uint32 zoneId, float x, float y, float z);
@@ -2301,6 +2296,7 @@ class Player final: public Unit
         typedef std::list<Channel*> JoinedChannelsList;
         JoinedChannelsList m_channels;
         void UpdateLocalChannels(uint32 newZone);
+        std::string m_name;
     public:
         void JoinedChannel(Channel* c);
         void LeftChannel(Channel* c);
@@ -2321,10 +2317,13 @@ class Player final: public Unit
         bool IsDND() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND); }
         uint8 GetChatTag() const;
 
+        char const* GetName() const final { return m_name.c_str(); }
+        void SetName(std::string const& newname) { m_name = newname; }
+
         float GetYellRange() const;
-        void Say(std::string const& text, uint32 const language) const;
-        void Yell(std::string const& text, uint32 const language) const;
-        void TextEmote(std::string const& text) const;
+        void Say(char const* text, uint32 const language) const;
+        void Yell(char const* text, uint32 const language) const;
+        void TextEmote(char const* text) const;
 
         /*********************************************************/
         /***                   FACTION SYSTEM                  ***/
@@ -2652,7 +2651,7 @@ class Player final: public Unit
         static uint32 GetGuildIdFromDB(ObjectGuid guid);
         static uint32 GetRankFromDB(ObjectGuid guid);
         int GetGuildIdInvited() { return m_GuildIdInvited; }
-        static void RemovePetitionsAndSigns(ObjectGuid guid);
+        static void RemovePetitionsAndSigns(ObjectGuid guid, uint32 exceptPetitionId = 0);
 };
 
 inline Player* Object::ToPlayer()
