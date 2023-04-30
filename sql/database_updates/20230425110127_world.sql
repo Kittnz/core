@@ -1722,3 +1722,8 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20342, 0, 0, 0, 0),
 (20343, 0, 0, 0, 0),
 (20344, 0, 0, 0, 0);
+
+-- NPC Regent-Lord Mortimer Harlow change level to 47, adjust damage to be 20% less than Chief Ukorz Sandscalp, set hp to 8612, mana to 1333, armor to 3833.
+update creature_template set level_min = 47, level_max = 47, dmg_min = 215, dmg_max = 277, health_min = 8612, health_max = 8612, mana_min = 1333, mana_max = 1333, armor = 3833, unit_class = 2 where entry = 61264;
+-- NPC Regent-Lady Celia Harlow change level to 47, adjust damage to be 15% less than Witch-Doctor Zum'rah, set hp to 7952, mana to 3699, armor to 1812
+update creature_template set level_min = 47, level_max = 47, dmg_min = 229, dmg_max = 294, health_min = 7952, health_max = 7952, mana_min = 3699, mana_max = 3699, armor = 1812, unit_class = 2 where entry = 61263;
