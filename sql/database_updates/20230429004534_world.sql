@@ -2500,3 +2500,4 @@ DELETE FROM creature_battleground WHERE guid=2576202;
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575984, 8);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575984, 6);
