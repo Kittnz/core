@@ -2369,3 +2369,9 @@ UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575193;
 
 -- Changes by SHANG
 UPDATE `creature_addon` SET `emote_state`=233 WHERE `guid`=2575190;
+DELETE FROM creature WHERE guid=2574975;
+DELETE FROM creature_addon WHERE guid=2574975;
+DELETE FROM creature_movement WHERE id=2574975;
+DELETE FROM game_event_creature WHERE guid=2574975;
+DELETE FROM game_event_creature_data WHERE guid=2574975;
+DELETE FROM creature_battleground WHERE guid=2574975;
