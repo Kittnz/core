@@ -2497,3 +2497,6 @@ DELETE FROM creature_movement WHERE id=2576202;
 DELETE FROM game_event_creature WHERE guid=2576202;
 DELETE FROM game_event_creature_data WHERE guid=2576202;
 DELETE FROM creature_battleground WHERE guid=2576202;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2575984, 8);
