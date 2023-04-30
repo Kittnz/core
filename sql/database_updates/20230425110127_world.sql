@@ -1839,3 +1839,21 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+set @equip_template = 20379; set @weapon_1 = 3366; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61413;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Give weapon 3366 to NPC 61413 & NPC 61411
+set @equip_template = 20378; set @weapon_1 = 3366; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61411;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Automated Servitor set scale to 0.5
+update creature_template set scale = 0.5 where entry = 61432;
+-- NPC Marshal Magnus Greystone, change spell 15267 to 17142.
+update creature_spells set spellid_3 = 17142 where entry = 180171;
+-- NPC Genn Greymane, change spell 11700 to 17620.
+update creature_spells set spellid_1 = 17620 where entry = 180166;
+-- NPC Handon Blackhammer give repair flags.
+update creature_template set npc_flags = 16389 where entry = 61368;
+-- Quest 'Scouring Greyshire' entry 40830 , add kill requirement 9 Shambling Dead (Entry 61235) and 9 Lingering Skeleton (Entry 61234)
+update quest_template set reqcreatureorgoid1 = 61234, reqcreatureorgocount1 = 9, reqcreatureorgoid2 = 61235, reqcreatureorgocount2 = 9 where entry = 40830;
