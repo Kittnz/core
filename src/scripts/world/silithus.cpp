@@ -457,11 +457,9 @@ struct npc_solenorAI : public ScriptedAI
     uint32 m_uiCreepingDoom_Timer;
     uint32 m_uiCastSoulFlame_Timer;
     uint32 m_uiDespawn_Timer;
-    bool m_canUseDreadfulFright;
 
     void Reset() override
     {
-        m_canUseDreadfulFright = false;
         switch (m_creature->GetEntry())
         {
             case NPC_NELSON_THE_NICE:
@@ -531,7 +529,7 @@ struct npc_solenorAI : public ScriptedAI
     void EnterEvadeMode() override
     {
         m_creature->RemoveGuardians();
-
+        m_creature->RemoveAllAuras();
         ScriptedAI::EnterEvadeMode();
     }
 
@@ -605,15 +603,6 @@ struct npc_solenorAI : public ScriptedAI
         }
     }
 
-    static constexpr uint32 m_hunterSlows[] =
-    {
-        5116,  // Concussive Shot
-        13810, // Frost Trap Aura
-        2974,  // Wing Clip (Rank 1)
-        14267, // Wing Clip (Rank 2)
-        14268, // Wing Clip (Rank 3)
-    };
-
     void UpdateAI(const uint32 uiDiff) override
     {
         /** Nelson the Nice */
@@ -666,18 +655,6 @@ struct npc_solenorAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_canUseDreadfulFright)
-        {
-            for (auto spellId : m_hunterSlows)
-            {
-                if (m_creature->HasAura(spellId))
-                {
-                    m_canUseDreadfulFright = true;
-                    break;
-                }
-            }
-        }
-
         if (m_creature->HasAura(SPELL_SOUL_FLAME) && m_creature->HasAura(SPELL_FROST_TRAP))
                 m_creature->RemoveAurasDueToSpell(SPELL_SOUL_FLAME);
 
@@ -692,7 +669,7 @@ struct npc_solenorAI : public ScriptedAI
         else
             m_uiCreepingDoom_Timer -= uiDiff;
 
-        if (m_canUseDreadfulFright)
+        if (m_creature->HasUnitState(UNIT_STAT_ROOT))
         {
             if (m_uiDreadfulFright_Timer < uiDiff)
             {

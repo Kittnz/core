@@ -8342,7 +8342,10 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
         }
     }
     else
+    {
+        SendLootRelease(guid);
         return;
+    }
 
     if (ObjectGuid lootGuid = GetLootGuid())
         m_session->DoLootRelease(lootGuid);
@@ -8581,7 +8584,10 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                 // the player whose group may loot the corpse
                 Player *recipient = creature->GetLootRecipient();
                 if (!recipient)
+                {
+                    SendLootRelease(guid);
                     return;
+                }
 
                 if (creature->lootForPickPocketed)
                 {
@@ -8675,6 +8681,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
         default:
         {
             sLog.outError("%s is unsupported for looting.", guid.GetString().c_str());
+            SendLootRelease(guid);
             return;
         }
     }
@@ -19089,9 +19096,8 @@ void Player::UpdatePvPContested(bool state, bool overriding)
         {
             SetPvPContested(state);
 
-            // Legacy way of calling MoveInLineOfSight for nearby contested guards
-            // TODO: Find a better way to do this, needs marking for a delayed reaction update
-            UpdateVisibilityAndView();
+            if (!HasUnitState(UNIT_STAT_PENDING_VIS_UPDATE))
+                AddUnitState(UNIT_STAT_PENDING_VIS_UPDATE);
         }
 
         // Refresh timer

@@ -111,6 +111,10 @@ namespace MaNGOS
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
+            // Turtle: No XP if you leave group in dungeon.
+            if (pUnit->IsPlayer() && !static_cast<Player*>(pUnit)->m_InstanceValid)
+                return 0;
+
             uint32 ownerLevel = pUnit->GetLevel();
             uint32 unitLevel = pUnit->GetLevel();
             if (pUnit->IsPet())

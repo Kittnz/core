@@ -831,6 +831,8 @@ static constexpr uint32 sOfsSharedData = 0x7FFE0000;
 static constexpr uint32 sOfsSharedDataMajorVersion = 0x026C;
 static constexpr uint32 sOfsSharedDataMinorVersion = 0x0270;
 
+static constexpr uint32 sOfsClickToMovePosition = 0xC4D890;
+
 // TODO: Identify drivers for other hypervisors and add detections for them too
 constexpr struct
 {
@@ -1866,6 +1868,51 @@ void WardenWin::LoadScriptedScans()
 
         return false;
     }, "WinVersionGet", WinAllBuild | InitialLogin | PriorityScan));
+
+    // click to move enabled check
+    sWardenScanMgr.AddWindowsScan(std::make_shared<WindowsScan>(
+        // builder
+        [](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
+    {
+        // no need to scan multiple times
+        if (warden->HasUsedClickToMove())
+            return;
+
+        auto const wardenWin = reinterpret_cast<const WardenWin *>(warden);
+
+        scan << static_cast<uint8>(wardenWin->GetModule()->opcodes[READ_MEMORY] ^ wardenWin->GetXor())
+            << static_cast<uint8>(0)
+            << sOfsClickToMovePosition
+            << static_cast<uint8>(sizeof(float) * 3);
+    },
+        // checker
+        [](const Warden *warden, ByteBuffer &buff)
+    {
+        auto const wardenWin = const_cast<WardenWin *>(reinterpret_cast<const WardenWin *>(warden));
+
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read click to move position from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return true;
+        }
+
+        float positionX = buff.read<float>();
+        float positionY = buff.read<float>();
+        float positionZ = buff.read<float>();
+        if (positionX || positionY || positionZ)
+        {
+            wardenWin->SetHasUsedClickToMove();
+            wardenWin->_session->SetHasUsedClickToMove();
+        }
+
+        return false;
+    }, sizeof(uint8) + sizeof(uint8) + sizeof(uint32) + sizeof(uint8),
+       sizeof(uint8) + sizeof(float) + sizeof(float) + sizeof(float),
+        "Click To Move Position", WinAllBuild));
 }
 
 void WardenWin::BuildLuaInit(const std::string &module, bool fastcall, uint32 offset, ByteBuffer &out) const

@@ -532,6 +532,8 @@ class WorldSession
         ClientIdentifiersMap const& GetClientIdentifiers() const { return _clientIdentifiers; }
         void ComputeClientHash();
         bool IsClientHashComputed() const { return _clientHashComputeStep != HASH_NOT_COMPUTED; }
+        bool HasUsedClickToMove() const { return m_hasUsedClickToMove; }
+        void SetHasUsedClickToMove() { m_hasUsedClickToMove = true; }
 
         //void InitCheatData(Player* pPlayer);
         //Anticheat::Movement* GetCheatData();
@@ -979,6 +981,7 @@ class WorldSession
         bool m_fingerprintBanned = false;
         bool m_shouldBackupCharacters = false;
         uint32 m_highestCharLevel = 0;
+        bool m_hasUsedClickToMove = false;
 
         enum ClientHashStep
         {

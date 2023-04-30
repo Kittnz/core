@@ -343,26 +343,13 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (_player->GetTypeId() == TYPEID_PLAYER)
+    // not have spell in spellbook or spell passive and not casted by client
+    if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
     {
-        // not have spell in spellbook or spell passive and not casted by client
-        if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
-        {
-            sLog.outError("World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
-            //cheater? kick? ban?
-            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
-            return;
-        }
-    }
-    else if (_player->GetTypeId() == TYPEID_UNIT)
-    {
-        // not have spell in spellbook or spell passive and not casted by client
-        if (!_player->HasSpell(spellId) || spellInfo->IsPassiveSpell())
-        {
-            //cheater? kick? ban?
-            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
-            return;
-        }
+        sLog.outError("World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
+        //cheater? kick? ban?
+        recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
+        return;
     }
 
     // client provided targets
