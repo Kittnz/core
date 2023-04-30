@@ -2506,8 +2506,8 @@ bool ChatHandler::HandleAuraCommand(char* args)
         return false;
     }
 
-    // Only allow admins to use auras in other players
-    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
+    // Only allow devs to use auras in other players
+    if (GetSession()->GetSecurity() < SEC_DEVELOPER)
         target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
@@ -16070,5 +16070,33 @@ bool ChatHandler::HandleBlacklistNameCommand(char* args)
     WorldDatabase.PExecute("REPLACE INTO `reserved_name` (`name`) VALUES ('%s')", name.c_str());
 
     PSendSysMessage("Name %s has been blacklisted.", name.c_str());
+    return true;
+}
+
+bool ChatHandler::HandleListClickToMoveCommand(char* args)
+{
+    std::multimap<uint32, Player*> levelSortedList;
+    HashMapHolder<Player>::MapType const& plist = sObjectAccessor.GetPlayers();
+    for (auto const& itr : plist)
+    {
+        if (!itr.second->IsInWorld())
+            continue;
+
+        if (itr.second->GetSession()->HasUsedClickToMove())
+            levelSortedList.insert(std::make_pair(itr.second->GetLevel(), itr.second));
+    }
+
+    if (levelSortedList.empty())
+    {
+        SendSysMessage("No players found.");
+        return true;
+    }
+
+    SendSysMessage("Listing players using click to move:");
+    for (auto const& itr : levelSortedList)
+    {
+        PSendSysMessage("- Name %s IP %s Level %s", GetNameLink(itr.second).c_str(), playerLink(itr.second->GetSession()->GetRemoteAddress()).c_str(), playerLink(std::to_string(itr.first)).c_str());
+    }
+
     return true;
 }

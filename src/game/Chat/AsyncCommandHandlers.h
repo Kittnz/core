@@ -66,7 +66,7 @@ struct PInfoData
     AccountTypes security = SEC_PLAYER;
     std::string last_login;
     std::string target_name;
-    
+    bool m_hasUsedClickToMove = false;
 };
 
 /**

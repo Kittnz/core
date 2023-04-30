@@ -353,8 +353,10 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(displayId);
     if (!minfo)                                             // Cancel load if no display info addon defined
     {
-        sLog.outErrorDb("Creature (Entry: %u) has no display id data defined in table `creature_display_info_addon`, can't load.", Entry);
-        return false;
+        sLog.outErrorDb("Creature (Entry: %u) has no display id data defined in table `creature_display_info_addon`, using default.", Entry);
+        minfo = sObjectMgr.GetCreatureDisplayInfoAddon(13);
+        if (!minfo)
+            return false;
     }
 
     displayId = minfo->display_id;                          // it can be different (for another gender)

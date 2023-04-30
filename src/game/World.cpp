@@ -1236,7 +1236,7 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY, "ItemRestoreLog.MinQuality", 3);
 
-    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 5);
+    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 10);
 
     setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
 

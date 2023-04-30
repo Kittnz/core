@@ -138,15 +138,19 @@ struct npc_melizza_brimbuzzleAI : public npc_escortAI
                     }
                 }
                 break;
-            case 9:
+            case 8:
                 for (uint8 i = 0; i < MAX_WRANGLERS; ++i)
                 {
                     float fX, fY, fZ;
                     m_creature->GetRandomPoint(wranglerSpawn.m_fX, wranglerSpawn.m_fY, wranglerSpawn.m_fZ, 10.0f, fX, fY, fZ);
-                    m_creature->SummonCreature(NPC_MARAUDINE_BONEPAW, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 25000);
+                    if (Creature* pEnemy = m_creature->SummonCreature(NPC_MARAUDINE_BONEPAW, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 25000))
+                        if (Player* pPlayer = GetPlayerForEscort())
+                            pEnemy->AI()->AttackStart(pPlayer);
 
                     m_creature->GetRandomPoint(wranglerSpawn.m_fX, wranglerSpawn.m_fY, wranglerSpawn.m_fZ, 10.0f, fX, fY, fZ);
-                    m_creature->SummonCreature(NPC_MARAUDINE_WRANGLER, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 25000);
+                    if (Creature* pEnemy = m_creature->SummonCreature(NPC_MARAUDINE_WRANGLER, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 25000))
+                        if (Player* pPlayer = GetPlayerForEscort())
+                            pEnemy->AI()->AttackStart(pPlayer);
                 }
                 break;
             case 12:
