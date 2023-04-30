@@ -1481,3 +1481,366 @@ DELETE FROM creature_movement WHERE id=2576049;
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,1, -1196.398926,2631.571777,182.949356, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,2, -1201.916870,2624.432373,182.874939, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,3, -1212.368652,2613.339355,182.648178, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,4, -1225.897339,2599.041748,182.827591, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,5, -1245.496826,2578.291992,182.390411, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,6, -1258.116089,2566.787598,182.912811, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,7, -1271.503906,2557.545898,182.896805, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,8, -1284.912964,2555.750732,182.511124, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,9, -1272.625122,2557.791504,182.898743, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,10, -1259.525635,2563.073975,183.198975, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,11, -1250.262817,2558.015869,183.328995, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,12, -1254.986206,2568.725830,182.642059, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,13, -1243.077759,2581.085938,182.906921, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,14, -1229.115234,2595.622559,182.933945, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576049,15, -1208.285034,2618.369873,182.912415, 100);
+REPLACE INTO `creature` VALUES (2576049,61417,0,0,0,815,-1196.4,2631.57,182.949,4.0303,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2576050,61365,0,0,0,815,-1177.03,2685.89,182.798,4.10245,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576050;
+DELETE FROM creature_addon WHERE guid=2576050;
+DELETE FROM creature_movement WHERE id=2576050;
+DELETE FROM game_event_creature WHERE guid=2576050;
+DELETE FROM game_event_creature_data WHERE guid=2576050;
+DELETE FROM creature_battleground WHERE guid=2576050;
+REPLACE INTO `creature` VALUES (2576051,61417,0,0,0,815,-1177.9,2684.5,182.937,4.28836,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576051;
+DELETE FROM creature_addon WHERE guid=2576051;
+DELETE FROM creature_movement WHERE id=2576051;
+DELETE FROM game_event_creature WHERE guid=2576051;
+DELETE FROM game_event_creature_data WHERE guid=2576051;
+DELETE FROM creature_battleground WHERE guid=2576051;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576052,61365,0,0,0,815,-1186.05,2664.28,182.628,0.980794,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576053,61388,0,0,0,815,-1155.94,2648.66,182.644,3.16272,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576052,61365,0,0,0,815,-1186.05,2664.28,182.628,0.980794,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576052;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576052,1, -1186.045654,2664.282959,182.627960, 100);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576054,61391,0,0,0,815,-1158.29,2650.53,182.527,5.47179,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576052,2, -1163.918457,2691.958984,182.717361, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576052,3, -1141.159790,2720.011719,183.292480, 100);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576055,61388,0,0,0,815,-1158.2,2647.76,182.464,0.830087,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576052,4, -1163.849976,2691.801270,182.714813, 100);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576056,61391,0,0,0,815,-1157.76,2674.94,183.211,2.79635,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576052,5, -1185.500977,2664.882080,182.616150, 100);
+REPLACE INTO `creature` VALUES (2576052,61365,0,0,0,815,-1186.05,2664.28,182.628,0.980794,300,300,0,100,100,2,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576057,61391,0,0,0,815,-1160.43,2676.27,183.33,5.76515,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576058,61417,0,0,0,815,-1128.34,2674.52,183.908,6.07223,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576059,61365,0,0,0,815,-1165.69,2650.17,183.262,0.816331,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576059,61365,0,0,0,815,-1165.69,2650.17,183.262,0.816331,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576059;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576059,1, -1165.688354,2650.168945,183.262146, 100);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576060,61391,0,0,0,815,-1126.8,2672.21,184.304,1.95188,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576061,61391,0,0,0,815,-1125.54,2674.68,183.881,3.51483,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576059,2, -1121.974121,2697.537109,184.446075, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576059,3, -1165.497559,2650.377441,183.274673, 100);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576062,61394,0,0,0,815,-1130.42,2700.25,183.286,3.17251,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576059,61365,0,0,0,815,-1165.69,2650.17,183.262,0.816331,300,300,0,100,100,2,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576062, 173);
+REPLACE INTO `creature` VALUES (2576063,61394,0,0,0,815,-1136.75,2710.28,182.891,5.10966,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576063, 173);
+REPLACE INTO `creature` VALUES (2576064,61394,0,0,0,815,-1110.31,2668.13,184.766,0.797817,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576065,61394,0,0,0,815,-1102.81,2667.06,183.543,5.72541,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576065, 173);
+REPLACE INTO `creature` VALUES (2576066,61394,0,0,0,815,-1125.56,2660.81,184.096,0.242123,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576067,61394,0,0,0,815,-1117.5,2658.17,183.51,2.73547,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576066;
+DELETE FROM creature_addon WHERE guid=2576066;
+DELETE FROM creature_movement WHERE id=2576066;
+DELETE FROM game_event_creature WHERE guid=2576066;
+DELETE FROM game_event_creature_data WHERE guid=2576066;
+DELETE FROM creature_battleground WHERE guid=2576066;
+REPLACE INTO `creature` VALUES (2576068,61394,0,0,0,815,-1117.8,2660.88,183.92,4.65245,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576069,61394,0,0,0,815,-1119.79,2659.94,183.643,6.05046,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576070,61394,0,0,0,815,-1117.36,2653.31,183.328,5.38366,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576071,61391,0,0,0,815,-1183.39,2683.4,183.328,2.05063,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576070, 173);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2576071, 8);
+REPLACE INTO `creature` VALUES (2576072,61388,0,0,0,815,-1187.95,2683.73,184.723,5.51424,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576073,61388,0,0,0,815,-1182.08,2689.94,184.891,5.51424,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576074,61388,0,0,0,815,-1172.69,2734.91,183.376,5.33418,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576075,61388,0,0,0,815,-1162.67,2744.81,183.247,5.5855,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576076,61414,0,0,0,815,-1167.46,2740.04,182.431,5.50697,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576076;
+DELETE FROM creature_addon WHERE guid=2576076;
+DELETE FROM creature_movement WHERE id=2576076;
+DELETE FROM game_event_creature WHERE guid=2576076;
+DELETE FROM game_event_creature_data WHERE guid=2576076;
+DELETE FROM creature_battleground WHERE guid=2576076;
+REPLACE INTO `creature` VALUES (2576077,61417,0,0,0,815,-1167.46,2740.04,182.431,5.50697,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576077,61417,0,0,0,815,-1167.46,2740.04,182.431,5.50697,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576077;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,1, -1167.456909,2740.044678,182.431427, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,2, -1160.042725,2732.765381,182.702835, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,3, -1149.422485,2728.321289,182.911285, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,4, -1139.522339,2725.187988,183.205093, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,5, -1125.286255,2731.688721,182.931671, 100);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576078,61391,0,0,0,815,-1164.97,2708.65,185.012,1.61315,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,6, -1118.761841,2728.043945,182.758728, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,7, -1114.324707,2720.214600,182.316299, 100);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576079,61390,0,0,0,815,-1167.22,2712.91,185.286,6.12762,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,8, -1113.307617,2706.430420,183.321289, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,9, -1108.148926,2694.598145,183.115402, 100);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576080,61388,0,0,0,815,-1163.04,2712.45,185.91,3.71016,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,10, -1103.263672,2686.048096,182.124374, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,11, -1093.649048,2676.126465,182.234451, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,12, -1107.599243,2691.182129,182.679840, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,13, -1109.677368,2700.447998,183.328934, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,14, -1112.535278,2716.693604,182.572021, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,15, -1119.071655,2726.812256,182.636505, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,16, -1127.199585,2730.456055,182.791992, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,17, -1141.133789,2726.340576,183.276260, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,18, -1154.542480,2726.924316,182.588486, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576077,19, -1158.826172,2731.434082,182.800034, 100);
+REPLACE INTO `creature` VALUES (2576077,61417,0,0,0,815,-1167.46,2740.04,182.431,5.50697,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2576081,61390,0,0,0,815,-1143.2,2697.79,182.403,0.0256729,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576082,61388,0,0,0,815,-1140.9,2697.33,182.358,2.86096,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2575755;
+DELETE FROM creature_addon WHERE guid=2575755;
+DELETE FROM creature_movement WHERE id=2575755;
+DELETE FROM game_event_creature WHERE guid=2575755;
+DELETE FROM game_event_creature_data WHERE guid=2575755;
+DELETE FROM creature_battleground WHERE guid=2575755;
+DELETE FROM creature WHERE guid=2575756;
+DELETE FROM creature_addon WHERE guid=2575756;
+DELETE FROM creature_movement WHERE id=2575756;
+DELETE FROM game_event_creature WHERE guid=2575756;
+DELETE FROM game_event_creature_data WHERE guid=2575756;
+DELETE FROM creature_battleground WHERE guid=2575756;
+DELETE FROM creature WHERE guid=2575758;
+DELETE FROM creature_addon WHERE guid=2575758;
+DELETE FROM creature_movement WHERE id=2575758;
+DELETE FROM game_event_creature WHERE guid=2575758;
+DELETE FROM game_event_creature_data WHERE guid=2575758;
+DELETE FROM creature_battleground WHERE guid=2575758;
+DELETE FROM creature WHERE guid=2575805;
+DELETE FROM creature_addon WHERE guid=2575805;
+DELETE FROM creature_movement WHERE id=2575805;
+DELETE FROM game_event_creature WHERE guid=2575805;
+DELETE FROM game_event_creature_data WHERE guid=2575805;
+DELETE FROM creature_battleground WHERE guid=2575805;
+DELETE FROM creature WHERE guid=2575798;
+DELETE FROM creature_addon WHERE guid=2575798;
+DELETE FROM creature_movement WHERE id=2575798;
+DELETE FROM game_event_creature WHERE guid=2575798;
+DELETE FROM game_event_creature_data WHERE guid=2575798;
+DELETE FROM creature_battleground WHERE guid=2575798;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576083,61388,0,0,0,815,-1141.62,2737.33,184.727,6.26013,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2575806;
+DELETE FROM creature_addon WHERE guid=2575806;
+DELETE FROM creature_movement WHERE id=2575806;
+DELETE FROM game_event_creature WHERE guid=2575806;
+DELETE FROM game_event_creature_data WHERE guid=2575806;
+DELETE FROM creature_battleground WHERE guid=2575806;
+DELETE FROM creature WHERE guid=2575799;
+DELETE FROM creature_addon WHERE guid=2575799;
+DELETE FROM creature_movement WHERE id=2575799;
+DELETE FROM game_event_creature WHERE guid=2575799;
+DELETE FROM game_event_creature_data WHERE guid=2575799;
+DELETE FROM creature_battleground WHERE guid=2575799;
+DELETE FROM creature WHERE guid=2575800;
+DELETE FROM creature_addon WHERE guid=2575800;
+DELETE FROM creature_movement WHERE id=2575800;
+DELETE FROM game_event_creature WHERE guid=2575800;
+DELETE FROM game_event_creature_data WHERE guid=2575800;
+DELETE FROM creature_battleground WHERE guid=2575800;
+DELETE FROM creature WHERE guid=2575803;
+DELETE FROM creature_addon WHERE guid=2575803;
+DELETE FROM creature_movement WHERE id=2575803;
+DELETE FROM game_event_creature WHERE guid=2575803;
+DELETE FROM game_event_creature_data WHERE guid=2575803;
+DELETE FROM creature_battleground WHERE guid=2575803;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576084,61365,0,0,0,815,-1136.74,2740.28,184.719,4.72075,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2575765;
+DELETE FROM creature_addon WHERE guid=2575765;
+DELETE FROM creature_movement WHERE id=2575765;
+DELETE FROM game_event_creature WHERE guid=2575765;
+DELETE FROM game_event_creature_data WHERE guid=2575765;
+DELETE FROM creature_battleground WHERE guid=2575765;
+DELETE FROM creature WHERE guid=2575760;
+DELETE FROM creature_addon WHERE guid=2575760;
+DELETE FROM creature_movement WHERE id=2575760;
+DELETE FROM game_event_creature WHERE guid=2575760;
+DELETE FROM game_event_creature_data WHERE guid=2575760;
+DELETE FROM creature_battleground WHERE guid=2575760;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576085,61390,0,0,0,815,-1137.27,2735.18,184.769,2.1525,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2575757;
+DELETE FROM creature_addon WHERE guid=2575757;
+DELETE FROM creature_movement WHERE id=2575757;
+DELETE FROM game_event_creature WHERE guid=2575757;
+DELETE FROM game_event_creature_data WHERE guid=2575757;
+DELETE FROM creature_battleground WHERE guid=2575757;
+REPLACE INTO `creature` VALUES (2576086,61384,0,0,0,815,-1100.2,2708.71,183.328,5.60121,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576086;
+DELETE FROM creature_addon WHERE guid=2576086;
+DELETE FROM creature_movement WHERE id=2576086;
+DELETE FROM game_event_creature WHERE guid=2576086;
+DELETE FROM game_event_creature_data WHERE guid=2576086;
+DELETE FROM creature_battleground WHERE guid=2576086;
+REPLACE INTO `creature` VALUES (2576087,61394,0,0,0,815,-1100.2,2708.71,183.328,5.60121,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576088,61394,0,0,0,815,-1098.04,2708.77,183.328,3.74374,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576089,61394,0,0,0,815,-1099.62,2706.72,183.328,1.28103,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576090,61394,0,0,0,815,-1082.03,2693.72,183.329,5.89917,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576090, 173);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576091,61388,0,0,0,815,-1112.79,2777.07,183.406,6.17452,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576092,61388,0,0,0,815,-1108.73,2781.34,182.81,5.2674,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576093,61394,0,0,0,815,-1088.46,2682.51,183.312,5.78686,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1108.795532, `position_y` = 2781.913330, `position_z` = 182.901794, `orientation` = 5.348955 WHERE `guid` = 2576092;
+
+-- Changes by SHANG
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2576093, 173);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1109.120239, `position_y` = 2781.877930, `position_z` = 182.952271, `orientation` = 5.220594 WHERE `guid` = 2576092;
+UPDATE `creature` SET `position_x` = -1112.738281, `position_y` = 2777.233154, `position_z` = 183.399078, `orientation` = 6.009082 WHERE `guid` = 2576091;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576094,61388,0,0,0,815,-1097.03,2671.97,182.992,2.17795,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576095,61391,0,0,0,815,-1112.38,2783.77,184.344,5.7342,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576096,61365,0,0,0,815,-1105.27,2692.69,182.724,3.35998,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576097,61390,0,0,0,815,-1116.01,2779.65,184.618,5.64859,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576098,61390,0,0,0,815,-1106.8,2691.09,182.607,1.32973,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576099,61391,0,0,0,815,-1107.4,2693.73,182.984,5.45699,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576100,61391,0,0,0,815,-1081.77,2750.3,183.798,4.96531,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = -1081.602539, `position_y` = 2749.460938, `position_z` = 183.706497, `orientation` = 5.237853 WHERE `guid` = 2576100;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576101,61417,0,0,0,815,-1109.9,2744.09,183.324,4.68338,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576102,61390,0,0,0,815,-1084.37,2746.19,183.438,6.14499,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576103,61390,0,0,0,815,-1107.89,2742.03,183.093,2.94064,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576104,61391,0,0,0,815,-1111.78,2741.78,183.087,0.871116,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2576102, 8);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2576100, 8);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576105,61417,0,0,0,815,-1070.27,2773.83,183.578,1.8403,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576106,61365,0,0,0,815,-1072.18,2775.69,183.692,5.77436,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576107,61365,0,0,0,815,-1069.6,2775.92,183.439,4.01821,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576108,61417,0,0,0,815,-1058.01,2801.92,182.782,4.03542,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576109,61417,0,0,0,815,-1066.29,2808.57,182.831,4.03542,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576110,61417,0,0,0,815,-1123.4,2701.95,183.326,4.02214,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2576110,61417,0,0,0,815,-1123.4,2701.95,183.326,4.02214,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576110;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,1, -1123.403687,2701.951660,183.325867, 100);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2576111,61417,0,0,0,815,-1057.93,2801.86,182.793,4.03542,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,2, -1132.393066,2692.038330,182.173737, 100);
+
+-- Changes by DRAGUNOVI
+DELETE FROM creature WHERE guid=2576108;
+DELETE FROM creature_addon WHERE guid=2576108;
+DELETE FROM creature_movement WHERE id=2576108;
+DELETE FROM game_event_creature WHERE guid=2576108;
+DELETE FROM game_event_creature_data WHERE guid=2576108;
+DELETE FROM creature_battleground WHERE guid=2576108;
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,3, -1143.523193,2698.802002,182.360992, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,4, -1153.729492,2705.961426,182.838776, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,5, -1160.579834,2699.436035,183.057281, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,6, -1166.093262,2693.070801,182.695633, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,7, -1157.798096,2682.143066,182.935196, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,8, -1146.518311,2672.448730,181.750488, 100);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -1065.975342, `position_y` = 2808.293457, `position_z` = 182.756683, `orientation` = 4.011065 WHERE `guid` = 2576109;
+
+-- Changes by SHANG
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,9, -1138.524048,2682.047607,182.834030, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,10, -1131.008423,2692.772949,182.426300, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,11, -1141.317749,2700.178223,182.314423, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,12, -1146.204834,2704.220215,182.720200, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,13, -1134.234009,2716.033936,183.270111, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,14, -1124.229858,2712.535645,182.485291, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576110,15, -1120.681763,2706.968750,183.198181, 100);
+REPLACE INTO `creature` VALUES (2576110,61417,0,0,0,815,-1123.4,2701.95,183.326,4.02214,300,300,0,100,100,2,0,0);
