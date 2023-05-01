@@ -74,8 +74,10 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
  '0', '1', NULL);
 
+-- To the Far West
+delete from quest_template where entry = 40836;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (70085,40836,2,15,35,30,0,0,'To the Far West','Most of my people are not kind to foreigners, but our current situation has forced some of us to leave our home island to find the means of overcoming the naga.$B$BYou have helped me and if you\'re interested in aiding us further, then you may assist the group that headed inland.$B$BWe need better weapons, so we seek materials to make them. Our Onmyoji, Dae-woong Kim, has gone west with a small expedition after hearing accounts of rare magical metals. The natives call the land Desolace, and I am confident that he has found it.$B$BLook for them along the shore. Offer your assistance, but be careful, they are still wary of strangers.','Seek out Dae-Woong Kim in Desolace.','A foreigner approaches!','You claim that Aneka sent you? For all we know, you tortured her to learn of our location. You deny it? Bah, all foreigners are liars.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,275,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
 
-
-
-
+replace into creature_questrelation		(id, quest) values (90983, 40836);
+replace into creature_involvedrelation	(id, quest) values (61412, 40836);
 
