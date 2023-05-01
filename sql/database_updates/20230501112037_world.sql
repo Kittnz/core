@@ -122,3 +122,30 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61414, 40839);
 replace into creature_involvedrelation	(id, quest) values (61414, 40839);
 
+-- From Dae to Ane
+delete from quest_template where entry = 40840;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40840,2,15,35,33,0,0,'From Dae to Ane','You have helped both me and my companions. While we remain please inform Aneka Konko in Ratchet of our progress and thank her for having kept us in her thoughts.$B$BBut you ought to be thanked as well, $N. Shizuru owes her life to you, and together we may complete our mission. Rest assured, Yasu and I can keep her safe going forward.','Deliver news to Aneka Konko at Ratchet in The Barrens.','Desolace is a foreboding name. I have no doubt it has reason for bearing it.$B$BPlease, tell me all, I yearn to hear of Dae-Woong and his comrades.','Earning the trust of Dae-Woong and especially Yasu is no easy task. The Senshi are tasked with keeping outsiders out of Kamio and to protect our citizens from criminals, invaders, and the Dark Kami.$B$BYes, even the Kami, or holy spirits, are not immune to corruption. The Kami exist in everything around us, every stone, tree and stream. The Dark Kami have absorbed negative energy and turned into monsters that only seek to devour and defile.$B$BThe legends speak of a time when our people were nearly destroyed by Haka, the Dark Kami of blood that masqueraded as a savior.$B$BDae-Woong on the other hand is an Onmyoji, they wield the energy of the Kami and can call forth the powers of the land. With allies such as you, the hope of the people of Kamio will never fade.$B$BThank you, hero of my kin.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61345,1,61346,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61412, 40840);
+replace into creature_involvedrelation	(id, quest) values (90983, 40840);
+
+replace into item_template values
+ ('61345', '4', '1', 'Kimono of the Sea', '', '61038', '2', '0', '1', '16432', '4108', '5', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '53', '0', '0', '0',
+ '0', '0', '0', '9304', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '70', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61346', '2', '8', 'Katana of the Senshi', '', '26588', '2', '0', '1', '56436', '14109', '17', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3100', '0',
+ '0', '61', '114', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
