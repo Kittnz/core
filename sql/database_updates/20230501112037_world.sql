@@ -56,3 +56,26 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (4413, 61342, -50, 0, 1, 1, 0),
 (4414, 61342, -50, 0, 1, 1, 0),
 (4415, 61342, -50, 0, 1, 1, 0);
+
+-- Mikoto's Farewell
+delete from quest_template where entry = 40835;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40834,40835,2,15,35,30,0,0,'Mikoto\'s Farewell','There is one final errand I\'d ask of you, $N.$B$BTravel to the northern port known as Ratchet, and deliver the news to Aneka Konko that we have what we need and are returning home.$B$BOur paths will part for now, but I hope that they will cross again in time. May the Kami guide your path.','Return to Aneka Konko at Ratchet in The Barrens.','Salutations, friend. I hope the southern marshes were not too difficult to traverse.','I am so glad for the help you gave to Mikoto. You may have this pendant, it is ancient and the enchantment has weakened through the centuries, but nonetheless it will serve you well.$B$BThe pendant has a golden fox engraved upon it. Legends tell that in times immemorial, one such blessed fox saved our people from a great flood that drowned the rest of the world. The fox thus vowed to protect our island for as long as we revered its name and obeyed its laws. I pray one day it will return and deliver us from the naga.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,500,0,0,0,0,0,0,0,0,0,0,0, 61343,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61410, 40835);
+replace into creature_involvedrelation	(id, quest) values (90983, 40835);
+
+replace into item_template values
+ ('61343', '4', '0', 'Fox Pendant', '', '1148', '2', '0', '1', '30404', '7601', '2', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '9', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+
+
+
+
+
