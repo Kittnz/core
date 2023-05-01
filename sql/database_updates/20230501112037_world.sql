@@ -81,3 +81,17 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (90983, 40836);
 replace into creature_involvedrelation	(id, quest) values (61412, 40836);
 
+-- Rescuing Shizuru
+delete from quest_template where entry = 40837;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40837,2,15,35,30,0,0,'Rescuing Shizuru','As it stands, foreigner, you have not yet earned my trust. Our encounters with the horse people of these lands have given us reason to be cautious, but I can ill afford to refuse aid when it is so readily given.$B$BOur sworn enemies, the naga, have abducted our herbalist, Shizuru Yamada, and taken her across the water to the island over yonder.$B$BI suspect they plan to make her suffer unspeakable agonies as they sacrifice her to their Dark Kami. Go there and save her, for we cannot cross the water. She is likely to be caged and the nearby naga will hold the key. Rescue her quickly, then I will know you to be a true friend.','Find and rescue Shizuru Yamada for Dae-woong Kim in Desolace.','Where is Shizuru? We have no time to squander.','Shizuru returned shortly before you did. Yasu was ready to cut you down had you failed.$B$BI am glad it did not come to that.',0,0,0,0,0,0,0,0, 60041,1,0,0,0,0,0,0, 0,0, 0,21000,3500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Rescue Shizuru Yamada in Desolace.');
+
+replace into creature_questrelation		(id, quest) values (61412, 40837);
+replace into creature_involvedrelation	(id, quest) values (61412, 40837);
+
+REPLACE INTO creature_template VALUES
+(60041, 328, 0, 0, 0, 0, 'quest_40837_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set name = 'Shizuru Yamada', phase_quest_id = 40837 where entry = 61414;
+update creature_template set script_name = 'npc_shizuru_yamada' where entry = 61415;
+update creature set spawntimesecsmin = 20, spawntimesecsmax = 20 where guid = 2575788;
+
