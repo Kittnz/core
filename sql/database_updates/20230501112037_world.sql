@@ -39,3 +39,20 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (4398, 61341, -45, 0, 1, 1, 0),
 (4399, 61341, -45, 0, 1, 1, 0),
 (4400, 61341, -45, 0, 1, 1, 0);
+
+-- A Silky Venture
+delete from quest_template where entry = 40834;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40833,40834,2,15,35,30,0,0,'A Silky Venture','Outlander, your help so far has been tremendous, there is one last thing we need to acquire. I have sampled the corpse of a local spider Haruhiko slew earlier.\n\nIts meat is brilliant, its venom is strong, but most importantly, its silk is amazing.\n\nPlease harvest some of the Darkfang Silk for us.','Collect 8 Darkfang Silk for Mikoto Shiina in Dustwallow Marsh.','Did you get the items?','These are amazing, I am grateful that our paths have crossed. I do not know anything about your people or your land,\n\nbut I believe your people can understand honor and integrity. There is one last task I have for you.',61342,8,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,19200,3200,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61410, 40834);
+replace into creature_involvedrelation	(id, quest) values (61410, 40834);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61342,18597,'Darkfang Silk',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(4411, 61342, -50, 0, 1, 1, 0),
+(4412, 61342, -50, 0, 1, 1, 0),
+(4413, 61342, -50, 0, 1, 1, 0),
+(4414, 61342, -50, 0, 1, 1, 0),
+(4415, 61342, -50, 0, 1, 1, 0);
