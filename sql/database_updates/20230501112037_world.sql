@@ -95,3 +95,23 @@ update creature_template set name = 'Shizuru Yamada', phase_quest_id = 40837 whe
 update creature_template set script_name = 'npc_shizuru_yamada' where entry = 61415;
 update creature set spawntimesecsmin = 20, spawntimesecsmax = 20 where guid = 2575788;
 
+-- Honorable Retribution
+delete from quest_template where entry = 40838;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40838,2,15,35,30,0,0,'Honorable Retribution','I have no love for your people. I will kill you where you stand if you so much as conceive a treacherous thought.$B$BYet, I trust Dae-Woong\'s judgment. If you are truly heading out there to rescue Shizuru I only ask one thing: Kill as many Naga as you can for me.$B$BLet their blood flow in retribution for all the people they\'ve murdered. Bring me their heads!','Bring 12 Slitherblade Heads from the nearby Naga to Yasu Ping in Desolace.','I will not be content until I shall have a heap of those serpents\' skulls!','I see the blood of our enemy adorns you. You have fought well and brought justice to our people. As a Senshi of Kontsuma, I salute you.',61344,12,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,19800,3300,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61413, 40838);
+replace into creature_involvedrelation	(id, quest) values (61413, 40838);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61344,40132,'Slitherblade Head',12,1,2048,1,-1,-1,1,12,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(4711, 61344, -40, 0, 1, 1, 0),
+(4712, 61344, -40, 0, 1, 1, 0),
+(4713, 61344, -40, 0, 1, 1, 0),
+(4714, 61344, -40, 0, 1, 1, 0),
+(4715, 61344, -40, 0, 1, 1, 0),
+(4716, 61344, -40, 0, 1, 1, 0),
+(4718, 61344, -40, 0, 1, 1, 0),
+(4719, 61344, -40, 0, 1, 1, 0);
+
