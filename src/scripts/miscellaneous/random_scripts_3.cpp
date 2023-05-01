@@ -6033,9 +6033,45 @@ bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool GossipHello_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40837) == QUEST_STATUS_INCOMPLETE) // Rescuing Shizuru
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am here to free you!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60041); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->ForcedDespawn();
+            }, 3000);
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_shizuru_yamada";
+    newscript->pGossipHello = &GossipHello_npc_shizuru_yamada;
+    newscript->pGossipSelect = &GossipSelect_npc_shizuru_yamada;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_dolvan_bracewind";
