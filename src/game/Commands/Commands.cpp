@@ -3897,12 +3897,14 @@ bool ChatHandler::HandleBanInfoAccountCommand(char* args)
     if (!*args)
         return false;
 
-    std::string account_name;
-    uint32 accountid = ExtractAccountId(&args, &account_name);
-    if (!accountid)
+    std::string accountName;
+    uint32 accountId = ExtractAccountId(&args, &accountName);
+    if (!accountId)
         return false;
 
-    return HandleBanInfoHelper(accountid, account_name.c_str());
+    bool banResult = HandleBanInfoHelper(accountId, accountName.c_str());
+    bool muteResult = HandleMuteHistoryHelper(accountId, accountName.c_str());
+    return banResult || muteResult;
 }
 
 bool ChatHandler::HandleBanInfoCharacterCommand(char* args)
@@ -3912,24 +3914,26 @@ bool ChatHandler::HandleBanInfoCharacterCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target, &target_guid,nullptr,true))
         return false;
 
-    uint32 accountid = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
+    uint32 accountId = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
 
-    std::string accountname;
-    if (!sAccountMgr.GetName(accountid, accountname))
+    std::string accountName;
+    if (!sAccountMgr.GetName(accountId, accountName))
     {
         PSendSysMessage(LANG_BANINFO_NOCHARACTER);
         return true;
     }
 
-    return HandleBanInfoHelper(accountid, accountname.c_str());
+    bool banResult = HandleBanInfoHelper(accountId, accountName.c_str());
+    bool muteResult = HandleMuteHistoryHelper(accountId, accountName.c_str());
+    return banResult || muteResult;
 }
 
-bool ChatHandler::HandleBanInfoHelper(uint32 accountid, char const* accountname)
+bool ChatHandler::HandleBanInfoHelper(uint32 accountId, char const* accountname)
 {
     QueryResult *result = LoginDatabase.PQuery(
     "SELECT FROM_UNIXTIME(bandate), unbandate-bandate, active, unbandate,banreason,bannedby,COALESCE(name, \"NoRealm\") , gmlevel "
     "FROM account_banned LEFT JOIN realmlist ON realmlist.id = realm "
-    "WHERE account_banned.id = '%u' ORDER BY bandate ASC", accountid);
+    "WHERE account_banned.id = '%u' ORDER BY bandate ASC", accountId);
     if (!result)
     {
         PSendSysMessage(LANG_BANINFO_NOACCOUNTBAN, accountname);
@@ -3957,6 +3961,42 @@ bool ChatHandler::HandleBanInfoHelper(uint32 accountid, char const* accountname)
                         fields[0].GetString(), bantime.c_str(), active ? GetMangosString(LANG_BANINFO_YES) : GetMangosString(LANG_BANINFO_NO), banreason.c_str(), authorName.c_str());
     }
     while (result->NextRow());
+
+    delete result;
+    return true;
+}
+
+bool ChatHandler::HandleMuteHistoryHelper(uint32 accountId, char const* accountname)
+{
+    QueryResult* result = LoginDatabase.PQuery(
+        //      0                        1                    2           3           4
+        "SELECT FROM_UNIXTIME(mutedate), unmutedate-mutedate, unmutedate, mutereason, mutedby "
+        "FROM account_muted "
+        "WHERE id = '%u' ORDER BY mutedate ASC", accountId);
+
+    if (!result)
+    {
+        PSendSysMessage("Account %s has never been muted", accountname);
+        return true;
+    }
+
+    PSendSysMessage("Mute history for account %s:", accountname);
+    do
+    {
+        Field* fields = result->Fetch();
+
+        time_t unmutedate = time_t(fields[2].GetUInt64());
+        std::string mutereason = fields[3].GetString();
+        std::string authorName = fields[4].GetCppString();
+        std::string mutetime = secsToTimeString(fields[1].GetUInt64(), true);
+
+        PSendSysMessage("Mute Date: %s Mutetime: %s Still active: %s  Reason: %s Set by: %s",
+            fields[0].GetString(),
+            mutetime.c_str(),
+            unmutedate > time(nullptr) ? GetMangosString(LANG_BANINFO_YES) : GetMangosString(LANG_BANINFO_NO),
+            mutereason.c_str(),
+            authorName.c_str());
+    } while (result->NextRow());
 
     delete result;
     return true;
@@ -7776,24 +7816,20 @@ bool ChatHandler::HandleMuteCommand(char* args)
     if (!ExtractPlayerTarget(&nameStr, &target, &target_guid, &target_name))
         return false;
 
-    uint32 notspeaktime;
-    if (!ExtractUInt32(&args, notspeaktime))
+    uint32 minutes;
+    if (!ExtractUInt32(&args, minutes))
         return false;
 
     std::string givenReason;
     if (char* givenReasonC = ExtractQuotedOrLiteralArg(&args))
         givenReason = givenReasonC;
 
-
-
-
-    uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
-
+    uint32 const accountId = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
 
     // find only player from same account if any
     if (!target)
     {
-        if (WorldSession* session = sWorld.FindSession(account_id))
+        if (WorldSession* session = sWorld.FindSession(accountId))
             target = session->GetPlayer();
     }
 
@@ -7801,29 +7837,24 @@ bool ChatHandler::HandleMuteCommand(char* args)
     if (HasLowerSecurity(target, target_guid, true))
         return false;
 
-    time_t mutetime = time(nullptr) + notspeaktime * 60;
+    time_t muteTime = time(nullptr) + minutes * MINUTE;
 
     if (target)
-        target->GetSession()->m_muteTime = mutetime;
+        target->GetSession()->m_muteTime = muteTime;
 
-    LoginDatabase.PExecute("UPDATE account SET mutetime = " UI64FMTD " WHERE id = '%u'", uint64(mutetime), account_id);
-
+    LoginDatabase.PExecute("UPDATE `account` SET `mutetime` = " UI64FMTD " WHERE `id` = '%u'", uint64(muteTime), accountId);
 
     if (target)
-        ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notspeaktime);
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, minutes);
 
-    std::string nameLink = playerLink(target_name);
+    PSendSysMessage(LANG_YOU_DISABLE_CHAT, playerLink(target_name).c_str(), minutes);
 
-    PSendSysMessage(LANG_YOU_DISABLE_CHAT, nameLink.c_str(), notspeaktime);
-
-    // Add warning to the account
+    // Save mute history.
     std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
-    PlayerCacheData const* playerData = sObjectMgr.GetPlayerDataByGUID(target_guid);
-    ASSERT(playerData);
-    std::stringstream reason;
-    reason << playerData->sName << " muted " << notspeaktime << " minutes";
-    if (!givenReason.empty())
-        reason << " for \"" << givenReason << "\"";
+
+    LoginDatabase.PExecute("INSERT INTO `account_muted` (`id`, `mutedate`, `unmutedate`, `mutedby`, `mutereason`) VALUES (%u, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+%u, '%s', '%s')",
+        accountId, minutes * MINUTE, authorName.c_str(), givenReason.c_str());
+
     return true;
 }
 
