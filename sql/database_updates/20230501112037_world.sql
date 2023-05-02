@@ -248,3 +248,11 @@ replace into gameobject_loot_template values
 (2020016,61350,-100,0,1,1,0);
 
 update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where ID = 2020016;
+
+-- Report to Livia Strongarm
+delete from quest_template where entry = 40846;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40846,2,5179,45,38,0,0,'Report to Livia Strongarm','Livia has been part of this outfit since the very beginning. If she judges you worthy, then so will I.$B$BI have given her a task of the utmost importance. Go assist her.','Seek out Livia Strongarm at Blackthorn\'s Camp in Gilneas.','Ah, it\'s you.','Listen up kid: I never wanted to set eyes nor foot upon the land of fancy pantsy Gilneans, not even to rob it. You want to earn my appreciation? Then help me complete this task from the boss so we can finish down here and leave this wretched place.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,75,68,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61375, 40846);
+replace into creature_involvedrelation	(id, quest) values (61376, 40846);
+
