@@ -2200,6 +2200,14 @@ void Pet::InitPetCreateSpells()
         }
     }
 
+    if (auto playerOwner = GetOwner() ? GetOwner()->ToPlayer() : nullptr; playerOwner && playerOwner->GetClass() == CLASS_HUNTER)
+    {
+        if (getPetType() == HUNTER_PET)
+        {
+            AddSpell(46023); // Pet:Avoidance
+        }
+    }
+
     LearnPetPassives();
 
     CastPetAuras(false);
