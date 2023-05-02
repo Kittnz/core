@@ -227,3 +227,24 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61375, 40844);
 replace into creature_involvedrelation	(id, quest) values (61377, 40844);
+
+-- Heist in Dryrock Mine
+delete from quest_template where entry = 40845;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40844,40845,2,5179,45,38,0,0,'Heist in Dryrock Mine','There is a mine up in the hills, Dryrock Mine I believe the locals call it, responsible for providing the Gilnean army with Mithril ore. The boss believes this Mithril is far better suited to supply the Horde, wouldn\'t you agree?$B$BTravel up to the mine, kill anyone who tries to stand in your way, and acquire 16 Sacks of Mithril Ore. Return to me when you\'ve finished the job.','Gather 16 Sacks of Mithril Ore from Dryrock Mine for Luke Agamand in Blackthorn\'s Camp.','Did you get the ore?','Well I\'ll be damned. You actually went and pulled it off! The boss will ensure this Mithril gets where it\'s most needed. I\'d say you\'ve proven your worth, kid. Here\'s your cut.',61350,16,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 2014,20250,3375,68,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61377, 40845);
+replace into creature_involvedrelation	(id, quest) values (61377, 40845);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61350,1168,'Sack of Mithril Ore',12,1,2048,1,-1,-1,1,16,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61395, 61350, -38, 0, 1, 1, 0);
+
+REPLACE INTO gameobject_template VALUES
+(2020016, 3, 25522, 'Sack of Mithril Ore', 0, 4, 1, 43, 2020016, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020016,61350,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where ID = 2020016;
