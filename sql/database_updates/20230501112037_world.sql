@@ -168,3 +168,42 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 (2020012, 5, 25677, 'Gilneas City Customs', 0, 0, 0.6, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (2020013, 5, 25687, 'Gelson Crossbows', 0, 0, 0.6, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (2020014, 5, 25674, 'Adaman Armor', 0, 0, 0.6, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Behind The Wall
+delete from quest_template where entry = 40841;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40841,2,5180,41,36,0,0,'Behind The Wall','Have you heard of the tidings from the north? The Greymane Wall lies open at last.$B$BI never thought I would see the day after hearing all the horrible things I did, and by the sounds of it, things don\'t bode well. Still, within Gilneas City one of my dearest friends used to work with a rare material called \'Dawnstone\' which could only be found within Gilneas itself.$B$BI have no doubt his patterns are still within his shop in the city, and I ask you to recover them for me. I would advise to bring some comrades in arms along with you; word has it that there is unrest, entailing worgen and civil war, so it certainly is not a safe place to venture alone.','Venture into Gilneas City and recover the Dawnstone Plans for Therum Deepforge in Stormwind.','Have you had any luck with the plans?$B$BI know it is nothing easy I asked of you, but those plans were a man\'s life\'s work, it would be a tragedy if they were lost.','Are these it? I haven\'t had the opportunity to read these plans in quite some years.$B$BAdaman was an exceptionally talented blacksmith and I grieve deeply for his passing. I will make sure his findings are properly recorded here and in Ironforge, so that his name may earn the recognition he always deserved.$B$BThank you, $N. I have prepared something for you as well, as compensation for the immense trouble you put yourself through.',61347,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,23400,3900,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61348,1,61349,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (5511, 40841);
+replace into creature_involvedrelation	(id, quest) values (5511, 40841);
+
+update quest_template set type = 81 where entry = 40841;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61347,7601,'Dawnstone Plans',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020015, 3, 27229, 'Dawnstone Plans', 0, 4, 1, 43, 2020015, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020015,61347,-100,0,1,1,0);
+
+replace into item_template values
+ ('61348', '4', '4', 'Inlaid Plate Boots', '', '28396', '2', '0', '1', '24616', '6154', '8', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '4', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '388', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '55', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61349', '2', '4', 'Dwarven Battle Bludgeon', '', '19703', '2', '0', '1', '75064', '18766', '21', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '56', '91', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '56', '0', '0', '0', '600000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
