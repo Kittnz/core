@@ -1049,7 +1049,6 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
 {
     explicit npc_darrowshire_triggerAI(Creature* pCreature) : ScriptedAI(pCreature), _cleanupDone(false), _initialized(false)
     {
-        DefenderFaction = 113;  // Faction Escortee : heal possible mais... n'attaque pas � vue malgr� les bons flags :/
         Reset();
         m_creature->SetCreatureSummonLimit(200);
     }
@@ -1057,7 +1056,6 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
     uint32 PhaseStep;
     uint32 PhaseTimer;
     uint32 MobTimer[7];
-    uint32 DefenderFaction;
     std::list<ObjectGuid> summonedMobsList;
 
     ObjectGuid mardukGuid;
@@ -1068,28 +1066,6 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
 
     void Reset() override
     {
-        // Changement de faction n�cessaire pour permettre l'aggro � vue
-        Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
-        uint32 myArea = m_creature->GetAreaId();
-        if (!pl.isEmpty() && myArea)
-        {
-            for (const auto& it : pl)
-            {
-                Player* pPlayer =  it.getSource();
-                if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && m_creature->IsWithinDist(pPlayer, 20.0f, false))
-                {
-                    if (pPlayer->GetQuestStatus(QUEST_BATTLE_DARROWSHIRE) == QUEST_STATUS_INCOMPLETE)
-                    {
-                        if (pPlayer->GetTeam() == HORDE)
-                            DefenderFaction = 85; // Orgrimmar
-                        else
-                            DefenderFaction = 57; // Ironforge
-                        break;
-                    }
-                }
-            }
-        }
-
         PhaseStep = 0;
         PhaseTimer = 6000;
 
@@ -1150,7 +1126,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
             case NPC_DARROWSHIRE_DEFENDER:
             case NPC_SILVERHAND_DISCIPLE:
             case NPC_REDPATH_MILITIA:
-                summoned->SetFactionTemplateId(DefenderFaction);
+                summoned->SetFactionTemplateId(FACTION_ESCORT_N_FRIEND_ACTIVE);
             // no break
             case NPC_MARAUDING_CORPSE:
             case NPC_MARAUDING_SKELETON:
@@ -1164,7 +1140,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                 break;
             case NPC_DAVIL_LIGHTFIRE:
             case NPC_CAPTAIN_REDPATH:
-                summoned->SetFactionTemplateId(DefenderFaction);
+                summoned->SetFactionTemplateId(FACTION_ESCORT_N_FRIEND_ACTIVE);
                 summoned->SetWalk(false);
                 summoned->SetHomePosition(DarrowshireEvent[4].X, DarrowshireEvent[4].Y, DarrowshireEvent[4].Z, DarrowshireEvent[4].O);
                 summoned->GetMotionMaster()->MovePoint(2, DarrowshireEvent[4].X, DarrowshireEvent[4].Y, DarrowshireEvent[4].Z, MOVE_PATHFINDING, 5.0f);
