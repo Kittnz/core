@@ -132,6 +132,14 @@ void LogCheat(WorldSession *session, uint32 actionMask, const std::string &info)
 
     sWorld.SendGMTextFlags(ACCOUNT_FLAG_SHOW_ANTICHEAT, LANG_GM_ANNOUNCE_COLOR, "AntiCheat", message.str().c_str());
 
+
+#ifdef USING_DISCORD_BOT
+    try {
+        sDiscordBot->SendMessageToChannel(1102940763970609152, message.str(), DiscordBot::MessagePriority::Requeue);
+    }
+    catch ([[maybe_unused]] const std::exception& e) {}
+#endif
+
     static SqlStatementID insLog;
     
     CharacterDatabase.BeginTransaction();

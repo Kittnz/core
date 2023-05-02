@@ -980,6 +980,7 @@ class World
         void SendGMTicketText(const char* text);
         void SendGMTextFlags(uint32 accountFlags, int32 string_id, ...);
         void SendGMText(int32 string_id, ...);
+        void SendGMText(const std::string& message, uint32 minGmLevel = SEC_MODERATOR);
         void SendGlobalText(const char* text, WorldSession *self);
         void SendGlobalMessage(WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);
         void SendZoneMessage(uint32 zone, WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);

@@ -11739,7 +11739,7 @@ void Player::DestroyItemCount(Item* pItem, uint32 &count, bool update)
         ItemRemovedQuestCheck(pItem->GetEntry(), count);
         pItem->SetCount(pItem->GetCount() - count);
         count = 0;
-        if (IsInWorld() & update)
+        if (IsInWorld() && update)
             pItem->SendCreateUpdateToPlayer(this);
         pItem->SetState(ITEM_CHANGED, this);
     }

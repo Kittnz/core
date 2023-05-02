@@ -710,6 +710,7 @@ class ChatHandler
         bool HandleBanHelper(BanMode mode, char* args);
         bool HandleBanInfoHelper(uint32 accountid, char const* accountname);
         bool HandleUnBanHelper(BanMode mode, char* args);
+        bool HandleMuteHistoryHelper(uint32 accountid, char const* accountname);
         void HandleCharacterLevel(Player* player, ObjectGuid player_guid, uint32 oldlevel, uint32 newlevel);
         void HandleLearnSkillRecipesHelper(Player* player,uint32 skill_id);
         bool HandleGoHelper(Player* _player, uint32 mapid, float x, float y, float const* zPtr = nullptr, float const* ortPtr = nullptr);
