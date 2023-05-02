@@ -2466,6 +2466,26 @@ void World::SendGMText(int32 string_id, ...)
     }
 }
 
+void World::SendGMText(const std::string& message, uint32 minGmLevel)
+{
+    for (const auto& itr : m_sessions)
+    {
+        if (WorldSession* session = itr.second)
+        {
+            if (session->GetSecurity() >= minGmLevel)
+            {
+                Player* player = session->GetPlayer();
+                if (player && player->IsInWorld())
+                {
+                    WorldPacket data;
+                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, message);
+                    player->SendDirectMessage(&data);
+                }
+            }
+        }
+    }
+}
+
 /// DEPRICATED, only for debug purpose. Send a System Message to all players (except self if mentioned)
 void World::SendGlobalText(const char* text, WorldSession *self)
 {
@@ -2645,6 +2665,9 @@ public:
         } while (result->NextRow());
 
         banResult = BAN_SUCCESS;
+
+        sWorld.SendGMText(string_format("%s banned %s %s (Reason %s).", holder->GetAuthor().c_str(), holder->GetBanTarget().c_str(), holder->GetDuration() > 0 ?
+            string_format("for %u seconds", holder->GetDuration()).c_str() : "permanently", holder->GetReason().c_str()));
 
         if (session)
         {
