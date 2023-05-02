@@ -256,3 +256,26 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61375, 40846);
 replace into creature_involvedrelation	(id, quest) values (61376, 40846);
 
+-- Rendezvous with the Infiltrator
+delete from quest_template where entry = 40847;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40846,40847,2,5179,45,38,0,0,'Rendezvous with the Infiltrator','Our intelligence on this region is poor. We knew Gilneas was an isolationist nation, but we did not expect it to be in such a miserable state.$B$BBeing among the living, we have no trouble blending in to conduct espionage. One of ours has assumed the name "Greta Longpike", who in her last missive reported she had infiltrated a settlement named Greyshire.$B$BSeek her out and tell her "Night Lady, gold in mouth at dawn". That is the code phrase. She will give you a report, the details of which are of vital importance, that you are to bring back to me.','Travel to the Ruins of Greyshire, locate Greta Longpike, and acquire the Sealed Report for Livia Strongarm at Blackthorn\'s Camp in Gilneas.','You return. You had better have that report in hand.','Gilneas appears to be in open rebellion. One side is led by Prince Liam Greymane and a certain Ravenwood, while the other side is led by corrupt Gilnean nobles. The boss will want to hear about this. You have done well. This task couldn\'t have been easy, but as a member of the Horde, you have proven yourself capable with this flawless execution.',61351,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,7650,1275,68,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61376, 40847);
+replace into creature_involvedrelation	(id, quest) values (61376, 40847);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, max_count, description, page_text) values
+(61351,3023,'Sealed Report to Livia',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,1,'',0);
+
+update creature_template set script_name = 'npc_greta_longpike' where entry = 61379;
+
+set @gossip_menu_id = 41450; set @magic_number = 61379;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, this is a fine day here in Gilneas, isn\'t it? Take care if you leave town, alright?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into broadcast_text (entry, Male_Text) values (30108, 'What are you talking about? Don\'t make me call the guards!');
+replace into npc_text (ID, BroadcastTextID0) values (30108, 30108);
+
+replace into broadcast_text (entry, Male_Text) values (30109, 'I didn\'t expect Livia to send a member of the Horde. What was she thinking?$B$BWhatever. Make sure this sealed report gets to her.');
+replace into npc_text (ID, BroadcastTextID0) values (30109, 30109);
