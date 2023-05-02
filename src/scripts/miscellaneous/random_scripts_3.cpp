@@ -6063,9 +6063,67 @@ bool GossipSelect_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool GossipHello_npc_greta_longpike(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40847) == QUEST_STATUS_INCOMPLETE) // Rendezvous with the Infiltrator
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Night Lady, gold in mouth at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Long Blizzard, ice dew at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Sun Lady, silver in ear at night.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61379, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_greta_longpike(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->HasItemCount(61351, 1))
+        {
+            pPlayer->AddItem(61351, 1);
+            if (pPlayer->HasItemCount(61351, 1))
+            {
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                pPlayer->SEND_GOSSIP_MENU(30109, pCreature->GetGUID());
+            }
+            else
+            {
+                pPlayer->GetSession()->SendNotification("Your bags are full!");
+                pPlayer->CLOSE_GOSSIP_MENU();
+            }
+        }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30108, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_greta_longpike";
+    newscript->pGossipHello = &GossipHello_npc_greta_longpike;
+    newscript->pGossipSelect = &GossipSelect_npc_greta_longpike;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_shizuru_yamada";
