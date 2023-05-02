@@ -286,3 +286,49 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61375, 40848);
 replace into creature_involvedrelation	(id, quest) values (61375, 40848);
+
+-- Genn Greymane Must Die!
+delete from quest_template where entry = 40849;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40848,40849,2,5180,49,40,0,0,'Genn Greymane Must Die!','Storytime is over. The time to act is at hand. I have read the report you retrieved from Livia, and I have decided how best to proceed.$B$BKing Genn Greymane was ever a force to be reckoned with in the old Alliance of Lordaeron. His strength and shrewdness were only matched by his stubbornness and pride. He cannot be allowed a to wrest control over his crumbling kingdom once more.$B$BVenture into his city with as many comrades as you can find and bring me his head.','Enter Gilneas City and slay Genn Greymane, then bring his head to Blackthorn at Blackthorn\'s Camp in Gilneas.','The King of Gilneas was once a force to be reckoned with. Though his power and grip over the kingdom has diminished, he will be no easy prey.','Wonderful! You have proven yourself a capable agent of the Dark Lady.$B$BThough your tale of what happened in the city troubles me... If Genn Greymane was truly behind the rebellion, we may have inadvertently aided our enemies. That, however, is neither your fault nor your concern.$B$BWe will take it from here. You are dismissed.',61352,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,37200,6200,68,500,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61353,1,61354,1,61355,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61375, 40849);
+replace into creature_involvedrelation	(id, quest) values (61375, 40849);
+
+update quest_template set type = 81 where entry = 40849;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61352,2975,'Genn Greymane\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61418, 61352, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61353', '4', '2', 'Blackthorn Gauntlets', '', '17183', '3', '0', '1', '23952', '5988', '10', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '4', '3', '3',
+ '6', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '86', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '35', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61354', '4', '0', 'Banshee\'s Tear', '', '26391', '3', '0', '1', '16872', '4218', '11', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '21618', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61355', '4', '3', 'Dark Footpad Belt', '', '26210', '3', '0', '1', '27128', '6782', '6', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '-8', '4', '13',
+ '6', '7', '3', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '158', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
