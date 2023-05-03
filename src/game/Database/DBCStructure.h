@@ -456,6 +456,18 @@ struct QuestSortEntry
                                                             // 9 string flags
 };
 
+struct NamesProfanityEntry
+{
+    //uint32    ID;                                         // 0
+    char const* Name;                                       // 1
+};
+
+struct NamesReservedEntry
+{
+    //uint32    ID;                                         // 0
+    char const* Name;                                       // 1
+};
+
 /*struct SkillLineCategoryEntry
 {
     uint32    id;                                           // 0        m_ID
