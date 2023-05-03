@@ -664,7 +664,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand blacklistCommandTable[] =
     {
-        { "name",              SEC_ADMINISTRATOR,       true, &ChatHandler::HandleBlacklistNameCommand,     "", nullptr},
+        { "name",              SEC_DEVELOPER,       true, &ChatHandler::HandleBlacklistNameCommand,     "", nullptr},
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
