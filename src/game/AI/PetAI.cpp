@@ -119,13 +119,12 @@ void PetAI::MoveInLineOfSight(Unit* pWho)
     if (pWho->IsCreature() && static_cast<Creature*>(pWho)->IsCivilian())
         return;
 
-    if (m_creature->CanInitiateAttack() && m_creature->IsValidAttackTarget(pWho))
-    {
-        float const attackRadius = m_creature->GetAttackDistance(pWho);
-        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None) &&
-            m_creature->IsHostileTo(pWho) && m_creature->IsWithinLOSInMap(pWho))
-            AttackStart(pWho);
-    }
+    if (pWho->IsTargetable(true, pWho->IsCharmerOrOwnerPlayerOrPlayerItself()) && pWho->IsInAccessablePlaceFor(m_creature)
+        && (m_creature->IsHostileTo(pWho) || pWho->IsHostileTo(m_creature->GetCharmerOrOwner()))
+        && m_creature->IsWithinDistInMap(pWho, m_creature->GetAttackDistance(pWho)
+            && m_creature->GetDistanceZ(pWho) <= CREATURE_Z_ATTACK_RANGE)
+        && m_creature->IsWithinLOSInMap(pWho))
+        AttackStart(pWho);
 }
 
 void PetAI::UpdateAI(uint32 const diff)
