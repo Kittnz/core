@@ -10,3 +10,6 @@ UPDATE item_template SET sell_Price = 1, buy_price = 4 WHERE entry = 6182;
 UPDATE `quest_template` SET `Details` = 'So, who was this about, Marven Horsen? Larsen Wormen?$B$B<Larry lets a crass smirk rest on his face.>$B$BCarver Molsen, he certainly is a character, hangs around that old farmstead, goes by the name \'The Dead Acre\' these days, used to be called the Easton Fields.$B$BYou got what you needed, now go on, and tell who you need to.' WHERE `entry` = 40601;
 
 UPDATE `quest_template` SET `Objectives` = 'Travel to the Dead Acre, and kill Carver Molsen, recover the Deed to Easton Fields, the Deed to Molsen Farm and the Westfall Church for Gryan Stoutmantle at Sentinel Hill in Westfall.' WHERE `entry` = 40602;
+
+-- Removed Glowing Cat Figurine's vendor price.
+UPDATE `item_template` SET `buy_price` = 1200, `sell_price` = 0 WHERE `entry` = 5332;
