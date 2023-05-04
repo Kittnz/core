@@ -1312,7 +1312,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read warden->SysInfo from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         // borrow this memory temporarily
@@ -1348,7 +1348,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read s_moduleInterface from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         wardenWin->_wardenAddress = buff.read<uint32>();
@@ -1710,7 +1710,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read g_theGxDevicePtr from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         buff.read(reinterpret_cast<uint8 *>(&wardenWin->_endSceneAddress), sizeof(wardenWin->_endSceneAddress));
