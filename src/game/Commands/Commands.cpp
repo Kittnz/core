@@ -16106,6 +16106,17 @@ bool ChatHandler::HandleBlacklistNameCommand(char* args)
 
 bool ChatHandler::HandleListClickToMoveCommand(char* args)
 {
+    uint32 levelMin;
+    if (!ExtractUInt32(&args, levelMin))
+        levelMin = 1;
+
+    uint32 levelMax;
+    if (!ExtractUInt32(&args, levelMax))
+        levelMax = 60;
+
+    if (levelMin > levelMax)
+        std::swap(levelMin, levelMax);
+
     std::multimap<uint32, Player*> levelSortedList;
     HashMapHolder<Player>::MapType const& plist = sObjectAccessor.GetPlayers();
     for (auto const& itr : plist)
@@ -16113,8 +16124,12 @@ bool ChatHandler::HandleListClickToMoveCommand(char* args)
         if (!itr.second->IsInWorld())
             continue;
 
+        uint32 const level = itr.second->GetLevel();
+        if (level < levelMin || level > levelMax)
+            continue;
+
         if (itr.second->GetSession()->HasUsedClickToMove())
-            levelSortedList.insert(std::make_pair(itr.second->GetLevel(), itr.second));
+            levelSortedList.insert(std::make_pair(level, itr.second));
     }
 
     if (levelSortedList.empty())
