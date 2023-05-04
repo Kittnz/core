@@ -13,3 +13,5 @@ UPDATE `quest_template` SET `Objectives` = 'Travel to the Dead Acre, and kill Ca
 
 -- Removed Glowing Cat Figurine's vendor price.
 UPDATE `item_template` SET `buy_price` = 1200, `sell_price` = 0 WHERE `entry` = 5332;
+
+UPDATE `broadcast_text` SET `male_text` = 'The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southerners, and to see if mainlanders can truly be trusted.\n\nShould the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\nWe shall see in time where the heart of Stormwind is rightly at.', `female_text` = NULL, `chat_type` = 0, `sound_id` = 0, `language_id` = 0, `emote_id1` = 0, `emote_id2` = 0, `emote_id3` = 0, `emote_delay1` = 0, `emote_delay2` = 0, `emote_delay3` = 0 WHERE `entry` = 61017;
