@@ -133,3 +133,18 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61478, 8952, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61478, 11284, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61478, 11285, 0, 0, 0, 0);
+-- Quest 40600, change short description to the following : Bring 7 Greater Tarantula Venom to Larry Ryder at the Pig and Whistle in Stormwind.
+update quest_template set objectives = 'Bring 7 Greater Tarantula Venom to Larry Ryder at the Pig and Whistle in Stormwind.' where entry = 40600;
+-- Item entry 61240 set sheath to shield on the back.
+update item_template set sheath = 4 where entry = 61240;
+-- Item entry 61209 change display ID to 20795.
+update item_template set display_id = 20795 where entry = 61209;
+-- item entry 61224 Dreamshard Elixir, set charges to 1.
+update item_template set spellcharges_1 = 1 where entry = 61224;
+-- Item entry 61225 Lucidity Potion, set charges to 1.
+update item_template set spellcharges_1 = 1 where entry = 61225;
+-- Gobject entry 2020000 , rename to Joshua the Redeemer
+update gameobject_template set name = 'Joshua the Redeemer' where entry = 2020000;
+-- Set scale of object 'Dawnstone Plans' entry 2020015 to 0.5, set respawn time to 10 seconds.
+update gameobject_template set size = 0.5 where entry = 2020015;
+update gameobject set spawntimesecsmin = 10, spawntimesecsmax = 10 where ID = 2020015;
