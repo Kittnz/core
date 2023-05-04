@@ -3896,7 +3896,7 @@ void World::AddAsyncTask(std::function<void()> task)
 void World::StopDiscordBot()
 {
 #ifdef USING_DISCORD_BOT
-    sDiscordBot->GetCore()->shutdown();
+    sDiscordBot->Stop();
 #endif
 }
 
