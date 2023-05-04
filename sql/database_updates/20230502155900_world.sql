@@ -191,3 +191,5 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '6', '0', '0', '0', '40', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
 
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(18777, 0, 0, 0, 0);
