@@ -118,3 +118,6 @@ DELETE FROM creature_battleground WHERE guid=190213;
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = 525.166199, `position_y` = -45.066074, `position_z` = 17.106842, `orientation` = 5.488294 WHERE `guid` = 150046;
+UPDATE `creature` SET `position_x` = 541.865112, `position_y` = -22.306519, `position_z` = 22.040667, `orientation` = 4.137405 WHERE `guid` = 150046;
+UPDATE `creature` SET `position_x` = 500.106079, `position_y` = -10.273674, `position_z` = 17.622465, `orientation` = 2.715833 WHERE `guid` = 150046;
+UPDATE `creature` SET `position_x` = 527.079590, `position_y` = -47.957481, `position_z` = 17.671375, `orientation` = 3.461952 WHERE `guid` = 150046;
