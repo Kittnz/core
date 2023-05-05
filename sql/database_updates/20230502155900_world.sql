@@ -678,3 +678,12 @@ update creature_template set npc_flags = 7 where entry = 61454;
 update item_template set spellcharges_1 = -1 where entry = 61225;
 -- Item 61224 set item charges to 1, item should be deleted upon use.
 update item_template set spellcharges_1 = -1 where entry = 61224;
+-- Vendor list for NPC Levandra from NPC Maria Lumere (entry 1313), remove the following items: 3371, 3372, 8925, 18256, 9301).
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 765, 3, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 785, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 2447, 3, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 2449, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 2453, 2, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3355, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3356, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3357, 1, 7200, 0, 0);
