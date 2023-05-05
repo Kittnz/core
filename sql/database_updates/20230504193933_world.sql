@@ -121,3 +121,6 @@ UPDATE `creature` SET `position_x` = 525.166199, `position_y` = -45.066074, `pos
 UPDATE `creature` SET `position_x` = 541.865112, `position_y` = -22.306519, `position_z` = 22.040667, `orientation` = 4.137405 WHERE `guid` = 150046;
 UPDATE `creature` SET `position_x` = 500.106079, `position_y` = -10.273674, `position_z` = 17.622465, `orientation` = 2.715833 WHERE `guid` = 150046;
 UPDATE `creature` SET `position_x` = 527.079590, `position_y` = -47.957481, `position_z` = 17.671375, `orientation` = 3.461952 WHERE `guid` = 150046;
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2576426,65004,0,0,0,1,-2218.46,816.208,160.066,4.16956,120,120,0,100,100,0,0,0);
