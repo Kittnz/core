@@ -553,3 +553,5 @@ update creature_template set display_id1 = 18765 where entry = 61478;
 update creature_template set display_id1 = 18767 where entry = 61473;
 -- NPC ENTRY 61366 GREYMANE INSTIGATOR, change display ids to 20275, 20276.
 update creature_template set display_id1 = 20275, display_id2 = 20276 where entry = 61366;
+-- Remove the subname from 61477 and change it's type to mechanical.
+update creature_template set subname = NULL, type = 9 where entry = 61477;
