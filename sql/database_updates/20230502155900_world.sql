@@ -544,3 +544,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61424, 4601, 4.6445, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61424, 4306, 10.3318, 0, 1, 2, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61424, 4338, 26.4455, 0, 1, 2, 0);
+-- Set the respawn time of all these creatures as well to 4hrs.
+update creature set spawntimesecsmin = 14400, spawntimesecsmax = 14400 where ID in (61424,61425,61426,61462,61364,61389,61391,61388,61390,61365,61394,61417);
+-- Set the respawn time of the following creatures to 48 hrs.
+update creature set spawntimesecsmin = 172800, spawntimesecsmax = 172800 where ID in (61419,61420,61421,61422,61423,61263,61264,61418);
