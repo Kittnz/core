@@ -555,3 +555,15 @@ update creature_template set display_id1 = 18767 where entry = 61473;
 update creature_template set display_id1 = 20275, display_id2 = 20276 where entry = 61366;
 -- Remove the subname from 61477 and change it's type to mechanical.
 update creature_template set subname = NULL, type = 9 where entry = 61477;
+-- NPC Demetreus (Entry 61450), change greeting text to :
+update broadcast_text set male_text = 'The Wolf Serpent sees through me, hears through me, feels through me. I am the thunder of his voice, the instrument of his judgement.$B$BFor as long as you linger in the Wolfswood, you shall abide by my word.' where entry = 61450;
+-- NPC Bearbane (Entry 61459), change greeting text to :
+update broadcast_text set male_text = 'Another one of you aimless outlanders wandering up here. I wonder what exactly you\'re hoping to find.' where entry = 61459;
+-- NPC Lurn Five-Pelts (Entry 61452), change greeting text to :
+update broadcast_text set male_text = 'We are the pellars, an order of faithful guardians of the land and her children. Healers, shepherds, teachers.$B$BWe see beyond the mirages of politics to aid those in Gilneas who take refuge in the old ways. Farmers, huntsmen, humble folk who did not lose themselves in their groves of cold stone.$B$BJoin us, return to your roots.' where entry = 61452;
+-- NPC Mustang (Entry 61449) add vendor flags and repair flags, change greeting text to :
+update broadcast_text set male_text = 'If ever be you needing help with fixing your gear, I know how to mend most things that break. If not, you could always sell your scraps to old Mustang.' where entry = 61449;
+update creature_template set npc_flags = 16391 where entry = 61449;
+-- NPC Levandra (Entry 61454) add vendor flags, add limited supply herbs to sell list, change greeting text to :
+update broadcast_text set male_text = 'Have you coin, have you gold? For a copper and a silver, roots and blooms, flowers and shrooms, and yet bulbs from the dell to you I\'ll gladly sell.' where entry = 61454;
+update creature_template set npc_flags = 7 where entry = 61454;
