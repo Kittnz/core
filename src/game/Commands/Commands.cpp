@@ -9965,15 +9965,16 @@ bool ChatHandler::HandleNpcSpawnSetDeathStateCommand(char* args)
         return false;
     }
 
-    CreatureData* pData = const_cast<CreatureData*>(sObjectMgr.GetCreatureData(pCreature->GetGUIDLow()));
+    uint32 const guidLow = pCreature->GetGUIDLow();
+    CreatureData* pData = const_cast<CreatureData*>(sObjectMgr.GetCreatureData(guidLow));
     if (value)
         pData->spawn_flags |= SPAWN_FLAG_DEAD;
     else
         pData->spawn_flags &= ~SPAWN_FLAG_DEAD;
 
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    pCreature->SetDeadByDefault(value);
     pCreature->SaveToDB();
-
     pCreature->Respawn();
 
     return true;
