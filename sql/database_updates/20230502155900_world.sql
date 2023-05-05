@@ -567,3 +567,7 @@ update creature_template set npc_flags = 16391 where entry = 61449;
 -- NPC Levandra (Entry 61454) add vendor flags, add limited supply herbs to sell list, change greeting text to :
 update broadcast_text set male_text = 'Have you coin, have you gold? For a copper and a silver, roots and blooms, flowers and shrooms, and yet bulbs from the dell to you I\'ll gladly sell.' where entry = 61454;
 update creature_template set npc_flags = 7 where entry = 61454;
+-- Item 61225 set item charges to 1, item should be deleted upon use.
+update item_template set spellcharges_1 = -1 where entry = 61225;
+-- Item 61224 set item charges to 1, item should be deleted upon use.
+update item_template set spellcharges_1 = -1 where entry = 61224;
