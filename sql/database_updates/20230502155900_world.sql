@@ -548,3 +548,8 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 update creature set spawntimesecsmin = 14400, spawntimesecsmax = 14400 where ID in (61424,61425,61426,61462,61364,61389,61391,61388,61390,61365,61394,61417);
 -- Set the respawn time of the following creatures to 48 hrs.
 update creature set spawntimesecsmin = 172800, spawntimesecsmax = 172800 where ID in (61419,61420,61421,61422,61423,61263,61264,61418);
+-- Swap the displayids of npc entries: 61478 and 61473.
+update creature_template set display_id1 = 18765 where entry = 61478;
+update creature_template set display_id1 = 18767 where entry = 61473;
+-- NPC ENTRY 61366 GREYMANE INSTIGATOR, change display ids to 20275, 20276.
+update creature_template set display_id1 = 20275, display_id2 = 20276 where entry = 61366;
