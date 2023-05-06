@@ -124,3 +124,16 @@ UPDATE `creature` SET `position_x` = 527.079590, `position_y` = -47.957481, `pos
 
 -- Changes by TAMMO
 REPLACE INTO `creature` VALUES (2576426,65004,0,0,0,1,-2218.46,816.208,160.066,4.16956,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576426;
+DELETE FROM creature_addon WHERE guid=2576426;
+DELETE FROM creature_movement WHERE id=2576426;
+DELETE FROM game_event_creature WHERE guid=2576426;
+DELETE FROM game_event_creature_data WHERE guid=2576426;
+DELETE FROM creature_battleground WHERE guid=2576426;
+REPLACE INTO `creature` VALUES (2576427,81041,0,0,0,1,-2219.6,812.933,160.065,1.34998,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576427;
+DELETE FROM creature_addon WHERE guid=2576427;
+DELETE FROM creature_movement WHERE id=2576427;
+DELETE FROM game_event_creature WHERE guid=2576427;
+DELETE FROM game_event_creature_data WHERE guid=2576427;
+DELETE FROM creature_battleground WHERE guid=2576427;
