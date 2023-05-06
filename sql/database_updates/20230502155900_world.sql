@@ -804,3 +804,27 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
+
+-- The Dawnstone Coupler
+delete from quest_template where entry = 40860;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40860,2,5179,43,35,512,0,'The Dawnstone Coupler','When Gnomeregan was built many years ago we had access to all sorts of materials from around the world. Dawnstone, one such material that we used, was excellent for being a coupler of energy. It was highly resistant to both magical, and powerful currents of energy. Making it highly versatile in its uses.$B$BWe have been unable to recreate any replicas to fix those that have broken down, having to replace them with subpar stand-ins that break much more often.$B$BThough it would appear we have a surge of luck on our side. You see, Gilneas has opened its gates once again. Rumors of civil problems are abound there.$B$BI need you to head to Gilneas far to the north and gather me a supply of four Dawnstone Ore. It should be found at the Dawnstone Mine near the city.','Travel to Gilneas in the north and collect 4 Dawnstone Ore for Technician Voltgear at the Gnomeregan Reclamation Facility in Dun Morogh.','We have been going through Copper Couplers faster than I can wrap my head around! If we are to keep up with all of the repair work required in this facility we need something that can last.','<Master Technician Wirespanner gazes upon the ore, an expression of giddy joy washes across his face.>$B$BThese dull, repressed glints, I remember them fondly. Excellent work $c, with this ore we will be able to produce enough conductors to fix what is needed in the facility.',61390,4,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,4400,54,200,0,0,0,0,0,0,0,0,0, 61391,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61430, 40860);
+replace into creature_involvedrelation	(id, quest) values (61430, 40860);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61390,4690,'Dawnstone Ore',12,1,2048,1,-1,-1,1,4,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61399, 61390, -28, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61391', '2', '5', 'Servocharged Wrench', '', '34820', '2', '0', '1', '87596', '21899', '17', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3400', '0',
+ '0', '92', '148', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '15',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
