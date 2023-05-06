@@ -737,4 +737,38 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+-- Removing Leper Leadership
+delete from quest_template where entry = 40857;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40857,2,1,13,6,512,0,'Removing Leper Leadership','Greetings adventurer, I am Teezle Dualflash, once widely known in Gnomeregan, and I have returned with valuable information that could greatly aid our cause. I have discovered the identity of the leader of the leper gnomes who has been causing chaos on the surface, and his name is Neevan Gubblewire. He has been rallying the lepers to his cause, continually causing trouble for the reclamation facility, hindering our efforts, and threatening the future success of our cause.$B$BThat is why I implore you, brave adventurer, to help us bring Neevan Gubblewire to justice. It will not be an easy task, but it must be done. You should be able to find him somewhere on the surface outside of Gnomeregan to the south of here. Will you help me with this matter?','Slay Neevan Gubblewire for Teezle Dualflash at the Gnomeregan Reclamation Facility in Dun Morogh.','Have you found that ruffian that calls himself leader?','Impressive work, $c. You have slain Neevan Gubblewire and scattered his leper ruffians, making our work safer and more secure. Your bravery and determination are admirable, and you have served our cause well. I will be sure to pass along your name with everyone I am sure to run into.$B$BTake one of these as a token of my appreciation, and best of luck out there.',0,0,0,0,0,0,0,0, 61482,1,0,0,0,0,0,0, 0,0, 0,5400,900,54,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61386,1,61387,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61435, 40857);
+replace into creature_involvedrelation	(id, quest) values (61435, 40857);
+
+-- Npc Neevan Gubblewire, display ID 6930, faction 63, humanoid, scale 1, weapon 2131, weapon2 11585
+REPLACE INTO creature_template VALUES
+(61482, 6930, 0, 0, 0, 0, 'Neevan Gubblewire', NULL, 0, 13, 13, 314, 314, 0, 0, 511, 63, 0, 1, 1.14286, 1, 20, 5, 40, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 61482, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 10, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20381; set @weapon_1 = 2131; set @weapon_2 = 11585; set @weapon_3 = 0; set @creature = 61482;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+replace into item_template values
+ ('61386', '4', '6', 'Gubblewire Shield', '', '21539', '2', '0', '1', '1616', '404', '14', '-1', '-1', '14',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '1', '7', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '330', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '4', '0', '0', '55', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61387', '4', '2', 'Backup Tinkering Trousers', '', '28431', '2', '0', '1', '1144', '286', '7', '-1', '-1', '14',
+ '', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '1', '5', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '58', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
 
