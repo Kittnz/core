@@ -6115,9 +6115,103 @@ bool GossipSelect_npc_greta_longpike(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool GOHello_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020017)
+    {
+        if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Alpha Channel Valve.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pGo), pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020017)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60042))
+            {
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+                if (Group* pGroup = pPlayer->GetGroup())
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
+                                pMember->KilledMonster(cInfo, ObjectGuid());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020018)
+    {
+        if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Reserve Pump Lever.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pGo), pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020018)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60043))
+            {
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+                if (Group* pGroup = pPlayer->GetGroup())
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
+                                pMember->KilledMonster(cInfo, ObjectGuid());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_reserve_pump_lever";
+    newscript->pGOHello = &GOHello_go_reserve_pump_lever;
+    newscript->pGOGossipSelect = &GOSelect_go_reserve_pump_lever;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_alpha_channel_valve";
+    newscript->pGOHello = &GOHello_go_alpha_channel_valve;
+    newscript->pGOGossipSelect = &GOSelect_go_alpha_channel_valve;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_greta_longpike";

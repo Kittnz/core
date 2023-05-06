@@ -687,3 +687,54 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3355, 1, 7200, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3356, 1, 7200, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61454, 3357, 1, 7200, 0, 0);
+
+-- Backup System Activation
+delete from quest_template where entry = 40856;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40856,2,133,33,25,512,0,'Backup System Activation','Gnomeregan\'s intricate network of ducts, pipes, channels, vents, and airways are essential for maintaining a healthy flow of air. However, they also circulated the toxic gases that had such a devastating impact on our brethren.$B$BAs a precaution, we established a comprehensive backup system that redirects the airflow in case of an emergency. Unfortunately, many of these channels have been closed off and sealed, necessitating the manipulation of levers and valves to reactivate them.$B$BWe require your technical expertise to access two crucial access points within the city. The first is the Alpha Channel, which is responsible for our backup power generation and is located in the Engineering Labs. The second is the Reserve Pump Channel, found near the Launch Bay, which is essential for the operation of our reserve air pumps.$B$BThese channels must be activated! We must return the great city of Gnomeregan to the marvel of technology that it once was!','Activate the Alpha Channel Valve and the Reserve Pump Channel Lever deep within Gnomeregan for Master Technician Wirespanner in Dun Morogh.','Our success is critical on the activation of these backup systems. I would advise you to recruit some backup in this task, for Gnomeregan is filled with all manner of terrible things.','Adventurer! I am pleased to inform you that the Alpha Channel and Reserve Pump Channel are performing exceptionally well, operating at approximately 87% efficiency. No, wait, 88%! Given the devastation of Gnomeregan, this is indeed a welcome surprise.$B$BI cannot express enough gratitude for the invaluable assistance you have provided in helping us restore this facility. Without your efforts, we would not have made nearly as much progress as we have.$B$BAs a token of our appreciation, please accept this humble offering from all of us here at the Reclamation Facility. May it aid you with your future endeavors.',0,0,0,0,0,0,0,0, 60042,1,60043,1,0,0,0,0, 0,0, 0,0,3350,54,350,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61383,1,61384,1,61385,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61437, 40856);
+replace into creature_involvedrelation	(id, quest) values (61437, 40856);
+
+update quest_template set type = 81 where entry = 40856;
+update quest_template set objectivetext1 = 'Activate the Alpha Channel Valve' where entry = 40856;
+update quest_template set objectivetext2 = 'Activate the Reserve Pump Lever' where entry = 40856;
+
+REPLACE INTO gameobject_template VALUES
+(2020017, 2, 353, 'Alpha Channel Valve', 0, 32, 0.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_alpha_channel_valve'),
+(2020018, 2, 353, 'Reserve Pump Lever', 0, 32, 0.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_reserve_pump_lever');
+
+REPLACE INTO creature_template VALUES
+(60042, 328, 0, 0, 0, 0, 'quest_40856_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60043, 328, 0, 0, 0, 0, 'quest_40856_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into item_template values
+ ('61383', '2', '3', 'Intricate Gnomish Blunderbuss', '', '66406', '3', '0', '1', '27152', '6788', '26', '-1', '-1', '37',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '100',
+ '3', '30', '78', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '75', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61384', '4', '3', 'Ionized Metal Grips', '', '27825', '3', '0', '1', '10032', '2508', '10', '-1', '-1', '37',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '152', '0', '0', '10',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61385', '4', '0', 'Magnetic Band', '', '14438', '3', '0', '1', '16432', '4108', '11', '-1', '-1', '37',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+
