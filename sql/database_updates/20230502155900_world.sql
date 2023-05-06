@@ -839,3 +839,17 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 REPLACE INTO creature_template VALUES
 (61483, 20346, 0, 0, 0, 0, 'Azshanaya Spellwind', 'Conjurer', 0, 60, 60, 4048, 4048, 0, 0, 3840, 1354, 3, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61484, 18515, 0, 0, 0, 0, 'Kalaya Spellbinder', 'Enchantress', 0, 60, 60, 5146, 5146, 0, 0, 4640, 1354, 3, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41461; set @magic_number = 61484;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ronae\'thalas used to be an academy closely connected to the Eldre\'thalas elite before the sundering. Many of us even attended this academy in it\'s prime.$B$BWhile the sundering destroyed much, a lot of the wards and magical reservoirs remain active to this day. It is my job to reshape and draw upon the lingering magic here so that it may assist us.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41460; set @magic_number = 61483;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'While we could only bring few things from Eldre\'thalas, we never lost our magic. Conjuration has allowed us to create many items, primarily food and supplies. My services are in high demand and I do what I must for my people.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+
