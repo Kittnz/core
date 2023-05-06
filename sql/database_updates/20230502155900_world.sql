@@ -778,3 +778,29 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61437, 40858);
 replace into creature_involvedrelation	(id, quest) values (61429, 40858);
+
+-- Hydrocondensor Modulator
+delete from quest_template where entry = 40859;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40858,40859,2,1,10,6,512,0,'Hydrocondensor Modulator','I have been expecting a shipment from Tinker Town for a few days now. You see, a lot of our rare materials were sent over here once we got things settled. A lot of my work on these access panels needs a Hydrocondensor Modulator, but it was stolen on the trip here by a group of leper gnomes. They ransacked quite a few valuable goods.$B$BNow, getting hold of a new one is not an easy task. We could only construct them in Gnomeregan, so unless you want to go digging through that trogg infested ruin, I suggest you look for the one that got stolen. Try rooting around the old houses to the south of here, no doubt they have it stashed somewhere safe.','Find the Hydrocondensor Modulator for Technician Stormlight at the Gnomeregan Reclamation Facility in Dun Morogh.','Have you had any success in finding my modulator?','<Technician Stormlight lets out an exhausted sigh of relief.>$B$BI was getting ready to start preparing the copper tubes and bronze frameworks as a backup! You have certainly saved a colossal headache by finding this blasted thing. Now I can get started on some real fixing. Thanks again, $c.',61388,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,800,54,200,0,0,0,0,0,0,0,0,0, 61389,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61429, 40859);
+replace into creature_involvedrelation	(id, quest) values (61429, 40859);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61388,7841,'Hydrocondensor Modulator',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020019, 3, 24107, 'Hydrocondensor Modulator', 0, 4, 1, 43, 2020019, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020019,61388,-100,0,1,1,0);
+
+replace into item_template values
+ ('61389', '4', '2', 'Stormlight Boots', '', '9530', '2', '0', '1', '872', '218', '8', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '2', '4', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '42', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
