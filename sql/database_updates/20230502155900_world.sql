@@ -221,18 +221,19 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (61381,20309,'Staff of Shinban',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 -- Shinban Four-Eyes, Display ID 11563, has 18523 equipped, faction 45, level 45, humanoid, scale 1.1 (casts 12523 every 6 seconds).
+
 REPLACE INTO creature_template VALUES
-(61381, 11563, 0, 0, 0, 0, 'Shinban Four-Eyes', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 45, 0, 1, 1.14714, 1.1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 61381, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61481, 11563, 0, 0, 0, 0, 'Shinban Four-Eyes', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 45, 0, 1, 1.14714, 1.1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 61481, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61481, 61381, -100, 0, 1, 1, 0);
 
-set @equip_template = 20380; set @weapon_1 = 18523; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61381;
+set @equip_template = 20380; set @weapon_1 = 18523; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61481;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 -- Shinban Four-Eyes
-set @creature_entry = 61381;
+set @creature_entry = 61481;
 set @description = ': Shinban Four-Eyes';
 set @spell_list_id = 180177;
 
@@ -834,3 +835,7 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20349, 0, 0, 1, 0);
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20350, 0, 0, 1, 0);
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20351, 0, 0, 1, 0);
+-- Add the following npcs ((Make sure their entries are not used by other mobs.)
+REPLACE INTO creature_template VALUES
+(61483, 20346, 0, 0, 0, 0, 'Azshanaya Spellwind', 'Conjurer', 0, 60, 60, 4048, 4048, 0, 0, 3840, 1354, 3, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61484, 18515, 0, 0, 0, 0, 'Kalaya Spellbinder', 'Enchantress', 0, 60, 60, 5146, 5146, 0, 0, 4640, 1354, 3, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
