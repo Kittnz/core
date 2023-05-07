@@ -155,7 +155,8 @@ bool ModelInstance::GetLocationInfo(const G3D::Vector3& p, LocationInfo& info) c
     Vector3 zDirModel = iInvRot * Vector3(0.f, 0.f, -1.f);
     float zDist;
 
-    if (iModel->GetLocationInfo(pModel, zDirModel, zDist, info))
+    GroupLocationInfo groupInfo;
+    if (iModel->GetLocationInfo(pModel, zDirModel, zDist, groupInfo))
     {
         Vector3 modelGround = pModel + zDist * zDirModel;
         // Transform back to world space. Note that:
@@ -164,6 +165,8 @@ bool ModelInstance::GetLocationInfo(const G3D::Vector3& p, LocationInfo& info) c
         float world_Z = ((modelGround * iInvRot) * iScale + iPos).z;
         if (info.ground_Z < world_Z) // hm...could it be handled automatically with zDist at intersection?
         {
+            info.rootId = groupInfo.rootId;
+            info.hitModel = groupInfo.hitModel;
             info.ground_Z = world_Z;
             info.hitInstance = this;
             return true;
