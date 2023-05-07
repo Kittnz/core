@@ -184,3 +184,4 @@ REPLACE INTO `gameobject` VALUES ( 5015105, 2002677, 0, -4872.13, 447.007, 359.9
 REPLACE INTO `gameobject` VALUES ( 5015106, 2002677, 0, -4873.68, 448.111, 359.973, 1.54635, 0, 0, 0.698412, 0.715696, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5015106, 2002677, 0, -4873.28, 448.111, 359.973, 1.54635, 0, 0, 0.698412, 0.715696, 300, 300, 100, 1, 0, 0);
 UPDATE `creature` SET `position_x` = -4872.065430, `position_y` = 448.808899, `position_z` = 359.971680, `orientation` = 1.080676 WHERE `guid` = 2575831;
+UPDATE `creature` SET `position_x` = -4767.542480, `position_y` = 285.769745, `position_z` = 310.158539, `orientation` = 6.045876 WHERE `guid` = 2576261;
