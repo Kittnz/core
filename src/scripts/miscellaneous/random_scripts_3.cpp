@@ -1265,7 +1265,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 player->AddItem(60244);
                 if (player->HasItemCount(60244, 1, false))
                 {
-                    npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
+                    npc->MonsterSayToPlayer("There, it is done. The key is attuned. Do with it what you must. I hope that it serves you well for whatever purpose you are using it.", player);
                     npc->HandleEmote(EMOTE_ONESHOT_TALK);
                     npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                     return true;

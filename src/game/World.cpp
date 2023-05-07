@@ -1236,7 +1236,7 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY, "ItemRestoreLog.MinQuality", 3);
 
-    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 10);
+    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 5);
 
     setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
 
@@ -3896,7 +3896,7 @@ void World::AddAsyncTask(std::function<void()> task)
 void World::StopDiscordBot()
 {
 #ifdef USING_DISCORD_BOT
-    sDiscordBot->GetCore()->shutdown();
+    sDiscordBot->Stop();
 #endif
 }
 
@@ -3978,8 +3978,14 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
 
     std::string log = FormatLoggedChat(sess, type, msg, target, chanId, chanStr);
 
-    if (sess->GetSecurity() >= SEC_MODERATOR || (target && target->GetSession() && target->GetSession()->GetSecurity() >= SEC_MODERATOR))
-        SendDiscordMessage(1075085609737142352, log); // always log GM chats to a seperate chn too
+    uint32 sessionSecurity = sess->GetSecurity();
+    uint32 targetSecurity = target && target->GetSession() ? target->GetSession()->GetSecurity() : SEC_PLAYER;
+
+    bool staffLog = sessionSecurity > SEC_PLAYER || targetSecurity > SEC_PLAYER;
+    bool modLog = staffLog && (sessionSecurity < SEC_DEVELOPER || targetSecurity < SEC_DEVELOPER);
+
+    if (staffLog)
+        SendDiscordMessage(modLog ? 1101486865477021726 : 1075085609737142352, log); // always log GM chats to a seperate chn too
     
 
     sLog.out(LOG_CHAT, "%s", log.c_str());

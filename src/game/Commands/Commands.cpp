@@ -9965,15 +9965,16 @@ bool ChatHandler::HandleNpcSpawnSetDeathStateCommand(char* args)
         return false;
     }
 
-    CreatureData* pData = const_cast<CreatureData*>(sObjectMgr.GetCreatureData(pCreature->GetGUIDLow()));
+    uint32 const guidLow = pCreature->GetGUIDLow();
+    CreatureData* pData = const_cast<CreatureData*>(sObjectMgr.GetCreatureData(guidLow));
     if (value)
         pData->spawn_flags |= SPAWN_FLAG_DEAD;
     else
         pData->spawn_flags &= ~SPAWN_FLAG_DEAD;
 
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    pCreature->SetDeadByDefault(value);
     pCreature->SaveToDB();
-
     pCreature->Respawn();
 
     return true;
@@ -13204,7 +13205,7 @@ bool ChatHandler::HandleFreezeCommand(char* args)
     Unit* pTarget = GetSelectedUnit();
     if (!pTarget)
         return false;
-    pTarget->CastSpell(pTarget, 29826, true);
+    GetPlayer()->CastSpell(pTarget, 9454, true);
     return true;
 }
 
@@ -13213,7 +13214,7 @@ bool ChatHandler::HandleUnfreezeCommand(char* args)
     Unit* pTarget = GetSelectedUnit();
     if (!pTarget)
         return false;
-    pTarget->RemoveAurasDueToSpell(29826);
+    pTarget->RemoveAurasDueToSpell(9454);
     return true;
 }
 
@@ -16106,6 +16107,17 @@ bool ChatHandler::HandleBlacklistNameCommand(char* args)
 
 bool ChatHandler::HandleListClickToMoveCommand(char* args)
 {
+    uint32 levelMin;
+    if (!ExtractUInt32(&args, levelMin))
+        levelMin = 1;
+
+    uint32 levelMax;
+    if (!ExtractUInt32(&args, levelMax))
+        levelMax = 60;
+
+    if (levelMin > levelMax)
+        std::swap(levelMin, levelMax);
+
     std::multimap<uint32, Player*> levelSortedList;
     HashMapHolder<Player>::MapType const& plist = sObjectAccessor.GetPlayers();
     for (auto const& itr : plist)
@@ -16113,8 +16125,12 @@ bool ChatHandler::HandleListClickToMoveCommand(char* args)
         if (!itr.second->IsInWorld())
             continue;
 
+        uint32 const level = itr.second->GetLevel();
+        if (level < levelMin || level > levelMax)
+            continue;
+
         if (itr.second->GetSession()->HasUsedClickToMove())
-            levelSortedList.insert(std::make_pair(itr.second->GetLevel(), itr.second));
+            levelSortedList.insert(std::make_pair(level, itr.second));
     }
 
     if (levelSortedList.empty())

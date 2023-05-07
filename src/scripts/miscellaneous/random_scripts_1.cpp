@@ -5791,7 +5791,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 npc->CastSpell(npc, 5906, false);
                 });
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
-                npc->MonsterSayToPlayer("I must thank you, your assistance has been insturmental.", player);
+                npc->MonsterSayToPlayer("I must thank you, your assistance has been instrumental.", player);
 
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
