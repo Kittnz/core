@@ -34,7 +34,7 @@ namespace DiscordBot
 
     void Bot::SendMessageToChannel(uint64_t channelId, std::string message, MessagePriority priority)
     {
-        if (!_core)
+        if (!_core || !_running)
             return;
 
         std::string NormalizedMessage = NormalizeString(message);
@@ -48,6 +48,9 @@ namespace DiscordBot
 
     void Bot::CreateMessage(dpp::message message, MessagePriority priority)
     {
+        if (!_running || !_core)
+            return;
+
         _core->message_create(message, [priority, this, message](const confirmation_callback_t& confirmation) mutable
             {
                 //rate-limited.
@@ -100,6 +103,7 @@ namespace DiscordBot
 
         _running = false;
         _core->shutdown();
+        _core = nullptr;
     }
 
     void Bot::Setup(std::string token)

@@ -56,6 +56,10 @@ bool PetAI::_needToStop() const
     if (m_creature->IsPet() && !((Pet*)m_creature)->IsEnabled())
         return true;
 
+    // Turtle: Abort chase if enemy turns invisible. This is not blizzlike for vanilla.
+    if (!m_creature->GetVictim()->IsVisibleForOrDetect(m_creature, m_creature, true))
+        return true;
+
     Unit* pOwner = m_creature->GetCharmerOrOwnerOrSelf();
     Creature* pOwnerCreature = pOwner->ToCreature();
 

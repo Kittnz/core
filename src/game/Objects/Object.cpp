@@ -3862,6 +3862,7 @@ int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, S
         return 10000;
 
     SpellSchoolMask schoolMask = spell->GetSpellSchoolMask();
+
     // PvP - PvE spell misschances per leveldif > 2
     int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
     int32 leveldif = int32(pVictim->GetLevelForTarget(this)) - int32(GetLevelForTarget(pVictim));
@@ -3872,6 +3873,10 @@ int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, S
         modHitChance = 96 - leveldif;
     else
         modHitChance = 94 - (leveldif - 2) * lchance;
+
+    // Turtle: Cap level based miss chance to 1 in 3.
+    if (modHitChance < 33)
+        modHitChance = 33;
 
     //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "%s [%u] : Binary [%s]. Base hit chance %f, level diff: %d", spell->SpellName[2].c_str(), spell->Id, spell->IsBinary() ? "YES" : "NO", modHitChance, leveldif);
 
@@ -5151,55 +5156,43 @@ void WorldObject::FinishSpell(CurrentSpellTypes spellType, bool ok /*= true*/)
         spell->SendChannelUpdate(0);
 }
 
-void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut)
+void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effectIndex)
             dynObjsOut.push_back(dynObj);
-        ++i;
     }
 }
 
-DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex)
+DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effIndex)
             return dynObj;
-        ++i;
     }
     return nullptr;
 }
 
-DynamicObject * WorldObject::GetDynObject(uint32 spellId)
+DynamicObject * WorldObject::GetDynObject(uint32 spellId) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId)
             return dynObj;
-        ++i;
     }
     return nullptr;
 }

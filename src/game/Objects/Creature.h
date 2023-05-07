@@ -778,6 +778,7 @@ class Creature : public Unit
 
         void RemoveCorpse();
         bool IsDeadByDefault() const { return m_isDeadByDefault; }
+        void SetDeadByDefault(bool state) { m_isDeadByDefault = state; }
 
         void ForcedDespawn(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
         void DespawnOrUnsummon(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
