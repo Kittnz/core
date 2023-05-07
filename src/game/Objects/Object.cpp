@@ -5151,55 +5151,43 @@ void WorldObject::FinishSpell(CurrentSpellTypes spellType, bool ok /*= true*/)
         spell->SendChannelUpdate(0);
 }
 
-void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut)
+void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effectIndex)
             dynObjsOut.push_back(dynObj);
-        ++i;
     }
 }
 
-DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex)
+DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effIndex)
             return dynObj;
-        ++i;
     }
     return nullptr;
 }
 
-DynamicObject * WorldObject::GetDynObject(uint32 spellId)
+DynamicObject * WorldObject::GetDynObject(uint32 spellId) const
 {
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    for (auto const& guid : m_dynObjGUIDs)
     {
-        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
-        {
-            i = m_dynObjGUIDs.erase(i);
             continue;
-        }
 
         if (dynObj->GetSpellId() == spellId)
             return dynObj;
-        ++i;
     }
     return nullptr;
 }
