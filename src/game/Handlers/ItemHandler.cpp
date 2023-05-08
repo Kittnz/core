@@ -841,7 +841,7 @@ void WorldSession::HandleListRestoreItemsCallBack(QueryResult* result, uint32 ac
         data << uint32(pProto->BuyPrice * stackCount);
         data << uint32(pProto->MaxDurability);
         data << uint32(stackCount);
-    } while (result->NextRow() && count < 128);
+    } while (result->NextRow() && count < MAX_VENDOR_ITEMS);
 
     data.put<uint8>(countPos, count);
     session->SendPacket(&data);
@@ -946,6 +946,9 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
                 data << uint32(price);
                 data << uint32(pProto->MaxDurability);
                 data << uint32(pProto->BuyCount);
+
+                if (count >= MAX_VENDOR_ITEMS)
+                    break;
             }
         }
     }
