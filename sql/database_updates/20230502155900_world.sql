@@ -970,3 +970,19 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
 
+-- Dark Iron Technology
+delete from quest_template where entry = 40866;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40866,2,1,10,6,0,0,'Dark Iron Technology','Ever since we left Tinker Town, there have been messages of a raid near Ironband\'s Compound to the south east. You would suspect Troggs to be behind such a thing, but no, Dark Irons are here in Dun Morogh.$B$BWhilst this is alarming, it could also prove to be a chance to get ahold of some Dark Iron Technology. I do know that there are some skilled engineers and magic users amongst their ranks, and I want to see first hand what they are capable of.$B$BHead down there, and take what you can find. Bring it back to me so I can do some studying.','Gather Dark Iron Technology at Ironband\'s Compound for Tenner Pipegadge at the Gnomeregan Reclamation Facility in Dun Morogh.','So, have you made it to Ironband\'s Compound yet?','This is it, huh? To be honest, I expected more, but perhaps this is only because they are so far from their home.$B$BOh well, I will still go ahead and study this in more depth. At the least you were able to kill some of those rather brutish Dark Iron.$B$BHere, take this coin as thanks.',61400,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 250,3720,620,54,300,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61446, 40866);
+replace into creature_involvedrelation	(id, quest) values (61446, 40866);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61400,7839,'Dark Iron Technology',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020022, 3, 22826, 'Dark Iron Technology', 0, 4, 1, 43, 2020022, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020022,61400,-100,0,1,1,0);
+
