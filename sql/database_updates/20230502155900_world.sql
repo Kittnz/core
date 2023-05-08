@@ -1045,7 +1045,7 @@ replace into item_template values
  '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
- '0', '1', NULL);
+ '0', '1', '0');
 -- Give entry 61474 the following gossip for Alliance players only: "I have nothing to say to you. Begone from my sight."
 -- 30000: Target Is Race (Orc, Undead, Tauren, Troll, Goblin).
 replace INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (30000, 14, 434, 0, 0, 0, 0);
