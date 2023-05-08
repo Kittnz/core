@@ -13963,8 +13963,8 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     if (HasEarnedTheTitle(TITLE_LOREKEEPER))
         AwardTitle(TITLE_LOREKEEPER);
 
-    if (HasEarnedTheTitle(TITLE_SEEKER))
-        AwardTitle(TITLE_SEEKER);
+    if (HasEarnedTheTitle(TITLE_SEEKER_OF_KNOWLEDGE))
+        AwardTitle(TITLE_SEEKER_OF_KNOWLEDGE);
 }
 
 void Player::FailQuest(uint32 questId)
@@ -23751,7 +23751,7 @@ bool Player::HasEarnedTheTitle(uint8 index)
             return true;
         break;
     }
-    case TITLE_SEEKER:
+    case TITLE_SEEKER_OF_KNOWLEDGE:
     {
         if (GetTotalQuestCount() >= SeekerQuestRequirement)
             return true;
