@@ -856,3 +856,32 @@ REPLACE INTO creature_template VALUES
 (61381, 1571, 0, 0, 0, 0, 'Frell Rosewick', NULL, 41408, 38, 38, 1599, 1599, 0, 0, 1780, 84, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 -- Gobject Reserve Pump Level (Entry 2020018) change display to 'GnomeLever'.
 update gameobject_template set displayid = 23839 where entry = 2020018;
+
+-- High Energy Regulator
+delete from quest_template where entry = 40861;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40861,2,133,33,25,512,0,'High Energy Regulator','The destruction of Gnomeregan set us back in our technology in quite a few ways. So much of our work was lost in the blink of an eye.$B$BWe are basically working blind. If we are to ever make real progress here in this facility, then we require a very rare item of significant importance.$B$BThe High Energy Regulator is something that was created to manage surges of intense energy. Without it, it is impossible to channel excessive amounts of power to where we need it, which is exactly what we are trying to do here!$B$BCurrently, this facility is operating at low power to prevent an override or oversurge to our systems. But we can work faster, MUCH faster. I need you to find the schematic for the High Energy Regulator that was lost in Gnomeregan. We can truly utilize this facility in the way it was meant to run if we can get ahold of it.','Find the Schematic: High Energy Regulator within Gnomeregan and bring it to Weezan Littlegear at the Gnomeregan Reclamation Facility in Dun Morogh.',' Damned spanner, always.. $B$BOh, you startled me, you wouldn\'t happen to have recovered the schematic would you?','Hmm, this is much more complicated than I remember, but with a little bit of elbow grease and some studious applications of gnomish engineering, it shouldn\'t be too hard to create a proper replica. It will take some time to test its efficiency before we put it into practice, but this has saved us a lot of time in designing a new prototype.$B$BThanks again $c. Here, take this, a Low Energy Regulator as thanks for your help.',61392,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,3050,54,350,0,0,0,0,0,0,0,0,0, 61393,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61441, 40861);
+replace into creature_involvedrelation	(id, quest) values (61441, 40861);
+
+update quest_template set type = 81 where entry = 40861;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61392,4690,'High Energy Regulator',12,2,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A highly intricate, and overly complex design.',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020020, 3, 27228, 'Schematic: High Energy Regulator', 0, 4, 1, 43, 2020020, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020020,61392,-100,0,1,1,0);
+
+replace into item_template values
+ ('61393', '4', '0', 'Low Energy Regulator', '', '20627', '2', '0', '1', '30000', '7500', '12', '-1', '-1', '30',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '27538', '0', '0', '0', '600000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
