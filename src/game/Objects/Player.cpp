@@ -23803,6 +23803,13 @@ bool Player::HasEarnedTheTitle(uint8 index)
         return true;
         break;
     }
+    case TITLE_BLOODTHIRSTY:
+    {
+        uint32 total_kills = GetHonorMgr().GetStoredHK();
+        if (total_kills >= 250000)
+            return true;
+        break;
+    }
     }
     return false;
 };
