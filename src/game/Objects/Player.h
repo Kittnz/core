@@ -131,6 +131,7 @@ enum ChallengeSpells
 };
 
 constexpr uint32 LoreKeeperQuestRequirement = 1700;
+constexpr uint32 SeekerQuestRequirement = 3000;
 
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
@@ -722,7 +723,7 @@ enum PlayerTitles : uint8
     TITLE_UNSTOPPABLE_FORCE = 44,
     TITLE_BREWMASTER = 45,
     TITLE_BMERCILESS_GLADIATOR = 46,
-    TITLE_BLOOD_RING_CHAMPION = 47,
+    TITLE_SEEKER = 47,
     TITLE_STORMWIELDER = 48,
     TITLE_SULFURON_CHAMPION = 49,
     TITLE_GUARDIAN_OF_TIRISFAL = 50,
