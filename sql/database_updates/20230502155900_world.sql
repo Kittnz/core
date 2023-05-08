@@ -1034,3 +1034,5 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- NPC Cassie Copperlight change subname to <Aspiring Tinkerer>, add quest flags.
 update creature_template set subname = 'Aspiring Tinkerer', npc_flags = 19 where entry = 61438;
+-- NPC Bimock Sparkbrake remove the following item from his vendor list : Portable Wormhole Generator: Orgrimmar (entry 51313).
+delete from npc_vendor where entry = 61439 and item in(83511,51313);
