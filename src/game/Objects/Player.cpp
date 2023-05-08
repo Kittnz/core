@@ -23767,7 +23767,7 @@ bool Player::HasEarnedTheTitle(uint8 index)
     }
     case TITLE_CRAZY_CAT_LADY:
     {
-        uint32 CatPets[10] = {         
+        static constexpr uint32 CatPets[10] = {         
         10673,	// Bombay
         10674,	// Cornish Rex
         10675,	// Maine Coon
@@ -23785,7 +23785,6 @@ bool Player::HasEarnedTheTitle(uint8 index)
                 return false;
         }
         return true;
-        break;
     }
     }
     return false;
