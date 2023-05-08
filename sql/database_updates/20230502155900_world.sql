@@ -1056,3 +1056,9 @@ update gossip_menu set condition_id = 30000 where entry = 41457 and text_id = 61
 replace into gossip_menu (entry, text_id, condition_id) VALUES (41457, 30111, '30001'); 
 replace into broadcast_text (entry, Male_Text) values (30111, 'I have nothing to say to you. Begone from my sight.');
 replace into npc_text (ID, BroadcastTextID0) values (30111, 30111);
+
+-- Give entry 61475 the following gossip for Horde players only: "I do not believe we should associate. I cordially ask you to refrain from speaking to me again." 
+update gossip_menu set condition_id = 30001 where entry = 41458 and text_id = 61475;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41458, 30112, '30000'); 
+replace into broadcast_text (entry, Male_Text) values (30112, 'I do not believe we should associate. I cordially ask you to refrain from speaking to me again.');
+replace into npc_text (ID, BroadcastTextID0) values (30112, 30112);
