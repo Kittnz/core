@@ -1036,3 +1036,14 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 update creature_template set subname = 'Aspiring Tinkerer', npc_flags = 19 where entry = 61438;
 -- NPC Bimock Sparkbrake remove the following item from his vendor list : Portable Wormhole Generator: Orgrimmar (entry 51313).
 delete from npc_vendor where entry = 61439 and item in(83511,51313);
+-- Add this item as a quest reward to the following quest 'Removing Leper Leadership' (entry 40857), the player should be able to pick from the two rewards.
+replace into item_template values
+ ('61387', '4', '2', 'Backup Tinkering Trousers', '', '28431', '2', '0', '1', '1144', '286', '7', '-1', '-1', '14',
+ '', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '1', '5', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '58', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
