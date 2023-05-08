@@ -6197,9 +6197,75 @@ bool GOSelect_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo, uint32 sen
     return false;
 }
 
+bool GossipHello_npc_prospector_gehn(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40868) == QUEST_STATUS_INCOMPLETE) // Mastering the Formula II
+    {
+        if (pCreature->GetEntry() == 1255 && !pPlayer->HasItemCount(61403, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Chemist Volterwhite has sent me to request a shipment of Gol'Bolar Ore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(1255, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_prospector_gehn(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(61403);
+        if (pPlayer->HasItemCount(61403, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Oh, he sent you for ore did he? Make sure he gets it this time.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_master_chemist_volterwhite(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40868) // Mastering the Formula II
+    {
+        pQuestGiver->MonsterSay("Blasted... It would appear that the materials I am working with are not enough... Wait a second, I got it!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40869) // Mastering the Formula III
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_master_chemist_volterwhite";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_master_chemist_volterwhite;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_prospector_gehn";
+    newscript->pGossipHello = &GossipHello_npc_prospector_gehn;
+    newscript->pGossipSelect = &GossipSelect_npc_prospector_gehn;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_reserve_pump_lever";
