@@ -1046,4 +1046,13 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
  '0', '1', NULL);
+-- Give entry 61474 the following gossip for Alliance players only: "I have nothing to say to you. Begone from my sight."
+-- 30000: Target Is Race (Orc, Undead, Tauren, Troll, Goblin).
+replace INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (30000, 14, 434, 0, 0, 0, 0);
+-- 30001: Target Is Race (Human, Dwarf, Night Elf, Gnome, High Elf).
+replace INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (30001, 14, 589, 0, 0, 0, 0);
 
+update gossip_menu set condition_id = 30000 where entry = 41457 and text_id = 61474;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41457, 30111, '30001'); 
+replace into broadcast_text (entry, Male_Text) values (30111, 'I have nothing to say to you. Begone from my sight.');
+replace into npc_text (ID, BroadcastTextID0) values (30111, 30111);
