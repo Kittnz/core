@@ -901,3 +901,32 @@ REPLACE INTO gameobject_template VALUES
 replace into gameobject_loot_template values
 (2020021,61394,-100,0,1,1,0);
 
+-- The Mercy of Humility
+delete from quest_template where entry = 40863;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40863,2,1,12,7,512,0,'The Mercy of Humility','Greetings, adventurer. I am Father Gavin, a humble priest of the Argent Dawn. I come to you with a request that weighs heavily upon my soul. I was recently ambushed in Dun Morogh and my prized possession, \'The Mercy of Humility\', an old religious text, was taken from me by the violent Rockjaw Troggs. I fear for its safety, as these brutish creatures are known to destroy anything they can\'t use.$B$BI implore you to aid me in recovering this valuable relic. I am certain the Troggs near Ironband\'s Compound to the south east are those that possess it. Slay them and recover the text before it is damaged beyond repair.$B$BBring this book back to me, and I will make sure you are justly rewarded for your service to the Light.','Recover The Mercy of Humility from the Rockjaw Troggs near Ironband\'s Compound for Father Gavin in Dun Morogh.','It is imperative that you recover The Mercy of Humility before it is too late.','By all that is divine, the tome is recovered...$B$BThe weight has been lifted, and my soul is free. You have done me a great service in recovering this text, and for it I must thank you dearly.$B$BPlease, take this robe, as a gesture of my good will.',61395,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,4080,680,529,250,0,0,0,0,0,0,0,0,0, 61396,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (1253, 40863);
+replace into creature_involvedrelation	(id, quest) values (1253, 40863);
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41462, 30110, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30110, 'Even in the cold such as this, one can embrace the warmth found within the Light. Do you have a moment to pray $c?');
+replace into npc_text (ID, BroadcastTextID0) values (30110, 30110);
+update creature_template set gossip_menu_id = 41462, npc_flags = 3 where entry = 1253;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61395,1134,'The Mercy of Humility',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(1116, 61395, -14, 0, 1, 1, 0),
+(1118, 61395, -14, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61396', '4', '1', 'Robe of Humility', '', '12653', '2', '0', '1', '704', '176', '5', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '23', '0', '0', '0',
+ '0', '0', '0', '7676', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+ 
