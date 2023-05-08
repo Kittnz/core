@@ -885,3 +885,19 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+-- Malfunction Mayhem
+delete from quest_template where entry = 40862;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40862,2,1,10,6,0,0,'Malfunction Mayhem','Greetings! I am Cassie Copperlight, a gnomish tinker. I find myself in a bit of a bind, you see: a recent batch of bad data membranes from Tinker Town has caused a catastrophic failure in many of the Servitors in the lower levels of the Reclamation Facility. I may need your help.$B$BYour task is to venture down into those lower levels and destroy the malfunctioning Servitors. Additionally, I need you to retrieve any spare parts lying about so that I can build functioning replacements. Around seven should do. It won\'t be easy, but with your skill and bravery, we can fix this problem and prevent any further damage.','Slay 10 Malfunctioning Servitors and gather 7 Spare Parts for Cassie Copperlight at the Gnomeregan Reclamation Facility in Dun Morogh.','I would be careful dealing with those Servitors. They may be primarily built to help with tasks, but they can be quite dangerous!','<A heavy sigh of relief escapes Cassie Copperlight.>$B$BPhew.$B$BWell, that is one crisis averted. It shouldn\'t be long until the other malfunctioning Servitor\'s are all destroyed. I got some spare silver for what you\'ve done. Hope to see you around!',61394,7,0,0,0,0,0,0, 61464,10,0,0,0,0,0,0, 0,0, 250,3600,600,54,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61438, 40862);
+replace into creature_involvedrelation	(id, quest) values (61438, 40862);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61394,7840,'Spare Parts',12,1,2048,1,-1,-1,1,7,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020021, 3, 23809, 'Spare Parts', 0, 4, 1, 43, 2020021, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020021,61394,-100,0,1,1,0);
+
