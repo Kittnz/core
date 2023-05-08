@@ -998,3 +998,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61463, 61401, -100, 0, 1, 1, 0);
+
+-- Mastering the Formula II
+delete from quest_template where entry = 40868;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40867,40868,2,1,10,6,0,0,'Mastering the Formula II','The magical fluctuations of the sample you provided were quite extreme. In order to harness and channel this energy, I require a few materials. Materials that I have been waiting on for some time now.$B$BWith the disturbance of Gol\'Bolar Quarry and the untimely demise of a contractor working there, I have been left empty handed on my supply of Snowvale Root and Gol\'Bolar Ore. Perhaps you can help with acquiring these things for me?$B$BSnowvale Root is often carried by Frostmane Seers who have travelled to their retreat far in the mountains. I will require three samples of it from them. As for the Gol\'Bolar Ore, I am sure Prospector Gehn at the Quarry will provide it on our behalf here.','Gather 3 Snowvale Root from Frostmane Seer\'s in Dun Morogh, and the Shipment of Gol\'Bolar Ore from Prospector Gehn at the Gol\'Bolar Quarry for Master Chemist Volterwhite at the Gnomeregan Reclamation Facility in Dun Morogh.','You\'re disturbing my work. That is, unless, you have those materials I asked you to acquire?','The grounded nature of the Gol\'Bolar Ore and the controlled energy of the Snowvale Root should do well in controlling the extreme fluctuations of the aqua sample you brought me earlier.',61402,3,61403,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,4080,680,54,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61436, 40868);
+replace into creature_involvedrelation	(id, quest) values (61436, 40868);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61402,1464,'Snowvale Root',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0),
+(61403,7914,'Shipment of Gol\'Bolar Ore',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(1397, 61402, -68, 0, 1, 1, 0);
+
+update creature_template set script_name = 'npc_prospector_gehn' where entry = 1255;
+update creature_template set script_name = 'npc_master_chemist_volterwhite' where entry = 61436;
