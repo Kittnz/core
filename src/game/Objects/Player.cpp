@@ -23786,6 +23786,23 @@ bool Player::HasEarnedTheTitle(uint8 index)
         }
         return true;
     }
+    case TITLE_GRAND_FROGUS:
+    {
+        static constexpr uint32 FrogPets[5] = {
+        10701, // Dart Frog
+        10703, // Wood Frog
+        10702, // Island Frog
+        10704, // Tree Frog
+        23811  // Jubling
+        };
+        for (auto spell : FrogPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
     }
     return false;
 };
