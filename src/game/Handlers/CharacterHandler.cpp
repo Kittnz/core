@@ -840,12 +840,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (!pCurrChar->HasSpell(197)) pCurrChar->LearnSpell(197, false); // Two-Handed Axes
     }
 
-    if (pCurrChar->HasAllZonesExplored() && !pCurrChar->HasTitle(TITLE_CARTOGRAPHER))
-        pCurrChar->AwardTitle(TITLE_CARTOGRAPHER);
-
-    if (pCurrChar->GetTotalQuestCount() >= LoreKeeperQuestRequirement && !pCurrChar->HasTitle(TITLE_LOREKEEPER))
-        pCurrChar->AwardTitle(TITLE_LOREKEEPER);
-
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
     {
         if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasItemCount(67000) && !pCurrChar->HasSpell(49517) && !pCurrChar->HasItemCount(67001))

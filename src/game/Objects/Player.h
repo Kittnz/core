@@ -728,7 +728,9 @@ enum PlayerTitles : uint8
     TITLE_GUARDIAN_OF_TIRISFAL = 50,
     TITLE_BANE_OF_THE_SCARLET_CRUSADE = 50,
     TITLE_IMMORTAL = 52,
-    TITLE_LOREKEEPER = 63
+    TITLE_LOREKEEPER = 63,
+    TITLE_DIPLOMAT = 64,
+    TITLE_MAX_LIMIT = 65
 };
 
 // Player summoning auto-decline time (in secs)
@@ -2859,6 +2861,7 @@ public:
         // Titles System
     public:
         std::map<uint8, uint8> m_playerTitles;
+        bool HasEarnedTheTitle(uint8 index);
         bool HasTitle(uint8 title);
         void AwardTitle(int8 title);
         uint8 GetActiveTitle();
