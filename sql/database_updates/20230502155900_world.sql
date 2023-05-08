@@ -1032,3 +1032,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'While we could only bring few things from Eldre\'thalas, we never lost our magic. Conjuration has allowed us to create many items, primarily food and supplies. My services are in high demand and I do what I must for my people.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- NPC Cassie Copperlight change subname to <Aspiring Tinkerer>, add quest flags.
+update creature_template set subname = 'Aspiring Tinkerer', npc_flags = 19 where entry = 61438;
