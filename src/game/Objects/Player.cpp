@@ -23765,6 +23765,28 @@ bool Player::HasEarnedTheTitle(uint8 index)
             return true;
         break;
     }
+    case TITLE_CRAZY_CAT_LADY:
+    {
+        uint32 CatPets[10] = {         
+        10673,	// Bombay
+        10674,	// Cornish Rex
+        10675,	// Maine Coon
+        10676,	// Orange Tabby
+        10677,	// Siamese
+        10678,	// Silver Tabby
+        10679,	// White Kitten
+        15648,	// Corrupted Kitten
+        49513,	// Midnight
+        30152,	// White Tiger Cub
+        };
+        for (auto spell : CatPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
     }
     return false;
 };
