@@ -6905,7 +6905,7 @@ void Player::CheckAreaExploreAndOutdoor()
     {
         SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset, (uint32)(currFields | val));
 
-        if (HasAllZonesExplored())
+        if (HasEarnedTheTitle(TITLE_CARTOGRAPHER))
             AwardTitle(TITLE_CARTOGRAPHER);
 
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
@@ -11167,11 +11167,8 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
         return pItem2;
     }
-
-    // Hand of Rag
-    // not a quest, so award on equip
     if (pItem->GetEntry() == 17182)
-        AwardTitle(TITLE_SULFURON_CHAMPION); //Sulfuron Champion
+        AwardTitle(TITLE_SULFURON_CHAMPION); // Sulfuron Champion
 
     return pItem;
 }
@@ -13963,7 +13960,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     if (quest_id == 9270 /*Mage*/ || quest_id == 9269 /*Druid*/ || quest_id == 9271 /*Warlock*/ || quest_id == 9257 /*Priest*/)
         AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
 
-    if (GetTotalQuestCount() >= LoreKeeperQuestRequirement && !HasTitle(TITLE_LOREKEEPER))
+    if (HasEarnedTheTitle(TITLE_LOREKEEPER))
         AwardTitle(TITLE_LOREKEEPER);
 }
 
@@ -15799,27 +15796,16 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 		} while (titlesQuery->NextRow());
 	}
 
-	// Award or take away City Protector Rank
-	AwardTitle(fields[59].GetBool() ? GetRace() : -GetRace());
+    // Grant achievement titles on login:
+    for (uint8 i = 1; i < TITLE_MAX_LIMIT; i++)
+    {
+        if (HasEarnedTheTitle(i) && !HasTitle(i))
+            AwardTitle(i);
+    }
+    // Temporary weekly titles:
+    AwardTitle(fields[59].GetBool() ? GetRace() : -GetRace());
+    SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); // set active title on logon   
 
-    SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); // set active title on logon
-
-    if (HasItemCount(21176, 1, 1)) // Scarab Lord
-        AwardTitle(TITLE_SCARAB_LORD);
-
-    if (isImmortal()) // Immortal (temp. check)
-        AwardTitle(TITLE_IMMORTAL);
-
-    // Award titles for current important items
-    if (HasItemCount(17182, 1, 1))
-        AwardTitle(TITLE_SULFURON_CHAMPION); // Sulfuron Champion
-        
-    if (HasItemCount(19019, 1, 1))
-        AwardTitle(TITLE_STORMWIELDER); // Stormwielder
-        
-    if (HasItemCount(22589, 1, 1) || HasItemCount(22630, 1, 1) || HasItemCount(22631, 1, 1) || HasItemCount(22632, 1, 1))
-        AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
-    
     return true;
 }
 
@@ -23702,6 +23688,77 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 
 	return true;
 }
+
+bool Player::HasEarnedTheTitle(uint8 index)
+{
+    switch (index)
+    {
+    case TITLE_SULFURON_CHAMPION:
+    {
+        if (HasItemCount(17182, 1, 1))
+            return true;
+        break;
+    }
+    case TITLE_SCARAB_LORD:
+    {
+        if (HasItemCount(21176, 1, 1))
+            return true;
+        break;
+    }
+    case TITLE_IMMORTAL:
+    {
+        if (isImmortal())
+            return true;
+        break;
+    }
+    case TITLE_STORMWIELDER:
+    {
+        if (HasItemCount(19019, 1, 1))
+            return true;
+        break;
+    }
+    case TITLE_GUARDIAN_OF_TIRISFAL:
+    {
+        if (HasItemCount(22589, 1, 1)
+            || HasItemCount(22630, 1, 1)
+            || HasItemCount(22631, 1, 1)
+            || HasItemCount(22632, 1, 1))
+            return true;
+        break;
+    }
+    //case TITLE_PROTECTOR_OF_STORMWIND:
+    //case TITLE_OVERLORD_OF_ORGRIMMAR:
+    //case TITLE_THANE_OF_IRONFORGE:
+    //case TITLE_HIGH_SENTINEL_OF_DARNASSUS:
+    //case TITLE_DEATHLORD_OF_THE_UNDERCITY:
+    //case TITLE_CHIEFTAN_OF_THUNDERBLUFF:
+    //case TITLE_VOODOO_BOSS_OF_SENJIN:
+    //case TITLE_AVENGER_OF_GNOMEREGAN:
+    //case TITLE_BRUISER_OF_MUDSPROCKET:
+    //case TITLE_AVENGER_OF_QUELTHALAS:
+    case TITLE_CARTOGRAPHER:
+    {
+        if (HasAllZonesExplored())
+            return true;
+        break;
+    }
+    case TITLE_LOREKEEPER:
+    {
+        if (GetTotalQuestCount() >= LoreKeeperQuestRequirement)
+            return true;
+        break;
+    }
+    case TITLE_DIPLOMAT:
+    {
+        if (GetReputationRank(576) == REP_EXALTED    // Timbermaw Hold
+            && GetReputationRank(531) == REP_EXALTED // Bronze Dragonflight
+            && GetReputationRank(59) == REP_EXALTED) // Thorium Brotherhood
+            return true;
+        break;
+    }
+    }
+    return false;
+};
 
 bool Player::HasTitle(uint8 title)
 {
