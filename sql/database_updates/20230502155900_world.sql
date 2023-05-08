@@ -854,3 +854,5 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 -- The overwritten NPC has been restored.
 REPLACE INTO creature_template VALUES
 (61381, 1571, 0, 0, 0, 0, 'Frell Rosewick', NULL, 41408, 38, 38, 1599, 1599, 0, 0, 1780, 84, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+-- Gobject Reserve Pump Level (Entry 2020018) change display to 'GnomeLever'.
+update gameobject_template set displayid = 23839 where entry = 2020018;
