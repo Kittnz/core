@@ -937,3 +937,36 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61433, 40864);
 replace into creature_involvedrelation	(id, quest) values (61433, 40864);
 
+-- Chemical Betrayal!
+delete from quest_template where entry = 40865;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40865,2,1,14,8,0,0,'Chemical Betrayal!','The Robot XV-81, a highly sophisticated chemical clean-up Servitor, has turned rogue due to magical interference. It\'s causing chaos in the lower levels of the Reclamation Facility, and poses a threat to anyone in its path.$B$BI must ask of you to venture into the depths below, locate XV-81, and destroy it before it causes any further harm. Most importantly I must ask you to recover it\'s Chemical Processing Membrane, an extremely rare piece of technology locked deep within its brain!','Slay XV-81 and return the Chemical Processing Membrane to Chemist Glowsight at the Gnomeregan Reclamation Facility in Dun Morogh.','The chemists here at the Reclamation Facility are relying on you, $N!','You\'ve done it!$B$BThe Chemical Processing Membrane has been recovered. I cannot express how thankful I am to see this! I was already dreading the sheer amount of work we would have to do to make a new one.$B$BNow, we can begin work on the XV-82 with the Tinkers and make it much more sound to deal with chemical issues and resilient to arcane interference.$B$BHere, take this as a token of appreciation. Without you, I would still be scratching my head to think of a solution!',61397,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,4320,720,54,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61398,1,61399,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61433, 40865);
+replace into creature_involvedrelation	(id, quest) values (61433, 40865);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61397,17923,'Chemical Processing Membrane',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61466, 61397, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61398', '4', '2', 'Gnomish Chemistry Belt', '', '12464', '2', '0', '1', '432', '108', '6', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '35', '0', '0', '3',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '20', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61399', '4', '3', 'Xtra-Protective Gloves', '', '25811', '2', '0', '1', '672', '168', '10', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '1', '4', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '72', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
