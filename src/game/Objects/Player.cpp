@@ -13962,6 +13962,9 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
 
     if (HasEarnedTheTitle(TITLE_LOREKEEPER))
         AwardTitle(TITLE_LOREKEEPER);
+
+    if (HasEarnedTheTitle(TITLE_SEEKER))
+        AwardTitle(TITLE_SEEKER);
 }
 
 void Player::FailQuest(uint32 questId)
@@ -23748,10 +23751,16 @@ bool Player::HasEarnedTheTitle(uint8 index)
             return true;
         break;
     }
+    case TITLE_SEEKER:
+    {
+        if (GetTotalQuestCount() >= SeekerQuestRequirement)
+            return true;
+        break;
+    }
     case TITLE_DIPLOMAT:
     {
         if (GetReputationRank(576) == REP_EXALTED    // Timbermaw Hold
-            && GetReputationRank(531) == REP_EXALTED // Bronze Dragonflight
+            && GetReputationRank(609) == REP_EXALTED // Cenarion Circle
             && GetReputationRank(59) == REP_EXALTED) // Thorium Brotherhood
             return true;
         break;
