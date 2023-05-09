@@ -1897,3 +1897,6 @@ REPLACE INTO `creature` VALUES (2576922,61358,0,0,0,1,4984.59,-1467.62,1328.33,3
 REPLACE INTO `creature` VALUES (2576923,61359,0,0,0,1,4984.61,-1464.64,1329.09,3.25203,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2576924,61367,0,0,0,1,4984.32,-1462.04,1329.78,3.25203,120,120,0,100,100,0,0,0);
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (887,4997.341309,-1462.990112,1328.659302,0.430081,1,'zulhatha');
+
+-- Changes by SHANG
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61357;
