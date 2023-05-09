@@ -435,9 +435,9 @@ enum SpellCastResult
 enum SpellInterruptFlags
 {
     SPELL_INTERRUPT_FLAG_MOVEMENT     = 0x01,
-    SPELL_INTERRUPT_FLAG_PUSH_BACK    = 0x02,
-    SPELL_INTERRUPT_FLAG_STUN         = 0x04,
-    SPELL_INTERRUPT_FLAG_INTERRUPT    = 0x08,
+    SPELL_INTERRUPT_FLAG_DAMAGE       = 0x02,
+    SPELL_INTERRUPT_FLAG_INTERRUPT    = 0x04,
+    SPELL_INTERRUPT_FLAG_AUTOATTACK   = 0x08,
     SPELL_INTERRUPT_FLAG_ABORT_ON_DMG = 0x10,               // _complete_ interrupt on direct damage
 };
 
