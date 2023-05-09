@@ -120,7 +120,7 @@ enum Challenges
     CHALLENGE_EXHAUSTION_MODE = 1,
     CHALLENGE_WAR_MODE = 2,
     CHALLENGE_HARDCORE = 3,
-    CHALLENGE_VARGANT_MODE = 4,
+    CHALLENGE_VAGRANT_MODE = 4,
 };
 
 enum ChallengeSpells
@@ -1170,6 +1170,7 @@ class Player final: public Unit
         }
         void RemoveItem(const uint8 bag, const uint8 slot, const bool update = true);
         void MailHardcoreModeRewards(uint32 level);
+        void MailVagrantModeRewards(uint32 level);
         void AnnounceHardcoreModeLevelUp(uint32 level);
         // Titles
         bool IsCityProtector();
@@ -2379,7 +2380,7 @@ public:
             {CHALLENGE_EXHAUSTION_MODE, SPELL_EXHAUSTION_MODE},
             {CHALLENGE_WAR_MODE,        SPELL_WAR_MODE},
             {CHALLENGE_HARDCORE,        SPELL_HARDCORE},
-            {CHALLENGE_VARGANT_MODE,    SPELL_VARGANT_MODE},
+            {CHALLENGE_VAGRANT_MODE,    SPELL_VARGANT_MODE},
         };
 
         auto itr = challenge_spells.find(challenge);
