@@ -2865,8 +2865,9 @@ public:
 
         // Titles System
     public:
-        std::map<uint8, uint8> m_playerTitles;
-        bool HasEarnedTheTitle(uint8 index);
+        std::unordered_set<uint8> m_playerTitles;
+        uint8 m_activeTitle = 0;
+        bool HasEarnedTitle(uint8 titleId);
         bool HasTitle(uint8 title);
         void AwardTitle(int8 title);
         uint8 GetActiveTitle();

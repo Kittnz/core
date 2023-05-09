@@ -6914,7 +6914,7 @@ void Player::CheckAreaExploreAndOutdoor()
     {
         SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset, (uint32)(currFields | val));
 
-        if (HasEarnedTheTitle(TITLE_CARTOGRAPHER))
+        if (HasEarnedTitle(TITLE_CARTOGRAPHER))
             AwardTitle(TITLE_CARTOGRAPHER);
 
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
@@ -13971,10 +13971,10 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     if (quest_id == 9270 /*Mage*/ || quest_id == 9269 /*Druid*/ || quest_id == 9271 /*Warlock*/ || quest_id == 9257 /*Priest*/)
         AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
 
-    if (HasEarnedTheTitle(TITLE_LOREKEEPER))
+    if (HasEarnedTitle(TITLE_LOREKEEPER))
         AwardTitle(TITLE_LOREKEEPER);
 
-    if (HasEarnedTheTitle(TITLE_SEEKER_OF_KNOWLEDGE))
+    if (HasEarnedTitle(TITLE_SEEKER_OF_KNOWLEDGE))
     {
         AwardTitle(TITLE_SEEKER_OF_KNOWLEDGE);
         sWorld.SendWorldText(50305, GetName());
@@ -15796,7 +15796,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_playerTitles.clear();
     QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT `title`, `active` FROM `character_titles` WHERE `guid` = '%u'", GetGUIDLow());
 
-	if (titlesQuery && titlesQuery->GetRowCount() > 0)
+	if (titlesQuery)
 	{
 		do
 		{
@@ -15804,19 +15804,23 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 			uint8 titleID = fields[0].GetUInt8();
 			uint8 active = fields[1].GetUInt8();
 
-			m_playerTitles[titleID] = active;
+            m_playerTitles.insert(titleID);
+            
+            if (active)
+                m_activeTitle = titleID;
 
 			// city protector scroll/medalion
 			if (titleID == GetRace())
 				MailCityProtectorMedallion();
 
 		} while (titlesQuery->NextRow());
+        delete titlesQuery;
 	}
 
     // Grant achievement titles on login:
     for (uint8 i = 1; i < TITLE_MAX_LIMIT; i++)
     {
-        if (HasEarnedTheTitle(i) && !HasTitle(i))
+        if (HasEarnedTitle(i) && !HasTitle(i))
             AwardTitle(i);
     }
     // Temporary weekly titles:
@@ -23716,12 +23720,12 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 	return true;
 }
 
-bool Player::HasEarnedTheTitle(uint8 index)
+bool Player::HasEarnedTitle(uint8 titleId)
 {
-    if (HasTitle(index))
+    if (HasTitle(titleId))
         return false;
 
-    switch (index)
+    switch (titleId)
     {
     case TITLE_SULFURON_CHAMPION:
     {
@@ -23843,12 +23847,17 @@ bool Player::HasEarnedTheTitle(uint8 index)
             return true;
         break;
     }
+
+    default:
+        return false;
     }
+
+    return false;
 };
 
-bool Player::HasTitle(uint8 title)
+bool Player::HasTitle(uint8 titleId)
 {
-    return m_playerTitles.count(title) > 0 || title == 0;
+    return m_playerTitles.find(titleId) != m_playerTitles.end() || titleId == 0;
 }
 
 void Player::AwardTitle(int8 title)
@@ -23877,7 +23886,7 @@ void Player::AwardTitle(int8 title)
 
 		SendAddonMessage("TWT_TITLES", newTiteText);
 
-		m_playerTitles[title] = 0;
+        m_playerTitles.insert(title);
 
         // check if this is the only title the player has, enable it if so
         if (m_playerTitles.size() == 1)
@@ -23892,10 +23901,7 @@ void Player::AwardTitle(int8 title)
 
 uint8 Player::GetActiveTitle()
 {
-    for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
-        if (itr->second == 1)
-            return itr->first;
-    return 0;
+    return m_activeTitle;
 }
 
 void Player::SendEarnedTitles()
@@ -23909,8 +23915,10 @@ void Player::SendEarnedTitles()
         titlesText += "0;"; // "None" title
 
     if (m_playerTitles.size() > 0)
-        for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
-            titlesText += std::to_string(itr->first) + ":" + std::to_string(itr->second) + ";";
+    {
+        for (auto itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
+            titlesText += std::to_string(*itr) + ":" + std::to_string(m_activeTitle == *itr ? 1 : 0) + ";";
+    }
 
     titlesText.pop_back(); // remove last ;
 
@@ -23921,14 +23929,10 @@ void Player::ChangeTitle(uint8 title)
 {
     if (!HasTitle(title))
         ChatHandler(this).PSendSysMessage("You have not earned that title.");
-    else {
+    else 
+    {
         SetByteValue(PLAYER_BYTES_3, 2, title);
-
-        for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
-            if (itr->first == title)
-                itr->second = 1;
-            else
-                itr->second = 0;
+        m_activeTitle = title;
 
         CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 0 WHERE guid = '%u'", GetGUIDLow());
         CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 1 WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
