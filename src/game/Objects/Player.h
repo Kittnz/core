@@ -120,6 +120,7 @@ enum Challenges
     CHALLENGE_EXHAUSTION_MODE = 1,
     CHALLENGE_WAR_MODE = 2,
     CHALLENGE_HARDCORE = 3,
+    CHALLENGE_VARGANT_MODE = 4,
 };
 
 enum ChallengeSpells
@@ -131,7 +132,7 @@ enum ChallengeSpells
 };
 
 constexpr uint32 LoreKeeperQuestRequirement = 1700;
-constexpr uint32 SeekerQuestRequirement = 3000;
+constexpr uint32 SeekerQuestRequirement = 5;
 
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
