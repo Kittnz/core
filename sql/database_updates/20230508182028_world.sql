@@ -1900,3 +1900,6 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 
 -- Changes by SHANG
 UPDATE `creature_template` set `scale` = 1.000000 where entry = 61357;
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5015164, 2003548, 815, -1132.64, 2793.4, 188.651, 5.41111, 0, 0, 0.422353, -0.906431, 300, 300, 100, 1, 0, 0);
