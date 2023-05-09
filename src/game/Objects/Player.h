@@ -133,7 +133,7 @@ enum ChallengeSpells
 };
 
 constexpr uint32 LoreKeeperQuestRequirement = 1700;
-constexpr uint32 SeekerQuestRequirement = 5;
+constexpr uint32 SeekerQuestRequirement = 2800;
 
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
