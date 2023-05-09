@@ -46,7 +46,12 @@ enum
     DATA_THEKAL             = 15,
     DATA_ZATH               = 16,
     DATA_HAKKAR             = 17,
-    DATA_GAHZRANKA          = 18
+    DATA_GAHZRANKA          = 18,
+
+    EVENT_MADNESS_GRILEK    = 29,
+    EVENT_MADNESS_HAZZARAH  = 30,
+    EVENT_MADNESS_RENATAKI  = 31,
+    EVENT_MADNESS_WUSHOOLAY = 32
 };
 
 class instance_zulgurub : public ScriptedInstance
