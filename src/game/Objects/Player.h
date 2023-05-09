@@ -128,7 +128,8 @@ enum ChallengeSpells
     SPELL_SLOW_AND_STEADY = 50000,
     SPELL_EXHAUSTION_MODE = 50004,
     SPELL_WAR_MODE = 50008,
-    SPELL_HARDCORE = 50001
+    SPELL_HARDCORE = 50001,
+    SPELL_VARGANT_MODE = 50014,
 };
 
 constexpr uint32 LoreKeeperQuestRequirement = 1700;
@@ -721,7 +722,7 @@ enum PlayerTitles : uint8
     TITLE_CARTOGRAPHER = 17,
     TITLE_SEEKER_OF_KNOWLEDGE = 42,
     TITLE_INQUISITOR = 43,
-    TITLE_UNSTOPPABLE_FORCE = 44,
+    TITLE_THE_WANDERER = 44,
     TITLE_BREWMASTER = 45,
     TITLE_BMERCILESS_GLADIATOR = 46,
     TITLE_SEEKER = 47,
@@ -2377,7 +2378,8 @@ public:
             {CHALLENGE_SLOW_AND_STEADY, SPELL_SLOW_AND_STEADY},
             {CHALLENGE_EXHAUSTION_MODE, SPELL_EXHAUSTION_MODE},
             {CHALLENGE_WAR_MODE,        SPELL_WAR_MODE},
-            {CHALLENGE_HARDCORE,        SPELL_HARDCORE}
+            {CHALLENGE_HARDCORE,        SPELL_HARDCORE},
+            {CHALLENGE_VARGANT_MODE,    SPELL_VARGANT_MODE},
         };
 
         auto itr = challenge_spells.find(challenge);
