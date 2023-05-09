@@ -3472,6 +3472,15 @@ void Player::GiveLevel(uint32 level)
     if (HasChallenge(CHALLENGE_SLOW_AND_STEADY))
         MailHardcoreModeRewards(level);
 
+    if (HasChallenge(CHALLENGE_VAGRANT_MODE))
+    {
+        if (level == 60)
+        {
+            AwardTitle(TITLE_THE_WANDERER);
+            MailVagrantModeRewards(level);
+        }
+    }
+
     if (IsHardcore())
     {
         AnnounceHardcoreModeLevelUp(level);
@@ -10470,7 +10479,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                if (HasChallenge(CHALLENGE_VARGANT_MODE))
+                if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < 60)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
@@ -22760,6 +22769,16 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
     }
 }
 
+void Player::MailVagrantModeRewards(uint32 level)
+{
+    Item* ToMailItem = Item::CreateItem(50007, 1, this);
+    ToMailItem->SaveToDB();
+
+    MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vargant Mode! As a gesture of gratitude, we give you a reliable Forworn Mule companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
+        .AddItem(ToMailItem)
+        .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+}
+
 bool Player::IsCityProtector() { return HasTitle(GetRace()); /*GetByteValue(PLAYER_BYTES_3, 2) == GetRace();*/ }
 bool Player::IsImmortal() { return GetByteValue(PLAYER_BYTES_3, 2) == 52; }
 bool Player::IsScarabLord() { return HasItemCount(21176, 1, 0); }
@@ -23819,7 +23838,7 @@ bool Player::HasEarnedTheTitle(uint8 index)
         break;
     case TITLE_THE_WANDERER:
     {
-        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VARGANT_MODE))
+        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
             return true;
     }
     }

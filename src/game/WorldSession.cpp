@@ -234,13 +234,13 @@ bool WorldSession::ForcePlayerLogoutDelay()
     {
         sLog.out(LOG_CHAR, "[%s:%u@%s] Lost socket for character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
 
+        SetDisconnectedSession();
         if (GetPlayer()->IsHardcore())
             m_disconnectTimer = 10000;
         else
             m_disconnectTimer = 20000;
-
         GetPlayer()->OnDisconnected();
-        SetDisconnectedSession();
+        GetPlayer()->SaveToDB();
         return true;
     }
     return false;
