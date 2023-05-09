@@ -10470,9 +10470,11 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                // Check is possibly not in vanilla.
-                //if (IsNonMeleeSpellCasted(false, true, true))
-                //    return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                if (HasChallenge(CHALLENGE_VARGANT_MODE))
+                {
+                    if (pProto->Quality > ITEM_QUALITY_NORMAL)
+                        return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                }
             }
 
             uint8 eslot = FindEquipSlot(pProto, slot, swap);
@@ -23770,6 +23772,11 @@ bool Player::HasEarnedTheTitle(uint8 index)
             && GetReputationRank(59) == REP_EXALTED) // Thorium Brotherhood
             return true;
         break;
+    }
+    case TITLE_THE_WANDERER:
+    {
+        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VARGANT_MODE))
+            return true;
     }
     }
     return false;
