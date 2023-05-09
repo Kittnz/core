@@ -23794,7 +23794,7 @@ bool Player::HasEarnedTheTitle(uint8 index)
     }
     case TITLE_CRAZY_CAT_LADY:
     {
-        static constexpr uint32 CatPets[10] = {         
+        static constexpr uint32 CatPets[10] = {
         10673,	// Bombay
         10674,	// Cornish Rex
         10675,	// Maine Coon
@@ -23836,13 +23836,14 @@ bool Player::HasEarnedTheTitle(uint8 index)
         if (total_kills >= 250000)
             return true;
         break;
+    }
     case TITLE_THE_WANDERER:
     {
         if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
             return true;
+        break;
     }
     }
-    return false;
 };
 
 bool Player::HasTitle(uint8 title)
