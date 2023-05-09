@@ -10470,7 +10470,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                if (HasChallenge(CHALLENGE_VARGANT_MODE))
+                if (HasChallenge(CHALLENGE_VARGANT_MODE) && GetLevel() < 60)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
