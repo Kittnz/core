@@ -10470,9 +10470,11 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                // Check is possibly not in vanilla.
-                //if (IsNonMeleeSpellCasted(false, true, true))
-                //    return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                if (HasChallenge(CHALLENGE_VARGANT_MODE))
+                {
+                    if (pProto->Quality > ITEM_QUALITY_NORMAL)
+                        return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                }
             }
 
             uint8 eslot = FindEquipSlot(pProto, slot, swap);
@@ -13964,7 +13966,10 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
         AwardTitle(TITLE_LOREKEEPER);
 
     if (HasEarnedTheTitle(TITLE_SEEKER_OF_KNOWLEDGE))
+    {
         AwardTitle(TITLE_SEEKER_OF_KNOWLEDGE);
+        sWorld.SendWorldText(50305, GetName());
+    }
 }
 
 void Player::FailQuest(uint32 questId)
@@ -23694,6 +23699,9 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 
 bool Player::HasEarnedTheTitle(uint8 index)
 {
+    if (HasTitle(index))
+        return false;
+
     switch (index)
     {
     case TITLE_SULFURON_CHAMPION:
@@ -23809,6 +23817,10 @@ bool Player::HasEarnedTheTitle(uint8 index)
         if (total_kills >= 250000)
             return true;
         break;
+    case TITLE_THE_WANDERER:
+    {
+        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VARGANT_MODE))
+            return true;
     }
     }
     return false;
