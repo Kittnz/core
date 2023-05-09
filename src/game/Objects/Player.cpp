@@ -23798,7 +23798,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_CRAZY_CAT_LADY:
     {
-        static constexpr uint32 CatPets[10] = {
+        static constexpr uint32 CatPets[11] = {
         10673,	// Bombay
         10674,	// Cornish Rex
         10675,	// Maine Coon
@@ -23809,6 +23809,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
         15648,	// Corrupted Kitten
         49513,	// Midnight
         30152,	// White Tiger Cub
+        49503,	// Mr. Bigglesworth
         };
         for (auto spell : CatPets)
         {
