@@ -44,6 +44,18 @@ void instance_zulgurub::Initialize()
     m_uiHakkarGUID    = 0;
     m_uiMarliGUID     = 0;
     m_uiGahzrankaGUID = 0;
+    
+    if (!sGameEventMgr.IsActiveEvent(EVENT_MADNESS_GRILEK) &&
+        !sGameEventMgr.IsActiveEvent(EVENT_MADNESS_HAZZARAH) &&
+        !sGameEventMgr.IsActiveEvent(EVENT_MADNESS_RENATAKI) &&
+        !sGameEventMgr.IsActiveEvent(EVENT_MADNESS_WUSHOOLAY))
+    {
+        sLog.outError("No madness event active! Force starting it.");
+        sGameEventMgr.StartEvent(EVENT_MADNESS_GRILEK, true);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_HAZZARAH, false);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_RENATAKI, false);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_WUSHOOLAY, false);
+    }
 }
 
 void instance_zulgurub::UpdateHakkarPowerStacks()
