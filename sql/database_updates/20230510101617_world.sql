@@ -296,3 +296,7 @@ update creature_template set scale = 1.5 where entry = 61332;
 update creature_template set scale = 1 where entry in (61357,61361,61360);
 -- NPC Barkskin Windtalker (Entry 61347) make elite, and change stats to reflect it.
 update creature_template set rank = 1, health_min = 17088, health_max = 18088, dmg_min = 751, dmg_max = 809, attack_power = 284, ranged_dmg_min = 203.77, ranged_dmg_max = 289.86 where entry = 61347;
+-- NPC Barkskin Ursa (entry 61342) give weapon 15464.
+set @equip_template = 20385; set @weapon_1 = 15464; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61342;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
