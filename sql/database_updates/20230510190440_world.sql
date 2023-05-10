@@ -181,3 +181,6 @@ REPLACE INTO `gameobject` VALUES ( 5015232, 2005680, 1, -2291.62, 397.272, 195.9
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (888,5492.377930,-3733.479492,1594.157227,2.876272,1,'nordanaar');
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2576947,61234,0,0,0,1,5637.17,-3688.6,1620.97,4.73269,120,120,0,100,100,0,0,0);
