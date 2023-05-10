@@ -25,3 +25,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '21', '0', '0', '0',
  '0', '1', NULL);
 
+-- Object 'Alpha Channel Valve' change greeting text to 'The large valve hisses steam with intensity.'
+replace into broadcast_text (entry, Male_Text) values (30113, 'The large valve hisses steam with intensity.');
+replace into npc_text (ID, BroadcastTextID0) values (30113, 30113);
+-- Object 'Reserve Pump Lever' change greeting text to "An old lever with the following letters etched at the base$B$B'Reserve Pump Lever.'
+replace into broadcast_text (entry, Male_Text) values (30114, 'An old lever with the following letters etched at the base$B$B\'Reserve Pump Lever.');
+replace into npc_text (ID, BroadcastTextID0) values (30114, 30114);

@@ -6122,7 +6122,7 @@ bool GOHello_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Alpha Channel Valve.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pGo), pGo->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(30113, pGo->GetGUID());
         }
     }
     return true;
@@ -6163,7 +6163,7 @@ bool GOHello_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Reserve Pump Lever.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pGo), pGo->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(30114, pGo->GetGUID());
         }
     }
     return true;
