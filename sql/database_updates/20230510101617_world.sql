@@ -281,3 +281,18 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50639, 'And so the First Rebellion began. Darius gathered all the soldiers he had left. The common folk under his rule were both inspired by his love for his lands and fearful of his brutality. Yet beyond fear laid respect. They knew and know that desperate times call for desperate deeds.', 50640),
 (50640, 'The battle was won by the righteous rebels. But with a heavy toll. Ravenwood Keep was destroyed, and all who died on its soil could never recognize ally from foe, cursed into vengeful wraiths by the dark magics of the Alteraci Harlow scum.', 50641),
 (50641, 'A treaty was signed between Lord Ravenwood and the Harlows. One in which Darius surrendered his daughter, Elena, to marry the Harlow lordling. Elena sacrificed herself so that Darius could purchase a tenuous truce to bide his time.$B$BBut Greymane shall always sit upon our throne, we will make sure of it. The Gate will fall, and we shall find aid in old allegiances. We will never surrender our country.$B$BFind with your eyes the tallest tree in the land. That, is how tall our great people stand.', 0);
+
+-- NPC Repusing Ooze (61334), change name to Repulsing Ooze.
+update creature_template set name = 'Repulsing Ooze' where entry = 61334;
+-- NPC Speaker Gan'hota (entry 61361) change display ID to 20298.
+update creature_template set display_id1 = 20298 where entry = 61361;
+-- NPC Warlord Hanzento (Entry 61360) change display ID to 20297.
+update creature_template set display_id1 = 20297 where entry = 61360;
+-- NPC Misthoof Sprinter (Entry 61333) change scale to 1.3
+update creature_template set scale = 1.3 where entry = 61333;
+-- NPC Misthoof Stag (Entry 61332) change scale to 1.5
+update creature_template set scale = 1.5 where entry = 61332;
+-- NPC Shadeflayer Shadowhunter (61357), Speaker Gan'hota (61361), Warlord Hanzento (61360): Set scale to 1.
+update creature_template set scale = 1 where entry in (61357,61361,61360);
+-- NPC Barkskin Windtalker (Entry 61347) make elite, and change stats to reflect it.
+update creature_template set rank = 1, health_min = 17088, health_max = 18088, dmg_min = 751, dmg_max = 809, attack_power = 284, ranged_dmg_min = 203.77, ranged_dmg_max = 289.86 where entry = 61347;
