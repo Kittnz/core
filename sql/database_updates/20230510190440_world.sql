@@ -184,3 +184,9 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2576947,61234,0,0,0,1,5637.17,-3688.6,1620.97,4.73269,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576947;
+DELETE FROM creature_addon WHERE guid=2576947;
+DELETE FROM creature_movement WHERE id=2576947;
+DELETE FROM game_event_creature WHERE guid=2576947;
+DELETE FROM game_event_creature_data WHERE guid=2576947;
+DELETE FROM creature_battleground WHERE guid=2576947;
