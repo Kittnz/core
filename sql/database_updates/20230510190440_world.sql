@@ -178,3 +178,6 @@ REPLACE INTO `gameobject` VALUES ( 5015231, 2005680, 1, -2349.57, 332.213, 184.9
 REPLACE INTO `gameobject` VALUES ( 5015232, 2005680, 1, -2291.62, 397.272, 195.98, 5.09193, 0, 0, 0.561029, -0.827796, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417412499605184, 0.630000);
 REPLACE INTO `gameobject` VALUES ( 5015232, 2005680, 1, -2291.62, 397.272, 195.98, 5.09193, 0, 0, 0.561029, -0.827796, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (888,5492.377930,-3733.479492,1594.157227,2.876272,1,'nordanaar');
