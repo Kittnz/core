@@ -302,3 +302,11 @@ replace into creature_equip_template values (@equip_template, @weapon_1, @weapon
 update creature_template set equipment_id = @equip_template where entry = @creature;
 -- NPC Barkskin Pathfinder, change spell casted to 18561.
 update creature_spells set spellid_1 = 18561 where entry = 180131;
+-- Change display ID of item High Energy Regulator to 811.
+update item_template set display_id = 811 where entry = 61392;
+-- Rename item High Energy Regulator to Schematic: High Energy Regulator.
+update item_template set name = 'Schematic: High Energy Regulator' where entry = 61392;
+-- Item Dreamsteel Bar, set material to metal when moving around in bags.
+update item_template set material = 1 where entry = 61216;
+-- Item Powerful Smelling Salts (entry 8546), remove unique, make the item be consumed upon use, set stack limit to 5.
+update item_template set flags = 0, max_count = 0, stackable = 5 where entry = 8546;
