@@ -2024,6 +2024,27 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 48305:
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        if (m_CastItem)
+                        {
+                            if (GameObject* spitelash_shrine = m_caster->ToPlayer()->FindNearestGameObject(2010801, 10.0F)) // Spitelash Shrine
+                            {
+                                m_caster->ToPlayer()->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
+                                if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
+                                {
+                                    m_caster->ToPlayer()->KilledMonster(dummy_bunny, ObjectGuid());
+                                    m_forceConsumeItem = true;
+                                }
+                            }
+                            else
+                            m_caster->ToPlayer()->GetSession()->SendNotification("Requires Spitelash Shrine.");
+                        }
+                    }
+                    return;
+                }
                 case 46002: // Goblin Brainwashing Device
                 {
                     if (m_caster && m_caster->IsPlayer())

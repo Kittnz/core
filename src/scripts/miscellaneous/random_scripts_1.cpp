@@ -5731,27 +5731,6 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
-bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    GameObject* spitelash_shrine = pPlayer->FindNearestGameObject(2010801, 10.0F); // Spitelash Shrine
-
-    if (!spitelash_shrine)
-    {
-        pPlayer->GetSession()->SendNotification("Requires Spitelash Shrine.");
-        return false;
-    }
-    
-    if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
-        pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
-
-    pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-    pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
-    pPlayer->SaveInventoryAndGoldToDB();
-    return true;
-}
-
 bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -7403,11 +7382,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_lord_rog";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_lord_rog;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_dispelling_scroll";
-    newscript->pItemUseSpell = &ItemUseSpell_dispelling_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
