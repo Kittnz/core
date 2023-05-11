@@ -3864,7 +3864,7 @@ int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, S
     SpellSchoolMask schoolMask = spell->GetSpellSchoolMask();
 
     // PvP - PvE spell misschances per leveldif > 2
-    int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
+    int32 lchance = pVictim->IsPlayer() ? 7 : 11;
     int32 leveldif = int32(pVictim->GetLevelForTarget(this)) - int32(GetLevelForTarget(pVictim));
 
     // Base hit chance from attacker and victim levels
@@ -3875,7 +3875,7 @@ int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, S
         modHitChance = 94 - (leveldif - 2) * lchance;
 
     // Turtle: Cap level based miss chance to 1 in 3.
-    if (modHitChance < 33)
+    if (IsPlayer() && modHitChance < 33)
         modHitChance = 33;
 
     //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "%s [%u] : Binary [%s]. Base hit chance %f, level diff: %d", spell->SpellName[2].c_str(), spell->Id, spell->IsBinary() ? "YES" : "NO", modHitChance, leveldif);
