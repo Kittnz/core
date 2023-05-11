@@ -1227,4 +1227,10 @@ update item_template set set_id = 622 where entry = 61376 -- Greymane Gauntlets
 update item_template set set_id = 622 where entry = 61378 -- Greymane Legplates
 update item_template set set_id = 622 where entry = 61377 -- Greymane Sabatons
 update item_template set set_id = 622 where entry = 61379 -- Greymane Vambraces
+-- Quest Mastering the Formula III (Entry 40869) add the following item requirement : Volatile Aqua (Display ID 15794, quest item, stackable to 1, drops from Volatile Aqua Elemental).
+update quest_template set reqitemid1 = 61408, reqitemcount1 = 1 where entry = 40869;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61408,7914,'Volatile Aqua',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61489, 61408, -100, 0, 1, 1, 0);
