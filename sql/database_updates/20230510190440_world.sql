@@ -204,3 +204,9 @@ UPDATE `creature_addon` SET `emote_state`=234 WHERE `guid`=2573052;
 
 -- Changes by WILL
 REPLACE INTO `creature` VALUES (2576949,60961,0,0,0,0,-4856.2,602.783,386.641,2.97972,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2576949;
+DELETE FROM creature_addon WHERE guid=2576949;
+DELETE FROM creature_movement WHERE id=2576949;
+DELETE FROM game_event_creature WHERE guid=2576949;
+DELETE FROM game_event_creature_data WHERE guid=2576949;
+DELETE FROM creature_battleground WHERE guid=2576949;
