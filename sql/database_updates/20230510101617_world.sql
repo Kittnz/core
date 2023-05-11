@@ -1260,3 +1260,29 @@ update creature_template set scale = 1.5 where entry = 61488;
 update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576943;
 -- GUID 2576945 should have a respawn time between 12 to 24 hours.
 update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576945;
+
+-- Blooming Hyjalroot
+delete from quest_template where entry = 40870;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40870,2,616,60,55,512,0,'Blooming Hyjalroot','You there! Yes you, mortal! I am in need of assistance. My friend has begun falling ill from the madness of the emerald dream and I require a cure before he is lost forever.$B$BI have heard from the Wardens of Nordrassil of a herb called Hyjalroot that can only be found around this region: it is somewhat scarce, but I require fifteen bundles of it in order to ease the pain of Paranus. I bid you to be quick and act with haste, or else I will lose my friend forever.$B$B<The whelp lets out a sad mewl of distress.>','Collect 15 Hyjalroot from around the region of Hyjal for Enthos at Nordanaar in Hyjal.','Paranus has a strong will, but it is only a matter of time before his strength is eroded.','You have done it. With this Hyjalroot I will be able to bring Paranus back from the edge, and guide him away from the dream. I must thank you $c. Without you, I would have been lost in grief.$B$BTake this Small Dreamshard, as thanks for everything you\'ve done.',61409,15,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,37200,6200,0,0,0,0,0,0,0,0,0,0,0, 61198,1,61410,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61494, 40870);
+replace into creature_involvedrelation	(id, quest) values (61494, 40870);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61409,19497,'Hyjalroot',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2020023, 3, 28255, 'Hyjalroot', 0, 4, 1, 43, 2020023, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020023,61409,-100,0,1,1,0);
+
+replace into item_template values
+ ('61410', '4', '0', 'Favor of Enthos', '', '22651', '2', '0', '1', '23568', '5892', '2', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '7', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9357', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', NULL);
