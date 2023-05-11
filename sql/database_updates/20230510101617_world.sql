@@ -1362,3 +1362,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61282, 40877);
 replace into creature_involvedrelation	(id, quest) values (61286, 40877);
+
+-- All We Need is Blood
+delete from quest_template where entry = 40878;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40877,40878,2,5179,42,35,0,0,'All We Need is Blood','I have come to this land in search of a particular book - a tome I have sought for ages: \'On the Powers of Blood\' by Archmage Ur. Oh, how it eluded me! But now, I have reason to believe that it may be hidden within Gilneas. $B$BThe knowledge contained within those pages could be invaluable to furthering both the goals of the Forsaken and the Horde. I am close to discovering its whereabouts, very close, but in the meantime I require your assistance. Take these vials and collect the blood of bats. We will need them for our plans, yes. Do not disappoint me.','Bring 10 Vilewing Blood Vials for Orvan Darkeye at the Ruins of Greyshire in Gilneas.','Have you collected the blood already? I need ten full vials.','Ah, excellent. You have brought me what I needed.$B$B<Orvan takes the vials, inspects them with a sinister smile and abruptly tosses them behind him.>$B$BThese will be invaluable, truly invaluable.',61416,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,22500,3750,68,100,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40878);
+replace into creature_involvedrelation	(id, quest) values (61286, 40878);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61416,1215,'Vilewing Blood Vial',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61230,61416,-60,0,1,1,0),
+(61231,61416,-60,0,1,1,0),
+(61401,61416,-60,0,1,1,0);
