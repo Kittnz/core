@@ -1234,3 +1234,5 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61489, 61408, -100, 0, 1, 1, 0);
+-- Item 8546 Powerful Smelling Salts, add 1hr cooldown after use.
+update item_template set spellcooldown_1 = 3600 where entry = 8546;
