@@ -1236,3 +1236,27 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61489, 61408, -100, 0, 1, 1, 0);
 -- Item 8546 Powerful Smelling Salts, add 1hr cooldown after use.
 update item_template set spellcooldown_1 = 3600 where entry = 8546;
+-- NPC Greymane Enforcer, change display ids to 20275, 20276 (display 20276 might be incorrect syntax, keeps showing up as another display)
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20275, 0, 0, 0, 0),
+(20276, 0, 0, 0, 0);
+update creature_template set display_id1 = 20275, display_id2 = 20276, display_id3 = 0, display_id4 = 0 where entry = 61397;
+-- NPC Warlord Hanzento change display ID to 20297 (display 20297 might be incorrect syntax)
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20297, 0, 0, 0, 0);
+update creature_template set display_id1 = 20297 where entry = 61360;
+-- NPC Speaker Gan'hota change display ID to 20298 (Display 20298 might be incorrect syntax)
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20298, 0, 0, 0, 0);
+update creature_template set display_id1 = 20298 where entry = 61361;
+-- After running this query, change the displayid of npc entry 61469 to 20354
+REPLACE INTO creature_display_info_addon (display_id, bounding_radius, combat_reach, gender, display_id_other_gender) VALUES (20354, 0, 0, 1, 0);
+update creature_template set display_id1 = 20354 where entry = 61469;
+-- NPC Barkskin Fisher needs to be only rare, remove elite status.
+update creature_template set rank = 2 where entry = 61487;
+-- Change Azurebeak's scale to 1.5
+update creature_template set scale = 1.5 where entry = 61488;
+-- GUID 2576943 should have a respawn time between 12 to 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576943;
+-- GUID 2576945 should have a respawn time between 12 to 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576945;
