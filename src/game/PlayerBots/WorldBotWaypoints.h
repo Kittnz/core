@@ -53,7 +53,7 @@ class Waypoints
 {
 public:
     float x, y, z;
-    uint32 guid, id, area, zone, map, reverse;
+    uint32 guid, id, area, zone, map, reverse, chance, minlevel;
     std::string func, comments = "";
 };
 

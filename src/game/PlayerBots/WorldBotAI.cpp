@@ -940,7 +940,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             m_resurrect = true;
         }
 
-        uint32 rand = urand(15000, 60000); // resurrect between 15 to 60 seconds
+        uint32 rand = urand(30000, 60000); // resurrect between 15 to 60 seconds
         m_updateResurrectTimer.Reset(rand);
     }
 
@@ -1223,8 +1223,14 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                 me->BuildPlayerRepop();
                 me->RepopAtGraveyard();
 
-                if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
-                    me->GetMotionMaster()->MoveIdle();
+                ClearPath();
+                StopMoving();
+
+                /*if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                    me->GetMotionMaster()->MoveIdle();*/
+
+                //if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                me->GetMotionMaster()->MovePoint(0, me->GetCorpse()->GetPositionX(), me->GetCorpse()->GetPositionY(), me->GetCorpse()->GetPositionZ(), MOVE_PATHFINDING);
 
                 if (m_resurrect)
                 {
@@ -1238,6 +1244,29 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     m_resurrect = false;
                 }
             }
+
+            /*if (me->GetDeathState() == CORPSE)
+            {
+                me->BuildPlayerRepop();
+                me->RepopAtGraveyard();
+
+                if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                    me->GetMotionMaster()->MoveIdle();
+
+
+
+                if (m_resurrect)
+                {
+                    if (Corpse* corpse = me->GetCorpse())
+                    {
+                        me->TeleportPositionRelocation(corpse->GetPosition());
+                        me->ResurrectPlayer(0.5f);
+                        me->SpawnCorpseBones();
+                        me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+                    }
+                    m_resurrect = false;
+                }
+            }*/
 
             if (me->GetDeathState() == DEAD)
             {
@@ -2135,7 +2164,6 @@ void WorldBotAI::HandleTradeChat(Player* me, uint32 type, uint32 guid1, uint32 g
     {
         // Chat Logic
         bool found = false;
-
 
 
         // send responds

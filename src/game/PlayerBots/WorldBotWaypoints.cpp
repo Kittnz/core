@@ -568,7 +568,7 @@ std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 void WorldBotAI::LoadDBWaypoints()
 {
     float x, y, z = 0.f;
-    uint32 guid, id, area, zone, map, reverse, lastGuidPoint = 0;
+    uint32 guid, id, area, zone, map, reverse, chance, minlevel, lastGuidPoint = 0;
     std::string func, comments = "";
 
     QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, x, y, z, func, area, zone, map, reverse, comments, minlevel FROM worldbot_waypoints ORDER BY guid, id ASC;");
@@ -589,7 +589,9 @@ void WorldBotAI::LoadDBWaypoints()
             zone = fields[7].GetUInt32();
             map = fields[8].GetUInt32();
             reverse = fields[9].GetUInt32();
-            comments = fields[9].GetString();
+            chance = fields[10].GetUInt32();
+            minlevel = fields[11].GetUInt32();
+            comments = fields[12].GetString();
 
             Waypoints wpoint;
             wpoint.guid = guid;
@@ -602,6 +604,8 @@ void WorldBotAI::LoadDBWaypoints()
             wpoint.zone = zone;
             wpoint.map = map;
             wpoint.reverse = reverse;
+            wpoint.chance = chance;
+            wpoint.minlevel = minlevel;
             wpoint.comments = comments;
             myWaypoints.push_back(wpoint);
         }
