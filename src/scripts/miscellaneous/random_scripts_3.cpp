@@ -6252,9 +6252,52 @@ bool QuestRewarded_npc_master_chemist_volterwhite(Player* pPlayer, Creature* pQu
     return false;
 }
 
+bool GossipHello_npc_loremaster_taerlon(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40876) == QUEST_STATUS_INCOMPLETE) // The Horn of Binding
+    {
+        if (pCreature->GetEntry() == 61497 && !pPlayer->HasItemCount(61415, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have come on behalf of Everwyl Moonseeker, he desires to borrow the book 'Bracing of Nature'.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61497, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_loremaster_taerlon(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(61415);
+        if (pPlayer->HasItemCount(61415, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("The Bracing of Nature huh? I remember the name Everwyl fondly. Please, let him know that I expect this returned when he is finished with it.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_loremaster_taerlon";
+    newscript->pGossipHello = &GossipHello_npc_loremaster_taerlon;
+    newscript->pGossipSelect = &GossipSelect_npc_loremaster_taerlon;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_master_chemist_volterwhite";
