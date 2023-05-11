@@ -155,8 +155,8 @@ public:
 
     void OnPlayerLogin() final;
     void UpdateAI(uint32 const diff) final;
+    void SendGroupAcceptPacket();
     void OnPacketReceived(WorldPacket const* packet) final;
-    void SendFakePacket(uint16 opcode) final;
     void MovementInform(uint32 MovementType, uint32 Data = 0) final;
 
     bool DrinkAndEat();
@@ -201,7 +201,6 @@ public:
     void UpdateInCombatAI_Druid() final;
     void UpdateOutOfCombatAI_Druid() final;
 
-    std::vector<LootResponseData> m_lootResponses;
     uint8 m_battlegroundId = 0;
     ShortTimeTracker m_updateTimer;
     ShortTimeTracker m_updateMoveTimer;

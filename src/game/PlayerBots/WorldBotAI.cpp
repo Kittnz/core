@@ -579,74 +579,12 @@ void WorldBotAI::StopMoving()
     me->GetMotionMaster()->MoveIdle();
 }
 
-void WorldBotAI::SendFakePacket(uint16 opcode)
+// not used
+void WorldBotAI::SendGroupAcceptPacket()
 {
-    //printf("Bot send %s\n", LookupOpcodeName(opcode));
-    switch (opcode)
-    {
-        case CMSG_BATTLEMASTER_JOIN:
-        {
-            WorldPacket data(CMSG_BATTLEMASTER_JOIN);
-            data << me->GetObjectGuid();                       // battlemaster guid, or player guid if joining queue from BG portal
-
-            switch (m_battlegroundId)
-            {
-                case BATTLEGROUND_QUEUE_AV:
-                    data << uint32(30);
-                    break;
-                case BATTLEGROUND_QUEUE_WS:
-                    data << uint32(489);
-                    break;
-                case BATTLEGROUND_QUEUE_AB:
-                    data << uint32(529);
-                    break;
-                default:
-                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: Invalid BG queue type!");
-                    botEntry->requestRemoval = true;
-                    return;
-            }
-
-            data << uint32(0);                                 // instance id, 0 if First Available selected
-            data << uint8(0);                                  // join as group
-            me->GetSession()->HandleBattlemasterJoinOpcode(data);
-            return;
-        }
-        case CMSG_LEAVE_BATTLEFIELD:
-        {
-            WorldPacket data(CMSG_LEAVE_BATTLEFIELD);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-            data << uint8(0);                           // unk1
-            data << uint8(0);                           // BattleGroundTypeId-1 ?
-            data << uint16(0);                          // unk2 0
-#endif
-            me->GetSession()->HandleLeaveBattlefieldOpcode(data);
-            return;
-        }
-        case CMSG_LOOT_ROLL:
-        {
-            if (m_lootResponses.empty())
-                return;
-
-            auto loot = m_lootResponses.begin();
-            WorldPacket data(CMSG_LOOT_ROLL);
-            data << uint64((*loot).guid);
-            data << uint32((*loot).slot);
-            data << uint8(0); // pass
-            m_lootResponses.erase(loot);
-            me->GetSession()->HandleLootRoll(data);
-            return;
-        }
-        case CMSG_GROUP_ACCEPT:
-        {
-            // Auto accept a group invite
-            WorldPacket data(CMSG_GROUP_ACCEPT);
-            me->GetSession()->HandleGroupAcceptOpcode(data);
-            return;
-        }
-
-    }
-
-    CombatBotBaseAI::SendFakePacket(opcode);
+    // Auto accept a group invite
+    WorldPacket data(CMSG_GROUP_ACCEPT);
+    me->GetSession()->HandleGroupAcceptOpcode(data);
 }
 
 void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
@@ -666,26 +604,33 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
         }
         case MSG_PVP_LOG_DATA:
         {
+            if (!me)
+                return;
+
             uint8 ended = *((uint8*)(*packet).contents());
             if (ended)
             {
                 m_battlegroundId = 0;
                 m_isBattleBot = false;
-                botEntry->m_pendingResponses.push_back(CMSG_LEAVE_BATTLEFIELD);
+                std::unique_ptr<WorldPacket> data = std::make_unique<WorldPacket>(CMSG_LEAVE_BATTLEFIELD);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+                * data << uint32(me->GetMapId());
+#endif
+                me->GetSession()->QueuePacket(std::move(data));
             }
-            return;
-        }
-        case SMSG_LOOT_START_ROLL:
-        {
-            uint64 guid = *((uint64*)(*packet).contents());
-            uint32 slot = *(((uint32*)(*packet).contents()) + 2);
-            m_lootResponses.emplace_back(LootResponseData(guid, slot));
-            botEntry->m_pendingResponses.push_back(CMSG_LOOT_ROLL);
             return;
         }
         case SMSG_GROUP_INVITE:
         {
-            botEntry->m_pendingResponses.push_back(CMSG_GROUP_ACCEPT);
+            if (!me)
+                return;
+
+            std::unique_ptr<WorldPacket> data = std::make_unique<WorldPacket>(CMSG_GROUP_ACCEPT);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+            * data << uint32(me->GetMapId());
+#endif
+            me->GetSession()->QueuePacket(std::move(data));
+
             break;
         }
         case SMSG_GROUP_LIST:
@@ -1156,7 +1101,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
 
             if (m_receivedBgInvite)
             {
-                SendFakePacket(CMSG_BATTLEFIELD_PORT);
+                SendBattlefieldPortPacket();
                 m_receivedBgInvite = false;
                 return;
             }
@@ -1181,7 +1126,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     return;
                 }
 
-                SendFakePacket(CMSG_BATTLEMASTER_JOIN);
+                SendBattlemasterJoinPacket(m_battlegroundId);
                 return;
             }
 
