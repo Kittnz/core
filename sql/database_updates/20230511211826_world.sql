@@ -357,3 +357,6 @@ DELETE FROM game_event_gameobject WHERE guid = '5015383';
 DELETE FROM gameobject_battleground WHERE guid = '5015383';
 REPLACE INTO `gameobject` VALUES ( 5015384, 2003734, 1, 5499.39, -3686.5, 1594.07, 4.73623, 0, 0, 0.698628, -0.715485, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5015384, 2003734, 1, 5499.39, -3686.5, 1593.87, 4.73623, 0, 0, 0.698628, -0.715485, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = 436.947052, `position_y` = -569.839905, `position_z` = 68.756912, `orientation` = 4.186104 WHERE `guid` = 2572475;
