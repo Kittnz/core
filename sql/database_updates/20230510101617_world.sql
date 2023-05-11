@@ -1221,12 +1221,12 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- Link Greymane Set to the invidual pieces
-update item_template set set_id = 622 where entry = 61313 -- Greymane Helmet
-update item_template set set_id = 622 where entry = 61324 -- Greymane Shoulders
-update item_template set set_id = 622 where entry = 61376 -- Greymane Gauntlets
-update item_template set set_id = 622 where entry = 61378 -- Greymane Legplates
-update item_template set set_id = 622 where entry = 61377 -- Greymane Sabatons
-update item_template set set_id = 622 where entry = 61379 -- Greymane Vambraces
+update item_template set set_id = 622 where entry = 61313; -- Greymane Helmet
+update item_template set set_id = 622 where entry = 61324; -- Greymane Shoulders
+update item_template set set_id = 622 where entry = 61376; -- Greymane Gauntlets
+update item_template set set_id = 622 where entry = 61378; -- Greymane Legplates
+update item_template set set_id = 622 where entry = 61377; -- Greymane Sabatons
+update item_template set set_id = 622 where entry = 61379; -- Greymane Vambraces
 -- Quest Mastering the Formula III (Entry 40869) add the following item requirement : Volatile Aqua (Display ID 15794, quest item, stackable to 1, drops from Volatile Aqua Elemental).
 update quest_template set reqitemid1 = 61408, reqitemcount1 = 1 where entry = 40869;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
@@ -1321,3 +1321,37 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61485, 40875);
 replace into creature_involvedrelation	(id, quest) values (61485, 40875);
+
+-- The Horn of Binding
+delete from quest_template where entry = 40876;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40876,2,616,60,55,512,0,'The Horn of Binding','I was once a trainee with the druids of Hyjal long before the Third War scarred the land. I had the chance to learn much of the more nuanced teachings of druidic magic, and it is there I learned to craft an item called \'The Horn of Binding\'.$B$BI have been working to craft a new horn and bind it to the natural energies here in Winterspring, but I require more materials from across these lands and Hyjal both.$B$BI require: the beaks of Greathorn Owls native to Hyjal, a Vilemusk Horn from the Satyr that also dwell there, a book titled \'Bracing of Nature\' which can be found at Nordanaar, and finally a Moontouched Amulet from the local Owlbeasts here in Winterspring.','Gather 6 Greathorn Beaks, 1 Vilemusk Horn, the book \'Bracing of Nature\', and a Moontouched Amulet to Everwyl Moonseeker at Starfall Village in Winterspring.','These materials will be dangerous to obtain, so I implore you to use caution when searching for them.','The creation of the Horn of Binding shall finally begin, in no small part thanks to your courageous and selfless efforts, $N. It will no doubt take me many days, or even weeks, to read through this old book and remember the steps necessary to finish this ordeal.$B$BI must thank you for what you have done for me. Please, take these items. They are tokens of my time spent in Hyjal, many long years ago... May they serve you better than collecting dust here with me at Starfall Village.',61412,6,61413,1,61414,1,61415,1, 0,0,0,0,0,0,0,0, 0,0, 0,42600,7100,69,300,0,0,0,0,0,0,0,0,0, 61199,1,61411,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61496, 40876);
+replace into creature_involvedrelation	(id, quest) values (61496, 40876);
+
+replace into item_template values
+ ('61411', '2', '10', 'Moonseeker Staff', '', '12286', '2', '0', '1', '226956', '56739', '17', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '16', '6', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '69', '151', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '85', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61412,1294,'Greathorn Beaks',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0),
+(61413,2598,'Vilemusk Horn',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(61414,9657,'Moontouched Amulet',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(61415,1134,'Bracing of Nature',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61336,61412,-52,0,1,1,0),
+(61337,61412,-52,0,1,1,0),
+(61340,61413,-28,0,1,1,0),
+(61339,61413,-28,0,1,1,0),
+(61341,61413,-28,0,1,1,0),
+(61338,61413,-28,0,1,1,0),
+(7453,61414,-22,0,1,1,0);
+
+update creature_template set script_name = 'npc_loremaster_taerlon' where entry = 61497;
