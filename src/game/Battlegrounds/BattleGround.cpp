@@ -688,11 +688,10 @@ void BattleGround::EndBattleGround(Team winner)
         SetWinner(WINNER_NONE);
 
     SetStatus(STATUS_WAIT_LEAVE);
-    //we must set it this way, because end time is sent in packet!
-    m_EndTime = TIME_TO_AUTOREMOVE;
+    SetEndTime(GetTypeID() == BATTLEGROUND_BR ? 15000 : TIME_TO_AUTOREMOVE);
 
-    if (GetTypeID() == BATTLEGROUND_BR)
-        m_EndTime = 15000;
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 
     // If PvP week is active, award experience (5% to the winner team and 2.5% to the others)
     // always reward xp now.
@@ -739,8 +738,8 @@ void BattleGround::EndBattleGround(Team winner)
 
         BlockMovement(pPlayer);
 
-        sBattleGroundMgr.BuildPvpLogDataPacket(&data, this);
-        pPlayer->GetSession()->SendPacket(&data);
+        // Send final scoreboard
+        pPlayer->GetSession()->SendPacket(&m_finalScore);
 
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(GetTypeID());
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, pPlayer->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime());
@@ -939,12 +938,12 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             // a player has left the battleground, so there are free slots -> add to queue
             AddToBGFreeSlotQueue();
             sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, GetBracketId());
-        }
 
-        // Let others know
-        WorldPacket data;
-        sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
-        SendPacketToTeam(team, &data, pPlayer, false);
+            // Let others know
+            WorldPacket data;
+            sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
+            SendPacketToTeam(team, &data, pPlayer, false);
+        }
     }
 
     if (pPlayer)
@@ -1701,6 +1700,9 @@ void BattleGround::EndNow()
     RemoveFromBGFreeSlotQueue();
     SetStatus(STATUS_WAIT_LEAVE);
     SetEndTime(0);
+
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 }
 
 /*
