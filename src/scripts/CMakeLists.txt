@@ -284,7 +284,6 @@ miscellaneous/random_scripts_0.cpp
 miscellaneous/random_scripts_1.cpp
 miscellaneous/random_scripts_2.cpp
 miscellaneous/random_scripts_3.cpp
-miscellaneous/custom_teleports.cpp
 miscellaneous/custom_exploration_triggers.cpp
 
 world/alterac_mountains.cpp

@@ -276,7 +276,6 @@ void AddSC_random_scripts_1();
 void AddSC_random_scripts_2();
 void AddSC_random_scripts_3();
 
-void AddSC_custom_teleports();
 void AddSC_custom_exploration_triggers();
 
 // Scarlet Citadel
@@ -598,7 +597,6 @@ void AddScripts()
     AddSC_random_scripts_2();
     AddSC_random_scripts_3();
 
-    AddSC_custom_teleports();
     AddSC_custom_exploration_triggers();
 
     // Scarlet Citadel
