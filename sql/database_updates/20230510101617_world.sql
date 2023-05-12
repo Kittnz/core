@@ -1475,3 +1475,16 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '44', '0', '0', '0',
  '0', '1', NULL);
 
+-- Talona Gladeheart <Dream Alchemist> , display ID 20257, faction 35, level 58, humanoid, scale 1, quest/gossip flags, gossip text : "I am charged with managing our supplies of rare potions and elixirs.$B$BI was taught by the most talented druidic alchemist years ago, and work to continue his vast research."
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20257, 0, 0, 0, 0);
+
+REPLACE INTO creature_template VALUES
+(61505, 20257, 0, 0, 0, 0, 'Talona Gladeheart', 'Dream Alchemist', 0, 58, 58, 3875, 3875, 0, 0, 3435, 35, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 154, 184, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41471; set @magic_number = 61505;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am charged with managing our supplies of rare potions and elixirs.$B$BI was taught by the most talented druidic alchemist years ago, and work to continue his vast research.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
