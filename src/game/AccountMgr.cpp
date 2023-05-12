@@ -344,7 +344,7 @@ void AccountMgr::Update(uint32 diff)
 
     if (m_fingerprintAutobanTimer < diff)
     {
-        sLog.outInfo("Auto banning %u fingerprints.", (uint32)m_fingerprintAutoban.size());
+        // sLog.outInfo("Auto banning %u fingerprints.", (uint32)m_fingerprintAutoban.size());
         m_fingerprintAutobanTimer = 1 * MINUTE * IN_MILLISECONDS;
 
         for (auto const& fingerprint : m_fingerprintAutoban)
