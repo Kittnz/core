@@ -1533,3 +1533,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 update creature_template set npc_flags = 2 where entry = 61495;
 -- Item entry 61412 rename to Greathorn Beak.
 update item_template set name = 'Greathorn Beak' where entry = 61412;
+-- Object 'Hyjalroot' entry 2020023 , set respawn timer to 10 minutes.
+update gameobject set spawntimesecsmin = 600, spawntimesecsmax = 600 where ID = 2020023;
