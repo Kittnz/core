@@ -1535,3 +1535,5 @@ update creature_template set npc_flags = 2 where entry = 61495;
 update item_template set name = 'Greathorn Beak' where entry = 61412;
 -- Object 'Hyjalroot' entry 2020023 , set respawn timer to 10 minutes.
 update gameobject set spawntimesecsmin = 600, spawntimesecsmax = 600 where ID = 2020023;
+-- NPC Vannamyr Featherwind (entry 61493) change display ID to 4243.
+update creature_template set display_id1 = 4243 where entry = 61493;
