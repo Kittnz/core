@@ -1519,3 +1519,17 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+-- Change item 8547 , Formula: Powerful Smelling Salts to be bind on pickup.
+update item_template set bonding = 1 where entry = 8547;
+-- Item White Tiger Cub (entry 23712) change description text to the following : "It is said no one has laid their eyes upon a White Tiger Cub given the sheer rarity of this species."
+update item_template set description = 'It is said no one has laid their eyes upon a White Tiger Cub given the sheer rarity of this species.' where entry = 23712;
+-- Item 'Volatile Aqua' (entry 61408) needs to drop from NPC Volatile Aqua Elemental (Entry 61489) for the quest 'Mastering the Formula III' (Entry 40869) at 100% drop chance.
+update quest_template set reqitemid1 = 61408, reqitemcount1 = 1 where entry = 40869;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61408,7914,'Volatile Aqua',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61489, 61408, -100, 0, 1, 1, 0);
+-- NPC Paranus (entry 61495) remove gossip flags.
+update creature_template set npc_flags = 2 where entry = 61495;
+-- Item entry 61412 rename to Greathorn Beak.
+update item_template set name = 'Greathorn Beak' where entry = 61412;
