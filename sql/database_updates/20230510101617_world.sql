@@ -1358,7 +1358,7 @@ update creature_template set script_name = 'npc_loremaster_taerlon' where entry 
 
 -- Dead Until Dark
 delete from quest_template where entry = 40877;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40877,2,5179,42,35,0,0,'Dead Until Dark','Listen, $r. We face no shortage of troubles here, but I shan\'t waste your time with mindless errands. Dealing with the pests and beasts that torment our camp is a task I can handle myself.$B$BHowever, I do require your aid in a matter of greater importance. One of our own, Orvan Darkeye, came to Gilneas in search of the lost tomes of Archmage Ur. Yet, the irony of it all - he himself became lost. $B$B<Deathstalker Alynna’s twisted smile conveys her amusement at the situation.>$B$BYour mission is clear: find him, or what little is left of him. Last we heard, he was headed towards Greyshire.','Find Orvan Darkeye for Deathstalker Alynna. He is rumored to be somewhere close to the ruins of Greyshire.','What?','What? That mindless rotbrain thinks I got lost?$B$B<Orvan chuckles darkly>$B$BHow amusing. One less pathetic cur to deal with. As you can see, I am perfectly capable of taking care of myself. But it seems fate has brought you here, and I must admit, I have a need for a servant. And you, my dear, look like a perfect specimen for the job.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,3900,650,68,100,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40877,2,5179,42,35,0,0,'Dead Until Dark','Listen, $r. We face no shortage of troubles here, but I shan\'t waste your time with mindless errands. Dealing with the pests and beasts that torment our camp is a task I can handle myself.$B$BHowever, I do require your aid in a matter of greater importance. One of our own, Orvan Darkeye, came to Gilneas in search of the lost tomes of Archmage Ur. Yet, the irony of it all - he himself became lost. $B$B<Deathstalker Alynna\'s twisted smile conveys her amusement at the situation.>$B$BYour mission is clear: find him, or what little is left of him. Last we heard, he was headed towards Greyshire.','Find Orvan Darkeye for Deathstalker Alynna. He is rumored to be somewhere close to the ruins of Greyshire.','What?','What? That mindless rotbrain thinks I got lost?$B$B<Orvan chuckles darkly>$B$BHow amusing. One less pathetic cur to deal with. As you can see, I am perfectly capable of taking care of myself. But it seems fate has brought you here, and I must admit, I have a need for a servant. And you, my dear, look like a perfect specimen for the job.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,3900,650,68,100,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
 
 replace into creature_questrelation		(id, quest) values (61282, 40877);
 replace into creature_involvedrelation	(id, quest) values (61286, 40877);
@@ -1377,3 +1377,208 @@ replace into creature_loot_template values
 (61230,61416,-60,0,1,1,0),
 (61231,61416,-60,0,1,1,0),
 (61401,61416,-60,0,1,1,0);
+
+-- Last of the Living Dead
+delete from quest_template where entry = 40879;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40877,40879,2,5179,42,35,0,0,'Last of the Living Dead','Greymane may have thought himself safe behind these walls, but he was foolish to believe he could hide from Death. Now, his incompetence comes back to haunt him, and by extension, me. The Scourge still lurk in these lands, constantly interrupting my research and slowing it down considerably. It is time to take matters into our own hands.$B$BI command you to eliminate the remaining Scourge forces in Greyshire.$B$BDo not fail me, for failure is not an option.$B$B<The Forsaken\'s eyes narrow with a cold, calculating intensity.>','Slay 8 Shambling Dead and 8 Lingering Skeletons for Orvan Darkeye at the Ruins of Greyshire in Gilneas.','What are you waiting for? Root them out, destroy them utterly. Their presence here is an affront to the Forsaken and a threat to our operations.','It seems that not all of the Scourge forces were eradicated, but I must commend you for your work nonetheless. Your efforts have weakened their hold on this land and that will have to be enough for now. We cannot afford to underestimate our enemies, especially not the Scourge. They are a relentless force, serving their vile Lich King until the end.$B$BSpeaking of which, what became of the commander of the Scourge invasion here, I wonder? Was he defeated, or is he in hiding, waiting for the Lich King\'s command to resume his invasion of Gilneas?',0,0,0,0,0,0,0,0, 61234,8,61235,8,0,0,0,0, 0,0, 0,22500,3650,68,100,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40879);
+replace into creature_involvedrelation	(id, quest) values (61286, 40879);
+
+-- We Take It From The Living
+delete from quest_template where entry = 40880;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40878,40880,2,5179,43,35,0,0,'We Take It From The Living','I must say, you have proven to be a useful servant, and your mindless loyalty is a rare sight indeed in these times. But I must confess, I wasn\'t exactly truthful with you in the beginning. While my personal pursuit is the search for the works of Ur, I am also here on a mission from the Royal Apothecary Society. We believe that Gilneas is the perfect place to perfect our new weapon against the enemies of the Horde.$B$BBut to do so, I require more blood. Human blood, and worgen blood. It\'s a delicate balance. Take these vials and head south of Stillward Church. There you will find Greymane\'s forces. It shouldn\'t be too difficult to get the blood we need from them. As for the worgen blood... well, they will come to you, one way or another. Just be ready for them when they do.','Bring 15 Gilnean Blood Vials and 15 Worgen Blood Vials to Orvan Darkeye in the Ruins of Grayshire.','Be quick about it, my servant.','Now that is impressive. Let us see how this blood will react with my concoction. If my calculations are correct...',61417,15,61418,15,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,24500,3980,68,100,0,0,0,0,0,0,0,0,0, 61419,1,61420,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40880);
+replace into creature_involvedrelation	(id, quest) values (61286, 40880);
+
+update quest_template set exclusivegroup = -40878 where entry in (40878,40879);
+
+update creature_template set script_name = 'npc_orvan_darkeye' where entry = 61286;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61417,4134,'Gilnean Blood Vial',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0),
+(61418,15741,'Worgen Blood Vial',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61366,61417,-90,0,1,1,0),
+(61363,61417,-90,0,1,1,0),
+(61397,61417,-90,0,1,1,0),
+(61237,61418,-90,0,1,1,0),
+(61238,61418,-90,0,1,1,0),
+(61236,61418,-90,0,1,1,0),
+(61252,61418,-90,0,1,1,0),
+(61253,61418,-90,0,1,1,0),
+(61251,61418,-90,0,1,1,0);
+
+replace into item_template values
+ ('61419', '4', '1', 'Sash of Innocent Blood', '', '9907', '2', '0', '1', '14004', '3501', '6', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '3', '3',
+ '4', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '31', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61420', '4', '3', 'Wreath of Worgen Blood', '', '25904', '2', '0', '1', '27588', '6897', '1', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '10', '4', '5',
+ '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '194', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '60', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Evil Made Me Do It
+delete from quest_template where entry = 40881;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40880,40881,2,5179,46,35,0,0,'The Evil Made Me Do It','I may have... miscalculated a bit. It seems without the knowledge held in the \'Powers of Blood\', I cannot stabilize the mix. I need that book.$B$BI scoured every corner of this land with no success. It can only mean one thing: The book is hidden in the city of Gilneas itself. It looms like an impenetrable fortress, and the thought of trying to find a single book within its walls is overwhelming.$B$BThe city is heavily fortified, and the human forces stationed there are not to be trifled with. They are determined to hold onto what little they have left, and they will stop at nothing to keep their city safe. It will take all of your cunning and stealth to even attempt getting past their defenses.$B$BIf, however, you do manage to locate the book... I will reward you beyond measure.','Find \'On the Powers of Blood\' in Gilneas City, then return to Orvan Darkeye at the Ruins of Greyshire in Gilneas.','Has everything I\'ve done been in vain?','Ah, finally! After all the obstacles and setbacks, I have obtained Ur\'s masterpiece. The secrets of blood magic, and the power to control the very essence of life itself! With this book, I will be unstoppable, and the enemies of the Forsaken will tremble before me.$B$B<The Forsaken flips through the pages, cackling with excitement.>$B$BIt is clear that Ur was a master of his craft. But even he did not fully comprehend the true potential of blood magic. With the knowledge contained in this tome, I will surpass him and become the greatest bloodmage the world has ever known.$B$B<The Forsaken looks up with a wicked grin.>$B$BYou have served me well, my faithful minion. And for that, I will grant you a small taste of the power we will soon wield.',61421,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,22500,5150,68,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40881);
+replace into creature_involvedrelation	(id, quest) values (61286, 40881);
+
+update quest_template set type = 81 where entry = 40881;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61421,34959,'\'On the Powers of Blood\'',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50642);
+
+REPLACE INTO gameobject_template VALUES
+(2020024, 3, 24016, '\'On the Powers of Blood\'', 0, 4, 1, 43, 2020024, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020024,61421,-100,0,1,1,0);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50642, 'Through decades of intensive research, it has become irrefutable that what is conventionally known as Blood Magic does not originate from our World. Those who profess to have attained mastery in this form of spellcasting are, in essence, akin to orcish warlocks, harnessing their abilities from the Twisting Nether itself.', 50643),
+(50643, 'The task that consumed many challenging years was discovering the source of this type of magic. It was evident that it necessitated fuel, in the form of blood, and granted spellcasters access to extraplanar powers. What was unclear, however, was how the link to this "Blood Dimension" was established.', 50644),
+(50644, 'Initially, I delved into the practices of the Gurubashi Trolls and their Blooddrinkers, but their methods proved to be different. Their magic was not connected to this Blood Dimension, as it derived its potency from their Blood God, much like most of the troll magicks. Hence, I quickly abandoned this line of inquiry.', 50645),
+(50645, 'As always, our High Elven comrades proved invaluable. Their ancient manuscripts, predating the legendary Sundering - if one chooses to believe such lore - detailed their spellcasters drawing power from the Blood Dimension, referred to as Vorgendor in their language. The rites mentioned appeared to align with my quest. The use of prodigious amounts of blood could heighten physical strength, intellect, and agility of the practitioner. However, according to the manuscripts, these rituals carried many deleterious effects, including but not limited to madness, visions, and transforming into wolf-like creatures.', 50646),
+(50646, 'Over time, their experiments led to disastrous consequences, as their bodies and minds were twisted and corrupted by the dark energies they had unleashed. The survivors were hunted down and banished from their homeland, their knowledge of Blood Magic lost to the ages.', 50647),
+(50647, 'It was apparent that I had to undertake the investigation myself. The specifics of how I acquired the necessary blood for the rituals need not concern the reader, other than to note that it was accomplished without harm to innocent individuals. <The book now describes Blood Magic rituals with detail.>', 50648),
+(50648, 'It is imperative to emphasize that these practices should be banished and proscribed. The agony I endured was indescribable, and the benefits meager, not to mention the grotesque visions of a world consumed by the Emerald Flame. I have documented this knowledge purely to caution future generations from engaging in these activities, and I fervently hope that the Kirin Tor will forever safeguard these secrets.', 0);
+
+-- Blood for Blood
+delete from quest_template where entry = 40882;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40881,40882,2,5179,46,35,512,0,'Blood for Blood','Behold the new age of the Forsaken! With this tome as my guide, I will unlock the secrets of the Blood Dimension and harness its power for our cause.$B$B<Orvan Darkeye mixes blood with a slimy, green concoction, following the steps described in the tome with meticulous precision. After a while, he turns to you, a wicked grin on his face.>$B$BNow, we must find a test subject for my latest creation. I had planned to force it down your throat, but you have been a faithful servant, and I will spare you this time. Instead, I have a better idea. There is a nearby camp of human mercenaries who are loyal to our cause. I wonder if this concoction will make them even more devoted to our mission.$B$BBefore I can proceed, I require one final favor from you. Report to Master Apothecary Faranell in Undercity. Tell him that the mission was a success.','Report to Master Apothecary Faranell in Undercity.','Yes?','So Orvan was successful after all. Great. You have done a great favor to the Forsaken and to the Horde this day, so you shall be rewarded. Take this vial, my friend. It contains a potent concoction that will enhance your strength simply by breathing in its fumes. Of course, there may be some minor side effects, such as headaches, vomiting, madness, or even death, but I\'m sure you\'ll be fine. After all, what is a little risk compared to the power it can provide?',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 35000,0,950,68,250,0,0,0,0,0,0,0,0,0, 61422,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40882);
+replace into creature_involvedrelation	(id, quest) values ( 2055, 40882);
+
+replace into item_template values
+ ('61422', '4', '0', 'Pure Bloodvial Pendant', '', '609', '3', '0', '1', '39032', '9758', '2', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '9', '7', '5',
+ '5', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Talona Gladeheart <Dream Alchemist> , display ID 20257, faction 35, level 58, humanoid, scale 1, quest/gossip flags, gossip text : "I am charged with managing our supplies of rare potions and elixirs.$B$BI was taught by the most talented druidic alchemist years ago, and work to continue his vast research."
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20257, 0, 0, 0, 0);
+
+REPLACE INTO creature_template VALUES
+(61505, 20257, 0, 0, 0, 0, 'Talona Gladeheart', 'Dream Alchemist', 0, 58, 58, 3875, 3875, 0, 0, 3435, 35, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 154, 184, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41471; set @magic_number = 61505;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am charged with managing our supplies of rare potions and elixirs.$B$BI was taught by the most talented druidic alchemist years ago, and work to continue his vast research.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Enchant Boots: Greater Spirit
+delete from quest_template where entry = 40883;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40883,2,616,60,55,0,0,'Enchant Boots: Greater Spirit','The enchantments known to us here are vast. Though we cannot share all of our secrets, we are willing to pass on certain enchanting formulas as a token of our gratitude for helping us in Hyjal. One such pattern is for a strong boots enchantment if you are interested.','Gather 50 Bright Dream Shard\'s for Evandil Nightwind at Nordanaar in Hyjal.','So, have you made your choice?','May this enchantment be a boon to you and your allies. Its power may just turn the tide in a difficult conflict.',61199,50,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61220,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61485, 40883);
+replace into creature_involvedrelation	(id, quest) values (61485, 40883);
+
+-- Enchant Bracer: Greater Deflection
+delete from quest_template where entry = 40884;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40884,2,616,60,55,0,0,'Enchant Bracer: Greater Deflection','The enchantments known to us here are vast. Though we cannot share all of our secrets, we are willing to pass on certain enchanting formulas as a token of our gratitude for helping us in Hyjal. One such pattern is for a strong bracers enchantment if you are interested.','Gather 50 Bright Dream Shard\'s for Evandil Nightwind at Nordanaar in Hyjal.','So, have you made your choice?','The properties of deflection are well known to us here. I am certain you will make good use it.',61199,50,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61221,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61485, 40884);
+replace into creature_involvedrelation	(id, quest) values (61485, 40884);
+
+-- Dreamtonic
+delete from quest_template where entry = 40885;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40885,2,616,60,55,0,1,'Dreamtonic','I am afraid I cannot offer you our Dreamtonic recipe to be crafted independently. It was discovered by one that is no longer with us, and I do not have their permission to share such secrets to outsiders.$B$BI can however, offer Dreamtonic that was created by myself in exchange for your efforts here in Hyjal. Bring me a single Small Dream Shard in exchange for a single Dreamtonic. That should be a fair trade.','Gather 1 Small Dream Shard for Evandil Nightwind at Nordanaar in Hyjal.','So, do you have a Small Dream Shard?','The effects of this mixture are intense, pace yourself.',61198,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61423,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61505, 40885);
+replace into creature_involvedrelation	(id, quest) values (61505, 40885);
+
+replace into item_template values
+ ('61423', '0', '0', 'Dreamtonic', '', '2797', '1', '0', '1', '3400', '850', '0', '-1', '-1', '55',
+ '50', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Change item 8547 , Formula: Powerful Smelling Salts to be bind on pickup.
+update item_template set bonding = 1 where entry = 8547;
+-- Item White Tiger Cub (entry 23712) change description text to the following : "It is said no one has laid their eyes upon a White Tiger Cub given the sheer rarity of this species."
+update item_template set description = 'It is said no one has laid their eyes upon a White Tiger Cub given the sheer rarity of this species.' where entry = 23712;
+-- Item 'Volatile Aqua' (entry 61408) needs to drop from NPC Volatile Aqua Elemental (Entry 61489) for the quest 'Mastering the Formula III' (Entry 40869) at 100% drop chance.
+update quest_template set reqitemid1 = 61408, reqitemcount1 = 1 where entry = 40869;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61408,7914,'Volatile Aqua',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61489, 61408, -100, 0, 1, 1, 0);
+-- NPC Paranus (entry 61495) remove gossip flags.
+update creature_template set npc_flags = 2 where entry = 61495;
+-- Item entry 61412 rename to Greathorn Beak.
+update item_template set name = 'Greathorn Beak' where entry = 61412;
+-- Object 'Hyjalroot' entry 2020023 , set respawn timer to 10 minutes.
+update gameobject set spawntimesecsmin = 600, spawntimesecsmax = 600 where ID = 2020023;
+-- NPC Vannamyr Featherwind (entry 61493) change display ID to 4243.
+update creature_template set display_id1 = 4243 where entry = 61493;
+-- Quest Blooming Hyjalroot, quest completion text, change the text 'Small Dreamshard' to 'Small Dream Shard'.
+update quest_template set offerrewardtext = 'You have done it. With this Hyjalroot I will be able to bring Paranus back from the edge, and guide him away from the dream. I must thank you $c. Without you, I would have been lost in grief.$B$BTake this Small Dream Shard, as thanks for everything you\'ve done.' where entry = 40870;
+-- NPC ID 61487 should only be a rare and not rare elite.
+-- NPC ID 61487 should cast its spells at its target and not itself.
+update creature_template set rank = 4 where entry = 61487;
+-- Change NPC GUID 2576992 to respawn every 12-24 hours.
+-- NPC ID 61498 should only be a rare and not rare elite.
+-- NPC ID 61498 should cast its spells at its target and not itself.
+-- NPC ID 61498 should be Mechanical creature type.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576992;
+update creature_template set rank = 4, type = 9 where entry = 61498;
+-- Change NPC GUID 2576993 to respawn every 12-24 hours.
+-- NPC ID 61499 should only be a rare and not rare elite.
+-- NPC ID 61499 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576993;
+update creature_template set rank = 4 where entry = 61499;
+-- Change NPC GUID 2576990 to respawn every 12-24 hours.
+-- NPC ID 61500 should only be a rare and not rare elite.
+-- NPC ID 61500 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576990;
+update creature_template set rank = 4 where entry = 61500;
+-- Change NPC GUID 2576994 to respawn every 12-24 hours.
+-- NPC ID 61501 should only be a rare and not rare elite.
+-- NPC ID 61501 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576994;
+update creature_template set rank = 4 where entry = 61501;
+-- Change NPC GUID 2576981 to respawn every 12-24 hours.
+-- NPC ID 61502 should only be a rare and not elite.
+-- NPC ID 61502 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576981;
+update creature_template set rank = 4 where entry = 61502;
+-- Change NPC GUID 2576979 to respawn every 12-24 hours.
+-- NPC ID 61503 should only be a rare and not rare elite.
+-- NPC ID 61503 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576979;
+update creature_template set rank = 4 where entry = 61503;
+-- Change NPC GUID 2576974 to respawn every 12-24 hours.
+-- NPC ID 61504 should only be a rare and not rare elite.
+-- NPC ID 61504 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576974;
+update creature_template set rank = 4 where entry = 61504;
+-- NPC Barkskin Ursa set HP to 11891.
+update creature_tempalte health_min = 11891, health_max = 11891 where entry = 61342;
+-- NPC Barkskin Windtalker set HP to 10403.
+update creature_tempalte health_min = 10403, health_max = 10403 where entry = 61347;
