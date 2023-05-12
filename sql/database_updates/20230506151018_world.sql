@@ -1,1 +1,1 @@
-UPDATE item_template SET bonding = 1, flags = 2048 WHERE entry BETWEEN 12430 AND 12436;
+UPDATE item_template SET bonding = 0, flags = 0 WHERE entry BETWEEN 12430 AND 12436;
