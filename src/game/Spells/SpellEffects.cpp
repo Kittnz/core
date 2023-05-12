@@ -4121,8 +4121,35 @@ void Spell::EffectDispel(SpellEffectIndex eff_idx)
             for (const auto& j : success_list)
             {
                 SpellAuraHolder* dispelledHolder = j.first;
-                data << uint32(dispelledHolder->GetId());   // Spell Id
-                unitTarget->RemoveAuraHolderDueToSpellByDispel(dispelledHolder->GetId(), j.second, dispelledHolder->GetCasterGuid());
+                uint32 removedAura = dispelledHolder->GetId();
+                data << removedAura;   // Spell Id
+                unitTarget->RemoveAuraHolderDueToSpellByDispel(removedAura, j.second, dispelledHolder->GetCasterGuid());
+
+                uint32 counterpart_aura = 0;
+                switch (removedAura)
+                {
+                    case 56508:
+                        counterpart_aura = 56509;
+                        break;
+                    case 56510:
+                        counterpart_aura = 56511;
+                        break;
+                    case 56512:
+                        counterpart_aura = 56513;
+                        break;
+                    case 56514:
+                        counterpart_aura = 56515;
+                        break;
+                    case 56516:
+                        counterpart_aura = 56517;
+                        break;
+                }
+
+                if (counterpart_aura != 0 && unitTarget->GetMapId() == 807)
+                {
+                    if (!unitTarget->HasAura(counterpart_aura))
+                        unitTarget->AddAura(counterpart_aura);
+                }
             }
 
             m_caster->SendMessageToSet(&data, true);

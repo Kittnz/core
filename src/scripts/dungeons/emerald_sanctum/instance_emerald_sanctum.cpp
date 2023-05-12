@@ -1,48 +1,62 @@
 #include "scriptPCH.h"
 #include "emerald_sanctum.h"
 
-struct instance_emerald_sanctum : public ScriptedInstance
+instance_emerald_sanctum::instance_emerald_sanctum(Map* p_Map) : ScriptedInstance(p_Map)
 {
-	explicit instance_emerald_sanctum(Map* p_Map) : ScriptedInstance(p_Map)
-	{
-		instance_emerald_sanctum::Initialize();
-	}
+	instance_emerald_sanctum::Initialize();
+}
 
-	uint64 m_uiSolniusGUID;
+void instance_emerald_sanctum::Initialize()
+{
+	m_uiSolniusGUID = 0;
+	m_mTrashGUID.clear();
+}
 
-	void Initialize() override
+void instance_emerald_sanctum::OnCreatureCreate(Creature* pCreature)
+{
+	switch (pCreature->GetEntry())
 	{
-		m_uiSolniusGUID = 0;
+		case NPC_SOLNIUS:
+			m_uiSolniusGUID = pCreature->GetGUID();
+			break;
+		case NPC_SANCTUM_DREAMER:
+		case NPC_SANCTUM_DRAGONKIN:
+		case NPC_SANCTUM_WYRM:
+		case NPC_SANCTUM_SUPRESSOR:
+		case NPC_SANCTUM_WYRMKIN:
+		case NPC_SANCTUM_SCALEBANE:
+		case NPC_ERENNIUS:
+			m_mTrashGUID.push_back(pCreature->GetGUID());
+			break;
 	}
+}
 
-	void OnCreatureCreate(Creature* pCreature) override
+void instance_emerald_sanctum::OnCreatureDeath(Creature* pCreature)
+{
+	switch (pCreature->GetEntry())
 	{
-		switch (pCreature->GetEntry())
-		{
-			case NPC_SOLNIUS:
-				m_uiSolniusGUID = pCreature->GetGUID();
-				break;
-			case NPC_SANCTUM_DREAMER:
-			case NPC_SANCTUM_DRAGONKIN:
-			case NPC_SANCTUM_WYRM:
-			case NPC_SANCTUM_SUPRESSOR:
-			case NPC_SANCTUM_WYRMKIN:
-			case NPC_SANCTUM_SCALEBANE:
-			case NPC_ERENNIUS:
-				m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
-				break;
-		}
+		case NPC_SANCTUM_DREAMER:
+		case NPC_SANCTUM_DRAGONKIN:
+		case NPC_SANCTUM_WYRM:
+		case NPC_SANCTUM_SUPRESSOR:
+		case NPC_SANCTUM_WYRMKIN:
+		case NPC_SANCTUM_SCALEBANE:
+		case NPC_ERENNIUS:
+			m_mTrashGUID.remove(pCreature->GetGUID());
+			break;
 	}
+}
 
-	uint64 GetData64(uint32 uiData) override
+uint64 instance_emerald_sanctum::GetData64(uint32 uiType)
+{
+	switch (uiType)
 	{
-		switch (uiData)
-		{
-			case DATA_SOLNIUS:
-				return m_uiSolniusGUID;
-		}
+		case DATA_SOLNIUS:
+			return m_uiSolniusGUID;
+		default:
+			return 0;
 	}
-};
+}
 
 InstanceData* GetInstanceData_instance_emerald_sanctum(Map* p_Map)
 {
@@ -336,6 +350,12 @@ struct erenniusAI : public ScriptedAI
 		m_uiCastedCurseOfErennius = false;
 	}
 
+	void EnterCombat(Unit* pWho)
+	{
+		m_creature->MonsterYell("You will not disturb the Awakener...");
+		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_1);
+	}
+
 	void UpdateAI(const uint32 uiDiff) override
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -364,6 +384,18 @@ struct erenniusAI : public ScriptedAI
 		}
 
 		DoMeleeAttackIfReady();
+	}
+
+	void KilledUnit(Unit* pVictim)
+	{
+		m_creature->MonsterYell("Your efforts will disturb everything, begone...");
+		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_2);
+	}
+
+	void JustDied(Unit* pWho)
+	{
+		m_creature->MonsterYell("The shadow must not prevail, the dragonflight must stand... Against it..");
+		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_3);
 	}
 };
 
