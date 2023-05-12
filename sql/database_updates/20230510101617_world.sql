@@ -1537,3 +1537,5 @@ update item_template set name = 'Greathorn Beak' where entry = 61412;
 update gameobject set spawntimesecsmin = 600, spawntimesecsmax = 600 where ID = 2020023;
 -- NPC Vannamyr Featherwind (entry 61493) change display ID to 4243.
 update creature_template set display_id1 = 4243 where entry = 61493;
+-- Quest Blooming Hyjalroot, quest completion text, change the text 'Small Dreamshard' to 'Small Dream Shard'.
+update quest_template set offerrewardtext = 'You have done it. With this Hyjalroot I will be able to bring Paranus back from the edge, and guide him away from the dream. I must thank you $c. Without you, I would have been lost in grief.$B$BTake this Small Dream Shard, as thanks for everything you\'ve done.' where entry = 40870;
