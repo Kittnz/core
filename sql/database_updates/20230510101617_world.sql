@@ -1494,3 +1494,11 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61485, 40883);
 replace into creature_involvedrelation	(id, quest) values (61485, 40883);
+
+-- Enchant Bracer: Greater Deflection
+delete from quest_template where entry = 40884;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40884,2,616,60,55,0,0,'Enchant Bracer: Greater Deflection','The enchantments known to us here are vast. Though we cannot share all of our secrets, we are willing to pass on certain enchanting formulas as a token of our gratitude for helping us in Hyjal. One such pattern is for a strong bracers enchantment if you are interested.','Gather 50 Bright Dream Shard\'s for Evandil Nightwind at Nordanaar in Hyjal.','So, have you made your choice?','The properties of deflection are well known to us here. I am certain you will make good use it.',61199,50,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61221,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61485, 40884);
+replace into creature_involvedrelation	(id, quest) values (61485, 40884);
+
