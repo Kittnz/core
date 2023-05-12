@@ -6289,9 +6289,40 @@ bool GossipSelect_npc_loremaster_taerlon(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+bool QuestRewarded_npc_orvan_darkeye(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40880) // We Take It From The Living
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_STATE_WORK);
+            }, 1000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
+                pQuestGiver->PMonsterEmote("The concoction explodes violently, covering Orvan in blood.");
+            }, 6000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->MonsterSay("Damn it! We will need the blasted book after all.");
+            }, 9000);
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_orvan_darkeye";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_orvan_darkeye;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_loremaster_taerlon";

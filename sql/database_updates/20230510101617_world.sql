@@ -1384,3 +1384,49 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61286, 40879);
 replace into creature_involvedrelation	(id, quest) values (61286, 40879);
+
+-- We Take It From The Living
+delete from quest_template where entry = 40880;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40878,40880,2,5179,43,35,0,0,'We Take It From The Living','I must say, you have proven to be a useful servant, and your mindless loyalty is a rare sight indeed in these times. But I must confess, I wasn\'t exactly truthful with you in the beginning. While my personal pursuit is the search for the works of Ur, I am also here on a mission from the Royal Apothecary Society. We believe that Gilneas is the perfect place to perfect our new weapon against the enemies of the Horde.$B$BBut to do so, I require more blood. Human blood, and worgen blood. It\'s a delicate balance. Take these vials and head south of Stillward Church. There you will find Greymane\'s forces. It shouldn\'t be too difficult to get the blood we need from them. As for the worgen blood... well, they will come to you, one way or another. Just be ready for them when they do.','Bring 15 Gilnean Blood Vials and 15 Worgen Blood Vials to Orvan Darkeye in the Ruins of Grayshire.','Be quick about it, my servant.','Now that is impressive. Let us see how this blood will react with my concoction. If my calculations are correct...',61417,15,61418,15,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,24500,3980,68,100,0,0,0,0,0,0,0,0,0, 61419,1,61420,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61286, 40880);
+replace into creature_involvedrelation	(id, quest) values (61286, 40880);
+
+update quest_template set exclusivegroup = -40878 where entry in (40878,40879);
+
+update creature_template set script_name = 'npc_orvan_darkeye' where entry = 61286;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61417,4134,'Gilnean Blood Vial',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0),
+(61418,15741,'Worgen Blood Vial',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61366,61417,-90,0,1,1,0),
+(61363,61417,-90,0,1,1,0),
+(61397,61417,-90,0,1,1,0),
+(61237,61418,-90,0,1,1,0),
+(61238,61418,-90,0,1,1,0),
+(61236,61418,-90,0,1,1,0),
+(61252,61418,-90,0,1,1,0),
+(61253,61418,-90,0,1,1,0),
+(61251,61418,-90,0,1,1,0);
+
+replace into item_template values
+ ('61419', '4', '1', 'Sash of Innocent Blood', '', '9907', '2', '0', '1', '14004', '3501', '6', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '3', '3',
+ '4', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '31', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61420', '4', '3', 'Wreath of Worgen Blood', '', '25904', '2', '0', '1', '27588', '6897', '1', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '10', '4', '5',
+ '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '194', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '60', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
