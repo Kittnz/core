@@ -16,6 +16,7 @@ struct boss_solniusAI : public ScriptedAI
 	uint32 m_uiEmeraldRotTimer;
 	uint32 m_uiAcidBreathTimer;
 	uint32 m_uiGimmickTimer;
+
 	std::vector<Player*> randomPlayers;
 	bool phaseOne;
 	bool phaseTwo;
@@ -74,29 +75,22 @@ struct boss_solniusAI : public ScriptedAI
 		if (m_creature->GetMapId() != 807)
 			return;
 
-		if (m_creature->GetEntry() != NPC_SANCTUM_DREAMER)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_DREAMER))
-				odd->AI()->AttackStart(pWho);
-		if (m_creature->GetEntry() != NPC_SANCTUM_DRAGONKIN)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_DRAGONKIN))
-				odd->AI()->AttackStart(pWho);
-		if (m_creature->GetEntry() != NPC_SANCTUM_WYRM)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_WYRM))
-				odd->AI()->AttackStart(pWho);
-		if (m_creature->GetEntry() != NPC_SANCTUM_WYRMKIN)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_WYRMKIN))
-				odd->AI()->AttackStart(pWho);
-		if (m_creature->GetEntry() != NPC_SANCTUM_SCALEBANE)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_SCALEBANE))
-				odd->AI()->AttackStart(pWho);
-		if (m_creature->GetEntry() != NPC_SANCTUM_SUPRESSOR)
-			if (Creature* odd = m_pInstance->GetSingleCreatureFromStorage(NPC_SANCTUM_SUPRESSOR))
-				odd->AI()->AttackStart(pWho);
+		if (instance_emerald_sanctum* pInstance = dynamic_cast<instance_emerald_sanctum*>(m_pInstance))
+		{
+			for (auto& helperGUID : pInstance->GetTrashGUID())
+			{
+				if (Creature* pCreature = m_pInstance->GetCreature(helperGUID))
+				{
+					pCreature->AI()->AttackStart(pWho);
+				}
+			}
+		}
 	}
 
 	void JustDied(Unit* pWho)
 	{
 		m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
+		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_3);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -201,6 +195,7 @@ struct boss_solniusAI : public ScriptedAI
 				m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 				m_creature->GetMotionMaster()->MoveTargetedHome();
 				m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
+				m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
 				envPhaseThree = true;
 			}
 		}
@@ -247,6 +242,9 @@ bool GossipHello_boss_solnius(Player* pPlayer, Creature* pCreature)
 	if (ScriptedInstance* pInstance = (ScriptedInstance*)pCreature->GetInstanceData())
 	{
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_START_FIGHT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+		
+		// Random text for now
+		pPlayer->SEND_GOSSIP_MENU(7134, pCreature->GetObjectGuid());
 	}
 
 	return true;
@@ -262,8 +260,10 @@ bool GossipSelect_boss_solnius(Player* pPlayer, Creature* pCreature, uint32 uiSe
 				if (Creature* boss_solnius = pInstance->GetCreature(pInstance->GetData64(DATA_SOLNIUS)))
 				{
 					boss_solnius->MonsterYell("You think you can interfere with my eternal duty? The awakening has been fortold long before your kind has existed mortals, you shall regret setting foot on our hallowed ground!");
+					boss_solnius->PlayDirectSound(SOLNIUS_SAY_SOUND_1);
 					boss_solnius->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 					boss_solnius->SetFactionTemplateId(14);
+					pPlayer->CLOSE_GOSSIP_MENU();
 				}
 		}
 	}

@@ -40,6 +40,34 @@ enum
 	NPC_SANCTUM_WYRMKIN = 60745,
 	NPC_SANCTUM_SCALEBANE = 60746,
 	NPC_ERENNIUS = 60747,
+
+	ERENNIUS_SAY_SOUND_1 = 60376,
+	ERENNIUS_SAY_SOUND_2 = 60377,
+	ERENNIUS_SAY_SOUND_3 = 60378,
+
+	SOLNIUS_SAY_SOUND_1 = 60379,
+	SOLNIUS_SAY_SOUND_2 = 60380,
+	SOLNIUS_SAY_SOUND_3 = 60381,
+};
+
+class instance_emerald_sanctum : public ScriptedInstance
+{
+public:
+	instance_emerald_sanctum(Map* pMap);
+	~instance_emerald_sanctum() override {}
+
+	void Initialize() override;
+
+	void OnCreatureCreate(Creature* pCreature) override;
+	void OnCreatureDeath(Creature* pCreature) override;
+
+	uint64 GetData64(uint32 uiData) override;
+
+	GuidList GetTrashGUID() { return m_mTrashGUID; }
+
+protected:
+	uint64 m_uiSolniusGUID;
+	GuidList m_mTrashGUID;
 };
 
 #endif
