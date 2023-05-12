@@ -1539,3 +1539,46 @@ update gameobject set spawntimesecsmin = 600, spawntimesecsmax = 600 where ID = 
 update creature_template set display_id1 = 4243 where entry = 61493;
 -- Quest Blooming Hyjalroot, quest completion text, change the text 'Small Dreamshard' to 'Small Dream Shard'.
 update quest_template set offerrewardtext = 'You have done it. With this Hyjalroot I will be able to bring Paranus back from the edge, and guide him away from the dream. I must thank you $c. Without you, I would have been lost in grief.$B$BTake this Small Dream Shard, as thanks for everything you\'ve done.' where entry = 40870;
+-- NPC ID 61487 should only be a rare and not rare elite.
+-- NPC ID 61487 should cast its spells at its target and not itself.
+update creature_template set rank = 4 where entry = 61487;
+-- Change NPC GUID 2576992 to respawn every 12-24 hours.
+-- NPC ID 61498 should only be a rare and not rare elite.
+-- NPC ID 61498 should cast its spells at its target and not itself.
+-- NPC ID 61498 should be Mechanical creature type.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576992;
+update creature_template set rank = 4, type = 9 where entry = 61498;
+-- Change NPC GUID 2576993 to respawn every 12-24 hours.
+-- NPC ID 61499 should only be a rare and not rare elite.
+-- NPC ID 61499 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576993;
+update creature_template set rank = 4 where entry = 61499;
+-- Change NPC GUID 2576990 to respawn every 12-24 hours.
+-- NPC ID 61500 should only be a rare and not rare elite.
+-- NPC ID 61500 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576990;
+update creature_template set rank = 4 where entry = 61500;
+-- Change NPC GUID 2576994 to respawn every 12-24 hours.
+-- NPC ID 61501 should only be a rare and not rare elite.
+-- NPC ID 61501 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576994;
+update creature_template set rank = 4 where entry = 61501;
+-- Change NPC GUID 2576981 to respawn every 12-24 hours.
+-- NPC ID 61502 should only be a rare and not elite.
+-- NPC ID 61502 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576981;
+update creature_template set rank = 4 where entry = 61502;
+-- Change NPC GUID 2576979 to respawn every 12-24 hours.
+-- NPC ID 61503 should only be a rare and not rare elite.
+-- NPC ID 61503 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576979;
+update creature_template set rank = 4 where entry = 61503;
+-- Change NPC GUID 2576974 to respawn every 12-24 hours.
+-- NPC ID 61504 should only be a rare and not rare elite.
+-- NPC ID 61504 should cast its spells at its target and not itself.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where guid = 2576974;
+update creature_template set rank = 4 where entry = 61504;
+-- NPC Barkskin Ursa set HP to 11891.
+update creature_tempalte health_min = 11891, health_max = 11891 where entry = 61342;
+-- NPC Barkskin Windtalker set HP to 10403.
+update creature_tempalte health_min = 10403, health_max = 10403 where entry = 61347;
