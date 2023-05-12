@@ -18,8 +18,8 @@ REPLACE INTO `areatrigger_template` (`id`, `map_id`, `x`, `y`, `z`, `radius`, `b
 (5011, 800, -11068.3, -1814.06, 53.9778, 3, 0, 0, 0, 0),
 (5012, 802, 585, 97, 276, 3, 0, 0, 0, 0),
 (5013, 808, -8172.85, -3114.18, 200.625, 3, 0, 0, 0, 0),
-(5014, 0, -1072.1069, 2215.936, 181.895, 3, 0, 0, 0, 0),
-(5015, 815, -1072.106, 2215.936, 181.895, 3, 0, 0, 0, 0);
+(5014, 0, -1096.81, 2234.77, 182.86, 3, 0, 0, 0, 0),
+(5015, 815, -1091.20, 2232.21, 182.86, 3, 0, 0, 0, 0);
 
 DELETE FROM `areatrigger_teleport` WHERE `id` >= 5000;
 
@@ -35,6 +35,6 @@ REPLACE INTO `areatrigger_teleport` (`id`, `name`, `message`, `required_level`, 
 (5011, 'Karazhan Crypt - Exit', '', 0, 0, 0, -11068.9, -1828.6, 60.26, 3.1),
 (5012, 'The Crescent Grove - Exit', '', 0, 0, 1, 1722, -1272.6, 163.26, 5.8),
 (5013, 'Hateforge Quarry - Exit', '', 0, 0, 0, -8169.2, -3106.7, 200.4, 1.1),
-(5014, 'Gilneas City - Entrance', 'You must be at least level 38 to enter.', 38, 0, 815, -1085.504, 2227.3, 182.84, 2.5),
-(5015, 'Gilneas City - Exit', '', 0, 0, 0, -1069.92, 2213.60, 181.290, 5.62);
+(5014, 'Gilneas City - Entrance', 'You must be at least level 38 to enter.', 38, 0, 815, -1100.00, 2237.75, 182.86, 2.6),
+(5015, 'Gilneas City - Exit', '', 0, 0, 0, -1089.86, 2231.4, 182.859, 5.54);
 
