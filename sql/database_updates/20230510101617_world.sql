@@ -2152,3 +2152,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61492, 40904);
 replace into creature_involvedrelation	(id, quest) values (61492, 40904);
 
+-- Change greeting text of npc Elder Barkmaw (Entry 61506) to the following : "The Barkskin Tribe has been lost to aggression. The corruption of Hyjal has taken a toll on my people, and we are all that is left here. It would appear that our sad and tragic downfall is common amongst the other tribes as well."
+update broadcast_text set male_text = 'The Barkskin Tribe has been lost to aggression. The corruption of Hyjal has taken a toll on my people, and we are all that is left here. It would appear that our sad and tragic downfall is common amongst the other tribes as well.' where entry = 61506;
+-- Change greeting text of NPC Nargg (Entry 61507) to the following : "Nargg is loyal, Nargg is strong!$B$BYou threaten Elder Barkmaw, Nargg threaten you! You hurt Elder Barkmaw, Nargg hurt you!" 
+update broadcast_text set male_text = 'Nargg is loyal, Nargg is strong!$B$BYou threaten Elder Barkmaw, Nargg threaten you! You hurt Elder Barkmaw, Nargg hurt you!' where entry = 61507;
