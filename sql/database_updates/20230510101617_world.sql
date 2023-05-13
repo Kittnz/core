@@ -2041,4 +2041,16 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
 
+-- Barkskin Ursa
+delete from quest_template where entry = 40892;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40892,2,616,60,55,0,0,'Barkskin Ursa','The Barkskin Ursa were a group of the most loyal and fearsome warriors within the Tribe. It is they who gravitated to Growlheart and did his bidding.$B$BThe purge led to many deaths, and much suffering. All at the actions of the ursa, who carried out the desires of their master with little care for repercussions.$B$BI bid you to travel to Barkskin Village, and hunt those that dispensed mindless murder. You can find Barkskin Village far to the south, near the foot of Hyjal.$B$BBring me four Ursa Battlehammers as proof of your deed, and you will be rewarded.','Gather 4 Ursa Battlehammers from Barkskin Ursa for Elder Barkmaw at Nordassil Glade in Hyjal.','The ursa should not be taken easily $c. Take your time, and prepare for the coming battle with diligence.','It eases an old mind to know such murderers have met their end, and paid for their actions. I wish I could have seen it myself.$B$BFor your efforts, I offer you one Bright Dream Shard, once highly valued amongst my kind. May you find some use for it.',61441,4,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,43200,7200,0,0,0,0,0,0,0,0,0,0,0, 61199,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61506, 40892);
+replace into creature_involvedrelation	(id, quest) values (61506, 40892);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61441,8285,'Ursa Battlehammer',12,1,2048,1,-1,-1,1,4,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61342,61441,-38,0,1,1,0);
 
