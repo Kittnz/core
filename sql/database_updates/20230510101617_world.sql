@@ -2054,3 +2054,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (61342,61441,-38,0,1,1,0);
 
+-- Barkskin Vengeance
+delete from quest_template where entry = 40893;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40893,2,616,60,55,0,0,'Barkskin Vengeance','Nargg seeks vengeance upon other Barkskin for evil deeds. Barkskin slay many friends of Nargg, including father.$B$BTribe no longer what it was, it angry, and it evil. Nargg asks you to do what Nargg cannot do. Slay Barkskin and reclaim Barkskin Pendants, they can be found on any Barkskin Furbolg.','Gather 10 Barkskin Pendants for Nargg at Nordassil Glade in Hyjal.','You do what Nargg ask, you bring death to evil Barkskin?','Nargg is pleased, Nargg is happy.$B$BA fire still burns deep within, anger not sated. Take this, as thanks from Nargg.',61442,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 8500,39600,6600,0,0,0,0,0,0,0,0,0,0,0, 61198,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61507, 40893);
+replace into creature_involvedrelation	(id, quest) values (61507, 40893);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61442,32073,'Barkskin Pendant',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61343,61442,-35,0,1,1,0),
+(61344,61442,-35,0,1,1,0),
+(61345,61442,-35,0,1,1,0),
+(61346,61442,-35,0,1,1,0),
+(61342,61442,-70,0,1,1,0),
+(61347,61442,-70,0,1,1,0);
