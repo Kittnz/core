@@ -2011,3 +2011,34 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61491, 40890);
 replace into creature_involvedrelation	(id, quest) values (61491, 40890);
+
+-- The Corruption of the Barkskin Tribe
+delete from quest_template where entry = 40891;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40891,2,616,60,55,512,0,'The Corruption of the Barkskin Tribe','The Barkskin Tribe was ruled by two elders. Myself, and Elder Barkmaw, a rather seasoned and old warrior who rose to prominence from his aggressive nature and impactful speeches.$B$BI do not blame the corruption of the Barkskin Tribe on any of its warriors, gardeners, or ursa. I blame it solely on Elder Growlheart. During his reign, he grew more and more hostile, leading to a culling of many I would have called dearest friends.$B$BElder Growlheart must be killed if there is even a minor chance the Barkskin tribe can be recovered. You will notice him by his discolored fur, he acquired this look from his addiction to a tainted sap him and his most loyal consume.$B$BYou can find Barkskin village to the southwest, near the bottom of the Hyjal itself.','Find and slay Elder Growlheart deep within Barkskin Village for Elder Barkmaw at Nordassil Glade in Hyjal.','I would advise caution, Barkskin Village is a place of great hostility and skilled ursa.','I can feel a weight leaving my shoulders knowing justice has been brought after so much horror. I have no doubt in my mind his most loyal allies fought and died alongside him.$B$BWords enough cannot express my thanks to you. Please, take these items as a token of appreciation from myself.',0,0,0,0,0,0,0,0, 61348,1,0,0,0,0,0,0, 0,0, 7500,43200,7200,0,0,0,0,0,0,0,0,0,0,0, 61198,1,61199,1,0,0,0,0, 61439,1,61440,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61506, 40891);
+replace into creature_involvedrelation	(id, quest) values (61506, 40891);
+
+update quest_template set type = 1 where entry = 40891;
+
+replace into item_template values
+ ('61439', '4', '0', 'Rod of Nargg', '', '66429', '3', '0', '1', '61632', '15408', '23', '-1', '-1', '64',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10',
+ '0', '0', '0', '45433', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61440', '4', '1', 'Barkskin Elder Cuffs', '', '6738', '3', '0', '1', '43444', '10861', '9', '-1', '-1', '64',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '4', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '36', '0', '0', '0',
+ '0', '0', '0', '9395', '1', '0', '0', '-1', '0', '-1', '45420', '1', '0', '0', '-1', '0', '-1', '21361', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+
