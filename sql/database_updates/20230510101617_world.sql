@@ -2071,3 +2071,14 @@ replace into creature_loot_template values
 (61346,61442,-35,0,1,1,0),
 (61342,61442,-70,0,1,1,0),
 (61347,61442,-70,0,1,1,0);
+
+-- Continued Barkskin Vengeance
+delete from quest_template where entry = 40894;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40893,40894,2,616,60,55,0,1,'Continued Barkskin Vengeance','Nargg still seeks vengeance upon the Barkskin for what they have done. Barkskin slayed many friends of Nargg, and must pay!$B$BTribe no longer what it was, it angry, and it evil. Nargg ask you to do what Nargg cannot do. Slay Barkskin and reclaim Barkskin Pendants, they can be found on any Barkskin Furbolg.','Gather 10 Barkskin Pendants for Nargg at Nordassil Glade in Hyjal.','You do what Nargg ask, you bring death to evil Barkskin?','Nargg is pleased, Nargg is happy.$B$BA fire still burns deep within, anger not sated. Take this, as thanks from Nargg.',61442,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61198,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61507, 40894);
+replace into creature_involvedrelation	(id, quest) values (61507, 40894);
+
+-- NPC Loremaster Taerlon add subname <Wardens of Nordrassil>.
+update creature_template set subname = 'Wardens of Nordrassil' where entry = 61497;
+
