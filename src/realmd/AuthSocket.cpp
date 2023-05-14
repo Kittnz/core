@@ -1310,30 +1310,6 @@ bool AuthSocket::VerifyPinData(uint32 pin, const PINData& clientData)
     return !memcmp(hash.AsDecStr(), clientHash.AsDecStr(), 20);
 }
 
-uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
-{
-    size_t keySize = b32key.length();
-    int bufsize = (keySize + 7) / 8 * 5;
-    std::vector<uint8_t> encoded;
-    encoded.resize(bufsize);
-    uint32 hmacResSize = 20;
-    uint8 hmacRes[20];
-    uint64 timestamp = timeOffset / 30;
-    uint8 challenge[8];
-
-    for (int i = 8; i--; timestamp >>= 8)
-        challenge[i] = timestamp;
-
-    base32_decode((const uint8_t*)b32key.data(),(uint8_t*)encoded.data(), bufsize);
-    HMAC(EVP_sha1(), encoded.data(), bufsize, challenge, 8, hmacRes, &hmacResSize);
-
-    uint32 offset = hmacRes[19] & 0xF;
-    uint32 truncHash = (hmacRes[offset] << 24) | (hmacRes[offset + 1] << 16) | (hmacRes[offset + 2] << 8) | (hmacRes[offset + 3]);
-    truncHash &= 0x7FFFFFFF;
-
-    return truncHash % 1000000;
-}
-
 bool AuthSocket::ValidateToken(std::string const& secretString, PINData& data)
 {
     time_t now = time(nullptr);

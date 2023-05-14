@@ -169,6 +169,15 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         if (discordLogFile)
             fclose(discordLogFile);
 
+        discordLogFile = nullptr;
+
+        if (discordCoreLogFile)
+            fclose(discordCoreLogFile);
+
+        discordCoreLogFile = nullptr;
+
+        
+
         for (auto& logFile : logFiles)
         {
             if (logFile != nullptr)
@@ -230,6 +239,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
         void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
         void outDiscord(char const* str, ...) ATTR_PRINTF(2, 3);
+        void outDiscordCore(char const* str, ...) ATTR_PRINTF(2, 3);
         void outSpam(char const* wrd, ...) ATTR_PRINTF(2, 3);
         void outErrorDb(); // any log level
         void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
@@ -263,6 +273,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* wardenLogfile;
         FILE* anticheatLogfile;
         FILE* discordLogFile;
+        FILE* discordCoreLogFile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;

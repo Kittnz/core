@@ -20,7 +20,8 @@ namespace DiscordBot
     {
         Successful = 1,
         AlreadyAuthed,
-        WrongCredentials
+        WrongCredentials,
+        WrongTwoFactorToken
     };
 
     class AuthManager
@@ -43,13 +44,13 @@ namespace DiscordBot
         const AuthenticationInfo* GetAuthInfo(const dpp::user* user) const;
         const AuthenticationInfo* GetAuthInfo(uint32_t gameAccountId) const;
 
-        AuthResult Login(std::string username, std::string password, const dpp::user* user);
+        AuthResult Login(std::string username, std::string password, std::string twofactorToken, const dpp::user* user);
         void Logout(const dpp::user* user);
 
     private:
         AuthManager() = default;
 
-        AuthResult Authenticate(std::string username, std::string password, const dpp::user* user);
+        AuthResult Authenticate(std::string username, std::string password, std::string twofactorToken, const dpp::user* user);
 
         std::unordered_map<dpp::snowflake, AuthenticationInfo> _authData;
         std::unordered_map<uint32_t, std::reference_wrapper<AuthenticationInfo>> _authDataLookup;

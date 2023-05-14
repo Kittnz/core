@@ -313,6 +313,7 @@ void Log::Initialize()
     wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a+");
     anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a+");
     discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a+");
+    discordCoreLogFile = openLogFile("DiscordCoreLogFile", "DiscordLogTimestamp", "a+");
     raidLogFile = openLogFile("RaidLogFile", "RaidLogTimestamp", "a+");
     logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a+");
     logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a+");
@@ -942,6 +943,7 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
     fflush(stdout);
 }
 
+//For application-level Discord bot logging.
 void Log::outDiscord(char const* str, ...)
 {
     if (!str)
@@ -958,6 +960,35 @@ void Log::outDiscord(char const* str, ...)
     printf("\n");
 
     if (discordLogFile)
+    {
+        va_list ap;
+        outTimestamp(logfile);
+        va_start(ap, str);
+        vfprintf(logfile, str, ap);
+        fprintf(logfile, "\n");
+        va_end(ap);
+        fflush(logfile);
+    }
+}
+
+
+//For internal Discord hooks such as rate limits and bad gateways.
+void Log::outDiscordCore(char const* str, ...)
+{
+    if (!str)
+        return;
+
+    if (m_includeTime)
+        outTime(stdout);
+
+    va_list ap;
+    va_start(ap, str);
+    vutf8printf(stdout, str, &ap);
+    va_end(ap);
+
+    printf("\n");
+
+    if (discordCoreLogFile)
     {
         va_list ap;
         outTimestamp(logfile);
