@@ -754,4 +754,4 @@ uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
     truncHash &= 0x7FFFFFFF;
 
     return truncHash % 1000000;
-}uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
+}
