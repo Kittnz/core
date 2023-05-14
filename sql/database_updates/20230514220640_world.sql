@@ -209,3 +209,6 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577142,10, -8406.701172,1023.908752,68.384216, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577142,11, -8415.847656,1023.890686,68.384216, 100);
 REPLACE INTO `creature` VALUES (2577142,80236,0,0,0,0,-8420.82,1028.94,68.3842,0.734729,300,300,0,100,100,2,0,0);
+REPLACE INTO `gameobject` VALUES ( 5015476, 2004092, 0, -4919.29, 600.021, 384.86, 1.37754, 0, 0, 0.63559, 0.772027, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015477, 2004092, 0, -4920.9, 600.01, 384.861, 1.18059, 0, 0, 0.556605, 0.830777, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015477, 2004092, 0, -4920.79, 600.393, 384.861, 1.18059, 0, 0, 0.556605, 0.830777, 300, 300, 100, 1, 0, 0);
