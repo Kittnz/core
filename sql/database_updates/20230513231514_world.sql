@@ -321,3 +321,7 @@ DELETE FROM creature_movement WHERE id=2576485;
 DELETE FROM game_event_creature WHERE guid=2576485;
 DELETE FROM game_event_creature_data WHERE guid=2576485;
 DELETE FROM creature_battleground WHERE guid=2576485;
+
+-- Changes by TAMMO
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417653000996396, 0.800000);
+REPLACE INTO `gameobject` VALUES ( 5015084, 2020015, 815, -1340.41, 2259.09, 187.132, 5.88187, 0, 0, 0.199314, -0.979936, 10, 10, 100, 1, 0, 0);
