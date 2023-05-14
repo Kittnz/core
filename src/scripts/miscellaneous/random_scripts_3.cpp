@@ -2614,12 +2614,23 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
     {
         Creature* npc_cookie = pQuestGiver->SummonCreature(60709, -11410.70F, 1966.56F, 10.60F, 6.12F, TEMPSUMMON_TIMED_DESPAWN, 0.125 * MINUTE * IN_MILLISECONDS);
 
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 5 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
+            auto npc = player->GetMap()->GetCreature(npcGuid);
+            if (!npc)
+                return;
+
             Creature* npc_cookie = npc->FindNearestCreature(60709, 30.0F);
+            if (!npc_cookie)
+                return;
+
             npc_cookie->PMonsterEmote("Cookie looks at Grayson with sadness in his eyes and waves him off.");
             npc_cookie->MonsterSay("Mrrgl?");
             });
-        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
+            auto npc = player->GetMap()->GetCreature(npcGuid);
+            if (!npc)
+                return;
+
             Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
             npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
             });
