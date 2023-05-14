@@ -817,3 +817,168 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,14, -2140.034668,792.328247,154.713928, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,15, -2132.665039,803.542969,154.612091, 100);
 REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,300,300,0,100,100,2,0,0);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015443, 2003332, 815, -1336.41, 2260.25, 186.751, 4.76674, 0, 0, 0.687633, -0.726059, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015443, 2003332, 815, -1336.41, 2260.25, 186.751, 4.76674, 0, 0, 0.687633, -0.726059, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015443, 2003332, 815, -1336.49, 2260.47, 186.751, 4.76674, 0, 0, 0.687633, -0.726059, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015463, 2003230, 815, -1349.37, 2259.34, 187.209, 1.5775, 0, 0, 0.709473, 0.704732, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2577119;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,1, -2128.560303,809.575928,154.637405, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,2, -2134.358887,798.466553,154.612946, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,3, -2145.054688,784.636475,154.685669, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,4, -2153.720459,773.784058,154.611740, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,5, -2160.467041,766.624207,154.611740, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,6, -2172.767822,751.739502,154.611725, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,7, -2194.728760,746.195007,154.611725, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015464, 2003230, 815, -1339.44, 2271.56, 185.727, 4.66334, 0, 0, 0.724234, -0.689555, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,8, -2206.588379,758.953979,154.613083, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,9, -2214.752686,756.447998,154.611679, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,10, -2207.928467,737.518311,154.599838, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,11, -2181.007080,746.361755,154.610275, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,12, -2166.253906,759.941589,154.610275, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,13, -2155.785156,772.037231,154.611771, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,14, -2144.273926,787.101013,154.750702, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,15, -2135.361572,798.979797,154.645248, 100);
+REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,300,300,0,100,100,2,0,0);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015465, 2010833, 815, -1343.21, 2264.76, 185.728, 3.12709, 0, 0, 0.999974, 0.00724961, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5015465';
+DELETE FROM game_event_gameobject WHERE guid = '5015465';
+DELETE FROM gameobject_battleground WHERE guid = '5015465';
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2577120,61477,0,0,0,1,-2124.6,828.607,154.612,2.60755,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2577120,61477,0,0,0,1,-2124.6,828.607,154.612,2.60755,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2577120;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,1, -2124.600342,828.607422,154.611877, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,2, -2141.069336,839.052368,154.648453, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,3, -2169.029541,838.706116,154.780350, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,4, -2207.780518,827.631226,154.624359, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015466, 2010050, 815, -1347.22, 2272.14, 185.726, 1.54998, 0, 0, 0.699707, 0.71443, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,5, -2173.632812,839.007263,154.918411, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,6, -2140.887451,838.989624,154.647995, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577120,7, -2131.960693,832.611877,154.612946, 100);
+REPLACE INTO `creature` VALUES (2577120,61477,0,0,0,1,-2124.6,828.607,154.612,2.60755,300,300,0,100,100,2,0,0);
+DELETE FROM gameobject WHERE guid = '5015466';
+DELETE FROM game_event_gameobject WHERE guid = '5015466';
+DELETE FROM gameobject_battleground WHERE guid = '5015466';
+REPLACE INTO `creature` VALUES (2577121,61477,0,0,0,1,-2214,663.766,133.276,1.42079,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2577121,61477,0,0,0,1,-2214,663.766,133.276,1.42079,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2577121;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,1, -2213.999023,663.766479,133.275955, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,2, -2210.048096,684.390076,139.764572, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,3, -2203.920654,734.020569,154.418518, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,4, -2203.957764,696.224731,143.728668, 100);
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015406';
+DELETE FROM game_event_gameobject WHERE guid = '5015406';
+DELETE FROM gameobject_battleground WHERE guid = '5015406';
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,5, -2208.084229,680.955505,138.769821, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577121,6, -2214.325439,670.909241,134.827133, 100);
+REPLACE INTO `creature` VALUES (2577121,61477,0,0,0,1,-2214,663.766,133.276,1.42079,300,300,0,100,100,2,0,0);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015467, 2003230, 815, -1351.19, 2264.98, 185.726, 3.11584, 0, 0, 0.999917, 0.0128759, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015468, 2003078, 815, -1351.2, 2264.99, 186.969, 3.16296, 0, 0, 0.999943, -0.0106831, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -2192.834717, `position_y` = 585.046387, `position_z` = 137.356476, `orientation` = 4.585949 WHERE `guid` = 2575752;
+REPLACE INTO `creature` VALUES (2575752,40012,0,0,0,1,-2192.83,585.046,137.356,4.58595,120,120,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2575752;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,1, -2192.834717,585.046387,137.356476, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015469, 2003075, 815, -1350.91, 2265.32, 186.969, 4.01119, 0, 0, 0.906955, -0.421227, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,2, -2195.891846,559.932068,137.350082, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015470, 2003070, 815, -1350.85, 2264.67, 186.969, 0.983476, 0, 0, 0.472158, 0.881514, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,3, -2203.339355,559.463013,137.350082, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,4, -2203.193604,552.033020,137.350082, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,5, -2210.777100,552.772400,137.350082, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,6, -2219.243896,553.362610,136.140411, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015471, 2003065, 815, -1351.42, 2264.56, 186.969, 3.14725, 0, 0, 0.999996, -0.00282768, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,7, -2221.472900,543.655823,136.050995, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,8, -2220.633057,556.460693,136.157440, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,9, -2213.407227,559.532776,136.077148, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,10, -2209.699951,561.137207,137.349472, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,11, -2201.482178,565.851868,137.349472, 100);
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015471';
+DELETE FROM game_event_gameobject WHERE guid = '5015471';
+DELETE FROM gameobject_battleground WHERE guid = '5015471';
+
+-- Changes by TAMMO
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2575752,12, -2199.597656,581.157288,137.349472, 100);
+REPLACE INTO `creature` VALUES (2575752,40012,0,0,0,1,-2192.83,585.046,137.356,4.58595,120,120,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2576362,40012,0,0,0,1,-2222.38,560.241,136.18,2.97794,120,120,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576362;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,1, -2222.379883,560.241028,136.179993, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,2, -2224.335693,561.799072,136.199478, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,3, -2220.317383,559.997253,136.156418, 100);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015472, 2003066, 815, -1351.53, 2264.56, 186.969, 3.13547, 0, 0, 0.999995, 0.00306184, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2576362,40012,0,0,0,1,-2222.38,560.241,136.18,2.97794,120,120,0,100,100,2,0,0);
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015473, 2003065, 815, -1347.6, 2259.48, 186.968, 1.77437, 0, 0, 0.775296, 0.631598, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2577122,61477,0,0,0,1,-2210.52,525.156,137.973,4.81765,120,120,0,100,100,0,0,0);
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015473';
+DELETE FROM game_event_gameobject WHERE guid = '5015473';
+DELETE FROM gameobject_battleground WHERE guid = '5015473';
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2577122,61477,0,0,0,1,-2210.52,525.156,137.973,4.81765,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2577122;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,1, -2210.516602,525.155518,137.972763, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,2, -2204.765137,503.001038,143.910583, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,3, -2205.347412,478.028687,151.950745, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,4, -2203.389160,444.659424,163.084839, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,5, -2210.096191,475.204498,152.381851, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,6, -2207.953369,503.539337,143.569824, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577122,7, -2211.030273,528.189453,137.802002, 100);
+REPLACE INTO `creature` VALUES (2577122,61477,0,0,0,1,-2210.52,525.156,137.973,4.81765,300,300,0,100,100,2,0,0);
+DELETE FROM creature WHERE guid=2576360;
+DELETE FROM creature_addon WHERE guid=2576360;
+DELETE FROM creature_movement WHERE id=2576360;
+DELETE FROM game_event_creature WHERE guid=2576360;
+DELETE FROM game_event_creature_data WHERE guid=2576360;
+DELETE FROM creature_battleground WHERE guid=2576360;
+UPDATE `creature` SET `position_x` = -2215.068359, `position_y` = 569.762756, `position_z` = 136.104034, `orientation` = 5.006145 WHERE `guid` = 2576423;
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015462';
+DELETE FROM game_event_gameobject WHERE guid = '5015462';
+DELETE FROM gameobject_battleground WHERE guid = '5015462';
