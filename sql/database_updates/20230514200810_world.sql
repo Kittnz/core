@@ -96,3 +96,30 @@ replace into item_template (entry, name, description, class, subclass, material,
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (61277, 'Cleaver of the Forgotten Order', 'Add Order proc to spellid_2 when added: Smites for 175-225 Holy damage and increases Strength by 50 for 15 sec.', 2, 1, 1, 4, 66441, 0, 60, 1, -1, -1, 589215, 147303, 17, 1, 0, 0, 1, 1, 0, 194, 297, 3600, 0, 0, 120, 0, 0, 0, 71, 0, 65, 0, 0, 0, 0, 0, 0, 4, 25, 7, 10, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (61284, 'Vest of Encroaching Darkness', '', 4, 1, 7, 4, 25462, 1, 60, 0, -1, -1, 181368, 45342, 5, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 60, 0, 0, 72, 0, 65, 0, 0, 0, 0, 0, 0, 5, 16, 6, 16, 23727, 1, 0, 0, -1, 0, -1, 45421, 1, 0, 0, 0, 0, 0, 18055, 1, 0, 0, -1, 0, -1, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (61299, 'Shawl of the Castellan', 'Add to spellid_3 when added: Agile Maneuver: When struck has an 1% chance to increase your Dodge chance by 80% for 1.5 sec.', 4, 0, 1, 4, 32426, 1, 60, 0, -1, -1, 185817, 46454, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 0, 65, 0, 0, 0, 0, 0, 0, 13670, 1, 0, 0, -1, 0, -1, 8815, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Changes based on feedback
+update item_template set spellppmRate_1 = 1.4 where entry = 17182; -- Sulfuras, Hand of Ragnaros
+update item_template set spellid_1 = 23727, spellid_2 = 18056 where entry = 21698; -- Leggings of Immersion
+update item_template set spellid_1 = 8815, spellid_2 = 27037, stat_value1 = 30 where entry = 23073; -- Boots of Displacement
+-- change kara10 reed leather healer set to cloth
+update item_template set armor = 95, max_durability = 100, subclass = 1 where entry = 61250; -- Reedwoven Tunic
+update item_template set armor = 53, max_durability = 30, subclass = 1 where entry = 61254; -- Reedmesh Belt
+update item_template set armor = 97, max_durability = 75, subclass = 1 where entry = 61256; -- Leggings of the Misty Marsh
+update item_template set armor = 42, max_durability = 30, subclass = 1 where entry = 61245; -- Bracers of Brambled Vines
+-- underpowered hyjal quest item
+update item_template set stat_value1 = 11, stat_value2 = 11 where entry = 61440; -- Barkskin Elder Cuffs
+-- fix kara10 items
+update item_template set inventory_type = 5 where entry = 61269; -- Clutchweave Robe
+update item_template set spellid_2 = 48036 where entry = 61263; -- Tooth of the Packlord
+update item_template set spellid_1 = 48034, spellid_2 = 45418 where entry = 61246; -- Sabatons of the Endless March
+update item_template set display_id = 66391 where entry = 61248; -- Beasthunter's Blunderbuss
+update item_template set inventory_type = 14, subclass = 5 where entry = 61276; -- Hyperchromatic Deflector
+update item_template set display_id = 66438 where entry = 61272; -- Deepstone Boots
+update item_template set spellid_1 = 48034 where entry = 61246; -- Sabatons of the Endless March
+update item_template set display_id = 14467 where entry = 61298; -- Overgrown Gloves
+update item_template set max_count = 1 where entry = 61299; -- Shawl of the Castellan
+update item_template set description = '' where entry = 61264; -- Ansirem's Runeweaver
+update item_template set name = 'Fist of the Forgotten Order', subclass = 5, display_id = 36714 where entry = 61264; -- Ansirem's Runeweaver
+update item_template set inventory_type = 10 where entry = 61253; -- Aetherforged Gauntlets
+-- fix a gilneas item
+update item_template set stat_value3 = 0 where entry = 61420; -- Wreath of Worgen Blood
