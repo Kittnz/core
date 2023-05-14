@@ -728,3 +728,92 @@ REPLACE INTO `gameobject` VALUES ( 5015438, 2003332, 815, -1337.75, 2271.01, 186
 UPDATE `creature` SET `position_x` = -1382.131714, `position_y` = 2229.544678, `position_z` = 187.304474, `orientation` = 6.021053 WHERE `guid` = 2577117;
 UPDATE `creature` SET `position_x` = -1382.245239, `position_y` = 2229.575195, `position_z` = 187.304474, `orientation` = 6.021053 WHERE `guid` = 2577117;
 UPDATE `creature` SET `position_x` = -1380.961914, `position_y` = 2229.152100, `position_z` = 187.304474, `orientation` = 2.863754 WHERE `guid` = 2577117;
+UPDATE `creature` SET `position_x` = -1382.231445, `position_y` = 2229.515137, `position_z` = 187.304474, `orientation` = 6.044619 WHERE `guid` = 2577117;
+UPDATE `creature` SET `position_x` = -1382.184326, `position_y` = 2229.604248, `position_z` = 187.304474, `orientation` = 6.044623 WHERE `guid` = 2577117;
+UPDATE `creature` SET `position_x` = -1382.202637, `position_y` = 2229.529053, `position_z` = 187.304474, `orientation` = 6.044623 WHERE `guid` = 2577117;
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015456, 2003566, 815, -1339.42, 2271.64, 185.726, 4.63428, 0, 0, 0.734175, -0.67896, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -1382.138672, `position_y` = 2229.510742, `position_z` = 187.304474, `orientation` = 6.005354 WHERE `guid` = 2577117;
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015456, 2003566, 815, -1339.42, 2271.64, 185.726, 4.63428, 0, 0, 0.734175, -0.67896, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5015456';
+DELETE FROM game_event_gameobject WHERE guid = '5015456';
+DELETE FROM gameobject_battleground WHERE guid = '5015456';
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -1382.118896, `position_y` = 2229.555176, `position_z` = 187.304474, `orientation` = 6.032839 WHERE `guid` = 2577117;
+UPDATE `creature` SET `position_x` = -1382.118896, `position_y` = 2229.555176, `position_z` = 187.304474, `orientation` = 6.032839 WHERE `guid` = 2577117;
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015457, 2003566, 815, -1339.42, 2271.64, 185.726, 6.17366, 0, 0, 0.0547349, -0.998501, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -1382.118896, `position_y` = 2229.555176, `position_z` = 187.304474, `orientation` = 6.032839 WHERE `guid` = 2577117;
+
+-- Changes by ALISAIE
+REPLACE INTO `gameobject` VALUES ( 5015457, 2003566, 815, -1339.42, 2271.64, 185.726, 6.17366, 0, 0, 0.0547349, -0.998501, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -1382.116821, `position_y` = 2229.524170, `position_z` = 187.304474, `orientation` = 6.006930 WHERE `guid` = 2577117;
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015457';
+DELETE FROM game_event_gameobject WHERE guid = '5015457';
+DELETE FROM gameobject_battleground WHERE guid = '5015457';
+REPLACE INTO `gameobject` VALUES ( 5015458, 2003566, 815, -1339.42, 2271.64, 185.726, 6.27969, 0, 0, 0.00175014, -0.999998, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5015458';
+DELETE FROM game_event_gameobject WHERE guid = '5015458';
+DELETE FROM gameobject_battleground WHERE guid = '5015458';
+REPLACE INTO `gameobject` VALUES ( 5015459, 2003566, 815, -1339.42, 2271.64, 185.726, 6.27969, 0, 0, 0.00175014, -0.999998, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = -1382.165771, `position_y` = 2229.534180, `position_z` = 187.304474, `orientation` = 6.083114 WHERE `guid` = 2577117;
+UPDATE `creature` SET `position_x` = -1380.944580, `position_y` = 2229.189209, `position_z` = 187.304718, `orientation` = 2.823712 WHERE `guid` = 2577118;
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015459';
+DELETE FROM game_event_gameobject WHERE guid = '5015459';
+DELETE FROM gameobject_battleground WHERE guid = '5015459';
+REPLACE INTO `gameobject` VALUES ( 5015460, 2004503, 815, -1349.3, 2259.29, 187.209, 1.63484, 0, 0, 0.729384, 0.684104, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5015460';
+DELETE FROM game_event_gameobject WHERE guid = '5015460';
+DELETE FROM gameobject_battleground WHERE guid = '5015460';
+REPLACE INTO `gameobject` VALUES ( 5015461, 2004135, 815, -1349.36, 2259.4, 187.209, 1.48719, 0, 0, 0.67694, 0.736038, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+REPLACE INTO `gameobject` VALUES ( 5015429, 2003558, 815, -1336.35, 2259.9, 186.751, 0.0552396, 0, 0, 0.0276163, 0.999619, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015429, 2003558, 815, -1336.35, 2259.9, 186.751, 1.12412, 0, 0, 0.532929, 0.84616, 300, 300, 100, 1, 0, 0);
+
+-- Changes by ALISAIE
+DELETE FROM gameobject WHERE guid = '5015461';
+DELETE FROM game_event_gameobject WHERE guid = '5015461';
+DELETE FROM gameobject_battleground WHERE guid = '5015461';
+
+-- Changes by TAMMO
+REPLACE INTO `gameobject` VALUES ( 5015462, 2004137, 815, -1335.53, 2269.88, 185.727, 3.3053, 0, 0, 0.996652, -0.0817625, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417386612361126, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5015462, 2004137, 815, -1335.53, 2269.88, 185.727, 3.3053, 0, 0, 0.996652, -0.0817625, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5015462, 2004137, 815, -1335.53, 2269.88, 185.727, 3.19927, 0, 0, 0.999584, -0.0288355, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2577119;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,1, -2128.560303,809.575928,154.637405, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,2, -2128.560303,809.575928,154.637405, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,3, -2134.496338,798.494629,154.612122, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,4, -2145.791992,784.162109,154.698502, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,5, -2159.398682,767.808289,154.611893, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,6, -2170.921387,753.260986,154.611877, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,7, -2195.257324,744.285950,154.611877, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,8, -2208.113525,761.385376,154.612122, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,9, -2211.232178,759.551270,154.612122, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,10, -2208.154541,740.014465,154.607193, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,11, -2193.124512,739.699097,154.610168, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,12, -2171.458252,756.039673,154.610168, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,13, -2155.104492,772.706970,154.611786, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,14, -2140.034668,792.328247,154.713928, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577119,15, -2132.665039,803.542969,154.612091, 100);
+REPLACE INTO `creature` VALUES (2577119,61477,0,0,0,1,-2128.56,809.576,154.637,4.11236,300,300,0,100,100,2,0,0);
