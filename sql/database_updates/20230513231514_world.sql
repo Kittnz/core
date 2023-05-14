@@ -982,3 +982,20 @@ UPDATE `creature` SET `position_x` = -2215.068359, `position_y` = 569.762756, `p
 DELETE FROM gameobject WHERE guid = '5015462';
 DELETE FROM game_event_gameobject WHERE guid = '5015462';
 DELETE FROM gameobject_battleground WHERE guid = '5015462';
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2576362,40012,0,0,0,1,-2222.38,560.241,136.18,2.97794,120,120,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2576362;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,1, -2222.379883,560.241028,136.179993, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,2, -2224.635986,561.586670,136.201782, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,3, -2221.910645,566.819763,136.151413, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,4, -2220.405518,567.567871,136.143036, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,5, -2213.482178,567.227112,136.084000, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,6, -2209.250000,562.955322,137.349518, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,7, -2217.726318,556.217224,136.123596, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2576362,8, -2220.301514,559.346313,136.155670, 100);
+REPLACE INTO `creature` VALUES (2576362,40012,0,0,0,1,-2222.38,560.241,136.18,2.97794,120,120,0,100,100,2,0,0);
+REPLACE INTO `gameobject` VALUES ( 5014945, 2008633, 1, -2222.42, 562.787, 136.184, 6.23044, 0, 0, 0.0263719, -0.999652, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5014947, 2008633, 1, -2215.83, 565.988, 136.109, 4.08095, 0, 0, 0.891715, -0.452598, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5014946, 2008633, 1, -2213.7, 562.338, 136.082, 2.97103, 0, 0, 0.996366, 0.0851768, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5014944, 2008633, 1, -2218.26, 559.068, 136.132, 1.43165, 0, 0, 0.656241, 0.754552, 300, 300, 100, 1, 0, 0);
