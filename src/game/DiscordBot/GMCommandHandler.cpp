@@ -44,9 +44,15 @@ namespace DiscordBot
 
     void GMCommandHandler::ExecuteGMCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
     {
+        
         auto authinfo = AuthManager::Instance()->GetAuthInfo(&src.issuer);
         if (!authinfo)
+        {
             return;
+        }
+
+        sLog.outDiscord(string_format("Executing command %s for Discord user %s (%llu). Account (%s / %u)", command.c_str(), src.issuer.format_username().c_str(),
+            static_cast<uint64>(src.issuer.id), authinfo->gameAccountName.c_str(), authinfo->gameAccountId).c_str());
 
         std::string commandParam;
         bool selfOnly = false;
