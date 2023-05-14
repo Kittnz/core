@@ -104,7 +104,7 @@ const char* CONF_mpq_list[] =
     "terrain.MPQ",
     "patch.MPQ",
     "patch-2.MPQ",
-    "patch-3.MPQ"
+    "patch-3.MPQ",
     "patch-4.MPQ"
 };
 
