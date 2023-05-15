@@ -811,7 +811,7 @@ public:
 
     inline bool IsDeathOnlySpell() const
     {
-        return HasAttribute(SPELL_ATTR_EX3_CAST_ON_DEAD) ||
+        return HasAttribute(SPELL_ATTR_EX3_ONLY_ON_GHOSTS) ||
                (Targets & (TARGET_FLAG_PVP_CORPSE | TARGET_FLAG_UNIT_CORPSE | TARGET_FLAG_CORPSE)) ||
                (Id == 2584);
     }
@@ -832,7 +832,7 @@ public:
 
     inline bool IsDeathPersistentSpell() const
     {
-        return HasAttribute(SPELL_ATTR_EX3_DEATH_PERSISTENT);
+        return HasAttribute(SPELL_ATTR_EX3_ALLOW_AURA_WHILE_DEAD);
     }
 
     inline bool IsNonCombatSpell() const

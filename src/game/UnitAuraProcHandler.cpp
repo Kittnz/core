@@ -365,7 +365,7 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     // Check if current equipment allows aura to proc
     if (!isVictim && IsPlayer())
     {
-        if (spellProto->EquippedItemClass == ITEM_CLASS_WEAPON)
+        if (spellProto->EquippedItemClass == ITEM_CLASS_WEAPON && !spellProto->HasAttribute(SPELL_ATTR_EX3_NO_PROC_EQUIP_REQUIREMENT))
         {
             Item *item = nullptr;
             if (attType == BASE_ATTACK)
@@ -393,6 +393,14 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     if (isSpellTriggeredByAuraOrItem && procSpell &&
         !procSpell->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC) &&
         !spellProto->HasAttribute(SPELL_ATTR_EX3_CAN_PROC_FROM_PROCS))
+        return SPELL_PROC_TRIGGER_FAILED;
+
+    if (spellProto->HasAttribute(SPELL_ATTR_EX3_ONLY_PROC_OUTDOORS) &&
+        !GetTerrain()->IsOutdoors(GetPositionX(), GetPositionY(), GetPositionZ()))
+        return SPELL_PROC_TRIGGER_FAILED;
+
+    if (spellProto->HasAttribute(SPELL_ATTR_EX3_ONLY_PROC_ON_CASTER) &&
+        holder->GetTarget()->GetObjectGuid() != holder->GetCasterGuid())
         return SPELL_PROC_TRIGGER_FAILED;
 
     // Get chance from spell
