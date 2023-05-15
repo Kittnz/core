@@ -239,3 +239,26 @@ REPLACE INTO `creature` VALUES (2577146,7559,0,0,0,0,-4853.27,608.485,386.64,0.5
 
 -- Changes by WILL
 REPLACE INTO `creature` VALUES (2577147,4049,0,0,0,0,-4911.41,606.733,384.86,2.45038,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2577147;
+DELETE FROM creature_addon WHERE guid=2577147;
+DELETE FROM creature_movement WHERE id=2577147;
+DELETE FROM game_event_creature WHERE guid=2577147;
+DELETE FROM game_event_creature_data WHERE guid=2577147;
+DELETE FROM creature_battleground WHERE guid=2577147;
+REPLACE INTO `creature` VALUES (2577148,61442,0,0,0,0,-4911.41,606.733,384.86,2.45038,120,120,0,100,100,0,0,0);
+
+-- Changes by TORTA
+DELETE FROM creature WHERE guid=2577148;
+DELETE FROM creature_addon WHERE guid=2577148;
+DELETE FROM creature_movement WHERE id=2577148;
+DELETE FROM game_event_creature WHERE guid=2577148;
+DELETE FROM game_event_creature_data WHERE guid=2577148;
+DELETE FROM creature_battleground WHERE guid=2577148;
+
+-- Changes by WILL
+DELETE FROM creature WHERE guid=2577146;
+DELETE FROM creature_addon WHERE guid=2577146;
+DELETE FROM creature_movement WHERE id=2577146;
+DELETE FROM game_event_creature WHERE guid=2577146;
+DELETE FROM game_event_creature_data WHERE guid=2577146;
+DELETE FROM creature_battleground WHERE guid=2577146;
