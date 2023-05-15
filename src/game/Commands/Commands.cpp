@@ -7852,6 +7852,7 @@ bool ChatHandler::HandleMuteCommand(char* args)
     // Save mute history.
     std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
 
+    LoginDatabase.escape_string(givenReason);
     LoginDatabase.PExecute("INSERT INTO `account_muted` (`id`, `mutedate`, `unmutedate`, `mutedby`, `mutereason`) VALUES (%u, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+%u, '%s', '%s')",
         accountId, minutes * MINUTE, authorName.c_str(), givenReason.c_str());
 
