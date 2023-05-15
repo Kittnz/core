@@ -67,6 +67,7 @@ struct PInfoData
     std::string last_login;
     std::string target_name;
     bool m_hasUsedClickToMove = false;
+    uint64 m_extendedFingerprint = 0;
 };
 
 /**
