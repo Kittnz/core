@@ -51,6 +51,31 @@ struct LootLogEntry
     std::string_view lootType = LogLoot::TypeKill;
 };
 
+namespace LogCharAction
+{
+    DEFINE_ENUM_TYPE(Action, Login);
+    DEFINE_ENUM_TYPE(Action, Logout);
+    DEFINE_ENUM_TYPE(Action, Create);
+    DEFINE_ENUM_TYPE(Action, Delete);
+    DEFINE_ENUM_TYPE(Action, Rename);
+}
+
+struct CharActionRenameEntry
+{
+    uint32 actionId = 0;
+    std::string oldName;
+    std::string newName;
+};
+
+
+struct CharActionLogEntry
+{
+    uint32 charGuid = 0;
+    uint32 accountId = 0;
+    std::string_view action = LogCharAction::ActionLogin;
+    std::optional<CharActionRenameEntry> renameInfo;
+};
+
 
 class DatabaseLogger
 {
@@ -63,7 +88,9 @@ public:
 
 
     void LogLoot(const LootLogEntry& log);
+    void LogCharAction(const CharActionLogEntry& log);
 
+    uint32 _maxCharActionId = 0;
 };
 
 #define sDBLogger DatabaseLogger::instance()

@@ -58,6 +58,7 @@
 #include "Geometry.h"
 #include "CreatureGroups.h"
 #include "Autoscaling/AutoScaler.hpp"
+#include "Logging/DatabaseLogger.hpp"
 
 Map::~Map()
 {
@@ -3279,6 +3280,7 @@ void Map::CrashUnload()
         {
             WorldSession* session = player->GetSession();
             sLog.out(LOG_CHAR, "[%s:%u@%s] Logout Character:[%s] (guid: %u)", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
+            sDBLogger->LogCharAction({ player->GetGUIDLow(), session->GetAccountId(), LogCharAction::ActionLogout, {} });
             session->SetPlayer(nullptr);
             player->SaveInventoryAndGoldToDB(); // Prevent possible exploits
             player->UninviteFromGroup();
