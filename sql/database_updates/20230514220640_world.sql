@@ -262,3 +262,6 @@ DELETE FROM creature_movement WHERE id=2577146;
 DELETE FROM game_event_creature WHERE guid=2577146;
 DELETE FROM game_event_creature_data WHERE guid=2577146;
 DELETE FROM creature_battleground WHERE guid=2577146;
+
+-- Changes by SHANG
+UPDATE `creature_addon` SET `stand_state`=0 WHERE `guid`=2576135;
