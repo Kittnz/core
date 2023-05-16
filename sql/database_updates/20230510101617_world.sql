@@ -2298,3 +2298,20 @@ replace into item_template values
 
 update item_template set start_quest = 40905 where entry = 61444;
 
+-- Purified Dream Essence
+delete from quest_template where entry = 40906;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40905,40906,2,616,60,55,0,0,'Purified Dream Essence','I must admit, I am quite nostalgic about working with Dream Essence once again. It has been many long decades since I have had the delight. To restore this sample, I require the following materials that can be found around azeroth.$B$BFrom here in Hyjal, I require ten Bright Dream Shards. Twenty-five Dream Dust needs to be acquired from anyone who can disenchant. Finally, I will need fifteen Living Essence, which can be somewhat tricky to come across. Bring these to me, and you shall be rewarded with the Emerald Blessing.','Collect 10 Bright Dream Shards, 25 Dream Dust, and 15 Living Essence for Arch Druid Dreamwind at Nordanaar in Hyjal.','Have the materials been collected fellow druid?','It is done, the Dream Essence is purified and awaiting your embrace.$B$BNot all druids ever get the opportunity to wield such magic. Use it sparingly, and with great care, young one.',61199,10,11176,25,12803,15,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,500,0,0,0,0,0,0,0,0,0,0,0, 61445,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61512, 40906);
+replace into creature_involvedrelation	(id, quest) values (61512, 40906);
+
+replace into item_template values
+ ('61445', '0', '0', 'Purified Emerald Essence', '', '20896', '4', '0', '1', '0', '0', '0', '1024', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '57109', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
