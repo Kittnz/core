@@ -2383,3 +2383,7 @@ update item_template set spellid_1 = 45430 where entry = 61439;
 REPLACE INTO gameobject_template VALUES
 (2020027, 3, 23433, 'Harlow Family Chest', 0, 4, 1, 43, 2020027, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 update gameobject set spawntimesecsmin = 172800, spawntimesecsmax = 172800 where ID = 2020027;
+-- Remove the following quests from the game: 40887,40896,40901.
+delete from quest_template where entry in (40887,40896,40901);
+delete from creature_questrelation where id in (40887,40896,40901);
+delete from creature_involvedrelation where id in (40887,40896,40901);
