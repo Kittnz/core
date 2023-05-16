@@ -2387,3 +2387,47 @@ update gameobject set spawntimesecsmin = 172800, spawntimesecsmax = 172800 where
 delete from quest_template where entry in (40887,40896,40901);
 delete from creature_questrelation where id in (40887,40896,40901);
 delete from creature_involvedrelation where id in (40887,40896,40901);
+-- NPC Solnius, add the following items to his drop tables:
+replace into item_template values
+ ('61448', '2', '0', 'Axe of Dorment Slumber', '', '28834', '4', '0', '1', '613604', '153401', '13', '-1', '-1', '76',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '118', '213', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '105', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+update creature_template set loot_id = 60748 where entry = 60748;
+-- Head of Solnius (61215), this item must always drop and be in its own loot group.
+replace into creature_loot_template values
+(60748,61215,100,10,1,1,0),
+-- The following items must all be part of the same loot group, 2 must drop at once: 61203,61204,61205,61206,61207,61208,61209,61210,61211,61212,61213,61214.
+(60748,61203,7.69,1,1,1,0),
+(60748,61204,7.69,1,1,1,0),
+(60748,61205,7.69,1,1,1,0),
+(60748,61206,7.69,1,1,1,0),
+(60748,61207,7.69,1,1,1,0),
+(60748,61208,7.69,1,1,1,0),
+(60748,61209,7.69,1,1,1,0),
+(60748,61210,7.69,1,1,1,0),
+(60748,61211,7.69,1,1,1,0),
+(60748,61212,7.69,1,1,1,0),
+(60748,61213,7.70,1,1,1,0),
+(60748,61214,7.70,1,1,1,0),
+(60748,61448,7.70,1,1,1,0),
+-- Solnius should have a 20% chance to drop the following item on its own loot group: 61445.
+(60748,61445,20,2,1,1,0),
+-- Solnius should have a 15% chance to drop the following item entry on its own loot group: 61196.
+(60748,61196,15,3,1,1,0),
+-- Solnius should always drop one of the following items in its own loot group: 17962,17963,17964,17965,17969.
+(60748,17962,20,4,1,1,0),
+(60748,17963,20,4,1,1,0),
+(60748,17964,20,4,1,1,0),
+(60748,17965,20,4,1,1,0),
+(60748,17969,20,4,1,1,0),
+-- Solnius should drop one of the following items with a 10% chance, all of these share a loot group: 61218,61217,61432,61428,61424.
+(60748,61218,10,5,1,1,0),
+(60748,61217,10,5,1,1,0),
+(60748,61432,10,5,1,1,0),
+(60748,61428,10,5,1,1,0),
+(60748,61424,10,5,1,1,0);
