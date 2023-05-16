@@ -367,3 +367,21 @@ DELETE FROM creature_battleground WHERE guid=2577153;
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566774, 233);
+UPDATE `creature` SET `position_x` = -13554.035156, `position_y` = 2645.711670, `position_z` = 48.848660, `orientation` = 1.460115 WHERE `guid` = 2566774;
+UPDATE `creature` SET `position_x` = -13554.038086, `position_y` = 2646.486328, `position_z` = 49.015839, `orientation` = 1.617196 WHERE `guid` = 2566774;
+UPDATE `creature` SET `position_x` = -13571.686523, `position_y` = 2636.751221, `position_z` = 48.703777, `orientation` = 4.509968 WHERE `guid` = 2566775;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566775, 233);
+UPDATE `creature` SET `position_x` = -13579.708008, `position_y` = 2650.290283, `position_z` = 49.123596, `orientation` = 0.454170 WHERE `guid` = 2566776;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566776, 233);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566777, 233);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566780, 233);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566778, 233);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2566773, 1);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2566773, 0);
+UPDATE `creature` SET `position_x` = -13549.735352, `position_y` = 2636.416016, `position_z` = 47.956894, `orientation` = 4.501306 WHERE `guid` = 2566773;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566773, 233);
+REPLACE INTO `creature` VALUES (2577154,92139,0,0,0,0,-13536.4,2629.02,49.1591,5.28671,120,120,5,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2577154,92139,0,0,0,0,-13536.4,2629.02,49.1591,5.28671,300,300,5,100,100,1,0,0);
+UPDATE `creature` SET `position_x` = -13583.069336, `position_y` = 2638.777832, `position_z` = 48.752914, `orientation` = 3.818024 WHERE `guid` = 2566772;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566772, 233);
+UPDATE `creature` SET `position_x` = -13566.538086, `position_y` = 2636.718750, `position_z` = 48.571953, `orientation` = 4.980042 WHERE `guid` = 2566775;
