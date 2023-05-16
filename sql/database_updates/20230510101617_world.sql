@@ -2379,3 +2379,7 @@ update item_template set sheath = 4 where entry = 61276;
 update item_template set material = 8 where entry = 61214;
 -- Item Rod of Nargg (entry 61439) , change spell1 to 45430.
 update item_template set spellid_1 = 45430 where entry = 61439;
+-- Create new object named 'Harlow Family Chest' which looks like the model 'Chest04', this object should be lootable and have a respawn time of 48hrs.
+REPLACE INTO gameobject_template VALUES
+(2020027, 3, 23433, 'Harlow Family Chest', 0, 4, 1, 43, 2020027, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject set spawntimesecsmin = 172800, spawntimesecsmax = 172800 where ID = 2020027;
