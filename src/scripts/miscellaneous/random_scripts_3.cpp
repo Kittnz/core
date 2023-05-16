@@ -6315,9 +6315,60 @@ bool QuestRewarded_npc_orvan_darkeye(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
+enum
+{
+    NPC_WILLOW = 61514,
+    NPC_INVISIBLE_CONTROLLER = 10
+};
+
+bool GOHello_go_aliattans_campfire(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020026)
+    {
+        if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+            return false;
+
+        if (pPlayer->GetQuestStatus(40908) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect the fire more closely.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30115, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_aliattans_campfire(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020026)
+        {
+            if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+                return false;
+
+            pGo->SummonCreature(NPC_INVISIBLE_CONTROLLER, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 2 * MINUTE * IN_MILLISECONDS);
+
+            if (Creature* pWillow = pGo->SummonCreature(NPC_WILLOW, -1717.13F, 1811.13F, 59.90F, 1.02F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+            {
+                pWillow->MonsterSay("Another comes to bother these lands? I do not have the patience to toy with another. Join us in the cold, dead ground.");
+                if (Player* pPlayer = pWillow->FindNearestHostilePlayer(50.0f))
+                    pWillow->AI()->AttackStart(pPlayer);
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_aliattans_campfire";
+    newscript->pGOHello = &GOHello_go_aliattans_campfire;
+    newscript->pGOGossipSelect = &GOSelect_go_aliattans_campfire;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_orvan_darkeye";
