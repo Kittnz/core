@@ -2339,3 +2339,27 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50653, 'DAY 32$B$BHis parents and friends know something is wrong. I told him not to tell. If he tells, that would make me so very upset and angry. I would be forced to extend his curse onto those he loves most. I would hate to have to do that. His parents are so very old, they would not make good dance partners. And his little love is not my type.$B$B I ran my invisible, cold fingers through his golden mane as he returned home, today. It was barely dusk, and I had not appeared to him so early as of yet. He did not even run. He is growing accepting of his fate.', 50654),
 (50654, 'DAY 56$B$BHe is almost gone. The boy has bags under his eyes, his hair is greying, he stutters and dares not to raise his eyes above floor level. His will is almost broken. I have begun whispering to him during the day as well as the night now. Join us... join us...$B$BHe will join us. He will join us around my willow. He will enter our circle. He will dance the black waltz. He will dance with us forever, and ever, and ever, and ever, and ever, and ever, and...$B$B<The same words are repeated for fifty pages.>', 0);
 
+-- The Black Waltz
+delete from quest_template where entry = 40908;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40908,2,2557,44,40,0,0,'The Black Waltz','The Widows of the Wood are a fickle lot, $N. They hold a strong attachment to the woods. They are playful, yet spiteful. They rejoice in scaring children, luring young men away to rest beneath the canopies they haunt, appearing in their dreams.$B$B I fear we have not much time to save young Aliattan if his journal is anything to go by. They seek to break his will, and draw him into a maddening dance known as the black waltz. They say the soul itself is wrenched from the body with each twirl and spin, before being devoured by the hungry Widows.$B$B Return to the campsite, $N. You must light that which caused so much grief to begin with. Draw them out of hiding, and dispose of them. May the Wolf Serpent guard you, for a fate worse than death awaits you, if you anger the Widows and fail in your struggle.','Banish the Widows that haunt Aliattan Anderson by lighting the campfire in the woods to the southwest, near the town of Greyshire.','H...have you... succeeded?','I... I haven\'t felt the chill of death in over an hour... I... I think it worked. By all that is holy, I think it worked! Thank you so much! My life is my own once more.',0,0,0,0,0,0,0,0, 61514,1,0,0,0,0,0,0, 0,0, 0,0,3500,0,0,0,0,0,0,0,0,0,0,0, 61447,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61452, 40908);
+replace into creature_involvedrelation	(id, quest) values (61513, 40908);
+
+update quest_template set requiredraces = 434 where entry = 40908;
+
+replace into item_template values
+ ('61447', '2', '10', 'Mossgrove Family Broom', 'Has had ten new handles and sixteen new heads.', '7449', '2', '0', '1', '112932', '28233', '17', '-1', '-1', '50',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '6', '5',
+ '7', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3500', '0',
+ '0', '87', '140', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9415', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+REPLACE INTO gameobject_template VALUES
+(2020026, 2, 22696, 'Aliattan\'s Campfire', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_aliattans_campfire');
+
+replace into broadcast_text (entry, Male_Text) values (30115, '<The fire glows ominously.>');
+replace into npc_text (ID, BroadcastTextID0) values (30115, 30115);
