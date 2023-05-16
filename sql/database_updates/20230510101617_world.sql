@@ -2373,3 +2373,9 @@ update creature_spells set spellid_1 = 1088 where entry = 180182;
 update creature_equip_template set equipentry2 = 13018 where entry = 20324;
 -- NPC Shadeflayer Shadowhunter add weapon1 : 15862, ranged weapon  : 15296
 update creature_equip_template set equipentry1 = 15862, equipentry3 = 15296 where entry = 20325;
+-- Change Item ID 61276 to be a shield.
+update item_template set sheath = 4 where entry = 61276;
+-- Item Mantle of the Wakener (entry 61214), set material to leather (8).
+update item_template set material = 8 where entry = 61214;
+-- Item Rod of Nargg (entry 61439) , change spell1 to 45430.
+update item_template set spellid_1 = 45430 where entry = 61439;
