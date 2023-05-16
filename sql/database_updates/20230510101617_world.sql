@@ -2363,3 +2363,13 @@ REPLACE INTO gameobject_template VALUES
 
 replace into broadcast_text (entry, Male_Text) values (30115, '<The fire glows ominously.>');
 replace into npc_text (ID, BroadcastTextID0) values (30115, 30115);
+
+-- NPC Elder Barkmaw has error incorrect syntax (Entry 61506).
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(18738, 0, 0, 0, 0);
+-- NPC ID 61499 should cast 1088 instead of the current Shadow Bolt.
+update creature_spells set spellid_1 = 1088 where entry = 180182;
+-- NPC Shadeflayer Berserker add weapon 13018.
+update creature_equip_template set equipentry2 = 13018 where entry = 20324;
+-- NPC Shadeflayer Shadowhunter add weapon1 : 15862, ranged weapon  : 15296
+update creature_equip_template set equipentry1 = 15862, equipentry3 = 15296 where entry = 20325;
