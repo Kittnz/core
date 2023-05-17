@@ -53,3 +53,6 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577160,9, -11513.694336,3272.680176,-6.511656, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577160,10, -11522.138672,3306.485840,-5.898055, 100);
 REPLACE INTO `creature` VALUES (2577160,61515,0,0,0,0,-11452.4,3320.14,-4.89496,3.97954,300,300,0,100,100,2,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2577161,61515,0,0,0,1,5270.7,-3683.95,1593.44,0.431235,120,120,0,100,100,0,0,0);
