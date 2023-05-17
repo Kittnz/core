@@ -3106,3 +3106,5 @@ update creature_equip_template set equipentry1 = 60701, equipentry2 = 0 where en
 update creature set spawntimesecsmin = 86400, spawntimesecsmax = 172800 where guid in (2577158,2577159);
 -- NPC GUID 2577157,2567101,2564681,2577160 change respawn timer to be between 48-72 hours.
 update creature set spawntimesecsmin = 172800, spawntimesecsmax = 259200 where guid in (2577157,2567101,2564681,2577160);
+-- Quest 40905 (Dreamthread Gloves) , rename to Smoldering Dream Essence, should be DRUID ONLY.
+update quest_template set title = 'Smoldering Dream Essence', RequiredClasses = 1024 where entry = 40905;
