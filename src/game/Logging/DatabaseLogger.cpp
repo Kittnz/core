@@ -14,7 +14,14 @@ void DatabaseLogger::LogCharAction(const CharActionLogEntry& log)
     if (!_maxCharActionId)
     {
         //have to do it this way because auto increment insert results aren't available for async inserts which is what all of our logs are based on.
-        _maxCharActionId = std::make_unique<QueryResult>(LogsDatabase.Query("SELECT IFNULL(MAX(id), 0) FROM character_action"))->Fetch()[0].GetUInt32();
+        QueryResult* Query = LogsDatabase.Query("SELECT IFNULL(MAX(id), 0) FROM character_action");
+        if (Query != nullptr)
+        {
+			Field* QueryResult = Query->Fetch();
+            _maxCharActionId = QueryResult[0].GetUInt32();
+
+			delete Query;
+        }
     }
 
     bool saveRename = log.action == LogCharAction::ActionRename;
