@@ -2795,9 +2795,9 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
--- Ok'thok the Pyromancer
+-- Ruk'thok the Pyromancer
 set @creature_entry = 61517;
-set @description = ': Ok\'thok the Pyromancer';
+set @description = ': Ruk\'thok the Pyromancer';
 set @spell_list_id = 180193;
 
 set @spellid_1 = 12526; -- Pyroblast
@@ -3091,3 +3091,14 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Rename NPC ID 61518 to Aquitus and increase mana to 6183.
+update creature_template set name = 'Aquitus', mana_min = 6183, mana_max = 6183 where entry = 61518;
+-- NPC ID 61515 reduce damage by 15%.
+update creature_template set dmg_min = 326, dmg_max = 420 where entry = 61515;
+-- NPC ID 61517 should have equipment ID 5201 and change name to Ruk'thok the Pyromancer.
+set @equip_template = 20391; set @weapon_1 = 5201; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61517;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template, name = 'Ruk\'thok the Pyromancer' where entry = @creature;
+-- Remove all weapons from Shadeflayer Berserker, and add weapon1 : 60701.
+update creature_equip_template set equipentry1 = 60701, equipentry2 = 0 where entry = 20324;
