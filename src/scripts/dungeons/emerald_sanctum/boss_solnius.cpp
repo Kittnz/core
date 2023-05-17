@@ -181,7 +181,7 @@ struct boss_solniusAI : public ScriptedAI
 					{
 						DoCastSpellIfCan(pPlayer, SPELL_EMERALD_INSTABILITY);
 					}
-					m_uiEmeraldRotTimer = 30 * IN_MILLISECONDS;
+					m_uiGimmickTimer = 20 * IN_MILLISECONDS;
 				}
 			}
 			else
