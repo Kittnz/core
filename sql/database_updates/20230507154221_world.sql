@@ -7,9 +7,7 @@ update item_template set set_id = 622 where entry = 61377; -- Greymane Sabatons
 update item_template set set_id = 622 where entry = 61379; -- Greymane Vambraces
 
 -- Added repair flag to NPC Argon Halmantle:
-
 UPDATE `creature_template` SET `npc_flags` = 16388 WHERE `entry` = 91982;
 
--- UPDATE `turtle_world`.`creature_template` SET `subname` = '' WHERE `entry` = 91874
-
+-- Removed duplicate Kul TIras subname for Kul Tiras NPCs:
 UPDATE `creature_template` SET `subname` = '' WHERE `subname` = 'Kul Tiras';
