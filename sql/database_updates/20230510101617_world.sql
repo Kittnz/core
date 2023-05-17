@@ -3102,3 +3102,7 @@ replace into creature_equip_template values (@equip_template, @weapon_1, @weapon
 update creature_template set equipment_id = @equip_template, name = 'Ruk\'thok the Pyromancer' where entry = @creature;
 -- Remove all weapons from Shadeflayer Berserker, and add weapon1 : 60701.
 update creature_equip_template set equipentry1 = 60701, equipentry2 = 0 where entry = 20324;
+-- NPC GUID 2577158,2577159 change respawn timer to be between 24-48 hours.
+update creature set spawntimesecsmin = 86400, spawntimesecsmax = 172800 where guid in (2577158,2577159);
+-- NPC GUID 2577157,2567101,2564681,2577160 change respawn timer to be between 48-72 hours.
+update creature set spawntimesecsmin = 172800, spawntimesecsmax = 259200 where guid in (2577157,2567101,2564681,2577160);
