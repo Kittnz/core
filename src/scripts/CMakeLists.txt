@@ -87,6 +87,7 @@ dungeons/hateforge_quarry/boss_hatereaver_annhilator.cpp
 dungeons/hateforge_quarry/hateforge_quarry_trash.cpp
 dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
+dungeons/gilneas_city/instance_gilneas_city.cpp
 dungeons/maraudon/boss_celebras_the_cursed.cpp
 dungeons/maraudon/boss_landslide.cpp
 dungeons/maraudon/boss_noxxion.cpp
