@@ -4328,8 +4328,7 @@ void Unit::RemoveArenaAuras(bool onleave, AuraRemoveMode mode /*= AURA_REMOVE_BY
     // On join, remove positive buffs, on end, remove negative used to remove positive visible auras in arenas
     for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
     {
-        if (!iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_EX4_UNK21) && // Don't remove stances, shadowform, pally/hunter auras
-            !iter->second->IsPassive() && // Don't remove passive auras
+        if (!iter->second->IsPassive() && // Don't remove passive auras
            (!iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) || !iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_HIDE_IN_COMBAT_LOG)) &&
            (!iter->second->GetSpellProto()->HasAreaAuraEffect()) && // Not unaffected by invulnerability auras or not having that unknown flag (that seemed the most probable)
            (iter->second->IsPositive() != onleave)) // Remove positive buffs on enter, negative buffs on leave
@@ -5509,7 +5508,7 @@ uint32 Unit::GetSpellRank(SpellEntry const* spellInfo)
  */
 uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spellProto, SpellEffectIndex effectIndex, uint32 pdamage, DamageEffectType damagetype, uint32 stack, Spell* spell) const
 {
-    if (!spellProto || !pCaster || damagetype == DIRECT_DAMAGE)
+    if (!spellProto || !pCaster || damagetype == DIRECT_DAMAGE || spellProto->HasAttribute(SPELL_ATTR_EX4_IGNORE_DAMAGE_TAKEN_MODIFIERS))
         return pdamage;
 
     uint32 schoolMask = spell ? spell->m_spellSchoolMask : spellProto->GetSpellSchoolMask();
@@ -5991,6 +5990,9 @@ uint32 Unit::MeleeDamageBonusTaken(WorldObject* pCaster, uint32 pdamage, WeaponA
         return pdamage;
 
     if (pdamage == 0)
+        return pdamage;
+
+    if (spellProto && spellProto->HasAttribute(SPELL_ATTR_EX4_IGNORE_DAMAGE_TAKEN_MODIFIERS))
         return pdamage;
 
     // Exception for Seal of Command and Seal of Righteousness
@@ -7688,6 +7690,9 @@ float Unit::ApplyTotalThreatModifier(float threat, SpellSchoolMask schoolMask)
 
 void Unit::AddThreat(Unit* target, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const *threatSpell /*= nullptr*/)
 {
+    if (threatSpell && threatSpell->HasAttribute(SPELL_ATTR_EX4_NO_HARMFUL_THREAT))
+        return;
+
     // Only mobs can manage threat lists
     if (CanHaveThreatList() && IsInMap(target))
         m_ThreatManager.addThreat(target, threat, crit, schoolMask, threatSpell, false);
