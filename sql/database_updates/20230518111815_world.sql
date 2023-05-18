@@ -251,3 +251,23 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Hostile Envoys
+delete from quest_template where entry = 40909;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40909,2,616,60,55,0,0,'Hostile Envoys','The Winterfall, and Deadwood Tribes have already been lost to madness. Their hatred burns deep and already they have sent speakers to discuss with the corrupt Barkskin. I have no doubt in my mind it will only be a matter of time before they conspire together.$B$BWe Timbermaw cannot stand idle whilst corruption ties hostile factions together in unison.$B$BI require you to travel deep into Barkskin Village to the southwest of here, near the bottom of the summit. Find and slay the Wintefall and Deadwood envoys both.','Slay the Winterfall Envoy and the Deadwood Envoy for Speaker Frulgg at Nordrassil Glade in Hyjal.','Have you killed my corrupt brethren?','I am impressed, you have returned from the depths of Barkskin Village and done as I asked.$B$BHere, as thanks, please take this Bright Dream Shard, as well as this armor.',0,0,0,0,0,0,0,0, 61510,1,61511,1,0,0,0,0, 0,0, 0,43200,7200,0,0,0,0,0,0,0,0,0,0,0, 61456,1,61199,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61509, 40909);
+replace into creature_involvedrelation	(id, quest) values (61509, 40909);
+
+update quest_template set type = 1 where entry = 40909;
+
+replace into item_template values
+ ('61456', '4', '2', 'Timbermaw Battle Vest', '', '19040', '2', '0', '1', '102532', '25633', '5', '-1', '-1', '64',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '166', '0', '0', '0',
+ '0', '0', '0', '14049', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '85', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', NULL);
+
