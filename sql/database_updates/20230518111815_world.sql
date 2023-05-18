@@ -298,3 +298,8 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61529, 40913);
 replace into creature_involvedrelation	(id, quest) values (61529, 40913);
+
+-- The loot table for Solnius that contains item 61214 (Mantle of the Wakener) should drop 2 items always on death instead of the 1 it currently drops.
+update creature_loot_template set mincountOrRef = 2, maxcount = 2 where entry = 60748 and item = 61214;
+-- Solnius, replace item 61445 (Purified Emerald Essence) drop with 61444 (Smoldering Dream Essence) 
+update creature_loot_template set 61444 where entry = 60748 and item = 61445;
