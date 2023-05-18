@@ -4778,25 +4778,20 @@ int32 WorldObject::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
 
 int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject* pCaster, Spell* spell) const
 {
-    // Distribute Damage over multiple effects, reduce by AoE
-    float coeff = 0.0f;
-
-    // Not apply this to creature casted spells
-    // Daemon: n'importe quoi. Et apres on se demande pourquoi les degats du sceau du croise sont abuses ...
-    //if (GetTypeId()==TYPEID_UNIT && !((Creature*)this)->IsPet())
-    //    coeff = 1.0f;
-    // Check for table values
-    if (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f)
-        coeff = spellProto->EffectBonusCoefficient[effectIndex];
-    // Calculate default coefficient
-    else if (benefit)
-        coeff = spellProto->CalculateDefaultCoefficient(damagetype);
-
     if (benefit)
     {
+        float coeff;
+
+        // Check for table values
+        if (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f)
+            coeff = spellProto->EffectBonusCoefficient[effectIndex];
+        // Calculate default coefficient
+        else
+            coeff = spellProto->CalculateDefaultCoefficient(damagetype);
+
         // Calculate level penalty only if spell does not have coefficient set in template,
         // since the coefficients already have the level penalty accounted for.
-        const float LvlPenalty = (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f) ? 1.0f : CalculateLevelPenalty(spellProto);
+        const float lvlPenalty = (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f) ? 1.0f : CalculateLevelPenalty(spellProto);
 
         // Calculate custom coefficient
         coeff = spellProto->CalculateCustomCoefficient(pCaster, damagetype, coeff, spell, donePart);
@@ -4812,27 +4807,7 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
             }
         }
 
-        // Nostalrius.
-        bool bUsePenalty = true;
-        // Flash of Light
-        if (spellProto->Id == 19993)
-        {
-            bUsePenalty = false;
-            if (Unit const* pUnit = ToUnit())
-            {
-                if (pUnit->HasAura(28853)) total += 53.0f;  // Libram of Divinity
-                if (pUnit->HasAura(28851)) total += 83.0f;  // Libram of Light
-            }
-        }
-
-        // Dragonbreath Chili
-        if (spellProto->Id == 15851)
-            bUsePenalty = false;
-
-        if (bUsePenalty)
-            total += int32(benefit * coeff * LvlPenalty);
-        else
-            total += int32(benefit * coeff);
+        total += int32(benefit * coeff);
     }
 
     return total;

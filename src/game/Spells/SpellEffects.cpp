@@ -6217,7 +6217,15 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
             {
                 if (!unitTarget || !unitTarget->IsAlive())
                     return;
+
                 int32 heal = damage;
+                if (m_casterUnit)
+                {
+                    if (m_casterUnit->HasAura(28853))
+                        heal += 53.0f;  // Libram of Divinity
+                    if (m_casterUnit->HasAura(28851))
+                        heal += 83.0f;  // Libram of Light
+                }
 
                 int32 spellid = m_spellInfo->Id;            // send main spell id as basepoints for not used effect
                 m_caster->CastCustomSpell(unitTarget, 19993, &heal, &spellid, nullptr, true);
