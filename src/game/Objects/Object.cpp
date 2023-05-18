@@ -3264,7 +3264,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
     if (pProto && pProto->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
         return victim;
 
-    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
+    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & SPELL_ATTR_IS_ABILITY))
     {
         Unit::AuraList const& magnetAuras = victim->GetAurasByType(SPELL_AURA_SPELL_MAGNET);
         for (const auto magnetAura : magnetAuras)
