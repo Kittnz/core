@@ -5865,9 +5865,24 @@ bool QuestRewarded_npc_commander_starwind(Player* pPlayer, Creature* pQuestGiver
     return false;
 }
 
+bool GOHello_go_mysterious_mailbox(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020028)
+    {
+        pPlayer->PrepareQuestMenu(pGo->GetObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30116, pGo->GetGUID());
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_mysterious_mailbox";
+    newscript->pGOHello = &GOHello_go_mysterious_mailbox;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_commander_starwind";
