@@ -302,4 +302,35 @@ replace into creature_involvedrelation	(id, quest) values (61529, 40913);
 -- The loot table for Solnius that contains item 61214 (Mantle of the Wakener) should drop 2 items always on death instead of the 1 it currently drops.
 update creature_loot_template set mincountOrRef = 2, maxcount = 2 where entry = 60748 and item = 61214;
 -- Solnius, replace item 61445 (Purified Emerald Essence) drop with 61444 (Smoldering Dream Essence) 
-update creature_loot_template set 61444 where entry = 60748 and item = 61445;
+update creature_loot_template set item = 61444 where entry = 60748 and item = 61445;
+
+-- Add tailoring recipes.
+UPDATE `item_template` SET `spellid_1`=45456, `spellcharges_1`=-1 WHERE `entry`=61432;
+UPDATE `item_template` SET `spellid_1`=45458, `spellcharges_1`=-1 WHERE `entry`=61433;
+UPDATE `item_template` SET `spellid_1`=45460, `spellcharges_1`=-1 WHERE `entry`=61434;
+UPDATE `item_template` SET `spellid_1`=45462, `spellcharges_1`=-1 WHERE `entry`=61435;
+
+-- Add blacksmithing recipes.
+UPDATE `item_template` SET `spellid_1`=45464, `spellcharges_1`=-1 WHERE `entry`=61424;
+UPDATE `item_template` SET `spellid_1`=45466, `spellcharges_1`=-1 WHERE `entry`=61425;
+UPDATE `item_template` SET `spellid_1`=45468, `spellcharges_1`=-1 WHERE `entry`=61426;
+UPDATE `item_template` SET `spellid_1`=45470, `spellcharges_1`=-1 WHERE `entry`=61427;
+
+-- Add leatherworking recipes.
+UPDATE `item_template` SET `spellid_1`=45472, `spellcharges_1`=-1 WHERE `entry`=61428;
+UPDATE `item_template` SET `spellid_1`=45474, `spellcharges_1`=-1 WHERE `entry`=61429;
+UPDATE `item_template` SET `spellid_1`=45476, `spellcharges_1`=-1 WHERE `entry`=61430;
+UPDATE `item_template` SET `spellid_1`=45478, `spellcharges_1`=-1 WHERE `entry`=61431;
+
+-- Intricate Gyroscope Goggles
+UPDATE `item_template` SET `spellid_1`=45480, `spellcharges_1`=-1 WHERE `entry`=61191;
+
+-- Inscribed Runic Bracers
+UPDATE `item_template` SET `spellid_1`=45482, `spellcharges_1`=-1 WHERE `entry`=61192;
+
+-- Gloves of Unwinding Mystery
+UPDATE `item_template` SET `spellid_1`=45484, `spellcharges_1`=-1 WHERE `entry`=61190;
+
+-- Dawnstone Hammer
+UPDATE `item_template` SET `spellid_1`=45486, `spellcharges_1`=-1, `name`='Plans: Dawnstone Hammer' WHERE `entry`=61189;
+
