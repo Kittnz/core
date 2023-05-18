@@ -98,3 +98,6 @@ DELETE FROM game_event_creature WHERE guid=2577164;
 DELETE FROM game_event_creature_data WHERE guid=2577164;
 DELETE FROM creature_battleground WHERE guid=2577164;
 REPLACE INTO `creature` VALUES (2577167,61512,0,0,0,1,5497.27,-3799.99,1651.04,5.01168,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (889,2739.849609,3006.867432,25.808846,0.465857,807,'emeraldsanctumproper');
