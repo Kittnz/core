@@ -4807,7 +4807,7 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
             }
         }
 
-        total += int32(benefit * coeff);
+        total += int32(benefit * coeff * lvlPenalty);
     }
 
     return total;
