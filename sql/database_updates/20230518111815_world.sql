@@ -334,3 +334,87 @@ UPDATE `item_template` SET `spellid_1`=45484, `spellcharges_1`=-1 WHERE `entry`=
 -- Dawnstone Hammer
 UPDATE `item_template` SET `spellid_1`=45486, `spellcharges_1`=-1, `name`='Plans: Dawnstone Hammer' WHERE `entry`=61189;
 
+-- NPC 61526 and 61527, need to have gossip flags removed.
+update creature_template set npc_flags = 2 where entry in (61526,61527);
+-- Matthias Holtz (entry 61419) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table:
+-- Gilneas Shackles(entry 61304) - 20%
+-- Darkwatch Pants (entry 61305) - 20%
+-- Worgen Hunter Grips (Entry 61306) - 20%
+-- Worgen Hunter Musket (Entry 61307) - 2%
+REPLACE INTO creature_loot_template (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61419, 61304, 20, 1, 1, 1, 0),
+(61419, 61305, 20, 1, 1, 1, 0),
+(61419, 61306, 20, 1, 1, 1, 0),
+(61419, 61307, 2 , 1, 1, 1, 0),
+-- Packmaster Ragetooth (Entry 61420) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table.
+-- Packmaster Gloves(entry 61300) - 20%
+-- Shaderun Boots (entry 61301) - 20%
+-- Wolfheart Necklace (Entry 61302) - 20%
+-- Orb of Aka'thar (Entry 61303) - 2%
+(61420, 61300, 20, 1, 1, 1, 0),
+(61420, 61301, 20, 1, 1, 1, 0),
+(61420, 61302, 20, 1, 1, 1, 0),
+(61420, 61303, 2 , 1, 1, 1, 0),
+-- Judge Sutherland (Entry 61421) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table.
+-- Gavel of Gilnean Justice(entry 61308) - 20%
+-- Mantle of Law (entry 61309) - 20%
+-- Sash of Conviction (Entry 61310) - 20%
+-- Sutherland's Cuffs (Entry 61311) - 20%
+-- The Black Pendant (Entry 61312) - 2%
+(61421, 61308, 20, 1, 1, 1, 0),
+(61421, 61309, 20, 1, 1, 1, 0),
+(61421, 61310, 20, 1, 1, 1, 0),
+(61421, 61311, 20, 1, 1, 1, 0),
+(61421, 61312, 2 , 1, 1, 1, 0),
+-- Dustivan Blackcowl (Entry 61422) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table.
+-- Dagger of Sinister Secrets (Entry 61330) - 24%
+-- Blackcowl Sash (Entry 61331) - 24%
+-- Ring of Electrical Binding (Entry 61332) - 24%
+-- Hookblade Cleaver (Entry 61333) - 24%
+-- Cloak of the Dark Veil (Entry 61334) - 4%
+(61422, 61330, 24, 1, 1, 1, 0),
+(61422, 61331, 24, 1, 1, 1, 0),
+(61422, 61332, 24, 1, 1, 1, 0),
+(61422, 61333, 24, 1, 1, 1, 0),
+(61422, 61334, 4 , 1, 1, 1, 0),
+-- Marshal Magnus Greystone (Entry 61423) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table.
+-- Greymane Helmet (Entry 61313) - 24%
+-- Marshal's Blocker (Entry 61314) - 24%
+-- Band of Piercing Shadows (Entry 61315) - 24%
+-- Chainlinked Cloak (Entry 61316) - 24%
+-- Scriptures of Blood (Entry 61317) - 4%
+(61423, 61313, 24, 1, 1, 1, 0),
+(61423, 61314, 24, 1, 1, 1, 0),
+(61423, 61315, 24, 1, 1, 1, 0),
+(61423, 61316, 24, 1, 1, 1, 0),
+(61423, 61317, 4 , 1, 1, 1, 0),
+-- Genn Greymane (Entry 61418) add the following loot to his loot table, this should all be under group 1 and have the following % chance to drop, this boss should always drop at least one of the items on this table.
+-- Swiftcaster's Chapeau (Entry 61323) - 14%
+-- Greymane Shoulders (Entry 61324) - 14%
+-- Regal Goldforged Breastplate (Entry 61325) - 14%
+-- Robe of Light's Ambassador (Entry 61326) - 14%
+-- Boots of Espionage (Entry 61327) - 14%
+-- Wolfblood (Entry 61328) - 14%
+-- Sack of Gruesome Eminence (Entry 61329) - 14%
+(61418, 61323, 14, 1, 1, 1, 0),
+(61418, 61324, 14, 1, 1, 1, 0),
+(61418, 61325, 14, 1, 1, 1, 0),
+(61418, 61326, 14, 1, 1, 1, 0),
+(61418, 61327, 14, 1, 1, 1, 0),
+(61418, 61328, 14, 1, 1, 1, 0),
+(61418, 61329, 14, 1, 1, 1, 0),
+-- Genn Greymane should also have a low chance to drop the following item
+-- Mark of the Worgen (Entry 61406) 1%
+(61418, 61406, 1 , 1, 1, 1, 0);
+-- OBJECT Harlow Family Chest (Entry 2020027) add the ofllowing loot to this drop table, all this loot should be under 1 group and have the following %chance to drop, this chest should always drop at least one item on this table.
+-- Fleshslasher (Entry 61318) - 24%
+-- Regal Robes of the Regent (Entry 61319) - 24%
+-- Ashen Leggings (Entry 61320) - 24%
+-- Wildfeather Bracers (Entry 61321) - 24%
+-- Resurging Necklace (Entry 61322) - 4%
+REPLACE INTO gameobject_loot_template (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(2020027, 61318, 24, 0, 1, 1, 0),
+(2020027, 61319, 24, 0, 1, 1, 0),
+(2020027, 61320, 24, 0, 1, 1, 0),
+(2020027, 61321, 24, 0, 1, 1, 0),
+(2020027, 61322, 4 , 0, 1, 1, 0);
