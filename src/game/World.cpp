@@ -2049,6 +2049,7 @@ void World::SetInitialWorldSettings()
                 }
                 CharacterDatabase.DirectPExecute("UPDATE `characters` SET `death_expire_time` = 0, `health` = 50, `playerflags` = `playerflags` & ~16, `mortality_status` = 1, `total_deaths` = 0 WHERE `name` = '%s'", playerName.c_str());
             }
+            _deadHcPlayers.insert(playerName);
         }
     }
 

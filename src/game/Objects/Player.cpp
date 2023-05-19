@@ -16088,6 +16088,11 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
 
 void Player::LoadCorpse()
 {
+    if (sWorld._deadHcPlayers.find(GetName()) != sWorld._deadHcPlayers.end())
+    {
+        ResurrectPlayer(1.0f);
+    }
+
     if (IsAlive())
         sObjectAccessor.ConvertCorpseForPlayer(GetObjectGuid());
     else
