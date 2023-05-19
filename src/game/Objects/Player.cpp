@@ -5202,10 +5202,10 @@ void Player::BuildPlayerRepop()
     SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND);
 }
 
-void Player::ResurrectPlayer(float restore_percent, bool applySickness)
+void Player::ResurrectPlayer(float restore_percent, bool applySickness, bool forceHc)
 {
     // Don't ressurent permamently dead chracters.
-    if (IsHardcore())
+    if (IsHardcore() && !forceHc)
         return;
 
     // Interrupt resurrect spells
@@ -16089,7 +16089,7 @@ void Player::LoadCorpse()
 {
     if (sWorld._deadHcPlayers.find(GetName()) != sWorld._deadHcPlayers.end() && (customFlags & CUSTOM_PLAYER_FLAG_HC_RESTORED) == 0)
     {
-        ResurrectPlayer(1.0f);
+        ResurrectPlayer(1.0f, false, true);
         CharacterDatabase.DirectPExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 1 WHERE `name` = '%s'", GetName());
     }
 
