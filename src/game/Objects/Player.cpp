@@ -15527,8 +15527,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GM))
         SetUInt32Value(PLAYER_FLAGS, 0 | old_safe_flags);
 
-	// Unused
-    uint32 FlagsUnused = fields[58].GetUInt32();
+    customFlags = fields[58].GetUInt32();
 
     m_taxi.LoadTaxiMask(fields[17].GetString());
 
@@ -16088,9 +16087,10 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
 
 void Player::LoadCorpse()
 {
-    if (sWorld._deadHcPlayers.find(GetName()) != sWorld._deadHcPlayers.end())
+    if (sWorld._deadHcPlayers.find(GetName()) != sWorld._deadHcPlayers.end() && (customFlags & CUSTOM_PLAYER_FLAG_HC_RESTORED) == 0)
     {
         ResurrectPlayer(1.0f);
+        CharacterDatabase.DirectPExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 1 WHERE `name` = '%s'", GetName());
     }
 
     if (IsAlive())
@@ -17050,7 +17050,7 @@ void Player::SaveToDB(bool online, bool force)
     // Nostalrius
     uberInsert.addUInt32(GetAreaId());
     uberInsert.addUInt32(GetWorldMask());
-    uberInsert.addUInt32(0); // Custom flag from Nost. Not used anymore
+    uberInsert.addUInt32(customFlags);
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
     uberInsert.addUInt8(m_hardcoreStatus);

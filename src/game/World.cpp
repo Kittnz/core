@@ -2025,7 +2025,6 @@ void World::SetInitialWorldSettings()
 
     //Restore HCs..
     {
-
         std::fstream file("hcdeaths.log");
 
         std::string line;

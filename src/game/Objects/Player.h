@@ -90,6 +90,11 @@ enum PlayerUnderwaterState
     UNDERWATER_EXIST_TIMERS             = 0x10
 };
 
+enum CustomPlayerFlags
+{
+    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01
+};
+
 enum BuyBankSlotResult
 {
     ERR_BANKSLOT_FAILED_TOO_MANY    = 0,
