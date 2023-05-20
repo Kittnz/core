@@ -1,6 +1,7 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
 #include "GuardAI.h"
+#include "PetAI.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -5739,6 +5740,72 @@ struct npc_horde_defenderAI : public GuardAI
 
 CreatureAI* GetAI_npc_horde_defender(Creature* creature) { return new npc_horde_defenderAI(creature); }
 
+struct npc_feral_spiritAI : public PetAI
+{
+    npc_feral_spiritAI(Creature* c) : PetAI(c) { }
+
+    float GetDamageScalingPercent() const
+    {
+        switch (m_creature->GetEntry())
+        {
+            case 29000: // Rank 1
+                return 0.33f;
+            case 29001: // Rank 2
+                return 0.66f;
+        }
+
+        return 1.0f;
+    }
+
+    void UpdateAI(uint32 const diff) override
+    {
+        // scale with owner's damage in real time
+        if (Unit* pOwner = m_creature->GetOwner())
+        {
+            m_creature->SetFloatValue(UNIT_FIELD_MINDAMAGE, pOwner->GetFloatValue(UNIT_FIELD_MINDAMAGE) * GetDamageScalingPercent());
+            m_creature->SetFloatValue(UNIT_FIELD_MAXDAMAGE, pOwner->GetFloatValue(UNIT_FIELD_MAXDAMAGE) * GetDamageScalingPercent());
+
+            // disenage from target if owner is not attacking
+            if (m_creature->GetVictim() && pOwner->GetTargetGuid().IsEmpty() && pOwner->IsMoving())
+                m_creature->HandlePetCommand(COMMAND_FOLLOW, pOwner);
+        }
+
+        PetAI::UpdateAI(diff);
+    }
+
+    // override to always attack owner's victim
+    // normally defensive pets only attack if you are hit
+    void OwnerAttacked(Unit* target) override
+    {
+        if (!m_creature->IsValidAttackTarget(target))
+            return;
+
+        // Pet desactive (monture)
+        if (m_creature->IsPet() && !((Pet*)m_creature)->IsEnabled())
+            return;
+
+        // Passive pets don't do anything
+        if (m_creature->HasReactState(REACT_PASSIVE))
+            return;
+
+        // In crowd control
+        if (m_creature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+            return;
+
+        // Always attack owner's target
+        if (m_creature->GetVictim() && m_creature->GetVictim()->IsAlive())
+        {
+            Unit* pOwner = m_creature->GetOwner();
+            if (!pOwner || pOwner->GetTargetGuid() != target->GetObjectGuid())
+                return;
+        }
+
+        AttackStart(target);
+    }
+};
+
+CreatureAI* GetAI_npc_feral_spirit(Creature* creature) { return new npc_feral_spiritAI(creature); }
+
 bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsQuestGiver())
@@ -6602,5 +6669,10 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_horde_defender";
     newscript->GetAI = &GetAI_npc_horde_defender;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_feral_spirit";
+    newscript->GetAI = &GetAI_npc_feral_spirit;
     newscript->RegisterSelf();
 }
