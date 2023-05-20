@@ -4,7 +4,7 @@ enum boss_entries
 {
     matthias_holtz = 61419,
     judge_sutherland = 61421,
-    dustivan_blackowl = 61442,
+    dustivan_blackowl = 61422,
     magnus_greystone = 61423,
     genn_greymane = 61418,
 };
