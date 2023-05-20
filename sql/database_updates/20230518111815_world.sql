@@ -735,3 +735,25 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61317, 30087, 0.0025, 0, -30087, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61317, 30088, 0.01, 0, -30088, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61317, 30103, 0.0025, 0, -30103, 1, 0);
+
+-- OBJECT Harlow Family Chest (Entry 2020027).
+update gameobject_loot_template set ChanceOrQuestChance = 25 where entry = 2020027 and item in (61318,61319,61320,61321);
+update gameobject_loot_template set ChanceOrQuestChance = 5 where entry = 2020027 and item = 61322;
+
+-- Bosses in Gilneas City currently have a chance to not drop loot, this is unintended, for the bosses below, please change any drop % of 20% to be 33%:
+-- Matthias Holtz (entry 61419), Packmaster Ragetooth (Entry 61420).
+update creature_loot_template set ChanceOrQuestChance = 33 where entry in (61419,61420) and item in (61300,61301,61302,61304,61305,61306);
+
+-- For the following boss, raise the drop chance of all 20% items to 25%:
+-- Judge Sutherland (Entry 61421).
+update creature_loot_template set ChanceOrQuestChance = 25 where entry = 61421 and item in (61308,61309,61310,61311);
+
+-- For the following bosses below, raise the drop chance of all items by 1%:
+-- Dustivan Blackcowl (Entry 61422).
+update creature_loot_template set ChanceOrQuestChance = 25 where entry = 61422 and item in (61330,61331,61332,61333);
+update creature_loot_template set ChanceOrQuestChance = 5 where entry = 61422 and item = 61334;
+-- Marshal Magnus Greystone (Entry 61423).
+update creature_loot_template set ChanceOrQuestChance = 25 where entry = 61423 and item in (61313,61314,61315,61316);
+update creature_loot_template set ChanceOrQuestChance = 5 where entry = 61423 and item = 61317;
+-- Genn Greymane (Entry 61418).
+update creature_loot_template set ChanceOrQuestChance = 15 where entry = 61418 and item in (61323,61324,61325,61326,61327,61328,61329);
