@@ -757,3 +757,40 @@ update creature_loot_template set ChanceOrQuestChance = 25 where entry = 61423 a
 update creature_loot_template set ChanceOrQuestChance = 5 where entry = 61423 and item = 61317;
 -- Genn Greymane (Entry 61418).
 update creature_loot_template set ChanceOrQuestChance = 15 where entry = 61418 and item in (61323,61324,61325,61326,61327,61328,61329);
+
+
+-- The loot table for NPCs "Solnius" (60748) has been redone.
+delete from reference_loot_template where entry = 60000;
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60000, 61203, 7.69,  0, 1, 1, 0),
+(60000, 61204, 7.69,  0, 1, 1, 0),
+(60000, 61205, 7.69,  0, 1, 1, 0),
+(60000, 61206, 7.69,  0, 1, 1, 0),
+(60000, 61207, 7.69,  0, 1, 1, 0),
+(60000, 61208, 7.69,  0, 1, 1, 0),
+(60000, 61209, 7.69,  0, 1, 1, 0),
+(60000, 61210, 7.69,  0, 1, 1, 0),
+(60000, 61211, 7.69,  0, 1, 1, 0),
+(60000, 61212, 7.69,  0, 1, 1, 0),
+(60000, 61213,  7.7,  0, 1, 1, 0),
+(60000, 61214,  7.7,  0, 2, 2, 0),
+(60000, 61448,  7.7,  0, 1, 1, 0);
+
+delete from creature_loot_template where entry = 60748;
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 60000, 100,  0, -60000, 1, 0),
+(60748, 60000, 100,  1, -60000, 1, 0),
+(60748, 60000, 100,  2, -60000, 1, 0),
+(60748, 61444,  20,  3,      1, 1, 0),
+(60748, 61196,  15,  4,      1, 1, 0),
+(60748, 17962,  20,  5,      1, 1, 0),
+(60748, 17963,  20,  5,      1, 1, 0),
+(60748, 17964,  20,  5,      1, 1, 0),
+(60748, 17965,  20,  5,      1, 1, 0),
+(60748, 17969,  20,  5,      1, 1, 0),
+(60748, 61217,  10,  6,      1, 1, 0),
+(60748, 61218,  10,  6,      1, 1, 0),
+(60748, 61424,  10,  6,      1, 1, 0),
+(60748, 61428,  10,  6,      1, 1, 0),
+(60748, 61432,  10,  6,      1, 1, 0),
+(60748, 61215, 100, 10,      1, 1, 0);
