@@ -23623,9 +23623,8 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 		return false;
 	}
 
-	// Make sure dual spec table is empty for spec = uiPrimaryOrSecondary to avoid duplicates
-	CharacterDatabase.DirectPExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
     CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
 
     for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
 	{
