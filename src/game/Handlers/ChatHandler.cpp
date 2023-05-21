@@ -822,7 +822,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (channel == u8"World" && lang != LANG_ADDON)
                         {
                             std::string logChat = sWorld.FormatLoggedChat(this, "Chan", msg, nullptr, 0, channel.c_str());
-                            sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                           // sWorld.SendDiscordMessage(1075224002013962250, logChat);
                         }
                     }
 
@@ -1024,8 +1024,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                                 PlayerPointer plr = GetPlayerPointer();
                                 std::ostringstream ss;
                                 ss << plr->GetName() << ":" << GetAccountId();
-                                sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
-                                    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
+                                //sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
+                                //    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
                             }
                             catch (const std::exception&) {}
                         }
