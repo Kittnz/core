@@ -16,3 +16,8 @@ UPDATE `item_template` SET `material` = 2, `display_id` = 28858, name = 'Felmusk
 -- 6	Salary
 -- 7	Cloth
 -- 8	Leather
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3531
+-- Fixed a typo in Kelly Vaulstone's gossip.
+
+UPDATE `broadcast_text` SET `male_text` = 'This harbor ain''t too shabby for fishing!', `female_text` = NULL, `chat_type` = 0, `sound_id` = 0, `language_id` = 0, `emote_id1` = 0, `emote_id2` = 0, `emote_id3` = 0, `emote_delay1` = 0, `emote_delay2` = 0, `emote_delay3` = 0 WHERE `entry` = 60928;
