@@ -1478,7 +1478,7 @@ class Player final: public Unit
         void _SetUpdateBits(UpdateMask* updateMask, Player* target) const override;
         uint32 m_nextSave;
     public:
-        void SaveToDB(bool online = true, bool force = false);
+        bool SaveToDB(bool online = true, bool force = false, bool direct = false);
         void SaveInventoryAndGoldToDB();                    // fast save function for item/money cheating preventing
         void SaveGoldToDB();
         static void SavePositionInDB(ObjectGuid guid, uint32 mapid, float x,float y,float z,float o,uint32 zone);
