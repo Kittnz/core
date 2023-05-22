@@ -221,7 +221,7 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 80661: color = 1; break; // Ruby
     case 80662: color = 2; break; // Red
     case 80663: color = 3; break; // Purple
-    case 80664: color = 4; break; // Black 
+    case 80664: color = pPlayer->GetGender() == GENDER_MALE ? 0 : 4; break; // Black 
     }
     pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
     pPlayer->UpdateAppearance();
