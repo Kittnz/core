@@ -26,3 +26,9 @@ UPDATE `broadcast_text` SET `male_text` = 'This harbor ain''t too shabby for fis
 -- In WoW classic, these mobs give reduced experience, since they have reduced hit points (they die in 2-3 spells).
 
 UPDATE `creature_template` SET `xp_multiplier` = 0.3 WHERE `entry` = 4689;
+
+-- Marked quest Treant Muisek as Elite.
+-- Marked quest Army of the Black Dragon as Elite.
+
+UPDATE `quest_template` SET `type` = 1 WHERE `entry` = 3126;
+UPDATE `quest_template` SET `type` = 1 WHERE `entry` = 1168;
