@@ -634,11 +634,6 @@ int32 BattleGround::GetHeraldEntry() const
 
 void BattleGround::EndBattleGround(Team winner)
 {
-    uint32 bgTypeID = BATTLEGROUND_TYPE_NONE;
-
-    if (m_maxPlayers == 40)
-        bgTypeID = BATTLEGROUND_AV;
-
     RemoveFromBGFreeSlotQueue();
 
     WorldPacket data;
@@ -657,8 +652,10 @@ void BattleGround::EndBattleGround(Team winner)
         SetWinner(WINNER_NONE);
 
     SetStatus(STATUS_WAIT_LEAVE);
-    //we must set it this way, because end time is sent in packet!
-    m_endTime = TIME_TO_AUTOREMOVE;
+    SetEndTime(TIME_TO_AUTOREMOVE);
+
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 
     for (const auto& itr : m_players)
     {
@@ -699,8 +696,8 @@ void BattleGround::EndBattleGround(Team winner)
 
         BlockMovement(pPlayer);
 
-        sBattleGroundMgr.BuildPvpLogDataPacket(&data, this);
-        pPlayer->GetSession()->SendPacket(&data);
+        // Send final scoreboard
+        pPlayer->GetSession()->SendPacket(&m_finalScore);
 
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BgQueueTypeId(GetTypeID());
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, pPlayer->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime());
@@ -954,12 +951,12 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool transport, bool sen
             // a player has left the battleground, so there are free slots -> add to queue
             AddToBGFreeSlotQueue();
             sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, GetBracketId());
-        }
 
-        // Let others know
-        WorldPacket data;
-        sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
-        SendPacketToTeam(team, &data, pPlayer, false);
+            // Let others know
+            WorldPacket data;
+            sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
+            SendPacketToTeam(team, &data, pPlayer, false);
+        }
     }
 
     if (pPlayer)
@@ -1612,14 +1609,12 @@ void BattleGround::SendYell2ToAll(int32 entry, uint32 language, ObjectGuid guid,
 
 void BattleGround::EndNow()
 {
-    uint32 bgTypeID = BATTLEGROUND_TYPE_NONE;
-
-    if (m_maxPlayers == 40)
-        bgTypeID = BATTLEGROUND_AV;
-
     RemoveFromBGFreeSlotQueue();
     SetStatus(STATUS_WAIT_LEAVE);
     SetEndTime(0);
+
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 }
 
 /*

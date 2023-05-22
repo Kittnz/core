@@ -781,11 +781,11 @@ inline void Map::UpdateActiveCellsAsynch(uint32 now, uint32 diff)
     for (int step = 0; step < 2; step++)
     {
         for (int i = 0; i < nthreads; ++i)
-            m_cellThreads << [this, diff, now, i, nthreads](){
-                UpdateActiveCellsCallback(diff, now, i, nthreads+1, 0);
+            m_cellThreads << [this, diff, now, i, nthreads, step](){
+                UpdateActiveCellsCallback(diff, now, i, nthreads+1, step);
             };
         std::future<void> job = m_cellThreads->processWorkload();
-        UpdateActiveCellsCallback(diff, now, nthreads, nthreads+1, 0);
+        UpdateActiveCellsCallback(diff, now, nthreads, nthreads+1, step);
         if (job.valid())
             job.wait();
     }
@@ -3143,8 +3143,14 @@ bool Map::GetWalkHitPosition(GenericTransport* transport, float srcX, float srcY
         sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "WalkHitPos: Navmesh raycast failed");
         return false;
     }
-    for (int i = 0; i < 3; ++i)
-        endPosition[i] += hitNormal[i] * 0.5f;
+
+    // We hit a wall - calculate new endposition
+    if ((t < 1) && (t > 0))
+    {
+        for (int i = 0; i < 3; ++i)
+            endPosition[i] = point[i] + (endPosition[i] - point[i]) * hitNormal[i];
+    }
+
     if (dtStatusFailed(m_navMeshQuery->closestPointOnPoly(visited[visitedCount - 1], endPosition, endPosition, nullptr)))
         return false;
 
