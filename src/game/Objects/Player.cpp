@@ -16876,7 +16876,7 @@ void Player::_LoadGuild(QueryResult* result)
 /***                   SAVE SYSTEM                     ***/
 /*********************************************************/
 
-void Player::SaveToDB(bool online, bool force)
+bool Player::SaveToDB(bool online, bool force, bool direct)
 {
     // we should assure this: ASSERT((m_nextSave != sWorld.getConfig(CONFIG_UINT32_INTERVAL_SAVE)));
     // delay auto save at any saves (manual, in code, or autosave)
@@ -16884,21 +16884,19 @@ void Player::SaveToDB(bool online, bool force)
 
     // Pas de sauvegarde des bots
     if (GetSession()->GetBot())
-        return;
+        return false;
     if (m_DbSaveDisabled)
-        return;
+        return false;
 
     //lets allow only players in world to be saved
     if (!force && IsBeingTeleportedFar())
     {
         ScheduleDelayedOperation(DELAYED_SAVE_PLAYER);
-        return;
+        return false;
     }
 
-    //DEBUG_FILTER_LOG(LOG_FILTER_PLAYER_STATS, "The value of player %s at save: ", m_name.c_str());
-    //outDebugStatsValues();
-
-    CharacterDatabase.BeginTransaction(GetGUIDLow());
+    if (!CharacterDatabase.BeginTransaction(GetGUIDLow()))
+        return false;
 
     m_honorMgr.Update();
 
@@ -17056,7 +17054,17 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt8(m_hardcoreStatus);
     uberInsert.addUInt32(GetTotalDeathCount());
     uberInsert.addUInt8(HasXPGainEnabled());
-    uberInsert.Execute();
+    
+    if (direct)
+    {
+        if (!uberInsert.DirectExecute())
+            return false;
+    }
+    else
+    {
+        if (!uberInsert.Execute())
+            return false;
+    }
 
     _SaveBGData();
     _SaveInventory();
@@ -17087,7 +17095,7 @@ void Player::SaveToDB(bool online, bool force)
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
     GetSession()->SaveTutorialsData();                      // changed only while character in game
 
-    CharacterDatabase.CommitTransaction();
+    bool saved = direct ? CharacterDatabase.CommitTransactionDirect() : CharacterDatabase.CommitTransaction();
 
     if ((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
     {
@@ -17102,12 +17110,15 @@ void Player::SaveToDB(bool online, bool force)
     // save pet (hunter pet level and experience and all type pets health/mana).
     if (Pet* pet = GetPet())
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
     {
         data->uiLevel = GetLevel();
         data->uiZoneId = GetCachedZoneId();
         data->uiHardcoreStatus = GetHardcoreStatus();
     }
+
+    return saved;
 }
 
 // fast save function for item/money cheating preventing - save only inventory and money state

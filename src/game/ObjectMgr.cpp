@@ -833,6 +833,13 @@ void ObjectMgr::DeletePlayerFromCache(uint32 lowGuid)
     }
 }
 
+void ObjectMgr::DeletePlayerNameFromCache(std::string const& name)
+{
+    auto itr = m_playerNameToGuid.find(name);
+    if (itr != m_playerNameToGuid.end())
+        m_playerNameToGuid.erase(itr);
+}
+
 void ObjectMgr::ChangePlayerNameInCache(uint32 guidLow, std::string const& oldName, std::string const& newName)
 {
     auto itr = m_playerCacheData.find(guidLow);
