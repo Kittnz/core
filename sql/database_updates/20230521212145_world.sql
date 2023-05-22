@@ -19,3 +19,6 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577212,7, 5211.960938,-1256.336792,1371.696899, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2577212,8, 5161.615723,-1338.726074,1358.527710, 100);
 REPLACE INTO `creature` VALUES (2577212,61533,0,0,0,1,5175.63,-1393.6,1355.68,0.77527,300,300,0,100,100,2,0,0);
+
+-- Changes by TORTA
+REPLACE INTO `gameobject` VALUES ( 5015492, 2005047, 1, 2910.17, -3248.18, 161.334, 4.30707, 0, 0, 0.834959, -0.550313, 300, 300, 100, 1, 0, 0);
