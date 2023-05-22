@@ -5,3 +5,7 @@ UPDATE `item_template` SET `max_count` = 1 WHERE `entry` = 50703;
 -- Make Polearm training available for Druids from Weapon Trainers.
 
 REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (2928, 229, 200, 0, 1031, 1, 0, 2, 0, 0, 0);
+
+-- High Elf start with Swords, Maces, Daggers?  Remove Axes.
+
+DELETE FROM `playercreateinfo_spell` WHERE `spell` = 196 AND `race` = 10 AND `class` = 1;
