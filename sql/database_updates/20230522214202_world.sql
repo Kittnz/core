@@ -43,5 +43,12 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (88098, 31445, 0, -11889.8, 3188.73, 17.4114, 1.62145, 0, 0, 0.724787, 0.688973, 300, 300, 100, 1, 0, 0);
 
 -- Fixed Ivory Tallstriderr getting dismounted in water.
+
 DELETE FROM `spell_mod` WHERE `Id` = 8396;
 UPDATE `spell_template` SET `castingTimeIndex` = 14 WHERE `entry`=8396;
+
+-- Fixed Ivory Tallstriderr getting dismounted in water.
+
+DELETE FROM `spell_mod` WHERE `Id` = 25675;
+UPDATE `spell_template` SET `castingTimeIndex` = 14 WHERE `entry`= 25675;
+
