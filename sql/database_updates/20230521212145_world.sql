@@ -37,3 +37,9 @@ REPLACE INTO `gameobject` VALUES ( 5015493, 2005043, 1, 2912.6, -3248.6, 160, 3.
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2577213,61457,0,0,0,0,-2147.39,1159.58,25.5197,1.79855,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574681;
+DELETE FROM creature_addon WHERE guid=2574681;
+DELETE FROM creature_movement WHERE id=2574681;
+DELETE FROM game_event_creature WHERE guid=2574681;
+DELETE FROM game_event_creature_data WHERE guid=2574681;
+DELETE FROM creature_battleground WHERE guid=2574681;
