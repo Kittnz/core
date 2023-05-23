@@ -1934,7 +1934,7 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
             }, 23000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I see... A radiant city... full of people…");
+                pQuestGiver->MonsterSay("I see... A radiant city... full of peopleÂ…");
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 27000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -3774,7 +3774,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side duringÂ… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -4439,7 +4439,7 @@ bool GossipSelect_npc_falgran_hastil(Player* pPlayer, Creature* pCreature, uint3
                 }, 47000);
             pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
                 {
-                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warrior… I assure you, I know nothing of this.");
+                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warriorÂ… I assure you, I know nothing of this.");
                     NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 55000);
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
@@ -5074,7 +5074,7 @@ bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 }, 62000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("That’s why they left him in the swamp. But, what was the information that was so precious to the deserters?");
+                    pQuestGiver->MonsterSay("ThatÂ’s why they left him in the swamp. But, what was the information that was so precious to the deserters?");
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 72000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
@@ -5084,7 +5084,7 @@ bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 }, 82000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("Vengeful Mariner… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it’s connected. ");
+                    pQuestGiver->MonsterSay("Vengeful MarinerÂ… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt itÂ’s connected. ");
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 92000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
@@ -5932,6 +5932,7 @@ bool QuestRewarded_npc_commander_starwind(Player* pPlayer, Creature* pQuestGiver
     return false;
 }
 
+
 bool GOHello_go_mysterious_mailbox(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2020028)
@@ -5942,6 +5943,512 @@ bool GOHello_go_mysterious_mailbox(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GossipHello_npc_lord_ebonlocke(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40817) == QUEST_STATUS_INCOMPLETE) // The Key to Karazhan I
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your tale Lord Ebonlocke.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61255, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_lord_ebonlocke(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30092, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30093, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30094, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30095, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->SEND_GOSSIP_MENU(30096, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->SEND_GOSSIP_MENU(30097, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->SEND_GOSSIP_MENU(30098, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30099, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60034); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool GossipHello_npc_dolvan_bracewind(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40825) == QUEST_STATUS_INCOMPLETE) // The Key to Karazhan VI
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61137, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_dolvan_bracewind(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30100, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30101, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60035); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 40829) // The Key to Karazhan X
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 35 * IN_MILLISECONDS);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->SummonCreature(61330, -4595.88f, -4706.26f, 57.67f, 3.52F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 27 * IN_MILLISECONDS);
+                    pQuestGiver->SummonCreature(61331, -4597.55f, -4709.26f, 57.67f, 2.00F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 27 * IN_MILLISECONDS);
+                }, 2000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I invoke the powers of the Council of Tirisfal!");
+                }, 7000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_CONCUIL_SPIRIT_1 = pQuestGiver->FindNearestCreature(61330, 40.0F);
+
+                    if (!NPC_CONCUIL_SPIRIT_1)
+                        return;
+
+                    NPC_CONCUIL_SPIRIT_1->CastSpell(NPC_CONCUIL_SPIRIT_1, 23017, false); // Arcane Channeling
+                }, 12000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_CONCUIL_SPIRIT_2 = pQuestGiver->FindNearestCreature(61331, 40.0F);
+
+                    if (!NPC_CONCUIL_SPIRIT_2)
+                        return;
+
+                    NPC_CONCUIL_SPIRIT_2->CastSpell(NPC_CONCUIL_SPIRIT_2, 23017, false); // Arcane Channeling
+                }, 12000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Aranal, ledel! Endorel aluminor, endala finel endal!");
+                }, 17000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Karazhan, selama am'oronor! Fala'andu, fallah.");
+                }, 23000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+                }, 31000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("It is done. The key is whole once more.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 33000);
+
+            DoAfterTime(pQuestGiver, 34 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60040); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40837) == QUEST_STATUS_INCOMPLETE) // Rescuing Shizuru
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am here to free you!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60041); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->ForcedDespawn();
+            }, 3000);
+    }
+    return true;
+}
+
+bool GossipHello_npc_greta_longpike(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40847) == QUEST_STATUS_INCOMPLETE) // Rendezvous with the Infiltrator
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Night Lady, gold in mouth at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Long Blizzard, ice dew at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Sun Lady, silver in ear at night.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61379, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_greta_longpike(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->HasItemCount(61351, 1))
+        {
+            pPlayer->AddItem(61351, 1);
+            if (pPlayer->HasItemCount(61351, 1))
+            {
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                pPlayer->SEND_GOSSIP_MENU(30109, pCreature->GetGUID());
+            }
+            else
+            {
+                pPlayer->GetSession()->SendNotification("Your bags are full!");
+                pPlayer->CLOSE_GOSSIP_MENU();
+            }
+        }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30108, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
+bool GOHello_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020017)
+    {
+        if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Alpha Channel Valve.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30113, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020017)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60042))
+            {
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+                if (Group* pGroup = pPlayer->GetGroup())
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
+                                pMember->KilledMonster(cInfo, ObjectGuid());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020018)
+    {
+        if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Reserve Pump Lever.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30114, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020018)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60043))
+            {
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+                if (Group* pGroup = pPlayer->GetGroup())
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
+                                pMember->KilledMonster(cInfo, ObjectGuid());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GossipHello_npc_prospector_gehn(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40868) == QUEST_STATUS_INCOMPLETE) // Mastering the Formula II
+    {
+        if (pCreature->GetEntry() == 1255 && !pPlayer->HasItemCount(61403, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Chemist Volterwhite has sent me to request a shipment of Gol'Bolar Ore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(1255, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_prospector_gehn(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(61403);
+        if (pPlayer->HasItemCount(61403, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Oh, he sent you for ore did he? Make sure he gets it this time.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_master_chemist_volterwhite(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40868) // Mastering the Formula II
+    {
+        pQuestGiver->MonsterSay("Blasted... It would appear that the materials I am working with are not enough... Wait a second, I got it!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40869) // Mastering the Formula III
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_loremaster_taerlon(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40876) == QUEST_STATUS_INCOMPLETE) // The Horn of Binding
+    {
+        if (pCreature->GetEntry() == 61497 && !pPlayer->HasItemCount(61415, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have come on behalf of Everwyl Moonseeker, he desires to borrow the book 'Bracing of Nature'.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61497, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_loremaster_taerlon(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(61415);
+        if (pPlayer->HasItemCount(61415, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("The Bracing of Nature huh? I remember the name Everwyl fondly. Please, let him know that I expect this returned when he is finished with it.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_orvan_darkeye(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40880) // We Take It From The Living
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_STATE_WORK);
+            }, 1000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
+                pQuestGiver->PMonsterEmote("The concoction explodes violently, covering Orvan in blood.");
+            }, 6000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->MonsterSay("Damn it! We will need the blasted book after all.");
+            }, 9000);
+    }
+    return false;
+}
+
+enum
+{
+    NPC_WILLOW = 61514,
+    NPC_INVISIBLE_CONTROLLER = 10
+};
+
+bool GOHello_go_aliattans_campfire(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020026)
+    {
+        if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+            return false;
+
+        if (pPlayer->GetQuestStatus(40908) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect the fire more closely.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30115, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_aliattans_campfire(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020026)
+        {
+            if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+                return false;
+
+            pGo->SummonCreature(NPC_INVISIBLE_CONTROLLER, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 2 * MINUTE * IN_MILLISECONDS);
+
+            if (Creature* pWillow = pGo->SummonCreature(NPC_WILLOW, -1717.13F, 1811.13F, 59.90F, 1.02F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
+            {
+                pWillow->MonsterSay("Another comes to bother these lands? I do not have the patience to toy with another. Join us in the cold, dead ground.");
+                if (Player* pPlayer = pWillow->FindNearestHostilePlayer(50.0f))
+                    pWillow->AI()->AttackStart(pPlayer);
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -5949,6 +6456,71 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "go_mysterious_mailbox";
     newscript->pGOHello = &GOHello_go_mysterious_mailbox;
+    newscript->RegisterSelf();
+  
+    newscript = new Script;
+    newscript->Name = "go_aliattans_campfire";
+    newscript->pGOHello = &GOHello_go_aliattans_campfire;
+    newscript->pGOGossipSelect = &GOSelect_go_aliattans_campfire;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_orvan_darkeye";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_orvan_darkeye;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_loremaster_taerlon";
+    newscript->pGossipHello = &GossipHello_npc_loremaster_taerlon;
+    newscript->pGossipSelect = &GossipSelect_npc_loremaster_taerlon;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_master_chemist_volterwhite";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_master_chemist_volterwhite;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_prospector_gehn";
+    newscript->pGossipHello = &GossipHello_npc_prospector_gehn;
+    newscript->pGossipSelect = &GossipSelect_npc_prospector_gehn;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_reserve_pump_lever";
+    newscript->pGOHello = &GOHello_go_reserve_pump_lever;
+    newscript->pGOGossipSelect = &GOSelect_go_reserve_pump_lever;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_alpha_channel_valve";
+    newscript->pGOHello = &GOHello_go_alpha_channel_valve;
+    newscript->pGOGossipSelect = &GOSelect_go_alpha_channel_valve;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_greta_longpike";
+    newscript->pGossipHello = &GossipHello_npc_greta_longpike;
+    newscript->pGossipSelect = &GossipSelect_npc_greta_longpike;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_shizuru_yamada";
+    newscript->pGossipHello = &GossipHello_npc_shizuru_yamada;
+    newscript->pGossipSelect = &GossipSelect_npc_shizuru_yamada;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_dolvan_bracewind";
+    newscript->pGossipHello = &GossipHello_npc_dolvan_bracewind;
+    newscript->pGossipSelect = &GossipSelect_npc_dolvan_bracewind;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_dolvan_bracewind;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_lord_ebonlocke";
+    newscript->pGossipHello = &GossipHello_npc_lord_ebonlocke;
+    newscript->pGossipSelect = &GossipSelect_npc_lord_ebonlocke;
     newscript->RegisterSelf();
 
     newscript = new Script;

@@ -21,6 +21,7 @@
 
 #include "Common.h"
 #include "Policies/Singleton.h"
+#include "SharedDefines.h"
 
 enum AuraRemovalFlags
 {
@@ -35,6 +36,7 @@ struct AuraRemovalEntry
 };
 
 class Player;
+class Unit;
 
 // Handles removal of auras from players on map changes, based on
 // definitions in world-db table instance_buff_removal
