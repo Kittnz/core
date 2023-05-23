@@ -58,3 +58,8 @@ DELETE FROM game_event_creature WHERE guid=2577214;
 DELETE FROM game_event_creature_data WHERE guid=2577214;
 DELETE FROM creature_battleground WHERE guid=2577214;
 REPLACE INTO `creature` VALUES (2577215,61513,0,0,0,0,-1535.18,1411.26,77.428,0.125484,120,120,0,100,100,0,0,0);
+
+-- Changes by VOJI
+UPDATE `creature` SET `position_x` = 5644.852051, `position_y` = -1121.827271, `position_z` = 380.961029, `orientation` = 2.299642 WHERE `guid` = 2573858;
+UPDATE `creature` SET `position_x` = 5641.056152, `position_y` = -1125.104248, `position_z` = 380.961060, `orientation` = 0.933048 WHERE `guid` = 2573857;
+UPDATE `creature` SET `position_x` = 5626.300781, `position_y` = -1105.061401, `position_z` = 381.811920, `orientation` = 4.624416 WHERE `guid` = 2573860;
