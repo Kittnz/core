@@ -46,6 +46,7 @@
 #include "PlayerBroadcaster.h"
 #include "Mail.h"
 #include "miscellaneous/feature_transmog.h"
+#include "Logging/DatabaseLogger.hpp"
 
 // config option SkipCinematics supported values
 enum CinematicsSkipMode
@@ -303,11 +304,20 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (sObjectMgr.GetPlayerGuidByName(name))
+    if (ObjectGuid existingGuid = sObjectMgr.GetPlayerGuidByName(name))
     {
-        data << (uint8)CHAR_CREATE_NAME_IN_USE;
-        SendPacket(&data);
-        return;
+        PlayerCacheData const* pExistingData = sObjectMgr.GetPlayerDataByGUID(existingGuid.GetCounter());
+        if (pExistingData && pExistingData->sName == name)
+        {
+            data << (uint8)CHAR_CREATE_NAME_IN_USE;
+            SendPacket(&data);
+            return;
+        }
+        else
+        {
+            sObjectMgr.DeletePlayerNameFromCache(name);
+            sLog.outError("Character name %s taken but no player data in cache!", name.c_str());
+        }
     }
 
     if (_charactersCount >= sWorld.getConfig(CONFIG_UINT32_CHARACTERS_PER_REALM))
@@ -358,31 +368,34 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
         }
     }
 
-    Player *pNewChar = new Player(this);
+    // created only to call SaveToDB()
+    std::unique_ptr<Player> pNewChar = std::make_unique<Player>(this);
     if (!pNewChar->Create(sObjectMgr.GeneratePlayerLowGuid(), name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair))
     {
         // Player not create (race/class problem?)
-        delete pNewChar;
-
         data << (uint8)CHAR_CREATE_ERROR;
         SendPacket(&data);
-
         return;
     }
 
     MasterPlayer masterPlayer(this);
-    masterPlayer.Create(pNewChar);
+    masterPlayer.Create(pNewChar.get());
     if ((have_same_race && skipCinematics == CINEMATICS_SKIP_SAME_RACE) || skipCinematics == CINEMATICS_SKIP_ALL)
         pNewChar->SetCinematic(1);                          // not show intro
 
     pNewChar->SetAtLoginFlag(AT_LOGIN_FIRST);               // First login
 
     // Player created, save it now
-    pNewChar->SaveToDB();
+    if (!pNewChar->SaveToDB(false, true, true))
+    {
+        data << (uint8)CHAR_CREATE_ERROR;
+        SendPacket(&data);
+        return;
+    }
     masterPlayer.SaveToDB();
 
-    sObjectMgr.InsertPlayerInCache(pNewChar);
-    sObjectMgr.UpdatePlayerCachedPosition(pNewChar);
+    sObjectMgr.InsertPlayerInCache(pNewChar.get());
+    sObjectMgr.UpdatePlayerCachedPosition(pNewChar.get());
     _charactersCount += 1;
 
     LoginDatabase.PExecute("DELETE FROM realmcharacters WHERE acctid= '%u' AND realmid = '%u'", GetAccountId(), realmID);
@@ -394,7 +407,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     sLog.out(LOG_CHAR, "[%s:%u@%s] Create Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
-    delete pNewChar;                                        // created only to call SaveToDB()
+    sDBLogger->LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
 }
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
@@ -450,6 +463,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Delete Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
     sLog.out(LOG_CHAR, "[%s:%u@%s] Delete Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
+    sDBLogger->LogCharAction({ lowguid, GetAccountId(), LogCharAction::ActionDelete, {} });
 
     // If the character is online (ALT-F4 logout for example)
     if (Player* onlinePlayer = sObjectAccessor.FindPlayer(guid))
@@ -866,6 +880,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (!alreadyOnline && !pCurrChar->IsStandingUp() && !pCurrChar->HasUnitState(UNIT_STAT_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
+    sDBLogger->LogCharAction({ pCurrChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogin, {} });
+
     m_playerLoading = false;
     m_clientMoverGuid = pCurrChar->GetObjectGuid();
     delete holder;
@@ -1046,6 +1062,8 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uin
     CharacterDatabase.CommitTransaction();
 
     sLog.out(LOG_CHAR, "[%s:%u@%s] Character:[%s] (guid:%u) Changed name to: %s", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), oldname.c_str(), guidLow, newname.c_str());
+
+    sDBLogger->LogCharAction({ guidLow, session->GetAccountId(), LogCharAction::ActionRename, CharActionRenameEntry{0, oldname, newname} });
 
     WorldPacket data(SMSG_CHAR_RENAME, 1 + 8 + (newname.size() + 1));
     data << uint8(RESPONSE_SUCCESS);

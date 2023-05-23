@@ -3264,7 +3264,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
     if (pProto && pProto->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
         return victim;
 
-    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
+    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & SPELL_ATTR_IS_ABILITY))
     {
         Unit::AuraList const& magnetAuras = victim->GetAurasByType(SPELL_AURA_SPELL_MAGNET);
         for (const auto magnetAura : magnetAuras)
@@ -3744,7 +3744,7 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
 
     uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell, spellPtr) * 100.0f);
     // Roll miss
-    uint32 tmp = spell->AttributesEx3 & SPELL_ATTR_EX3_CANT_MISS ? 0 : missChance;
+    uint32 tmp = spell->AttributesEx3 & SPELL_ATTR_EX3_ALWAYS_HIT ? 0 : missChance;
     if (roll < tmp)
         return SPELL_MISS_MISS;
 
@@ -3759,6 +3759,7 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
 
     bool canDodge = true;
     bool canParry = true;
+    bool canBlock = spell->HasAttribute(SPELL_ATTR_EX3_COMPLETELY_BLOCKED);
 
     // Same spells cannot be parry/dodge
     if (spell->Attributes & SPELL_ATTR_IMPOSSIBLE_DODGE_PARRY_BLOCK)
@@ -3776,20 +3777,26 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
         // Can`t dodge from behind in PvP (but its possible in PvE)
         if (GetTypeId() == TYPEID_PLAYER && pVictim->GetTypeId() == TYPEID_PLAYER)
             canDodge = false;
-        // Can`t parry
+
+        // Can`t parry or block
         canParry = false;
+        canBlock = false;
     }
     // Check creatures flags_extra for disable parry
     if (Creature* pCreatureVictim = pVictim->ToCreature())
     { 
         if (pCreatureVictim->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_PARRY))
             canParry = false;
+        if (pCreatureVictim->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_BLOCK))
+            canBlock = false;
     }
     // Check if the player can parry
     else
     {
         if (!((Player*)pVictim)->CanParry())
             canParry = false;
+        if (!((Player*)pVictim)->CanBlock())
+            canBlock = false;
     }
 
     if (canDodge)
@@ -3829,6 +3836,13 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
             return SPELL_MISS_PARRY;
     }
 
+    // There are 2 types of ability blocks: partial and full
+    // Fully blockable spells have a specific attribute, which generates a miss instead of a partial block
+    // Spells with an attribute must be rolled for block once on spell hit die
+    // Spells without an attribute must be rolled for partial block only inside damage calculation
+    if (canBlock && pVictim->RollSpellBlockChanceOutcome(this, attType))
+        return SPELL_MISS_BLOCK;
+
     return SPELL_MISS_NONE;
 }
 
@@ -3858,7 +3872,7 @@ SpellMissInfo WorldObject::MagicSpellHitResult(Unit* pVictim, SpellEntry const* 
 
 int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, Spell* spellPtr)
 {
-     if (spell->AttributesEx3 & SPELL_ATTR_EX3_CANT_MISS)
+     if (spell->AttributesEx3 & SPELL_ATTR_EX3_ALWAYS_HIT)
         return 10000;
 
     SpellSchoolMask schoolMask = spell->GetSpellSchoolMask();
@@ -4290,7 +4304,7 @@ void WorldObject::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 da
             damage = pVictim->MeleeDamageBonusTaken(this, damage, attackType, spellInfo, effectIndex, SPELL_DIRECT_DAMAGE, 1, spell);
 
             // if crit add critical bonus
-            if (crit)
+            if (crit && !spellInfo->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS))
             {
                 damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
                 damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
@@ -4306,7 +4320,7 @@ void WorldObject::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 da
             damage = pVictim->SpellDamageBonusTaken(this, spellInfo, effectIndex, damage, SPELL_DIRECT_DAMAGE, 1, spell);
 
             // If crit add critical bonus
-            if (crit)
+            if (crit && !spellInfo->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS))
             {
                 damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
                 damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
@@ -4333,10 +4347,11 @@ void WorldObject::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 da
  */
 uint32 WorldObject::MeleeDamageBonusDone(Unit* pVictim, uint32 pdamage, WeaponAttackType attType, SpellEntry const* spellProto, SpellEffectIndex effectIndex, DamageEffectType damagetype, uint32 stack, Spell* spell, bool flat)
 {
-    if (!pVictim)
+    if (!pVictim || pdamage == 0)
         return pdamage;
 
-    if (pdamage == 0)
+    // Some spells don't benefit from done mods
+    if (spellProto && spellProto->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS))
         return pdamage;
 
     // differentiate for weapon damage based spells
@@ -4499,7 +4514,8 @@ uint32 WorldObject::SpellHealingBonusDone(Unit* pVictim, SpellEntry const* spell
             return owner->SpellHealingBonusDone(pVictim, spellProto, effectIndex, healamount, damagetype, stack, spell);
 
     // No heal amount for this class spells
-    if (((spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE) && spellProto->HasAttribute(SPELL_ATTR_PASSIVE)) || (spellProto->Custom & SPELL_CUSTOM_FIXED_DAMAGE))
+    if (((spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE) && spellProto->HasAttribute(SPELL_ATTR_PASSIVE)) ||
+        (spellProto->Custom & SPELL_CUSTOM_FIXED_DAMAGE) || spellProto->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS))
     {
         //DEBUG_UNIT(this, DEBUG_SPELLS_DAMAGE, "SpellHealingBonusDone[spell=%u]: has fixed damage (SPELL_DAMAGE_CLASS_NONE)", spellProto->Id);
         return healamount < 0 ? 0 : healamount;
@@ -4599,6 +4615,8 @@ uint32 WorldObject::SpellDamageBonusDone(Unit* pVictim, SpellEntry const* spellP
         return pdamage;
 
     if (spellProto->Custom & SPELL_CUSTOM_FIXED_DAMAGE)
+        return pdamage;
+    if (spellProto->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS))
         return pdamage;
 
     // Ignite damage already includes modifiers
@@ -4760,25 +4778,20 @@ int32 WorldObject::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
 
 int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject* pCaster, Spell* spell) const
 {
-    // Distribute Damage over multiple effects, reduce by AoE
-    float coeff = 0.0f;
-
-    // Not apply this to creature casted spells
-    // Daemon: n'importe quoi. Et apres on se demande pourquoi les degats du sceau du croise sont abuses ...
-    //if (GetTypeId()==TYPEID_UNIT && !((Creature*)this)->IsPet())
-    //    coeff = 1.0f;
-    // Check for table values
-    if (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f)
-        coeff = spellProto->EffectBonusCoefficient[effectIndex];
-    // Calculate default coefficient
-    else if (benefit)
-        coeff = spellProto->CalculateDefaultCoefficient(damagetype);
-
     if (benefit)
     {
+        float coeff;
+
+        // Check for table values
+        if (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f)
+            coeff = spellProto->EffectBonusCoefficient[effectIndex];
+        // Calculate default coefficient
+        else
+            coeff = spellProto->CalculateDefaultCoefficient(damagetype);
+
         // Calculate level penalty only if spell does not have coefficient set in template,
         // since the coefficients already have the level penalty accounted for.
-        const float LvlPenalty = (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f) ? 1.0f : CalculateLevelPenalty(spellProto);
+        const float lvlPenalty = (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f) ? 1.0f : CalculateLevelPenalty(spellProto);
 
         // Calculate custom coefficient
         coeff = spellProto->CalculateCustomCoefficient(pCaster, damagetype, coeff, spell, donePart);
@@ -4794,27 +4807,7 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
             }
         }
 
-        // Nostalrius.
-        bool bUsePenalty = true;
-        // Flash of Light
-        if (spellProto->Id == 19993)
-        {
-            bUsePenalty = false;
-            if (Unit const* pUnit = ToUnit())
-            {
-                if (pUnit->HasAura(28853)) total += 53.0f;  // Libram of Divinity
-                if (pUnit->HasAura(28851)) total += 83.0f;  // Libram of Light
-            }
-        }
-
-        // Dragonbreath Chili
-        if (spellProto->Id == 15851)
-            bUsePenalty = false;
-
-        if (bUsePenalty)
-            total += int32(benefit * coeff * LvlPenalty);
-        else
-            total += int32(benefit * coeff);
+        total += int32(benefit * coeff * lvlPenalty);
     }
 
     return total;
@@ -4921,7 +4914,7 @@ void WorldObject::DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabili
 
     // Call default DealDamage (send critical in hit info for threat calculation)
     CleanDamage cleanDamage(0, BASE_ATTACK, damageInfo->HitInfo & SPELL_HIT_TYPE_CRIT ? MELEE_HIT_CRIT : MELEE_HIT_NORMAL, damageInfo->absorb, damageInfo->resist);
-    DealDamage(pVictim, damageInfo->damage, &cleanDamage, SPELL_DIRECT_DAMAGE, GetSchoolMask(damageInfo->school), spellProto, durabilityLoss, damageInfo->spell);
+    DealDamage(pVictim, damageInfo->damage, &cleanDamage, spellProto->HasAttribute(SPELL_ATTR_EX3_TREAT_AS_PERIODIC) ? DOT : SPELL_DIRECT_DAMAGE, GetSchoolMask(damageInfo->school), spellProto, durabilityLoss, damageInfo->spell);
 }
 
 uint32 WorldObject::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell, bool addThreat)

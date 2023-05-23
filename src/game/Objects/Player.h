@@ -90,6 +90,11 @@ enum PlayerUnderwaterState
     UNDERWATER_EXIST_TIMERS             = 0x10
 };
 
+enum CustomPlayerFlags
+{
+    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01
+};
+
 enum BuyBankSlotResult
 {
     ERR_BANKSLOT_FAILED_TOO_MANY    = 0,
@@ -1473,7 +1478,7 @@ class Player final: public Unit
         void _SetUpdateBits(UpdateMask* updateMask, Player* target) const override;
         uint32 m_nextSave;
     public:
-        void SaveToDB(bool online = true, bool force = false);
+        bool SaveToDB(bool online = true, bool force = false, bool direct = false);
         void SaveInventoryAndGoldToDB();                    // fast save function for item/money cheating preventing
         void SaveGoldToDB();
         static void SavePositionInDB(ObjectGuid guid, uint32 mapid, float x,float y,float z,float o,uint32 zone);
@@ -2335,7 +2340,7 @@ class Player final: public Unit
         Corpse* CreateCorpse();
         void KillPlayer();
         uint32 GetResurrectionSpellId() const;
-        void ResurrectPlayer(float restore_percent, bool applySickness = false);
+        void ResurrectPlayer(float restore_percent, bool applySickness = false, bool forceHc = false);
         void BuildPlayerRepop();
         void RepopAtGraveyard();
         void ScheduleRepopAtGraveyard();
@@ -2905,7 +2910,7 @@ void RemoveItemsSetItem(Player*player,ItemPrototype const* proto);
 template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
-    if (!spellInfo) return 0;
+    if (!spellInfo || spellInfo->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS)) return 0;
     int32 totalpct = 0;
     int32 totalflat = 0;
     for (const auto mod : m_spellMods[op])
