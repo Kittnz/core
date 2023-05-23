@@ -5202,10 +5202,10 @@ void Player::BuildPlayerRepop()
     SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND);
 }
 
-void Player::ResurrectPlayer(float restore_percent, bool applySickness)
+void Player::ResurrectPlayer(float restore_percent, bool applySickness, bool forceHc)
 {
     // Don't ressurent permamently dead chracters.
-    if (IsHardcore())
+    if (IsHardcore() && !forceHc)
         return;
 
     // Interrupt resurrect spells
@@ -15527,8 +15527,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GM))
         SetUInt32Value(PLAYER_FLAGS, 0 | old_safe_flags);
 
-	// Unused
-    uint32 FlagsUnused = fields[58].GetUInt32();
+    customFlags = fields[58].GetUInt32();
 
     m_taxi.LoadTaxiMask(fields[17].GetString());
 
@@ -16088,6 +16087,12 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
 
 void Player::LoadCorpse()
 {
+    if (sWorld._deadHcPlayers.find(GetName()) != sWorld._deadHcPlayers.end() && (customFlags & CUSTOM_PLAYER_FLAG_HC_RESTORED) == 0)
+    {
+        ResurrectPlayer(1.0f, false, true);
+        CharacterDatabase.DirectPExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 1 WHERE `name` = '%s'", GetName());
+    }
+
     if (IsAlive())
         sObjectAccessor.ConvertCorpseForPlayer(GetObjectGuid());
     else
@@ -16871,7 +16876,7 @@ void Player::_LoadGuild(QueryResult* result)
 /***                   SAVE SYSTEM                     ***/
 /*********************************************************/
 
-void Player::SaveToDB(bool online, bool force)
+bool Player::SaveToDB(bool online, bool force, bool direct)
 {
     // we should assure this: ASSERT((m_nextSave != sWorld.getConfig(CONFIG_UINT32_INTERVAL_SAVE)));
     // delay auto save at any saves (manual, in code, or autosave)
@@ -16879,21 +16884,19 @@ void Player::SaveToDB(bool online, bool force)
 
     // Pas de sauvegarde des bots
     if (GetSession()->GetBot())
-        return;
+        return false;
     if (m_DbSaveDisabled)
-        return;
+        return false;
 
     //lets allow only players in world to be saved
     if (!force && IsBeingTeleportedFar())
     {
         ScheduleDelayedOperation(DELAYED_SAVE_PLAYER);
-        return;
+        return false;
     }
 
-    //DEBUG_FILTER_LOG(LOG_FILTER_PLAYER_STATS, "The value of player %s at save: ", m_name.c_str());
-    //outDebugStatsValues();
-
-    CharacterDatabase.BeginTransaction(GetGUIDLow());
+    if (!CharacterDatabase.BeginTransaction(GetGUIDLow()))
+        return false;
 
     m_honorMgr.Update();
 
@@ -17045,13 +17048,23 @@ void Player::SaveToDB(bool online, bool force)
     // Nostalrius
     uberInsert.addUInt32(GetAreaId());
     uberInsert.addUInt32(GetWorldMask());
-    uberInsert.addUInt32(0); // Custom flag from Nost. Not used anymore
+    uberInsert.addUInt32(customFlags);
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
     uberInsert.addUInt8(m_hardcoreStatus);
     uberInsert.addUInt32(GetTotalDeathCount());
     uberInsert.addUInt8(HasXPGainEnabled());
-    uberInsert.Execute();
+    
+    if (direct)
+    {
+        if (!uberInsert.DirectExecute())
+            return false;
+    }
+    else
+    {
+        if (!uberInsert.Execute())
+            return false;
+    }
 
     _SaveBGData();
     _SaveInventory();
@@ -17082,7 +17095,7 @@ void Player::SaveToDB(bool online, bool force)
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
     GetSession()->SaveTutorialsData();                      // changed only while character in game
 
-    CharacterDatabase.CommitTransaction();
+    bool saved = direct ? CharacterDatabase.CommitTransactionDirect() : CharacterDatabase.CommitTransaction();
 
     if ((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
     {
@@ -17097,12 +17110,15 @@ void Player::SaveToDB(bool online, bool force)
     // save pet (hunter pet level and experience and all type pets health/mana).
     if (Pet* pet = GetPet())
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
     {
         data->uiLevel = GetLevel();
         data->uiZoneId = GetCachedZoneId();
         data->uiHardcoreStatus = GetHardcoreStatus();
     }
+
+    return saved;
 }
 
 // fast save function for item/money cheating preventing - save only inventory and money state
@@ -23618,9 +23634,8 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 		return false;
 	}
 
-	// Make sure dual spec table is empty for spec = uiPrimaryOrSecondary to avoid duplicates
-	CharacterDatabase.DirectPExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
     CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
 
     for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
 	{

@@ -1,6 +1,7 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
 #include "GuardAI.h"
+#include "PetAI.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -1933,7 +1934,7 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
             }, 23000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I see... A radiant city... full of people…");
+                pQuestGiver->MonsterSay("I see... A radiant city... full of peopleÂ…");
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 27000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -2614,12 +2615,23 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
     {
         Creature* npc_cookie = pQuestGiver->SummonCreature(60709, -11410.70F, 1966.56F, 10.60F, 6.12F, TEMPSUMMON_TIMED_DESPAWN, 0.125 * MINUTE * IN_MILLISECONDS);
 
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 5 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
+            auto npc = player->GetMap()->GetCreature(npcGuid);
+            if (!npc)
+                return;
+
             Creature* npc_cookie = npc->FindNearestCreature(60709, 30.0F);
+            if (!npc_cookie)
+                return;
+
             npc_cookie->PMonsterEmote("Cookie looks at Grayson with sadness in his eyes and waves him off.");
             npc_cookie->MonsterSay("Mrrgl?");
             });
-        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
+            auto npc = player->GetMap()->GetCreature(npcGuid);
+            if (!npc)
+                return;
+
             Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
             npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
             });
@@ -3762,7 +3774,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side duringÂ… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -4427,7 +4439,7 @@ bool GossipSelect_npc_falgran_hastil(Player* pPlayer, Creature* pCreature, uint3
                 }, 47000);
             pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
                 {
-                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warrior… I assure you, I know nothing of this.");
+                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warriorÂ… I assure you, I know nothing of this.");
                     NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 55000);
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
@@ -5062,7 +5074,7 @@ bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 }, 62000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("That’s why they left him in the swamp. But, what was the information that was so precious to the deserters?");
+                    pQuestGiver->MonsterSay("ThatÂ’s why they left him in the swamp. But, what was the information that was so precious to the deserters?");
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 72000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
@@ -5072,7 +5084,7 @@ bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 }, 82000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("Vengeful Mariner… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it’s connected. ");
+                    pQuestGiver->MonsterSay("Vengeful MarinerÂ… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt itÂ’s connected. ");
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 92000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
@@ -5728,6 +5740,72 @@ struct npc_horde_defenderAI : public GuardAI
 
 CreatureAI* GetAI_npc_horde_defender(Creature* creature) { return new npc_horde_defenderAI(creature); }
 
+struct npc_feral_spiritAI : public PetAI
+{
+    npc_feral_spiritAI(Creature* c) : PetAI(c) { }
+
+    float GetDamageScalingPercent() const
+    {
+        switch (m_creature->GetEntry())
+        {
+            case 29000: // Rank 1
+                return 0.33f;
+            case 29001: // Rank 2
+                return 0.66f;
+        }
+
+        return 1.0f;
+    }
+
+    void UpdateAI(uint32 const diff) override
+    {
+        // scale with owner's damage in real time
+        if (Unit* pOwner = m_creature->GetOwner())
+        {
+            m_creature->SetFloatValue(UNIT_FIELD_MINDAMAGE, pOwner->GetFloatValue(UNIT_FIELD_MINDAMAGE) * GetDamageScalingPercent());
+            m_creature->SetFloatValue(UNIT_FIELD_MAXDAMAGE, pOwner->GetFloatValue(UNIT_FIELD_MAXDAMAGE) * GetDamageScalingPercent());
+
+            // disenage from target if owner is not attacking
+            if (m_creature->GetVictim() && pOwner->GetTargetGuid().IsEmpty() && pOwner->IsMoving())
+                m_creature->HandlePetCommand(COMMAND_FOLLOW, pOwner);
+        }
+
+        PetAI::UpdateAI(diff);
+    }
+
+    // override to always attack owner's victim
+    // normally defensive pets only attack if you are hit
+    void OwnerAttacked(Unit* target) override
+    {
+        if (!m_creature->IsValidAttackTarget(target))
+            return;
+
+        // Pet desactive (monture)
+        if (m_creature->IsPet() && !((Pet*)m_creature)->IsEnabled())
+            return;
+
+        // Passive pets don't do anything
+        if (m_creature->HasReactState(REACT_PASSIVE))
+            return;
+
+        // In crowd control
+        if (m_creature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+            return;
+
+        // Always attack owner's target
+        if (m_creature->GetVictim() && m_creature->GetVictim()->IsAlive())
+        {
+            Unit* pOwner = m_creature->GetOwner();
+            if (!pOwner || pOwner->GetTargetGuid() != target->GetObjectGuid())
+                return;
+        }
+
+        AttackStart(target);
+    }
+};
+
+CreatureAI* GetAI_npc_feral_spirit(Creature* creature) { return new npc_feral_spiritAI(creature); }
+
 bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsQuestGiver())
@@ -5852,6 +5930,17 @@ bool QuestRewarded_npc_commander_starwind(Player* pPlayer, Creature* pQuestGiver
     }
 
     return false;
+}
+
+
+bool GOHello_go_mysterious_mailbox(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020028)
+    {
+        pPlayer->PrepareQuestMenu(pGo->GetObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30116, pGo->GetGUID());
+    }
+    return true;
 }
 
 bool GossipHello_npc_lord_ebonlocke(Player* pPlayer, Creature* pCreature)
@@ -6364,6 +6453,11 @@ void AddSC_random_scripts_3()
 {
     Script* newscript;
 
+    newscript = new Script;
+    newscript->Name = "go_mysterious_mailbox";
+    newscript->pGOHello = &GOHello_go_mysterious_mailbox;
+    newscript->RegisterSelf();
+  
     newscript = new Script;
     newscript->Name = "go_aliattans_campfire";
     newscript->pGOHello = &GOHello_go_aliattans_campfire;
@@ -7147,5 +7241,10 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_horde_defender";
     newscript->GetAI = &GetAI_npc_horde_defender;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_feral_spirit";
+    newscript->GetAI = &GetAI_npc_feral_spirit;
     newscript->RegisterSelf();
 }

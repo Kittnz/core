@@ -1416,6 +1416,7 @@ class ObjectMgr
         PlayerCacheData* InsertPlayerInCache(Player *pPlayer);
         PlayerCacheData* InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 uiGender, uint32 account, std::string const& name, uint32 level, uint32 zoneId, uint8 hardcoreStatus);
         void DeletePlayerFromCache(uint32 lowGuid);
+        void DeletePlayerNameFromCache(std::string const& name);
         void ChangePlayerNameInCache(uint32 lowGuid, std::string const& oldName, std::string const& newName);
         void UpdatePlayerCachedPosition(Player *pPlayer);
         void UpdatePlayerCachedPosition(uint32 lowGuid, uint32 mapId, float posX, float posY, float posZ, float o, bool inFlight);

@@ -1299,7 +1299,8 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     if (pPlayerVictim)
     {
         // only if not player and not controlled by player pet. And not at BG
-        if (durabilityLoss && !pPlayerTap && !pPlayerVictim->InBattleGround())
+        if (durabilityLoss && !pPlayerTap && !pPlayerVictim->InBattleGround() &&
+           (!spellProto || !spellProto->HasAttribute(SPELL_ATTR_EX3_NO_DURABILITY_LOSS)))
         {
             DEBUG_LOG("We are dead, loosing 10 percents durability");
             pPlayerVictim->DurabilityLossAll(0.10f, false);
@@ -1817,7 +1818,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
         for (const auto& itr : vAuras)
         {
             SpellEntry const *spellInfo = itr.second->GetSpellProto();
-            if (spellInfo->AttributesEx3 & 0x40000 && spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN && (itr.second->GetCasterGuid() == GetObjectGuid()))
+            if (spellInfo->AttributesEx3 & SPELL_ATTR_EX3_ALWAYS_HIT && spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN && (itr.second->GetCasterGuid() == GetObjectGuid()))
                 itr.second->RefreshHolder();
         }
     }
@@ -2250,7 +2251,7 @@ void Unit::CalculateAbsorbResistBlock(WorldObject* pCaster, SpellNonMeleeDamage 
         // Melee and Ranged Spells
         case SPELL_DAMAGE_CLASS_RANGED:
         case SPELL_DAMAGE_CLASS_MELEE:
-            blocked = IsSpellBlocked(pCaster, this, spellProto, attType);
+            blocked = IsSpellPartiallyBlocked(pCaster, spellProto, attType);
             break;
         default:
             break;
@@ -2619,7 +2620,7 @@ void Unit::SendMeleeAttackStop(Unit* pVictim) const
     DETAIL_FILTER_LOG(LOG_FILTER_COMBAT, "%s %u stopped attacking %s %u", (IsPlayer() ? "player" : "creature"), GetGUIDLow(), (pVictim->IsPlayer() ? "player" : "creature"), pVictim->GetGUIDLow());
 }
 
-bool Unit::IsSpellBlocked(WorldObject* pCaster, Unit* pVictim, SpellEntry const* spellEntry, WeaponAttackType attackType) const
+bool Unit::IsSpellPartiallyBlocked(WorldObject* pCaster, SpellEntry const* spellEntry, WeaponAttackType attackType) const
 {
     if (!HasInArc(pCaster))
         return false;
@@ -2628,6 +2629,9 @@ bool Unit::IsSpellBlocked(WorldObject* pCaster, Unit* pVictim, SpellEntry const*
     {
         // Some spells cannot be blocked
         if (spellEntry->Attributes & SPELL_ATTR_IMPOSSIBLE_DODGE_PARRY_BLOCK)
+            return false;
+        // Full block checked in MeleeSpellHitResult (prevents all effects)
+        if (spellEntry->HasAttribute(SPELL_ATTR_EX3_COMPLETELY_BLOCKED))
             return false;
     }
 
@@ -2638,18 +2642,23 @@ bool Unit::IsSpellBlocked(WorldObject* pCaster, Unit* pVictim, SpellEntry const*
             return false;
     }
 
+    return RollSpellBlockChanceOutcome(pCaster, attackType);
+}
+
+bool Unit::RollSpellBlockChanceOutcome(WorldObject* pCaster, WeaponAttackType attackType) const
+{
     float blockChance = GetUnitBlockChance();
 
     int32 skillDiff = int32(pCaster->GetWeaponSkillValue(attackType)) - int32(GetSkillMaxForLevel());
-    blockChance -= pVictim->IsPlayer() ? skillDiff * 0.04f : skillDiff * 0.1f;
+    blockChance -= IsPlayer() ? skillDiff * 0.04f : skillDiff * 0.1f;
 
     // mobs cannot block more than 5% of attacks regardless of rating difference
-    if (!pVictim->IsPlayer() && (blockChance > 5))
+    if (!IsPlayer() && (blockChance > 5))
         blockChance = 5.0f;
 
     // Low level reduction
-    if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
-        blockChance *= pVictim->GetLevel() / 10.0f;
+    if (!IsPlayer() && GetLevel() < 10)
+        blockChance *= GetLevel() / 10.0f;
 
     if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) || (blockChance < 0) || (pCaster->IsPlayer() && pCaster->ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)))
         blockChance = 0;
@@ -3455,7 +3464,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                     case SPELL_AURA_PERIODIC_ENERGIZE:      // all or self or clear non-stackable
                     default:                                // not allow
                         // can be only single (this check done at _each_ aura add
-                        stop = true;
+                        stop = !aurSpellInfo->HasAttribute(SPELL_ATTR_EX3_DOT_STACKING_RULE);
                         break;
                 }
             }
@@ -3639,7 +3648,7 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
     uint32 spellId = holder->GetId();
 
     // passive spell special case (only non stackable with ranks)
-    if (spellProto->Attributes & (SPELL_ATTR_PASSIVE | 0x80))
+    if (spellProto->Attributes & (SPELL_ATTR_PASSIVE | SPELL_ATTR_HIDDEN_CLIENTSIDE))
     {
         if (spellProto->IsPassiveSpellStackableWithRanks())
             return true;
@@ -3723,7 +3732,7 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
             continue;
 
         // early checks that spellId is passive non stackable spell
-        if (i_spellProto->Attributes & (SPELL_ATTR_PASSIVE | 0x80))
+        if (i_spellProto->Attributes & (SPELL_ATTR_PASSIVE | SPELL_ATTR_HIDDEN_CLIENTSIDE))
         {
             // passive non-stackable spells not stackable only for same caster
             // -> Sauf si 2 AreaAuras
@@ -4319,8 +4328,7 @@ void Unit::RemoveArenaAuras(bool onleave, AuraRemoveMode mode /*= AURA_REMOVE_BY
     // On join, remove positive buffs, on end, remove negative used to remove positive visible auras in arenas
     for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
     {
-        if (!iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_EX4_UNK21) && // Don't remove stances, shadowform, pally/hunter auras
-            !iter->second->IsPassive() && // Don't remove passive auras
+        if (!iter->second->IsPassive() && // Don't remove passive auras
            (!iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) || !iter->second->GetSpellProto()->HasAttribute(SPELL_ATTR_HIDE_IN_COMBAT_LOG)) &&
            (!iter->second->GetSpellProto()->HasAreaAuraEffect()) && // Not unaffected by invulnerability auras or not having that unknown flag (that seemed the most probable)
            (iter->second->IsPositive() != onleave)) // Remove positive buffs on enter, negative buffs on leave
@@ -5500,27 +5508,34 @@ uint32 Unit::GetSpellRank(SpellEntry const* spellInfo)
  */
 uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spellProto, SpellEffectIndex effectIndex, uint32 pdamage, DamageEffectType damagetype, uint32 stack, Spell* spell) const
 {
-    if (!spellProto || !pCaster || damagetype == DIRECT_DAMAGE)
+    if (!spellProto || !pCaster || damagetype == DIRECT_DAMAGE || spellProto->HasAttribute(SPELL_ATTR_EX4_IGNORE_DAMAGE_TAKEN_MODIFIERS))
         return pdamage;
 
     uint32 schoolMask = spell ? spell->m_spellSchoolMask : spellProto->GetSpellSchoolMask();
 
     // Taken total percent damage auras
-    float TakenTotalMod = 1.0f;
-    int32 TakenTotal = 0;
-
-    // ..taken
-    TakenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
+    float takenTotalMod = 1.0f;
+    takenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
     if (spellProto->IsAreaOfEffectSpell())
-        TakenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
+        takenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
+
+    float tmpDamage;
 
     // Taken fixed damage bonus auras
-    int32 TakenAdvertisedBenefit = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
+    int32 takenFlatMod = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
+    if (takenFlatMod < 0)
+    {
+        if ((-takenFlatMod > (pdamage / 2)))
+            takenFlatMod = -int(pdamage / 2);
 
-    // apply benefit affected by spell power implicit coeffs and spell level penalties
-    TakenTotal = SpellBonusWithCoeffs(spellProto, effectIndex, TakenTotal, TakenAdvertisedBenefit, 0, damagetype, false, pCaster, spell);
-
-    float tmpDamage = (int32(pdamage) + TakenTotal * int32(stack)) * TakenTotalMod;
+        tmpDamage = (int32(pdamage) + takenFlatMod) * takenTotalMod;
+    }
+    else
+    {
+        // apply benefit affected by spell power implicit coeffs and spell level penalties
+        int32 takenTotal = SpellBonusWithCoeffs(spellProto, effectIndex, 0, takenFlatMod, 0, damagetype, false, pCaster, spell);
+        tmpDamage = (int32(pdamage) + takenTotal * int32(stack)) * takenTotalMod;
+    }
 
     return tmpDamage > 0 ? uint32(tmpDamage) : 0;
 }
@@ -5564,7 +5579,13 @@ bool Unit::IsSpellCrit(Unit const* pVictim, SpellEntry const* spellProto, SpellS
         crit_chance = 10.0f;
     else
     {
-        switch (spellProto->DmgClass)
+        // Wand shoot forced to use ranged crit
+        uint32 const dmgClass = attackType == RANGED_ATTACK && spellProto->HasAttribute(SPELL_ATTR_EX3_NORMAL_RANGED_ATTACK) ?
+            SPELL_DAMAGE_CLASS_RANGED
+            :
+            spellProto->DmgClass;
+
+        switch (dmgClass)
         {
             case SPELL_DAMAGE_CLASS_NONE:
                 return false;
@@ -5969,6 +5990,9 @@ uint32 Unit::MeleeDamageBonusTaken(WorldObject* pCaster, uint32 pdamage, WeaponA
         return pdamage;
 
     if (pdamage == 0)
+        return pdamage;
+
+    if (spellProto && spellProto->HasAttribute(SPELL_ATTR_EX4_IGNORE_DAMAGE_TAKEN_MODIFIERS))
         return pdamage;
 
     // Exception for Seal of Command and Seal of Righteousness
@@ -7666,6 +7690,9 @@ float Unit::ApplyTotalThreatModifier(float threat, SpellSchoolMask schoolMask)
 
 void Unit::AddThreat(Unit* target, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const *threatSpell /*= nullptr*/)
 {
+    if (threatSpell && threatSpell->HasAttribute(SPELL_ATTR_EX4_NO_HARMFUL_THREAT))
+        return;
+
     // Only mobs can manage threat lists
     if (CanHaveThreatList() && IsInMap(target))
         m_ThreatManager.addThreat(target, threat, crit, schoolMask, threatSpell, false);

@@ -494,6 +494,102 @@ bool ChatHandler::HandleLearnAllMySpellsCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleLearnAllTrainerCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    
+    uint32 trainerId;
+    if (ExtractUInt32(&args, trainerId))
+    {
+        if (TrainerSpellData const* tSpells = sObjectMgr.GetNpcTrainerTemplateSpells(trainerId))
+            HandleLearnTrainerHelper(pPlayer, tSpells);
+        else
+        {
+            SendSysMessage("Trainer template not found!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+    else
+    {
+        std::set<uint32> checkedTrainerTemplates;
+        for (uint32 i = 0; i < sCreatureStorage.GetMaxEntry(); ++i)
+        {
+            CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(i);
+            if (!cInfo)
+                continue;
+
+            if (!(cInfo->npc_flags & UNIT_NPC_FLAG_TRAINER))
+                continue;
+
+            switch (cInfo->trainer_type)
+            {
+                case TRAINER_TYPE_CLASS:
+                {
+                    if (cInfo->trainer_class != pPlayer->GetClass())
+                        continue;
+                    break;
+                }
+                case TRAINER_TYPE_PETS:
+                {
+                    if (pPlayer->GetClass() != CLASS_HUNTER)
+                        continue;
+                    break;
+                }
+            }
+
+            if (TrainerSpellData const* cSpells = sObjectMgr.GetNpcTrainerSpells(i))
+                HandleLearnTrainerHelper(pPlayer, cSpells);
+
+            if (trainerId = cInfo->trainer_id) // assignment
+            {
+                if (checkedTrainerTemplates.find(trainerId) != checkedTrainerTemplates.end())
+                    continue;
+
+                checkedTrainerTemplates.insert(trainerId);
+                if (TrainerSpellData const* tSpells = sObjectMgr.GetNpcTrainerTemplateSpells(trainerId))
+                    HandleLearnTrainerHelper(pPlayer, tSpells);
+            }
+        }
+    }
+
+    SendSysMessage("Learned all available spells from trainers.");
+    return true;
+}
+
+void ChatHandler::HandleLearnTrainerHelper(Player* player, TrainerSpellData const* tSpells)
+{
+    // spells are not in rank order, so we need to do multiple loops to learn everything
+    bool learnedAnything;
+    do
+    {
+        learnedAnything = false;
+        for (const auto& itr : tSpells->spellList)
+        {
+            TrainerSpell const* tSpell = &itr.second;
+
+            TrainerSpellState state = player->GetTrainerSpellState(tSpell);
+            if (state != TRAINER_SPELL_GREEN)
+                continue;
+
+            for (auto const& spellId : sSpellMgr.GetSpellEntry(tSpell->spell)->EffectTriggerSpell)
+            {
+                if (!spellId)
+                    continue;
+
+                if (sSpellMgr.IsPrimaryProfessionFirstRankSpell(spellId))
+                    continue;
+
+                if (!player->IsSpellFitByClassAndRace(spellId))
+                    continue;
+
+                player->LearnSpell(spellId, false);
+                learnedAnything = true;
+            }
+        }
+    } while (learnedAnything);
+}
+
 bool ChatHandler::HandleLearnCommand(char* args)
 {
     Player* player = m_session->GetPlayer();
@@ -7852,6 +7948,7 @@ bool ChatHandler::HandleMuteCommand(char* args)
     // Save mute history.
     std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
 
+    LoginDatabase.escape_string(givenReason);
     LoginDatabase.PExecute("INSERT INTO `account_muted` (`id`, `mutedate`, `unmutedate`, `mutedby`, `mutereason`) VALUES (%u, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+%u, '%s', '%s')",
         accountId, minutes * MINUTE, authorName.c_str(), givenReason.c_str());
 
@@ -14319,34 +14416,43 @@ bool ChatHandler::HandleGetShopLogs(char* args)
 
     QueryResult* result = LoginDatabase.PQuery("SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u", account_id);
 
-    if (result)
-    {
-        do
+    LoginDatabase.AsyncPQuery<std::tuple<uint32, std::string>>([](QueryResult* result, std::tuple<uint32, std::string> callbackData)
         {
-            Field* fields = result->Fetch();
-            std::string date = fields[0].GetString();
-            uint32 charGuid = fields[1].GetUInt32();
-            uint32 itemEntry = fields[2].GetUInt32();
-            uint32 itemPrice = fields[3].GetUInt32();
-            bool refunded = fields[4].GetBool();
+            const auto& [accountId, targetAccountName] = callbackData;
+            auto session = sWorld.FindSession(accountId);
 
-            QueryResult* result2 = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", charGuid);
-            std::string charName = "Unknown";
-            if (result2)
+            if (!session)
+                return;
+
+            if (!result)
             {
-                Field* fields2 = result2->Fetch();
-                charName = fields2[0].GetString();
-                delete result2;
+                ChatHandler(session).PSendSysMessage("No payment history for account %s (ID: %u)", targetAccountName.c_str(), accountId);
+                return;
             }
 
-            PSendSysMessage("%s | %s spent %u tokens on item %u %s", date.c_str(), charName.c_str(), itemPrice, itemEntry, refunded ? "(refunded)" : "");
-        }
-        while (result->NextRow());
+            do
+            {
+                Field* fields = result->Fetch();
+                std::string date = fields[0].GetString();
+                uint32 charGuid = fields[1].GetUInt32();
+                uint32 itemEntry = fields[2].GetUInt32();
+                uint32 itemPrice = fields[3].GetUInt32();
+                bool refunded = fields[4].GetBool();
 
-        delete result;
-    }
-    else
-        PSendSysMessage("No payment history for account %s (ID: %u)", account_name.c_str(), account_id);
+                std::string charName = "Unknown";
+
+                auto cachedPlayerData = sObjectMgr.GetPlayerDataByGUID(charGuid);
+
+                if (cachedPlayerData)
+                    charName = cachedPlayerData->sName;
+
+                ChatHandler(session).PSendSysMessage("%s | %s spent %u tokens on item %u %s", date.c_str(), charName.c_str(), itemPrice, itemEntry, refunded ? "(refunded)" : "");
+            } while (result->NextRow());
+
+            delete result;
+
+        }, { GetSession()->GetAccountId(), account_name }, "SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u",
+        account_id);
 
     return true;
 }

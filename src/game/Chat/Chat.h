@@ -49,6 +49,7 @@ class Unit;
 class GmTicket;
 struct ItemPrototype;
 struct GameObjectData;
+struct TrainerSpellData;
 
 enum CommandFlags
 {
@@ -370,6 +371,7 @@ class ChatHandler
 
         bool HandleLearnCommand(char* args);
         bool HandleLearnAllMySpellsCommand(char* args);
+        bool HandleLearnAllTrainerCommand(char* args);
 
         bool HandleLookupCreatureCommand(char* args);
         bool HandleLookupFactionCommand(char* args);
@@ -713,6 +715,7 @@ class ChatHandler
         bool HandleMuteHistoryHelper(uint32 accountid, char const* accountname);
         void HandleCharacterLevel(Player* player, ObjectGuid player_guid, uint32 oldlevel, uint32 newlevel);
         void HandleLearnSkillRecipesHelper(Player* player,uint32 skill_id);
+        void HandleLearnTrainerHelper(Player* player, TrainerSpellData const* tSpells);
         bool HandleGoHelper(Player* _player, uint32 mapid, float x, float y, float const* zPtr = nullptr, float const* ortPtr = nullptr);
         bool HandleGetValueHelper(Object* target, uint32 field, char* typeStr);
         bool HandlerDebugModValueHelper(Object* target, uint32 field, char* typeStr, char* valStr);

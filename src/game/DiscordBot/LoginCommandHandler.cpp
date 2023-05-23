@@ -23,10 +23,11 @@ namespace DiscordBot
     {
         container["Turtle-Login"] = [](const form_submit_t& event)
         {
-            std::string v = std::get<std::string>(event.components[0].components[0].value);
-            std::string v2 = std::get<std::string>(event.components[1].components[0].value);
+            std::string username = std::get<std::string>(event.components[0].components[0].value);
+            std::string password = std::get<std::string>(event.components[1].components[0].value);
+            std::string twofactorToken = std::get<std::string>(event.components[2].components[0].value);
             dpp::message m;
-            auto result = AuthManager::Instance()->Login(v, v2, &event.command.usr);
+            auto result = AuthManager::Instance()->Login(username, password, twofactorToken, &event.command.usr);
 
             m.set_content(AuthManager::AuthResultToString(result)).set_flags(m_ephemeral);
             event.reply(m);
@@ -38,6 +39,8 @@ namespace DiscordBot
         if (!src.interaction_event.has_value())
             return;
 
+        src.interaction_event.value().command.usr.format_username();
+
         interaction_modal_response modal("Turtle-Login", "Please login with your Turtle WoW account");
         modal.add_component(
             component().
@@ -45,6 +48,7 @@ namespace DiscordBot
             set_id("username").
             set_type(dpp::cot_text).
             set_placeholder("Username").
+            set_min_length(1).
             set_max_length(12).
             set_text_style(dpp::text_short)
         );
@@ -57,7 +61,19 @@ namespace DiscordBot
             set_type(dpp::cot_text).
             set_placeholder("Password").
             set_min_length(1).
-            set_max_length(20).
+            set_max_length(16).
+            set_text_style(dpp::text_short)
+        );
+
+        modal.add_row();
+        modal.add_component(
+            component().
+            set_label("Two-Factor token (if set on account)").
+            set_id("Twofactor").
+            set_type(dpp::cot_text).
+            set_placeholder("2FA-Token").
+            set_min_length(0).
+            set_default_value("").
             set_text_style(dpp::text_short)
         );
 
