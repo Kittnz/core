@@ -32,3 +32,12 @@ UPDATE `creature_template` SET `xp_multiplier` = 0.3 WHERE `entry` = 4689;
 
 UPDATE `quest_template` SET `type` = 1 WHERE `entry` = 3126;
 UPDATE `quest_template` SET `type` = 1 WHERE `entry` = 1168;
+
+-- Custom cooking trigger for pre-baked fireplaces:
+
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (31445, 8, 0, 'Can Cook Here!', 0, 0, 1.11712, 4, 8, 2061, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3473
+-- Caelan's Rest fireplace:
+
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (88098, 31445, 0, -11889.8, 3188.73, 17.4114, 1.62145, 0, 0, 0.724787, 0.688973, 300, 300, 100, 1, 0, 0);
