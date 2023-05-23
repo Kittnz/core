@@ -43,3 +43,8 @@ DELETE FROM creature_movement WHERE id=2574681;
 DELETE FROM game_event_creature WHERE guid=2574681;
 DELETE FROM game_event_creature_data WHERE guid=2574681;
 DELETE FROM creature_battleground WHERE guid=2574681;
+
+-- Changes by VOJI
+DELETE FROM gameobject WHERE guid = '5012058';
+DELETE FROM game_event_gameobject WHERE guid = '5012058';
+DELETE FROM gameobject_battleground WHERE guid = '5012058';
