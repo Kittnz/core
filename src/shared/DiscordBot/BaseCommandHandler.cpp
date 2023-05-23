@@ -3,7 +3,6 @@
 #include "AuthManager.hpp"
 #include "Bot.hpp"
 #include "Log.h"
-
 #include <sstream>
 
 

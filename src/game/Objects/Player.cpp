@@ -23811,6 +23811,52 @@ bool Player::HasEarnedTitle(uint8 titleId)
             return true;
         break;
     }
+    case TITLE_CRAZY_CAT_LADY:
+    {
+        static constexpr uint32 CatPets[11] = {
+        10673,	// Bombay
+        10674,	// Cornish Rex
+        10675,	// Maine Coon
+        10676,	// Orange Tabby
+        10677,	// Siamese
+        10678,	// Silver Tabby
+        10679,	// White Kitten
+        15648,	// Corrupted Kitten
+        49513,	// Midnight
+        30152,	// White Tiger Cub
+        49503,	// Mr. Bigglesworth
+        };
+        for (auto spell : CatPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+    }
+    case TITLE_GRAND_FROGUS:
+    {
+        static constexpr uint32 FrogPets[5] = {
+        10701, // Dart Frog
+        10703, // Wood Frog
+        10702, // Island Frog
+        10704, // Tree Frog
+        23811  // Jubling
+        };
+        for (auto spell : FrogPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
+    case TITLE_BLOODTHIRSTY:
+    {
+        uint32 total_kills = GetHonorMgr().GetStoredHK();
+        if (total_kills >= 250000)
+            return true;
+        break;
+    }
     case TITLE_THE_WANDERER:
     {
         if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
