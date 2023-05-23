@@ -48,3 +48,13 @@ DELETE FROM creature_battleground WHERE guid=2574681;
 DELETE FROM gameobject WHERE guid = '5012058';
 DELETE FROM game_event_gameobject WHERE guid = '5012058';
 DELETE FROM gameobject_battleground WHERE guid = '5012058';
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2577214,61393,0,0,0,0,-1948.84,2537.43,30.6805,4.68299,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2577214;
+DELETE FROM creature_addon WHERE guid=2577214;
+DELETE FROM creature_movement WHERE id=2577214;
+DELETE FROM game_event_creature WHERE guid=2577214;
+DELETE FROM game_event_creature_data WHERE guid=2577214;
+DELETE FROM creature_battleground WHERE guid=2577214;
+REPLACE INTO `creature` VALUES (2577215,61513,0,0,0,0,-1535.18,1411.26,77.428,0.125484,120,120,0,100,100,0,0,0);
