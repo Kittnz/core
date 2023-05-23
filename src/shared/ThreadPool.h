@@ -196,7 +196,7 @@ private:
     Status m_status = Status::STOPPED;
     ErrorHandling m_errorHandling;
     size_t m_size;
-    std::shared_timed_mutex m_mutex;
+    std::shared_mutex m_mutex;
     std::condition_variable_any m_waitForWork;
     workload_t m_workload;
     ClearMode m_clearMode;
