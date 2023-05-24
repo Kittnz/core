@@ -386,7 +386,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     pNewChar->SetAtLoginFlag(AT_LOGIN_FIRST);               // First login
 
     // Player created, save it now
-    if (!pNewChar->SaveToDB(false, true, true))
+    if (!pNewChar->SaveToDB(false, true, false))
     {
         data << (uint8)CHAR_CREATE_ERROR;
         SendPacket(&data);
