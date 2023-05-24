@@ -145,21 +145,21 @@ enum CharacterFlags
 static constexpr uint32 MAX_WORLD_BUFFS = 15;
 static uint32 WorldBuffs[MAX_WORLD_BUFFS]
 {
-	22888, // Rallying Cry of the Dragonslayer
-	24425, // Spirit of zandalar
-	22818, // Mol'dar's Moxie
-	22817, // Fengus' Ferocity
-	22820, // Slip'kik's Savvy
-	15366, // Songflower Serenade
-	23768, // Sayge's Dark Fortune of Damage  basepoints0 = % damage
-	23736, // Sayge's Dark Fortune of Agility
-	23767, // Sayge's Dark Fortune of Armor
-	23766, // Sayge's Dark Fortune of Intelligence
-	23769, // Sayge's Dark Fortune of Resistance
-	23738, // Sayge's Dark Fortune of Spirit
-	23737, // Sayge's Dark Fortune of Stamina
-	23735, // Sayge's Dark Fortune of Strength
-	16609, // Warchief's Blessing
+    22888, // Rallying Cry of the Dragonslayer
+    24425, // Spirit of zandalar
+    22818, // Mol'dar's Moxie
+    22817, // Fengus' Ferocity
+    22820, // Slip'kik's Savvy
+    15366, // Songflower Serenade
+    23768, // Sayge's Dark Fortune of Damage  basepoints0 = % damage
+    23736, // Sayge's Dark Fortune of Agility
+    23767, // Sayge's Dark Fortune of Armor
+    23766, // Sayge's Dark Fortune of Intelligence
+    23769, // Sayge's Dark Fortune of Resistance
+    23738, // Sayge's Dark Fortune of Spirit
+    23737, // Sayge's Dark Fortune of Stamina
+    23735, // Sayge's Dark Fortune of Strength
+    16609, // Warchief's Blessing
 };
 
 // Corpse reclaim times
@@ -669,8 +669,8 @@ Player::Player(WorldSession *session) : Unit(),
 
 Player::~Player()
 {
-	// Clear all pointers to this player in all zone scripts
-	sZoneScriptMgr.OnPlayerGettingDestroyed(this);
+    // Clear all pointers to this player in all zone scripts
+    sZoneScriptMgr.OnPlayerGettingDestroyed(this);
 
     DeletePacketBroadcaster();
     RemoveAI();
@@ -1464,17 +1464,17 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         HandleFoodEmotes(update_diff);
         RegenerateAll();
 
-		if (IsInWorld())
-		{
-			// Prevent player from getting a world buff if its already suspended in character_aura_suspended
-			if (update_diff >= m_worldBuffCheckTimer)
-			{
-				RemoveWorldBuffsIfAlreadySuspended();
-				m_worldBuffCheckTimer = 3 * MINUTE * IN_MILLISECONDS;
-			}
-			else
-				m_worldBuffCheckTimer -= update_diff;
-		}
+        if (IsInWorld())
+        {
+            // Prevent player from getting a world buff if its already suspended in character_aura_suspended
+            if (update_diff >= m_worldBuffCheckTimer)
+            {
+                RemoveWorldBuffsIfAlreadySuspended();
+                m_worldBuffCheckTimer = 3 * MINUTE * IN_MILLISECONDS;
+            }
+            else
+                m_worldBuffCheckTimer -= update_diff;
+        }
     }
     else
     {
@@ -2068,59 +2068,59 @@ bool Player::ToggleDND()
 
 bool Player::IsBasicallyInactive(bool bIncludeChat /*= false*/) const
 {
-	const uint32 InactivityMovementTimerBG = 4 * MINUTE * IN_MILLISECONDS;
-	const uint32 InactivityMovementTimerOther = 5 * MINUTE * IN_MILLISECONDS;
+    const uint32 InactivityMovementTimerBG = 4 * MINUTE * IN_MILLISECONDS;
+    const uint32 InactivityMovementTimerOther = 5 * MINUTE * IN_MILLISECONDS;
 
-	uint32 InactivityTimer = InactivityMovementTimerOther;
-	if (Map* map = FindMap())
-	{
-		if (map->IsBattleGround())
-		{
-			InactivityTimer = InactivityMovementTimerBG;
-		}
-	}
+    uint32 InactivityTimer = InactivityMovementTimerOther;
+    if (Map* map = FindMap())
+    {
+        if (map->IsBattleGround())
+        {
+            InactivityTimer = InactivityMovementTimerBG;
+        }
+    }
 
-	//cache current time
-	uint32 currentTime = WorldTimer::getMSTime();
+    //cache current time
+    uint32 currentTime = WorldTimer::getMSTime();
 
-	//Maybe character casting something, staying in one position?
-	bool bCastedSpellsRecently = (currentTime - m_lastSpellTimer) < InactivityTimer;
-	bool bMovedRecently = (currentTime - m_lastMovementTimer) < InactivityTimer;
-	if (bMovedRecently)
-	{
-		//Check for velocity, if it's too low - player is using anti-afk tool
+    //Maybe character casting something, staying in one position?
+    bool bCastedSpellsRecently = (currentTime - m_lastSpellTimer) < InactivityTimer;
+    bool bMovedRecently = (currentTime - m_lastMovementTimer) < InactivityTimer;
+    if (bMovedRecently)
+    {
+        //Check for velocity, if it's too low - player is using anti-afk tool
 
-		if (m_velocityPer3Min < 0.6f)
-		{
-			//Do check with current position, character can move just recently
+        if (m_velocityPer3Min < 0.6f)
+        {
+            //Do check with current position, character can move just recently
 
-			uint32 currentTime = WorldTimer::getMSTime();
-			uint32 deltaTimeForVelocity = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
-			float freshVelocity = GetVelocity(deltaTimeForVelocity, m_last3MinPosition);
-			if (freshVelocity > 0.6f)
-			{
-				bMovedRecently = true;
-			}
-			else
-			{
-				bMovedRecently = false;
-			}
-		}
-		else
-		{
-			bMovedRecently = true;
-		}
-	}
+            uint32 currentTime = WorldTimer::getMSTime();
+            uint32 deltaTimeForVelocity = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
+            float freshVelocity = GetVelocity(deltaTimeForVelocity, m_last3MinPosition);
+            if (freshVelocity > 0.6f)
+            {
+                bMovedRecently = true;
+            }
+            else
+            {
+                bMovedRecently = false;
+            }
+        }
+        else
+        {
+            bMovedRecently = true;
+        }
+    }
 
-	bool bInactive = !bCastedSpellsRecently && !bMovedRecently;
+    bool bInactive = !bCastedSpellsRecently && !bMovedRecently;
 
-	//If we considering as inactive, but asked to check chat
-	if (bIncludeChat && bInactive)
-	{
-		bInactive = (currentTime - m_lastChatMessageTimer) > InactivityTimer;
-	}
+    //If we considering as inactive, but asked to check chat
+    if (bIncludeChat && bInactive)
+    {
+        bInactive = (currentTime - m_lastChatMessageTimer) > InactivityTimer;
+    }
 
-	return bInactive;
+    return bInactive;
 }
 
 void Player::UpdateMovementActivityTimer()
@@ -2140,15 +2140,15 @@ void Player::UpdateChatActivityTimer()
 
 void Player::UpdateVelocity()
 {
-	///PER SECOND
-	uint32 currentTime = WorldTimer::getMSTime();
-	uint32 deltaTime = (currentTime - m_lastUpdatedVelocityPerSecondTimer);
+    ///PER SECOND
+    uint32 currentTime = WorldTimer::getMSTime();
+    uint32 deltaTime = (currentTime - m_lastUpdatedVelocityPerSecondTimer);
 
-	//#HACKFIX: Don't calculate velocity on transport now. Client sometimes send weird things
-	if (GetTransport() != nullptr) return;
+    //#HACKFIX: Don't calculate velocity on transport now. Client sometimes send weird things
+    if (GetTransport() != nullptr) return;
 
-	//#HACKFIX: Deeprun Tram is weird place, don't calculate velocity here
-	if (GetMapId() == 369) return;
+    //#HACKFIX: Deeprun Tram is weird place, don't calculate velocity here
+    if (GetMapId() == 369) return;
 
     if (IsTaxiFlying())
     {
@@ -2156,40 +2156,40 @@ void Player::UpdateVelocity()
         return;
     }
 
-	if (deltaTime > 1000)
-	{
-		m_velocity = GetVelocity(deltaTime, m_lastSecondPosition);
+    if (deltaTime > 1000)
+    {
+        m_velocity = GetVelocity(deltaTime, m_lastSecondPosition);
 
-		WorldLocation CurrentPos;
-		GetPosition(CurrentPos);
-		m_lastSecondPosition = CurrentPos;
+        WorldLocation CurrentPos;
+        GetPosition(CurrentPos);
+        m_lastSecondPosition = CurrentPos;
 
-		//ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocity);
-		m_lastUpdatedVelocityPerSecondTimer = currentTime;
-	}
+        //ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocity);
+        m_lastUpdatedVelocityPerSecondTimer = currentTime;
+    }
 
-	///PER 3 MIN
-	deltaTime = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
-	if (deltaTime > 3 * MINUTE * IN_MILLISECONDS)
-	{
-		m_velocityPer3Min = GetVelocity(deltaTime, m_last3MinPosition);
+    ///PER 3 MIN
+    deltaTime = (currentTime - m_lastUpdatedVelocityPer3MinTimer);
+    if (deltaTime > 3 * MINUTE * IN_MILLISECONDS)
+    {
+        m_velocityPer3Min = GetVelocity(deltaTime, m_last3MinPosition);
 
-		WorldLocation CurrentPos;
-		GetPosition(CurrentPos);
-		m_last3MinPosition = CurrentPos;
+        WorldLocation CurrentPos;
+        GetPosition(CurrentPos);
+        m_last3MinPosition = CurrentPos;
 
-		//ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocityPer3Min);
-		m_lastUpdatedVelocityPer3MinTimer = currentTime;
-	}
+        //ChatHandler(this).PSendSysMessage("Velocity: %f", m_velocityPer3Min);
+        m_lastUpdatedVelocityPer3MinTimer = currentTime;
+    }
 }
 
 void Player::UpdateSavedVelocityPositionToCurrentPos()
 {
-	WorldLocation CurrentPos;
-	GetPosition(CurrentPos);
+    WorldLocation CurrentPos;
+    GetPosition(CurrentPos);
 
-	m_lastSecondPosition = CurrentPos;
-	m_last3MinPosition = CurrentPos;
+    m_lastSecondPosition = CurrentPos;
+    m_last3MinPosition = CurrentPos;
 
     uint32 currentTime = WorldTimer::getMSTime();
     m_lastUpdatedVelocityPerSecondTimer = currentTime;
@@ -2198,23 +2198,23 @@ void Player::UpdateSavedVelocityPositionToCurrentPos()
 
 float Player::GetVelocity(uint32 deltaTime, const WorldLocation& PrevPos) const
 {
-	float fltCurrentTime = float(deltaTime) / 1000.0f;
+    float fltCurrentTime = float(deltaTime) / 1000.0f;
 
-	if (fltCurrentTime < 0.001f)
-		return 0.0f;
+    if (fltCurrentTime < 0.001f)
+        return 0.0f;
 
-	WorldLocation CurrentPos;
-	GetPosition(CurrentPos);
+    WorldLocation CurrentPos;
+    GetPosition(CurrentPos);
 
-	float dx = CurrentPos.x - PrevPos.x;
-	float dy = CurrentPos.y - PrevPos.y;
-	float dist = sqrt((dx * dx) + (dy * dy));
+    float dx = CurrentPos.x - PrevPos.x;
+    float dy = CurrentPos.y - PrevPos.y;
+    float dist = sqrt((dx * dx) + (dy * dy));
 
-	//FIX: float divide can have bad result if value almost zero
-	if (dist < 0.1f)
-		return 0.0f;
+    //FIX: float divide can have bad result if value almost zero
+    if (dist < 0.1f)
+        return 0.0f;
 
-	return dist / fltCurrentTime;
+    return dist / fltCurrentTime;
 }
 
 uint8 Player::GetChatTag() const
@@ -2368,7 +2368,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
             m_teleport_options = options;
             m_teleportRecoverDelayed = recover;
-			m_teleportFinishedDelayed = OnTeleportFinished;
+            m_teleportFinishedDelayed = OnTeleportFinished;
             return true;
         }
 
@@ -2411,10 +2411,10 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             else
                 m_teleportRecover = wps;
             wps();
-			if (OnTeleportFinished)
-			{
-				OnTeleportFinished();
-			}
+            if (OnTeleportFinished)
+            {
+                OnTeleportFinished();
+            }
         }
         m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For extrapolation
     }
@@ -2574,10 +2574,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
                 sMapMgr.ScheduleNewWorldOnFarTeleport(this);
         }
 
-		if (data->OnTeleportFinished)
-		{
-			data->OnTeleportFinished();
-		}
+        if (data->OnTeleportFinished)
+        {
+            data->OnTeleportFinished();
+        }
         return true;
     }
 
@@ -2705,10 +2705,10 @@ void Player::AddToWorld()
     ///- The player should only be added when logging in
     Unit::AddToWorld();
 
-	uint32 CurrentTime = WorldTimer::getMSTime();
-	m_lastMovementTimer = CurrentTime;
-	m_lastSpellTimer = CurrentTime;
-	m_lastChatMessageTimer = CurrentTime;
+    uint32 CurrentTime = WorldTimer::getMSTime();
+    m_lastMovementTimer = CurrentTime;
+    m_lastSpellTimer = CurrentTime;
+    m_lastChatMessageTimer = CurrentTime;
 
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {
@@ -7347,15 +7347,15 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 {
     uint32 oldZoneId  = m_zoneUpdateId;
 
-	// Turtle: Black morass has a different Felldown Z
-	if (newZone == 2366)
-	{
-		ZFelldownLimit = -250.0f;
-	}
-	else if (oldZoneId == 2366)
-	{
-		ZFelldownLimit = -500.0f;
-	}
+    // Turtle: Black morass has a different Felldown Z
+    if (newZone == 2366)
+    {
+        ZFelldownLimit = -250.0f;
+    }
+    else if (oldZoneId == 2366)
+    {
+        ZFelldownLimit = -500.0f;
+    }
 
     const auto *zoneEntry = AreaEntry::GetById(newZone);
     if (!zoneEntry)
@@ -11011,15 +11011,15 @@ Item* Player::_StoreItem(uint16 pos, Item *pItem, uint32 count, bool clone, bool
         if (!pItem)
             return nullptr;
 
-		const ItemPrototype* proto = pItem->GetProto();
+        const ItemPrototype* proto = pItem->GetProto();
         if (proto->Bonding == BIND_WHEN_PICKED_UP ||
-			proto->Bonding == BIND_QUEST_ITEM ||
+            proto->Bonding == BIND_QUEST_ITEM ||
                 (proto->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
             pItem->SetBinding(true);
 
-		// Turtle specific - set binding for all items with BIND_ACCOUNT
-		if (proto->Bonding == BIND_ACCOUNT)
-			pItem->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+        // Turtle specific - set binding for all items with BIND_ACCOUNT
+        if (proto->Bonding == BIND_ACCOUNT)
+            pItem->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
 
         //AddTransmog(proto->ItemId);
 
@@ -11064,17 +11064,17 @@ Item* Player::_StoreItem(uint16 pos, Item *pItem, uint32 count, bool clone, bool
     }
     else
     {
-		const ItemPrototype* proto = pItem2->GetProto();
+        const ItemPrototype* proto = pItem2->GetProto();
         if (proto->Bonding == BIND_WHEN_PICKED_UP ||
-			proto->Bonding == BIND_QUEST_ITEM ||
+            proto->Bonding == BIND_QUEST_ITEM ||
            (proto->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
             pItem2->SetBinding(true);
 
-		// Turtle specific - set binding for all items with BIND_ACCOUNT
-		if (proto->Bonding == BIND_ACCOUNT)
-		{
-			pItem2->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
-		}
+        // Turtle specific - set binding for all items with BIND_ACCOUNT
+        if (proto->Bonding == BIND_ACCOUNT)
+        {
+            pItem2->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+        }
 
         pItem2->SetCount(pItem2->GetCount() + count);
         if (IsInWorld() && update)
@@ -12821,7 +12821,7 @@ void Player::PrepareGossipMenu(WorldObject *pSource, uint32 menuId)
                 case GOSSIP_OPTION_PETITIONER:
                 case GOSSIP_OPTION_TABARDDESIGNER:
                 case GOSSIP_OPTION_AUCTIONEER:
-				case GOSSIP_OPTION_GUILD_BANKER:
+                case GOSSIP_OPTION_GUILD_BANKER:
                     break;                                  // no checks
                 default:
                     sLog.outErrorDb("Creature entry %u have unknown gossip option %u for menu %u", pCreature->GetEntry(), itr->second.option_id, itr->second.menu_id);
@@ -15820,26 +15820,26 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_playerTitles.clear();
     QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT `title`, `active` FROM `character_titles` WHERE `guid` = '%u'", GetGUIDLow());
 
-	if (titlesQuery)
-	{
-		do
-		{
-			Field *fields = titlesQuery->Fetch();
-			uint8 titleID = fields[0].GetUInt8();
-			uint8 active = fields[1].GetUInt8();
+    if (titlesQuery)
+    {
+        do
+        {
+            Field *fields = titlesQuery->Fetch();
+            uint8 titleID = fields[0].GetUInt8();
+            uint8 active = fields[1].GetUInt8();
 
             m_playerTitles.insert(titleID);
             
             if (active)
                 m_activeTitle = titleID;
 
-			// city protector scroll/medalion
-			if (titleID == GetRace())
-				MailCityProtectorMedallion();
+            // city protector scroll/medalion
+            if (titleID == GetRace())
+                MailCityProtectorMedallion();
 
-		} while (titlesQuery->NextRow());
+        } while (titlesQuery->NextRow());
         delete titlesQuery;
-	}
+    }
 
     // Grant achievement titles on login:
     for (uint8 i = 1; i < TITLE_MAX_LIMIT; i++)
@@ -18490,12 +18490,12 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
 
             if (sTaxiPathNodesByPath.size() < lastPath)
             {
-				sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid sTaxiPathNodesByPath %u \"lastPath\"", GetName(), lastPath);
-				WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-				data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-				GetSession()->SendPacket(&data);
-				m_taxi.ClearTaxiDestinations();
-				return false;
+                sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid sTaxiPathNodesByPath %u \"lastPath\"", GetName(), lastPath);
+                WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+                data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+                GetSession()->SendPacket(&data);
+                m_taxi.ClearTaxiDestinations();
+                return false;
             }
 
             // default values in database, init them to n-1 -> 1
@@ -18504,12 +18504,12 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
                 size_t TotalNodesInLastPath = sTaxiPathNodesByPath[lastPath].size();
                 if (TotalNodesInLastPath < 2)
                 {
-					sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid node count in %u \"lastPath\"", GetName(), lastPath);
-					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-					GetSession()->SendPacket(&data);
-					m_taxi.ClearTaxiDestinations();
-					return false;
+                    sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid node count in %u \"lastPath\"", GetName(), lastPath);
+                    WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+                    data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+                    GetSession()->SendPacket(&data);
+                    m_taxi.ClearTaxiDestinations();
+                    return false;
                 }
                 inNode = TotalNodesInLastPath - 2;
             }
@@ -18522,23 +18522,23 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
                 if (sTaxiPathNodesByPath.size() <= lastPath)
                 {
                     sLog.outError("Player \"%s\" tried activate invalid taxi! sTaxiPathNodesByPath has size %zu, while trying get %u index", GetName(), sTaxiPathNodesByPath.size(), lastPath);
-					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-					GetSession()->SendPacket(&data);
-					m_taxi.ClearTaxiDestinations();
-					return false;
+                    WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+                    data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+                    GetSession()->SendPacket(&data);
+                    m_taxi.ClearTaxiDestinations();
+                    return false;
                 }
                 TaxiPathNodeList& NodeList = sTaxiPathNodesByPath[lastPath];
 
                 if (NodeList.size() <= i)
                 {
-					sLog.outError("Player \"%s\" tried activate invalid taxi! sTaxiPathNodesByPath has size %zu, while trying get %u index, and we trying to get NodeEntry with id %u, while have %zu", 
+                    sLog.outError("Player \"%s\" tried activate invalid taxi! sTaxiPathNodesByPath has size %zu, while trying get %u index, and we trying to get NodeEntry with id %u, while have %zu", 
                             GetName(), sTaxiPathNodesByPath.size(), lastPath, i, NodeList.size());
-					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
-					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
-					GetSession()->SendPacket(&data);
-					m_taxi.ClearTaxiDestinations();
-					return false;
+                    WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+                    data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+                    GetSession()->SendPacket(&data);
+                    m_taxi.ClearTaxiDestinations();
+                    return false;
                 }
                 const TaxiPathNodeEntry& NodeEntry = NodeList[i];
                 m_taxi.AddTaxiPathNode(NodeEntry);
@@ -18711,16 +18711,16 @@ UnitMountResult Player::Mount(uint32 mount, uint32 spellId)
         return MOUNTRESULT_ALREADYMOUNTED;
     }
 
-	// Turtle specific - allow gnome and goblin display ID to mount on
-	if (mount != GOBLINCAR_DISPLAYID && mount != GNOMECAR_DISPLAYID)
-	{
-		if (!spellId && IsInDisallowedMountForm())
-		{
-			RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-			SendMountResult(MOUNTRESULT_SHAPESHIFTED);
-			return MOUNTRESULT_SHAPESHIFTED;
-		}
-	}
+    // Turtle specific - allow gnome and goblin display ID to mount on
+    if (mount != GOBLINCAR_DISPLAYID && mount != GNOMECAR_DISPLAYID)
+    {
+        if (!spellId && IsInDisallowedMountForm())
+        {
+            RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+            SendMountResult(MOUNTRESULT_SHAPESHIFTED);
+            return MOUNTRESULT_SHAPESHIFTED;
+        }
+    }
 
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING))
     {
@@ -19970,17 +19970,17 @@ uint32 Player::GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket
 
     BattleGround *bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     ASSERT(bg);
-	// Giperion Turtle: first bracket for 1 lvl, second bracket starts from 2 lvl
-	if (bracket_id == 0)
-	{
-		return 1;
-	}
-	else if (bracket_id == 1)
-	{
-		return 2;
-	}
+    // Giperion Turtle: first bracket for 1 lvl, second bracket starts from 2 lvl
+    if (bracket_id == 0)
+    {
+        return 1;
+    }
+    else if (bracket_id == 1)
+    {
+        return 2;
+    }
 
-	uint32 ShiftedBracket = bracket_id - 1;
+    uint32 ShiftedBracket = bracket_id - 1;
 
     return 10 * ShiftedBracket + bg->GetMinLevel();
 }
@@ -19992,15 +19992,15 @@ uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket
     if (bracket_id >= BG_BRACKET_ID_LAST || (bgTypeId == BATTLEGROUND_AB && bracket_id == (BG_BRACKET_ID_LAST - 1)))
         return (GetMinLevelForBattleGroundBracketId(BG_BRACKET_ID_LAST, bgTypeId) + 1);
 
-	// Giperion Turtle: first bracket start and ends in 1 lvl, second ends on 10
-	if (bracket_id == 0)
-	{
-		return 2;
-	}
-	else if (bracket_id == 1)
-	{
-		return 10;
-	}
+    // Giperion Turtle: first bracket start and ends in 1 lvl, second ends on 10
+    if (bracket_id == 0)
+    {
+        return 2;
+    }
+    else if (bracket_id == 1)
+    {
+        return 10;
+    }
 
 
     return GetMinLevelForBattleGroundBracketId(bracket_id, bgTypeId) + 10;
@@ -20019,23 +20019,23 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
     if (playerLvl < bg->GetMinLevel())
         return BG_BRACKET_ID_NONE;
 
-	// Giperion Turtle: Make a separate BG bracket for 1 lvl
-	uint32 bracket_id = BG_BRACKET_ID_NONE;
-	if (playerLvl == 1)
-	{
-		return BG_BRACKET_ID_FIRST;
-	}
-	else
-	{
-		bracket_id = (playerLvl - bg->GetMinLevel()) / 10;
-		
-		// shift bracketId, since the first bracket for 1 lvl characters only
-		bracket_id++;
-		if (bracket_id >= MAX_BATTLEGROUND_BRACKETS)
-		{
-			return BG_BRACKET_ID_LAST;
-		}
-	}
+    // Giperion Turtle: Make a separate BG bracket for 1 lvl
+    uint32 bracket_id = BG_BRACKET_ID_NONE;
+    if (playerLvl == 1)
+    {
+        return BG_BRACKET_ID_FIRST;
+    }
+    else
+    {
+        bracket_id = (playerLvl - bg->GetMinLevel()) / 10;
+        
+        // shift bracketId, since the first bracket for 1 lvl characters only
+        bracket_id++;
+        if (bracket_id >= MAX_BATTLEGROUND_BRACKETS)
+        {
+            return BG_BRACKET_ID_LAST;
+        }
+    }
 
     return BattleGroundBracketId(bracket_id);
 }
@@ -21678,13 +21678,13 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
     uint32 mapId = GetMapId();
 
-	//Key - SkillId, Value - Skill value
-	std::unordered_map<uint32, uint16> SkillValues;
-	for (const auto& SkillElemPair : mSkillStatus)
-	{
-		uint32 SkillId = SkillElemPair.first;
-		SkillValues[SkillId] = GetSkillValuePure(SkillId);
-	}
+    //Key - SkillId, Value - Skill value
+    std::unordered_map<uint32, uint16> SkillValues;
+    for (const auto& SkillElemPair : mSkillStatus)
+    {
+        uint32 SkillId = SkillElemPair.first;
+        SkillValues[SkillId] = GetSkillValuePure(SkillId);
+    }
 
     for (const auto& SkillElemPair : mSkillStatus)
     {
@@ -21703,7 +21703,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     m_DbSaveDisabled = true;
     if (!ChangeSpellsForRace(oldRace, newRace))
     {
-		CHANGERACE_ERR("Impossible due to spells.");
+        CHANGERACE_ERR("Impossible due to spells.");
         return false;
     }
 
@@ -22448,15 +22448,15 @@ void Player::RewardHonorOnDeath()
         Group* g = itr.first;
         std::list<Player*> rewarded;
         for (const auto& grItr : g->GetMemberSlots())
-		{
-			if (Player* pl = GetMap()->GetPlayer(grItr.guid))
-			{
-				if (pl->IsAtGroupRewardDistance(this) && pl->IsAlive() && pl->GetTeam() != GetTeam())
-				{
-					rewarded.push_back(pl);
-				}
-			}
-		}
+        {
+            if (Player* pl = GetMap()->GetPlayer(grItr.guid))
+            {
+                if (pl->IsAtGroupRewardDistance(this) && pl->IsAlive() && pl->GetTeam() != GetTeam())
+                {
+                    rewarded.push_back(pl);
+                }
+            }
+        }
 
         uint32 totalRewarded = rewarded.size();
         float honorRate = itr.second;
@@ -22850,41 +22850,41 @@ void Player::SetIgnoringTitles(bool shouldIgnore) { m_isIgnoringTitles = shouldI
 
 void Player::SendRaidWarning(const std::string& text)
 {
-	SendRaidWarning(text.c_str());
+    SendRaidWarning(text.c_str());
 }
 
 void Player::SendRaidWarning(uint32 textId)
 {
-	if (WorldSession* Sess = GetSession())
-	{
-		SendRaidWarning(Sess->GetMangosString(textId));
-	}
+    if (WorldSession* Sess = GetSession())
+    {
+        SendRaidWarning(Sess->GetMangosString(textId));
+    }
 }
 
 void Player::SendRaidWarning(const char* text)
 {
-	WorldPacket data;
-	if (WorldSession* Sess = GetSession())
-	{
-		ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_WARNING, text, LANG_UNIVERSAL);
-		Sess->SendPacket(&data);
-	}
+    WorldPacket data;
+    if (WorldSession* Sess = GetSession())
+    {
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_WARNING, text, LANG_UNIVERSAL);
+        Sess->SendPacket(&data);
+    }
 }
 
 bool Player::IsObjectIsExclusiveVisible(ObjectGuid guid)
 {
-	auto findIter = std::find(m_exclusiveVisibleObjects.begin(), m_exclusiveVisibleObjects.end(), guid);
-	return findIter != m_exclusiveVisibleObjects.end();
+    auto findIter = std::find(m_exclusiveVisibleObjects.begin(), m_exclusiveVisibleObjects.end(), guid);
+    return findIter != m_exclusiveVisibleObjects.end();
 }
 
 void Player::AddExclusiveVisibleObject(ObjectGuid guid)
 {
-	m_exclusiveVisibleObjects.push_back(guid);
+    m_exclusiveVisibleObjects.push_back(guid);
 }
 
 void Player::RemoveExclusiveVisibleObject(ObjectGuid guid)
 {
-	m_exclusiveVisibleObjects.remove(guid);
+    m_exclusiveVisibleObjects.remove(guid);
 }
 
 enum BountyBoards
@@ -23070,14 +23070,14 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
 
 uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 {
-	if (!skill)
-		return 0;
+    if (!skill)
+        return 0;
 
-	SkillStatusMap::const_iterator itr = mSkillStatus.find(skill);
-	if (itr == mSkillStatus.end() || itr->second.uState == SKILL_DELETED)
-		return 0;
+    SkillStatusMap::const_iterator itr = mSkillStatus.find(skill);
+    if (itr == mSkillStatus.end() || itr->second.uState == SKILL_DELETED)
+        return 0;
 
-	return SKILL_MAX(GetUInt32Value(PLAYER_SKILL_VALUE_INDEX(itr->second.pos)));
+    return SKILL_MAX(GetUInt32Value(PLAYER_SKILL_VALUE_INDEX(itr->second.pos)));
 }
 
 // for Hardcore mode
@@ -23344,255 +23344,255 @@ void Player::UpdateTotalDeathCount()
 bool Player::SuspendWorldBuffs()
 {
 
-	if (HasItemCount(83001, 1, true))
-	{
-		ChatHandler(this).SendSysMessage("You already have suspended world effects.");
-		return false;
-	}
+    if (HasItemCount(83001, 1, true))
+    {
+        ChatHandler(this).SendSysMessage("You already have suspended world effects.");
+        return false;
+    }
 
-	if (IsInCombat())
-	{
-		GetSession()->SendNotification("You can't use that while in combat.");
-		return false;
-	} 
-	else if (InArena())
-	{
-		GetSession()->SendNotification("You can't use that while in the Arena.");
-		return false;
-	}
-	else if (InBattleGround())
-	{
-		GetSession()->SendNotification("You can't use that while in a Battleground.");
-		return false;
-	}
+    if (IsInCombat())
+    {
+        GetSession()->SendNotification("You can't use that while in combat.");
+        return false;
+    } 
+    else if (InArena())
+    {
+        GetSession()->SendNotification("You can't use that while in the Arena.");
+        return false;
+    }
+    else if (InBattleGround())
+    {
+        GetSession()->SendNotification("You can't use that while in a Battleground.");
+        return false;
+    }
 
     std::string suspendMessage{};
 
-	SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+    SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
 
-	if (auraHolders.empty())
-		return false;
+    if (auraHolders.empty())
+        return false;
 
-	AuraSaveStruct s;
-	bool suspended_cleared = false;
-	for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
-	{
-		SpellAuraHolder *holder = itr->second;
+    AuraSaveStruct s;
+    bool suspended_cleared = false;
+    for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+    {
+        SpellAuraHolder *holder = itr->second;
 
-		if (!SaveAura(holder, s))
-			continue;
+        if (!SaveAura(holder, s))
+            continue;
 
-		for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
-		{
-			if (s.spellid == WorldBuffs[i])
-			{
-
-				if (!suspended_cleared)
-				{
-					// found at least one world buff, clear character_aura_suspended 
-					CharacterDatabase.DirectPExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
-					ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
-					suspended_cleared = true;
-				}
-
-				static SqlStatementID insertAuras;
-
-				SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO `character_aura_suspended` (`guid`, `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, "
-					"`basepoints0`, `basepoints1`, `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask`) "
-					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-				stmt.addUInt32(GetGUIDLow());
-				stmt.addUInt64(s.caster_guid.GetRawValue());
-				stmt.addUInt32(s.item_lowguid);
-				stmt.addUInt32(s.spellid);
-				stmt.addUInt32(s.stackcount);
-				stmt.addUInt8(s.remaincharges);
-
-				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
-					stmt.addInt32(s.damage[i]);
-
-				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
-					stmt.addUInt32(s.periodicTime[i]);
-
-				stmt.addInt32(s.maxduration);
-				stmt.addInt32(s.remaintime);
-				stmt.addUInt32(s.effIndexMask);
-				stmt.Execute();
-
-				suspendMessage += "Suspended " + sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0];
-
-				if (s.spellid == 23768)
-					suspendMessage += " " + std::to_string(s.damage[0]) + "%%";
-
-				suspendMessage += " (" + std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)) + "m).\n";
-
-			}
-		}
-	}
-
-	if (suspendMessage.empty())
-	{
-		ChatHandler(this).SendSysMessage("No world effects found.");
-		return false;
-	}
-	else
-	{
         for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
-			RemoveAurasDueToSpell(WorldBuffs[i]);
+        {
+            if (s.spellid == WorldBuffs[i])
+            {
 
-		ChatHandler(this).SendSysMessage(suspendMessage.c_str());
-		ChatHandler(this).SendSysMessage("While a world effect is suspended, you cannot benefit from it.");
+                if (!suspended_cleared)
+                {
+                    // found at least one world buff, clear character_aura_suspended 
+                    CharacterDatabase.DirectPExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
+                    ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
+                    suspended_cleared = true;
+                }
 
-		// Remove Chronoboon Displacer
-		DestroyItemCount(83000, 1, true);
-		SaveInventoryAndGoldToDB();
+                static SqlStatementID insertAuras;
 
-		// Add Supercharged Chronoboon Displacer
-		AddItem(83001);
+                SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO `character_aura_suspended` (`guid`, `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, "
+                    "`basepoints0`, `basepoints1`, `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask`) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-		CastSpell(this, 14867, true);
-	}
+                stmt.addUInt32(GetGUIDLow());
+                stmt.addUInt64(s.caster_guid.GetRawValue());
+                stmt.addUInt32(s.item_lowguid);
+                stmt.addUInt32(s.spellid);
+                stmt.addUInt32(s.stackcount);
+                stmt.addUInt8(s.remaincharges);
 
-	return true;
+                for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+                    stmt.addInt32(s.damage[i]);
+
+                for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+                    stmt.addUInt32(s.periodicTime[i]);
+
+                stmt.addInt32(s.maxduration);
+                stmt.addInt32(s.remaintime);
+                stmt.addUInt32(s.effIndexMask);
+                stmt.Execute();
+
+                suspendMessage += "Suspended " + sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0];
+
+                if (s.spellid == 23768)
+                    suspendMessage += " " + std::to_string(s.damage[0]) + "%%";
+
+                suspendMessage += " (" + std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)) + "m).\n";
+
+            }
+        }
+    }
+
+    if (suspendMessage.empty())
+    {
+        ChatHandler(this).SendSysMessage("No world effects found.");
+        return false;
+    }
+    else
+    {
+        for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
+            RemoveAurasDueToSpell(WorldBuffs[i]);
+
+        ChatHandler(this).SendSysMessage(suspendMessage.c_str());
+        ChatHandler(this).SendSysMessage("While a world effect is suspended, you cannot benefit from it.");
+
+        // Remove Chronoboon Displacer
+        DestroyItemCount(83000, 1, true);
+        SaveInventoryAndGoldToDB();
+
+        // Add Supercharged Chronoboon Displacer
+        AddItem(83001);
+
+        CastSpell(this, 14867, true);
+    }
+
+    return true;
 }
 
 // Buffs the player whith WorldBuffs are saved in character_aura_suspended and clears them from character_aura_suspended
 bool Player::RestoreSuspendedWorldBuffs()
 {
-	if (IsInCombat())
-	{
-		GetSession()->SendNotification("You can't use that while in combat.");
-		return false;
-	}
-	else if (InArena())
-	{
-		GetSession()->SendNotification("You can't use that while in the Arena.");
-		return false;
-	}
-	else if (InBattleGround())
-	{
-		GetSession()->SendNotification("You can't use that while in a Battleground.");
-		return false;
-	}
-	else if (GetMap() && GetMap()->IsRaid())
-	{
-		GetSession()->SendNotification("You can't use that in raid dungeons.");
-		return false;
-	}
+    if (IsInCombat())
+    {
+        GetSession()->SendNotification("You can't use that while in combat.");
+        return false;
+    }
+    else if (InArena())
+    {
+        GetSession()->SendNotification("You can't use that while in the Arena.");
+        return false;
+    }
+    else if (InBattleGround())
+    {
+        GetSession()->SendNotification("You can't use that while in a Battleground.");
+        return false;
+    }
+    else if (GetMap() && GetMap()->IsRaid())
+    {
+        GetSession()->SendNotification("You can't use that in raid dungeons.");
+        return false;
+    }
 
-	QueryResult *auras = CharacterDatabase.PQuery("SELECT `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, `basepoints0`, `basepoints1`,"
-		" `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask` "
-		"FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
+    QueryResult *auras = CharacterDatabase.PQuery("SELECT `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, `basepoints0`, `basepoints1`,"
+        " `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask` "
+        "FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
 
-	if (!auras)
-	{
-		ChatHandler(this).SendSysMessage("No suspended world effects found.");
-		// Remove supercharged chronoboon displacer
-		DestroyItemCount(83001, 1, true);
-		SaveInventoryAndGoldToDB();
-		return true;
-	}
-		
-	do
-	{
-		Field *fields = auras->Fetch();
-		AuraSaveStruct s;
-		s.caster_guid = ObjectGuid(fields[0].GetUInt64());
-		s.item_lowguid = fields[1].GetUInt32();
-		s.spellid = fields[2].GetUInt32();
-		s.stackcount = fields[3].GetUInt32();
-		s.remaincharges = fields[4].GetUInt32();
+    if (!auras)
+    {
+        ChatHandler(this).SendSysMessage("No suspended world effects found.");
+        // Remove supercharged chronoboon displacer
+        DestroyItemCount(83001, 1, true);
+        SaveInventoryAndGoldToDB();
+        return true;
+    }
+        
+    do
+    {
+        Field *fields = auras->Fetch();
+        AuraSaveStruct s;
+        s.caster_guid = ObjectGuid(fields[0].GetUInt64());
+        s.item_lowguid = fields[1].GetUInt32();
+        s.spellid = fields[2].GetUInt32();
+        s.stackcount = fields[3].GetUInt32();
+        s.remaincharges = fields[4].GetUInt32();
 
-		for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
-		{
-			s.damage[i] = fields[i + 5].GetInt32();
-			s.periodicTime[i] = fields[i + 8].GetUInt32();
-		}
+        for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+        {
+            s.damage[i] = fields[i + 5].GetInt32();
+            s.periodicTime[i] = fields[i + 8].GetUInt32();
+        }
 
-		s.maxduration = fields[11].GetInt32();
-		s.remaintime = fields[12].GetInt32();
-		s.effIndexMask = fields[13].GetUInt32();
+        s.maxduration = fields[11].GetInt32();
+        s.remaintime = fields[12].GetInt32();
+        s.effIndexMask = fields[13].GetUInt32();
 
-		LoadAura(s, s.remaintime);
+        LoadAura(s, s.remaintime);
 
-		CharacterDatabase.PExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = %u and `spell` = %u", s.caster_guid, s.spellid);
+        CharacterDatabase.PExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = %u and `spell` = %u", s.caster_guid, s.spellid);
 
-		std::string fortunePercent = "";
-		if (s.spellid == 23768)
-			fortunePercent = " " + std::to_string(s.damage[0]) + "%";
+        std::string fortunePercent = "";
+        if (s.spellid == 23768)
+            fortunePercent = " " + std::to_string(s.damage[0]) + "%";
 
-		ChatHandler(this).PSendSysMessage("Restored %s%s (%sm).",
-			sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0].c_str(),
-			fortunePercent.c_str(),
-			std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)).c_str());
+        ChatHandler(this).PSendSysMessage("Restored %s%s (%sm).",
+            sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0].c_str(),
+            fortunePercent.c_str(),
+            std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)).c_str());
 
 
-	} while (auras->NextRow());
+    } while (auras->NextRow());
 
-	delete auras;
+    delete auras;
 
-	// Remove supercharged chronoboon displacer
-	DestroyItemCount(83001, 1, true);
-	SaveInventoryAndGoldToDB();
+    // Remove supercharged chronoboon displacer
+    DestroyItemCount(83001, 1, true);
+    SaveInventoryAndGoldToDB();
 
-	CastSpell(this, 14867, true);
+    CastSpell(this, 14867, true);
 
-	return true;
+    return true;
 }
 
 // Removes buffs from player if he has them in character_aura_suspended
 void Player::RemoveWorldBuffsIfAlreadySuspended()
 {
-	// Only if player has item that restores them, Supercharged Chronoboon Displacer id 83001
-	if (HasItemCount(83001, 1, true))
-	{
-		// Get current buffs
-		SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+    // Only if player has item that restores them, Supercharged Chronoboon Displacer id 83001
+    if (HasItemCount(83001, 1, true))
+    {
+        // Get current buffs
+        SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
 
         uint32 WorldBuffsToRemove[MAX_WORLD_BUFFS]{};
 
-		for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
-			WorldBuffsToRemove[i] = 0;
+        for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
+            WorldBuffsToRemove[i] = 0;
 
-		if (!auraHolders.empty())
-		{
-			AuraSaveStruct s;
-			for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
-			{
-				SpellAuraHolder *holder = itr->second;
+        if (!auraHolders.empty())
+        {
+            AuraSaveStruct s;
+            for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+            {
+                SpellAuraHolder *holder = itr->second;
 
-				if (!SaveAura(holder, s))
-					continue;
+                if (!SaveAura(holder, s))
+                    continue;
 
-				for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
-				{
-					// Check if buff is suspendable worldbuff
-					if (s.spellid == WorldBuffs[i])
-					{
-						// Check if its alreayd suspended
-						QueryResult *auras = CharacterDatabase.PQuery("SELECT `spell` FROM `character_aura_suspended` WHERE `guid` = '%u' and `spell` = '%u'", GetGUIDLow(), s.spellid);
+                for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
+                {
+                    // Check if buff is suspendable worldbuff
+                    if (s.spellid == WorldBuffs[i])
+                    {
+                        // Check if its alreayd suspended
+                        QueryResult *auras = CharacterDatabase.PQuery("SELECT `spell` FROM `character_aura_suspended` WHERE `guid` = '%u' and `spell` = '%u'", GetGUIDLow(), s.spellid);
 
-						if (!auras)
-							continue;
+                        if (!auras)
+                            continue;
 
-						if (auras->GetRowCount() > 0)
-							WorldBuffsToRemove[i] = s.spellid;
-							
-						delete auras;
-					}
-				}
-			}
-		}
+                        if (auras->GetRowCount() > 0)
+                            WorldBuffsToRemove[i] = s.spellid;
+                            
+                        delete auras;
+                    }
+                }
+            }
+        }
 
-		for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
-		{
-			if (WorldBuffsToRemove[i] != 0)
-			{
-				RemoveAurasDueToSpell(WorldBuffsToRemove[i]);
-				ChatHandler(this).PSendSysMessage("Cannot benefit from %s, world effect already suspended.", sSpellMgr.GetSpellEntry(WorldBuffsToRemove[i])->SpellName[0].c_str());
-			}
-		}
-	}
+        for (std::uint8_t i{}; i < MAX_WORLD_BUFFS; i++)
+        {
+            if (WorldBuffsToRemove[i] != 0)
+            {
+                RemoveAurasDueToSpell(WorldBuffsToRemove[i]);
+                ChatHandler(this).PSendSysMessage("Cannot benefit from %s, world effect already suspended.", sSpellMgr.GetSpellEntry(WorldBuffsToRemove[i])->SpellName[0].c_str());
+            }
+        }
+    }
 }
 
 // Checks if player has primary or secondary spec saved
@@ -23600,7 +23600,7 @@ bool Player::HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
     const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spec` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
-	return static_cast<bool>(talents);
+    return static_cast<bool>(talents);
 }
 
 // Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
@@ -23612,28 +23612,28 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 
     const std::unique_ptr<QueryResult> savedTalents(CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and spec = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
-	if (!savedTalents)
-		return "";
+    if (!savedTalents)
+        return "";
 
     std::vector<uint32> vTreeTalents = { 0, 0, 0 };
 
-	do
-	{
+    do
+    {
         Field* fields{ savedTalents->Fetch() };
         const uint32 uiSavedTalentID{ fields[0].GetUInt32() };
 
         for (uint32 i{}; i < sTalentStore.GetNumRows(); ++i)
-		{
+        {
             TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
-			if (!talentInfo)
+            if (!talentInfo)
                 continue;
 
             TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
-			if (!talentTabInfo)
-				continue;
+            if (!talentTabInfo)
+                continue;
 
-			if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
-				continue;
+            if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
+                continue;
 
             for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
             {
@@ -23642,49 +23642,49 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
                     vTreeTalents[talentTabInfo->tabpage] += (j + 1);
                 }
             }
-		}
+        }
 
-	} while (savedTalents->NextRow());
+    } while (savedTalents->NextRow());
 
-	return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
+    return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }
 
 // Saves primary or secondary spec
 bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-	// Prevent untalented saves
-	if (m_usedTalentCount == 0)
-	{
-		ChatHandler(this).SendSysMessage("No learned talents found.");
-		return false;
-	}
+    // Prevent untalented saves
+    if (m_usedTalentCount == 0)
+    {
+        ChatHandler(this).SendSysMessage("No learned talents found.");
+        return false;
+    }
 
     CharacterDatabase.BeginTransaction();
     CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
 
     for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
-	{
+    {
         TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
-		if (!talentInfo)
+        if (!talentInfo)
             continue;
 
         TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
-		if (!talentTabInfo)
-			continue;
+        if (!talentTabInfo)
+            continue;
 
-		if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
-			continue;
+        if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
+            continue;
 
         for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
-		{
+        {
             SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(talentInfo->RankID[j]) };
 
             if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
             {
                 CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
             }
-		}
-	}
+        }
+    }
 
     CharacterDatabase.CommitTransaction();
 
@@ -23697,9 +23697,9 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
         ChatHandler(this).SendSysMessage("Secondary Specialization Saved.");
     }
 
-	CastSpell(this, 14867, true); // Visual
+    CastSpell(this, 14867, true); // Visual
 
-	return true;
+    return true;
 }
 
 // Activates primary or secondary spec
@@ -23709,9 +23709,9 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 
     const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
-	if (!talents)
-	{
-		// Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
+    if (!talents)
+    {
+        // Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
         if (uiPrimaryOrSecondary == 1)
         {
             ChatHandler(this).SendSysMessage("Primary Specialization not saved.");
@@ -23721,17 +23721,17 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
             ChatHandler(this).SendSysMessage("Secondary Specialization not saved.");
         }
 
-		return false;
-	}
+        return false;
+    }
 
-	do
-	{
+    do
+    {
         Field* fields{ talents->Fetch() };
         const uint32 uiTalentSpellId{ fields[0].GetUInt32() };
 
-		LearnSpell(uiTalentSpellId, false, true);
+        LearnSpell(uiTalentSpellId, false, true);
 
-	} while (talents->NextRow());
+    } while (talents->NextRow());
 
     if (uiPrimaryOrSecondary == 1)
     {
@@ -23742,7 +23742,7 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
         ChatHandler(this).SendSysMessage("Secondary Specialization Activated.");
     }
 
-	// Reset powers to avoid some bullshittery
+    // Reset powers to avoid some bullshittery
     if (GetPowerType() == POWER_RAGE)
     {
         SetPower(POWER_RAGE, 0);
@@ -23752,12 +23752,12 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
         SetPower(POWER_MANA, 0);
     }
 
-	// Short stun
-	AddAura(27880);
+    // Short stun
+    AddAura(27880);
 
-	SaveToDB();
+    SaveToDB();
 
-	return true;
+    return true;
 }
 
 bool Player::HasEarnedTitle(uint8 titleId)
@@ -23879,7 +23879,7 @@ void Player::AwardTitle(int8 title)
 
         std::string newTiteText = "newTitle:" + std::to_string(title);
 
-		SendAddonMessage("TWT_TITLES", newTiteText);
+        SendAddonMessage("TWT_TITLES", newTiteText);
 
         m_playerTitles.insert(title);
 
@@ -23917,7 +23917,7 @@ void Player::SendEarnedTitles()
 
     titlesText.pop_back(); // remove last ;
 
-	SendAddonMessage("TWT_TITLES", titlesText);
+    SendAddonMessage("TWT_TITLES", titlesText);
 }
 
 void Player::ChangeTitle(uint8 title)
@@ -23945,22 +23945,22 @@ void Player::UpdateAppearance()
 
 void Player::SendAddonMessage(std::string prefix, std::string message)
 {
-	WorldPacket data;
-	ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-		(prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
-		GetObjectGuid(), GetName());
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+        (prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
+        GetObjectGuid(), GetName());
 
-	GetSession()->SendPacket(&data);
+    GetSession()->SendPacket(&data);
 }
 
 void Player::SendAddonMessage(std::string prefix, std::string message, Player* from)
 {
-	WorldPacket data;
-	ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-		(prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
-		from->GetObjectGuid(), from->GetName());
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+        (prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
+        from->GetObjectGuid(), from->GetName());
 
-	GetSession()->SendPacket(&data);
+    GetSession()->SendPacket(&data);
 }
 
 uint32 Player::GetTotalQuestCount()
