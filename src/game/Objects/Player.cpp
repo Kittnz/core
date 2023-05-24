@@ -2564,33 +2564,11 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
 
         if (!GetSession()->PlayerLogout())
         {
-            const auto wps = [this, mapid]() {
-                // transfer finished, inform client to start load
-                WorldPacket data(SMSG_NEW_WORLD, (20));
-                data << uint32(mapid);
-                if (m_transport)
-                {
-                    data << m_movementInfo.GetTransportPos().x;
-                    data << m_movementInfo.GetTransportPos().y;
-                    data << m_movementInfo.GetTransportPos().z;
-                    data << m_movementInfo.GetTransportPos().o;
-                }
-                else
-                {
-                    data << m_teleport_dest.x;
-                    data << m_teleport_dest.y;
-                    data << m_teleport_dest.z;
-                    data << m_teleport_dest.o;
-                }
-                GetSession()->SendPacket(&data);
-                SendMovementMessageToSet(std::move(data), true);
-                SendSavedInstances();
-            };
             if (data->recover)
                 m_teleportRecover = data->recover;
             else
-                m_teleportRecover = wps;
-            wps();
+                m_teleportRecover = std::bind(&Player::SendNewWorld, this);
+            sMapMgr.ScheduleNewWorldOnFarTeleport(this);
         }
 
 		if (data->OnTeleportFinished)
@@ -2601,6 +2579,45 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
     }
 
     return false;
+}
+
+void Player::SendNewWorld()
+{
+    // transfer finished, inform client to start load
+    WorldPacket data(SMSG_NEW_WORLD, (20));
+    data << uint32(m_teleport_dest.mapId);
+    if (m_transport)
+    {
+        data << m_movementInfo.GetTransportPos().x;
+        data << m_movementInfo.GetTransportPos().y;
+        data << m_movementInfo.GetTransportPos().z;
+        data << m_movementInfo.GetTransportPos().o;
+    }
+    else
+    {
+        data << m_teleport_dest.x;
+        data << m_teleport_dest.y;
+        data << m_teleport_dest.z;
+        data << m_teleport_dest.o;
+    }
+    GetSession()->SendPacket(&data);
+    SendSavedInstances();
+}
+
+void Player::HandleReturnOnTeleportFail(WorldLocation const& oldLoc)
+{
+    SetSemaphoreTeleportFar(false);
+
+    // if player wasn't added to map, reset his map pointer!
+    ResetMap();
+
+    // Teleport to previous place, if cannot be ported back TP to homebind place
+    if (!TeleportTo(oldLoc))
+    {
+        DETAIL_LOG("WorldSession::HandleMoveWorldportAckOpcode: %s cannot be ported to his previous place, teleporting him to his homebind place...",
+            GetGuidStr().c_str());
+        TeleportToHomebind();
+    }
 }
 
 void Player::RestorePendingTeleport()
