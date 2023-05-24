@@ -36,3 +36,9 @@ UPDATE `creature` SET `position_x` = -1683.695068, `position_y` = 2023.573120, `
 UPDATE `creature` SET `position_x` = -1677.941528, `position_y` = 2036.336914, `position_z` = 54.073818, `orientation` = 5.299973 WHERE `guid` = 2574933;
 UPDATE `creature` SET `position_x` = -1678.872070, `position_y` = 2039.496216, `position_z` = 61.554676, `orientation` = 4.719167 WHERE `guid` = 2574921;
 UPDATE `creature_template` set `scale` = 1.000000 where entry = 61381;
+DELETE FROM creature WHERE guid=2577213;
+DELETE FROM creature_addon WHERE guid=2577213;
+DELETE FROM creature_movement WHERE id=2577213;
+DELETE FROM game_event_creature WHERE guid=2577213;
+DELETE FROM game_event_creature_data WHERE guid=2577213;
+DELETE FROM creature_battleground WHERE guid=2577213;
