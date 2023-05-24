@@ -993,12 +993,13 @@ class DungeonMap : public Map
         void SendResetWarnings(uint32 timeLeft) const;
         void SetResetSchedule(bool on);
         uint32 GetMaxPlayers() const;
+
         decltype(m_objectsStore_lock)& GetObjectLock() { return m_objectsStore_lock; }
-
-
         decltype(m_objectsStore) const & GetObjectStore() const { return m_objectsStore; }
+
         // can't be nullptr for loaded map
         DungeonPersistentState* GetPersistanceState() const;
+        void BindPlayerOrGroupOnEnter(Player* player);
 
         void InitVisibilityDistance() override;
         // Activated at raid expiration. No one can enter.
