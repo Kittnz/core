@@ -831,8 +831,6 @@ class World
         World();
         ~World();
 
-        std::unordered_set<std::string> _deadHcPlayers;
-
 		// basically a destructor
 		void InternalShutdown();
 
