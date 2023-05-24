@@ -2568,7 +2568,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
                 m_teleportRecover = data->recover;
             else
                 m_teleportRecover = std::bind(&Player::SendNewWorld, this);
-            sMapMgr.ScheduleNewWorldOnFarTeleport(this);
+
+            // No need to send or schedule anything on logout
+            if (!GetSession()->PlayerLogout())
+                sMapMgr.ScheduleNewWorldOnFarTeleport(this);
         }
 
 		if (data->OnTeleportFinished)
