@@ -300,3 +300,6 @@ UPDATE `creature_template` set `scale` = 2.000000 where entry = 61533;
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -3644.987061, `position_y` = -994.833191, `position_z` = 153.012924, `orientation` = 1.798389 WHERE `guid` = 2573940;
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5015497, 2008297, 815, -1485.31, 2317.84, 185.248, 1.84313, 0, 0, 0.796549, 0.604574, 300, 300, 100, 1, 0, 0);
