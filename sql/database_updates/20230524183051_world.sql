@@ -294,3 +294,6 @@ DELETE FROM gameobject WHERE guid = '5015496';
 DELETE FROM game_event_gameobject WHERE guid = '5015496';
 DELETE FROM gameobject_battleground WHERE guid = '5015496';
 REPLACE INTO `creature` VALUES (2577304,61237,0,0,0,0,-795.064,1841.24,108.522,4.86728,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature_template` set `scale` = 2.000000 where entry = 61533;
