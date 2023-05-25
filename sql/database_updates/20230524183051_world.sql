@@ -297,3 +297,6 @@ REPLACE INTO `creature` VALUES (2577304,61237,0,0,0,0,-795.064,1841.24,108.522,4
 
 -- Changes by DRAGUNOVI
 UPDATE `creature_template` set `scale` = 2.000000 where entry = 61533;
+
+-- Changes by JOE
+UPDATE `creature` SET `position_x` = -3644.987061, `position_y` = -994.833191, `position_z` = 153.012924, `orientation` = 1.798389 WHERE `guid` = 2573940;
