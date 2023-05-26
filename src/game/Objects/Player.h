@@ -1894,6 +1894,8 @@ class Player final: public Unit
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we
         // remove objects from the map
         bool ExecuteTeleportFar(ScheduledTeleportData* data);
+        void SendNewWorld();
+        void HandleReturnOnTeleportFail(WorldLocation const& oldLoc);
 
         void SetBGQueueAllowed(bool allow) { m_BGQueueAllowed = allow; }
         bool IsAllowedToQueueBGDueToTabard() { return m_BGQueueAllowed; };
@@ -2271,7 +2273,7 @@ class Player final: public Unit
         bool m_repopAtGraveyardPending;
         ObjectGuid m_selectedGobj; // For GM commands
         ObjectGuid m_escortingGuid;
-        uint32 customFlags;
+        uint32 customFlags = 0;
         uint8 m_hardcoreStatus;
         bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
