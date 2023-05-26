@@ -1,0 +1,35 @@
+REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (936, 3.7);
+
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES 
+(936, 5179, 0),
+(936, 5180, 0),
+(936, 5181, 0),
+(936, 5182, 0),
+(936, 5183, 0),
+(936, 5184, 0),
+(936, 5185, 0),
+(936, 5186, 0),
+(936, 5187, 0),
+(936, 5188, 0),
+(936, 5189, 0),
+(936, 5190, 0),
+(936, 5191, 0),
+(936, 5192, 0),
+(936, 5193, 0),
+(936, 5194, 0),
+(936, 5195, 0),
+(936, 5196, 0),
+(936, 5197, 0),
+(936, 5198, 0),
+(936, 5199, 0),
+(936, 5200, 0),
+(936, 5201, 0),
+(936, 5202, 0),
+(936, 5203, 0),
+(936, 5205, 0),
+(936, 5206, 0),
+(936, 5207, 0),
+(936, 5208, 0),
+(936, 5209, 0);
+
+REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES (815, 0, 1, 0, 10, 0, 0, -1765.49, 1607.01, 'Gilneas City', 'instance_gilneas_city');
