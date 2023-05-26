@@ -843,9 +843,9 @@ class WorldObject : public Object
 
         // Valeur de retour : false si aucun point correct trouve.
         bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath = false) const;
-    void GetPointBehindObject(WorldLocation& location, float distance) const;
+        void GetPointBehindObject(WorldLocation& location, float distance) const;
 
-    uint32 GetMapId() const { return m_mapId; }
+        uint32 GetMapId() const { return m_mapId; }
         uint32 GetInstanceId() const { return m_InstanceId; }
 
         uint32 GetZoneId() const;
