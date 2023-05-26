@@ -98,3 +98,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61423, 61368, 3, 2, 1, 1, 0);
 -- Add spell 45489 on use with -1 charges to item Dreamtonic (Entry 61423).
 update item_template set spellid_1 = 45489, spellcharges_1 = -1 where entry = 61423;
+-- Quest Scouring Greyshire (Entry 40830), remove kill requirements from quest, chain short description to the following: "Recover the Greyshire Manuscripts from the Ruins of Greyshire for Father Oblen at Shademore Tavern in Gilneas."
+update quest_template set ReqCreatureOrGOId1 = 0, ReqCreatureOrGOId2 = 0, ReqCreatureOrGOCount1 = 0, ReqCreatureOrGOCount2 = 0, Objectives = 'Recover the Greyshire Manuscripts from the Ruins of Greyshire for Father Oblen at Shademore Tavern in Gilneas.' where entry = 40830;
