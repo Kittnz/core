@@ -2682,18 +2682,6 @@ void Player::ProcessDelayedOperations()
     if (m_DelayedOperations & DELAYED_CAST_HONORLESS_TARGET)
         CastSpell(this, 2479, true);
 
-    if (m_DelayedOperations & DELAYED_TAXI_FLIGHT_WITH_TELEPORT)
-    {
-        // restore taxi route
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(0));
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(1));
-
-        ClearTaxiFlightData(0);
-        ClearTaxiFlightData(1);
-
-        ContinueTaxiFlight();
-    }
-
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
 }
@@ -18688,11 +18676,6 @@ void Player::ContinueTaxiFlight()
             break;
         }
     }
-
-    if (GetSaveTaxiData(2))
-        startNode = GetSaveTaxiData(2);
-    ClearTaxiFlightData(2);
-
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
 }
 
