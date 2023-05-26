@@ -93,3 +93,6 @@ update creature_template set scale = 2 where entry = 61533;
 update creature_template set faction = 84 where entry = 61280;
 -- NPC Sergeant Arbington (Entry 61265) add subname <Gilneas Brigade>
 update creature_template set subname = 'Gilneas Brigade' where entry = 61265;
+-- Add item 61368 as a 3% drop on its own lootgroup to npc Marshal Magnus Greystone (61423).
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61423, 61368, 3, 2, 1, 1, 0);
