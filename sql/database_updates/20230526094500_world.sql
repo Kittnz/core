@@ -1,4 +1,8 @@
 -- NPCS FOR VAGRANT CAMP:
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20403, 0, 0, 0, 0),
+(20404, 0, 0, 0, 0);
+
 REPLACE INTO creature_template VALUES
 (61534, 1713, 0, 0, 0, 0, 'Councilor Ravencrest', NULL, 0, 42, 42, 2059, 2059, 0, 0, 3568, 84, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 78, 107, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61535, 3281, 0, 0, 0, 0, 'Camp Leader Gethenor', NULL, 0, 42, 42, 2059, 2059, 0, 0, 3568, 84, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 78, 107, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -80,3 +84,12 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61536, 4, 3771, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61536, 5, 4599, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61536, 6, 8952, 0, 0, 0, 0);
+
+-- Npc Frell Rosewick set scale to 1.
+update creature_template set scale = 1 where entry = 61381;
+-- Change NPC ID 61533 to have a scale of 2.
+update creature_template set scale = 2 where entry = 61533;
+-- NPC Hailey Everton change faction to 84.
+update creature_template set faction = 84 where entry = 61280;
+-- NPC Sergeant Arbington (Entry 61265) add subname <Gilneas Brigade>
+update creature_template set subname = 'Gilneas Brigade' where entry = 61265;
