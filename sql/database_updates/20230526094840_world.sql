@@ -101,9 +101,18 @@ REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES
 (946, 5068, 0), -- Gilijim Isle
 (946, 5069, 0), -- Gilijim Isle
 (946, 5070, 0), -- Gilijim Isle
+(946, 5071, 0), -- Gilijim Isle
 
-(942, 5071,  0), -- Lapidis Isle
-(942, 5072, 0), -- Lapidis Isle
+(942, 5043,  0), -- Lapidis Isle
+(942, 5044,  0), -- Lapidis Isle
+(942, 5045,  0), -- Lapidis Isle
+(942, 5046,  0), -- Lapidis Isle
+(942, 5047,  0), -- Lapidis Isle
+(942, 5048,  0), -- Lapidis Isle
+(942, 5049,  0), -- Lapidis Isle
+(942, 5050,  0), -- Lapidis Isle
+(942, 5051,  0), -- Lapidis Isle
+(942, 5052,  0), -- Lapidis Isle
 
 -- 5071 and 5072 are lapidis
 
