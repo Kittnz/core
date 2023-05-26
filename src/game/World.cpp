@@ -1757,8 +1757,6 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadAreaTriggerTeleports();                  // must be after item template load
     sLog.outString("Loading quest area trigger...");
     sObjectMgr.LoadQuestAreaTriggers();                     // must be after LoadQuests
-    sLog.outString("Loading custom graveyards...");
-    sObjectMgr.LoadCustomGraveyards();
     sLog.outString("Loading tavern area triggers...");
     sObjectMgr.LoadTavernAreaTriggers();
     sLog.outString("Loading battlegroun entry triggers...");
