@@ -209,7 +209,7 @@ inline void MaNGOS::DynamicObjectUpdater::VisitHelper(Unit* target)
         {
             Unit* pCasterUnit = i_dynobject.GetUnitCaster();
 
-            PersistentAreaAura* Aur = new PersistentAreaAura(spellInfo, eff_index, nullptr, holder, target, pCasterUnit);
+            PersistentAreaAura* Aur = new PersistentAreaAura(i_dynobject.GetObjectGuid(), spellInfo, eff_index, holder, target, pCasterUnit);
             holder->AddAura(Aur, eff_index);
             
             target->AddAuraToModList(Aur);
@@ -228,7 +228,7 @@ inline void MaNGOS::DynamicObjectUpdater::VisitHelper(Unit* target)
         Unit* pCasterUnit = i_dynobject.GetUnitCaster();
 
         holder = CreateSpellAuraHolder(spellInfo, target, pCasterUnit, pCaster);
-        PersistentAreaAura* Aur = new PersistentAreaAura(spellInfo, eff_index, nullptr, holder, target, pCasterUnit);
+        PersistentAreaAura* Aur = new PersistentAreaAura(i_dynobject.GetObjectGuid(), spellInfo, eff_index, holder, target, pCasterUnit);
         holder->AddAura(Aur, eff_index);
 
         // Debuff slots may be full, in which case holder is deleted or holder is not able to

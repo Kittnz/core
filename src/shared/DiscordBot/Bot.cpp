@@ -19,7 +19,8 @@ namespace DiscordBot
         for (auto handler : _handlers)
             delete handler;
 
-        _workerThread.join();
+        if (_workerThread.joinable())
+            _workerThread.join();
     }
 
     void Bot::AddHandler(BaseCommandHandler* handler)

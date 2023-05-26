@@ -2023,35 +2023,6 @@ void World::SetInitialWorldSettings()
     }
 #endif
 
-    //Restore HCs..
-    {
-        std::fstream file("hcdeaths.log");
-
-        std::string line;
-        re2::RE2 expr(R"(\d+-\d+-\d+ \d+:\d+:\d+ Player (\w+) dead)");
-        while (std::getline(file, line))
-        {
-            std::string playerName;
-            if (re2::RE2::PartialMatch(line, expr, &playerName))
-            {
-                if (auto playerData = sObjectMgr.GetPlayerDataByName(playerName))
-                {
-                    if (playerData->uiRace == RACE_DWARF || playerData->uiRace == RACE_GNOME || playerData->uiRace == RACE_HIGH_ELF || playerData->uiRace == RACE_HUMAN
-                        || playerData->uiRace == RACE_NIGHTELF)
-                    {
-                        CharacterDatabase.DirectPExecute("UPDATE `characters` SET `position_x` = -8833, `position_y` = 629, `position_z` = 95, `map` = 0 WHERE `name` = '%s'", playerName.c_str()); // sw
-                    }
-                    else
-                    {
-                        CharacterDatabase.DirectPExecute("UPDATE `characters` SET `position_x` = 1652, `position_y` = -4416, `position_z` = 17, `map` = 1 WHERE `name` = '%s'", playerName.c_str()); // org
-                    }
-                }
-                CharacterDatabase.DirectPExecute("UPDATE `characters` SET `death_expire_time` = 0, `health` = 50, `playerflags` = `playerflags` & ~16, `mortality_status` = 1, `total_deaths` = 0 WHERE `name` = '%s'", playerName.c_str());
-            }
-            _deadHcPlayers.insert(playerName);
-        }
-    }
-
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
 }
