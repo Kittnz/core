@@ -167,3 +167,33 @@ replace into item_template (entry, name, description, class, subclass, material,
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61516, 'Corrupt Chainmail', '', 4, 3, 5, 2, 25671, 1, 0, 0, -1, -1, 81298, 20324, 5, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 307, 0, 0, 57, 0, 10, 0, 0, 0, 0, 0, 0, 7, 18, 7597, 1, 0, 0, -1, 0, -1, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61521, 'Strongstep Boots', '', 4, 2, 8, 2, 18967, 1, 0, 0, -1, -1, 54615, 13653, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 45, 102, 0, 0, 57, 0, 10, 0, 0, 0, 0, 0, 0, 4, 16, 13679, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61517, 'Chimaera\'s Eye', 'This magical gem seems to slowly exude a corossive poison that no armor of man nor monster can endure.', 4, 0, 1, 3, 3491, 1, 0, 1, -1, -1, 40000, 10000, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 47, 0, 0, 0, 0, 0, 0, 48036, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Items made by Ques, includes grammar fix:
+-- Ruk'thok items
+replace into item_template values
+ ('61497', '4', '2', 'Burnt Explorer\'s Tunic', '', '27518', '2', '0', '1', '75480', '18870', '5', '-1', '-1', '58',
+ '53', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '13', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '150', '0', '18', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '0', '1', '0', '0', '85', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('61498', '4', '1', 'Ruk\'thok Slippers', '', '28151', '2', '0', '1', '46056', '11514', '8', '-1', '-1', '58',
+ '53', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '13', '7', '11',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '51', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '0', '1', '0', '0', '35', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('61499', '2', '19', 'Burning Torch', 'It\'s hot!', '28631', '2', '0', '1', '117096', '29274', '15', '-1', '-1', '58',
+ '53', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1600', '100',
+ '0', '57', '105', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9399', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '2', '0', '0', '0', '55', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
