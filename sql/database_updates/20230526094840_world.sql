@@ -1,36 +1,7 @@
 REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (936, 3.7);
 
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES 
-(936, 5179, 0),
-(936, 5180, 0),
-(936, 5181, 0),
-(936, 5182, 0),
-(936, 5183, 0),
-(936, 5184, 0),
-(936, 5185, 0),
-(936, 5186, 0),
-(936, 5187, 0),
-(936, 5188, 0),
-(936, 5189, 0),
-(936, 5190, 0),
-(936, 5191, 0),
-(936, 5192, 0),
-(936, 5193, 0),
-(936, 5194, 0),
-(936, 5195, 0),
-(936, 5196, 0),
-(936, 5197, 0),
-(936, 5198, 0),
-(936, 5199, 0),
-(936, 5200, 0),
-(936, 5201, 0),
-(936, 5202, 0),
-(936, 5203, 0),
-(936, 5205, 0),
-(936, 5206, 0),
-(936, 5207, 0),
-(936, 5208, 0),
-(936, 5209, 0);
+(936, 267, 0); -- Temp. before we have MMAPS, open world Gilneas
 
 REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES (815, 0, 1, 0, 10, 0, 0, -1765.49, 1607.01, 'Gilneas City', 'instance_gilneas_city');
 
@@ -51,77 +22,21 @@ REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `play
 -- "945","1","-8453.4","-4690.7","-202.9","Caverns of Time","","","","","","","","4128894"
 -- "946","1","-13912","2350.9","28.57","Gilijim Isle","","","","","","","","4128894"
 
+DELETE FROM `game_graveyard_zone` WHERE `id` BETWEEN 937 AND 945;
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES 
 (937, 2041, 67), -- Amani'Alor
-(938, 147, 0), -- Farstrider's Lodge
+(938, 38, 469), -- Farstrider's Lodge
 (939, 5130, 0), -- Winter Veil Vale
-(939, 5131, 0), -- Winter Veil Vale, Icepaw Village
-(940, 5028, 0), -- Tirisfal Uplands
-(940, 5029, 0), -- Tirisfal Uplands
-(940, 5030, 0), -- Tirisfal Uplands
-(940, 5031, 0), -- Tirisfal Uplands
-(940, 5032, 0), -- Tirisfal Uplands
-(940, 5033, 0), -- Tirisfal Uplands
-(940, 5034, 0), -- Tirisfal Uplands
-(940, 5035, 0), -- Tirisfal Uplands
-(940, 5036, 0), -- Tirisfal Uplands
-(940, 5037, 0), -- Tirisfal Uplands
-(940, 5038, 0), -- Tirisfal Uplands
-(940, 5039, 0), -- Tirisfal Uplands
-(940, 5040, 0), -- Tirisfal Uplands
-(940, 5041, 0), -- Tirisfal Uplands
-(940, 5042, 0), -- Tirisfal Uplands
+(940, 85, 0), -- Tirisfal Uplands
 (941, 5121, 0), -- Tel'Abim Island
-(941, 5122, 0), -- Tel'Abim Island
-(941, 5123, 0), -- Tel'Abim Island
-(941, 5124, 0), -- Tel'Abim Island
-(941, 5125, 0), -- Tel'Abim Island
-(941, 5126, 0), -- Tel'Abim Island
-(941, 5127, 0), -- Tel'Abim Island
-(941, 5128, 0), -- Tel'Abim Island
-(941, 5129, 0), -- Tel'Abim Island
-(944, 4011, 67), -- Venture Camp
+(944, 406, 67), -- Venture Camp
 (945, 2366, 0), -- Black Morass
 (945, 5204, 0), -- Black Morass
-
-(946, 5054, 0), -- Gilijim Isle
-(946, 5055, 0), -- Gilijim Isle
-(946, 5056, 0), -- Gilijim Isle
-(946, 5057, 0), -- Gilijim Isle
-(946, 5058, 0), -- Gilijim Isle
-(946, 5059, 0), -- Gilijim Isle
-(946, 5060, 0), -- Gilijim Isle
-(946, 5061, 0), -- Gilijim Isle
-(946, 5062, 0), -- Gilijim Isle
-(946, 5063, 0), -- Gilijim Isle
-(946, 5064, 0), -- Gilijim Isle
-(946, 5065, 0), -- Gilijim Isle
-(946, 5066, 0), -- Gilijim Isle
-(946, 5067, 0), -- Gilijim Isle
-(946, 5068, 0), -- Gilijim Isle
-(946, 5069, 0), -- Gilijim Isle
-(946, 5070, 0), -- Gilijim Isle
-(946, 5071, 0), -- Gilijim Isle
-
-(942, 5043,  0), -- Lapidis Isle
-(942, 5044,  0), -- Lapidis Isle
-(942, 5045,  0), -- Lapidis Isle
-(942, 5046,  0), -- Lapidis Isle
-(942, 5047,  0), -- Lapidis Isle
-(942, 5048,  0), -- Lapidis Isle
-(942, 5049,  0), -- Lapidis Isle
-(942, 5050,  0), -- Lapidis Isle
-(942, 5051,  0), -- Lapidis Isle
-(942, 5052,  0), -- Lapidis Isle
-
--- 5071 and 5072 are lapidis
-
+(946, 408, 0), -- Gilijim Isle
+(942, 409,  0), -- Lapidis Isle
 (632, 5098, 0), -- Hateforge Quarry, link with Burning Steppes, Flame Crest
-(632, 5101, 0), -- Hateforge Quarry, link with Burning Steppes, Flame Crest
 (632, 5103, 0), -- Hateforge Quarry, link with Burning Steppes, Flame Crest
-
-(92, 5077, 0), -- Crescent Grove, link with Ashenvale, Astranaar
-(92, 5078, 0); -- Crescent Grove, link with Ashenvale, Astranaar
+(92, 5077, 0); -- Crescent Grove, link with Ashenvale, Astranaar
 
 -- Fix orientation:
 
