@@ -36,7 +36,7 @@ REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `play
 
 -- More fixes for new graveyards:
 
-DROP TABLE IF EXISTS custom_graveyards;
+-- DROP TABLE IF EXISTS custom_graveyards;
 
 -- DBC data:
 
