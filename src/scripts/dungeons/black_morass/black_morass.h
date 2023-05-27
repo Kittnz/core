@@ -7,6 +7,11 @@
 
 #pragma once
 
+enum
+{
+    NPC_UNKNOWN_ENTITY = 66003,
+};
+
 struct LocationXYZO
 {
     float m_fX{}, m_fY{}, m_fZ{}, m_fO{};

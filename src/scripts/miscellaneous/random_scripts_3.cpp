@@ -1934,7 +1934,7 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
             }, 23000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I see... A radiant city... full of people");
+                pQuestGiver->MonsterSay("I see... A radiant city... full of people");
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 27000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -3774,7 +3774,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -4439,7 +4439,7 @@ bool GossipSelect_npc_falgran_hastil(Player* pPlayer, Creature* pCreature, uint3
                 }, 47000);
             pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
                 {
-                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warrior I assure you, I know nothing of this.");
+                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warrior I assure you, I know nothing of this.");
                     NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 55000);
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
@@ -5084,7 +5084,7 @@ bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 }, 82000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("Vengeful Mariner The Ogres speak of a haunted sailor terrorizing the shores, but I doubt its connected. ");
+                    pQuestGiver->MonsterSay("The Ogres speak of a haunted sailor terrorizing the shores, but I doubt its connected. ");
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 92000);
             pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
