@@ -37,26 +37,6 @@ namespace nsInfiniteWhelp
 	};
 }
 
-namespace nsInfiniteTimeripper
-{
-	static constexpr uint32 NPC_TIME_RIFT{ 91001 };
-	static constexpr uint32 NPC_DRAGONSPAWN{ 65123 };
-	static constexpr uint32 NPC_HARBINGER{ 65114 };
-
-	static constexpr uint32 SPELL_TIME_LAPSE{ 23310 };
-	static constexpr uint32 SPELL_SCHADOW_CHANNELING{ 12380 };
-	static constexpr uint32 AURA_SHADOWGUARD{ 19312 };
-
-	enum class Phase : uint8
-	{
-		ONE,
-		TWO,
-		THREE,
-		FOUR,
-		FIVE
-	};
-}
-
 namespace nsInfiniteRiftlord
 {
 	static constexpr uint32 SPELL_DEMO_SHOUT{ 19778 };
@@ -93,28 +73,6 @@ namespace nsSwampMob
 	static constexpr uint32 SPELL_PARALYZING_POISON{ 3609 };
 }
 
-namespace nsBossChronar
-{
-	static constexpr uint32 SPELL_SHOUT { 18328 };
-	static constexpr uint32 SPELL_MORTAL_STRIKE { 13737 };
-	static constexpr uint32 SPELL_SWEEPING_SLAM { 12887 };
-	static constexpr uint32 SPELL_REFLECTION { 22067 };
-	static constexpr uint32 SPELL_ENRAGE { 28131 };
-	static constexpr uint32 SPELL_TELEPORT{ 26638 };
-
-	static constexpr uint32 GOB_CHROMIE_PORTAL { 81048 };
-
-	static constexpr uint32 NPC_CHROMIE { 91003 };
-
-	enum class Phase : uint8
-	{
-		ONE,
-		TWO,
-		THREE,
-		FOUR
-	};
-}
-
 namespace nsBossHarbringer
 {
 	static constexpr uint32 NPC_LARVAE { 65115 };
@@ -124,22 +82,6 @@ namespace nsBossHarbringer
 	static constexpr uint32 SPELL_SHADOWFORM { 16592 };
 	static constexpr uint32 SPELL_SHADOW_BURST { 28447 };
 	static constexpr uint32 SPELL_CAUSE_INSANITY { 26079 };
-}
-
-namespace nsBossEpochronos
-{
-	static constexpr uint32 SPELL_SAND_BREATH { 20717 };
-	static constexpr uint32 SPELL_SWOOP { 23919 };
-	static constexpr uint32 SPELL_ARCANE_BLAST { 24857 };
-	static constexpr uint32 SPELL_BANISH { 18647 };
-	static constexpr uint32 SPELL_TELEPORT{ 26638 };
-
-	static constexpr uint32 NPC_LICH_KING { 65117 };
-	static constexpr uint32 NPC_KAELTHAS { 65118 };
-	static constexpr uint32 NPC_VASHJ { 65119 };
-	static constexpr uint32 NPC_CHROMIE{ 91003 };
-
-	static constexpr uint32 GOB_CHROMIE_PORTAL{ 81048 };
 }
 
 namespace nsShade
@@ -161,49 +103,6 @@ namespace nsShade
 	static constexpr uint32 NPC_LICH_KING{ 65117 };
 	static constexpr uint32 NPC_KAELTHAS{ 65118 };
 	static constexpr uint32 NPC_VASHJ{ 65119 };
-}
-
-namespace nsBossChromie
-{
-	static constexpr uint32 SPELL_MANA_BURN { 26046 };
-	static constexpr uint32 SPELL_FEAR{ 26580 };
-	static constexpr uint32 SPELL_FUMBLE{ 5917 };
-
-	static constexpr uint32 NPC_TIME_RIFT{ 81051 };
-	static constexpr uint32 NPC_RIFT_GUARD{ 65101 };
-	static constexpr uint32 NPC_ROTMAW{ 65122 };
-	static constexpr uint32 NPC_MOSSHEART{ 65124 };
-	static constexpr uint32 NPC_TIME_RIFT_SMALL{ 65129 };
-	static constexpr uint32 NPC_UNKNOWN_ENTITY{ 66003 };
-
-	static constexpr uint32 GOB_GHOST_GATE{ 180322 };
-	static constexpr uint32 GOB_LARGE_GHOST_GATE{ 2010866 };
-	static constexpr uint32 GOB_SAND_WALL{ 2010865 };
-
-	struct MoveLocation
-	{
-		float m_fX{}, m_fY{}, m_fZ{};
-	};
-
-	static const MoveLocation riftMoveLocation[] =
-	{
-		{ -1598.93f, 7095.85f, 24.33f },
-		{ -1596.64f, 7115.21f, 24.33f },
-		{ -1597.06f, 7111.69f, 30.73f },
-		{ -1598.41f, 7100.27f, 30.73f },
-		{ -1597.79f, 7105.53f, 34.99f },
-		{ -1577.60f, 7098.29f, 33.77f },
-		{ -1576.78f, 7108.26f, 33.77f },
-		{ -1597.42f, 7100.14f, 30.84f }
-	};
-
-	enum class Phase : uint8
-	{
-		ONE,
-		TWO,
-		THREE,
-		FOUR
-	};
 }
 
 namespace nsRotmaw
@@ -242,29 +141,6 @@ namespace nsAntnormi
 	static constexpr uint32 SPELL_ENRAGE{ 28131 };
 }
 
-namespace nsChromiePortal
-{
-	static constexpr uint32 NPC_WHELP{ 65103 };
-	static constexpr uint32 NPC_RIFT_GUARD{ 65101 };
-}
-
-namespace nsInjuredDefender
-{
-	static constexpr uint32 CHROMIE_PORTAL{ 81048 };
-	static constexpr uint32 SPELL_TELEPORT{ 26638 };
-
-	static constexpr uint32 NPC_DEFENDER{ 65001 };
-	static constexpr uint32 NPC_DRAGONSPAWN{ 65100 };
-
-	enum class Phase : uint8
-	{
-		ONE,
-		TWO,
-		THREE,
-		FOUR
-	};
-}
-
 namespace nsLogisticalOfficer
 {
 	static constexpr uint32 SPELL_ARCANE_CHANNEL{ 23017 };
@@ -299,31 +175,3 @@ namespace nsLogisticalOfficer
 	};
 }
 
-namespace nsChromieBossAnim
-{
-	static constexpr uint32 SHADOW_AURA{ 24674 };
-
-	static constexpr uint32 NPC_BOSS_CHROMIE { 65121 };
-
-	static constexpr uint32 GOB_GHOST_GATE{ 180322 };
-	static constexpr uint32 GOB_SAND_WALL{ 2010865 };
-}
-
-namespace nsTemporalBronzeDisc
-{
-	static constexpr uint32 GOB_CHROMIE_PORTAL{ 81048 };
-
-	static constexpr uint32 NPC_CHROMIE{ 91003 };
-	static constexpr uint32 NPC_LARGE_TIME_RIFT{ 91001 };
-
-	static constexpr uint32 SPELL_TELEPORT{ 26638 };
-	static constexpr uint32 SPELL_ARCANE_CHANNELING{ 23017 };
-	static constexpr uint32 SPELL_ARCANE_EXPLOSION{ 22460 };
-
-	struct cotDataStruct
-	{
-		time_t m_itemTimer{};
-	};
-
-	static cotDataStruct cotData{};
-}
