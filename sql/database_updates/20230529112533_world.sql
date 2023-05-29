@@ -544,3 +544,21 @@ replace into creature_involvedrelation	(id, quest) values (61271, 40941);
 
 update quest_template set requiredraces = 589 where entry = 40941;
 
+-- Draconic Presence?
+delete from quest_template where entry = 40942;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40941,40942,2,5179,43,35,0,0,'Draconic Presence?','I have taken time to familiarize myself with the Font. I have come to the realization that the lingering magic is indeed coming from Gilneas City. In order to discover what type of magic, I require one last material in order to make it fully operational. I have my theories and suspicions based off the font itself that this could be draconic magic, and if so, perhaps Lord Prestor was indeed one taking humanoid form.$B$BTo fully know if this is the truth, I require you to travel to Dustwallow Marsh where the Black Dragonflight calls home. From the Firemane that linger at Dragonmurk in southern Dustwallow Marsh, recover a \'Potent Draconic Jewel\'. It is often carried by their kind.','Slay Firemurk Dragonkin in Dustwallow Marsh, and recover a Potent Draconic Jewel for Magus Orelius at Ravenshire in Gilneas.','Once this Draconic Jewel is recovered, I can ascertain the true magic.','<Magus Orelius takes a moment, channeling the energy of the Potent Draconic Jewel with the Font of Arcana. Within time, he would let out a loud and heavy sigh.>$B$BIt\'s as I had feared, my theories are proven correct. Lord Prestor may perhaps have been a dragon in disguise all along. I am certain those who have come to replace him are aswell.$B$BThe Harlow\'s are a noble family which rose to prominence around the time Prestor had arrived in Gilneas, and it is that same group that lords over the city itself. Lady Celia and Lord Mortimer are Regents of King Greymane, and act on his behalf.$B$BThe grip of the Black Dragonflight is deep within Gilneas, and it would appear they have long been working to bring this feud about. The death of innocents, and the corruption of this land is all on their hands. They must be stopped.',61485,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,24600,4100,61,300,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61271, 40942);
+replace into creature_involvedrelation	(id, quest) values (61271, 40942);
+
+update quest_template set requiredraces = 589, type = 1 where entry = 40942;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61485,1263,'Potent Draconic Jewel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(4328,61485,-18,0,1,1,0),
+(4329,61485,-18,0,1,1,0),
+(4331,61485,-18,0,1,1,0),
+(4334,61485,-18,0,1,1,0);
+
