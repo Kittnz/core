@@ -562,3 +562,31 @@ replace into creature_loot_template values
 (4331,61485,-18,0,1,1,0),
 (4334,61485,-18,0,1,1,0);
 
+-- Undoing Draconic Presence
+delete from quest_template where entry = 40943;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40942,40943,2,5180,47,35,0,0,'Undoing Draconic Presence','There is only one course of action to save Gilneas. The Harlow family cannot be allowed to emerge from this civil war unscathed. The Regent-Lady Celia Harlow, and Regent-Lord Mortimer Harlow are Dragonkin of the Black Dragonflight. They have long corrupted Gilneas and turned it into a land of decay and conflict.$B$BWe must put an end to the suffering of the land, slay both of them, and rid this place of their evil machinations.','End the Draconic Influence over Gilneas by slaying Regent-Lady Celia Harlow, and Regent-Lord Mortimer Harlow for Magus Orelius at Ravenshire in Gilneas.','Has their work been undone?','The people will not know of your work here today, but their suffering will end. The draconic influence over Gilneas has been put to rest.$B$BIt is only a matter of time until the land is restored to what it was some years ago, and this is in part thanks to your efforts here today. I have convened with the other members of the Kirin Tor, and your work to banish the foul draconic magic will not go unrewarded.$B$BPlease, take one of these items, as a gesture of our appreciation.',0,0,0,0,0,0,0,0, 61263,1,61264,1,0,0,0,0, 0,0, 0,28200,4700,61,500,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61486,1,61487,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61271, 40943);
+replace into creature_involvedrelation	(id, quest) values (61271, 40943);
+
+update quest_template set requiredraces = 589, type = 81 where entry = 40943;
+
+replace into item_template values
+ ('61486', '4', '1', 'Violet Sash', '', '24624', '3', '0', '1', '15464', '3866', '6', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '6', '5', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '33', '0', '0', '0',
+ '0', '0', '0', '9397', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61487', '4', '3', 'Gauntlets of Insight', '', '12068', '3', '0', '1', '20472', '5118', '10', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '13', '3', '11',
+ '6', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '166', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
