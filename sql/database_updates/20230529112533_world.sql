@@ -176,3 +176,21 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
 
+-- Wagon Woes
+delete from quest_template where entry = 40932;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40932,2,5179,41,35,0,0,'Wagon Woes','You there, why I am lucky to have you stumble across me. I\'m having a terrible time. Forced to abandon my family home, now this!$B$BThe wheel on my wagon has broken and needs to be replaced, but I left the spare back at the plantation. You wouldn\'t mind doing me a favor, would you? I cannot return as worgen have taken over, but maybe you can.$B$BHead to the Rosewick Plantation just to the northwest of here, and bring me my spare wheel from my house.','Recover the Spare Wagon Wheel for Donald Rosewick near Northgate Tower in Gilneas.','Have you gotten my spare wheel?','Oh, this is splendid, now I will be able to make pace to Shademore Tavern!',61477,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,16800,2800,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61384, 40932);
+replace into creature_involvedrelation	(id, quest) values (61384, 40932);
+
+update quest_template set requiredraces = 589 where entry = 40932;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61477,7926,'Spare Wagon Wheel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+REPLACE INTO gameobject_template VALUES
+(2020030, 3, 31, 'Spare Wagon Wheel', 0, 4, 1, 43, 2020030, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020030,61477,-100,0,1,1,0);
+
