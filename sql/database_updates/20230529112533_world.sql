@@ -76,3 +76,32 @@ replace into creature_loot_template values
 (61252,61470,-66,0,1,1,0),
 (61253,61470,-66,0,1,1,0);
 
+-- Securing Gilneas II
+delete from quest_template where entry = 40927;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40926,40927,2,5179,44,35,0,0,'Securing Gilneas II','To stop the Bloodclaw, we must put an end to the alpha of their packs. The strongest of the worgen themselves are known as \'alpha\' and it is these creatures that command the rest of the smaller worgen.$B$BThe Bloodclaw Alpha can be found within a cave to the northwest. Search for the worgen camp west of Northgate Tower. The cave should be just nearby.$B$BSlay thirteen of them, and return to me when the job is done.','Slay 13 Bloodclaw Alpha that linger within the northern caves for Corporal Ranworth at Ravenshire in Gilneas.','Be prepared for the task ahead.$B$B I would advise to bring some assistance. Assaulting a worgen den is no easy task.','You have done well $N. It will only be a matter of time before the Bloodclaw tears itself apart as they struggle to establish new chains of command.$B$BYour duty to the people of Gilneas will not go unrewarded. Please, take one of these items as a thanks for everything you have done.',0,0,0,0,0,0,0,0, 61252,13,0,0,0,0,0,0, 0,0, 1000,22200,3700,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61471,1,61472,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61540, 40927);
+replace into creature_involvedrelation	(id, quest) values (61540, 40927);
+
+update quest_template set requiredraces = 589 where entry = 40927;
+
+replace into item_template values
+ ('61471', '4', '4', 'Gilneas Brigade Leggings', '', '2969', '2', '0', '1', '34508', '8627', '7', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '4', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '379', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61472', '2', '3', 'Brigade Rifle', '', '66391', '2', '0', '1', '51236', '12809', '26', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '100',
+ '3', '42', '76', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '65', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
