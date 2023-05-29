@@ -520,3 +520,18 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
+-- Font of Arcana
+delete from quest_template where entry = 40940;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40940,2,5179,40,35,8,0,'Font of Arcana','A strange and foul magic lingers upon the air of Gilneas. I believe there is more going on behind the scenes than first meets the eye.$B$BThe Lord Prestor was well known for holding the ear to King Greymane and often influenced many of his decisions. When I met this Lord Prestor long ago, I was overwhelmed by the immense magic that practically emanated from him. This same magic can be sensed within Gilneas, but I am not sure where.$B$BTo discover the source I require an item of rarity, a Font of Arcana that is often wielded by Blue Dragonkin. The nearest of their brood resides within the Badlands, in a place named Crystalline Oasis.','Travel to the Badlands and slay members of the Blue Dragonflight to recover a Font of Arcana for Magus Orelius at Ravenshire in Gilneas.','Has the Font been recovered?','Everytime I interact with draconic magic I am impressed by the sheer power it posesses.$B$BWe mortals truly cannot compare to the power of our draconic enemies.',61484,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,16800,2800,61,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61271, 40940);
+replace into creature_involvedrelation	(id, quest) values (61271, 40940);
+
+update quest_template set requiredraces = 589 where entry = 40940;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61484,20609,'Font of Arcana',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+replace into creature_loot_template values
+(60910,61484,-38,0,1,1,0);
+
