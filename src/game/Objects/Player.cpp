@@ -6988,15 +6988,15 @@ Team Player::TeamForRace(uint8 race)
         return ALLIANCE;
     }
 
-    switch (rEntry->TeamID)
+    switch (rEntry->baseLanguage)
     {
-        case 7:
+        case LANG_COMMON:
             return ALLIANCE;
-        case 1:
+        case LANG_ORCISH:
             return HORDE;
     }
 
-    sLog.outError("Race %u have wrong teamid %u in DBC: wrong DBC files?", uint32(race), rEntry->TeamID);
+    sLog.outError("Race %u have wrong base language %u in DBC: wrong DBC files?", uint32(race), rEntry->baseLanguage);
     return TEAM_NONE;
 }
 
