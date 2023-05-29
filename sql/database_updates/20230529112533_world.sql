@@ -493,3 +493,30 @@ values (@spell_list_id, @description,
 -- Pendant of Mortality fix.
 Update item_template set stat_value2 = -1, description = 'A devil\'s deal, signed in blood.' where entry = 81278;
 
+-- Supplementing Rations
+delete from quest_template where entry = 40939;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40939,2,5179,41,35,8,0,'Supplementing Rations','Many of the refugees here in the camp and at the Greymane Wall are starving. The threat of the worgen has been enough to deter most from foraging or hunting. I request you to aid in our situation and perhaps I can get a decent meal for everyone.$B$B The Duskpelt wolves are hostile, but should supplement our current rations well. You can find Duskpelt wolves all around Gilneas. Bring me six chunks of their meat and it should last us for a time.','Gather 6 Duskpelt Meat from the Duskpelt wolves for Camp Chef Velden at the Vagrant Encampment in northern Gilneas.','Have you had any luck finding food for us adventurer?','Well, I am impressed. These fresh cuts of meat will surely go a long way in easing the rumbling of stomachs. I will make sure this gets to our most desperate first.$B$BThanks again for what you\'ve done, take this, as a token for keeping us alive just a bit longer.',61482,6,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,17700,2950,0,0,0,0,0,0,0,0,0,0,0, 61483,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61536, 40939);
+replace into creature_involvedrelation	(id, quest) values (61536, 40939);
+
+update quest_template set requiredraces = 589 where entry = 40939;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61482,25472,'Duskpelt Meat',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0,0);
+
+replace into creature_loot_template values
+(61227,61482,-78,0,1,1,0),
+(61228,61482,-78,0,1,1,0),
+(61229,61482,-78,0,1,1,0);
+
+replace into item_template values
+ ('61483', '2', '0', 'Velden\'s Backup Cleaver', '', '19281', '2', '0', '1', '55584', '13896', '21', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '7', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '0',
+ '0', '42', '93', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
