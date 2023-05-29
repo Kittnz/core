@@ -268,3 +268,22 @@ replace into creature_loot_template values
 (61236,61480,-72,0,1,1,0),
 (61237,61480,-72,0,1,1,0),
 (61238,61480,-72,0,1,1,0);
+
+-- Nighthowl Neutralizing
+delete from quest_template where entry = 40938;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40937,40938,2,5179,43,35,8,0,'Nighthowl Neutralizing','To end the Nighthowl threat, we must target their leadership. The tribe of worgen are led by strong alpha who command their packs with extreme efficiency. Without the alpha, the Nighthowl would crumble into disarray.$B$BI am asking you to delve into the wolf\'s lair.$B$BOldrock Pass can be found to the west of here. It is a trail between Silverpine Forest and Gilneas that got breached some time ago. It is infested with the Nighthowl worgen, and it is there you will find their alpha.$B$BSlay them, and rid us of this threat.','Slay 3 Nighthowl Alphas for Camp Leader Gethenor at the Vagrant Encampment in northern Gilneas.','The Alpha are a cunning foe, plot your moves and prepare for a challenge.','You have scattered the Nighthowl with this move. I suspect their attacks on us will cease as infighting begins to establish new leaders for their tribe.$B$BYou have done us a good favor $c, and for that you shall be rewarded.',0,0,0,0,0,0,0,0, 61237,3,0,0,0,0,0,0, 0,0, 1000,21900,3650,0,0,0,0,0,0,0,0,0,0,0, 61481,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61535, 40938);
+replace into creature_involvedrelation	(id, quest) values (61535, 40938);
+
+update quest_template set requiredraces = 589 where entry = 40938;
+
+replace into item_template values
+ ('61481', '4', '3', 'Vagrant Coif', '', '25904', '2', '0', '1', '25108', '6277', '1', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '13', '3', '7',
+ '7', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '192', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '60', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
