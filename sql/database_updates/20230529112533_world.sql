@@ -653,3 +653,32 @@ replace into creature_loot_template values
 (61407,61491,-100,0,1,1,0),
 (61408,61491,-100,0,1,1,0);
 
+-- Spitecrest Decursions
+delete from quest_template where entry = 40947;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40946,40947,2,5179,42,35,8,0,'Spitecrest Decursions','You didn\'t think it was going to be that easy, did you? Those Spitecrest naga are a stubborn and vile kind. They are led by a Lord and Mistress both, each commanding two prongs of a forked trident assaulting Gilneas herself.$B$B Find and slay the Lord and Mistress of the naga and you shall end this tyranny threatening our coasts. I have no doubt you will find them amongst their slithering kin on the southern beaches.','Find and Slay Lord Zarsan and Mistress Hesszha along the southern coast of Gilneas for Dockwatcher Vorren at Ravenshire in Gilneas.','You better not be bothering me.','Huh, you\'ve done it? Well why didn\'t you say that $c! You\'ve done and gone real heroes work out here, and in Gilneas that is a rarity.$B$BHere, as a token of my thanks and from all of us that work down here, take this. It might serve you better than it would myself.',0,0,0,0,0,0,0,0, 61404,1,61406,1,0,0,0,0, 0,0, 0,23100,3850,0,0,0,0,0,0,0,0,0,0,0, 61492,1,61493,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61275, 40947);
+replace into creature_involvedrelation	(id, quest) values (61275, 40947);
+
+update quest_template set requiredraces = 589 where entry = 40947;
+
+replace into item_template values
+ ('61492', '4', '0', 'Fisherman\'s Shawl', '', '23101', '2', '0', '1', '16728', '4182', '16', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '7', '3', '3',
+ '4', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61493', '4', '1', 'Dockmaster Cuffs', '', '14111', '2', '0', '1', '11504', '2876', '9', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '4', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
