@@ -535,3 +535,12 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (60910,61484,-38,0,1,1,0);
 
+-- Magical Presence
+delete from quest_template where entry = 40941;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40940,40941,2,5179,40,35,0,0,'Magical Presence','You have done well in acquiring this Font of Arcana. However, before we can proceed, I need materials of a magical nature. The Font of Arcana cannot be wielded naturally without draconic magic, and therefore, I must channel enchanting materials with my own magic to power the Font.$B$BBring me a Large Glowing Shard, which is a common Enchanting material, and we can continue our work.','Acquire a Large Glowing Shard for the Font of Arcana for Magus Orelius at Ravenshire in Gilneas.','The Arcane Font pocesses great power that cannot be wielded by magic alone.','Now then, let us see what the Font of Arcana can expose as truth.',11139,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,16800,2800,61,100,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61271, 40941);
+replace into creature_involvedrelation	(id, quest) values (61271, 40941);
+
+update quest_template set requiredraces = 589 where entry = 40941;
+
