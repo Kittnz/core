@@ -600,3 +600,38 @@ replace into creature_involvedrelation	(id, quest) values (61539, 40944);
 
 update quest_template set requiredraces = 589 where entry = 40944;
 
+-- Snarlclaw
+delete from quest_template where entry = 40945;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40945,2,5179,44,35,8,0,'Snarlclaw','I once served as a knight of Gilneas. During my service I saw many things that wavered my loyalties. But it was not until the death of my wife that I forever saw the truth.$B$BThe loyalists allowed the incursion of the worgen to punish the innocents outside the city. My wife met her end to a creature named Snarlclaw, and I was forbidden from carrying out my revenge. Now I remain here, to drink away my sorrows.$B$BSlay the beast Snarlclaw, and do what those royalists could never stomach. You will find him to the northeast, hiding amongst the caves with the Bloodclaw worgen.','Slay the worgen named Snarlclaw for Maxwell Givings at the Shademore Tavern in Gilneas.','<Maxwell is lost in thought.>','I was expecting to feel some sort of relief, but in truth I don\'t feel much of anything. You have done me a great service, and for that I am in your thanks.$B$BPerhaps soon I will find solace from the dark days ahead. Please, take this, I shall not be needing it any longer.',61488,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 1000,24600,4100,0,0,0,0,0,0,0,0,0,0,0, 61489,1,61490,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61383, 40945);
+replace into creature_involvedrelation	(id, quest) values (61383, 40945);
+
+update quest_template set requiredraces = 589 where entry = 40945;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61488,5077,'Snarlclaw\'s Mane',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,1);
+
+replace into creature_loot_template values
+(61405,61488,-100,0,1,1,0);
+
+replace into item_template values
+ ('61489', '4', '6', 'Ravenwood Shield', '', '66377', '2', '0', '1', '41056', '10264', '14', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '3', '3',
+ '4', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '1396', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '4', '0', '0', '85', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61490', '4', '1', 'Hollow-Thread Trousers', '', '27853', '2', '0', '1', '27952', '6988', '7', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '16', '6', '7',
+ '7', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '55', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
