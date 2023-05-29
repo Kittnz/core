@@ -120,3 +120,12 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (61249,61473,-66,0,1,1,0);
 
+-- The Gilneas Lighthouse
+delete from quest_template where entry = 40929;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40929,2,5179,42,35,0,0,'The Gilneas Lighthouse','Why hello there, I am Elaroth Ranworth and it is my charge to keep the fire of this lighthouse burning bright.$B$BBefore the war we relied on a steady supply of oil from Theramore. Ever since the Greymane Wall was sealed shut, this lighthouse has been burning on what excess I could find.$B$BIt is only a matter of time before the light will cease burning. With it, I will also leave this world.$B$BI am not yet ready to depart, and so I am desperate.$B$BI ask of you to visit Theramore, speak with the Dockmaster, and see if there is any oil that can be given to me.','Speak with Dockmaster Lorman at Theramore Isle in Dustwallow Marsh to recover any oil meant for Gilneas.','Yes?','Oil to Gilneas? Hasn\'t that place been sealed shut for years now?',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,3300,550,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61258, 40929);
+replace into creature_involvedrelation	(id, quest) values (60733, 40929);
+
+update quest_template set requiredraces = 589 where entry = 40929;
+
