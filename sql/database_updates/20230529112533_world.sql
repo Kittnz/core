@@ -129,3 +129,21 @@ replace into creature_involvedrelation	(id, quest) values (60733, 40929);
 
 update quest_template set requiredraces = 589 where entry = 40929;
 
+-- The Gilneas Lighthouse II
+delete from quest_template where entry = 40930;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40929,40930,2,5179,42,35,0,0,'The Gilneas Lighthouse II','Huh, now that you mention it, we did have a supply of old oil that lingered around here for some years. I hate to tell you but it was taken when the deserters left the city and went to found their camp in the quagmire.$B$BI have no doubts their purpose for the highly flammable liquid is nefarious. That or they desire to make some coins from the valueable liquid. There aint many active sources working these days.$B$BIf you want the oil, recover it from them.','Gather the Stolen Oil Shipment from the Deserter\'s Hideout for Dockmaster Lorman at Theramore Isle in Dustwallow Marsh.','Has the oil been recovered?','Hmm, its been some time since I properly looked at this drum, but I think this is it.',61474,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,22500,3750,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60733, 40930);
+replace into creature_involvedrelation	(id, quest) values (60733, 40930);
+
+update quest_template set requiredraces = 589 where entry = 40930;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61474,8381,'Stolen Oil Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+REPLACE INTO gameobject_template VALUES
+(2020029, 3, 23556, 'Stolen Oil Shipment', 0, 4, 1, 43, 2020029, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020029,61474,-100,0,1,1,0);
+
