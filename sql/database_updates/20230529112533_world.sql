@@ -147,3 +147,32 @@ REPLACE INTO gameobject_template VALUES
 replace into gameobject_loot_template values
 (2020029,61474,-100,0,1,1,0);
 
+-- The Gilneas Lighthouse III
+delete from quest_template where entry = 40931;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40930,40931,2,5179,42,35,0,0,'The Gilneas Lighthouse III','Now that you have recovered this oil, it can be returned to Gilneas, should you have a means to actually enter the place.$B$BI did hear rumors of a civil war brewing there, so I suggest you be careful.','Return the Stolen Oil Shipment to Elaroth Ranworth at Greymane\'s Watch in Gilneas.','So, this is the oil from Theramore?','Relief, I can actually feel an emotion other than fear.$B$BI was cursed long ago, to forever tend to this fire. Should the flame go extinct, I would die. I cannot explain the fear I have about what would happen should the flame go out. Whilst I am bound to this spiritual form, I do not know what comes after, and that is what I truly dread.$B$BI would give whatever I can, to suffer as I am now, then to drift away forever, forgotten for all time.',61474,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61474,1, 0,22500,3750,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61475,1,61476,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60733, 40931);
+replace into creature_involvedrelation	(id, quest) values (61258, 40931);
+
+update quest_template set requiredraces = 589 where entry = 40931;
+
+replace into item_template values
+ ('61475', '4', '0', 'The Light of Elaroth', '', '7461', '2', '0', '1', '27376', '6844', '23', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9294', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61476', '4', '2', 'Lightkeeping Boots', '', '13864', '2', '0', '1', '23724', '5931', '8', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '13', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '80', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
