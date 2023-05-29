@@ -590,3 +590,13 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '44', '0', '0', '0',
  '0', '1', NULL);
+
+-- Onward to Ravenshire
+delete from quest_template where entry = 40944;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40944,2,5179,40,35,8,0,'Onward to Ravenshire','Hail $c. I am Councilor Ravencrest, a noble in service to the rebellion of Lord Ravenwood.$B$BYou have come to Gilneas in a time of strife and civil conflict. Even now the Greymane royalists are no doubt preparing for the coming conflict within the walls of the city itself.$B$BIf you desire to learn more, or help us break free from the shackles of tyranny, I would guide your attention to Ravenshire to the southeast. Simply follow the road and take a left at the fork. Keep following it southward until you reach the town. When you have arrived, speak with Clerk Ebonmere.','Meet with Clerk Ebonmere at Ravenshire in Gilneas.','Yes?','An outsider has come? It would appear the opening of the Greymane Wall has indeed brought new allies.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,2100,350,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61534, 40944);
+replace into creature_involvedrelation	(id, quest) values (61539, 40944);
+
+update quest_template set requiredraces = 589 where entry = 40944;
+
