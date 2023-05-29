@@ -635,3 +635,21 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '55', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
 
+-- Spitecrest Incursions
+delete from quest_template where entry = 40946;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40946,2,5179,42,35,8,0,'Spitecrest Incursions','What, you want to help us?$B$B<A snide look crosses Vorren\'s face.>$B$BIf you want to really do something here at Ravenshire, you can get rid of those naga lot that have been gathering at the southern beaches. Ever since last year, they started showing up in droves. Killed a good many fishermen they have!$B$BBring me sixteen of their scales as proof. You can find them all along the coastlines of southern Gilneas. Do that, and you\'ll bring me some peace in this bastard world.','Gather 16 Spitecrest Scales from the Spitecrest Naga along the southern coast of Gilneas for Dockwatcher Vorren at Ravenshire in Gilneas.','You better not be bothering me.','So, you do have a backbone, do ye? You may have thinned their ranks, but there is still more to do.',61491,16,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,18900,3150,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61275, 40946);
+replace into creature_involvedrelation	(id, quest) values (61275, 40946);
+
+update quest_template set requiredraces = 589 where entry = 40946;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61491,555,'Spitecrest Scale',12,1,2048,1,-1,-1,1,16,-1,-1,-1,-1,4,'',0,1);
+
+replace into creature_loot_template values
+(61402,61491,-100,0,1,1,0),
+(61403,61491,-100,0,1,1,0),
+(61407,61491,-100,0,1,1,0),
+(61408,61491,-100,0,1,1,0);
+
