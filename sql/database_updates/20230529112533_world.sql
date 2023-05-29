@@ -212,4 +212,22 @@ replace into creature_involvedrelation	(id, quest) values (61387, 40934);
 
 update quest_template set requiredraces = 589 where entry = 40934;
 
+-- Scarlet Corruption
+delete from quest_template where entry = 40935;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40934,40935,2,796,44,35,512,0,'Scarlet Corruption','Now that I can trust you to not be an agent of undeath, I can reveal the true reason that I have sought neutral lands. The Crusade was once a noble organization of high integrity, but cracks have begun to show in the pillars of our most trusted leaders.$B$BDeep within the Cathedral there are rumors spreading of the true fate of High Inquisitor Fairbanks. I have good sources to believe his death was halted by... Unnatural means. If it is true that necromancy has become common among the elite of the Crusade, I require proof.$B$BFind Inquisitor Fairbanks within the Scarlet Cathedral, and discover the truth.','Discover the truth about the fate of High Inquisitor Fairbanks for Brother Elias at Shademore Tavern in Gilneas.','So, what is it you have uncovered within my homeland?','I cannot believe the words that I am hearing, such practices among the leaders of my people? Me and others have long been wary of such allegations, but to know it to be true...$B$BI will have to convene with the others to decide our future. I thank you greatly. Please, take this, as thanks from myself and those that I represent.',0,0,0,0,0,0,0,0, 4542,1,0,0,0,0,0,0, 0,0, 0,22800,3800,0,0,0,0,0,0,0,0,0,0,0, 61478,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61387, 40935);
+replace into creature_involvedrelation	(id, quest) values (61387, 40935);
+
+update quest_template set requiredraces = 589, type = 81 where entry = 40935;
+
+replace into item_template values
+ ('61478', '4', '0', 'Ring of Holy Sacrement', '', '24087', '2', '0', '1', '27404', '6851', '11', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '21509', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
 
