@@ -11213,7 +11213,7 @@ void Unit::RemoveAllArenaSpellCooldown()
             if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) != excludedSpellIds.end())
                 dontRemove = true;
 
-            if (spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS && !dontRemove)
+            if (spellEntry->RecoveryTime <= 10 * MINUTE * IN_MILLISECONDS && spellEntry->CategoryRecoveryTime <= 10 * MINUTE * IN_MILLISECONDS && !dontRemove)
                 RemoveSpellCooldown(spellEntry->Id, true);
         }
     }
