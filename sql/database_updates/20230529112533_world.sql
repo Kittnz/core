@@ -59,3 +59,20 @@ replace into creature_loot_template values
 (61232,61469,-48,0,1,1,0),
 (61233,61469,-48,0,1,1,0);
 
+-- Securing Gilneas I
+delete from quest_template where entry = 40926;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40926,2,5179,44,35,0,0,'Securing Gilneas I','The land is tainted with the foul mark of worgen that tread through our lands unopposed. The royalists have seen fit to punish the people by letting their kind spread like a disease.$B$BEven now the worgen reach as fair south as the Overgrown Acre just to the northwest of here. If they will not put an end to this threat, then we must. Find the Bloodclaw tribe that stalks within Gilneas, hunt them, and recover twelve of their pelts.','Gather 12 Bloodclaw Pelts from the Bloodclaw Worgen for Corporal Ranworth at Ravenshire in Gilneas.','Have the worgen been culled?','Your efforts will better the realm in time. The less worgen that stalk our forests, the faster we can return to a state of peace.',61470,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 1000,20100,3350,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61540, 40926);
+replace into creature_involvedrelation	(id, quest) values (61540, 40926);
+
+update quest_template set requiredraces = 589 where entry = 40926;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61470,7990,'Bloodclaw Pelt',12,1,2048,1,-1,-1,1,12,-1,-1,-1,-1,4,'',0,8);
+
+replace into creature_loot_template values
+(61251,61470,-66,0,1,1,0),
+(61252,61470,-66,0,1,1,0),
+(61253,61470,-66,0,1,1,0);
+
