@@ -105,3 +105,18 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '65', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
+-- Foulhide Pests
+delete from quest_template where entry = 40928;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40928,2,5179,44,35,8,0,'Foulhide Pests','The foulhide gnolls are growing to become a large problem for the region. Recently, they attacked and laid claim to Southmire Orchard, where a good friend of mine named Ernest met his end.$B$BWhile I still grieve for his loss, I cannot stand idle. The foulhide will soon move to find another target to enact their rampant desire to fight and the Shademore Tavern could be their next target.$B$BI ask of you to head to my friend\'s orchard to the southeast of here, and slay the gnolls that inhabit it. Bring me fourteen of their armbands as proof.','Slay Foulhide Gnolls and recover 14 Foulhide Armbands for Darrow Shademoore at Shademore Tavern in Gilneas.','Have you completed your task $c?','Fewer gnolls that prowl the countryside is better for any that call Gilneas home.$B$BThank you for your hard work $c.',61473,14,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 2500,19800,3300,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61385, 40928);
+replace into creature_involvedrelation	(id, quest) values (61385, 40928);
+
+update quest_template set requiredraces = 589 where entry = 40928;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61473,1329,'Foulhide Armband',12,1,2048,1,-1,-1,1,14,-1,-1,-1,-1,4,'',0,7);
+
+replace into creature_loot_template values
+(61249,61473,-66,0,1,1,0);
+
