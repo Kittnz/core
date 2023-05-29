@@ -130,7 +130,7 @@ struct ChrRacesEntry
     uint32      model_f;                                    // 5        m_FemaleDisplayId
                                                             // 6        m_ClientPrefix
                                                             // 7        unused
-    uint32      TeamID;                                     // 8        m_BaseLanguage (7-Alliance 1-Horde)
+    uint32      baseLanguage;                               // 8        m_BaseLanguage (7-Alliance 1-Horde)
     uint32      creatureType;                               // 9        m_creatureType (blizzlike always 7-humanoid)
                                                             // 10       unused, all 836
                                                             // 11       unused, all 1604

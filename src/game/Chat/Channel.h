@@ -81,6 +81,17 @@ enum ChannelId
     CHANNEL_ID_LOOKING_FOR_GROUP    = 26
 };
 
+inline bool IsDefenseChannel(uint32 channelId)
+{
+    switch (channelId)
+    {
+        case CHANNEL_ID_LOCAL_DEFENSE:
+        case CHANNEL_ID_WORLD_DEFENSE:
+            return true;
+    }
+    return false;
+}
+
 class Channel
 {
     public:

@@ -659,10 +659,13 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
         }
     }
 
-    // Send channel message
-    if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+    
+    if (pPlayer && IsDefenseChannel(GetChannelId()))
+        lang = sChrRacesStore.LookupEntry(pPlayer->GetRace())->baseLanguage;
+    else if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
         lang = LANG_UNIVERSAL;
 
+    // Send channel message
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, text, Language(lang), pPlayer ? pPlayer->GetChatTag() : 0, guid, nullptr, ObjectGuid(), "", m_name.c_str(), honor_rank);
 
