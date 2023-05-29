@@ -231,3 +231,24 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
+-- Vagrant Supplies
+delete from quest_template where entry = 40936;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40936,2,5179,43,35,8,0,'Vagrant Supplies','We arrived in Gilneas with the hope of being free from conflict. However, we have only come to find hostility.$B$BThree nights ago a worgen raid attacked our camp and made away with supplies most vital to us. However, these supplies were not taken by the pale Nighthowl, but instead the Bloodclaw. They are another tribe in conflict with the Nighthowl, who have a camp to the south of us. I have no doubt they have our supplies stashed amongst their hovels.$B$BRecover the supplies, and return them to us.','Recover the Vagrant Supplies from the Bloodclaw camp to the south and return to Camp Leader Gethenor at the Vagrant Camp in northern Gilneas.','It is only a matter of time until our supplies are spoiled by the vile hands of the worgen who ran off with them.','<Gethenor takes his time, going through the missing supplies.>$B$BThat is a relief, it is all here. I was afraid our rare medical supplies and tinctures would have been destroyed in the rough transit to the camp.$B$BI must thank you greatly for your work. We have been heavily reliant on these supplies. Please, take this, as thanks from us here.',61479,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 1000,19500,3250,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61535, 40936);
+replace into creature_involvedrelation	(id, quest) values (61535, 40936);
+
+update quest_template set requiredraces = 589 where entry = 40936;
+
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61479,7913,'Vagrant Supplies',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+REPLACE INTO gameobject_template VALUES
+(2020031, 3, 24108, 'Medical Crate', 0, 4, 1, 43, 2020031, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020031,61479,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 10, spawntimesecsmax = 10 where ID = 2020031;
+
