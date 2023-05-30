@@ -9279,9 +9279,12 @@ private:
 };
 
 
-bool ChatHandler::HandleGameObjectSelectCommand(char*)
+bool ChatHandler::HandleGameObjectSelectCommand(char* args)
 {
-    const float dist = 10.0f;
+    float dist;
+    if (!ExtractOptFloat(&args, dist, 10.0f))
+        return false;
+
     Player* player = m_session->GetPlayer();
 
     GameObject* go = nullptr;
