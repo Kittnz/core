@@ -690,3 +690,10 @@ update item_template set display_id = 26391 where entry = 61466;
 update item_template set class = 12 where entry = 61446;
 -- Swiftfeather Quiver needs to be turned into a 14 slot Quiver.
 update item_template set container_slots = 14 where entry = 61549;
+-- Item Foulhide Armband (entry 61473), from the quest Foulhide Pests (Entry 40928) should also drop from Foulhide Basher (61248) and Foulhide Mystic (61250) at 82%.
+replace into creature_loot_template values
+(61248,61473,-82,0,1,1,0),
+(61250,61473,-82,0,1,1,0);
+-- Item "Font of Arcana" (entry 61484), needs to have its drop chance increased to 72% and must drop from Azurescale Manaweaver (Entry 60910).
+update creature_template set loot_id = 60910;
+update creature_loot_template set ChanceOrQuestChance = -72 where entry = 60910;
