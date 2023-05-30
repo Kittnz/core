@@ -881,6 +881,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                             (spellInfo_2->Id == 21992 && spellInfo_1->Id == 27648))
                         return false;
 
+                    // Atiesh aura stacking with Moonkin Aura
+                    if (spellInfo_1->SpellIconID == 46 && spellInfo_2->SpellIconID == 46)
+                        return false;
+
                     // Soulstone Resurrection and Twisting Nether (resurrector)
                     if (spellInfo_1->SpellIconID == 92 && spellInfo_2->SpellIconID == 92 && (
                                 (spellInfo_1->SpellVisual == 99 && spellInfo_2->SpellVisual == 0) ||
@@ -2356,7 +2360,7 @@ void SpellMgr::LoadSpellAreas()
     } while (result->NextRow());
 }
 
-SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spellInfo, Unit const* caster, Player const* player)
+SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spellInfo, Unit const* caster, Player const* player)
 {
     // Spell can be casted only in battleground
     if (spellInfo->HasAttribute(SPELL_ATTR_EX3_ONLY_BATTLEGROUNDS) &&
@@ -2370,6 +2374,24 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
 
 	if (spellInfo->Id == 22564 && player && player->InBattleGround() && player->GetTeamId() != TEAM_ALLIANCE)
 		return SPELL_FAILED_SPELL_UNAVAILABLE;
+
+    // Custom arena spell blacklist.
+    if (player && player->InArena())
+    {
+        if (spellInfo->HasEffect(SPELL_EFFECT_RESURRECT_NEW))
+            return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+
+        switch (spellInfo->Id)
+        {
+            case 633:   // Lay on Hands (rank 1)
+            case 2800:  // Lay on Hands (rank 2)
+            case 10310: // Lay on Hands (rank 3)
+            case 1719:  // Recklessness
+            case 13180: // Gnomish Mind Control Cap
+            case 22641: // Reckless Charge (Goblin Rocket Helmet)
+                return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+        }
+    }
 
     switch (spellInfo->Id)
     {
