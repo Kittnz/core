@@ -86,6 +86,7 @@
 #include "Anticheat/Anticheat.h"
 #include <ace/OS_NS_dirent.h>
 #include "SuspiciousStatisticMgr.h"
+#include "ChannelMgr.h"
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -10289,6 +10290,40 @@ bool ChatHandler::HandleCrashCommand(char* args)
     return true;
 }
 
+bool ChatHandler::ForceJoinChannelCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* chr = GetSelectedPlayer();
+    if (!chr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    char* channelnamestr = ExtractLiteralArg(&args);
+    if (!channelnamestr)
+    {
+        return false;
+    }
+
+    std::string channelName = channelnamestr;
+
+    if (channelName.empty())
+        return false;
+
+    ChannelMgr* cMgr = channelMgr(chr->GetTeam());
+
+    if (cMgr)
+    {
+        if (Channel* chn = cMgr->GetOrCreateChannel(channelName))
+            chn->Join(chr->GetObjectGuid(), "", false);
+    }
+    return true;
+}
+
 bool ChatHandler::HandleMarkSuspiciousCommand(char* args)
 {
     if (!*args)
@@ -10301,6 +10336,8 @@ bool ChatHandler::HandleMarkSuspiciousCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    
 
     bool value;
     if (!ExtractOnOff(&args, value))
@@ -14388,6 +14425,69 @@ bool ChatHandler::HandleCopyCommand(char* args)
     return false;
 }
 
+bool ChatHandler::HandleShopRefundCommand(char* args)
+{
+    uint32 shopId;
+
+    if (!ExtractOptUInt32(&args, shopId, 1))
+    {
+        SendSysMessage("No item ID specified.");
+        return false;
+    }
+
+    Player* player;
+    ObjectGuid target_guid;
+    std::string target_name;
+
+    if (!ExtractPlayerTarget(&args, &player, &target_guid, &target_name))
+    {
+        SendSysMessage("No correct player given.");
+        return false;
+    }
+
+    auto cachedData = sObjectMgr.GetPlayerDataByGUID(target_guid);
+
+    uint32 accountId = 0;
+    if (cachedData)
+        accountId = cachedData->uiAccount;
+    else
+        return false;
+
+    auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
+
+    ShopLogEntry* entry = nullptr;
+    for (auto& elem : shopEntries)
+    {
+        if (elem.id == shopId)
+        {
+            entry = &elem;
+            break;
+        }
+    }
+
+    if (!entry)
+    {
+        SendSysMessage("Could not find shop entry for given ID.");
+        return false;
+    }
+
+    if (entry->refunded)
+    {
+        PSendSysMessage("ID %u is already refunded.", entry->id);
+        return false;
+    }
+
+
+
+    entry->refunded = true;
+    LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+
+
+
+
+    return true;
+}
+
 bool ChatHandler::HandleGetShopLogs(char* args)
 {
     char* c_account_name = ExtractArg(&args);
@@ -14414,46 +14514,29 @@ bool ChatHandler::HandleGetShopLogs(char* args)
 
     PSendSysMessage("Payment history for account %s", account_name.c_str());
 
-    QueryResult* result = LoginDatabase.PQuery("SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u", account_id);
+    auto& entries = sObjectMgr.GetShopLogEntries(account_id);
 
-    LoginDatabase.AsyncPQuery<std::tuple<uint32, std::string>>([](QueryResult* result, std::tuple<uint32, std::string> callbackData)
-        {
-            const auto& [accountId, targetAccountName] = callbackData;
-            auto session = sWorld.FindSession(accountId);
+    auto session = GetSession();
 
-            if (!session)
-                return;
+    if (entries.empty())
+    {
+        ChatHandler(session).PSendSysMessage("No payment history for account %s (ID: %u)", account_name.c_str(), account_id);
+        return false;
+    }
 
-            if (!result)
-            {
-                ChatHandler(session).PSendSysMessage("No payment history for account %s (ID: %u)", targetAccountName.c_str(), accountId);
-                return;
-            }
 
-            do
-            {
-                Field* fields = result->Fetch();
-                std::string date = fields[0].GetString();
-                uint32 charGuid = fields[1].GetUInt32();
-                uint32 itemEntry = fields[2].GetUInt32();
-                uint32 itemPrice = fields[3].GetUInt32();
-                bool refunded = fields[4].GetBool();
+    for (const auto& elem : entries)
+    {
+        std::string charName = "Unknown";
 
-                std::string charName = "Unknown";
+        auto cachedPlayerData = sObjectMgr.GetPlayerDataByGUID(elem.charGuid);
 
-                auto cachedPlayerData = sObjectMgr.GetPlayerDataByGUID(charGuid);
+        if (cachedPlayerData)
+            charName = cachedPlayerData->sName;
 
-                if (cachedPlayerData)
-                    charName = cachedPlayerData->sName;
-
-                ChatHandler(session).PSendSysMessage("%s | %s spent %u tokens on item %u %s", date.c_str(), charName.c_str(), itemPrice, itemEntry, refunded ? "(refunded)" : "");
-            } while (result->NextRow());
-
-            delete result;
-
-        }, { GetSession()->GetAccountId(), account_name }, "SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u",
-        account_id);
-
+        ChatHandler(session).PSendSysMessage("%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s", elem.date.c_str(), 
+            elem.id, charName.c_str(), elem.charGuid, elem.itemPrice, elem.itemEntry, elem.refunded ? "(refunded)" : "");
+    }
     return true;
 }
 

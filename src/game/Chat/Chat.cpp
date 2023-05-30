@@ -639,6 +639,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand shopCommandTable[] =
     {
         { "log",               SEC_DEVELOPER,        false, &ChatHandler::HandleGetShopLogs,               "", nullptr },
+        { "refund",           SEC_DEVELOPER,        false, &ChatHandler::HandleShopRefundCommand,          "", nullptr },
         { nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
@@ -814,6 +815,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bw",             SEC_MODERATOR,       false, &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { "bi",             SEC_MODERATOR,       false, &ChatHandler::HandleBanInfoAccountCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
+        { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,           "", nullptr},
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

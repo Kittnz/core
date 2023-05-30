@@ -261,6 +261,7 @@ class ChatHandler
         bool HandleCrashCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
+        bool ForceJoinChannelCommand(char* args);
 
         bool HandleMarkSuspiciousCommand(char* args);
 
@@ -652,6 +653,7 @@ class ChatHandler
         bool HandleSuspiciousNotify(char* args);
 
         // Shop info
+        bool HandleShopRefundCommand(char* args);
         bool HandleGetShopLogs(char* args);
 
         // Temp simple waypoints
