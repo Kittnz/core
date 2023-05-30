@@ -9045,6 +9045,30 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
+    result = LoginDatabase.Query("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` ORDER BY `account`, `time` ASC");
+
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 id = fields[0].GetUInt32();
+            std::string date = fields[1].GetString();
+            uint32 accountId = fields[2].GetUInt32();
+            uint32 charGuid = fields[3].GetUInt32();
+            uint32 itemEntry = fields[4].GetUInt32();
+            uint32 itemPrice = fields[5].GetUInt32();
+            bool refunded = fields[6].GetBool();
+
+
+            //ordered by time ASC so last elem in vec is latest log for easier shop log output
+            m_shopLogs[accountId].push_back({ id, date, accountId, charGuid, itemEntry, itemPrice, refunded });
+
+        } while (result->NextRow());
+        delete result;
+    }
+
 }
 
 void ObjectMgr::LoadItemTransmogrifyTemplates()
