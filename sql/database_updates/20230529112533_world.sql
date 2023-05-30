@@ -681,4 +681,12 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
-
+-- Item Ring of Nordrassil (Entry 61195), change display ID to 66449.
+update item_template set display_id = 66449 where entry = 61195;
+update item_template set spellid_1 = 45421 where entry = 60294;
+-- Signet of Silverlaine (Entry 61466), change display ID to 26391.
+update item_template set display_id = 26391 where entry = 61466;
+-- Item Aliattan Anderson's Journal (Entry 61446), make a quest item.
+update item_template set class = 12 where entry = 61446;
+-- Swiftfeather Quiver needs to be turned into a 14 slot Quiver.
+update item_template set container_slots = 14 where entry = 61549;
