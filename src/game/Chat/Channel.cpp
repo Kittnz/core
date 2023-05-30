@@ -62,7 +62,7 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Toogle" || m_name == u8"Roleplay")
+        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Toogle" || m_name == u8"Roleplay" || m_name == u8"Hardcore")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
             m_announce = false;
@@ -75,7 +75,7 @@ Channel::Channel(std::string const& name)
     }
 }
 
-void Channel::Join(ObjectGuid guid, const char *password)
+void Channel::Join(ObjectGuid guid, const char *password, bool checkPassword)
 {
     WorldPacket data;
     if (IsOn(guid))
@@ -95,7 +95,7 @@ void Channel::Join(ObjectGuid guid, const char *password)
         return;
     }
 
-    if (m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
+    if (checkPassword && m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
     {
         MakeWrongPassword(&data);
         SendToOne(&data, guid);
