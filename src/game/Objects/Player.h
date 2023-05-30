@@ -690,6 +690,7 @@ enum HardcoreStatus : uint8
     HARDCORE_MODE_STATUS_ALIVE    = 1,
     HARDCORE_MODE_STATUS_IMMORTAL = 2,
     HARDCORE_MODE_STATUS_DEAD     = 3,
+    HARCORE_MODE_STATUS_HC60      = 4
 };
 
 inline char const* HardcoreStatusToString(uint8 status)
@@ -704,6 +705,8 @@ inline char const* HardcoreStatusToString(uint8 status)
             return "Immortal";
         case HARDCORE_MODE_STATUS_DEAD:
             return "Dead";
+        case HARCORE_MODE_STATUS_HC60:
+            return "HC60";
     }
     return "UNKNOWN";
 }
@@ -2236,7 +2239,7 @@ class Player final: public Unit
 
         void SetHardcoreStatus(uint8 status);
         uint8 GetHardcoreStatus() { return m_hardcoreStatus; };
-        bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
+        bool IsHardcore() const{ return (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || m_hardcoreStatus == HARCORE_MODE_STATUS_HC60); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         void SpawnHardcoreGravestone();

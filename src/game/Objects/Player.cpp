@@ -3503,21 +3503,30 @@ void Player::GiveLevel(uint32 level)
 
     if (IsHardcore())
     {
-        AnnounceHardcoreModeLevelUp(level);
         if (level == 60)
         {
-            SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
-            AwardTitle(TITLE_IMMORTAL);
-            ChangeTitle(TITLE_IMMORTAL);
-            uint32 itemEntry = 80189;
-            std::string subject = "Lockbox of the Immortal Soul";
-            std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
-            Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
-            ToMailItem->SaveToDB();
-            MailDraft(subject, sObjectMgr.CreateItemText(message))
-                .AddItem(ToMailItem)
-                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+            if (m_hardcoreStatus != HARCORE_MODE_STATUS_HC60)
+            {
+                AnnounceHardcoreModeLevelUp(level);
+                SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
+                AwardTitle(TITLE_IMMORTAL);
+                ChangeTitle(TITLE_IMMORTAL);
+                uint32 itemEntry = 80189;
+                std::string subject = "Lockbox of the Immortal Soul";
+                std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
+                Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+                ToMailItem->SaveToDB();
+                MailDraft(subject, sObjectMgr.CreateItemText(message))
+                    .AddItem(ToMailItem)
+                    .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+            }
+            else
+            {
+                //TODO rewards for HC60 level 60 and custom announcement.
+            }
         }
+        else
+            AnnounceHardcoreModeLevelUp(level);
     }
 
     // Quick-fix for 'Stay awhile and listen...' (Hardcore Mode)
