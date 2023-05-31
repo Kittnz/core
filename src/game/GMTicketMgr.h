@@ -271,13 +271,14 @@ public:
     void SendTicketsInAddonMessage(Player* pPlayer) const;
 
     void SendTicket(WorldSession* session, GmTicket* ticket) const;
-    void ReloadTicket(uint32 ticketId);
-    void ReloadTicketCallback(QueryResult* holder);
+    /*void ReloadTicket(uint32 ticketId);
+    void ReloadTicketCallback(QueryResult* holder);*/
 
 protected:
     void _RemoveTicket(uint32 ticketId, int64 source = -1, bool permanently = false);
 
     GmTicketList _ticketList;
+    std::unordered_map<uint32, std::reference_wrapper<GmTicket*>> _
 
     bool   _status;
     uint32 _lastTicketId;
