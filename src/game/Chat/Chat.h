@@ -652,6 +652,8 @@ class ChatHandler
 		bool HandleSuspiciousFishers(char* args);
         bool HandleSuspiciousNotify(char* args);
 
+        bool HandleToggleTrainingCommand(char* args);
+
         // Shop info
         bool HandleShopRefundCommand(char* args);
         bool HandleGetShopLogs(char* args);
