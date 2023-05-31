@@ -814,6 +814,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bw",             SEC_MODERATOR,       false, &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { "bi",             SEC_MODERATOR,       false, &ChatHandler::HandleBanInfoAccountCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
+        { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

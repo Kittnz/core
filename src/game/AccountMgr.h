@@ -96,6 +96,19 @@ class AccountMgr
         uint32 GetCharactersCount(uint32 acc_id);
         std::string CalculateShaPassHash(std::string& name, std::string& password);
 
+        bool IsTraineeGM(uint32 accId) const
+        {
+            return m_traineeGms.find(accId) != m_traineeGms.end();
+        }
+
+        void ToggleTraineeGM(uint32 accId)
+        {
+            if (IsTraineeGM(accId))
+                m_traineeGms.erase(accId);
+            else
+                m_traineeGms.insert(accId);
+        }
+
         uint32 GetFlags(uint32 accountId);
         static bool normalizeString(std::string& utf8str);
         // Nostalrius
@@ -196,6 +209,7 @@ class AccountMgr
         uint32 m_fingerprintAutobanTimer;
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_fingerprintBanned;
+        std::unordered_set<uint32> m_traineeGms;
         std::set<uint32> m_fingerprintAutoban;
         std::map<uint32, uint32> m_accountBanned;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
