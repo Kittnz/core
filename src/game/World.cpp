@@ -662,6 +662,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_GROUP_VISIBILITY, "Visibility.GroupMode", 0);
 
     setConfig(CONFIG_UINT32_MAIL_DELIVERY_DELAY, "MailDeliveryDelay", HOUR);
+    setConfig(CONFIG_UINT32_MAIL_MAX_PER_HOUR, "MailMaxPerHour", 3);
 
     setConfigMin(CONFIG_UINT32_MASS_MAILER_SEND_PER_TICK, "MassMailer.SendPerTick", 10, 1);
 

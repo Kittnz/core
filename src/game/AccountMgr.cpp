@@ -36,7 +36,7 @@
 
 INSTANTIATE_SINGLETON_1(AccountMgr);
 
-AccountMgr::AccountMgr() : m_banlistUpdateTimer(0), m_fingerprintAutobanTimer(0)
+AccountMgr::AccountMgr() : m_banlistUpdateTimer(0), m_fingerprintAutobanTimer(0), m_accountMailsResetTimer(0)
 {}
 
 AccountMgr::~AccountMgr()
@@ -352,6 +352,15 @@ void AccountMgr::Update(uint32 diff)
     }
     else
         m_fingerprintAutobanTimer -= diff;
+
+    if (m_accountMailsResetTimer < diff)
+    {
+        m_accountMailsResetTimer = 1 * HOUR * IN_MILLISECONDS;
+        std::lock_guard<std::mutex> lock(m_accountMailsMutex);
+        m_accountMails.clear();
+    }
+    else
+        m_accountMailsResetTimer -= diff;
 }
 
 void AccountMgr::LoadIPBanList(bool silent)
