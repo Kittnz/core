@@ -93,11 +93,11 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 
 			bool successTransaction =
 				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
-				LoginDatabase.PExecute("INSERT INTO `shop_logs` VALUES (NOW(), %u, %u, %u, %u, 0)", _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
+				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (NOW(), %u, %u, %u, %u, 0)", _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
 
-			LoginDatabase.CommitTransaction();
+			bool success = LoginDatabase.CommitTransactionDirect();
 
-			if (!successTransaction)
+			if (!success)
 				return "dberrorcantprocess";
 
 			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
