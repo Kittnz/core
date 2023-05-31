@@ -14484,8 +14484,8 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
     entry->refunded = true;
     LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
-
-
+    return true;
+}
 
 bool ChatHandler::HandleToggleTrainingCommand(char* args)
 {
