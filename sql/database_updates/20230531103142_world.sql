@@ -71,3 +71,10 @@ replace into creature_loot_template values
 (61394,61495,-87,0,1,1,0),
 (61395,61495,-87,0,1,1,0),
 (61396,61495,-87,0,1,1,0);
+
+-- A Crossroads Deal
+delete from quest_template where entry = 40954;
+
+replace into creature_questrelation		(id, quest) values (61260, 40954);
+replace into creature_involvedrelation	(id, quest) values (61458, 40954);
+
