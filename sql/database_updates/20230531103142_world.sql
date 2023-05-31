@@ -19,4 +19,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61257, 40948);
 replace into creature_involvedrelation	(id, quest) values (61457, 40948);
 
+-- One Chain at a Time
+delete from quest_template where entry = 40949;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40948,40949,2,5179,42,35,0,0,'One Chain at a Time','It\'s ironic. I was about to say that I haven\'t been able to see the sun in so long, yet I grinned realising I have yet to see an actual Sunrise in Gilneas anyway, with all its fog and rain.$B$BI must be free of these chains. That harlot, Celia, convinced Father to send us away to Kul Tiras only to bind Tess and I, hiding us away from the world! I helped Tess escape, but they tossed me into this place.$B$BAid me, so that I may find my way towards my people, and so I may help them against the scum that took over my city and poisoned the mind of my father.$B$BGuard Captain Marson, that\'s the name of the brute that holds the key to my freedom. You should be able to find him around here. Perhaps lingering outside in the fresh air.','Find and slay Guard Captain Marsow, gather the Rust-Covered Key and and free Liam.','I wish we had the time to spare a few more words but we really must hurry.','He did not deserve the mercy of a quick death.$B$B<Liam chuckles.>$B$BPerhaps the weeks spent in this hole are making me question my integrity as a follower of the Light. I have brought shame to my teacher.',61494,1,0,0,0,0,0,0, 61543,1,0,0,0,0,0,0, 0,0, 0,22500,3750,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61457, 40949);
+replace into creature_involvedrelation	(id, quest) values (61457, 40949);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61494,8951,'Rust-Covered Key',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61543,61494,-100,0,1,1,0);
 
