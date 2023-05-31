@@ -55,3 +55,19 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61458, 40952);
 replace into creature_involvedrelation	(id, quest) values (61260, 40952);
 
+-- Vilest of Men
+delete from quest_template where entry = 40953;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40952,40953,2,5179,42,35,0,0,'Vilest of Men','It\'s clear to me that Prince Greymane seeks aid from my research group. I am afraid he must\'ve misunderstood us, however, as we do not intend to reach immortality. Rather, we seek power and healthiness beyond what the human body is capable of. I assume you\'ve already figured out our little secret. If not, let me put this as bluntly as possible: we have accepted the worgen curse.$B$BWe are more than willing to aid Liam in reclaiming his city and his lands; our alchemical knowledge, our teeth, and our latent power are all at his disposal.$B$BWe have yet to have full control of our abilities, but I think I have discovered a way to aid in that regard. Travel back to the lumber mill, kill as many of the traitorous ones as possible, drain their blood, and bring it back to me. It will play an important part in our research.','Collect 20 Vials of Blood from the Greymane loyalists around Dryrock Valley for Moranna Rosenberg at the Hollow Web Cemetary in Gilneas.','You cannot even begin to understand how much power resides in the blood.','I was skeptical of your aid, but it seems that I have doubted you for naught. Well done.',61495,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,23700,3950,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61260, 40953);
+replace into creature_involvedrelation	(id, quest) values (61260, 40953);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61495,15741,'Vials of Blood',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0,3);
+
+update creature_template set loot_id = 61393 where entry = 61393;
+replace into creature_loot_template values
+(61393,61495,-87,0,1,1,0),
+(61394,61495,-87,0,1,1,0),
+(61395,61495,-87,0,1,1,0),
+(61396,61495,-87,0,1,1,0);
