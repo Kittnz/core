@@ -6449,9 +6449,27 @@ bool GOSelect_go_aliattans_campfire(Player* pPlayer, GameObject* pGo, uint32 sen
     return false;
 }
 
+bool QuestRewarded_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40956) // The Fall and Rise of Greymane
+    {
+        pQuestGiver->MonsterYell("Tyranny has been defeated this day! Our land has been freed from the evil that has corrupted our forests, and murdered countless innocents. A new king has been crowned, glory to Gilneas!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_ROAR);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_lord_darius_ravenwood";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_lord_darius_ravenwood;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_mysterious_mailbox";

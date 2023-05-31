@@ -86,3 +86,50 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61458, 40955);
 replace into creature_involvedrelation	(id, quest) values (61259, 40955);
 
+-- The Fall and Rise of Greymane
+delete from quest_template where entry = 40956;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40955,40956,2,5180,42,35,0,0,'The Fall and Rise of Greymane','The entirety of Gilneas stands at our side! The tyranny of the royalists can no longer be allowed to stand! If this nation is to ever recover from the darkness, then we must hold fast, and strike even faster still!$B$BThe Greymane Crown must be recovered if our dream is ever to be realized. Enter Gilneas City. Fight your way through his most loyal soldiers. End the Harlows, and reclaim the Greymane birthright. A new king and a new beginning awaits us, $N.','\'Save\' Genn, and recover the Greymane Crown for Lord Darius Ravenwood at Ravenshire in Gilneas.','Be brave adventurer, the city itself has struggled through civil strife as we have.','The end of an era is upon us. A darkness has been lifted on this day, and with it, a new hope emerges from the clouds. A ray of light for all to see. Liam Greymane shall be named king and his reign shall bring prosperity to the people who have suffered for so long!$B$B<His eyes shine with hope, for perhaps the first time in a generation.>',61496,1,0,0,0,0,0,0, 61418,1,0,0,0,0,0,0, 0,0, 0,44400,7400,0,0,0,0,0,0,0,0,0,0,0, 61369,1,0,0,0,0,0,0, 61497,1,61498,1,61499,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61259, 40956);
+replace into creature_involvedrelation	(id, quest) values (61259, 40956);
+
+update quest_template set type = 81 where entry = 40956;
+
+update creature_template set script_name = 'npc_lord_darius_ravenwood' where entry = 61259;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61496,2528,'The Greymane Crown',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,1);
+
+replace into creature_loot_template values
+(61418,61496,-100,0,1,1,0);
+
+replace into item_template values
+ ('61497', '4', '3', 'Ravenwood Belt', '', '26210', '3', '0', '1', '27128', '6782', '6', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '16', '4', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '158', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61498', '4', '0', 'Signet of Gilneas', '', '23728', '3', '0', '1', '16872', '4218', '11', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61499', '4', '2', 'Ravenshire Gloves', '', '17183', '3', '0', '1', '23952', '5988', '10', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '11', '6', '7',
+ '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '86', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '35', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
