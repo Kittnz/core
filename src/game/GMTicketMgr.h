@@ -181,7 +181,7 @@ private:
     std::string _response;
     std::string _chatLog; // No need to store in db, will be refreshed every session client side
 };
-typedef std::map<uint32, GmTicket*> GmTicketList;
+typedef std::unordered_map<uint32, GmTicket> GmTicketList;
 
 class TicketMgr
 {
@@ -222,24 +222,6 @@ public:
         for (const auto& itr : _ticketList)
             if (itr.second && !itr.second->IsClosed() && !itr.second->IsCompleted())
                 return itr.second;
-
-        return nullptr;
-    }
-
-    GmTicket* GetNextTicket(uint32 counter)
-    {
-        for (const auto& itr : _ticketList)
-            if (itr.first > counter && !itr.second->IsClosed() && !itr.second->IsCompleted())
-                return itr.second;
-
-        return nullptr;
-    }
-
-    GmTicket* GetPreviousTicket(uint32 counter)
-    {
-        for (GmTicketList::const_reverse_iterator itr = _ticketList.rbegin(); itr != _ticketList.rend(); ++itr)
-            if (itr->first < counter && !itr->second->IsClosed() && !itr->second->IsCompleted())
-                return itr->second;
 
         return nullptr;
     }
