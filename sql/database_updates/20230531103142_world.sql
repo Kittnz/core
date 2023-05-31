@@ -32,3 +32,12 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (61543,61494,-100,0,1,1,0);
 
+-- On Legend's Trail
+delete from quest_template where entry = 40950;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40949,40950,2,5179,42,35,0,0,'On Legend\'s Trail','You have my thanks. While it would be best for us to return to Ravenshire and report to Darius, I must have you do something else. You must follow my sister\'s footsteps.$B$BBefore she managed to escape, she spoke of Mother\'s stories, though they were nothing more than fairy tales. Alas, it seems that Tess was strongly convinced of the Wolf-Serpent and its followers named the Pellars. She left for the middle of the land, in search of a legend, which is why you must do the same. Find my sister and deliver her safely to Ravenshire.$B$BWe shall meet there once more, since lingering here is the last thing on my mind.$B$BGo with the Light, friend, may it shine brightest when you most need it.','Find Tess Greymane beneath the great tree at the center of Gilneas.','Yes?','A foreigner, here of all places? Liam sent you? Ah, Then my brother is safe. We were just about ready to save him ourselves.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,6900,1150,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61457, 40950);
+replace into creature_involvedrelation	(id, quest) values (61448, 40950);
+
+update creature_template set phase_quest_id = 40950 where entry = 61458;
+
