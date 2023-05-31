@@ -226,6 +226,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (security > SEC_SIGMACHAD)                       // prevent invalid security settings in DB
         security = SEC_SIGMACHAD;
 
+    if (sAccountMgr.IsTraineeGM(id))
+        security = SEC_DEVELOPER;
+
     auto str = fields[2].GetString();
 
     K.SetHexStr(fields[2].GetString());
