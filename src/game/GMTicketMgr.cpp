@@ -132,10 +132,8 @@ void GmTicket::WritePacket(WorldPacket& data) const
     data << displayedMessage.str();
     data << uint8(_ticketType);
     data << GetAge(_lastModifiedTime);
-    if (GmTicket* ticket = sTicketMgr->GetOldestOpenTicket())
-        data << GetAge(ticket->GetLastModifiedTime());
-    else
-        data << float(0);
+    data << GetAge(sTicketMgr->GetOldestOpenTime());
+
 
     // I am not sure how blizzlike this is, and we don't really have a way to find out
     data << GetAge(sTicketMgr->GetLastChange());         // Estimated wait time ?
@@ -306,32 +304,11 @@ TicketMgr::TicketMgr() : _status(true), _lastTicketId(0), _lastSurveyId(0), _ope
 
 TicketMgr::~TicketMgr()
 {
-    for (const auto& itr : _ticketList)
-        delete itr.second;
 }
 
 void TicketMgr::Initialize()
 {
     SetStatus(sWorld.getConfig(CONFIG_BOOL_GMTICKETS_ENABLE));
-}
-
-void TicketMgr::ResetTickets()
-{
-    for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end();)
-    {
-        if (itr->second->IsClosed())
-        {
-            uint32 ticketId = itr->second->GetId();
-            ++itr;
-            sTicketMgr->RemoveTicket(ticketId);
-        }
-        else
-            ++itr;
-    }
-
-    _lastTicketId = 0;
-
-    CharacterDatabase.Execute("TRUNCATE TABLE gm_tickets");
 }
 
 #define TICKET_TABLE_FIELDS "ticketId, guid, name, message, createTime, mapId, posX, posY, posZ, lastModifiedTime, closedBy, assignedTo, comment, response, completed, escalated, viewed, haveTicket, ticketType, securityNeeded"
@@ -340,15 +317,13 @@ void TicketMgr::LoadTickets()
 {
     uint32 oldMSTime = WorldTimer::getMSTime();
 
-    for (const auto& itr : _ticketList)
-        delete itr.second;
-
     _ticketList.clear();
+    _accountTicketList.clear();
 
     _lastTicketId = 0;
     _openTicketCount = 0;
 
-    QueryResult* result = CharacterDatabase.Query("SELECT " TICKET_TABLE_FIELDS " FROM gm_tickets");
+    QueryResult* result = CharacterDatabase.Query("SELECT " TICKET_TABLE_FIELDS " FROM gm_tickets ORDER BY `lastModifiedTime` ASC");
     if (!result)
     {
         return;
@@ -358,21 +333,27 @@ void TicketMgr::LoadTickets()
     do
     {
         Field* fields = result->Fetch();
-        GmTicket* ticket = new GmTicket();
-        if (!ticket->LoadFromDB(fields))
+        GmTicket ticket;
+        if (!ticket.LoadFromDB(fields))
         {
-            delete ticket;
             continue;
         }
-        if (!ticket->IsClosed())
+        if (!ticket.IsClosed())
+        {
             ++_openTicketCount;
+            if (_oldestOpenTime == 0) // set for first time if open, we sort lastmodifiedtime ASC so first one should be oldest.
+                _oldestOpenTime = ticket.GetLastModifiedTime();
+        }
 
         // Update max ticket id if necessary
-        uint32 id = ticket->GetId();
+        uint32 id = ticket.GetId();
         if (_lastTicketId < id)
             _lastTicketId = id;
 
-        _ticketList[id] = ticket;
+
+        auto& elem = _ticketList[id];
+        elem = std::move(ticket);
+        _accountTicketList.insert({ elem.GetCreatorLowGuid(), std::ref(elem) });
         ++count;
     } while (result->NextRow());
     delete result;
@@ -393,12 +374,15 @@ void TicketMgr::LoadSurveys()
 
 }
 
-void TicketMgr::AddTicket(GmTicket* ticket)
+void TicketMgr::AddTicket(GmTicket&& ticket)
 {
-    _ticketList[ticket->GetId()] = ticket;
-    if (!ticket->IsClosed())
+    uint32 id = ticket.GetId();
+    auto& elem = _ticketList[id];
+    elem = std::move(ticket);
+    _accountTicketList.insert({ elem.GetCreatorLowGuid(), std::ref(elem) });
+    if (!ticket.IsClosed())
         ++_openTicketCount;
-    ticket->SaveToDB();
+    ticket.SaveToDB();
 }
 
 void TicketMgr::CloseTicket(uint32 ticketId, ObjectGuid source)
@@ -412,22 +396,13 @@ void TicketMgr::CloseTicket(uint32 ticketId, ObjectGuid source)
     }
 }
 
-void TicketMgr::RemoveTicket(uint32 ticketId)
-{
-    if (GmTicket* ticket = GetTicket(ticketId))
-    {
-        ticket->DeleteFromDB();
-        _ticketList.erase(ticketId);
-        delete ticket;
-    }
-}
 
 void TicketMgr::SendTicketsInAddonMessage(Player* pPlayer) const
 {
     pPlayer->SendAddonMessage("GM_ADDON", "tickets;;start");
     for (const auto& itr : _ticketList)
-        if (!itr.second->IsClosed() && !itr.second->IsCompleted())
-            pPlayer->SendAddonMessage("GM_ADDON", itr.second->FormatAddonMessage());
+        if (!itr.second.IsClosed() && !itr.second.IsCompleted())
+            pPlayer->SendAddonMessage("GM_ADDON", itr.second.FormatAddonMessage());
     pPlayer->SendAddonMessage("GM_ADDON", "tickets;;end");
 }
 
@@ -435,25 +410,25 @@ void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly, uint8 category) 
 {
     handler.SendSysMessage(onlineOnly ? LANG_COMMAND_TICKETSHOWONLINELIST : LANG_COMMAND_TICKETSHOWLIST);
     for (const auto& itr : _ticketList)
-        if (!itr.second->IsClosed() && !itr.second->IsCompleted())
-            if ((!onlineOnly || itr.second->GetPlayer()) && (!category || (itr.second->GetTicketType() == TicketType(category))))
-                handler.SendSysMessage(itr.second->FormatMessageString(handler).c_str());
+        if (!itr.second.IsClosed() && !itr.second.IsCompleted())
+            if ((!onlineOnly || itr.second.GetPlayer()) && (!category || (itr.second.GetTicketType() == TicketType(category))))
+                handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
 }
 
 void TicketMgr::ShowClosedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWCLOSEDLIST);
     for (const auto& itr : _ticketList)
-        if (itr.second->IsClosed())
-            handler.SendSysMessage(itr.second->FormatMessageString(handler).c_str());
+        if (itr.second.IsClosed())
+            handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
 }
 
 void TicketMgr::ShowEscalatedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWESCALATEDLIST);
     for (const auto& itr : _ticketList)
-        if (!itr.second->IsClosed() && itr.second->GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
-            handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second->FormatMessageString(handler).c_str(), itr.second->GetNeededSecurityLevel());
+        if (!itr.second.IsClosed() && itr.second.GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
+            handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second.FormatMessageString(handler).c_str(), itr.second.GetNeededSecurityLevel());
 }
 
 void TicketMgr::SendTicket(WorldSession* session, GmTicket* ticket) const

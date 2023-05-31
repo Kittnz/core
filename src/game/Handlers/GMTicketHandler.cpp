@@ -125,17 +125,18 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
         if (ticketType >= GMTICKET_MAX)
             return;
 
-        ticket = new GmTicket(GetPlayer());
-        ticket->SetPosition(mapId, x, y, z);
-        ticket->SetMessage(ticketText);
-        ticket->SetTicketType(TicketType(ticketType));
+        GmTicket newTicket{ GetPlayer() };
+        uint32 newTicketId = newTicket.GetId();
+        newTicket.SetPosition(mapId, x, y, z);
+        newTicket.SetMessage(ticketText);
+        newTicket.SetTicketType(TicketType(ticketType));
 
-        sTicketMgr->AddTicket(ticket);
+        sTicketMgr->AddTicket(std::move(newTicket));
         sTicketMgr->UpdateLastChange();
 
         sWorld.SendGMTicketText(LANG_COMMAND_TICKETNEW, GetPlayer()->GetName(), ticket->GetTicketCategoryName(TicketType(ticketType)), ticket->GetId());
 
-        sWorld.SendDiscordMessage(1075859522268180540, string_format("New ticket %u created by %s:%u. Message: %s", ticket->GetId(), GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), ticketText.c_str()));
+        sWorld.SendDiscordMessage(1075859522268180540, string_format("New ticket %u created by %s:%u. Message: %s", newTicketId, GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), ticketText.c_str()));
 
         response = GMTICKET_RESPONSE_CREATE_SUCCESS;
         ChatHandler(this).SendSysMessage("Please note that you do not have to be logged in for your ticket to be completed.");
