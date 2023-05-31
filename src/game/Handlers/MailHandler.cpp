@@ -265,6 +265,8 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         return;
     }
 
+    sAccountMgr.IncreaseMailCount(GetAccountId());
+
     if (req->receiverPtr)
     {
         // hardcore players interaction (additional checks for online receivers)

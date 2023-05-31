@@ -186,7 +186,7 @@ class AccountMgr
             return 0;
         }
 
-        uint32 IncreaseMailCount(uint32 accountId)
+        void IncreaseMailCount(uint32 accountId)
         {
             std::lock_guard<std::mutex> lock(m_accountMailsMutex);
             m_accountMails[accountId]++;
