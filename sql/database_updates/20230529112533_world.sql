@@ -694,9 +694,6 @@ update item_template set container_slots = 14 where entry = 61549;
 replace into creature_loot_template values
 (61248,61473,-82,0,1,1,0),
 (61250,61473,-82,0,1,1,0);
--- Item "Font of Arcana" (entry 61484), needs to have its drop chance increased to 72% and must drop from Azurescale Manaweaver (Entry 60910).
-update creature_template set loot_id = 60910;
-update creature_loot_template set ChanceOrQuestChance = -72 where entry = 60910;
 -- Quest Draconic Presence? change completion text 3rd paragraph to the following 'The Harlow's are a noble family which rose to power around the time Prestor had arrived in Gilneas. Lady Celia and Lord Mortimer are Regents of King Greymane, and act on his behalf.
 update quest_template set Objectives = '<Magus Orelius takes a moment, channeling the energy of the Potent Draconic Jewel with the Font of Arcana. Within time, he would let out a loud and heavy sigh.>$B$BIt\'s as I had feared, my theories are proven correct. Lord Prestor may perhaps have been a dragon in disguise all along. I am certain those who have come to replace him are aswell.$B$BThe Harlow\'s are a noble family which rose to power around the time Prestor had arrived in Gilneas. Lady Celia and Lord Mortimer are Regents of King Greymane, and act on his behalf.$B$BThe grip of the Black Dragonflight is deep within Gilneas, and it would appear they have long been working to bring this feud about. The death of innocents, and the corruption of this land is all on their hands. They must be stopped.' where entry = 40942;
 -- Quest 'The Black Waltz' (Entry 40908), set previous quest requirement to 40907, change zone id to 5179
