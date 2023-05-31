@@ -4886,7 +4886,7 @@ bool ChatHandler::HandleGMOnlineListCommand(char* args)
 
         std::string accName = "None";
         sAccountMgr.GetName(session->GetAccountId(), accName);
-        PSendSysMessage("| Char: %15s | Level: %u | Acc: %15s|", session->GetPlayer()->GetName(), (uint32)session->GetSecurity(), accName.c_str());
+        PSendSysMessage("| Char: %15s | Level: %u | Acc: %15s|%s", session->GetPlayer()->GetName(), (uint32)session->GetSecurity(), accName.c_str(), sAccountMgr.IsTraineeGM(accId) ? " TRAINEE" : "");
 
     }
 
@@ -14487,6 +14487,35 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
 
 
+bool ChatHandler::HandleToggleTrainingCommand(char* args)
+{
+
+    //disable command for trainees.
+    if (sAccountMgr.IsTraineeGM(GetAccountId()))
+        return false;
+
+    char* accountStr = ExtractOptNotLastArg(&args);
+
+    std::string targetAccountName;
+    Player* targetPlayer = nullptr;
+    uint32 targetAccountId = ExtractAccountId(&accountStr, &targetAccountName, &targetPlayer);
+    if (!targetAccountId)
+        return false;
+
+    bool isTrainee = sAccountMgr.IsTraineeGM(targetAccountId);
+
+    if (targetPlayer)
+    {
+        if (isTrainee) // toggle off
+            targetPlayer->GetSession()->SetSecurity(SEC_OBSERVER);
+        else // toggle on
+            targetPlayer->GetSession()->SetSecurity(SEC_DEVELOPER);
+    }
+
+    isTrainee = !isTrainee;
+    sAccountMgr.ToggleTraineeGM(targetAccountId);
+
+    PSendSysMessage("Account %s trainee is now : %s", targetAccountName.c_str(), isTrainee ? "ON" : "OFF");
 
     return true;
 }
