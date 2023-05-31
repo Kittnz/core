@@ -557,6 +557,7 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
     }
 
     members.erase(lowguid);
+    RemoveFromCache(lowguid);
     sGuildMgr.GuildMemberRemoved(lowguid);
 
     Player *player = sObjectMgr.GetPlayer(guid);
