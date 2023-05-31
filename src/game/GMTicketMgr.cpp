@@ -468,7 +468,7 @@ void TicketMgr::SendTicket(WorldSession* session, GmTicket* ticket) const
     session->SendPacket(&data);
 }
 
-void TicketMgr::ReloadTicketCallback(QueryResult* holder)
+/*void TicketMgr::ReloadTicketCallback(QueryResult* holder)
 {
     if (!holder)
         return;
@@ -509,7 +509,7 @@ void TicketMgr::ReloadTicket(uint32 ticketId)
         return;
     _reloadTicketsSet.insert(ticketId);
     CharacterDatabase.AsyncPQueryUnsafe(this, &TicketMgr::ReloadTicketCallback, "SELECT " TICKET_TABLE_FIELDS " FROM gm_tickets WHERE ticketId = '%u'", ticketId);
-}
+}*/
 
 void TicketMgr::LoadTicketTemplates()
 {
