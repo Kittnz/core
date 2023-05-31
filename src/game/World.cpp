@@ -1591,9 +1591,6 @@ void World::SetInitialWorldSettings()
         exit(1);
     }
 
-    sLog.outInfo("Beginning character name cleanup...");
-    CharacterDatabaseCleaner::FreeInactiveCharacterNames();
-
     ///- Loading shop tables
     sLog.outString("Loading shop...");
     sObjectMgr.LoadShop();
