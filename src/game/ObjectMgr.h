@@ -1355,10 +1355,11 @@ class ObjectMgr
             return m_shopLogs[accountId];
         }
 
-        ShopLogEntry& GetShopLogEntry(uint32 id)
+        uint32 NextShopLogEntry()
         {
-            return m_shopLogsId[id];
+            return ++m_maxShopEntry;
         }
+
 
         ItemRequiredTargetMapBounds GetItemRequiredTargetMapBounds(uint32 uiItemEntry) const
         {
@@ -1687,7 +1688,7 @@ class ObjectMgr
 		ShopEntriesMap m_ShopEntriesMap;
 
         std::unordered_map<uint32, std::vector<ShopLogEntry>> m_shopLogs;
-        std::vector<std::reference_wrapper<ShopLogEntry>> m_shopLogsId;
+        std::atomic_uint32_t m_maxShopEntry = 0;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap m_BaseXPMap;

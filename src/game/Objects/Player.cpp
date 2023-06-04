@@ -5349,27 +5349,37 @@ void Player::KillPlayer()
 
         m_hardcoreKickTimer = 120 * IN_MILLISECONDS;
 
-        // refund tokens on account
-        QueryResult* Result = LoginDatabase.PQuery("SELECT SUM(price) FROM shop_logs WHERE guid = %u AND refunded <> 1", GetGUIDLow());
 
-        if (!Result)
-            return;
-
-        Field* fields = Result->Fetch();
-
-        uint32 spending = fields[0].GetUInt32();
-        delete Result;
+        auto& logEntries = sObjectMgr.GetShopLogEntries(GetSession()->GetAccountId());
 
         LoginDatabase.BeginTransaction();
 
-        bool successTransaction =
-            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", spending, GetSession()->GetAccountId()) &&
-            LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE guid = %u AND account = %u", GetGUIDLow(), GetSession()->GetAccountId());
+        std::vector<std::reference_wrapper<ShopLogEntry>> refundableItems;
 
-        LoginDatabase.CommitTransaction();
+        uint32 totalRefund = 0;
+        const uint32 guidLow = GetGUIDLow();
+        for (auto& elem : logEntries)
+        {
+            if (elem.charGuid == guidLow && !elem.refunded)
+            {
+                totalRefund += elem.itemPrice;
+                refundableItems.push_back(std::ref(elem));
+                LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+            }           
+        }
+
+        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
+
+        bool successTransaction = LoginDatabase.CommitTransaction();
 
         if (successTransaction)
-            ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", spending);
+        {
+            for (auto& refundItem : refundableItems)
+            {
+                refundItem.get().refunded = true;
+            }
+            ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", totalRefund);
+        }
         else
             sLog.outErrorDb("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
     }

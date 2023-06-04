@@ -755,3 +755,10 @@ uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
 
     return truncHash % 1000000;
 }
+
+std::string GetCurrentTimeString()
+{
+    time_t t = time(nullptr);
+    tm* aTm = localtime(&t);
+    return string_format("%02d:%02d:%02d ", aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
+}
