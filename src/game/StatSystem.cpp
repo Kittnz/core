@@ -144,11 +144,11 @@ void Player::UpdateArmor()
     {
         auto auraList = GetAurasByType(SPELL_AURA_DUMMY);
 
-        static std::unordered_map<uint32, uint32> armorLookup =
+        static std::unordered_map<uint32, float> armorLookup =
         {
-            {45951, 10},
-            {45952, 20},
-            {45953, 30}
+            {45951, 10.0f},
+            {45952, 20.0f},
+            {45953, 30.0f}
         };
 
         for (const auto& aura : auraList)
@@ -159,7 +159,7 @@ void Player::UpdateArmor()
                 if (shield && shield->GetProto()->Class == ITEM_CLASS_ARMOR &&
                     (shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_SHIELD || shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_BUCKLER))
                 {
-                    dynamic += shield->GetProto()->Armor / 100 * findItr->second;
+                    dynamic += ceilf(shield->GetProto()->Armor / 100.0f * findItr->second);
                 }
             }
         }
