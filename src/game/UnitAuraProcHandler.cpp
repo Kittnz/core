@@ -247,6 +247,12 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Conviction (Custom Paladin Spell) should proc seals
+        if (procSpell->Id == 45619 || procSpell->Id == 45620)
+        {
+            if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_SEAL_OF_THE_CRUSADER, CF_PALADIN_SEAL_OF_WISDOM_LIGHT, CF_PALADIN_SEAL_OF_COMMAND, CF_PALADIN_SEALS>())
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Sanctified Command (Custom Paladin Talent)
         if (spellProto->Id == 45954 || spellProto->Id == 45955)
         {
