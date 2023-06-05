@@ -57,3 +57,6 @@ UPDATE `quest_template` SET `QuestLevel` = 35 WHERE `entry` = 40561;
 UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = 1124;
 
 DELETE FROM `gameobject` WHERE `guid` = 47750;
+
+UPDATE `item_template` SET `required_level` = 60 WHERE `entry` = 60465;
+UPDATE `item_template` SET `bonding` = 1 WHERE `entry` = 60465;
