@@ -6565,9 +6565,42 @@ bool QuestRewarded_npc_ralathius(Player* pPlayer, Creature* pQuestGiver, Quest c
     return false;
 }
 
+bool QuestAccept_npc_itharius(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+    bool third_item_added = false;
+    bool fourth_item_added = false;
+
+    if (pQuest->GetQuestId() == 40960) // Into the Dream IV
+    {
+        if (pPlayer->AddItem(61557)) first_item_added = true;
+        if (pPlayer->AddItem(61558)) second_item_added = true;
+        if (pPlayer->AddItem(61559)) third_item_added = true;
+        if (pPlayer->AddItem(61560)) fourth_item_added = true;
+
+        if (!first_item_added || !second_item_added || !third_item_added || !fourth_item_added)
+        {
+            pPlayer->RemoveQuest(40960);
+            pPlayer->SetQuestStatus(40960, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_itharius";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_itharius;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ralathius";
