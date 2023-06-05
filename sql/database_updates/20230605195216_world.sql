@@ -52,3 +52,6 @@ UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHE
 
 UPDATE `quest_template` SET `QuestLevel` = 40 WHERE `entry` = 40565;
 UPDATE `quest_template` SET `QuestLevel` = 35 WHERE `entry` = 40561;
+UPDATE `quest_template` SET `QuestLevel` = 35 WHERE `entry` = 40561;
+
+UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = 1124;
