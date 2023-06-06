@@ -66,3 +66,5 @@ UPDATE `item_template` SET `bonding` = 1 WHERE `entry` = 60465;
 UPDATE `custom_character_skins` SET `skin_female` = 12 WHERE `token_id` = 61105;
 UPDATE `custom_character_skins` SET `skin_female` = 0 WHERE `token_id` = 61104;
 UPDATE `custom_character_skins` SET `skin_female` = 0 WHERE `token_id` = 61106;
+
+update item_template set spellid_1 = 2974 where entry = 4090; -- Mug O' Hurt 
