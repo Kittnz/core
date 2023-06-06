@@ -2627,13 +2627,14 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
             npc_cookie->PMonsterEmote("Cookie looks at Grayson with sadness in his eyes and waves him off.");
             npc_cookie->MonsterSay("Mrrgl?");
             });
-        DoAfterTime(pQuestGiver, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
+        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
             auto npc = player->GetMap()->GetCreature(npcGuid);
             if (!npc)
                 return;
 
             Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
-            npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
+            if (npc_captain_grayson)
+                npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
             });
     }
 
