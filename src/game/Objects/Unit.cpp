@@ -8990,7 +8990,7 @@ void Unit::HandlePetCommand(CommandStates command, Unit* pTarget)
                 // Hunter pets are dismissed with a spell with a cast time
                 if (pPet->getPetType() != HUNTER_PET)
                     // dismissing a summoned pet is like killing them (this prevents returning a soulshard...)
-                    pPet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                    pPet->Unsummon(PET_SAVE_REAGENTS);
             }
             else                                    // charmed
                 pCharmer->Uncharm();
