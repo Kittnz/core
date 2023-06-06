@@ -60,3 +60,9 @@ DELETE FROM `gameobject` WHERE `guid` = 47750;
 
 UPDATE `item_template` SET `required_level` = 60 WHERE `entry` = 60465;
 UPDATE `item_template` SET `bonding` = 1 WHERE `entry` = 60465;
+
+-- New Nigh Elf skins:
+
+UPDATE `custom_character_skins` SET `skin_female` = 12 WHERE `token_id` = 61105;
+UPDATE `custom_character_skins` SET `skin_female` = 0 WHERE `token_id` = 61104;
+UPDATE `custom_character_skins` SET `skin_female` = 0 WHERE `token_id` = 61106;
