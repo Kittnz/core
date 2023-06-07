@@ -739,7 +739,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "kick",           SEC_DEVELOPER,       true,  &ChatHandler::HandleKickPlayerCommand,          "", nullptr },
         { "ban",            SEC_DEVELOPER,       true,  nullptr,                                        "", banCommandTable      },
         { "unban",          SEC_DEVELOPER,       true,  nullptr,                                        "", unbanCommandTable    },
-        { "baninfo",        SEC_DEVELOPER,       false, nullptr,                                        "", baninfoCommandTable  },
+        { "baninfo",        SEC_MODERATOR,       false, nullptr,                                        "", baninfoCommandTable  },
         { "banlist",        SEC_DEVELOPER,       true,  nullptr,                                        "", banlistCommandTable  },
         { "start",          SEC_DEVELOPER,       false, &ChatHandler::HandleStartCommand,               "", nullptr },
         { "unstuck",        SEC_DEVELOPER,       false, &ChatHandler::HandleUnstuckCommand,             "", nullptr },
