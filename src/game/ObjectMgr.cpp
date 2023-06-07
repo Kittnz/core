@@ -8973,6 +8973,7 @@ AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
 void ObjectMgr::LoadShop()
 {
 	m_ShopCategoriesMap.clear();
+    m_shopLogs.clear();
 
 	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, icon FROM shop_categories");
 
