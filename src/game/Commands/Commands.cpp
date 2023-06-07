@@ -353,7 +353,10 @@ bool ChatHandler::HandleUnLearnCommand(char* args)
         spell_id = sSpellMgr.GetFirstSpellInChain(spell_id);
 
     if (target->HasSpell(spell_id))
+    {
         target->RemoveSpell(spell_id, false, !allRanks);
+        PSendSysMessage("Successfully unlearned spell ID %u from player %s.", spell_id, target->GetName());
+    }
     else
         SendSysMessage(LANG_FORGET_SPELL);
 
