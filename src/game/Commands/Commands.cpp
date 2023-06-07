@@ -13930,13 +13930,14 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 
     uint32 account_id;
     account_id = ExtractAccountId(&c_account_name, &account_name, nullptr, false);
-    int32 coins = (int32)atoi(args);
+    int32 coinsArg = (int32)atoi(args);
 
-    if (!coins || !account_id)
+    if (!account_id)
         return false;
 
     QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", account_id);
 
+    int32 currentCoins = 0;
     if (!result)
     {
         LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", account_id);
@@ -13946,22 +13947,29 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     if (result)
     {
         Field* fields = result->Fetch();
-        int32 current_balance = fields[0].GetInt32();
+        currentCoins = fields[0].GetInt32();
+    }
 
-        int32 updated_balance = current_balance + coins;
-        delete result;
-
-        if (updated_balance < 0)
-        {
-            PSendSysMessage("Can't go below zero, the current balance is %i.", current_balance);
-            return false;
-        }
-
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%i WHERE `id`=%u", coins, account_id);
-        PSendSysMessage("You've successfully added %i coins to %s.", coins, account_name.c_str());
-        PSendSysMessage("Account %s now has %i coins.", account_name.c_str(), updated_balance);
+    if (!coinsArg)
+    {
+        PSendSysMessage("Current coins on account %s is : %i", account_name.c_str(), currentCoins);
         return true;
     }
+
+    int32 updated_balance = currentCoins + coinsArg;
+    delete result;
+
+    if (updated_balance < 0)
+    {
+        PSendSysMessage("Can't go below zero, the current balance is %i.", currentCoins);
+        return false;
+    }
+
+    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%i WHERE `id`=%u", coinsArg, account_id);
+    PSendSysMessage("You've successfully added %i coins to %s.", coinsArg, account_name.c_str());
+    PSendSysMessage("Account %s now has %i coins.", account_name.c_str(), updated_balance);
+    return true;
+
     return false;
 }
 
