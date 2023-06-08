@@ -608,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
     `account` INT(10) UNSIGNED NOT NULL,
     `ip` VARCHAR(16) NOT NULL COLLATE 'utf8_general_ci',
     `realm` INT(10) UNSIGNED NOT NULL,
-    `time` DATETIME NOT NULL DEFAULT current_timestamp(),
+    `time` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
     `architecture` VARCHAR(16) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
     `cputype` VARCHAR(64) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
     `activecpus` INT(10) UNSIGNED NULL DEFAULT NULL,
