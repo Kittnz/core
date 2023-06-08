@@ -600,6 +600,43 @@ CREATE TABLE IF NOT EXISTS `uptime` (
   PRIMARY KEY (`realmid`,`starttime`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
 
+
+DROP TABLE IF EXISTS `system_fingerprint_usage`;
+CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `fingerprint` INT(10) UNSIGNED NOT NULL,
+    `account` INT(10) UNSIGNED NOT NULL,
+    `ip` VARCHAR(16) NOT NULL COLLATE 'utf8_general_ci',
+    `realm` INT(10) UNSIGNED NOT NULL,
+    `time` DATETIME NOT NULL DEFAULT current_timestamp(),
+    `architecture` VARCHAR(16) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+    `cputype` VARCHAR(64) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+    `activecpus` INT(10) UNSIGNED NULL DEFAULT NULL,
+    `totalcpus` INT(10) UNSIGNED NULL DEFAULT NULL,
+    `pagesize` INT(10) UNSIGNED NULL DEFAULT NULL,
+    `timezoneBias` INT(10) UNSIGNED NOT NULL,
+    `largepageMinimum` INT(10) UNSIGNED NOT NULL,
+    `suiteMask` INT(10) UNSIGNED NOT NULL,
+    `mitigationPolicies` INT(10) UNSIGNED NOT NULL,
+    `numberPhysicalPages` INT(10) UNSIGNED NOT NULL,
+    `sharedDataFlags` INT(10) UNSIGNED NOT NULL,
+    `testRestInstruction` BIGINT(20) UNSIGNED NOT NULL,
+    `qpcFrequency` BIGINT(20) NOT NULL,
+    `qpcSystemTimeIncrement` BIGINT(20) UNSIGNED NOT NULL,
+    `unparkedProcessorCount` INT(10) UNSIGNED NOT NULL,
+    `enclaveFeatureMask` INT(10) UNSIGNED NOT NULL,
+    `qpcData` INT(10) UNSIGNED NOT NULL,
+    `osVersion` ENUM('None','WinXP','Win7','Win8','Vista','Win10Up','<Unknown>') NOT NULL DEFAULT '<Unknown>' COLLATE 'utf8_general_ci',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `fingerprint` (`fingerprint`) USING BTREE,
+    INDEX `account` (`account`) USING BTREE,
+    INDEX `ip` (`ip`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=8904428
+;
+
 -- Dumping data for table tw_logon.uptime: 0 rows
 /*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
 /*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
