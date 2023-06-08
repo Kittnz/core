@@ -1,3 +1,0 @@
-ALTER TABLE character_action RENAME logs_character_action;
-ALTER TABLE character_loot RENAME logs_character_loot;
-ALTER TABLE character_action_renames RENAME logs_character_action_renames;
