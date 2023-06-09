@@ -16,3 +16,9 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set npc_flags = 3, gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- NPC Snarlclaw (entry 61405), change display ID to 1947
 update creature_template set display_id1 = 1947 where entry = 61405;
+-- Item Vials of Blood (Entry 61495) , rename to Vial of Blood
+update item_template set name = 'Vial of Blood' where entry = 61495;
+-- Item 61174 add spell 57106 with -1 charges to be consumed on use.
+update item_template set spellid_1 = 57106, spellcharges_1 = -1 where entry = 61174;
+-- Item 61175 add spell 57107 with -1 charges to be consumed on use.
+update item_template set spellid_1 = 57107, spellcharges_1 = -1 where entry = 61175;
