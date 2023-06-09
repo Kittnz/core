@@ -14143,8 +14143,11 @@ bool ChatHandler::HandleTransferCommand(char* args)
         return false;
     }
 
+
     std::string playerName(rawPlName);
     std::string accountName(rawAccountName);
+
+    auto playerCache = sObjectMgr.GetPlayerDataByName(playerName);
 
     CharacterDatabase.escape_string(playerName);
     CharacterDatabase.escape_string(accountName);
@@ -14187,6 +14190,9 @@ bool ChatHandler::HandleTransferCommand(char* args)
             }
 
             CharacterDatabase.PExecute("UPDATE characters SET account = %u WHERE guid = '%u'", accountId, guid);
+            if (playerCache)
+                playerCache->uiAccount = GetAccountId();
+
             PSendSysMessage("You have successfully moved character %s to account %s.", playerName.c_str(),
                 accountName.c_str());
         }
