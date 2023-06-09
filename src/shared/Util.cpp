@@ -33,6 +33,10 @@
 #include "Auth/Hmac.h"
 #include "Auth/base32.h"
 
+
+#include <iomanip>
+#include <sstream>
+
 typedef ACE_TSS<MTRand> MTRandTSS;
 static MTRandTSS mtRand;
 
@@ -758,7 +762,10 @@ uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
 
 std::string GetCurrentTimeString()
 {
-    time_t t = time(nullptr);
-    tm* aTm = localtime(&t);
-    return string_format("%02d:%02d:%02d ", aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
 }
