@@ -17,7 +17,7 @@ instance_black_morass::instance_black_morass(Map* pMap) : ScriptedInstance(pMap)
 
 void instance_black_morass::Initialize()
 {
-    if (Creature* entityCreature{ instance->SummonCreature(NPC_UNKNOWN_ENTITY, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN) })
+    if (Creature* entityCreature{ instance->SummonCreature(66003, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN) })
     {
         unknownEntity = entityCreature->GetObjectGuid();
     }
