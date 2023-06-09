@@ -4902,14 +4902,22 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
     uint32 charDelete_method = sWorld.getConfig(CONFIG_UINT32_CHARDELETE_METHOD);
     uint32 charDelete_minLvl = sWorld.getConfig(CONFIG_UINT32_CHARDELETE_MIN_LEVEL);
 
+    PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(playerguid);
+    uint8 hardcoreStatus = data ? data->uiHardcoreStatus : 0;
+
+    const bool isHardcore = hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARCORE_MODE_STATUS_HC60;
+
     // if we want to finally delete the character or the character does not meet the level requirement, we set it to mode 0
     if (deleteFinally)
         charDelete_method = 0;
     else
     {
-        PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(playerguid);
         if (data && data->uiLevel < charDelete_minLvl)
             charDelete_method = 0;
+
+        
+        if (isHardcore)
+            charDelete_method = 0; // always fully delete HCs
     }
 
     uint32 lowguid = playerguid.GetCounter();
@@ -4951,6 +4959,28 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
         // completely remove from the database
         case 0:
         {
+            //if HC, refund tokens.
+            if (isHardcore)
+            {
+                uint32 totalRefund = 0;
+                auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
+                LoginDatabase.BeginTransaction();
+                for (auto& elem : shopEntries)
+                {
+                    if (elem.charGuid == lowguid && !elem.refunded)
+                    {
+                        totalRefund += elem.itemPrice;
+                        elem.refunded = true;
+                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+                    }
+                }
+
+                if (totalRefund > 0)
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, accountId);
+                LoginDatabase.CommitTransaction();
+            }
+
+
             // return back all mails with COD and Item                 0  1           2              3      4       5          6     7
             QueryResult *resultMail = CharacterDatabase.PQuery("SELECT id,messageType,mailTemplateId,sender,subject,itemTextId,money,has_items FROM mail WHERE receiver='%u' AND has_items<>0 AND cod<>0", lowguid);
             if (resultMail)
