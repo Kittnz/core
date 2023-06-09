@@ -1073,10 +1073,7 @@ private:
     uint32 m_uiShout_Timer{};
     uint32 m_uiMortalStrike_Timer{};
     uint32 m_uiSweepingSlam_Timer{};
-
-    ObjectGuid m_chromieGuid{};
-
-    nsBossChronar::Phase phase{};
+    uint32 m_uiSpellReflectionTimer;
 
 public:
 
@@ -1087,10 +1084,7 @@ public:
         m_uiShout_Timer = 5000;
         m_uiMortalStrike_Timer = 18000;
         m_uiSweepingSlam_Timer = 25000;
-
-        m_chromieGuid = 0;
-
-        phase = nsBossChronar::Phase::ONE;
+        m_uiSpellReflectionTimer = 17000;
     }
 
     void EnterCombat(Unit*) override
@@ -1147,50 +1141,16 @@ public:
             m_uiSweepingSlam_Timer -= uiDiff;
         }
 
-        switch (phase)
+        if (m_uiSpellReflectionTimer < uiDiff)
         {
-            case nsBossChronar::Phase::ONE:
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
             {
-                if (m_creature->GetHealthPercent() < 75.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            case nsBossChronar::Phase::TWO:
-            {
-                if (m_creature->GetHealthPercent() < 50.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            case nsBossChronar::Phase::THREE:
-            {
-                if (m_creature->GetHealthPercent() < 25.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            default:
-            {
-                break;
+                m_creature->MonsterYell("Your magic turns against you!");
+                m_uiSpellReflectionTimer = urand(10000, 17000);
             }
         }
-
+        else
+            m_uiSpellReflectionTimer -= uiDiff;
 
         if (!m_bEnrageActive && m_creature->GetHealthPercent() < 35.0f)
         {
@@ -1391,8 +1351,6 @@ private:
 
     uint32 m_uiSummonEntry{};
 
-    ObjectGuid chromieGuid{};
-
 public:
     void Reset() override
     {
@@ -1405,8 +1363,6 @@ public:
         m_uiBanish_Timer = 500;
 
         m_uiSummonEntry = 0;
-
-        chromieGuid = 0;
     }
 
     void EnterCombat(Unit*) override
@@ -1426,20 +1382,6 @@ public:
         if (GameObject* pBarrier{ m_creature->FindNearestGameObject(180322, 75.f) })
         {
             pBarrier->AddObjectToRemoveList();
-        }
-
-        if (Creature * pPortal{ m_creature->SummonCreature(81048, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000) })
-        {
-            DoAfterTime(pPortal, 2 * IN_MILLISECONDS, [portal = pPortal]()
-                {
-                    if (Creature * pChromie{ portal->SummonCreature(91003, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                    {
-                        pChromie->CastSpell(pChromie, 26638, false); // Teleport
-                        pChromie->SetFacingTo(6.18f);
-                        pChromie->HandleEmote(EMOTE_ONESHOT_WAVE);
-                        pChromie->PMonsterYell("You did it! Come over here, quick!");
-                    }
-                });
         }
     }
 

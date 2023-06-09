@@ -101,14 +101,6 @@ namespace nsBossChronar
 	static constexpr uint32 SPELL_REFLECTION { 22067 };
 	static constexpr uint32 SPELL_ENRAGE { 28131 };
 	static constexpr uint32 SPELL_TELEPORT{ 26638 };
-
-	enum class Phase : uint8
-	{
-		ONE,
-		TWO,
-		THREE,
-		FOUR
-	};
 }
 
 namespace nsBossHarbringer
