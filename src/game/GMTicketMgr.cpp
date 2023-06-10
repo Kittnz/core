@@ -411,26 +411,32 @@ void TicketMgr::SendTicketsInAddonMessage(Player* pPlayer) const
 void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly, uint8 category) const
 {
     handler.SendSysMessage(onlineOnly ? LANG_COMMAND_TICKETSHOWONLINELIST : LANG_COMMAND_TICKETSHOWLIST);
+    /* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS
     for (const auto& itr : reverse(_ticketList))
         if (!itr.second.IsClosed() && !itr.second.IsCompleted())
             if ((!onlineOnly || itr.second.GetPlayer()) && (!category || (itr.second.GetTicketType() == TicketType(category))))
                 handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
+    */
 }
 
 void TicketMgr::ShowClosedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWCLOSEDLIST);
+    /* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS
     for (const auto& itr : reverse(_ticketList))
         if (itr.second.IsClosed())
             handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
+    */
 }
 
 void TicketMgr::ShowEscalatedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWESCALATEDLIST);
+    /* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS
     for (const auto& itr : reverse(_ticketList))
         if (!itr.second.IsClosed() && itr.second.GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
             handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second.FormatMessageString(handler).c_str(), itr.second.GetNeededSecurityLevel());
+    */
 }
 
 void TicketMgr::SendTicket(WorldSession* session, GmTicket* ticket) const
