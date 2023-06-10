@@ -272,7 +272,7 @@ class CreatureAI
         bool IsMeleeAttackEnabled() const { return m_bMeleeAttack; }
 
         // Triggers an alert when a Unit moves near stealth detection range.
-        virtual void TriggerAlert(Unit const* who);
+        virtual void OnMoveInStealth(Unit* who);
 
         // TrinityCore
         void DoCast(Unit* victim, uint32 spellId, bool triggered = false);
@@ -379,6 +379,8 @@ class CreatureAI
 
         bool IsCombatMovement() { return m_bCombatMovement; }
     protected:
+        bool CanTriggerAlert(Unit const* who);
+        void TriggerAlertDirect(Unit const* who);
         ///== Fields =======================================
         bool   m_bUseAiAtControl;
         bool   m_bMeleeAttack;                                  // If we allow melee auto attack
