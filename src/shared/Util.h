@@ -525,6 +525,7 @@ uint32 GenerateToken(const std::string& b32key, time_t timeOffset);
 
 std::string GetCurrentTimeString();
 
+/* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS
 template <typename T>
 struct reversion_wrapper { T& iterable; };
 
@@ -536,3 +537,4 @@ auto end(reversion_wrapper<T> w) { return std::rend(w.iterable); }
 
 template <typename T>
 reversion_wrapper<T> reverse(T&& iterable) { return { iterable }; }
+*/
