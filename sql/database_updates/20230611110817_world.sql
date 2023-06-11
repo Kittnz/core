@@ -145,3 +145,34 @@ replace into gameobject_loot_template values
 (2020034,61606,-100,0,1,1,0);
 
 update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020034;
+
+-- Crystalvein Delivery
+delete from quest_template where entry = 40971;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40970,40971,2,5179,42,35,0,0,'Crystalvein Delivery','Alright, my pal, here\'s the package you\'ve been waiting for. Crystalvein, all neatly packaged and ready for delivery. Take good care of it now, ya hear?$B$BNow, when you see Todd, pass along my message. Tell him to swing by once he\'s done with all this Rebellion business and whatnot. We\'ll have a good ol\' chat and catch up on things. Wish him the best of luck from me, will ya?$B$BAs for me. Well, I have got business to attend to. There\'s money to be made and deals to be struck.','Deliver the Crystalvein Shipment to Todd Bolder at Ravenshire in Gilneas.','Yes?','I can hardly believe my own eyes! Crystalvein ore, just as I remembered it. This is a treasure indeed. I can already envision the magnificent weapons I\'ll forge from this exquisite batch.$B$BLarry! Fire up the forge, lad! It\'s time to showcase the true artistry that can be achieved with these precious ores. We shall create masterpieces that will leave tongues wagging in awe and envy.$B$BOh, where are my manners? I apologize. Allow me to express my profound gratitude for your efforts. Here, accept this piece as a token of my appreciation. It\'s one of my finest works, crafted with the utmost care and skill. May it serve you well, my friend, as a testament to our collaboration.$B$BNow, let\'s get to work, shall we?',61607,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61607,1, 0,12000,2000,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61608,1,61609,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values ( 2498, 40971);
+replace into creature_involvedrelation	(id, quest) values (61277, 40971);
+update quest_template set requiredraces = 589		 where entry = 40971;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61607,11449,'Crystalvein Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+
+replace into item_template values
+ ('61608', '4', '3', 'Crystaltouched Breastplate', '', '15731', '2', '0', '1', '47844', '11961', '5', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '12', '4', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '258', '0', '0', '0',
+ '0', '10', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '100', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61609', '4', '3', 'Crystalforged Leggings', '', '4339', '2', '0', '1', '51732', '12933', '7', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '15', '5', '8',
+ '7', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '231', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
