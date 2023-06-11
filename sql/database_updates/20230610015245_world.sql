@@ -430,3 +430,6 @@ REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573858, 60);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573858, 24);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573857, 153);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573857, 1);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2577438,61320,0,0,0,532,-10934.8,-1811.95,121.706,5.34247,120,120,0,100,100,0,0,0);
