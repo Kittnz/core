@@ -13,3 +13,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61557, 40964);
 replace into creature_involvedrelation	(id, quest) values (61265, 40964);
 update quest_template set requiredraces = 589		 where entry = 40964;
+
+-- Feeding the Rebellion
+delete from quest_template where entry = 40965;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40965,2,5179,42,35,0,0,'Feeding the Rebellion','I\'ve led a rugged existence in these parts. Life here ain\'t always been gentle, but it\'s been plain and straightforward. My duty has been to provide sustenance for my kinfolk and the folks in town, tracking down the savage creatures that roam these woods.$B$BA lot has changed since the rebellion. Now, it falls upon my weary shoulders to not only keep my own family fed but also help supply an entire army! It\'s a burden fit for no ordinary man like myself. I reckon, stranger, could you lend me a hand in this dire situation?$B$BVenture deep into the heart of the forest and set your sights on the batlike creatures known as Vilewings. Don\'t bother with the young ones, their flesh is all stringy and full of veins. It\'s the greater beasts we\'re after. Hunt them down and bring me back no less than nine hefty chunks of their meat. That\'ll be the key to keepin\' bellies full and spirits high in these troubled times.','Bring 9 Chunks of Greater Vilewing Meat to Narwick at Ravenshire in Gilneas.','Ah, the thrill of the hunt.','Well, ain\'t you a sight for sore eyes, stranger! You\'ve done some mighty fine work for our cause, and I reckon we owe you a debt of gratitude.',61599,9,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 8000,22800,3800,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61278, 40965);
+replace into creature_involvedrelation	(id, quest) values (61278, 40965);
+update quest_template set requiredraces = 589		 where entry = 40965;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61599,25466,'Greater Vilewing Meat',12,1,2048,1,-1,-1,1,9,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61401,61599,-65,0,1,1,0);
+
