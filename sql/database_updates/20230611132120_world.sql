@@ -45,3 +45,25 @@ update item_template set stat_value1 = 20, stat_value2 = 10 where entry = 20616;
 update item_template set stat_value1 = 20, stat_value2 = 10 where entry = 65101; -- Dragonbone Waistguard
 update item_template set stat_value2 = 17 where entry = 16964; -- Gauntlets of Wrath
 update item_template set stat_value2 = 14, stat_value3 = 14, spellid_2 = 13388 where entry = 21598; -- Royal Qiraji Belt
+
+-- Add the items below to the drop tables of the following creatures in a loot table with a drop chance of 0.10% (NPC entries 61424, 61425, 61426, 61364, 61365, 61388, 61389, 61390, 61391, 61417).
+REPLACE INTO reference_loot_template VALUES
+(30559, 61336, 0, 1, 1, 1, 0),
+(30559, 61337, 0, 1, 1, 1, 0),
+(30559, 61338, 0, 1, 1, 1, 0),
+(30559, 61335, 0, 1, 1, 1, 0),
+(30559, 61597, 0, 1, 1, 1, 0),
+(30559, 61598, 0, 1, 1, 1, 0),
+(30559, 61596, 0, 1, 1, 1, 0),
+(30559, 61339, 0, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES
+(61424, 30075, 0.1, 0, -30559, 1, 0),
+(61425, 30075, 0.1, 0, -30559, 1, 0),
+(61426, 30075, 0.1, 0, -30559, 1, 0),
+(61364, 30075, 0.1, 0, -30559, 1, 0),
+(61365, 30075, 0.1, 0, -30559, 1, 0),
+(61388, 30075, 0.1, 0, -30559, 1, 0),
+(61389, 30075, 0.1, 0, -30559, 1, 0),
+(61390, 30075, 0.1, 0, -30559, 1, 0),
+(61391, 30075, 0.1, 0, -30559, 1, 0),
+(61417, 30075, 0.1, 0, -30559, 1, 0);
