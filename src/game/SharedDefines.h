@@ -1870,6 +1870,15 @@ struct WorldLocation
     {
         return mapId == 0 && x == 0 && y == 0 && z == 0 && o == 0;
     }
+
+    void Clear()
+    {
+        mapId = 0;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
+        o = 0.0f;
+    }
 };
 
 #endif

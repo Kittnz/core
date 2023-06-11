@@ -470,6 +470,20 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
             {
                 _player->GetMotionMaster()->MovementExpired();
                 _player->m_taxi.ClearTaxiDestinations();
+
+                // make sure nothing is moving player
+                if (_player->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
+                    _player->GetMotionMaster()->Initialize();
+
+                // verify that flight movement is properly ended
+                if (_player->HasUnitState(UNIT_STAT_TAXI_FLIGHT) ||
+                    _player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_TAXI_FLIGHT) ||
+                    _player->HasMovementFlag(MOVEFLAG_FLYING) ||
+                    _player->GetMountID())
+                {
+                    _player->CleanupFlagsOnTaxiPathFinished();
+                    _player->SendHeartBeat();
+                }
             }
 
             sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_IN_PROGRESS, 0, bg->GetStartTime());
