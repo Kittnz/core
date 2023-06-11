@@ -123,3 +123,25 @@ replace into creature_questrelation		(id, quest) values (61277, 40969);
 replace into creature_involvedrelation	(id, quest) values ( 2498, 40969);
 update quest_template set requiredraces = 589		 where entry = 40969;
 
+-- Crystalvein Mine Cleanup
+delete from quest_template where entry = 40970;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40969,40970,2,33,42,35,0,0,'Crystalvein Mine Cleanup','Ah, Todd, good ol\' blacksmith, that one. He sure had a knack for working with those metals. I\'ll give him that. But here\'s the thing, I can\'t exactly fulfill his request for that ore he\'s after. It\'s a bit of a sticky situation, ya see.$B$BThe mine he\'s talkin\' about, the Crystalvein Mine, got itself overrun by those pesky basilisks. Nasty creatures, they are. Just one gaze from \'em, and poof, you\'re a crystal! So, understandably, we goblins have been keepin\' our distance.$B$BBut hey, if you\'re feelin\' either foolish or brave, and you\'re up for clearin\' out the basilisks from that cave, well, we might just have ourselves a deal. You do the dirty work, and any ore you find there is yours to keep. Fair and square. Mind ya, it\'s gotta fit in your backpack, though. Can\'t have ya luggin\' around mountains of the stuff.$B$BSo, what do ya say, adventurer? You up for the challenge? If so, head northeast from here, and you\'ll find the Crystalvein Mine.','Gather 10 Crystalvein Ore and slay 6 Trashtail Basilisks and 6 Ironjaw Basilisks for Crank Fizzlebub in Booty Bay.','Well, I told you already. You need to clear the mine.','Whoa there, pal! I gotta say, I didn\'t expect you to make it outta there in one piece. You\'re a real survivor, I\'ll give ya that! So, you\'re tellin\' me the mine\'s clear of them nasty basilisks? Well, ain\'t that splendid news! I\'ll have a mining team dispatched there pronto!$B$BNow, about that ore you managed to snag, I\'ll need ya to hand it over. Don\'t worry, I\'ll package it all up real nice and attach a fancy note for Todd. Long time no see, right? I\'m sure he\'ll be thrilled to get a package from me.',61606,10,0,0,0,0,0,0, 1550,6,1551,6,0,0,0,0, 0,0, 4000,24000,4000,21,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61277, 40970);
+replace into creature_involvedrelation	(id, quest) values ( 2498, 40970);
+update quest_template set requiredraces = 589		 where entry = 40970;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61606,6614,'Crystalvein Ore',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(1551,61606,-5,0,1,1,0),
+(1550,61606,-5,0,1,1,0);
+
+REPLACE INTO gameobject_template VALUES
+(2020034, 3, 2975, 'Crystalvein', 0, 4, 1, 43, 2020034, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020034,61606,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020034;
