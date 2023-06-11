@@ -28,3 +28,62 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (61401,61599,-65,0,1,1,0);
 
+-- The Deed to Ravenshire
+delete from quest_template where entry = 40966;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40966,2,5179,45,38,0,0,'The Deed to Ravenshire','Greymane, or rather, Harlow, has persistently launched assaults upon Ravenshire, yet to no avail. Our valiant soldiers have repelled their attacks time and time again, displaying unwavering courage. However, in one of their audacious night assaults, the enemy managed to breach the defenses of our city hall and abscond with the Deed to Ravenshire.$B$BWhile this parchment holds little personal value for me, it carries great significance to the common folk as a symbol of my rightful rule. For order to be restored in Gilneas, I must retrieve it without delay.$B$BUndoubtedly, the enemy forces have brought it back to Gilneas City itself. However, as to its current whereabouts, one can only speculate.','Find the Deed to Ravenshire in Gilneas City and bring it back to Caliban Silverlaine.','The Deed to Ravenshire must be reclaimed.','I commend your stellar work. With the Deed once again safely back in my possession, any troublemakers who dare challenge my rule shall be forced to reconsider their actions. The return of this document serves as a powerful deterrent, casting doubt upon the audacity of those who would question our authority.$B$BThough the path ahead may be arduous, we shall not waver in our commitment to rebuilding Gilneas. We have a long and challenging journey before us, but with each passing day, we will labor tirelessly to restore our beloved homeland to its rightful place of glory and splendor.',61600,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 120000,33000,5500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61601,1,61602,1,61603,1,61604,1, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61257, 40966);
+replace into creature_involvedrelation	(id, quest) values (61257, 40966);
+update quest_template set requiredraces = 589		 where entry = 40966;
+update quest_template set type = 81					 where entry = 40966;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61600,7629,'Deed to Ravenshire',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,7);
+
+REPLACE INTO gameobject_template VALUES
+(2020033, 3, 24337, 'Deed to Ravenshire', 0, 4, 1, 43, 2020033, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020033,61600,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020033;
+
+replace into item_template values
+ ('61601', '2', '0', 'Ebonmere Axe', '', '19214', '2', '0', '1', '67732', '16933', '13', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2400', '0',
+ '0', '48', '83', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61602', '4', '4', 'Gilneas Brigade Helmet', '', '66375', '2', '0', '1', '20388', '5097', '1', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '3', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '364', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '70', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61603', '4', '1', 'Robes of Ravenshire', '', '21114', '2', '0', '1', '30432', '7608', '5', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '61', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '70', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61604', '4', '2', 'Greyshire Pauldrons', '', '17193', '2', '0', '1', '29132', '7283', '3', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '4', '6',
+ '6', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '93', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
