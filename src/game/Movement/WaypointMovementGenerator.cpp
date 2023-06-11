@@ -321,15 +321,7 @@ void FlightPathMovementGenerator::Initialize(Player &player)
 
 void FlightPathMovementGenerator::Finalize(Player & player)
 {
-    // Reset fall information to prevent fall dmg at arrive
-    player.SetFallInformation(0, player.GetPositionZ());
-
-    // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
-    player.ClearUnitState(UNIT_STAT_TAXI_FLIGHT);
-    player.RemoveUnitMovementFlag(MOVEFLAG_FLYING);
-
-    player.Unmount();
-    player.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
+    player.CleanupFlagsOnTaxiPathFinished();
     player.TaxiStepFinished();
 
     if (player.GetTaxi().empty())

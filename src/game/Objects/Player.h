@@ -803,6 +803,7 @@ class PlayerTaxi
             m_TaxiDestinations.clear();
             m_taxiPath.clear();
             m_discount = 1.0f;
+            m_taxiStartLocation.Clear();
         }
         void AddTaxiDestination(uint32 dest) { m_TaxiDestinations.push_back(dest); }
         void SetDiscount(float discount) { m_discount = discount; }
@@ -824,6 +825,7 @@ class PlayerTaxi
         bool empty() const { return m_TaxiDestinations.empty(); }
 
         friend std::ostringstream& operator<< (std::ostringstream& ss, PlayerTaxi const& taxi);
+        WorldLocation m_taxiStartLocation;
     private:
         float m_discount;
         TaxiMask m_taximask;
@@ -2131,6 +2133,7 @@ class Player final: public Unit
         bool ActivateTaxiPathTo(uint32 taxi_path_id, uint32 spellid = 0, bool nocheck = false);
         void TaxiStepFinished();
         void ContinueTaxiFlight();
+        void CleanupFlagsOnTaxiPathFinished();
 
         /*********************************************************/
         /***                 CINEMATIC SYSTEM                  ***/

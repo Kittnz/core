@@ -18662,6 +18662,10 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     if (GetPet())
         RemovePet(PET_SAVE_REAGENTS);
 
+    WorldLocation currentLocation;
+    GetPosition(currentLocation);
+    m_taxi.m_taxiStartLocation = currentLocation;
+
     WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
     data << uint32(ERR_TAXIOK);
     GetSession()->SendPacket(&data);
@@ -18746,6 +18750,19 @@ void Player::ContinueTaxiFlight()
     ClearTaxiFlightData(2);
 
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
+}
+
+void Player::CleanupFlagsOnTaxiPathFinished()
+{
+    // Reset fall information to prevent fall dmg at arrive
+    SetFallInformation(0, GetPositionZ());
+
+    // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
+    ClearUnitState(UNIT_STAT_TAXI_FLIGHT);
+    RemoveUnitMovementFlag(MOVEFLAG_FLYING);
+
+    Unmount();
+    RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 }
 
 UnitMountResult Player::Mount(uint32 mount, uint32 spellId)
@@ -19233,8 +19250,26 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
         }
 
         // If flying at the time we enter, return to queue position.
-        if (IsTaxiFlying() && !m_bgData.joinPos.IsEmpty() && m_bgData.joinPos.mapId == GetMapId())
-            return;
+        if (IsTaxiFlying())
+        {
+            if (!m_bgData.joinPos.IsEmpty() && m_bgData.joinPos.mapId == GetMapId())
+                return;
+
+            if (!m_taxi.m_taxiStartLocation.IsEmpty())
+            {
+                m_bgData.joinPos = m_taxi.m_taxiStartLocation;
+                m_bgData.m_needSave = true;
+                return;
+            }
+
+            if (!movespline->Finalized())
+            {
+                G3D::Vector3 dest = movespline->FinalDestination();
+                m_bgData.joinPos = WorldLocation(GetMapId(), dest.x, dest.y, dest.z, 0.0f);
+                m_bgData.m_needSave = true;
+                return;
+            }
+        }
         
         // If map is dungeon find linked graveyard
         if (leader->GetMap()->IsDungeon())
