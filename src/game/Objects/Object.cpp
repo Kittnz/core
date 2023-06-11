@@ -2917,6 +2917,21 @@ Pet* Object::ToPet()
     return IsPet() ? static_cast<Pet*>(this) : nullptr;
 }
 
+bool Object::IsTotem() const
+{
+    return IsCreature() && static_cast<Creature const*>(this)->IsTotem();
+}
+
+Totem const* Object::ToTotem() const
+{
+    return IsTotem() ? static_cast<Totem const*>(this) : nullptr;
+}
+
+Totem* Object::ToTotem()
+{
+    return IsTotem() ? static_cast<Totem*>(this) : nullptr;
+}
+
 bool WorldObject::IsLikePlayer() const
 {
     if (IsPlayer())

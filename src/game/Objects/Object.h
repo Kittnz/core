@@ -142,6 +142,7 @@ enum class SizeFactor
 class WorldPacket;
 class UpdateData;
 class WorldSession;
+class Totem;
 class Creature;
 class Player;
 class Unit;
@@ -646,6 +647,10 @@ class Object
         bool IsPet() const;
         Pet const* ToPet() const;
         Pet* ToPet();
+
+        bool IsTotem() const;
+        Totem const* ToTotem() const;
+        Totem* ToTotem();
 
         virtual bool HasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool HasInvolvedQuest(uint32 /* quest_id */) const { return false; }
