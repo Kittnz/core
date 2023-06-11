@@ -204,3 +204,11 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61325, 40973);
 replace into creature_involvedrelation	(id, quest) values (61325, 40973);
 
+-- Item 61559, change display ID to 31205.
+update item_template set display_id = 31205 where entry = 61559;
+-- Item Book: Smelt Dreamsteel, change spell to 57120.
+update item_template set spellid_1 = 57120 where entry = 61226;
+-- Item Book: Craft Dreamhide change spell to 57124.
+update item_template set spellid_1 = 57124 where entry = 61228;
+-- Item Powerful Smelling Salts (Entry 8546) set to bind on pickup, add cooldown to spell and set to 7200000 miliseconds. MAKE SURE THIS ITEM IS CONSUMED ON USE AND HAS -1 CHARGES.
+update item_template set bonding = 1, spellcooldown_1 = 7200, spellcharges_1 = -1 where entry = 61228;
