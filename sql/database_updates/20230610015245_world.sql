@@ -363,3 +363,55 @@ REPLACE INTO `gameobject` VALUES ( 5015513, 1000092, 0, 2226.98, 2487.1, 132.032
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 16);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 68);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 68);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 68);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577393, 68);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577393, 16);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577393, 69);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577393, 68);
+
+-- Changes by VOJI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577394, 68);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 391);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573860, 0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2573860, 1);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 378);
+
+-- Changes by VOJI
+REPLACE INTO `creature` VALUES (2573850,61162,0,0,0,1,5663.13,-1085.3,382.682,5.36468,300,300,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2573850;
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2573850,1, 5663.129883,-1085.300049,382.682007, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2573850,2, 5649.247559,-1078.543945,380.033661, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2573850,3, 5633.564941,-1072.286133,378.420654, 100);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573855, 378);
+
+-- Changes by VOJI
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2573850,4, 5616.507324,-1067.759521,377.218323, 100);
+INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2573850,5, 5600.497559,-1066.334351,377.797272, 100);
+REPLACE INTO `creature` VALUES (2573850,61162,0,0,0,1,5663.13,-1085.3,382.682,5.36468,300,300,4,100,100,2,0,0);
+REPLACE INTO `gameobject` VALUES ( 5015514, 3000224, 1, 5602.12, -1081.53, 379.703, 3.46907, 0, 0, 0.986625, -0.163007, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5015514';
+DELETE FROM game_event_gameobject WHERE guid = '5015514';
+DELETE FROM gameobject_battleground WHERE guid = '5015514';
+REPLACE INTO `gameobject` VALUES ( 5015515, 2010339, 1, 5601.81, -1081.79, 379.743, 2.77366, 0, 0, 0.983126, 0.182932, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 193);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 51);
+
+-- Changes by VOJI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 5);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 15);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 35);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 34);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 36);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 37);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 38);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 39);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2573856, 43);
