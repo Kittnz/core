@@ -6462,6 +6462,50 @@ bool QuestRewarded_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pQuestGi
     return false;
 }
 
+bool GossipHello_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40972) == QUEST_STATUS_INCOMPLETE) // The Rebellion
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Debrief me on the situation in Gilneas.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61326, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30123, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30124, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I see.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30125, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60046); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    return true;
+}
+
 bool GossipHello_npc_ralathius(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsQuestGiver())
@@ -6612,6 +6656,8 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_lord_darius_ravenwood";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_lord_darius_ravenwood;
+    newscript->pGossipHello = &GossipHello_npc_lord_darius_ravenwood;
+    newscript->pGossipSelect = &GossipSelect_npc_lord_darius_ravenwood;
     newscript->RegisterSelf();
 
     newscript = new Script;
