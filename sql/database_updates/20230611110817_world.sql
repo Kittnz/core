@@ -87,3 +87,23 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
+
+-- Ravenwood Keep
+delete from quest_template where entry = 40967;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40967,2,5179,44,35,0,0,'Ravenwood Keep','In the wake of the rebellion\'s inception, my home, Ravenwood Keep, became the target of an assault by the forces under the command of the Harlows. Our defenders fought with unwavering valor, but we found ourselves outmatched. It seemed that the Harlows, had delved into dark magicks to bolster their armies.$B$BThough some of our forces managed to escape the onslaught, the majority fell victim to the blades of our adversaries. Even my loyal servants were not spared from the carnage. Among the casualties were two of my dearest friends, Gately and Mathias.$B$BNow, as the dust settles, a haunting presence looms within the very walls that once provided solace and protection. The restless spirits of Gately and Mathias wander aimlessly, their once noble hearts consumed by bitterness. No longer able to distinguish friend from foe, they wreak havoc upon any who dare to cross their path.$B$BLay these tormented souls to rest, so that they may find peace in the embrace of the eternal slumber.','Bring rest to 8 Ravenwood Apparitions, 8 Ravenwood Spectres, Sergeant Gately and Custodian Matthias for Lord Darius Ravenwood at Ravenshire in Gilneas.','Ravenwood Keep... my home.','<Darius Ravenwood sighs with relief.>$B$BThe knowledge that my soldiers and servants no longer wander this world, tormented by the dark magic of the Harlows, brings me great peace. In their name, I express my deepest gratitude. Please, accept this token as a symbol of my appreciation as well as theirs.',0,0,0,0,0,0,0,0, 61242,1,61241,1,61240,8,61239,8, 0,0, 10000,28800,4800,0,0,0,0,0,0,0,0,0,0,0, 61605,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61259, 40967);
+replace into creature_involvedrelation	(id, quest) values (61259, 40967);
+update quest_template set requiredraces = 589		 where entry = 40967;
+update quest_template set type = 1					 where entry = 40967;
+
+replace into item_template values
+ ('61605', '4', '0', 'Ravenwood Signet', '', '29697', '2', '0', '1', '29624', '7406', '11', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '5', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
