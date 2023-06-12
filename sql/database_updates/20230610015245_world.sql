@@ -566,3 +566,12 @@ DELETE FROM creature_battleground WHERE guid=2577474;
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575514, 378);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575516, 378);
+UPDATE `creature` SET `position_x` = -1801.457397, `position_y` = 2553.512939, `position_z` = 51.473274, `orientation` = 2.173577 WHERE `guid` = 2575514;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575514, 28);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575514, 69);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575516, 69);
+UPDATE `creature` SET `position_x` = -1802.260498, `position_y` = 2551.099609, `position_z` = 51.533894, `orientation` = 3.065004 WHERE `guid` = 2575516;
+UPDATE `creature` SET `position_x` = -1798.571533, `position_y` = 2551.090820, `position_z` = 51.350933, `orientation` = 2.825458 WHERE `guid` = 2575515;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575515, 29);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575515, 0);
