@@ -670,3 +670,29 @@ values (@spell_list_id, @description,
 
 -- Item ID 61549 needs to have 16 slots, its a quiver.
 update item_template set class = 11, container_slots = 16, inventory_type = 18 where entry = 61549;
+-- Warlock tier 1 and tier 2 adjustments, also fixing display/projectile accessory bugs.
+-- fix overcharged belt and projectile trinket/ring
+update item_template set display_id = 30340 where entry = 61568; -- Overcharged Belt
+update item_template set display_id = 30340 where entry = 61568; -- Overcharged Belt
+update item_template set class = 3 where entry = 61531; -- Glowing Black Pearl
+update item_template set class = 3 where entry = 61533; -- Ring of the Forgotten Hero
+-- Warlock Tier Set Reworks
+-- Tier 1
+update item_template set stat_value1 = 21, stat_type2 = 7, stat_value2 = 22, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 18049 where entry = 16808; -- Felheart Horns
+update item_template set stat_value1 = 12, stat_type2 = 7, stat_value2 = 21, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 9345 where entry = 16807; -- Felheart Shoulder Pads
+update item_template set stat_value1 = 20, stat_type2 = 7, stat_value2 = 25, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 24595 where entry = 16809; -- Felheart Robes
+update item_template set stat_value1 = 15, stat_type2 = 7, stat_value2 = 18, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 9343 where entry = 16805; -- Felheart Gloves
+update item_template set stat_value1 = 15, stat_type2 = 7, stat_value2 = 16, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 14799 where entry = 16806; -- Felheart Belt
+update item_template set stat_value1 = 12, stat_type2 = 7, stat_value2 = 18, stat_value3 = 0, stat_value4 = 0, spellid_1 = 9345, spellid_2 = 0 where entry = 16804; -- Felheart Bracers
+update item_template set stat_value1 = 11, stat_type2 = 7, stat_value2 = 21, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 9346 where entry = 16803; -- Felheart Slippers
+update item_template set stat_value1 = 19, stat_type2 = 7, stat_value2 = 20, stat_value3 = 0, stat_value4 = 0, spellid_1 = 14798, spellid_2 = 0 where entry = 16810; -- Felheart Pants
+-- Tier 2
+update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 26, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 18050 where entry = 16929; -- Nemesis Skullcap
+update item_template set stat_value1 = 14, stat_type2 = 7, stat_value2 = 20, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 14047 where entry = 16932; -- Nemesis Spaulders
+update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 26, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 14055 where entry = 16931; -- Nemesis Robes
+update item_template set stat_value1 = 12, stat_type2 = 7, stat_value2 = 18, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18384, spellid_2 = 14127 where entry = 16933; -- Nemesis Belt
+update item_template set stat_value1 = 13, stat_type2 = 7, stat_value2 = 21, stat_value3 = 0, stat_value4 = 0, spellid_1 = 9345, spellid_2 = 0 where entry = 16934; -- Nemesis Bracers
+update item_template set stat_value1 = 14, stat_type2 = 7, stat_value2 = 20, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 15715 where entry = 16927; -- Nemesis Boots
+update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 23, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18056, spellid_2 = 0 where entry = 16930; -- Nemesis Leggings
+	
+
