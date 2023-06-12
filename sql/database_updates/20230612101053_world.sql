@@ -699,3 +699,9 @@ update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 23, sta
 update item_template set display_id = 67764, flags = 0 where entry = 84040; 
 -- NPC Maria Galwest (Entry 61549) add subname <Gryphon Master>.
 update creature_template set subname = 'Gryphon Master' where entry = 61549;
+-- Create gobject called 'Grave of Franklin Blackheart' which uses the model Woodcross01, this object should have gossip flags with the following gossip text : "A hastily constructed grave. The following words are etched into the wood in crude handwriting.$B$B<Franklin Blackheart. Rest easy brother.>
+REPLACE INTO gameobject_template VALUES
+(2020035, 2, 22659, 'Grave of Franklin Blackheart', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_grave_of_franklin_blackheart');
+
+replace into broadcast_text (entry, Male_Text) values (30126, 'A hastily constructed grave. The following words are etched into the wood in crude handwriting.$B$B<Franklin Blackheart. Rest easy brother.');
+replace into npc_text (ID, BroadcastTextID0) values (30126, 30126);

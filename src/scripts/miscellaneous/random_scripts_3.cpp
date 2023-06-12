@@ -6637,9 +6637,23 @@ bool QuestAccept_npc_itharius(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool GOHello_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020035)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30126, pGo->GetGUID());
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_grave_of_franklin_blackheart";
+    newscript->pGOHello = &GOHello_go_grave_of_franklin_blackheart;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_itharius";
