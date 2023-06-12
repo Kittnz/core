@@ -695,4 +695,5 @@ update item_template set stat_value1 = 13, stat_type2 = 7, stat_value2 = 21, sta
 update item_template set stat_value1 = 14, stat_type2 = 7, stat_value2 = 20, stat_value3 = 0, stat_value4 = 0, spellid_1 = 23727, spellid_2 = 15715 where entry = 16927; -- Nemesis Boots
 update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 23, stat_value3 = 0, stat_value4 = 0, spellid_1 = 18056, spellid_2 = 0 where entry = 16930; -- Nemesis Leggings
 	
-
+-- Item Le Fishe Au Chocolat is currently a conjured item, remove this tag, change display ID to 67764.
+update item_template set display_id = 67764, flags = 0 where entry = 84040; 
