@@ -697,3 +697,5 @@ update item_template set stat_value1 = 16, stat_type2 = 7, stat_value2 = 23, sta
 	
 -- Item Le Fishe Au Chocolat is currently a conjured item, remove this tag, change display ID to 67764.
 update item_template set display_id = 67764, flags = 0 where entry = 84040; 
+-- NPC Maria Galwest (Entry 61549) add subname <Gryphon Master>.
+update creature_template set subname = 'Gryphon Master' where entry = 61549;
