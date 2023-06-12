@@ -563,3 +563,6 @@ DELETE FROM creature_movement WHERE id=2577474;
 DELETE FROM game_event_creature WHERE guid=2577474;
 DELETE FROM game_event_creature_data WHERE guid=2577474;
 DELETE FROM creature_battleground WHERE guid=2577474;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2575514, 378);
