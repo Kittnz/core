@@ -177,6 +177,18 @@ struct boss_solniusAI : public ScriptedAI
 					{
 						m_creature->SetDisplayId(MODEL_DRAGON);
 						m_creature->SetTauntImmunity(true);
+						if (m_creature->GetThreatManager().getThreat(m_creature->GetVictim()))
+						{
+							m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+							Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
+							if (!playerList.isEmpty())
+							{
+								for (Player* pPlayer : GetRandomPlayers(playerList, 1))
+								{
+									m_creature->AddThreat(pPlayer, 10);
+								}
+							}
+						}
 						events.ScheduleEvent(EVENT_GO_TO_SLEEP, Seconds(12));
 						phase = PHASE_2;
 					}
@@ -308,19 +320,19 @@ struct boss_solniusAI : public ScriptedAI
 						{
 							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 							{
-								DoCast(pPlayer, SPELL_BANE_OF_ERANIKUS, false);
+								m_creature->CastSpell(pPlayer, SPELL_BANE_OF_ERANIKUS, true);
 							}
 							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 							{
-								DoCast(pPlayer, SPELL_SANCTUM_MIND_DECAY, false);
+								m_creature->CastSpell(pPlayer, SPELL_SANCTUM_MIND_DECAY, true);
 							}
 							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 							{
-								DoCast(pPlayer, SPELL_DREAMFEVER, false);
+								m_creature->CastSpell(pPlayer, SPELL_DREAMFEVER, true);
 							}
 							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 							{
-								DoCast(pPlayer, SPELL_EMERALD_INSTABILITY, false);
+								m_creature->CastSpell(pPlayer, SPELL_EMERALD_INSTABILITY, true);
 							}
 							m_uiGimmickTimer = 20 * IN_MILLISECONDS;
 						}
