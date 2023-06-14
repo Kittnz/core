@@ -26,3 +26,6 @@ REPLACE INTO `gameobject` VALUES ( 5015549, 2002563, 1, 7689.84, -2961.29, 465.7
 DELETE FROM gameobject WHERE guid = '5015549';
 DELETE FROM game_event_gameobject WHERE guid = '5015549';
 DELETE FROM gameobject_battleground WHERE guid = '5015549';
+
+-- Changes by SHANG
+UPDATE `creature` SET `position_x` = -947.607056, `position_y` = 2948.833252, `position_z` = 145.549789, `orientation` = 4.229321 WHERE `guid` = 2576136;
