@@ -46,3 +46,28 @@ replace into item_template values
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61276, 0, 61617, 1, 7200, 0, 0);
 -- Item Le Fishe Au Chocolat add sell value of 3 silver, and buy value of 12 silver.
 update item_template set buy_price = 1200, sell_price = 300 where entry = 84040;
+-- Maltimor's Prototype loot ID changed:
+update creature_template set loot_id = 61551 where entry = 61551;
+-- Replace Duskskitterer's quest item drops with these items, each with equal chance to drop.
+delete from reference_loot_template where entry = 30565;
+REPLACE INTO reference_loot_template VALUES
+(30565, 61610, 0, 1, 1, 1, 0),
+(30565, 61611, 0, 1, 1, 1, 0),
+(30565, 61612, 0, 1, 1, 1, 0);
+-- Maltimor's Prototype, Widow of the Woods, Firstborn of Arugal should have a 24-48 hour respawn timer.
+update creature set spawntimesecsmin = 86400, spawntimesecsmax = 172800 where ID in (61551,61553,61558);
+-- Dawnhowl, Duskskitter, Baron Silverlaine, Bonecruncher should have a 12-24 hour respawn timer.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where ID in (61554,61552,3887,61555);
+-- Replace Bonecruncher BoE uncommon item loottable to drop one of three items listed, with equal drop chances:
+delete from creature_loot_template where entry = 61555;
+update creature_template set loot_id = 61555 where entry = 61555;
+-- Shadeflayer Goliath should drop the following items with the listed drop chances:
+REPLACE INTO reference_loot_template VALUES
+(30581, 61545, 10, 1, 1, 1, 0),
+(30581, 61546, 40, 1, 1, 1, 0),
+(30581, 61547, 10, 1, 1, 1, 0),
+(30581, 61548, 40, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES
+(61533, 30581, 100, 0, -30581, 1, 0);
+-- Embereye should not drop the following items:
+delete from creature_loot_template where entry = 61516 and item = 30581;
