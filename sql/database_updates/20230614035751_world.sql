@@ -29,3 +29,5 @@ DELETE FROM gameobject_battleground WHERE guid = '5015549';
 
 -- Changes by SHANG
 UPDATE `creature` SET `position_x` = -947.607056, `position_y` = 2948.833252, `position_z` = 145.549789, `orientation` = 4.229321 WHERE `guid` = 2576136;
+UPDATE `creature` SET `position_x` = -947.374329, `position_y` = 2948.945557, `position_z` = 144.993607, `orientation` = 4.169495 WHERE `guid` = 2576136;
+UPDATE `creature` SET `position_x` = -947.571472, `position_y` = 2949.020996, `position_z` = 144.993942, `orientation` = 4.126302 WHERE `guid` = 2576136;
