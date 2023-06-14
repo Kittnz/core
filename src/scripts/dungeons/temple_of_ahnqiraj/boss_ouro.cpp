@@ -455,7 +455,6 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         if (!m_bHasSummoned
             && !((Player*) pWho)->IsGameMaster()
             && pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 25.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
