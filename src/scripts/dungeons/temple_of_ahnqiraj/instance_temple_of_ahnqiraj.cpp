@@ -792,9 +792,9 @@ struct AI_QirajiMindslayer : public ScriptedAI {
 
     void Reset() override
     {
-        insanityTimer = 10000;
-        mindBlastTimer = 5000;
-        mindFlayTimer = urand(12000, 15000);
+        insanityTimer = urand(5000, 60000);
+        mindBlastTimer = urand(12000, 32000);
+        mindFlayTimer = urand(5000, 20000);
     }
 
     void JustDied(Unit* pWho) override
@@ -834,7 +834,7 @@ struct AI_QirajiMindslayer : public ScriptedAI {
         if (mindFlayTimer < diff) {
             if (Unit* pU = m_creature->SelectAttackingTarget(AttackingTarget::ATTACKING_TARGET_RANDOM, 0, 26044, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_LOS)) {
                 if (DoCastSpellIfCan(pU, 26044) == CAST_OK) {
-                    mindFlayTimer = urand(12000, 15000);
+                    mindFlayTimer = urand(10000, 30000);
                 }
             }
         }
@@ -845,7 +845,7 @@ struct AI_QirajiMindslayer : public ScriptedAI {
         if (mindBlastTimer < diff) {
             if (Unit* pU = m_creature->SelectAttackingTarget(AttackingTarget::ATTACKING_TARGET_TOPAGGRO, 0, 26048, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_LOS)) {
                 if (DoCastSpellIfCan(pU, 26048) == CAST_OK) {
-                    mindBlastTimer = urand(9000, 12000);
+                    mindBlastTimer = urand(17000, 44000);
                 }
             }
         }
@@ -856,7 +856,7 @@ struct AI_QirajiMindslayer : public ScriptedAI {
         if (insanityTimer < diff) {
             if (Unit* pU = m_creature->SelectAttackingTarget(AttackingTarget::ATTACKING_TARGET_RANDOM, 0, 26079, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_LOS)) {
                 if (DoCastSpellIfCan(pU, 26079) == CAST_OK) {
-                    insanityTimer = 10000;
+                    insanityTimer = urand(15000, 60000);
                 }
             }
         }

@@ -3446,33 +3446,8 @@ SpellCastResult Spell::prepare(Aura* triggeredByAura, uint32 chance)
         m_powerCost = CalculatePowerCost(m_spellInfo, m_casterUnit, this, m_CastItem);
 
         if (Player* pPlayerCaster = m_caster->ToPlayer())
-        {
-            // Custom arena spell blacklist.
-            if (BattleGround* bg = pPlayerCaster->GetBattleGround())
-            {
-                if (bg->IsArena())
-                {
-                    switch (m_spellInfo->Id)
-                    {
-                    case 633:   // Lay on Hands (rank 1)
-                    case 2800:  // Lay on Hands (rank 2)
-                    case 10310: // Lay on Hands (rank 3)
-                    case 1719:  // Recklessness
-                    case 13180: // Gnomish Mind Control Cap
-                    case 22641: // Reckless Charge (Goblin Rocket Helmet)
-                        // Custom cast result.
-                        pPlayerCaster->GetSession()->SendNotification("Not usable in arena");
-                        SendCastResult(SPELL_FAILED_SPELL_UNAVAILABLE);
-                        finish(false);
-                        return SPELL_FAILED_SPELL_UNAVAILABLE;
-                    }
-                }
-            }
-
             if (pPlayerCaster->HasOption(PLAYER_CHEAT_NO_POWER))
                 m_powerCost = 0;
-        }
-
 
         if (!IsChannelingVisual())
         {
@@ -8577,6 +8552,9 @@ public:
                     continue;
             }
 
+            if (unit->IsCreature() && static_cast<Creature*>(unit)->IsImmuneToAoe())
+                continue;
+
             switch (i_TargetType)
             {
                 case SPELL_TARGETS_HOSTILE:
@@ -8615,9 +8593,6 @@ public:
                    break;
                 case SPELL_TARGETS_AOE_DAMAGE:
                 {
-                    if (unit->IsCreature() && static_cast<Creature*>(unit)->IsImmuneToAoe())
-                        continue;
-
                     if (i_originalCaster->IsFriendlyTo(unit))
                         continue;
 

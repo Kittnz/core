@@ -79,6 +79,10 @@ replace into shop_items values
 (55, 2, 83092, 'Night Elf: Blessing of the Wilds I', 160),
 (56, 2, 83099, 'Night Elf: Blessing of the Wilds II', 160),
 (57, 2, 83100, 'Night Elf: Blessing of the Wilds III', 160),
+(58, 2, 61105, 'Night Elf: Demon Hunter (preview on forums)', 160),
+(59, 2, 61106, 'Night Elf: Necromancer (preview on forums)', 160),
+(60, 2, 61104, 'Night Elf: Demon Form (preview on forums)', 160),
+
 -- Gameplay
 (61, 3, 50003, 'Backpack: 28 slots', 200),
 (62, 3, 50004, 'Backpack: 36 slots', 300),

@@ -3491,21 +3491,30 @@ void Player::GiveLevel(uint32 level)
 
     if (IsHardcore())
     {
-        AnnounceHardcoreModeLevelUp(level);
         if (level == 60)
         {
-            SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
-            AwardTitle(TITLE_IMMORTAL);
-            ChangeTitle(TITLE_IMMORTAL);
-            uint32 itemEntry = 80189;
-            std::string subject = "Lockbox of the Immortal Soul";
-            std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
-            Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
-            ToMailItem->SaveToDB();
-            MailDraft(subject, sObjectMgr.CreateItemText(message))
-                .AddItem(ToMailItem)
-                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+            if (m_hardcoreStatus != HARCORE_MODE_STATUS_HC60)
+            {
+                AnnounceHardcoreModeLevelUp(level);
+                SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
+                AwardTitle(TITLE_IMMORTAL);
+                ChangeTitle(TITLE_IMMORTAL);
+                uint32 itemEntry = 80189;
+                std::string subject = "Lockbox of the Immortal Soul";
+                std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
+                Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+                ToMailItem->SaveToDB();
+                MailDraft(subject, sObjectMgr.CreateItemText(message))
+                    .AddItem(ToMailItem)
+                    .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+            }
+            else
+            {
+                //TODO rewards for HC60 level 60 and custom announcement.
+            }
         }
+        else
+            AnnounceHardcoreModeLevelUp(level);
     }
 
     // Quick-fix for 'Stay awhile and listen...' (Hardcore Mode)
@@ -4566,10 +4575,13 @@ bool Player::ResetTalents(bool no_cost)
         m_resetTalentsTime = time(nullptr);
     }
 
-    // Warlock: Remove Touch of Shadow aura
-    if (GetClass() == CLASS_WARLOCK && HasAura(18791))
+    if (GetClass() == CLASS_WARLOCK)
     {
-        RemoveAurasDueToSpell(18791);
+        if (HasAura(18791)) // Touch of Shadow
+            RemoveAurasDueToSpell(18791);
+
+        if (HasAura(18789)) // Burning Wish
+            RemoveAurasDueToSpell(18789);
     }
 
     //FIXME: Remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
@@ -4878,14 +4890,22 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
     uint32 charDelete_method = sWorld.getConfig(CONFIG_UINT32_CHARDELETE_METHOD);
     uint32 charDelete_minLvl = sWorld.getConfig(CONFIG_UINT32_CHARDELETE_MIN_LEVEL);
 
+    PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(playerguid);
+    uint8 hardcoreStatus = data ? data->uiHardcoreStatus : 0;
+
+    const bool isHardcore = hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARCORE_MODE_STATUS_HC60;
+
     // if we want to finally delete the character or the character does not meet the level requirement, we set it to mode 0
     if (deleteFinally)
         charDelete_method = 0;
     else
     {
-        PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(playerguid);
         if (data && data->uiLevel < charDelete_minLvl)
             charDelete_method = 0;
+
+        
+        if (isHardcore)
+            charDelete_method = 0; // always fully delete HCs
     }
 
     uint32 lowguid = playerguid.GetCounter();
@@ -4927,6 +4947,28 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
         // completely remove from the database
         case 0:
         {
+            //if HC, refund tokens.
+            if (isHardcore)
+            {
+                uint32 totalRefund = 0;
+                auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
+                LoginDatabase.BeginTransaction();
+                for (auto& elem : shopEntries)
+                {
+                    if (elem.charGuid == lowguid && !elem.refunded)
+                    {
+                        totalRefund += elem.itemPrice;
+                        elem.refunded = true;
+                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+                    }
+                }
+
+                if (totalRefund > 0)
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, accountId);
+                LoginDatabase.CommitTransaction();
+            }
+
+
             // return back all mails with COD and Item                 0  1           2              3      4       5          6     7
             QueryResult *resultMail = CharacterDatabase.PQuery("SELECT id,messageType,mailTemplateId,sender,subject,itemTextId,money,has_items FROM mail WHERE receiver='%u' AND has_items<>0 AND cod<>0", lowguid);
             if (resultMail)
@@ -5328,27 +5370,37 @@ void Player::KillPlayer()
 
         m_hardcoreKickTimer = 120 * IN_MILLISECONDS;
 
-        // refund tokens on account
-        QueryResult* Result = LoginDatabase.PQuery("SELECT SUM(price) FROM shop_logs WHERE guid = %u AND refunded <> 1", GetGUIDLow());
 
-        if (!Result)
-            return;
-
-        Field* fields = Result->Fetch();
-
-        uint32 spending = fields[0].GetUInt32();
-        delete Result;
+        auto& logEntries = sObjectMgr.GetShopLogEntries(GetSession()->GetAccountId());
 
         LoginDatabase.BeginTransaction();
 
-        bool successTransaction =
-            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", spending, GetSession()->GetAccountId()) &&
-            LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE guid = %u AND account = %u", GetGUIDLow(), GetSession()->GetAccountId());
+        std::vector<std::reference_wrapper<ShopLogEntry>> refundableItems;
 
-        LoginDatabase.CommitTransaction();
+        uint32 totalRefund = 0;
+        const uint32 guidLow = GetGUIDLow();
+        for (auto& elem : logEntries)
+        {
+            if (elem.charGuid == guidLow && !elem.refunded)
+            {
+                totalRefund += elem.itemPrice;
+                refundableItems.push_back(std::ref(elem));
+                LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+            }           
+        }
+
+        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
+
+        bool successTransaction = LoginDatabase.CommitTransaction();
 
         if (successTransaction)
-            ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", spending);
+        {
+            for (auto& refundItem : refundableItems)
+            {
+                refundItem.get().refunded = true;
+            }
+            ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", totalRefund);
+        }
         else
             sLog.outErrorDb("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
     }
@@ -6960,15 +7012,15 @@ Team Player::TeamForRace(uint8 race)
         return ALLIANCE;
     }
 
-    switch (rEntry->TeamID)
+    switch (rEntry->baseLanguage)
     {
-        case 7:
+        case LANG_COMMON:
             return ALLIANCE;
-        case 1:
+        case LANG_ORCISH:
             return HORDE;
     }
 
-    sLog.outError("Race %u have wrong teamid %u in DBC: wrong DBC files?", uint32(race), rEntry->TeamID);
+    sLog.outError("Race %u have wrong base language %u in DBC: wrong DBC files?", uint32(race), rEntry->baseLanguage);
     return TEAM_NONE;
 }
 
@@ -18582,6 +18634,10 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     if (GetPet())
         RemovePet(PET_SAVE_REAGENTS);
 
+    WorldLocation currentLocation;
+    GetPosition(currentLocation);
+    m_taxi.m_taxiStartLocation = currentLocation;
+
     WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
     data << uint32(ERR_TAXIOK);
     GetSession()->SendPacket(&data);
@@ -18661,6 +18717,19 @@ void Player::ContinueTaxiFlight()
         }
     }
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
+}
+
+void Player::CleanupFlagsOnTaxiPathFinished()
+{
+    // Reset fall information to prevent fall dmg at arrive
+    SetFallInformation(0, GetPositionZ());
+
+    // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
+    ClearUnitState(UNIT_STAT_TAXI_FLIGHT);
+    RemoveUnitMovementFlag(MOVEFLAG_FLYING);
+
+    Unmount();
+    RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 }
 
 UnitMountResult Player::Mount(uint32 mount, uint32 spellId)
@@ -19148,8 +19217,26 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
         }
 
         // If flying at the time we enter, return to queue position.
-        if (IsTaxiFlying() && !m_bgData.joinPos.IsEmpty() && m_bgData.joinPos.mapId == GetMapId())
-            return;
+        if (IsTaxiFlying())
+        {
+            if (!m_bgData.joinPos.IsEmpty() && m_bgData.joinPos.mapId == GetMapId())
+                return;
+
+            if (!m_taxi.m_taxiStartLocation.IsEmpty())
+            {
+                m_bgData.joinPos = m_taxi.m_taxiStartLocation;
+                m_bgData.m_needSave = true;
+                return;
+            }
+
+            if (!movespline->Finalized())
+            {
+                G3D::Vector3 dest = movespline->FinalDestination();
+                m_bgData.joinPos = WorldLocation(GetMapId(), dest.x, dest.y, dest.z, 0.0f);
+                m_bgData.m_needSave = true;
+                return;
+            }
+        }
         
         // If map is dungeon find linked graveyard
         if (leader->GetMap()->IsDungeon())

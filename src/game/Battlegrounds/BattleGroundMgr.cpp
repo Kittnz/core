@@ -125,14 +125,17 @@ bool BattleGroundQueue::SelectionPool::KickGroup(uint32 size)
 // returns false when selection pool is full
 bool BattleGroundQueue::SelectionPool::AddGroup(GroupQueueInfo *ginfo, uint32 desiredCount, uint32 bgInstanceId)
 {
-    bool groupInBg = false;
+    bool skip = false;
     for (const auto& memberPair : ginfo->Players)
     {
         auto player = sObjectAccessor.FindPlayer(memberPair.first);
+        if (!player)
+            continue;
 
-        if (player && player->InBattleGround()) // dont allow adding to BG selectionpool group to join new BGs while in old BG.
+        // dont allow adding to BG selectionpool group to join new BGs while in old BG.
+        if (player->InBattleGround() || player->IsTaxiFlying())
         {
-            groupInBg = true;
+            skip = true;
             break;
         }
     }
@@ -140,7 +143,7 @@ bool BattleGroundQueue::SelectionPool::AddGroup(GroupQueueInfo *ginfo, uint32 de
     //if group is larger than desired count - don't allow to add it to pool
     if (!ginfo->IsInvitedToBGInstanceGUID &&
        (!ginfo->DesiredInstanceId || ginfo->DesiredInstanceId == bgInstanceId) &&
-       (desiredCount >= PlayerCount + ginfo->Players.size()) && !groupInBg)
+       (desiredCount >= PlayerCount + ginfo->Players.size()) && !skip)
     {
         SelectedGroups.push_back(ginfo);
         // increase selected players count

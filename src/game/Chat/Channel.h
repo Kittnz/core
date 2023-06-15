@@ -81,6 +81,17 @@ enum ChannelId
     CHANNEL_ID_LOOKING_FOR_GROUP    = 26
 };
 
+inline bool IsDefenseChannel(uint32 channelId)
+{
+    switch (channelId)
+    {
+        case CHANNEL_ID_LOCAL_DEFENSE:
+        case CHANNEL_ID_WORLD_DEFENSE:
+            return true;
+    }
+    return false;
+}
+
 class Channel
 {
     public:
@@ -172,7 +183,7 @@ class Channel
         void SetSecurityLevel(uint8 sec) { m_securityLevel = sec; }
         uint8 GetSecurityLevel() const { return m_securityLevel; }
 
-        void Join(ObjectGuid guid, const char *password);
+        void Join(ObjectGuid guid, const char *password, bool checkPassword = true);
         void Leave(ObjectGuid guid, bool send = true);
         void KickOrBan(ObjectGuid guid, const char *targetName, bool ban);
         void Kick(ObjectGuid guid, const char *targetName) { KickOrBan(guid, targetName, false); }

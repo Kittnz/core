@@ -89,6 +89,18 @@ struct ShopCategory
 typedef std::unordered_map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
+
+struct ShopLogEntry
+{
+    uint32 id;
+    std::string date;
+    uint32 accountId;
+    uint32 charGuid;
+    uint32 itemEntry;
+    uint32 itemPrice;
+    bool refunded;
+};
+
 struct BattlegroundEntranceTrigger
 {
     Team   team;
@@ -1316,6 +1328,17 @@ class ObjectMgr
 			return m_ShopCategoriesMap;
 		}
 
+        std::vector<ShopLogEntry>& GetShopLogEntries(uint32 accountId)
+        {
+            return m_shopLogs[accountId];
+        }
+
+        uint32 NextShopLogEntry()
+        {
+            return ++m_maxShopEntry;
+        }
+
+
         ItemRequiredTargetMapBounds GetItemRequiredTargetMapBounds(uint32 uiItemEntry) const
         {
             return m_ItemRequiredTarget.equal_range(uiItemEntry);
@@ -1640,6 +1663,9 @@ class ObjectMgr
 
 		ShopCategoriesMap m_ShopCategoriesMap;
 		ShopEntriesMap m_ShopEntriesMap;
+
+        std::unordered_map<uint32, std::vector<ShopLogEntry>> m_shopLogs;
+        std::atomic_uint32_t m_maxShopEntry = 0;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap m_BaseXPMap;

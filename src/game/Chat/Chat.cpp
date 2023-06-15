@@ -639,6 +639,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand shopCommandTable[] =
     {
         { "log",               SEC_DEVELOPER,        false, &ChatHandler::HandleGetShopLogs,               "", nullptr },
+        { "refund",           SEC_DEVELOPER,        false, &ChatHandler::HandleShopRefundCommand,          "", nullptr },
         { nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
@@ -738,7 +739,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "kick",           SEC_DEVELOPER,       true,  &ChatHandler::HandleKickPlayerCommand,          "", nullptr },
         { "ban",            SEC_DEVELOPER,       true,  nullptr,                                        "", banCommandTable      },
         { "unban",          SEC_DEVELOPER,       true,  nullptr,                                        "", unbanCommandTable    },
-        { "baninfo",        SEC_DEVELOPER,       false, nullptr,                                        "", baninfoCommandTable  },
+        { "baninfo",        SEC_MODERATOR,       false, nullptr,                                        "", baninfoCommandTable  },
         { "banlist",        SEC_DEVELOPER,       true,  nullptr,                                        "", banlistCommandTable  },
         { "start",          SEC_DEVELOPER,       false, &ChatHandler::HandleStartCommand,               "", nullptr },
         { "unstuck",        SEC_DEVELOPER,       false, &ChatHandler::HandleUnstuckCommand,             "", nullptr },
@@ -759,7 +760,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "maxskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleMaxSkillCommand,            "", nullptr },
         { "setskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleSetSkillCommand,            "", nullptr },
         { "whispers",       SEC_MODERATOR,       false, &ChatHandler::HandleWhispersCommand,            "", nullptr },
-        { "pinfo",          SEC_DEVELOPER,       false, &ChatHandler::HandlePInfoCommand,               "", nullptr },
+        { "pinfo",          SEC_MODERATOR,       false, &ChatHandler::HandlePInfoCommand,               "", nullptr },
         { "groupinfo",      SEC_DEVELOPER,       true,  &ChatHandler::HandleGroupInfoCommand,           "", nullptr },
         { "addons",         SEC_DEVELOPER,       false, &ChatHandler::HandleListAddonsCommand,          "", nullptr },
         { "respawn",        SEC_DEVELOPER,       false, &ChatHandler::HandleRespawnCommand,             "", nullptr },
@@ -814,6 +815,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bw",             SEC_MODERATOR,       false, &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { "bi",             SEC_MODERATOR,       false, &ChatHandler::HandleBanInfoAccountCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
+        { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,           "", nullptr},
         { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };

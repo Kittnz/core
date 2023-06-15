@@ -689,6 +689,7 @@ enum HardcoreStatus : uint8
     HARDCORE_MODE_STATUS_ALIVE    = 1,
     HARDCORE_MODE_STATUS_IMMORTAL = 2,
     HARDCORE_MODE_STATUS_DEAD     = 3,
+    HARCORE_MODE_STATUS_HC60      = 4
 };
 
 inline char const* HardcoreStatusToString(uint8 status)
@@ -703,6 +704,8 @@ inline char const* HardcoreStatusToString(uint8 status)
             return "Immortal";
         case HARDCORE_MODE_STATUS_DEAD:
             return "Dead";
+        case HARCORE_MODE_STATUS_HC60:
+            return "HC60";
     }
     return "UNKNOWN";
 }
@@ -724,6 +727,11 @@ enum PlayerTitles : uint8
     TITLE_SCARAB_LORD = 15,
     TITLE_CONQUEROR_OF_NAXXRAMAS = 16,
     TITLE_CARTOGRAPHER = 17,
+    TITLE_STILL_ALIVE = 18,
+    TITLE_CONQUEROR_OF_THE_FLAMES = 20,
+    TITLE_CONQUEROR_OF_THE_DRAGONS = 21,
+    TITLE_CONQUEROR_OF_THE_QIRAJI = 22,
+    TITLE_CONQUEROR_OF_THE_SCOURGE = 23,
     TITLE_SEEKER_OF_KNOWLEDGE = 42,
     TITLE_GRAND_FROGUS = 43,
     TITLE_THE_WANDERER = 44,
@@ -794,6 +802,7 @@ class PlayerTaxi
             m_TaxiDestinations.clear();
             m_taxiPath.clear();
             m_discount = 1.0f;
+            m_taxiStartLocation.Clear();
         }
         void AddTaxiDestination(uint32 dest) { m_TaxiDestinations.push_back(dest); }
         void SetDiscount(float discount) { m_discount = discount; }
@@ -815,6 +824,7 @@ class PlayerTaxi
         bool empty() const { return m_TaxiDestinations.empty(); }
 
         friend std::ostringstream& operator<< (std::ostringstream& ss, PlayerTaxi const& taxi);
+        WorldLocation m_taxiStartLocation;
     private:
         float m_discount;
         TaxiMask m_taximask;
@@ -2122,6 +2132,7 @@ class Player final: public Unit
         bool ActivateTaxiPathTo(uint32 taxi_path_id, uint32 spellid = 0, bool nocheck = false);
         void TaxiStepFinished();
         void ContinueTaxiFlight();
+        void CleanupFlagsOnTaxiPathFinished();
 
         /*********************************************************/
         /***                 CINEMATIC SYSTEM                  ***/
@@ -2235,8 +2246,9 @@ class Player final: public Unit
 
         void SetHardcoreStatus(uint8 status);
         uint8 GetHardcoreStatus() { return m_hardcoreStatus; };
-        bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
+        bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || m_hardcoreStatus == HARCORE_MODE_STATUS_HC60); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
+        bool IsHC60() const { return m_hardcoreStatus == HARCORE_MODE_STATUS_HC60; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         void SpawnHardcoreGravestone();
         static std::string HardcoreResultToString(HardcoreInteractionResult result);

@@ -108,6 +108,27 @@ uint32 WardenWin::GetSharedDataFieldOffset(SharedDataField field)
     };*/
 }
 
+std::string OsVersionToString(OsVersion version)
+{
+    switch (version)
+    {
+    case OsVersion::None:
+        return "None";
+    case OsVersion::WindowsXP:
+        return "WinXP";
+    case OsVersion::Windows7:
+        return "Win7";
+    case OsVersion::Windows8:
+        return "Win8";
+    case OsVersion::WindowsVista:
+        return "Vista";
+    case OsVersion::Windows10AndUp:
+        return "Win10Up";
+    default:
+        return "<Unknown>";
+    }
+}
+
 void WardenWin::SetOSVersion()
 {
     //expects _minor and _major version to be here.
@@ -2165,8 +2186,8 @@ void WardenWin::Update()
 
         auto stmt = LoginDatabase.CreateStatement(fingerprintUpdate,
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
-            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData` ) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `osVersion` ) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -2189,6 +2210,7 @@ void WardenWin::Update()
         stmt.addUInt32(_sharedData->UnparkedProcessorCount);
         stmt.addUInt32(_sharedData->EnclaveFeatureMask);
         stmt.addUInt32(_sharedData->QpcData);
+        stmt.addString(OsVersionToString(_osVersion));
         stmt.Execute();
 
         LoginDatabase.CommitTransaction();

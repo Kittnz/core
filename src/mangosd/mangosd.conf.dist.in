@@ -774,6 +774,10 @@ PasswordChangeRewardItem = 13342
 
 MailDeliveryDelay = 3600
 
+# MailMaxPerHour. How many mails each account is allowed to send per hour.
+
+MailMaxPerHour = 3
+
 # Mails.COD.ForceTag.MaxLevel
 # Prevent COD scam attempts by adding "COD" prefix to the mail subject.
 # Only affects senders below given level.

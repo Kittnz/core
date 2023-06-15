@@ -11,6 +11,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
 #include "ObjectAccessor.h"
+#include "CharacterDatabaseCleaner.h"
 
 #include <fstream>
 
@@ -316,6 +317,9 @@ void HonorMaintenancer::DoMaintenance()
 
     if (sWorld.getConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY))
         sObjectMgr.BackupCharacterInventory();
+
+    sLog.outInfo("Beginning character name cleanup...");
+    CharacterDatabaseCleaner::FreeInactiveCharacterNames();
 
     sLog.outHonor("[MAINTENANCE] Honor maintenance starting.");
 

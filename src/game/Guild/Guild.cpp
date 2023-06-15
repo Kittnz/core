@@ -557,6 +557,7 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
     }
 
     members.erase(lowguid);
+    RemoveFromCache(lowguid);
     sGuildMgr.GuildMemberRemoved(lowguid);
 
     Player *player = sObjectMgr.GetPlayer(guid);
@@ -670,11 +671,25 @@ void Guild::BroadcastToOfficers(WorldSession *session, std::string const& msg, u
 
 void Guild::BroadcastPacket(WorldPacket *packet)
 {
-    for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+    if (IsMemberCacheEnabled())
     {
-        Player *player = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
-        if (player)
-            player->GetSession()->SendPacket(packet);
+        for (auto const& guidLow : m_onlineMemberCache)
+        {
+            auto pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, guidLow));
+            if (!pl)
+                continue;
+
+            pl->GetSession()->SendPacket(packet);
+        }
+    }
+    else
+    {
+        for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+        {
+            Player* player = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+            if (player)
+                player->GetSession()->SendPacket(packet);
+        }
     }
 
     for (const auto& gmGuid : m_GmListeners)
