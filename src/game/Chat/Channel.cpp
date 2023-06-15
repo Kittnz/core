@@ -62,7 +62,7 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Toogle" || m_name == u8"Roleplay")
+        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"Roleplay" || m_name == u8"Hardcore")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
             m_announce = false;
@@ -75,7 +75,7 @@ Channel::Channel(std::string const& name)
     }
 }
 
-void Channel::Join(ObjectGuid guid, const char *password)
+void Channel::Join(ObjectGuid guid, const char *password, bool checkPassword)
 {
     WorldPacket data;
     if (IsOn(guid))
@@ -95,7 +95,7 @@ void Channel::Join(ObjectGuid guid, const char *password)
         return;
     }
 
-    if (m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
+    if (checkPassword && m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
     {
         MakeWrongPassword(&data);
         SendToOne(&data, guid);
@@ -659,10 +659,13 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
         }
     }
 
-    // Send channel message
-    if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+    
+    if (pPlayer && IsDefenseChannel(GetChannelId()))
+        lang = sChrRacesStore.LookupEntry(pPlayer->GetRace())->baseLanguage;
+    else if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
         lang = LANG_UNIVERSAL;
 
+    // Send channel message
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, text, Language(lang), pPlayer ? pPlayer->GetChatTag() : 0, guid, nullptr, ObjectGuid(), "", m_name.c_str(), honor_rank);
 

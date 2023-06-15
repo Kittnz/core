@@ -8990,7 +8990,7 @@ void Unit::HandlePetCommand(CommandStates command, Unit* pTarget)
                 // Hunter pets are dismissed with a spell with a cast time
                 if (pPet->getPetType() != HUNTER_PET)
                     // dismissing a summoned pet is like killing them (this prevents returning a soulshard...)
-                    pPet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                    pPet->Unsummon(PET_SAVE_REAGENTS);
             }
             else                                    // charmed
                 pCharmer->Uncharm();
@@ -11213,7 +11213,7 @@ void Unit::RemoveAllArenaSpellCooldown()
             if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) != excludedSpellIds.end())
                 dontRemove = true;
 
-            if (spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS && !dontRemove)
+            if (spellEntry->RecoveryTime <= 10 * MINUTE * IN_MILLISECONDS && spellEntry->CategoryRecoveryTime <= 10 * MINUTE * IN_MILLISECONDS && !dontRemove)
                 RemoveSpellCooldown(spellEntry->Id, true);
         }
     }

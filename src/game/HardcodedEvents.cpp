@@ -2173,7 +2173,7 @@ void RacePlayer::Update(uint32 deltaTime)
 	}
 	if (Player* pl = map->GetPlayer(guid))
 	{
-		constexpr float AllowedDist = 24.0f * 24.0f;
+		constexpr float AllowedDist = 30.0f * 30.0f;
 		constexpr float OutOfRaceDist = 250.0f * 250.0f;
 
 		float DistToCheckpoint = pl->GetDistanceSqr(nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z);

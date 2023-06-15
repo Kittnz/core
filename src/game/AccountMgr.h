@@ -178,6 +178,21 @@ class AccountMgr
             return true;
         }
 
+        uint32 GetMailCount(uint32 accountId)
+        {
+            std::lock_guard<std::mutex> lock(m_accountMailsMutex);
+            auto itr = m_accountMails.find(accountId);
+            if (itr != m_accountMails.end())
+                return itr->second;
+            return 0;
+        }
+
+        void IncreaseMailCount(uint32 accountId)
+        {
+            std::lock_guard<std::mutex> lock(m_accountMailsMutex);
+            m_accountMails[accountId]++;
+        }
+
         void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
         bool BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
         void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
@@ -208,16 +223,19 @@ class AccountMgr
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
         uint32 m_fingerprintAutobanTimer;
+        uint32 m_accountMailsResetTimer;
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_fingerprintBanned;
         std::unordered_set<uint32> m_traineeGms;
         std::set<uint32> m_fingerprintAutoban;
         std::map<uint32, uint32> m_accountBanned;
+        std::map<uint32, uint32> m_accountMails;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
         AccountInstanceEnterTimesMap m_instanceEnterTimes;
         std::map<uint32, AccountPersistentData> m_accountPersistentData;
         mutable std::mutex m_ipBannedMutex;
+        mutable std::mutex m_accountMailsMutex;
 };
 
 #define sAccountMgr MaNGOS::Singleton<AccountMgr>::Instance()

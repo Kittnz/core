@@ -91,14 +91,26 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 		{
 			LoginDatabase.BeginTransaction();
 
+			uint32 shopId = sObjectMgr.NextShopLogEntry();
+
 			bool successTransaction =
 				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
-				LoginDatabase.PExecute("INSERT INTO `shop_logs` VALUES (NOW(), %u, %u, %u, %u, 0)", _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
+				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
 
-			LoginDatabase.CommitTransaction();
+			bool success = LoginDatabase.CommitTransactionDirect();
 
-			if (!successTransaction)
+			if (!success)
 				return "dberrorcantprocess";
+
+			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back({
+				shopId, 
+				GetCurrentTimeString(), 
+				_owner->GetSession()->GetAccountId(), 
+				_owner->GetGUIDLow(), 
+				itemID, 
+				price, 
+				false
+				});
 
 			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
 			_owner->SendNewItem(item, count, false, true);

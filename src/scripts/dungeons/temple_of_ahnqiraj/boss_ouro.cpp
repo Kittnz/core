@@ -446,6 +446,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         m_bHasSummoned = false;
 
         DoCastSpellIfCan(m_creature, SPELL_DIRTMOUND_PASSIVE);
+        me->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override
@@ -454,7 +455,6 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         if (!m_bHasSummoned
             && !((Player*) pWho)->IsGameMaster()
             && pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 25.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -509,6 +509,7 @@ struct npc_dirt_moundAI : public ScriptedAI
 	    m_CurrentTargetGUID.Clear();
 
         DoCastSpellIfCan(m_creature, SPELL_DIRTMOUND_PASSIVE);
+        me->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit *who) override
@@ -570,6 +571,7 @@ struct npc_ouro_scarabAI : public ScriptedAI
     void Reset() override
     {
         m_uiDespawnTimer = 45000;
+        me->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit *who) override
