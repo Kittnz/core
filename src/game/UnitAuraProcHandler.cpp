@@ -247,6 +247,12 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Conviction (Custom Paladin Spell) should proc seals
+        if (procSpell->Id == 45619 || procSpell->Id == 45620)
+        {
+            if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_SEAL_OF_THE_CRUSADER, CF_PALADIN_SEAL_OF_WISDOM_LIGHT, CF_PALADIN_SEAL_OF_COMMAND, CF_PALADIN_SEALS>())
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Sanctified Command (Custom Paladin Talent)
         if (spellProto->Id == 45954 || spellProto->Id == 45955)
         {
@@ -681,6 +687,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 
                     target = this;
                     break;
+                }
+                // Vampirism
+                case 45420:
+                case 45421:
+                case 45422:
+                case 45423:
+                case 45424:
+                {
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // heal amount
+                    basepoints[0] = std::max(1u, triggerAmount * damage / 100);
+                    CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+                    return SPELL_AURA_PROC_OK;
                 }
             }
             break;

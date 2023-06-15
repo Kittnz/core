@@ -2682,18 +2682,6 @@ void Player::ProcessDelayedOperations()
     if (m_DelayedOperations & DELAYED_CAST_HONORLESS_TARGET)
         CastSpell(this, 2479, true);
 
-    if (m_DelayedOperations & DELAYED_TAXI_FLIGHT_WITH_TELEPORT)
-    {
-        // restore taxi route
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(0));
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(1));
-
-        ClearTaxiFlightData(0);
-        ClearTaxiFlightData(1);
-
-        ContinueTaxiFlight();
-    }
-
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
 }
@@ -5751,26 +5739,10 @@ void Player::RepopAtGraveyard()
             TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
     }
     else
-    {
-        CustomGraveyardEntry const* CustomGrave = sObjectMgr.GetCustomGraveyard(GetMapId(), GetZoneId(), GetAreaId(), GetLevel());
-
-        if (CustomGrave)
-        {
-            // Release spirit from transport => Teleport alive at nearest graveyard.
-            if (GetTransport())
-            {
-                GetTransport()->RemovePassenger(this);
-                ResurrectPlayer(1.0f);
-            }
-
-            if (GetTeam() == TEAM_ALLIANCE)
-                TeleportTo(CustomGrave->map_alliance, CustomGrave->x_alliance, CustomGrave->y_alliance, CustomGrave->z_alliance, CustomGrave->orientation_alliance, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
-            else
-                TeleportTo(CustomGrave->map_horde,    CustomGrave->x_horde,    CustomGrave->y_horde,    CustomGrave->z_horde,    CustomGrave->orientation_horde,    TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
-        }
+    { 
         // If no grave found, stay at the current location
         // and don't show spirit healer location
-        else if (ClosestGrave)
+        if (ClosestGrave)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())
@@ -18744,11 +18716,6 @@ void Player::ContinueTaxiFlight()
             break;
         }
     }
-
-    if (GetSaveTaxiData(2))
-        startNode = GetSaveTaxiData(2);
-    ClearTaxiFlightData(2);
-
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
 }
 
@@ -23920,6 +23887,52 @@ bool Player::HasEarnedTitle(uint8 titleId)
         if (GetReputationRank(576) == REP_EXALTED    // Timbermaw Hold
             && GetReputationRank(609) == REP_EXALTED // Cenarion Circle
             && GetReputationRank(59) == REP_EXALTED) // Thorium Brotherhood
+            return true;
+        break;
+    }
+    case TITLE_CRAZY_CAT_LADY:
+    {
+        static constexpr uint32 CatPets[11] = {
+        10673,	// Bombay
+        10674,	// Cornish Rex
+        10675,	// Maine Coon
+        10676,	// Orange Tabby
+        10677,	// Siamese
+        10678,	// Silver Tabby
+        10679,	// White Kitten
+        15648,	// Corrupted Kitten
+        49513,	// Midnight
+        30152,	// White Tiger Cub
+        49503,	// Mr. Bigglesworth
+        };
+        for (auto spell : CatPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+    }
+    case TITLE_GRAND_FROGUS:
+    {
+        static constexpr uint32 FrogPets[5] = {
+        10701, // Dart Frog
+        10703, // Wood Frog
+        10702, // Island Frog
+        10704, // Tree Frog
+        23811  // Jubling
+        };
+        for (auto spell : FrogPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
+    case TITLE_BLOODTHIRSTY:
+    {
+        uint32 total_kills = GetHonorMgr().GetStoredHK();
+        if (total_kills >= 250000)
             return true;
         break;
     }
