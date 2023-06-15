@@ -1073,10 +1073,7 @@ private:
     uint32 m_uiShout_Timer{};
     uint32 m_uiMortalStrike_Timer{};
     uint32 m_uiSweepingSlam_Timer{};
-
-    ObjectGuid m_chromieGuid{};
-
-    nsBossChronar::Phase phase{};
+    uint32 m_uiSpellReflectionTimer;
 
 public:
 
@@ -1087,10 +1084,7 @@ public:
         m_uiShout_Timer = 5000;
         m_uiMortalStrike_Timer = 18000;
         m_uiSweepingSlam_Timer = 25000;
-
-        m_chromieGuid = 0;
-
-        phase = nsBossChronar::Phase::ONE;
+        m_uiSpellReflectionTimer = 17000;
     }
 
     void EnterCombat(Unit*) override
@@ -1100,23 +1094,6 @@ public:
 
     void JustDied(Unit*) override
     {
-        DoAfterTime(m_creature, 3 * IN_MILLISECONDS, [this]()
-            {
-                me->SummonCreature(nsBossChronar::GOB_CHROMIE_PORTAL, -1423.45f, 6990.50f, -230.19f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
-            });
-
-        DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [this]()
-            {
-                if (Creature* pChromie{ me->SummonCreature(81048, -1426.82f, 6988.00f, -230.20f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                {
-                    pChromie->CastSpell(pChromie, nsBossChronar::SPELL_TELEPORT, false);
-                    pChromie->SetFacingTo(3.94f);
-                    pChromie->MonsterYell("Hey you! Over here! We need to talk.");
-
-                    m_chromieGuid = pChromie->GetGUIDLow();
-                }
-            });
-
         m_creature->MonsterSay("Too soon...");
     }
 
@@ -1164,50 +1141,16 @@ public:
             m_uiSweepingSlam_Timer -= uiDiff;
         }
 
-        switch (phase)
+        if (m_uiSpellReflectionTimer < uiDiff)
         {
-            case nsBossChronar::Phase::ONE:
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
             {
-                if (m_creature->GetHealthPercent() < 75.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            case nsBossChronar::Phase::TWO:
-            {
-                if (m_creature->GetHealthPercent() < 50.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            case nsBossChronar::Phase::THREE:
-            {
-                if (m_creature->GetHealthPercent() < 25.f)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChronar::SPELL_REFLECTION) == CAST_OK)
-                    {
-                        m_creature->MonsterYell("Your magic turns against you!");
-                    }
-
-                    break;
-                }
-            }
-            default:
-            {
-                break;
+                m_creature->MonsterYell("Your magic turns against you!");
+                m_uiSpellReflectionTimer = urand(10000, 17000);
             }
         }
-
+        else
+            m_uiSpellReflectionTimer -= uiDiff;
 
         if (!m_bEnrageActive && m_creature->GetHealthPercent() < 35.0f)
         {
@@ -1408,8 +1351,6 @@ private:
 
     uint32 m_uiSummonEntry{};
 
-    ObjectGuid chromieGuid{};
-
 public:
     void Reset() override
     {
@@ -1422,8 +1363,6 @@ public:
         m_uiBanish_Timer = 500;
 
         m_uiSummonEntry = 0;
-
-        chromieGuid = 0;
     }
 
     void EnterCombat(Unit*) override
@@ -1443,20 +1382,6 @@ public:
         if (GameObject* pBarrier{ m_creature->FindNearestGameObject(180322, 75.f) })
         {
             pBarrier->AddObjectToRemoveList();
-        }
-
-        if (Creature * pPortal{ m_creature->SummonCreature(81048, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000) })
-        {
-            DoAfterTime(pPortal, 2 * IN_MILLISECONDS, [portal = pPortal]()
-                {
-                    if (Creature * pChromie{ portal->SummonCreature(91003, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                    {
-                        pChromie->CastSpell(pChromie, 26638, false); // Teleport
-                        pChromie->SetFacingTo(6.18f);
-                        pChromie->HandleEmote(EMOTE_ONESHOT_WAVE);
-                        pChromie->PMonsterYell("You did it! Come over here, quick!");
-                    }
-                });
         }
     }
 
@@ -1819,305 +1744,6 @@ CreatureAI* GetAI_npc_shade(Creature* pCreature)
 {
     return new npc_shadeAI(pCreature);
 }
-
-
-class boss_infinite_chromieAI : public ScriptedAI
-{
-public:
-    explicit boss_infinite_chromieAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        boss_infinite_chromieAI::Reset();
-    }
-
-private:
-
-    bool m_bBeginFight{};
-
-    uint32 m_uiManaBurnTimer{};
-    uint32 m_uiFearTimer{};
-    uint32 m_uiFumbleTimer{};
-    uint32 m_uiRiftTimer{};
-
-    ObjectGuid m_UnknownEntityGUID{};
-
-    nsBossChromie::Phase phase{};
-
-    std::list<ObjectGuid> m_lTimeRifts;
-    std::list<ObjectGuid> m_lGOs;
-
-public:
-    void Reset() override
-    {
-        m_bBeginFight = false;
-
-        m_uiManaBurnTimer = 18000;
-        m_uiFearTimer = 45000;
-        m_uiFumbleTimer = 12000;
-        m_uiRiftTimer = 1000;
-
-        m_UnknownEntityGUID = 0;
-
-        phase = nsBossChromie::Phase::ONE;
-    }
-
-    void EnterCombat(Unit*) override
-    {
-        m_creature->MonsterYell("Well well, surprised are we? I am the superior Chromie! It's a shame you came this far just to die.");
-    }
-
-    void JustDied(Unit*) override
-    {
-        m_creature->MonsterYell("But I... we cannot fail! We are so close!");
-
-        DespawnTimeRifts();
-        DespawnGOs();
-
-        Creature* pMonsterSummoned{};
-        std::string str{};
-
-        if (m_UnknownEntityGUID)
-        {
-            if (const auto map{ m_creature->GetMap() })
-            {
-                if (Creature* pEntityCreature{ map->GetCreature(m_UnknownEntityGUID) })
-                {
-                    pMonsterSummoned = pEntityCreature->FindNearestCreature(nsBossChromie::NPC_ROTMAW, 5000.f, true);
-
-                    if (pMonsterSummoned)
-                    {
-                        str = "Hssss ... I ... hunger ... hssss...";
-                    }
-                    else
-                    {
-                        str = "Mrgml ... Who dares disturb my mossy slumber?";
-
-                        pMonsterSummoned = pEntityCreature->FindNearestCreature(nsBossChromie::NPC_MOSSHEART, 5000.f, true);
-                    }
-
-                    if (pMonsterSummoned)
-                    {
-                        pEntityCreature->MonsterTextEmote("An unknown entity emerges nearby.");
-                    }
-                }
-            }
-        }
-
-        if (pMonsterSummoned)
-        {
-            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-            if (!PlayerList.isEmpty())
-            {
-                for (const auto& itr : PlayerList)
-                {
-                    if (Player* pPlayer{ itr.getSource() })
-                    {
-                        pMonsterSummoned->MonsterWhisper(str.c_str(), pPlayer, true);
-                    }
-                }
-            }
-        }
-    }
-
-    void DespawnTimeRifts()
-    {
-        if (!m_lTimeRifts.empty())
-        {
-            if (const auto map{ m_creature->GetMap() })
-            {
-                for (const auto& guid : m_lTimeRifts)
-                {
-                    if (GameObject* pGO{ map->GetGameObject(guid) })
-                    {
-                        pGO->AddObjectToRemoveList();
-                    }
-                }
-
-                m_lTimeRifts.clear();
-            }
-        }
-    }
-
-    void DespawnGOs()
-    {
-        if (!m_lGOs.empty())
-        {
-            if (const auto map{ m_creature->GetMap() })
-            {
-                for (const auto& guid : m_lGOs)
-                {
-                    if (Creature* pCreature{ map->GetCreature(guid) })
-                    {
-                        if (TemporarySummon * tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
-                        {
-                            tmpSumm->UnSummon();
-                        }
-                    }
-                }
-
-                m_lGOs.clear();
-            }
-        }
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (!m_bBeginFight && m_lTimeRifts.empty())
-        {
-            if (GameObject* pGate{ m_creature->SummonGameObject(nsBossChromie::GOB_LARGE_GHOST_GATE, -1535.68f, 7109.90f, 24.76f, 0, 0, 0, 0, 0, 0, 0) })
-            {
-                m_lGOs.push_back(pGate->GetObjectGuid());
-            }
-
-            if (GameObject* pSandwall{ m_creature->SummonGameObject(nsBossChromie::GOB_SAND_WALL, -1527.84f, 7111.95f, 24.05f, 0, 0, 0, 0, 0, 0, 0) })
-            {
-                m_lGOs.push_back(pSandwall->GetObjectGuid());
-            }
-
-            for (uint8 i{}; i < 8; ++i)
-            {
-                if (Creature* pTimeRift{ m_creature->SummonCreature(nsBossChromie::NPC_TIME_RIFT_SMALL,
-                    m_creature->GetPositionX(),
-                    m_creature->GetPositionY(),
-                    m_creature->GetPositionZ(),
-                    0, TEMPSUMMON_DEAD_DESPAWN) })
-                {
-                    m_lTimeRifts.push_back(pTimeRift->GetObjectGuid());
-                    pTimeRift->GetMotionMaster()->MovePoint(0, nsBossChromie::riftMoveLocation[i].m_fX, nsBossChromie::riftMoveLocation[i].m_fY, nsBossChromie::riftMoveLocation[i].m_fZ, true);
-                }
-            }
-
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-
-            m_creature->SetFactionTemporary(35);
-
-            if (Creature* largeRift{ m_creature->SummonCreature(91001, -1607.04f, 7107.48f, 26.08f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-            {
-                m_lTimeRifts.push_back(largeRift->GetObjectGuid());
-            }
-
-            DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [creature = m_creature, this]()
-                {
-                    m_bBeginFight = true;
-
-                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
-                    creature->RestoreFaction();
-                });
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (m_uiManaBurnTimer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), nsBossChromie::SPELL_MANA_BURN) == CAST_OK)
-            {
-                m_creature->MonsterYell("Your will, your power, it'll be all reduced down to a husk!");
-
-                m_uiManaBurnTimer = 20000;
-            }
-        }
-        else
-        {
-            m_uiManaBurnTimer -= uiDiff;
-        }
-
-        if (m_uiFearTimer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), nsBossChromie::SPELL_FEAR) == CAST_OK)
-            {
-                m_uiFearTimer = 45000;
-            }
-        }
-        else
-        {
-            m_uiFearTimer -= uiDiff;
-        }
-
-        if (m_uiFumbleTimer < uiDiff)
-        {
-            if (Unit* target{ m_creature->SelectRandomUnfriendlyTarget(nullptr, 10.f) })
-            {
-                if (target->IsPlayer())
-                {
-                    target->AddAura(nsBossChromie::SPELL_FUMBLE);
-
-                    m_uiFumbleTimer = 12000;
-                }
-            }
-        }
-        else
-        {
-            m_uiFumbleTimer -= uiDiff;
-        }
-
-        if (phase == nsBossChromie::Phase::ONE && m_creature->GetHealthPercent() < 80.f)
-        {
-            if (Creature* pPortal{ m_creature->SummonCreature(nsBossChromie::NPC_TIME_RIFT,
-                (m_creature->GetPositionX() + 5.f),
-                (m_creature->GetPositionY() + 5.f),
-                m_creature->GetPositionZ(), 0) })
-            {
-                m_creature->SummonCreature(nsBossChromie::NPC_RIFT_GUARD,
-                    pPortal->GetPositionX(),
-                    pPortal->GetPositionY(),
-                    pPortal->GetPositionZ(),
-                    0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
-            }
-
-            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
-
-            phase = nsBossChromie::Phase::TWO;
-        }
-
-        if (phase == nsBossChromie::Phase::TWO && m_creature->GetHealthPercent() < 50.f)
-        {
-            if (Creature* pPortal{ m_creature->SummonCreature(nsBossChromie::NPC_TIME_RIFT,
-                (m_creature->GetPositionX() + 5),
-                (m_creature->GetPositionY() + 5),
-                m_creature->GetPositionZ(), 0) })
-            {
-                m_creature->SummonCreature(nsBossChromie::NPC_RIFT_GUARD,
-                    pPortal->GetPositionX(),
-                    pPortal->GetPositionY(),
-                    pPortal->GetPositionZ(),
-                    0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
-            }
-
-            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
-
-            phase = nsBossChromie::Phase::THREE;
-        }
-
-        if (phase == nsBossChromie::Phase::THREE && m_creature->GetHealthPercent() < 20.f)
-        {
-            if (Creature* pPortal{ m_creature->SummonCreature(nsBossChromie::NPC_TIME_RIFT,
-                (m_creature->GetPositionX() + 5),
-                (m_creature->GetPositionY() + 5),
-                m_creature->GetPositionZ(), 0) })
-            {
-                m_creature->SummonCreature(nsBossChromie::NPC_RIFT_GUARD,
-                    pPortal->GetPositionX(),
-                    pPortal->GetPositionY(),
-                    pPortal->GetPositionZ(),
-                    0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
-            }
-
-            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
-
-            phase = nsBossChromie::Phase::FOUR;
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_boss_infinite_chromie(Creature* pCreature)
-{
-    return new boss_infinite_chromieAI(pCreature);
-}
-
 
 class npc_rotmawAI : public ScriptedAI
 {
@@ -2522,215 +2148,6 @@ CreatureAI* GetAI_npc_antnormi(Creature* pCreature)
 {
     return new npc_antnormiAI(pCreature);
 }
-
-
-class chromie_portalAI : public ScriptedAI
-{
-public:
-    explicit chromie_portalAI(Creature* c) : ScriptedAI(c)
-    {
-        chromie_portalAI::Reset();
-    }
-
-private:
-
-    bool m_bDoOnce{};
-    bool m_bBeginSpawning{};
-
-    uint32 m_uiSpawnTimer{};
-
-public:
-    void Reset() override
-    {
-        m_bDoOnce = false;
-        m_bBeginSpawning = false;
-
-        m_uiSpawnTimer = 2000;
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (!m_bDoOnce)
-        {
-            m_creature->MonsterSay("The time rift will stabilise in 20 seconds!");
-
-            DoAfterTime(m_creature, 10 * IN_MILLISECONDS, [creature = m_creature, this]()
-                {
-                    creature->MonsterSay("The time rift will stabilise in 10 seconds!");
-                });
-
-            DoAfterTime(m_creature, 20 * IN_MILLISECONDS, [creature = m_creature, this]()
-                {
-                    creature->MonsterSay("The time rift is stable!");
-
-                    m_bBeginSpawning = true;
-                });
-
-            m_bDoOnce = true;
-        }
-
-        if (m_bBeginSpawning)
-        {
-            if (m_uiSpawnTimer < uiDiff && m_creature->FindNearestCreature(nsChromiePortal::NPC_RIFT_GUARD, 50.f, true))
-            {
-                m_creature->SummonCreature(nsChromiePortal::NPC_WHELP,
-                    m_creature->GetPositionX(),
-                    m_creature->GetPositionY(),
-                    m_creature->GetPositionZ(),
-                    0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
-
-                m_uiSpawnTimer = 15000;
-            }
-            else
-            {
-                m_uiSpawnTimer -= uiDiff;
-            }
-        }
-
-        if (!m_creature->FindNearestCreature(nsChromiePortal::NPC_RIFT_GUARD, 50.f, true))
-        {
-            m_creature->DespawnOrUnsummon();
-        }
-    }
-};
-
-CreatureAI* GetAI_chromie_portal(Creature* pCreature)
-{
-    return new chromie_portalAI(pCreature);
-}
-
-
-class npc_injured_defenderAI : public ScriptedAI
-{
-public:
-    explicit npc_injured_defenderAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_injured_defenderAI::Reset();
-    }
-
-private:
-
-    uint32 m_uiUpdateTimer{};
-
-    nsInjuredDefender::Phase phase{};
-
-    std::vector<ObjectGuid> m_vDeadDragonsList;
-
-public:
-    void Reset()
-    {
-        m_uiUpdateTimer = 1000;
-
-        phase = nsInjuredDefender::Phase::ONE;
-
-        m_creature->SetHealthPercent(40.f);
-    }
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff && m_creature->GetMapId() == 269)
-        {
-            switch (phase)
-            {
-                case nsInjuredDefender::Phase::ONE:
-                {
-                    std::list<Player*> players;
-                    MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, 40.0f, true, false);
-                    MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-                    Cell::VisitWorldObjects(me, searcher, 40.f);
-
-                    if (players.size() != 0)
-                    {
-                        nsInjuredDefender::Phase::TWO;
-                    }
-
-                    m_uiUpdateTimer = 2000;
-
-                    break;
-                }
-                case nsInjuredDefender::Phase::TWO:
-                {
-                    m_creature->MonsterYell("They're everywhere! They're attacking the Caverns!");
-                
-                    nsInjuredDefender::Phase::THREE;
-                
-                    m_uiUpdateTimer = 5000;
-
-                    break;
-                }
-                case nsInjuredDefender::Phase::THREE:
-                {
-                    m_creature->MonsterSay("Heroes! I must report whats happening! Keep them back!");
-
-                    if (Creature* pPortal{ m_creature->SummonCreature(nsInjuredDefender::CHROMIE_PORTAL, -1872.45f, 6693.27f, -177.26f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000) })
-                    {
-                        pPortal->SetObjectScale(2.f);
-                    }
-
-                    if (Creature* dragonSpawn1{ m_creature->SummonCreature(nsInjuredDefender::NPC_DRAGONSPAWN, -1809.58f, 6708.89f, -187.67f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                    {
-                        dragonSpawn1->MonsterMove(-1850.10f, 6701.65f, -182.06f);
-
-                        m_vDeadDragonsList.push_back(dragonSpawn1->GetGUIDLow());
-                    }
-
-                    if (Creature* dragonSpawn2{ m_creature->SummonCreature(nsInjuredDefender::NPC_DRAGONSPAWN, -1808.60f, 6701.76f, -188.38f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                    {
-                        dragonSpawn2->MonsterMove(-1844.97f, 6697.32f, -182.67f);
-
-                        m_vDeadDragonsList.push_back(dragonSpawn2->GetGUIDLow());
-                    }
-
-                    if (Creature* dragonSpawn3{ m_creature->SummonCreature(nsInjuredDefender::NPC_DRAGONSPAWN, -1813.18f, 6692.31f, -188.27f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                    {
-                        dragonSpawn3->MonsterMove(-1839.84f, 6693.14f, -182.99f);
-
-                        m_vDeadDragonsList.push_back(dragonSpawn3->GetGUIDLow());
-                    }
-
-                    m_uiUpdateTimer = 2000;
-                
-                    nsInjuredDefender::Phase::FOUR;
-
-                    break;
-                }
-                case nsInjuredDefender::Phase::FOUR:
-                {
-                    m_creature->MonsterMove(-1872.45f, 6693.27f, -177.26f);
-
-                    if (m_creature->FindNearestCreature(nsInjuredDefender::CHROMIE_PORTAL, 3))
-                    {
-                        m_creature->CastSpell(m_creature, nsInjuredDefender::SPELL_TELEPORT, true);
-                    }
-
-                    if (Creature* pPortal{ m_creature->FindNearestCreature(nsInjuredDefender::CHROMIE_PORTAL, 2.f) })
-                    {
-                        m_creature->ForcedDespawn();
-
-                        pPortal->AddObjectToRemoveList();
-                    }
-                }
-                default:
-                {
-                    break;
-                }
-            }
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_injured_defender(Creature* pCreature)
-{
-    return new npc_injured_defenderAI(pCreature);
-}
-
 
 class npc_logistical_officerAI : public ScriptedAI
 {
@@ -3209,45 +2626,6 @@ CreatureAI* GetAI_npc_logistical_officer(Creature* pCreature)
     return new npc_logistical_officerAI(pCreature);
 }
 
-
-void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
-{
-    if (pPlayer->HasItemCount(80008, 1, true))
-    {
-        pPlayer->DestroyItemCount(80008, 1, true);
-    }
-
-    bool chromieBossSummoned{};
-
-    if (!chromieBossSummoned)
-    {
-        DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [creature = pCreature]()
-            {
-                creature->GetMotionMaster()->MovePoint(0, -1597.75f, 7105.72f, 23.76f, true, 1.25f, 6.25f);
-            });
-
-        DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [creature = pCreature]()
-            {
-                creature->MonsterSay("By helping me close the rifts, you've ensured the success of our invasion.");
-                creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            });
-
-        DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [creature = pCreature]()
-            {
-                creature->SetVisibility(VISIBILITY_OFF);
-                creature->ForcedDespawn(1000);
-
-                if (Creature* pBossChromie{ creature->SummonCreature(nsChromieBossAnim::NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                {
-                    pBossChromie->AddAura(nsChromieBossAnim::SHADOW_AURA);
-                }
-            });
-
-        chromieBossSummoned = true;
-    }
-}
-
-
 void AddSC_black_morass_trash()
 {
     Script* pNewscript{};
@@ -3318,11 +2696,6 @@ void AddSC_black_morass_trash()
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
-    pNewscript->Name = "boss_infinite_chromie";
-    pNewscript->GetAI = &GetAI_boss_infinite_chromie;
-    pNewscript->RegisterSelf();
-
-    pNewscript = new Script;
     pNewscript->Name = "npc_rotmaw";
     pNewscript->GetAI = &GetAI_npc_rotmaw;
     pNewscript->RegisterSelf();
@@ -3335,16 +2708,6 @@ void AddSC_black_morass_trash()
     pNewscript = new Script;
     pNewscript->Name = "npc_antnormi";
     pNewscript->GetAI = &GetAI_npc_antnormi;
-    pNewscript->RegisterSelf();
-
-    pNewscript = new Script;
-    pNewscript->Name = "chromie_portalAI";
-    pNewscript->GetAI = &GetAI_chromie_portal;
-    pNewscript->RegisterSelf();
-
-    pNewscript = new Script;
-    pNewscript->Name = "npc_injured_defender";
-    pNewscript->GetAI = &GetAI_npc_injured_defender;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;

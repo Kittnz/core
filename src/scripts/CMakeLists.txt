@@ -13,8 +13,6 @@ battlegrounds/battleground_sunnyglade.cpp
 dungeons/black_morass/black_morass.h
 dungeons/black_morass/black_morass_trash.cpp
 dungeons/black_morass/black_morass_trash.hpp
-dungeons/black_morass/boss_chromie.cpp
-dungeons/black_morass/boss_chromie.hpp
 dungeons/black_morass/boss_chronormu.cpp
 dungeons/black_morass/boss_chronormu.hpp
 dungeons/black_morass/boss_gerastrasz.cpp
@@ -73,6 +71,9 @@ dungeons/dire_maul/dreadsteed_ritual.cpp
 dungeons/dire_maul/instance_dire_maul.cpp
 dungeons/dire_maul/npc_ecorcefer.cpp
 dungeons/dire_maul/npc_pusillin.cpp
+dungeons/emerald_sanctum/emerald_sanctum.h
+dungeons/emerald_sanctum/instance_emerald_sanctum.cpp
+dungeons/emerald_sanctum/boss_solnius.cpp
 dungeons/gnomeregan/boss_thermaplugg.cpp
 dungeons/gnomeregan/gnomeregan.cpp
 dungeons/gnomeregan/gnomeregan.h
@@ -84,6 +85,7 @@ dungeons/hateforge_quarry/boss_hatereaver_annhilator.cpp
 dungeons/hateforge_quarry/hateforge_quarry_trash.cpp
 dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
+dungeons/gilneas_city/instance_gilneas_city.cpp
 dungeons/maraudon/boss_celebras_the_cursed.cpp
 dungeons/maraudon/boss_landslide.cpp
 dungeons/maraudon/boss_noxxion.cpp
@@ -281,7 +283,6 @@ miscellaneous/random_scripts_0.cpp
 miscellaneous/random_scripts_1.cpp
 miscellaneous/random_scripts_2.cpp
 miscellaneous/random_scripts_3.cpp
-miscellaneous/custom_teleports.cpp
 miscellaneous/custom_exploration_triggers.cpp
 
 world/alterac_mountains.cpp
