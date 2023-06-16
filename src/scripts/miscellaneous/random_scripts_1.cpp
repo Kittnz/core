@@ -2952,6 +2952,8 @@ bool GossipHello_npc_nert_blastentom(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
+
+
 bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -7487,6 +7489,7 @@ void AddSC_random_scripts_1()
     newscript->pGossipHello = &GossipHello_npc_maverick;
     newscript->pGossipSelect = &GossipSelect_npc_maverick;
     newscript->RegisterSelf();
+
 
     newscript = new Script;
     newscript->Name = "npc_brother_crowley";

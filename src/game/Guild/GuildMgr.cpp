@@ -55,8 +55,11 @@ void GuildMgr::AddGuild(Guild* guild)
     std::lock_guard<std::mutex> guard(m_guildMutex);
     m_GuildMap[guild->GetId()] = guild;
 
-	guild->_Bank = new GuildBank;
+    guild->_Bank = new GuildBank{ false };
 	guild->_Bank->SetGuild(guild);
+
+    guild->_InfernoBank = new GuildBank{ true };
+    guild->_InfernoBank->SetGuild(guild);
 }
 
 void GuildMgr::RemoveGuild(uint32 guildId)
@@ -271,8 +274,11 @@ void GuildMgr::SaveGuildBanks()
 	uint32 uSaveStartTime = WorldTimer::getMSTime();
 
 	m_guildBankSaveTimer = GUILD_BANK_SAVE_INTERVAL;
-	for (const auto& itr : m_GuildMap)
-		itr.second->_Bank->SaveToDB();
+    for (const auto& itr : m_GuildMap)
+    {
+        itr.second->_Bank->SaveToDB();
+        itr.second->_InfernoBank->SaveToDB();
+    }
 
 	uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
 

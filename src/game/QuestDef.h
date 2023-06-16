@@ -172,7 +172,8 @@ enum QuestSpecialFlags
     QUEST_SPECIAL_FLAG_DELIVER              = 0x008,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_SPEAKTO              = 0x010,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_KILL_OR_CAST         = 0x020,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_TIMED                = 0x040         // Internal flag computed only
+    QUEST_SPECIAL_FLAG_TIMED                = 0x040,        // Internal flag computed only
+    QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080
 };
 
 enum QuestMethod

@@ -46,7 +46,7 @@ bool IsPlayerHardcore(uint32 lowGuid)
     if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(lowGuid))
         hardcoreStatus = pCache->uiHardcoreStatus;
 
-    if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD)
+    if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60)
         return true;
 
     return false;
