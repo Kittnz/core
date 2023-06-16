@@ -413,6 +413,7 @@ class Guild
 		// Guild Bank
 	public:
 		GuildBank* _Bank;
+        GuildBank* _InfernoBank;
 		// Guild Bank end;
 };
 
