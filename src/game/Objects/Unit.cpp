@@ -1175,10 +1175,13 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                         deathReason << "died of natural causes";
                 }
 
-                deathReason << " at level " << pVictim->GetLevel() << ". They laughed in the face of death, but have learnt that death always has the last laugh.";
+                
 
                 if (pPlayerVictim->IsHC60())
+                {
+                    deathReason << " at level " << pVictim->GetLevel() << ". They laughed in the face of death, but have learnt that death always has the last laugh.";
                     sWorld.SendGMText(deathReason.str(), 0);
+                }
                 else
                 {
                     sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
