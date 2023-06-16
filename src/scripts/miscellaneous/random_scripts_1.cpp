@@ -2994,27 +2994,7 @@ bool GossipHello_npc_nert_blastentom(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool QuestComplete_npc_inferno(Player* player, GameObject* obj, Quest const* quest)
-{
-    if (!obj)
-        return false;
 
-    if (!player)
-        return false;
-
-    constexpr uint32 RewardInfernoModeQuestId = 40922;
-
-    if (quest->GetQuestId() == RewardInfernoModeQuestId)
-    {
-        if (player->IsHardcore() && player->GetLevel() < 60)
-        {
-            player->SetHardcoreStatus(HARDCORE_MODE_STATUS_HC60);
-            return true;
-        }
-    }
-
-    return true;
-}
 
 bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -7578,9 +7558,6 @@ void AddSC_random_scripts_1()
     newscript->pGossipSelect = &GossipSelect_npc_maverick;
     newscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "npc_inferno";
-    newscript->pQuestRewardedGO = &QuestComplete_npc_inferno;
 
     newscript = new Script;
     newscript->Name = "npc_brother_crowley";
