@@ -3415,6 +3415,26 @@ void Player::GiveNegativeXP(uint32 percent, Unit* victim)
     SetUInt32Value(PLAYER_XP, newXP);
 }
 
+void Player::CheckInfernoInvite()
+{
+    if (GetLevel() >= 55 && GetLevel() < 60 && IsHardcore())
+    {
+        if (!HasCustomFlag(CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE))
+        {
+            uint32 itemEntry = 61457;
+            std::string subject = "A Mysterious Missive";
+            std::string body = "This quest is the beginning of the Inferno Mode attunement. Completion of this chain will result in PERMANANT hardcore gameplay, even upon reaching level 60.";
+            Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+            ToMailItem->SaveToDB();
+            MailDraft(subject, sObjectMgr.CreateItemText(body))
+                .AddItem(ToMailItem)
+                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+
+            SetCustomFlag(CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE);
+        }
+    }
+}
+
 // Update player to next level
 // Current player experience not update (must be update by caller)
 void Player::GiveLevel(uint32 level)
@@ -3505,7 +3525,7 @@ void Player::GiveLevel(uint32 level)
     {
         if (level == 60)
         {
-            if (m_hardcoreStatus != HARCORE_MODE_STATUS_HC60)
+            if (m_hardcoreStatus != HARDCORE_MODE_STATUS_HC60)
             {
                 AnnounceHardcoreModeLevelUp(level);
                 SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
@@ -3523,10 +3543,20 @@ void Player::GiveLevel(uint32 level)
             else
             {
                 //TODO rewards for HC60 level 60 and custom announcement.
+                uint32 itemEntry = 80189;
+                std::string subject = "Lockbox of the Immortal Soul";
+                std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
+                Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+                ToMailItem->SaveToDB();
+                MailDraft(subject, sObjectMgr.CreateItemText(message))
+                    .AddItem(ToMailItem)
+                    .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
             }
         }
         else
+        {
             AnnounceHardcoreModeLevelUp(level);
+        }
     }
 
     // Quick-fix for 'Stay awhile and listen...' (Hardcore Mode)
@@ -3623,6 +3653,8 @@ void Player::GiveLevel(uint32 level)
     // update level to hunter/summon pet
     if (Pet* pet = GetPet())
         pet->SynchronizeLevelWithOwner();
+
+    CheckInfernoInvite();
 
     if (m_session->ShouldBeBanned(GetLevel()))
         sWorld.BanAccount(BAN_ACCOUNT, m_session->GetUsername(), 0, m_session->GetScheduleBanReason(), "");
@@ -4905,7 +4937,7 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
     PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(playerguid);
     uint8 hardcoreStatus = data ? data->uiHardcoreStatus : 0;
 
-    const bool isHardcore = hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARCORE_MODE_STATUS_HC60;
+    const bool isHardcore = hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60;
 
     // if we want to finally delete the character or the character does not meet the level requirement, we set it to mode 0
     if (deleteFinally)
@@ -13383,8 +13415,20 @@ bool Player::CanTakeQuest(Quest const *pQuest, bool msg, bool skipStatusCheck /*
            SatisfyQuestSkill(pQuest, msg) && SatisfyQuestReputation(pQuest, msg) &&
            SatisfyQuestPreviousQuest(pQuest, msg) && SatisfyQuestTimed(pQuest, msg) &&
            SatisfyQuestNextChain(pQuest, msg) && SatisfyQuestPrevChain(pQuest, msg) &&
-           pQuest->IsActive();
+           pQuest->IsActive() && SatisfyQuestChallenges(pQuest, msg);
 }
+
+bool Player::SatisfyQuestChallenges(Quest const* quest, bool msg) const
+{
+    if (quest->HasSpecialFlag(QUEST_SPECIAL_FLAG_HARDCORE_ONLY) && !IsHardcore())
+    {
+        if (msg)
+            GetSession()->SendNotification("You are not Hardcore.");
+        return false;
+    }
+    return true;
+}
+
 
 bool Player::CanAddQuest(Quest const *pQuest, bool msg) const
 {
@@ -22894,7 +22938,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
             },GetName(), level);
             break;
         case 60:
-            sWorld.SendWorldText(50302, GetName(), GetName());
+            IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("%s has laughed in the face of death in the Hardcore challenge. %s has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
             break;
         default:
             return;

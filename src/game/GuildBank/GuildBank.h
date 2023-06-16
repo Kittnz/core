@@ -53,6 +53,7 @@ struct BankItem
 	uint8 durability;
 	uint32 text;
 	int8 generated_loot;
+	bool is_inferno;
 
 	// extra
 	uint32 quality; 
@@ -67,16 +68,17 @@ struct BankItem
 
 		guildid = fields[0].GetUInt32();
 		guid = fields[1].GetUInt32();
-		tab = fields[2].GetUInt8();
-		slot = fields[3].GetUInt8();
-		item_template = fields[4].GetUInt32();
-		creatorGuid = fields[5].GetUInt32();
-		giftCreatorGuid = fields[6].GetUInt32();
-		count = fields[7].GetUInt32();
-		duration = fields[8].GetUInt32();
-		charges = fields[9].GetString();
-		flags = fields[10].GetUInt8();
-		enchantments = fields[11].GetString();
+		is_inferno = fields[2].GetBool();
+		tab = fields[3].GetUInt8();
+		slot = fields[4].GetUInt8();
+		item_template = fields[5].GetUInt32();
+		creatorGuid = fields[6].GetUInt32();
+		giftCreatorGuid = fields[7].GetUInt32();
+		count = fields[8].GetUInt32();
+		duration = fields[9].GetUInt32();
+		charges = fields[10].GetString();
+		flags = fields[11].GetUInt8();
+		enchantments = fields[12].GetString();
 
 		enchant = 0;
 
@@ -84,26 +86,26 @@ struct BankItem
 		if (params.size() == MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET)
 			enchant = atoi(params[0]);
 
-		randomPropertyId = fields[12].GetInt16();
-		transmogrifyId = fields[13].GetUInt32();
-		durability = fields[14].GetUInt16();
-		text = fields[15].GetUInt32();
-		generated_loot = fields[16].GetInt16();
+		randomPropertyId = fields[13].GetInt16();
+		transmogrifyId = fields[14].GetUInt32();
+		durability = fields[15].GetUInt16();
+		text = fields[16].GetUInt32();
+		generated_loot = fields[17].GetInt16();
 
 		return true;
 	}
 
 	bool AddToDB()
 	{
-		return CharacterDatabase.PExecute("INSERT INTO guild_bank (guildid, guid, tab, slot, item_template, "
+		return CharacterDatabase.PExecute("INSERT INTO guild_bank (guildid, guid, isInferno, tab, slot, item_template, "
 			"creatorGuid, giftCreatorGuid, count, duration, "
 			"charges, flags, enchantments, randomPropertyId, transmogrifyId, "
 			"durability, text, generated_loot) VALUES ("
-			"'%u', '%u', '%u', '%u', '%u', "
+			"'%u', '%u', '%u', '%u', '%u', '%u', "
 			"'%u', '%u', '%u', '%u', "
 			"'%s', '%u', '%s', '%u', '%u', "
 			"'%u', '%u', '%u')",
-			guildid, guid, tab, slot, item_template,
+			guildid, guid, is_inferno ? 1 : 0, tab, slot, item_template,
 			creatorGuid, giftCreatorGuid, count, duration,
 			charges.c_str(), flags, enchantments.c_str(), randomPropertyId, transmogrifyId,
 			durability, text, generated_loot);
@@ -112,12 +114,12 @@ struct BankItem
 	bool SaveToDB()
 	{
 		return CharacterDatabase.PExecute("UPDATE guild_bank SET "
-			"tab = '%u', slot = '%u', item_template = '%u',"
+			"tab = '%u', isInferno = '%u', slot = '%u', item_template = '%u',"
 			"creatorGuid = '%u', giftCreatorGuid = '%u', count = '%u', duration = '%u',"
 			"charges = '%s', flags = '%u', enchantments = '%s', randomPropertyId = '%u', transmogrifyId = '%u',"
 			"durability = '%u', text = '%u', generated_loot = '%u' "
 			"WHERE guildid = '%u' and guid = '%u'",
-			tab, slot, item_template,
+			tab, is_inferno ? 1 : 0, slot, item_template,
 			creatorGuid, giftCreatorGuid, count, duration,
 			charges.c_str(), flags, enchantments.c_str(), randomPropertyId, transmogrifyId,
 			durability, text, generated_loot,
@@ -126,8 +128,8 @@ struct BankItem
 
 	bool DeleteFromDB()
 	{
-		return CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE guildid = '%u' and guid = '%u'",
-			guildid, guid);
+		return CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE guildid = '%u' and guid = '%u' AND isInferno = '%u'",
+			guildid, guid, is_inferno ? 1 : 0);
 	}
 
 };
@@ -176,7 +178,7 @@ typedef std::unordered_map<uint32, MoneyLog> MoneyLogMap;
 class GuildBank
 {
     public:
-		GuildBank();
+		GuildBank(bool isInfernoBank);
 
 		void SetGuild(Guild* guild);
         void HandleAddonMessages(std::string msg, Player* player);
@@ -199,6 +201,8 @@ class GuildBank
 		bool b_money_changed;
 		bool b_moneyLog_changed;
 		bool b_log_changed;
+
+		bool b_infernoBank = false;
 
         Guild* _guild;
         Player* _player;

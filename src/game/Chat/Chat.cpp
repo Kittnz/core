@@ -817,6 +817,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
         { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,           "", nullptr},
         { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
+        { "toggleinferno", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleInfernoModeCommand,      "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

@@ -1152,6 +1152,9 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
                 std::ostringstream deathReason;
 
+                if (pPlayerVictim->IsHC60())
+                    deathReason << "A tragedy has occured. Inferno character ";
+
                 if (attacker && attacker != pVictim)
                 {
                     if (attacker->IsPlayer())
@@ -1172,17 +1175,23 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                         deathReason << "died of natural causes";
                 }
 
+                deathReason << " at level " << pVictim->GetLevel() << ". They laughed in the face of death, but have learnt that death always has the last laugh.";
 
-                sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
+                if (pPlayerVictim->IsHC60())
+                    sWorld.SendGMText(deathReason.str(), 0);
+                else
                 {
-                    auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
-                    if (!levelCheck.has_value())
-                        return true;
+                    sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
+                    {
+                        auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
+                        if (!levelCheck.has_value())
+                            return true;
 
-                    if (std::atoi(levelCheck.value().c_str()) <= level)
-                        return true;
-                    return false;
-                }, pVictim->GetName(), deathReason.str().c_str(), pVictim->GetLevel());
+                        if (std::atoi(levelCheck.value().c_str()) <= level)
+                            return true;
+                        return false;
+                    }, pVictim->GetName(), deathReason.str().c_str(), pVictim->GetLevel());
+                }
             }
             pPlayerVictim->LogHCDeath();
         }

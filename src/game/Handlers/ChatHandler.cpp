@@ -402,9 +402,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		// no type == CHAT_MSG_GUILD on this, to protecc fraudulent messages
 		if (strstr(msg.c_str(), "TW_GUILDBANK"))
 		{
+            const bool isInferno = _player->IsHC60();
 			// HC check
 			// no Newcommers check since we dont have anyone in Newcommers to unlock the feature
-			if (_player->IsHardcore())
+			if (_player->IsHardcore() && !isInferno)
 			{
 				//_player->GetSession()->SendNotification("HC No Guild Bank");
 				_player->SendAddonMessage("TW_GUILDBANK", "Access:Error:HC");
@@ -413,7 +414,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (GetMasterPlayer()->GetGuildId())
 			{
-
 				Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId());
 				if (!guild)
 					return;
@@ -424,8 +424,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 					return;
 				}
 
-				guild->_Bank->HandleAddonMessages(msg, _player);
-
+                if (isInferno)
+                    guild->_InfernoBank->HandleAddonMessages(msg, _player);
+                else
+                    guild->_Bank->HandleAddonMessages(msg, _player);
 			}
 			else
 			{

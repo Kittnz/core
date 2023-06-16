@@ -2466,6 +2466,8 @@ void World::SendGMText(int32 string_id, ...)
 
 void World::SendGMText(const std::string& message, uint32 minGmLevel)
 {
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, message);
     for (const auto& itr : m_sessions)
     {
         if (WorldSession* session = itr.second)
@@ -2475,8 +2477,6 @@ void World::SendGMText(const std::string& message, uint32 minGmLevel)
                 Player* player = session->GetPlayer();
                 if (player && player->IsInWorld())
                 {
-                    WorldPacket data;
-                    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, message);
                     player->SendDirectMessage(&data);
                 }
             }
