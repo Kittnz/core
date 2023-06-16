@@ -90,8 +90,9 @@ enum BankCommLimits
 constexpr uint32 AllianceGuildNpcEntry = 80917;
 constexpr uint32 HordeGuildNpcEntry = 80918;
 
-GuildBank::GuildBank()
+GuildBank::GuildBank(bool isInfenoBank)
 {
+	b_infernoBank = isInfenoBank;
 }
 
 /* Public Methods */
@@ -209,8 +210,8 @@ void GuildBank::SaveToDB()
 	// Save Money
 	if (b_money_changed)
 	{
-		CharacterDatabase.PExecute("UPDATE guild_bank_money SET money = '%u' WHERE guildid = '%u'" ,
-		b_money, guildid);
+		CharacterDatabase.PExecute("UPDATE guild_bank_money SET money = '%u' WHERE guildid = '%u' AND isInferno = '%u'" ,
+		b_money, guildid, b_infernoBank);
 
 		b_money_changed = false;
 		numQuerries++;
@@ -225,13 +226,13 @@ void GuildBank::SaveToDB()
 			"icon1 = '%s', icon2 = '%s', icon3 = '%s', icon4 = '%s', icon5 = '%s', "
 			"withdrawal1 = '%u', withdrawal2 = '%u', withdrawal3 = '%u', withdrawal4 = '%u', withdrawal5 = '%u', "
 			"minrank1 = '%u', minrank2 = '%u', minrank3 = '%u', minrank4 = '%u', minrank5 = '%u' "
-			"WHERE guildid = '%u'",
+			"WHERE guildid = '%u' AND isInferno = '%u'",
 			b_tabs,
 			b_tabInfo[1].name.c_str(), b_tabInfo[2].name.c_str(), b_tabInfo[3].name.c_str(), b_tabInfo[4].name.c_str(), b_tabInfo[5].name.c_str(),
 			b_tabInfo[1].icon.c_str(), b_tabInfo[2].icon.c_str(), b_tabInfo[3].icon.c_str(), b_tabInfo[4].icon.c_str(), b_tabInfo[5].icon.c_str(),
 			b_tabInfo[1].withdrawals, b_tabInfo[2].withdrawals, b_tabInfo[3].withdrawals, b_tabInfo[4].withdrawals, b_tabInfo[5].withdrawals,
 			b_tabInfo[1].minrank, b_tabInfo[2].minrank, b_tabInfo[3].minrank, b_tabInfo[4].minrank, b_tabInfo[5].minrank,
-			guildid);
+			guildid, b_infernoBank);
 
 		b_tabs_changed = false;
 		numQuerries++;
@@ -244,9 +245,9 @@ void GuildBank::SaveToDB()
 			if (b_moneyLog[i].state == ITEM_NEW)
 			{
 				CharacterDatabase.PExecute("INSERT INTO guild_bank_log "
-					"(guildid, player, action, tab, item, randomPropertyId, enchant, count, stamp) "
-					"VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')",
-					guildid, b_moneyLog[i].player, b_moneyLog[i].action, 0, 0, 0, 0,
+					"(guildid, isInferno, player, action, tab, item, randomPropertyId, enchant, count, stamp) "
+					"VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')",
+					guildid, b_infernoBank, b_moneyLog[i].player, b_moneyLog[i].action, 0, 0, 0, 0,
 					b_moneyLog[i].money, b_moneyLog[i].stamp);
 
 				b_moneyLog[i].state = ITEM_UNCHANGED;
@@ -264,9 +265,9 @@ void GuildBank::SaveToDB()
 				if (b_log[i][j].state == ITEM_NEW)
 				{
 					CharacterDatabase.PExecute("INSERT INTO guild_bank_log "
-						"(guildid, player, action, tab, item, randomPropertyId, enchant, count, stamp) "
-						"VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')",
-						guildid, b_log[i][j].player, b_log[i][j].action,
+						"(guildid, isInferno, player, action, tab, item, randomPropertyId, enchant, count, stamp) "
+						"VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u', '%u')",
+						guildid, b_infernoBank, b_log[i][j].player, b_log[i][j].action,
 						b_log[i][j].tab, b_log[i][j].item, b_log[i][j].randomPropertyId, b_log[i][j].enchant,
 						b_log[i][j].count, b_log[i][j].stamp);
 
@@ -339,10 +340,10 @@ void GuildBank::DeleteFromDB()
 {
 	b_saveLock = true;
 	CharacterDatabase.BeginTransaction();
-	CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE guildid = '%u'", guildid);
-	CharacterDatabase.PExecute("DELETE FROM guild_bank_log WHERE guildid = '%u'", guildid);
-	CharacterDatabase.PExecute("DELETE FROM guild_bank_money WHERE guildid = '%u'", guildid);
-	CharacterDatabase.PExecute("DELETE FROM guild_bank_tabs WHERE guildid = '%u'", guildid);
+	CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE guildid = '%u' AND isInferno = '%u'", guildid, b_infernoBank);
+	CharacterDatabase.PExecute("DELETE FROM guild_bank_log WHERE guildid = '%u' AND isInferno = '%u'", guildid, b_infernoBank);
+	CharacterDatabase.PExecute("DELETE FROM guild_bank_money WHERE guildid = '%u' AND isInferno = '%u'", guildid, b_infernoBank);
+	CharacterDatabase.PExecute("DELETE FROM guild_bank_tabs WHERE guildid = '%u' AND isInferno = '%u'", guildid, b_infernoBank);
 	CharacterDatabase.CommitTransaction();
 }
 
@@ -387,8 +388,8 @@ void GuildBank::LoadBank()
 		"`minrank1`, `minrank2`, `minrank3`, `minrank4`, `minrank5` "
 		"FROM guild_bank_tabs bt "
 		"JOIN guild_bank_money bm "
-		"ON `bt`.`guildid` = `bm`.`guildid` "
-		"WHERE `bt`.`guildid` = '%u'", guildid);
+		"ON `bt`.`guildid` = `bm`.`guildid` AND `bt`.`isInferno` = `bm`.`isInferno` "
+		"WHERE `bt`.`guildid` = '%u' AND `bt`.`isInferno` = '%u'", guildid, b_infernoBank);
 
 	if (!guildBankTabs)
 		return; // guild doesnt have a bank yet
@@ -415,12 +416,12 @@ void GuildBank::LoadBank()
 	delete guildBankTabs;
 
 	// Load Items
-	QueryResult *bankQuery = CharacterDatabase.PQuery("SELECT `guildid`, `guid`, `tab`, `slot`, `item_template`, "
+	QueryResult *bankQuery = CharacterDatabase.PQuery("SELECT `guildid`, `guid`, `isInferno`, `tab`, `slot`, `item_template`, "
 		"`creatorGuid`, `giftCreatorGuid`, `count`, `duration`, "
 		"`charges`, `flags`, `enchantments`, `randomPropertyId`, `transmogrifyId`, `durability`, "
 		"`text`, `generated_loot` "
-		"FROM guild_bank WHERE `guildid` = '%u'",
-		guildid);
+		"FROM guild_bank WHERE `guildid` = '%u' AND `isInferno` = '%u'",
+		guildid, b_infernoBank);
 
 	if (!bankQuery)
 		return; // no items in the bank
@@ -501,12 +502,12 @@ void GuildBank::UnlockGuildBank(std::string msg) {
 		}
 
 		// insert tabs
-		CharacterDatabase.DirectPExecute("INSERT INTO guild_bank_tabs (guildid, tabs) VALUES ('%u', '%u')",
-			guildid, 1);
+		CharacterDatabase.DirectPExecute("INSERT INTO guild_bank_tabs (guildid, isInferno, tabs) VALUES ('%u', '%u', '%u')",
+			guildid, b_infernoBank, 1);
 
 		// insert money
-		CharacterDatabase.DirectPExecute("INSERT INTO guild_bank_money (guildid, money) VALUES ('%u', '%u')",
-			guildid, 0);
+		CharacterDatabase.DirectPExecute("INSERT INTO guild_bank_money (guildid, isInferno, money) VALUES ('%u', '%u', '%u')",
+			guildid, b_infernoBank, 0);
 
 		b_tabs = 1;
 
@@ -2108,9 +2109,9 @@ void GuildBank::LoadLog()
 	
 	// 1 week behind
 	QueryResult *guildBankLog = CharacterDatabase.PQuery("SELECT `log_id`, `player`, `action`, `tab`, `item`, `randomPropertyId`, `enchant`, `count`, `stamp` "
-		"FROM guild_bank_log WHERE `guildid` = '%u' AND `stamp` >= 'UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 WEEK))'"
+		"FROM guild_bank_log WHERE `guildid` = '%u' AND `isInferno`= '%u' AND `stamp` >= 'UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 WEEK))'"
 		"ORDER BY stamp",
-		guildid);
+		guildid, b_infernoBank);
 
 	if (!guildBankLog)
 		return; // log empty

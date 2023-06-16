@@ -92,7 +92,8 @@ enum PlayerUnderwaterState
 
 enum CustomPlayerFlags
 {
-    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01
+    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01,
+    CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE = 0x02
 };
 
 enum BuyBankSlotResult
@@ -689,7 +690,7 @@ enum HardcoreStatus : uint8
     HARDCORE_MODE_STATUS_ALIVE    = 1,
     HARDCORE_MODE_STATUS_IMMORTAL = 2,
     HARDCORE_MODE_STATUS_DEAD     = 3,
-    HARCORE_MODE_STATUS_HC60      = 4
+    HARDCORE_MODE_STATUS_HC60      = 4
 };
 
 inline char const* HardcoreStatusToString(uint8 status)
@@ -704,7 +705,7 @@ inline char const* HardcoreStatusToString(uint8 status)
             return "Immortal";
         case HARDCORE_MODE_STATUS_DEAD:
             return "Dead";
-        case HARCORE_MODE_STATUS_HC60:
+        case HARDCORE_MODE_STATUS_HC60:
             return "HC60";
     }
     return "UNKNOWN";
@@ -1359,6 +1360,8 @@ class Player final: public Unit
         void IncompleteQuest(uint32 quest_id);
         void RewardQuest(Quest const* pQuest, uint32 reward, WorldObject* questGiver, bool announce = true);
         void FailQuest(uint32 quest_id);
+
+        bool SatisfyQuestChallenges(Quest const* quest, bool msg) const;
         bool SatisfyQuestSkill(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLevel(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLog(bool msg) const;
@@ -1663,6 +1666,9 @@ class Player final: public Unit
         void GiveNegativeXP(uint32 percent, Unit* victim);
         void GiveLevel(uint32 level);
         void InitStatsForLevel(bool reapplyMods = false);
+
+
+        void CheckInfernoInvite();
 
         void RewardRage(uint32 damage, bool attacker);
         uint8 GetComboPoints() const { return m_comboPoints; }
@@ -2246,9 +2252,9 @@ class Player final: public Unit
 
         void SetHardcoreStatus(uint8 status);
         uint8 GetHardcoreStatus() { return m_hardcoreStatus; };
-        bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || m_hardcoreStatus == HARCORE_MODE_STATUS_HC60); }
+        bool IsHardcore() const{ return (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || m_hardcoreStatus == HARDCORE_MODE_STATUS_HC60); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
-        bool IsHC60() const { return m_hardcoreStatus == HARCORE_MODE_STATUS_HC60; }
+        bool IsHC60() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_HC60; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         void SpawnHardcoreGravestone();
         static std::string HardcoreResultToString(HardcoreInteractionResult result);
@@ -2299,6 +2305,21 @@ class Player final: public Unit
     public:
 
         uint32 m_hardcoreSaveItemsTimer;
+
+        bool HasCustomFlag(CustomPlayerFlags flag) const
+        {
+            return (customFlags & flag) == flag;
+        }
+
+        void SetCustomFlag(CustomPlayerFlags flags)
+        {
+            customFlags |= flags;
+        }
+
+        void RemoveCustomFlag(CustomPlayerFlags flags)
+        {
+            customFlags &= ~flags;
+        }
 
 
         //Little safeguard for HC characters after a server start.

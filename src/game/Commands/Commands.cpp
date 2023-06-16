@@ -14504,6 +14504,21 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleToggleInfernoModeCommand(char* args)
+{
+    auto player = GetSelectedPlayer();
+
+    if (!player)
+        return false;
+
+
+    bool isInferno = player->IsHC60();
+    player->SetHardcoreStatus(isInferno ? (player->GetLevel() == 60 ? HARDCORE_MODE_STATUS_IMMORTAL : HARDCORE_MODE_STATUS_ALIVE) : HARDCORE_MODE_STATUS_HC60);
+
+    PSendSysMessage("Inferno mode is now %s", isInferno ? "OFF" : "ON");
+    return true;
+}
+
 bool ChatHandler::HandleToggleTrainingCommand(char* args)
 {
 

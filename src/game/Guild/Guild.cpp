@@ -90,7 +90,7 @@ void MemberSlot::ChangeRank(uint32 newRank)
 //// Guild /////////////////////////////////////////////////
 
 Guild::Guild() : m_Id(0), m_EmblemStyle(0), m_EmblemColor(0), m_BorderStyle(0), m_BorderColor(0), m_BackgroundColor(0), m_accountsNumber(0),
-    m_CreatedYear(0), m_CreatedMonth(0), m_CreatedDay(0), m_GuildEventLogNextGuid(0), _Bank(nullptr)
+    m_CreatedYear(0), m_CreatedMonth(0), m_CreatedDay(0), m_GuildEventLogNextGuid(0), _Bank(nullptr), _InfernoBank(nullptr)
 {
 }
 
@@ -159,8 +159,11 @@ bool Guild::Create(Player* leader, std::string gname)
 
     CreateDefaultGuildRanks(lSession->GetSessionDbLocaleIndex());
 
-	_Bank = new GuildBank;
+    _Bank = new GuildBank{ false };
 	_Bank->SetGuild(this);
+
+    _InfernoBank = new GuildBank{ true };
+    _InfernoBank->SetGuild(this);
 
     return AddMember(m_LeaderGuid, (uint32)GR_GUILDMASTER) == GuildAddStatus::OK;
 }
@@ -745,6 +748,7 @@ void Guild::DelRank()
     CharacterDatabase.PExecute("DELETE FROM guild_rank WHERE rid>='%u' AND guildid='%u'", rank, m_Id);
 
 	_Bank->UpdateMinranks(rank);
+    _InfernoBank->UpdateMinranks(rank);
 
     m_Ranks.pop_back();
 }
@@ -815,6 +819,9 @@ void Guild::Disband()
 
 	_Bank->DeleteFromDB();
 	delete _Bank;
+
+    _InfernoBank->DeleteFromDB();
+    delete _InfernoBank;
 
     sGuildMgr.RemoveGuild(m_Id);
 }

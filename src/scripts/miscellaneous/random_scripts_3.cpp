@@ -6647,6 +6647,28 @@ bool GOHello_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool QuestComplete_go_mysterious_mailbox(Player* player, GameObject* obj, Quest const* quest)
+{
+    if (!obj)
+        return false;
+
+    if (!player)
+        return false;
+
+    constexpr uint32 RewardInfernoModeQuestId = 40922;
+
+    if (quest->GetQuestId() == RewardInfernoModeQuestId)
+    {
+        if (player->IsHardcore() && player->GetLevel() < 60)
+        {
+            player->SetHardcoreStatus(HARDCORE_MODE_STATUS_HC60);
+            return true;
+        }
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -6678,6 +6700,7 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "go_mysterious_mailbox";
     newscript->pGOHello = &GOHello_go_mysterious_mailbox;
+    newscript->pQuestRewardedGO = &QuestComplete_go_mysterious_mailbox;
     newscript->RegisterSelf();
   
     newscript = new Script;

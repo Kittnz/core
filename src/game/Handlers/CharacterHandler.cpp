@@ -860,6 +860,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             pCurrChar->AddItem(67001, 1);
     }
 
+    player->CheckInfernoInvite();
+
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())
         sWorld.ShutdownMsg(true, pCurrChar);
