@@ -715,7 +715,7 @@ void WorldBotAI::OnPlayerLogin()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    // We already have a path.
+    // We already have a path
     if (m_currentPath)
         return;
 
@@ -732,6 +732,9 @@ void WorldBotAI::UpdateWaypointMovement()
         return;
 
     if (hasPoiDestination)
+        return;
+
+    if (m_wasDead)
         return;
 
     switch (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
@@ -754,15 +757,22 @@ void WorldBotAI::UpdateWaypointMovement()
         if (BGStartNewPathToObjective())
             return;
 
-    // Handle task destination
-    if (TaskDestination())
-        return;
+    // Handle task explore
+    if (currentTaskID == TASK_EXPLORE)
+    {
+        if (TaskDestination())
+            return;
+    }
 
-    // normal pathing
-    if (StartNewPathFromBeginning())
-        return;
+    // Handle task roaming
+    if (currentTaskID == TASK_ROAM)
+    {
+        // normal pathing
+        if (StartNewPathFromBeginning())
+            return;
 
-    StartNewPathFromAnywhere();
+        StartNewPathFromAnywhere();
+    }
 }
 
 void WorldBotAI::OnJustDied()
@@ -1005,20 +1015,14 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
 
         // Choose a TASK todo
-        int32 rtask = urand(0, 1);
-        switch (rtask)
-        {
-            case 0:
-            {
-                currentTaskID = TASK_ROAM;
-            }
-            case 1:
-            {
-                currentTaskID = TASK_EXPLORE;
-            }
-            default:
-                currentTaskID = TASK_ROAM;
-        }
+        /*int32 rtask = urand(0, 1);
+        if (rtask==1)
+            currentTaskID = TASK_ROAM;
+        else
+            currentTaskID = TASK_EXPLORE;
+        */
+
+        currentTaskID = TASK_EXPLORE;
 
         uint32 newzone, newarea;
         me->GetZoneAndAreaId(newzone, newarea);
@@ -1144,6 +1148,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
     }
 
+    // bot is dead
     if (me->IsDead())
     {
         if (!m_wasDead)
@@ -2244,17 +2249,17 @@ void WorldBotAI::SetExploreDestination()
     for (auto& poi : myAreaPOI)
     {
         if (poi.map == 0 || poi.map == 1)
-            continue;
-
-        if (poi.map == mapId)
-            continue;
-
-        DestName = poi.name;
-        DestCoordinatesX = poi.pos_x;
-        DestCoordinatesY = poi.pos_y;
-        DestCoordinatesZ = poi.pos_z;
-        DestMap = poi.map;
-        hasPoiDestination = true;
-        break;
+        {
+            if (poi.map == mapId)
+            {
+                DestName = poi.name;
+                DestCoordinatesX = poi.pos_x;
+                DestCoordinatesY = poi.pos_y;
+                DestCoordinatesZ = poi.pos_z;
+                DestMap = poi.map;
+                hasPoiDestination = true;
+                break;
+            }
+        }
     }
 }

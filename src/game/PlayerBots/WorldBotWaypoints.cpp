@@ -568,10 +568,10 @@ std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 void WorldBotAI::LoadDBWaypoints()
 {
     float x, y, z = 0.f;
-    uint32 guid, id, area, zone, map, reverse, chance, minlevel, lastGuidPoint = 0;
-    std::string func, comments = "";
+    uint32 guid, id, area, zone, map, reverse, chance, minlevel, faction, lastGuidPoint = 0;
+    std::string func, comment = "";
 
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, x, y, z, func, area, zone, map, reverse, comments, minlevel FROM worldbot_waypoints ORDER BY guid, id ASC;");
+    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, x, y, z, func, area, zone, map, reverse, chance, faction, minlevel, comments FROM worldbot_waypoints ORDER BY guid, id ASC;");
 
     if (result)
     {
@@ -590,8 +590,9 @@ void WorldBotAI::LoadDBWaypoints()
             map = fields[8].GetUInt32();
             reverse = fields[9].GetUInt32();
             chance = fields[10].GetUInt32();
-            minlevel = fields[11].GetUInt32();
-            comments = fields[12].GetString();
+            faction = fields[11].GetUInt32();
+            minlevel = fields[12].GetUInt32();
+            comment = fields[13].GetString();
 
             Waypoints wpoint;
             wpoint.guid = guid;
@@ -605,8 +606,9 @@ void WorldBotAI::LoadDBWaypoints()
             wpoint.map = map;
             wpoint.reverse = reverse;
             wpoint.chance = chance;
+            wpoint.faction = faction;
             wpoint.minlevel = minlevel;
-            wpoint.comments = comments;
+            wpoint.comment = comment;
             myWaypoints.push_back(wpoint);
         }
         while (result->NextRow());
@@ -632,6 +634,10 @@ void WorldBotAI::LoadDBWaypoints()
                 uint32 guid_ = v_.guid;
                 uint32 id_ = v_.id;
                 std::string func_ = v_.func;
+                uint32 chance_ = v_.chance;
+                uint32 faction_ = v_.faction;
+                uint32 minlevel_ = v_.minlevel;
+                std::string comment_ = v_.comment;
 
                 if (guid_ == guid)
                 {
@@ -713,7 +719,7 @@ void WorldBotAI::LoadDBWaypoints()
                             tempFunc = &TransportTeleportToBootyBayFromRatchet;
 
                     }
-                    path->push_back(WorldBotWaypoint({ v_.x, v_.y, v_.z, v_.map, reverse, tempFunc }));
+                    path->push_back(WorldBotWaypoint({ v_.x, v_.y, v_.z, v_.map, tempFunc, v_.reverse, chance_, faction_, minlevel_, comment_ }));
                 }
             }
 
@@ -778,14 +784,15 @@ void WorldBotAI::MoveToNextPoint()
     {
         if (!m_allowedToMove)
             return;
-
-        if (me->GetLevel() == 1)
-            return;
-
-        std::string name = me->GetName();
-        if (name.find("bank") != std::string::npos)
-            return;
     }
+
+    // let bank characters not roam around
+        /*if (me->GetLevel() == 1)
+            return;*/
+
+    std::string name = me->GetName();
+    if (name.find("bank") != std::string::npos)
+        return;
 
     uint32 const lastPointInPath = m_movingInReverse ? 0 : ((*m_currentPath).size() - 1);
 
@@ -802,6 +809,7 @@ void WorldBotAI::MoveToNextPoint()
     else
         m_currentPoint++;
 
+
     WorldBotWaypoint& nextPoint = m_currentPath->at(m_currentPoint);
 
     me->GetMotionMaster()->MovePoint(m_currentPoint, nextPoint.x + frand(-2, 2), nextPoint.y + frand(-2, 2), nextPoint.z, MOVE_PATHFINDING);
@@ -811,10 +819,15 @@ bool WorldBotAI::StartNewPathFromBeginning()
 {
     struct AvailablePath
     {
-        AvailablePath(WorldBotPath* pPath_, bool reverse_) : pPath(pPath_), reverse(reverse_) {}
+        AvailablePath(WorldBotPath* pPath_, bool reverse_, uint32 chance_, uint32 faction_, uint32 minlevel_, std::string comment_) : pPath(pPath_), reverse(reverse_), chance(chance_), faction(faction_), minlevel(minlevel_), comment(comment_) {}
         WorldBotPath* pPath = nullptr;
         bool reverse = false;
+        uint32 chance = 100;
+        uint32 faction = 0;
+        uint32 minlevel = 1;
+        std::string comment = "";
     };
+
     std::vector<AvailablePath> availablePaths;
 
     std::vector<WorldBotPath*> const* vPaths;
@@ -851,18 +864,66 @@ bool WorldBotAI::StartNewPathFromBeginning()
     }
 
     for (const auto& pPath : *vPaths)
-    {
+    {   
         WorldBotWaypoint* pStart = &((*pPath)[0]);
-        if (me->GetDistance(pStart->x, pStart->y, pStart->z) < INTERACTION_DISTANCE)
-            availablePaths.emplace_back(AvailablePath(pPath, false));
+
+        if (me->GetDistance(pStart->x, pStart->y, pStart->z) < INSPECT_DISTANCE)
+            availablePaths.emplace_back(AvailablePath(pPath, false, pStart->chance, pStart->faction, pStart->minlevel, pStart->comment));
 
         // Some paths are not allowed backwards.
         if (std::find(vPaths_NoReverseAllowed.begin(), vPaths_NoReverseAllowed.end(), pPath) != vPaths_NoReverseAllowed.end())
             continue;
 
         WorldBotWaypoint* pEnd = &((*pPath)[(*pPath).size() - 1]);
-        if (me->GetDistance(pEnd->x, pEnd->y, pEnd->z) < INTERACTION_DISTANCE)
-            availablePaths.emplace_back(AvailablePath(pPath, true));
+
+        if (me->GetDistance(pEnd->x, pEnd->y, pEnd->z) < INSPECT_DISTANCE)
+            availablePaths.emplace_back(AvailablePath(pPath, true, pEnd->chance, pEnd->faction, pEnd->minlevel, pEnd->comment));
+    }
+
+    if (availablePaths.empty() == false)
+    {
+        for (int i = availablePaths.size() - 1; i >= 0; i--)
+        {
+            //availablePaths.at(i).reverse
+
+            // chance
+            uint32 rnd = urand(0, 99);
+            uint32 chance = availablePaths.at(i).chance;
+            bool reverse = availablePaths.at(i).reverse;
+
+            if (chance <= rnd)
+            {
+                availablePaths.erase(availablePaths.begin() + i);
+                continue;
+            }
+
+            // faction
+            uint32 team = me->GetTeam();
+            uint32 faction = availablePaths.at(i).faction;
+            if (faction == 1)
+                faction = ALLIANCE;
+
+            if (faction == 2)
+                faction = HORDE;
+
+            if (faction != 0)
+            {
+                if (team == faction)
+                {
+                    availablePaths.erase(availablePaths.begin() + i);
+                    continue;
+                }
+            }
+
+            // minlevel
+            uint32 level = me->GetLevel();
+            uint32 minlevel = availablePaths.at(i).minlevel;
+            if (level <= minlevel)
+            {
+                availablePaths.erase(availablePaths.begin() + i);
+                continue;
+            }
+        }
     }
 
     if (availablePaths.empty())
@@ -871,6 +932,7 @@ bool WorldBotAI::StartNewPathFromBeginning()
     AvailablePath const* chosenPath = &SelectRandomContainerElement(availablePaths);
     m_currentPath = chosenPath->pPath;
     m_movingInReverse = chosenPath->reverse;
+
     m_currentPoint = m_movingInReverse ? m_currentPath->size() - 1 : 0;
     MoveToNextPoint();
     return true;
@@ -878,8 +940,8 @@ bool WorldBotAI::StartNewPathFromBeginning()
 
 void WorldBotAI::StartNewPathFromAnywhere()
 {
-    if (currentTaskID != TASK_ROAM)
-        return;
+    /*if (currentTaskID != TASK_ROAM)
+        return;*/
 
     WorldBotPath* pClosestPath = nullptr;
     uint32 closestPoint = 0;
@@ -1216,7 +1278,11 @@ bool WorldBotAI::BGStartNewPathToObjective()
 
 bool WorldBotAI::StartNewPathToObjectiveForTask(uint8 currentTaskID)
 {
-   
+    if (m_currentPath)
+		return false;
+
+
+
     return false;
 }
 

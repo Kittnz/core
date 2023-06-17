@@ -10,13 +10,18 @@ typedef void(*WorldBotWaypointFunc) (WorldBotAI* pAI);
 
 struct WorldBotWaypoint
 {
-    WorldBotWaypoint(float x_, float y_, float z_, uint32 map, uint32 reverse, WorldBotWaypointFunc func) :
-        x(x_), y(y_), z(z_), pFunc(func) {};
+    WorldBotWaypoint(float x_, float y_, float z_, uint32 map_, WorldBotWaypointFunc func_, uint32 reverse_, uint32 chance_, uint32 faction_, uint32 minlevel_, std::string comment_) :
+        x(x_), y(y_), z(z_), pFunc(func_), reverse(reverse_), chance(chance_), faction(faction_), minlevel(minlevel_), comment(comment_) {};
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
     uint32 map = 0;
     uint32 reverse = 0;
+    uint32 chance = 100;
+    uint32 faction = 0;
+    uint32 minlevel = 1;
+    std::string comment = "";
+
     WorldBotWaypointFunc pFunc = nullptr;
 };
 
@@ -32,6 +37,7 @@ extern std::vector<WorldBotPath*> vPaths_Map_Arathi_Basin;
 extern std::vector<WorldBotPath*> vPaths_Map_Alterac_Valley;
 extern std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 
+/*
 struct DBPathXYZ {
     DBPathXYZ(uint32 count, float x, float y, float z, WorldBotWaypointFunc func)
         : x(x), y(y), z(z) {}
@@ -47,14 +53,14 @@ struct DBWaypoint {
     std::vector<DBPathXYZ> shards;
 
     ObjectGuid relayGuid;
-};
+};*/
 
 class Waypoints
 {
 public:
     float x, y, z;
-    uint32 guid, id, area, zone, map, reverse, chance, minlevel;
-    std::string func, comments = "";
+    uint32 guid, id, area, zone, map, reverse, chance, faction, minlevel;
+    std::string func, comment = "";
 };
 
 #endif
