@@ -224,6 +224,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "toggle",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectToggleCommand,    "", nullptr },
         { "reset",          SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectResetCommand,     "", nullptr },
         { "respawn",        SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectRespawnCommand,   "", nullptr },
+        { "setgostate",     SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSetGoStateCommand,   "", nullptr },
+        { "setlootstate",   SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSetLootStateCommand,   "", nullptr },
         { "customanim",     SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSendCustomAnimCommand,"", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
