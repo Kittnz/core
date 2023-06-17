@@ -6007,6 +6007,8 @@ void ObjectMgr::LoadFactions()
             return;
         }
 
+        std::set<uint32> factionsWithEnemies;
+
         do
         {
             Field* fields = result->Fetch();
@@ -6021,18 +6023,29 @@ void ObjectMgr::LoadFactions()
             faction.ourMask = fields[3].GetUInt32();
             faction.friendlyMask = fields[4].GetUInt32();
             faction.hostileMask = fields[5].GetUInt32();
-            faction.enemyFaction[0] = fields[6].GetUInt32();
-            faction.enemyFaction[1] = fields[7].GetUInt32();
-            faction.enemyFaction[2] = fields[8].GetUInt32();
-            faction.enemyFaction[3] = fields[9].GetUInt32();
-            faction.friendFaction[0] = fields[10].GetInt32();
-            faction.friendFaction[1] = fields[11].GetInt32();
-            faction.friendFaction[2] = fields[12].GetInt32();
-            faction.friendFaction[3] = fields[13].GetInt32();
+            for (int i = 0; i < 4; ++i)
+            {
+                if (faction.enemyFaction[i] = fields[6 + i].GetUInt32())
+                {
+                    if (faction.factionFlags & (FACTION_TEMPLATE_SEARCH_FOR_ENEMIES_LOW_PRIO | FACTION_TEMPLATE_SEARCH_FOR_ENEMIES_MED_PRIO | FACTION_TEMPLATE_SEARCH_FOR_ENEMIES_HIG_PRIO))
+                        factionsWithEnemies.insert(faction.enemyFaction[i]);
+                }
+            }
+            for (int i = 0; i < 4; ++i)
+            {
+                faction.friendFaction[i] = fields[10 + i].GetUInt32();
+            }
 
             m_FactionTemplatesMap[factionId] = faction;
 
         } while (result->NextRow());
+
+        // This is needed to make sure passive factions who are someone's enemy notify their enemies upon moving.
+        for (auto& itr : m_FactionTemplatesMap)
+        {
+            if (factionsWithEnemies.find(itr.second.faction) != factionsWithEnemies.end())
+                itr.second.isEnemyOfAnother = true;
+        }
     }
     
 }
