@@ -356,3 +356,12 @@ values (@spell_list_id, @description,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- NPC Todd Bolder, remove subname.
 update creature_template set subname = '' where entry = 61277;
+
+-- material fixes for sha(n)gu
+update item_template set material = 8 where entry = 61215; -- Head of Solnius
+update item_template set material = 1 where entry = 61216; -- Dreamsteel Ingot
+update item_template set material = 7 where entry = 61214; -- Mantle of the Wakener
+update item_template set material = 2 where entry = 61173; -- Premium Chocolate
+update item_template set material = 1 where entry = 61204; -- Totem of the Stonebreaker
+update item_template set material = 4 where entry = 61198; -- Small Dream Shard
+update item_template set material = 2 where entry = 61173; -- Premium Chocolate
