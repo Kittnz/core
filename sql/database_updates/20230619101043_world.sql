@@ -333,3 +333,55 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61561, 40989);
 replace into creature_involvedrelation	(id, quest) values (61528, 40989);
 
+-- The Runestone Scepter
+delete from quest_template where entry = 40990;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40989,40990,2,616,60,55,0,0,'The Runestone Scepter','<The creaking ancient lets out a grumble.>$B$BIt would appear Buthok has proven successful in re-energizing the Runestone of Cenarius. Though, there is one last problem that still offers trouble.$B$BYou see, I once charged a druid named Enthelar Valebranch with overseeing the Runestones some years ago. The Runestone Scepter, which activates the magic was in his possession when he succumbed to the whim of corruption.$B$BLast I heard, Enthelar Valebranch was seen wandering Winterspring, his mind addled, and lost. Recover the Runestone Scepter, and I will grant you access to the Runestones of Hyjal.','Recover the Runestone Scepter from Enthelar Valebranch, last seen wandering Winterspring for Glanthas the Ancient at Nordanaar in Hyjal.','Yes?','<Glanthas the Ancient lets out a creaking exhale of approval.>$B$BYou have done well in finding this. It eases my mind to know you have brought peace to Enthelar. He suffered great hardships, and I am sure he was relieved by your actions.$B$BAs I promised, you can now access the Runestones of Hyjal, offering transport between them. Use this power wisely, $c.$B$BFor your considerable efforts in restoring the Runestones I have prepared a suitable commendation.',61644,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,46800,7800,0,0,0,0,0,0,0,0,0,0,0, 61199,5,0,0,0,0,0,0, 61645,1,61646,1,61647,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61528, 40990);
+replace into creature_involvedrelation	(id, quest) values (61528, 40990);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61644,66240,'Runestone Chunk',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61564,61644,-100,0,1,1,0);
+
+replace into item_template values
+ ('61645', '4', '0', 'Clutch of Renewal', '', '66424', '3', '0', '1', '144432', '36108', '23', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '17988', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61646', '4', '4', 'Gladeforge Breastplate', '', '27384', '3', '0', '1', '98752', '24688', '5', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '23', '3', '12',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '704', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '21598', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '135', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61647', '4', '2', 'Cuffs of Nordanaar', '', '3606', '3', '0', '1', '59900', '14975', '9', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '16', '6', '9',
+ '3', '7', '5', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '79', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '35', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- GOBJECT Runestone of Nordrassil, uses model NEMagicImplement10, has gossip flags with the following text : <The stone hums softly.>
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020036, 2, 24516, 'Runestone of Nordrassil', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_runestone_of_nordrassil');
+-- GOBJECT Runestone of Cenarius, , uses model NEMagicImplement09, has gossip flags with the following text : <The stone hums softly.>
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020037, 2, 24515, 'Runestone of Cenarius', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_runestone_of_cenarius');
+
+replace into broadcast_text (entry, Male_Text) values (30127, 'The stone hums softly.');
+replace into npc_text (ID, BroadcastTextID0) values (30127, 30127);
