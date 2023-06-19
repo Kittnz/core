@@ -107,3 +107,59 @@ replace into creature_loot_template values
 (61237,61625,-100,0,1,1,0),
 (61238,61625,-100,0,1,1,0);
 
+-- Ebonmere Affairs
+delete from quest_template where entry = 40979;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40977,40979,2,5180,45,35,0,0,'Ebonmere Affairs','Now that you\'ve proven yourself to me as a valuable ally, I have more pressing matters that I need looked into.$B$BYou see, three weeks ago my farm was robbed. A swindling rogue named Dustivan Blackcowl was employed to take the deed of Ebonmere Farm itself!$B$BHe is a lackey to Greymane and serves like an obedient dog. I want his hand for this treachery, and I want my family deed recovered. Do this for me and I will see you rewarded justly.$B$BI have no doubt you will find this rogue deep within the bowels of Gilneas City itself.','Slay Dustivan Blackcowl and recover the Ebonmere Deed for Joshua Ebonmere at Ebonmere Farm in Gilneas.','So, what news do you have?','You\'ve brought me peace, something I have been longing to have.$B$BWith this deed I can continue as I always have. I have prepared some rewards for you as thanks for returning my property.',61626,1,0,0,0,0,0,0, 61422,1,0,0,0,0,0,0, 0,0, 0,31200,5200,68,350,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61627,1,61628,1,61629,1,61630,1, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61290, 40979);
+replace into creature_involvedrelation	(id, quest) values (61290, 40979);
+update quest_template set requiredraces = 434		 where entry = 40979;
+update quest_template set type = 81					 where entry = 40979;
+update quest_template set exclusivegroup = -40977 where entry in (40977,40978);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61626,811,'Ebonmere Deed',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,8);
+
+replace into creature_loot_template values
+(61422,61626,-100,0,1,1,0);
+
+replace into item_template values
+ ('61627', '2', '0', 'Ebonmere Reaver', '', '14029', '2', '0', '1', '71864', '17966', '13', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '45', '79', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61628', '4', '1', 'Clutch of Joshua', '', '24762', '2', '0', '1', '14324', '3581', '6', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '36', '0', '0', '0',
+ '0', '0', '0', '25975', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61629', '2', '3', 'Farmer\'s Musket', '', '66393', '2', '0', '1', '48836', '12209', '26', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '3', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '100',
+ '3', '38', '76', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '65', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61630', '4', '4', 'Ebonmere Vambracers', '', '24410', '2', '0', '1', '14472', '3618', '9', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '3', '7', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '198', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '40', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
