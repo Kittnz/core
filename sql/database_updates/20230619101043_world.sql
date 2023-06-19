@@ -300,3 +300,16 @@ replace into creature_loot_template values
 (7110,61641,-11,0,1,1,0),
 (7111,61641,-11,0,1,1,0);
 
+-- Imbued Stone
+delete from quest_template where entry = 40987;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40986,40987,2,616,60,55,0,0,'Imbued Stone','The Clutch of Atherelex is reliant on elemental magic, drawing power from potent natural energies. To access the magic that we so desire, we must acquire a Imbued Stone.$B$BPowerful, and enraged elementals of stone are known to hold such items.$B$BOn the island of Tel\'Abim to the east of Tanaris can be found Agitated Rock Elementals. Travel there, and acquire an Imbued Stone from them.','Acquire an Imbued Stone from Rock Elementals in Tel\'Abim for Buthok Cloudhorn near the base of Hyjal.','Has the work been completed $c?','This Imbued Stone holds considerable power, despite looking like an ordinary rock.',61642,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,39000,6500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61561, 40987);
+replace into creature_involvedrelation	(id, quest) values (61561, 40987);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61642,4717,'Imbued Stone',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61093,61642,-13,0,1,1,0);
+
