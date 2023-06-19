@@ -6735,9 +6735,75 @@ bool QuestAccept_npc_buthok_cloudhorn(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool GOHello_go_runestone_of_nordrassil(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020036)
+    {
+        if (pPlayer->GetQuestRewardStatus(40990))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Runestone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(30127, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_runestone_of_nordrassil(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020036)
+        {
+            static const WorldLocation m_runestone_of_nordrassil(1, 4474.1542F, -3153.9086F, 1033.9987f, 3.3363f);
+            pPlayer->TeleportTo(m_runestone_of_nordrassil);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_runestone_of_cenarius(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020037)
+    {
+        if (pPlayer->GetQuestRewardStatus(40990))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Runestone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(30127, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_runestone_of_cenarius(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020037)
+        {
+            static const WorldLocation m_runestone_of_cenarius(1, 5372.1660F, -3696.9299F, 1594.3531f, 1.4211f);
+            pPlayer->TeleportTo(m_runestone_of_cenarius);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_runestone_of_cenarius";
+    newscript->pGOHello = &GOHello_go_runestone_of_cenarius;
+    newscript->pGOGossipSelect = &GOSelect_go_runestone_of_cenarius;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_runestone_of_nordrassil";
+    newscript->pGOHello = &GOHello_go_runestone_of_nordrassil;
+    newscript->pGOGossipSelect = &GOSelect_go_runestone_of_nordrassil;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_buthok_cloudhorn";
