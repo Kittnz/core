@@ -325,3 +325,11 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 replace into creature_loot_template values
 (61565,61643,-100,0,1,1,0);
+
+-- Runestone Reactivation
+delete from quest_template where entry = 40989;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40988,40989,2,616,60,55,0,0,'Runestone Reactivation','With everything in place, the power of the Runestone will soon be channeling once again. I require you to speak with Glanthas the Ancient in Nordanaar. It is he that controls the power of the Runestones here in Hyjal. With his magic, you should be allowed teleporation between both stones.','Speak with Glanthas the Ancient at Nordanaar in Hyjal.','Yes?','<Glanthas the Ancient offers a long, and silent stare.>$B$BThe Runestone?',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61561, 40989);
+replace into creature_involvedrelation	(id, quest) values (61528, 40989);
+
