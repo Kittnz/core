@@ -385,3 +385,12 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 
 replace into broadcast_text (entry, Male_Text) values (30127, 'The stone hums softly.');
 replace into npc_text (ID, BroadcastTextID0) values (30127, 30127);
+
+-- Link mooncloth item set.
+update item_template set set_id = 628 where entry = 14140;
+update item_template set set_id = 628 where entry = 14139;
+update item_template set set_id = 628 where entry = 14138;
+update item_template set set_id = 628 where entry = 18486;
+update item_template set set_id = 628 where entry = 18409;
+update item_template set set_id = 628 where entry = 14137;
+update item_template set set_id = 628 where entry = 15802;
