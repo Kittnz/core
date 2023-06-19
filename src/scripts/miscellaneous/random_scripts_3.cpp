@@ -6638,15 +6638,6 @@ bool QuestAccept_npc_itharius(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
-bool GOHello_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo)
-{
-    if (pGo->GetEntry() == 2020035)
-    {
-        pPlayer->SEND_GOSSIP_MENU(30126, pGo->GetGUID());
-    }
-    return true;
-}
-
 bool QuestComplete_go_mysterious_mailbox(Player* player, GameObject* obj, Quest const* quest)
 {
     if (!obj)
@@ -6669,6 +6660,46 @@ bool QuestComplete_go_mysterious_mailbox(Player* player, GameObject* obj, Quest 
     return true;
 }
 
+bool GOHello_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020035)
+    {
+        if (pPlayer->GetQuestStatus(40982) == QUEST_STATUS_INCOMPLETE) // In Memory of Franklin
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Place the necklace on the grave.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(30126, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020035)
+        {
+            if (pPlayer->HasItemCount(61632, 1, false))
+            {
+                pPlayer->DestroyItemCount(61632, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60047); cInfo && pPlayer)
+                    pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+                Creature* NPC_HARRISON_BLACKHEART = pGo->FindNearestCreature(61287, 40.0F);
+
+                if (!NPC_HARRISON_BLACKHEART)
+                    return false;
+
+                NPC_HARRISON_BLACKHEART->MonsterSay("Rest easy Franklin, you will be missed.");
+                NPC_HARRISON_BLACKHEART->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -6676,6 +6707,7 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "go_grave_of_franklin_blackheart";
     newscript->pGOHello = &GOHello_go_grave_of_franklin_blackheart;
+    newscript->pGOGossipSelect = &GOSelect_go_grave_of_franklin_blackheart;
     newscript->RegisterSelf();
 
     newscript = new Script;
