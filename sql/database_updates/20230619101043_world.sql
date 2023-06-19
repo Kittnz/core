@@ -183,3 +183,16 @@ replace into creature_loot_template values
 (61396,61631,-100,0,1,1,0),
 (61397,61631,-100,0,1,1,0);
 
+-- The Blackheart Killer
+delete from quest_template where entry = 40981;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40980,40981,2,5179,45,35,0,0,'The Blackheart Killer','I have heard rumors from the Deathstalkers that the ambush was facilitated by Captain Veller stationed at Freyshear Keep. If this information is true, then this man was the murderer of my brother.$B$BA very valuable piece of jewelry was taken from Franklin\'s corpse; the Blackheart Necklace. I have no doubt in my mind that this pompous man has taken the necklace.$B$BFreyshear Keep can be found far to the west, isolated on an island that looms overtop of Ravenshire. Kill him, and recover the necklace.','Assault Freyshear Keep and Slay Captain Veller to recover the Blackheart Necklace for Harrison Blackheart in Gilneas.','Have you found the necklace?','<Harrison Blackheart takes the jewelry with soft hands, taking a moment to admire the beauty.>$B$BI must thank you for recovering this. It certainly does mean a lot to me.',61632,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,30000,5000,68,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61287, 40981);
+replace into creature_involvedrelation	(id, quest) values (61287, 40981);
+update quest_template set requiredraces = 434		 where entry = 40981;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61632,15420,'Blackheart Necklace',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61566,61632,-100,0,1,1,0);
