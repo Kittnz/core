@@ -196,3 +196,38 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 replace into creature_loot_template values
 (61566,61632,-100,0,1,1,0);
+
+-- In Memory of Franklin
+delete from quest_template where entry = 40982;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40981,40982,2,5179,45,35,0,0,'In Memory of Franklin','I have one last request from you. I figure you should do the honors, since you have recovered this necklace after all.$B$BPlace it upon the grave of Franklin, we can honor him in this way at least.','Place the Blackheart Necklace on the grave of Franklin.','Hmm, yes?','<With a nod of approval Harrison seems content.>$B$BYou\'ve done a lot for me, and I am certainly greatful. I am sure Franklin is as well.$B$B<A heavy chuckle escapes Harrison.>$B$BTake one of these, as tribute from us.',0,0,0,0,0,0,0,0, 60047,1,0,0,0,0,0,0, 61632,1, 0,2700,450,68,250,0,0,0,0,0,0,0,0,0, 61633,1,61634,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Place the Blackheart Necklace on the grave of Franklin');
+
+replace into creature_questrelation		(id, quest) values (61287, 40982);
+replace into creature_involvedrelation	(id, quest) values (61287, 40982);
+update quest_template set requiredraces = 434		 where entry = 40982;
+
+REPLACE INTO creature_template VALUES
+(60047, 328, 0, 0, 0, 0, 'quest_40982_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into item_template values
+ ('61633', '2', '15', 'Bleaktalon', '', '20398', '2', '0', '1', '65632', '16408', '13', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '4', '3', '3',
+ '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '0',
+ '0', '27', '63', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '55', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61634', '4', '1', 'Blackheart Boots', '', '27861', '2', '0', '1', '22536', '5634', '8', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '7', '5', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '0', '9398', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '35', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+
+
+
