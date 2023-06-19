@@ -248,7 +248,7 @@ replace into creature_involvedrelation	(id, quest) values (61561, 40984);
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
 (61636,609,'Barkskin Spirit Bead',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0,4),
 (61637,1500,'Misthoof Antler',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0,2),
-(61638,1507,'Shimmering Ooze',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0,3);
+(61638,1507,'Shimmering Ooze',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
 
 replace into creature_loot_template values
 (61343,61636,-26,0,1,1,0),
@@ -271,4 +271,32 @@ REPLACE INTO creature_template VALUES
 (60048, 328, 0, 0, 0, 0, 'quest_40985_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 update creature_template set script_name = 'npc_buthok_cloudhorn' where entry = 61561;
+
+-- The Clutch of Atherelex
+delete from quest_template where entry = 40986;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40985,40986,2,616,60,55,0,0,'The Clutch of Atherelex','Undoing a powerful satyr curse is not something that can be easily done, especially not with any magic that we here possess. We will need to create a satyr relic named the Clutch of Atherelex. Each satyr tribe holds a specific rod. Should a specific curse need to be undone all of the rods must be attached together in unison in order to channel a specific magic to remove the curse.$B$BTo create the Clutch of Atherelex we require the Rod of \'Ath, from the Vilemusk satyrs in Hyjal. The Rod of \'Ere from the Legashi satyrs in Azshara. Finally, the Rod of \'Lex from the Jadefire satyrs.','Gather the Rod of \'Ath, the Rod of \'Ere, and the Rod of \'Lex for Buthok Cloudhorn near the base of Hyjal.','So, have you recovered what is required?','<Buthok Cloudhorn lets out a sigh of relief.>$B$BI feared that you would not return. I am happy my worries have not come true.',61639,1,61640,1,61641,1,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,40800,6800,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61561, 40986);
+replace into creature_involvedrelation	(id, quest) values (61561, 40986);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61639,20309,'Rod of \'Ath',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4),
+(61640,20352,'Rod of \'Ere',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4),
+(61641,18026,'Rod of \'Lex',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61338,61639,-11,0,1,1,0),
+(61339,61639,-11,0,1,1,0),
+(61340,61639,-11,0,1,1,0),
+(61341,61639,-11,0,1,1,0),
+(6200,61640,-11,0,1,1,0),
+(6201,61640,-11,0,1,1,0),
+(6202,61640,-11,0,1,1,0),
+(7105,61641,-11,0,1,1,0),
+(7106,61641,-11,0,1,1,0),
+(7107,61641,-11,0,1,1,0),
+(7108,61641,-11,0,1,1,0),
+(7109,61641,-11,0,1,1,0),
+(7110,61641,-11,0,1,1,0),
+(7111,61641,-11,0,1,1,0);
 
