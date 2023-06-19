@@ -118,7 +118,7 @@ update quest_template set type = 81					 where entry = 40979;
 update quest_template set exclusivegroup = -40977 where entry in (40977,40978);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
-(61626,811,'Ebonmere Deed',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,8);
+(61626,811,'Ebonmere Deed',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,7);
 
 replace into creature_loot_template values
 (61422,61626,-100,0,1,1,0);
@@ -162,4 +162,24 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '40', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
+
+-- Greymane Hatred
+delete from quest_template where entry = 40980;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40980,2,5179,45,35,0,0,'Greymane Hatred','My brother Franklin Blackheart may have been living, but he was my brother. He took up the cause to fight with the Ravenwood rebellion. It is here he met his fate, ambushed by the Greymane. Not a single person was spared, and the entire camp was burned to the ground.$B$BSeeing his twisted remains hurt me in a way nothing else has. I can feel it deep within, the sadness of his demise lingers still. I want retribution on those that have done this, slay the Greymane that inhabit Gilneas. They can be found to the east, just north of Ravenshire, or to the west of here, in a place called Dryrock Valley.$B$BBring me forty Greymane Signets from any who would swear allegiance to their cause.','Slay those loyal to the Greymane cause, and gather from them 40 Greymane Signets for Harrison Blackheart in Gilneas.','So, you\'ve returned, have you dealt justice to those that murdered my brother?','Ahh, is this what revenge feels like?$B$BI must admit, I only feel an emptiness. The true killer is still out there, and must be found.',61631,40,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,29700,4950,68,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61287, 40980);
+replace into creature_involvedrelation	(id, quest) values (61287, 40980);
+update quest_template set requiredraces = 434		 where entry = 40980;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61631,1705,'Greymane Signet',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61363,61631,-100,0,1,1,0),
+(61366,61631,-100,0,1,1,0),
+(61393,61631,-100,0,1,1,0),
+(61394,61631,-100,0,1,1,0),
+(61395,61631,-100,0,1,1,0),
+(61396,61631,-100,0,1,1,0),
+(61397,61631,-100,0,1,1,0);
 
