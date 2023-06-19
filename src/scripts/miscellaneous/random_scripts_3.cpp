@@ -6700,9 +6700,49 @@ bool GOSelect_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo, 
     return false;
 }
 
+bool QuestAccept_npc_buthok_cloudhorn(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40985) // The Runestone Ritual
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("A dark magic lingers, it is foul in intent...");
+            }, 3000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_YES);
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }, 9500);
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60048))
+                player->KilledMonster(dummy_bunny, ObjectGuid());
+            npc->InterruptNonMeleeSpells(true);
+            return true;
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_buthok_cloudhorn";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_buthok_cloudhorn;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_grave_of_franklin_blackheart";

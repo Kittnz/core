@@ -260,3 +260,15 @@ replace into creature_loot_template values
 (61334,61638,-12,0,1,1,0),
 (61335,61638,-12,0,1,1,0);
 
+-- The Runestone Ritual
+delete from quest_template where entry = 40985;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40984,40985,2,616,60,55,0,0,'The Runestone Ritual','I have prepared the ritual. Using the materials you have collected I should be able to uncover the magic that is lingering upon the Runestone.$B$BGive me some time, and speak to me when I am done.','Wait for Buthok Cloudhorn to finish his ritual.','<Buthok Cloudhorn seems lost in the ritual.>','I have uncovered the source of this magic. Satyrs have tained the Runestone, and placed a curse upon it.$B$B<Buthok Cloudhorn lets out a sigh.>$B$BThis will take some considerable effort to fix.',0,0,0,0,0,0,0,0, 60048,1,0,0,0,0,0,0, 0,0, 0,0,500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Wait for Buthok Cloudhorn to finish his ritual');
+
+replace into creature_questrelation		(id, quest) values (61561, 40985);
+replace into creature_involvedrelation	(id, quest) values (61561, 40985);
+
+REPLACE INTO creature_template VALUES
+(60048, 328, 0, 0, 0, 0, 'quest_40985_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set script_name = 'npc_buthok_cloudhorn' where entry = 61561;
+
