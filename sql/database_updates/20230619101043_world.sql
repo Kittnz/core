@@ -87,3 +87,23 @@ replace into creature_questrelation		(id, quest) values (61290, 40977);
 replace into creature_involvedrelation	(id, quest) values (61290, 40977);
 update quest_template set requiredraces = 434		 where entry = 40977;
 
+-- Ebonmere Worgen Infestation
+delete from quest_template where entry = 40978;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40978,2,5179,40,35,8,0,'Ebonmere Worgen Infestation','The worgen in Gilneas entered shortly after the Greymane wall was destroyed in Oldrock Pass. You see, a powerful lich invaded the land and destroyed Greyshire some time ago. Now the forests themselves are packed full of the beasts, threatening to overtake my farm at any minute.$B$BI need you to collect their pelts and prevent any future attacks. Six pelts from the Bloodclaw and Nighthowl worgen should suffice. You can find these packs to the west and southwest.','Collect 6 Bloodclaw Pelts, and 6 Nighthowl Pelts for Joshua Ebonmere at Ebonmere Farm in Gilneas.','Watch yourself during the night. Dark things are always lingering.','The worgen, defeated?$B$B<A wiry smirk crosses his features.>$B$BYou have done well, outsider.',61624,6,61625,6,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,18600,3100,68,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61290, 40978);
+replace into creature_involvedrelation	(id, quest) values (61290, 40978);
+update quest_template set requiredraces = 434		 where entry = 40978;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61624,3591,'Bloodclaw Pelt',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0,8),
+(61625,1421,'Nighthowl Pelt',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0,8);
+
+replace into creature_loot_template values
+(61251,61624,-100,0,1,1,0),
+(61252,61624,-100,0,1,1,0),
+(61253,61624,-100,0,1,1,0),
+(61236,61625,-100,0,1,1,0),
+(61237,61625,-100,0,1,1,0),
+(61238,61625,-100,0,1,1,0);
+
