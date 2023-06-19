@@ -79,3 +79,11 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
 
+-- Ebonmere Bat Infestation
+delete from quest_template where entry = 40977;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40977,2,5179,40,35,8,0,'Ebonmere Bat Infestation','Hey, you there.$B$BYou know anything about bat extermination? These past few weeks have been hell. All of my efforts to drive away these bats have ended in disappointment. Perhaps you can do me a solid and rid me of their annoyance.$B$BIf I am to restore the Ebonmere farm they need to go, and for good. Thin their population, and kill twelve of them, return to me when the task is done.','Slay 12 Vilewing Batlings for Joshua Ebonmere at Ebonmere Farm in Gilneas.','So, has the work been done?','I feel like I can breathe again. These blasted vermin roam the forests in droves, at least now there are less of them about.',0,0,0,0,0,0,0,0, 61230,12,0,0,0,0,0,0, 0,0, 0,18600,3100,68,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61290, 40977);
+replace into creature_involvedrelation	(id, quest) values (61290, 40977);
+update quest_template set requiredraces = 434		 where entry = 40977;
+
