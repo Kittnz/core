@@ -61,3 +61,21 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
 
+-- War on Worgen
+delete from quest_template where entry = 40976;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40976,2,5179,45,38,8,0,'War on Worgen','The worgen of Gilneas are surprisingly well organized for a bunch of beasts. Their packs have caused us quite a lot of headache in spreading our influence.$B$BI am in need of someone who can sever the chain of command. An aimless group of worgen will serve us much better in the end. Travel west and search for the cavern where the Bloodclaw alpha call home. Slay them so that their packs cannot organize against us.','Slay 9 Bloodclaw Alpha for Deathstalker Vernon at Stillward Church in Gilneas.','I advise you to carry yourself with caution.$B$BYour foe is not as weak as you may think.','You have done well, with the alphas scattered there will be struggles for dominance. Whatever comes of that is not our concern, however. We have already removed the head of the beast.$B$BYour efforts to serve the Dark Lady will not go unnoticed. Take this as a commendation for your work.',0,0,0,0,0,0,0,0, 61252,9,0,0,0,0,0,0, 0,0, 0,20700,3450,68,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61623,1,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61283, 40976);
+replace into creature_involvedrelation	(id, quest) values (61283, 40976);
+update quest_template set requiredraces = 434		 where entry = 40976;
+
+replace into item_template values
+ ('61623', '4', '0', 'Deathstalker Band', '', '9840', '2', '0', '1', '12832', '3208', '11', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '8', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
