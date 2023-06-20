@@ -264,6 +264,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand learnCommandTable[] =
     {
 		{ "all_myspells",   SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllMySpellsCommand,    "", nullptr },
+        { "all_recipes",    SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllRecipesCommand,     "", nullptr },
         { "all_trainer",    SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllTrainerCommand,     "", nullptr },
 		{ "",               SEC_DEVELOPER,     false, &ChatHandler::HandleLearnCommand,               "", nullptr },
 		{ nullptr,          0,                  false, nullptr,                                       "", nullptr }
