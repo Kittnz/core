@@ -6653,6 +6653,7 @@ bool QuestComplete_go_mysterious_mailbox(Player* player, GameObject* obj, Quest 
         if (player->IsHardcore() && player->GetLevel() < 60)
         {
             player->SetHardcoreStatus(HARDCORE_MODE_STATUS_HC60);
+            sLog.out(LOG_HARDCORE_MODE, "Player %s turned on Infernal mode by completing quest at level %u.", player->GetName(), player->GetLevel());
             return true;
         }
     }

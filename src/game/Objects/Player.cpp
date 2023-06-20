@@ -3411,12 +3411,12 @@ void Player::CheckInfernoInvite()
         {
             uint32 itemEntry = 61457;
             std::string subject = "A Mysterious Missive";
-            std::string body = "This quest is the beginning of the Inferno Mode attunement. Completion of this chain will result in PERMANANT hardcore gameplay, even upon reaching level 60.";
+            std::string body = "This quest is the beginning of the Inferno Mode attunement.\n\nCompletion of this chain will result in PERMANENT hardcore gameplay, even upon reaching level 60.";
             Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
             ToMailItem->SaveToDB();
             MailDraft(subject, sObjectMgr.CreateItemText(body))
                 .AddItem(ToMailItem)
-                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(81030), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
             SetCustomFlag(CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE);
         }
