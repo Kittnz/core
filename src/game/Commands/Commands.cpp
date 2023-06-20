@@ -14436,6 +14436,75 @@ bool ChatHandler::HandleTurtleCinematic(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildNameCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    if (!pPlayer)
+        return false;
+
+    if (!pPlayer->GetGuildId() || !pPlayer->GetRank() == GR_GUILDMASTER)
+    {
+        m_session->SendNotification("You must be a guild master of your guild to use this service!");
+        return false;
+    }
+
+    if (!pPlayer->HasItemCount(80499))
+    {
+        m_session->SendNotification("You must purchase [Guild Name Change Token] first.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (!args || !*args)
+        return false;
+
+    char* new_name = ExtractQuotedArg(&args);
+
+    if (!new_name)
+        return false;
+
+    std::string name_str(new_name);
+
+    std::wstring name_wstr;
+    Utf8toWStr(name_str, name_wstr);
+    wstrToLower(name_wstr);
+
+    if (!isBasicLatinString(name_wstr, false))
+    {
+        m_session->SendNotification("Please use latin symbols only.");
+        return false;
+    }
+
+    if (name_str.size() > 1)
+    {
+        name_str[0] = toupper(name_str[0]);
+    }
+
+    Guild* guild = sGuildMgr.GetGuildById(pPlayer->GetGuildId());
+
+    if (!guild)
+    {
+        SendSysMessage(LANG_GUILD_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (Guild* existing = sGuildMgr.GetGuildByName(name_str))
+    {
+        m_session->SendNotification("A guild with the name '%s' already exists.", new_name);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    guild->Rename(name_str);
+    PSendSysMessage("Your guild has successfully been renamed to '%s'. Players must log out and log back in to see the changes.",  name_str);
+
+    pPlayer->DestroyItemCount(80499, 1, true, false, true);
+    pPlayer->SaveInventoryAndGoldToDB();
+    return true;
+}
+
 bool ChatHandler::HandleCopyCommand(char* args)
 {
     if (!args || !*args)
