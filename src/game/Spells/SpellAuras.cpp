@@ -1770,6 +1770,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         break;
                     }
                     case 29705: // Midsummer Pole Dancing
+                    case 29726:
+                    case 29727:
                     {
                         m_isPeriodic = true;
                         m_modifier.periodictime = 3000;
@@ -6712,7 +6714,9 @@ void Aura::PeriodicDummyTick()
                     }
                     return;
                 }
-                case 29705:  // Midsummer Pole Dancing
+                case 29705:  // Midsummer Summer Festival - Test Ribbon Pole Channel
+                case 29726:
+                case 29727:
                 {
                     int ribbonCount = 0;
 
@@ -6721,8 +6725,14 @@ void Aura::PeriodicDummyTick()
                     {
                         if (ribbonCount < 2)
                         {
-                            if (aura.second->GetId() == 29705)
-                                ribbonCount++;
+                            switch (aura.second->GetId())
+                            {
+                                case 29705: // Red
+                                case 29726: // Purple
+                                case 29727: // Green
+                                    ribbonCount++;
+                                    break;
+                            }
                         }
                         else
                             break;

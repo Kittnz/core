@@ -36,7 +36,6 @@ dungeons/blackrock_depths/boss_magmus.cpp
 dungeons/blackrock_depths/boss_tomb_of_seven.cpp
 dungeons/blackrock_depths/instance_blackrock_depths.cpp
 dungeons/blackrock_spire/blackrock_spire.h
-dungeons/blackrock_spire/boss_drakkisath.cpp
 dungeons/blackrock_spire/boss_halycon.cpp
 dungeons/blackrock_spire/boss_highlord_omokk.cpp
 dungeons/blackrock_spire/boss_mother_smolderweb.cpp
