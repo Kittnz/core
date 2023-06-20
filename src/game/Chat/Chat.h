@@ -50,6 +50,7 @@ class GmTicket;
 struct ItemPrototype;
 struct GameObjectData;
 struct TrainerSpellData;
+struct SkillLineEntry;
 
 enum CommandFlags
 {
