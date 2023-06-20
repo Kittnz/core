@@ -669,8 +669,8 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
             if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
             {
                 Onyxia->ForcedDespawn();
-                Onyxia->SetRespawnDelay(30 * MINUTE);
-                Onyxia->SetRespawnTime(30 * MINUTE);
+                Onyxia->SetRespawnDelay(3 * MINUTE);
+                Onyxia->SetRespawnTime(3 * MINUTE);
                 Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
             }
             Timer = 15000;
@@ -679,13 +679,6 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
             if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
                 DoScriptText(SAY_BOVLAR4, Bolvar, Bolvar);
         case 75:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
-            {
-                Onyxia->ForcedDespawn();
-                Onyxia->SetRespawnDelay(30 * MINUTE);
-                Onyxia->SetRespawnTime(30 * MINUTE);
-                Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-            }
             Tick = 100; // come back when combat is done
             PhaseFinale = true;
             break;

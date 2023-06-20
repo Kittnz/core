@@ -323,6 +323,8 @@ class ChatHandler
         bool HandleGameObjectResetCommand(char* args);
         bool HandleGameObjectSelectCommand(char* args);
         bool HandleGameObjectRespawnCommand(char* args);
+        bool HandleGameObjectSetGoStateCommand(char* args);
+        bool HandleGameObjectSetLootStateCommand(char* args);
         bool HandleGameObjectInfoCommand(char* args);
         bool HandleGameObjectSendCustomAnimCommand(char* args);
         GameObject* getSelectedGameObject();
