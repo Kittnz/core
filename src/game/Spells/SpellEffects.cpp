@@ -6177,10 +6177,12 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 29710:  // Pole Dancing (triggered when clicking the pole)
+                case 29710:
                 {
                     if (Player* pPlayerTarget = ToPlayer(unitTarget))
-                        pPlayerTarget->CastSpell(pPlayerTarget, 29705, true); // Pole Dancing Visual
+                    {
+                        pPlayerTarget->CastSpell(pPlayerTarget, PickRandomValue(29705, 29726, 29727), false);
+                    }
                     return;
                 }
             }

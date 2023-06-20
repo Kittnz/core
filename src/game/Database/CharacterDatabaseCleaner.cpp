@@ -33,6 +33,7 @@
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {
+    return;
     // config to disable
     if (!sWorld.getConfig(CONFIG_BOOL_CLEAN_CHARACTER_DB))
         return;
@@ -56,6 +57,8 @@ void CharacterDatabaseCleaner::CleanDatabase()
 
 void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table, bool (*check)(uint32))
 {
+
+    return;
     QueryResult* result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
     if (!result)
     {
@@ -115,6 +118,7 @@ void CharacterDatabaseCleaner::CleanCharacterSpell()
 
 void CharacterDatabaseCleaner::FreeInactiveCharacterNames()
 {
+    return;
     sLog.outInfo("NameCleanup #1: Loading banned accounts...");
     std::set<uint32> bannedAccounts;
     std::unique_ptr<QueryResult> pQuery(LoginDatabase.Query("SELECT `id` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
@@ -219,6 +223,7 @@ void CharacterDatabaseCleaner::FreeInactiveCharacterNames()
 
 void CharacterDatabaseCleaner::DeleteInactiveCharacters()
 {
+    return;
     sLog.outInfo("CharCleanup #1: Loading banned accounts...");
     std::set<uint32> bannedAccounts;
     std::unique_ptr<QueryResult> pQuery(LoginDatabase.Query("SELECT `id` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
