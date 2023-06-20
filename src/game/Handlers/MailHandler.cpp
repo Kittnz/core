@@ -148,7 +148,8 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     if (IsSuspicious())
         return;
 
-    if (sAccountMgr.GetMailCount(GetAccountId()) >= sWorld.getConfig(CONFIG_UINT32_MAIL_MAX_PER_HOUR))
+    if (sAccountMgr.GetMailCount(GetAccountId()) >= sWorld.getConfig(CONFIG_UINT32_MAIL_MAX_PER_HOUR)
+        && !HasHighLevelCharacter())
     {
         SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
         WorldPacket data;

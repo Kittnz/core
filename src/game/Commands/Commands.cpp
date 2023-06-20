@@ -14451,7 +14451,7 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
     if (!ExtractOptUInt32(&args, shopId, 1))
     {
-        SendSysMessage("No item ID specified.");
+        SendSysMessage("No Shop ID specified.");
         return false;
     }
 
@@ -14501,6 +14501,7 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
     entry->refunded = true;
     LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+    PSendSysMessage("Shop ID %u for player %u refunded.", entry->id, entry->charGuid);
     return true;
 }
 
