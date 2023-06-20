@@ -374,6 +374,7 @@ class ChatHandler
 
         bool HandleLearnCommand(char* args);
         bool HandleLearnAllMySpellsCommand(char* args);
+        bool HandleLearnAllRecipesCommand(char* args);
         bool HandleLearnAllTrainerCommand(char* args);
 
         bool HandleLookupCreatureCommand(char* args);
@@ -722,6 +723,7 @@ class ChatHandler
         bool HandleUnBanHelper(BanMode mode, char* args);
         bool HandleMuteHistoryHelper(uint32 accountid, char const* accountname);
         void HandleCharacterLevel(Player* player, ObjectGuid player_guid, uint32 oldlevel, uint32 newlevel);
+        SkillLineEntry const* FindSkillLineEntryFromProfessionName(char* args, std::string& nameOut);
         void HandleLearnSkillRecipesHelper(Player* player,uint32 skill_id);
         void HandleLearnTrainerHelper(Player* player, TrainerSpellData const* tSpells);
         bool HandleGoHelper(Player* _player, uint32 mapid, float x, float y, float const* zPtr = nullptr, float const* ortPtr = nullptr);
