@@ -47,10 +47,11 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     {
         if (Channel* chn = cMgr->GetOrCreateChannel(channelname))
         {
-            //Would do it in Channel::Join but we dont have sec checks available there yet unless we rewrite it. Zzz
-            if (channelname == u8"Hardcore" && GetSecurity() == SEC_PLAYER && !GetPlayer()->IsHardcore())
+            if (chn->GetChannelId() == CHANNEL_ID_HARDCORE && GetSecurity() == SEC_PLAYER && !GetPlayer()->IsHardcore() && !GetPlayer()->IsHC60())
+            {
+                player->ToPlayer()->GetSession()->SendNotification("You must be Hardcore to join this channel.");
                 return;
-
+            }
             chn->Join(player->GetObjectGuid(), pass.c_str());
         }
     }

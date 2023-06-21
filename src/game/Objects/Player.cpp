@@ -23290,8 +23290,6 @@ bool Player::SetupHardcoreMode()
     // Remove trades
     if (GetTradeData())
         TradeCancel(true);
-
-
    
     SetMoney(0);
 
@@ -23407,8 +23405,6 @@ bool Player::SetupHardcoreMode()
     // destroy buyback
     for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
         RemoveItemFromBuyBackSlot(i, true);
-
-
 
     //all modifications to auction containers are done in World::Update or its derivatives.
     //SetupHardcoreMode() being called only from RewardQuest, a Map-opcode means that we should only protect ourselves here.
