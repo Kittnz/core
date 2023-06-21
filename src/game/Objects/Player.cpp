@@ -18353,6 +18353,45 @@ void Player::SendProficiency(ItemClass itemClass, uint32 itemSubclassMask) const
     GetSession()->SendPacket(&data);
 }
 
+unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
+{
+    uint32 display_id = 0;
+
+    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 12> glyph_map =
+    { {
+       // Move it to DB if more glyphs!
+       // item id, alliance display, horde display, default_alliance, defaut_horde 
+        { FORM_CAT,       51057, 11444, 10054, 892,   8571  }, // Glyph of the Frostsaber
+        { FORM_TRAVEL,    51056, 1992,  2161,  632,   632  },  // Glyph of the Stag
+        { FORM_AQUA,      51830, 4591,  2428,  2428,  2428  }, // Glyph of the Orca
+        { FORM_BEAR,      51266, 8837,  8837,  2281,  2289  }, // Glyph of the Icebear
+        { FORM_DIREBEAR,  51266, 8837,  8837,  2281,  2289  }, // Glyph of the Icebear
+        { FORM_GHOSTWOLF, 51831, 3123,  4613,  4613,  4613  }, // Glyph of the Ghostwolf
+        { FORM_MOONKIN,   51431, 12237, 12237, 15374, 15375 }, // Glyph of the Frostkin
+        { FORM_BEAR,      51360, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
+        { FORM_DIREBEAR,  51360, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
+        { FORM_MOONKIN,   51361, 20408, 20409, 15374, 15375 }, // Glyph of the Dreamkin
+        { FORM_CAT,       51362, 20410, 20410, 892,   8571 },  // Glyph of the Panther
+        { FORM_MOONKIN,   51432, GetNativeDisplayId(), GetNativeDisplayId(), 15374, 15375 }, // Glyph of the Moon
+    } };
+
+    for (auto const& model : glyph_map)
+    {
+        const auto& [t_form, glyph_item, a_model, h_model, a_default, h_default] = model;
+        if (form == t_form)
+        {
+            if (HasItemCount(glyph_item))
+            {
+                display_id = GetTeam() == ALLIANCE ? a_model : h_model;
+                break;
+            }
+            else
+                display_id = GetTeam() == ALLIANCE ? a_default : h_default;
+        }
+    }
+    return display_id;
+}
+
 void Player::SetRestBonus(float rest_bonus_new)
 {
     // Prevent resting on max level or with the Glyph og Exhaustion 
