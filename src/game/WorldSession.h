@@ -335,6 +335,9 @@ class WorldSession
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
+        uint32 m_tokenBalance = 0;
+
+
         void MarkSuspicious() { m_suspicious = true; }
         void UnmarkSuspicious() { m_suspicious = false; }
         bool IsSuspicious() const { return m_suspicious; }
