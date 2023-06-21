@@ -4999,11 +4999,11 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                 LoginDatabase.BeginTransaction();
                 for (auto& elem : shopEntries)
                 {
-                    if (elem.charGuid == lowguid && !elem.refunded)
+                    if (elem->charGuid == lowguid && !elem->refunded)
                     {
-                        totalRefund += elem.itemPrice;
-                        elem.refunded = true;
-                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+                        totalRefund += elem->itemPrice;
+                        elem->refunded = true;
+                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem->id);
                     }
                 }
 
@@ -5419,17 +5419,17 @@ void Player::KillPlayer()
 
         LoginDatabase.BeginTransaction();
 
-        std::vector<std::reference_wrapper<ShopLogEntry>> refundableItems;
+        std::vector<std::reference_wrapper<ShopLogEntry*>> refundableItems;
 
         uint32 totalRefund = 0;
         const uint32 guidLow = GetGUIDLow();
         for (auto& elem : logEntries)
         {
-            if (elem.charGuid == guidLow && !elem.refunded)
+            if (elem->charGuid == guidLow && !elem->refunded)
             {
-                totalRefund += elem.itemPrice;
+                totalRefund += elem->itemPrice;
                 refundableItems.push_back(std::ref(elem));
-                LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem.id);
+                LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem->id);
             }           
         }
 
@@ -5441,7 +5441,7 @@ void Player::KillPlayer()
         {
             for (auto& refundItem : refundableItems)
             {
-                refundItem.get().refunded = true;
+                refundItem.get()->refunded = true;
             }
             ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", totalRefund);
         }
