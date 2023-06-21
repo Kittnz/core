@@ -1179,6 +1179,7 @@ class Player final: public Unit
         void SetAmmo(uint32 item);
         void RemoveAmmo();
         void SendProficiency(ItemClass itemClass, uint32 itemSubclassMask) const;
+        unsigned int GetShapeshiftDisplay(ShapeshiftForm form);
         Item* BankItem(ItemPosCountVec const& dest, Item* pItem, bool update)
         {
             return StoreItem(dest, pItem, update);

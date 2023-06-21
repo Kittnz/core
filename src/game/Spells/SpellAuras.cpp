@@ -2410,50 +2410,35 @@ void Aura::HandleWaterBreathing(bool /*apply*/, bool /*Real*/)
         ((Player*)GetTarget())->UpdateMirrorTimers();
 }
 
-std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Unit* target){
+std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Unit* target)
+{
     unsigned int display_id = 0;
     float mod = 1;
     switch (form)
     {
     case FORM_CAT:
-
         if (target->IsPlayer())
-        {
-            if (target->ToPlayer()->HasItemCount(51057, 1))
-                // Glyph of the Frostsaber, Turtle WoW:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 11444 : 10054;
-            else    
-                // Blizzlike cat models:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 892 : 8571;  
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 892;
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        // Glyph of the Stag, Alliance glyph makes you a black Stag and the Horde one a brown Stag.
-        if (target->ToPlayer()->HasItemCount(51056, 1))       
-            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 1992 : 2161;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else 
             display_id = 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:
-        // Glyph of the Orca
-        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51830, 1)) ? 4591 : 2428;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
     case FORM_BEAR:
     case FORM_DIREBEAR:
         if (target->IsPlayer())
-        {
-            if (target->ToPlayer()->HasItemCount(51266, 1))
-                // Glyph of the Icebear, Turtle WoW:
-                display_id = 8837;
-            else
-                // Blizzlike bear models:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 2281 : 2289;
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 2281;
         break;
@@ -2464,31 +2449,17 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_CREATUREBEAR:
         display_id = 902;
         break;
-
     case FORM_NEW_TREE:
-    {
-        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;
-    }break;
-
+        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;        
+       break;
     case FORM_GHOSTWOLF:
-        // Glyph of the Spectral Wolf
-        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
     case FORM_MOONKIN:
         if (target->IsPlayer())
-        {
-            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 15374 : 15375;
-
-            // Glyph of the Frostkin
-            if (target->ToPlayer()->HasItemCount(51431, 1))
-                display_id = 12237;
-
-            // Glyph of Stars
-            if (target->ToPlayer()->HasItemCount(51432, 1))
-                display_id = target->ToPlayer()->GetNativeDisplayId();
-
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 15374;
         break;
@@ -2498,12 +2469,6 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_SPIRITOFREDEMPTION:
         display_id = 16031;
         break;
-    /*case FORM_BATTLESTANCE:
-    case FORM_BERSERKERSTANCE:
-    case FORM_DEFENSIVESTANCE:
-    case FORM_AMBIENT:
-    case FORM_SHADOW:
-    case FORM_STEALTH:*/
     default:
         break;
     }
