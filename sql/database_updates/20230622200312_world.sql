@@ -85,28 +85,75 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 
 REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (92950, 60748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
--- TODO:
+-- Random speech for Gilneas NPCs, they should have a 25% chance to say one of the following lines:
 
--- Random speech for Gilneas NPCs:
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES 
 
--- 61363, 61364, 61365, 61366, 61388, 61389, 61390, 61391, 61393, 61394,61395,61396,61397,
+(60350, 'You will die before the might of Gilneas.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60351, 'You won''t leave here alive, outsider!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60352, 'I fight for my king, you fight for your life!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60353, 'My sword is stained with the blood of my enemies, and yours will soon join them.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60354, 'You and the other rebels will be hunted like the cattle you are.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60355, 'You will find no mercy here, just the wrath of Greymane.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60356, 'For the Crown!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60357, 'In the name of Genn Greymane!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
--- have a 25% chance to say one of the following lines
+DELETE FROM `creature_ai_events` WHERE `id` BETWEEN 899706 AND 899718;
 
--- 'You will die before the might of Gilneas.'
--- 'You won't leave here alive, outsider!' 
--- 'I fight for my king, you fight for your life!'
--- 'My sword is stained with the blood of my enemies, and yours will soon join them.'
--- 'You and the other rebels will be hunted like the cattle you are.'
--- 'You will find no mercy here, just the wrath of Greymane.' 
--- 'For the Crown!'
--- 'In the name of Genn Greymane!'
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES 
 
--- 61417
+(899706, 61363, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899707, 61364, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899708, 61365, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899709, 61366, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899710, 61388, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899711, 61389, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899712, 61390, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899713, 61391, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899714, 61393, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899715, 61394, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899716, 61395, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899717, 61396, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899707, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP'),
+(899718, 61397, 0, 2, 0, 25, 0, 90, 1, 0, 0, 899706, 0, 0, 'Gilneas NPC (Greymane) - Say at 90% HP');
 
--- Have a 25% chance to say one of the following lines
+DELETE FROM `creature_ai_scripts` WHERE `id` = 899706;
+DELETE FROM `creature_ai_scripts` WHERE `id` = 899707;
 
--- 'In the name of the Light!'
--- 'Justice shall be served.'
--- 'Back to the shadows!' 
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES 
+(899706, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60350, 60351, 60352, 60353, 0, 0, 0, 0, 0, 'Genn Greymane - Say at 90% HP'),
+(899707, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60354, 60355, 60356, 60357, 0, 0, 0, 0, 0, 'Genn Greymane - Say at 90% HP');
 
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61363;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61364;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61365;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61366;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61388;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61389;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61390;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61391;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61393;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61394;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61395;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61396;
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61397;
+
+-- NPC 61417 should have a 25% chance to say one of the following lines:
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES 
+
+(60358, 'In the name of the Light!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60359, 'Justice shall be served.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(60360, 'Back to the shadows!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+DELETE FROM `creature_ai_events` WHERE `id` = 899719;
+
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES 
+
+(899719, 61417, 0, 2, 0, 50, 0, 90, 1, 0, 0, 899708, 0, 0, 'Gilneas NPC (Ravenwood) - Say at 90% HP');
+
+DELETE FROM `creature_ai_scripts` WHERE `id` = 899708;
+
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES 
+(899708, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60358, 60359, 60360, 0, 0, 0, 0, 0, 0, 'Gilneas NPC (Ravenwood) - Say at 90% HP');
+
+UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61417;
