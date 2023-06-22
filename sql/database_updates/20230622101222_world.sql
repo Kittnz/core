@@ -25,3 +25,5 @@ update item_template set spellid_1 = 45454 where entry = 61228;
 update item_template set spellcooldown_1 = 18000 where entry = 8546;
 -- Item 61644, Runestone Chunk, rename to Runestone Scepter.
 update item_template set name = 'Runestone Scepter' where entry = 61644;
+-- Quest In Memory of Franklin (40982), make it so the quest is choose item reward instead of reward both.
+update quest_template set RewItemId1 = 0, RewItemId2 = 0, RewItemCount1 = 0, RewItemCount2 = 0, RewChoiceItemId1 = 61633, RewChoiceItemId2 = 61634, RewChoiceItemCount1 = 1, RewChoiceItemCount2 = 1 where entry = 40982;
