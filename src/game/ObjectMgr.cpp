@@ -9031,7 +9031,9 @@ void ObjectMgr::LoadShop()
 
 
             //ordered by time ASC so last elem in vec is latest log for easier shop log output
-            m_shopLogs[accountId].push_back({ id, date, accountId, charGuid, itemEntry, itemPrice, refunded });
+            auto item = new ShopLogEntry{ id, date, accountId, charGuid, itemEntry, itemPrice, refunded };
+            m_shopLogs[accountId].push_back(item);
+            m_shopLogsLookup[id] = item;
 
             if (id > m_maxShopEntry.load())
                 m_maxShopEntry = id;

@@ -637,6 +637,7 @@ class ChatHandler
         bool HandleModifyAccessoriesCommand(char* args);
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
+        bool HandleGuildNameCommand(char* args);
         bool HandleSendPacketCommand(char* args);
         bool HandleXPCommand(char* args);
         bool HandleHCInviteCommand(char* args);

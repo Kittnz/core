@@ -1165,6 +1165,7 @@ void GuildBank::DepositItemInSlot(uint32 bankTab, uint32 bankSlot, Item* pItem, 
 	{
 		// insert
 		bItem          = new BankItem;
+		bItem->is_inferno = b_infernoBank;
 		bItem->guid    = GetNewGuid();
 		bItem->guildid = guildid;
 		bItem->count   = count;
@@ -2501,6 +2502,7 @@ void GuildBank::CloneItem(BankItem* bItem, Item* pItem)
 	bItem->giftCreatorGuid = pItem->GetGuidValue(ITEM_FIELD_GIFTCREATOR).GetCounter();
 	bItem->maxStackSize    = pItem->GetProto()->GetMaxStackSize();
 	bItem->duration        = pItem->GetInt32Value(ITEM_FIELD_DURATION);
+	bItem->is_inferno      = b_infernoBank;
 
 	std::ostringstream ssSpells;
 	for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)

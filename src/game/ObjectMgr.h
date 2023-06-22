@@ -1328,9 +1328,19 @@ class ObjectMgr
 			return m_ShopCategoriesMap;
 		}
 
-        std::vector<ShopLogEntry>& GetShopLogEntries(uint32 accountId)
+        std::vector<ShopLogEntry*>& GetShopLogEntries(uint32 accountId)
         {
             return m_shopLogs[accountId];
+        }
+
+        ShopLogEntry* GetShopLogEntry(uint32 shopId)
+        {
+            return m_shopLogsLookup[shopId];
+        }
+
+        void AddShopLogEntry(uint32 shopId, ShopLogEntry* shoplogEntry)
+        {
+            m_shopLogsLookup[shopId] = shoplogEntry;
         }
 
         uint32 NextShopLogEntry()
@@ -1664,7 +1674,8 @@ class ObjectMgr
 		ShopCategoriesMap m_ShopCategoriesMap;
 		ShopEntriesMap m_ShopEntriesMap;
 
-        std::unordered_map<uint32, std::vector<ShopLogEntry>> m_shopLogs;
+        std::unordered_map<uint32, std::vector<ShopLogEntry*>> m_shopLogs;
+        std::unordered_map<uint32, ShopLogEntry*> m_shopLogsLookup;
         std::atomic_uint32_t m_maxShopEntry = 0;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
