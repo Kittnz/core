@@ -78,3 +78,35 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (60748, 30044, 100, 0, -30044, 1, 0);
 
 DELETE FROM `reference_loot_template` WHERE `entry` = 60000;
+
+-- Restored Solnius' gossip text:
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (60748, 'Do you know where you are walking mortal? This place has been here long before your races existence. The Emerald Sanctum is a hallowed ground. Your mere steps upon the verdant grass tarnishes the beauty of this place. Your vile smell lingers upon the air.$B$BYou must leave, it will not be long until the rest of the Green Dragonflight is awoken.$B$BOur eternal duty has arrived, and as The Awakener, I have put out the call to stir those lost in slumber. They will arrive, it is only a matter of time now, and you will not get in the way, $r.$B$BDarkness swirls, festering upon the sleepless realm, I will put an end to it.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (92950, 60748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- TODO:
+
+-- Random speech for Gilneas NPCs:
+
+-- 61363, 61364, 61365, 61366, 61388, 61389, 61390, 61391, 61393, 61394,61395,61396,61397,
+
+-- have a 25% chance to say one of the following lines
+
+-- 'You will die before the might of Gilneas.'
+-- 'You won't leave here alive, outsider!' 
+-- 'I fight for my king, you fight for your life!'
+-- 'My sword is stained with the blood of my enemies, and yours will soon join them.'
+-- 'You and the other rebels will be hunted like the cattle you are.'
+-- 'You will find no mercy here, just the wrath of Greymane.' 
+-- 'For the Crown!'
+-- 'In the name of Genn Greymane!'
+
+-- 61417
+
+-- Have a 25% chance to say one of the following lines
+
+-- 'In the name of the Light!'
+-- 'Justice shall be served.'
+-- 'Back to the shadows!' 
+
