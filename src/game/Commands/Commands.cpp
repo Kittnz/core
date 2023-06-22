@@ -14516,6 +14516,75 @@ bool ChatHandler::HandleTurtleCinematic(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildNameCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    if (!pPlayer)
+        return false;
+
+    if (!pPlayer->GetGuildId() || !pPlayer->GetRank() == GR_GUILDMASTER)
+    {
+        m_session->SendNotification("You must be a guild master of your guild to use this service!");
+        return false;
+    }
+
+    if (!pPlayer->HasItemCount(80499))
+    {
+        m_session->SendNotification("You must purchase [Guild Name Change Token] first.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (!args || !*args)
+        return false;
+
+    char* new_name = ExtractQuotedArg(&args);
+
+    if (!new_name)
+        return false;
+
+    std::string name_str(new_name);
+
+    std::wstring name_wstr;
+    Utf8toWStr(name_str, name_wstr);
+    wstrToLower(name_wstr);
+
+    if (!isBasicLatinString(name_wstr, false))
+    {
+        m_session->SendNotification("Please use latin symbols only.");
+        return false;
+    }
+
+    if (name_str.size() > 1)
+    {
+        name_str[0] = toupper(name_str[0]);
+    }
+
+    Guild* guild = sGuildMgr.GetGuildById(pPlayer->GetGuildId());
+
+    if (!guild)
+    {
+        SendSysMessage(LANG_GUILD_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (Guild* existing = sGuildMgr.GetGuildByName(name_str))
+    {
+        m_session->SendNotification("A guild with the name '%s' already exists.", new_name);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    guild->Rename(name_str);
+    PSendSysMessage("Your guild has successfully been renamed to '%s'. Players must log out and log back in to see the changes.",  name_str);
+
+    pPlayer->DestroyItemCount(80499, 1, true, false, true);
+    pPlayer->SaveInventoryAndGoldToDB();
+    return true;
+}
+
 bool ChatHandler::HandleCopyCommand(char* args)
 {
     if (!args || !*args)
@@ -14602,39 +14671,11 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
     if (!ExtractOptUInt32(&args, shopId, 1))
     {
-        SendSysMessage("No item ID specified.");
+        SendSysMessage("No Shop ID specified.");
         return false;
     }
 
-    Player* player;
-    ObjectGuid target_guid;
-    std::string target_name;
-
-    if (!ExtractPlayerTarget(&args, &player, &target_guid, &target_name))
-    {
-        SendSysMessage("No correct player given.");
-        return false;
-    }
-
-    auto cachedData = sObjectMgr.GetPlayerDataByGUID(target_guid);
-
-    uint32 accountId = 0;
-    if (cachedData)
-        accountId = cachedData->uiAccount;
-    else
-        return false;
-
-    auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
-
-    ShopLogEntry* entry = nullptr;
-    for (auto& elem : shopEntries)
-    {
-        if (elem.id == shopId)
-        {
-            entry = &elem;
-            break;
-        }
-    }
+    auto entry = sObjectMgr.GetShopLogEntry(shopId);
 
     if (!entry)
     {
@@ -14652,6 +14693,7 @@ bool ChatHandler::HandleShopRefundCommand(char* args)
 
     entry->refunded = true;
     LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+    PSendSysMessage("Shop ID %u for player %u marked as refunded. Do not forget to remove items or restore balance if applicable.", entry->id, entry->charGuid);
     return true;
 }
 
@@ -14705,37 +14747,53 @@ bool ChatHandler::HandleToggleTrainingCommand(char* args)
 
 bool ChatHandler::HandleGetShopLogs(char* args)
 {
+
+    uint32 accountId = 0;
+    std::string account_name = "";
     char* c_account_name = ExtractArg(&args);
 
     if (!c_account_name)
-        return false;
-
-    std::string account_name = c_account_name;
-
-    if (!AccountMgr::normalizeString(account_name))
     {
-        PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
-        SetSentErrorMessage(true);
-        return false;
+        auto selectedPlayer = GetSelectedPlayer();
+        if (selectedPlayer)
+        {
+            accountId = selectedPlayer->GetSession()->GetAccountId();
+            account_name = selectedPlayer->GetSession()->GetUsername();
+        }
+        else
+            return false;
     }
 
-    uint32 account_id = sAccountMgr.GetId(account_name);
-    if (!account_id)
+    
+    if (!accountId)
     {
-        PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
-        SetSentErrorMessage(true);
-        return false;
+         account_name = c_account_name;
+
+        if (!AccountMgr::normalizeString(account_name))
+        {
+            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        accountId = sAccountMgr.GetId(account_name);
+        if (!accountId)
+        {
+            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+            SetSentErrorMessage(true);
+            return false;
+        }
     }
 
     PSendSysMessage("Payment history for account %s", account_name.c_str());
 
-    auto& entries = sObjectMgr.GetShopLogEntries(account_id);
+    auto& entries = sObjectMgr.GetShopLogEntries(accountId);
 
     auto session = GetSession();
 
     if (entries.empty())
     {
-        ChatHandler(session).PSendSysMessage("No payment history for account %s (ID: %u)", account_name.c_str(), account_id);
+        ChatHandler(session).PSendSysMessage("No payment history for account %s (ID: %u)", account_name.c_str(), accountId);
         return false;
     }
 
@@ -14744,13 +14802,13 @@ bool ChatHandler::HandleGetShopLogs(char* args)
     {
         std::string charName = "Unknown";
 
-        auto cachedPlayerData = sObjectMgr.GetPlayerDataByGUID(elem.charGuid);
+        auto cachedPlayerData = sObjectMgr.GetPlayerDataByGUID(elem->charGuid);
 
         if (cachedPlayerData)
             charName = cachedPlayerData->sName;
 
-        ChatHandler(session).PSendSysMessage("%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s", elem.date.c_str(), 
-            elem.id, charName.c_str(), elem.charGuid, elem.itemPrice, elem.itemEntry, elem.refunded ? "(refunded)" : "");
+        ChatHandler(session).PSendSysMessage("%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s", elem->date.c_str(),
+            elem->id, charName.c_str(), elem->charGuid, elem->itemPrice, elem->itemEntry, elem->refunded ? "([REFUNDED])" : "");
     }
     return true;
 }

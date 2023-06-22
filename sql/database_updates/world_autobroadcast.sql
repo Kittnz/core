@@ -5,7 +5,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50000', 'Delete your WDB folder regularly. This is your game cache, and deleting it can often fix minor game glitches. Always try this before submitting a ticket.'),
 
-('50001', 'All donation rewards are half-price until June 20th! Visit the donation page on our website for more information.'),
+('50001', 'If you want to help our project, check our shop for donation rewards! Visit the donation page on our website for more info.'),
 
 ('50002', '/join world to connect with the community around you!'),
 

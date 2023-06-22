@@ -102,15 +102,22 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 			if (!success)
 				return "dberrorcantprocess";
 
-			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back({
-				shopId, 
-				GetCurrentTimeString(), 
-				_owner->GetSession()->GetAccountId(), 
-				_owner->GetGUIDLow(), 
-				itemID, 
-				price, 
+
+			auto entry = new ShopLogEntry{
+				shopId,
+				GetCurrentTimeString(),
+				_owner->GetSession()->GetAccountId(),
+				_owner->GetGUIDLow(),
+				itemID,
+				price,
 				false
-				});
+			};
+
+			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
+
+			sObjectMgr.AddShopLogEntry(shopId, entry);
+
+
 
 			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
 			_owner->SendNewItem(item, count, false, true);

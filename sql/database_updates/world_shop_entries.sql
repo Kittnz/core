@@ -29,7 +29,8 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Miscellaneous
-(1, 1, 50000, 'Token: Rename', 160),
+(1, 1, 50000, 'Token: Character Name Change', 160),
+(2, 1, 80499, 'Token: Guild Name Change', 300),
 (3, 1, 80699, 'Token: Appearance Change', 160),
 -- (4, 1, 50603, 'Race Change Token: Human', 180),
 -- (5, 1, 50604, 'Race Change Token: Gnome', 180),
