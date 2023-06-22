@@ -157,3 +157,7 @@ REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datal
 (899708, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60358, 60359, 60360, 0, 0, 0, 0, 0, 0, 'Gilneas NPC (Ravenwood) - Say at 90% HP');
 
 UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 61417;
+
+-- Item 8546, Powerful Smelling Salts, needs a 5 hour cooldown:
+
+UPDATE `item_template` SET `spellcooldown_1` = 18000000 WHERE `entry` = 8546;
