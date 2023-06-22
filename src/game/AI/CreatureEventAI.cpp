@@ -124,7 +124,7 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
     //Check event conditions based on the event type, also reset events
     switch (event.event_type)
     {
-        case EVENT_T_TIMER:
+        case EVENT_T_TIMER_IN_COMBAT:
         {
             if (!m_creature->IsInCombat())
                 return false;
@@ -645,7 +645,7 @@ void CreatureEventAI::EnterCombat(Unit *enemy)
                     ProcessEvent(i, enemy);
                     break;
                 //Reset all in combat timers
-                case EVENT_T_TIMER:
+                case EVENT_T_TIMER_IN_COMBAT:
                     if (i.UpdateRepeatTimer(m_creature, event.timer.initialMin, event.timer.initialMax))
                         i.Enabled = true;
                     break;
@@ -842,14 +842,16 @@ void CreatureEventAI::UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat)
             switch (i.Event.event_type)
             {
                 case EVENT_T_TIMER_OOC:
+                case EVENT_T_FRIENDLY_MISSING_BUFF:
                     ProcessEvent(i);
                     break;
-                case EVENT_T_TIMER:
+                case EVENT_T_TIMER_IN_COMBAT:
                 case EVENT_T_MANA:
                 case EVENT_T_HP:
                 case EVENT_T_TARGET_HP:
                 case EVENT_T_TARGET_CASTING:
                 case EVENT_T_FRIENDLY_HP:
+                case EVENT_T_FRIENDLY_IS_CC:
                 case EVENT_T_AURA:
                 case EVENT_T_TARGET_AURA:
                 case EVENT_T_MISSING_AURA:
