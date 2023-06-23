@@ -487,3 +487,23 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (7358,61657,-20,0,1,1,0);
 
+-- The Greymane Stone
+delete from quest_template where entry = 40996;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40995,40996,2,5180,47,38,0,0,'The Greymane Stone','Regrettably, the crystal that once adorned the apex of the scepter has been lost to the ravages of time. Its whereabouts remain unknown, and locating it may prove to be an insurmountable challenge. However, despair not, for I have devised an alternative solution.$B$BDuring the Alterac Succession Crisis, a figure known as Lord Prestor frequented Gilneas City and established a close bond with the king himself. As a gift, he bestowed upon Genn a potent artifact known as the Shard of Midnight.$B$B Legends abound regarding its corrupting influence, and it is said that the Shard has been securely sealed within the Greymane Tower.$B$B Your task is clear: locate the Shard of Midnight and restore it to its rightful place within the Scepter. Only then shall its power be fully rekindled.','Recover the Shard of Midnight for Dark Bishop Mordren in Stillward Church.','Gather a strong party before you venture forth.','Yes, indeed! Behold, the Shard of Midnight, at last in my possession.$B$B<Dark Bishop meticulously adjusts the scepter, delicately affixing the crystal atop its pinnacle.>$B$BThe task is accomplished. The unholy forces once wielded by Garalon Greymane can be harnessed anew, but only by those who possess the fortitude to withstand their malevolence.$B$BThis endeavor is far above you and me. We have fulfilled our mission, and now we must deliver the Scepter to our superiors.',61658,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,30600,5100,68,500,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40996);
+replace into creature_involvedrelation	(id, quest) values (61281, 40996);
+update quest_template set requiredraces = 434		 where entry = 40996;
+update quest_template set type = 81					 where entry = 40996;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61658,36414,'Shard of Midnight',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+REPLACE INTO gameobject_template VALUES
+(2020039, 3, 25865, 'Shard of Midnight', 0, 4, 1, 43, 2020039, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020039,61658,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020039;
+
