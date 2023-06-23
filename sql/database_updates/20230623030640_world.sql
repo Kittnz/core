@@ -85,3 +85,5 @@ DELETE FROM game_event_creature WHERE guid=2577535;
 DELETE FROM game_event_creature_data WHERE guid=2577535;
 DELETE FROM creature_battleground WHERE guid=2577535;
 REPLACE INTO `creature` VALUES (2577536,61210,0,0,0,532,-11065.1,-1917.71,77.267,2.5046,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577536, 69);
+REPLACE INTO `gameobject` VALUES ( 5015575, 2011044, 532, -11054.5, -1916.48, 77.2686, 4.36053, 0, 0, 0.819951, -0.572433, 300, 300, 100, 1, 0, 0);
