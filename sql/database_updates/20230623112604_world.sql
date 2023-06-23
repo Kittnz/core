@@ -453,3 +453,22 @@ replace into creature_loot_template values
 (4668,61655,-20,0,1,1,0);
  
 update creature_template set script_name = 'npc_dark_bishop_mordren' where entry = 61281;
+
+-- The Ravenwood Scepter
+delete from quest_template where entry = 40994;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40993,40994,2,5179,46,40,0,0,'The Ravenwood Scepter','I have beheld the truth, a glimpse into the First Battle of Stillward as if I had been there myself. The ancient tomes, with their accounts of Garalon Greymane\'s tactical prowess, now revealed as a tapestry of deception. He wielded an ominous power, a force derived from entities that even my mind struggles to comprehend. Clutched in his hand was a scepter, a conduit through which he commanded the very essence of darkness. Its sheer potency was nothing short of terror-inducing.$B$BWe cannot allow this power to fall into the clutches of our enemies. If they were to uncover the truth, it could spell doom for our cause. Listen closely. In the depths of my vision, I recognized the scepter\'s likeness. It once resided within the halls of Ravenwood Keep.$B$BAlas, the keep now lies in ruins, razed by the onslaught of Greymane\'s forces. We can only pray that the scepter remains unclaimed by their hands.$B$BVenture forth to the Ravenwood Keep. Seek out a specter forged from dark obsidian and bring it to me.','Retrieve the Ravenwood Scepter from Ravenwood Keep for Dark Bishop Mordren at Stillward Chuch in Gilneas.','Such power... It must be ours.','Ah, so you have found it after all.$B$B The ravages of time have taken their toll upon the scepter, diminishing its former might. Yet, even in its weakened state, its aura pulsates with an undeniable darkness, a lingering remnant of forbidden magic.',61656,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,26100,4350,68,300,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40994);
+replace into creature_involvedrelation	(id, quest) values (61281, 40994);
+update quest_template set requiredraces = 434		 where entry = 40994;
+update quest_template set type = 1					 where entry = 40994;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61656,10275,'Ravenwood Scepter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+REPLACE INTO gameobject_template VALUES
+(2020038, 3, 23431, 'Ravenwood Chest', 0, 4, 1, 43, 2020038, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020038,61656,-100,0,1,1,0);
+
