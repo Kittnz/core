@@ -419,3 +419,21 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (61567,61653,-100,0,1,1,0);
 
+-- Foulhide Mongrels
+delete from quest_template where entry = 40992;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40992,2,5179,43,35,512,0,'Foulhide Mongrels','The Foulhide gnolls, wretched creatures that they are, have likely crossed your path on your journey here. Like any typical gnoll, they possess little intelligence, resorting to savagery and brute force. Communication or cooperation with them is an exercise in futility.$B$B The Regents turn a blind eye, while the so-called Rebellion remains preoccupied with their own affairs. Thus, it falls upon us to address this predicament.$B$BOur motivations are far from altruistic, mind you. These gnolls have become an insurmountable obstacle, intercepting crucial supplies dispatched from Undercity. Such interference is unacceptable. Venture southward and dispatch as many of these abominations as you can.$B$BReturn to me with sixteen Foulhide paws as undeniable proof of your success.','Bring 16 Foulhide Paws to Harlan Ballow in Stillward Church.','Huge packs of Foulhide gnolls can be found in the Southmire Orchard. Their raiding parties have been spotted in Silverpine already. They must be stopped.','Ha! Thanks to your unwavering efforts, our communication lines with the capital have been fortified, ensuring the safety of our operations in Gilneas. Your dedication to the cause of the Forsaken is commendable.$B$BAs a token of my gratitude, I offer you this. Though it may not be extravagant, it will undoubtedly prove useful in navigating the treacherous lands that lie before us.',61654,16,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 4000,20700,3450,68,200,0,0,0,0,0,0,0,0,0, 6048,3,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+-- replace into creature_questrelation		(id, quest) values (61281, 40992);
+-- replace into creature_involvedrelation	(id, quest) values (61281, 40992);
+update quest_template set requiredraces = 434		 where entry = 40992;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61654,6671,'Foulhide Paw',12,1,2048,1,-1,-1,1,16,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61248,61654,-65,0,1,1,0),
+(61249,61654,-65,0,1,1,0),
+(61250,61654,-65,0,1,1,0),
+(61362,61654,-65,0,1,1,0),
+(61399,61654,-65,0,1,1,0);
+
