@@ -6507,62 +6507,6 @@ bool GossipSelect_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature
     return true;
 }
 
-bool GossipHello_npc_ralathius(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    if (pPlayer->GetQuestStatus(40957) == QUEST_STATUS_INCOMPLETE) // Into the Dream I
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your tale Ralathius.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(61326, pCreature->GetGUID());
-
-    return true;
-}
-
-bool GossipSelect_npc_ralathius(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(30117, pCreature->GetGUID());
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->SEND_GOSSIP_MENU(30118, pCreature->GetGUID());
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-        pPlayer->SEND_GOSSIP_MENU(30119, pCreature->GetGUID());
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-        pPlayer->SEND_GOSSIP_MENU(30120, pCreature->GetGUID());
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-        pPlayer->SEND_GOSSIP_MENU(30121, pCreature->GetGUID());
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
-    {
-        pPlayer->SEND_GOSSIP_MENU(30122, pCreature->GetGUID());
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60044); cInfo && pPlayer)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-    }
-    return true;
-}
-
 bool QuestRewarded_npc_ralathius(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     Creature* NPC_YSERA = pQuestGiver->FindNearestCreature(61545, 40.0F);
@@ -6824,8 +6768,6 @@ void AddSC_random_scripts_3()
 
     newscript = new Script;
     newscript->Name = "npc_ralathius";
-    newscript->pGossipHello = &GossipHello_npc_ralathius;
-    newscript->pGossipSelect = &GossipSelect_npc_ralathius;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_ralathius;
     newscript->RegisterSelf();
 
