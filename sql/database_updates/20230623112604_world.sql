@@ -400,3 +400,22 @@ replace into item_template values
 update creature_template set loot_id = 60747 where entry = 60747;
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (60747, 61652, -100, 0, 1, 1, 0);
+
+-- Refrik <Hand of Corthan>, display id 18940, faction 14, level 40, undead, scale 1, add ghostly effect to it.
+REPLACE INTO creature_template VALUES
+(61567, 18940, 0, 0, 0, 0, 'Refrik', 'Hand of Corthan', 0, 40, 40, 1752, 1752, 0, 0, 1964, 14, 2, 1, 1.14286, 1, 18, 5, 0, 0, 1, 92, 109, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 6, 0, 61567, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 29, 147, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0');
+
+-- For the Collection
+delete from quest_template where entry = 40991;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40991,2,5179,40,35,0,0,'For the Collection','In my previous life as a living man, I was enthralled by the tales of the Azotha, our long-lost human predecessors from a bygone age. Their ancient knowledge and artifacts fascinated me.$B$B Alas, the tumultuous situation in Gilneas hindered my research on the Azotha, trapping me within these confining walls. Now, the gates have finally opened, but as a forsaken, venturing into human lands would be my ultimate demise.$B$BHowever, I have heard whispers of a secluded city known as Corthan, nestled in the treacherous Badlands. Legends speak of a powerful and enigmatic Azotha artifact hidden within its abandoned walls—the Hand of Corthan. Although the true nature of this relic eludes me, I am certain that it holds great significance and would be a valuable addition to my collection.','Bring the Hand of Corthan to Dark Bishop Mordren at Stillward Church in Gilneas.','Journey to Badlands is long. Get going.','Unfathomable. Azothan artifact, now resting in my grasp.$B$B<Dark Bishop chuckles ominously>$B$BHow amusing it is to consider the reactions of our ancestors, witnessing their cherished relic held by a creature as abhorrent as I. Surely, they twist and turn in their eternal slumber, aghast at the sight.',61653,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 8000,20700,3450,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40991);
+replace into creature_involvedrelation	(id, quest) values (61281, 40991);
+update quest_template set requiredraces = 434		 where entry = 40991;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61653,3538,'Hand of Corthan',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61567,61653,-100,0,1,1,0);
+
