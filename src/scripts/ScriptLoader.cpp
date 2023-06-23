@@ -261,6 +261,8 @@ void AddSC_boss_turtlhu();
 void AddSC_instance_karazhan_crypt();
 void AddSC_instance_crescent_grove();
 void AddSC_instance_gilneas_city();
+void AddSC_boss_celia();
+void AddSC_boss_lord_mortimer();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
 void AddSC_mirage_raceway();
@@ -580,6 +582,8 @@ void AddScripts()
     AddSC_instance_karazhan_crypt();
     AddSC_instance_crescent_grove();
     AddSC_instance_gilneas_city();
+    AddSC_boss_celia();
+    AddSC_boss_lord_mortimer();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
     AddSC_mirage_raceway();

@@ -1,13 +1,6 @@
 #include "scriptPCH.h"
-
-enum boss_entries
-{
-    matthias_holtz = 61419,
-    judge_sutherland = 61421,
-    dustivan_blackowl = 61422,
-    magnus_greystone = 61423,
-    genn_greymane = 61418,
-};
+#include "instance_gilneas_city.h"
+#include <random>
 
 struct instance_gilneas_city : public ScriptedInstance
 {
@@ -15,6 +8,22 @@ struct instance_gilneas_city : public ScriptedInstance
     {
         Initialize();
     };
+
+    uint64 m_uiCeliaGUID;
+    uint64 m_uiLordMortimerGUID;
+
+    std::vector<Player*> randomPlayers;
+
+    uint32 m_auiEncounter[INSTANCE_GILNEAS_CITY_MAX_ENCOUNTER];
+
+    void Initialize()
+    {
+		randomPlayers.clear();
+        m_uiCeliaGUID = 0;
+        m_uiLordMortimerGUID = 0;
+        m_auiEncounter[PHASE_1] = NOT_STARTED;
+        m_auiEncounter[PHASE_2] = NOT_STARTED;
+	}
 
     void OnCreatureEnterCombat(Creature* pCreature) override
     {
@@ -71,6 +80,96 @@ struct instance_gilneas_city : public ScriptedInstance
             pCreature->MonsterYell("It... It was pointless after all, this cannot be the way I fall...");
             break;
         }
+    }
+
+    void OnCreatureCreate(Creature* pCreature)
+    {
+        switch (pCreature->GetEntry())
+        {
+            case NPC_CELIA:
+			    m_uiCeliaGUID = pCreature->GetGUID();
+			    break;
+            case NPC_LORD_MORTIMER:
+                m_uiLordMortimerGUID = pCreature->GetGUID();
+                break;
+        }
+    }
+
+    void SetData(uint32 uiType, uint32 uiData)
+    {
+        switch (uiType)
+        {
+            case PHASE_1:
+                m_auiEncounter[PHASE_1] = uiData;
+                if (uiData == IN_PROGRESS)
+                {
+                    m_auiEncounter[PHASE_2] = NOT_STARTED;
+                }
+                break;
+            case PHASE_2:
+                m_auiEncounter[PHASE_2] = uiData;
+                if (uiData == IN_PROGRESS)
+                {
+                    m_auiEncounter[PHASE_1] = DONE;
+                }
+                break;
+        }
+    }
+
+    uint32 GetData(uint32 uiType)
+    {
+        switch (uiType)
+        {
+		    case PHASE_1:
+			    return m_auiEncounter[PHASE_1];
+		    case PHASE_2:
+			    return m_auiEncounter[PHASE_2];
+		    default:
+			    return 0;
+		}
+	}
+
+    uint64 GetData64(uint32 uiType)
+    {
+        switch (uiType)
+        {
+            case DATA_CELIA:
+                return m_uiCeliaGUID;
+            case DATA_LORD_MORTIMER:
+                return m_uiLordMortimerGUID;
+            default:
+                return 0;
+        }
+    }
+
+    std::vector<Player*> GetRandomPlayers(int8 count)
+    {
+        Map::PlayerList const& playerList = GetMap()->GetPlayers();
+        randomPlayers.clear();
+        if (!playerList.isEmpty())
+        {
+            for (const auto& itr : playerList)
+            {
+                if (Player* pPlayer = itr.getSource())
+                {
+                    randomPlayers.push_back(pPlayer);
+                }
+            }
+        }
+
+        auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(randomPlayers.begin(), randomPlayers.end(), std::default_random_engine(seed));
+
+        if (randomPlayers.size() < count)
+        {
+            randomPlayers.resize(randomPlayers.size());
+        }
+        else
+        {
+            randomPlayers.resize(count);
+        }
+
+        return randomPlayers;
     }
 };
 
