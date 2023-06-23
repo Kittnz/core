@@ -437,3 +437,19 @@ replace into creature_loot_template values
 (61362,61654,-65,0,1,1,0),
 (61399,61654,-65,0,1,1,0);
 
+-- Through Greater Magic
+delete from quest_template where entry = 40993;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40993,2,5179,42,38,0,0,'Through Greater Magic','The wretched Greymane forces, perpetrators of my demise and desecrators of my church. Why did they target me?$B$BThe answer remains an enigma, yet I sense it is intertwined with the significance of this place. Centuries ago, a battle unfolded upon this very hill, where the forces of Gilneas, against all odds, triumphed over Arathor. I am convinced that the key to their triumph lay buried within these grounds, and the Regent\'s bloodlust coveted this dormant power for their own malevolent purposes.$B$BWe must delve deep into this mystery. Unearthing such power would bestow upon us a formidable advantage. I shall sift through these weathered tomes, unearthing knowledge that may shed light on our quarry.$B$B In the interim, I ask you to embark on a perilous journey to Desolace. There, amidst the demons, seek out and retrieve the Eye of Xythos—an artifact rumored to possess the ability to uncover the secrets of the past, if one can channel the energies of the Forgotten Shadow, of course.','Find the Eye of Xythos in Desolace, then return to Dark Bishop Mordren at Stillward Church in Gilneas.','Eye of Xythos is rumored to be in the possession of the Shadow Council in Desolace. I have caught wind of dark whispers that speak the name... Shadowbreak.','The Eye... Ah, yes. Its malevolent aura was unmistakable as you drew near.$B$BDraw nearer still. Through tireless research and countless tomes, I have unearthed a revelation of great intrigue. It appears that during the fabled Battle of Stillward, the first Greymane wielded an unfathomable darkness.$B$BNow, with the Eye of Xythos firmly in my grasp, I shall delve into the depths of time itself. I seek to unveil the true nature of this formidable power that we now confront.',61655,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,22500,3750,68,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40993);
+replace into creature_involvedrelation	(id, quest) values (61281, 40993);
+update quest_template set requiredraces = 434		 where entry = 40993;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61655,16300,'Eye of Xythos',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(4705,61655,-20,0,1,1,0),
+(4668,61655,-20,0,1,1,0);
+ 
+update creature_template set script_name = 'npc_dark_bishop_mordren' where entry = 61281;

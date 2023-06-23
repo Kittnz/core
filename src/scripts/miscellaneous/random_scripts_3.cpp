@@ -6734,9 +6734,47 @@ bool GOSelect_go_runestone_of_cenarius(Player* pPlayer, GameObject* pGo, uint32 
     return false;
 }
 
+bool QuestRewarded_npc_dark_bishop_mordren(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40993) // Through Greater Magic
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->MonsterSay("Now witness... The Eye!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->CastSpell(pQuestGiver, 21157, false);
+            }, 1000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("I see... Stillward as it was... the battle.");
+            }, 5000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->InterruptNonMeleeSpells(true);
+                pQuestGiver->MonsterSay("This cannot be. A Greymane... holding such power.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 10000);
+
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_dark_bishop_mordren";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_dark_bishop_mordren;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_runestone_of_cenarius";
