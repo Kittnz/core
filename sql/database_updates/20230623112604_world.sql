@@ -472,3 +472,18 @@ REPLACE INTO gameobject_template VALUES
 replace into gameobject_loot_template values
 (2020038,61656,-100,0,1,1,0);
 
+-- The Powers Beyond
+delete from quest_template where entry = 40995;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40994,40995,2,722,44,38,0,0,'The Powers Beyond','To harness the true potential of this fractured weapon, we must not shy away from embracing the power it holds. However, caution must prevail, for in its current state of disrepair, wielding it would be a grave folly. To mend the cracks that mar its surface and restore its formidable strength, I require a potent artifact crafted from dark obsidian.$B$BFortuitously, I have knowledge of a likely source for such an object. Venture westward, to the Barrens of Kalimdor, where Razorfen Downs stands as a bastion of darkness. Within its depths, a malevolent lich has established his abode, guarded by undead minions and ensconced in nefarious sorcery.$B$BIt is said that his phylactery, the vessel of his immortal essence, is forged from the very obsidian we seek.','Venture into Razorfen Downs, slay Amnennar the Coldbringer and retrieve his phylactery for Dark Bishop Mordren at Stillward Church in Gilneas.','Act quickly, $c. For with each passing moment, his dark powers surge and his influence expands.','Your unwavering dedication continues to impress me, $c.$B$BYet, during your absence, I delved once more into the past, and it became clear that there is yet another task I must entrust to you.$B$BThe Scepter is still incomplete, lacking a crucial component I have missed earlier.',61657,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,29100,4700,68,300,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40995);
+replace into creature_involvedrelation	(id, quest) values (61281, 40995);
+update quest_template set requiredraces = 434		 where entry = 40995;
+update quest_template set type = 81					 where entry = 40995;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61657,31577,'Obsidian Phylactery',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(7358,61657,-20,0,1,1,0);
+
