@@ -382,5 +382,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61397, 4338, 23.8496, 0, 1, 2, 0);
 -- REMOVE the following loot 'Highborne Essence' (Entry 60404) from the following creatures.
 delete from creature_loot_template where item = 60404 and entry in (61242,61241,61239,61240);
-
+-- ITEM 8546 change to Bind on Pickup.
+update item_template set bonding = 1 where entry = 8546;
 
