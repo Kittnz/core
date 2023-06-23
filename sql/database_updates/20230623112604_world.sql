@@ -507,3 +507,44 @@ replace into gameobject_loot_template values
 
 update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020039;
 
+-- Gift of the Dark Bishop
+delete from quest_template where entry = 40997;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40996,40997,2,5179,47,38,0,0,'Gift of the Dark Bishop','Your efforts have proven invaluable. Without you, our triumph would have remained naught but a distant dream. It is only fitting that you undertake the task of delivering this Scepter to Varimathras. He has been duly apprised of its profound importance and eagerly anticipates your arrival.$B$BI would strongly advise against keeping him waiting. Remember, he is a Dreadlord, and their patience is not to be trifled with.','Deliver the Scepter of Garalon to Varimathras in the Undercity.','I speak for the Dark Lady.','Ah, behold, the Scepter in your grasp, delivered as expected.$B$B<Varimathras gazes at you with his piercing, demonic eyes>$B$BTruly, the latent darkness contained within shall prove indispensable to our grand cause. While it may take time for our adept warlocks to fully harness its potential, the rewards shall be manifold.$B$BIt amuses me greatly to witness the irony that the very forces that once shaped the foundation of Gilneas are now scorned and reviled by the feeble humans. It appears that wisdom has waned in their fledgling race over time.$B$BBut enough about them. I have not forgotten your contributions. Our meticulous Apothecaries have prepared a reward for your endeavors. Choose from this assortment, and claim your well-deserved prize.',61659,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61659,1, 25000,0,950,68,500,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61660,1,61661,1,61662,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61281, 40997);
+replace into creature_involvedrelation	(id, quest) values ( 2425, 40997);
+update quest_template set requiredraces = 434		 where entry = 40997;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61659,10275,'Scepter of Garalon',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+replace into item_template values
+ ('61660', '2', '8', 'Garalon\'s Might', '', '20170', '3', '0', '1', '69980', '17495', '17', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '18', '5', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
+ '0', '87', '144', '0', '2', '6', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '100', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61661', '2', '10', 'Varimathras\' Cunning', '', '20275', '3', '0', '1', '63348', '15837', '17', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '6', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3600', '0',
+ '0', '102', '148', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23727', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '100', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61662', '4', '0', 'Stillward Amulet', '', '23718', '3', '0', '1', '27444', '6861', '2', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '4', '3',
+ '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
