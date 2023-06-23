@@ -479,7 +479,6 @@ public:
 private:
 
     bool m_bDoOnce{};
-    bool m_bStartSummonEvent{};
 
     uint32 m_uiPhase_Timer{};
 
@@ -491,34 +490,12 @@ public:
     void Reset() override
     {
         m_bDoOnce = false;
-        m_bStartSummonEvent = false;
 
         m_uiPhase_Timer = 1000;
 
         phase = nsInfiniteTimeripper::Phase::ONE;
 
         DespawnDragonSpawns();
-    }
-
-    void EnterCombat(Unit*) override
-    {
-        Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-        if (!PlayerList.isEmpty())
-        {
-            for (const auto& itr : PlayerList)
-            {
-                if (Player* pPlayer{ itr.getSource() })
-                {
-                    if (pPlayer->GetDistance3dToCenter(m_creature) < 50.f)
-                    {
-                        pPlayer->AddAura(nsInfiniteTimeripper::SPELL_TIME_LAPSE);
-                        pPlayer->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
-
-                        m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
-                    }
-                }
-            }
-        }
     }
 
     void DespawnDragonSpawns()
@@ -569,116 +546,6 @@ public:
             }
 
             m_bDoOnce = true;
-        }
-
-        if (m_bStartSummonEvent)
-        {
-            if (m_uiPhase_Timer < uiDiff)
-            {
-                switch (phase)
-                {
-                    case nsInfiniteTimeripper::Phase::ONE:
-                    {
-                        if (Creature* pPortal{ m_creature->SummonCreature(nsInfiniteTimeripper::NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000) })
-                        {
-                            pPortal->MonsterTextEmote("The Infinite Timeripper opens a rift in time!");
-
-                            m_creature->CastSpell(m_creature, nsInfiniteTimeripper::SPELL_SCHADOW_CHANNELING, true);
-
-                            DoAfterTime(m_creature, 8 * IN_MILLISECONDS, [creature = m_creature, portal = pPortal]()
-                                {
-                                    portal->SummonCreature(nsInfiniteTimeripper::NPC_HARBINGER, -1416.87f, 6899.85f, -138.03f, 0, TEMPSUMMON_DEAD_DESPAWN);
-                                });
-                        }
-
-                        m_uiPhase_Timer = 2000;
-                    
-                        phase = nsInfiniteTimeripper::Phase::TWO;
-
-                        break;
-                    }
-                    case nsInfiniteTimeripper::Phase::TWO:
-                    {
-                        if (Creature* pPortal{ m_creature->FindNearestCreature(nsInfiniteTimeripper::NPC_TIME_RIFT, 100.f, true) })
-                        {
-                            if (Player* pPlayer{ m_creature->FindNearestPlayer(50.f) })
-                            {
-                                pPortal->PMonsterEmote("Something big is coming!", pPlayer, true);
-                            }
-                        }
-
-                        m_uiPhase_Timer = 2000;
-
-                        phase = nsInfiniteTimeripper::Phase::THREE;
-
-                        break;
-                    }
-                    case nsInfiniteTimeripper::Phase::THREE:
-                    {
-                        m_creature->MonsterYell("Your time has come, what we have summoned is but a hollow reflection of what we have seen in the future. Savor these moments, mortals. They will be your last. Retreat!");
-                    
-                        phase = nsInfiniteTimeripper::Phase::FOUR;
-
-                        m_uiPhase_Timer = 4000;
-
-                        break;
-                    }
-                    case nsInfiniteTimeripper::Phase::FOUR:
-                    {
-                        m_creature->MonsterMove(-1441.65f, 6936.788f, -136.89f);
-                        m_creature->ForcedDespawn(4000);
-
-                        if (!m_lDragonSpawns.empty())
-                        {
-                            if (const auto map{ m_creature->GetMap() })
-                            {
-                                for (const auto& guid : m_lDragonSpawns)
-                                {
-                                    if (Creature* pCreature{ map->GetCreature(guid) })
-                                    {
-                                        pCreature->MonsterMove(-1441.65f, 6936.788f, -136.89f);
-                                        pCreature->DespawnOrUnsummon(4000);
-                                    }
-                                }
-                            }
-                        }
-
-                        phase = nsInfiniteTimeripper::Phase::FIVE;
-
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                m_uiPhase_Timer -= uiDiff;
-            }
-        }
-        else
-        {
-            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-            if (!PlayerList.isEmpty())
-            {
-                for (const auto& itr : PlayerList)
-                {
-                    if (Player* pPlayer{ itr.getSource() })
-                    {
-                        if (pPlayer->GetDistance3dToCenter(m_creature) < 20.f)
-                        {
-                            pPlayer->AddAura(nsInfiniteTimeripper::SPELL_TIME_LAPSE);
-                            pPlayer->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
-
-                            m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, You’ve come far to stop us, but your advance stops here!");
-
-                            m_bStartSummonEvent = true;
-                        }
-                    }
-                }
-            }
         }
 
         // if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
