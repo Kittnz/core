@@ -47,3 +47,6 @@ DELETE FROM creature_movement WHERE id=2576415;
 DELETE FROM game_event_creature WHERE guid=2576415;
 DELETE FROM game_event_creature_data WHERE guid=2576415;
 DELETE FROM creature_battleground WHERE guid=2576415;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2577531,16474,0,0,0,0,-1367.76,1215.17,125.692,1.55388,120,120,5,100,100,1,0,0);
