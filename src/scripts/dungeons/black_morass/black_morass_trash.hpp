@@ -39,12 +39,8 @@ namespace nsInfiniteWhelp
 
 namespace nsInfiniteTimeripper
 {
-	static constexpr uint32 NPC_TIME_RIFT{ 91001 };
 	static constexpr uint32 NPC_DRAGONSPAWN{ 65123 };
-	static constexpr uint32 NPC_HARBINGER{ 65114 };
 
-	static constexpr uint32 SPELL_TIME_LAPSE{ 23310 };
-	static constexpr uint32 SPELL_SCHADOW_CHANNELING{ 12380 };
 	static constexpr uint32 AURA_SHADOWGUARD{ 19312 };
 
 	enum class Phase : uint8
