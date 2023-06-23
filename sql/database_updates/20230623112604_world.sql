@@ -384,4 +384,19 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 delete from creature_loot_template where item = 60404 and entry in (61242,61241,61239,61240);
 -- ITEM 8546 change to Bind on Pickup.
 update item_template set bonding = 1 where entry = 8546;
-
+-- jadestone quest rewards
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61650, 'Jadestone Skewer', '', 2, 6, 1, 4, 32717, 1, 60, 0, -1, -1, 560134, 140033, 17, 1, 0, 0, 1, 1, 0, 136, 252, 3100, 0, 0, 120, 0, 0, 0, 66, 0, 65, 0, 0, 0, 0, 0, 0, 3, 35, 7, 27, 45433, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61651, 'Jadestone Mallet', '', 2, 4, 1, 4, 33017, 1, 60, 1, -1, -1, 441444, 110361, 21, 3, 0, 0, 1, 1, 0, 60, 131, 2300, 0, 0, 105, 0, 0, 0, 66, 0, 65, 0, 0, 0, 0, 0, 0, 5, 10, 7, 8, 6, 6, 18042, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+-- Drop from Erennius (Entry 60747) at 100% drop chance.
+replace into item_template values
+ ('61652', '15', '0', 'Claw of Erennius', '', '1498', '4', '0', '1', '0', '0', '0', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+update creature_template set loot_id = 60747 where entry = 60747;
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60747, 61652, -100, 0, 1, 1, 0);
