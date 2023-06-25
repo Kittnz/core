@@ -140,3 +140,7 @@ values (@spell_list_id, @description,
 -- Quest 40992 has been added for NPC "Harlan Ballow".
 replace into creature_questrelation		(id, quest) values (61285, 40992);
 replace into creature_involvedrelation	(id, quest) values (61285, 40992);
+-- NPC Regent-Lord Mortimer Harlow set mana to 4003.
+update creature_template set mana_min = 4003, mana_max = 4003 where entry = 61264;
+-- NPC Regent-Lady Celia Harlow set mana to 5699.
+update creature_template set mana_min = 5699, mana_max = 5699 where entry = 61263;
