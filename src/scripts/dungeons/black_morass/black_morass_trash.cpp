@@ -296,6 +296,7 @@ private:
     uint32 m_timeStopTimer;
     uint32 m_shadowShockTimer;
     uint32 m_darkenVisionTimer;
+    uint32 m_mindBlastTimer;
 
 public:
     void Reset() override
@@ -303,6 +304,7 @@ public:
         m_timeStopTimer = 20000;
         m_shadowShockTimer = 12000;
         m_darkenVisionTimer = 10000;
+        m_mindBlastTimer = 12000;
     }
 
     void EnterCombat(Unit*) override
@@ -373,6 +375,18 @@ public:
         else
         {
             m_darkenVisionTimer -= uiDiff;
+        }
+
+        if (m_mindBlastTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsInfiniteRiftWeaver::SPELL_MIND_BLAST) == CAST_OK)
+            {
+                m_mindBlastTimer = 12000;
+            }
+        }
+        else
+        {
+            m_mindBlastTimer -= uiDiff;
         }
 
         DoMeleeAttackIfReady();
