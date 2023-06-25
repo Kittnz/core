@@ -65,3 +65,4 @@ DELETE FROM creature_movement WHERE id=2577556;
 DELETE FROM game_event_creature WHERE guid=2577556;
 DELETE FROM game_event_creature_data WHERE guid=2577556;
 DELETE FROM creature_battleground WHERE guid=2577556;
+UPDATE `creature` SET `position_x` = -1252.937256, `position_y` = 2550.492188, `position_z` = 183.328308, `orientation` = 6.216217 WHERE `guid` = 2576180;
