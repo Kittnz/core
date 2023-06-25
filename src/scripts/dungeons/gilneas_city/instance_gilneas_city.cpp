@@ -14,15 +14,11 @@ struct instance_gilneas_city : public ScriptedInstance
 
     std::vector<Player*> randomPlayers;
 
-    uint32 m_auiEncounter[INSTANCE_GILNEAS_CITY_MAX_ENCOUNTER];
-
     void Initialize()
     {
 		randomPlayers.clear();
         m_uiCeliaGUID = 0;
         m_uiLordMortimerGUID = 0;
-        m_auiEncounter[PHASE_1] = NOT_STARTED;
-        m_auiEncounter[PHASE_2] = NOT_STARTED;
 	}
 
     void OnCreatureEnterCombat(Creature* pCreature) override
@@ -94,40 +90,6 @@ struct instance_gilneas_city : public ScriptedInstance
                 break;
         }
     }
-
-    void SetData(uint32 uiType, uint32 uiData)
-    {
-        switch (uiType)
-        {
-            case PHASE_1:
-                m_auiEncounter[PHASE_1] = uiData;
-                if (uiData == IN_PROGRESS)
-                {
-                    m_auiEncounter[PHASE_2] = NOT_STARTED;
-                }
-                break;
-            case PHASE_2:
-                m_auiEncounter[PHASE_2] = uiData;
-                if (uiData == IN_PROGRESS)
-                {
-                    m_auiEncounter[PHASE_1] = DONE;
-                }
-                break;
-        }
-    }
-
-    uint32 GetData(uint32 uiType)
-    {
-        switch (uiType)
-        {
-		    case PHASE_1:
-			    return m_auiEncounter[PHASE_1];
-		    case PHASE_2:
-			    return m_auiEncounter[PHASE_2];
-		    default:
-			    return 0;
-		}
-	}
 
     uint64 GetData64(uint32 uiType)
     {
