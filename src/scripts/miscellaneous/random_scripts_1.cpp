@@ -1099,7 +1099,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
 
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 {
-    int32 coin = 51600 + urand(0, 44);
+    int32 coin = 51600 + urand(0, 45);
     pPlayer->AddItem(coin);
     pPlayer->PlayDirectSound(1204, pPlayer);
     pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
