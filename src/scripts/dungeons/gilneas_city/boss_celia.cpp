@@ -42,13 +42,8 @@ struct boss_celiaAI : public ScriptedAI
 			m_pInstance->SetData(PHASE_2, IN_PROGRESS);
 		}
 
-		if (m_pInstance->GetData(PHASE_1 == IN_PROGRESS))
+		if (m_pInstance->GetData(PHASE_1) == IN_PROGRESS)
 		{
-			if (m_creature->GetDisplayId() != MODEL_DRAGONKIN_CELIA)
-			{
-				m_creature->SetDisplayId(MODEL_DRAGONKIN_CELIA);
-			}
-
 			if (m_uiImmolateTimer <= uiDiff)
 			{
 				Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
@@ -80,6 +75,11 @@ struct boss_celiaAI : public ScriptedAI
 
 		if (m_pInstance->GetData(PHASE_2) == IN_PROGRESS)
 		{
+			if (m_creature->GetDisplayId() != MODEL_DRAGONKIN_CELIA)
+			{
+				m_creature->SetDisplayId(MODEL_DRAGONKIN_CELIA);
+			}
+
 			if (m_uiBlastWaveTimer <= uiDiff)
 			{
 				Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);

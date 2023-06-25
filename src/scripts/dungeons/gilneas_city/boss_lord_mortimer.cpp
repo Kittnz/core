@@ -42,11 +42,6 @@ struct boss_lord_mortimerAI : public ScriptedAI
 
 		if (m_pInstance->GetData(PHASE_1) == IN_PROGRESS)
 		{
-			if (m_creature->GetDisplayId() != MODEL_DRAGONKIN_LORD_MORTIMER)
-			{
-				m_creature->SetDisplayId(MODEL_DRAGONKIN_LORD_MORTIMER);
-			}
-
 			if (m_uiHolyStrikeTimer <= uiDiff)
 			{
 				Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
@@ -70,6 +65,11 @@ struct boss_lord_mortimerAI : public ScriptedAI
 
 		if (m_pInstance->GetData(PHASE_2) == IN_PROGRESS)
 		{
+			if (m_creature->GetDisplayId() != MODEL_DRAGONKIN_LORD_MORTIMER)
+			{
+				m_creature->SetDisplayId(MODEL_DRAGONKIN_LORD_MORTIMER);
+			}
+
 			if (m_uiBlastWaveTimer <= uiDiff)
 			{
 				Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
