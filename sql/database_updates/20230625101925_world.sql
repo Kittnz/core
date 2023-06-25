@@ -137,3 +137,6 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
+-- Quest 40992 has been added for NPC "Harlan Ballow".
+replace into creature_questrelation		(id, quest) values (61285, 40992);
+replace into creature_involvedrelation	(id, quest) values (61285, 40992);
