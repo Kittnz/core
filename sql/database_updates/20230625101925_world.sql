@@ -2288,3 +2288,22 @@ replace into gameobject_loot_template values
 
 update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020040;
 
+-- Rothlen Family Brooch
+delete from quest_template where entry = 41000;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40999,41000,2,2017,60,55,0,0,'Rothlen Family Brooch','I am thankful for your work in recovering my Engraved Golden Bracelet, but I long for something closer to my heart. I left my family behind long ago to come to this place, only to forever become trapped.$B$BI want a memento of the past, something that I can look back on with the fondest of memories. With it, I may find some peace.$B$BI once hailed from the lands of Lordaeron, and the city of Stratholme, my family house is within the trade district, find the Rothlen house, and recover my family brooch.','Recover the Rothlen Family Brooch from Stratholme for Duke Rothlen in Karazhan.','Has the Rothlen Family Brooch been recovered?','Stratholme, destroyed? My family home burned?$B$B<Duke Rothlen lets out an exhale of disbelief.>$B$BSuch news brings emotions to my soul. I must thank you deeply for recovering this, for it is truly the final memento of my family.',61664,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61320, 41000);
+replace into creature_involvedrelation	(id, quest) values (61320, 41000);
+update quest_template set TYPE = 81					 where entry = 41000;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61664,2378,'Rothlen Family Brooch',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,4);
+
+REPLACE INTO gameobject_template VALUES
+(2020041, 3, 23432, 'Rothlen Chest', 0, 4, 1, 43, 2020041, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020041,61664,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020041;
+
