@@ -2314,3 +2314,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61320, 41001);
 replace into creature_involvedrelation	(id, quest) values (61328, 41001);
 update quest_template set TYPE = 64					 where entry = 41001;
+
+-- The Doorman of Karazhan
+delete from quest_template where entry = 41002;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (41001,41002,2,3457,60,55,0,0,'The Doorman of Karazhan','Yes, it was me who devised this recipe. I have taught it to very few of the cooks that we had working within Karazhan. It was not widely appreciated, but adored by Medivh.$B$B I am not freely able to dispense with such information, but if you are able to produce a \'Charge of Karazhan\' from Doorman Montigue, I could easily provide you with the recipe. Speak with him, and see to acquiring one.','Speak with Doorman Montigue in Karazhan.','Yes?','Welcome to Karazhan, what is it that I can assist you with?',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61328, 41002);
+replace into creature_involvedrelation	(id, quest) values (61571, 41002);
+update quest_template set TYPE = 64					 where entry = 41002;
+
