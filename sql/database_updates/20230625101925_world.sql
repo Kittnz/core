@@ -2269,3 +2269,22 @@ update quest_template set TYPE = 64					 where entry = 40998;
 
 update item_template set start_quest = 40998 where entry = 51326;
 
+-- Lost and Found
+delete from quest_template where entry = 40999;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40998,40999,2,3457,60,55,0,0,'Lost and Found','If you desire to truly learn more, I will require some favors before I can depart with what knowledge I can gleam from this parchment of notes. When I first arrived in Karazhan some time ago, I wore an engraved bracelet made of the finest gold. It was a symbol of my status, and has subsequently gone missing ever since I have been left to haunt these halls.$B$BI am certain I left my bracelet somewhere within these lower halls. Recover it for me, and I will be quite thankful.','Recover the Engraved Golden Bracelet for Duke Rothlen in Karazhan.','Have you recovered my bracelet? It was a gift from my wife.','Ahh, such a marvelous piece of work... I had forgotten just how extravagant it was.',61663,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61320, 40999);
+replace into creature_involvedrelation	(id, quest) values (61320, 40999);
+update quest_template set TYPE = 64					 where entry = 40999;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61663,18291,'Engraved Golden Bracelet',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,6);
+
+REPLACE INTO gameobject_template VALUES
+(2020040, 3, 23431, 'Lost and Found Box', 0, 4, 1, 43, 2020040, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020040,61663,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where ID = 2020040;
+
