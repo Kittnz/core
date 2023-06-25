@@ -24,6 +24,7 @@ namespace nsInfiniteRiftWeaver
 	static constexpr uint32 SPELL_TIME_STOP{ 23171 };
 	static constexpr uint32 SPELL_SHADOW_SHOCK{ 20603 };
 	static constexpr uint32 SPELL_DARKEN_VISION{ 5514 };
+	static constexpr uint32 SPELL_MIND_BLAST{ 10947 };
 }
 
 namespace nsInfiniteWhelp
