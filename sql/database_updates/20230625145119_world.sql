@@ -52,3 +52,16 @@ UPDATE `creature` SET `position_x` = -950.061157, `position_y` = 2979.919678, `p
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2577555,14337,0,0,0,815,-1408.13,2265.03,182.861,4.70358,120,120,5,100,100,1,0,0);
+DELETE FROM creature WHERE guid=2577555;
+DELETE FROM creature_addon WHERE guid=2577555;
+DELETE FROM creature_movement WHERE id=2577555;
+DELETE FROM game_event_creature WHERE guid=2577555;
+DELETE FROM game_event_creature_data WHERE guid=2577555;
+DELETE FROM creature_battleground WHERE guid=2577555;
+REPLACE INTO `creature` VALUES (2577556,50041,0,0,0,815,-1408.18,2266.44,182.861,5.23294,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2577556;
+DELETE FROM creature_addon WHERE guid=2577556;
+DELETE FROM creature_movement WHERE id=2577556;
+DELETE FROM game_event_creature WHERE guid=2577556;
+DELETE FROM game_event_creature_data WHERE guid=2577556;
+DELETE FROM creature_battleground WHERE guid=2577556;
