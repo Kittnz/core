@@ -9077,6 +9077,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
         copy->DisplayInfoID = DisplayID;
         copy->DestItemId = ItemID;
         copy->SourceItemId = SourceID;
+        copy->Bonding = BIND_WHEN_PICKED_UP;
 
         m_itemTransmogs[ID] = copy;
     } while (result->NextRow());
@@ -9099,6 +9100,7 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
     copy->DisplayInfoID = sourceDisplayId;
     copy->DestItemId = destItemId;
     copy->SourceItemId = sourceItemId;
+    copy->Bonding = BIND_WHEN_PICKED_UP;
     //copy->Sheath = source->Sheath; // 3 hip, 1 back
 
     m_itemTransmogs[destId] = copy;

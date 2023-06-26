@@ -495,19 +495,33 @@ bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint3
             SetSpellCharges(i, atoi(tokens[i]));
 
     SetUInt32Value(ITEM_FIELD_FLAGS, fields[5].GetUInt32());
-    // Remove bind flag for items vs NO_BIND set
-    if (IsSoulBound() && proto->Bonding == NO_BIND)
-    {
-        ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, false);
-        need_save = true;
-    }
 
+    uint32 transmogId = fields[8].GetUInt32();
+
+    if (transmogId)
+    {
+        // All transmogged items should be soulbound
+        if (!IsSoulBound())
+        {
+            ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, true);
+            need_save = true;
+        }
+    }
+    else
+    {
+        // Remove bind flag for items vs NO_BIND set
+        if (IsSoulBound() && proto->Bonding == NO_BIND)
+        {
+            ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, false);
+            need_save = true;
+        }
+    }
 
     std::string enchants = fields[6].GetString();
     _LoadIntoDataField(enchants, ITEM_FIELD_ENCHANTMENT, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET);
     SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, fields[7].GetInt16());
 
-    SetTransmogrification(fields[8].GetUInt32());
+    SetTransmogrification(transmogId);
 
     uint32 durability = fields[9].GetUInt16();
     SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
