@@ -72,3 +72,6 @@ DELETE FROM game_event_creature_data WHERE guid=2577588;
 DELETE FROM creature_battleground WHERE guid=2577588;
 REPLACE INTO `creature` VALUES (2577589,61572,0,0,0,0,2296.96,-5309.07,81.9968,1.97149,120,120,0,100,100,0,0,0);
 UPDATE `creature` SET `position_x` = 2304.522705, `position_y` = -5350.202637, `position_z` = 91.574257, `orientation` = 2.168211 WHERE `guid` = 69678;
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5015602, 2003194, 815, -1405.26, 2241.82, 187.069, 2.37843, 0, 0, 0.928077, 0.372389, 300, 300, 100, 1, 0, 0);
