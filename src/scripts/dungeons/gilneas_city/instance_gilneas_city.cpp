@@ -21,6 +21,14 @@ struct instance_gilneas_city : public ScriptedInstance
         m_uiLordMortimerGUID = 0;
 	}
 
+    void OnPlayerEnter(Player* pPlayer)
+    {
+        if (pPlayer)
+        {
+            pPlayer->GetMap()->SetWeather(pPlayer->GetZoneId(), WEATHER_TYPE_RAIN, 2, true);
+        }
+    }
+
     void OnCreatureEnterCombat(Creature* pCreature) override
     {
         if (pCreature->IsAlive() && !pCreature->IsInCombat())
