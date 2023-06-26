@@ -32,6 +32,4 @@ update spell_template SET EffectBasePoints2 = 1, EffectBasePoints2 = 2, effectAp
 update spell_template SET description = 'Empowers your pet, increasing pet damage by $s1% and increasing pet armor by $s2% for $d. This spell will only affect an Imp, Succubus, Voidwalker, Felhunter, Infernal and Doomguard.' WHERE entry = 23720; -- Blessing of the Black Book
 update spell_template SET ProcChance = 3, Name = 'Proc Self Protection', description = 'When struck in combat has a 3% chance to reduce damage taken by physical attacks by $16621s1% for $16621d. This effect can only occur once every 30 sec.' WHERE entry = 16620; -- Proc Self Invulnerability (Invulnerable Mail)
 update spell_template SET EffectBasePoints1 = -76, effectApplyAuraName1 = 87, Auradescription = 'Physical damage taken reduced by $s1%.', Name = 'Self Protection' WHERE entry = 16621; -- Self Invulnerability (Invulnerable Mail)
--- update spell_template SET ManaCostPct = 6 WHERE entry = 46042; -- Grace of the Sunwell
-
-
+update spell_template SET manaCostPercentage = 6 WHERE entry = 46042; 
