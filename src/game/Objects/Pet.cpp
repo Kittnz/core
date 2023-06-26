@@ -1894,8 +1894,9 @@ void Pet::_SaveAuras()
         {
             SpellEntry const* spellInfo = holder->GetSpellProto();
             if (spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_STEALTH ||
-                    spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_POSSESS_PET || // Nostalrius : Fix crash avec "oeil de la bete"
-                    spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AREA_AURA_PET)
+                spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_POSSESS_PET || // Nostalrius : Fix crash avec "oeil de la bete"
+                spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AREA_AURA_PET ||
+                spellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_CASTER_PET) // Turtle: Do not save Intimidation or Bestial Wrath
             {
                 save = false;
                 break;
