@@ -6603,9 +6603,10 @@ void Spell::EffectSummonPlayer(SpellEffectIndex /*eff_idx*/)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    // Evil Twin (ignore player summon, but hide this for summoner)
-    if (unitTarget->HasAura(23445))
-        return;
+    // https://github.com/vmangos/core/pull/1945/commits/32f853d8874fc82590a0dfa394cc03d1c9ed61b2
+    //// Evil Twin (ignore player summon, but hide this for summoner)
+    //if (unitTarget->HasAura(23445))
+    //    return;
 
     float x, y, z;
     WorldObject* landingObject = m_caster;
