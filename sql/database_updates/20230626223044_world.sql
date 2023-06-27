@@ -30,3 +30,9 @@ DELETE FROM gameobject_battleground WHERE guid = '5015677';
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2577595,89000,0,0,0,1,5336.38,-3555.15,1576.54,5.45815,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2577595;
+DELETE FROM creature_addon WHERE guid=2577595;
+DELETE FROM creature_movement WHERE id=2577595;
+DELETE FROM game_event_creature WHERE guid=2577595;
+DELETE FROM game_event_creature_data WHERE guid=2577595;
+DELETE FROM creature_battleground WHERE guid=2577595;
