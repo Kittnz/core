@@ -479,3 +479,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (1201, 23712, 0.25, 1, 1, 1, 0),
 (1199, 23712, 0.15, 1, 1, 1, 0);
 
+-- Quest Dreamtonic change short description to the following : "Gather 1 Small Dream Shard for Talona Gladeheart at Nordanaar in Hyjal."
+update quest_template set Objectives = 'Gather 1 Small Dream Shard for Talona Gladeheart at Nordanaar in Hyjal.' where entry = 40885;
