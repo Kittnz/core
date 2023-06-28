@@ -2159,6 +2159,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
+                            case 51210:
+                            {
+                                displayid = 181;
+                                break;
+                            }
                             case 51200: // Goblin
                             {
                                 const std::uint32_t m_male[] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
