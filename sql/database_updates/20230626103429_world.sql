@@ -519,5 +519,8 @@ update creature_template set mana_min = 30000, mana_max = 40000 where entry in (
 update creature_loot_template set groupid = 1, ChanceOrQuestChance = 15 where entry = 9736 and item = 80759;
 -- change display ID of creature 17254 to 20381.
 update creature_template set display_id1 = 20381 where entry = 17254;
-
-
+-- Link the following GUIDS to aggro together (2575906,  2575905,  2575904).
+INSERT INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES 
+(2575904, 2575905, 0, 0, 2),
+(2575904, 2575904, 0, 0, 2),
+(2575904, 2575906, 0, 0, 2);
