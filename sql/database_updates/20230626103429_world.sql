@@ -490,3 +490,34 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20411; set @weapon_1 = 20718; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61263;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Make the following npcs immune to stun/fear/poly/charm/slow , Matthias Holtz, Packmaster Ragetooth, Judge Sutherland, Dustivan Blackcowl, Marshal Magnus Greystone, Regent-Lady Celia Harlow, Regent-Lord Mortimer Harlow, Genn Greymane
+update creature_template set mechanic_immune_mask = 604047379 where entry in (61419,61420,61421,61422,61423,61263,61264,61418);
+-- NPC Greymane Cleric reduce HP to 4495, set armor to 1840.
+update creature_template set health_min = 4495, health_max = 4495, armor = 1840 where entry = 61391;
+-- NPC Greymane Elite reduce damage by 15%, reduce armor by 300.
+update creature_template set dmg_min = 357, dmg_max = 424, armor = 3240 where entry = 61388;
+-- NPC Greymane Arbalest, Greymane Knight, and Greymane Noble, reduce damage by 10%.
+update creature_template set dmg_min = 374, dmg_max = 456 where entry in (61390);
+update creature_template set dmg_min = 244, dmg_max = 314 where entry in (61364);
+update creature_template set dmg_min = 373, dmg_max = 443 where entry in (61365);
+-- NPC Greymane Footman, set armor to 2420.
+update creature_template set armor = 2420 where entry = 61389;
+-- Make the following NPCS Skinnable (61424, 61425, 61426, 61462), and copy the skinning loot from creature Duskpelt Prowler.
+update creature_template set skinning_loot_id = 5286 where entry in (61424, 61425, 61426, 61462);
+-- Make NPC 61332, 61333 skinnable and copy the skinning table of Mosshoof Courser (Entry 8761).
+update creature_template set skinning_loot_id = 8761 where entry in (61332, 61333);
+-- Increase damage of Genn Greymane by 10%.
+update creature_template set dmg_min = 300, dmg_max = 372 where entry in (61418);
+-- Remove the spell 17207 from the npc Greymane Elite, he should NOT cast this anymore.
+update creature_spells set spellid_1 = 0, probability_1 = 0, casttarget_1 = 0, castflags_1 = 0, delayinitialmin_1 = 0, delayinitialmax_1 = 0, delayrepeatmin_1 = 0, delayrepeatmax_1 = 0 where entry = 180152;
+-- Greymane Knight, change spell to 18368 instead of what it currently uses.
+update creature_spells set spellid_1 = 18368 where entry = 180150;
+-- NPC ID 60601, 60602 and 60603 should have a random mana value between 30000 and 40000.
+update creature_template set mana_min = 30000, mana_max = 40000 where entry in (60601, 60602, 60603);
+-- Move Item ID 80759 to loot group 1 for NPC ID 9736 and change its drop chance to 15%.
+update creature_loot_template set groupid = 1, ChanceOrQuestChance = 15 where entry = 9736 and item = 80759;
+-- change display ID of creature 17254 to 20381.
+update creature_template set display_id1 = 20381 where entry = 17254;
+
+
