@@ -481,3 +481,12 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 
 -- Quest Dreamtonic change short description to the following : "Gather 1 Small Dream Shard for Talona Gladeheart at Nordanaar in Hyjal."
 update quest_template set Objectives = 'Gather 1 Small Dream Shard for Talona Gladeheart at Nordanaar in Hyjal.' where entry = 40885;
+
+-- NPC Regent-Lord Mortimer Harlow (Entry 61264) add weapon 61318.
+set @equip_template = 20412; set @weapon_1 = 61318; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61264;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+-- NPC Regent-Lady Celia Harlow (Entry 61263)  add weapon 20718.
+set @equip_template = 20411; set @weapon_1 = 20718; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61263;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
