@@ -1237,3 +1237,6 @@ REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417347555002526
 REPLACE INTO `gameobject` VALUES ( 5015710, 2001809, 815, -1473.75, 2339.94, 183.211, 0.158515, 0, 0, 0.0791745, 0.996861, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417347555002526, 1.450000);
 REPLACE INTO `gameobject` VALUES ( 5015710, 2001809, 815, -1473.75, 2339.94, 183.211, 0.158515, 0, 0, 0.0791745, 0.996861, 300, 300, 100, 1, 0, 0);
+
+-- Changes by VOJI
+UPDATE `creature` SET `position_x` = -6344.243164, `position_y` = -2960.129150, `position_z` = 403.407318, `orientation` = 0.579932 WHERE `guid` = 2577537;
