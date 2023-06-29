@@ -145,6 +145,123 @@ struct instance_gilneas_city : public ScriptedInstance
 
 InstanceData* GetInstanceData_instance_gilneas_city(Map* p_Map) { return new instance_gilneas_city(p_Map); }
 
+struct genn_greymaneAI : public ScriptedAI
+{
+    genn_greymaneAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    bool event50PercentHP;
+
+    void Reset() override
+    {
+        event50PercentHP = false;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_creature->GetHealthPercent() < 50.0f && !event50PercentHP)
+        {
+            event50PercentHP = true;
+            DoScriptText(81055, m_creature);
+            // Fear
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+                DoCastSpellIfCan(pTarget, 22678);
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_genn_greymane(Creature* pCreature)
+{
+    return new genn_greymaneAI(pCreature);
+}
+
+struct greymane_knightAI : public ScriptedAI
+{
+    greymane_knightAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    uint32 m_hammerOfJusticeTimer;
+
+    void Reset() override
+    {
+        m_hammerOfJusticeTimer = urand(12 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        // Hammer of Justice
+        if (m_hammerOfJusticeTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0, nullptr, SELECT_FLAG_PLAYER))
+            {
+                if (DoCastSpellIfCan(pTarget, 853) == CAST_OK)
+                    m_hammerOfJusticeTimer = urand(12 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+            }
+        }
+        else
+            m_hammerOfJusticeTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_greymane_knight(Creature* pCreature)
+{
+    return new greymane_knightAI(pCreature);
+}
+
+struct greymane_nobleAI : public ScriptedAI
+{
+    greymane_nobleAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    uint32 m_mindFlayTimer;
+
+    void Reset() override
+    {
+        m_mindFlayTimer = urand(10 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        // Mind Flay
+        if (m_mindFlayTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+            {
+                if (DoCastSpellIfCan(pTarget, 17312) == CAST_OK)
+                    m_mindFlayTimer = urand(10 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+            }
+        }
+        else
+            m_mindFlayTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_greymane_noble(Creature* pCreature)
+{
+    return new greymane_nobleAI(pCreature);
+}
+
 void AddSC_instance_gilneas_city()
 {
     Script* newscript;
@@ -152,5 +269,20 @@ void AddSC_instance_gilneas_city()
     newscript = new Script;
     newscript->Name = "instance_gilneas_city";
     newscript->GetInstanceData = &GetInstanceData_instance_gilneas_city;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "genn_greymane";
+    newscript->GetAI = &GetAI_genn_greymane;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "greymane_knight";
+    newscript->GetAI = &GetAI_greymane_knight;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "greymane_noble";
+    newscript->GetAI = &GetAI_greymane_noble;
     newscript->RegisterSelf();
 }
