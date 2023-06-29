@@ -20,4 +20,7 @@ update spell_template SET Reagent2 = 8836, ReagentCount2 = 2 WHERE entry = 17578
 update spell_template SET EffectBasePoints1 = 1, EffectBasePoints2 = 2, EffectBasePoints3 = 2 WHERE entry = 57046; -- Well Fed (Danonzo's Tel'Abim Medley)
 update spell_template SET ReagentCount3 = 2 WHERE entry = 57051; 
 
+-- Fixed Ansimer's Runeweaver:
 
+UPDATE `item_template` SET `subclass` = 10 WHERE `entry` = 61264;
+UPDATE `item_template` SET `sheath` = 2 WHERE `entry` = 61264;
