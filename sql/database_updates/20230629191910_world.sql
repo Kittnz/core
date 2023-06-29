@@ -1240,3 +1240,7 @@ REPLACE INTO `gameobject` VALUES ( 5015710, 2001809, 815, -1473.75, 2339.94, 183
 
 -- Changes by VOJI
 UPDATE `creature` SET `position_x` = -6344.243164, `position_y` = -2960.129150, `position_z` = 403.407318, `orientation` = 0.579932 WHERE `guid` = 2577537;
+REPLACE INTO `creature` VALUES (2577537,61567,0,0,0,0,-6344.24,-2960.13,403.407,0.579932,300,300,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 16);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 353);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 398);
