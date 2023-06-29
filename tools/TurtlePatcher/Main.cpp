@@ -41,13 +41,13 @@ OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game t
 
 bool fov_build = false;
 
-#define NEW_BUILD 7060u
-#define NEW_VISUAL_BUILD "7060"
-#define NEW_VISUAL_VERSION "1.16.5"
-#define NEW_BUILD_DATE "Jan 03 2023"
+#define NEW_BUILD 7070u
+#define NEW_VISUAL_BUILD "7070"
+#define NEW_VISUAL_VERSION "1.16.6"
+#define NEW_BUILD_DATE "Aug ?? 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-3.mpq"
+#define PATCH_FILE "Data\\patch-4.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
@@ -490,12 +490,26 @@ void ClearWDBCache()
 	}
 }
 
+void DeleteChatCache()
+{
+	fs::path chat_cache_path = fs::current_path() / "WTF" / "Account";
+
+	for (const fs::directory_entry& dir_entry : fs::recursive_directory_iterator(chat_cache_path))
+	{
+		if (wcsstr(dir_entry.path().c_str(), L"chat-cache.txt"))
+		{
+			WriteLog("Removing %S", dir_entry.path().c_str());
+			fs::remove(dir_entry.path());
+		}
+	}
+}
+
 void DeleteDeprecatedMPQ()
 {
-	fs::path currentPath = fs::current_path();
+	fs::path currentPath = fs::current_path();	
 
 	{
-		int numerical_patches[6] = { 4, 5, 6, 7, 8, 9 };
+		int numerical_patches[5] = { 5, 6, 7, 8, 9 };
 		for (int i : numerical_patches)
 		{
 			WriteLog("Searching for patch-%i...", i);
@@ -636,9 +650,11 @@ int GuardedMain(HINSTANCE hInstance)
 	// Delete deprecated MPQ files:
 	DeleteDeprecatedMPQ();
 
+	// Delete player's chat cache:
+	DeleteChatCache();
+
 	// Delete WDB:
 	ClearWDBCache();
-
 
 	// unpack patch files
 	{
