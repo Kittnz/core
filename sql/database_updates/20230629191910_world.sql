@@ -1244,3 +1244,5 @@ REPLACE INTO `creature` VALUES (2577537,61567,0,0,0,0,-6344.24,-2960.13,403.407,
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 16);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 353);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577537, 398);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370434098161328418, 2.000000);
+REPLACE INTO `gameobject` VALUES ( 4006178, 3000223, 1, -5687.31, 1376.73, 51.6745, 6.23355, 0, 0, 0.0248151, -0.999692, 25, 25, 100, 1, 0, 0);
