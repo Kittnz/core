@@ -1255,3 +1255,30 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 
 -- Changes by VOJI
 REPLACE INTO `creature` VALUES (2577597,61292,0,0,0,1,2999.91,-3201.3,189.697,3.22637,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2577597;
+DELETE FROM creature_addon WHERE guid=2577597;
+DELETE FROM creature_movement WHERE id=2577597;
+DELETE FROM game_event_creature WHERE guid=2577597;
+DELETE FROM game_event_creature_data WHERE guid=2577597;
+DELETE FROM creature_battleground WHERE guid=2577597;
+REPLACE INTO `creature` VALUES (2577598,61292,0,0,0,1,2995.65,-3199.46,189.47,0.998979,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2577599,61427,0,0,0,1,1698.77,-3441.21,144.882,5.33595,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 10);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 173);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 69);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 36);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 389);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 382);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 275);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 14);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 4);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 45);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 53);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 44);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 353);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 386);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 1);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 2);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 3);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 37);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 36);
