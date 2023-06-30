@@ -1252,3 +1252,6 @@ DELETE FROM gameobject_battleground WHERE guid = '4006178';
 
 -- Changes by TAMMO
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (890,4602.547363,-3881.319092,944.176331,0.951490,1,'hyjalentrance');
+
+-- Changes by VOJI
+REPLACE INTO `creature` VALUES (2577597,61292,0,0,0,1,2999.91,-3201.3,189.697,3.22637,120,120,0,100,100,0,0,0);
