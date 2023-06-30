@@ -1285,3 +1285,4 @@ REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2577599, 36);
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -488.455322, `position_y` = 2016.043213, `position_z` = 96.493790, `orientation` = 5.456972 WHERE `guid` = 28811;
+UPDATE `creature` SET `position_x` = -334.365509, `position_y` = 2038.393677, `position_z` = 111.785057, `orientation` = 5.732651 WHERE `guid` = 28872;
