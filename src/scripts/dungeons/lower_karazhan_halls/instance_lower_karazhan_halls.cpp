@@ -305,7 +305,7 @@ struct phantom_guardsmanAI : public ScriptedAI
 
 		if (m_ShieldBlockTimer < uiDiff)
 		{
-			if (DoCastSpellIfCan(m_creature, 2565) == CAST_OK)
+			if (DoCastSpellIfCan(m_creature, 2565, CF_TRIGGERED | CF_FORCE_CAST) == CAST_OK)
 				m_ShieldBlockTimer = 5 * IN_MILLISECONDS;
 		}
 		else
@@ -315,7 +315,7 @@ struct phantom_guardsmanAI : public ScriptedAI
 		{
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 			{
-				if (DoCastSpellIfCan(pTarget, 12493) == CAST_OK)
+				if (DoCastSpellIfCan(pTarget, 12493, CF_TRIGGERED | CF_FORCE_CAST) == CAST_OK)
 					m_CurseOfWeaknessTimer = urand(14 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
 			}
 		}
