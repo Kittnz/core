@@ -1249,3 +1249,6 @@ REPLACE INTO `gameobject` VALUES ( 4006178, 3000223, 1, -5687.31, 1376.73, 51.67
 DELETE FROM gameobject WHERE guid = '4006178';
 DELETE FROM game_event_gameobject WHERE guid = '4006178';
 DELETE FROM gameobject_battleground WHERE guid = '4006178';
+
+-- Changes by TAMMO
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (890,4602.547363,-3881.319092,944.176331,0.951490,1,'hyjalentrance');
