@@ -27,3 +27,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (6007, 1802, 0.02, 5, 1, 1, 0),
 (6008, 1802, 0.02, 5, 1, 1, 0),
 (6009, 1802, 0.02, 5, 1, 1, 0);
+
+UPDATE `item_template` SET `quality` = 2 WHERE `entry` = 61368;
