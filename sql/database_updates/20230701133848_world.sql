@@ -11,3 +11,7 @@ UPDATE `creature_template` SET `faction` = 35, `npc_flags` = 1 WHERE `entry` = 6
 -- change zone id of quest The True Enemy to 331 
 
 UPDATE `quest_template` SET `ZoneOrSort` = 331 WHERE `entry` = 40842;
+
+-- Add Item ID 18355 to NPC ID 14308 to a new loot group with a 14% chance to drop.
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (14308, 18355, 14, 1, 1, 1, 0);
