@@ -153,16 +153,52 @@ struct genn_greymaneAI : public ScriptedAI
     }
 
     bool event50PercentHP;
+    uint32 m_DrainLifeTimer;
+    uint32 m_MortalStrikeTimer;
+    uint32 m_CurseOfAgonyTimer;
 
     void Reset() override
     {
         event50PercentHP = false;
+        m_DrainLifeTimer = 4 * IN_MILLISECONDS;
+        m_MortalStrikeTimer = 2 * IN_MILLISECONDS;
+        m_CurseOfAgonyTimer = 1 * IN_MILLISECONDS;
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        // Drain Life
+        if (m_DrainLifeTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 17620, CF_FORCE_CAST) == CAST_OK)
+                m_DrainLifeTimer = urand(20 * IN_MILLISECONDS, 25 * IN_MILLISECONDS);
+        }
+        else
+            m_DrainLifeTimer -= uiDiff;
+
+        // Mortal Strike
+        if (m_MortalStrikeTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 21551, CF_FORCE_CAST) == CAST_OK)
+                m_MortalStrikeTimer = urand(17 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+        }
+        else
+            m_MortalStrikeTimer -= uiDiff;
+
+        // Curse of Agony
+        if (m_CurseOfAgonyTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+            {
+                if (DoCastSpellIfCan(pTarget, 11711, CF_FORCE_CAST) == CAST_OK)
+                    m_CurseOfAgonyTimer = urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
+            }
+        }
+        else
+            m_CurseOfAgonyTimer -= uiDiff;
 
         if (m_creature->GetHealthPercent() < 50.0f && !event50PercentHP)
         {
@@ -190,16 +226,27 @@ struct greymane_knightAI : public ScriptedAI
     }
 
     uint32 m_hammerOfJusticeTimer;
+    uint32 m_strikeTimer;
 
     void Reset() override
     {
         m_hammerOfJusticeTimer = urand(12 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+        m_strikeTimer = 1 * IN_MILLISECONDS;
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        // Strike
+        if (m_strikeTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 18368, CF_FORCE_CAST) == CAST_OK)
+                m_strikeTimer = 10 * IN_MILLISECONDS;
+        }
+        else
+            m_strikeTimer -= uiDiff;
 
         // Hammer of Justice
         if (m_hammerOfJusticeTimer < uiDiff)
@@ -230,16 +277,27 @@ struct greymane_nobleAI : public ScriptedAI
     }
 
     uint32 m_mindFlayTimer;
+    uint32 m_mindBlastTimer;
 
     void Reset() override
     {
         m_mindFlayTimer = urand(10 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+        m_mindBlastTimer = 2 * IN_MILLISECONDS;
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        // Mind Blast
+        if (m_mindBlastTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 10945, CF_FORCE_CAST) == CAST_OK)
+                m_mindBlastTimer = 9 * IN_MILLISECONDS;
+        }
+        else
+            m_mindBlastTimer -= uiDiff;
 
         // Mind Flay
         if (m_mindFlayTimer < uiDiff)
