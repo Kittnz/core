@@ -21,9 +21,9 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
 
-(6004, 18023, 0.02, 5, 1, 1, 0),
-(6005, 18023, 0.02, 5, 1, 1, 0),
-(6006, 18023, 0.02, 5, 1, 1, 0),
-(6007, 18023, 0.02, 5, 1, 1, 0),
-(6008, 18023, 0.02, 5, 1, 1, 0),
-(6009, 18023, 0.02, 5, 1, 1, 0);
+(6004, 1802, 0.02, 5, 1, 1, 0),
+(6005, 1802, 0.02, 5, 1, 1, 0),
+(6006, 1802, 0.02, 5, 1, 1, 0),
+(6007, 1802, 0.02, 5, 1, 1, 0),
+(6008, 1802, 0.02, 5, 1, 1, 0),
+(6009, 1802, 0.02, 5, 1, 1, 0);
