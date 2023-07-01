@@ -7,3 +7,7 @@ UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 2 WHERE `entry` = 49
 
 UPDATE `creature_template` SET `faction` = 35, `npc_flags` = 1 WHERE `entry` = 61225;
 UPDATE `creature_template` SET `faction` = 35, `npc_flags` = 1 WHERE `entry` = 61226;
+
+-- change zone id of quest The True Enemy to 331 
+
+UPDATE `quest_template` SET `ZoneOrSort` = 331 WHERE `entry` = 40842;
