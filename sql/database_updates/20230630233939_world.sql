@@ -284,3 +284,8 @@ DELETE FROM creature_movement WHERE id=2577892;
 DELETE FROM game_event_creature WHERE guid=2577892;
 DELETE FROM game_event_creature_data WHERE guid=2577892;
 DELETE FROM creature_battleground WHERE guid=2577892;
+REPLACE INTO `gameobject` VALUES ( 4004604, 2008707, 0, -5647.95, -4288.03, 408.813, 5.30016, 0, 0, 0.47196, -0.88162, 25, 25, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 4004604, 2008707, 0, -5647.95, -4288.03, 407.813, 5.30016, 0, 0, 0.47196, -0.88162, 25, 25, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = -5817.146484, `position_y` = -4044.791748, `position_z` = 375.542114, `orientation` = 1.607597 WHERE `guid` = 8690;
+UPDATE `creature` SET `position_x` = -5853.449707, `position_y` = -3936.083984, `position_z` = 352.681488, `orientation` = 2.074909 WHERE `guid` = 8690;
+UPDATE `creature` SET `position_x` = -5892.281250, `position_y` = -3886.646240, `position_z` = 354.573334, `orientation` = 4.951816 WHERE `guid` = 8690;
