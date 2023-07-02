@@ -2505,3 +2505,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2070, 11903, 0.06, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2071, 11903, 0.06, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2237, 11903, 0.06, 0, 1, 1, 0);
+-- Change https://database.turtle-wow.org/?item=60516 drop chance to 75% for Young Reef Crawlers, 90% for Tide Crawlers.
+update creature_loot_template set ChanceOrQuestChance = -90 where entry = 2232 and item = 60516;
+update creature_loot_template set ChanceOrQuestChance = -75 where entry = 2234 and item = 60516;
