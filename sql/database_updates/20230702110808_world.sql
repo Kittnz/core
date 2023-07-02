@@ -2454,3 +2454,18 @@ values (@spell_list_id, @description,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- NPC Ralathius, change greeting text to: "Hidden beneath the veil, a great shadow lurks within the dream. Already many of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream. I have resisted its temptations already, but not all are willed so strong."
 update broadcast_text set male_text = 'Hidden beneath the veil, a great shadow lurks within the dream. Already many of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream. I have resisted its temptations already, but not all are willed so strong.' where entry = 61326;
+
+-- Quest 40912 add item requirement 61197 (x1).
+-- Quest 40911 add item requirement 61197 (x1).
+-- Quest 40910 add item requirement 61197 (x1).
+update quest_template set reqitemid2 = 61197, reqitemcount2 = 1 where entry in (40910,40911,40912);
+-- Quest 40912, 40911, 40910 change main description last paragraph to : "If you desire this sigil, I will require thirty Bright Dream Shards. I will also require a Fading Dream Fragment. I cannot just give it away without proof of your deeds here in Hyjal."
+update quest_template set details = 'The Sigil of Quickness is infused with the powers of speed. Upon using its energy, you will find yourself able to strike at a quicker pace.$B$BIf you desire this sigil, I will require thirty Bright Dream Shards. I will also require a Fading Dream Fragment. I cannot just give it away without proof of your deeds here in Hyjal.' where entry = 40910;
+update quest_template set details = 'The Sigil of Leeching is infused with darker powers. Upon using its energy, you will find yourself able to siphon the essence of your opponent.$B$BIf you desire this sigil, I will require thirty Bright Dream Shards. I will also require a Fading Dream Fragment. I cannot just give it away without proof of your deeds here in Hyjal.' where entry = 40911;
+update quest_template set details = 'The Sigil of Penetration is infused with powerful magics. Upon using its energy, you will find yourself able to pierce deeper into tough armor.$B$BIf you desire this sigil, I will require thirty Bright Dream Shards. I will also require a Fading Dream Fragment. I cannot just give it away without proof of your deeds here in Hyjal.' where entry = 40912;
+-- Quest 40912, 40911, 40910 change short description to : "Gather 30 Bright Dream Shards and a Fading Dream Fragment for Vaenar Hollowstar at Nordanaar in Hyjal"
+update quest_template set objectives = 'Gather 30 Bright Dream Shards and a Fading Dream Fragment for Vaenar Hollowstar at Nordanaar in Hyjal.' where entry in (40910,40911,40912);
+-- Remove Pattern: Wicked Leather Gauntlets and Pattern: Stormshroud Pants from Randal Portman (Tirisfal Uplands vendor).
+delete from npc_vendor where entry = 91983 and item = 15725;
+
+
