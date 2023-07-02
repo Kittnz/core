@@ -20,3 +20,8 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61209, 61674, 0.8, 5, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61210, 61674, 0.8, 5, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61226, 61674, 70, 5, 1, 1, 0);
+
+UPDATE `spell_template` SET `name` = 'Sigil of Penetration' WHERE `entry` = 57157;
+UPDATE `spell_template` SET `reagent2` = 61673, `reagentCount2` = 3 WHERE `entry` = 57115;
+UPDATE `spell_template` SET `reagent4` = 61673, `reagentCount4` = 1 WHERE `entry` = 57113;
+UPDATE `spell_template` SET `reagent2` = 61673 WHERE `entry` = 57144;
