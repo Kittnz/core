@@ -10,3 +10,8 @@ DELETE FROM creature_battleground WHERE guid=2577923;
 REPLACE INTO `gameobject` VALUES ( 5015799, 2001828, 1, 5708.98, -2983.5, 1548.5, 4.69395, 0, 0, 0.713597, -0.700556, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5015799, 2001828, 1, 5708.98, -2983.5, 1548.1, 4.69395, 0, 0, 0.713597, -0.700556, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5015799, 2001828, 1, 5708.98, -2983.5, 1547.7, 4.69395, 0, 0, 0.713597, -0.700556, 300, 300, 100, 1, 0, 0);
+
+-- Changes by VOJI
+DELETE FROM gameobject WHERE guid = '4004969';
+DELETE FROM game_event_gameobject WHERE guid = '4004969';
+DELETE FROM gameobject_battleground WHERE guid = '4004969';
