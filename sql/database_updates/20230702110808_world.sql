@@ -2468,4 +2468,19 @@ update quest_template set objectives = 'Gather 30 Bright Dream Shards and a Fadi
 -- Remove Pattern: Wicked Leather Gauntlets and Pattern: Stormshroud Pants from Randal Portman (Tirisfal Uplands vendor).
 delete from npc_vendor where entry = 91983 and item = 15725;
 
+-- Nordanaar Herbal Tea
+delete from quest_template where entry = 41005;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41005,2,616,60,55,0,1,'Nordanaar Herbal Tea','If you are looking for something a bit more relaxing, I have spent quite a few years mastering my recipe for herbal tea.$B$BI could brew you some for your efforts here in Hyjal. Bring me a single Small Dream Shard and I shall reward you with my famous tea.','Gather 1 Small Dream Shard for Talona Gladeheart at Nordanaar in Hyjal.','So, do you have a Small Dream Shard?','The effects of the tea are quite calming, be at ease with a few sips.',61198,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,250,0,0,0,0,0,0,0,0,0,0,0, 61675,2,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
 
+replace into creature_questrelation		(id, quest) values (61505, 41005);
+replace into creature_involvedrelation	(id, quest) values (61505, 41005);
+
+replace into item_template values
+ ('61675', '0', '0', 'Nordanaar Herbal Tea', '', '18061', '2', '0', '1', '2400', '600', '0', '-1', '-1', '55',
+ '50', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '19199', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
