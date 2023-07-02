@@ -2498,3 +2498,10 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61522, 41007);
 replace into creature_involvedrelation	(id, quest) values (61522, 41007);
+
+-- Item Corrupted Kitten 11903, add to the drop table of 2069, 2070, 2071, 2237 with a drop chance of 0.06%, change item description text to : "This rare deformity is a new phenomenon." 
+update item_template set description = 'This rare deformity is a new phenomenon.' where entry = 11903;
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2069, 11903, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2070, 11903, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2071, 11903, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2237, 11903, 0.06, 0, 1, 1, 0);
