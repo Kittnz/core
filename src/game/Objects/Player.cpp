@@ -18364,8 +18364,8 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
         { FORM_CAT,       51057, 11444, 10054, 892,   8571  }, // Glyph of the Frostsaber
         { FORM_TRAVEL,    51056, 1992,  2161,  632,   632  },  // Glyph of the Stag
         { FORM_AQUA,      51830, 4591,  2428,  2428,  2428  }, // Glyph of the Orca
-        { FORM_BEAR,      51266, 8837,  8837,  2281,  2289  }, // Glyph of the Icebear
-        { FORM_DIREBEAR,  51266, 8837,  8837,  2281,  2289  }, // Glyph of the Icebear
+        { FORM_BEAR,      51266, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
+        { FORM_DIREBEAR,  51266, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
         { FORM_GHOSTWOLF, 51831, 3123,  4613,  4613,  4613  }, // Glyph of the Ghostwolf
         { FORM_MOONKIN,   51431, 12237, 12237, 15374, 15375 }, // Glyph of the Frostkin
         { FORM_BEAR,      51360, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
