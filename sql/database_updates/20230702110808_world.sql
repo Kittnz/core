@@ -2508,3 +2508,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- Change https://database.turtle-wow.org/?item=60516 drop chance to 75% for Young Reef Crawlers, 90% for Tide Crawlers.
 update creature_loot_template set ChanceOrQuestChance = -90 where entry = 2232 and item = 60516;
 update creature_loot_template set ChanceOrQuestChance = -75 where entry = 2234 and item = 60516;
+-- Object Harlow Family Chest is lootable after killing Celia Harlow.
+update gameobject_template set flags = 0, data2 = 30 where entry = 2020027;
