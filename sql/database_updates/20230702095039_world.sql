@@ -21,3 +21,9 @@ REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value
 UPDATE `areatrigger_teleport` SET `required_condition` = 30003 WHERE `id` = 5017;
 
 UPDATE `areatrigger_teleport` SET `message` = 'To enter, you must be part of a raid group, be at least level 60, and have the Gemstone of Ysera in your inventory.' WHERE `id` = 5017;
+
+-- NPC white tiger cub (creature entry 17254) display ID is getting incorrect syntax error 
+-- Corrupted Kitten change scale to 0.5
+
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20381, 0, 0, 0, 0);
+UPDATE `creature_template` SET `scale` = 0.5 WHERE `entry` = 9936;
