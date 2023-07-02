@@ -4103,86 +4103,6 @@ bool GossipSelect_npc_q_controlling_sailors(Player* pPlayer, Creature* pCreature
     return true;
 }
 
-bool GossipHello_npc_sailor_pardol(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    if (pPlayer->GetQuestStatus(40660) == QUEST_STATUS_INCOMPLETE) // Controlling Sailors
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(61016, pCreature->GetGUID());
-
-    return true;
-}
-
-bool GossipSelect_npc_sailor_pardol(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->MonsterSay("Check in on me? What does he think he can control me here, and who are you, some worthless constable?");
-        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-
-        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            npc->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
-            });
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-struct npc_sailor_pardolAI : public ScriptedAI
-{
-    npc_sailor_pardolAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    bool speech = false;
-
-    void Reset() { }
-    void UpdateAI(const uint32 diff)
-    {
-        if (m_creature->GetHealthPercent() < 50)
-        {
-            if (!speech)
-            {
-                speech = true;
-                m_creature->MonsterSay("I yield, fine! Tell him I'll keep out of trouble then, I got the lesson.");
-            }
-            m_creature->CombatStop(true);
-            m_creature->ClearInCombat();
-            m_creature->SetFactionTemplateId(1693);
-        }
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
-        DoMeleeAttackIfReady();
-    }
-    void JustDied(Unit*) override { }
-    void EnterCombat() { }
-
-    void OnCombatStop()
-    {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-
-        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
-        {
-            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
-            {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60397))
-                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-            }
-        }
-    }
-
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_sailor_pardol(Creature* _Creature) { return new npc_sailor_pardolAI(_Creature); }
-
 bool GossipHello_npc_mally_o_flor(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsQuestGiver())
@@ -7053,13 +6973,6 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_mally_o_flor";
     newscript->pGossipHello = &GossipHello_npc_mally_o_flor;
     newscript->pGossipSelect = &GossipSelect_npc_mally_o_flor;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sailor_pardol";
-    newscript->pGossipHello = &GossipHello_npc_sailor_pardol;
-    newscript->pGossipSelect = &GossipSelect_npc_sailor_pardol;
-    newscript->GetAI = &GetAI_npc_sailor_pardol;
     newscript->RegisterSelf();
 
     newscript = new Script;
