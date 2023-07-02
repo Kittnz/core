@@ -21,3 +21,6 @@ DELETE FROM gameobject_battleground WHERE guid = '4004965';
 DELETE FROM gameobject WHERE guid = '4004967';
 DELETE FROM game_event_gameobject WHERE guid = '4004967';
 DELETE FROM gameobject_battleground WHERE guid = '4004967';
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (892,-5289.106934,-316.280518,36.149006,2.643448,1,'chimaeraroostvale');
