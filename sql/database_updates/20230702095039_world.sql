@@ -13,3 +13,11 @@ replace into item_template values
  '0', '1', NULL);
  
 UPDATE `quest_template` SET `RewItemId1` = 50545, `RewItemCount1` = 50545 WHERE `entry` = 40962;
+
+-- Lock Emerald Sanctum:
+
+REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (30003, 2, 50545, 1, 0, 0, 0);
+
+UPDATE `areatrigger_teleport` SET `required_condition` = 30003 WHERE `id` = 5017;
+
+UPDATE `areatrigger_teleport` SET `message` = 'To enter, you must be part of a raid group, be at least level 60, and have the Gemstone of Ysera in your inventory.' WHERE `id` = 5017;
