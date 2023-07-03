@@ -101,8 +101,6 @@ replace into shop_items values
 (89, 4, 51830, 'Druid: Glyph of the Orca', 100),
 (90, 4, 51432, 'Druid: Glyph of Stars', 100),
 (91, 4, 51360, 'Druid: Glyph of the Emerald Bear', 100),
-(92, 4, 51361, 'Druid: Glyph of the Dreamkin', 100),
-(93, 4, 51362, 'Druid: Glyph of Panther', 100),
 (94, 4, 50406, 'Druid: Glyph of the Stag', 100),
 -- Mounts
 (101, 5, 50071, 'Ivory Tallstrider', 100),

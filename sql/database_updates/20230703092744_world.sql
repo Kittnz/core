@@ -98,3 +98,15 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- change item reward to Pattern: Enchanted Armor Kit (Entry 61179)
 
 UPDATE `quest_template` SET `Title` = 'Pattern: Enchanted Armor Kit', `Details` = 'Long ago the druids of Hyjal devised a potent and powerful leatherworking recipe to enhance their armor.$B$BThis armor kit contains the very power of the druidic magic itself.$B$BIf you desire, I could give you this pattern in exchange for your efforts to assist us in Nordanaar. It could be a powerful boon for you and your allies.', `RewItemId1` = 61179 WHERE `entry` = 40875;
+
+-- Item Glyph of the Dreamkin (Entry 51361) change item to blue (rare) rarity, change description text to 
+-- "Your Moonkin Form appears as a Dreamkin, while this Glyph is on your keyring."
+-- Add item Glyph of the Dreamkin as a drop from Solnius (60748) at 14%
+
+-- Item Glyph of the Dream Panther, change description text to 
+-- "Your Cat Form appears as a Dream Panther, while this Glyph is on your keyring."
+
+UPDATE `item_template` SET `description` = 'Your Moonkin Form appears as a Dreamkin, while this Glyph is on your keyring.', `quality` = 3 WHERE `entry` = 51361;
+UPDATE `item_template` SET `description` = 'Your Cat Form appears as a Dream Panther, while this Glyph is on your keyring.', `quality` = 3 WHERE `entry` = 51362;
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 51361, 14, 11, 1, 1, 0);
