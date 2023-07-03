@@ -78,6 +78,13 @@ if(WIN32)
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/include-windows
   )
+
+  if (ENABLE_PROFILING)
+    include_directories(
+        ${OPTICK_INCLUDE_DIR}
+    )
+endif()
+
 endif()
 
 # Display some debug informations at server startup
@@ -131,6 +138,12 @@ if(WIN32)
       -lws2_32
     )
   endif()
+
+  if (ENABLE_PROFILING)
+      target_link_libraries(${EXECUTABLE_NAME}
+        ${OPTICK_LIBRARY})
+  endif()
+
   if(PLATFORM MATCHES X86)
     target_link_libraries(${EXECUTABLE_NAME})
   endif()

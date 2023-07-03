@@ -29,6 +29,7 @@ set (shared_SRCS
     ThreadPool.h
     Timer.h
     Util.h
+    OptickIntegration.h
     WorldPacket.h
     Auth/ARC4.h
     Auth/AuthCrypt.h
@@ -123,6 +124,12 @@ if(WIN32)
     PosixDaemon.cpp
     revision.h
   )
+  
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
 
 if (NOT MSVC)
   list(REMOVE_ITEM shared_SRCS
