@@ -43,3 +43,9 @@ REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `c
 -- NPC ID 61550 should have a random respawn timer between 12 and 24 hours.
 
 UPDATE `creature` SET `spawntimesecsmin` = 43200, `spawntimesecsmax` = 86400 WHERE `id` = 61550;
+
+-- quest 40872, 40873, 40874, 40875, 40883, 40884, change short description to the following: 
+
+-- "Gather 50 Bright Dream Shards for Evandil Nightwind at Nordanaar in Hyjal."
+
+UPDATE `quest_template` SET `Objectives` = 'Gather 50 Bright Dream Shards for Evandil Nightwind at Nordanaar in Hyjal.' WHERE `entry` IN (40872, 40873, 40874, 40875, 40883, 40884);
