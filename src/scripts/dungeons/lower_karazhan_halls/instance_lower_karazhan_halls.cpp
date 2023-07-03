@@ -410,7 +410,7 @@ struct shattercage_magiskullAI : public ScriptedAI
 {
 	shattercage_magiskullAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
-		Reset();
+	   Reset();
 	}
 
 	uint32 m_ArcaneExplosionTimer;
@@ -440,6 +440,248 @@ struct shattercage_magiskullAI : public ScriptedAI
 CreatureAI* GetAI_shattercage_magiskull(Creature* pCreature)
 {
 	return new shattercage_magiskullAI(pCreature);
+}
+
+struct skitterweb_crawlerAI : public ScriptedAI
+{
+	skitterweb_crawlerAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+	    Reset();
+	}
+
+	uint32 m_LeechingBiteTimer;
+
+	void Reset() override
+	{
+	    m_LeechingBiteTimer = urand(2 * IN_MILLISECONDS, 5 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+	    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+		    return;
+
+	    if (m_LeechingBiteTimer < uiDiff)
+	    {
+			if (DoCastSpellIfCan(m_creature->GetVictim(), 57056) == CAST_OK)
+				m_LeechingBiteTimer = 15 * IN_MILLISECONDS;
+	    }
+	    else
+		    m_LeechingBiteTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_skitterweb_crawler(Creature* pCreature)
+{
+	return new skitterweb_crawlerAI(pCreature);
+}
+
+struct skitterweb_darkfangAI : public ScriptedAI
+{
+	skitterweb_darkfangAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_DarkfangVenomTimer;
+	uint32 m_VenomInfluxTimer;
+	uint32 m_ReStealthTimer;
+
+	void Reset() override
+	{
+		if (m_creature->HasAura(8216))
+			DoCastSpellIfCan(m_creature, 8216, CF_TRIGGERED | CF_FORCE_CAST);
+
+		m_DarkfangVenomTimer = 1 * IN_MILLISECONDS;
+		m_VenomInfluxTimer = 5 * IN_MILLISECONDS;
+		m_ReStealthTimer = 0;
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->IsInCombat() && !m_creature->HasAura(8216) && !m_ReStealthTimer)
+			m_ReStealthTimer = 2000;
+
+		if (m_ReStealthTimer)
+		{
+			if (m_ReStealthTimer < uiDiff)
+			{
+				if (!m_creature->IsInCombat())
+					DoCastSpellIfCan(m_creature, 8216, CF_TRIGGERED | CF_FORCE_CAST);
+				m_ReStealthTimer = 0;
+			}
+			else
+				m_ReStealthTimer -= uiDiff;
+		}
+
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_DarkfangVenomTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57058) == CAST_OK)
+					m_DarkfangVenomTimer = urand(5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_DarkfangVenomTimer -= uiDiff;
+
+		if (m_VenomInfluxTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57059) == CAST_OK)
+					m_VenomInfluxTimer = urand(12 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_VenomInfluxTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_skitterweb_darkfang(Creature* pCreature)
+{
+	return new skitterweb_darkfangAI(pCreature);
+}
+
+struct skitterweb_venomfangAI : public ScriptedAI
+{
+	skitterweb_venomfangAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_PoisonBoltVolleyTimer;
+	uint32 m_CorrosiveBoltTimer;
+
+	void Reset() override
+	{
+		m_PoisonBoltVolleyTimer = urand(7 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
+		m_CorrosiveBoltTimer = 2 * IN_MILLISECONDS;
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_PoisonBoltVolleyTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature, 25991) == CAST_OK)
+				m_PoisonBoltVolleyTimer = urand(23 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
+		}
+		else
+			m_PoisonBoltVolleyTimer -= uiDiff;
+
+		if (m_CorrosiveBoltTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 56507) == CAST_OK)
+					m_CorrosiveBoltTimer = urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_CorrosiveBoltTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_skitterweb_venomfang(Creature* pCreature)
+{
+	return new skitterweb_venomfangAI(pCreature);
+}
+
+struct skitterweb_leaperAI : public ScriptedAI
+{
+	skitterweb_leaperAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+	    Reset();
+	}
+
+	uint32 m_SkitterLeapTimer;
+
+	void Reset() override
+	{
+		m_SkitterLeapTimer = urand(15 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_SkitterLeapTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_FARTHEST, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57060) == CAST_OK)
+					m_SkitterLeapTimer = DAY * IN_MILLISECONDS;
+			}
+		}
+		else
+			m_SkitterLeapTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_skitterweb_leaper(Creature* pCreature)
+{
+	return new skitterweb_leaperAI(pCreature);
+}
+
+struct phantom_servantAI : public ScriptedAI
+{
+	phantom_servantAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_ServantsCurseTimer;
+	uint32 m_PhantomScreamTimer;
+
+	void Reset() override
+	{
+		m_ServantsCurseTimer = urand(25 * IN_MILLISECONDS, 35 * IN_MILLISECONDS);
+		m_PhantomScreamTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_ServantsCurseTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature, 57061) == CAST_OK)
+				m_ServantsCurseTimer = 3600 * IN_MILLISECONDS;
+		}
+		else
+			m_ServantsCurseTimer -= uiDiff;
+
+		if (m_PhantomScreamTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature, 57062) == CAST_OK)
+				m_PhantomScreamTimer = 11 * IN_MILLISECONDS;
+		}
+		else
+			m_PhantomScreamTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_phantom_servant(Creature* pCreature)
+{
+	return new phantom_servantAI(pCreature);
 }
 
 void AddSC_instance_lower_karazhan_halls()
@@ -499,5 +741,30 @@ void AddSC_instance_lower_karazhan_halls()
 	newscript = new Script;
 	newscript->Name = "shattercage_magiskull";
 	newscript->GetAI = &GetAI_shattercage_magiskull;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "skitterweb_crawler";
+	newscript->GetAI = &GetAI_skitterweb_crawler;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "skitterweb_darkfang";
+	newscript->GetAI = &GetAI_skitterweb_darkfang;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "skitterweb_venomfang";
+	newscript->GetAI = &GetAI_skitterweb_venomfang;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "skitterweb_leaper";
+	newscript->GetAI = &GetAI_skitterweb_leaper;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "phantom_servant";
+	newscript->GetAI = &GetAI_phantom_servant;
 	newscript->RegisterSelf();
 }
