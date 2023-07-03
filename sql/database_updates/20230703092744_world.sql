@@ -221,3 +221,6 @@ update spell_template SET EffectBasePoints1 = 9, EffectBasePoints2 = 9, EffectBa
 update spell_template SET EffectBasePoints1 = 849, EffectBasePoints2 = 849 WHERE entry = 48002; -- Dark Accord
 update spell_template SET EffectBasePoints1 = 49 WHERE entry = 48006; -- Strike (Crafted Shoulder Effect)
 update spell_template SET ReagentCount1 = 10, ReagentCount2 = 10, ReagentCount3 = 8 WHERE entry = 46667; -- Pauldron of Deflection
+
+
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (19126, 0, 0, 0, 0);
