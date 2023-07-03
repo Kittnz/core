@@ -106,6 +106,7 @@ protected:
     void Run()
     {
         sLog.outDebug("Network Thread Starting");
+        thread_name("NetThread");
 
         _updateTimer.expires_from_now(boost::posix_time::milliseconds(1));
         _updateTimer.async_wait([this](boost::system::error_code const&) { Update(); });

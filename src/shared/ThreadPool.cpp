@@ -25,8 +25,8 @@
 #undef IGNORE
 #endif
 
-ThreadPool::ThreadPool(int numThreads, ClearMode when, ErrorHandling mode) :
-    m_errorHandling(mode), m_size(numThreads), m_clearMode(when), m_active(0)
+ThreadPool::ThreadPool(int numThreads, std::string InName, ClearMode when, ErrorHandling mode) :
+    m_errorHandling(mode), m_size(numThreads), m_clearMode(when), m_active(0), Name(InName)
 {
     m_workers.reserve(m_size);
 }
@@ -113,8 +113,8 @@ void ThreadPool::clearWorkload()
     m_workload.clear();
 }
 
-ThreadPool::worker::worker(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    id(id), errorHandling(mode), pool(pool), thread([this](){this->loop_wrapper();})
+ThreadPool::worker::worker(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    id(id), Name(InName), errorHandling(mode), pool(pool), thread([this](){this->loop_wrapper();})
 {
 }
 
@@ -125,6 +125,10 @@ ThreadPool::worker::~worker()
 
 void ThreadPool::worker::loop_wrapper()
 {
+    char ThreadName[128];
+    sprintf(ThreadName, "PoolThread %s %d", Name.c_str(), id);
+    thread_name(ThreadName);
+    
     if (pool->m_errorHandling == ErrorHandling::NONE)
         loop();
     else
@@ -217,8 +221,8 @@ void ThreadPool::worker::loop()
     }
 }
 
-ThreadPool::worker_mq::worker_mq(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    worker(pool,id,mode)
+ThreadPool::worker_mq::worker_mq(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    worker(pool, InName, id,mode)
 {
 }
 
@@ -238,8 +242,8 @@ void ThreadPool::worker_mq::prepare(ThreadPool::Callable pre, ThreadPool::Callab
     worker::prepare(pre, post);
 }
 
-ThreadPool::worker_sq::worker_sq(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    worker(pool,id,mode)
+ThreadPool::worker_sq::worker_sq(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    worker(pool, InName, id,mode)
 {
 }
 
@@ -254,8 +258,8 @@ void ThreadPool::worker_sq::doWork()
 }
 
 template <class T>
-ThreadPool::worker_mysql<T>::worker_mysql(ThreadPool *tp, int id, ThreadPool::ErrorHandling e):
-    T(tp, id, e)
+ThreadPool::worker_mysql<T>::worker_mysql(ThreadPool *tp, std::string InName, int id, ThreadPool::ErrorHandling e):
+    T(tp, InName, id, e)
 {
 }
 

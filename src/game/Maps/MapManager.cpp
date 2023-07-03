@@ -42,7 +42,7 @@ MapManager::MapManager()
     :
     i_gridCleanUpDelay(sWorld.getConfig(CONFIG_UINT32_INTERVAL_GRIDCLEAN)),
     i_MaxInstanceId(RESERVED_INSTANCES_LAST),
-    m_threads(new ThreadPool(sWorld.getConfig(CONFIG_UINT32_MAPUPDATE_INSTANCED_UPDATE_THREADS)))
+    m_threads(new ThreadPool(sWorld.getConfig(CONFIG_UINT32_MAPUPDATE_INSTANCED_UPDATE_THREADS), "MapManager"))
 {
     i_timer.SetInterval(sWorld.getConfig(CONFIG_UINT32_INTERVAL_MAPUPDATE));
     m_threads->start<ThreadPool::MySQL<>>();
@@ -257,35 +257,41 @@ void MapManager::CreateNewInstancesForPlayers()
     do
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
-        std::unordered_set<Player*> players;
-        std::swap(players, m_scheduledNewInstancesForPlayers);
 
-        for (auto const& player : players)
-        {
-            WorldLocation const& dest = player->GetTeleportDest();
-            if (!player->IsBeingTeleportedFar())
-            {
-                sLog.outError("Scheduled instance creation for map %u for player %u but he is no longer being teleported!", dest.mapId, player->GetGUIDLow());
-                continue;
-            }
-
-            MapEntry const* pMapEntry = sMapStorage.LookupEntry<MapEntry>(dest.mapId);
-            MANGOS_ASSERT(pMapEntry->IsDungeon());
-
-            DungeonMap* pMap = static_cast<DungeonMap*>(CreateInstance(dest.mapId, player));
-            if (pMap->CanEnter(player))
-            {
-                pMap->BindPlayerOrGroupOnEnter(player);
-                player->SendNewWorld();
-            } 
-            else
-            {
-                WorldLocation oldLoc;
-                player->GetPosition(oldLoc);
-                player->HandleReturnOnTeleportFail(oldLoc);
-            }
-        } 
+        CreateNewInstancesForPlayersSync();
     } while (asyncMapUpdating);
+}
+
+void MapManager::CreateNewInstancesForPlayersSync()
+{
+	std::unordered_set<Player*> players;
+	std::swap(players, m_scheduledNewInstancesForPlayers);
+
+	for (Player* player : players)
+	{
+		WorldLocation const& dest = player->GetTeleportDest();
+		if (!player->IsBeingTeleportedFar())
+		{
+			sLog.outError("Scheduled instance creation for map %u for player %u but he is no longer being teleported!", dest.mapId, player->GetGUIDLow());
+			continue;
+		}
+
+		MapEntry const* pMapEntry = sMapStorage.LookupEntry<MapEntry>(dest.mapId);
+		MANGOS_ASSERT(pMapEntry->IsDungeon());
+
+		DungeonMap* pMap = static_cast<DungeonMap*>(CreateInstance(dest.mapId, player));
+		if (pMap->CanEnter(player))
+		{
+			pMap->BindPlayerOrGroupOnEnter(player);
+			player->SendNewWorld();
+		}
+		else
+		{
+			WorldLocation oldLoc;
+			player->GetPosition(oldLoc);
+			player->HandleReturnOnTeleportFail(oldLoc);
+		}
+	}
 }
 
 void MapManager::Update(uint32 diff)
@@ -336,14 +342,16 @@ void MapManager::Update(uint32 diff)
         }
     }
 
+#ifndef TURTLE_PROFILE
     std::thread instanceCreationThread = std::thread(&MapManager::CreateNewInstancesForPlayers, this);
+#endif
 
     i_maxContinentThread = continentsIdx;
     i_continentUpdateFinished.store(0);
 
     if (!m_continentThreads || m_continentThreads->size() < continentsUpdaters.size())
     {
-        m_continentThreads.reset(new ThreadPool(continentsUpdaters.size()));
+        m_continentThreads.reset(new ThreadPool(continentsUpdaters.size(), "ContinentUpdate"));
         m_continentThreads->start<>();
     }
     std::future<void> continents = m_continentThreads->processWorkload(std::move(continentsUpdaters),
@@ -368,8 +376,12 @@ void MapManager::Update(uint32 diff)
     SwitchPlayersInstances();
     asyncMapUpdating = false;
 
-    if (instanceCreationThread.joinable())
-        instanceCreationThread.join();
+#ifndef TURTLE_PROFILE
+	if (instanceCreationThread.joinable())
+		instanceCreationThread.join();
+#else
+    CreateNewInstancesForPlayersSync();
+#endif
 
     // Execute far teleports after all map updates have finished
     ExecuteDelayedPlayerTeleports();

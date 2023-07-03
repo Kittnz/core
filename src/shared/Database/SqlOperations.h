@@ -112,7 +112,7 @@ class ThreadPool;
 class SqlResultQueue : public LockedQueue<MaNGOS::IQueryCallback* , std::mutex>
 {
     public:
-        SqlResultQueue();
+        SqlResultQueue(const char* Name);
         ~SqlResultQueue();
         void CancelAll();
         void Update(uint32 maxTime);

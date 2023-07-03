@@ -99,6 +99,14 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/shared
 )
 
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
+
 add_library(framework STATIC
   ${framework_SRCS}
 )

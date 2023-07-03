@@ -1316,6 +1316,8 @@ void charactersDatabaseWorkerThread()
     static uint32 returnDelay = MailReturnDelay;
     static uint32 currentMs = WorldTimer::getMSTime();
 
+    thread_name("CharDBWorker");
+
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
     {
@@ -2071,6 +2073,7 @@ void World::DetectDBCLang()
 
 void World::ProcessAsyncPackets()
 {
+    thread_name("AsyncPackets");
     while (!sWorld.IsStopped())
     {
         do
@@ -2146,7 +2149,7 @@ void World::Update(uint32 diff)
     if (!m_updateThreads)
     {
         m_updateThreads = std::unique_ptr<ThreadPool>( new ThreadPool(
-                    getConfig(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT),
+                    getConfig(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT),"WorldAsync",
                     ThreadPool::ClearMode::UPPON_COMPLETION)
                                              );
         m_updateThreads->start<ThreadPool::MySQL<>>();
@@ -4129,6 +4132,7 @@ bool World::IsCharacterLocked(uint32 guidLow)
 void World::AutoPDumpWorker()
 {
     CharacterDatabase.ThreadStart();
+    thread_name("AutoPDump");
     while (!IsStopped())
     {
         std::this_thread::sleep_for(5s);
