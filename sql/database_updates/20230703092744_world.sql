@@ -110,3 +110,7 @@ UPDATE `item_template` SET `description` = 'Your Moonkin Form appears as a Dream
 UPDATE `item_template` SET `description` = 'Your Cat Form appears as a Dream Panther, while this Glyph is on your keyring.', `quality` = 3 WHERE `entry` = 51362;
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 51361, 14, 11, 1, 1, 0);
+
+-- Buff damage from Echo of Time (Entry 61318) by 20%
+
+UPDATE `creature_template` SET `dmg_min` = 970, `dmg_max` = 1284 WHERE `entry` = 61318;
