@@ -803,7 +803,7 @@ bool GossipHello_npc_marty_moonshine(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 92137 && !pPlayer->HasItemCount(60217, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Give me the Recipe for Southsea Reserve and you get to live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Give me the recipe for the Southsea Reserve and I'll let you live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
     }
 
@@ -5638,7 +5638,7 @@ bool QuestRewarded_npc_deckmaster_darkhollow(Player* pPlayer, Creature* pQuestGi
 
     if (pQuest->GetQuestId() == 40791) // Kul Tiran Provisions: Special Goods
     {
-        pQuestGiver->MonsterSay("Well done on your missions recruit, you make Kul Tiras proud!");
+        pQuestGiver->MonsterSay("WWell done on your missions, recruit. You make Kul Tiras proud!");
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_SALUTE);
     }
 
