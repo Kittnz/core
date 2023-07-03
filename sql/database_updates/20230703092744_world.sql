@@ -200,3 +200,6 @@ REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `c
 REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36465, 171, 57111, 0, 0, 1, 0, 0, 320, 310, 0);
 REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36466, 165, 57125, 0, 0, 1, 0, 0, 320, 310, 0);
 REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36467, 197, 57123, 0, 0, 1, 0, 0, 320, 310, 0);
+
+UPDATE `spell_template` SET `effectMiscValue1` = 3049 WHERE `entry` = 57157
+UPDATE `spell_template` SET `effectMiscValue1` = 3040 WHERE `entry` = 57151
