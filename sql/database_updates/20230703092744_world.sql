@@ -170,3 +170,11 @@ replace into item_template values
 UPDATE `item_template` SET `spellid_1` = 57155, `spellcharges_1` = -1 WHERE `entry` = 61436;
 UPDATE `item_template` SET `spellid_1` = 57156, `spellcharges_1` = -1 WHERE `entry` = 61437;
 UPDATE `item_template` SET `spellid_1` = 57157, `spellcharges_1` = -1 WHERE `entry` = 61438;
+
+UPDATE `spell_template` SET `effectMiscValue1` = 3026 WHERE `entry` = 57134;
+UPDATE `spell_template` SET `effectMiscValue1` = 1068 WHERE `entry` = 57127;
+UPDATE `spell_template` SET `description` = 'Permanently increase the spell power and intellect values of an item worn on the chest, legs, hands or feet by 8 and 6, respectively.  Only usable on items level 60 and above.' WHERE `entry` = 57135;
+UPDATE `spell_template` SET `description` = 'Permanently increase the intellect by 8 and spell power by 6 of an item worn on the chest, legs, hands or feet.  Only usable on items level 60 and above.' WHERE `entry` = 57115;
+UPDATE `spell_template` SET `effectMiscValue1` = 3025 WHERE `entry` = 57135;
+UPDATE `spell_template` SET `totem1` = 11130 WHERE `entry` = 57146;
+UPDATE `spell_template` SET `reagent1` = 11135, `reagent2` = 5637, `reagentCount2` = 2, `reagentCount3` = 2, `reagentCount4` = 0 WHERE `entry` = 57146;
