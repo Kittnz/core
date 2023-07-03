@@ -399,3 +399,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61226, 70001, 2.2, 11, 1, 1, 0),
 (61226, 61185, 2.2, 11, 1, 1, 0),
 (61226, 13517, 2.2, 11, 1, 1, 0);
+
+ UPDATE `broadcast_text` SET `male_text` = 'Please, don\'t kill me!\n\nI\'m the bootlegger who created the recipe for the famous Southsea Reserve!\n\nYou... you can buy some of it if you\'d like!' WHERE `entry` = 92137
