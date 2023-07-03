@@ -49,3 +49,7 @@ UPDATE `creature` SET `spawntimesecsmin` = 43200, `spawntimesecsmax` = 86400 WHE
 -- "Gather 50 Bright Dream Shards for Evandil Nightwind at Nordanaar in Hyjal."
 
 UPDATE `quest_template` SET `Objectives` = 'Gather 50 Bright Dream Shards for Evandil Nightwind at Nordanaar in Hyjal.' WHERE `entry` IN (40872, 40873, 40874, 40875, 40883, 40884);
+
+-- Item Powerful Smelling Salts (entry 8546) set requirement to First Aid 250 instead of 200
+
+UPDATE `item_template` SET `required_skill_rank` = 250 WHERE `entry` = 8546;
