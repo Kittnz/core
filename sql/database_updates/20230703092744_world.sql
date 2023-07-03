@@ -178,3 +178,25 @@ UPDATE `spell_template` SET `description` = 'Permanently increase the intellect 
 UPDATE `spell_template` SET `effectMiscValue1` = 3025 WHERE `entry` = 57135;
 UPDATE `spell_template` SET `totem1` = 11130 WHERE `entry` = 57146;
 UPDATE `spell_template` SET `reagent1` = 11135, `reagent2` = 5637, `reagentCount2` = 2, `reagentCount3` = 2, `reagentCount4` = 0 WHERE `entry` = 57146;
+
+UPDATE `spell_template` SET `effectMiscValue1` = 3026 WHERE `entry` = 57134;
+UPDATE `spell_template` SET `effectMiscValue1` = 1068 WHERE `entry` = 57127;
+UPDATE `spell_template` SET `description` = 'Permanently increase the spell power and intellect values of an item worn on the chest, legs, hands or feet by 8 and 6, respectively.  Only usable on items level 60 and above.' WHERE `entry` = 57135;
+UPDATE `spell_template` SET `description` = 'Permanently increase the intellect by 8 and spell power by 6 of an item worn on the chest, legs, hands or feet.  Only usable on items level 60 and above.' WHERE `entry` = 57115;
+UPDATE `spell_template` SET `effectMiscValue1` = 3025 WHERE `entry` = 57135;
+UPDATE `spell_template` SET `totem1` = 11130 WHERE `entry` = 57146;
+UPDATE `spell_template` SET `reagent1` = 11135, `reagent2` = 5637, `reagentCount2` = 2, `reagentCount3` = 2, `reagentCount4` = 0 WHERE `entry` = 57146;
+UPDATE `spell_template` SET `description` = 'Permanently enchant a pair of boots to increase stamina by 15.' WHERE `entry` = 57127;
+UPDATE `spell_template` SET `description` = 'Teaches you how to permanently enchant a pair of boots to increase stamina by 15.' WHERE `entry` = 57126;
+
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36457, 333, 57142, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36458, 333, 57144, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36459, 333, 57146, 0, 0, 1, 0, 0, 210, 205, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36460, 333, 57148, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36461, 333, 57119, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36462, 333, 57117, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36463, 164, 57113, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36464, 164, 57121, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36465, 171, 57111, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36466, 165, 57125, 0, 0, 1, 0, 0, 320, 310, 0);
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36467, 197, 57123, 0, 0, 1, 0, 0, 320, 310, 0);
