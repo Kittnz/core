@@ -90,3 +90,11 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61359, 61198, 7.6, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61353, 61198, 7.6, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61352, 61198, 7.6, 0, 1, 1, 0);
+
+-- Quest The Recipe of Powerful Smelling Salts (entry 40875), change name to Pattern: Enchanted Armor Kit
+
+-- change main description to : "Long ago the druids of Hyjal devised a potent and powerful leatherworking recipe to enhance their armor.$B$BThis armor kit contains the very power of the druidic magic itself.$B$BIf you desire, I could give you this pattern in exchange for your efforts to assist us in Nordanaar. It could be a powerful boon for you and your allies."
+
+-- change item reward to Pattern: Enchanted Armor Kit (Entry 61179)
+
+UPDATE `quest_template` SET `Title` = 'Pattern: Enchanted Armor Kit', `Details` = 'Long ago the druids of Hyjal devised a potent and powerful leatherworking recipe to enhance their armor.$B$BThis armor kit contains the very power of the druidic magic itself.$B$BIf you desire, I could give you this pattern in exchange for your efforts to assist us in Nordanaar. It could be a powerful boon for you and your allies.', `RewItemId1` = 61179 WHERE `entry` = 40875;
