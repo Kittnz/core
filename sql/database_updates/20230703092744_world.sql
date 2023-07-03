@@ -53,3 +53,7 @@ UPDATE `quest_template` SET `Objectives` = 'Gather 50 Bright Dream Shards for Ev
 -- Item Powerful Smelling Salts (entry 8546) set requirement to First Aid 250 instead of 200
 
 UPDATE `item_template` SET `required_skill_rank` = 250 WHERE `entry` = 8546;
+
+-- Recipe: Alchemists' Stone (Entry 13517) change to rarity purple (epic) 
+
+UPDATE `item_template` SET `quality` = 4 WHERE `entry` = 13517;
