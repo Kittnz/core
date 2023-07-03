@@ -160,3 +160,13 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Add spell 57155 as a use effect with -1 charges, it should be consumed to item Sigil of Leeching (entry 61436)
+
+-- Add spell 57156 as a use effect with -1 charges, it should be consumed to item Sigil of Leeching (entry 61437)
+
+-- Add spell 57157 as a use effect with -1 charges, it should be consumed to item Sigil of Leeching (entry 61438)
+
+UPDATE `item_template` SET `spellid_1` = 57155, `spellcharges_1` = -1 WHERE `entry` = 61436;
+UPDATE `item_template` SET `spellid_1` = 57156, `spellcharges_1` = -1 WHERE `entry` = 61437;
+UPDATE `item_template` SET `spellid_1` = 57157, `spellcharges_1` = -1 WHERE `entry` = 61438;
