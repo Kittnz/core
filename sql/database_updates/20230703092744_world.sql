@@ -211,4 +211,13 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 
 UPDATE `item_template` SET `class` = 12, `flags` = 64, `bonding` = 1 WHERE `entry` IN (61081, 61436, 61437, 61438, 92005, 92006, 92007, 92008);
 
-
+-- whoops
+update spell_template SET EffectBasePoints1 = 0, EffectBasePoints2 = 0, EffectBasePoints3 = 1 WHERE entry = 13679; -- Haste 1
+update spell_template SET EffectBasePoints1 = 1, EffectBasePoints2 = 1, EffectBasePoints3 = 3 WHERE entry = 8815; -- Haste 2
+update spell_template SET EffectBasePoints1 = 2, EffectBasePoints2 = 2, EffectBasePoints3 = 5 WHERE entry = 13680; -- Haste 3
+update spell_template SET EffectBasePoints1 = 3, EffectBasePoints2 = 3, EffectBasePoints3 = 7 WHERE entry = 13681; -- Haste 4
+update spell_template SET EffectBasePoints1 = 4, EffectBasePoints2 = 4, EffectBasePoints3 = 9 WHERE entry = 13682; -- Haste 5
+update spell_template SET EffectBasePoints1 = 9, EffectBasePoints2 = 9, EffectBasePoints3 = 19 WHERE entry = 18065; -- Haste 10
+update spell_template SET EffectBasePoints1 = 849, EffectBasePoints2 = 849 WHERE entry = 48002; -- Dark Accord
+update spell_template SET EffectBasePoints1 = 49 WHERE entry = 48006; -- Strike (Crafted Shoulder Effect)
+update spell_template SET ReagentCount1 = 10, ReagentCount2 = 10, ReagentCount3 = 8 WHERE entry = 46667; -- Pauldron of Deflection
