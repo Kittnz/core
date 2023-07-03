@@ -9,6 +9,7 @@ instance_emerald_sanctum::instance_emerald_sanctum(Map* p_Map) : ScriptedInstanc
 void instance_emerald_sanctum::Initialize()
 {
 	m_uiSolniusGUID = 0;
+	m_uiErenniusGUID = 0;
 	m_mTrashGUID.clear();
 }
 
@@ -19,13 +20,15 @@ void instance_emerald_sanctum::OnCreatureCreate(Creature* pCreature)
 		case NPC_SOLNIUS:
 			m_uiSolniusGUID = pCreature->GetGUID();
 			break;
+		case NPC_ERENNIUS:
+			m_uiErenniusGUID = pCreature->GetGUID();
+			break;
 		case NPC_SANCTUM_DREAMER:
 		case NPC_SANCTUM_DRAGONKIN:
 		case NPC_SANCTUM_WYRM:
 		case NPC_SANCTUM_SUPRESSOR:
 		case NPC_SANCTUM_WYRMKIN:
 		case NPC_SANCTUM_SCALEBANE:
-		case NPC_ERENNIUS:
 			m_mTrashGUID.push_back(pCreature->GetGUID());
 			break;
 	}
@@ -41,7 +44,6 @@ void instance_emerald_sanctum::OnCreatureDeath(Creature* pCreature)
 		case NPC_SANCTUM_SUPRESSOR:
 		case NPC_SANCTUM_WYRMKIN:
 		case NPC_SANCTUM_SCALEBANE:
-		case NPC_ERENNIUS:
 			m_mTrashGUID.remove(pCreature->GetGUID());
 			break;
 	}
@@ -53,6 +55,8 @@ uint64 instance_emerald_sanctum::GetData64(uint32 uiType)
 	{
 		case DATA_SOLNIUS:
 			return m_uiSolniusGUID;
+		case DATA_ERENNIUS:
+			return m_uiErenniusGUID;
 		default:
 			return 0;
 	}
@@ -336,17 +340,26 @@ struct erenniusAI : public ScriptedAI
 {
 	erenniusAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
+		m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
 		Reset();
 	}
 
+	ScriptedInstance* m_pInstance;
+
 	uint32 m_uiPoisonBoltVolleyTimer;
 	uint32 m_uiHowlOfErreniusTimer;
+	uint32 m_uiCallOfNightmareTimer;
+	uint32 m_uiWallOfErenniusTimer;
+	uint32 m_uiGreenDragonBindingTimer;
 	bool m_uiCastedCurseOfErennius;
 
 	void Reset() override
 	{
 		m_uiPoisonBoltVolleyTimer = 12 * IN_MILLISECONDS;
 		m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
+		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+		m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
+		m_uiGreenDragonBindingTimer = 110 * IN_MILLISECONDS;
 		m_uiCastedCurseOfErennius = false;
 	}
 
@@ -360,6 +373,38 @@ struct erenniusAI : public ScriptedAI
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
+
+		if (Creature* pSolnius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_SOLNIUS)))
+		{
+			if (pSolnius->IsAlive() && pSolnius->IsInCombat())
+			{
+				if (m_uiWallOfErenniusTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WALL_OF_ERENNIUS) == CAST_OK)
+						m_uiCallOfNightmareTimer = 45 * IN_MILLISECONDS;
+				}
+				else
+					m_uiWallOfErenniusTimer -= uiDiff;
+
+				if (m_uiGreenDragonBindingTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(pSolnius, SPELL_GREEN_DRAGON_BINDING) == CAST_OK)
+						m_uiCallOfNightmareTimer = 110 * IN_MILLISECONDS;
+				}
+				else
+					m_uiGreenDragonBindingTimer -= uiDiff;
+			}
+		}
+
+		if (m_uiCallOfNightmareTimer < uiDiff)
+		{
+			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+
+			if (DoCastSpellIfCan(target, SPELL_CALL_OF_NIGHTMARE) == CAST_OK)
+				m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+		}
+		else
+			m_uiCallOfNightmareTimer -= uiDiff;
 
 		if (m_uiPoisonBoltVolleyTimer < uiDiff)
 		{

@@ -51,6 +51,8 @@ struct boss_solniusAI : public ScriptedAI
 	uint32 m_uiEmeraldRotTimer;
 	uint32 m_uiAcidBreathTimer;
 	uint32 m_uiGimmickTimer;
+	uint32 m_uiCallOfNightmareTimer;
+	uint32 m_uiExpulsionOfCorruptionTimer;
 	GuidList m_mSummonedMajorCreature;
 	GuidList m_mSummonedMinorCreature;
 	GuidList m_mSummonedPortals;
@@ -58,6 +60,7 @@ struct boss_solniusAI : public ScriptedAI
 	std::vector<Player*> randomPlayers;
 	EventMap events;
 	Phase phase;
+	bool m_bIsHardMode;
 
 	void DespawnHelpers()
 	{
@@ -95,6 +98,9 @@ struct boss_solniusAI : public ScriptedAI
 		m_uiEmeraldRotTimer = 15 * IN_MILLISECONDS;
 		m_uiAcidBreathTimer = 25 * IN_MILLISECONDS;
 		m_uiGimmickTimer = 20 * IN_MILLISECONDS;
+		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+		m_uiExpulsionOfCorruptionTimer = urand(18 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
+		m_bIsHardMode = false;
 		randomPlayers.clear();
 		phase = PHASE_1;
 		events.Reset();
@@ -107,7 +113,7 @@ struct boss_solniusAI : public ScriptedAI
 		m_mSummonedMajorCreature.clear();
 		m_mSummonedMinorCreature.clear();
 		m_mSummonedPortals.clear();
-		m_creature->RemoveAurasDueToSpell(SPELL_SLEEP_VISUAL);
+		m_creature->RemoveAllAuras();
 		m_creature->ClearUnitState(UNIT_STAT_CAN_NOT_MOVE);
 	}
 
@@ -153,6 +159,15 @@ struct boss_solniusAI : public ScriptedAI
 			}
 		}
 
+		if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
+		{
+			if (pErennius->IsAlive())
+			{
+				m_bIsHardMode = true;
+				pErennius->AI()->AttackStart(pWho);
+			}
+		}
+
 		events.ScheduleEvent(EVENT_TRANSFORM_TO_DRAGON, Seconds(12));
 	}
 
@@ -160,13 +175,25 @@ struct boss_solniusAI : public ScriptedAI
 	{
 		m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
 		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_3);
+
+		if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
+		{
+			if (pErennius->IsAlive() && pErennius->IsInCombat())
+			{
+				pErennius->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
+				pErennius->DeleteThreatList();
+				pErennius->CombatStop(true);
+				pErennius->SetReactState(REACT_PASSIVE);
+				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+				pErennius->SetFactionTemplateId(7);
+				pErennius->DespawnOrUnsummon(5000);
+				//pErennius->SummonGameObject(GO_ERENNIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
+			}
+		}
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
 	{
-		if ((!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) && (!m_creature->HasAura(SPELL_SLEEP_VISUAL)))
-			return;
-
 		events.Update(uiDiff);
 		while (uint32 eventId = events.ExecuteEvent())
 		{
@@ -200,10 +227,6 @@ struct boss_solniusAI : public ScriptedAI
 				case EVENT_GO_TO_SLEEP:
 					if (m_creature->GetStandState() != UNIT_STAND_STATE_SLEEP && m_creature->HealthBelowPct(60))
 					{
-						m_creature->DeleteThreatList();
-						m_creature->CombatStop(true);
-						m_creature->SetReactState(REACT_PASSIVE);
-						m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 						m_creature->GetMotionMaster()->MovePoint(MOVEMENT_TO_HOME_AND_SLEEP, m_creature->GetHomePosition().x, m_creature->GetHomePosition().y, m_creature->GetHomePosition().z, MOVE_PATHFINDING, MOVE_WALK_MODE, m_creature->GetHomePosition().o);
 					}
 					else
@@ -300,92 +323,113 @@ struct boss_solniusAI : public ScriptedAI
 			}
 		}
 
-		if (!m_creature->HasAura(SPELL_SLEEP_VISUAL))
+		if ((!m_creature->SelectHostileTarget() || !m_creature->GetVictim()))
+			return;
+
+		if (m_uiCallOfNightmareTimer < uiDiff)
 		{
-			switch (phase)
+			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+
+			if (DoCastSpellIfCan(target, SPELL_CALL_OF_NIGHTMARE) == CAST_OK)
+				m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+		}
+		else
+			m_uiCallOfNightmareTimer -= uiDiff;
+
+		if (m_bIsHardMode)
+		{
+			if (m_uiExpulsionOfCorruptionTimer < uiDiff)
 			{
-				case PHASE_2:
-					if (m_uiAcidBreathTimer < uiDiff)
-					{
-						if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACID_BREATH) == CAST_OK)
-							m_uiAcidBreathTimer = 25 * IN_MILLISECONDS;
-					}
-					else
-						m_uiAcidBreathTimer -= uiDiff;
+				if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EXPULSION_OF_CORRUPTION) == CAST_OK)
+					m_uiExpulsionOfCorruptionTimer = urand(18 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
+			}
+			else
+				m_uiExpulsionOfCorruptionTimer -= uiDiff;
+		}
 
-					if (m_uiGimmickTimer < uiDiff)
+		switch (phase)
+		{
+			case PHASE_2:
+				if (m_uiAcidBreathTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACID_BREATH) == CAST_OK)
+						m_uiAcidBreathTimer = 25 * IN_MILLISECONDS;
+				}
+				else
+					m_uiAcidBreathTimer -= uiDiff;
+
+				if (m_uiGimmickTimer < uiDiff)
+				{
+					Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
+					if (!playerList.isEmpty())
 					{
-						Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
-						if (!playerList.isEmpty())
+						for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 						{
-							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
-							{
-								m_creature->CastSpell(pPlayer, SPELL_BANE_OF_ERANIKUS, true);
-							}
-							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
-							{
-								m_creature->CastSpell(pPlayer, SPELL_SANCTUM_MIND_DECAY, true);
-							}
-							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
-							{
-								m_creature->CastSpell(pPlayer, SPELL_DREAMFEVER, true);
-							}
-							for (Player* pPlayer : GetRandomPlayers(playerList, 2))
-							{
-								m_creature->CastSpell(pPlayer, SPELL_EMERALD_INSTABILITY, true);
-							}
-							m_uiGimmickTimer = 20 * IN_MILLISECONDS;
+							m_creature->CastSpell(pPlayer, SPELL_BANE_OF_ERANIKUS, true);
 						}
-					}
-					else
-						m_uiGimmickTimer -= uiDiff;
-
-					if (m_creature->HealthBelowPct(40))
-					{
-						if (m_uiEmeraldRotTimer < uiDiff)
+						for (Player* pPlayer : GetRandomPlayers(playerList, 2))
 						{
-							Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
-							if (!playerList.isEmpty())
-							{
-								for (Player* pPlayer : GetRandomPlayers(playerList, 4))
-								{
-									DoCastSpellIfCan(pPlayer, SPELL_EMERALD_ROT);
-								}
-								m_uiEmeraldRotTimer = 30 * IN_MILLISECONDS;
-							}
+							m_creature->CastSpell(pPlayer, SPELL_SANCTUM_MIND_DECAY, true);
 						}
-						else
-							m_uiEmeraldRotTimer -= uiDiff;
+						for (Player* pPlayer : GetRandomPlayers(playerList, 2))
+						{
+							m_creature->CastSpell(pPlayer, SPELL_DREAMFEVER, true);
+						}
+						for (Player* pPlayer : GetRandomPlayers(playerList, 2))
+						{
+							m_creature->CastSpell(pPlayer, SPELL_EMERALD_INSTABILITY, true);
+						}
+						m_uiGimmickTimer = 20 * IN_MILLISECONDS;
 					}
-					break;
-				default:
-					if (m_uiCorrosiveBoltTimer < uiDiff)
-					{
-						if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CORROSIVE_BOLT) == CAST_OK)
-							m_uiCorrosiveBoltTimer = 6 * IN_MILLISECONDS;
-					}
-					else
-						m_uiCorrosiveBoltTimer -= uiDiff;
+				}
+				else
+					m_uiGimmickTimer -= uiDiff;
 
+				if (m_creature->HealthBelowPct(40))
+				{
 					if (m_uiEmeraldRotTimer < uiDiff)
 					{
 						Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
 						if (!playerList.isEmpty())
 						{
-							for (Player* pPlayer : GetRandomPlayers(playerList, 8))
+							for (Player* pPlayer : GetRandomPlayers(playerList, 4))
 							{
 								DoCastSpellIfCan(pPlayer, SPELL_EMERALD_ROT);
 							}
-							m_uiEmeraldRotTimer = 15 * IN_MILLISECONDS;
+							m_uiEmeraldRotTimer = 30 * IN_MILLISECONDS;
 						}
 					}
 					else
 						m_uiEmeraldRotTimer -= uiDiff;
-					break;
-			}
+				}
+				break;
+			default:
+				if (m_uiCorrosiveBoltTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CORROSIVE_BOLT) == CAST_OK)
+						m_uiCorrosiveBoltTimer = 6 * IN_MILLISECONDS;
+				}
+				else
+					m_uiCorrosiveBoltTimer -= uiDiff;
 
-			DoMeleeAttackIfReady();
+				if (m_uiEmeraldRotTimer < uiDiff)
+				{
+					Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
+					if (!playerList.isEmpty())
+					{
+						for (Player* pPlayer : GetRandomPlayers(playerList, 8))
+						{
+							DoCastSpellIfCan(pPlayer, SPELL_EMERALD_ROT);
+						}
+						m_uiEmeraldRotTimer = 15 * IN_MILLISECONDS;
+					}
+				}
+				else
+					m_uiEmeraldRotTimer -= uiDiff;
+				break;
 		}
+
+		DoMeleeAttackIfReady();
 	}
 
 	void MovementInform(uint32 uiMotionType, uint32 uiPointId) override
@@ -398,6 +442,10 @@ struct boss_solniusAI : public ScriptedAI
 		switch (uiPointId)
 		{
 			case MOVEMENT_TO_HOME_AND_SLEEP:
+				m_creature->AttackStop();
+				m_creature->RemoveAllAttackers();
+				m_creature->SetReactState(REACT_PASSIVE);
+				m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 				m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
 				m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
 				m_creature->AddAura(SPELL_SLEEP_VISUAL);
