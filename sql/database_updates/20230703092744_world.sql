@@ -11,4 +11,6 @@ UPDATE `spell_template` SET `equippedItemInventoryTypeMask` = 256 WHERE `entry` 
 UPDATE `spell_template` SET `equippedItemInventoryTypeMask` = 256 WHERE `entry` = 57148;
 UPDATE `spell_template` SET `name` = 'Enchant Chest - Mighty Mana' WHERE `entry` = 57119;
 
+-- Rainy weather for Gilneas:
 
+REPLACE INTO `game_weather` (`zone`, `spring_rain_chance`, `spring_snow_chance`, `spring_storm_chance`, `summer_rain_chance`, `summer_snow_chance`, `summer_storm_chance`, `fall_rain_chance`, `fall_snow_chance`, `fall_storm_chance`, `winter_rain_chance`, `winter_snow_chance`, `winter_storm_chance`) VALUES (5179, 60, 0, 0, 60, 0, 0, 60, 0, 0, 60, 0, 0);
