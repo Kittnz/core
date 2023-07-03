@@ -99,3 +99,4 @@ DELETE FROM game_event_creature_data WHERE guid=2577925;
 DELETE FROM creature_battleground WHERE guid=2577925;
 REPLACE INTO `creature` VALUES (2577926,61226,0,0,0,532,-10893.5,-1758.96,90.477,4.60134,120,120,0,100,100,0,0,0);
 UPDATE `creature` SET `position_x` = -6981.955078, `position_y` = -4833.077637, `position_z` = 7.870831, `orientation` = 0.891276 WHERE `guid` = 23449;
+REPLACE INTO `creature` VALUES (2577927,61399,0,0,0,1,-7175.76,-4805.4,8.90417,0.796417,120,120,0,100,100,0,0,0);
