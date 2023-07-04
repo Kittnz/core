@@ -228,3 +228,8 @@ REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES
 
 (2574803, 2574800, 3),
 (2574802, 2574800, 3);
+
+-- Spell 57143 add to item 61220 with -1 charges so that the item is consumed upon use.
+UPDATE `item_template` SET `spellid_1` =  57143, `spellcharges_1` = -1 WHERE `entry` = 61220;
+-- Spell 57145 add to item 61221 with -1 charges so that the item is consumed upon use.
+UPDATE `item_template` SET `spellid_1` =  57145, `spellcharges_1` = -1 WHERE `entry` = 61221;
