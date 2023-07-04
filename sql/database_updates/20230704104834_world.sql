@@ -886,3 +886,97 @@ update creature_template set mechanic_immune_mask = 65553 where entry in (61200,
 -- Make the following creatures immune to mindcontrol and charm:
 -- Shadowbane Darkcaster (61192), Shadowbane Ambusher (61193), Shadowbane Ragefang (61194), Shadowbane Glutton (61211) Grellkin Shadow Weaver (61195), Grellkin Primalist (61196), Grellkin Channeler (61197), Skitterweb Crawler (61206), Skitterweb Darkfang (61207), Skitterweb Leaper (61209).
 update creature_template set mechanic_immune_mask = 1 where entry in (61192,61193,61194,61211,61195,61196,61197,61206,61207,61209);
+-- Add the following item IDs to the following NPC IDs, all items should be added to every npc with the listed drop chances.
+-- Item IDs: 61564,61565,61566,61567,61568,61569,61570,61571.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30585, 61564, 0, 1, 1, 1, 0),
+(30585, 61565, 0, 1, 1, 1, 0),
+(30585, 61566, 0, 1, 1, 1, 0),
+(30585, 61567, 0, 1, 1, 1, 0),
+(30585, 61568, 0, 1, 1, 1, 0),
+(30585, 61569, 0, 1, 1, 1, 0),
+(30585, 61570, 0, 1, 1, 1, 0),
+(30585, 61571, 0, 1, 1, 1, 0);
+-- The following NPC IDs should drop the item IDs above with a 0.01% drop chance: 61317,65100,65101,65102,65104.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61317, 30585, 0.01, 0, -30585, 1, 0),
+(65100, 30585, 0.01, 0, -30585, 1, 0),
+(65101, 30585, 0.01, 0, -30585, 1, 0),
+(65102, 30585, 0.01, 0, -30585, 1, 0),
+(65104, 30585, 0.01, 0, -30585, 1, 0),
+-- The following NPC IDs should drop the item IDs above with a 0.025% drop chance: 61318,65105.
+(61318, 30585, 0.025, 0, -30585, 1, 0),
+(65105, 30585, 0.025, 0, -30585, 1, 0),
+-- The following NPC IDs should drop the item IDs above with a 0.005% drop chance: 65103,50106,65111,65110,65112.
+(65103, 30585, 0.005, 0, -30585, 1, 0),
+(50106, 30585, 0.005, 0, -30585, 1, 0),
+(65111, 30585, 0.005, 0, -30585, 1, 0),
+(65110, 30585, 0.005, 0, -30585, 1, 0),
+(65112, 30585, 0.005, 0, -30585, 1, 0);
+
+-- Gilneas city dungeon junk.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61680, 'Rusted Pocket Watch', 'It seems to have stopped working the very second the Greymane Wall was breached.', 15, 0, 1, 0, 1270, 0, 0, 0, -1, -1, 1512, 378, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61681, 'Torn Handkerchief', 'Covered in blood.', 15, 0, 1, 0, 18193, 0, 0, 0, -1, -1, 1193, 298, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61682, 'Broken Walking Cane', 'Not even the nobles were spared.', 15, 0, 1, 0, 18192, 0, 0, 0, -1, -1, 1234, 308, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61683, 'Battered Arbalest', 'Somehow still in working condition.', 2, 18, 1, 0, 10671, 0, 40, 0, -1, -1, 20942, 5235, 26, 0, 0, 0, 1, 1, 0, 19, 35, 2200, 0, 0, 65, 0, 0, 0, 45, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61684, 'Tuft of Worgen Hair', 'Smells like dried blood.', 15, 0, 1, 0, 29087, 0, 0, 0, -1, -1, 1254, 313, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61685, 'Punctured Quiver', 'Full of holes.', 15, 0, 1, 0, 21330, 0, 0, 0, -1, -1, 1133, 283, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61686, 'Broken Protector', 'Beyond repair.', 15, 0, 1, 0, 4130, 0, 0, 0, -1, -1, 1432, 358, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61687, 'Noble\'s Pendant', 'The magic is all but faded.', 4, 0, 1, 0, 15420, 0, 40, 0, -1, -1, 2432, 608, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 7706, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61688, 'Worgen Claw', 'Deadly as ever.', 2, 13, 1, 0, 7430, 0, 39, 0, -1, -1, 24394, 6098, 21, 3, 0, 0, 1, 1, 0, 16, 30, 1500, 0, 0, 55, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 18078, 2, 0, 0.9, 12000, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61689, 'Worn Tome', 'The text is illegible.', 15, 0, 1, 0, 2757, 0, 0, 0, -1, -1, 1398, 349, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61690, 'Cleric\'s Bent Staff', 'The Light serves any cause you believe is right, no matter how vile.', 2, 10, 1, 0, 20384, 0, 44, 0, -1, -1, 41438, 10359, 17, 1, 0, 0, 1, 1, 0, 51, 83, 2900, 0, 0, 85, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61692, 'Broken Helmet', 'A blow overhead rendered the helmet inoperable.', 15, 0, 1, 0, 27379, 0, 0, 0, -1, -1, 1585, 396, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Broken Walking Cane and Noble's Pendant are for the Greymane Noble.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61390, 61682, 6, 0, 1, 1, 0);
+-- Battered Arbalest and Punctured Quiver are for the Greymane Arbalest.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61364, 61683, 6, 0, 1, 1, 0),
+(61364, 61685, 6, 0, 1, 1, 0);
+-- Worn Tome is for the Greymane Justicar.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61417, 61689, 6, 0, 1, 1, 0);
+-- Cleric's Bent Staff is for the Greymane Cleric.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61391, 61690, 6, 0, 1, 1, 0);
+-- 61388 Broken Helmet is for the Greymane Elite
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61388, 61692, 6, 0, 1, 1, 0);
+-- Broken Protector is for the Greymane Warrior(?).
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61389, 61686, 6, 0, 1, 1, 0);
+-- Rusted Pocket Watch, Torn Handkerchief are general drops.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30586, 61680, 0, 0, 1, 1, 0),
+(30586, 61681, 0, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(4075 , 30586, 6, 0, -30586, 1, 0),
+(22211, 30586, 6, 0, -30586, 1, 0),
+(61227, 30586, 6, 0, -30586, 1, 0),
+(61263, 30586, 6, 0, -30586, 1, 0),
+(61264, 30586, 6, 0, -30586, 1, 0),
+(61365, 30586, 6, 0, -30586, 1, 0),
+(61388, 30586, 6, 0, -30586, 1, 0),
+(61389, 30586, 6, 0, -30586, 1, 0),
+(61390, 30586, 6, 0, -30586, 1, 0),
+(61391, 30586, 6, 0, -30586, 1, 0),
+(61394, 30586, 6, 0, -30586, 1, 0),
+(61417, 30586, 6, 0, -30586, 1, 0),
+(61418, 30586, 6, 0, -30586, 1, 0),
+(61419, 30586, 6, 0, -30586, 1, 0),
+(61420, 30586, 6, 0, -30586, 1, 0),
+(61421, 30586, 6, 0, -30586, 1, 0),
+(61422, 30586, 6, 0, -30586, 1, 0),
+(61423, 30586, 6, 0, -30586, 1, 0),
+(61424, 30586, 6, 0, -30586, 1, 0),
+(61425, 30586, 6, 0, -30586, 1, 0),
+(61426, 30586, 6, 0, -30586, 1, 0);
+-- Tuft of Worgen Hair and Worgen Claw are for the worgen trash before the first boss.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61424, 61684, 6, 0, 1, 1, 0),
+(61425, 61684, 6, 0, 1, 1, 0),
+(61426, 61684, 6, 0, 1, 1, 0),
+(61424, 61688, 6, 0, 1, 1, 0),
+(61425, 61688, 6, 0, 1, 1, 0),
+(61426, 61688, 6, 0, 1, 1, 0);
