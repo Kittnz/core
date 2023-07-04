@@ -2364,6 +2364,12 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
     float const block_chance = pVictim->GetUnitBlockChance();
     float const parry_chance = pVictim->GetUnitParryChance();
 
+    // Turtle: hack fix so rogues cant solo bosses
+    if (pVictim->IsPlayer() && pVictim->GetClass() == CLASS_ROGUE &&
+        IsCreature() && static_cast<Creature const*>(this)->IsWorldBoss() &&
+        GetThreatManager().getThreatList().size() < 10)
+        return MELEE_HIT_NORMAL;
+
     // Useful if want to specify crit & miss chances for melee, else it could be removed
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "MELEE OUTCOME: miss %f crit %f dodge %f parry %f block %f", miss_chance, crit_chance, dodge_chance, parry_chance, block_chance);
 
