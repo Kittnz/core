@@ -81,11 +81,6 @@ struct boss_celiaAI : public ScriptedAI
 
 		DoMeleeAttackIfReady();
 	}
-
-	void JustDied(Unit* pWho)
-	{
-		m_creature->SummonGameObject(2020027, -968.2298f, 2959.4106f, 166.3139f, 5.6228f, 0, 0, 0, 0, 0);
-	}
 };
 
 CreatureAI* GetAI_boss_celia(Creature* pCreature)
