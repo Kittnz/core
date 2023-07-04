@@ -792,12 +792,15 @@ struct THREAD_NAME
 
 void InternalThreadName(const char* name)
 {
+#ifdef _WIN32_WINNT_WIN10
 	if (IsWindows10OrGreater() && !Win10SupportNewThreadNameInit)
 	{
 		HMODULE KernelLib = GetModuleHandle("kernel32.dll");
 		pThreadCall = (ThreadCall)GetProcAddress(KernelLib, "SetThreadDescription");
 		Win10SupportNewThreadNameInit = true;
 	}
+#endif
+
 	if (pThreadCall)
 	{
 		constexpr size_t cSize = 64;
