@@ -14,3 +14,5 @@ update creature_template set dmg_min = 711, dmg_max = 769, health_min = 24256, h
 set @equip_template = 20413; set @weapon_1 = 61247; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61222;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Item Premium Chocolate (61173), add spell on use 1129 with -1 charges to be consumed when eaten, add level requirement of 35.
+update item_template set spellid_1 = 1512, spellcharges_1 = -1, required_level = 35 where entry = 61173;
