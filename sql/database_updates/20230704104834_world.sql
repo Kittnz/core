@@ -738,3 +738,25 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 -- Move Item ID 81006 to Loot Group 1 for NPC ID 3654 and make sure all three items have the same drop chance. 
 delete from creature_loot_template where entry = 3654 and item = 81006;
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30123, 81006, 0, 1, 1, 1, 0);
+-- NPC Chronar (65113) needs to be an ELITE mob.
+update creature_template set rank = 1 where entry = 65113;
+-- NPC Drifting Avatar of Sand (61316) needs to be an ELITE mob.
+update creature_template set rank = 1 where entry = 61316;
+-- NPC Time-Lord Epochronos (65116) needs to be an ELITE mob.
+update creature_template set rank = 1 where entry = 65116;
+-- NPC Rotmaw (65122) needs to be an ELITE MOB.
+update creature_template set rank = 1 where entry = 65122;
+-- NPC Mossheart (65124) needs to be an ELITE MOB.
+update creature_template set rank = 1 where entry = 65124;
+-- NPC Antnormi (65125) needs to be a BOSS mob with a skull.
+update creature_template set rank = 3 where entry = 65125;
+-- Phantom Guardsman reduce damage by 50%.
+update creature_template set dmg_min = 479, dmg_max = 513 entry = 61200;
+-- Phantom Cook reduce Damage by 50%.
+update creature_template set dmg_min = 458, dmg_max = 491 entry = 61210;
+-- Phantom Servant reduce damage by 50%.
+update creature_template set dmg_min = 458, dmg_max = 491 entry = 61210;
+-- Haunted Blacksmith reduce damage by 60%.
+update creature_template set dmg_min = 767, dmg_max = 875 entry = 61202;
+-- Haunted Stable Tender reduce damage by 50%.
+update creature_template set dmg_min = 570, dmg_max = 669 entry = 65116;
