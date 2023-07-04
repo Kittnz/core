@@ -144,4 +144,87 @@ REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES
 (2570825, 2570840, 3),
 (2570824, 2570840, 3),
 (2570828, 2570840, 3),
-(2570839, 2570840, 3);
+(2570839, 2570840, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562836, 2562834, 3),
+(2562907, 2562834, 3),
+(2562914, 2562834, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562851, 2562843, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562837, 2562835, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562849, 2562852, 3),
+(2562850, 2562852, 3),
+(2562853, 2562852, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562898, 2565190, 3),
+(2565189, 2565190, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562848, 2562889, 3),
+(2562847, 2562889, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562890, 2562846, 3),
+(2577211, 2562846, 3),
+(2562845, 2562846, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2565188, 2562844, 3),
+(2562899, 2562844, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562881, 2562894, 3),
+(2562893, 2562894, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2577209, 2562935, 3),
+(2577210, 2562935, 3),
+(2577208, 2562935, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2562896, 2562897, 3),
+(2562915, 2562897, 3),
+(2562916, 2562897, 3),
+(2562918, 2562897, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2574763, 2574762, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2574767, 2574766, 3),
+(2574771, 2574766, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2574776, 2574777, 3),
+(2574779, 2574777, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2574772, 2574774, 3),
+(2574783, 2574774, 3),
+
+-- Link the following GUIDs to pull together when one is aggroed.
+
+(2574803, 2574800, 3),
+(2574802, 2574800, 3);

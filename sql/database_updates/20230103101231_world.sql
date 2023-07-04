@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `cartographer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='list of all areas that must be explored to gain the cartographer title';
 
 -- Converted the hardcoded mask into list of area ids.
-INSERT INTO `cartographer` (`area_id`) VALUES
+REPLACE INTO `cartographer` (`area_id`) VALUES
 (2817),
 (249),
 (251),
