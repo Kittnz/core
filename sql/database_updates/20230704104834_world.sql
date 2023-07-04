@@ -874,3 +874,15 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Make the following creatures immune to fear, stun, slow, charm, polymorph, sleep, mindcontrol, roots, snares:
+-- Sanctum Supressor (61212), Sanctum Scalebane (60746), Sanctum Wyrm (60744), Solnius (60748), Erennius (60747), Lord Blackwald II, Moroes (61225, 61226), Grizikil (61224), Clawlord Howlfang (61223), Brood Queen Araxxna (61221), Shadowbane Alpha (61191), Dark Rider Apprentice (61203) , Dark Rider Champion (61204), Skitterweb Venomfang (61208).
+update creature_template set mechanic_immune_mask = 69201 where entry in (61212,60746,60744,60748,60747,61222,61225,61226,61224,61223,61221,61191,61203,61204,61208);
+-- Make the following creatures immune to fear, stun, slow, charm, polymorph, roots, snares. (Can be sleeped): 
+-- Sanctum Dreamer (60742), Sanctum Dragonkin (60743), Sanctum Wyrmkin (60745).
+update creature_template set mechanic_immune_mask = 68689 where entry in (60742,60743,60745);
+-- Make the following creatures immune to fear, charm, polymorph, mindcontrol ((ALLOW SHACKLE)):
+-- Phantom Guardsman (61200), Phantom Servant (61205), Phantom Cook (61210), Shattercage Spearman (61198), Shattercage Magiskull (61199), Haunted Stable Tender (61201), Haunted Blacksmith (61202).
+update creature_template set mechanic_immune_mask = 65553 where entry in (61200,61205,61210,61198,61199,61201,61202);
+-- Make the following creatures immune to mindcontrol and charm:
+-- Shadowbane Darkcaster (61192), Shadowbane Ambusher (61193), Shadowbane Ragefang (61194), Shadowbane Glutton (61211) Grellkin Shadow Weaver (61195), Grellkin Primalist (61196), Grellkin Channeler (61197), Skitterweb Crawler (61206), Skitterweb Darkfang (61207), Skitterweb Leaper (61209).
+update creature_template set mechanic_immune_mask = 1 where entry in (61192,61193,61194,61211,61195,61196,61197,61206,61207,61209);
