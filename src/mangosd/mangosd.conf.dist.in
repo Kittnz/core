@@ -112,6 +112,12 @@ SaveRespawnTimeImmediately = 1
 
 MaxOverspeedPings = 15
 
+# AutoRestart.MaxServerUptime. Schedule a restart if server has been up for this many seconds.
+
+AutoRestart.MaxServerUptime = 259200
+AutoRestart.HourMin = 4
+AutoRestart.HourMax = 6
+
 # GridUnload. Unload grids. (If you have lot memory you can disable it to speed up player move to new grids second time)
 
 GridUnload = 0
