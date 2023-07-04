@@ -11,6 +11,7 @@ struct instance_gilneas_city : public ScriptedInstance
 
     uint64 m_uiCeliaGUID;
     uint64 m_uiLordMortimerGUID;
+    uint64 m_uiHarlowFamilyChestGUID;
 
     std::vector<Player*> randomPlayers;
 
@@ -19,6 +20,7 @@ struct instance_gilneas_city : public ScriptedInstance
 		randomPlayers.clear();
         m_uiCeliaGUID = 0;
         m_uiLordMortimerGUID = 0;
+        m_uiHarlowFamilyChestGUID = 0;
 	}
 
     void OnPlayerEnter(Player* pPlayer)
@@ -83,6 +85,10 @@ struct instance_gilneas_city : public ScriptedInstance
             pCreature->PlayDirectSound(60390);
             pCreature->MonsterYell("It... It was pointless after all, this cannot be the way I fall...");
             break;
+
+        case NPC_CELIA:
+            DoRespawnGameObject(m_uiHarlowFamilyChestGUID, HOUR * IN_MILLISECONDS);
+            break;
         }
     }
 
@@ -111,6 +117,16 @@ struct instance_gilneas_city : public ScriptedInstance
                 return 0;
         }
     }
+
+    void OnObjectCreate(GameObject* pGo)
+    {
+        switch (pGo->GetEntry())
+        {
+			case GO_HARLOW_FAMILY_CHEST:
+				m_uiHarlowFamilyChestGUID = pGo->GetGUID();
+				break;
+		}
+	}
 
     std::vector<Player*> GetRandomPlayers(int8 count)
     {
