@@ -2364,16 +2364,19 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
     float const block_chance = pVictim->GetUnitBlockChance();
     float const parry_chance = pVictim->GetUnitParryChance();
 
+    // Useful if want to specify crit & miss chances for melee, else it could be removed
+    //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "MELEE OUTCOME: miss %f crit %f dodge %f parry %f block %f", miss_chance, crit_chance, dodge_chance, parry_chance, block_chance);
+
+    MeleeHitOutcome result = RollMeleeOutcomeAgainst(pVictim, attType, int32(crit_chance * 100), int32(miss_chance * 100), int32(dodge_chance * 100), int32(parry_chance * 100), int32(block_chance * 100), false);
+    
     // Turtle: hack fix so rogues cant solo bosses
-    if (pVictim->IsPlayer() && pVictim->GetClass() == CLASS_ROGUE &&
+    if ((result == MELEE_HIT_DODGE || result == MELEE_HIT_PARRY) &&
+        pVictim->IsPlayer() && pVictim->GetClass() == CLASS_ROGUE &&
         IsCreature() && static_cast<Creature const*>(this)->IsWorldBoss() &&
         GetThreatManager().getThreatList().size() < 10)
         return MELEE_HIT_NORMAL;
 
-    // Useful if want to specify crit & miss chances for melee, else it could be removed
-    //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "MELEE OUTCOME: miss %f crit %f dodge %f parry %f block %f", miss_chance, crit_chance, dodge_chance, parry_chance, block_chance);
-
-    return RollMeleeOutcomeAgainst(pVictim, attType, int32(crit_chance * 100), int32(miss_chance * 100), int32(dodge_chance * 100), int32(parry_chance * 100), int32(block_chance * 100), false);
+    return result;
 }
 
 MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackType attType, int32 crit_chance, int32 miss_chance, int32 dodge_chance, int32 parry_chance, int32 block_chance, bool SpellCasted) const
