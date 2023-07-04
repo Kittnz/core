@@ -698,6 +698,10 @@ void World::LoadConfigSettings(bool reload)
         setConfig(CONFIG_UINT32_MAX_OVERSPEED_PINGS, 2);
     }
 
+    setConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME, "AutoRestart.MaxServerUptime", 0);
+    setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MIN, "AutoRestart.HourMin", 0);
+    setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MAX, "AutoRestart.HourMax", 0);
+
     setConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY, "SaveRespawnTimeImmediately", true);
     setConfig(CONFIG_BOOL_WEATHER, "ActivateWeather", true);
 
@@ -2306,6 +2310,19 @@ void World::Update(uint32 diff)
         sTerrainMgr.Update(diff);
 
 	sGuildMgr.Update(diff);
+
+    if (!m_ShutdownTimer && !m_stopEvent &&
+        getConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME) &&
+        getConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME) < GetUptime() &&
+        GetGameDay() != sHonorMaintenancer.GetNextMaintenanceDay())
+    {
+        struct tm* tm_struct = localtime(&m_gameTime);
+        if (tm_struct->tm_hour >= getConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MIN) && tm_struct->tm_hour <= getConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MAX))
+        {
+            sLog.outInfo("Restarting server due to exceeding maximum uptime.");
+            sWorld.ShutdownServ(900, SHUTDOWN_MASK_RESTART, SHUTDOWN_EXIT_CODE);
+        }
+    }
 }
 
 /// Send a packet to all players (except self if mentioned)
