@@ -751,12 +751,126 @@ update creature_template set rank = 1 where entry = 65124;
 -- NPC Antnormi (65125) needs to be a BOSS mob with a skull.
 update creature_template set rank = 3 where entry = 65125;
 -- Phantom Guardsman reduce damage by 50%.
-update creature_template set dmg_min = 479, dmg_max = 513 entry = 61200;
+update creature_template set dmg_min = 479, dmg_max = 513 where entry = 61200;
 -- Phantom Cook reduce Damage by 50%.
-update creature_template set dmg_min = 458, dmg_max = 491 entry = 61210;
+update creature_template set dmg_min = 458, dmg_max = 491 where entry = 61210;
 -- Phantom Servant reduce damage by 50%.
-update creature_template set dmg_min = 458, dmg_max = 491 entry = 61210;
+update creature_template set dmg_min = 458, dmg_max = 491 where entry = 61210;
 -- Haunted Blacksmith reduce damage by 60%.
-update creature_template set dmg_min = 767, dmg_max = 875 entry = 61202;
+update creature_template set dmg_min = 767, dmg_max = 875 where entry = 61202;
 -- Haunted Stable Tender reduce damage by 50%.
-update creature_template set dmg_min = 570, dmg_max = 669 entry = 65116;
+update creature_template set dmg_min = 570, dmg_max = 669 where entry = 65116;
+-- Epidamu , display ID 18043, faction 40, level 62 elite, dragonkin, scale 2.4, ((Has 42055 HP, 13033 Mana, 2099 Armor, 50 shadow resistance, copy damage from Infinite Rift-Lord)), ((Make immune to stun, sleep, root, charm, slow, sheep, fear), Casts 17682 at a random party member every 12 seconds, Casts 17287 every 11-13 seconds, Casts 57102 on a random player every 15-18 seconds, Casts 9433 every 5-8 seconds.
+-- Canos Clearwood, display ID 2253, faction 35, level 56, humanoid, scale 1, quest/gossip flags, gossip text : "There is much to learn and discover in this world. Make sure your eyes and ears are open.", weapon 15397.
+REPLACE INTO creature_template VALUES
+(61575, 18043, 0, 0, 0, 0, 'Epidamu', NULL, 0, 62, 62, 42055, 42055, 13033, 13033, 2099, 40, 0, 1, 1.14286, 2.4, 20, 5, 0, 1, 1, 711, 769, 0, 250, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 105, 220, 100, 2, 0, 61575, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 68177, 0, 0, 0, ''),
+(61576, 2253, 0, 0, 0, 0, 'Canos Clearwood', NULL, 0, 56, 56, 3643, 3643, 0, 0, 2699, 35, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 102, 131, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20414; set @weapon_1 = 15397; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61576;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41502; set @magic_number = 61576;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is much to learn and discover in this world. Make sure your eyes and ears are open.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Epidamu
+set @creature_entry = 61575;
+set @description = ': Epidamu';
+set @spell_list_id = 180209;
+
+set @spellid_1 = 17682; -- Drain Mana
+set @probability_1 = 100;
+set @casttarget_1 = 4;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 8;
+set @delayinitialmax_1 = 8;
+set @delayrepeatmin_1 = 12;
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 17287; -- Mind Blast
+set @probability_2 = 100;
+set @casttarget_2 = 1;
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 3;
+set @delayinitialmax_2 = 3;
+set @delayrepeatmin_2 = 11;
+set @delayrepeatmax_2 = 13;
+
+set @spellid_3 = 57102; -- 
+set @probability_3 = 100;
+set @casttarget_3 = 4;
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 0;
+set @delayinitialmax_3 = 0;
+set @delayrepeatmin_3 = 15;
+set @delayrepeatmax_3 = 18;
+
+set @spellid_4 = 9433; -- Arcane Explosion
+set @probability_4 = 100;
+set @casttarget_4 = 1;
+set @castflags_4 = 4;
+set @delayinitialmin_4 = 6;
+set @delayinitialmax_4 = 6;
+set @delayrepeatmin_4 = 5;
+set @delayrepeatmax_4 = 8;
+
+set @spellid_5 = 0;
+set @probability_5 = 0;
+set @casttarget_5 = 0;
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0;
+set @delayinitialmax_5 = 0;
+set @delayrepeatmin_5 = 0;
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0;
+set @probability_6 = 0;
+set @casttarget_6 = 0;
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0;
+set @delayinitialmax_6 = 0;
+set @delayrepeatmin_6 = 0;
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0;
+set @probability_7 = 0;
+set @casttarget_7 = 0;
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0;
+set @delayinitialmax_7 = 0;
+set @delayrepeatmin_7 = 0;
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0;
+set @probability_8 = 0;
+set @casttarget_8 = 0;
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0;
+set @delayinitialmax_8 = 0;
+set @delayrepeatmin_8 = 0;
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
