@@ -154,3 +154,58 @@ delete from creature_loot_template where entry = 65122 and item in (61023,61025,
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (65122, 30588, 100, 1, -30588, 1, 0);
 
+-- low level stuff
+update item_template set max_count = 1 where entry = 83460; -- Deepearth Signet
+update item_template set name = 'Axe of Dormant Slumber', armor = 100, nature_res = 0, delay = 2200, dmg_min1 = 90, dmg_max1 = 166, stat_value1 = 8, stat_type1 = 4, stat_value2 = 11, stat_type2 = 7, spellid_1 = 15464, spelltrigger_1 = 1 where entry = 61448; -- Axe of Dorment Slumber
+update item_template set display_id = 34533 where entry = 61526; -- Jadestone Protector
+update item_template set inventory_type = 11 where entry = 60690; -- Eye of Farad
+update item_template set stat_value2 = 5, stat_value3 = 5 where entry = 60692; -- Golemslayer Mitts
+update item_template set stat_value2 = 4 where entry = 60691; -- Golemslayer Mitts
+update item_template set stat_value1 = 10, spellid_1 = 45421 where entry = 19302; -- Darkmoon Ring
+update item_template set stat_value1 = 6, stat_value2 = 6, stat_value3 = 6, spellid_1 = 9396 where entry = 51756; -- Pendant of the Deep Woodlands
+update item_template set name = 'Woven Ivy Cloak', description = '', armor = 77, stat_value1 = 6, stat_value2 = 6, stat_value3 = 6, spellid_1 = 20888, spelltrigger_1 = 1 where entry = 51757; -- Ivy Woven Cloak
+update item_template set description = 'You can hear crackling thunder within.' where entry = 51755; -- Rune of the Wildhammer Clan
+-- fix up unused items
+update item_template set disenchant_id = 49, max_count = 1 where entry = 18355; -- Ferra's Collar
+update item_template set disenchant_id = 49 where entry = 18023; -- Blood Ruby Pendant
+-- balance adjustments
+update item_template set spellid_3 = 14027, armor = 665 where entry = 12640; -- Lionheart Helm
+update item_template set spellid_1 = 17988, spelltrigger_1 = 1, nature_res = 0 where entry = 61270; -- Pendant of Shadra's Chosen
+update item_template set stat_value3 = 30, spellid_3 = 13679, spellid_2 = 15464, spelltrigger_3 = 1 where entry = 61265; -- Leggings of the Inferno
+update item_template set stat_value1 = 9, stat_type1 = 6, spellid_1 = 18031, spellid_2 = 21363 where entry = 19312; -- Lei of the Lifegiver
+-- kara10 crafts buffs
+update item_template set spellid_2 = 15715 where entry = 61187; -- Intricate Gyroscope Goggles
+update item_template set stat_value1 = 14, stat_value2 = 12, spellid_1 = 8815, spellid_2 = 15714 where entry = 61186; -- Gloves of Unwinding Mystery
+update item_template set stat_value1 = 15, stat_value2 = 0, spellid_2 = 14027 where entry = 61188; -- Inscribed Runic Bracers
+update item_template set stat_type3 = 7, spellid_1 = 18048 where entry = 61185; -- Dawnstone Hammer
+-- mini world boss drop rework
+-- tarangos
+update item_template set item_level = 61, dmg_min1 = 44, dmg_max1 = 76, description = 'Pulsating with a foreign energy.', stat_value1 = 0, stat_value2 = 0 where entry = 81360; -- Claw of Taranassz
+update item_template set item_level = 61, armor = 129, name = 'Dampener\'s Pauldrons', stat_value1 = 14, stat_value2 = 8 where entry = 81361; -- Dampener's Pauldrons
+update item_template set armor = 438, stat_value1 = 3, stat_value2 = 10 where entry = 81362; -- Azure-Scale Sabatons
+update item_template set item_level = 61, dmg_min1 = 121, dmg_max1 = 178, stat_value1 = 18, stat_value2 = 17, spellid_2 = 13881 where entry = 81363; -- Staff of Azure Domination
+update item_template set stat_value1 = 10, spellid_1 = 9345, spellid_2 = 13601 where entry = 81364; -- Scale of Malygos
+-- blademaster kargron
+update item_template set item_level = 64, armor = 146, stat_value1 = 11, spellid_1 = 13667, spellid_2 = 13667, description = 'Worn and scarred from ages of battle.' where entry = 81365; -- Kargron's Leggings
+update item_template set item_level = 64, armor = 500, stat_value1 = 15 where entry = 81366; -- Blackrock Clan Mantle
+update item_template set item_level = 64, max_count = 1, description = 'Etched with symbols of the Blackrock Clan' where entry = 81367; -- Band of the Old Horde
+update item_template set stat_value1 = 12, stat_value2 = 6, spellid_1 = 9342 where entry = 81368; -- Blackshackle Bracers
+update item_template set item_level = 64, dmg_min1 = 122, dmg_max1 = 227, stat_value1 = 17, stat_type1 = 4, stat_value2 = 17, fire_res = 10, spellid_1 = 7598, spellid_2 = 13669, spellid_3 = 45431, spelltrigger_2 = 1, spelltrigger_3 = 1, description = 'The blade is perfectly balanced for warfare.' where entry = 81369; -- Sword of the Blademaster
+-- xalvic blackclaw
+update item_template set shadow_res = 10, armor = 57 where entry = 81370; -- Footpads of the Corruptor
+update item_template set stat_value1 = 15, stat_type1 = 7, armor = 345, description = 'Lined with pure fel energy' where entry = 81371; -- Gnarltwist Vest
+update item_template set item_level = 58, stat_value1 = 9, spellid_1 = 45530, spelltrigger_1 = 1 where entry = 81372; -- The Black Claw
+update item_template set stat_value1 = 7, stat_value2 = 8, stat_value3 = 8, shadow_res = 8, spellid_1 = 0 where entry = 81373; -- Shawl of the Satyr
+update item_template set stat_value2 = 13, shadow_res = 5 where entry = 81374; -- Trickster's Necklace
+-- Mallon The Moontouched
+
+update item_template set description = '', stat_value1 = 8, disenchant_id = 47 where entry = 83279; -- Everflame Torch
+update item_template set description = '' where entry = 83275; -- Ashbeard's Lucky Telescope
+update item_template set description = 'Swirling in voodoo magics.' where entry = 83274; -- Charmed Voodoo Collar
+update item_template set description = 'Laced with corrupting power.' where entry = 51024; -- Cursed Idol
+update item_template set description = 'Tattered and worn, it has seen better days.' where entry = 83277; -- Dark Iron Adventurer Shawl
+update item_template set description = 'Covered in a heavy layer of ash.' where entry = 83278; -- Ash Explorer Pauldrons
+update item_template set name = 'Bracers of the Demonic Hunt', description = 'Surging with the power to destroy.' where entry = 83267; -- Bracers of Demonic Hunt
+update item_template set description = 'To become sightless, is to see the demonic.' where entry = 83265; -- Demon Hunter's Blindfold
+
+
