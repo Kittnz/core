@@ -112,3 +112,45 @@ replace into creature_loot_template values
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
 (61698,24687,'The Binding of Xanthar',12,1,2048,1,-1,-1,65,1,-1,-1,-1,-1,0,'',0,3);
 
+-- black morass relics
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61698, 'Totem of the Flowing Timeways', 'Add Calming River custom spell when added.', 4, 9, 1, 3, 34144, 1, 60, 0, -1, -1, 59115, 14778, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (61699, 'Idol of Savagery', 'Add Improved Bleeds spell when implemented.', 4, 8, 1, 3, 34149, 1, 60, 0, -1, -1, 58605, 14651, 28, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- black morass new drops
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (61700, 'Fabric of Time', 'Prone to tearing.', 4, 0, 1, 3, 60862, 1, 60, 1, -1, -1, 57811, 14452, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 49, 0, 0, 0, 0, 0, 0, 5, -20, 14798, 1, 0, 0, -1, 0, -1, 21364, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (61701, 'Wraps of the Transmogrified', 'Once a plate helmet, warped by the timeways into a thin cloth that preserves its properties.', 4, 1, 7, 3, 28762, 1, 60, 1, -1, -1, 75811, 18952, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 50, 306, 0, 0, 66, 0, 49, 0, 0, 0, 0, 0, 0, 3, -10, 45530, 1, 0, 0, 0, 0, 0, 14798, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+-- NPC ID 61575 should drop one of the following items with equal chances:
+-- Imbued Planar Belt
+-- Band of Infinite Possibilities
+-- Nexus Shoulderpads
+-- Tome of Riftmancy
+-- Arcanoweave Boots
+-- Extremely Well Crafted Cuffs
+-- Totem of the Flowing Timeways (SQL)
+-- Fabric of Time (SQL)
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30587, 61041, 0, 0, 1, 1, 0),
+(30587, 61032, 0, 0, 1, 1, 0),
+(30587, 61045, 0, 0, 1, 1, 0),
+(30587, 61055, 0, 0, 1, 1, 0),
+(30587, 61056, 0, 0, 1, 1, 0),
+(30587, 50431, 0, 0, 1, 1, 0),
+(30587, 61698, 0, 0, 1, 1, 0),
+(30587, 61700, 0, 0, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61575, 30587, 100, 0, -30587, 1, 0);
+-- Add Idol of Savagery and Wraps of the Transmogrified (SQL) to Rotmaw's loot group 2 and make it so all items have equal drop chances totalling to 100%
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30588, 61699, 0, 1, 1, 1, 0),
+(30588, 61701, 0, 1, 1, 1, 0),
+(30588, 61023, 0, 1, 1, 1, 0),
+(30588, 61025, 0, 1, 1, 1, 0),
+(30588, 61029, 0, 1, 1, 1, 0),
+(30588, 61030, 0, 1, 1, 1, 0),
+(30588, 61034, 0, 1, 1, 1, 0),
+(30588, 61063, 0, 1, 1, 1, 0);
+
+delete from creature_loot_template where entry = 65122 and item in (61023,61025,61029,61030,61034,61063);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(65122, 30588, 100, 1, -30588, 1, 0);
+
