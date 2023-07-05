@@ -514,7 +514,7 @@ public:
                         pPlayer->AddAura(nsInfiniteTimeripper::SPELL_TIME_LAPSE);
                         pPlayer->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
 
-                        m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
+                        m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, youï¿½ve come far to stop us, but your advance stops here!");
                     }
                 }
             }
@@ -672,7 +672,7 @@ public:
                             pPlayer->AddAura(nsInfiniteTimeripper::SPELL_TIME_LAPSE);
                             pPlayer->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
 
-                            m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, You’ve come far to stop us, but your advance stops here!");
+                            m_creature->MonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, Youï¿½ve come far to stop us, but your advance stops here!");
 
                             m_bStartSummonEvent = true;
                         }
@@ -2145,6 +2145,10 @@ private:
         m_uiConsume_Timer = 10000;
         m_uiMortalWound_Timer = 14000;
         m_uiSunderArmor_Timer = 5000;
+
+        m_creature->SetRooted(false);
+        m_creature->ClearUnitState(UNIT_STAT_ROOT);
+        m_creature->SetReactState(REACT_AGGRESSIVE);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -2171,7 +2175,10 @@ private:
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), nsRotmaw::SPELL_CONSUME) == CAST_OK)
             {
-                m_creature->UpdateSpeed(MOVE_WALK, true, 0.f);
+                m_creature->StopMoving();
+                m_creature->AddUnitState(UNIT_STAT_ROOT);
+                m_creature->SetRooted(true);
+                m_creature->SetReactState(REACT_PASSIVE);
 
                 if (Unit* pTarget{ m_creature->GetVictim() })
                 {
@@ -2190,7 +2197,9 @@ private:
 
                                 player->SetTransformScale(originalscale);
 
-                                m_creature->UpdateSpeed(MOVE_WALK, true, 1.0f);
+                                m_creature->SetRooted(false);
+                                m_creature->ClearUnitState(UNIT_STAT_ROOT);
+                                m_creature->SetReactState(REACT_AGGRESSIVE);
 
                                 m_bIsConsuming = false;
                             });
@@ -3021,7 +3030,7 @@ public:
                                 }
                                 case 3:
                                 {
-                                    pSummon->MonsterYell("OH MY GOD — IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
+                                    pSummon->MonsterYell("OH MY GOD ï¿½ IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
                                     pSummon->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                                     pSummon->GetMotionMaster()->MoveConfused();
                                     pPortal = m_creature->SummonGameObject(nsLogisticalOfficer::GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
