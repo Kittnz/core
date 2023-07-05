@@ -6687,9 +6687,57 @@ bool QuestRewarded_npc_dark_bishop_mordren(Player* pPlayer, Creature* pQuestGive
     return false;
 }
 
+bool QuestAccept_npc_parnabus(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 41014) // The Upper Binding IV
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 35 * IN_MILLISECONDS);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("The Upper Binding begins to glow with energy.");
+                }, 10000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+                }, 12000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("It is complete, the binding is energized!");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                    pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }, 13500);
+
+            DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60049); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_parnabus";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_parnabus;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_dark_bishop_mordren";
