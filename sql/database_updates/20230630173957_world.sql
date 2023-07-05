@@ -1,0 +1,1 @@
+UPDATE page_text SET Text_loc1 = 'Dear McCoy/n/nI've been having some troubles with supply issues, from troll attacks to not receiving deliveries. The one you sent has been plenty of help and has gotten things back on track. You should receive everything soon.\n\n\'Wincing\' Willy.' WHERE entry = 50524;
