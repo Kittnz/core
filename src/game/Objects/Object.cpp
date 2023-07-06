@@ -4162,11 +4162,28 @@ void WorldObject::SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 D
     SendMessageToSet(&data, true);
 }
 
-void WorldObject::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype)
+void WorldObject::EnergizeBySpell(Unit* pVictim, uint32 spellId, uint32 amount, Powers powerType)
 {
-    SendEnergizeSpellLog(pVictim, SpellID, Damage, powertype);
+    SendEnergizeSpellLog(pVictim, spellId, amount, powerType);
+
+    // Turtle: threat from power gains as per RMJ's explanations
+    if (Unit* pUnit = ToUnit())
+    {
+        float multiplier;
+        switch (powerType)
+        {
+            case POWER_ENERGY:
+                multiplier = 5.0f;
+                break;
+            default:
+                multiplier = 0.5f;
+                break;
+        }
+        pVictim->GetHostileRefManager().threatAssist(pUnit, amount * multiplier, sSpellMgr.GetSpellEntry(spellId));
+    }
+
     // needs to be called after sending spell log
-    pVictim->ModifyPower(powertype, Damage);
+    pVictim->ModifyPower(powerType, amount);
 }
 
 void WorldObject::SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, Powers powertype) const
