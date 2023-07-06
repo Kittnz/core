@@ -1172,7 +1172,7 @@ virtual uint32 GetLevel() const = 0;
         void SendSpellOrDamageImmune(Unit* target, uint32 spellID) const;
         int32 DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellProto, bool critical = false);
         void SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, bool critical = false) const;
-        void EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype);
+        void EnergizeBySpell(Unit* pVictim, uint32 spellId, uint32 amount, Powers powerType);
         void SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, Powers powertype) const;
 
         void GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut) const;
