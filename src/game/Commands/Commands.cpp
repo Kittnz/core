@@ -975,6 +975,49 @@ bool ChatHandler::HandleListBuybackItemsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleListHostileRefsCommand(char* /*args*/)
+{
+    Unit* pUnit = GetSelectedUnit();
+    if (!pUnit)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("List of hostile references for %s:", pUnit->GetObjectGuid().GetString().c_str());
+    HostileReference* pReference = pUnit->GetHostileRefManager().getFirst();
+    uint32 counter = 1;
+    while (pReference)
+    {
+        if (Unit* pTarget = pReference->getSourceUnit())
+            PSendSysMessage("%u. %s", counter++, pTarget->GetGuidStr().c_str());
+        pReference = pReference->next();
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleListThreatCommand(char* /*args*/)
+{
+    Unit* pUnit = GetSelectedUnit();
+    if (!pUnit)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Threat list for %s:", pUnit->GetObjectGuid().GetString().c_str());
+    ThreatList const& threatList = pUnit->GetThreatManager().getThreatList();
+    for (auto const& itr : threatList)
+    {
+        PSendSysMessage("%g - %s", itr->getThreat(), itr->getUnitGuid().GetString().c_str());
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
@@ -6850,19 +6893,6 @@ bool ChatHandler::HandleModifyManaCommand(char* args)
 
 bool ChatHandler::HandleModifyEnergyCommand(char* args)
 {
-    if (!*args)
-        return false;
-
-    int32 energy = atoi(args) * 10;
-    int32 energym = atoi(args) * 10;
-
-    if (energy <= 0 || energym <= 0 || energym < energy)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
     Player* chr = GetSelectedPlayer();
     if (!chr)
     {
@@ -6871,16 +6901,31 @@ bool ChatHandler::HandleModifyEnergyCommand(char* args)
         return false;
     }
 
+    uint32 energyMin;
+    if (!ExtractUInt32(&args, energyMin))
+        return false;
+
+    uint32 energyMax;
+    if (!ExtractUInt32(&args, energyMax))
+        energyMax = std::max(chr->GetMaxPower(POWER_ENERGY), energyMin);
+
+    if (energyMin < 0 || energyMax < 0 || energyMax < energyMin)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     // check online security
     if (HasLowerSecurity(chr))
         return false;
 
-    PSendSysMessage(LANG_YOU_CHANGE_ENERGY, GetNameLink(chr).c_str(), energy / 10, energym / 10);
+    PSendSysMessage(LANG_YOU_CHANGE_ENERGY, GetNameLink(chr).c_str(), energyMin, energyMax);
     if (needReportToTarget(chr))
-        ChatHandler(chr).PSendSysMessage(LANG_YOURS_ENERGY_CHANGED, GetNameLink().c_str(), energy / 10, energym / 10);
+        ChatHandler(chr).PSendSysMessage(LANG_YOURS_ENERGY_CHANGED, GetNameLink().c_str(), energyMin, energyMax);
 
-    chr->SetMaxPower(POWER_ENERGY, energym);
-    chr->SetPower(POWER_ENERGY, energy);
+    chr->SetMaxPower(POWER_ENERGY, energyMax);
+    chr->SetPower(POWER_ENERGY, energyMin);
 
     DETAIL_LOG(GetMangosString(LANG_CURRENT_ENERGY), chr->GetMaxPower(POWER_ENERGY));
 
@@ -6889,19 +6934,6 @@ bool ChatHandler::HandleModifyEnergyCommand(char* args)
 
 bool ChatHandler::HandleModifyRageCommand(char* args)
 {
-    if (!*args)
-        return false;
-
-    int32 rage = atoi(args) * 10;
-    int32 ragem = atoi(args) * 10;
-
-    if (rage <= 0 || ragem <= 0 || ragem < rage)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
     Player* chr = GetSelectedPlayer();
     if (chr == nullptr)
     {
@@ -6910,16 +6942,34 @@ bool ChatHandler::HandleModifyRageCommand(char* args)
         return false;
     }
 
+    uint32 rageMin;
+    if (!ExtractUInt32(&args, rageMin))
+        return false;
+
+    uint32 rageMax;
+    if (!ExtractUInt32(&args, rageMax))
+        rageMax = std::max(chr->GetMaxPower(POWER_RAGE) / 10, rageMin);
+
+    if (rageMin < 0 || rageMax < 0 || rageMax < rageMin)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    rageMin *= 10;
+    rageMax *= 10;
+
     // check online security
     if (HasLowerSecurity(chr))
         return false;
 
-    PSendSysMessage(LANG_YOU_CHANGE_RAGE, GetNameLink(chr).c_str(), rage / 10, ragem / 10);
+    PSendSysMessage(LANG_YOU_CHANGE_RAGE, GetNameLink(chr).c_str(), rageMin / 10, rageMax / 10);
     if (needReportToTarget(chr))
-        ChatHandler(chr).PSendSysMessage(LANG_YOURS_RAGE_CHANGED, GetNameLink().c_str(), rage / 10, ragem / 10);
+        ChatHandler(chr).PSendSysMessage(LANG_YOURS_RAGE_CHANGED, GetNameLink().c_str(), rageMin / 10, rageMax / 10);
 
-    chr->SetMaxPower(POWER_RAGE, ragem);
-    chr->SetPower(POWER_RAGE, rage);
+    chr->SetMaxPower(POWER_RAGE, rageMax);
+    chr->SetPower(POWER_RAGE, rageMin);
 
     return true;
 }
