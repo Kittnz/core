@@ -5050,6 +5050,7 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
                 {
                     switch (m_spellInfo->Id)
                     {
+                        case 679:
                         case 678:
                         case 1866:
                         case 680:
@@ -5066,35 +5067,15 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
                                 {
                                     SpellAuraHolder* holder = itr->second;
 
-                                    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(holder->GetId());
-
-                                    switch (spellInfo->Id)
+                                    if (holder && GetSpellSpecific(holder->GetId()) == SPELL_JUDGEMENT)
                                     {
-                                        case 21183: // Judgement of the Crusader (Rank 1)
-                                        case 20188: // Judgement of the Crusader (Rank 2)
-                                        case 20300: // Judgement of the Crusader (Rank 3)
-                                        case 20301: // Judgement of the Crusader (Rank 4)
-                                        case 20302: // Judgement of the Crusader (Rank 5)
-                                        case 20303: // Judgement of the Crusader (Rank 6)
-                                        case 20185: // Judgement of Light (Rank 1)
-                                        case 20344: // Judgement of Light (Rank 2)
-                                        case 20345: // Judgement of Light (Rank 3)
-                                        case 20346: // Judgement of Light (Rank 4)
-                                        case 20186: // Judgement of Wisdom (Rank 1)
-                                        case 20354: // Judgement of Wisdom (Rank 2)
-                                        case 20355: // Judgement of Wisdom (Rank 3)
-                                        case 20184: // Judgement of Justice
-                                        {
-                                            int32 maxDuration = holder->GetAuraMaxDuration();
-                                            int32 currentDuration = holder->GetAuraDuration();
+                                        int32 maxDuration = holder->GetAuraMaxDuration();
+                                        int32 currentDuration = holder->GetAuraDuration();
 
-                                            if (currentDuration > 0)
-                                            {
-                                                unitTarget->RefreshAura(spellInfo->Id, maxDuration);
-                                            }
-                                        }
-                                        break;
+                                        if (currentDuration > 0)
+                                            unitTarget->RefreshAura(holder->GetId(), maxDuration);
                                     }
+                                    break;
                                 }
                             }
                         }
