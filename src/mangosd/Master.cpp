@@ -423,7 +423,7 @@ bool StartDB(std::string name, DatabaseType& database)
     }
 
     ///- Initialise the world database
-    if (!database.Initialize(dbstring.c_str(), nConnections, nAsyncConnections))
+    if (!database.Initialize(name.c_str(), dbstring.c_str(), nConnections, nAsyncConnections))
     {
         sLog.outError("Cannot connect to world database %s", name.c_str());
         return false;

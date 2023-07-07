@@ -770,3 +770,83 @@ std::string GetCurrentTimeString()
     oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
     return oss.str();
 }
+
+#ifdef WIN32
+#include <windows.h>
+#include <VersionHelpers.h>
+
+bool Win10SupportNewThreadNameInit = false;
+
+using ThreadCall = HRESULT(WINAPI*)(HANDLE handle, PCWSTR name);
+ThreadCall pThreadCall = nullptr;
+
+#pragma pack(push,8)
+struct THREAD_NAME
+{
+	DWORD dwType;
+	const char* szName;
+	DWORD dwThreadID;
+	DWORD dwFlags;
+};
+
+#pragma pack(pop)
+
+void InternalThreadName(const char* name)
+{
+#ifdef _WIN32_WINNT_WIN10
+	if (IsWindows10OrGreater() && !Win10SupportNewThreadNameInit)
+	{
+		HMODULE KernelLib = GetModuleHandle("kernel32.dll");
+		pThreadCall = (ThreadCall)GetProcAddress(KernelLib, "SetThreadDescription");
+		Win10SupportNewThreadNameInit = true;
+	}
+#endif
+
+	if (pThreadCall)
+	{
+		constexpr size_t cSize = 64;
+		wchar_t wc[cSize];
+		mbstowcs(wc, name, cSize);
+
+		pThreadCall(GetCurrentThread(), wc);
+	}
+	else
+	{
+		THREAD_NAME tn;
+		tn.dwType = 0x1000;
+		tn.szName = name;
+		tn.dwThreadID = DWORD(-1);
+		tn.dwFlags = 0;
+		__try
+		{
+			RaiseException(0x406D1388, 0, sizeof(tn) / sizeof(size_t), (size_t*)&tn);
+		}
+		__except (EXCEPTION_CONTINUE_EXECUTION)
+		{
+		}
+	}
+}
+
+#else
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#include <pthread.h>
+
+#endif
+
+
+
+void thread_name(const char* name)
+{
+#ifdef WIN32
+    // Should be in separate function, because of __try and /EHse, while we have scope object from Optick
+    InternalThreadName(name);
+#else
+    pthread_t threadID = pthread_self();
+    pthread_setname_np(threadID, name);
+#endif
+
+    OPTICK_SETUP_THREAD(name);
+}

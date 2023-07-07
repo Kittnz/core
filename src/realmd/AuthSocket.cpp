@@ -1428,11 +1428,11 @@ bool AuthSocket::GeographicalLockCheck()
 
 bool AuthSocket::VerifyVersion(uint8 const* a, int32 aLength, uint8 const* versionProof, bool isReconnect)
 {
+	if (!sConfig.GetBoolDefault("StrictVersionCheck", false))
+		return true;
+
     if (!((_platform == X86 || _platform == PPC) && (_os == Win || _os == OSX)))
         return false;
-
-    if (!sConfig.GetBoolDefault("StrictVersionCheck", false))
-        return true;
 
     std::array<uint8, 20> zeros = { {} };
     std::array<uint8, 20> const* versionHash = nullptr;

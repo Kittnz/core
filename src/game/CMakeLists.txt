@@ -588,6 +588,14 @@ target_link_libraries(game
   Detour
 )
 
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
+
 if(USE_DISCORD_BOT)
     target_link_libraries(game
 	dpp

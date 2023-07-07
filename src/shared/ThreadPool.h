@@ -82,7 +82,7 @@ public:
      * @brief ThreadPool allocates memory, use ThreadPool::start() to spawn the threads.
      * @param numThreads the number of threads that will be created.
      */
-    ThreadPool(int numThreads, ClearMode when = ClearMode::AT_NEXT_WORKLOAD, ErrorHandling mode = ErrorHandling::NONE);
+    ThreadPool(int numThreads, std::string InName, ClearMode when = ClearMode::AT_NEXT_WORKLOAD, ErrorHandling mode = ErrorHandling::NONE);
 
     ThreadPool() = delete;
 
@@ -98,7 +98,7 @@ public:
             return;
         m_status = Status::STARTING;
         for (int i = 0; i < m_size; i++)
-            m_workers.emplace_back(new WORKER_T(this, i, m_errorHandling));
+            m_workers.emplace_back(new WORKER_T(this, Name, i, m_errorHandling));
         m_status = Status::READY;
     }
 
@@ -150,7 +150,7 @@ public:
 
 private:
     struct worker {
-        worker(ThreadPool *pool, int id, ErrorHandling mode);
+        worker(ThreadPool *pool, std::string InName, int id, ErrorHandling mode);
         ~worker();
 
         void loop_wrapper();
@@ -160,6 +160,7 @@ private:
         void waitForWork();
 
         int id;
+        std::string Name;
         ErrorHandling errorHandling;
         volatile bool busy = false;
         ThreadPool *pool;
@@ -169,13 +170,13 @@ private:
     };
 
     struct worker_sq : public worker{
-        worker_sq(ThreadPool *pool, int id, ErrorHandling mode);
+        worker_sq(ThreadPool *pool, std::string InName, int id, ErrorHandling mode);
 
         void doWork() override;
     };
 
     struct worker_mq : public worker{
-        worker_mq(ThreadPool *pool, int id, ErrorHandling mode);
+        worker_mq(ThreadPool *pool, std::string InName, int id, ErrorHandling mode);
 
         void doWork() override;
         void prepare(Callable pre, Callable post) override;
@@ -186,13 +187,14 @@ private:
     template <class T>
     struct worker_mysql : public T
     {
-        worker_mysql(ThreadPool *tp, int id, ErrorHandling e);
+        worker_mysql(ThreadPool *tp, std::string InName, int id, ErrorHandling e);
 
         void doWork() override;
     };
 
     using workers_t = std::vector<std::unique_ptr<worker>>;
 
+    std::string Name;
     Status m_status = Status::STOPPED;
     ErrorHandling m_errorHandling;
     size_t m_size;

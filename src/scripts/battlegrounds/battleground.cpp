@@ -35,7 +35,7 @@ EndScriptData */
 // battleground spiritguides - this script handles gossipHello
 // and JustDied also it let autocast the channel-spell
 
-enum
+enum : uint32
 {
     SPELL_SPIRIT_HEAL_CHANNEL = 22011, // Spirit Heal Channel
     SPELL_SPIRIT_HEAL = 22012, // Spirit Heal
@@ -69,6 +69,23 @@ struct npc_spirit_guideAI : ScriptedAI
             m_creature->InterruptNonMeleeSpells(true);
             m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL, true);
             m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL_CHANNEL, false);
+
+            Map::PlayerList const& PlayerList = m_creature->GetMap()->GetPlayers();
+            for (const auto& itr : PlayerList)
+            {
+                Player* pPlayer = itr.getSource();
+                if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || pPlayer->IsAlive())
+                    continue;
+
+                if (pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT))
+                {
+                    pPlayer->ResurrectPlayer(1.f);
+                    pPlayer->SpawnCorpseBones();
+                }
+                else
+                    pPlayer->CastSpell(pPlayer, SPELL_WAITING_TO_RESURRECT, true);
+            }
+
             uiTimerRez = 30000;
         }
         else
@@ -78,13 +95,7 @@ struct npc_spirit_guideAI : ScriptedAI
     void CorpseRemoved(uint32 &) override
     {
         // TODO: would be better to cast a dummy spell
-        Map* pMap = m_creature->GetMap();
-
-        // if (!pMap || !pMap->IsBattleGround()) // Return this check if you don't plan to run Turtle WoW Arena Tournament
-        if (!pMap)
-            return;
-
-        Map::PlayerList const &PlayerList = pMap->GetPlayers();
+        Map::PlayerList const &PlayerList = m_creature->GetMap()->GetPlayers();
 
         for (const auto& itr : PlayerList)
         {

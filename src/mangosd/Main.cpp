@@ -74,6 +74,8 @@ extern int main(int argc, char **argv)
 
     char const *options = ":c:s:";
 
+    thread_name("MainThread");
+
     ACE_Get_Opt cmd_opts(argc, argv, options);
     cmd_opts.long_option("version", 'v');
 
