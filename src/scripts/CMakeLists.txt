@@ -419,6 +419,14 @@ target_link_libraries(scripts
   game
 )
 
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
+
 #add_dependencies(${LIBRARY_NAME} revision.h)
 
 if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)

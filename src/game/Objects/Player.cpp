@@ -3530,15 +3530,16 @@ void Player::GiveLevel(uint32 level)
             }
             else
             {
+                AnnounceHardcoreModeLevelUp(level);
                 //TODO rewards for HC60 level 60 and custom announcement.
-                uint32 itemEntry = 80189;
+                /*uint32 itemEntry = 80189;
                 std::string subject = "Lockbox of the Immortal Soul";
                 std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
                 Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
                 ToMailItem->SaveToDB();
                 MailDraft(subject, sObjectMgr.CreateItemText(message))
                     .AddItem(ToMailItem)
-                    .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+                    .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);*/
             }
         }
         else
@@ -22944,7 +22945,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
             },GetName(), level);
             break;
         case 60:
-            IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("%s has laughed in the face of death in the Hardcore challenge. %s has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
+            !IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("%s has laughed in the face of death in the Hardcore challenge. %s has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
             break;
         default:
             return;

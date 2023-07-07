@@ -470,7 +470,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
             // temporary measure to remove false positives
             if (GetLastMovementInfo().ctime - movementInfo.ctime < 1000)
             {
-                _anticheat->RecordCheatInternal(CHEAT_TYPE_TIME_BACK, "Clock moved in reverse from %u to %u",
+                _anticheat->RecordCheatInternal(CHEAT_TYPE_TIME_BACK, "Clock moved in reverse from %u to %u, possible bot!",
                     GetLastMovementInfo().ctime, movementInfo.ctime);
             }
             else

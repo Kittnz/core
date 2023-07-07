@@ -698,6 +698,10 @@ void World::LoadConfigSettings(bool reload)
         setConfig(CONFIG_UINT32_MAX_OVERSPEED_PINGS, 2);
     }
 
+    setConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME, "AutoRestart.MaxServerUptime", 0);
+    setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MIN, "AutoRestart.HourMin", 0);
+    setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MAX, "AutoRestart.HourMax", 0);
+
     setConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY, "SaveRespawnTimeImmediately", true);
     setConfig(CONFIG_BOOL_WEATHER, "ActivateWeather", true);
 
@@ -1315,6 +1319,8 @@ void charactersDatabaseWorkerThread()
 {
     static uint32 returnDelay = MailReturnDelay;
     static uint32 currentMs = WorldTimer::getMSTime();
+
+    thread_name("CharDBWorker");
 
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
@@ -1980,6 +1986,9 @@ void World::SetInitialWorldSettings()
     sLog.outInfo("Beginning inactive character deletion...");
     CharacterDatabaseCleaner::DeleteInactiveCharacters();
 
+    sLog.outInfo("Loading RBAC for chat commands...");
+    ChatHandler::LoadRbacPermissions();
+
     if (getConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS))
     {
         sLog.outString("Restoring deleted items...");
@@ -2069,6 +2078,7 @@ void World::DetectDBCLang()
 
 void World::ProcessAsyncPackets()
 {
+    thread_name("AsyncPackets");
     while (!sWorld.IsStopped())
     {
         do
@@ -2144,7 +2154,7 @@ void World::Update(uint32 diff)
     if (!m_updateThreads)
     {
         m_updateThreads = std::unique_ptr<ThreadPool>( new ThreadPool(
-                    getConfig(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT),
+                    getConfig(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT),"WorldAsync",
                     ThreadPool::ClearMode::UPPON_COMPLETION)
                                              );
         m_updateThreads->start<ThreadPool::MySQL<>>();
@@ -2301,6 +2311,19 @@ void World::Update(uint32 diff)
         sTerrainMgr.Update(diff);
 
 	sGuildMgr.Update(diff);
+
+    if (!m_ShutdownTimer && !m_stopEvent &&
+        getConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME) &&
+        getConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME) < GetUptime() &&
+        GetGameDay() != sHonorMaintenancer.GetNextMaintenanceDay())
+    {
+        struct tm* tm_struct = localtime(&m_gameTime);
+        if (tm_struct->tm_hour >= getConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MIN) && tm_struct->tm_hour <= getConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MAX))
+        {
+            sLog.outInfo("Restarting server due to exceeding maximum uptime.");
+            sWorld.ShutdownServ(900, SHUTDOWN_MASK_RESTART, SHUTDOWN_EXIT_CODE);
+        }
+    }
 }
 
 /// Send a packet to all players (except self if mentioned)
@@ -4127,6 +4150,7 @@ bool World::IsCharacterLocked(uint32 guidLow)
 void World::AutoPDumpWorker()
 {
     CharacterDatabase.ThreadStart();
+    thread_name("AutoPDump");
     while (!IsStopped())
     {
         std::this_thread::sleep_for(5s);

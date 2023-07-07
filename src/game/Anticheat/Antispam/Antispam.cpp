@@ -23,6 +23,7 @@ Antispam& Antispam::Instance()
 void AntispamAsyncWorker(Antispam *antispam)
 {
     using namespace std::chrono_literals;
+    thread_name("AntispamAsync");
     LoginDatabase.ThreadStart();
     auto prevNow = Clock::now();
     while (!sWorld.IsStopped())

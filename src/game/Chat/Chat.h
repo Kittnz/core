@@ -69,6 +69,7 @@ public:
         ChatCommand *      ChildCommands;
         uint8              Flags;
         std::string        FullName;
+        uint32             PermissionMask = 0;
 };
 
 enum ChatCommandSearchResult
@@ -92,6 +93,8 @@ class ChatHandler
         explicit ChatHandler(WorldSession* session);
         explicit ChatHandler(Player* player);
         virtual ~ChatHandler();
+
+        static void LoadRbacPermissions();
 
         static char* LineFromMessage(char*& pos) { char* start = strtok(pos,"\n"); pos = nullptr; return start; }
 
@@ -154,7 +157,7 @@ class ChatHandler
     protected:
         explicit ChatHandler() : m_session(nullptr), sentErrorMessage(false) {}      // for CLI subclass
 
-        bool hasStringAbbr(const char* name, const char* part);
+        static bool hasStringAbbr(const char* name, const char* part);
 
         // function with different implementation for chat/console
         virtual uint32 GetAccountId() const;
@@ -170,15 +173,16 @@ class ChatHandler
 
         void SendGlobalSysMessage(const char *str);
 
-        bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint8 security, std::string const& help, uint8 flags);
+        static bool SetPermissionMaskForCommandInTable(ChatCommand* table, const char* text, uint32 permissionId);
+        static bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint8 security, std::string const& help, uint8 flags);
         void ExecuteCommand(const char* text);
         bool ShowHelpForCommand(ChatCommand *table, const char* cmd);
         bool ShowHelpForSubCommands(ChatCommand *table, char const* cmd);
-        ChatCommandSearchResult FindCommand(ChatCommand* table, char const*& text, ChatCommand*& command, ChatCommand** parentCommand = nullptr, std::string* cmdNamePtr = nullptr, bool allAvailable = false, bool exactlyName = false);
+        static ChatCommandSearchResult FindCommand(ChatCommand* table, char const*& text, ChatCommand*& command, ChatCommand** parentCommand = nullptr, std::string* cmdNamePtr = nullptr, bool allAvailable = false, bool exactlyName = false);
 
         void CheckIntegrity(ChatCommand *table, ChatCommand *parentCommand);
-        void FillFullCommandsName(ChatCommand* table, std::string prefix);
-        ChatCommand* getCommandTable();
+        static void FillFullCommandsName(ChatCommand* table, std::string prefix);
+        static ChatCommand* getCommandTable();
 
         bool HandleGodCommand(char *);
         bool HandleGMOptionsCommand(char *);
@@ -769,7 +773,9 @@ class ChatHandler
         WorldSession * m_session;                           // != nullptr for chat command call and nullptr for CLI command
 
         // common global flag
-        static bool load_command_table;
+        static std::map<uint32 /*Permission Id*/, std::string /*Permission Name*/> m_rbacPermissionNames;
+        static std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> m_rbacAccountGrantedPermissions;
+        static std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> m_rbacAccountBannedPermissions;
         bool sentErrorMessage;
 };
 

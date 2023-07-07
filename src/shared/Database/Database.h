@@ -121,9 +121,9 @@ class Database
     public:
         virtual ~Database();
 
-        virtual bool Initialize(const char *infoString, int nConns = 1, int nWorkers = 1);
+        virtual bool Initialize(const char* name, const char *infoString, int nConns = 1, int nWorkers = 1);
         //start worker thread for async DB request execution
-        virtual bool InitDelayThread(std::string const& infoString);
+        virtual bool InitDelayThread(const char* Name, std::string const& infoString);
         //stop worker thread
         virtual void HaltDelayThread();
 

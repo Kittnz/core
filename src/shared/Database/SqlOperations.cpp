@@ -154,9 +154,12 @@ using SqlResultQueueWorker = ThreadPool::ThreadPool::MySQL<>;
 using SqlResultQueueWorker = ThreadPool::SingleQueue;
 #endif
 
-SqlResultQueue::SqlResultQueue() :
-    numUnsafeQueries(0), m_callbackThreads(new ThreadPool(6))
+SqlResultQueue::SqlResultQueue(const char* Name) :
+    numUnsafeQueries(0)
 {
+    char PoolName[128];
+    sprintf(PoolName, "SqlCallback %s", Name);
+    m_callbackThreads.reset(new ThreadPool(6, PoolName));
     m_callbackThreads->start<SqlResultQueueWorker>();
 }
 

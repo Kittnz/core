@@ -469,7 +469,7 @@ bool StartDB()
         return false;
     }
 
-    if(!LoginDatabase.Initialize(dbstring.c_str()))
+    if(!LoginDatabase.Initialize("Login", dbstring.c_str()))
     {
         sLog.outError("Cannot connect to database");
         return false;

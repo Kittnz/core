@@ -24,6 +24,7 @@
 #include "Common.h"
 #include "Duration.h"
 #include "Errors.h"
+#include "OptickIntegration.h"
 
 #include <string>
 #include <vector>
@@ -538,3 +539,5 @@ auto end(reversion_wrapper<T> w) { return std::rend(w.iterable); }
 template <typename T>
 reversion_wrapper<T> reverse(T&& iterable) { return { iterable }; }
 */
+
+void thread_name(const char* name);
