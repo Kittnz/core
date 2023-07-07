@@ -1988,6 +1988,9 @@ void World::SetInitialWorldSettings()
     sLog.outInfo("Beginning inactive character deletion...");
     CharacterDatabaseCleaner::DeleteInactiveCharacters();
 
+    sLog.outInfo("Loading RBAC for chat commands...");
+    ChatHandler::LoadRbacPermissions();
+
     if (getConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS))
     {
         sLog.outString("Restoring deleted items...");
