@@ -1189,7 +1189,7 @@ public:
             }
         }
         else
-            m_uiSpellReflectionTimer
+            m_uiSpellReflectionTimer -= uiDiff;
 
         switch (phase)
         {
