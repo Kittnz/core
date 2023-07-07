@@ -837,6 +837,120 @@ ChatCommand * ChatHandler::getCommandTable()
     return commandTable;
 }
 
+std::map<uint32 /*Permission Id*/, std::string /*Permission Name*/> ChatHandler::m_rbacPermissionNames;
+std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> ChatHandler::m_rbacAccountGrantedPermissions;
+std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> ChatHandler::m_rbacAccountBannedPermissions;
+
+void ChatHandler::LoadRbacPermissions()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.Query("SELECT `id`, `name` FROM `rbac_permissions`"));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            std::string name = fields[1].GetCppString();
+
+            if (id >= 32)
+            {
+                sLog.outErrorDb("RBAC permission ids are stored as an uint32 and cannot exceed id 31!");
+                continue;
+            }
+
+            if (name.empty())
+            {
+                sLog.outErrorDb("RBAC permission names should not be empty!");
+                continue;
+            }
+
+            m_rbacPermissionNames.emplace(std::make_pair(id, name));
+
+        } while (result->NextRow());
+    }
+
+    result.reset(LoginDatabase.Query("SELECT `account_id`, `permission_id`, `granted` FROM `rbac_account_permissions`"));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 accountId = fields[0].GetUInt32();
+            uint32 permissionId = fields[1].GetUInt32();
+            bool granted = fields[2].GetBool();
+
+            if (m_rbacPermissionNames.find(permissionId) == m_rbacPermissionNames.end())
+            {
+                sLog.outErrorDb("Unknown RBAC permission id %u assigned to account %u!", permissionId, accountId);
+                continue;
+            }
+
+            if (granted)
+                m_rbacAccountGrantedPermissions[accountId] |= 1 << permissionId;
+            else
+                m_rbacAccountBannedPermissions[accountId] |= 1 << permissionId;
+
+        } while (result->NextRow());
+    }
+
+    ChatCommand* commandTable = getCommandTable();
+
+    result.reset(LoginDatabase.Query("SELECT `command`, `permission_id` FROM `rbac_command_permissions`"));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            std::string command = fields[0].GetCppString();
+            uint32 permissionId = fields[1].GetUInt32();
+
+            if (m_rbacPermissionNames.find(permissionId) == m_rbacPermissionNames.end())
+            {
+                sLog.outErrorDb("Unknown RBAC permission id %u assigned to command '%s'!", permissionId, command);
+                continue;
+            }
+            
+            SetPermissionMaskForCommandInTable(commandTable, command.c_str(), permissionId);
+
+        } while (result->NextRow());
+    }
+}
+
+bool ChatHandler::SetPermissionMaskForCommandInTable(ChatCommand* commandTable, const char* text, uint32 permissionId)
+{
+    std::string fullcommand = text;                         // original `text` can't be used. It content destroyed in command code processing.
+
+    ChatCommand* command = nullptr;
+    std::string cmdName;
+
+    ChatCommandSearchResult res = FindCommand(commandTable, text, command, nullptr, &cmdName, true, true);
+
+    switch (res)
+    {
+        case CHAT_COMMAND_OK:
+        {
+            command->PermissionMask |= (1 << permissionId);
+            return true;
+        }
+        case CHAT_COMMAND_UNKNOWN_SUBCOMMAND:
+        {
+            // command have subcommands, but not '' subcommand and then any data in `command` useless for it.
+            if (cmdName.empty())
+                sLog.outErrorDb("Table `command` have command '%s' that only used with some subcommand selection, it can't have help or overwritten access level, skip.", cmdName.c_str());
+            else
+                sLog.outErrorDb("Table `command` have unexpected subcommand '%s' in command '%s', skip.", cmdName.c_str(), fullcommand.c_str());
+            return false;
+        }
+        case CHAT_COMMAND_UNKNOWN:
+        {
+            sLog.outErrorDb("Table `command` have nonexistent command '%s', skip.", cmdName.c_str());
+            return false;
+        }
+    }
+
+    return false;
+}
+
 ChatHandler::ChatHandler(WorldSession* session) :
     m_session(session), sentErrorMessage(false)
 {
@@ -869,7 +983,28 @@ AccountTypes ChatHandler::GetAccessLevel() const
 bool ChatHandler::isAvailable(ChatCommand const& cmd) const
 {
     // check security level only for simple  command (without child commands)
-    return GetAccessLevel() >= (AccountTypes)cmd.SecurityLevel;
+    if (GetAccessLevel() >= (AccountTypes)cmd.SecurityLevel)
+    {
+        auto itrBanned = m_rbacAccountBannedPermissions.find(m_session->GetAccountId());
+        if (itrBanned != m_rbacAccountBannedPermissions.end())
+        {
+            if (cmd.PermissionMask & itrBanned->second)
+                return false;
+        }
+
+        return true;
+    }
+    else
+    {
+        auto itrGranted = m_rbacAccountGrantedPermissions.find(m_session->GetAccountId());
+        if (itrGranted != m_rbacAccountGrantedPermissions.end())
+        {
+            if (cmd.PermissionMask & itrGranted->second)
+                return true;
+        }
+
+        return false;
+    }
 }
 
 std::string ChatHandler::GetNameLink() const
@@ -1194,10 +1329,6 @@ ChatCommandSearchResult ChatHandler::FindCommand(ChatCommand* table, char const*
             }
         }
 
-        // must be available (not checked for subcommands case because parent command expected have most low access that all subcommands always
-        if (!allAvailable && !isAvailable(table[i]))
-            continue;
-
         // must be have handler is explicitly selected
         if (!table[i].Handler)
             continue;
@@ -1248,6 +1379,12 @@ void ChatHandler::ExecuteCommand(const char* text)
     {
         case CHAT_COMMAND_OK:
         {
+            if (!isAvailable(*command))
+            {
+                SendSysMessage(LANG_COMMAND_UNAVAILABLE);
+                return;
+            }
+
             std::string realCommandFull = command->FullName;
 
             if (text[0])
