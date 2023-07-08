@@ -38,25 +38,29 @@ struct instance_gilneas_city : public ScriptedInstance
 
         switch (pCreature->GetEntry())
         {
-        case matthias_holtz:
+        case NPC_MATTHIAS_HOLTZ:
             pCreature->PlayDirectSound(60384);
             pCreature->MonsterYell("This district is currently on lockdown...");
             break;
-        case judge_sutherland:
+        case NPC_JUDGE_SUTHERLAND:
             pCreature->PlayDirectSound(60382);
             pCreature->MonsterYell("Order, must be maintained!");
             break;
-        case dustivan_blackowl:
+        case NPC_DUSTIVAN_BLACKOWL:
             pCreature->PlayDirectSound(60391);
             pCreature->MonsterYell("I hunt from the shadows, these streets have been cleared by my hand!");
             break;
-        case magnus_greystone:
+        case NPC_MAGNUS_GREYSTONE:
             pCreature->PlayDirectSound(60386);
             pCreature->MonsterYell("I have served as Marshal throughout all of the orcish incursions, you will not put an end to Gilneas.");
             break;
-        case genn_greymane:
+        case NPC_GENN_GREYMANE:
             pCreature->PlayDirectSound(60388);
             pCreature->MonsterYell("My family has held power in Gilneas for countless generations. You will not change fate.");
+            break;
+        case NPC_CELIA_HARLOW:
+            pCreature->PlayDirectSound(60399);
+            pCreature->MonsterYell("Mortimer, it would appear we have someone here to interrupt our plans!");
             break;
         }
     }
@@ -65,29 +69,30 @@ struct instance_gilneas_city : public ScriptedInstance
     {
         switch (pCreature->GetEntry())
         {
-        case matthias_holtz:
+        case NPC_MATTHIAS_HOLTZ:
             pCreature->PlayDirectSound(60385);
             pCreature->MonsterYell("Foolish Interloper, you do not belong here...");
             break;
-        case judge_sutherland:
+        case NPC_JUDGE_SUTHERLAND:
             pCreature->PlayDirectSound(60383);
             pCreature->MonsterYell("I will not let Gilneas fall to madness, not while I...");
             break;
-        case dustivan_blackowl:
+        case NPC_DUSTIVAN_BLACKOWL:
             pCreature->PlayDirectSound(60392);
             pCreature->MonsterYell("This was not meant to be...");
             break;
-        case magnus_greystone:
+        case NPC_MAGNUS_GREYSTONE:
             pCreature->PlayDirectSound(60387);
             pCreature->MonsterYell("The brave defenders... Of this city will not let you put it to ruin, outsider!");
             break;
-        case genn_greymane:
+        case NPC_GENN_GREYMANE:
             pCreature->PlayDirectSound(60390);
             pCreature->MonsterYell("It... It was pointless after all, this cannot be the way I fall...");
             break;
-
-        case NPC_CELIA:
+        case NPC_CELIA_HARLOW:
             DoRespawnGameObject(m_uiHarlowFamilyChestGUID, HOUR * IN_MILLISECONDS);
+            pCreature->PlayDirectSound(60400);
+            pCreature->MonsterYell("All of our progress, our influence. What a pointless end....");
             break;
         }
     }
@@ -96,7 +101,7 @@ struct instance_gilneas_city : public ScriptedInstance
     {
         switch (pCreature->GetEntry())
         {
-            case NPC_CELIA:
+            case NPC_CELIA_HARLOW:
 			    m_uiCeliaGUID = pCreature->GetGUID();
 			    break;
             case NPC_LORD_MORTIMER:

@@ -6,12 +6,12 @@ enum
 	DATA_CELIA = 1,
 	DATA_LORD_MORTIMER = 2,
 
-    matthias_holtz = 61419,
-    judge_sutherland = 61421,
-    dustivan_blackowl = 61422,
-    magnus_greystone = 61423,
-    genn_greymane = 61418,
-    NPC_CELIA = 61263,
+    NPC_MATTHIAS_HOLTZ = 61419,
+    NPC_JUDGE_SUTHERLAND = 61421,
+    NPC_DUSTIVAN_BLACKOWL = 61422,
+    NPC_MAGNUS_GREYSTONE = 61423,
+    NPC_GENN_GREYMANE = 61418,
+    NPC_CELIA_HARLOW = 61263,
     NPC_LORD_MORTIMER = 61264,
 
     MODEL_DRAGONKIN_CELIA = 8249,
