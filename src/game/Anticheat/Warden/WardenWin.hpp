@@ -107,7 +107,8 @@ enum class SharedDataField
     QpcSystemTimeIncrement,
     UnparkedProcessorCount,
     EnclaveFeatureMask,
-    QpcData
+    QpcData,
+    TimeZoneId
 };
 
 typedef struct _KSYSTEM_TIME
@@ -131,6 +132,7 @@ struct SharedDataCompact
     ULONG UnparkedProcessorCount;
     ULONG EnclaveFeatureMask;
     USHORT QpcData;
+    ULONG TimeZoneId;
 };
 
 enum class OsVersion
