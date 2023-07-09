@@ -312,7 +312,6 @@ void AddSC_black_morass_trash();
 void AddSC_instance_black_morass();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chronormu();
-void AddSC_boss_chromie();
 
 // Misc
 void AddSC_npc_ptr();
@@ -626,7 +625,6 @@ void AddScripts()
     AddSC_instance_black_morass();
     AddSC_boss_gerastrasz();
     AddSC_boss_chronormu();
-    AddSC_boss_chromie();
 
     // Misc
     AddSC_npc_ptr();
