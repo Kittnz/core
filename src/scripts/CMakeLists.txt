@@ -13,8 +13,6 @@ battlegrounds/battleground_sunnyglade.cpp
 dungeons/black_morass/black_morass.h
 dungeons/black_morass/black_morass_trash.cpp
 dungeons/black_morass/black_morass_trash.hpp
-dungeons/black_morass/boss_chromie.cpp
-dungeons/black_morass/boss_chromie.hpp
 dungeons/black_morass/boss_chronormu.cpp
 dungeons/black_morass/boss_chronormu.hpp
 dungeons/black_morass/boss_gerastrasz.cpp
