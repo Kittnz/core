@@ -359,7 +359,7 @@ struct erenniusAI : public ScriptedAI
 		m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
 		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
 		m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
-		m_uiGreenDragonBindingTimer = 110 * IN_MILLISECONDS;
+		m_uiGreenDragonBindingTimer = 105 * IN_MILLISECONDS;
 		m_uiCastedCurseOfErennius = false;
 	}
 
@@ -381,7 +381,7 @@ struct erenniusAI : public ScriptedAI
 				if (m_uiWallOfErenniusTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WALL_OF_ERENNIUS) == CAST_OK)
-						m_uiCallOfNightmareTimer = 45 * IN_MILLISECONDS;
+						m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
 				}
 				else
 					m_uiWallOfErenniusTimer -= uiDiff;
@@ -389,7 +389,7 @@ struct erenniusAI : public ScriptedAI
 				if (m_uiGreenDragonBindingTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(pSolnius, SPELL_GREEN_DRAGON_BINDING) == CAST_OK)
-						m_uiCallOfNightmareTimer = 110 * IN_MILLISECONDS;
+						m_uiGreenDragonBindingTimer = 105 * IN_MILLISECONDS;
 				}
 				else
 					m_uiGreenDragonBindingTimer -= uiDiff;

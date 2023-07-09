@@ -53,7 +53,7 @@ enum
 	SOLNIUS_SAY_SOUND_2 = 60380,
 	SOLNIUS_SAY_SOUND_3 = 60381,
 
-	//GO_ERRENIUS_CHEST = ?,
+	GO_ERRENIUS_CHEST = 2020042,
 };
 
 class instance_emerald_sanctum : public ScriptedInstance

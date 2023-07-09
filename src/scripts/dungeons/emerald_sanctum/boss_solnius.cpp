@@ -187,7 +187,7 @@ struct boss_solniusAI : public ScriptedAI
 				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 				pErennius->SetFactionTemplateId(7);
 				pErennius->DespawnOrUnsummon(5000);
-				//pErennius->SummonGameObject(GO_ERENNIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
+				pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
 			}
 		}
 	}
@@ -518,7 +518,6 @@ bool GossipHello_boss_solnius(Player* pPlayer, Creature* pCreature)
 	{
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_START_FIGHT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 		
-		// Random text for now
 		pPlayer->SEND_GOSSIP_MENU(92950, pCreature->GetObjectGuid());
 	}
 
