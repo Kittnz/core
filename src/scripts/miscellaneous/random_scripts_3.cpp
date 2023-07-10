@@ -6745,9 +6745,62 @@ bool QuestRewarded_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pQuestGiv
     return false;
 }
 
+bool QuestAccept_npc_great_cat_spirit(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 41030) // Saving Loresh
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 35 * IN_MILLISECONDS);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 13540, false); // Nature Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("Dark magic begins to lift from the Fang of Loresh.");
+                }, 3000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("The dark magic dissipates from the Fang of Loresh.");
+                }, 8000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->CastSpell(pQuestGiver, 24171, false);
+                }, 9000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("It is done!");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                    pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }, 9500);
+
+            DoAfterTime(pQuestGiver, 10 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60050); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_great_cat_spirit";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_great_cat_spirit;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_arch_druid_dreamwind";
