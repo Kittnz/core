@@ -6730,9 +6730,29 @@ bool QuestAccept_npc_parnabus(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestRewarded_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 41020) // Lord Xanvarak
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Walk with the blessings of Cenarius, and may nature guide your path noble one.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_arch_druid_dreamwind";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_arch_druid_dreamwind;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_parnabus";
