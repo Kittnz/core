@@ -344,7 +344,7 @@ REPLACE INTO creature_template VALUES
 (61592, 20401, 0, 0, 0, 0, 'Yohan Wildwalker', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 79, 3, 1, 1.14286, 1, 20, 5, 40, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61593, 20402, 0, 0, 0, 0, 'Marlonias Shademoon', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 79, 2, 1, 1.14286, 1, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61594, 3031, 0, 0, 0, 0, 'Dark Spirit of Loresh', NULL, 0, 61, 61, 11302, 11302, 0, 0, 3312, 16, 0, 1, 1.14286, 2.4, 18, 5, 0, 1, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 0, 0, 61594, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61595, 3031, 0, 0, 0, 0, 'Spirit of Loresh', NULL, 0, 61, 61, 11302, 11302, 0, 0, 3312, 35, 2, 1, 1.14286, 1.8, 18, 5, 0, 1, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61595, 3031, 0, 0, 0, 0, 'Spirit of Loresh', NULL, 0, 61, 61, 11302, 11302, 0, 0, 3312, 35, 2, 1, 1.14286, 1.8, 18, 5, 0, 1, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 41030, ''),
 (61596, 20414, 0, 0, 0, 0, 'Venomlash Chimaera', NULL, 0, 42, 44, 1902, 2059, 0, 0, 2245, 16, 0, 1, 1.42857, 1, 18, 5, 0, 0, 1, 61, 81, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 55.968, 76.956, 100, 1, 0, 61596, 0, 5307, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61597, 20412, 0, 0, 0, 0, 'Dunebound Chimaera', NULL, 0, 42, 44, 1902, 2059, 0, 0, 2245, 16, 0, 1, 1.42857, 1, 18, 5, 0, 0, 1, 61, 81, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 55.968, 76.956, 100, 1, 0, 61597, 0, 5307, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61598, 10231, 0, 0, 0, 0, 'Marat Grimtotem', NULL, 0, 45, 45, 1981, 2059, 0, 0, 2397, 16, 0, 1, 1.14286, 1.4, 18, 5, 0, 0, 1, 65, 83, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 61598, 7725, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -1056,3 +1056,217 @@ REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_t
 delete from creature_ai_scripts where id = 2200034;
 REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (2200034, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30128, 0, 0, 0, 0, 0, 0, 0, 0, 'Matthew Beckett - Say on Aggro');
+
+-- Stolen Ferocity
+delete from quest_template where entry = 41027;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41027,2,493,60,55,0,0,'Stolen Ferocity','<The Cat Spirit looks upon you with a growing curiosity.>$B$BI sense purpose upon you. A strength that lingers from your essence. I have a task for you, one that will test your cunning and resilience.$B$BNestled within Felwood is a place called Shadow Hold. Once a barrow den of the druids, now infested by the Burning Legion. This stronghold contains a relic most important to me, the Fang of Loresh. You see, the corruption that lingers deep within Shadow Hold has turned the spirit of Loresh into madness and I seek to bring an end to the torment that has been inflicted.$B$BShow me your ferocity, and bring me this relic.','Recover the Fang of Loresh from deep within Shadow Hold for the Great Cat Spirit in Moonglade.','Fabricate a plan, and put it in motion. Use cunning and skill to achieve your goals $c.','The Fang of Loresh, returned to me, but it is worse than I had feared. Dark magic has already festered deep within the relic. There is no wonder why the Loresh\'s spirit has gone mad.',61718,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,43200,7200,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (11957, 41027);
+replace into creature_involvedrelation	(id, quest) values (11957, 41027);
+update quest_template set requiredclasses = 1024 where entry = 41027;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61718,1227,'Fang of Loresh',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+
+REPLACE INTO gameobject_template VALUES
+(2020043, 3, 23435, 'Sealed Barrow Trunk', 0, 4, 1, 43, 2020043, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020043,61718,-100,0,1,1,0);
+
+-- The Fang of Loresh
+delete from quest_template where entry = 41028;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (41027,41028,2,493,60,55,0,0,'The Fang of Loresh','Corruption has completely dominated all essence that was once held within the Fang of Loresh. To preserve the spirit still contained within, we will need to collect a large amount of materials to begin my ritual.$B$BI ask you to bring me ten Bright Dream Shards, found in Hyjal. Ten Living Essence, and a single Large Brilliant Shard. These last materials may require some searching to acquire.$B$BReturn to me once these items are gathered.','Gather 10 Bright Dream Shards, 10 Living Essence, and 1 Large Brilliant Shard for the Great Cat Spirit in Moonglade.','<The Great Cat Spirit stares with intensity.>','You are resourceful.$B$BThere is one final thing we must do before I can begin to purify the spirit of Loresh.',61199,10,12803,10,14344,1,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,24000,4000,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (11957, 41028);
+replace into creature_involvedrelation	(id, quest) values (11957, 41028);
+update quest_template set requiredclasses = 1024 where entry = 41028;
+
+-- The Spirit of Loresh
+delete from quest_template where entry = 41029;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (41028,41029,2,493,60,55,0,0,'The Spirit of Loresh','The dark and twisted shadow of Loresh has been made manifest by the powerful magic lingering upon his fang. If we desire to purify his spirit, this dark entity must be destroyed. Prove yourself to me, and dispatch this shade.$B$BUse your tracking on the island of Tel\'Abim, it is there you will find your prey.','Slay the Spirit of Loresh and return to the Great Cat Spirit in Moonglade.','Be vigilant, and direct with your approach. Do not let the dark magic cow you into submission.','Loresh\'s spirit is one step closer to freedom. The foul magic that entrapped him was no match for your speed and skill.',0,0,0,0,0,0,0,0, 61594,1,0,0,0,0,0,0, 0,0, 0,43200,7200,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (11957, 41029);
+replace into creature_involvedrelation	(id, quest) values (11957, 41029);
+update quest_template set requiredclasses = 1024 where entry = 41029;
+
+-- Saving Loresh
+delete from quest_template where entry = 41030;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (41029,41030,2,493,60,55,0,0,'Saving Loresh','Your efforts in helping me will not go unrewarded, but first, I must tend to a matter most important to me. I must purify the spirit of Loresh, and free him from the suffering of dark magic.$B$BStand back, and speak to me when I am finished.','Wait for the Great Cat Spirit to free Loresh from his suffering.','Yes?','It is done, Loresh has been freed from dark magic. You have succeeded in what was asked, and for that, you shall be rewarded.$B$BTake this Gift of Ferocity, and use it for the greater good of all nature.',0,0,0,0,0,0,0,0, 60050,1,0,0,0,0,0,0, 0,0, 0,7200,1200,0,0,0,0,0,0,0,0,0,0,0, 61081,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Wait for the Great Cat Spirit to free Loresh from his suffering');
+
+replace into creature_questrelation		(id, quest) values (11957, 41030);
+replace into creature_involvedrelation	(id, quest) values (11957, 41030);
+update quest_template set requiredclasses = 1024 where entry = 41030;
+
+REPLACE INTO creature_template VALUES
+(60050, 328, 0, 0, 0, 0, 'quest_41030_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set script_name = 'npc_great_cat_spirit' where entry = 11957;
+
+-- The Gift of Ferocity
+delete from quest_template where entry = 41031;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (41030,41031,2,493,60,55,0,1,'The Gift of Ferocity','I have been freed from eternal torment, and my spirit may now rest within Moonglade peacefully.$B$BAs thanks, I can offer you an enchantment most powerful. This gift is a sacred item amongst our kin, only given to those we trust most. Bring me three Bright Dream Shards, and I can make sure you receive this blessing as well.','Gather 3 Bright Dream Shards for the Spirit of Loresh at Moonglade.','Have the shards been acquired?','As I have promised, The Gift of Ferocity.$B$BUse it wisely, and your enemies will tremble before your might!',61199,3,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0, 61081,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61595, 41031);
+replace into creature_involvedrelation	(id, quest) values (61595, 41031);
+
+-- To Numb the Pain
+delete from quest_template where entry = 41032;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41032,2,5179,42,39,0,0,'To Numb the Pain','Enter, my child. You are welcome here amongst the restless dead. You likely know of the gifts we bestow upon our followers, so I shan\'t speak of it further.$B$BI chose to be a worgen, and have found much more power and knowledge in the curse than I ever did the life I left behind. Now I assist Lady Moranna with her research, which has sadly come to a stalemate. The venom I require comes from the Hollow Web spiders just to the east of this cemetery. It will be crucial for our new recruits to overcome the pain of their transition. Gather me ten vials. That should be enough.','Gather 10 Hollow Web Venom for Mother Tanya at Hollow Web Cemetery in Gilneas.','The transformation is often a difficult process for some. There is a point of immense pain as the old skin tears away, and the worgen form is forced underneath. You must understand how painful that can be, and how some people do not have the inner strength to complete it.','So you return! With the venom in hand! Greeted by the snarl of an old woman--I mean a smile of course.$B$BTake this coin, as thanks for the work.',61719,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 4000,0,3550,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61447, 41032);
+replace into creature_involvedrelation	(id, quest) values (61447, 41032);
+update quest_template set requiredraces = 589 where entry = 41032;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61719,3663,'Hollow Web Venom',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61232,61719,-77,0,1,1,0),
+(61233,61719,-77,0,1,1,0);
+
+-- A Bloody Solution
+delete from quest_template where entry = 41033;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41033,2,5179,42,38,0,0,'A Bloody Solution','Well met my friend. You\'ve come to join us? You have caught the spark of curiosity, and must surely satiate it. I will admit, those in Ravenshire look upon us as a cult. How foolish they are to see our strength as sin, eh?$B$BI have been tasked to study blood itself, and I am curious to see if the blood of other races shares similar properties to our own. To the east lay the Hinterlands, a place once called home by the Witherbark Trolls. From them, gather 5 vials of Witherbark Blood and return them to me.','Gather 5 vials of Witherbark Blood from the Witerbark Trolls in The Hinterlands for Ethan Ravencroft in Hollow Web Cemetery.','Blood is quite intriguing indeed. It holds immense power, you know. Some of Ur\'s research suggests that demons can be poisoned with a dead man\'s blood. Fascinating, is it not?','With enough research, we may be able to uncover the properties of blood itself. This could be very important to Moranna, if our suspicions are correct.',61720,5,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,3550,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61460, 41033);
+replace into creature_involvedrelation	(id, quest) values (61460, 41033);
+update quest_template set requiredraces = 589 where entry = 41033;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61720,292,'Witherbark Blood',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(2651,61720,-32,0,1,1,0),
+(2652,61720,-32,0,1,1,0),
+(2649,61720,-32,0,1,1,0),
+(2650,61720,-32,0,1,1,0);
+
+-- A Vile Mantle
+delete from quest_template where entry = 41034;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41034,2,5179,43,38,512,0,'A Vile Mantle','I don\'t know your face, $r, I don\'t like new faces. There\'s enough trouble in these forests without outlanders dragging theirs along.$B$BBut you\'re here now, curse it all. The Master says it is all part of the Wolf Serpent\'s will and who is foolish wee me to disagree? Thus, I say you should help with your part.$B$BIt gets pretty cold up here in Gilneas and we pellars need clothes as much as anyone. Track down the Vilewing Bats and the Duskpelt Wolves, then bring me their furs. You\'ll find them almost anywhere in this country, but the closest are to the southwest.','Gather 5 Vilewing Pelts and 5 Duskpelt Furs for Bearbane at the cave above Mossgrove Farm in Gilneas.','The sacrament of the hunt is crucial in the order of nature. Death feeds life, which feeds death, which feeds life.$B$BThe circle is unbroken.','Look at that, an outlander with some mettle. We say that a man is not made until he has won his first hunt, but I can see this wasn\'t your first.$B$BI can tolerate your foreign mug a little more. Now scurry.',61721,5,61722,5,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 500,0,3450,0,0,0,0,0,0,0,0,0,0,0, 61723,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61459, 41034);
+replace into creature_involvedrelation	(id, quest) values (61459, 41034);
+update quest_template set requiredraces = 589 where entry = 41034;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61721,7990,'Vilewing Pelt',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0,8),
+(61722,1421,'Duskpelt Fur',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0,8);
+
+replace into creature_loot_template values
+(61230,61721,-40,0,1,1,0),
+(61231,61721,-40,0,1,1,0),
+(61401,61721,-40,0,1,1,0),
+(61227,61722,-40,0,1,1,0),
+(61228,61722,-40,0,1,1,0),
+(61229,61722,-40,0,1,1,0);
+
+replace into item_template values
+ ('61723', '4', '3', 'Bearbane Cuffs', '', '6948', '2', '0', '1', '17952', '4488', '9', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '7', '6', '4',
+ '7', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '104', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '35', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Hound and the Hunter
+delete from quest_template where entry = 41035;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41035,2,5179,43,38,0,0,'The Hound and the Hunter','Adrift you have strayed, misplaced and mislaid. Unto the Wolf Serpent\'s coils have you wandered, chasing meaning, seeking wonder.$B$BAm I right? For once like you I were, an affrighted hen, beaten, bitten, driven from her pen. Bled and felled!$B$BIn the north, near Ebonmere Farm a woodsman stalks among trees, he who my life would end. Be you his last fare and the Wolf Serpent\'s blessings with you I\'ll share.','Find and slay Matthew Beckett, then return to Levandra at the cave above Mossgrove Farm in Gilneas.','Is it over, is it done? Is my nightmare gone?','A thousand and thousand thanks I lay upon you.$B$BMy family, my own blood, thought me sick with plague, thought me not worth the yoke. Now I am free to be Beckett no more.',0,0,0,0,0,0,0,0, 61602,1,0,0,0,0,0,0, 0,0, 0,0,3450,0,0,0,0,0,0,0,0,0,0,0, 2450,5,1710,2,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61454, 41035);
+replace into creature_involvedrelation	(id, quest) values (61454, 41035);
+update quest_template set requiredraces = 589 where entry = 41035;
+
+-- Deathly Fetters
+delete from quest_template where entry = 41036;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41036,2,5179,44,37,0,0,'Deathly Fetters','My father, Demetreus, has seen your likeness in a dream, $N. He knew you would come to us one day.$B$BThe Wolf Serpent, our eternal guardian, will soon return to this world. We must make ready for his rebirth, for the cleansing of these lands.$B$BIn the west lie the Ruins of Greyshire. There are items there, mementos of significance, that hold a spiritual bond with the dead that possessed them in life.$B$BGather them for me, that I may summon the souls of the departed and relieve them of their suffering.','Gather 10 Haunted Mementos for Lurn Five-Pelts in the Wolfswood.','These tokens hold vestiges of who these revenants once were, what they once valued.$B$BWedding rings, a family sword, a lost one\'s handkerchief could all become a tether from the realm of the dead to ours.','Once we are ready, I will place these items in a circle of salt, and light an incense of black roses to call the spirits forth.$B$BThough that day has not come, and will not for some time. You have done well, as I know you would have.',61724,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,4000,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61725,1,61726,1,61727,1,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61452, 41036);
+replace into creature_involvedrelation	(id, quest) values (61452, 41036);
+update quest_template set requiredraces = 589 where entry = 41036;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61724,37241,'Haunted Memento',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0,3);
+
+replace into creature_loot_template values
+(61234,61724,-31,0,1,1,0),
+(61235,61724,-31,0,1,1,0);
+
+REPLACE INTO gameobject_template VALUES
+(2020044, 3, 24108, 'Memento of Greyshire', 0, 4, 1, 43, 2020044, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020044,61724,-100,0,1,1,0);
+
+replace into item_template values
+ ('61725', '4', '1', 'Cowl of Memento', '', '15287', '2', '0', '1', '15260', '3815', '1', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '14', '5', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61726', '4', '0', 'Wolf Serpent Ring', '', '23728', '2', '0', '1', '15412', '3853', '11', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '21599', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61727', '4', '3', 'Wolfwood Sash', '', '9358', '2', '0', '1', '19124', '4781', '6', '-1', '-1', '43',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '5', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '138', '0', '0', '0',
+ '0', '0', '0', '45420', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '35', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+-- <NO TITLE>
+delete from quest_template where entry = 41037;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, RewMoneyMaxLevel, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,41037,2,5179,44,38,0,0,'<NO TITLE>','For what do you linger there, $c? Idle of hand, idle of spirit?$B$BIf you are looking for good work, then I have a task for you. From the soot on me you can see the markings of a blacksmith, and indeed, I have forged many a fine thing for us here.$B$BCopper and silver we do need, to craft the rods we wield to bridle lightning and shackle thunder. Find the talismans worn by the invading Foulhide gnolls south of here and bring them to me. They contain the metals that I need.','Gather 15 Foulhide Talismans for Mustang at the cave above Mossgrove Farm in Gilneas.','Won\'t be much silver in the trinkets the gnolls use, but copper they seem to like just enough.','Ugly, crude, cheap. What else can you expect of gnoll-make?$B$BBut metal is metal, \'tis better in my hands than theirs. You have me thanks, this copper will make proper rods.',61728,15,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,0,3500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61729,1,61730,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61449, 41037);
+replace into creature_involvedrelation	(id, quest) values (61449, 41037);
+update quest_template set requiredraces = 589 where entry = 41037;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61728,9636,'Foulhide Talisman',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0,4);
+
+replace into creature_loot_template values
+(61248,61728,-69,0,1,1,0),
+(61249,61728,-69,0,1,1,0),
+(61250,61728,-69,0,1,1,0),
+(61362,61728,-69,0,1,1,0),
+(61392,61728,-69,0,1,1,0),
+(61399,61728,-69,0,1,1,0);
+
+replace into item_template values
+ ('61729', '2', '10', 'Staff of Shackled Lightning', '', '20443', '2', '0', '1', '77084', '19271', '17', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '17', '4', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2700', '0',
+ '0', '66', '115', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61730', '2', '4', 'Copper Infused Bludgeon', '', '2861', '2', '0', '1', '56524', '14131', '21', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '5', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '48', '72', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
