@@ -5199,6 +5199,19 @@ void Aura::HandleAuraModCritPercent(bool apply, bool Real)
     if (target->GetTypeId() != TYPEID_PLAYER)
         return;
 
+    if (apply)
+    {
+        switch (GetId())
+        {
+            case 24932: // Leader of the Pack
+            {
+                if (Unit* pCaster = GetCaster())
+                    if (pCaster->HasAura(45851)) // Moonclaw
+                        m_modifier.m_amount += 1;
+            }
+        }
+    }
+
     // apply item specific bonuses for already equipped weapon
     if (Real)
     {
@@ -5242,6 +5255,19 @@ void Aura::HandleModSpellCritChance(bool apply, bool Real)
     // spells required only Real aura add/remove
     if (!Real)
         return;
+
+    if (apply)
+    {
+        switch (GetId())
+        {
+            case 24907: // Moonkin Aura
+            {
+                if (Unit* pCaster = GetCaster())
+                    if (pCaster->HasAura(45851)) // Moonclaw
+                        m_modifier.m_amount += 1;
+            }
+        }
+    }
 
     if (GetTarget()->GetTypeId() == TYPEID_PLAYER)
         ((Player*)GetTarget())->UpdateAllSpellCritChances();
