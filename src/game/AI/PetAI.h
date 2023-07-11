@@ -63,15 +63,11 @@ class PetAI : public CreatureAI
         bool _needToStop() const;
         void _stopAttack();
 
-        void UpdateAllies();
-
-        uint32 m_updateAlliesTimer;
-        std::set<uint64> m_AllySet;
-
         std::pair<Unit*, ePetSelectTargetReason> SelectNextTarget() const;
         void HandleReturnMovement();
         void DoAttack(Unit* target, bool chase);
         bool CanAttack(Unit* target);
         void ClearCharmInfoFlags();
+        void UpdateSpells();
 };
 #endif
