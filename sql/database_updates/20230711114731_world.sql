@@ -362,14 +362,14 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61605, 30589, 100, 1, -30589, 1, 0),
 (61605, 83157, 0.18, 0, 1, 1, 0);
-
 -- Add the following drop loot to creature Epidamu, all of these items should be on the same lootgroup, and he should always drop 1 of them.
 update creature_loot_template set groupid = 1 where entry = 61575 and item = 30587 and mincountOrRef = -30587;
 update reference_loot_template set groupid = 1 where entry = 30587;
-
 -- Add the following drop to npc Antnormi (Entry 65125) with a 1.1% drop chance, this item should be on its OWN lootgroup: Eye of the Abyss (Entry 61043).
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (65125, 61043, 1.1, 8, 1, 1, 0);
-
 -- Reduce dropchance of the following items to 4.1%: 61428, 61424, 61432, 61218, 61217.
 update creature_loot_template set ChanceOrQuestChance = 4.4 where entry = 60748 and item in (61428, 61424, 61432, 61218, 61217);
+-- Object 'Favor of Erennius' add loot 'Fading Dream Fragment' (Entry 61197) with a drop chance of 48% on its own loot group.
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(2020042, 61197, 48, 1, 1, 1, 0);
