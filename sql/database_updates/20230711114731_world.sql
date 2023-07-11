@@ -373,3 +373,18 @@ update creature_loot_template set ChanceOrQuestChance = 4.4 where entry = 60748 
 -- Object 'Favor of Erennius' add loot 'Fading Dream Fragment' (Entry 61197) with a drop chance of 48% on its own loot group.
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (2020042, 61197, 48, 1, 1, 1, 0);
+-- Add item 61738 drop chance to Genn Greymane on its own loot group with 5.7%:
+replace into item_template values
+ ('61738', '9', '8', 'Formula: Enchant Bracer - Vampirism', '', '7798', '2', '0', '1', '25000', '1500', '0', '-1', '-1', '40',
+ '0', '333', '185', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '57147', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61418, 61738, 5.7, 3, 1, 1, 0);
+-- Add this same item as a sellable item to the loot table of (61574) 'Stickypaws' as a limited x1 with a restock timer of 5 hours.
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES
+(61574, 0, 61738, 1, 18000, 0, 0);
