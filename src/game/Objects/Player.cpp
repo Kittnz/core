@@ -23464,17 +23464,6 @@ bool Player::SetupHardcoreMode()
     }
 
     CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
-
-    ChannelMgr* cMgr = channelMgr(GetTeam());
-    if (cMgr)
-    {
-        if (Channel* chn = cMgr->GetOrCreateChannel("Hardcore"))
-        {
-            chn->Join(GetObjectGuid(), "", false);
-           // chn->List(GetSession()->GetPlayerPointer());
-        }
-    }
-
     return true;
 }
 
