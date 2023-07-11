@@ -363,3 +363,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61605, 30589, 100, 1, -30589, 1, 0),
 (61605, 83157, 0.18, 0, 1, 1, 0);
 
+-- Add the following drop loot to creature Epidamu, all of these items should be on the same lootgroup, and he should always drop 1 of them.
+update creature_loot_template set groupid = 1 where entry = 61575 and item = 30587 and mincountOrRef = -30587;
+update reference_loot_template set groupid = 1 where entry = 30587;
+
