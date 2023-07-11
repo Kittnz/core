@@ -26,6 +26,8 @@ void AccountAnalyser::LoadFingerprintsCallback(QueryResult* result, uint32 Sessi
 	WorldSession* AccountSession = sWorld.FindSession(SessionID);
 	if (AccountSession == nullptr)
 	{
+        if (result)
+            delete result;
 		return;
 	}
 
