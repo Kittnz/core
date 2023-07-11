@@ -370,3 +370,6 @@ update reference_loot_template set groupid = 1 where entry = 30587;
 -- Add the following drop to npc Antnormi (Entry 65125) with a 1.1% drop chance, this item should be on its OWN lootgroup: Eye of the Abyss (Entry 61043).
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (65125, 61043, 1.1, 8, 1, 1, 0);
+
+-- Reduce dropchance of the following items to 4.1%: 61428, 61424, 61432, 61218, 61217.
+update creature_loot_template set ChanceOrQuestChance = 4.4 where entry = 60748 and item in (61428, 61424, 61432, 61218, 61217);
