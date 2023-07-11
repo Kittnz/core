@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "SocialMgr.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -2550,6 +2551,29 @@ void World::SendZoneText(uint32 zone, const char* text, WorldSession *self, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, text);
     SendZoneMessage(zone, &data, self, team);
+}
+
+void World::SendHardcoreMessage(WorldPacket* packet, WorldSession* self)
+{
+    for (const auto& itr : m_sessions)
+    {
+        if (WorldSession* session = itr.second)
+        {
+            if (session != self)
+            {
+                Player* player = session->GetPlayer();
+                // base check
+                if (player && player->IsInWorld() && ((player->IsHardcore() || player->IsHC60()) || player->GetSession()->GetSecurity() > SEC_PLAYER))
+                {
+                    // social check
+                    if (player->GetSocial() && !player->GetSocial()->HasIgnore(self->GetPlayer()->GetObjectGuid()))
+                        session->SendPacket(packet);          
+                }
+            }
+            else
+                self->SendPacket(packet);
+        }
+    }
 }
 
 /// Kick (and save) all players
