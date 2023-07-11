@@ -388,3 +388,24 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- Add this same item as a sellable item to the loot table of (61574) 'Stickypaws' as a limited x1 with a restock timer of 5 hours.
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES
 (61574, 0, 61738, 1, 18000, 0, 0);
+-- Add item 61739 drop chance to the following creatures, on the same loot group as item 8547, this item should have a drop chance of 1.3%:
+-- Brood Queen Araxxna
+-- Lord Blackwald II
+-- Grizikil
+-- Clawlord Howlfang
+-- Moroes (Entry 61226)
+replace into item_template values
+ ('61739', '9', '8', 'Formula: Enchant Boots - Vampirism', '', '7798', '3', '0', '1', '25000', '1500', '0', '-1', '-1', '40',
+ '0', '333', '300', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '57149', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61221, 61739, 1.3, 11, 1, 1, 0),
+(61222, 61739, 1.3, 11, 1, 1, 0),
+(61223, 61739, 1.3, 11, 1, 1, 0),
+(61224, 61739, 1.3, 11, 1, 1, 0),
+(61226, 61739, 1.3, 11, 1, 1, 0);
