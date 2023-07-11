@@ -516,6 +516,7 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578247,8, -4554.424316,-791.460388,-49.399342, 100);
 REPLACE INTO `creature` VALUES (2578247,61600,0,0,0,1,-4549.69,-786.561,-48.6012,5.62326,300,300,0,100,100,2,0,0);
 REPLACE INTO `creature` VALUES (2578248,61600,0,0,0,1,-4380.34,-723.132,-28.4373,2.4581,120,120,0,100,100,0,0,0);
+DELETE FROM creature_movement WHERE id=2578248;
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578248,1, -4380.344727,-723.132385,-28.437330, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578248,2, -4391.056152,-712.180420,-30.655880, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578248,3, -4416.408691,-709.765015,-30.649057, 100);
