@@ -39,9 +39,8 @@ int PetAI::Permissible(Creature const* creature)
     return PERMIT_BASE_NO;
 }
 
-PetAI::PetAI(Creature* c) : CreatureAI(c), m_updateAlliesTimer(0)
+PetAI::PetAI(Creature* c) : CreatureAI(c)
 {
-    UpdateAllies();
     // Warlock imp has no melee attack
     m_bMeleeAttack = (c->GetEntry() != 416);
 }
@@ -142,12 +141,6 @@ void PetAI::UpdateAI(uint32 const diff)
     // part of it must run during eyes of the Beast to update melee hits
     bool playerControlled = m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
 
-    if (m_updateAlliesTimer <= diff)
-        // UpdateAllies self set update timer
-        UpdateAllies();
-    else
-        m_updateAlliesTimer -= diff;
-
     // First checking if we have some taunt on us
     Unit* tauntTarget = !playerControlled ? m_creature->GetTauntTarget() : nullptr;
     if (tauntTarget)
@@ -183,201 +176,188 @@ void PetAI::UpdateAI(uint32 const diff)
         return;
 
     // Autocast (casted only in combat or persistent spells in any state)
-    if (!m_creature->IsNonMeleeSpellCasted(false))
+    if (m_uiCastingDelay >= CREATURE_CASTING_DELAY)
     {
-        Unit* owner = m_creature->GetCharmerOrOwner();
-        typedef std::vector<std::pair<Unit*, Spell*> > TargetSpellList;
-        TargetSpellList targetSpellStore;
+        if (!m_creature->IsNonMeleeSpellCasted(false))
+            UpdateSpells();
 
-        for (uint8 i = 0; i < m_creature->GetPetAutoSpellSize(); ++i)
-        {
-            uint32 spellId = m_creature->GetPetAutoSpellOnPos(i);
-            if (!spellId)
-                continue;
-
-            SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
-            if (!spellInfo)
-                continue;
-
-            if (m_creature->GetGlobalCooldownMgr().HasGlobalCooldown(spellInfo))
-                continue;
-
-            // check spell cooldown
-            if (m_creature->HasSpellCooldown(spellInfo->Id))
-                continue;
-
-            if (spellInfo->IsPositiveSpell())
-            {
-                if (!spellInfo->IsNonCombatSpell()) // Can be used in combat.
-                {
-                    /*
-                    Spells handled here:
-                        Dash (1850), Dive (23145), Furious Howl (24604), Tainted Blood (19478)
-                        Blood Pact (6307), Fire Shield (11771), Sacrifice ...
-                        Consume Shadows (17767)
-                    */
-
-                    // Warlock Sacrifice: do not auto cast if not in combat
-                    bool castOnlyInCombat = spellInfo->HasEffect(SPELL_EFFECT_INSTAKILL);
-
-                    if (!castOnlyInCombat)
-                    {
-                        int32 duration = spellInfo->GetDuration();
-                        int32 cooldown = spellInfo->GetRecoveryTime();
-                        // Keep this spell for when we will be in combat.
-                        if (cooldown >= 0 && duration >= 0 && cooldown > duration)
-                            castOnlyInCombat = true;
-                    }
-                    // 19478 - Tainted Blood, rank 1 enUS
-                    if (spellInfo->SpellIconID == 153)
-                        castOnlyInCombat = true;
-                    // 2947 - Fire Shield, rank 1 enUS
-                    // When set to auto-cast, the Imp will cast this on any party members within 30 yds if they receive a melee attack.
-                    if (spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_IMP_BUFFS>() && spellInfo->SpellVisual == 289)
-                        castOnlyInCombat = false;
-                    // Furious Howl: in combat only
-                    if (spellInfo->HasAura(SPELL_AURA_MOD_DAMAGE_DONE))
-                        castOnlyInCombat = true;
-                    if (castOnlyInCombat && !m_creature->GetVictim())
-                        continue;
-                }
-
-                Spell* spell = new Spell(m_creature, spellInfo, false);
-                bool spellUsed = false;
-
-                // Some spells can target enemy or friendly (DK Ghoul's Leap)
-                // Check for enemy first (pet then owner)
-                Unit* target = m_creature->GetAttackerForHelper();
-                if (!target && owner)
-                    target = owner->GetAttackerForHelper();
-
-                if (target)
-                {
-                    if (CanAttack(target) && spell->CanAutoCast(target))
-                    {
-                        targetSpellStore.push_back(std::make_pair(target, spell));
-                        spellUsed = true;
-                    }
-                }
-
-                // No enemy, check friendly
-                if (!spellUsed)
-                {
-                    for (const auto& guid : m_AllySet)
-                    {
-                        Unit* ally = m_creature->GetMap()->GetUnit(guid);
-
-                        //only buff targets that are in combat, unless the spell can only be cast while out of combat
-                        if (!ally)
-                            continue;
-
-                        if (spell->CanAutoCast(ally))
-                        {
-                            targetSpellStore.push_back(std::make_pair(ally, spell));
-                            spellUsed = true;
-                            break;
-                        }
-                    }
-                }
-
-                // No valid targets at all
-                if (!spellUsed)
-                    spell->Delete();
-            }
-            else if (m_creature->GetVictim() && CanAttack(m_creature->GetVictim()) && !spellInfo->IsNonCombatSpell())
-            {
-                Spell* spell = new Spell(m_creature, spellInfo, false);
-                if (spell->CanAutoCast(m_creature->GetVictim()))
-                    targetSpellStore.push_back(std::make_pair(m_creature->GetVictim(), spell));
-                else
-                    spell->Delete();
-            }
-        }
-
-        //found units to cast on to
-        if (!targetSpellStore.empty())
-        {
-            uint32 index = urand(0, targetSpellStore.size() - 1);
-
-            Spell* spell  = targetSpellStore[index].second;
-            Unit*  target = targetSpellStore[index].first;
-
-            targetSpellStore.erase(targetSpellStore.begin() + index);
-
-            SpellCastTargets targets;
-            targets.setUnitTarget(target);
-
-            if (!m_creature->HasInArc(target))
-            {
-                m_creature->SetInFront(target);
-                if (target->GetTypeId() == TYPEID_PLAYER)
-                    m_creature->SendCreateUpdateToPlayer((Player*)target);
-
-                if (owner && owner->GetTypeId() == TYPEID_PLAYER)
-                    m_creature->SendCreateUpdateToPlayer((Player*)owner);
-            }
-
-            if (((Creature*)m_creature)->IsPet())
-                ((Pet*)m_creature)->CheckLearning(spell->m_spellInfo->Id);
-
-            // 10% chance to play special pet attack talk, else growl
-            // actually this only seems to happen on special spells, fire shield for imp, torment for voidwalker, but it's stupid to check every spell
-            if (((Creature*)m_creature)->IsPet() && (((Pet*)m_creature)->getPetType() == SUMMON_PET) && (m_creature != target) && (urand(0, 100) < 10))
-                m_creature->SendPetTalk((uint32)PET_TALK_SPECIAL_SPELL);
-            else
-                m_creature->SendPetAIReaction();
-
-            spell->prepare(std::move(targets));
-        }
-
-        // deleted cached Spell objects
-        for (const auto& itr : targetSpellStore)
-            itr.second->Delete();
+        m_uiCastingDelay -= CREATURE_CASTING_DELAY;
     }
+    else
+        m_uiCastingDelay += diff;
 
     // Update speed as needed to prevent dropping too far behind and despawning
     m_creature->UpdateSpeed(MOVE_RUN, false);
     m_creature->UpdateSpeed(MOVE_WALK, false);
 }
 
-void PetAI::UpdateAllies()
+void PetAI::UpdateSpells()
 {
     Unit* owner = m_creature->GetCharmerOrOwner();
-    Group* group = nullptr;
+    typedef std::vector<std::pair<Unit*, Spell*> > TargetSpellList;
+    TargetSpellList targetSpellStore;
 
-    m_updateAlliesTimer = 10 * IN_MILLISECONDS;              //update friendly targets every 10 seconds, lesser checks increase performance
-
-    if (!owner)
-        return;
-    else if (owner->GetTypeId() == TYPEID_PLAYER)
-        group = ((Player*)owner)->GetGroup();
-
-    //only pet and owner/not in group->ok
-    if (m_AllySet.size() == 2 && !group)
-        return;
-
-    //owner is in group; group members filled in already (no raid -> subgroupcount = whole count)
-    if (group && !group->isRaidGroup() && m_AllySet.size() == (group->GetMembersCount() + 2))
-        return;
-
-    m_AllySet.clear();
-    m_AllySet.insert(m_creature->GetObjectGuid());
-    if (group)                                             //add group
+    for (uint8 i = 0; i < m_creature->GetPetAutoSpellSize(); ++i)
     {
-        for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+        uint32 spellId = m_creature->GetPetAutoSpellOnPos(i);
+        if (!spellId)
+            continue;
+
+        SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+        if (!spellInfo)
+            continue;
+
+        if (m_creature->GetGlobalCooldownMgr().HasGlobalCooldown(spellInfo))
+            continue;
+
+        // check spell cooldown
+        if (m_creature->HasSpellCooldown(spellInfo->Id))
+            continue;
+
+        if (spellInfo->IsPositiveSpell())
         {
-            Player* target = itr->getSource();
-            if (!target || !group->SameSubGroup((Player*)owner, target))
-                continue;
+            if (!spellInfo->IsNonCombatSpell()) // Can be used in combat.
+            {
+                /*
+                Spells handled here:
+                    Dash (1850), Dive (23145), Furious Howl (24604), Tainted Blood (19478)
+                    Blood Pact (6307), Fire Shield (11771), Sacrifice ...
+                    Consume Shadows (17767)
+                */
 
-            if (target->GetObjectGuid() == owner->GetObjectGuid())
-                continue;
+                // Warlock Sacrifice: do not auto cast if not in combat
+                bool castOnlyInCombat = spellInfo->HasEffect(SPELL_EFFECT_INSTAKILL);
 
-            m_AllySet.insert(target->GetObjectGuid());
+                if (!castOnlyInCombat)
+                {
+                    int32 duration = spellInfo->GetDuration();
+                    int32 cooldown = spellInfo->GetRecoveryTime();
+                    // Keep this spell for when we will be in combat.
+                    if (cooldown >= 0 && duration >= 0 && cooldown > duration)
+                        castOnlyInCombat = true;
+                }
+                // 19478 - Tainted Blood, rank 1 enUS
+                if (spellInfo->SpellIconID == 153)
+                    castOnlyInCombat = true;
+                // 2947 - Fire Shield, rank 1 enUS
+                // When set to auto-cast, the Imp will cast this on any party members within 30 yds if they receive a melee attack.
+                if (spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_IMP_BUFFS>() && spellInfo->SpellVisual == 289)
+                    castOnlyInCombat = false;
+                // Furious Howl: in combat only
+                if (spellInfo->HasAura(SPELL_AURA_MOD_DAMAGE_DONE))
+                    castOnlyInCombat = true;
+                if (castOnlyInCombat && !m_creature->GetVictim())
+                    continue;
+            }
+
+            Spell* spell = new Spell(m_creature, spellInfo, false);
+            bool spellUsed = false;
+
+            // Some spells can target enemy or friendly (DK Ghoul's Leap)
+            // Check for enemy first (pet then owner)
+            Unit* target = m_creature->GetAttackerForHelper();
+            if (!target && owner)
+                target = owner->GetAttackerForHelper();
+
+            if (target)
+            {
+                if (CanAttack(target) && spell->CanAutoCast(target))
+                {
+                    targetSpellStore.push_back(std::make_pair(target, spell));
+                    spellUsed = true;
+                }
+            }
+
+            // No enemy, check friendly
+            if (!spellUsed)
+            {
+                if (Player* pPlayer = owner->ToPlayer())
+                {
+                    if (Group* pGroup = pPlayer->GetGroup())
+                    {
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            Player* pAlly = itr->getSource();
+                            if (!pAlly || !pGroup->SameSubGroup(pPlayer, pAlly))
+                                continue;
+
+                            if (spell->CanAutoCast(pAlly))
+                            {
+                                targetSpellStore.push_back(std::make_pair(pAlly, spell));
+                                spellUsed = true;
+                                break;
+                            }
+
+                            if (pAlly->GetObjectGuid() != pPlayer->GetObjectGuid())
+                            {
+                                if (Unit* pAllyPet = pAlly->GetPet())
+                                {
+                                    if (spell->CanAutoCast(pAllyPet))
+                                    {
+                                        targetSpellStore.push_back(std::make_pair(pAllyPet, spell));
+                                        spellUsed = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // No valid targets at all
+            if (!spellUsed)
+                spell->Delete();
+        }
+        else if (m_creature->GetVictim() && CanAttack(m_creature->GetVictim()) && !spellInfo->IsNonCombatSpell())
+        {
+            Spell* spell = new Spell(m_creature, spellInfo, false);
+            if (spell->CanAutoCast(m_creature->GetVictim()))
+                targetSpellStore.push_back(std::make_pair(m_creature->GetVictim(), spell));
+            else
+                spell->Delete();
         }
     }
-    else                                                    //remove group
-        m_AllySet.insert(owner->GetObjectGuid());
+
+    //found units to cast on to
+    if (!targetSpellStore.empty())
+    {
+        uint32 index = urand(0, targetSpellStore.size() - 1);
+
+        Spell* spell  = targetSpellStore[index].second;
+        Unit*  target = targetSpellStore[index].first;
+
+        targetSpellStore.erase(targetSpellStore.begin() + index);
+
+        SpellCastTargets targets;
+        targets.setUnitTarget(target);
+
+        if (!m_creature->HasInArc(target))
+        {
+            m_creature->SetInFront(target);
+            if (target->GetTypeId() == TYPEID_PLAYER)
+                m_creature->SendCreateUpdateToPlayer((Player*)target);
+
+            if (owner && owner->GetTypeId() == TYPEID_PLAYER)
+                m_creature->SendCreateUpdateToPlayer((Player*)owner);
+        }
+
+        if (((Creature*)m_creature)->IsPet())
+            ((Pet*)m_creature)->CheckLearning(spell->m_spellInfo->Id);
+
+        // 10% chance to play special pet attack talk, else growl
+        // actually this only seems to happen on special spells, fire shield for imp, torment for voidwalker, but it's stupid to check every spell
+        if (((Creature*)m_creature)->IsPet() && (((Pet*)m_creature)->getPetType() == SUMMON_PET) && (m_creature != target) && (urand(0, 100) < 10))
+            m_creature->SendPetTalk((uint32)PET_TALK_SPECIAL_SPELL);
+        else
+            m_creature->SendPetAIReaction();
+
+        spell->prepare(std::move(targets));
+    }
+
+    // deleted cached Spell objects
+    for (const auto& itr : targetSpellStore)
+        itr.second->Delete();
 }
 
 void PetAI::KilledUnit(Unit* victim)

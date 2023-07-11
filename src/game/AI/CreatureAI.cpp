@@ -187,23 +187,18 @@ void CreatureAI::SetSpellsList(const CreatureSpellsList *pSpellsList)
         m_CreatureSpells.push_back(CreatureAISpellsEntry(entry));
     }
     m_CreatureSpells.shrink_to_fit();
-    m_uiCastingDelay = 0;
+    m_uiCastingDelay = CREATURE_CASTING_DELAY;
 }
-
-// Creature spell lists should be updated every 1.2 seconds according to research.
-// https://www.reddit.com/r/wowservers/comments/834nt5/felmyst_ai_system_research/
-#define CREATURE_CASTING_DELAY 1200
 
 void CreatureAI::UpdateSpellsList(const uint32 uiDiff)
 {
-    if (m_uiCastingDelay <= uiDiff)
+    if (m_uiCastingDelay >= CREATURE_CASTING_DELAY)
     {
-        uint32 const uiDesync = (uiDiff - m_uiCastingDelay);
-        DoSpellsListCasts(CREATURE_CASTING_DELAY + uiDesync);
-        m_uiCastingDelay = uiDesync < CREATURE_CASTING_DELAY ? CREATURE_CASTING_DELAY - uiDesync : 0;
+        DoSpellsListCasts(m_uiCastingDelay);
+        m_uiCastingDelay = 0;
     }
     else
-        m_uiCastingDelay -= uiDiff;
+        m_uiCastingDelay += uiDiff;
 }
 
 void CreatureAI::DoSpellsListCasts(const uint32 uiDiff)
