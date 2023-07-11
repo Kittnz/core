@@ -27,3 +27,9 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578268,6, -940.603577,2937.059326,133.911057, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578268,7, -944.017639,2932.109619,133.921204, 100);
 REPLACE INTO `creature` VALUES (2578268,61605,0,0,0,815,-947.452,2927.15,133.921,0.966982,300,300,0,100,100,2,0,0);
+DELETE FROM creature WHERE guid=2578192;
+DELETE FROM creature_addon WHERE guid=2578192;
+DELETE FROM creature_movement WHERE id=2578192;
+DELETE FROM game_event_creature WHERE guid=2578192;
+DELETE FROM game_event_creature_data WHERE guid=2578192;
+DELETE FROM creature_battleground WHERE guid=2578192;
