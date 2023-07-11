@@ -321,3 +321,45 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Horsemaster Levvin should drop 0.18% chance to drop Greymane Charger (entry 83157) and one of the following items below:
+replace into item_template values
+ ('61734', '4', '2', 'Horsemaster Belt', '', '28012', '2', '0', '1', '22404', '5601', '6', '-1', '-1', '49',
+ '44', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '9', '3', '6',
+ '6', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '71', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61735', '2', '10', 'Stablehand Broom', '', '3509', '2', '0', '1', '115620', '28905', '17', '-1', '-1', '49',
+ '44', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '18', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3500', '0',
+ '0', '78', '188', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '85', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61736', '4', '0', 'Horse Rustler Drape', '', '23103', '2', '0', '1', '24432', '6108', '16', '-1', '-1', '49',
+ '44', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '11', '3', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '33', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61737, 'Stablemaster\'s Nightlight', '', 4, 0, 1, 3, 7461, 1, 44, 0, -1, -1, 51115, 12778, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 46, 0, 0, 0, 0, 0, 0, 6, 10, 9401, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30589, 61734, 0, 1, 1, 1, 0),
+(30589, 61735, 0, 1, 1, 1, 0),
+(30589, 61736, 0, 1, 1, 1, 0),
+(30589, 61737, 0, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61605, 30589, 100, 1, -30589, 1, 0),
+(61605, 83157, 0.18, 0, 1, 1, 0);
+
