@@ -535,3 +535,9 @@ REPLACE INTO `creature` VALUES (2578249,61600,0,0,0,1,-4489.51,-693.159,19.6149,
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578239, 10);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578239, 378);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578238, 378);
+DELETE FROM creature WHERE guid=2558309;
+DELETE FROM creature_addon WHERE guid=2558309;
+DELETE FROM creature_movement WHERE id=2558309;
+DELETE FROM game_event_creature WHERE guid=2558309;
+DELETE FROM game_event_creature_data WHERE guid=2558309;
+DELETE FROM creature_battleground WHERE guid=2558309;
