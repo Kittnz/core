@@ -106,6 +106,8 @@ void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, uint32 SessionI
     WorldSession* AccountSession = sWorld.FindSession(SessionID);
     if (AccountSession == nullptr)
     {
+        if (result)
+            delete result;
         return;
     }
 
