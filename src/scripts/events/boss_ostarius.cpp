@@ -63,6 +63,7 @@ struct boss_ostariusAI : public ScriptedAI
     uint32 m_chainLightningTimer = 0;
     uint32 m_spawnPortalsTimer = 0;
     uint32 m_spawnDevicesTimer = 0;
+    uint32 m_teleportTargetTimer = 0;
 
     std::vector<ObjectGuid> m_constructSpawns;
     std::vector<ObjectGuid> m_sentrySpawns;
@@ -112,6 +113,7 @@ struct boss_ostariusAI : public ScriptedAI
         m_spawnPortalsTimer = 0;
         m_spawnDevicesTimer = 0;
         m_portalActivateTimer = 10000;
+        m_teleportTargetTimer = 3000;
 
         me->SetAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
 
@@ -255,6 +257,16 @@ struct boss_ostariusAI : public ScriptedAI
 
         if (!me->SelectHostileTarget() || !me->GetVictim())
             return;
+
+        if (m_teleportTargetTimer <= diff)
+        {
+            if (!me->CanReachWithMeleeAutoAttack(me->GetVictim()))
+                me->CastSpell(me->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
+            m_teleportTargetTimer = 3000;
+        }
+        else
+            m_teleportTargetTimer -= diff;
 
         // Timer events
         while (uint32 eventId = m_events.ExecuteEvent())

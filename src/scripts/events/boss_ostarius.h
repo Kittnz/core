@@ -29,6 +29,7 @@ constexpr std::uint32_t SPELL_MORTALITY_SCAN = 57005;
 constexpr std::uint32_t SPELL_CONFLAG = 16805;
 constexpr std::uint32_t SPELL_SANDSTORM = 57002;
 constexpr std::uint32_t SPELL_TARGET_CHANNEL = 57004;
+constexpr std::uint32_t SPELL_SUMMON_PLAYER = 26229;
 
 constexpr std::uint32_t SPELL_STOMP = 27993;
 constexpr std::uint32_t SPELL_EARTHQUAKE = 19798;
