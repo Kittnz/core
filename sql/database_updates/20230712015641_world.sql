@@ -457,3 +457,4 @@ DELETE FROM gameobject_battleground WHERE guid = '4010702';
 DELETE FROM gameobject WHERE guid = '4010375';
 DELETE FROM game_event_gameobject WHERE guid = '4010375';
 DELETE FROM gameobject_battleground WHERE guid = '4010375';
+REPLACE INTO `creature` VALUES (2578319,61558,0,0,0,0,-1382.16,1698.62,86.982,0.970915,120,120,0,100,100,0,0,0);
