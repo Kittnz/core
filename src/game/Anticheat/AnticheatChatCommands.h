@@ -16,6 +16,14 @@ static ChatCommand anticheatFingerprintCommandTable[] =
     { nullptr,   0,                  false, nullptr,                                             "", nullptr },
 };
 
+
+static ChatCommand anticheatHwprintCommandTable[] =
+{
+    { "mark",      SEC_ADMINISTRATOR, true, &ChatHandler::HandleAnticheatHwPrintMarkCommand,      "", nullptr },
+    { "list",      SEC_DEVELOPER, true, &ChatHandler::HandleAnticheatHwPrintListCommand,      "", nullptr },
+    { nullptr,   0,                  false, nullptr,                                             "", nullptr },
+};
+
 static ChatCommand anticheatCommandTable[] =
 {
     { "info",         SEC_DEVELOPER,    true,  &ChatHandler::HandleAnticheatInfoCommand,           "", nullptr },
@@ -24,6 +32,7 @@ static ChatCommand anticheatCommandTable[] =
     { "unsilence",    SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatUnsilenceCommand,      "", nullptr },
     { "spaminfo",     SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatSpaminfoCommand,       "", nullptr },
     { "fingerprint",  SEC_ADMINISTRATOR, false, nullptr,                                            "", anticheatFingerprintCommandTable },
+    { "hwprint",      SEC_DEVELOPER,    true, nullptr,                                            "", anticheatHwprintCommandTable},
     { "cheatinform",  SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatCheatinformCommand,    "", nullptr },
     { "spaminform",   SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatSpaminformCommand,     "", nullptr },
     { "blacklist",    SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatBlacklistCommand,      "", nullptr },

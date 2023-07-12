@@ -138,6 +138,47 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
+{
+    uint32 extendedPrint;
+
+    if (!ExtractUInt32(&args, extendedPrint))
+    {
+        PSendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
+{
+    uint32 extendedPrint;
+
+    if (!ExtractUInt32(&args, extendedPrint))
+    {
+        PSendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+    PSendSysMessage("Listing logged in clients with extended FP %u:", extendedPrint);
+
+    const auto& sessions = sWorld.GetAllSessions();
+    for (const auto& sessionPair : sessions)
+    {
+        const auto& session = sessionPair.second;
+        auto& sample = session->_analyser->GetCurrentSample();
+        if (sample.GetHash() == extendedPrint)
+        {
+            auto player = session->GetPlayer();
+            PSendSysMessage("Found Match for Account ID %u, player %s (GUID %u). IP: %s", session->GetAccountId(), player ? player->GetName() : "<None> (Not logged in)", player ? player->GetGUIDLow() : 0
+                , session->GetRemoteAddress().c_str());
+        }
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
 {
     uint32 fingerprintNum = 0;
