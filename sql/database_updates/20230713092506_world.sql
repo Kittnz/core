@@ -373,3 +373,8 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61565, 8952, 4.7864, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61565, 14047, 24.692, 0, 1, 2, 0);
 
+-- Prof recipe req changes.
+update spell_template SET ReagentCount1 = 2 WHERE entry = 17580; -- Major Mana Potion Crafting Recipe
+update spell_template SET ReagentCount2 = 3, ReagentCount3 = 3 WHERE entry = 22732; -- Major Rejuvenation Potion Crafting Recipe
+update spell_template SET ReagentCount2 = 2 WHERE entry = 3449; -- Shadow Oil Crafting Recipe
+update spell_template SET EffectItemType1 = 60001 WHERE entry = 46068; -- Cleaning Cloth Craft
