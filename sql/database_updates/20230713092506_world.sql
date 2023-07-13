@@ -473,4 +473,6 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 set @equip_template = 20426; set @weapon_1 = 61752; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61578;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Rename quest 41055 to Dreamscale Collection.
+update quest_template set title = 'Dreamscale Collection' where entry = 41055;
 
