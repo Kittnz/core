@@ -486,3 +486,5 @@ update creature set id = 61606, health_percent = 0, mana_percent = 0, movement_t
 
 REPLACE INTO creature_template VALUES
 (61606, 6172, 0, 0, 0, 0, 'Hederine Manastalker', NULL, 0, 59, 60, 17766, 18312, 0, 0, 3059, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 2, 36, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 3, 0, 7462, 0, 7462, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, '');
+-- NPC Ralathius had his greeting text overwritten. Restore his previous greeting text.
+update broadcast_text set male_text = 'Hidden beneath the veil, a great shadow lurks within the dream, already much of my kind have been disturbed by the presence.$B$BYou may not know this, but the awakening has begun.$B$BAn ancient ritual of my kin intended to draw us from the dream, I have resisted it\'s temptations already, but not all are willed so strong.' where entry = 61326;
