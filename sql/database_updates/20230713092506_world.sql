@@ -410,3 +410,25 @@ update item_template set max_durability = 100 where entry = 80642; -- Revantusk 
 update item_template set max_durability = 55 where entry = 80502; -- Curved Ceremonial Staff
 update item_template set max_durability = 40 where entry = 80624; -- Revantusk Shadow Hunter's Belt
 update item_template set max_durability = 40 where entry = 80524; -- Quel'dorei Ranger's Belt
+
+-- Implement cleaning cloth.
+replace into item_template values
+ ('60001', '0', '0', 'Cleaning Cloth', '', '7596', '1', '0', '1', '400', '50', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '46070', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60002', '9', '0', 'Outline: Cleaning Cloth', '', '15274', '2', '0', '1', '15000', '3750', '0', '-1', '-1', '55',
+ '0', '51', '50', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '46069', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- New rare c'thun drop.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (60003, 'Remnants of an Old God', '', 2, 13, 1, 4, 67783, 1, 60, 1, -1, -1, 1034835, 206967, 21, 3, 0, 0, 1, 1, 0, 126, 233, 2700, 0, 0, 75, 0, 0, 0, 84, 0, 65, 0, 0, 0, 0, 0, 0, 7, 8, 14089, 1, 0, 0, -1, 0, -1, 46040, 1, 0, 0, -1, 0, -1, 0, 0, 0); -- Remnants of an Old God.
