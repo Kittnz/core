@@ -14208,12 +14208,12 @@ bool ChatHandler::HandleRadioCommand(char* args)
 
     if (value)
     {
-        m_session->GetPlayer()->PlayDirectSound(60401);  // http://turtle-wow.org/radio
+        m_session->GetPlayer()->PlayDirectMusic(60401);  // http://turtle-wow.org/radio
         return true;
     }
     else
     {
-        m_session->GetPlayer()->PlayDirectSound(68); 
+        m_session->GetPlayer()->PlayDirectMusic(68); 
         return true;
     }
 
