@@ -378,3 +378,35 @@ update spell_template SET ReagentCount1 = 2 WHERE entry = 17580; -- Major Mana P
 update spell_template SET ReagentCount2 = 3, ReagentCount3 = 3 WHERE entry = 22732; -- Major Rejuvenation Potion Crafting Recipe
 update spell_template SET ReagentCount2 = 2 WHERE entry = 3449; -- Shadow Oil Crafting Recipe
 update spell_template SET EffectItemType1 = 60001 WHERE entry = 46068; -- Cleaning Cloth Craft
+
+-- dreamsteel
+update item_template set stat_value2 = 12 where entry = 61364; -- Dreamsteel Mantle
+update item_template set stat_value1 = 36, spellid_2 = 48034 where entry = 61365; -- Dreamsteel Leggings
+update item_template set stat_value1 = 18, spellid_1 = 13679, spelltrigger_1 = 1 where entry = 61366; -- Dreamsteel Bracers
+-- dreamthread
+update item_template set stat_value3 = 5, spellid_2 = 21364 where entry = 61360; -- Dreamthread Mantle
+update item_template set spellid_3 = 21629 where entry = 61361; -- Dreamthread Kilt
+update item_template set stat_value1 = 7 where entry = 61362; -- Dreamthread Bracers
+update item_template set stat_value1 = 7, stat_value3 = 7, spellid_1 = 15715, spellid_2 = 21364, spelltrigger_2 = 1 where entry = 61363; -- Dreamthread Gloves
+-- dreamhide
+update item_template set stat_value1 = 12, stat_value2 = 20, stat_value3 = 9 where entry = 61356; -- Dreamhide Mantle
+update item_template set stat_value2 = 11 where entry = 61358; -- Dreamhide Leggings
+update item_template set stat_value2 = 6 where entry = 61357; -- Dreamhide Bracers
+update item_template set stat_value2 = 14, stat_value3 = 15 where entry = 61359; -- Dreamhide Belt
+-- misc
+update item_template set inventory_type = 13, spellid_1 = 17315, spelltrigger_1 = 2, spellppmRate_1 = 1 where entry = 12798; -- Annihilator
+update item_template set subclass = 6, name = 'Blade of the Blademaster' where entry = 81369; -- Sword of the Blademaster
+update item_template set spellid_1 = 20487 where entry = 61337; -- Libram of the Justicar
+update item_template set spellid_1 = 15873, spellid_2 = 7576, spellid_3 = 15896, spellid_4 = 46040, spelltrigger_4 = 1 where entry = 14551; -- Edgemaster's Handguards
+update item_template set allowable_class = -1 where entry = 81007; -- Blackened Defias Mask
+update item_template set stat_type1 = 3 where entry = 19608;
+update item_template set stat_type1 = 3 where entry = 19607;
+update item_template set stat_value1 = 17, stat_value2 = 20, spellid_1 = 23727, spellid_2 = 17367 where entry = 19607; -- Leggings of Arcana
+update item_template set spellid_2 = 13679 where entry = 12757; -- Breastplate of Bloodthirst
+update item_template set spellid_3 = 0 where entry = 61186; -- Gloves of Unwinding Mystery
+update item_template set required_spell = 9787 where entry = 61189; -- Plans: Dawnstone Hammer
+update item_template set max_durability = 100 where entry = 80542; -- Quel'dorei Cleric's Staff
+update item_template set max_durability = 100 where entry = 80642; -- Revantusk Mender's Cane
+update item_template set max_durability = 55 where entry = 80502; -- Curved Ceremonial Staff
+update item_template set max_durability = 40 where entry = 80624; -- Revantusk Shadow Hunter's Belt
+update item_template set max_durability = 40 where entry = 80524; -- Quel'dorei Ranger's Belt
