@@ -475,4 +475,6 @@ replace into creature_equip_template values (@equip_template, @weapon_1, @weapon
 update creature_template set equipment_id = @equip_template where entry = @creature;
 -- Rename quest 41055 to Dreamscale Collection.
 update quest_template set title = 'Dreamscale Collection' where entry = 41055;
+-- Item "Windtalker Cape" (Entry 61709) change display ID to 26233.
+update item_template set display_id = 26233 where entry = 61709;
 
