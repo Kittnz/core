@@ -648,6 +648,7 @@ class ChatHandler
         bool HandleXPCommand(char* args);
         bool HandleHCInviteCommand(char* args);
         bool HandlePlayCommand(char* args);
+        bool HandleRadioCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);

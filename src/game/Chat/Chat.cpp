@@ -804,6 +804,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcinvite",       SEC_PLAYER,          false, &ChatHandler::HandleHCInviteCommand,            "", nullptr },
         { "settime",        SEC_DEVELOPER,       false, &ChatHandler::HandleSetTimeCommand,             "", nullptr},
         { "play",           SEC_DEVELOPER,       false, &ChatHandler::HandlePlayCommand,                "", nullptr},
+        { "radio",          SEC_PLAYER,          false, &ChatHandler::HandleRadioCommand,                "", nullptr},
         { "getskillvalue",  SEC_DEVELOPER,       false, &ChatHandler::HandleGetSkillValueCommand,       "", nullptr},
         { "anonymous",      SEC_DEVELOPER,       false, nullptr,                                        "", anonymousCommandTable},
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },

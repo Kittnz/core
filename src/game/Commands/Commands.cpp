@@ -14189,6 +14189,37 @@ bool ChatHandler::HandlePlayCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleRadioCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .radio on/off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+
+    if (!ExtractOnOff(&args, value))
+    {
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        m_session->GetPlayer()->PlayDirectSound(60401);  // http://turtle-wow.org/radio
+        return true;
+    }
+    else
+    {
+        m_session->GetPlayer()->PlayDirectSound(68); 
+        return true;
+    }
+
+    return false;
+}
+
 bool ChatHandler::HandleBgTestCommand(char* args)
 {
     sBattleGroundMgr.ToggleTesting();
