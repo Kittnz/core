@@ -477,4 +477,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 update quest_template set title = 'Dreamscale Collection' where entry = 41055;
 -- Item "Windtalker Cape" (Entry 61709) change display ID to 26233.
 update item_template set display_id = 26233 where entry = 61709;
+-- Apply deathstate to the following GUID: 2578192, 2578193, 2578194 (There was an old command called .npc deathstate that would make npcs be dead at all times, I need that emulated.)
+REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES
+(2578192, 0, -1, -1, 7, 1, 0, NULL),
+(2578193, 0, -1, -1, 7, 1, 0, NULL),
+(2578194, 0, -1, -1, 7, 1, 0, NULL);
+update creature set id = 61606, health_percent = 0, mana_percent = 0, movement_type = 0 where guid in (2578192, 2578193, 2578194);
 
+REPLACE INTO creature_template VALUES
+(61606, 6172, 0, 0, 0, 0, 'Hederine Manastalker', NULL, 0, 59, 60, 17766, 18312, 0, 0, 3059, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 2, 36, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 3, 0, 7462, 0, 7462, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, '');
