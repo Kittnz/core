@@ -8826,22 +8826,17 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
 bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 {
     // number or [name] Shift-click form |color|Hgameobject:go_guid|h[name]|h|r
+    uint32 lowguid;
+    if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
+        return false;
 
-    auto object = getSelectedGameObject();
+    if (!lowguid)
+        return false;
 
     uint32 entry = 0;
-    uint32 lowguid = 0;
-    if (!object)
-    {
-        if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
-            return false;
 
-        if (!lowguid)
-            return false;
-
-        if (!ExtractUInt32(&args, entry))
-            entry = 0;
-    }
+    if (!ExtractUInt32(&args, entry))
+        entry = 0;
 
     auto player = GetSession()->GetPlayer();
 
@@ -8850,19 +8845,16 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 
 
 
-    GameObject* obj = object;
+    GameObject* obj = nullptr;
 
-    if (!obj)
+    if (!entry)
     {
-        if (!entry)
-        {
-            // by DB guid
-            if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-                obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
-        }
-        else
-            obj = GetGameObjectWithGuid(lowguid, entry);
+        // by DB guid
+        if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+            obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
     }
+    else
+        obj = GetGameObjectWithGuid(lowguid, entry);
 
     if (!obj)
     {
@@ -13473,17 +13465,35 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
 bool ChatHandler::HandleFreezeCommand(char* args)
 {
     Unit* pTarget = GetSelectedUnit();
-    if (!pTarget)
-        return false;
-    GetPlayer()->CastSpell(pTarget, 9454, true);
+    if (!pTarget || pTarget == GetPlayer())
+    {
+        Player* pPlayer = nullptr;
+        if (!ExtractPlayerTarget(&args, &pPlayer))
+            return false;
+
+        PSendSysMessage("Freezing %s.", GetNameLink(pPlayer).c_str());
+        pTarget = pPlayer;
+    }
+
+    Unit* pCaster = GetPlayer()->IsInMap(pTarget) ? GetPlayer() : pTarget;
+    pCaster->CastSpell(pTarget, 9454, true);
+
     return true;
 }
 
 bool ChatHandler::HandleUnfreezeCommand(char* args)
 {
     Unit* pTarget = GetSelectedUnit();
-    if (!pTarget)
-        return false;
+    if (!pTarget || pTarget == GetPlayer())
+    {
+        Player* pPlayer = nullptr;
+        if (!ExtractPlayerTarget(&args, &pPlayer))
+            return false;
+
+        PSendSysMessage("Unfreezing %s.", GetNameLink(pPlayer).c_str());
+        pTarget = pPlayer;
+    }
+    
     pTarget->RemoveAurasDueToSpell(9454);
     return true;
 }
