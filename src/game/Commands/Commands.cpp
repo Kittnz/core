@@ -8826,17 +8826,22 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
 bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 {
     // number or [name] Shift-click form |color|Hgameobject:go_guid|h[name]|h|r
-    uint32 lowguid;
-    if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
-        return false;
 
-    if (!lowguid)
-        return false;
+    auto object = getSelectedGameObject();
 
     uint32 entry = 0;
+    uint32 lowguid = 0;
+    if (!object)
+    {
+        if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
+            return false;
 
-    if (!ExtractUInt32(&args, entry))
-        entry = 0;
+        if (!lowguid)
+            return false;
+
+        if (!ExtractUInt32(&args, entry))
+            entry = 0;
+    }
 
     auto player = GetSession()->GetPlayer();
 
@@ -8845,16 +8850,19 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 
 
 
-    GameObject* obj = nullptr;
+    GameObject* obj = object;
 
-    if (!entry)
+    if (!obj)
     {
-        // by DB guid
-        if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-            obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
+        if (!entry)
+        {
+            // by DB guid
+            if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+                obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
+        }
+        else
+            obj = GetGameObjectWithGuid(lowguid, entry);
     }
-    else
-        obj = GetGameObjectWithGuid(lowguid, entry);
 
     if (!obj)
     {
