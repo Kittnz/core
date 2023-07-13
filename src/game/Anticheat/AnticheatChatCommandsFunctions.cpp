@@ -6,6 +6,9 @@
 #include "ObjectMgr.h"
 #include "AccountMgr.h"
 #include "Antispam/Antispam.h"
+#include "CommandStream.h"
+
+#include <istream>
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
@@ -153,13 +156,31 @@ bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
 
 bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
 {
-    uint32 extendedPrint;
+    CommandStream commandStream { args };
+    uint64 extendedPrint;
 
-    if (!ExtractUInt32(&args, extendedPrint))
+    if (!(commandStream >> extendedPrint))
     {
         PSendSysMessage("Wrongly formatted HWPrint.");
         return false;
     }
+
+    std::string guildName;
+
+    if (!(commandStream >> guildName))
+    {
+        PSendSysMessage("Wrongly formatted guild name.");
+        return false;
+    }
+
+    std::string playerName;
+
+    if (!(commandStream >> playerName))
+    {
+        PSendSysMessage("Wrongly formatted player name.");
+        return false;
+    }
+
 
     PSendSysMessage("Listing logged in clients with extended FP %u:", extendedPrint);
 
