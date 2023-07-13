@@ -225,3 +225,15 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61327, 41055);
 replace into creature_involvedrelation	(id, quest) values (61327, 41055);
 
+-- Npc 61599 make tamable as a Cat by hunters.
+update creature_template set type_flags = 1, beast_family = 2 where entry = 61599;
+-- Make the following npcs immune to bleeds/poisons:
+-- Phantom Guardsman
+-- Haunted Stable Tender
+-- Haunted Blacksmith
+-- Phantom Cook
+-- Phantom Servant
+update creature_template set mechanic_immune_mask = 81937 where entry in (61200,61201,61202,61205,61210);
+-- Make npc "Brood Queen Araxxna" immune to poisons.
+update creature_template set mechanic_immune_mask = 85585 where entry = 61221;
+
