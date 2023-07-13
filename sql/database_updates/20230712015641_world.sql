@@ -628,3 +628,8 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578320,101, -1264.161011,1819.590088,85.736092, 100);
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2578320,102, -1270.017578,1796.351074,85.578140, 100);
 REPLACE INTO `creature` VALUES (2578320,61558,0,0,0,0,-1264.23,1794.08,85.8285,0.762732,10000,10000,0,100,100,2,0,0);
+
+-- Changes by JOE
+DELETE FROM gameobject WHERE guid = '4007598';
+DELETE FROM game_event_gameobject WHERE guid = '4007598';
+DELETE FROM gameobject_battleground WHERE guid = '4007598';
