@@ -446,3 +446,17 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 -- Object ID Range 5015844-5015942 except for the IDs below should have the respawn timer of a vanilla Mithril Deposit object. 5015893, 5015898, 5015906, 5015915, 5015937 should have the respawn timer of a vanilla Truesilver Deposit.
 update gameobject set spawntimesecsmin = 1800, spawntimesecsmax = 1800 where guID between 5015844 and 5015942;
 update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 where guID in (5015893,5015898,5015906,5015915,5015937);
+
+-- Enable the displayid 20428 in the DB, then apply it to Annesastrasza.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20428, 0, 0, 0, 0);
+update creature_template set display_id1 = 20428 where entry = 61577;
+-- Enable the displayid 20429 in the DB, then apply it to Shadowhunter Trak'nal.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20429, 0, 0, 0, 0);
+update creature_template set display_id1 = 20429 where entry = 61578;
+-- Enable the displayid 20439 in the DB, then apply it to Melanastrasza.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20439, 0, 0, 0, 0);
+update creature_template set display_id1 = 20429 where entry = 61579;
+
