@@ -450,10 +450,10 @@ WaypointNode const* WaypointManager::AddNode(uint32 entry, uint32 dbGuid, uint32
     for (WaypointPath::reverse_iterator rItr = path.rbegin(); rItr != path.rend() && rItr->first > pointId; ++rItr)
     {
         if (rItr->first <= nextPoint)
-            sWorld.ExecuteUpdate("UPDATE %s SET point=point+1 WHERE %s=%u AND point=%u", table, key_field, keydb, rItr->first - 1);
+            sWorld.ExecuteUpdate("UPDATE `%s` SET `point`=`point`+1 WHERE `%s`=%u AND `point`=%u", table, key_field, keydb, rItr->first - 1);
     }
     // Insert new Point to database
-    sWorld.ExecuteUpdate("INSERT INTO %s (%s,point,position_x,position_y,position_z,orientation) VALUES (%u,%u, %f,%f,%f, 100)", table, key_field, keydb, pointId+1, x, y, z);
+    sWorld.ExecuteUpdate("REPLACE INTO `%s` (`%s`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (%u,%u, %f,%f,%f, 100)", table, key_field, keydb, pointId+1, x, y, z);
 
     return &path[pointId];
 }
