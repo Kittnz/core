@@ -591,4 +591,15 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61609, 61198, 100, 2, 1, 1, 0);
 -- Add Raw Black Truffle to the sell list of 'Stickypaws'.
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61574, 0, 4608, 0, 0, 0, 0);
+-- Quest Lord Xanvarak, change item requirement to 'Heart of Xanvarak' (Display ID 3320, quest item, stackable to 1, drops from Lord Xanvarak at 100% drop chance).
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61609, 61768, -100, 0, 1, 1, 0);
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
+(61768,3320,'Heart of Xanvarak',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,3);
+update quest_template set reqitemid1 = 61768, reqitemcount1 = 1 where entry = 41020;
+-- Quest 'The Galak Messenger' (Entry 41053), remove reward item 61517.
+update quest_template set rewitemid1 = 0, rewitemcount1 = 0 where entry = 41053;
+-- Quest 'Harness of Chimaeran' entry 41052, remove requirement to slay Noxxion (Entry 13282).
+update quest_template set reqcreatureorgoid1 = 0, reqcreatureorgocount1 = 0 where entry = 41052;
+-- Quest Feeding the Younglings (Entry 41051), change short description to "Bring 20 Chunks of Hippogryph Meat to Velos Sharpstrike at Chimaera Roost Vale in Feralas."
+update quest_template set objectives = 'Bring 20 Chunks of Hippogryph Meat to Velos Sharpstrike at Chimaera Roost Vale in Feralas.' where entry = 41051;
 
