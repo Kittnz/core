@@ -1761,12 +1761,17 @@ void BattleGroundMgr::PlayerLoggedIn(Player* player)
 
 void BattleGroundMgr::PlayerLoggedOut(Player* player)
 {
-    for (int i = 1; i <= PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+    for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
     {
-        if (BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(i-1))
+        BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(queueSlot);
+        if (bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
         {
-            player->RemoveBattleGroundQueueId(bgQueueTypeId);
-            m_BattleGroundQueues[bgQueueTypeId].PlayerLoggedOut(player->GetObjectGuid());
+            player->RemoveBattleGroundQueueId(bgQueueTypeId);  // must be called this way, because if you move this call to queue->removeplayer, it causes bugs
+            m_BattleGroundQueues[bgQueueTypeId].RemovePlayer(player->GetObjectGuid(), true);
+
+            // player left queue, we should update it
+            BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
+            sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, player->GetBattleGroundBracketIdFromLevel(bgTypeId, player->GetLevel()));
         }
     }
 }
