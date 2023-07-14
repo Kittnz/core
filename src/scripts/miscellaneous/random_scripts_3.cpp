@@ -6806,7 +6806,7 @@ bool GOHello_go_velindes_memory(Player* pPlayer, GameObject* pGo)
         if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
             return false;
 
-        if (pPlayer->GetQuestStatus(41064) == QUEST_STATUS_COMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
+        if (pPlayer->GetQuestStatus(41064) == QUEST_STATUS_COMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->GetQuestRewardStatus(41066))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect this item.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
@@ -6826,7 +6826,7 @@ bool GOSelect_go_velindes_memory(Player* pPlayer, GameObject* pGo, uint32 sender
 
             pGo->SummonCreature(NPC_INVISIBLE_CONTROLLER, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 300 * IN_MILLISECONDS);
 
-            Creature* VELINDE_STARSONG = pGo->SummonCreature(NPC_VELINDE_STARSONG, pGo->GetPositionX()+2, pGo->GetPositionY()+2, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 300 * IN_MILLISECONDS);
+            Creature* VELINDE_STARSONG = pGo->SummonCreature(NPC_VELINDE_STARSONG, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation()+3.14, TEMPSUMMON_TIMED_DESPAWN, 300 * IN_MILLISECONDS);
             if (!VELINDE_STARSONG)
                 VELINDE_STARSONG = pPlayer->FindNearestCreature(NPC_VELINDE_STARSONG, 30.0F);
             if (!VELINDE_STARSONG)
