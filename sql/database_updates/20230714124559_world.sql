@@ -602,4 +602,5 @@ update quest_template set rewitemid1 = 0, rewitemcount1 = 0 where entry = 41053;
 update quest_template set reqcreatureorgoid1 = 0, reqcreatureorgocount1 = 0 where entry = 41052;
 -- Quest Feeding the Younglings (Entry 41051), change short description to "Bring 20 Chunks of Hippogryph Meat to Velos Sharpstrike at Chimaera Roost Vale in Feralas."
 update quest_template set objectives = 'Bring 20 Chunks of Hippogryph Meat to Velos Sharpstrike at Chimaera Roost Vale in Feralas.' where entry = 41051;
-
+-- Item 61733 (Formula: Eternal Dreamstone Shard) add spell 51519 with -1 charges to be consumed on use.
+update item_template set spellid_1 = 51519, spellcharges_1 = -1 where entry = 61733;
