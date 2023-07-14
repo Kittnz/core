@@ -604,3 +604,7 @@ update quest_template set reqcreatureorgoid1 = 0, reqcreatureorgocount1 = 0 wher
 update quest_template set objectives = 'Bring 20 Chunks of Hippogryph Meat to Velos Sharpstrike at Chimaera Roost Vale in Feralas.' where entry = 41051;
 -- Item 61733 (Formula: Eternal Dreamstone Shard) add spell 51519 with -1 charges to be consumed on use.
 update item_template set spellid_1 = 51519, spellcharges_1 = -1 where entry = 61733;
+-- NPC Lataro Swifthoof set scale to 1.35.
+update creature_template set scale = 1.35 where entry = 61590;
+-- Change display ID of npc 60545 to 8842.
+update creature_template set display_id1 = 8842 where entry = 60545;
