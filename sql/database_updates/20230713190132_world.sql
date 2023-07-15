@@ -55,4 +55,5 @@ UPDATE `creature_template` set `scale` = 1.350000 where entry = 61590;
 UPDATE `creature` SET `position_x` = -4916.795898, `position_y` = 1173.883057, `position_z` = 61.152985, `orientation` = 5.207444 WHERE `guid` = 50190;
 
 -- Changes by DRAGUNOVI
+DELETE FROM creature_movement WHERE id=2576616;
 INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orientation) VALUES (2562216,1, -8457.458984,-4188.429688,-212.443817, 100);
