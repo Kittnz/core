@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string> 
 #include <sstream>
+#include <array>
 
 #define fs std::filesystem
 
@@ -41,10 +42,10 @@ OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game t
 
 bool fov_build = false;
 
-#define NEW_BUILD 7070u
-#define NEW_VISUAL_BUILD "7070"
+#define NEW_BUILD 7069u
+#define NEW_VISUAL_BUILD "7069"
 #define NEW_VISUAL_VERSION "1.16.6"
-#define NEW_BUILD_DATE "Aug ?? 2023"
+#define NEW_BUILD_DATE "Aug 13 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-4.mpq"
