@@ -639,10 +639,11 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
         return;
 
     Loot *pLoot = nullptr;
+    Creature* creature = nullptr;
 
     if (lootguid.IsCreature())
     {
-        Creature *creature = GetPlayer()->GetMap()->GetCreature(lootguid);
+        creature = GetPlayer()->GetMap()->GetCreature(lootguid);
         if (!creature)
             return;
         if (!_player->IsAtGroupRewardDistance(creature))
@@ -688,9 +689,9 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
         sLog.out(LOG_LOOTS, "Master loot %s gives %ux%u to %s [loot from %s]", _player->GetShortDescription().c_str(), item.count, item.itemid, target->GetShortDescription().c_str(), lootguid.GetString().c_str());
 
         // Turtle:: Make raid looted items not appear soul bound.
-        //Restrict to non-stackable and non party-loot.
+        // Restrict to non-stackable and non party-loot.
 
-        if (_player->GetMap()->IsRaid())
+        if (_player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
         {
             auto itemProto = newitem->GetProto();
             if (itemProto)
@@ -704,7 +705,7 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
                         {
                             if (Player* pMember = itr->getSource())
                             {
-                                if (pMember->GetMapId() == _player->GetMapId())
+                                if (pMember->GetMapId() == _player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
                                     newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
                             }
                         }

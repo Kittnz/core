@@ -1128,8 +1128,9 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
     }
 
     // Turtle:: Make raid looted items not appear soul bound.
-    const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem) {
-        if (player->GetMap()->IsRaid())
+    const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem, Creature* creature)
+    {
+        if (player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
         {
             auto itemProto = newitem->GetProto();
             if (itemProto)
@@ -1141,7 +1142,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     {
                         if (Player* pMember = itr->getSource())
                         {
-                            if (pMember->GetMapId() == player->GetMapId())
+                            if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
                                 newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
                         }
                     }
@@ -1208,7 +1209,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
 
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                     {
-                        CheckSoulboundException(player, *item, newItem);
+                        CheckSoulboundException(player, *item, newItem, roll->lootedTargetGUID.IsCreature() ? player->GetMap()->GetCreature(roll->lootedTargetGUID) : nullptr);
                         player->OnReceivedItem(newItem);
                     }
                 }
@@ -1278,7 +1279,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
 
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                     {
-                        CheckSoulboundException(player, *item, newItem);
+                        CheckSoulboundException(player, *item, newItem, roll->lootedTargetGUID.IsCreature() ? player->GetMap()->GetCreature(roll->lootedTargetGUID) : nullptr);
                         player->OnReceivedItem(newItem);
                     }
                 }
