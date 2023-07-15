@@ -46,14 +46,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     if (cMgr)
     {
         if (Channel* chn = cMgr->GetOrCreateChannel(channelname))
-        {
-            if (chn->GetChannelId() == CHANNEL_ID_HARDCORE && GetSecurity() == SEC_PLAYER && !GetPlayer()->IsHardcore() && !GetPlayer()->IsHC60())
-            {
-                player->ToPlayer()->GetSession()->SendNotification("You must be Hardcore to join this channel.");
-                return;
-            }
             chn->Join(player->GetObjectGuid(), pass.c_str());
-        }
     }
 
     if (player->GetSession()->GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_JOIN_OPPOSITE_FACTION_CHANNELS))

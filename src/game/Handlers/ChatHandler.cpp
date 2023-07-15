@@ -289,6 +289,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_RAID_WARNING:
         case CHAT_MSG_BATTLEGROUND:
         case CHAT_MSG_BATTLEGROUND_LEADER:
+        case CHAT_MSG_HARDCORE:
         {
             recv_data >> msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
@@ -1040,6 +1041,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (lang != LANG_ADDON)
                 sWorld.LogChat(this, "Guild", msg, nullptr, GetMasterPlayer()->GetGuildId());
 
+            break;
+        }
+        case CHAT_MSG_HARDCORE:
+        {
+            if ((GetPlayer()->IsHardcore() || GetPlayer()->IsHC60()) || GetPlayer()->GetSession()->GetSecurity() > SEC_PLAYER)
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_HARDCORE, msg.c_str(), Language(lang), _player->GetChatTag(), _player->GetObjectGuid(), _player->GetName());
+                sWorld.SendHardcoreMessage(&data, _player->GetSession());
+            }
+            else
+                GetPlayer()->ToPlayer()->GetSession()->SendNotification("You must be Hardcore to join this channel.");                
             break;
         }
         case CHAT_MSG_OFFICER: // Master side

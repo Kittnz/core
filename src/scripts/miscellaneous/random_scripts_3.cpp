@@ -6793,9 +6793,87 @@ bool QuestAccept_npc_great_cat_spirit(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+enum
+{
+    NPC_VELINDE_STARSONG = 3946,
+    NPC_DARK_RIDER = 61608,
+};
+
+bool GOHello_go_velindes_memory(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020048)
+    {
+        if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+            return false;
+
+        if (pPlayer->GetQuestStatus(41064) == QUEST_STATUS_COMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->GetQuestRewardStatus(41066))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect this item.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_velindes_memory(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020048)
+        {
+            if (pGo->FindNearestCreature(NPC_INVISIBLE_CONTROLLER, 10.0f, false))
+                return false;
+
+            pGo->SummonCreature(NPC_INVISIBLE_CONTROLLER, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 300 * IN_MILLISECONDS);
+
+            Creature* VELINDE_STARSONG = pGo->SummonCreature(NPC_VELINDE_STARSONG, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation()+3.14, TEMPSUMMON_TIMED_DESPAWN, 300 * IN_MILLISECONDS);
+            if (!VELINDE_STARSONG)
+                VELINDE_STARSONG = pPlayer->FindNearestCreature(NPC_VELINDE_STARSONG, 30.0F);
+            if (!VELINDE_STARSONG)
+                return false;
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool QuestAccept_npc_velinde_starsong(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    Creature* DARK_RIDER = pPlayer->FindNearestCreature(NPC_DARK_RIDER, 30.0F);
+
+    if (pQuest->GetQuestId() == 41065) // Scythe of the Goddess
+    {
+        if (!DARK_RIDER)
+        {
+            Creature* DARK_RIDER = pQuestGiver->SummonCreature(NPC_DARK_RIDER, -11141.1318, -1166.9799, 42.8755, 2.7963, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300 * IN_MILLISECONDS);
+        }
+
+        if (DARK_RIDER)
+            return false;
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_velinde_starsong";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_velinde_starsong;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_velindes_memory";
+    newscript->pGOHello = &GOHello_go_velindes_memory;
+    newscript->pGOGossipSelect = &GOSelect_go_velindes_memory;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_great_cat_spirit";

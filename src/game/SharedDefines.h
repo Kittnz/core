@@ -1409,9 +1409,10 @@ enum ChatMsg
     CHAT_MSG_FILTERED                             = 0x5B,
     CHAT_MSG_BATTLEGROUND                         = 0x5C,
     CHAT_MSG_BATTLEGROUND_LEADER                  = 0x5D,
+    CHAT_MSG_HARDCORE                             = 0x5E,
 };
 
-#define MAX_CHAT_MSG_TYPE 0x5E
+#define MAX_CHAT_MSG_TYPE 0x5F
 
 enum ChatLinkColors
 {
