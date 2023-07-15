@@ -684,6 +684,247 @@ CreatureAI* GetAI_phantom_servant(Creature* pCreature)
 	return new phantom_servantAI(pCreature);
 }
 
+struct shadowbane_ambusherAI : public ScriptedAI
+{
+	shadowbane_ambusherAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_ReStealthTimer;
+	uint32 m_RendTimer;
+
+	void Reset() override
+	{
+		if (m_creature->HasAura(8216))
+			DoCastSpellIfCan(m_creature, 8216, CF_TRIGGERED | CF_FORCE_CAST);
+
+		m_RendTimer = 1 * IN_MILLISECONDS;
+		m_ReStealthTimer = 0;
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->IsInCombat() && !m_creature->HasAura(8216) && !m_ReStealthTimer)
+			m_ReStealthTimer = 2000;
+
+		if (m_ReStealthTimer)
+		{
+			if (m_ReStealthTimer < uiDiff)
+			{
+				if (!m_creature->IsInCombat())
+					DoCastSpellIfCan(m_creature, 8216, CF_TRIGGERED | CF_FORCE_CAST);
+				m_ReStealthTimer = 0;
+			}
+			else
+				m_ReStealthTimer -= uiDiff;
+		}
+
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_RendTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
+			{
+				if (DoCastSpellIfCan(pTarget, 18106) == CAST_OK)
+					m_RendTimer = urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_RendTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_shadowbane_ambusher(Creature* pCreature)
+{
+	return new shadowbane_ambusherAI(pCreature);
+}
+
+struct grellkin_shadow_weaverAI : public ScriptedAI
+{
+	grellkin_shadow_weaverAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_DrainManaTimer;
+	uint32 m_DarkboltTimer;
+
+	void Reset() override
+	{
+		m_DrainManaTimer = urand(6 * IN_MILLISECONDS, 9 * IN_MILLISECONDS);
+		m_DarkboltTimer = urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_DrainManaTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA))
+			{
+				if (DoCastSpellIfCan(pTarget, 17682) == CAST_OK)
+					m_DrainManaTimer = urand(8 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_DrainManaTimer -= uiDiff;
+
+		if (m_DarkboltTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57080) == CAST_OK)
+					m_DarkboltTimer = urand(5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_DarkboltTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_grellkin_shadow_weaver(Creature* pCreature)
+{
+	return new grellkin_shadow_weaverAI(pCreature);
+}
+
+struct grellkin_primalistAI : public ScriptedAI
+{
+	grellkin_primalistAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_EarthShieldTimer;
+	uint32 m_LightningStormTimer;
+	uint32 m_FrostShockTimer;
+
+	void Reset() override
+	{
+		m_FrostShockTimer = urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS);
+		m_EarthShieldTimer = urand(1 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
+		m_LightningStormTimer = 25 * IN_MILLISECONDS;
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_EarthShieldTimer < uiDiff)
+		{
+			if (Unit* pFriendlyTarget = m_creature->SelectRandomFriendlyTarget(nullptr, 50.0f, true))
+			{
+				if (pFriendlyTarget->HasAura(57087))
+					m_EarthShieldTimer = 500;
+				else
+				{
+					if (DoCastSpellIfCan(pFriendlyTarget, 57087) == CAST_OK)
+						m_EarthShieldTimer = urand(12 * IN_MILLISECONDS, 17 * IN_MILLISECONDS);
+				}
+			}
+		}
+		else
+			m_EarthShieldTimer -= uiDiff;
+
+		if (m_FrostShockTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 23115) == CAST_OK)
+					m_FrostShockTimer = urand(5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_FrostShockTimer -= uiDiff;
+
+		if (m_LightningStormTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57088) == CAST_OK)
+					m_LightningStormTimer = urand(28 * IN_MILLISECONDS, 36 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_LightningStormTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_grellkin_primalist(Creature* pCreature)
+{
+	return new grellkin_primalistAI(pCreature);
+}
+
+struct grellkin_channelerAI : public ScriptedAI
+{
+	grellkin_channelerAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_GrellFireTimer;
+	uint32 m_GrellkinHealTimer;
+	bool shielded;
+
+	void Reset() override
+	{
+		m_GrellkinHealTimer = urand(9 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
+		m_GrellFireTimer = urand(1 * IN_MILLISECONDS, 3 * IN_MILLISECONDS);
+		shielded = false;
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_GrellkinHealTimer < uiDiff)
+		{
+			if (Unit* pFriendlyTarget = m_creature->FindLowestHpFriendlyUnit(50.0f, 30, true))
+			{
+				if (DoCastSpellIfCan(pFriendlyTarget, 57090) == CAST_OK)
+					m_GrellkinHealTimer = urand(9 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_GrellkinHealTimer -= uiDiff;
+
+		if (m_GrellFireTimer < uiDiff)
+		{
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+			{
+				if (DoCastSpellIfCan(pTarget, 57089) == CAST_OK)
+					m_GrellFireTimer = urand(8 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
+			}
+		}
+		else
+			m_GrellFireTimer -= uiDiff;
+
+		if (m_creature->GetHealthPercent() <= 50.0f && !shielded)
+		{
+			shielded = true;
+			DoCastSpellIfCan(m_creature, 13874);
+		}
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_grellkin_channeler(Creature* pCreature)
+{
+	return new grellkin_channelerAI(pCreature);
+}
+
 void AddSC_instance_lower_karazhan_halls()
 {
 	Script* newscript;
@@ -767,4 +1008,34 @@ void AddSC_instance_lower_karazhan_halls()
 	newscript->Name = "phantom_servant";
 	newscript->GetAI = &GetAI_phantom_servant;
 	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "shadowbane_ambusher";
+	newscript->GetAI = &GetAI_shadowbane_ambusher;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "grellkin_shadow_weaver";
+	newscript->GetAI = &GetAI_grellkin_shadow_weaver;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "grellkin_primalist";
+	newscript->GetAI = &GetAI_grellkin_primalist;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "grellkin_channeler";
+	newscript->GetAI = &GetAI_grellkin_channeler;
+	newscript->RegisterSelf();
+
+	//newscript = new Script;
+	//newscript->Name = "dark_rider_champion";
+	//newscript->GetAI = &GetAI_dark_rider_champion;
+	//newscript->RegisterSelf();
+
+	//newscript = new Script;
+	//newscript->Name = "dark_rider_apprentice";
+	//newscript->GetAI = &GetAI_dark_rider_apprentice;
+	//newscript->RegisterSelf();
 }
