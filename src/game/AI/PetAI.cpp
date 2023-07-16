@@ -268,9 +268,16 @@ void PetAI::UpdateSpells()
                 }
             }
 
+
+
             // No enemy, check friendly
             if (!spellUsed)
             {
+                std::vector<Unit*> alliesToCheck{ m_creature };
+                if (owner)
+                    alliesToCheck.emplace_back(owner);
+
+
                 if (Player* pPlayer = owner->ToPlayer())
                 {
                     if (Group* pGroup = pPlayer->GetGroup())
@@ -281,23 +288,28 @@ void PetAI::UpdateSpells()
                             if (!pAlly || !pGroup->SameSubGroup(pPlayer, pAlly))
                                 continue;
 
-                            if (spell->CanAutoCast(pAlly))
-                            {
-                                targetSpellStore.push_back(std::make_pair(pAlly, spell));
-                                spellUsed = true;
-                                break;
-                            }
+                            alliesToCheck.push_back(pAlly);
+                        }
+                    }
 
-                            if (pAlly->GetObjectGuid() != pPlayer->GetObjectGuid())
+                    for (const auto& ally : alliesToCheck)
+                    {
+                        if (spell->CanAutoCast(ally))
+                        {
+                            targetSpellStore.push_back(std::make_pair(ally, spell));
+                            spellUsed = true;
+                            break;
+                        }
+
+                        if (ally->GetObjectGuid() != pPlayer->GetObjectGuid())
+                        {
+                            if (Unit* pAllyPet = ally->GetPet())
                             {
-                                if (Unit* pAllyPet = pAlly->GetPet())
+                                if (spell->CanAutoCast(pAllyPet))
                                 {
-                                    if (spell->CanAutoCast(pAllyPet))
-                                    {
-                                        targetSpellStore.push_back(std::make_pair(pAllyPet, spell));
-                                        spellUsed = true;
-                                        break;
-                                    }
+                                    targetSpellStore.push_back(std::make_pair(pAllyPet, spell));
+                                    spellUsed = true;
+                                    break;
                                 }
                             }
                         }
