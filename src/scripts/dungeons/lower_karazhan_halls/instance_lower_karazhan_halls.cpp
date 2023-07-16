@@ -925,6 +925,101 @@ CreatureAI* GetAI_grellkin_channeler(Creature* pCreature)
 	return new grellkin_channelerAI(pCreature);
 }
 
+struct dark_rider_championAI : public ScriptedAI
+{
+	dark_rider_championAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_ReaverStormTimer;
+	uint32 m_DarkRiderScreamTimer;
+	uint32 m_HamstringTimer;
+
+	void Reset() override
+	{
+		m_ReaverStormTimer = urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS);
+		m_DarkRiderScreamTimer = urand(15 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
+		m_HamstringTimer = urand(8 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_ReaverStormTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature, 57066) == CAST_OK)
+				m_ReaverStormTimer = 7 * IN_MILLISECONDS;
+		}
+		else
+			m_ReaverStormTimer -= uiDiff;
+
+		if (m_DarkRiderScreamTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature, 57067) == CAST_OK)
+				m_DarkRiderScreamTimer = urand(20 * IN_MILLISECONDS, 24 * IN_MILLISECONDS);
+		}
+		else
+			m_DarkRiderScreamTimer -= uiDiff;
+
+		if (m_HamstringTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature->GetVictim(), 26211) == CAST_OK)
+				m_HamstringTimer = urand(11 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
+		}
+		else
+			m_HamstringTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_dark_rider_champion(Creature* pCreature)
+{
+	return new dark_rider_championAI(pCreature);
+}
+
+struct dark_rider_apprenticeAI : public ScriptedAI
+{
+	dark_rider_apprenticeAI(Creature* pCreature) : ScriptedAI(pCreature)
+	{
+		Reset();
+	}
+
+	uint32 m_SoulExchangeTimer;
+
+	void Reset() override
+	{
+		m_SoulExchangeTimer = urand(1 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
+	}
+
+	void UpdateAI(const uint32 uiDiff) override
+	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
+		if (m_SoulExchangeTimer < uiDiff)
+		{
+			if (Creature* master = m_creature->FindNearestCreature(61204, 15.0f, true, m_creature))
+			{
+				if (DoCastSpellIfCan(master->ToUnit(), 57065) == CAST_OK)
+					m_SoulExchangeTimer = 6 * IN_MILLISECONDS;
+			}
+		}
+		else
+			m_SoulExchangeTimer -= uiDiff;
+
+		DoMeleeAttackIfReady();
+	}
+};
+
+CreatureAI* GetAI_dark_rider_apprentice(Creature* pCreature)
+{
+	return new dark_rider_apprenticeAI(pCreature);
+}
+
 void AddSC_instance_lower_karazhan_halls()
 {
 	Script* newscript;
@@ -1029,13 +1124,13 @@ void AddSC_instance_lower_karazhan_halls()
 	newscript->GetAI = &GetAI_grellkin_channeler;
 	newscript->RegisterSelf();
 
-	//newscript = new Script;
-	//newscript->Name = "dark_rider_champion";
-	//newscript->GetAI = &GetAI_dark_rider_champion;
-	//newscript->RegisterSelf();
+	newscript = new Script;
+	newscript->Name = "dark_rider_champion";
+	newscript->GetAI = &GetAI_dark_rider_champion;
+	newscript->RegisterSelf();
 
-	//newscript = new Script;
-	//newscript->Name = "dark_rider_apprentice";
-	//newscript->GetAI = &GetAI_dark_rider_apprentice;
-	//newscript->RegisterSelf();
+	newscript = new Script;
+	newscript->Name = "dark_rider_apprentice";
+	newscript->GetAI = &GetAI_dark_rider_apprentice;
+	newscript->RegisterSelf();
 }

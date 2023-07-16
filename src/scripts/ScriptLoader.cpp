@@ -272,6 +272,7 @@ void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
 void AddSC_instance_emerald_sanctum();
 void AddSC_instance_lower_karazhan_halls();
+void AddSC_boss_brood_queen_araxxna();
 void AddSC_boss_solnius();
 
 void AddSC_random_scripts_0();
@@ -592,6 +593,7 @@ void AddScripts()
     AddSC_boss_dark_reaver();
     AddSC_instance_emerald_sanctum();
     AddSC_instance_lower_karazhan_halls();
+    AddSC_boss_brood_queen_araxxna();
     AddSC_boss_solnius();
 
     AddSC_boss_ostarius();

@@ -24,7 +24,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 	{
 		m_creature->MonsterYell("Brood Queen Araxxna spawns two Skitterweb Egg!");
 		for (uint8 i = 0; i < 2; ++i)
-			DoSpawnCreature(90000, 15.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
+			DoSpawnCreature(61604, 15.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
