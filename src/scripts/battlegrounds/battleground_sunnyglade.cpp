@@ -18,6 +18,8 @@ enum SV_Spells
     SPELL_SUNDER_ARMOR = 24317,
     SPELL_SLOW = 22356,
     SPELL_KNOCK = 20686,
+    SPELL_SHADOW_FLAME = 22539,
+    SPELL_BLAST_WAVE = 30092,
     /*human_footman*/
     /*human_archer*/
     SPELL_AUTOSHOT = 75,
@@ -43,6 +45,7 @@ enum SV_Events
     EVENT_SLOW,
     EVENT_KNOCK,
     EVENT_TRANSFORM,
+    EVENT_SHADOW_FLAME,
     /*human_footman*/
     /*human_archer*/
     EVENT_SHOOT,
@@ -112,6 +115,11 @@ struct SV_heraldAI : public ScriptedAI
     }
 };
 
+enum
+{
+    ITEM_SPARK = 81390,
+};
+
 bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
 {
     uint32 gossipTextId = pPlayer->GetGossipTextId(pCreature);
@@ -119,12 +127,12 @@ bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
     {
         if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
         {
-            if (bg->GetStatus() == STATUS_IN_PROGRESS && !bg->IsGeneralsActive())
+            if (bg->GetStatus() == STATUS_IN_PROGRESS)
             {
                 if (bg->GetHeraldControlledTeam() == pPlayer->GetTeam())
                 {
                     gossipTextId = 13762;
-                    uint32 sparkCount = pPlayer->GetItemCount(81390);
+                    uint32 sparkCount = pPlayer->GetItemCount(ITEM_SPARK);
 
                     if (sparkCount)
                     {
@@ -150,23 +158,12 @@ bool GossipSelect_SV_herald(Player* player, Creature* creature, uint32 sender, u
         {
             if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
             {
-                if (bg->GetStatus() == STATUS_IN_PROGRESS && !bg->IsGeneralsActive())
+                if (bg->GetStatus() == STATUS_IN_PROGRESS)
                 {
-                    uint32 sparkCount = player->GetItemCount(81390);
-                    player->DestroyItemCount(81390, sparkCount, true);
+                    uint32 sparkCount = player->GetItemCount(ITEM_SPARK);
+                    player->DestroyItemCount(ITEM_SPARK, sparkCount, true);
 
                     bg->AddTeamSparks(player->GetTeamId(), sparkCount);
-
-                    // check here
-                    uint32 totalSparks = bg->GetTeamSparks(TEAM_ALLIANCE) + bg->GetTeamSparks(TEAM_HORDE);
-                    uint32 maxSparks = sWorld.getConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT);
-
-                    if (totalSparks >= maxSparks)
-                        bg->StartFinalEvent();
-
-                    // if we use npc flag gossip and created gossip with action bg start
-                    //player->CLOSE_GOSSIP_MENU();
-                    //return true;
                 }
             }
         }
@@ -191,16 +188,32 @@ struct SV_human_leaderAI : public ScriptedAI
     {
         m_events.Reset();
         m_blackDragon = false;
+        m_creature->DeMorph();
     }
 
-    void Aggro(Unit* pWho) override
+    bool WeHaveMoreSparks() const
+    {
+        if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(m_creature->GetMap()))
+        {
+            if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+            {
+                return bg->GetTeamSparks(TEAM_ALLIANCE) > bg->GetTeamSparks(TEAM_HORDE);
+            }
+        }
+        return false;
+    }
+
+    void EnterCombat(Unit* pWho) override
     {
         m_events.ScheduleEvent(EVENT_CLEAVE, Seconds(10));
         m_events.ScheduleEvent(EVENT_WARSTOMP, Seconds(15));
         m_events.ScheduleEvent(EVENT_REND, Seconds(12));
         m_events.ScheduleEvent(EVENT_SUNDER_ARMOR, Seconds(2));
-        m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
-        m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
+        if (WeHaveMoreSparks())
+        {
+            m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
+            m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
+        }
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -208,14 +221,11 @@ struct SV_human_leaderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_blackDragon)
+        if (!m_blackDragon && m_creature->GetHealthPercent() < 30.0f)
         {
-            if (m_creature->GetHealthPercent() < 50.0f)
-            {
-                m_blackDragon = true;
-                DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
-                m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
-            }
+            m_blackDragon = true;
+            DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
+            m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
         }
 
         m_events.Update(uiDiff);
@@ -225,61 +235,91 @@ struct SV_human_leaderAI : public ScriptedAI
             {
                 case EVENT_CLEAVE:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                        m_events.Repeat(Seconds(10));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                            m_events.Repeat(Seconds(10));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_WARSTOMP:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
-                        m_events.Repeat(Seconds(15));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                            m_events.Repeat(Seconds(15));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_REND:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                        m_events.Repeat(Seconds(18));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                            m_events.Repeat(Seconds(18));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_SUNDER_ARMOR:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
-                        m_events.Repeat(Seconds(25));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                            m_events.Repeat(Seconds(25));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_SLOW:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                            m_events.Repeat(Seconds(20));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_KNOCK:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                            m_events.Repeat(Seconds(20));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_TRANSFORM:
                 {
                     m_creature->SetDisplayId(18750);
+                    m_creature->CastSpell(m_creature, SPELL_BLAST_WAVE, false);
+                    if (WeHaveMoreSparks())
+                        m_events.ScheduleEvent(EVENT_SHADOW_FLAME, 10000);
+                    break;
+                }
+                case EVENT_SHADOW_FLAME:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_FLAME) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
+
                     break;
                 }
             }
@@ -304,16 +344,32 @@ struct SV_orc_leaderAI : public ScriptedAI
     {
         m_events.Reset();
         m_blackDragon = false;
+        m_creature->DeMorph();
     }
 
-    void Aggro(Unit* pWho) override
+    bool WeHaveMoreSparks() const
+    {
+        if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(m_creature->GetMap()))
+        {
+            if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+            {
+                return bg->GetTeamSparks(TEAM_HORDE) > bg->GetTeamSparks(TEAM_ALLIANCE);
+            }
+        }
+        return false;
+    }
+
+    void EnterCombat(Unit* pWho) override
     {
         m_events.ScheduleEvent(EVENT_CLEAVE, Seconds(10));
         m_events.ScheduleEvent(EVENT_WARSTOMP, Seconds(15));
         m_events.ScheduleEvent(EVENT_REND, Seconds(12));
         m_events.ScheduleEvent(EVENT_SUNDER_ARMOR, Seconds(2));
-        m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
-        m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
+        if (WeHaveMoreSparks())
+        {
+            m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
+            m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
+        }
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -321,14 +377,11 @@ struct SV_orc_leaderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_blackDragon)
+        if (!m_blackDragon && m_creature->GetHealthPercent() < 30.0f)
         {
-            if (m_creature->GetHealthPercent() < 50.0f)
-            {
-                m_blackDragon = true;
-                DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
-                m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
-            }
+            m_blackDragon = true;
+            DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
+            m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
         }
 
         m_events.Update(uiDiff);
@@ -338,61 +391,91 @@ struct SV_orc_leaderAI : public ScriptedAI
             {
                 case EVENT_CLEAVE:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                        m_events.Repeat(Seconds(10));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                            m_events.Repeat(Seconds(10));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_WARSTOMP:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
-                        m_events.Repeat(Seconds(15));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                            m_events.Repeat(Seconds(15));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_REND:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                        m_events.Repeat(Seconds(18));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                            m_events.Repeat(Seconds(18));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_SUNDER_ARMOR:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
-                        m_events.Repeat(Seconds(25));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                            m_events.Repeat(Seconds(25));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_SLOW:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                            m_events.Repeat(Seconds(20));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_KNOCK:
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
+                    if (!m_blackDragon)
+                    {
+                        if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                            m_events.Repeat(Seconds(20));
+                        else
+                            m_events.Repeat(100);
+                    }
 
                     break;
                 }
                 case EVENT_TRANSFORM:
                 {
                     m_creature->SetDisplayId(18750);
+                    m_creature->CastSpell(m_creature, SPELL_BLAST_WAVE, false);
+                    if (WeHaveMoreSparks())
+                        m_events.ScheduleEvent(EVENT_SHADOW_FLAME, 10000);
+                    break;
+                }
+                case EVENT_SHADOW_FLAME:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_FLAME) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
+
                     break;
                 }
             }
