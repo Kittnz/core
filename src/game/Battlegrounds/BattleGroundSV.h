@@ -349,9 +349,9 @@ class BattleGroundSV : public BattleGround
         Team GetHeraldControlledTeam();
         uint32 GetTeamSparks(TeamId team) const { return m_resources[team]; }
         void UpdateTeamSparks(TeamId team);
-        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; UpdateTeamSparks(team); }
-        void SetGeneralsActive(bool set) { generalsActive = set; }
-        bool IsGeneralsActive() { return generalsActive; }
+        void AddTeamSparks(TeamId team, uint32 count);
+        void SetGeneralsActive(bool set) { m_generalsActive = set; }
+        bool IsGeneralsActive() { return m_generalsActive; }
         bool SetupSkirmishes();
 
     private:
@@ -371,6 +371,8 @@ class BattleGroundSV : public BattleGround
         uint32 m_NodeTimers[BG_SV_DYNAMIC_NODES_COUNT];
         uint32 m_resources[BG_TEAMS_COUNT];
         uint32 m_lastTick[BG_TEAMS_COUNT];
-        bool generalsActive;
+        bool m_generalsActive;
+        ObjectGuid m_allianceGeneralGuid;
+        ObjectGuid m_hordeGeneralGuid;
 };
 #endif
