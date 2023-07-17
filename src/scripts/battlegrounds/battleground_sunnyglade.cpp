@@ -45,6 +45,7 @@ enum SV_Events
     EVENT_SLOW,
     EVENT_KNOCK,
     EVENT_TRANSFORM,
+    EVENT_BLAST_WAVE,
     EVENT_SHADOW_FLAME,
     /*human_footman*/
     /*human_archer*/
@@ -163,6 +164,12 @@ bool GossipSelect_SV_herald(Player* player, Creature* creature, uint32 sender, u
                     uint32 sparkCount = player->GetItemCount(ITEM_SPARK);
                     player->DestroyItemCount(ITEM_SPARK, sparkCount, true);
 
+                    std::string message = std::string(player->GetName()) + " has turned in " + std::to_string(sparkCount) + " sparks.";
+                    ChatMsg msgType = player->GetTeam() == ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE;
+                    WorldPacket data(SMSG_MESSAGECHAT);
+                    ChatHandler::BuildChatPacket(data, msgType, message);
+                    bg->SendPacketToAll(&data);
+
                     bg->AddTeamSparks(player->GetTeamId(), sparkCount);
                 }
             }
@@ -189,6 +196,12 @@ struct SV_human_leaderAI : public ScriptedAI
         m_events.Reset();
         m_blackDragon = false;
         m_creature->DeMorph();
+    }
+
+    void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
+    {
+        if (pAttacker && pAttacker->IsCreature())
+            uiDamage = 0;
     }
 
     bool WeHaveMoreSparks() const
@@ -226,6 +239,7 @@ struct SV_human_leaderAI : public ScriptedAI
             m_blackDragon = true;
             DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
             m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
+            m_creature->MonsterYell("I will not allow you to sabotage our plans. Time for you to face my true form!");
         }
 
         m_events.Update(uiDiff);
@@ -307,10 +321,15 @@ struct SV_human_leaderAI : public ScriptedAI
                 }
                 case EVENT_TRANSFORM:
                 {
-                    m_creature->SetDisplayId(18750);
-                    m_creature->CastSpell(m_creature, SPELL_BLAST_WAVE, false);
+                    m_creature->SetDisplayId(6374);
+                    m_events.ScheduleEvent(EVENT_BLAST_WAVE, 500);
                     if (WeHaveMoreSparks())
                         m_events.ScheduleEvent(EVENT_SHADOW_FLAME, 10000);
+                    break;
+                }
+                case EVENT_BLAST_WAVE:
+                {
+                    DoCast(m_creature, SPELL_BLAST_WAVE);
                     break;
                 }
                 case EVENT_SHADOW_FLAME:
@@ -345,6 +364,12 @@ struct SV_orc_leaderAI : public ScriptedAI
         m_events.Reset();
         m_blackDragon = false;
         m_creature->DeMorph();
+    }
+
+    void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
+    {
+        if (pAttacker && pAttacker->IsCreature())
+            uiDamage = 0;
     }
 
     bool WeHaveMoreSparks() const
@@ -382,6 +407,7 @@ struct SV_orc_leaderAI : public ScriptedAI
             m_blackDragon = true;
             DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
             m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
+            m_creature->MonsterYell("I will not allow you to sabotage our plans. Time for you to face my true form!");
         }
 
         m_events.Update(uiDiff);
@@ -463,10 +489,15 @@ struct SV_orc_leaderAI : public ScriptedAI
                 }
                 case EVENT_TRANSFORM:
                 {
-                    m_creature->SetDisplayId(18750);
-                    m_creature->CastSpell(m_creature, SPELL_BLAST_WAVE, false);
+                    m_creature->SetDisplayId(6374);
+                    m_events.ScheduleEvent(EVENT_BLAST_WAVE, 500);
                     if (WeHaveMoreSparks())
                         m_events.ScheduleEvent(EVENT_SHADOW_FLAME, 10000);
+                    break;
+                }
+                case EVENT_BLAST_WAVE:
+                {
+                    DoCast(m_creature, SPELL_BLAST_WAVE);
                     break;
                 }
                 case EVENT_SHADOW_FLAME:
@@ -485,420 +516,27 @@ struct SV_orc_leaderAI : public ScriptedAI
     }
 };
 
-struct SV_human_footmanAI : public ScriptedAI
+struct SV_trash_mobsAI : public ScriptedAI
 {
-    SV_human_footmanAI(Creature* pCreature) : ScriptedAI(pCreature)
+    SV_trash_mobsAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 15211);
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_1, 7188);
         Reset();
     }
 
-    EventMap m_events;
-
     void Reset() override
     {
-        m_events.Reset();
     }
 
-    void Aggro(Unit* pWho) override
+    void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
     {
-    }
-
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
-    {
-        if (pDoneBy && pDoneBy->GetEntry() == NPC_ORC_GRUNT)
+        if (pAttacker && pAttacker->IsCreature() && pAttacker->GetLevel() <= m_creature->GetLevel())
             uiDamage = 0;
     }
 
-    void UpdateAI(uint32 const uiDiff)  override
+    void JustDied(Unit* pKiller)
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_human_archerAI : public ScriptedAI
-{
-    SV_human_archerAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_2, 15807);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        m_events.ScheduleEvent(EVENT_SHOOT, Seconds(2));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-            case EVENT_SHOOT:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AUTOSHOT) == CAST_OK)
-                    m_events.Repeat(Seconds(2));
-                else
-                    m_events.Repeat(100);
-
-                break;
-            }
-            }
-        }
-    }
-};
-
-struct SV_human_conjurerAI : public ScriptedAI
-{
-    SV_human_conjurerAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        m_events.ScheduleEvent(EVENT_SUMMON_WATER_ELEMENTAL, Seconds(5));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-            case EVENT_SUMMON_WATER_ELEMENTAL:
-            {
-                m_events.CancelEvent(EVENT_SUMMON_WATER_ELEMENTAL);
-                DoCastSpellIfCan(m_creature, SPELL_SUMMON_WATER_ELEMENTAL);
-                break;
-            }
-            }
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_human_clericAI : public ScriptedAI
-{
-    SV_human_clericAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 13049);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        //m_events.ScheduleEvent(EVENT_HEAL, Seconds(urand(8, 15)));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HEAL:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_orc_gruntAI : public ScriptedAI
-{
-    SV_orc_gruntAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 4562);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-    }
-
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
-    {
-        if (pDoneBy && pDoneBy->GetEntry() == NPC_HUMAN_FOOTMAN)
-            uiDamage = 0;
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_orc_spearmanAI : public ScriptedAI
-{
-    SV_orc_spearmanAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 2023);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_orc_warlockAI : public ScriptedAI
-{
-    SV_orc_warlockAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 13078);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct SV_orc_necrolyteAI : public ScriptedAI
-{
-    SV_orc_necrolyteAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 19214);
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        //m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
-        //m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        /*while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }*/
-
-        DoMeleeAttackIfReady();
+        if (Player* pPlayer = ToPlayer(pKiller))
+            pPlayer->GetHonorMgr().Add(10, HONORABLE, m_creature);
     }
 };
 
@@ -917,44 +555,9 @@ CreatureAI* GetAI_SV_orc_leader(Creature* pCreature)
     return new SV_orc_leaderAI(pCreature);
 }
 
-CreatureAI* GetAI_SV_human_footman(Creature* pCreature)
+CreatureAI* GetAI_SV_trash_mobs(Creature* pCreature)
 {
-    return new SV_human_footmanAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_human_archer(Creature* pCreature)
-{
-    return new SV_human_archerAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_human_conjurer(Creature* pCreature)
-{
-    return new SV_human_conjurerAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_human_cleric(Creature* pCreature)
-{
-    return new SV_human_clericAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_orc_grunt(Creature* pCreature)
-{
-    return new SV_orc_gruntAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_orc_spearman(Creature* pCreature)
-{
-    return new SV_orc_spearmanAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_orc_warlock(Creature* pCreature)
-{
-    return new SV_orc_warlockAI(pCreature);
-}
-
-CreatureAI* GetAI_SV_orc_necrolyte(Creature* pCreature)
-{
-    return new SV_orc_necrolyteAI(pCreature);
+    return new SV_trash_mobsAI(pCreature);
 }
 
 void AddSC_bg_sunnyglade()
@@ -978,42 +581,7 @@ void AddSC_bg_sunnyglade()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_sv_human_footman";
-    newscript->GetAI = &GetAI_SV_human_footman;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_human_archer";
-    newscript->GetAI = &GetAI_SV_human_archer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_human_conjurer";
-    newscript->GetAI = &GetAI_SV_human_conjurer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_human_cleric";
-    newscript->GetAI = &GetAI_SV_human_cleric;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_orc_grunt";
-    newscript->GetAI = &GetAI_SV_orc_grunt;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_orc_spearman";
-    newscript->GetAI = &GetAI_SV_orc_spearman;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_orc_warlock";
-    newscript->GetAI = &GetAI_SV_orc_warlock;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_sv_orc_necrolyte";
-    newscript->GetAI = &GetAI_SV_orc_necrolyte;
+    newscript->Name = "npc_sv_trash_mobs";
+    newscript->GetAI = &GetAI_SV_trash_mobs;
     newscript->RegisterSelf();
 }

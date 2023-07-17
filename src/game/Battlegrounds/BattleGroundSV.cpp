@@ -524,7 +524,7 @@ void BattleGroundSV::AddTeamSparks(TeamId team, uint32 count)
     {
         if (Creature* pHumanLeader = GetBgMap()->GetCreature(m_allianceGeneralGuid))
             UpdateGeneralHealth(pHumanLeader, GetTeamSparks(TEAM_ALLIANCE), GetTeamSparks(TEAM_HORDE));
-        if (Creature* pOrcLeader = GetBgMap()->GetCreature(m_allianceGeneralGuid))
+        if (Creature* pOrcLeader = GetBgMap()->GetCreature(m_hordeGeneralGuid))
             UpdateGeneralHealth(pOrcLeader, GetTeamSparks(TEAM_HORDE), GetTeamSparks(TEAM_ALLIANCE));
     }
     else
