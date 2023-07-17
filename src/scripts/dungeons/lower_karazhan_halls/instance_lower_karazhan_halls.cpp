@@ -8,10 +8,17 @@ instance_lower_karazhan_halls::instance_lower_karazhan_halls(Map* p_Map) : Scrip
 
 void instance_lower_karazhan_halls::Initialize()
 {
+	m_uiBroodQueenAraxxnaGUID = 0;
 }
 
 void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 {
+	switch (pCreature->GetEntry())
+	{
+	    case 61221:
+			m_uiBroodQueenAraxxnaGUID = pCreature->GetGUID();
+			break;
+	}
 }
 
 void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
@@ -20,7 +27,13 @@ void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
 {
-	return 0;
+	switch (uiType)
+	{
+	    case DATA_BROOD_QUEEN_ARAXXNA:
+			return m_uiBroodQueenAraxxnaGUID;
+		default:
+			return 0;
+	}
 }
 
 InstanceData* GetInstanceData_instance_lower_karazhan_halls(Map* p_Map)

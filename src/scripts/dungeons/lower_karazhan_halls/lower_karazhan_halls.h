@@ -3,6 +3,7 @@
 
 enum
 {
+	DATA_BROOD_QUEEN_ARAXXNA = 1,
 };
 
 class instance_lower_karazhan_halls : public ScriptedInstance
@@ -17,6 +18,9 @@ public:
 	void OnCreatureDeath(Creature* pCreature) override;
 
 	uint64 GetData64(uint32 uiData) override;
+
+protected:
+	uint64 m_uiBroodQueenAraxxnaGUID;
 };
 
 #endif
