@@ -182,3 +182,4 @@ DELETE FROM creature_battleground WHERE guid=2578339;
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2560552, 33);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2560552, 333);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2560550, 384);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2560549, 412);
