@@ -96,3 +96,6 @@ UPDATE `creature` SET `position_x` = 4353.056152, `position_y` = -2856.214844, `
 UPDATE `creature` SET `position_x` = 4347.162109, `position_y` = -2836.189209, `position_z` = 1093.842773, `orientation` = 2.845807 WHERE `guid` = 2578335;
 UPDATE `creature` SET `position_x` = 4347.162109, `position_y` = -2836.189209, `position_z` = 1093.812744, `orientation` = 2.947909 WHERE `guid` = 2578335;
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578191, 333);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578190, 333);
+UPDATE `creature` SET `position_x` = 4409.463379, `position_y` = -4181.034180, `position_z` = 956.251038, `orientation` = 4.412263 WHERE `guid` = 2578194;
+UPDATE `creature` SET `position_x` = 4412.093750, `position_y` = -4177.012207, `position_z` = 953.621521, `orientation` = 4.215905 WHERE `guid` = 2578194;
