@@ -99,3 +99,4 @@ REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578191, 333);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2578190, 333);
 UPDATE `creature` SET `position_x` = 4409.463379, `position_y` = -4181.034180, `position_z` = 956.251038, `orientation` = 4.412263 WHERE `guid` = 2578194;
 UPDATE `creature` SET `position_x` = 4412.093750, `position_y` = -4177.012207, `position_z` = 953.621521, `orientation` = 4.215905 WHERE `guid` = 2578194;
+REPLACE INTO `creature` VALUES (2578336,61582,0,0,0,1,4625.14,-2676.01,1139.79,2.26967,120,120,0,100,100,0,0,0);
