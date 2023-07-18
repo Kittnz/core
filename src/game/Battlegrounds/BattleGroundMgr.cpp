@@ -133,7 +133,9 @@ bool BattleGroundQueue::SelectionPool::AddGroup(GroupQueueInfo *ginfo, uint32 de
             continue;
 
         // dont allow adding to BG selectionpool group to join new BGs while in old BG.
-        if (player->InBattleGround() || player->IsTaxiFlying())
+        if (player->InBattleGround() || player->IsTaxiFlying() ||
+            !player->GetSession()->IsConnected() ||
+            player->GetSession()->isLogingOut())
         {
             skip = true;
             break;
@@ -449,9 +451,14 @@ bool BattleGroundQueue::InviteGroupToBG(GroupQueueInfo * ginfo, BattleGround * b
         for (GroupQueueInfoPlayers::iterator itr = ginfo->Players.begin(); itr != ginfo->Players.end(); ++itr)
         {
             // get the player
-            Player* plr = ObjectAccessor::FindPlayerNotInWorld(itr->first);
+            Player* plr = ObjectAccessor::FindPlayer(itr->first);
+
             // if offline, skip him
-            if (!plr)
+            if (!plr || !plr->GetSession()->IsConnected())
+                continue;
+
+            // if logging out, skip him
+            if (plr->GetSession()->isLogingOut())
                 continue;
 
             // if already in battleground, skip him
@@ -473,6 +480,22 @@ bool BattleGroundQueue::InviteGroupToBG(GroupQueueInfo * ginfo, BattleGround * b
             // create automatic remove events
             BGQueueRemoveEvent* removeEvent = new BGQueueRemoveEvent(plr->GetObjectGuid(), ginfo->IsInvitedToBGInstanceGUID, bgTypeId, bgQueueTypeId, ginfo->RemoveInviteTime);
             plr->m_Events.AddEvent(removeEvent, plr->m_Events.CalculateTime(INVITE_ACCEPT_WAIT_TIME));
+
+            if (bgTypeId == BATTLEGROUND_BR)
+            {
+                plr->m_Events.AddLambdaEventAtOffset([plr, bgTypeId]
+                {
+                    if (plr->IsInWorld() && !plr->InBattleGround() &&
+                        plr->GetSession()->IsConnected() &&
+                        !plr->GetSession()->isLogingOut())
+                    {
+                        WorldPacket* data = new WorldPacket(CMSG_BATTLEFIELD_PORT);
+                        *data << uint32(GetBattleGrounMapIdByTypeId(bgTypeId));
+                        *data << uint8(1);
+                        plr->GetSession()->QueuePacket(std::move(data));
+                    }
+                }, 1000);
+            }
 
             WorldPacket data;
 
@@ -1761,12 +1784,17 @@ void BattleGroundMgr::PlayerLoggedIn(Player* player)
 
 void BattleGroundMgr::PlayerLoggedOut(Player* player)
 {
-    for (int i = 1; i <= PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+    for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
     {
-        if (BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(i-1))
+        BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(queueSlot);
+        if (bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
         {
-            player->RemoveBattleGroundQueueId(bgQueueTypeId);
-            m_BattleGroundQueues[bgQueueTypeId].PlayerLoggedOut(player->GetObjectGuid());
+            player->RemoveBattleGroundQueueId(bgQueueTypeId);  // must be called this way, because if you move this call to queue->removeplayer, it causes bugs
+            m_BattleGroundQueues[bgQueueTypeId].RemovePlayer(player->GetObjectGuid(), true);
+
+            // player left queue, we should update it
+            BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
+            sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, player->GetBattleGroundBracketIdFromLevel(bgTypeId, player->GetLevel()));
         }
     }
 }

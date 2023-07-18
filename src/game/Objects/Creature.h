@@ -726,6 +726,7 @@ class Creature : public Unit
         Player* GetOriginalLootRecipient() const;           // ignore group changes/etc, not for looting
         bool IsTappedBy(Player const* player) const;
         bool IsSkinnableBy(Player const* player) const { return !skinningForOthersTimer || IsTappedBy(player); }
+        bool WasPlayerPresentAtDeath(Player const* player) const;
 
         uint32 m_spells[CREATURE_MAX_SPELLS];
 
@@ -1028,6 +1029,7 @@ class Creature : public Unit
         uint32 m_lootMoney;
         ObjectGuid m_lootRecipientGuid;                     // player who will have rights for looting if m_lootGroupRecipient==0 or group disbanded
         uint32 m_lootGroupRecipientId;                      // group who will have rights for looting if set and exist
+        ObjectGuidSet m_playersPresentAtDeath;              // list of players that were in the map at time of death (for raid bosses only)
 
         /// Timers
         uint32 m_corpseDecayTimer;                          // (msecs)timer for death or corpse disappearance

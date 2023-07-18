@@ -1403,6 +1403,12 @@ bool Creature::IsTappedBy(Player const* player) const
     return true;
 }
 
+// checked for trading of soulbound items within raid
+bool Creature::WasPlayerPresentAtDeath(Player const* player) const
+{
+    return m_playersPresentAtDeath.find(player->GetObjectGuid()) != m_playersPresentAtDeath.end();
+}
+
 void Creature::SaveToDB()
 {
     // this should only be used when the creature has already been loaded
@@ -1862,6 +1868,15 @@ void Creature::SetDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
+        // Turtle: Store players in map during raid boss death,
+        // to allow trading of soulbound items among eligible players.
+        if (IsWorldBoss() && IsInWorld() && FindMap() && FindMap()->IsRaid())
+        {
+            Map::PlayerList const& players = FindMap()->GetPlayers();
+            for (auto const& itr : players)
+                m_playersPresentAtDeath.insert(itr.getSource()->GetObjectGuid());
+        }
+
         SetTargetGuid(ObjectGuid());                        // remove target selection in any cases (can be set at aura remove in Unit::SetDeathState)
         SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 
@@ -1885,6 +1900,8 @@ void Creature::SetDeathState(DeathState s)
 
     if (s == JUST_ALIVED)
     {
+        m_playersPresentAtDeath.clear();
+
         ClearUnitState(UNIT_STAT_ALL_DYN_STATES);
 
         CreatureInfo const *cinfo = GetCreatureInfo();

@@ -6,6 +6,9 @@
 #include "ObjectMgr.h"
 #include "AccountMgr.h"
 #include "Antispam/Antispam.h"
+#include "CommandStream.h"
+
+#include <istream>
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
@@ -135,6 +138,65 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
     }
 
     PSendSysMessage("End of listing for fingerprint %u.  Found %d matches.", fingerprintNum, count);
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
+{
+    uint32 extendedPrint;
+
+    if (!ExtractUInt32(&args, extendedPrint))
+    {
+        PSendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
+{
+    CommandStream commandStream { args };
+    uint64 extendedPrint;
+
+    if (!(commandStream >> extendedPrint))
+    {
+        PSendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+    std::string guildName;
+
+    if (!(commandStream >> guildName))
+    {
+        PSendSysMessage("Wrongly formatted guild name.");
+        return false;
+    }
+
+    std::string playerName;
+
+    if (!(commandStream >> playerName))
+    {
+        PSendSysMessage("Wrongly formatted player name.");
+        return false;
+    }
+
+
+    PSendSysMessage("Listing logged in clients with extended FP %u:", extendedPrint);
+
+    const auto& sessions = sWorld.GetAllSessions();
+    for (const auto& sessionPair : sessions)
+    {
+        const auto& session = sessionPair.second;
+        auto& sample = session->_analyser->GetCurrentSample();
+        if (sample.GetHash() == extendedPrint)
+        {
+            auto player = session->GetPlayer();
+            PSendSysMessage("Found Match for Account ID %u, player %s (GUID %u). IP: %s", session->GetAccountId(), player ? player->GetName() : "<None> (Not logged in)", player ? player->GetGUIDLow() : 0
+                , session->GetRemoteAddress().c_str());
+        }
+    }
+
     return true;
 }
 

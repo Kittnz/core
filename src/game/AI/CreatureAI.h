@@ -141,11 +141,14 @@ struct DefaultTargetSelector : public unary_function<Unit*, bool>
     }
 };
 
+// Creature spell lists should be updated every 1.2 seconds according to research.
+// https://www.reddit.com/r/wowservers/comments/834nt5/felmyst_ai_system_research/
+#define CREATURE_CASTING_DELAY 1200
 
 class CreatureAI
 {
     public:
-        explicit CreatureAI(Creature* creature) : m_creature(creature), m_bUseAiAtControl(false), m_bMeleeAttack(true), m_bCombatMovement(true), m_uiCastingDelay(0), m_uLastAlertTime(0)
+        explicit CreatureAI(Creature* creature) : m_creature(creature), m_bUseAiAtControl(false), m_bMeleeAttack(true), m_bCombatMovement(true), m_uiCastingDelay(CREATURE_CASTING_DELAY), m_uLastAlertTime(0)
         {
             SetSpellsList(creature->GetCreatureInfo()->spell_list_id);
         }
@@ -385,7 +388,7 @@ class CreatureAI
         bool   m_bUseAiAtControl;
         bool   m_bMeleeAttack;                                  // If we allow melee auto attack
         bool   m_bCombatMovement;                               // If we allow targeted movement gen (chasing target)
-        uint32 m_uiCastingDelay;                                // Cooldown before updating spell list again
+        uint32 m_uiCastingDelay;                                // Milliseconds elapsed since last spell list update
         uint32 m_uLastAlertTime;
         std::vector<CreatureAISpellsEntry> m_CreatureSpells;    // Contains the currently used creature_spells template
 };

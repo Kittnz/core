@@ -189,21 +189,21 @@ NPCData const BG_SV_LeaderGuardsPos[2][6] =
 {
     // footman, conjurer, cleric
     {
-        {93001, 1678.05f, 422.08f, 115.0f, 4.66f},
-        {93001, 1669.69f, 422.52f, 115.0f, 4.66f},
-        {93003, 1679.98f, 424.64f, 115.0f, 4.66f},
-        {93003, 1668.3f, 425.0f, 115.0f, 4.66f},
-        {93004, 1676.1f, 424.46f, 115.0f, 4.66f},
-        {93004, 1671.1f, 424.5f, 115.0f, 4.66f}
+        {NPC_HUMAN_FOOTMAN, 1678.05f, 422.08f, 115.0f, 4.66f},
+        {NPC_HUMAN_FOOTMAN, 1669.69f, 422.52f, 115.0f, 4.66f},
+        {NPC_HUMAN_CONJURER, 1679.98f, 424.64f, 115.0f, 4.66f},
+        {NPC_HUMAN_CONJURER, 1668.3f, 425.0f, 115.0f, 4.66f},
+        {NPC_HUMAN_CLERIC, 1676.1f, 424.46f, 115.0f, 4.66f},
+        {NPC_HUMAN_CLERIC, 1671.1f, 424.5f, 115.0f, 4.66f}
     },
     // grunt, warlock, necrolyte
     {
-        {93006, 967.55f, 178.71f, 100.5f, 0.55f},
-        {93006, 970.25f, 172.6f, 100.5f, 0.55f},
-        {93009, 970.45f, 169.9f, 100.5f, 0.55f},
-        {93009, 964.44f, 179.4f, 100.5f, 0.55f},
-        {93008, 965.9f, 177.0f, 100.5f, 0.55f},
-        {93008, 967.8f, 173.0f, 100.5f, 0.55f}
+        {NPC_ORC_GRUNT, 967.55f, 178.71f, 100.5f, 0.55f},
+        {NPC_ORC_GRUNT, 970.25f, 172.6f, 100.5f, 0.55f},
+        {NPC_ORC_WARLOCK, 970.45f, 169.9f, 100.5f, 0.55f},
+        {NPC_ORC_WARLOCK, 964.44f, 179.4f, 100.5f, 0.55f},
+        {NPC_ORC_NECROLYTE, 965.9f, 177.0f, 100.5f, 0.55f},
+        {NPC_ORC_NECROLYTE, 967.8f, 173.0f, 100.5f, 0.55f}
     }
 };
 
@@ -349,9 +349,9 @@ class BattleGroundSV : public BattleGround
         Team GetHeraldControlledTeam();
         uint32 GetTeamSparks(TeamId team) const { return m_resources[team]; }
         void UpdateTeamSparks(TeamId team);
-        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; UpdateTeamSparks(team); }
-        void SetGeneralsActive(bool set) { generalsActive = set; }
-        bool IsGeneralsActive() { return generalsActive; }
+        void AddTeamSparks(TeamId team, uint32 count);
+        void SetGeneralsActive(bool set) { m_generalsActive = set; }
+        bool IsGeneralsActive() { return m_generalsActive; }
         bool SetupSkirmishes();
 
     private:
@@ -371,6 +371,8 @@ class BattleGroundSV : public BattleGround
         uint32 m_NodeTimers[BG_SV_DYNAMIC_NODES_COUNT];
         uint32 m_resources[BG_TEAMS_COUNT];
         uint32 m_lastTick[BG_TEAMS_COUNT];
-        bool generalsActive;
+        bool m_generalsActive;
+        ObjectGuid m_allianceGeneralGuid;
+        ObjectGuid m_hordeGeneralGuid;
 };
 #endif

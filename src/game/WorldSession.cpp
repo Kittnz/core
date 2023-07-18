@@ -518,9 +518,6 @@ void WorldSession::LogoutPlayer(bool Save)
             _player->BuildPlayerRepop();
             _player->RepopAtGraveyard();
         }
-        //drop a flag if player is carrying it
-        if (BattleGround *bg = _player->GetBattleGround())
-            _player->LeaveBattleground(true);
 
         ///- Teleport to home if the player is in an invalid instance
         if (!_player->m_InstanceValid && !_player->IsGameMaster())
@@ -537,6 +534,22 @@ void WorldSession::LogoutPlayer(bool Save)
         {
             HandleMoveWorldportAckOpcode();
             sMapMgr.ExecuteSingleDelayedTeleport(_player); // Execute chain teleport if there are some
+        }
+
+        // drop the flag if player is carrying it
+        if (BattleGround* bg = _player->GetBattleGround())
+        {
+            _player->LeaveBattleground(true);
+
+            // check for teleports both before and after leaving bg
+            // fixes exploit where you can be considered to be inside bg
+            // while you are actually outside if you kill wow process on
+            // loading screen during the teleport into bg when joining
+            while (_player->IsBeingTeleportedFar())
+            {
+                HandleMoveWorldportAckOpcode();
+                sMapMgr.ExecuteSingleDelayedTeleport(_player);
+            }
         }
 
         // Refresh apres ca
