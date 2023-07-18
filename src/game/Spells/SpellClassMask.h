@@ -160,10 +160,10 @@ enum ClassFlag
     CF_PRIEST_DEVOURING_PLAGUE              = 25,   // CM0 02000000
     CF_PRIEST_MIND_VISION                   = 26,   // CM0 04000000
     CF_PRIEST_HOLY_NOVA2                    = 27,   // CM0 08000000
-    CF_PRIEST_FLASH_HEAL2                   = 28,   // CM0 10000000
+    CF_PRIEST_SHADOW_MEND                   = 28,   // CM0 10000000 custom turtle spell
     CF_PRIEST_WEAKENED_SOUL                 = 29,   // CM0 20000000
     CF_PRIEST_MISC1                         = 30,   // CM0 40000000 Ressurection, Shackle Undead, Lightwell
-    CF_PRIEST_MISC2                         = 31,   // CM0 80000000
+    CF_PRIEST_MISC2                         = 31,   // CM0 80000000 instant cast spells
 
     CF_PRIEST_DISPELLS                       = 32,   // CM1 00000001
 
