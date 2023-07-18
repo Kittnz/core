@@ -312,18 +312,30 @@ bool HasOverrideAttributes(SpellEntry const* triggerSpell, SpellEntry const* mod
 {
     if (mod.op == SPELLMOD_DURATION)
     {
-        if (triggerSpell->SpellFamilyName == SPELLFAMILY_DRUID && triggerSpell->SpellIconID == 1181) // tiger's fury 
-        {
+        // Tiger's Fury
+        if (triggerSpell->SpellFamilyName == SPELLFAMILY_DRUID && triggerSpell->SpellIconID == 1181)
             return true;
-        }
     }
 
     if (mod.op == SPELLMOD_CRIT_DAMAGE_BONUS)
     {
-        if (triggerSpell->SpellFamilyName == SPELLFAMILY_MAGE && modSpell->SpellIconID == 1708 && triggerSpell->School == SPELL_SCHOOL_ARCANE) // Arcane potency mage
-        {
+        // Arcane Potency
+        if (triggerSpell->SpellFamilyName == SPELLFAMILY_MAGE && modSpell->SpellIconID == 1708 && triggerSpell->School == SPELL_SCHOOL_ARCANE)
             return true;
-        }
+    }
+
+    if (mod.op == SPELLMOD_COST)
+    {
+        // Inner Focus
+        if (modSpell->Id == 14751 && triggerSpell->SpellFamilyName == SPELLFAMILY_PRIEST)
+            return true;
+    }
+
+    if (mod.op == SPELLMOD_CRITICAL_CHANCE)
+    {
+        // Inner Focus
+        if (modSpell->Id == 14751 && triggerSpell->SpellFamilyName == SPELLFAMILY_PRIEST)
+            return true;
     }
 
     return false;
