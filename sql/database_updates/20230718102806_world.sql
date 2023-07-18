@@ -41,3 +41,6 @@ REPLACE INTO `creature` VALUES (2568679,60545,0,0,0,1,13840,-6571.7,29.5674,5.58
 -- Changes by DRAGUNOVI
 UPDATE `creature_template` set `scale` = 2.000000 where entry = 61558;
 UPDATE `creature` SET `spawntimesecsmin`=86400, `spawntimesecsmax`=172800 WHERE `guid`=2578320;
+
+-- Changes by TAMMO
+UPDATE `creature` SET `position_x` = 4294.243652, `position_y` = -2680.674805, `position_z` = 1106.244873, `orientation` = 1.153481 WHERE `guid` = 2578189;
