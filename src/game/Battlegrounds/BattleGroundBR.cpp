@@ -149,11 +149,13 @@ void BattleGroundBR::EndBattleGround(Team winner)
         return;
 
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+
     // rewards
-    RewardReputationToTeam(1008, 100, winner);
-    RewardReputationToTeam(1008, 25, loser);
-    RewardHonorToTeam(200, winner);
-    RewardHonorToTeam(50, loser);
+    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+    RewardReputationToTeam(1008, isBGWeekend ? 200 : 100, winner);
+    RewardReputationToTeam(1008, isBGWeekend ? 50 : 25, loser);
+    RewardHonorToTeam(isBGWeekend ? 400 : 200, winner);
+    RewardHonorToTeam(isBGWeekend ? 100 : 50, loser);
 
     BattleGround::EndBattleGround(winner);
 }
