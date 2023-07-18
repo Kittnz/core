@@ -1002,6 +1002,8 @@ enum HolidayIds
     HOLIDAY_CALL_TO_ARMS_AV          = 283,
     HOLIDAY_CALL_TO_ARMS_WS          = 284,
     HOLIDAY_CALL_TO_ARMS_AB          = 285,
+    HOLIDAY_CALL_TO_ARMS_BR          = 286,
+    HOLIDAY_CALL_TO_ARMS_SV          = 287,
     HOLIDAY_FISHING_EXTRAVAGANZA     = 301,
     HOLIDAY_HARVEST_FESTIVAL         = 321,
     HOLIDAY_HALLOWS_END              = 324,
