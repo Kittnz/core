@@ -73,6 +73,7 @@ struct AnalysisInfo
     uint32 qpcData = 0;
     bool useExtendedData = false;
     bool useCpuData = false;
+    uint32 timeZoneId = 0;
 
     size_t GetHash() const
     {

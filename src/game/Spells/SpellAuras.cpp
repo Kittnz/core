@@ -138,7 +138,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleModSpellCritChanceSchool,                  // 71 SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
     &Aura::HandleModPowerCostPCT,                           // 72 SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT
     &Aura::HandleModPowerCost,                              // 73 SPELL_AURA_MOD_POWER_COST_SCHOOL
-    &Aura::HandleReflectSpellsSchool,                       // 74 SPELL_AURA_REFLECT_SPELLS_SCHOOL  implemented in Unit::SpellHitResult
+    &Aura::HandleNoImmediateEffect,                         // 74 SPELL_AURA_REFLECT_SPELLS_SCHOOL  implemented in Unit::SpellHitResult
     &Aura::HandleNoImmediateEffect,                         // 75 SPELL_AURA_MOD_LANGUAGE
     &Aura::HandleFarSight,                                  // 76 SPELL_AURA_FAR_SIGHT
     &Aura::HandleModMechanicImmunity,                       // 77 SPELL_AURA_MECHANIC_IMMUNITY
@@ -2210,51 +2210,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     if (target->GetTypeId() == TYPEID_UNIT)
                         target->SetFeignDeath(apply);
 
-                    return;
-                }
-            }
-            break;
-        }
-        case SPELLFAMILY_MAGE:
-        {
-            switch (GetId())
-            {
-                // Frost Warding
-                case 11189:
-                case 28332:
-                {
-                    if (Player* pPlayer = target->ToPlayer())
-                    {
-                        if (apply)
-                        {
-                            SpellModifier* mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), UI64LIT(0x0000000000000100));
-                            pPlayer->AddSpellMod(mod, true);
-                        }
-                        else
-                        {
-                            if (SpellModifier *mod = pPlayer->GetSpellMod(SPELLMOD_RESIST_MISS_CHANCE, GetId()))
-                                pPlayer->AddSpellMod(mod, false);
-                        }
-                    }
-                    return;
-                }
-                // Improved Fire Ward
-                case 11094:
-                case 13043:
-                {
-                    if (Player* pPlayer = target->ToPlayer())
-                    {
-                        if (apply)
-                        {
-                            SpellModifier *mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), UI64LIT(0x0000000000000008));
-                            pPlayer->AddSpellMod(mod, true);
-                        }
-                        else
-                        {
-                            if (SpellModifier *mod = pPlayer->GetSpellMod(SPELLMOD_RESIST_MISS_CHANCE, GetId()))
-                                pPlayer->AddSpellMod(mod, false);
-                        }
-                    }
                     return;
                 }
             }
@@ -5649,13 +5604,15 @@ void Aura::HandleModPowerCost(bool apply, bool Real)
 
 void Aura::HandleReflectSpellsSchool(bool apply, bool Real)
 {
+    // Why reflect spells decreased hit chance????
+
     // all applied/removed only at real aura add/remove
-    if (!Real)
+    /*if (!Real)
         return;
 
     if (Unit* pCaster = GetCaster())
         if (Player *modOwner = pCaster->GetSpellModOwner())
-            modOwner->ApplySpellMod(GetId(), SPELLMOD_RESIST_MISS_CHANCE, m_modifier.m_amount);
+            modOwner->ApplySpellMod(GetId(), SPELLMOD_RESIST_MISS_CHANCE, m_modifier.m_amount);*/
 }
 
 void Aura::HandleShapeshiftBoosts(bool apply)

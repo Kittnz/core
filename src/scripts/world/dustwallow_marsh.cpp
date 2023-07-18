@@ -1296,22 +1296,18 @@ struct npc_tabethaAI : ScriptedAI
     void UpdateAI(const uint32 uiDiff) override
     {
         // Prevent Tabetha from getting stuck in uninteractible state.
-        if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP) ||
-            !m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER))
+        if (m_uiNotInteractibleTimer >= 60000)
         {
-            if (m_uiNotInteractibleTimer)
-            {
-                if (m_uiNotInteractibleTimer <= uiDiff)
-                {
-                    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-                    m_uiNotInteractibleTimer = 0;
-                }
-                else
-                    m_uiNotInteractibleTimer -= uiDiff;
-            }
-            else
-                m_uiNotInteractibleTimer = 120000;
+            m_uiNotInteractibleTimer = 0;
+
+            if (m_creature->IsInCombat())
+                EnterEvadeMode();
+
+            m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+            m_creature->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
         }
+        else
+            m_uiNotInteractibleTimer += uiDiff;
 
         if (!m_uiManaSurgesInProcess)
             return;

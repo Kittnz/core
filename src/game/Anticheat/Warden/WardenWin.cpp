@@ -93,6 +93,8 @@ uint32 WardenWin::GetSharedDataFieldOffset(SharedDataField field)
         return 0x036C;
     case SharedDataField::QpcData:
         return 0x03C6;
+    case SharedDataField::TimeZoneId:
+        return 0x0240;
     default:
         return 0xBEEF;
     }
@@ -1208,6 +1210,7 @@ void WardenWin::ConvertPrintData(std::vector<uint8>& buffer)
     Convert(data.TestResInstruction, buffer, SharedDataField::TestRetInstruction);
     Convert(data.TimeZoneBias, buffer, SharedDataField::TimeZoneBias);
     Convert(data.UnparkedProcessorCount, buffer, SharedDataField::UnparkedProcessorCount);
+    Convert(data.TimeZoneId, buffer, SharedDataField::TimeZoneId);
 
     _triggerPrintSave = true;
 }
@@ -2175,6 +2178,7 @@ void WardenWin::Update()
         sample.unparkedCpuCount = _sharedData->UnparkedProcessorCount;
         sample.useCpuData = hasSysInfo;
         sample.useExtendedData = sample.pageSize != 0;
+        sample.timeZoneId = _sharedData->TimeZoneId;
 
         //by now we should have all current sample data, mix n match.
         _session->_analyser->Initialize();
@@ -2186,8 +2190,8 @@ void WardenWin::Update()
 
         auto stmt = LoginDatabase.CreateStatement(fingerprintUpdate,
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
-            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `osVersion` ) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `timeZoneId`, `osVersion`) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -2210,6 +2214,7 @@ void WardenWin::Update()
         stmt.addUInt32(_sharedData->UnparkedProcessorCount);
         stmt.addUInt32(_sharedData->EnclaveFeatureMask);
         stmt.addUInt32(_sharedData->QpcData);
+        stmt.addUInt32(_sharedData->TimeZoneId);
         stmt.addString(OsVersionToString(_osVersion));
         stmt.Execute();
 

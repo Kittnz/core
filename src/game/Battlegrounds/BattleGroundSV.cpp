@@ -352,7 +352,7 @@ void BattleGroundSV::Reset()
         m_BannerTimers[i].timer = 0;
     }
 
-    generalsActive = false;
+    m_generalsActive = false;
 
     for (uint8 i = 0; i < BG_SV_CREATURE_MAX; ++i)
         if (m_BgCreatures[i])
@@ -505,18 +505,48 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     PlaySoundToAll(sound);
 }
 
+static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 enemySparks)
+{
+    int32 health = pGeneral->GetCreatureInfo()->health_max;
+    health = health + health * ourSparks - (health / 2) * enemySparks;
+    if (health <= 0)
+        health = pGeneral->GetCreatureInfo()->health_max;
+
+    pGeneral->SetMaxHealth(health);
+}
+
+void BattleGroundSV::AddTeamSparks(TeamId team, uint32 count)
+{
+    m_resources[team] += count;
+    UpdateTeamSparks(team);
+
+    if (IsGeneralsActive())
+    {
+        if (Creature* pHumanLeader = GetBgMap()->GetCreature(m_allianceGeneralGuid))
+            UpdateGeneralHealth(pHumanLeader, GetTeamSparks(TEAM_ALLIANCE), GetTeamSparks(TEAM_HORDE));
+        if (Creature* pOrcLeader = GetBgMap()->GetCreature(m_hordeGeneralGuid))
+            UpdateGeneralHealth(pOrcLeader, GetTeamSparks(TEAM_HORDE), GetTeamSparks(TEAM_ALLIANCE));
+    }
+    else
+    {
+        uint32 totalSparks = GetTeamSparks(TEAM_ALLIANCE) + GetTeamSparks(TEAM_HORDE);
+        uint32 maxSparks = sWorld.getConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT);
+
+        if (totalSparks >= maxSparks)
+            StartFinalEvent();
+    }
+}
+
 void BattleGroundSV::StartFinalEvent()
 {
-    generalsActive = true;
+    m_generalsActive = true;
     SendYellToAll(LANG_BG_SV_SUMMON_DRAGON, LANG_UNIVERSAL, m_BgCreatures[BG_SV_CREATURE_HERALD]);
 
     /*human leader*/
-    Creature* humanLeader = AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_LeaderPos[0].x, BG_SV_LeaderPos[0].y, BG_SV_LeaderPos[0].z, BG_SV_LeaderPos[0].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS);
-    if (humanLeader)
+    if (Creature* pHumanLeader = AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_LeaderPos[0].x, BG_SV_LeaderPos[0].y, BG_SV_LeaderPos[0].z, BG_SV_LeaderPos[0].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS))
     {
-        uint32 newHp = humanLeader->GetMaxHealth() * (GetTeamSparks(TEAM_ALLIANCE) > 1 ? GetTeamSparks(TEAM_ALLIANCE) : 1);
-        humanLeader->SetHealth(newHp);
-        humanLeader->SetMaxHealth(newHp);
+        m_allianceGeneralGuid = pHumanLeader->GetObjectGuid();
+        UpdateGeneralHealth(pHumanLeader, GetTeamSparks(TEAM_ALLIANCE), GetTeamSparks(TEAM_HORDE));
     }
 
     /*human leader guards*/
@@ -524,12 +554,10 @@ void BattleGroundSV::StartFinalEvent()
         AddCreature(BG_SV_LeaderGuardsPos[0][i].entry, BG_SV_CREATURE_LEADER_GUARDS_A + i, BG_SV_LeaderGuardsPos[0][i].x, BG_SV_LeaderGuardsPos[0][i].y, BG_SV_LeaderGuardsPos[0][i].z, BG_SV_LeaderGuardsPos[0][i].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS);
 
     /*orc leader*/
-    Creature* orcLeader = AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_LeaderPos[1].x, BG_SV_LeaderPos[1].y, BG_SV_LeaderPos[1].z, BG_SV_LeaderPos[1].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS);
-    if (orcLeader)
+    if (Creature* pOrcLeader = AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_LeaderPos[1].x, BG_SV_LeaderPos[1].y, BG_SV_LeaderPos[1].z, BG_SV_LeaderPos[1].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS))
     {
-        uint32 newHp = orcLeader->GetMaxHealth() * (GetTeamSparks(TEAM_HORDE) > 1 ? GetTeamSparks(TEAM_HORDE) : 1);
-        orcLeader->SetHealth(newHp);
-        orcLeader->SetMaxHealth(newHp);
+        m_hordeGeneralGuid = pOrcLeader->GetObjectGuid();
+        UpdateGeneralHealth(pOrcLeader, GetTeamSparks(TEAM_HORDE), GetTeamSparks(TEAM_ALLIANCE));
     }
 
     /*orc leader guards*/
