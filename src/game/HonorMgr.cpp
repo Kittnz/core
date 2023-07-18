@@ -1074,7 +1074,7 @@ void HonorMgr::SendPVPCredit(Unit* victim, float honor)
             if (!rank)
                 rank = minimumRank;
 
-            data << int32(minimumRank);
+            data << int32(rank);
         }
     }
 
