@@ -2553,8 +2553,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         return;
 
                     // Reduce base armor by 27% in Bear Form and 16% in Dire Bear Form
+                    // TODO: armor calculation is not correct (5-8% error in pct calc) in general
                     int32 reductionMod = unitTarget->HasAura(9634) ? -16 : -27;
-                    unitTarget->CastCustomSpell(unitTarget, 25503, &reductionMod, nullptr, nullptr, true);
+                    unitTarget->CastCustomSpell(unitTarget, 25503, nullptr, &reductionMod, nullptr, true);
                     break;
                 }
                 case 29201: // Loatheb Corrupted Mind triggered sub spells
