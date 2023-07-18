@@ -3644,8 +3644,49 @@ SpellMissInfo WorldObject::SpellHitResult(Unit* pVictim, SpellEntry const* spell
         int32 reflectchance = pVictim->GetTotalAuraModifier(SPELL_AURA_REFLECT_SPELLS);
         Unit::AuraList const& mReflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
         for (const auto i : mReflectSpellsSchool)
+        {
             if (i->GetModifier()->m_miscvalue & spell->GetSpellSchoolMask())
-                reflectchance += i->GetModifier()->m_amount;
+            {
+                // handling reflection bonus from wards HERE - hack, not implemented spell mods and system who affected on effect in other spell through apply dummy effect, NOT hack aura
+                bool ward = false;
+                switch (i->GetId())
+                {
+                    // Fire Ward
+                    case 543:
+                    case 8457:
+                    case 8458:
+                    case 10223:
+                    case 10225:
+                    {
+                        // Improved Fire Ward
+                        if (pVictim->HasAura(11094))
+                            reflectchance += 10;
+                        else if (pVictim->HasAura(13043))
+                            reflectchance += 20;
+                        ward = true;
+                        break;
+                    }
+                    // Frost Ward
+                    case 6143:
+                    case 8461:
+                    case 8462:
+                    case 10177:
+                    case 28609:
+                    {
+                        // Frost Warding
+                        if (pVictim->HasAura(11189))
+                            reflectchance += 10;
+                        else if (pVictim->HasAura(28332))
+                            reflectchance += 20;
+                        ward = true;
+                        break;
+                    }
+                }
+
+                if (!ward)
+                    reflectchance += i->GetModifier()->m_amount;
+            }
+        }
 
         if (reflectchance > 0 && roll_chance_i(reflectchance))
         {
