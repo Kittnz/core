@@ -7,6 +7,7 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "World.h"
+#include "GameEventMgr.h"
 
 enum SV_Spells
 {
@@ -536,7 +537,13 @@ struct SV_trash_mobsAI : public ScriptedAI
     void JustDied(Unit* pKiller)
     {
         if (Player* pPlayer = ToPlayer(pKiller))
+        {
+            if (sGameEventMgr.IsActiveEvent(51))
+                if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(1007))
+                    pPlayer->GetReputationMgr().ModifyReputation(factionEntry, 10);
+
             pPlayer->GetHonorMgr().Add(10, HONORABLE, m_creature);
+        }
     }
 };
 
