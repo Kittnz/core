@@ -74,5 +74,29 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61533, 30090, 2.5, 10, -30090, 1, 0),
 (61533, 61707, 100, 0, 1, 1, 0);
 
+-- can you reduce drop chances of item 61706
+-- 24% to 15%, 
+-- 44% to 18% 
+-- 89% to 41%
 
+-- for item 61707, change drop chances to 
 
+-- 10.4% to 13.5%
+-- 6.3% to 8.8%
+
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 8.8 WHERE `entry` = 61367 AND `item` = 61707 AND `groupid` = 0;
+
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 13.5 WHERE `entry` = 61359 AND `item` = 61707 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 13.5 WHERE `entry` = 61358 AND `item` = 61707 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 13.5 WHERE `entry` = 61358 AND `item` = 61707 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 13.5 WHERE `entry` = 61356 AND `item` = 61707 AND `groupid` = 0;
+
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -15, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61338 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -15, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61339 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -15, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61340 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -15, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61341 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -18, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61354 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -18, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61349 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -18, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61350 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -41, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61352 AND `item` = 61706 AND `groupid` = 0;
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = -41, `mincountOrRef` = 1, `maxcount` = 1, `condition_id` = 0 WHERE `entry` = 61353 AND `item` = 61706 AND `groupid` = 0;
