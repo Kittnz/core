@@ -89,6 +89,27 @@
 #include "SuspiciousStatisticMgr.h"
 #include "ChannelMgr.h"
 
+uint32 GetTokenBalance(uint32 accountId)
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId);
+
+    uint32 coins = 0;
+
+    if (!result)
+    {
+        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", accountId);
+        return coins;
+    }
+
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        coins = fields[0].GetInt32();
+        delete result;
+    }
+    return coins;
+}
+
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
     sObjectMgr.LoadMangosStrings();
@@ -14163,20 +14184,7 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     if (!account_id)
         return false;
 
-    QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", account_id);
-
-    int32 currentCoins = 0;
-    if (!result)
-    {
-        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", account_id);
-        PSendSysMessage("This player had no record in the shop_coins table. Run the command again.");
-    }
-
-    if (result)
-    {
-        Field* fields = result->Fetch();
-        currentCoins = fields[0].GetInt32();
-    }
+    int32 currentCoins = GetTokenBalance(account_id);
 
     if (!coinsArg)
     {
@@ -14185,7 +14193,6 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     }
 
     int32 updated_balance = currentCoins + coinsArg;
-    delete result;
 
     if (updated_balance < 0)
     {
@@ -14904,6 +14911,7 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         }
     }
 
+    PSendSysMessage("Current tokens on accouns %s : %u", account_name.c_str(), GetTokenBalance(accountId));
     PSendSysMessage("Payment history for account %s", account_name.c_str());
 
     auto& entries = sObjectMgr.GetShopLogEntries(accountId);

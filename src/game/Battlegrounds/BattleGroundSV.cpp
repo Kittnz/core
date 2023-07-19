@@ -80,7 +80,8 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
                     NodeOccupied(node, (teamIndex == 0) ? ALLIANCE : HORDE);
 
-                    RewardHonorToTeam(35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+                    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+                    RewardHonorToTeam(isBGWeekend ? 70 : 35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
 
                     UpdateNodeWorldState(node);
 
@@ -362,10 +363,12 @@ void BattleGroundSV::Reset()
 void BattleGroundSV::EndBattleGround(Team winner)
 {
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+
     // rewards
-    RewardReputationToTeam(1007, 150, winner);
-    RewardHonorToTeam(450, winner);
-    RewardHonorToTeam(120, loser);
+    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+    RewardReputationToTeam(1007, isBGWeekend ? 300 : 150, winner);
+    RewardHonorToTeam(isBGWeekend ? 900 : 450, winner);
+    RewardHonorToTeam(isBGWeekend ? 240 : 120, loser);
 
     BattleGround::EndBattleGround(winner);
 }
