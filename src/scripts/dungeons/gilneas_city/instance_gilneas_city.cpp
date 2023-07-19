@@ -59,7 +59,7 @@ struct instance_gilneas_city : public ScriptedInstance
             pCreature->MonsterYell("My family has held power in Gilneas for countless generations. You will not change fate.");
             break;
         case NPC_CELIA_HARLOW:
-            pCreature->PlayDirectSound(60399);
+            pCreature->PlayDirectSound(60400);
             pCreature->MonsterYell("Mortimer, it would appear we have someone here to interrupt our plans!");
             break;
         }
@@ -91,7 +91,7 @@ struct instance_gilneas_city : public ScriptedInstance
             break;
         case NPC_CELIA_HARLOW:
             DoRespawnGameObject(m_uiHarlowFamilyChestGUID, HOUR * IN_MILLISECONDS);
-            pCreature->PlayDirectSound(60400);
+            pCreature->PlayDirectSound(60399);
             pCreature->MonsterYell("All of our progress, our influence. What a pointless end....");
             break;
         }
