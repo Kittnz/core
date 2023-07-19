@@ -764,7 +764,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "maxskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleMaxSkillCommand,            "", nullptr },
         { "setskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleSetSkillCommand,            "", nullptr },
         { "whispers",       SEC_MODERATOR,       false, &ChatHandler::HandleWhispersCommand,            "", nullptr },
-        { "pinfo",          SEC_MODERATOR,       false, &ChatHandler::HandlePInfoCommand,               "", nullptr },
+        { "pinfo",          SEC_MODERATOR,       true, &ChatHandler::HandlePInfoCommand,               "", nullptr },
         { "groupinfo",      SEC_DEVELOPER,       true,  &ChatHandler::HandleGroupInfoCommand,           "", nullptr },
         { "addons",         SEC_DEVELOPER,       false, &ChatHandler::HandleListAddonsCommand,          "", nullptr },
         { "respawn",        SEC_DEVELOPER,       false, &ChatHandler::HandleRespawnCommand,             "", nullptr },
