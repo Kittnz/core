@@ -6860,9 +6860,87 @@ bool QuestAccept_npc_velinde_starsong(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool GossipHello_npc_councilman_kyleson(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestRewardStatus(41086)) // Wine for Kyleson
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Have you seen, or heard anything unusual in Karazhan?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61322, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_councilman_kyleson(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30131, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+bool GOHello_go_strange_marble_bust(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020051)
+    {
+        if (pPlayer->GetQuestRewardStatus(41086))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect the Marble Bust closely.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(30132, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_strange_marble_bust(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020051)
+        {
+            if (pPlayer->HasItemCount(61771, 1))
+            {
+                pPlayer->GetSession()->SendNotification("You have Obsidian Rod alredy.");
+                return false;
+            }
+
+            bool item_added = false;
+
+            if (pPlayer->AddItem(61771)) item_added = true;
+
+            if (!item_added)
+            {
+                pPlayer->GetSession()->SendNotification("Your bags are full!");
+                return false;
+            }
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_strange_marble_bust";
+    newscript->pGOHello = &GOHello_go_strange_marble_bust;
+    newscript->pGOGossipSelect = &GOSelect_go_strange_marble_bust;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_councilman_kyleson";
+    newscript->pGossipHello = &GossipHello_npc_councilman_kyleson;
+    newscript->pGossipSelect = &GossipSelect_npc_councilman_kyleson;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_velinde_starsong";
