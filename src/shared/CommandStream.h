@@ -7,7 +7,7 @@ public:
     CommandStream(std::string commandArgs) : _inputStream(std::move(commandArgs)) {}
 
     template <typename T>
-    CommandStream& ExtractString(T& t)
+    CommandStream& ExtractString(T&& t)
     {
         auto chr = _inputStream.peek();
 
@@ -31,7 +31,7 @@ public:
 
 
     template <typename T>
-    CommandStream& operator>>(T& t)
+    CommandStream& operator>>(T&& t)
     {
         if constexpr (std::is_same<T, std::string>::value)
         {
