@@ -351,15 +351,17 @@ struct erenniusAI : public ScriptedAI
 	uint32 m_uiCallOfNightmareTimer;
 	uint32 m_uiWallOfErenniusTimer;
 	uint32 m_uiGreenDragonBindingTimer;
+	uint32 m_uiCurseOfErenniusTimer;
 	bool m_uiCastedCurseOfErennius;
 
 	void Reset() override
 	{
-		m_uiPoisonBoltVolleyTimer = 12 * IN_MILLISECONDS;
+		m_uiPoisonBoltVolleyTimer = urand(25 * IN_MILLISECONDS, 29 * IN_MILLISECONDS);
 		m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
 		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
 		m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
 		m_uiGreenDragonBindingTimer = 105 * IN_MILLISECONDS;
+		m_uiCurseOfErenniusTimer = urand(83 * IN_MILLISECONDS, 95 * IN_MILLISECONDS);
 		m_uiCastedCurseOfErennius = false;
 	}
 
@@ -409,7 +411,7 @@ struct erenniusAI : public ScriptedAI
 		if (m_uiPoisonBoltVolleyTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT_VOLLEY) == CAST_OK)
-				m_uiPoisonBoltVolleyTimer = 12 * IN_MILLISECONDS;
+				m_uiPoisonBoltVolleyTimer = urand(25 * IN_MILLISECONDS, 29 * IN_MILLISECONDS);
 		}
 		else
 			m_uiPoisonBoltVolleyTimer -= uiDiff;
@@ -424,8 +426,13 @@ struct erenniusAI : public ScriptedAI
 
 		if (m_creature->HealthBelowPct(50) && !m_uiCastedCurseOfErennius)
 		{
-			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSE_OF_ERENNIUS) == CAST_OK)
-				m_uiCastedCurseOfErennius = true;
+			if (m_uiCurseOfErenniusTimer < uiDiff)
+			{
+				if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSE_OF_ERENNIUS) == CAST_OK)
+					m_uiCastedCurseOfErennius = true;
+			}
+			else
+				m_uiCurseOfErenniusTimer -= uiDiff;
 		}
 
 		DoMeleeAttackIfReady();
