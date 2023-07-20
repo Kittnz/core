@@ -26,3 +26,6 @@ REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417473769998791
 REPLACE INTO `gameobject` VALUES ( 5016007, 2009332, 0, 4261.3, -2822.3, 4.83438, 6.14295, 0, 0, 0.0700611, -0.997543, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417473769998791, 0.400000);
 REPLACE INTO `gameobject` VALUES ( 5016007, 2009332, 0, 4261.3, -2822.3, 4.83438, 6.14295, 0, 0, 0.0700611, -0.997543, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = -3164.829102, `position_y` = -4192.156738, `position_z` = 5.755243, `orientation` = 5.053123 WHERE `guid` = 2575782;
+UPDATE `creature` SET `position_x` = -3161.511719, `position_y` = -4192.939453, `position_z` = 5.667147, `orientation` = 3.737806 WHERE `guid` = 2575783;
+UPDATE `creature` SET `position_x` = -3161.438477, `position_y` = -4192.955566, `position_z` = 5.664043, `orientation` = 3.646248 WHERE `guid` = 2575783;
