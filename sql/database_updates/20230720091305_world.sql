@@ -36,3 +36,47 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20428; set @weapon_1 = 61773; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61414;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+-- NPC ID 61487 should drop Item ID 84507 with a 100% chance from a new loottable.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61487, 84507, 100, 0, 1, 1, 0);
+-- NPC Lord Blackwald II (creature Entry 61222), add item drop Entry 61184 (The Scythe of Elune) on its own loot table with a 0.85% drop chance.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61222, 61184, 0.85, 10, 1, 1, 0);
+-- Add the following items in their own loot group:
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30590, 84500, 0, 4, 1, 1, 0),
+(30590, 84501, 0, 4, 1, 1, 0),
+(30590, 84502, 0, 4, 1, 1, 0),
+(30590, 84503, 0, 4, 1, 1, 0),
+(30590, 84504, 0, 4, 1, 1, 0),
+(30590, 84505, 0, 4, 1, 1, 0),
+(30590, 84506, 0, 4, 1, 1, 0),
+(30590, 84509, 0, 4, 1, 1, 0);
+-- To the following creatures: 60742, 60743, 60744, 60745, 60746, 61212, with a drop chance of 0.13%.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60742, 30590, 0.13, 4, -30590, 1, 0),
+(60743, 30590, 0.13, 4, -30590, 1, 0),
+(60744, 30590, 0.13, 4, -30590, 1, 0),
+(60745, 30590, 0.13, 4, -30590, 1, 0),
+(60746, 30590, 0.13, 4, -30590, 1, 0),
+(61212, 30590, 0.13, 4, -30590, 1, 0);
+-- Add item 61733 (Formula: Eternal Dreamstone Shard) to the loot table of Solnius (Creature Entry 60748) on its own loot table with a drop chance of 0.85%.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61733, 0.85, 12, 1, 1, 0),
+-- NPC Solnius, add loot 61198 to its own loot table with a 100% drop chance to drop between 6-10 of the item.
+(60748, 61198, 100, 13, 6, 10, 0);
+-- NPC Erennius add loot 61198 to its own loot table with a 100% drop chance to drop between 2-5 of the item.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60747, 61198, 100, 13, 2, 5, 0);
+-- Remove any green or blue item drops from Firstborn of Arugal, and make a new loottable that drops one of these items with the listed chances:
+delete from creature_loot_template where entry = 61558 and item in (8028 ,51764,51765,5758 ,7909 ,7910 ,12689,15731,20400);
+delete from creature_loot_template where entry = 61558 and item in (30045,30043,30046,30584);
+-- Old Hunter's Boots 40%
+-- Explorer's Pauldron 40%
+-- Arugal Family Seal 20%
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30591, 61587, 40, 10, 1, 1, 0),
+(30591, 61586, 40, 10, 1, 1, 0),
+(30591, 61588, 20, 10, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61558, 30591, 100, 10, -30591, 1, 0);
