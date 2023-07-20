@@ -80,3 +80,12 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 (30591, 61588, 20, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61558, 30591, 100, 10, -30591, 1, 0);
+-- Create object called 'The Orb of Pyforos' which uses the model 'BE_ScryingOrb' with a scale of 1.4, this orb should have quest/gossip text, when interacted use the following gossip text: <The orb glows with an intensity of dark energy. Fire can be seen tracing along its surface. Any attempt to get close to the orb causes it to fade away, becoming translucent, making material objects pass through it. It would appear powerful magic is present here.>
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020052, 2, 29623, 'The Orb of Pyforos', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_the_orb_of_pyforos');
+replace into broadcast_text (entry, Male_Text) values (30133, '<The orb glows with an intensity of dark energy. Fire can be seen tracing along its surface. Any attempt to get close to the orb causes it to fade away, becoming translucent, making material objects pass through it. It would appear powerful magic is present here.>');
+replace into npc_text (ID, BroadcastTextID0) values (30133, 30133);
+-- Object Strange Marble Bust make scale 2.2.
+update gameobject_template set size = 2.2 where entry = 2020051;
+-- Change the displayid of gameobject 3000208 to 33182.
+update gameobject_template set displayid = 33182 where entry = 3000208;
