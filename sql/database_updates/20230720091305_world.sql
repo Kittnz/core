@@ -4,6 +4,8 @@ REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipm
 (2578191, 0, 0, -1, 0, 1, 333, NULL);
 -- Enable displayids 20439-20455 (Melanastrasza turned into a wisp so her display is still broken).
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(19120, 0, 0, 0, 0),
+(19121, 0, 0, 0, 0),
 (20439, 0, 0, 0, 0),
 (20440, 0, 0, 0, 0),
 (20441, 0, 0, 0, 0),
@@ -110,3 +112,19 @@ update item_template set bonding = 2 where entry = 61585;
 update item_template set display_id = 50514 where entry = 61752;
 -- Hyperchromatic Deflector should be a shield and not a buckler.
 update item_template set subclass = 6, sheath = 4 where entry = 61276;
+-- Postworker Albertus Manethas, display ID 19120, faction 35, level 50, humanoid, scale 1, gossip/quest flags, gossip text : "Can I help you with something?".
+REPLACE INTO creature_template VALUES
+(61611, 19120, 0, 0, 0, 0, 'Postworker Albertus Manethas', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+set @gossip_menu_id = 41519; set @magic_number = 61611;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Can I help you with something?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Postworker Katya Hastings, display ID 19121, faction 35, level 50, humanoid, scale 1, gossip/quest flags, gossip text : "What, do you have a letter or something?".
+REPLACE INTO creature_template VALUES
+(61612, 19121, 0, 0, 0, 0, 'Postworker Katya Hastings', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+set @gossip_menu_id = 41520; set @magic_number = 61612;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What, do you have a letter or something?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
