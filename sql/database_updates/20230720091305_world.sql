@@ -89,3 +89,9 @@ replace into npc_text (ID, BroadcastTextID0) values (30133, 30133);
 update gameobject_template set size = 2.2 where entry = 2020051;
 -- Change the displayid of gameobject 3000208 to 33182.
 update gameobject_template set displayid = 33182 where entry = 3000208;
+-- Quest 41062 and 41067 label as a raid quest.
+update quest_template set type = 62 where entry in (41062,41067);
+-- Quest The Deed to Ravenshire change money reward to 12 silver (It is currently 12g).
+update quest_template set reworreqmoney = 1200 where entry = 40966;
+-- Quest Suitable Accomodations and Quest Spectral Wine make RAID quest.
+update quest_template set type = 62 where entry in (41083,41085);

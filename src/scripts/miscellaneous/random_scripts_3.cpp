@@ -6906,7 +6906,7 @@ bool GOSelect_go_strange_marble_bust(Player* pPlayer, GameObject* pGo, uint32 se
         {
             if (pPlayer->HasItemCount(61771, 1))
             {
-                pPlayer->GetSession()->SendNotification("You have Obsidian Rod alredy.");
+                pPlayer->GetSession()->SendNotification("You already have the Obsidian Rod.");
                 return false;
             }
 
@@ -6926,9 +6926,23 @@ bool GOSelect_go_strange_marble_bust(Player* pPlayer, GameObject* pGo, uint32 se
     return false;
 }
 
+bool GOHello_go_the_orb_of_pyforos(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020052)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30133, pGo->GetGUID());
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_the_orb_of_pyforos";
+    newscript->pGOHello = &GOHello_go_the_orb_of_pyforos;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_strange_marble_bust";
