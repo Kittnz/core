@@ -618,3 +618,8 @@ DELETE FROM gameobject WHERE guid = '5016409';
 DELETE FROM game_event_gameobject WHERE guid = '5016409';
 DELETE FROM gameobject_battleground WHERE guid = '5016409';
 REPLACE INTO `gameobject` VALUES ( 5016410, 2003490, 0, -8569.11, 607.857, 102.863, 0.8949, 0, 0, 0.432668, 0.901553, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417375757503322, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5016410, 2003490, 0, -8569.11, 607.857, 102.863, 0.8949, 0, 0, 0.432668, 0.901553, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016410';
+DELETE FROM game_event_gameobject WHERE guid = '5016410';
+DELETE FROM gameobject_battleground WHERE guid = '5016410';
