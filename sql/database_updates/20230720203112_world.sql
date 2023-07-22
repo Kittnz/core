@@ -610,3 +610,10 @@ REPLACE INTO `gameobject` VALUES ( 5016407, 176583, 1, 4706.3, -3854.47, 956.498
 
 -- Changes by SHANG
 REPLACE INTO `gameobject` VALUES ( 5016408, 2020042, 451, 16900.7, 15649.9, 67.7084, 4.32111, 0, 0, 0.831075, -0.55616, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016408';
+DELETE FROM game_event_gameobject WHERE guid = '5016408';
+DELETE FROM gameobject_battleground WHERE guid = '5016408';
+REPLACE INTO `gameobject` VALUES ( 5016409, 2020042, 451, 16901.6, 15652, 67.6714, 4.32111, 0, 0, 0.831075, -0.55616, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016409';
+DELETE FROM game_event_gameobject WHERE guid = '5016409';
+DELETE FROM gameobject_battleground WHERE guid = '5016409';
