@@ -66,5 +66,4 @@ INSERT INTO `game_weather` VALUES (5179, 60, 0, 0, 60, 0, 0, 60, 0, 0, 60, 0, 0,
 INSERT INTO `game_weather` VALUES (408, 10, 0, 0, 25, 0, 0, 25, 0, 0, 10, 0, 0, 'Gilijim\'s Isle');
 INSERT INTO `game_weather` VALUES (409, 10, 0, 0, 25, 0, 0, 25, 0, 0, 10, 0, 0, 'Lapidis Isle');
 INSERT INTO `game_weather` VALUES (5121, 10, 0, 0, 25, 0, 0, 25, 0, 0, 10, 0, 0, 'Tel\'Abim');
-
-SET FOREIGN_KEY_CHECKS = 1;
+INSERT INTO `game_weather` VALUES (616, 25, 10, 0, 25, 10, 0, 25, 10, 0, 25, 10, 0, 'Hyjal');
