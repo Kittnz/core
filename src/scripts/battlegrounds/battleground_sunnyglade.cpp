@@ -171,6 +171,9 @@ bool GossipSelect_SV_herald(Player* player, Creature* creature, uint32 sender, u
                     ChatHandler::BuildChatPacket(data, msgType, message);
                     bg->SendPacketToAll(&data);
 
+                    if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(1007))
+                        player->GetReputationMgr().ModifyReputation(factionEntry, sparkCount);
+
                     bg->AddTeamSparks(player->GetTeamId(), sparkCount);
                 }
             }
@@ -197,6 +200,20 @@ struct SV_human_leaderAI : public ScriptedAI
         m_events.Reset();
         m_blackDragon = false;
         m_creature->DeMorph();
+    }
+
+    void KilledUnit(Unit* pVictim) override
+    {
+        if (!pVictim->IsPlayer())
+            return;
+
+        if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(m_creature->GetMap()))
+        {
+            if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+            {
+                bg->RewardReputationToTeam(1007, 1, ALLIANCE);
+            }
+        }
     }
 
     void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
@@ -367,6 +384,20 @@ struct SV_orc_leaderAI : public ScriptedAI
         m_creature->DeMorph();
     }
 
+    void KilledUnit(Unit* pVictim) override
+    {
+        if (!pVictim->IsPlayer())
+            return;
+
+        if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(m_creature->GetMap()))
+        {
+            if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+            {
+                bg->RewardReputationToTeam(1007, 1, HORDE);
+            }
+        }
+    }
+
     void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
     {
         if (pAttacker && pAttacker->IsCreature())
@@ -517,6 +548,11 @@ struct SV_orc_leaderAI : public ScriptedAI
     }
 };
 
+enum
+{
+    DISPLAY_ID_BLACK_DRAKONOID = 14885
+};
+
 struct SV_trash_mobsAI : public ScriptedAI
 {
     SV_trash_mobsAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -524,21 +560,42 @@ struct SV_trash_mobsAI : public ScriptedAI
         Reset();
     }
 
+    bool m_isBlackDrakonoid;
+    bool m_isTransformed;
+
     void Reset() override
     {
+        m_isTransformed = false;
+        m_isBlackDrakonoid = urand(0,1);
+        m_creature->DeMorph();
+        m_creature->LoadEquipment(m_creature->GetCreatureInfo()->equipment_id, true);
     }
 
     void DamageTaken(Unit* pAttacker, uint32& uiDamage) override
     {
-        if (pAttacker && pAttacker->IsCreature() && pAttacker->GetLevel() <= m_creature->GetLevel())
-            uiDamage = 0;
+        if (pAttacker)
+        {
+            if (pAttacker->IsCreature() && pAttacker->GetLevel() <= m_creature->GetLevel())
+                uiDamage = 0;
+
+            if (pAttacker->IsPlayer() && m_isBlackDrakonoid && !m_isTransformed &&
+                m_creature->GetHealth() > uiDamage)
+            {
+                m_creature->SetDisplayId(DISPLAY_ID_BLACK_DRAKONOID);
+                m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 3432);
+                m_CreatureSpells.clear();
+                m_creature->MonsterYell("How dare you interfere!");
+                m_creature->AddThreat(pAttacker, 10000);
+                m_isTransformed = true;
+            }
+        }
     }
 
     void JustDied(Unit* pKiller)
     {
         if (Player* pPlayer = ToPlayer(pKiller))
         {
-            if (sGameEventMgr.IsActiveEvent(51))
+            if (m_isBlackDrakonoid && m_isTransformed)
                 if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(1007))
                     pPlayer->GetReputationMgr().ModifyReputation(factionEntry, 10);
 
