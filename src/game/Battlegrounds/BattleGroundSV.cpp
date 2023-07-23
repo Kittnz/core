@@ -366,7 +366,7 @@ void BattleGroundSV::EndBattleGround(Team winner)
 
     // rewards
     bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
-    RewardReputationToTeam(1007, isBGWeekend ? 300 : 150, winner);
+    RewardReputationToTeam(1007, isBGWeekend ? 150 : 75, winner);
     RewardHonorToTeam(isBGWeekend ? 900 : 450, winner);
     RewardHonorToTeam(isBGWeekend ? 240 : 120, loser);
 
@@ -511,7 +511,7 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 enemySparks)
 {
     int32 health = pGeneral->GetCreatureInfo()->health_max;
-    health = health + health * ourSparks - (health / 2) * enemySparks;
+    health = health + (health / 2) * ourSparks - (health / 4) * enemySparks;
     if (health <= 0)
         health = pGeneral->GetCreatureInfo()->health_max;
 

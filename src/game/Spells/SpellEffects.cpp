@@ -2330,6 +2330,24 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }   
                     return;
                 }
+                case 45873: // Summon Spider (Sunnyglade)
+                {
+                    if (!m_casterUnit || !m_casterUnit->IsMoving())
+                        return;
+
+                    float x, y, z;
+                    m_casterUnit->GetPosition(x, y, z);
+                    if (Creature* pSpider = m_casterUnit->SummonCreature(61212, x, y, z, 0, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 30000))
+                    {
+                        pSpider->SetFactionTemplateId(m_casterUnit->GetFactionTemplateId());
+                        pSpider->SetCreatorGuid(m_casterUnit->GetObjectGuid());
+                        pSpider->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);
+                        if (Unit* pVictim = m_casterUnit->GetVictim())
+                            pSpider->AI()->AttackStart(pVictim);
+                    }
+
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
