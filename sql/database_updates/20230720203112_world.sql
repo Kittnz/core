@@ -630,3 +630,6 @@ DELETE FROM gameobject WHERE guid = '5016411';
 DELETE FROM game_event_gameobject WHERE guid = '5016411';
 DELETE FROM gameobject_battleground WHERE guid = '5016411';
 REPLACE INTO `creature` VALUES (2578343,61486,0,0,0,0,-14352.9,409.64,6.63315,1.93132,120,120,0,100,100,0,0,0);
+
+-- Changes by VOJI
+REPLACE INTO `gameobject` VALUES ( 5016412, 2020047, 1, -4510.61, -760.245, -36.8263, 3.48307, 0, 0, 0.98546, -0.169908, 300, 300, 100, 1, 0, 0);
