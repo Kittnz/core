@@ -593,3 +593,8 @@ replace into item_template values
 -- Create object called 'Buckle Up' that shows name upon hovering over with the model NobleHouse01 with scale 0.5 
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
 (2020054, 5, 24369, 'Buckle Up', 0, 0, 0.5, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- Quest 40490, change the word "Chemist's" in the main description to chemists.
+update quest_template set details = 'There be rumors floatin\' around about somethin\' called \'Hateforge Brew\'. The Dark Iron refer to it as something with reverance, and I know they aint makin\' no ale in there.$B$BThe name is a cover up for somethin\' else and we gotta find out just what that somethin\' else is, ye get me? I do know that they have chemists within the Quarry, and my bet is they are linked to this Hateforge Brew.$B$BI need you to head in there, gather me a Dark Iron Vial and some Hateforge Chemistry Documents. I bet they have them stashed away somewhere in there about what\'s going on.' where entry = 40490;
+-- Quest 40848 should require quests 40847, 40845.
+update quest_template set prevquestid = 40845 where entry = 40848;
+update quest_template set exclusivegroup = -40845 where entry in (40845,40847);
