@@ -242,70 +242,72 @@ struct boss_solniusAI : public ScriptedAI
 					}
 					break;
 				case EVENT_SPAWN_PORTALS:
-					Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
-					if (m_mSummonedPortals.empty())
 					{
-						for (auto const& portal : portals)
+						Map::PlayerList const& playerList = m_creature->GetMap()->GetPlayers();
+						if (m_mSummonedPortals.empty())
 						{
-							m_creature->SummonGameObject(GO_PORTAL, portal[1], portal[2], portal[3], portal[4], 0, 0, 0, 0, 0);
-
-							std::random_device rd;
-							std::mt19937 gen(rd());
-							std::uniform_int_distribution<> dis(0, 3);
-							int uiCreatureId = dis(gen);
-
-							float randomCreature = majorCreatures[uiCreatureId][0];
-
-							if (Creature* summonedCreature1 = m_creature->SummonCreature(randomCreature, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
+							for (auto const& portal : portals)
 							{
-								if (!playerList.isEmpty())
-								{
-									for (Player* pPlayer : GetRandomPlayers(playerList, 1))
-									{
-										summonedCreature1->AI()->AttackStart(pPlayer);
-									}
-								}
-							}
+								m_creature->SummonGameObject(GO_PORTAL, portal[1], portal[2], portal[3], portal[4], 0, 0, 0, 0, 0);
 
-							if (Creature* summonedCreature2 = m_creature->SummonCreature(NPC_SANCTUM_DREAMER, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
-							{
-								if (!playerList.isEmpty())
-								{
-									for (Player* pPlayer : GetRandomPlayers(playerList, 1))
-									{
-										summonedCreature2->AI()->AttackStart(pPlayer);
-									}
-								}
-							}
-						}
-						events.Repeat(Seconds(30));
-					}
-					else
-					{
-						if (!m_mSummonedMajorCreature.empty())
-						{
+								std::random_device rd;
+								std::mt19937 gen(rd());
+								std::uniform_int_distribution<> dis(0, 3);
+								int uiCreatureId = dis(gen);
 
-							for (std::size_t i = 0; i < 3; i++)
-							{
-								auto const& portal = portals[i];
+								float randomCreature = majorCreatures[uiCreatureId][0];
 
-								if (i == 0 || i == 2)
+								if (Creature* summonedCreature1 = m_creature->SummonCreature(randomCreature, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
 								{
-									if (Creature* summonedCreature = m_creature->SummonCreature(NPC_SANCTUM_DREAMER, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
+									if (!playerList.isEmpty())
 									{
-										if (!playerList.isEmpty())
+										for (Player* pPlayer : GetRandomPlayers(playerList, 1))
 										{
-											for (Player* pPlayer : GetRandomPlayers(playerList, 1))
-											{
-												summonedCreature->AI()->AttackStart(pPlayer);
-											}
+											summonedCreature1->AI()->AttackStart(pPlayer);
+										}
+									}
+								}
+
+								if (Creature* summonedCreature2 = m_creature->SummonCreature(NPC_SANCTUM_DREAMER, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
+								{
+									if (!playerList.isEmpty())
+									{
+										for (Player* pPlayer : GetRandomPlayers(playerList, 1))
+										{
+											summonedCreature2->AI()->AttackStart(pPlayer);
 										}
 									}
 								}
 							}
 							events.Repeat(Seconds(30));
 						}
+						else
+						{
+							if (!m_mSummonedMajorCreature.empty())
+							{
 
+								for (std::size_t i = 0; i < 3; i++)
+								{
+									auto const& portal = portals[i];
+
+									if (i == 0 || i == 2)
+									{
+										if (Creature* summonedCreature = m_creature->SummonCreature(NPC_SANCTUM_DREAMER, portal[1], portal[2], portal[3], portal[4], TEMPSUMMON_DEAD_DESPAWN, 300000))
+										{
+											if (!playerList.isEmpty())
+											{
+												for (Player* pPlayer : GetRandomPlayers(playerList, 1))
+												{
+													summonedCreature->AI()->AttackStart(pPlayer);
+												}
+											}
+										}
+									}
+								}
+								events.Repeat(Seconds(30));
+							}
+
+						}
 					}
 					break;
 				case EVENT_ERENNIUS_DESPAWN:
