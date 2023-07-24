@@ -511,7 +511,7 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 enemySparks)
 {
     int32 health = pGeneral->GetCreatureInfo()->health_max;
-    health = health + (health / 2) * ourSparks - (health / 4) * enemySparks;
+    health = health + (health / 3) * ourSparks - (health / 6) * enemySparks;
     if (health <= 0)
         health = pGeneral->GetCreatureInfo()->health_max;
 
