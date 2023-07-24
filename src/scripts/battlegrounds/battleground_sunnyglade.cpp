@@ -596,8 +596,15 @@ struct SV_trash_mobsAI : public ScriptedAI
         if (Player* pPlayer = ToPlayer(pKiller))
         {
             if (m_isBlackDrakonoid && m_isTransformed)
-                if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(1007))
-                    pPlayer->GetReputationMgr().ModifyReputation(factionEntry, 10);
+            {
+                if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(m_creature->GetMap()))
+                {
+                    if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+                    {
+                        bg->RewardReputationToTeam(1007, 10, pPlayer->GetTeam());
+                    }
+                }
+            }
 
             pPlayer->GetHonorMgr().Add(10, HONORABLE, m_creature);
         }
