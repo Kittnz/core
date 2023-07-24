@@ -126,6 +126,7 @@ bool ChatHandler::HandleReloadHousingCommand(char* /*args*/)
 bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 {
     sWorld.LoadConfigSettings(true);
+    sAnticheatLib->Reload();
     SendSysMessage("World config settings reloaded.");
     return true;
 }
