@@ -13,3 +13,5 @@ UPDATE `map_template` SET `map_type` = 2, `reset_delay` = 7 WHERE `entry` = 532;
 UPDATE `gameobject` SET `spawntimesecsmin` = 5, `spawntimesecsmax` = 5 WHERE `guid` IN (5016268, 5016269);
 
 UPDATE `spell_template` SET `auraDescription` = 'Friendly units within a $a1 yard radius attack $s1% faster.' WHERE `entry` = 57078;
+
+UPDATE `battleground_template` SET `min_players_per_team` = 3, `max_players_per_team` = 3 WHERE `id` = 4;
