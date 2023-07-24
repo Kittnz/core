@@ -357,8 +357,8 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
     player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
     // Nordannar to Everlook, fly faster because Woji said so.
-    if ((*i_path)[0].path == 1621 || (*i_path)[0].path == 1623 || (*i_path)[0].path == 1624 || (*i_path)[0].path == 1625)
-    modSpeed = 1.2f;
+    //if ((*i_path)[0].path == 1621 || (*i_path)[0].path == 1623 || (*i_path)[0].path == 1624 || (*i_path)[0].path == 1625)
+    //modSpeed = 1.2f;
 
     Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
     uint32 end = GetPathAtMapEnd();
