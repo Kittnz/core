@@ -121,7 +121,7 @@ class GameEventMgr
         uint32 Initialize();
         void StartEvent(uint16 event_id, bool overwrite = false, bool resume = false);
         void StopEvent(uint16 event_id, bool overwrite = false);
-        void EnableEvent(uint16 event_id, bool enable);
+        void EnableEvent(uint16 event_id, bool enable, bool updateDB = true);
         bool IsEnabled(uint16 event_id);
         template<typename T>
         int16 GetGameEventId(uint32 guid_or_poolid);
