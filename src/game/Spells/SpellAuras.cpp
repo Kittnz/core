@@ -1809,7 +1809,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         playerCaster->SetChampion(target->GetGUID());
                         break;
                     }
-                    case 45872: // Magnetic Boots (Sunnyglade)
+                    case 45872: // Superconducting Magnet (Sunnyglade)
                     {
                         m_isPeriodic = true;
                         m_modifier.periodictime = 1000;
@@ -6833,9 +6833,10 @@ void Aura::PeriodicDummyTick()
 
                     return;
                 }
-                case 45872: // Magnetic Boots (Sunnyglade)
+                case 45872: // Superconducting Magnet (Sunnyglade)
                 {
-                    if (target->IsNonMeleeSpellCasted() ||
+                    if (target->IsDead() || target->IsMounted() ||
+                        target->IsNonMeleeSpellCasted() ||
                        !target->movespline->Finalized() ||
                         target->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) ||
                         target->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
