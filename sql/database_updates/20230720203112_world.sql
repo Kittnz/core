@@ -752,3 +752,6 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578360,2, -3857.408936,-4729.855957,9.374494, 100);
 REPLACE INTO `creature` VALUES (2578360,61541,0,0,0,1,-3813.11,-4771.04,4.86971,2.39557,300,300,0,100,100,2,0,0);
 REPLACE INTO `creature` VALUES (2578361,61541,0,0,0,1,-3822.02,-4660.05,9.1917,0.765859,120,120,0,100,100,0,0,0);
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2578362,61580,0,0,0,1,-3170.41,-4198.44,5.46728,0.462475,120,120,0,100,100,0,0,0);
