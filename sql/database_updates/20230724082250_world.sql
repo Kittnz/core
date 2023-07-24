@@ -113,3 +113,8 @@ update item_template set stat_type3 = 7 where entry = 22385; -- Titanic Leggings
 update item_template set dmg_min1 = 43, dmg_max1 = 92 where entry = 19910; -- Arlokk's Grasp
 
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (62923, 2849, 1, 5.11241, -692.71, -19.1304, 3.03684, 0, 0, 0.998629, 0.0523532, 3600, 14400, 100, 1, 0, 0);
+
+-- remove the dummy ship that triest to stop in Southshore
+
+DELETE FROM `transports` WHERE `guid` = 13;
+DELETE FROM `gameobject_template` WHERE `entry` = 176533;
