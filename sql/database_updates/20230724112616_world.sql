@@ -598,3 +598,27 @@ update quest_template set details = 'There be rumors floatin\' around about some
 -- Quest 40848 should require quests 40847, 40845.
 update quest_template set prevquestid = 40845 where entry = 40848;
 update quest_template set exclusivegroup = -40845 where entry in (40845,40847);
+-- Add the items 92002 and 92004 to the loot tables of the creatures below, on their own loot table, and with a drop chance of 0.32%
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30593, 92002, 0, 0, 1, 1, 0),
+(30593, 92004, 0, 0, 1, 1, 0);
+-- 61200, 61205, 61210, 61198, 61199, 61192, 61193, 61194, 61211, 61195, 61196, 61197, 61206, 61207, 61209.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61192, 30593, 0.32, 0, -30593, 1, 0),
+(61193, 30593, 0.32, 0, -30593, 1, 0),
+(61194, 30593, 0.32, 0, -30593, 1, 0),
+(61195, 30593, 0.32, 0, -30593, 1, 0),
+(61196, 30593, 0.32, 0, -30593, 1, 0),
+(61197, 30593, 0.32, 0, -30593, 1, 0),
+(61198, 30593, 0.32, 0, -30593, 1, 0),
+(61199, 30593, 0.32, 0, -30593, 1, 0),
+(61200, 30593, 0.32, 0, -30593, 1, 0),
+(61205, 30593, 0.32, 0, -30593, 1, 0),
+(61206, 30593, 0.32, 0, -30593, 1, 0),
+(61207, 30593, 0.32, 0, -30593, 1, 0),
+(61209, 30593, 0.32, 0, -30593, 1, 0),
+(61210, 30593, 0.32, 0, -30593, 1, 0),
+(61211, 30593, 0.32, 0, -30593, 1, 0);
+-- Item 92001, 92003 change rarity to uncommon (green), change level requirement to 40.
+update item_template set quality = 2, required_level = 40 where entry in (92001,92003);
+
