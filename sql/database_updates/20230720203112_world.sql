@@ -733,3 +733,22 @@ REPLACE INTO `gameobject` VALUES ( 5016475, 176589, 1, 4536.62, -3845.86, 973.05
 
 -- Changes by VOJI
 REPLACE INTO `creature` VALUES (2578351,61541,0,0,0,1,-3821.13,-4565.24,8.82441,2.40658,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578352,61541,0,0,0,1,-3818.06,-4560.4,9.16404,3.58783,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578353,61541,0,0,0,1,-3869.25,-4615.31,9.26723,3.74883,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578354,61541,0,0,0,1,-3871.21,-4613.91,9.26953,4.37715,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578355,61541,0,0,0,1,-3874.25,-4716.42,9.25219,2.52911,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578356,61541,0,0,0,1,-3863.52,-4720.43,9.25813,0.809077,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578356,1, -3863.522705,-4720.425293,9.258131, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578356,2, -3850.679443,-4707.579590,9.222112, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578356,3, -3838.504883,-4695.314453,9.599101, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578356,4, -3827.958008,-4684.373535,9.620872, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578356,5, -3815.118652,-4670.330078,9.090636, 100);
+REPLACE INTO `creature` VALUES (2578356,61541,0,0,0,1,-3863.52,-4720.43,9.25813,0.809077,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2578357,61541,0,0,0,1,-3812.02,-4762.2,4.69679,4.95989,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578358,61541,0,0,0,1,-3810.45,-4764.98,4.79661,2.11282,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578359,61541,0,0,0,1,-3828.8,-4768.38,4.42919,1.88898,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2578360,61541,0,0,0,1,-3813.11,-4771.04,4.86971,2.39557,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578360,1, -3815.682373,-4768.668945,4.757150, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2578360,2, -3857.408936,-4729.855957,9.374494, 100);
+REPLACE INTO `creature` VALUES (2578360,61541,0,0,0,1,-3813.11,-4771.04,4.86971,2.39557,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2578361,61541,0,0,0,1,-3822.02,-4660.05,9.1917,0.765859,120,120,0,100,100,0,0,0);
