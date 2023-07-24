@@ -136,12 +136,12 @@ const uint8 BG_SV_CaptureNodesSparkTicks[3] = { 0, 1, 2 };
 
 Position const BG_SV_BuffPositions[6] =
 {
-    {1632.22f, 143.54f, 103.7f, 0.79f},  // tree
-    {1356.95f, -117.16f, 102.5f, 1.19f}, // mine
-    {1240.48f, 178.16f, 66.6f, 3.98f},   // stables
-    {1077.14f, 412.6f, 92.7f, 5.38f},    // well
-    {1324.09f, 578.5f, 104.2f, 3.95f},   // mine 2
-    {1444.28f, 306.99f, 70.9f, 0.23f},   // wind
+    {1632.22f, 143.54f, 104.7f, 0.79f},  // tree
+    {1356.95f, -117.16f, 103.5f, 1.19f}, // mine
+    {1240.48f, 178.16f, 67.6f, 3.98f},   // stables
+    {1077.14f, 412.6f, 93.7f, 5.38f},    // well
+    {1324.09f, 578.5f, 105.2f, 3.95f},   // mine 2
+    {1444.28f, 306.99f, 71.9f, 0.23f},   // wind
 };
 
 Position const BG_SV_HeraldPos = { 1318.8f, 255.87f, 75.6f, 1.68f };
