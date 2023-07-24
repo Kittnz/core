@@ -137,3 +137,6 @@ update spell_template SET Name = 'Rolfen\'s Fury' WHERE entry = 48102; -- World 
 update spell_template SET Description = 'You have a $s1% chance to reflect harmful spells.' WHERE entry = 45847; -- Reflect
 -- buff eskhander proc chance
 update spell_template SET procChance = 3 WHERE entry = 22648; -- Call of Eskhandar
+
+-- Make sure the Kamio Fan has displayid 61015, if it already has that displayid, change it from a sword to thrown. If it does not have that displayid, then simply fix it, no need to change it from a sword. (Currently it is a cube and I am not sure why, the model and path and such is as it should be)
+UPDATE `item_template` SET `display_id` = 61015 WHERE `entry` = 61773;
