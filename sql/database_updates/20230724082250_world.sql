@@ -118,3 +118,22 @@ REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `pos
 
 DELETE FROM `transports` WHERE `guid` = 13;
 DELETE FROM `gameobject_template` WHERE `entry` = 176533;
+
+-- fix
+update item_template set stat_type3 = 7 where entry = 22385; -- Titanic Leggings
+update item_template set dmg_min1 = 43, dmg_max1 = 92, spellppmrate_1 = 4 where entry = 19910; -- Arlokk's Grasp
+update item_template set stat_value1 = 27, stat_value2 = 23, spellid_1 = 15464, spellid_2 = 0 where entry = 23244; -- Champion's Plate Helm
+update item_template set stat_value1 = 27, stat_value2 = 23, spellid_1 = 15464, spellid_2 = 0 where entry = 23314; -- Lieutenant Commander's Plate Helm
+
+-- fifth of the effect
+update spell_template SET effectBasePoints1 = 3, description = 'Increases the melee attack power bonus of your Seal of the Crusader by $s1 and the Holy damage increase of your Crusader Strike by $s2 per stack.a' WHERE entry = 23300; -- Seal of the Crusader Judgement Increase
+update spell_template SET effectBasePoints2 = 6, description = 'Increases the Holy damage bonus of your Crusader Strike by $s1 per stack.' WHERE entry = 28852; -- Improved Seal of the Crusader
+-- fix typo
+update spell_template SET Description = 'Friendly units within a $a1 yard radius attack $s1% faster.' WHERE entry = 57078; -- Alpha Presence
+-- fix spell names for their new uses
+update spell_template SET Name = 'Power Surge' WHERE entry = 45496; -- Lionheart
+update spell_template SET Name = 'Power Surge', SpellIconID = 122 WHERE entry = 45495; -- Lionheart
+update spell_template SET Name = 'Rolfen\'s Fury' WHERE entry = 48102; -- World Breaker
+update spell_template SET Description = 'You have a $s1% chance to reflect harmful spells.' WHERE entry = 45847; -- Reflect
+-- buff eskhander proc chance
+update spell_template SET procChance = 3 WHERE entry = 22648; -- Call of Eskhandar
