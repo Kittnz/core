@@ -28,11 +28,7 @@
 #include "World.h"
 #include "ObjectGuid.h"
 
-#ifdef WIN32
-#include "..\zlib\zlib.h"
-#else
-#include "zlib.h"
-#endif
+#include "libdeflate.h"
 
 #define MAX_UNCOMPRESSED_PACKET_SIZE 0x8000 // 32ko
 
@@ -71,61 +67,24 @@ void UpdateData::AddUpdateBlock(const ByteBuffer &block)
     ++it->blockCount;
 }
 
+inline auto GetCompressor()
+{
+    return std::unique_ptr<libdeflate_compressor, decltype(&libdeflate_free_compressor)>{
+        libdeflate_alloc_compressor(sWorld.getConfig(CONFIG_UINT32_COMPRESSION)), libdeflate_free_compressor };
+}
+
 void PacketCompressor::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
 {
-    z_stream c_stream;
-
-    c_stream.zalloc = (alloc_func)0;
-    c_stream.zfree = (free_func)0;
-    c_stream.opaque = (voidpf)0;
-
-    // default Z_BEST_SPEED (1)
-    int z_res = deflateInit(&c_stream, sWorld.getConfig(CONFIG_UINT32_COMPRESSION));
-    if (z_res != Z_OK)
-    {
-        sLog.outError("Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));
-        *dst_size = 0;
-        return;
-    }
-
-    c_stream.next_out = (Bytef*)dst;
-    c_stream.avail_out = *dst_size;
-    c_stream.next_in = (Bytef*)src;
-    c_stream.avail_in = (uInt)src_size;
-
-    z_res = deflate(&c_stream, Z_NO_FLUSH);
-    if (z_res != Z_OK)
-    {
-        sLog.outError("Can't compress update packet (zlib: deflate) Error code: %i (%s)", z_res, zError(z_res));
-        *dst_size = 0;
-        return;
-    }
-
-    if (c_stream.avail_in != 0)
-    {
-        sLog.outError("Can't compress update packet (zlib: deflate not greedy)");
-        *dst_size = 0;
-        return;
-    }
-
-    z_res = deflate(&c_stream, Z_FINISH);
-    if (z_res != Z_STREAM_END)
-    {
-        sLog.outError("Can't compress update packet (zlib: deflate should report Z_STREAM_END instead %i (%s)", z_res, zError(z_res));
-        *dst_size = 0;
-        return;
-    }
-
-    z_res = deflateEnd(&c_stream);
-    if (z_res != Z_OK)
-    {
-        sLog.outError("Can't compress update packet (zlib: deflateEnd) Error code: %i (%s)", z_res, zError(z_res));
-        *dst_size = 0;
-        return;
-    }
-
-    *dst_size = c_stream.total_out;
+    auto compressor = GetCompressor();
+    *dst_size = libdeflate_zlib_compress(compressor.get(), src, src_size, dst, *dst_size);
 }
+
+size_t PacketCompressor::Bound(size_t size)
+{
+    auto compressor = GetCompressor();
+    return libdeflate_zlib_compress_bound(compressor.get(), size);
+}
+
 
 bool UpdateData::BuildPacket(WorldPacket *packet, bool hasTransport)
 {
@@ -164,7 +123,7 @@ bool UpdateData::BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket,
         if (pSize >= 900000)
             sLog.outInfo("[CRASH-CLIENT] Too large packet: %u", pSize);
 
-        uint32 destsize = compressBound(pSize);
+        uint32 destsize = PacketCompressor::Bound(pSize);
         packet->resize(destsize + sizeof(uint32));
 
         packet->put<uint32>(0, pSize);
@@ -247,7 +206,7 @@ bool MovementData::BuildPacket(WorldPacket& packet)
     if (pSize >= 900000)
         sLog.outInfo("[CRASH-CLIENT] Too large packet size %u (SMSG_COMPRESSED_MOVES)", pSize);
 
-    uint32 destsize = compressBound(pSize);
+    uint32 destsize = PacketCompressor::Bound(pSize);
     packet.resize(destsize + sizeof(uint32));
     packet.put<uint32>(0, pSize);
     PacketCompressor::Compress(const_cast<uint8*>(packet.contents()) + sizeof(uint32), &destsize, (void*)_buffer.contents(), pSize);

@@ -2379,6 +2379,24 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }   
                     return;
                 }
+                case 45873: // Summon Spider (Sunnyglade)
+                {
+                    if (!m_casterUnit || !m_casterUnit->IsMoving())
+                        return;
+
+                    float x, y, z;
+                    m_casterUnit->GetPosition(x, y, z);
+                    if (Creature* pSpider = m_casterUnit->SummonCreature(61212, x, y, z, 0, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 30000))
+                    {
+                        pSpider->SetFactionTemplateId(m_casterUnit->GetFactionTemplateId());
+                        pSpider->SetCreatorGuid(m_casterUnit->GetObjectGuid());
+                        pSpider->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);
+                        if (Unit* pVictim = m_casterUnit->GetVictim())
+                            pSpider->AI()->AttackStart(pVictim);
+                    }
+
+                    return;
+                }
                 case 29999: // Goblin Radio KABOOM-Box X23B76
                 {
                     if (m_CastItem)
@@ -2751,7 +2769,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellData.SpellId))
                                         {
                                             // nerf chance for overpowered effects
-                                            if (pSpellEntry->IsCCSpell() ||
+                                            if (pSpellEntry->Id == 48102 ||
+                                                pSpellEntry->IsCCSpell() ||
                                                 pSpellEntry->HasAura(SPELL_AURA_MOD_CONFUSE) ||
                                                 pSpellEntry->HasAura(SPELL_AURA_MOD_DECREASE_SPEED) ||
                                                 pSpellEntry->HasAura(SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK))

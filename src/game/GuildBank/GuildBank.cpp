@@ -1790,7 +1790,7 @@ void GuildBank::SplitItem(std::string msg)
 		}
 
 		uint32 sorceOriginalCount = sItem->count;
-		uint32 sourceNewCount     = sItem->count - split;
+		int32 sourceNewCount     =  (int32)sItem->count - (int32)split;
 
 		if (sourceNewCount <= 0)
 		{

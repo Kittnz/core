@@ -386,9 +386,16 @@ void BattleGround::Update(uint32 diff)
 
             PlaySoundToAll(SOUND_BG_START);
 
-            //Announce BG starting
+            // Announce BG starting
             if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
-                sWorld.SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
+            {
+                static time_t lastAnnounceTime = 0;
+                if (sWorld.GetGameTime() > (lastAnnounceTime + MINUTE * 2))
+                {
+                    lastAnnounceTime = sWorld.GetGameTime();
+                    sWorld.SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), std::min<uint32>(GetMaxLevel(), PLAYER_MAX_LEVEL));
+                }
+            }
         }
     }
     // Despawn des portes apres 2min (preparation) + 1min
