@@ -22521,9 +22521,6 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
     if (uVictim->GetAura(2479, EFFECT_INDEX_0))
         return;
 
-    if (HasItemCount(50746, 1, false)) // Glyph of the Honorless or I PvP for Fun!
-        return;
-
     if (uVictim->GetTypeId() == TYPEID_UNIT)
     {
         Creature* cVictim = (Creature*)uVictim;
