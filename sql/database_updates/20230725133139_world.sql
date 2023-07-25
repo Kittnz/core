@@ -10,6 +10,7 @@ UPDATE`item_template` SET `name` = 'Glyph of Exhaustion', `buy_price` = 1, `sell
 UPDATE`item_template` SET `name` = 'Glyph of the Turtle', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 51230;
 UPDATE`item_template` SET `name` = 'Glyph of the Honorless', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 50746;
 UPDATE`item_template` SET `name` = 'Glyph of the Vagrant', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 51029;
+UPDATE`item_template` SET `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 50745;
 
 -- rename item Blood Ring Mark of Honor (61793) to Arena Mark of Honor
 
@@ -31,3 +32,8 @@ UPDATE item_template SET bonding = 0 WHERE entry IN (61790, 61791);
 -- Removed Green Woolen Vest quest reward from Once Upon a Sheep quest.
 
 UPDATE `quest_template` SET `RewItemId2` = 0, `RewItemCount2` = 0 WHERE `entry` = 60005;
+
+-- Add Glyph of Self Restraint to Glyph Masters with button to explain it also
+
+REPLACE INTO `npc_vendor_template` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) 
+VALUES (101, 0, 50745, 0, 0, 0, 0);
