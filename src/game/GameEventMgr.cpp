@@ -112,7 +112,7 @@ void GameEventMgr::StopEvent(uint16 event_id, bool overwrite)
     }
 }
 
-void GameEventMgr::EnableEvent(uint16 event_id, bool enable)
+void GameEventMgr::EnableEvent(uint16 event_id, bool enable, bool updateDB)
 {
     // skip if event not exists or length <= 0
     if (!IsValidEvent(event_id))
@@ -129,7 +129,8 @@ void GameEventMgr::EnableEvent(uint16 event_id, bool enable)
 
     // change state
     mGameEvent[event_id].disabled = disabled;
-    WorldDatabase.PExecute("UPDATE `game_event` SET `disabled` = '%u' WHERE `entry` = '%u'", disabled, event_id);
+    if (updateDB)
+        WorldDatabase.PExecute("UPDATE `game_event` SET `disabled` = '%u' WHERE `entry` = '%u'", disabled, event_id);
    
     // we take no action if event needs to be started: GameEvent system will start it for us on its next iteration
     if (!IsActiveEvent(event_id))

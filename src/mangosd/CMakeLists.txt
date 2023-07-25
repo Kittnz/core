@@ -124,6 +124,10 @@ if(USE_DISCORD_BOT)
   )
 endif()
 
+target_link_libraries(${EXECUTABLE_NAME}
+    libdeflate
+)
+
 
 if(WIN32)
   target_link_libraries(${EXECUTABLE_NAME}

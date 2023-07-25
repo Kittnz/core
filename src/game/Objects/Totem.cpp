@@ -74,6 +74,9 @@ void Totem::Update(uint32 update_diff, uint32 time)
         return;
     }
 
+    if (IsPvP() != owner->IsPvP())
+        SetPvP(owner->IsPvP());
+
     if (GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
         GetMotionMaster()->MoveIdle();
 

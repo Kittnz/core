@@ -247,26 +247,9 @@ struct boss_ostariusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateEvents(uint32 const diff)
     {
         m_events.Update(diff);
-
-        // Anti-leash protection
-        if (me->GetPositionX() > (me->GetHomePosition().x + 150))
-            EnterEvadeMode();
-
-        if (!me->SelectHostileTarget() || !me->GetVictim())
-            return;
-
-        if (m_teleportTargetTimer <= diff)
-        {
-            if (!me->CanReachWithMeleeAutoAttack(me->GetVictim()))
-                me->CastSpell(me->GetVictim(), SPELL_SUMMON_PLAYER, true);
-
-            m_teleportTargetTimer = 3000;
-        }
-        else
-            m_teleportTargetTimer -= diff;
 
         // Timer events
         while (uint32 eventId = m_events.ExecuteEvent())
@@ -295,7 +278,8 @@ struct boss_ostariusAI : public ScriptedAI
                 }
                 case EVENT_INTRO_RP_4:
                 {
-                    me->CastSpell(me->GetVictim(), SPELL_SCAN_OF_OSTARIUS, true);
+                    if (me->GetVictim())
+                        me->CastSpell(me->GetVictim(), SPELL_SCAN_OF_OSTARIUS, true);
                     m_events.ScheduleEvent(EVENT_INTRO_RP_5, Seconds(6));
                     break;
                 }
@@ -338,15 +322,44 @@ struct boss_ostariusAI : public ScriptedAI
                 case EVENT_PHASE_3_DELAY:
                 {
                     // Remove physical immunity, reset combat reach, unroot, restore swing timer.
-                    MakeNormal();
+                    if (me->GetVictim())
+                    {
+                        MakeNormal();
 
-                    me->SetAttackTimer(BASE_ATTACK, 2000);
-                    me->SetInCombatWith(me->GetVictim());
+                        me->SetAttackTimer(BASE_ATTACK, 2000);
+                        me->SetInCombatWith(me->GetVictim());
+                    }
 
                     break;
                 }
             }
         }
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        UpdateEvents(diff);
+
+        // wait for rp event on spawn to finish
+        if (!m_currentPhase)
+            return;
+
+        if (!me->SelectHostileTarget() || !me->GetVictim())
+            return;
+
+        // Anti-leash protection
+        if (me->GetPositionX() > (me->GetHomePosition().x + 150))
+            EnterEvadeMode();
+
+        if (m_teleportTargetTimer <= diff)
+        {
+            if (!me->CanReachWithMeleeAutoAttack(me->GetVictim()))
+                me->CastSpell(me->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
+            m_teleportTargetTimer = 3000;
+        }
+        else
+            m_teleportTargetTimer -= diff;
 
         // Portal phase.
         if (m_currentPhase == 1 && !(m_phaseState & STATE_PHASE_1))
@@ -889,16 +902,12 @@ struct npc_uldum_pedestalAI : public ScriptedAI
         npc_uldum_pedestalAI::Reset();
     }
 
-    uint32 InitialDelay_Timer{};
     EventMap m_events;
-    uint8 failedSearches{};
     bool m_started = false;
-
 
     void SetDefaults()
     {
         m_events.Reset();
-        failedSearches = 0;
         m_started = false;
     }
 
@@ -933,20 +942,6 @@ struct npc_uldum_pedestalAI : public ScriptedAI
     void UpdateAI(const uint32 diff) override
     {
         m_events.Update(diff);
-
-        if (!me->GetVictim())
-        {
-            failedSearches++;
-
-            if (failedSearches >= 20)
-            {
-                TogglePedestal();
-                Reset();
-                me->DespawnOrUnsummon();
-            }
-
-            return;
-        }
 
         while (uint32 eventId = m_events.ExecuteEvent())
         {
@@ -987,10 +982,26 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                 }
                 case PEDESTAL_EVENT_BOSS_SPAWN:
                 {
-                    if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                    std::list<Player*> players;
+                    me->GetAlivePlayerListInRange(me, players, 100.0f);
+
+                    if (!players.empty())
                     {
-                        ostarius->AI()->JustRespawned();
-                        ostarius->SetInCombatWith(me->GetVictim());
+                        if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                        {
+                            ostarius->AI()->JustRespawned();
+
+                            for (auto const& itr : players)
+                            {
+                                ostarius->SetInCombatWith(itr);
+                                ostarius->AddThreat(itr);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TogglePedestal();
+                        lastOstariusSummonTime = 0;
                     }
 
                     me->DespawnOrUnsummon();

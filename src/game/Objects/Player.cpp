@@ -20096,52 +20096,43 @@ bool Player::GetBGAccessByLevel(BattleGroundTypeId bgTypeId) const
     return true;
 }
 
-uint32 Player::GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId)
+uint32 Player::GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracketId, BattleGroundTypeId bgTypeId)
 {
-    if (bgTypeId == BATTLEGROUND_AV)
-        return 51;
-    if (bgTypeId == BATTLEGROUND_AB)
-        bracket_id = BattleGroundBracketId(uint32(bracket_id) + 1);
-
-    if (bracket_id > BG_BRACKET_ID_LAST)
-        bracket_id = BG_BRACKET_ID_LAST;
+    if (bracketId > BG_BRACKET_ID_LAST)
+        bracketId = BG_BRACKET_ID_LAST;
 
     BattleGround *bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     ASSERT(bg);
+
+    if (bg->GetMinLevel())
+        return bg->GetMinLevel() + 10 * bracketId;
+    
     // Giperion Turtle: first bracket for 1 lvl, second bracket starts from 2 lvl
-    if (bracket_id == 0)
-    {
+    if (bracketId == 0)
         return 1;
-    }
-    else if (bracket_id == 1)
-    {
+
+    if (bracketId == 1)
         return 2;
-    }
 
-    uint32 ShiftedBracket = bracket_id - 1;
-
-    return 10 * ShiftedBracket + bg->GetMinLevel();
+    return (bracketId - 1) * 10;
 }
 
-uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId)
+uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracketId, BattleGroundTypeId bgTypeId)
 {
-    if (bgTypeId == BATTLEGROUND_AV)
-        return 61;
-    if (bracket_id >= BG_BRACKET_ID_LAST || (bgTypeId == BATTLEGROUND_AB && bracket_id == (BG_BRACKET_ID_LAST - 1)))
-        return (GetMinLevelForBattleGroundBracketId(BG_BRACKET_ID_LAST, bgTypeId) + 1);
+    BattleGround* bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
+    ASSERT(bg);
 
-    // Giperion Turtle: first bracket start and ends in 1 lvl, second ends on 10
-    if (bracket_id == 0)
+    if (!bg->GetMinLevel())
     {
-        return 2;
-    }
-    else if (bracket_id == 1)
-    {
-        return 10;
+        // Giperion Turtle: first bracket start and ends in 1 lvl, second ends on 10
+        if (bracketId == 0)
+            return 2;
+
+        if (bracketId == 1)
+            return 10;
     }
 
-
-    return GetMinLevelForBattleGroundBracketId(bracket_id, bgTypeId) + 10;
+    return GetMinLevelForBattleGroundBracketId(bracketId, bgTypeId) + 10;
 }
 
 BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId) const
@@ -20157,25 +20148,31 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
     if (playerLvl < bg->GetMinLevel())
         return BG_BRACKET_ID_NONE;
 
-    // Giperion Turtle: Make a separate BG bracket for 1 lvl
-    uint32 bracket_id = BG_BRACKET_ID_NONE;
-    if (playerLvl == 1)
+    uint32 bracketId = BG_BRACKET_ID_NONE;
+    if (bg->GetMinLevel())
     {
-        return BG_BRACKET_ID_FIRST;
+        bracketId = (playerLvl - bg->GetMinLevel()) / 10;
     }
     else
     {
-        bracket_id = (playerLvl - bg->GetMinLevel()) / 10;
-        
-        // shift bracketId, since the first bracket for 1 lvl characters only
-        bracket_id++;
-        if (bracket_id >= MAX_BATTLEGROUND_BRACKETS)
+        // Giperion Turtle: Make a separate BG bracket for 1 lvl
+        if (playerLvl == 1)
         {
-            return BG_BRACKET_ID_LAST;
+            return BG_BRACKET_ID_FIRST;
+        }
+        else
+        {
+            bracketId = (playerLvl - bg->GetMinLevel()) / 10;
+
+            // shift bracketId, since the first bracket for 1 lvl characters only
+            bracketId++;
         }
     }
 
-    return BattleGroundBracketId(bracket_id);
+    if (bracketId > MAX_BATTLEGROUND_BRACKETS)
+        return BG_BRACKET_ID_LAST;
+
+    return BattleGroundBracketId(bracketId);
 }
 
 float Player::GetReputationPriceDiscount(Creature const* pCreature) const

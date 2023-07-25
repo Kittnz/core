@@ -1809,6 +1809,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         playerCaster->SetChampion(target->GetGUID());
                         break;
                     }
+                    case 45872: // Superconducting Magnet (Sunnyglade)
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -6815,6 +6821,32 @@ void Aura::PeriodicDummyTick()
                             return;
                         }
                     }
+
+                    return;
+                }
+                case 45872: // Superconducting Magnet (Sunnyglade)
+                {
+                    if (target->IsDead() || target->IsMounted() ||
+                        target->IsNonMeleeSpellCasted() ||
+                       !target->movespline->Finalized() ||
+                        target->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) ||
+                        target->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
+                        return;
+
+                    ObjectGuid selectionGuid = target->GetTargetGuid();
+                    if (selectionGuid.IsEmpty())
+                        return;
+
+                    Unit* pSelection = target->GetMap()->GetUnit(selectionGuid);
+                    if (!pSelection)
+                        return;
+
+                    float distance = target->GetDistance(pSelection);
+                    if (distance < 10 || distance > 100)
+                        return;
+
+                    target->SendSpellGo(pSelection, 100); // todo: remove in 1.16.6
+                    target->CastSpell(pSelection, 45871, false);
 
                     return;
                 }

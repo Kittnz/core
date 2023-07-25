@@ -52,9 +52,9 @@ void instance_zulgurub::Initialize()
     {
         sLog.outError("No madness event active! Force starting it.");
         sGameEventMgr.StartEvent(EVENT_MADNESS_GRILEK, true);
-        sGameEventMgr.EnableEvent(EVENT_MADNESS_HAZZARAH, false);
-        sGameEventMgr.EnableEvent(EVENT_MADNESS_RENATAKI, false);
-        sGameEventMgr.EnableEvent(EVENT_MADNESS_WUSHOOLAY, false);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_HAZZARAH, false, false);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_RENATAKI, false, false);
+        sGameEventMgr.EnableEvent(EVENT_MADNESS_WUSHOOLAY, false, false);
     }
 }
 
