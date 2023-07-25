@@ -999,7 +999,10 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                         }
                     }
                     else
+                    {
+                        TogglePedestal();
                         lastOstariusSummonTime = 0;
+                    }
 
                     me->DespawnOrUnsummon();
                     break;
