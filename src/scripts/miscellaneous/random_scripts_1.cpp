@@ -5864,9 +5864,10 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     }
 
     // info about glyphs
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of the Vagrant.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
@@ -5917,6 +5918,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
         pPlayer->SEND_GOSSIP_MENU(52131, pCreature->GetGUID());
+        return true;
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52132, pCreature->GetGUID());
         return true;
     }
 
