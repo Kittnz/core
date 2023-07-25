@@ -228,23 +228,6 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) 
-        return false;
-
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += 2.0F * cos(pPlayer->GetOrientation());
-    y += 2.0F * sin(pPlayer->GetOrientation());
-    switch (pItem->GetEntry())
-    {
-    case 51021: pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
-    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
-    }
-    return true;
-}
-
 bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->AddAura(8067);
@@ -346,31 +329,6 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
         break;
     default: break;
     }
-    return true;
-}
-
-bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->HasItemCount(51425, 1, false))
-    {
-        if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
-        {
-            pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-            pPlayer->PlayDirectSound(1204, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
-            {
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-                pPlayer->DestroyItemCount(51425, 1, true);
-                return true;
-            }
-        }
-        else
-        {
-            pPlayer->GetSession()->SendNotification("Requires Stormwind Fountain.");
-            return false;
-        }
-    }
-
     return true;
 }
 
@@ -5775,27 +5733,6 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
-bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    GameObject* spitelash_shrine = pPlayer->FindNearestGameObject(2010801, 10.0F); // Spitelash Shrine
-
-    if (!spitelash_shrine)
-    {
-        pPlayer->GetSession()->SendNotification("Requires Spitelash Shrine.");
-        return false;
-    }
-    
-    if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
-        pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
-
-    pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-    pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
-    pPlayer->SaveInventoryAndGoldToDB();
-    return true;
-}
-
 bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -5927,9 +5864,10 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     }
 
     // info about glyphs
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me about Glyph of the Vagrant.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
@@ -5980,6 +5918,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
         pPlayer->SEND_GOSSIP_MENU(52131, pCreature->GetGUID());
+        return true;
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52132, pCreature->GetGUID());
         return true;
     }
 
@@ -7450,11 +7394,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_dispelling_scroll";
-    newscript->pItemUseSpell = &ItemUseSpell_dispelling_scroll;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_magus_bromley";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_magus_bromley;
     newscript->RegisterSelf();
@@ -7980,11 +7919,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_elwynn_coin";
-    newscript->pItemUseSpell = &ItemUseSpell_item_elwynn_coin;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_character_rename";
     newscript->pItemUseSpell = &ItemUseSpell_character_rename;
     newscript->RegisterSelf();
@@ -8007,11 +7941,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_hairdye";
     newscript->pItemUseSpell = &ItemUseSpell_hairdye;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_radio";
-    newscript->pItemUseSpell = &ItemUseSpell_item_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;

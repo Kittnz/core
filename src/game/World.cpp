@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "SocialMgr.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -801,9 +802,9 @@ void World::LoadConfigSettings(bool reload)
 
     //setConfig(CONFIG_UINT32_ANTIFLOOD_SANCTION,       "Antiflood.Sanction", CHEAT_ACTION_KICK);
 
-    setConfig(CONFIG_BOOL_BEGINNERS_GUILD, "BeginnersGuilds", 0);
-    setConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE, "BeginnersGuildHorde", 0);
-    setConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE, "BeginnersGuildAlliance", 0);
+    //setConfig(CONFIG_BOOL_BEGINNERS_GUILD, "BeginnersGuilds", 0);
+    //setConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE, "BeginnersGuildHorde", 0);
+    //setConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE, "BeginnersGuildAlliance", 0);
 
     setConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING, "Account.ShowWarningAge", 3);
 
@@ -1761,8 +1762,6 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadAreaTriggerTeleports();                  // must be after item template load
     sLog.outString("Loading quest area trigger...");
     sObjectMgr.LoadQuestAreaTriggers();                     // must be after LoadQuests
-    sLog.outString("Loading custom graveyards...");
-    sObjectMgr.LoadCustomGraveyards();
     sLog.outString("Loading tavern area triggers...");
     sObjectMgr.LoadTavernAreaTriggers();
     sLog.outString("Loading battlegroun entry triggers...");
@@ -2552,6 +2551,29 @@ void World::SendZoneText(uint32 zone, const char* text, WorldSession *self, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, text);
     SendZoneMessage(zone, &data, self, team);
+}
+
+void World::SendHardcoreMessage(WorldPacket* packet, WorldSession* self)
+{
+    for (const auto& itr : m_sessions)
+    {
+        if (WorldSession* session = itr.second)
+        {
+            if (session != self)
+            {
+                Player* player = session->GetPlayer();
+                // base check
+                if (player && player->IsInWorld() && ((player->IsHardcore() || player->IsHC60()) || player->GetSession()->GetSecurity() > SEC_PLAYER))
+                {
+                    // social check
+                    if (player->GetSocial() && !player->GetSocial()->HasIgnore(self->GetPlayer()->GetObjectGuid()))
+                        session->SendPacket(packet);          
+                }
+            }
+            else
+                self->SendPacket(packet);
+        }
+    }
 }
 
 /// Kick (and save) all players

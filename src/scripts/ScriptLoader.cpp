@@ -260,6 +260,9 @@ void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_instance_karazhan_crypt();
 void AddSC_instance_crescent_grove();
+void AddSC_instance_gilneas_city();
+void AddSC_boss_celia();
+void AddSC_boss_lord_mortimer();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
 void AddSC_mirage_raceway();
@@ -267,13 +270,16 @@ void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
+void AddSC_instance_emerald_sanctum();
+void AddSC_instance_lower_karazhan_halls();
+void AddSC_boss_brood_queen_araxxna();
+void AddSC_boss_solnius();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
 void AddSC_random_scripts_2();
 void AddSC_random_scripts_3();
 
-void AddSC_custom_teleports();
 void AddSC_custom_exploration_triggers();
 
 // Scarlet Citadel
@@ -307,7 +313,6 @@ void AddSC_black_morass_trash();
 void AddSC_instance_black_morass();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chronormu();
-void AddSC_boss_chromie();
 
 // Misc
 void AddSC_npc_ptr();
@@ -578,11 +583,18 @@ void AddScripts()
     AddSC_boss_turtlhu();
     AddSC_instance_karazhan_crypt();
     AddSC_instance_crescent_grove();
+    AddSC_instance_gilneas_city();
+    AddSC_boss_celia();
+    AddSC_boss_lord_mortimer();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
+    AddSC_instance_emerald_sanctum();
+    AddSC_instance_lower_karazhan_halls();
+    AddSC_boss_brood_queen_araxxna();
+    AddSC_boss_solnius();
 
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
@@ -592,7 +604,6 @@ void AddScripts()
     AddSC_random_scripts_2();
     AddSC_random_scripts_3();
 
-    AddSC_custom_teleports();
     AddSC_custom_exploration_triggers();
 
     // Scarlet Citadel
@@ -616,7 +627,6 @@ void AddScripts()
     AddSC_instance_black_morass();
     AddSC_boss_gerastrasz();
     AddSC_boss_chronormu();
-    AddSC_boss_chromie();
 
     // Misc
     AddSC_npc_ptr();

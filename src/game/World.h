@@ -362,8 +362,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT,
-    CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE,
-    CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
+    //CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE,
+    //CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_CHAT_MIN_LEVEL,
@@ -583,7 +583,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_RESTORE_DELETED_ITEMS,
     CONFIG_BOOL_UNLINKED_AUCTION_HOUSES,
     CONFIG_BOOL_PREVENT_ITEM_DATAMINING,
-    CONFIG_BOOL_BEGINNERS_GUILD,
+    //CONFIG_BOOL_BEGINNERS_GUILD,
     CONFIG_BOOL_TRANSMOG_ENABLED,
     CONFIG_BOOL_STATIC_OBJECT_LOS,
 	CONFIG_BOOL_DUAL_SPEC,
@@ -990,6 +990,7 @@ class World
         void SendZoneMessage(uint32 zone, WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);
         void SendZoneText(uint32 zone, const char *text, WorldSession *self = 0, uint32 team = 0);
         void SendServerMessage(ServerMessageType type, const char *text = "", Player* player = nullptr);
+        void SendHardcoreMessage(WorldPacket* packet, WorldSession* self);
 
         /// Are we in the middle of a shutdown?
         bool IsShutdowning() const { return m_ShutdownTimer > 0; }
