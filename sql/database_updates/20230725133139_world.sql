@@ -28,3 +28,6 @@ UPDATE`quest_template` SET `RewXP` = 0 WHERE `entry` = 40973;
 
 UPDATE item_template SET bonding = 0 WHERE entry IN (61790, 61791);
 
+-- Removed Green Woolen Vest quest reward from Once Upon a Sheep quest.
+
+UPDATE `quest_template` SET `RewItemId2` = 0, `RewItemCount2` = 0 WHERE `entry` = 60005;
