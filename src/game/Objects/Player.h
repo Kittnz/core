@@ -674,7 +674,6 @@ enum PlayerDelayedOperations
     DELAYED_RESURRECT_PLAYER          = 0x02,
     DELAYED_SPELL_CAST_DESERTER       = 0x04,
     DELAYED_CAST_HONORLESS_TARGET     = 0x08,
-    DELAYED_TAXI_FLIGHT_WITH_TELEPORT = 0x10, // special case: it's not default restoring taxi flight
     DELAYED_END
 };
 
@@ -724,7 +723,7 @@ enum PlayerTitles : uint8
     TITLE_AVENGER_OF_GNOMEREGAN = 8,
     TITLE_BRUISER_OF_MUDSPROCKET = 9,
     TITLE_AVENGER_OF_QUELTHALAS = 10,
-    TITLE_WARCHIEF = 11,
+    TITLE_BLOOD_RING_CHAMPION = 11,
     TITLE_DEVELOPER = 12,
     TITLE_SCARAB_LORD = 15,
     TITLE_CONQUEROR_OF_NAXXRAMAS = 16,
@@ -1180,6 +1179,7 @@ class Player final: public Unit
         void SetAmmo(uint32 item);
         void RemoveAmmo();
         void SendProficiency(ItemClass itemClass, uint32 itemSubclassMask) const;
+        unsigned int GetShapeshiftDisplay(ShapeshiftForm form);
         Item* BankItem(ItemPosCountVec const& dest, Item* pItem, bool update)
         {
             return StoreItem(dest, pItem, update);
@@ -1471,7 +1471,7 @@ class Player final: public Unit
         bool HasAtLoginFlag(AtLoginFlags f) const { return m_atLoginFlags & f; }
         void SetAtLoginFlag(AtLoginFlags f) { m_atLoginFlags |= f; }
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
-        void JoinBeginnersGuild();
+        //void JoinBeginnersGuild();
         bool InGurubashiArena(bool checkOutsideArea) const;
   
         /*********************************************************/
@@ -2920,22 +2920,6 @@ public:
 	public:
 		void SendAddonMessage(std::string prefix, std::string message);
 		void SendAddonMessage(std::string prefix, std::string message, Player* from);
-
-        // For new taxi
-    public:
-        uint32 GetSaveTaxiData(uint8 index) { if (index > 2) return 0; return saveTaxiDataForTeleport[index]; }
-        void SaveTaxiFlightData(uint32 startNodeAfterTeleport)
-        {
-            saveTaxiDataForTeleport[0] = m_taxi.GetTaxiSource();
-            saveTaxiDataForTeleport[1] = m_taxi.GetTaxiDestination();
-            saveTaxiDataForTeleport[2] = startNodeAfterTeleport;
-        }
-        void ClearTaxiFlightData(uint8 i) { saveTaxiDataForTeleport[i] = 0; }
-        void PrepareTaxiFlightWithTeleport() { ScheduleDelayedOperation(DELAYED_TAXI_FLIGHT_WITH_TELEPORT); }
-    private:
-        uint32 saveTaxiDataForTeleport[3]{};
-
-
 };
 
 void AddItemsSetItem(Player*player,Item* item);

@@ -356,15 +356,18 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
     player.AddUnitState(UNIT_STAT_TAXI_FLIGHT);
     player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
-    uint32 currentNodeId = GetCurrentNode();
-    uint32 end = GetPathAtMapEnd();
+    // Nordannar to Everlook, fly faster because Woji said so.
+    //if ((*i_path)[0].path == 1621 || (*i_path)[0].path == 1623 || (*i_path)[0].path == 1624 || (*i_path)[0].path == 1625)
+    //modSpeed = 1.2f;
 
     Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
-    for (uint32 i = currentNodeId; i != end; ++i)
+    uint32 end = GetPathAtMapEnd();
+    for (uint32 i = GetCurrentNode(); i != end; ++i)
     {
         G3D::Vector3 vertice((*i_path)[i].x, (*i_path)[i].y, (*i_path)[i].z);
         init.Path().push_back(vertice);
     }
+
     init.SetFirstPointId(GetCurrentNode());
     init.SetFly();
     init.SetVelocity(modSpeed * PLAYER_FLIGHT_SPEED);
@@ -378,21 +381,6 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
     while (static_cast <int32>(i_currentNode) < pointId)
     {
         ++i_currentNode;
-        if (MovementInProgress() && (*i_path)[i_currentNode].actionFlag & 4)
-        {
-            // temporary hack 
-            uint32 nextNode = i_currentNode + 4;
-            switch ((*i_path)[i_currentNode].path)
-            {
-            case 1605: nextNode = 13; break;
-            case 1606: nextNode = 12; break;
-            }
-
-            player.SaveTaxiFlightData(nextNode);
-            player.PrepareTaxiFlightWithTeleport();
-            player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
-            return false;
-        }
         if (MovementInProgress() && (*i_path)[i_currentNode + 1].path != (*i_path)[i_currentNode].path)
         {
             player.GetTaxi().NextTaxiDestination();

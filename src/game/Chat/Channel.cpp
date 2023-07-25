@@ -62,7 +62,8 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"Roleplay" || m_name == u8"Hardcore" || m_name == u8"China")
+        // Disable join/left announcements for Russians & Germans:
+        if (m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"China")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
             m_announce = false;
