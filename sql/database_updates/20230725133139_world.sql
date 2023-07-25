@@ -10,3 +10,21 @@ UPDATE`item_template` SET `name` = 'Glyph of Exhaustion', `buy_price` = 1, `sell
 UPDATE`item_template` SET `name` = 'Glyph of the Turtle', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 51230;
 UPDATE`item_template` SET `name` = 'Glyph of the Honorless', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 50746;
 UPDATE`item_template` SET `name` = 'Glyph of the Vagrant', `buy_price` = 1, `sell_price` = 0 WHERE `entry` = 51029;
+
+-- rename item Blood Ring Mark of Honor (61793) to Arena Mark of Honor
+
+UPDATE item_template SET name = 'Arena Mark of Honor' WHERE entry = 61793;
+
+-- Change Blood Ring Mark of Honor (61793) item limit to 100 capacity instead of 200
+
+UPDATE item_template SET stackable = 100 WHERE entry = 61793;
+
+-- Quest Shard Harmonization and Mass Harmonization set XP to 0
+
+UPDATE`quest_template` SET `RewXP` = 0 WHERE `entry` = 40813;
+UPDATE`quest_template` SET `RewXP` = 0 WHERE `entry` = 40973;
+
+-- Item 61790 and 61791 change to no binding 
+
+UPDATE item_template SET bonding = 0 WHERE entry IN (61790, 61791);
+
