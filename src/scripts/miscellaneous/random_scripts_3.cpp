@@ -6935,9 +6935,37 @@ bool GOHello_go_the_orb_of_pyforos(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool QuestAccept_npc_shade_of_senshi(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    Creature* SHADE_OF_SENSHI = pPlayer->FindNearestCreature(61119, 30.0F);
+
+    if (pQuest->GetQuestId() == 41124) // To Save a Soul
+    {
+        if (!SHADE_OF_SENSHI)
+        {
+            Creature* SHADE_OF_SENSHI = pQuestGiver->SummonCreature(61119, pPlayer->GetPositionX() + 2.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ() + 1.0F, pPlayer->GetOrientation() + 3.14, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300 * IN_MILLISECONDS);
+        }
+
+        if (SHADE_OF_SENSHI)
+            return false;
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_shade_of_senshi";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_shade_of_senshi;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_the_orb_of_pyforos";
