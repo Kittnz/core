@@ -374,7 +374,7 @@ void AccountAnalyser::LoadFromDB()
 void AccountAnalyser::CheckExtendedHashes()
 {
     //Check if any extended hashes are empty and fill if they are.
-    auto result = std::unique_ptr<QueryResult>(LoginDatabase.Query("SELECT  FROM `system_fingerprint_usage` WHERE `extendedHash` = 0 AND `suiteMask` != 0"));
+    auto result = std::unique_ptr<QueryResult>(LoginDatabase.Query("SELECT * FROM `system_fingerprint_usage` WHERE `extendedHash` = 0 AND `suiteMask` != 0"));
 
     if (result)
     {
