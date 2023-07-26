@@ -41,3 +41,6 @@ REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `c
 REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES (36474, 164, 57196, 0, 0, 1, 0, 0, 320, 310, 0);
 UPDATE `spell_template` SET `spellVisual1` = 263 WHERE `entry` = 49358;
 UPDATE `spell_template` SET `effectApplyAuraName1` = 108, `effectMiscValue1` = 8 WHERE `entry` = 45707;
+
+UPDATE `spell_template` SET `description` = 'You can only use poor and common quality equipment. Enchanting items is not allowed.' WHERE `entry` = 50014;
+UPDATE `spell_template` SET `description` = 'You can only use poor and common quality equipment. Enchanting items is not allowed.' WHERE `entry` = 50045;
