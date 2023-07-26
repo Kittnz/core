@@ -19,13 +19,21 @@
 
 -- Change item type to Trade Goods (they are consumable now)
 
-update item_template set `class` = 12, `flags` = 64, name = 'Copper Belt Buckle' where name = 'Copper Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Bronze Belt Buckle' where name = 'Bronze Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Iron Belt Buckle' where name = 'Iron Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Mithril Belt Buckle' where name = 'Mithril Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Thorium Belt Buckle' where name = 'Thorium Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Arcanite Belt Buckle' where name = 'Arcanite Buckle';
-update item_template set `class` = 12, `flags` = 64, name = 'Dreamsteel Belt Buckle' where name = 'Dreamsteel Buckle';
+update item_template set  name = 'Copper Belt Buckle' where name = 'Copper Buckle';
+update item_template set  name = 'Bronze Belt Buckle' where name = 'Bronze Buckle';
+update item_template set  name = 'Iron Belt Buckle' where name = 'Iron Buckle';
+update item_template set  name = 'Mithril Belt Buckle' where name = 'Mithril Buckle';
+update item_template set  name = 'Thorium Belt Buckle' where name = 'Thorium Buckle';
+update item_template set  name = 'Arcanite Belt Buckle' where name = 'Arcanite Buckle';
+update item_template set  name = 'Dreamsteel Belt Buckle' where name = 'Dreamsteel Buckle';
+
+update item_template set `class` = 12, flags = 64 where entry = 61779;
+update item_template set `class` = 12, flags = 64 where entry = 61780;
+update item_template set `class` = 12, flags = 64 where entry = 61781;
+update item_template set `class` = 12, flags = 64 where entry = 61782;
+update item_template set `class` = 12, flags = 64 where entry = 61783;
+update item_template set `class` = 12, flags = 64 where entry = 61784;
+update item_template set `class` = 12, flags = 64 where entry = 61785;
 
 update spell_template set name = 'Copper Belt Buckle' where name = 'Copper Buckle';
 update spell_template set name = 'Bronze Belt Buckle' where name = 'Bronze Buckle';
@@ -45,13 +53,13 @@ update spell_template set name = 'Dreamsteel Belt Buckle' where name = 'Dreamste
 -- Arcanite Buckle
 -- Dreamsteel Buckle
 	
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57182;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57179;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57176;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57173;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57170;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57167;
-UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64` WHERE `entry` = 57164;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57182;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57179;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57176;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57173;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57170;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57167;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57164;
 
 -- The following items/spells can be applied to other players in the trade window, this is not intentional
 
