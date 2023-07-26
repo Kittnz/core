@@ -155,7 +155,9 @@ void AccountAnalyser::CheckExtendedPrintMark()
             _session->GetRemoteAddress().c_str());
 
         sWorld.SendGMText(message);
+#ifdef USING_DISCORD_BOT
         sDiscordBot->SendMessageToChannel(1102940763970609152, message, DiscordBot::MessagePriority::Requeue);
+#endif
     }
 }
 
