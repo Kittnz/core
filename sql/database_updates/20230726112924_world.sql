@@ -333,3 +333,11 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (12944, 41126);
 replace into creature_involvedrelation	(id, quest) values (12944, 41126);
 
+-- Quest 'Collecting Fading Dream Fragments' change reward to 15x Small Dream Shard instead of 10.
+update quest_template set RewItemCount1 = 15 where entry = 41007;
+-- Quest 40912, 40911, 40910, change quest requirement of 30 Bright Dream Shard to 5.
+update quest_template set ReqItemCount1 = 5 where entry in (40912, 40911, 40910); 
+-- Quest 40912, 40911, 40910, change short description text to "Gather 5 Bright Dream Shards and a Fading Dream Fragment for Vaenar Hollowstar at Nordanaar in Hyjal".
+update quest_template set Objectives = 'Gather 5 Bright Dream Shards and a Fading Dream Fragment for Vaenar Hollowstar at Nordanaar in Hyjal' where entry in (40912, 40911, 40910); 
+-- Quest 40816, 40815, 40814, 41069, 41068, 41055 change reward to 2 Bright Dream Shard instead of 1.
+update quest_template set RewItemCount1 = 2 where entry in (40816, 40815, 40814, 41069, 41068, 41055);
