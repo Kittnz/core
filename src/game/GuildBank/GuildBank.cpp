@@ -2108,7 +2108,7 @@ void GuildBank::LoadLog()
 	for (uint32 tab = 0; tab <= MAX_TABS; ++tab)
 		index[tab] = 0;
 
-	time_t timeStamp = time(nullptr);
+	time_t timeStamp = time(nullptr) - 604800;
 	
 	// 1 week behind
 	QueryResult *guildBankLog = CharacterDatabase.PQuery("SELECT `log_id`, `player`, `action`, `tab`, `item`, `randomPropertyId`, `enchant`, `count`, `stamp` "
