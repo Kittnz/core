@@ -183,6 +183,10 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
         return true;
 
+    //block purely-client sided LFT for now from being blocked by anti spam.
+    if (channel && channel->GetName() == "LFT")
+        return true;
+
     MessageBlock messageBlock;
     messageBlock.fromGuid = from->GetObjectGuid();
     messageBlock.fromAccount = from->GetSession()->GetAccountId();

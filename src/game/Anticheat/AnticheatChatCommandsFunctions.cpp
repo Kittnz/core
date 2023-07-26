@@ -143,13 +143,19 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
 
 bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
 {
-    uint32 extendedPrint;
+    CommandStream commandStream{ args };
+    uint64 extendedPrint;
 
-    if (!ExtractUInt32(&args, extendedPrint))
+    if (!(commandStream >> extendedPrint))
     {
-        PSendSysMessage("Wrongly formatted HWPrint.");
+        SendSysMessage("Wrongly formatted HWPrint.");
         return false;
     }
+
+
+    AccountAnalyser::MarkExtendedPrint(extendedPrint);
+
+    PSendSysMessage("Marking Extended Print %llu", extendedPrint);
 
     return true;
 }
@@ -161,35 +167,19 @@ bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
 
     if (!(commandStream >> extendedPrint))
     {
-        PSendSysMessage("Wrongly formatted HWPrint.");
-        return false;
-    }
-
-    std::string guildName;
-
-    if (!(commandStream >> guildName))
-    {
-        PSendSysMessage("Wrongly formatted guild name.");
-        return false;
-    }
-
-    std::string playerName;
-
-    if (!(commandStream >> playerName))
-    {
-        PSendSysMessage("Wrongly formatted player name.");
+        SendSysMessage("Wrongly formatted HWPrint.");
         return false;
     }
 
 
-    PSendSysMessage("Listing logged in clients with extended FP %u:", extendedPrint);
+    PSendSysMessage("Listing logged in clients with extended FP %llu:", extendedPrint);
 
     const auto& sessions = sWorld.GetAllSessions();
     for (const auto& sessionPair : sessions)
     {
         const auto& session = sessionPair.second;
         auto& sample = session->_analyser->GetCurrentSample();
-        if (sample.GetHash() == extendedPrint)
+        if (sample.GetHash() == extendedPrint && sample.GetHash() != 0)
         {
             auto player = session->GetPlayer();
             PSendSysMessage("Found Match for Account ID %u, player %s (GUID %u). IP: %s", session->GetAccountId(), player ? player->GetName() : "<None> (Not logged in)", player ? player->GetGUIDLow() : 0
