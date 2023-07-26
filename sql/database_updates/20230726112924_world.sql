@@ -424,3 +424,25 @@ REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
 (50676, 'The humans have no real conviction. Treating the common folk like cattle, kidnapping and serving them on platters. Frankly, I was proud of my own accomplishments. To twist the beloved King of these men who still wish to see him on the throne. Still holding hope that he\'s merely ill or captured by us—the root of all evil—while he himself betrayed them.', 0);
 replace into creature_loot_template values
 (61263,61802,8,0,1,1,0);
+
+-- Item fixes.
+update item_template set required_level = 12 where entry = 2582; -- Green Woolen Vest
+update item_template set subclass = 7 where entry = 61293; -- Idol of the Moonfang
+update item_template set bonding = 0, display_id = 6270 where entry = 13517; -- Recipe: Alchemists' Stone
+update item_template set spelltrigger_1 = 1 where entry = 61269; -- Clutchweave Robe
+update item_template set spellcooldown_1 = 240000 where entry = 20130; -- Diamond Flask
+update item_template set display_id = 19742 where entry = 61668; -- Dawnstone Sabatons
+update item_template set stat_value1 = 0, stat_value2 = 0, spellid_2 = 0 where entry = 13503; -- Alchemists' Stone
+-- wardens of time reputation reward adjustments
+update item_template set spellid_2 = 18054 where entry = 61006; -- Blade of Infinite Mysteries
+update item_template set spellid_1 = 45530, spellid_2 = 9318 where entry = 61009; -- Time-Shifting Wheel
+update item_template set spellid_1 = 8815, stat_value1 = 11, stat_value2 = 11 where entry = 61010; -- Wing of the Time-Lord
+update item_template set spellid_1 = 13675, spellid_2 = 28112, stat_value1 = 8, stat_value2 = 23, stat_value3 = 0, stat_type2 = 7, stat_type1 = 3 where entry = 61007; -- Temporal Bronze Boots
+update item_template set spellid_1 = 13669, stat_value1 = 12, stat_value2 = 12, stat_value3 = 22, stat_type3 = 7, stat_type2 = 3, spellid_2 = 45530, spelltrigger_2 = 1 where entry = 61003; -- Timeskipper's Helm of Alacrity
+update item_template set spellid_1 = 13679, stat_value1 = 5, stat_value2 = 5, spellid_2 = 9346, spelltrigger_2 = 1 where entry = 61004; -- Sandswept Ring of Arcanum
+
+update item_template set item_level = 68, dmg_min1 = 70, dmg_max1 = 130, stat_value1 = 12, stat_value2 = 7 where entry = 61001; -- Claw of the Infinite
+update item_template set item_level = 68, spellid_1 = 18036, armor = 95 where entry = 61002; -- Robe of the Custodian
+update item_template set item_level = 68, stat_value2 = 12, stat_value3 = 8, armor = 249 where entry = 61013; -- Gauntlets of Temporal Guidance
+-- nordanaar herbal tea shared cd
+update item_template set spellcategory_1 = 1153, spellcategorycooldown_1 = 120000 where entry = 61675; -- Nordanaar Herbal Tea
