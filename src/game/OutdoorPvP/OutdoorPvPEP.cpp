@@ -1032,23 +1032,25 @@ void OutdoorPvPEP::BuffTeams()
 {
     for (const auto pPlayer : m_players[0])
     {
-        {
-            for (uint32 i : EP_AllianceBuffs)
+        uint32 const spellId = m_AllianceTowersControlled && m_AllianceTowersControlled < 5 ? EP_AllianceBuffs[m_AllianceTowersControlled - 1] : 0;
+
+        for (uint32 i : EP_AllianceBuffs)
+            if (i != spellId)
                 pPlayer->RemoveAurasDueToSpell(i);
 
-            if (m_AllianceTowersControlled && m_AllianceTowersControlled < 5)
-                pPlayer->CastSpell(pPlayer, EP_AllianceBuffs[m_AllianceTowersControlled - 1], true);
-        }
+        if (spellId && !pPlayer->HasAura(spellId))
+            pPlayer->CastSpell(pPlayer, spellId, true);
     }
     for (const auto pPlayer : m_players[1])
     {
-        {
-            for (uint32 i : EP_HordeBuffs)
+        uint32 const spellId = m_HordeTowersControlled && m_HordeTowersControlled < 5 ? EP_HordeBuffs[m_HordeTowersControlled - 1] : 0;
+
+        for (uint32 i : EP_HordeBuffs)
+            if (i != spellId)
                 pPlayer->RemoveAurasDueToSpell(i);
 
-            if (m_HordeTowersControlled && m_HordeTowersControlled < 5)
-                pPlayer->CastSpell(pPlayer, EP_HordeBuffs[m_HordeTowersControlled - 1], true);
-        }
+        if (spellId && !pPlayer->HasAura(spellId))
+            pPlayer->CastSpell(pPlayer, spellId, true);
     }
 }
 
