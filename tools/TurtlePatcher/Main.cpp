@@ -51,7 +51,6 @@ bool fov_build = false;
 #define PATCH_FILE "Data\\patch-4.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
-#define LFT_ADDON_FILE "LFT.mpq"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 
 const unsigned char LoadDLLShellcode[] =
@@ -486,7 +485,9 @@ void ClearWDBCache()
 		if (fs::exists(wdb))
 		{
 			WriteLog("Deleting client cache...");
-			fs::remove_all(wdb);
+			std::error_code ec;
+			fs::remove_all(wdb, ec);
+			WriteLog("Failed to delete cache, error code: %s", ec.category().message(ec.value()));
 		}	
 	}
 }
@@ -585,6 +586,24 @@ void DeleteDeprecatedMPQ()
 	}
 }
 
+void DeleteLFTAddon()
+{
+	fs::path currentPath = fs::current_path();
+	{
+		fs::path lft = currentPath / "Interface" / "AddOns" / "LFT";
+
+		if (fs::exists(lft))
+		{
+			WriteLog("Deleting old LFT addon...");
+			std::error_code ec;
+			fs::remove_all(lft, ec);
+			WriteLog("Failed to delete LFT, error code: %s", ec.category().message(ec.value()));
+		}
+		else
+			WriteLog("LFT addon doesn't exist. Skip.");
+	}
+}
+
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
@@ -648,14 +667,10 @@ int GuardedMain(HINSTANCE hInstance)
 	// Then sleep for 5 sec. because there is a strange error if we working too fast
 	Sleep(5000);
 
-	// Delete deprecated MPQ files:
 	DeleteDeprecatedMPQ();
-
-	// Delete player's chat cache:
 	DeleteChatCache();
-
-	// Delete WDB:
 	ClearWDBCache();
+	DeleteLFTAddon();
 
 	// unpack patch files
 	{
@@ -761,146 +776,8 @@ int GuardedMain(HINSTANCE hInstance)
 				WriteLog("File WoWFoV.exe not found.");
 			}
 		}
-		
-		// Unpack LFT.mpq
-		{
-			if (StormFile* pFile = PatchFile.OpenFile(LFT_ADDON_FILE))
-			{
-				OnOpenFileLambda(LFT_ADDON_FILE);
-				std::unique_ptr<StormFile> patchData(pFile);
 
-				FILE* hTargetFile = OpenFileWithLogLambda(LFT_ADDON_FILE);
-				if (hTargetFile == nullptr)
-				{
-					return 1;
-				}
-
-				CopyFromMPQToFileLambda(pFile, hTargetFile);
-				fclose(hTargetFile);
-
-				fs::path LFTAddonPath = "Interface\\AddOns\\LFT";
-				if (fs::exists(LFTAddonPath))
-				{
-					fs::remove_all(LFTAddonPath);
-				}
-
-				fs::create_directories(LFTAddonPath);
-
-				{
-					StormArchive LFTArchive(LFT_ADDON_FILE);
-
-					for (StormArchive::FileIterator it(LFTArchive.mpq); it; it++)
-					{
-						std::unique_ptr<StormFile> FileInside( it.OpenCurrentFile());
-
-						WriteLog("Unpack LFT file %s", it.FileData.cFileName);
-
-						char FilePath[256] = {0};
-						sprintf(FilePath, "Interface\\AddOns\\LFT\\%s", it.FileData.cFileName);
-
-						std::string sFilePath = FilePath;
-						RemoveFilenameFromEnd(sFilePath);
-						fs::create_directories(sFilePath);
-
-						FILE* hTargetFile = OpenFileWithLogLambda(FilePath);
-						if (hTargetFile == nullptr)
-						{
-							continue;
-						}
-
-						CopyFromMPQToFileLambda(FileInside.get(), hTargetFile);
-
-						fclose(hTargetFile);
-					}
-				}
-
-				fs::remove(LFT_ADDON_FILE);
-			}
-		}
-
-		// unpack mpq
-		//if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
-		//{
-		//	OnOpenFileLambda(PATCH_FILE);
-		//	std::unique_ptr<StormFile> patchData(pFile);
-
-		//	// copy shit to target path
-		//	FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
-		//	if (hTargetFile == nullptr)
-		//	{
-		//		return 1;
-		//	}
-
-		//	// split to chunks
-		//	const DWORD chunkSize = 4096;
-		//	DWORD chunks = patchData->Size.QuadPart / chunkSize;
-		//	chunks += (patchData->Size.QuadPart % chunkSize) != 0;
-		//	char ReadingBuffer[4096];
-
-		//	PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
-
-		//	DWORD ExtractProgress = 0;
-
-		//	for (DWORD i = 0; i < chunks; i++)
-		//	{
-		//		if (hDialog == NULL)
-		//		{
-		//			break;
-		//		}
-
-		//		DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
-
-		//		patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
-
-		//		fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
-
-		//		// update progress
-		//		float progress = float(i) / float(chunks);
-		//		progress *= 100.0f;
-
-		//		DWORD NewExtractProgress = DWORD(progress);
-
-		//		for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
-		//		{
-		//			SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
-		//		}
-
-		//		while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
-		//		{
-		//			if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
-		//			{
-		//				TranslateMessage(&msg);
-		//				DispatchMessage(&msg);
-		//			}
-		//		}
-		//	}
-
-		//	fclose(hTargetFile);
-		//}
-		//else
-		//{
-		//	WriteLog("The file you're looking for is probably already installed!");
-		//	ErrorBox("Your client is already updated.");
-		//	return 1;
-		//}
 	}
-
-	//if (hDialog == NULL)
-	//{
-	//	WriteLog("INFO: User has cancelled update.");
-	//	if (fs::exists(PATCH_FILE))
-	//	{
-	//		WriteLog("Removing patch files...");
-	//		fs::remove(PATCH_FILE);
-	//	}
-
-	//	return 0;
-	//}
-	//else
-	//{
-	//	DestroyWindow(hDialog);
-	//	hDialog = NULL;
-	//}
 
 	WriteLog("Patching WoW.exe...");
 
