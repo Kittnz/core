@@ -133,3 +133,4 @@ DELETE FROM game_event_creature WHERE guid=2578406;
 DELETE FROM game_event_creature_data WHERE guid=2578406;
 DELETE FROM creature_battleground WHERE guid=2578406;
 REPLACE INTO `creature` VALUES (2578407,61614,0,0,0,0,-8563.3,378.697,108.386,6.10368,120,120,0,100,100,0,0,0);
+UPDATE `creature_template` set `scale` = 2.400000 where entry = 61609;
