@@ -2112,7 +2112,7 @@ void GuildBank::LoadLog()
 	
 	// 1 week behind
 	QueryResult *guildBankLog = CharacterDatabase.PQuery("SELECT `log_id`, `player`, `action`, `tab`, `item`, `randomPropertyId`, `enchant`, `count`, `stamp` "
-		"FROM guild_bank_log WHERE `guildid` = '%u' AND `isInferno`= '%u' AND `stamp` >= %u"
+		"FROM guild_bank_log WHERE `guildid` = '%u' AND `isInferno`= '%u' AND `stamp` >= %u "
 		"ORDER BY stamp",
 		guildid, b_infernoBank, timeStamp);
 
