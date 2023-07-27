@@ -104,10 +104,15 @@ public:
 
     AnalysisInfo& GetCurrentSample() { return _currentSample; }
 
+    void CheckExtendedPrintMark();
+
     uint32& RescheduleTimer() { return _rescheduleTimer; }
 
     static void LoadFingerprintsCallback(QueryResult* result, uint32 SessionID);
     static void LoadIPHistoryCallback(QueryResult* result, uint32 SessionID);
+
+    static void CheckExtendedHashes();
+    static void MarkExtendedPrint(uint64 extendedPrint);
 
 private:
     WorldSession* _session;
@@ -127,4 +132,7 @@ private:
     constexpr static int LoadSteps = 2;
 
     bool IsLoaded() const { return m_loadStep.load(std::memory_order_acquire) >= LoadSteps; }
+
+
+    inline static std::unordered_set<uint64> _markedExtendedPrints;
 };

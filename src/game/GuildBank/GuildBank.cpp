@@ -2107,12 +2107,14 @@ void GuildBank::LoadLog()
 
 	for (uint32 tab = 0; tab <= MAX_TABS; ++tab)
 		index[tab] = 0;
+
+	time_t timeStamp = time(nullptr) - 604800;
 	
 	// 1 week behind
 	QueryResult *guildBankLog = CharacterDatabase.PQuery("SELECT `log_id`, `player`, `action`, `tab`, `item`, `randomPropertyId`, `enchant`, `count`, `stamp` "
-		"FROM guild_bank_log WHERE `guildid` = '%u' AND `isInferno`= '%u' AND `stamp` >= 'UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 WEEK))'"
+		"FROM guild_bank_log WHERE `guildid` = '%u' AND `isInferno`= '%u' AND `stamp` >= %u "
 		"ORDER BY stamp",
-		guildid, b_infernoBank);
+		guildid, b_infernoBank, timeStamp);
 
 	if (!guildBankLog)
 		return; // log empty

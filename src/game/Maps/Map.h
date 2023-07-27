@@ -459,6 +459,7 @@ class Map : public GridRefManager<NGridType>
         bool SendToPlayersInZone(WorldPacket const* data, uint32 zoneId) const;
         // Sends a Packet to all game masters not in the group
         void SendToAllGMsNotInGroup(WorldPacket const* data, Group* pGroup) const;
+        void SendDefenseMessage(int32 textId, uint32 zoneId) const;
 
         typedef MapRefManager PlayerList;
         PlayerList const& GetPlayers() const { return m_mapRefManager; }

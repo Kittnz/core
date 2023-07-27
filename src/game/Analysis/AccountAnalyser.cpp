@@ -147,6 +147,20 @@ void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, uint32 SessionI
     delete result;
 }
 
+void AccountAnalyser::CheckExtendedPrintMark()
+{
+    if (_markedExtendedPrints.find(_currentSample.GetHash()) != _markedExtendedPrints.end())
+    {
+        std::string message = string_format("Marked extended print logged in! %llu on account %s (ID %u). IP %s. ", _currentSample.GetHash(), _session->GetUsername(), _session->GetAccountId(),
+            _session->GetRemoteAddress().c_str());
+
+        sWorld.SendGMText(message);
+#ifdef USING_DISCORD_BOT
+        sDiscordBot->SendMessageToChannel(1102940763970609152, message, DiscordBot::MessagePriority::Requeue);
+#endif
+    }
+}
+
 void AccountAnalyser::Initialize()
 {
     if (!_enabled)
@@ -157,6 +171,8 @@ void AccountAnalyser::Initialize()
         _rescheduleTimer = 500;
         return;
     }
+
+    CheckExtendedPrintMark();
 
     if (_totalLogins < 20 || _loadedSamples.size() < 20)
         return;
@@ -355,4 +371,89 @@ void AccountAnalyser::LoadFromDB()
     LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadIPHistoryCallback,
         _session->GetAccountId(), string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = %u  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
 
+}
+
+void AccountAnalyser::CheckExtendedHashes()
+{
+    //Check if any extended hashes are empty and fill if they are.
+    auto result = std::unique_ptr<QueryResult>(LoginDatabase.Query("SELECT * FROM `system_fingerprint_usage` WHERE `extendedHash` = 0 AND `suiteMask` != 0"));
+
+    if (result)
+    {
+
+        do {
+            auto fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            uint32 fingerprint = fields[1].GetUInt32();
+            uint32 accountId = fields[2].GetUInt32();
+            std::string ipAddress = fields[3].GetString();
+            std::string cpuType = fields[7].GetString();
+
+            uint32 activeCpus = fields[8].GetUInt32();
+            uint32 totalCpus = fields[9].GetUInt32();
+
+            uint32 pageSize = fields[10].GetUInt32();
+            uint32 timeZoneBiasLow = fields[11].GetUInt32();
+            uint32 suiteMask = fields[13].GetUInt32();
+            uint32 mitPolicies = fields[14].GetUInt32();
+            uint32 numPhysicalPages = fields[15].GetUInt32();
+            uint32 sharedDataFlags = fields[16].GetUInt32();
+            uint32 unparkedCpuCount = fields[20].GetUInt32();
+            uint32 enclaveMask = fields[21].GetUInt32();
+            uint32 qpcData = fields[22].GetUInt32();
+
+            bool useExtendedData = true;
+
+            if (AllVal(0, pageSize, timeZoneBiasLow, suiteMask, mitPolicies, numPhysicalPages, sharedDataFlags, unparkedCpuCount, enclaveMask, qpcData))
+                useExtendedData = false;
+
+            bool useCpuData = true;
+            if (cpuType.empty())
+                useCpuData = false;
+
+            AnalysisInfo info
+            {
+                fingerprint,
+                ipAddress,
+                cpuType,
+                activeCpus,
+                totalCpus,
+                pageSize,
+                timeZoneBiasLow,
+                suiteMask,
+                mitPolicies,
+                numPhysicalPages,
+                sharedDataFlags,
+                unparkedCpuCount,
+                enclaveMask,
+                qpcData,
+                useExtendedData,
+                useCpuData
+            };
+
+            LoginDatabase.DirectPExecute("UPDATE `system_fingerprint_usage` SET `extendedHash` = %llu WHERE `id` = %u", info.GetHash(), id);
+
+        } while (result->NextRow());
+    }
+
+
+    result = std::unique_ptr<QueryResult>(LoginDatabase.Query("SELECT `extendedPrint` FROM `hwprint_marks`"));
+
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+            _markedExtendedPrints.insert(fields[1].GetUInt64());
+        } while (result->NextRow());
+    }
+}
+
+void AccountAnalyser::MarkExtendedPrint(uint64 extendedPrint)
+{
+    if (_markedExtendedPrints.find(extendedPrint) != _markedExtendedPrints.end())
+        return;
+
+    _markedExtendedPrints.insert(extendedPrint);
+
+    LoginDatabase.PExecute("REPLACE INTO `hwprint_marks` (`extendedPrint`) VALUES (%llu)", extendedPrint);
 }
