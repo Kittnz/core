@@ -217,7 +217,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     if (!data->email.empty())
         cHandler.PSendSysMessage("Email: %s", data->email.c_str());
     cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
-    cHandler.PSendSysMessage("Extended Fingerprint: %llu", data->m_extendedFingerprint);
+    cHandler.PSendSysMessage("Extended Fingerprint: %s", cHandler.playerLink(std::to_string(data->m_extendedFingerprint)).c_str());
     cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
     if (data->m_hasUsedClickToMove)

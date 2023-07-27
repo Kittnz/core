@@ -2018,6 +2018,8 @@ void World::SetInitialWorldSettings()
 	uint32 uTransmogFillDuration = WorldTimer::getMSTimeDiff(uTransmogFillStartTime, WorldTimer::getMSTime());
 	sLog.outString("Loading possible transmogs: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
 
+    AccountAnalyser::CheckExtendedHashes();
+
 #ifdef USING_DISCORD_BOT
     sLog.outString("Loading Discord Bot...");
 
