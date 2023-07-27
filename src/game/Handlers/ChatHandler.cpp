@@ -289,6 +289,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_RAID_WARNING:
         case CHAT_MSG_BATTLEGROUND:
         case CHAT_MSG_BATTLEGROUND_LEADER:
+        case CHAT_MSG_HARDCORE:
         {
             recv_data >> msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
@@ -995,51 +996,63 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
             {
-                if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
-                {
-                    // Still Alive & Newcomers channels should be strictly English-speaking:
-                    std::wstring w_normMsg;
-                    if (!Utf8toWStr(msg, w_normMsg))
-                    {
-                        ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
-                        return;
-                    }
+                //if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
+                //{
+                //    // Still Alive & Newcomers channels should be strictly English-speaking:
+                //    std::wstring w_normMsg;
+                //    if (!Utf8toWStr(msg, w_normMsg))
+                //    {
+                //        ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
+                //        return;
+                //    }
 
-                    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
-                    {
-                        ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
-                        return;
-                    }
-                }
+                //    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+                //    {
+                //        ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
+                //        return;
+                //    }
+                //}
 
-                if (guild->GetId() == GUILD_HARDCORE || guild->GetId() == GUILD_NEWCOMERS)
-                {
-                    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
-                    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, nullptr, guild))
-                    {
-                        guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+                //if (guild->GetId() == GUILD_HARDCORE || guild->GetId() == GUILD_NEWCOMERS)
+                //{
+                //    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+                //    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, nullptr, guild))
+                //    {
+                //        guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
 
 
-                        if (lang != LANG_ADDON)
-                        {
-                            try {
-                                PlayerPointer plr = GetPlayerPointer();
-                                std::ostringstream ss;
-                                ss << plr->GetName() << ":" << GetAccountId();
-                                //sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
-                                //    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
-                            }
-                            catch (const std::exception&) {}
-                        }
-                    }
-                }
-                else
+                //        if (lang != LANG_ADDON)
+                //        {
+                //            try {
+                //                PlayerPointer plr = GetPlayerPointer();
+                //                std::ostringstream ss;
+                //                ss << plr->GetName() << ":" << GetAccountId();
+                //                //sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
+                //                //    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
+                //            }
+                //            catch (const std::exception&) {}
+                //        }
+                //    }
+                //}
+                /*else*/
                     guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
             }
 
             if (lang != LANG_ADDON)
                 sWorld.LogChat(this, "Guild", msg, nullptr, GetMasterPlayer()->GetGuildId());
 
+            break;
+        }
+        case CHAT_MSG_HARDCORE:
+        {
+            if ((GetPlayer()->IsHardcore() || GetPlayer()->IsHC60()) || GetPlayer()->GetSession()->GetSecurity() > SEC_PLAYER)
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_HARDCORE, msg.c_str(), Language(lang), _player->GetChatTag(), _player->GetObjectGuid(), _player->GetName());
+                sWorld.SendHardcoreMessage(&data, _player->GetSession());
+            }
+            else
+                GetPlayer()->ToPlayer()->GetSession()->SendNotification("You must be Hardcore to join this channel.");                
             break;
         }
         case CHAT_MSG_OFFICER: // Master side

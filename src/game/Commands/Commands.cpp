@@ -521,6 +521,86 @@ bool ChatHandler::HandleLearnAllMySpellsCommand(char* /*args*/)
     return true;
 }
 
+SkillLineEntry const* ChatHandler::FindSkillLineEntryFromProfessionName(char* args, std::string& nameOut)
+{
+    if (!*args)
+        return nullptr;
+
+    std::wstring wnamepart;
+
+    if (!Utf8toWStr(args, wnamepart))
+        return nullptr;
+
+    // converting string that we try to find to lower case
+    wstrToLower(wnamepart);
+
+    SkillLineEntry const* targetSkillInfo = nullptr;
+    for (uint32 i = 1; i < sSkillLineStore.GetNumRows(); ++i)
+    {
+        SkillLineEntry const* skillInfo = sSkillLineStore.LookupEntry(i);
+        if (!skillInfo)
+            continue;
+
+        if (skillInfo->categoryId != SKILL_CATEGORY_PROFESSION && skillInfo->categoryId != SKILL_CATEGORY_SECONDARY)
+            continue;
+
+        int loc = GetSessionDbcLocale();
+        nameOut = skillInfo->name[loc];
+        if (nameOut.empty())
+            continue;
+
+        if (!Utf8FitTo(nameOut, wnamepart))
+        {
+            loc = 0;
+            for (; loc < MAX_DBC_LOCALE; ++loc)
+            {
+                if (loc == GetSessionDbcLocale())
+                    continue;
+
+                nameOut = skillInfo->name[loc];
+                if (nameOut.empty())
+                    continue;
+
+                if (Utf8FitTo(nameOut, wnamepart))
+                    break;
+            }
+        }
+
+        if (loc < MAX_DBC_LOCALE)
+        {
+            targetSkillInfo = skillInfo;
+            break;
+        }
+    }
+
+    return targetSkillInfo;
+}
+
+bool ChatHandler::HandleLearnAllRecipesCommand(char* args)
+{
+    //  Learns all recipes of specified profession and sets skill to max
+    //  Example: .learn all_recipes enchanting
+
+    Player* target = GetSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        return false;
+    }
+
+    std::string name;
+    SkillLineEntry const* targetSkillInfo = FindSkillLineEntryFromProfessionName(args, name);
+    if (!targetSkillInfo)
+        return false;
+
+    HandleLearnSkillRecipesHelper(target, targetSkillInfo->id);
+
+    uint16 maxLevel = target->GetSkillMaxPure(targetSkillInfo->id);
+    target->SetSkill(targetSkillInfo->id, maxLevel, maxLevel);
+    PSendSysMessage(LANG_COMMAND_LEARN_ALL_RECIPES, name.c_str());
+    return true;
+}
+
 bool ChatHandler::HandleLearnAllTrainerCommand(char* args)
 {
     Player* pPlayer = m_session->GetPlayer();
@@ -14142,6 +14222,37 @@ bool ChatHandler::HandlePlayCommand(char* args)
 
     m_session->GetPlayer()->PlayDirectMusic(id);
     return true;
+}
+
+bool ChatHandler::HandleRadioCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .radio on/off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+
+    if (!ExtractOnOff(&args, value))
+    {
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        m_session->GetPlayer()->PlayDirectMusic(60401);  // http://turtle-wow.org/radio
+        return true;
+    }
+    else
+    {
+        m_session->GetPlayer()->PlayDirectMusic(68); 
+        return true;
+    }
+
+    return false;
 }
 
 bool ChatHandler::HandleBgTestCommand(char* args)

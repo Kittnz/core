@@ -81,6 +81,8 @@ enum BattleGroundMarks
     SPELL_AB_MARK_WINNER            = 24953,
     SPELL_AV_MARK_LOSER             = 24954,
     SPELL_AV_MARK_WINNER            = 24955,
+    SPELL_BR_MARK_LOSER             = 29128,
+    SPELL_BR_MARK_WINNER            = 29129
 };
 
 enum BattleGroundTimeIntervals

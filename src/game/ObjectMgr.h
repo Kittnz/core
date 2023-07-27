@@ -405,25 +405,6 @@ struct GraveYardData
     Team team;
 };
 
-struct CustomGraveyardEntry
-{
-    uint32 graveyard_id;
-    uint32 map_id;
-    uint32 zone_id;
-    uint32 area_id;
-    uint32 max_level;
-    uint32 map_alliance;
-    float x_alliance;
-    float y_alliance;
-    float z_alliance;
-    float orientation_alliance;
-    uint32 map_horde;
-    float x_horde;
-    float y_horde;
-    float z_horde;
-    float orientation_horde;
-};
-
 typedef std::multimap<uint32, GraveYardData> GraveYardMap;
 typedef std::pair<GraveYardMap::const_iterator, GraveYardMap::const_iterator> GraveYardMapBounds;
 typedef std::unordered_map<uint32, float> WorldSafeLocsFacingMap;
@@ -667,7 +648,6 @@ class ObjectMgr
         typedef std::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
         typedef std::map<uint32, AreaTriggerTeleport> AreaTriggerTeleportMap;
         typedef std::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
-        typedef std::unordered_map<uint32, CustomGraveyardEntry> CustomGraveyardMap;
         typedef std::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
 
         typedef std::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
@@ -811,7 +791,6 @@ class ObjectMgr
         bool AddGraveYardLink(uint32 id, uint32 zone, Team team, bool inDB = true);
         void RemoveGraveYardLink(uint32 id, uint32 zone, Team team, bool inDB = false);
         void LoadGraveyardZones();
-        CustomGraveyardEntry const *GetCustomGraveyard(uint32 player_map, uint32 player_zone, uint32 player_area, uint32 player_level);
         GraveYardData const* FindGraveYardData(uint32 id, uint32 zone) const;
         void LoadWorldSafeLocsFacing();
         float GetWorldSafeLocFacing(uint32 id) const;
@@ -830,7 +809,6 @@ class ObjectMgr
         AreaTriggerTeleport const* GetMapEntranceTrigger(uint32 Map) const;
 
         void LoadAreaTriggers();
-        void LoadCustomGraveyards();
         void LoadCustomCharacterSkins();
 
         AreaTriggerEntry const* GetAreaTrigger(uint32 id) const
@@ -1611,7 +1589,6 @@ class ObjectMgr
         ItemTextMap         m_ItemTextsMap;
 
         AreaTriggerMap    m_AreaTriggersMap;
-        CustomGraveyardMap    m_CustomGraveyardMap;
         QuestAreaTriggerMap m_QuestAreaTriggerMap;
         TavernAreaTriggerSet m_TavernAreaTriggerSet;
         GameObjectForQuestSet m_GameObjectForQuestSet;

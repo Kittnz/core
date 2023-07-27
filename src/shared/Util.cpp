@@ -24,6 +24,7 @@
 #include "Log.h"
 
 #include "utf8cpp/utf8.h"
+#include "Log.h"
 #include "mersennetwister/MersenneTwister.h"
 
 #include <ace/TSS_T.h>

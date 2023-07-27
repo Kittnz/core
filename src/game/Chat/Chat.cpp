@@ -146,7 +146,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "clean",          SEC_CONSOLE,       true,  nullptr,                                        "", characterCleanCommandTable },
         { "itemlog",        SEC_DEVELOPER,     true,  &ChatHandler::HandleItemLogCommand,             "", nullptr },
         { "mail",           SEC_DEVELOPER,     true,  nullptr,                                        "", characterMailCommandTable },
-		{ "inactivity",     SEC_OBSERVER,     false,  &ChatHandler::HandleCharacterInactivityDataCommand,      "", nullptr },
+        { "inactivity",     SEC_OBSERVER,     false,  &ChatHandler::HandleCharacterInactivityDataCommand,      "", nullptr },
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
@@ -156,17 +156,17 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
-	static ChatCommand suspiciousCommandTable[] =
-	{
-		{ "enable",               SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousEnable,               "", nullptr },
-		{ "movementenable",       SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousMovementEnable,       "", nullptr },
-		{ "movementdetectvalue",  SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousMovementDetectValue,  "", nullptr },
-		{ "fishingenable",        SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousFishingEnable,        "", nullptr },
-		{ "killednpcenabled",     SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousKilledNPC,            "", nullptr },
-		{ "notify",               SEC_MODERATOR,      true,  &ChatHandler::HandleSuspiciousNotify,               "", nullptr },
-		{ "fishers",              SEC_OBSERVER,       false, &ChatHandler::HandleSuspiciousFishers,              "", nullptr },
-		{ nullptr,                0,                      false, nullptr,                                       "", nullptr }
-	};
+    static ChatCommand suspiciousCommandTable[] =
+    {
+        { "enable",               SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousEnable,               "", nullptr },
+        { "movementenable",       SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousMovementEnable,       "", nullptr },
+        { "movementdetectvalue",  SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousMovementDetectValue,  "", nullptr },
+        { "fishingenable",        SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousFishingEnable,        "", nullptr },
+        { "killednpcenabled",     SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousKilledNPC,            "", nullptr },
+        { "notify",               SEC_MODERATOR,      true,  &ChatHandler::HandleSuspiciousNotify,               "", nullptr },
+        { "fishers",              SEC_OBSERVER,       false, &ChatHandler::HandleSuspiciousFishers,              "", nullptr },
+        { nullptr,                0,                      false, nullptr,                                       "", nullptr }
+    };
 
     static ChatCommand eventCommandTable[] =
     {
@@ -263,10 +263,11 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand learnCommandTable[] =
     {
-		{ "all_myspells",   SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllMySpellsCommand,    "", nullptr },
+        { "all_myspells",   SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllMySpellsCommand,    "", nullptr },
+        { "all_recipes",    SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllRecipesCommand,     "", nullptr },
         { "all_trainer",    SEC_DEVELOPER,     false, &ChatHandler::HandleLearnAllTrainerCommand,     "", nullptr },
-		{ "",               SEC_DEVELOPER,     false, &ChatHandler::HandleLearnCommand,               "", nullptr },
-		{ nullptr,          0,                  false, nullptr,                                       "", nullptr }
+        { "",               SEC_DEVELOPER,     false, &ChatHandler::HandleLearnCommand,               "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                       "", nullptr }
     };
 
     static ChatCommand listCommandTable[] =
@@ -297,18 +298,18 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand lookupCommandTable[] =
     {
-		{ "creature",       SEC_DEVELOPER, true,  &ChatHandler::HandleLookupCreatureCommand,      "", nullptr },
-		{ "faction",        SEC_DEVELOPER, true,  &ChatHandler::HandleLookupFactionCommand,       "", nullptr },
-		{ "item",           SEC_DEVELOPER, true,  &ChatHandler::HandleLookupItemCommand,          "", nullptr },
-		{ "object",         SEC_DEVELOPER, true,  &ChatHandler::HandleLookupObjectCommand,        "", nullptr },
-		{ "quest",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupQuestCommand,         "", nullptr },
-		{ "player",         SEC_DEVELOPER, true,  nullptr,                                        "", lookupPlayerCommandTable },
-		{ "skill",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupSkillCommand,         "", nullptr },
-		{ "spell",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupSpellCommand,         "", nullptr },
+        { "creature",       SEC_DEVELOPER, true,  &ChatHandler::HandleLookupCreatureCommand,      "", nullptr },
+        { "faction",        SEC_DEVELOPER, true,  &ChatHandler::HandleLookupFactionCommand,       "", nullptr },
+        { "item",           SEC_DEVELOPER, true,  &ChatHandler::HandleLookupItemCommand,          "", nullptr },
+        { "object",         SEC_DEVELOPER, true,  &ChatHandler::HandleLookupObjectCommand,        "", nullptr },
+        { "quest",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupQuestCommand,         "", nullptr },
+        { "player",         SEC_DEVELOPER, true,  nullptr,                                        "", lookupPlayerCommandTable },
+        { "skill",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupSkillCommand,         "", nullptr },
+        { "spell",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupSpellCommand,         "", nullptr },
         { "itemset",        SEC_DEVELOPER, true,  &ChatHandler::HandleLookupItemSetCommand,       "", nullptr },
         { "event",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupEventCommand,         "", nullptr },
         { "guild",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupGuildCommand,         "", nullptr },
-		{ nullptr,          0,                  false, nullptr,                                    "", nullptr }
+        { nullptr,          0,                  false, nullptr,                                    "", nullptr }
     };
 
     static ChatCommand modifyCommandTable[] =
@@ -803,6 +804,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcinvite",       SEC_PLAYER,          false, &ChatHandler::HandleHCInviteCommand,            "", nullptr },
         { "settime",        SEC_DEVELOPER,       false, &ChatHandler::HandleSetTimeCommand,             "", nullptr},
         { "play",           SEC_DEVELOPER,       false, &ChatHandler::HandlePlayCommand,                "", nullptr},
+        { "radio",          SEC_PLAYER,          false, &ChatHandler::HandleRadioCommand,                "", nullptr},
         { "getskillvalue",  SEC_DEVELOPER,       false, &ChatHandler::HandleGetSkillValueCommand,       "", nullptr},
         { "anonymous",      SEC_DEVELOPER,       false, nullptr,                                        "", anonymousCommandTable},
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },

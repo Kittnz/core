@@ -393,17 +393,16 @@ void Antispam::ProcessMessages(uint32 diff)
                 {
                     if (messageBlock.guild)
                     {
-                        if (messageBlock.guild->GetId() == GUILD_HARDCORE || messageBlock.guild->GetId() == GUILD_NEWCOMERS)
-                        {
-                           /* try {
-                                std::ostringstream ss;
-                                ss << pSender->GetName() << ":" << pSender->GetSession()->GetAccountId();
-                                sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", pSender->GetGuildId(),
-                                    ss.str().c_str(), pSender->GetObjectGuid().GetCounter(), messageBlock.msg.c_str()));
-                            }
-                            catch (const std::exception&) {}*/
-                        }
-
+                        //if (messageBlock.guild->GetId() == GUILD_HARDCORE/* || messageBlock.guild->GetId() == GUILD_NEWCOMERS*/)
+                        //{
+                        //   /* try {
+                        //        std::ostringstream ss;
+                        //        ss << pSender->GetName() << ":" << pSender->GetSession()->GetAccountId();
+                        //        sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", pSender->GetGuildId(),
+                        //            ss.str().c_str(), pSender->GetObjectGuid().GetCounter(), messageBlock.msg.c_str()));
+                        //    }
+                        //    catch (const std::exception&) {}*/
+                        //}
                         messageBlock.guild->BroadcastToGuild(pSender, messageBlock.msg, LANG_UNIVERSAL);
                     }
                 }
