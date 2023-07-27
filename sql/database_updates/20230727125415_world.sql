@@ -98,3 +98,14 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+-- Spell and skill fixes.
+UPDATE `spell_template` SET `description` = 'Reduce the mana of nearby enemies by $s2 every $t2 and mana regeneration is reduced by $s1%.', `auraDescription` = 'Draining $s2 mana from enemies every $t2. Mana regeneration reduced by $ s1%.' WHERE `entry` = 56502;
+UPDATE `spell_template` SET `reagent4` = 0, `reagentCount4` = 0 WHERE `entry` = 57169;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57196, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36474;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57193, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36473;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57191, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36472;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57189, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36471;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57187, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36470;
+UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57181, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 350, `min_value` = 325, `req_train_points` = 0 WHERE `id` = 36469;
+UPDATE `skill_line_ability` SET `skill_id` = 333, `spell_id` = 57518, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 360, `min_value` = 320, `req_train_points` = 0 WHERE `id` = 36468;
