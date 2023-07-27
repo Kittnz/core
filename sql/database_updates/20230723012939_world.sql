@@ -82,7 +82,7 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `posi
 (90116, 179904, 27, 1315.09, 263.421, 66.7868, 4.84525, 0, 0, 0.658609, -0.752485, 300, 300, 100, 1, 0, 0);
 
 -- Increase max player count since its a big map and bosses are too hard for 10 people.
-INSERT INTO `battleground_template` (`id`, `min_players_per_team`, `max_players_per_team`, `min_level`, `max_level`, `alliance_win_spell`, `alliance_lose_spell`, `horde_win_spell`, `horde_lose_spell`, `alliance_start_location`, `horde_start_location`, `player_loot_id`) VALUES (5, 10, 20, 51, 60, 0, 0, 0, 0, 700, 701, 0);
+REPLACE INTO `battleground_template` (`id`, `min_players_per_team`, `max_players_per_team`, `min_level`, `max_level`, `alliance_win_spell`, `alliance_lose_spell`, `horde_win_spell`, `horde_lose_spell`, `alliance_start_location`, `horde_start_location`, `player_loot_id`) VALUES (5, 10, 20, 51, 60, 0, 0, 0, 0, 700, 701, 0);
 
 -- Nerf Human Footman and Orc Grunt.
 UPDATE `creature_template` SET `level_min`=55, `level_max`=55, `health_min`=5630, `health_max`=5630 WHERE `entry` IN (93001, 93006);
