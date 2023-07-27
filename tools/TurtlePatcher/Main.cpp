@@ -11,6 +11,8 @@
 #include <sstream>
 #include <array>
 
+#include "PeUtils.h"
+
 #define fs std::filesystem
 
 enum OriginalValues
@@ -607,6 +609,26 @@ void DeleteLFTAddon()
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
+
+	// check existing section
+	bool addSection = true;
+	PortableExecutable pe(const_cast<LPSTR>("Wow.exe"));
+	std::vector<PortableExecutable::SectionHeader>::iterator it = pe.SectionHeaders().begin();
+
+	while (it != pe.SectionHeaders().end()) 
+	{
+		if (it->GetName() == ".tdata")
+		{
+			addSection = false;
+			break;
+		}
+		++it;
+	}
+
+	if (addSection)
+		pe.AddSection(const_cast<LPSTR>(".tdata"), 0xE0000040, 0x20000, 0x20000);
+
+	Sleep(2000);
 
 	PatchWoWExe();
 
