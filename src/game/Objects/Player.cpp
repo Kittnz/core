@@ -10565,6 +10565,8 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+
+                    // Forbid enchanting!
                 }
             }
 
