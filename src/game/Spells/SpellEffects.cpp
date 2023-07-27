@@ -3491,6 +3491,10 @@ void Spell::DoCreateItem(SpellEffectIndex eff_idx, uint32 itemtype)
         case SPELL_AB_MARK_LOSER:
             bgType = BATTLEGROUND_AB;
             break;
+        case SPELL_BR_MARK_WINNER:
+        case SPELL_BR_MARK_LOSER:
+            bgType = BATTLEGROUND_BR;
+                break;
         default:
             break;
     }
