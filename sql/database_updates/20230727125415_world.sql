@@ -132,3 +132,20 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 update creature_template set scale = 1 where entry = 61614;
 -- Rename npc High Taskmaster Grigor to Overlord Grigor.
 update creature_template set name = 'Overlord Grigor' where entry = 61615;
+
+-- Item 7071 rename to Iron Buckle.
+update item_template set name = 'Iron Buckle' where entry = 7071;
+-- Rename item 61786 to Plans: Copper Belt Buckle.
+update item_template set name = 'Plans: Copper Belt Buckle' where entry = 61786;
+-- Rename item 61787 to Plans: Bronze Belt Buckle.
+update item_template set name = 'Plans: Bronze Belt Buckle' where entry = 61787;
+-- Rename item 61788 to Plans: Iron Belt Buckle.
+update item_template set name = 'Plans: Iron Belt Buckle' where entry = 61788;
+-- Rename item 61789 to Plans: Mithril Belt Buckle.
+update item_template set name = 'Plans: Mithril Belt Buckle' where entry = 61789;
+-- Rename item 61790 to Plans: Thorium Belt Buckle.
+update item_template set name = 'Plans: Thorium Belt Buckle' where entry = 61790;
+-- Rename item 61791 to Plans: Arcanite Belt Buckle.
+update item_template set name = 'Plans: Arcanite Belt Buckle' where entry = 61791;
+-- Rename item 61792 to Plans: Dreamsteel Belt Buckle.
+update item_template set name = 'Plans: Dreamsteel Belt Buckle' where entry = 61792;
