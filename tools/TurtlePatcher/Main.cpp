@@ -40,6 +40,14 @@ OFFSET_LARGE_ADDRESS_AWARE                    = 0x00000126, // Allows the game u
 OFFSET_SOUND_IN_BACKGROUND                    = 0x003A4869, // Allows the game to play music while user is alt-tabbed.
 OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game to play emote sounds for High Elves.
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
+OFFSET_HARDCORE_CHAT_CODECAVE1                = 0x0009B0B8,
+OFFSET_HARDCORE_CHAT_CODECAVE2                = 0x0009B193,
+OFFSET_HARDCORE_CHAT_CODECAVE3                = 0x0009F7A5,
+OFFSET_HARDCORE_CHAT_CODECAVE4                = 0x0009F864,
+OFFSET_HARDCORE_CHAT_CODECAVE5                = 0x0009F878,
+OFFSET_HARDCORE_CHAT_CODECAVE6                = 0x0009F887,
+OFFSET_HARDCORE_CHAT_CODECAVE7                = 0x0011BAE1,
+OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section 
 };
 
 bool fov_build = false;
@@ -214,6 +222,44 @@ void PatchBinary(FILE* hWoW)
 		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 	}
+
+	// Hardcore chat
+	char patch_16[] = { 0x5F };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE1, SEEK_SET);
+	fwrite(patch_16, sizeof(patch_16), 1, hWoW);
+
+	char patch_17[] = { 0xE9, 0xA8, 0xAE, 0x86 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE2, SEEK_SET);
+	fwrite(patch_17, sizeof(patch_17), 1, hWoW);
+
+	char patch_18[] = { 0x70, 0x53, 0x56, 0x33, 0xF6, 0xE9, 0x71, 0x68, 0x86, 0x00 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE3, SEEK_SET);
+	fwrite(patch_18, sizeof(patch_18), 1, hWoW);
+
+	char patch_19[] = { 0x94 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE4, SEEK_SET);
+	fwrite(patch_19, sizeof(patch_19), 1, hWoW);
+
+	char patch_20[] = { 0x0E };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE5, SEEK_SET);
+	fwrite(patch_20, sizeof(patch_20), 1, hWoW);
+
+	char patch_21[] = { 0x90 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE6, SEEK_SET);
+	fwrite(patch_21, sizeof(patch_21), 1, hWoW);
+
+	char patch_22[] = { 0x0C, 0x60, 0xD0 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE7, SEEK_SET);
+	fwrite(patch_22, sizeof(patch_22), 1, hWoW);
+
+	char patch_23[] = { 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00, 0x00, 0x43, 0x48, 0x41, 0x54,
+	0x5F, 0x4D, 0x53, 0x47, 0x5F, 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00,
+	0x57, 0x8B, 0xDA, 0x8B, 0xF9, 0xC7, 0x45, 0x94, 0x00, 0x60, 0xD0, 0x00, 0xC7, 0x45, 0x90, 0x5E,
+	0x00, 0x00, 0x00, 0xE9, 0x77, 0x97, 0x79, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x68, 0x08, 0x46, 0x84, 0x00, 0x83, 0x7D, 0xF0, 0x5E, 0x75, 0x05, 0xB9, 0x1F, 0x02, 0x00, 0x00,
+	0xE9, 0x43, 0x51, 0x79, 0xFF };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_ADDED, SEEK_SET);
+	fwrite(patch_23, sizeof(patch_23), 1, hWoW);
 }
 
 constexpr int max_path = 260;
