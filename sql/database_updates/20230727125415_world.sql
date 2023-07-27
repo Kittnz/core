@@ -109,3 +109,26 @@ UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57189, `race_mask
 UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57187, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 320, `min_value` = 310, `req_train_points` = 0 WHERE `id` = 36470;
 UPDATE `skill_line_ability` SET `skill_id` = 164, `spell_id` = 57181, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 350, `min_value` = 325, `req_train_points` = 0 WHERE `id` = 36469;
 UPDATE `skill_line_ability` SET `skill_id` = 333, `spell_id` = 57518, `race_mask` = 0, `class_mask` = 0, `req_skill_value` = 1, `superseded_by_spell` = 0, `learn_on_get_skill` = 0, `max_value` = 360, `min_value` = 320, `req_train_points` = 0 WHERE `id` = 36468;
+
+-- NPC Gorug add quest flags.
+update creature_template set npc_flags = 7 where entry = 50099;
+-- NPC Bradley steel add quest/gossip flags, gossip text : "If you're looking to make a name for yourself, Blood Ring is just the place."
+set @gossip_menu_id = 41537; set @magic_number = 61616;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'If you\'re looking to make a name for yourself, Blood Ring is just the place.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set npc_flags = 7, gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- NPC Gordon Hardfoot add vendor flags, and add the following items to his sell list 61786, 61787, 61788, 61789.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61621, 61786, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61621, 61787, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61621, 61788, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61621, 61789, 0, 0, 0, 0);
+-- NPC Taovan Darkwell add vendor flags and add the following items to his sell list 61786, 61787, 61788, 61789.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61622, 61786, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61622, 61787, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61622, 61788, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61622, 61789, 0, 0, 0, 0);
+-- NPC Lord Ivar Pyrewood set scale to 1.
+update creature_template set scale = 1 where entry = 61614;
+-- Rename npc High Taskmaster Grigor to Overlord Grigor.
+update creature_template set name = 'Overlord Grigor' where entry = 61615;
