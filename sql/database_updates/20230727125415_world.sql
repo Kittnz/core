@@ -149,3 +149,17 @@ update item_template set name = 'Plans: Thorium Belt Buckle' where entry = 61790
 update item_template set name = 'Plans: Arcanite Belt Buckle' where entry = 61791;
 -- Rename item 61792 to Plans: Dreamsteel Belt Buckle.
 update item_template set name = 'Plans: Dreamsteel Belt Buckle' where entry = 61792;
+
+-- Quest Cartel Gold Donations add short description : "Bring 10 Gold to Clemence the Counter in Booty Bay."
+update quest_template set objectives = 'Bring 10 Gold to Clemence the Counter in Booty Bay.' where entry = 41115;
+-- Quest 41111 rename to Plans: Dreamsteel Belt Buckle.
+update quest_template set title = 'Plans: Dreamsteel Belt Buckle' where entry = 41111;
+-- Quest Manuscript on Hydromancy II, make sure this quest is given and finished from NPC Magus Halister.
+delete from creature_questrelation where quest = 41114;
+delete from creature_involvedrelation where quest = 41114;
+replace into creature_questrelation		(id, quest) values (60731, 41114);
+replace into creature_involvedrelation	(id, quest) values (60731, 41114);
+-- Quest Tokens of Blood, change quest requirement to 15 Arena Marks of Honor ((Entry 61793))
+update quest_template set reqitemid1 = 61793, reqitemcount1 = 15 where entry = 41118;
+-- Quest Donations of Blood 41123 rename to Donations to Vizlow.
+update quest_template set title = 'Donations to Vizlow' where entry = 41123;
