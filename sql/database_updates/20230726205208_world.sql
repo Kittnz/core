@@ -224,3 +224,4 @@ DELETE FROM gameobject WHERE guid = '5016501';
 DELETE FROM game_event_gameobject WHERE guid = '5016501';
 DELETE FROM gameobject_battleground WHERE guid = '5016501';
 REPLACE INTO `creature` VALUES (2578413,61541,0,0,0,0,-1696.07,2042.6,54.7582,1.85814,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = -1702.646973, `position_y` = 2026.527710, `position_z` = 55.255150, `orientation` = 2.791971 WHERE `guid` = 2578413;
