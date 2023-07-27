@@ -37,8 +37,8 @@ UPDATE `item_template` SET `class` = 7 WHERE `entry` = 61182;
 
 REPLACE INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`) VALUES 
 
-(50000, 2, 'Black Lotus - Tel''Abim', 0, 0),
-(50001, 2, 'Black Lotus - Hyjal', 0, 0);
+(50000, 1, 'Black Lotus - Tel''Abim', 0, 0),
+(50001, 1, 'Black Lotus - Hyjal', 0, 0);
 
 DELETE FROM `pool_gameobject` WHERE `pool_entry` IN (50000, 50001);
 
