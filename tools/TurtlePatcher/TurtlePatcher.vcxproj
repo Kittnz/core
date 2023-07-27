@@ -101,8 +101,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PeUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PeUtils.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

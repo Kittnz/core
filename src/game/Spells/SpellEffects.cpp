@@ -197,6 +197,8 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS] =
     &Spell::EffectApplyAreaAura,                            //129 SPELL_EFFECT_APPLY_AREA_AURA_ENEMY
     &Spell::EffectDespawnObject,                            //130 SPELL_EFFECT_DESPAWN_OBJECT
     &Spell::EffectNostalrius,                               //131 SPELL_EFFECT_NOSTALRIUS
+    &Spell::EffectApplyAreaAura,                            //132 SPELL_EFFECT_APPLY_AREA_AURA_RAID
+    &Spell::EffectApplyAreaAura,                            //133 SPELL_EFFECT_APPLY_AREA_AURA_OWNER
 };
 
 void Spell::EffectEmpty(SpellEffectIndex /*eff_idx*/)
@@ -2009,6 +2011,48 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->ToPlayer()->TeleportTo(1, 16247.7F, 16305.58F, 20.89F, 3.47F);
                     return;
                 }
+                case 48304: // Teresa's Copper Coin
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        if (m_CastItem)
+                        {
+                            if (GameObject* pObject = m_caster->ToPlayer()->FindNearestGameObject(1000220, 3.0F))
+                            {
+                                m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+                                m_caster->ToPlayer()->PlayDirectSound(1204, m_caster->ToPlayer());
+                                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
+                                {
+                                    m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                                    m_forceConsumeItem = true;
+                                }
+                            }
+                            m_caster->ToPlayer()->GetSession()->SendNotification("Requires Stormwind Fountain.");                            
+                        }
+                    }
+                    return;
+                }
+                case 48305:
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        if (m_CastItem)
+                        {
+                            if (GameObject* spitelash_shrine = m_caster->ToPlayer()->FindNearestGameObject(2010801, 10.0F)) // Spitelash Shrine
+                            {
+                                m_caster->ToPlayer()->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
+                                if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
+                                {
+                                    m_caster->ToPlayer()->KilledMonster(dummy_bunny, ObjectGuid());
+                                    m_forceConsumeItem = true;
+                                }
+                            }
+                            else
+                            m_caster->ToPlayer()->GetSession()->SendNotification("Requires Spitelash Shrine.");
+                        }
+                    }
+                    return;
+                }
                 case 46002: // Goblin Brainwashing Device
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -2121,6 +2165,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             {
                                 const std::uint32_t models[] = { 3022, 10872, 1352 };
                                 displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 51210:
+                            {
+                                displayid = 181;
                                 break;
                             }
                             case 51200: // Goblin
@@ -2345,7 +2394,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                     float x, y, z;
                     m_casterUnit->GetPosition(x, y, z);
-                    if (Creature* pSpider = m_casterUnit->SummonCreature(61212, x, y, z, 0, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 30000))
+                    if (Creature* pSpider = m_casterUnit->SummonCreature(161212, x, y, z, 0, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 30000))
                     {
                         pSpider->SetFactionTemplateId(m_casterUnit->GetFactionTemplateId());
                         pSpider->SetCreatorGuid(m_casterUnit->GetObjectGuid());
@@ -2355,6 +2404,21 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
 
                     return;
+                }
+                case 29999: // Goblin Radio KABOOM-Box X23B76
+                {
+                    if (m_CastItem)
+                    {
+                        float x, y, z;
+                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
+                        x += 2.0F * cos(m_caster->ToPlayer()->GetOrientation());
+                        y += 2.0F * sin(m_caster->ToPlayer()->GetOrientation());
+                        switch (m_CastItem->GetEntry())
+                        {
+                        case 51021: m_caster->ToPlayer()->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
+                        case 10585: m_caster->ToPlayer()->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
+                        }
+                    }
                 }
             }
             // All IconID Check in there
@@ -3435,6 +3499,10 @@ void Spell::DoCreateItem(SpellEffectIndex eff_idx, uint32 itemtype)
         case SPELL_AB_MARK_LOSER:
             bgType = BATTLEGROUND_AB;
             break;
+        case SPELL_BR_MARK_WINNER:
+        case SPELL_BR_MARK_LOSER:
+            bgType = BATTLEGROUND_BR;
+                break;
         default:
             break;
     }
@@ -4093,8 +4161,35 @@ void Spell::EffectDispel(SpellEffectIndex eff_idx)
             for (const auto& j : success_list)
             {
                 SpellAuraHolder* dispelledHolder = j.first;
-                data << uint32(dispelledHolder->GetId());   // Spell Id
-                unitTarget->RemoveAuraHolderDueToSpellByDispel(dispelledHolder->GetId(), j.second, dispelledHolder->GetCasterGuid());
+                uint32 removedAura = dispelledHolder->GetId();
+                data << removedAura;   // Spell Id
+                unitTarget->RemoveAuraHolderDueToSpellByDispel(removedAura, j.second, dispelledHolder->GetCasterGuid());
+
+                uint32 counterpart_aura = 0;
+                switch (removedAura)
+                {
+                    case 56508:
+                        counterpart_aura = 56509;
+                        break;
+                    case 56510:
+                        counterpart_aura = 56511;
+                        break;
+                    case 56512:
+                        counterpart_aura = 56513;
+                        break;
+                    case 56514:
+                        counterpart_aura = 56515;
+                        break;
+                    case 56516:
+                        counterpart_aura = 56517;
+                        break;
+                }
+
+                if (counterpart_aura != 0 && unitTarget->GetMapId() == 807)
+                {
+                    if (!unitTarget->HasAura(counterpart_aura))
+                        unitTarget->AddAura(counterpart_aura);
+                }
             }
 
             m_caster->SendMessageToSet(&data, true);
