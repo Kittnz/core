@@ -3034,82 +3034,64 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
-            [CreatureGuid = MaytenBoomfire->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = NertBlastenton]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
-            [CreatureGuid = LeytiQuicktongue->GetObjectGuid()]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = LeytiQuicktongue]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_BOW);
-            creature->MonsterTextEmote("Leyti Quicktongue bows silently.");
+            me->HandleEmote(EMOTE_ONESHOT_BOW);
+            me->MonsterTextEmote("Leyti Quicktongue bows silently.");
         });
 
         DoAfterTime(pPlayer, 31 * IN_MILLISECONDS,
-            [CreatureGuid = WizetteIcewhistle->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = WizetteIcewhistle]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
-            [CreatureGuid = AmriDemondeal->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = AmriDemondeal]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
         });
 
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
-            [CreatureGuid = SpratNozzleton->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = SpratNozzleton]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
         });
 
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSayToPlayer("Very well, recruits. I'll give you the same chance as any orc or troll who arrives from the Valley of Trials. There is plenty of work for you in Razor Hill. Start here, earn the respect of your new allies, and bring honor to the Horde!", player);
+            me->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            me->MonsterTextEmote("Gar'thok laughs.");
+            me->MonsterSayToPlayer("Very well, recruits. I'll give you the same chance as any orc or troll who arrives from the Valley of Trials. There is plenty of work for you in Razor Hill. Start here, earn the respect of your new allies, and bring honor to the Horde!", player);
         });
     }
     return false;
@@ -3126,82 +3108,64 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
     if (pQuest->GetQuestId() == QUEST_ME_NOT_ANY_KIND_OF_ORC)
     {
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_NO);
-            creature->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
+            me->HandleEmote(EMOTE_ONESHOT_NO);
+            me->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
         DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
-            creature->MonsterSayToPlayer("We can't go back to the Venture Co. or we're all dead meat! There's no way the Steamwheedle Cartel will take us in. Not with all the bad blood between us already.", player);
+            me->HandleEmote(EMOTE_ONESHOT_QUESTION);
+            me->MonsterSayToPlayer("We can't go back to the Venture Co. or we're all dead meat! There's no way the Steamwheedle Cartel will take us in. Not with all the bad blood between us already.", player);
         });
 
 
         DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. We've only got one chance left, and that's kissing Thrall's feet.", player);
+            me->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            me->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. We've only got one chance left, and that's kissing Thrall's feet.", player);
         });
 
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->SetWalk(true);
-            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
-            creature->MonsterTextEmote("Nert Blastentom smiles.");
+            me->SetWalk(true);
+            me->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
+            me->MonsterTextEmote("Nert Blastentom smiles.");
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
+            me->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
         });
 
         DoAfterTime(pPlayer, 35 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->DespawnOrUnsummon();
+            me->DespawnOrUnsummon();
         });
     }
     return false;
@@ -3311,81 +3275,62 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSayToPlayer("My sister was on that wagon!", player);
+            me->HandleEmote(EMOTE_ONESHOT_CRY);
+            me->MonsterSayToPlayer("My sister was on that wagon!", player);
         });
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("We all knew there was a risk, but... she was practically here already! It could have been any of us!", player);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("We all knew there was a risk, but... she was practically here already! It could have been any of us!", player);
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSayToPlayer("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!", player);
+            me->HandleEmote(EMOTE_ONESHOT_CRY);
+            me->MonsterSayToPlayer("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!", player);
         });
 
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.", player);
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.", player);
         });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-            creature->MonsterSayToPlayer("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!", player);
+            me->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+            me->MonsterSayToPlayer("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!", player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -3395,60 +3340,48 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->SetCastingTarget(player);
-            creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSayToPlayer("You've saved my sister!", player);
-            creature->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
+            me->SetCastingTarget(player);
+            me->HandleEmote(EMOTE_ONESHOT_CRY);
+            me->MonsterSayToPlayer("You've saved my sister!", player);
+            me->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
         });
 
 
         DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.", player);
         });
 
 
         DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever.", player);
         });
 
 
         DoAfterTime(pPlayer, 19 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
-            creature->MonsterSayToPlayer("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!", player);
+            me->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+            me->MonsterSayToPlayer("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!", player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -3491,15 +3424,12 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             Alisha->SetWalk(false);
 
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
-                [CreatureGuid = Alisha->GetObjectGuid()]()
+                [playerGuid = pPlayer->GetObjectGuid(), me = Alisha]()
             {
-                Map* map = sMapMgr.FindMap(0);
-                Creature* creature = map->GetCreature(CreatureGuid);
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
 
-                if (!creature)
-                    return;
-
-                creature->DespawnOrUnsummon();
+                me->DespawnOrUnsummon();
             });
         }
     }
@@ -3652,11 +3582,12 @@ bool GOHello_go_crypt_door(Player* pPlayer, GameObject* pGo)
         pGo->SummonCreature(NPC_TOMB_SHADOW, 1626.74F, 1698.38F, 146.65F, 5.708F, TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [GObjectGuid = pGo->GetObjectGuid()]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pGo]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            GameObject* object = map->GetGameObject(GObjectGuid);
-            object->ResetDoorOrButton();
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
+
+            me->ResetDoorOrButton();
         });
     }
     return false;
@@ -3870,14 +3801,14 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         });
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS,
-            [player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = sturk]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* sturk_mob = map->GetCreature(sturkGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            sturk_mob->MonsterSay("Hey, hey, not the face man!");
-            sturk_mob->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
-            sturk_mob->SetWalk(false);
+            me->MonsterSay("Hey, hey, not the face man!");
+            me->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
+            me->SetWalk(false);
         });
 
         DoAfterTime(pPlayer, 11 * IN_MILLISECONDS,
@@ -4345,68 +4276,53 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
     {
 
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Loania and her sister Lieren are the daughters of a Human paladin named Dougan. I have known Dougan since the Second war when we fought the Horde together.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Loania and her sister Lieren are the daughters of a Human paladin named Dougan. I have known Dougan since the Second war when we fought the Horde together.", player);
         });
 
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("During the Second war, Dougan, myself, and a dwarf of the Wildhammer clan known as Kardan were close companions. After the war, Dougan and his wife Adena settled down in Grand Hamlet. ", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("During the Second war, Dougan, myself, and a dwarf of the Wildhammer clan known as Kardan were close companions. After the war, Dougan and his wife Adena settled down in Grand Hamlet. ", player);
         });
 
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Grand Hamlet later fell under a curse and became known as Darkshire, but I digress. One day, Dougan heard reports of villagers disappearing in the nearby cursed tower known as Karazhan. He summoned Kardan and I, and together we entered the tower to attempt a rescue.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Grand Hamlet later fell under a curse and became known as Darkshire, but I digress. One day, Dougan heard reports of villagers disappearing in the nearby cursed tower known as Karazhan. He summoned Kardan and I, and together we entered the tower to attempt a rescue.", player);
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSayToPlayer("It didn't go well, Karazhan was far more treacherous than we could have anticipated... Dougan didn't make it, and his wife subsequently lost the will to live. Kardan and I each adopted one of his infant twin daughters and raised them as our own.", player);
+            me->HandleEmote(EMOTE_ONESHOT_CRY);
+            me->MonsterSayToPlayer("It didn't go well, Karazhan was far more treacherous than we could have anticipated... Dougan didn't make it, and his wife subsequently lost the will to live. Kardan and I each adopted one of his infant twin daughters and raised them as our own.", player);
         });
 
         DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
 
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I believe the girls have a destiny before them, perhaps you will play a part in it too. For now, take this as your reward with my blessing.", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("I believe the girls have a destiny before them, perhaps you will play a part in it too. For now, take this as your reward with my blessing.", player);
         });
 
     }
@@ -4432,14 +4348,13 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
             Creature* chromie = pGo->SummonCreature(65019, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
             DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
-                [CreatureGuid = chromie->GetObjectGuid(), player = pPlayer]()
+                [playerGuid = pPlayer->GetObjectGuid(), me = chromie]()
             {
-                Map* map = sMapMgr.FindMap(1);
-                Creature* creature = map->GetCreature(CreatureGuid);
-                if (!creature)
-                    return;
-                creature->HandleEmote(EMOTE_ONESHOT_TALK);
-                creature->MonsterSay("We need to talk!");
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+
+                me->HandleEmote(EMOTE_ONESHOT_TALK);
+                me->MonsterSay("We need to talk!");
             });
         }
         else
@@ -4481,16 +4396,13 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
         if (Taupo && Taupo->IsAlive())
         {
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
-                [CreatureGuid = Taupo->GetObjectGuid(), player = pPlayer]()
+                [playerGuid = pPlayer->GetObjectGuid(), me = Taupo]()
             {
-                Map* map = sMapMgr.FindMap(1);
-                Creature* creature = map->GetCreature(CreatureGuid);
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
 
-                if (!creature)
-                    return;
-
-                creature->HandleEmote(EMOTE_ONESHOT_TALK);
-                creature->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
+               me->HandleEmote(EMOTE_ONESHOT_TALK);
+               me->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
             });
         }
 
@@ -4943,19 +4855,23 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 80708) // Scarlet Aid
     {
-        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
-            Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
-            Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("The issue is she'd go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
-            Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("Last I heard she was in Tyr's Hand, but if there's a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
-        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
-            Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
-            crowley->HandleEmote(EMOTE_ONESHOT_QUESTION); });
+        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+            me->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+            me->MonsterSayToPlayer("The issue is she'd go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+            me->MonsterSayToPlayer("Last I heard she was in Tyr's Hand, but if there's a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
+        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+            me->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
+            me->HandleEmote(EMOTE_ONESHOT_QUESTION); });
     }
     return false;
 }
@@ -4987,33 +4903,38 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
         maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
-        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
-            Map* map = sMapMgr.FindMap(0);
-            summoner->SummonCreature(50680, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
-            summoner->SummonGameObject(2005011, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
+        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return
+            me->SummonCreature(50680, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            me->SummonGameObject(2005011, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
             });
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
-            Map* map = sMapMgr.FindMap(0);
-            summoner->MonsterSayToPlayer("A trap! It's a trap!", player);
-            summoner->SummonCreature(50680, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return
+            me->MonsterSayToPlayer("A trap! It's a trap!", player);
+            me->SummonCreature(50680, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
-            Map* map = sMapMgr.FindMap(0);
-            summoner->MonsterSayToPlayer("I feel... weird.", player);
-            summoner->CastSpell(summoner, 25148, true);
-            summoner->HandleEmote(EMOTE_STATE_SLEEP);
-            summoner->SetStandState(UNIT_STAND_STATE_SLEEP);
-            summoner->SummonCreature(50682, 2558.14F, -663.63F, 88.68F, 2.19F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
+        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return
+            me->MonsterSayToPlayer("I feel... weird.", player);
+            me->CastSpell(me, 25148, true);
+            me->HandleEmote(EMOTE_STATE_SLEEP);
+            me->SetStandState(UNIT_STAND_STATE_SLEEP);
+            me->SummonCreature(50682, 2558.14F, -663.63F, 88.68F, 2.19F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
-            Map* map = sMapMgr.FindMap(0);
-            summoner->SummonCreature(50681, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return
+            me->SummonCreature(50681, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 54 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
-            Map* map = sMapMgr.FindMap(0);
-            summoner->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
-            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+        DoAfterTime(pPlayer, 54 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
+            me->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -5228,20 +5149,23 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
         if (spanessa && brizclang)
         {
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = spanessa]() {
-                Map* map = sMapMgr.FindMap(0);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Finally, I can sleep in a real bed!", player);
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+                me->HandleEmote(EMOTE_ONESHOT_TALK);
+                me->MonsterSayToPlayer("Finally, I can sleep in a real bed!", player);
                 });
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = brizclang]() {
-                Map* map = sMapMgr.FindMap(0);
-                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
-                npc->MonsterSayToPlayer("Well, maybe we can get back to sailing soon, after a nice break! Thanks!", player);
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+                me->HandleEmote(EMOTE_ONESHOT_CHEER);
+                me->MonsterSayToPlayer("Well, maybe we can get back to sailing soon, after a nice break! Thanks!", player);
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                Map* map = sMapMgr.FindMap(0);
-                npc->HandleEmote(EMOTE_ONESHOT_WAVE);
-                npc->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", player);
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
+                if (!player) return;
+                me->HandleEmote(EMOTE_ONESHOT_WAVE);
+                me->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", player);
                 });
             return true;
         }
