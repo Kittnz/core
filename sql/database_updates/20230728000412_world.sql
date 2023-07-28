@@ -792,3 +792,14 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (61616, 80739);
 replace into creature_involvedrelation (id, quest) values (61616, 80739);
 
+-- Item 53016 change rarity to rare (blue)
+
+UPDATE `item_template` SET `quality` = 3 WHERE `entry` = 53016;
+
+-- Change Bradley Steel to be able to repair gear as a vendor. 
+
+UPDATE `creature_template` SET `npc_flags` = 16391 WHERE `entry` = 61616;
+
+-- Henley Rothand should sell Bloody Gladiator's Footwraps with infinite stock.
+
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61620, 0, 83424, 0, 0, 0, 0);
