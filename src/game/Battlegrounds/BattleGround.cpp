@@ -745,6 +745,13 @@ void BattleGround::EndBattleGround(Team winner)
 
         BlockMovement(pPlayer);
 
+        // Complete Victory on Blood Ring quest:
+        if (GetTypeID() == BATTLEGROUND_BR && pPlayer->GetQuestStatus(41110) == QUEST_STATUS_INCOMPLETE && winner)
+        {
+           if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60051))
+                pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+        }
+
         // Send final scoreboard
         pPlayer->GetSession()->SendPacket(&m_finalScore);
 
