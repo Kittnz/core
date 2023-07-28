@@ -443,7 +443,7 @@ void AccountAnalyser::CheckExtendedHashes()
     {
         do {
             auto fields = result->Fetch();
-            _markedExtendedPrints.insert(fields[1].GetUInt64());
+            _markedExtendedPrints.insert(fields[0].GetUInt64());
         } while (result->NextRow());
     }
 }
