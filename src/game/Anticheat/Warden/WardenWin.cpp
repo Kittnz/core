@@ -2190,8 +2190,8 @@ void WardenWin::Update()
 
         auto stmt = LoginDatabase.CreateStatement(fingerprintUpdate,
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
-            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `timeZoneId`, `osVersion`) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `timeZoneId`, `osVersion`, `extendedHash`) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -2216,6 +2216,7 @@ void WardenWin::Update()
         stmt.addUInt32(_sharedData->QpcData);
         stmt.addUInt32(_sharedData->TimeZoneId);
         stmt.addString(OsVersionToString(_osVersion));
+        stmt.addUInt64(sample.GetHash());
         stmt.Execute();
 
         LoginDatabase.CommitTransaction();
