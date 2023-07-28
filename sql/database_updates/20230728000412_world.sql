@@ -115,4 +115,18 @@ REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `c
 
 -- Iron Belt Buckle remove required crafting material Arcane Essence (entry 61673)
 
-UPDATE ``spell_template` SET `reagent4` = 0, `reagentCount4` = 0 WHERE `entry` = 57169;
+UPDATE `spell_template` SET `reagent4` = 0, `reagentCount4` = 0 WHERE `entry` = 57169;
+
+-- Misc. NPC fixes:
+
+UPDATE `creature_template` SET `armor` =  1750 WHERE `entry` = 91835;
+UPDATE `creature_template` SET `health_min` = 2156, `health_max` = 2382 WHERE `entry` = 91832;
+UPDATE `creature_template` SET `health_min` = 2868, `health_max` = 3029 WHERE `entry` = 91848;
+UPDATE `creature_template` SET `health_min` = 2768, `health_max` = 2945 WHERE `entry` = 91825;
+UPDATE `creature_template` SET `health_min` = 2968, `health_max` = 3045 WHERE `entry` = 92146;
+UPDATE `creature_template` SET `health_min` = 2979, `health_max` = 2979 WHERE `entry` = 91845;
+UPDATE `creature_template` SET `dmg_min` = 150, `dmg_max` = 200 WHERE `entry` = 91832;
+UPDATE `creature_questrelation` SET `id` = 40049 WHERE `quest` = 41110;
+UPDATE `creature_involvedrelation` SET `id` = 40049 WHERE `quest` = 41110;
+UPDATE `quest_template` SET `Objectives` = 'Win a battle in Blood Ring and report to Vizlow at the Gurubashi Arena in Stranglethorn Vale.' WHERE `entry` = 41110;
+UPDATE `quest_template` SET `ObjectiveText1` = 'Win a battle in Blood Ring' WHERE `entry` = 41110;
