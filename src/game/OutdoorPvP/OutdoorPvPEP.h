@@ -18,167 +18,319 @@
 #ifndef OUTDOOR_PVP_EP_
 #define OUTDOOR_PVP_EP_
 
-#include "DBCStructure.h"
 #include "ZoneScript.h"
 
-const uint32 EP_AllianceBuffs[4] = {11413, 11414, 11415, 1386};
-
-const uint32 EP_HordeBuffs[4] = {30880, 30683, 30682, 29520};
-
-const uint32 EP_GraveYardZone = 139;
-
-const uint32 EP_GraveYardId = 927;
-
-const uint8 EPBuffZonesNum = 3;
-
-const uint32 EP_EWT_CM = 17690;
-const uint32 EP_CGT_CM = 17689;
-const uint32 EP_NPT_CM = 17696;
-const uint32 EP_PWT_CM = 17698;
-
-const uint32 EPBuffZones[EPBuffZonesNum] = {139, 2017, 2057};
-
-enum EP_TaxiNodes
+enum WorldStates 
 {
-    EP_CGT_Taxi = 87,
-    EP_EWT_Taxi = 86,
-    EP_NPT_Taxi = 85,
-    EP_PWT_Taxi = 84
+    WS_EASTWALL_TOWER_ALLIANCE                  = 2354, // Blue Tower icon on map
+    WS_EASTWALL_TOWER_HORDE                     = 2356, // Red Tower icon on map
+    WS_EASTWALL_TOWER_ALLIANCE_PROGRESSING      = 2357, // Blue Tower icon on map
+    WS_EASTWALL_TOWER_HORDE_PROGRESSING         = 2358, // Red Tower icon on map
+    WS_EASTWALL_TOWER_ALLIANCE_CONTESTED        = 2359, // Grey Tower icon on map
+    WS_EASTWALL_TOWER_HORDE_CONTESTED           = 2360, // Grey Tower icon on map
+    WS_EASTWALL_TOWER_NEUTRAL                   = 2361, // Grey Tower icon on map
+
+    WS_NORTHPASS_TOWER_ALLIANCE                 = 2372, // Blue Tower icon on map
+    WS_NORTHPASS_TOWER_HORDE                    = 2373, // Red Tower icon on map
+    WS_NORTHPASS_TOWER_ALLIANCE_PROGRESSING     = 2364, // Blue Tower icon on map
+    WS_NORTHPASS_TOWER_HORDE_PROGRESSING        = 2365, // Red Tower icon on map
+    WS_NORTHPASS_TOWER_ALLIANCE_CONTESTED       = 2362, // Grey Tower icon on map
+    WS_NORTHPASS_TOWER_HORDE_CONTESTED          = 2363, // Grey Tower icon on map
+    WS_NORTHPASS_TOWER_NEUTRAL                  = 2352, // Grey Tower icon on map
+
+    WS_PLAGUEWOOD_TOWER_ALLIANCE                = 2370, // Blue Tower icon on map
+    WS_PLAGUEWOOD_TOWER_HORDE                   = 2371, // Red Tower icon on map
+    WS_PLAGUEWOOD_TOWER_ALLIANCE_PROGRESSING    = 2368, // Blue Tower icon on map
+    WS_PLAGUEWOOD_TOWER_HORDE_PROGRESSING       = 2369, // Red Tower icon on map
+    WS_PLAGUEWOOD_TOWER_ALLIANCE_CONTESTED      = 2366, // Grey Tower icon on map
+    WS_PLAGUEWOOD_TOWER_HORDE_CONTESTED         = 2367, // No Tower icon on map, 2367 is not working client side ".debug send worldstate 2367 1"
+    WS_PLAGUEWOOD_TOWER_NEUTRAL                 = 2353, // Grey Tower icon on map
+
+    WS_CROWN_GUARD_TOWER_ALLIANCE               = 2378, // Blue Tower icon on map
+    WS_CROWN_GUARD_TOWER_HORDE                  = 2379, // Red Tower icon on map
+    WS_CROWN_GUARD_TOWER_ALLIANCE_PROGRESSING   = 2376, // Blue Tower icon on map
+    WS_CROWN_GUARD_TOWER_HORDE_PROGRESSING      = 2377, // Red Tower icon on map
+    WS_CROWN_GUARD_TOWER_ALLIANCE_CONTESTED     = 2374, // Grey Tower icon on map
+    WS_CROWN_GUARD_TOWER_HORDE_CONTESTED        = 2375, // Grey Tower icon on map
+    WS_CROWN_GUARD_TOWER_NEUTRAL                = 2355, // Grey Tower icon on map
+
+    WS_UI_TOWER_SLIDER_DISPLAY                  = 2426,
+    WS_UI_TOWER_SLIDER_POSITION                 = 2427,
+    WS_UI_TOWER_SLIDER_N                        = 2428,
+
+    WS_UI_TOWER_COUNT_ALLIANCE                  = 2327,
+    WS_UI_TOWER_COUNT_HORDE                     = 2328
 };
 
-enum EP_EastwallTowerWorldStates
+enum BroadCastTexts
 {
-    EP_EWT_A = 2354,
-    EP_EWT_H = 2356,
-    EP_EWT_N_A = 2359, // ally conquested
-    EP_EWT_N_H = 2360,
-    EP_EWT_N = 2361
+    BCT_PLAGUEWOOD_TOWER_ALLIANCE       = 13629, // |cffffff00The Plaguewood Tower has been taken by the Alliance!| r
+    BCT_NORTHPASS_TOWER_ALLIANCE        = 13630, // |cffffff00Northpass Tower has been taken by the Alliance!| r
+    BCT_EASTWALL_TOWER_ALLIANCE         = 13631, // |cffffff00Eastwall Tower has been taken by the Alliance!| r
+    BCT_CROWN_GUARD_TOWER_ALLIANCE      = 13632, // |cffffff00Crown Guard Tower has been taken by the Alliance!| r
+    BCT_CROWN_GUARD_TOWER_HORDE         = 13633, // |cffffff00Crown Guard Tower has been taken by the Horde!| r
+    BCT_PLAGUEWOOD_TOWER_HORDE          = 13634, // |cffffff00The Plaguewood Tower has been taken by the Horde!| r
+    BCT_NORTHPASS_TOWER_HORDE           = 13635, // |cffffff00Northpass Tower has been taken by the Horde!| r
+    BCT_EASTWALL_TOWER_HORDE            = 13636, // |cffffff00Eastwall Tower has been taken by the Horde!| r
+    BCT_ALL_HORDE                       = 13637, // |cffff0000All four towers are now in control of the Horde!| r
+    BCT_ALL_ALLIANCE                    = 13638, // |cff33ccffAll four towers are now in control of the Alliance!| r
+    BCT_EASTWALL_TOWER_SAY              = 14746  // The Northpass tower needs our aid!  Once again, let us charge and do proud or liege!
 };
 
-enum EP_NorthpassTowerWorldStates
+enum Sounds
 {
-    EP_NPT_N = 2352,
-    EP_NPT_N_A = 2362,
-    EP_NPT_N_H = 2363,
-    EP_NPT_A = 2372,
-    EP_NPT_H = 2373
+    SOUND_PVPFLAGCAPTUREDALLIANCE       = 8173, // Played by 17794 Creature
+    SOUND_PVPFLAGCAPTUREDHORDE          = 8213, // Played by 17795 Creature
+    SOUND_TUGOFWAR_VICTORY_HORDE        = 9283, // Played by 17795 Creature
+    SOUND_PVPVICTORYHORDE               = 8454, // Played by 182106 GameObject
+    SOUND_PVPVICTORYALLIANCE            = 8455, // Played by 182106 GameObject
+    SOUND_PVPWARNINGALLIANCE            = 8332, // Played by 182106 GameObject
+    SOUND_PVPWARNINGHORDE               = 8333  // Played by 182106 GameObject
 };
 
-enum EP_PlagewoodTowerWorldStates
+enum Artkit
 {
-    EP_PWT_N_A = 2366,
-    EP_PWT_N_H = 2353, //2367 not present! use neutral!
-    EP_PWT_A = 2370,
-    EP_PWT_H = 2371,
-    EP_PWT_N = 2353
+    ARTKIT_NEUTRAL      = 21,
+    ARTKIT_ALLIANCE     = 2,
+    ARTKIT_HORDE        = 1
 };
 
-enum EP_CrownGuardTowerWorldStates
+enum Animation
 {
-    EP_CGT_N_A = 2374,
-    EP_CGT_N_H = 2375,
-    EP_CGT_A = 2378,
-    EP_CGT_H = 2379,
-    EP_CGT_N = 2355
+    ANIMATION_NEUTRAL   = 2,
+    ANIMATION_ALLIANCE  = 1,
+    ANIMATION_HORDE     = 0
 };
 
-enum EP_WorldStates
+enum Tower_Spells
 {
-    EP_UI_TOWER_SLIDER_DISPLAY = 2426,
-    EP_UI_TOWER_SLIDER_POS = 2427,
-    EP_UI_TOWER_SLIDER_N = 2428,
-
-    EP_UI_TOWER_COUNT_A = 2327,
-    EP_UI_TOWER_COUNT_H = 2328
+    SPELL_TXT_TOWOW_TOWER_KILL_CREDIT_DND       = 32061, // Casted by Players which have the Quest on Eastwall Capture Quest Doodad. 
+    SPELL_TOWER_CAPTURE_TEST_DND                = 30882, // Casted by Alliance Tower Buffer and Horde Tower Buffer on all Players within 100 yards (77) Script Effect. 
+    SPELL_TOWER_CAPTURE_DND                     = 31929, // Casted by Players.
+    SPELL_SPIRIT_SPAWN_IN                       = 17321, // Casted by Spirit of Victory.
+    SPELL_SPIRIT_PARTICLES                      = 17327,
+    SPELL_SPIRIT_PARTICLES_RED_BIG              = 31309,
+    SPELL_SPIRIT_PARTICLES_SUPER_BIG_DND        = 31954,
+    SPELL_SPIRIT_PARTICLES_RED_SUPER_BIG_DND    = 31951,
+    SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_1      = 30880,
+    SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_2      = 30683,
+    SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_3      = 30682,
+    SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_4      = 29520,
+    SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_1   = 11413,
+    SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_2   = 11414,
+    SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_3   = 11415,
+    SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_4   = 1386
 };
 
-enum EP_Summons
+enum NPCs
 {
-    EP_EWT_COMMANDER = 0,
-    EP_EWT_SOLDIER1,
-    EP_EWT_SOLDIER2,
-    EP_EWT_SOLDIER3,
-    EP_EWT_SOLDIER4,
-    EP_PWT_FLIGHTMASTER,
+    NPC_SPIRIT_OF_VICTORY                       = 18039,
+    NPC_WILLIAM_KIELAR                          = 17209,
+    NPC_TOWER_BUFFER_ALLIANCE                   = 17794,
+    NPC_TOWER_BUFFER_HORDE                      = 17795,
+    NPC_LORDAERON_COMMANDER                     = 17635,
+    NPC_LORDAERON_SOLDIER                       = 17647,
+    NPC_LORDAERON_VETERAN                       = 17995,
+    NPC_LORDAERON_FIGHTER                       = 17996,
+    NPC_EASTWALL_CAPTURE_QUEST_DOODAD           = 17690, // <TXT>Eastwall Capture Quest Doodad
+    NPC_CROWN_GUARD_CAPTURE_QUEST_DOODAD        = 17689, // <TXT>Crown Guard Capture Quest Doodad
+    NPC_NORTHPASS_CAPTURE_QUEST_DOODAD          = 17696, // <TXT>Northpass Capture Quest Doodad
+    NPC_PLAGUEWOOD_CAPTURE_QUEST_DOODAD         = 17698  // <TXT>Plaguewood Capture Quest Doodad
 };
 
-enum EP_GoSummons
+enum GameObjects
 {
-    EP_NPT_BUFF = 0,
-    EP_NPT_FLAGS,
-    EP_EWT_FLAGS,
-    EP_CGT_FLAGS,
-    EP_PWT_FLAGS
+    GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS03   = 182097,
+    GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS01   = 181899,
+    GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS04   = 182098,
+    GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS02   = 182096,
+    GOBJECT_TOWER_BANNER                                        = 182106,
+    GOBJECT_CURING_SHRINE_ALLIANCE                              = 181682,
+    GOBJECT_BANNER_AURA_ALLIANCE                                = 180100,
+    GOBJECT_CURING_SHRINE_HORDE                                 = 181955,
+    GOBJECT_BANNER_AURA_HORDE                                   = 180101,
+    GOBJECT_BANNER_AURA_LARGE_HORDE                             = 180422,
+    GOBJECT_BANNER_AURA_LARGE_ALLIANCE                          = 180421,
+    GOBJECT_FLAG_FLARE_ALLIANCE                                 = 181852,
+    GOBJECT_FLAG_FLARE_HORDE                                    = 181853
 };
 
-enum EP_Towers
+enum Towers
 {
-    EP_EWT = 0, // plaguelands 03
-    EP_NPT,// plaguelands 01
-    EP_PWT,// plaguelands 04
-    EP_CGT,// plaguelands 02
-    EP_TOWER_NUM
+    EASTWALL_TOWER      = 0,    // plaguelands 03 (182097)
+    NORTHPASS_TOWER,            // plaguelands 01 (181899)
+    PLAGUEWOOD_TOWER,           // plaguelands 04 (182098)
+    CROWN_GUARD_TOWER,          // plaguelands 02 (182096)
+    TOWER_NUMBER,
+    BANNER_NUMBER       = 8     // Tower Banner (182106)
 };
 
-const go_type EPCapturePoints[EP_TOWER_NUM] =
+enum Flares
 {
-    {182097,0,2574.51f,-4794.89f,144.704f,-1.45003f,-0.097056f,0.095578f,-0.656229f,0.742165f},
-    {181899,0,3181.08f,-4379.36f,174.123f,-2.03472f,-0.065392f,0.119494f,-0.842275f,0.521553f},
-    {182098,0,2962.71f,-3042.31f,154.789f,2.08426f,-0.074807f,-0.113837f,0.855928f,0.49883f},
-    {182096,0,1860.85f,-3731.23f,196.716f,-2.53214f,0.033967f,-0.131914f,0.944741f,-0.298177f}
+    FLAG_FLARE_CROWN_GUARD_TOWER_ALLIANCE = 0,  // Flag Flare, Alliance (181852)
+    FLAG_FLARE_CROWN_GUARD_TOWER_HORDE,         // Flag Flare, Horde (181853)
+    FLAG_FLARE_EASTWALL_TOWER_ALLIANCE,
+    FLAG_FLARE_EASTWALL_TOWER_HORDE,
+    FLAG_FLARE_NORTHPASS_TOWER_ALLIANCE,
+    FLAG_FLARE_NORTHPASS_TOWER_HORDE,
+    FLAG_FLARE_PLAGUEWOOD_TOWER_ALLIANCE,
+    FLAG_FLARE_PLAGUEWOOD_TOWER_HORDE,
+    FLAG_FLARE_NUMBER = 8
 };
 
-const go_type EPTowerFlags[EP_TOWER_NUM] =
+enum Buffers
 {
-    {182106,0,2569.60f,-4772.93f,115.399f,2.72271f,0.0f,0.0f,0.978148f,0.207912f},
-    {182106,0,3148.17f,-4365.51f,145.029f,1.53589f,0.0f,0.0f,0.694658f,0.71934f},
-    {182106,0,2992.63f,-3022.95f,125.593f,3.03687f,0.0f,0.0f,0.99863f,0.052336f},
-    {182106,0,1838.42f,-3703.56f,167.713f,0.890118f,0.0f,0.0f,0.430511f,0.902585f}
+    TOWER_BUFFER_CROWN_GUARD_TOWER_ALLIANCE = 0,    // Horde Tower Buffer (17794)
+    TOWER_BUFFER_EASTWALL_TOWER_ALLIANCE,           // Horde Tower Buffer (17795)
+    TOWER_BUFFER_PLAGUEWOOD_TOWER_ALLIANCE,
+    TOWER_BUFFER_NORTHPASS_TOWER_ALLIANCE,
+    TOWER_BUFFER_CROWN_GUARD_TOWER_HORDE,
+    TOWER_BUFFER_EASTWALL_TOWER_HORDE,
+    TOWER_BUFFER_PLAGUEWOOD_TOWER_HORDE,
+    TOWER_BUFFER_NORTHPASS_TOWER_HORDE
 };
 
-const uint32 EPTowerPlayerEnterEvents[EP_TOWER_NUM] = {10691,10699,10701,10705};
-
-const uint32 EPTowerPlayerLeaveEvents[EP_TOWER_NUM] = {10692,10698,10700,10704};
-
-const uint8 EP_NUM_CREATURES = 6;
-const uint8 EP_EWT_NUM_CREATURES = 5;
-
-// one lordaeron commander, 4 soldiers
-// should be spawned at EWT and follow a path, but trans-grid pathing isn't safe, so summon them directly at NPT
-const creature_type EP_EWT_Summons_A[EP_EWT_NUM_CREATURES] =
+enum NPCSummons
 {
-    {17635,469,0, 3167.61f,-4352.09f,138.20f,4.5811f},
-    {20200,469,0, 3172.74f,-4352.99f,139.14f,4.9873f},
-    {20200,469,0, 3165.89f,-4354.46f,138.67f,3.7244f},
-    {20200,469,0, 3164.65f,-4350.26f,138.22f,2.4794f},
-    {20200,469,0, 3169.91f,-4349.68f,138.37f,0.7444f}
+    EASTWALL_TOWER_COMMANDER = 0,
+    EASTWALL_TOWER_SOLDIER1,
+    EASTWALL_TOWER_SOLDIER2,
+    EASTWALL_TOWER_SOLDIER3,
+    EASTWALL_TOWER_SOLDIER4,
+    PLAGUEWOOD_TOWER_FLIGHTMASTER,
+    PLAGUEWOOD_TOWER_BUFFER,
+    CROWN_GUARD_TOWER_BUFFER,
+    EASTWALL_TOWER_BUFFER,
+    NORTHPASS_TOWER_BUFFER,
+    CROWN_GUARD_TOWER_SPIRITOFVICTORY
 };
 
-const creature_type EP_EWT_Summons_H[EP_EWT_NUM_CREATURES] =
+enum GobjectSummons
 {
-    {17995,67,0, 3167.61f,-4352.09f,138.20f,4.5811f},
-    {17996,67,0, 3172.74f,-4352.99f,139.14f,4.9873f},
-    {17996,67,0, 3165.89f,-4354.46f,138.67f,3.7244f},
-    {17996,67,0, 3164.65f,-4350.26f,138.22f,2.4794f},
-    {17996,67,0, 3169.91f,-4349.68f,138.37f,0.7444f}
+    CROWN_GUARD_TOWER_BANNER_1 = 0,     // Tower Banner (182106)
+    CROWN_GUARD_TOWER_BANNER_2,
+    EASTWALL_TOWER_BANNER_1,
+    EASTWALL_TOWER_BANNER_2,
+    PLAGUEWOOD_TOWER_BANNER_1,
+    PLAGUEWOOD_TOWER_BANNER_2,
+    NORTHPASS_TOWER_BANNER_1,
+    NORTHPASS_TOWER_BANNER_2,
+    PLAGUEWOOD_TOWER_FLAG_FLARE,        // Flag Flare, Alliance/Horde (181852, 181853)
+    CROWN_GUARD_TOWER_FLAG_FLARE,
+    EASTWALL_TOWER_FLAG_FLARE,
+    NORTHPASS_TOWER_FLAG_FLARE,
+    NORTHPASS_TOWER_CURING_SHRINE,
+    NORTHPASS_TOWER_BANNER_AURA,
+    CROWN_GUARD_TOWER_BANNER_AURA       // Alliance/Horde Banner Aura, Large (180421, 180422)
 };
 
-enum EP_TowerStates
+enum TowerStates
 {
-    EP_TS_N = 1,
-    EP_TS_N_A = 2,
-    EP_TS_N_H = 4,
-    EP_TS_A_P = 8,
-    EP_TS_H_P = 16,
-    EP_TS_A = 32,
-    EP_TS_H = 64
+    TOWERSTATE_NEUTRAL                  = 1,
+    TOWERSTATE_ALLIANCE_CONTESTED       = 2,
+    TOWERSTATE_HORDE_CONTESTED          = 4,
+    TOWERSTATE_ALLIANCE_PROGRESSING     = 8,
+    TOWERSTATE_HORDE_PROGRESSING        = 16,
+    TOWERSTATE_ALLIANCE                 = 32,
+    TOWERSTATE_HORDE                    = 64
 };
 
-// when spawning, pay attention at setting the faction manually!
-const creature_type EP_PWT_FlightMaster = {17209,0,0,2987.5f,-3049.11f,120.126f,5.75959f};
+uint32 const EP_AllianceBuffs[4] = { SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_1, SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_2, SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_3, SPELL_ALLIANCE_ECHOES_OF_LORDAERON_RANK_4 };
 
-// after spawning, modify the faction so that only the controller will be able to use it with SetUInt32Value(GAMEOBJECT_FACTION, faction_id);
-const go_type EP_NPT_LordaeronShrine = {181682,0,3167.72f,-4355.91f,138.785f,1.69297f,0.0f,0.0f,0.748956f,0.66262f};
+uint32 const EP_HordeBuffs[4] = { SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_1, SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_2, SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_3, SPELL_HORDE_ECHOES_OF_LORDAERON_RANK_4 };
+
+uint32 const EP_Zone = 139; // Eastern Plaguelands.
+uint32 const TFV_area = 2258; // The Fungal Vale.
+
+uint32 const EP_GraveYardId = 927;
+
+uint8 const EP_BuffZonesNum = 3;
+
+uint32 const EP_BuffZones[EP_BuffZonesNum] = { 139, 2017, 2057 };
+
+uint8 const EP_SummonsNum = 5;
+
+// All positions below are sniffed.
+
+const creature_type EP_BufferNPCs[8] =
+{
+    { NPC_TOWER_BUFFER_ALLIANCE, 469, 0, 1860.59f, -3730.8f, 197.854f, 2.54818f },
+    { NPC_TOWER_BUFFER_ALLIANCE, 469, 0, 2574.12f, -4795.33f, 145.871f, 5.11381f },
+    { NPC_TOWER_BUFFER_ALLIANCE, 469, 0, 2962.6f, -3041.96f, 155.835f, 3.00197f },
+    { NPC_TOWER_BUFFER_ALLIANCE, 469, 0, 3180.54f, -4379.31f, 175.275f, 3.57792f },
+    { NPC_TOWER_BUFFER_HORDE, 67, 0, 1860.48f, -3731.34f, 197.778f, 2.42601f },
+    { NPC_TOWER_BUFFER_HORDE, 67, 0, 2574.0f, -4794.79f, 145.881f, 1.95477f },
+    { NPC_TOWER_BUFFER_HORDE, 67, 0, 2963.02f, -3041.9f, 155.965f, 4.27606f },
+    { NPC_TOWER_BUFFER_HORDE, 67, 0, 3180.48f, -4379.07f, 174.995f, 2.74017f }
+};
+
+const go_type EP_CapturePoints[TOWER_NUMBER] =
+{
+    { GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS03, 0, 2574.51f, -4794.89f, 144.704f, -1.45003f, -0.097056f, 0.095578f, -0.656229f, 0.742165f },
+    { GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS01, 0, 3181.08f, -4379.36f, 174.123f, -2.03472f, -0.065392f, 0.119494f, -0.842275f, 0.521553f },
+    { GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS04, 0, 2962.71f, -3042.31f, 154.789f, 2.08426f, -0.074807f, -0.113837f, 0.855928f, 0.49883f },
+    { GOBJECT_DOODAD_BATTLEFIELDBANNER_STATE_BASE_PLAGUELANDS02, 0, 1860.85f, -3731.23f, 196.716f, -2.53214f, 0.033967f, -0.131914f, 0.944741f, -0.298177f }
+};
+
+const go_type EP_TowerFlags[BANNER_NUMBER] =
+{
+    { GOBJECT_TOWER_BANNER, 0, 1838.42f, -3703.56f, 167.713f, 0.890117f, 0.0f, 0.0f, 0.43051f, 0.902586f },
+    { GOBJECT_TOWER_BANNER, 0, 1877.6f, -3716.76f, 167.188f, 1.74533f, 0.0f, 0.0f, 0.766044f, 0.642789f },
+    { GOBJECT_TOWER_BANNER, 0, 2539.61f, -4801.55f, 115.766f, 2.00713f, 0.0f, 0.0f, 0.843391f, 0.5373f },
+    { GOBJECT_TOWER_BANNER, 0, 2569.6f, -4772.93f, 115.399f, 2.72271f, 0.0f, 0.0f, 0.978148f, 0.207912f },
+    { GOBJECT_TOWER_BANNER, 0, 2975.5f, -3060.36f, 125.108f, 5.23599f, 0.0f, 0.0f, -0.5f, 0.866025f },
+    { GOBJECT_TOWER_BANNER, 0, 2992.63f, -3022.95f, 125.593f, 3.03684f, 0.0f, 0.0f, 0.998629f, 0.0523532f },
+    { GOBJECT_TOWER_BANNER, 0, 3148.17f, -4365.51f, 145.029f, 1.53589f, 0.0f, 0.0f, 0.694658f, 0.71934f },
+    { GOBJECT_TOWER_BANNER, 0, 3188.76f, -4358.5f, 144.555f, 1.97222f, 0.0f, 0.0f, 0.833885f, 0.551938f }
+};
+
+const go_type EP_TowerFlares[FLAG_FLARE_NUMBER] =
+{
+    { GOBJECT_FLAG_FLARE_ALLIANCE, 0, 1855.66f, -3725.0f, 197.044f, 1.53589f, 0.0f, 0.0f, 0.694658f, 0.71934f },    // Flag Flare, Alliance" in Crown Guard Tower.
+    { GOBJECT_FLAG_FLARE_HORDE, 0, 1853.12f, -3722.62f, 197.406f, 0.628317f, 0.0f, 0.0f, 0.309016f, 0.951057f },    // Flag Flare, Horde" in Crown Guard Tower.
+    { GOBJECT_FLAG_FLARE_ALLIANCE, 0, 2563.26f, -4795.15f, 145.852f, 1.81514f, 0.0f, 0.0f, 0.788011f, 0.615662f },  // Flag Flare, Alliance" in Eastwall Tower.
+    { GOBJECT_FLAG_FLARE_HORDE, 0, 2565.27f, -4797.59f, 147.846f, 3.05433f, 0.0f, 0.0f, 0.999048f, 0.0436193f },    // Flag Flare, Horde" in Eastwall Tower.
+    { GOBJECT_FLAG_FLARE_ALLIANCE, 0, 3171.86f, -4377.2f, 174.898f, 0.174532f, 0.0f, 0.0f, 0.0871553f, 0.996195f }, // Flag Flare, Alliance" in Northpass Tower.
+    { GOBJECT_FLAG_FLARE_HORDE, 0, 3169.76f, -4375.13f, 175.458f, 2.70526f, 0.0f, 0.0f, 0.976295f, 0.216442f },     // Flag Flare, Horde" in Northpass Tower.
+    { GOBJECT_FLAG_FLARE_ALLIANCE, 0, 2971.41f, -3038.36f, 157.492f, 5.35816f, 0.0f, 0.0f, -0.446198f, 0.894935f }, // Flag Flare, Alliance" in Plaguewood.
+    { GOBJECT_FLAG_FLARE_HORDE, 0, 2973.17f, -3037.19f, 156.443f, 1.97222f, 0.0f, 0.0f, 0.833885f, 0.551938f }      // Flag Flare, Horde" in Plaguewood.
+};
+
+const go_type EP_NPT_LordaeronShrine[4] =
+{
+    { GOBJECT_CURING_SHRINE_ALLIANCE, 0, 3167.72f, -4355.91f, 138.785f, 1.69297f, 0.0f, 0.0f, 0.748956f, 0.66262f },
+    { GOBJECT_BANNER_AURA_ALLIANCE, 0, 3167.72f, -4355.91f, 138.785f, 1.69297f, 0.0f, 0.0f, 0.748956f, 0.66262f },
+    { GOBJECT_CURING_SHRINE_HORDE, 0, 3167.5f, -4356.25f, 138.821f, 1.69297f, 0.0f, 0.0f, 0.748956f, 0.66262f },
+    { GOBJECT_BANNER_AURA_HORDE, 0, 3167.5f, -4356.25f, 138.821f, 1.69297f, 0.0f, 0.0f, 0.748956f, 0.66262f }
+};
+
+const go_type EP_CGT_BannerAuraGraveYard[2] =
+{
+    { GOBJECT_BANNER_AURA_LARGE_HORDE, 0, 1985.47f, -3653.88f, 120.172f, 1.46608f, 0.0f, 0.0f, 0.66913f, 0.743145f },
+    { GOBJECT_BANNER_AURA_LARGE_ALLIANCE, 0, 1985.47f, -3653.88f, 120.172f, 1.46608f, 0.0f, 0.0f, 0.66913f, 0.743145f }
+};
+
+const creature_type EP_EWT_Summons_A[EP_SummonsNum] =
+{
+    { NPC_LORDAERON_COMMANDER, 469, 0, 2532.85f, -4764.92f, 103.617f, 2.35619f },
+    { NPC_LORDAERON_SOLDIER, 469, 0, 2533.33f, -4769.31f, 104.396f, 2.37365f },
+    { NPC_LORDAERON_SOLDIER, 469, 0, 2537.34f, -4773.92f, 105.941f, 2.21657f },
+    { NPC_LORDAERON_SOLDIER, 469, 0, 2537.77f, -4765.94f, 104.432f, 2.3911f },
+    { NPC_LORDAERON_SOLDIER, 469, 0, 2542.57f, -4770.22f, 106.145f, 2.42601f }
+};
+
+const creature_type EP_EWT_Summons_H[EP_SummonsNum] =
+{
+    { NPC_LORDAERON_VETERAN, 67, 0, 2532.85f, -4764.92f, 103.617f, 2.35619f },
+    { NPC_LORDAERON_FIGHTER, 67, 0, 2533.33f, -4769.31f, 104.396f, 2.37365f },
+    { NPC_LORDAERON_FIGHTER, 67, 0, 2537.34f, -4773.92f, 105.941f, 2.21657f },
+    { NPC_LORDAERON_FIGHTER, 67, 0, 2537.77f, -4765.94f, 104.432f, 2.3911f },
+    { NPC_LORDAERON_FIGHTER, 67, 0, 2542.57f, -4770.22f, 106.145f, 2.42601f }
+};
+
+const creature_type EP_PWT_FlightMaster = { NPC_WILLIAM_KIELAR, 0, 0, 2987.5f, -3049.11f, 120.126f, 5.75959f };
+
+const creature_type EP_CGT_SpiritOfVictory = { NPC_SPIRIT_OF_VICTORY, 0, 0, 1856.58f, -3714.72f, 194.637f, 0.762214f };
 
 class OutdoorPvPEP;
 
@@ -194,23 +346,26 @@ class OPvPCapturePointEP_EWT : public OPvPCapturePoint
 
         void SendChangePhase();
 
-        uint32 FillInitialWorldStates(WorldPacket & data);
+        uint32 FillInitialWorldStates(WorldPacket& data);
 
         // used when player is activated/inactivated in the area
-        virtual bool HandlePlayerEnter(Player * plr);
-        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
+        bool HandlePlayerEnter(Player* plr);
+        void HandlePlayerLeave(Player* plr, bool bJustDestroy);
 
     protected:
 
-        void SummonSupportUnitAtNorthpassTower(uint32 team);
+        void RemoveSquad();
+        void SummonSquadAtEastWallTower(uint32 team);
 
         void UpdateTowerState();
+
+        void UpdateBannerArt(uint32 artkit, uint32 animation);
+
+        void PlaySound(uint32 sound);
 
     protected:
 
         uint32 m_TowerState;
-
-        uint32 m_UnitsSummonedSide;
 };
 
 class OPvPCapturePointEP_NPT : public OPvPCapturePoint
@@ -225,23 +380,25 @@ class OPvPCapturePointEP_NPT : public OPvPCapturePoint
 
         void SendChangePhase();
 
-        uint32 FillInitialWorldStates(WorldPacket & data);
+        uint32 FillInitialWorldStates(WorldPacket& data);
 
         // used when player is activated/inactivated in the area
-		virtual bool HandlePlayerEnter(Player * plr);
-		virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
+        bool HandlePlayerEnter(Player* plr);
+        void HandlePlayerLeave(Player* plr, bool bJustDestroy);
 
     protected:
 
-        void SummonGO(uint32 team);
+        void SummonCuringShrine(uint32 team);
 
         void UpdateTowerState();
+
+        void UpdateBannerArt(uint32 artkit, uint32 animation);
+
+        void PlaySound(uint32 sound);
 
     protected:
 
         uint32 m_TowerState;
-
-        uint32 m_SummonedGOSide;
 };
 
 class OPvPCapturePointEP_CGT : public OPvPCapturePoint
@@ -256,23 +413,31 @@ class OPvPCapturePointEP_CGT : public OPvPCapturePoint
 
         void SendChangePhase();
 
-        uint32 FillInitialWorldStates(WorldPacket & data);
+        uint32 FillInitialWorldStates(WorldPacket& data);
 
         // used when player is activated/inactivated in the area
-        virtual bool HandlePlayerEnter(Player * plr);
-        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
+        bool HandlePlayerEnter(Player* plr);
+        void HandlePlayerLeave(Player* plr, bool bJustDestroy);
 
     protected:
 
         void LinkGraveYard(Team team);
 
+        void UnLinkGraveYard();
+
+        void SummonSpiritOfVictory(uint32 team);
+
+        void SummonBannerAura(uint32 team);
+
         void UpdateTowerState();
+
+        void UpdateBannerArt(uint32 artkit, uint32 animation);
+
+        void PlaySound(uint32 sound);
 
     protected:
 
         uint32 m_TowerState;
-
-        Team m_GraveyardSide;
 };
 
 class OPvPCapturePointEP_PWT : public OPvPCapturePoint
@@ -287,11 +452,11 @@ class OPvPCapturePointEP_PWT : public OPvPCapturePoint
 
         void SendChangePhase();
 
-        uint32 FillInitialWorldStates(WorldPacket & data);
+        uint32 FillInitialWorldStates(WorldPacket& data);
 
         // used when player is activated/inactivated in the area
-        virtual bool HandlePlayerEnter(Player * plr);
-        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
+        bool HandlePlayerEnter(Player* plr);
+        void HandlePlayerLeave(Player* plr, bool bJustDestroy);
 
     protected:
 
@@ -299,9 +464,11 @@ class OPvPCapturePointEP_PWT : public OPvPCapturePoint
 
         void UpdateTowerState();
 
-    protected:
+        void UpdateBannerArt(uint32 artkit, uint32 animation);
 
-        uint32 m_FlightMasterSpawned;
+        void PlaySound(uint32 sound);
+
+    protected:
 
         uint32 m_TowerState;
 };
@@ -319,25 +486,24 @@ class OutdoorPvPEP : public OutdoorPvP
 
         bool SetupZoneScript();
 
-		virtual void OnPlayerEnter(Player *plr);
-		virtual void OnPlayerLeave(Player *plr, bool bJustDestroy);
+        void OnPlayerEnter(Player* plr);
+        void OnPlayerLeave(Player* plr, bool bJustDestroy);
 
         void Update(uint32 diff);
 
-        uint32 FillInitialWorldStates(WorldPacket &data);
+        uint32 FillInitialWorldStates(WorldPacket& data);
 
-        void SendRemoveWorldStates(Player * plr);
+        void SendRemoveWorldStates(Player* plr);
 
         void BuffTeams();
 
     private:
 
         // how many towers are controlled
-        uint32 EP_Controls[EP_TOWER_NUM];
+        uint32 EP_Controls[TOWER_NUMBER];
 
         uint32 m_AllianceTowersControlled;
         uint32 m_HordeTowersControlled;
 };
 
 #endif
-
