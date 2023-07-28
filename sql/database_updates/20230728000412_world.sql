@@ -112,3 +112,7 @@ REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `c
 (36495, 164, 57178, 0, 0, 1, 0, 0, 290, 275, 0), --	Arcanite Belt Buckle
 (36496, 164, 57181, 0, 0, 1, 0, 0, 310, 300, 0), --	Dreamsteel Belt Buckle
 (36497, 164, 57196, 0, 0, 1, 0, 0, 310, 300, 0); --	Bloody Belt Buckle
+
+-- Iron Belt Buckle remove required crafting material Arcane Essence (entry 61673)
+
+UPDATE ``spell_template` SET `reagent4` = 0, `reagentCount4` = 0 WHERE `entry` = 57169;
