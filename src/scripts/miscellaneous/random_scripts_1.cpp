@@ -2,17 +2,12 @@
 #include "Utilities/EventProcessor.h"
 #include <algorithm>
 
-template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+template <typename EntityT, typename Functor>
+void DoAfterTime(EntityT* entity, uint32 p_time, Functor&& function)
 {
-    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+    entity->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), entity->m_Events.CalculateTime(p_time));
 }
 
-template <typename Functor>
-void DoAfterTime(GameObject* pGO, const uint32& p_time, Functor&& function)
-{
-    pGO->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pGO->m_Events.CalculateTime(p_time));
-}
 
 class DemorphAfterTime : public BasicEvent 
 {
@@ -3014,30 +3009,28 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         Creature* AmriDemondeal = pQuestGiver->SummonCreature(NPC_AMRI_DEMONDEAL, 289.36F, -4723.89F, 12.91F, 2.80F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
         Creature* SpratNozzleton = pQuestGiver->SummonCreature(NPC_SPRAT_NOZZLETON, 293.27F, -4719.20F, 12.74F, 2.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
 
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = NertBlastenton->GetObjectGuid(), player = pPlayer]()
+        DoAfterTime(NertBlastenton, 5 * IN_MILLISECONDS,
+            [playerGuid = pPlayer->GetObjectGuid(), me = NertBlastenton]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
 
-            if (!creature)
+            if (!player)
                 return;
 
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Gar'Thok, Chief! Allow me to introduce you to my crew. We've got nowhere else to go, and we're willing to lend a hand to the Horde in exchange for food and lodge!", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Gar'Thok, Chief! Allow me to introduce you to my crew. We've got nowhere else to go, and we're willing to lend a hand to the Horde in exchange for food and lodge!", player);
         });
 
-        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
-            [CreatureGuid = GrizzleEnforcer->GetObjectGuid(), player = pPlayer]()
+        DoAfterTime(GrizzleEnforcer, 13 * IN_MILLISECONDS,
+            [playerGuid = pPlayer->GetObjectGuid(), me = GrizzleEnforcer]()
         {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
+                auto player = ObjectAccessor::FindPlayer(playerGuid);
 
-            if (!creature)
-                return;
+                if (!player)
+                    return;
 
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
+            me->HandleEmote(EMOTE_ONESHOT_TALK);
+            me->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
