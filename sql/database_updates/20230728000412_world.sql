@@ -66,7 +66,7 @@ REPLACE INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`
 
 -- Misc. NPC fixes:
 
-UPDATE `item_template` SET `stackable` = 100 WHERE `entry` = 61793;
+UPDATE `item_template` SET `stackable` = 20, `max_count` = 100 WHERE `entry` = 61793;
 UPDATE `creature_template` SET `subname` = 'Cloth Armor Vendor' WHERE `entry` = 61620;
 UPDATE `creature_questrelation` SET `id` = 61616 WHERE `quest` = 41129;
 UPDATE `creature_questrelation` SET `id` = 40049 WHERE `quest` = 41109;
@@ -714,3 +714,81 @@ UPDATE `quest_template` SET `ObjectiveText1` = 'Win a battle in Blood Ring' WHER
 
 UPDATE `spell_template` SET `description` = 'Attaches a buckle to your belt that increases your armor penetration by 25.' WHERE `entry` = 57170;
 UPDATE `spell_template` SET `description` = 'Attaches a buckle to your belt that increases your intellect by 10.' WHERE `entry` = 57182;
+
+-- Misc. quest and NPC fixes:
+
+-- The following display ids have syntax error and need to be fixed
+
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES 
+
+(20455, 0, 0, 0, 0),
+(20456, 0, 0, 0, 0),
+(20457, 0, 0, 0, 0),
+(20458, 0, 0, 0, 0),
+(20459, 0, 0, 0, 0),
+(20460, 0, 0, 0, 0),
+(20461, 0, 0, 0, 0),
+(20462, 0, 0, 0, 0),
+(20463, 0, 0, 0, 0),
+(20464, 0, 0, 0, 0),
+(20465, 0, 0, 0, 0),
+(20466, 0, 0, 0, 0);
+
+-- NPC 61630 and 61631 remove gossip flags
+
+UPDATE `creature_template` SET `npc_flags` = 18 WHERE `entry` = 61630;
+UPDATE `creature_template` SET `npc_flags` = 18 WHERE `entry` = 61631;
+
+-- Previous quest: 
+-- Title: Recipe: Gurubashi Gumbo
+-- Quest NPC (Start): Bradley Steel
+-- Quest NPC (End): Bradley Steel
+-- Quest level: 60
+-- Required level: 60
+-- Quest zone ID: 977
+-- Main description: The Gurubashi trolls have a unique recipe for gumbo that can boost the willpower of those that consume it. It is often eaten by their fiercest warriors before combat.$B$BI have obtained such a recipe and am willing to trade it to those who prove themselves in the arena.$B$BBring me Tokens of Blood and you too may learn this recipe.
+-- Short objective: Bring 25 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.
+-- Progress text: So, made your mind up?
+-- Completion: Endulge in the secret recipe of the Gurubashi with glee. You are as reknowned as their most savage fighters.
+-- Required creature kills:  NONE
+-- Required items: 25 Token of Blood
+-- Money: NONE
+-- Reputation: NONE
+-- XP:  NONE
+-- Rewmoneymaxlevel: NONE
+-- Items: 53016 
+
+-- Recipe: Gurubashi Gumbo
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80738,977,60,60,0,0,'Recipe: Gurubashi Gumbo','The Gurubashi trolls have a unique recipe for gumbo that can boost the willpower of those that consume it. It is often eaten by their fiercest warriors before combat.$B$BI have obtained such a recipe and am willing to trade it to those who prove themselves in the arena.$B$BBring me Tokens of Blood and you too may learn this recipe.','Bring 25 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.','So, made your mind up?','Endulge in the secret recipe of the Gurubashi with glee. You are as reknowned as their most savage fighters.',61794,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53016,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (61616, 80738);
+replace into creature_involvedrelation (id, quest) values (61616, 80738);
+
+-- Previous quest: 
+-- Title: Formula: Enchant Gloves - Major Strength
+-- Quest NPC (Start): Bradley Steel
+-- Quest NPC (End): Bradley Steel
+-- Quest level: 60
+-- Required level: 60
+-- Quest zone ID: 977
+-- Main description: A fierce and quick bout of combat in the arena is often decided by the strength to overcome. Such power can overcome those that are unprepared, or give you the last bit of desire to win in the heat of battle.$B$BSuch strength can be found in this enchantment once held by the Gurubashi trolls. For a price, it can also be yours.
+-- Short objective: Bring 25 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.
+-- Progress text: So, made your mind up?
+-- Completion: Power now lies at your fingertips. Use this enchantment wisely, and you can overcome great obstacles.
+-- Required creature kills:  NONE
+-- Required items: 25 Token of Blood
+-- Money: NONE
+-- Reputation: NONE
+-- XP:  NONE
+-- Rewmoneymaxlevel: NONE
+-- Items: 53017 
+
+
+-- Formula: Enchant Gloves - Major Strength
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80739,977,60,60,0,0,'Formula: Enchant Gloves - Major Strength','A fierce and quick bout of combat in the arena is often decided by the strength to overcome.$B$BSuch power can overcome those that are unprepared, or give you the last bit of desire to win in the heat of battle.$B$BSuch strength can be found in this enchantment once held by the Gurubashi trolls. For a price, it can also be yours.','Bring 25 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.','So, made your mind up?','Power now lies at your fingertips. Use this enchantment wisely, and you can overcome great obstacles.',61794,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53017,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (61616, 80739);
+replace into creature_involvedrelation (id, quest) values (61616, 80739);
+
