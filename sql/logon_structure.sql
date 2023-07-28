@@ -1,645 +1,637 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               5.5.53 - MySQL Community Server (GPL)
--- Server OS:                    Win32
--- HeidiSQL Version:             9.3.0.4998
--- --------------------------------------------------------
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
--- Dumping structure for table tw_logon.account
+-- ----------------------------
+-- Table structure for account
+-- ----------------------------
 DROP TABLE IF EXISTS `account`;
-CREATE TABLE IF NOT EXISTS `account` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
-  `username` varchar(32) NOT NULL,
-  `sha_pass_hash` varchar(40) NOT NULL,
-  `rank` int(10) unsigned NOT NULL DEFAULT '0',
-  `sessionkey` longtext,
-  `v` longtext,
-  `s` longtext,
-  `email` text,
-  `joindate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `tfa_verif` varchar(255) DEFAULT NULL,
-  `last_ip` varchar(30) NOT NULL DEFAULT '0.0.0.0',
-  `last_local_ip` varchar(30) NOT NULL DEFAULT '0.0.0.0',
-  `failed_logins` int(11) unsigned NOT NULL DEFAULT '0',
-  `locked` tinyint(3) unsigned NOT NULL DEFAULT '0',
+CREATE TABLE `account`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
+  `username` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sha_pass_hash` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `rank` int UNSIGNED NOT NULL DEFAULT 0,
+  `sessionkey` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `v` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `s` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `email` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `joindate` timestamp NOT NULL DEFAULT current_timestamp,
+  `tfa_verif` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `last_ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `last_local_ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `failed_logins` int UNSIGNED NOT NULL DEFAULT 0,
+  `locked` tinyint UNSIGNED NOT NULL DEFAULT 0,
   `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `online` tinyint(4) NOT NULL DEFAULT '0',
-  `expansion` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `mutetime` bigint(40) NOT NULL DEFAULT '0',
-  `mutereason` varchar(255) NOT NULL DEFAULT '',
-  `muteby` varchar(50) NOT NULL DEFAULT '',
-  `locale` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `os` varchar(4) NOT NULL DEFAULT '',
-  `platform` varchar(4) NOT NULL DEFAULT '',
-  `current_realm` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `banned` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `flags` int(10) unsigned NOT NULL DEFAULT '0',
-  `security` varchar(255) DEFAULT NULL,
-  `pass_verif` varchar(255) DEFAULT NULL COMMENT 'Web recover password',
-  `email_verif` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Email verification',
-  `forum_username` varchar(32) DEFAULT NULL,
-  `token_key` varchar(100) DEFAULT '',
-  `email_keyword` varchar(16) DEFAULT NULL,
-  `email_status` int(8) DEFAULT NULL,
-  `email_sub` tinyint(3) NOT NULL DEFAULT '1',
-  `comments` text,
-  `geolock_pin` int(11) DEFAULT '0',
+  `online` tinyint NOT NULL DEFAULT 0,
+  `expansion` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `mutetime` bigint NOT NULL DEFAULT 0,
+  `mutereason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `muteby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `locale` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `os` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `platform` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `current_realm` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `banned` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
+  `flags` int UNSIGNED NOT NULL DEFAULT 0,
+  `security` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pass_verif` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Web recover password',
+  `email_verif` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Email verification',
+  `forum_username` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `token_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `email_keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `email_status` int NULL DEFAULT NULL,
+  `email_letterid` int NULL DEFAULT 0,
+  `email_sub` tinyint NOT NULL DEFAULT 1,
+  `server` tinyint NOT NULL DEFAULT 0,
+  `comments` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `geolock_pin` int NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `idx_username` (`username`) USING BTREE,
-  KEY `idx_gmlevel` (`rank`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
+  UNIQUE INDEX `idx_username`(`username`) USING BTREE,
+  INDEX `idx_gmlevel`(`rank`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 389145 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Account System' ROW_FORMAT = DYNAMIC;
 
--- Dumping data for table tw_logon.account: ~0 rows (approximately)
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.account_banned
+-- ----------------------------
+-- Table structure for account_banned
+-- ----------------------------
 DROP TABLE IF EXISTS `account_banned`;
-CREATE TABLE IF NOT EXISTS `account_banned` (
-  `banid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Account id',
-  `bandate` bigint(40) NOT NULL DEFAULT '0',
-  `unbandate` bigint(40) NOT NULL DEFAULT '0',
-  `bannedby` varchar(50) NOT NULL,
-  `banreason` varchar(255) NOT NULL,
-  `active` tinyint(4) NOT NULL DEFAULT '1',
-  `realm` tinyint(4) NOT NULL DEFAULT '1',
-  `gmlevel` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`bandate`) USING BTREE,
-  UNIQUE KEY `banid` (`banid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
+CREATE TABLE `account_banned`  (
+  `banid` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL DEFAULT 0 COMMENT 'Account id',
+  `bandate` bigint NOT NULL DEFAULT 0,
+  `unbandate` bigint NOT NULL DEFAULT 0,
+  `bannedby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `banreason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `active` tinyint NOT NULL DEFAULT 1,
+  `realm` tinyint NOT NULL DEFAULT 1,
+  `gmlevel` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `bandate`) USING BTREE,
+  UNIQUE INDEX `banid`(`banid`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4225607 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Ban List' ROW_FORMAT = DYNAMIC;
 
--- Dumping data for table tw_logon.account_banned: 0 rows
-/*!40000 ALTER TABLE `account_banned` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_banned` ENABLE KEYS */;
+-- ----------------------------
+-- Table structure for account_banned_withautobancrap
+-- ----------------------------
+DROP TABLE IF EXISTS `account_banned_withautobancrap`;
+CREATE TABLE `account_banned_withautobancrap`  (
+  `banid` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL DEFAULT 0 COMMENT 'Account id',
+  `bandate` bigint NOT NULL DEFAULT 0,
+  `unbandate` bigint NOT NULL DEFAULT 0,
+  `bannedby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `banreason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `active` tinyint NOT NULL DEFAULT 1,
+  `realm` tinyint NOT NULL DEFAULT 1,
+  `gmlevel` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`, `bandate`) USING BTREE,
+  UNIQUE INDEX `banid`(`banid`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4215051 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Ban List' ROW_FORMAT = DYNAMIC;
 
-
--- Dumping structure for table tw_logon.account_ip_logins
-DROP TABLE IF EXISTS `account_ip_logins`;
-CREATE TABLE IF NOT EXISTS `account_ip_logins` (
-  `account_id` int(10) unsigned NOT NULL,
-  `account_ip` varchar(32) NOT NULL DEFAULT '0.0.0.0',
-  `login_count` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`account_id`,`account_ip`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Dumping data for table tw_logon.account_ip_logins: ~0 rows (approximately)
-/*!40000 ALTER TABLE `account_ip_logins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_ip_logins` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.account_mailstatus
-DROP TABLE IF EXISTS `account_mailstatus`;
-CREATE TABLE IF NOT EXISTS `account_mailstatus` (
-  `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `email` text,
-  `status` int(11) DEFAULT NULL,
-  `letterid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`message_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.account_mailstatus: ~0 rows (approximately)
-/*!40000 ALTER TABLE `account_mailstatus` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_mailstatus` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.account_mailstatus_archive
-DROP TABLE IF EXISTS `account_mailstatus_archive`;
-CREATE TABLE IF NOT EXISTS `account_mailstatus_archive` (
-  `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `email` text,
-  `status` int(11) DEFAULT NULL,
-  `letterid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`message_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.account_mailstatus_archive: ~0 rows (approximately)
-/*!40000 ALTER TABLE `account_mailstatus_archive` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_mailstatus_archive` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.account_muted
-DROP TABLE IF EXISTS `account_muted`;
-CREATE TABLE IF NOT EXISTS `account_muted` (
-  `muteid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Account id',
-  `mutedate` bigint(40) NOT NULL DEFAULT '0',
-  `unmutedate` bigint(40) NOT NULL DEFAULT '0',
-  `mutedby` varchar(50) NOT NULL,
-  `mutereason` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`,`mutedate`) USING BTREE,
-  UNIQUE KEY `banid` (`muteid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Mute History';
-
--- Dumping data for table tw_logon.account_muted: 0 rows
-/*!40000 ALTER TABLE `account_muted` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_muted` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.account_twofactor_allowed
-DROP TABLE IF EXISTS `account_twofactor_allowed`;
-CREATE TABLE IF NOT EXISTS `account_twofactor_allowed` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(30) NOT NULL DEFAULT '0',
-  `account_id` int(10) unsigned DEFAULT NULL,
-  `expires_at` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.account_twofactor_allowed: ~0 rows (approximately)
-/*!40000 ALTER TABLE `account_twofactor_allowed` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_twofactor_allowed` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_blacklist
-DROP TABLE IF EXISTS `antispam_blacklist`;
-CREATE TABLE IF NOT EXISTS `antispam_blacklist` (
-  `word` varchar(32) NOT NULL DEFAULT '',
-  `regex` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`word`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Dumping data for table tw_logon.antispam_blacklist: 6 rows
-/*!40000 ALTER TABLE `antispam_blacklist` DISABLE KEYS */;
-INSERT INTO `antispam_blacklist` (`word`, `regex`) VALUES
-	('NLGGER', 0),
-	('JIZZ', 0),
-	('ANAL', 0),
-	('FAGGOT', 0),
-	('TRANNY', 0),
-	('NEEDMANA', 0);
-/*!40000 ALTER TABLE `antispam_blacklist` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_client
-DROP TABLE IF EXISTS `antispam_client`;
-CREATE TABLE IF NOT EXISTS `antispam_client` (
-  `Regex` varchar(255) NOT NULL,
-  `Note` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`Regex`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.antispam_client: ~0 rows (approximately)
-/*!40000 ALTER TABLE `antispam_client` DISABLE KEYS */;
-/*!40000 ALTER TABLE `antispam_client` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_replacement
-DROP TABLE IF EXISTS `antispam_replacement`;
-CREATE TABLE IF NOT EXISTS `antispam_replacement` (
-  `from` varchar(32) NOT NULL DEFAULT '',
-  `to` varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (`from`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Dumping data for table tw_logon.antispam_replacement: 13 rows
-/*!40000 ALTER TABLE `antispam_replacement` DISABLE KEYS */;
-INSERT INTO `antispam_replacement` (`from`, `to`) VALUES
-	('\\\\/\\\\/', 'W'),
-	('/\\/\\', 'M'),
-	('0', 'O'),
-	('...hic!', ''),
-	('()', 'O'),
-	('\\/\\/', 'W'),
-	('/\\\\', 'A'),
-	('VV', 'W'),
-	('@', 'O'),
-	('/V\\', 'M'),
-	('/\\\\/\\\\', 'M'),
-	('㎜', 'MM'),
-	('!<', 'K');
-/*!40000 ALTER TABLE `antispam_replacement` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_scores
-DROP TABLE IF EXISTS `antispam_scores`;
-CREATE TABLE IF NOT EXISTS `antispam_scores` (
-  `word` varchar(32) NOT NULL DEFAULT '',
-  `score` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`word`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Dumping data for table tw_logon.antispam_scores: 58 rows
-/*!40000 ALTER TABLE `antispam_scores` DISABLE KEYS */;
-INSERT INTO `antispam_scores` (`word`, `score`, `type`) VALUES
-	('>>', 1, 1),
-	('<<', 1, 1),
-	('5OG', 1, 1),
-	('$', 2, 1),
-	('MOTANK', 4, 0),
-	('\\\\', 2, 1),
-	('ACOUNT', 1, 0),
-	('CHEAP', 2, 0),
-	('LEVELING', 1, 0),
-	('LEVLING', 1, 0),
-	('LEVILING', 1, 0),
-	('LVLING', 1, 0),
-	('SAFE', 1, 0),
-	('SERVICE', 1, 0),
-	('NOST', 1, 0),
-	('COM', 1, 0),
-	('PRICE', 2, 0),
-	('GOLD', 2, 0),
-	('SKYPE', 2, 0),
-	('EPIC', 2, 0),
-	('DOLARS', 2, 0),
-	('PROFESIONAL', 2, 0),
-	('RELIABLE', 2, 0),
-	('PROMOTION', 2, 0),
-	('DELIVER', 2, 0),
-	('NAX', 2, 0),
-	('GAMES', 2, 0),
-	('GRETINGS', 2, 0),
-	('WEBSITE', 2, 0),
-	('GOID', 2, 0),
-	('ITEM4', 5, 1),
-	('1OO', 2, 1),
-	('POWER', 1, 0),
-	('SELGOLD', 2, 0),
-	('FAST', 1, 0),
-	('25G', 2, 1),
-	('981526249', 3, 1),
-	('XIAOYUAN9921521', 3, 1),
-	('MANFARM', 1, 1),
-	('USD', 2, 0),
-	('GWOW', 3, 0),
-	('EUR', 2, 0),
-	('80G', 1, 1),
-	('OKO', 1, 0),
-	('G4', 2, 1),
-	('2OG', 1, 1),
-	('MSD', 3, 0),
-	('3VV', 3, 1),
-	('3W', 2, 1),
-	('SELL', 1, 1),
-	('WVWOKO', 4, 0),
-	('G=$', 3, 1),
-	('1OG', 1, 0),
-	('COIN', 0, 1),
-	('P0VVER', 2, 1),
-	('IEVEIING', 2, 1),
-	('GO1D', 2, 1),
-	('POWERLEVELING', 2, 0);
-/*!40000 ALTER TABLE `antispam_scores` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_unicode
-DROP TABLE IF EXISTS `antispam_unicode`;
-CREATE TABLE IF NOT EXISTS `antispam_unicode` (
-  `from` mediumint(5) unsigned NOT NULL DEFAULT '0',
-  `to` mediumint(5) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`from`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Dumping data for table tw_logon.antispam_unicode: 42 rows
-/*!40000 ALTER TABLE `antispam_unicode` DISABLE KEYS */;
-INSERT INTO `antispam_unicode` (`from`, `to`) VALUES
-	(1063, 52),
-	(1054, 79),
-	(1057, 67),
-	(1052, 77),
-	(927, 79),
-	(1050, 75),
-	(913, 65),
-	(917, 69),
-	(1062, 85),
-	(9675, 79),
-	(1040, 65),
-	(1058, 84),
-	(1064, 87),
-	(1025, 69),
-	(1055, 78),
-	(1065, 87),
-	(922, 75),
-	(924, 77),
-	(1045, 69),
-	(968, 87),
-	(192, 65),
-	(210, 79),
-	(211, 79),
-	(242, 79),
-	(324, 78),
-	(328, 78),
-	(332, 79),
-	(466, 79),
-	(59336, 78),
-	(12562, 84),
-	(8745, 78),
-	(65325, 77),
-	(959, 79),
-	(945, 65),
-	(954, 75),
-	(12295, 79),
-	(65323, 75),
-	(65296, 79),
-	(65355, 75),
-	(65357, 77),
-	(65319, 71),
-	(925, 78);
-/*!40000 ALTER TABLE `antispam_unicode` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.antispam_unicode_replacement
-DROP TABLE IF EXISTS `antispam_unicode_replacement`;
-CREATE TABLE IF NOT EXISTS `antispam_unicode_replacement` (
-  `from` mediumint(5) unsigned NOT NULL DEFAULT '0',
-  `to` mediumint(5) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`from`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
-
--- Dumping data for table tw_logon.antispam_unicode_replacement: 0 rows
-/*!40000 ALTER TABLE `antispam_unicode_replacement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `antispam_unicode_replacement` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.config
-DROP TABLE IF EXISTS `config`;
-CREATE TABLE IF NOT EXISTS `config` (
-  `id` int(11) NOT NULL,
-  `value` varchar(45) DEFAULT NULL,
-  `comment` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.config: ~0 rows (approximately)
-/*!40000 ALTER TABLE `config` DISABLE KEYS */;
-/*!40000 ALTER TABLE `config` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.fingerprint_autoban
-DROP TABLE IF EXISTS `fingerprint_autoban`;
-CREATE TABLE IF NOT EXISTS `fingerprint_autoban` (
-  `fingerprint` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Account id',
-  `banreason` varchar(255) NOT NULL,
-  PRIMARY KEY (`fingerprint`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Fingerprint Ban List';
-
--- Dumping data for table tw_logon.fingerprint_autoban: 11 rows
-/*!40000 ALTER TABLE `fingerprint_autoban` DISABLE KEYS */;
-INSERT INTO `fingerprint_autoban` (`fingerprint`, `banreason`) VALUES
-	(149392107, 'duck'),
-	(222393403, 'hacks2'),
-	(957965474, 'gs'),
-	(1046341544, 'gs'),
-	(1155010007, 'duck2'),
-	(1302404417, 'gs'),
-	(2009228929, 'hacks'),
-	(2162373540, 'gs'),
-	(2410606283, 'gs'),
-	(3876728909, 'gs'),
-	(4134214259, 'gs');
-/*!40000 ALTER TABLE `fingerprint_autoban` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.fingerprint_banned
-DROP TABLE IF EXISTS `fingerprint_banned`;
-CREATE TABLE IF NOT EXISTS `fingerprint_banned` (
-  `fingerprint` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Fingerprint',
-  `bandate` bigint(40) NOT NULL DEFAULT '0',
-  `unbandate` bigint(40) NOT NULL DEFAULT '0',
-  `bannedby` varchar(50) NOT NULL,
-  `banreason` varchar(255) NOT NULL,
-  PRIMARY KEY (`fingerprint`,`bandate`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Fingerprint Ban List';
-
--- Dumping data for table tw_logon.fingerprint_banned: 0 rows
-/*!40000 ALTER TABLE `fingerprint_banned` DISABLE KEYS */;
-/*!40000 ALTER TABLE `fingerprint_banned` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.geoip
-DROP TABLE IF EXISTS `geoip`;
-CREATE TABLE IF NOT EXISTS `geoip` (
-  `network_start_integer` int(11) DEFAULT NULL,
-  `network_last_integer` int(11) DEFAULT NULL,
-  `geoname_id` text,
-  `registered_country_geoname_id` text,
-  `represented_country_geoname_id` text,
-  `is_anonymous_proxy` int(11) DEFAULT NULL,
-  `is_satellite_provider` int(11) DEFAULT NULL,
-  `postal_code` text,
-  `latitude` double DEFAULT NULL,
-  `longitude` double DEFAULT NULL,
-  `accuracy_radius` int(11) DEFAULT NULL,
-  KEY `ip_start` (`network_start_integer`) USING BTREE,
-  KEY `ip_end` (`network_last_integer`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.geoip: ~0 rows (approximately)
-/*!40000 ALTER TABLE `geoip` DISABLE KEYS */;
-/*!40000 ALTER TABLE `geoip` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.gp_history
-DROP TABLE IF EXISTS `gp_history`;
-CREATE TABLE IF NOT EXISTS `gp_history` (
-  `account_id` int(11) unsigned NOT NULL,
-  `code` varchar(256) NOT NULL,
-  PRIMARY KEY (`account_id`,`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Dumping data for table tw_logon.gp_history: ~0 rows (approximately)
-/*!40000 ALTER TABLE `gp_history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gp_history` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.ip_banned
-DROP TABLE IF EXISTS `ip_banned`;
-CREATE TABLE IF NOT EXISTS `ip_banned` (
-  `ip` varchar(32) NOT NULL DEFAULT '0.0.0.0',
-  `bandate` int(11) NOT NULL,
-  `unbandate` int(11) NOT NULL,
-  `bannedby` varchar(50) NOT NULL DEFAULT '[Console]',
-  `banreason` varchar(128) NOT NULL DEFAULT 'no reason',
-  PRIMARY KEY (`ip`,`bandate`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Banned IPs';
-
--- Dumping data for table tw_logon.ip_banned: 0 rows
-/*!40000 ALTER TABLE `ip_banned` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ip_banned` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.migrations
-DROP TABLE IF EXISTS `migrations`;
-CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` varchar(255) NOT NULL,
-  `Name` varchar(255) NOT NULL DEFAULT '',
-  `Hash` varchar(128) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- Dumping data for table tw_logon.migrations: 0 rows
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.realmcharacters
-DROP TABLE IF EXISTS `realmcharacters`;
-CREATE TABLE IF NOT EXISTS `realmcharacters` (
-  `realmid` int(11) unsigned NOT NULL DEFAULT '0',
-  `acctid` bigint(20) unsigned NOT NULL,
-  `numchars` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`realmid`,`acctid`) USING BTREE,
-  KEY `acctid` (`acctid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm Character Tracker';
-
--- Dumping data for table tw_logon.realmcharacters: 0 rows
-/*!40000 ALTER TABLE `realmcharacters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `realmcharacters` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.realmlist
-DROP TABLE IF EXISTS `realmlist`;
-CREATE TABLE IF NOT EXISTS `realmlist` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL DEFAULT '',
-  `address` varchar(32) NOT NULL DEFAULT '127.0.0.1',
-  `port` int(11) NOT NULL DEFAULT '8085',
-  `icon` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `realmflags` tinyint(3) unsigned NOT NULL DEFAULT '2' COMMENT 'Supported masks: 0x1 (invalid, not show in realm list), 0x2 (offline, set by mangosd), 0x4 (show version and build), 0x20 (new players), 0x40 (recommended)',
-  `timezone` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `allowedSecurityLevel` int(10) unsigned NOT NULL DEFAULT '0',
-  `population` float unsigned NOT NULL DEFAULT '0',
-  `realmbuilds` varchar(64) NOT NULL DEFAULT '5875',
+-- ----------------------------
+-- Table structure for account_copy_060621
+-- ----------------------------
+DROP TABLE IF EXISTS `account_copy_060621`;
+CREATE TABLE `account_copy_060621`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
+  `username` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sha_pass_hash` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `gmlevel` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `sessionkey` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `v` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `s` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `email` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `joindate` timestamp NOT NULL DEFAULT current_timestamp,
+  `tfa_verif` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `last_ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `last_local_ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `failed_logins` int UNSIGNED NOT NULL DEFAULT 0,
+  `locked` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `online` tinyint NOT NULL DEFAULT 0,
+  `expansion` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `mutetime` bigint NOT NULL DEFAULT 0,
+  `mutereason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `muteby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `locale` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `os` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `current_realm` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `banned` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
+  `flags` int UNSIGNED NOT NULL DEFAULT 0,
+  `security` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pass_verif` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Web recover password',
+  `email_verif` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Email verification',
+  `forum_username` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `token_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `email_keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `email_status` int NULL DEFAULT NULL,
+  `email_sub` tinyint NOT NULL DEFAULT 1,
+  `server` tinyint NOT NULL DEFAULT 0,
+  `comments` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `geolock_pin` int NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `idx_name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
+  UNIQUE INDEX `idx_username`(`username`) USING BTREE,
+  INDEX `idx_gmlevel`(`gmlevel`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 54548 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Account System' ROW_FORMAT = DYNAMIC;
 
--- Dumping data for table tw_logon.realmlist: 0 rows
-/*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
-/*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
+-- ----------------------------
+-- Table structure for account_ip_logins
+-- ----------------------------
+DROP TABLE IF EXISTS `account_ip_logins`;
+CREATE TABLE `account_ip_logins`  (
+  `account_id` int UNSIGNED NOT NULL,
+  `account_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `login_count` int UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`account_id`, `account_ip`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for account_mailstatus_deprecated
+-- ----------------------------
+DROP TABLE IF EXISTS `account_mailstatus_deprecated`;
+CREATE TABLE `account_mailstatus_deprecated`  (
+  `message_id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `account_id` int UNSIGNED NOT NULL DEFAULT 0,
+  `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `status` int NULL DEFAULT NULL,
+  `letterid` int NULL DEFAULT NULL,
+  PRIMARY KEY (`message_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 180160 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping structure for table tw_logon.shop_coins
-DROP TABLE IF EXISTS `shop_coins`;
-CREATE TABLE IF NOT EXISTS `shop_coins` (
-  `id` int(10) unsigned NOT NULL,
-  `coins` int(11) NOT NULL DEFAULT '0',
+-- ----------------------------
+-- Table structure for account_mailstatus_deprecated_archive
+-- ----------------------------
+DROP TABLE IF EXISTS `account_mailstatus_deprecated_archive`;
+CREATE TABLE `account_mailstatus_deprecated_archive`  (
+  `message_id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `account_id` int UNSIGNED NOT NULL DEFAULT 0,
+  `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `status` int NULL DEFAULT NULL,
+  `letterid` int NULL DEFAULT NULL,
+  PRIMARY KEY (`message_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 151402 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for account_muted
+-- ----------------------------
+DROP TABLE IF EXISTS `account_muted`;
+CREATE TABLE `account_muted`  (
+  `muteid` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL DEFAULT 0 COMMENT 'Account id',
+  `mutedate` bigint NOT NULL DEFAULT 0,
+  `unmutedate` bigint NOT NULL DEFAULT 0,
+  `mutedby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `mutereason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`, `mutedate`) USING BTREE,
+  UNIQUE INDEX `banid`(`muteid`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 2011 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Mute History' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for account_twofactor_allowed
+-- ----------------------------
+DROP TABLE IF EXISTS `account_twofactor_allowed`;
+CREATE TABLE `account_twofactor_allowed`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+  `account_id` int UNSIGNED NULL DEFAULT NULL,
+  `expires_at` bigint UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 753 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping data for table tw_logon.shop_coins: ~0 rows (approximately)
-/*!40000 ALTER TABLE `shop_coins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shop_coins` ENABLE KEYS */;
+-- ----------------------------
+-- Table structure for antispam_blacklist
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_blacklist`;
+CREATE TABLE `antispam_blacklist`  (
+  `word` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `regex` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`word`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for antispam_client
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_client`;
+CREATE TABLE `antispam_client`  (
+  `Regex` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `Note` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`Regex`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping structure for table tw_logon.shop_coins_history
+-- ----------------------------
+-- Table structure for antispam_replacement
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_replacement`;
+CREATE TABLE `antispam_replacement`  (
+  `from` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `to` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`from`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for antispam_scores
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_scores`;
+CREATE TABLE `antispam_scores`  (
+  `word` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `score` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `type` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`word`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for antispam_unicode
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_unicode`;
+CREATE TABLE `antispam_unicode`  (
+  `from` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  `to` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`from`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Table structure for antispam_unicode_replacement
+-- ----------------------------
+DROP TABLE IF EXISTS `antispam_unicode_replacement`;
+CREATE TABLE `antispam_unicode_replacement`  (
+  `from` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  `to` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`from`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Table structure for config
+-- ----------------------------
+DROP TABLE IF EXISTS `config`;
+CREATE TABLE `config`  (
+  `id` int NOT NULL,
+  `value` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `comment` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for fingerprint_autoban
+-- ----------------------------
+DROP TABLE IF EXISTS `fingerprint_autoban`;
+CREATE TABLE `fingerprint_autoban`  (
+  `fingerprint` bigint NOT NULL DEFAULT 0 COMMENT 'Account id',
+  `banreason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Unknown',
+  PRIMARY KEY (`fingerprint`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Fingerprint Ban List' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for fingerprint_banned
+-- ----------------------------
+DROP TABLE IF EXISTS `fingerprint_banned`;
+CREATE TABLE `fingerprint_banned`  (
+  `fingerprint` bigint NOT NULL DEFAULT 0 COMMENT 'Account id',
+  `bandate` bigint NOT NULL DEFAULT 0,
+  `unbandate` bigint NOT NULL DEFAULT 0,
+  `bannedby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `banreason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`fingerprint`, `bandate`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Fingerprint Ban List' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for geoip
+-- ----------------------------
+DROP TABLE IF EXISTS `geoip`;
+CREATE TABLE `geoip`  (
+  `network_start_integer` int NULL DEFAULT NULL,
+  `network_last_integer` int NULL DEFAULT NULL,
+  `geoname_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `registered_country_geoname_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `represented_country_geoname_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `is_anonymous_proxy` int NULL DEFAULT NULL,
+  `is_satellite_provider` int NULL DEFAULT NULL,
+  `postal_code` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `latitude` double NULL DEFAULT NULL,
+  `longitude` double NULL DEFAULT NULL,
+  `accuracy_radius` int NULL DEFAULT NULL,
+  INDEX `ip_start`(`network_start_integer`) USING BTREE,
+  INDEX `ip_end`(`network_last_integer`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for gp_history
+-- ----------------------------
+DROP TABLE IF EXISTS `gp_history`;
+CREATE TABLE `gp_history`  (
+  `account_id` int UNSIGNED NOT NULL,
+  `code` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`account_id`, `code`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for hwprint_marks
+-- ----------------------------
+DROP TABLE IF EXISTS `hwprint_marks`;
+CREATE TABLE `hwprint_marks`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `extendedPrint` bigint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ip_banned
+-- ----------------------------
+DROP TABLE IF EXISTS `ip_banned`;
+CREATE TABLE `ip_banned`  (
+  `ip` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0.0.0.0',
+  `bandate` int NOT NULL,
+  `unbandate` int NOT NULL,
+  `bannedby` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '[Console]',
+  `banreason` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'no reason',
+  PRIMARY KEY (`ip`, `bandate`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Banned IPs' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for migrations
+-- ----------------------------
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE `migrations`  (
+  `Id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+  `Hash` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+  `AppliedAt` datetime NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rbac_account_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `rbac_account_permissions`;
+CREATE TABLE `rbac_account_permissions`  (
+  `account_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  `granted` tinyint UNSIGNED NOT NULL DEFAULT 1,
+  PRIMARY KEY (`account_id`, `permission_id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Table structure for rbac_command_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `rbac_command_permissions`;
+CREATE TABLE `rbac_command_permissions`  (
+  `command` varchar(128) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `permission_id` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`command`, `permission_id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rbac_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `rbac_permissions`;
+CREATE TABLE `rbac_permissions`  (
+  `id` int UNSIGNED NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for realmcharacters
+-- ----------------------------
+DROP TABLE IF EXISTS `realmcharacters`;
+CREATE TABLE `realmcharacters`  (
+  `realmid` int UNSIGNED NOT NULL DEFAULT 0,
+  `acctid` bigint UNSIGNED NOT NULL,
+  `numchars` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`realmid`, `acctid`) USING BTREE,
+  INDEX `acctid`(`acctid`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Realm Character Tracker' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for realmlist
+-- ----------------------------
+DROP TABLE IF EXISTS `realmlist`;
+CREATE TABLE `realmlist`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `address` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '127.0.0.1',
+  `port` int NOT NULL DEFAULT 8085,
+  `icon` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `realmflags` tinyint UNSIGNED NOT NULL DEFAULT 2 COMMENT 'Supported masks: 0x1 (invalid, not show in realm list), 0x2 (offline, set by mangosd), 0x4 (show version and build), 0x20 (new players), 0x40 (recommended)',
+  `timezone` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `allowedSecurityLevel` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  `population` float UNSIGNED NOT NULL DEFAULT 0,
+  `realmbuilds` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '5875',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `idx_name`(`name`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 56 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Realm System' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for shop_coins
+-- ----------------------------
+DROP TABLE IF EXISTS `shop_coins`;
+CREATE TABLE `shop_coins`  (
+  `id` int UNSIGNED NOT NULL,
+  `coins` int NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for shop_coins_history
+-- ----------------------------
 DROP TABLE IF EXISTS `shop_coins_history`;
-CREATE TABLE IF NOT EXISTS `shop_coins_history` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) unsigned NOT NULL,
-  `points` int(11) NOT NULL,
-  `actual_points` int(11) NOT NULL,
-  `new_points` int(11) NOT NULL,
-  `type` varchar(256) NOT NULL,
-  `system` varchar(256) NOT NULL,
-  `reference` varchar(256) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `shop_coins_history`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `account_id` int UNSIGNED NOT NULL,
+  `points` int NOT NULL,
+  `actual_points` int NOT NULL,
+  `new_points` int NOT NULL,
+  `type` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `system` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `reference` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 16643 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping data for table tw_logon.shop_coins_history: ~0 rows (approximately)
-/*!40000 ALTER TABLE `shop_coins_history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shop_coins_history` ENABLE KEYS */;
-
-
--- Dumping structure for table tw_logon.shop_diff
+-- ----------------------------
+-- Table structure for shop_diff
+-- ----------------------------
 DROP TABLE IF EXISTS `shop_diff`;
-CREATE TABLE IF NOT EXISTS `shop_diff` (
-  `guid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `accountid` int(11) unsigned NOT NULL DEFAULT '0',
-  `prev_bonus` int(11) NOT NULL,
-  `new_bonus` int(11) NOT NULL,
-  `date` int(11) unsigned NOT NULL DEFAULT '0',
-  `query` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+CREATE TABLE `shop_diff`  (
+  `guid` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `accountid` int UNSIGNED NOT NULL DEFAULT 0,
+  `prev_bonus` int NOT NULL,
+  `new_bonus` int NOT NULL,
+  `date` int UNSIGNED NOT NULL DEFAULT 0,
+  `query` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`guid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 824805 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
--- Dumping data for table tw_logon.shop_diff: 0 rows
-/*!40000 ALTER TABLE `shop_diff` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shop_diff` ENABLE KEYS */;
+-- ----------------------------
+-- Table structure for shop_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `shop_logs`;
+CREATE TABLE `shop_logs`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `time` timestamp NOT NULL DEFAULT current_timestamp,
+  `guid` int UNSIGNED NOT NULL DEFAULT 0,
+  `account` int UNSIGNED NOT NULL DEFAULT 0,
+  `item` int UNSIGNED NOT NULL DEFAULT 0,
+  `price` int UNSIGNED NOT NULL DEFAULT 0,
+  `refunded` tinyint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `account`(`account`) USING BTREE,
+  INDEX `time`(`time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 148122 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-
--- Dumping structure for table tw_logon.statistics_online
+-- ----------------------------
+-- Table structure for statistics_online
+-- ----------------------------
 DROP TABLE IF EXISTS `statistics_online`;
-CREATE TABLE IF NOT EXISTS `statistics_online` (
-  `guid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `online` int(8) unsigned DEFAULT '0',
-  `online_alli` int(8) DEFAULT '0',
-  `online_horde` int(8) DEFAULT '0',
-  `connections` int(8) unsigned DEFAULT '0',
-  `realm` tinyint(3) unsigned DEFAULT '0',
-  `date` int(11) unsigned DEFAULT NULL,
+CREATE TABLE `statistics_online`  (
+  `guid` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `online` int UNSIGNED NULL DEFAULT 0,
+  `online_alli` int UNSIGNED NULL DEFAULT 0,
+  `online_horde` int UNSIGNED NULL DEFAULT 0,
+  `connections` int UNSIGNED NULL DEFAULT 0,
+  `realm` tinyint UNSIGNED NULL DEFAULT 0,
+  `date` int UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`guid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 251561 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping data for table tw_logon.statistics_online: ~0 rows (approximately)
-/*!40000 ALTER TABLE `statistics_online` DISABLE KEYS */;
-/*!40000 ALTER TABLE `statistics_online` ENABLE KEYS */;
+-- ----------------------------
+-- Table structure for statistics_online_old
+-- ----------------------------
+DROP TABLE IF EXISTS `statistics_online_old`;
+CREATE TABLE `statistics_online_old`  (
+  `guid` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `online` int UNSIGNED NULL DEFAULT 0,
+  `online_alli` int NULL DEFAULT 0,
+  `online_horde` int NULL DEFAULT 0,
+  `connections` int UNSIGNED NULL DEFAULT 0,
+  `realm` tinyint UNSIGNED NULL DEFAULT 0,
+  `date` int UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`guid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 201668 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-
--- Dumping structure for table tw_logon.uptime
-DROP TABLE IF EXISTS `uptime`;
-CREATE TABLE IF NOT EXISTS `uptime` (
-  `realmid` int(11) unsigned NOT NULL,
-  `starttime` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `startstring` varchar(64) NOT NULL DEFAULT '',
-  `uptime` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `onlineplayers` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `maxplayers` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `revision` varchar(255) NOT NULL DEFAULT 'Turtle WoW',
-  PRIMARY KEY (`realmid`,`starttime`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
-
-
+-- ----------------------------
+-- Table structure for system_fingerprint_usage
+-- ----------------------------
 DROP TABLE IF EXISTS `system_fingerprint_usage`;
-CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
-    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `fingerprint` INT(10) UNSIGNED NOT NULL,
-    `account` INT(10) UNSIGNED NOT NULL,
-    `ip` VARCHAR(16) NOT NULL COLLATE 'utf8_general_ci',
-    `realm` INT(10) UNSIGNED NOT NULL,
-    `time` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    `architecture` VARCHAR(16) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
-    `cputype` VARCHAR(64) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
-    `activecpus` INT(10) UNSIGNED NULL DEFAULT NULL,
-    `totalcpus` INT(10) UNSIGNED NULL DEFAULT NULL,
-    `pagesize` INT(10) UNSIGNED NULL DEFAULT NULL,
-    `timezoneBias` INT(10) UNSIGNED NOT NULL,
-    `largepageMinimum` INT(10) UNSIGNED NOT NULL,
-    `suiteMask` INT(10) UNSIGNED NOT NULL,
-    `mitigationPolicies` INT(10) UNSIGNED NOT NULL,
-    `numberPhysicalPages` INT(10) UNSIGNED NOT NULL,
-    `sharedDataFlags` INT(10) UNSIGNED NOT NULL,
-    `testRestInstruction` BIGINT(20) UNSIGNED NOT NULL,
-    `qpcFrequency` BIGINT(20) NOT NULL,
-    `qpcSystemTimeIncrement` BIGINT(20) UNSIGNED NOT NULL,
-    `unparkedProcessorCount` INT(10) UNSIGNED NOT NULL,
-    `enclaveFeatureMask` INT(10) UNSIGNED NOT NULL,
-    `qpcData` INT(10) UNSIGNED NOT NULL,
-    `osVersion` ENUM('None','WinXP','Win7','Win8','Vista','Win10Up','<Unknown>') NOT NULL DEFAULT '<Unknown>' COLLATE 'utf8_general_ci',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `fingerprint` (`fingerprint`) USING BTREE,
-    INDEX `account` (`account`) USING BTREE,
-    INDEX `ip` (`ip`) USING BTREE
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=8904428
-;
+CREATE TABLE `system_fingerprint_usage`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fingerprint` int UNSIGNED NOT NULL,
+  `account` int UNSIGNED NOT NULL,
+  `ip` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `realm` int UNSIGNED NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp,
+  `architecture` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `cputype` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `activecpus` int UNSIGNED NULL DEFAULT NULL,
+  `totalcpus` int UNSIGNED NULL DEFAULT NULL,
+  `pagesize` int UNSIGNED NULL DEFAULT NULL,
+  `timezoneBias` int UNSIGNED NOT NULL,
+  `largepageMinimum` int UNSIGNED NOT NULL,
+  `suiteMask` int UNSIGNED NOT NULL,
+  `mitigationPolicies` int UNSIGNED NOT NULL,
+  `numberPhysicalPages` int UNSIGNED NOT NULL,
+  `sharedDataFlags` int UNSIGNED NOT NULL,
+  `testRestInstruction` bigint UNSIGNED NOT NULL,
+  `qpcFrequency` bigint NOT NULL,
+  `qpcSystemTimeIncrement` bigint UNSIGNED NOT NULL,
+  `unparkedProcessorCount` int UNSIGNED NOT NULL,
+  `enclaveFeatureMask` int UNSIGNED NOT NULL,
+  `qpcData` int UNSIGNED NOT NULL,
+  `timeZoneId` int UNSIGNED NOT NULL,
+  `osVersion` enum('None','WinXP','Win7','Win8','Vista','Win10Up','<Unknown>') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '<Unknown>',
+  `extendedHash` bigint UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fingerprint`(`fingerprint`) USING BTREE,
+  INDEX `account`(`account`) USING BTREE,
+  INDEX `ip`(`ip`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12866396 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- Dumping data for table tw_logon.uptime: 0 rows
-/*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
-/*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+-- ----------------------------
+-- Table structure for system_fingerprint_usage_archive
+-- ----------------------------
+DROP TABLE IF EXISTS `system_fingerprint_usage_archive`;
+CREATE TABLE `system_fingerprint_usage_archive`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fingerprint` int UNSIGNED NOT NULL,
+  `account` int UNSIGNED NOT NULL,
+  `ip` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `realm` int UNSIGNED NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp,
+  `architecture` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `cputype` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `activecpus` int UNSIGNED NULL DEFAULT NULL,
+  `totalcpus` int UNSIGNED NULL DEFAULT NULL,
+  `pagesize` int UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fingerprint`(`fingerprint`) USING BTREE,
+  INDEX `account`(`account`) USING BTREE,
+  INDEX `ip`(`ip`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 122489 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for uptime
+-- ----------------------------
+DROP TABLE IF EXISTS `uptime`;
+CREATE TABLE `uptime`  (
+  `realmid` int UNSIGNED NOT NULL,
+  `starttime` bigint UNSIGNED NOT NULL DEFAULT 0,
+  `startstring` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `uptime` bigint UNSIGNED NOT NULL DEFAULT 0,
+  `onlineplayers` smallint UNSIGNED NOT NULL DEFAULT 0,
+  `maxplayers` smallint UNSIGNED NOT NULL DEFAULT 0,
+  `revision` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Turtle WoW',
+  PRIMARY KEY (`realmid`, `starttime`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Uptime system' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Function structure for account_balance_update
+-- ----------------------------
+DROP FUNCTION IF EXISTS `account_balance_update`;
+delimiter ;;
+CREATE FUNCTION `account_balance_update`(`AccountID` int,`Price` int)
+ RETURNS int(11)
+BEGIN
+    SELECT `coins` INTO @CoinCount FROM `shop_coins` WHERE `id`= AccountID FOR UPDATE;
+    IF @CoinCount >= Price THEN
+        UPDATE `shop_coins` SET `coins` = `coins` - Price WHERE `id` = AccountID;
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+	  RETURN 0;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table shop_coins
+-- ----------------------------
+DROP TRIGGER IF EXISTS `shop_insert`;
+delimiter ;;
+CREATE TRIGGER `shop_insert` AFTER INSERT ON `shop_coins` FOR EACH ROW BEGIN
+INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (0, NEW.coins, NEW.id, UNIX_TIMESTAMP(now()), "INSERT");
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table shop_coins
+-- ----------------------------
+DROP TRIGGER IF EXISTS `shop_update`;
+delimiter ;;
+CREATE TRIGGER `shop_update` AFTER UPDATE ON `shop_coins` FOR EACH ROW BEGIN
+IF OLD.coins != NEW.coins THEN  
+INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (OLD.coins, NEW.coins, NEW.id, UNIX_TIMESTAMP(now()), "UPDATE");
+END IF;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table shop_coins
+-- ----------------------------
+DROP TRIGGER IF EXISTS `shop_delete`;
+delimiter ;;
+CREATE TRIGGER `shop_delete` AFTER DELETE ON `shop_coins` FOR EACH ROW BEGIN
+INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (OLD.coins, 0, OLD.id, UNIX_TIMESTAMP(now()), "DELETE");
+END
+;;
+delimiter ;
+
+SET FOREIGN_KEY_CHECKS = 1;
