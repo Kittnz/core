@@ -50,3 +50,6 @@ DELETE FROM creature_movement WHERE id=2578421;
 DELETE FROM game_event_creature WHERE guid=2578421;
 DELETE FROM game_event_creature_data WHERE guid=2578421;
 DELETE FROM creature_battleground WHERE guid=2578421;
+
+-- Changes by VOJI
+REPLACE INTO `creature` VALUES (2578422,61627,0,0,0,0,-8864.92,-227.909,81.4348,4.26977,120,120,0,100,100,0,0,0);
