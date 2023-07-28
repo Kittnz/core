@@ -3033,7 +3033,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
         });
 
-        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
+        DoAfterTime(NertBlastenton, 21 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = NertBlastenton]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3043,7 +3043,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
         });
 
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
+        DoAfterTime(LeytiQuicktongue, 23 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = LeytiQuicktongue]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3053,7 +3053,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterTextEmote("Leyti Quicktongue bows silently.");
         });
 
-        DoAfterTime(pPlayer, 31 * IN_MILLISECONDS,
+        DoAfterTime(WizetteIcewhistle, 31 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = WizetteIcewhistle]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3063,7 +3063,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
         });
 
-        DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
+        DoAfterTime(AmriDemondeal, 39 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = AmriDemondeal]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3073,7 +3073,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
         });
 
-        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
+        DoAfterTime(SpratNozzleton, 48 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = SpratNozzleton]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3083,7 +3083,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
         });
 
-        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 53 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3107,7 +3107,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
 
     if (pQuest->GetQuestId() == QUEST_ME_NOT_ANY_KIND_OF_ORC)
     {
-        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 2 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3117,7 +3117,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             me->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
-        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 8 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3128,7 +3128,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
         });
 
 
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3139,7 +3139,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
         });
 
 
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3150,7 +3150,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             me->MonsterTextEmote("Nert Blastentom smiles.");
         });
 
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3159,12 +3159,9 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             me->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
         });
 
-        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS,
-            [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
+        DoAfterTime(pQuestGiver, 35 * IN_MILLISECONDS,
+            [me = pQuestGiver]()
         {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return;
-
             me->DespawnOrUnsummon();
         });
     }
@@ -3274,7 +3271,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 1 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3284,7 +3281,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             me->MonsterSayToPlayer("My sister was on that wagon!", player);
         });
 
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 5 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3293,7 +3290,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             me->MonsterSayToPlayer("We all knew there was a risk, but... she was practically here already! It could have been any of us!", player);
         });
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 10 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3303,7 +3300,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             me->MonsterSayToPlayer("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!", player);
         });
 
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 15 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3313,7 +3310,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             me->MonsterSayToPlayer("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.", player);
         });
 
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 20 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3323,7 +3320,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             me->MonsterSayToPlayer("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.", player);
         });
 
-        DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 25 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3339,7 +3336,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 2 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3352,7 +3349,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
         });
 
 
-        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 8 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3363,7 +3360,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
         });
 
 
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 14 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3374,7 +3371,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
         });
 
 
-        DoAfterTime(pPlayer, 19 * IN_MILLISECONDS,
+        DoAfterTime(pCreature, 19 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pCreature]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -3423,12 +3420,9 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             Alisha->GetMotionMaster()->MovePoint(0, -5831.14F, -4119.65F, 387.77F, 0, 3.0F);
             Alisha->SetWalk(false);
 
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
+            DoAfterTime(Alisha, 25 * IN_MILLISECONDS,
                 [playerGuid = pPlayer->GetObjectGuid(), me = Alisha]()
             {
-                auto player = ObjectAccessor::FindPlayer(playerGuid);
-                if (!player) return;
-
                 me->DespawnOrUnsummon();
             });
         }
@@ -3581,12 +3575,9 @@ bool GOHello_go_crypt_door(Player* pPlayer, GameObject* pGo)
         pGo->UseDoorOrButton();
         pGo->SummonCreature(NPC_TOMB_SHADOW, 1626.74F, 1698.38F, 146.65F, 5.708F, TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [playerGuid = pPlayer->GetObjectGuid(), me = pGo]()
+        DoAfterTime(pGo, 10 * IN_MILLISECONDS,
+            [me = pGo]()
         {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return;
-
             me->ResetDoorOrButton();
         });
     }
@@ -3786,11 +3777,14 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         DoAfterTime(pPlayer, 7 * IN_MILLISECONDS,
             [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
         {
-            Map* map = sMapMgr.FindMap(1);
+            Map* map = player->GetMap();
+            if (!map)
+                return;
+
             Creature* creature = map->GetCreature(CreatureGuid);
             Creature* sturk_mob = map->GetCreature(sturkGuid);
 
-            if (!creature || !sturkGuid)
+            if (!creature || !sturk_mob)
                 return;
 
             creature->Attack(sturk_mob, true);
@@ -3801,11 +3795,8 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         });
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS,
-            [playerGuid = pPlayer->GetObjectGuid(), me = sturk]()
+            [ me = sturk]()
         {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return;
-
             me->MonsterSay("Hey, hey, not the face man!");
             me->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
             me->SetWalk(false);
@@ -3814,9 +3805,16 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         DoAfterTime(pPlayer, 11 * IN_MILLISECONDS,
             [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
         {
-            Map* map = sMapMgr.FindMap(1);
+            Map* map = player->GetMap();
+            if (!map)
+                return;
+
             Creature* creature = map->GetCreature(CreatureGuid);
             Creature* sturk_mob = map->GetCreature(sturkGuid);
+
+            if (!creature || !sturk_mob)
+                return;
+
 
             creature->ForcedDespawn(300);
             sturk_mob->ForcedDespawn(300);
@@ -4275,7 +4273,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
     if (pQuest->GetQuestId() == 80393)
     {
 
-        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -4285,7 +4283,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Loania and her sister Lieren are the daughters of a Human paladin named Dougan. I have known Dougan since the Second war when we fought the Horde together.", player);
         });
 
-        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 9 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -4295,7 +4293,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("During the Second war, Dougan, myself, and a dwarf of the Wildhammer clan known as Kardan were close companions. After the war, Dougan and his wife Adena settled down in Grand Hamlet. ", player);
         });
 
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -4305,7 +4303,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("Grand Hamlet later fell under a curse and became known as Darkshire, but I digress. One day, Dougan heard reports of villagers disappearing in the nearby cursed tower known as Karazhan. He summoned Kardan and I, and together we entered the tower to attempt a rescue.", player);
         });
 
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 23 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -4315,7 +4313,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             me->MonsterSayToPlayer("It didn't go well, Karazhan was far more treacherous than we could have anticipated... Dougan didn't make it, and his wife subsequently lost the will to live. Kardan and I each adopted one of his infant twin daughters and raised them as our own.", player);
         });
 
-        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
+        DoAfterTime(pQuestGiver, 30 * IN_MILLISECONDS,
             [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]()
         {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
@@ -4347,12 +4345,9 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
 
             Creature* chromie = pGo->SummonCreature(65019, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
-            DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+            DoAfterTime(chromie, 2 * IN_MILLISECONDS,
                 [playerGuid = pPlayer->GetObjectGuid(), me = chromie]()
             {
-                auto player = ObjectAccessor::FindPlayer(playerGuid);
-                if (!player) return;
-
                 me->HandleEmote(EMOTE_ONESHOT_TALK);
                 me->MonsterSay("We need to talk!");
             });
@@ -4395,11 +4390,9 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
         if (Taupo && Taupo->IsAlive())
         {
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
+            DoAfterTime(Taupo, 3 * IN_MILLISECONDS,
                 [playerGuid = pPlayer->GetObjectGuid(), me = Taupo]()
             {
-                auto player = ObjectAccessor::FindPlayer(playerGuid);
-                if (!player) return;
 
                me->HandleEmote(EMOTE_ONESHOT_TALK);
                me->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
@@ -4855,19 +4848,19 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 80708) // Scarlet Aid
     {
-        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 2 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
             me->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 10 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
             me->MonsterSayToPlayer("The issue is she'd go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
             me->MonsterSayToPlayer("Last I heard she was in Tyr's Hand, but if there's a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
-        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 28 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
             me->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
@@ -4903,35 +4896,31 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
         maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
-        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return
+        DoAfterTime(maverick, 40 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             me->SummonCreature(50680, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             me->SummonGameObject(2005011, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
             });
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+        DoAfterTime(maverick, 41 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return
+            if (!player) return;
+
             me->MonsterSayToPlayer("A trap! It's a trap!", player);
             me->SummonCreature(50680, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
+        DoAfterTime(maverick, 44 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return
+            if (!player) return;
+
             me->MonsterSayToPlayer("I feel... weird.", player);
             me->CastSpell(me, 25148, true);
             me->HandleEmote(EMOTE_STATE_SLEEP);
             me->SetStandState(UNIT_STAND_STATE_SLEEP);
             me->SummonCreature(50682, 2558.14F, -663.63F, 88.68F, 2.19F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return
+        DoAfterTime(maverick, 53 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             me->SummonCreature(50681, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 54 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
-            auto player = ObjectAccessor::FindPlayer(playerGuid);
-            if (!player) return;
+        DoAfterTime(maverick, 54 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             me->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
@@ -5149,19 +5138,19 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
         if (spanessa && brizclang)
         {
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_TALK);
                 me->MonsterSayToPlayer("Finally, I can sleep in a real bed!", player);
                 });
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_CHEER);
                 me->MonsterSayToPlayer("Well, maybe we can get back to sailing soon, after a nice break! Thanks!", player);
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
+            DoAfterTime(pQuestGiver, 5 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_WAVE);
@@ -5192,11 +5181,13 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS, [ npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 1449, false);
             });
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
             npc->MonsterSayToPlayer("That certainly was challenging, but I have finished my work, the key should be enchanted.", player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
@@ -5280,11 +5271,15 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
 
     if (pQuest->GetQuestId() == 55043) // The Brightwater Logs
     {
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
             npc->HandleEmote(EMOTE_ONESHOT_EAT_NOSHEATHE);
             npc->MonsterSayToPlayer("Bottoms up!", player);
             });
-        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
             npc->HandleEmote(EMOTE_ONESHOT_LAUGH);
             npc->MonsterSayToPlayer("Ack- that hits the spot!", player);
             });
@@ -5450,17 +5445,21 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
         pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
-        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 6 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
             npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
             });
-        DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 12 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
+            auto player = ObjectAccessor::FindPlayer(playerGuid);
+            if (!player) return;
             npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
                 player->KilledMonster(cInfo, ObjectGuid());
             });
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS, [npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_NONE);
             });
     }
