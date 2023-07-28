@@ -113,3 +113,11 @@ UPDATE `spell_template` SET name = 'Plans: Thorium Belt Buckle'	WHERE entry = 57
 UPDATE `spell_template` SET name = 'Plans: Arcanite Belt Buckle' WHERE entry = 57177;
 UPDATE `spell_template` SET name = 'Plans: Dreamsteel Belt Buckle' WHERE entry = 57180;
 UPDATE `spell_template` SET name = 'Plans: Bloody Belt Buckle' WHERE entry = 57195;
+
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57182;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57179;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57176;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57173;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57170;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57167;
+UPDATE `spell_template` SET `equippedItemClass` = 4, `equippedItemSubClassMask` = 31, `equippedItemInventoryTypeMask` = 64 WHERE `entry` = 57164;
