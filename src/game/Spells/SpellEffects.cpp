@@ -640,6 +640,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                     return;
                 }
+                case 32061: // EPL PvP A Game of Towers: (TXT) ToWoW - Tower Kill Credit (DND)
+                {
+                    if (Player* pPlayer = ToPlayer(m_casterUnit))
+                        if (Creature* pCreature = ToCreature(unitTarget))
+                            pPlayer->KilledMonsterCredit(pCreature->GetEntry(), 0);
+
+                    return;
+                }
                 case 23383: // Alliance Flag Click
                 case 23384: // Horde Flag Click
                 {
@@ -6114,6 +6122,29 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     {
                         pPlayerTarget->CastSpell(pPlayerTarget, PickRandomValue(29705, 29726, 29727), false);
                     }
+                    return;
+                }
+                case 30882: // EPL PvP A Game of Towers: Tower Capture Test (DND)
+                {
+                    std::list<Player*> players;
+                    m_casterUnit->GetAlivePlayerListInRange(m_casterUnit, players, VISIBILITY_DISTANCE_NORMAL);
+                    for (const auto& pTarget : players)
+                    {
+                        if (!pTarget->IsFriendlyTo(m_casterUnit))
+                            continue;
+
+                        if (!pTarget->IsOutdoorPvPActive())
+                            continue;
+
+                        pTarget->CastSpell(pTarget, 31929, true);
+                    }
+                    return;
+                }
+                case 31929: // EPL PvP A Game of Towers: Tower Capture (DND)
+                {
+                    if (Player* pTarget = ToPlayer(unitTarget))
+                        pTarget->CastSpell(pTarget, 32061, true);
+
                     return;
                 }
             }
