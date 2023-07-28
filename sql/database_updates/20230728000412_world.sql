@@ -707,3 +707,10 @@ UPDATE `quest_template` SET `ObjectiveText1` = 'Win a battle in Blood Ring' WHER
 -- UPDATE `creature` SET `spawntimesecsmin` = 120, `spawntimesecsmax` = 120 WHERE `guid` = 2578350;
 -- UPDATE `creature` SET `spawntimesecsmin` = 120, `spawntimesecsmax` = 120 WHERE `guid` = 2574947;
 -- UPDATE `creature` SET `spawntimesecsmin` = 120, `spawntimesecsmax` = 120 WHERE `guid` = 2574949;
+
+-- Change the spell attached to the enchant given from Iron Belt Buckle to spell 48029  , change text on enchanted item to "+25 Armor Penetration" , change spelltext to "Attaches a buckle to your belt that increases your armor penetration by 25."
+
+-- Change the spell attached to the enchant given from Dreamsteel Belt Buckle to spell 9106 , change text on enchanted item to "+10 Intellect", change spelltext to "Attaches a buckle to your belt that increases your intellect by 10."
+
+UPDATE `spell_template` SET `description` = 'Attaches a buckle to your belt that increases your armor penetration by 25.' WHERE `entry` = 57170;
+UPDATE `spell_template` SET `description` = 'Attaches a buckle to your belt that increases your intellect by 10.' WHERE `entry` = 57182;
