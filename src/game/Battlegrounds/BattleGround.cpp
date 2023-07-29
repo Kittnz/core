@@ -746,7 +746,7 @@ void BattleGround::EndBattleGround(Team winner)
         BlockMovement(pPlayer);
 
         // Complete Victory on Blood Ring quest:
-        if (bgTypeID == BATTLEGROUND_BR && pPlayer->GetQuestStatus(41110) == QUEST_STATUS_INCOMPLETE)
+        if (bgTypeID == BATTLEGROUND_BR && pPlayer->GetQuestStatus(41110) == QUEST_STATUS_INCOMPLETE && winner)
         {
            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60051))
                 pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
