@@ -6174,7 +6174,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 {
                     if (m_casterUnit->IsInWater() || !m_casterUnit->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) || 
                         m_caster->GetZoneId() == 1519 || m_caster->GetZoneId() == 1637 || m_caster->GetZoneId() == 1497 || m_caster->GetZoneId() == 1537 ||
-                        m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetInstanceId())
+                        m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetMap()->IsDungeon())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't build here.");
                         return SPELL_FAILED_DONT_REPORT;
