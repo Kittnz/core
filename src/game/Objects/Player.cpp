@@ -670,7 +670,8 @@ Player::Player(WorldSession *session) : Unit(),
 Player::~Player()
 {
     // Clear all pointers to this player in all zone scripts
-    sZoneScriptMgr.OnPlayerGettingDestroyed(this);
+    if (m_uint32Values)
+        sZoneScriptMgr.OnPlayerGettingDestroyed(this);
 
     DeletePacketBroadcaster();
     RemoveAI();
