@@ -885,3 +885,7 @@ UPDATE `creature_template` SET `trainer_class` = 9 WHERE `entry` = 61633;
 UPDATE `creature_template` SET `trainer_class` = 9 WHERE `entry` = 61634;
 UPDATE `creature_template` SET `trainer_class` = 9 WHERE `entry` = 61635;
 UPDATE `creature_template` SET `trainer_class` = 9 WHERE `entry` = 61636;
+
+-- Spell 57109 Emerald Blessing (learn) is attached to item 61445 (Purified Emerald Essence) when using the item the spell highlights the cursor, and can be targeted on other players. The spell doesn't actually teach to anyone but the caster, but please remove the cursor selector and make it so it auto casts on the player. 
+
+UPDATE `spell_template` SET `targets` = 0 WHERE `entry` = 57109;
