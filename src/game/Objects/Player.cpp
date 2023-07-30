@@ -22927,7 +22927,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
         case 50:
             sWorld.SendWorldTextChecked(50301, [level](Player* player) -> bool
             {
-                uint32 minLevel = 60;
+                uint32 minLevel = 40;
                 auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
                 if (levelCheck.has_value())
                     minLevel = std::atoi(levelCheck.value().c_str());
