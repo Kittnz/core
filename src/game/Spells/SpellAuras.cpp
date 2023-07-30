@@ -6851,7 +6851,6 @@ void Aura::PeriodicDummyTick()
                     if (distance < 10 || distance > 100)
                         return;
 
-                    target->SendSpellGo(pSelection, 100); // todo: remove in 1.16.6
                     target->CastSpell(pSelection, 45871, false);
 
                     return;
