@@ -17,3 +17,5 @@ UPDATE creature_template SET faction = '29' WHERE entry = '4544';
 UPDATE creature_template SET faction = '126' WHERE entry = '11818';
 UPDATE creature_template SET faction = '68' WHERE entry = '11752';
 UPDATE creature_template SET faction = '125' WHERE entry = '7777';
+UPDATE creature_template SET faction = '104' WHERE entry = '11407';
+UPDATE creature_template SET faction = '35' WHERE entry = '11407';
