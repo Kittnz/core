@@ -19,3 +19,6 @@ UPDATE creature_template SET faction = '68' WHERE entry = '11752';
 UPDATE creature_template SET faction = '125' WHERE entry = '7777';
 UPDATE creature_template SET faction = '104' WHERE entry = '11407';
 UPDATE creature_template SET faction = '35' WHERE entry = '11407';
+
+-- Changes by VOJI
+REPLACE INTO `creature` VALUES (2578456,2386,0,0,0,0,-1086.54,-529.539,6.80358,3.18728,120,120,0,100,100,0,0,0);
