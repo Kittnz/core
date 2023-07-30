@@ -4064,7 +4064,7 @@ bool ChatHandler::HandleBanInfoAccountCommand(char* args)
         return false;
 
     std::string accountName;
-    uint32 accountId = ExtractAccountId(&args, &accountName);
+    uint32 accountId = ExtractAccountId(&args, &accountName, nullptr, false);
     if (!accountId)
         return false;
 
