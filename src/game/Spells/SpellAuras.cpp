@@ -1815,6 +1815,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 47357: // Calming River
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 5000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -6848,6 +6854,12 @@ void Aura::PeriodicDummyTick()
                     target->SendSpellGo(pSelection, 100); // todo: remove in 1.16.6
                     target->CastSpell(pSelection, 45871, false);
 
+                    return;
+                }
+                case 47357: // Calming River
+                {
+                    if (target->HasAura(45527))
+                        target->CastSpell(target, 47358, true, nullptr, this);
                     return;
                 }
             }
