@@ -199,6 +199,7 @@ enum ObjectSpawnFlags
   SPAWN_FLAG_EVADE_OUT_HOME_AREA = 0x20, // creature only
   SPAWN_FLAG_NOT_VISIBLE = 0x40,         // creature only
   SPAWN_FLAG_DEAD = 0x80,                // creature only
+  SPAWN_FLAG_NO_DYNAMIC_RESPAWN = 0x100, // creature only
 };
 
 // [-ZERO] Need check and update
