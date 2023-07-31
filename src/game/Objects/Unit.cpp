@@ -811,6 +811,12 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             if (pPlayer->IsGod())
                 return 0;
 
+        if (auto player = pVictim->ToPlayer(); player && player->IsHardcore() && sWorld.HitsDiffThreshold())
+        {
+            //don't deal damage nor kill.
+            return 0;
+        }
+
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage: victim just died");
         Kill(pVictim, spellProto, durabilityLoss); // Function too long, we cut
         // last damage from non m_duel opponent or opponent controlled creature

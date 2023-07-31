@@ -5882,7 +5882,9 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 
     if (GetSession() && GetSession()->GetSecurity() >= SEC_MODERATOR)
     {
-        PSendSysMessage("Server diff: %u ms", sWorld.GetLastDiff());
+        PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
+        PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
+        PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());
