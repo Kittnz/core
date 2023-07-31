@@ -1180,7 +1180,7 @@ virtual uint32 GetLevel() const = 0;
         DynamicObject* GetDynObject(uint32 spellId) const;
         void AddDynObject(DynamicObject* dynObj);
         void RemoveDynObject(uint32 spellid);
-        void RemoveDynObjectWithGUID(ObjectGuid guid) { m_dynObjGUIDs.remove(guid); }
+        void RemoveDynObjectWithGUID(ObjectGuid guid);
         void RemoveAllDynObjects();
 
         // Event handler
@@ -1217,8 +1217,7 @@ virtual uint32 GetLevel() const = 0;
 
         uint32 m_summonLimitAlert;                          // Timer to alert GMs if a creature is at the summon limit
 
-        typedef std::list<ObjectGuid> DynObjectGUIDs;
-        DynObjectGUIDs m_dynObjGUIDs;
+        std::vector<ObjectGuid> m_spellDynObjects;
 
         std::array<Spell*, CURRENT_MAX_SPELL> m_currentSpells{};
         uint32 m_castCounter = 0;                           // count casts chain of triggered spells for prevent infinity cast crashes

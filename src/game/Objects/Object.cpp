@@ -5201,7 +5201,7 @@ void WorldObject::FinishSpell(CurrentSpellTypes spellType, bool ok /*= true*/)
 
 void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut) const
 {
-    for (auto const& guid : m_dynObjGUIDs)
+    for (auto const& guid : m_spellDynObjects)
     {
         DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
@@ -5214,7 +5214,7 @@ void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, st
 
 DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex) const
 {
-    for (auto const& guid : m_dynObjGUIDs)
+    for (auto const& guid : m_spellDynObjects)
     {
         DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
@@ -5228,7 +5228,7 @@ DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIn
 
 DynamicObject * WorldObject::GetDynObject(uint32 spellId) const
 {
-    for (auto const& guid : m_dynObjGUIDs)
+    for (auto const& guid : m_spellDynObjects)
     {
         DynamicObject* dynObj = GetMap()->GetDynamicObject(guid);
         if (!dynObj)
@@ -5242,37 +5242,49 @@ DynamicObject * WorldObject::GetDynObject(uint32 spellId) const
 
 void WorldObject::AddDynObject(DynamicObject* dynObj)
 {
-    m_dynObjGUIDs.push_back(dynObj->GetObjectGuid());
+    m_spellDynObjects.push_back(dynObj->GetObjectGuid());
     dynObj->SetWorldMask(GetWorldMask()); // Nostalrius : phasing
 }
 
 void WorldObject::RemoveDynObject(uint32 spellid)
 {
-    if (m_dynObjGUIDs.empty())
+    if (m_spellDynObjects.empty())
         return;
-    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+
+    for (auto i = m_spellDynObjects.begin(); i != m_spellDynObjects.end();)
     {
         DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
         if (!dynObj)
-            i = m_dynObjGUIDs.erase(i);
+            i = m_spellDynObjects.erase(i);
         else if (spellid == 0 || dynObj->GetSpellId() == spellid)
         {
             dynObj->Delete();
-            i = m_dynObjGUIDs.erase(i);
+            i = m_spellDynObjects.erase(i);
         }
         else
             ++i;
     }
 }
 
+void WorldObject::RemoveDynObjectWithGUID(ObjectGuid guid)
+{
+    for (auto itr = m_spellDynObjects.begin(); itr != m_spellDynObjects.end();)
+    {
+        if ((*itr) == guid)
+            itr = m_spellDynObjects.erase(itr);
+        else
+            ++itr;
+    }
+}
+
 void WorldObject::RemoveAllDynObjects()
 {
-    while (!m_dynObjGUIDs.empty())
+    for (auto const& guid : m_spellDynObjects)
     {
-        if (DynamicObject* dynObj = GetMap()->GetDynamicObject(*m_dynObjGUIDs.begin()))
+        if (DynamicObject* dynObj = GetMap()->GetDynamicObject(guid))
             dynObj->Delete();
-        m_dynObjGUIDs.erase(m_dynObjGUIDs.begin());
     }
+    m_spellDynObjects.clear();
 }
 
 SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
