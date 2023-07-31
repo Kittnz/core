@@ -2359,10 +2359,13 @@ void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
     if (GetSubtype() != CREATURE_SUBTYPE_GENERIC)
         return;
 
+    if (!data || (data->spawn_flags & SPAWN_FLAG_NO_DYNAMIC_RESPAWN))
+        return;
+
     // Only affects rares and above with the forced flag
     if (GetCreatureInfo()->rank >= CREATURE_ELITE_ELITE)
     {
-        if (!data || !(data->spawn_flags & SPAWN_FLAG_FORCE_DYNAMIC_ELITE))
+        if (!(data->spawn_flags & SPAWN_FLAG_FORCE_DYNAMIC_ELITE))
             return;
     }
 

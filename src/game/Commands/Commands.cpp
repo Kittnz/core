@@ -5018,8 +5018,7 @@ bool ChatHandler::HandleSendItemsHelper(MailDraft& draft, char* args)
 
     // extract items
     typedef std::pair<uint32, uint32> ItemPair;
-    typedef std::vector< ItemPair > ItemPairs;
-    ItemPairs items;
+    std::vector<ItemPair> items;
 
     // get from tail next item str
     while (char* itemStr = ExtractArg(&args))
@@ -5991,7 +5990,7 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
             {
                 if (ItemPrototype const* itemProto = sObjectMgr.GetItemPrototype(sWorld.getConfig(CONFIG_UINT32_PASSWORD_CHANGE_REWARD_ITEM)))
                 {
-                    std::list<PlayerCacheData*> characters;
+                    std::vector<PlayerCacheData*> characters;
                     sObjectMgr.GetPlayerDataForAccount(GetAccountId(), characters);
                     for (auto const& pChar : characters)
                     {
