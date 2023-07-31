@@ -124,3 +124,18 @@ REPLACE INTO `creature` VALUES (2578506,91784,0,0,0,0,-609.489,-2445.42,205.794,
 
 -- Changes by TAMMO
 REPLACE INTO `gameobject` VALUES ( 5016577, 2020058, 1, -2311.32, -298.959, -9.42382, 1.57773, 0, 0, 0.709555, 0.70465, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016577';
+DELETE FROM game_event_gameobject WHERE guid = '5016577';
+DELETE FROM gameobject_battleground WHERE guid = '5016577';
+REPLACE INTO `gameobject` VALUES ( 5016578, 2020059, 1, -2312.18, -296.692, -9.42382, 4.35019, 0, 0, 0.822901, -0.568185, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016578';
+DELETE FROM game_event_gameobject WHERE guid = '5016578';
+DELETE FROM gameobject_battleground WHERE guid = '5016578';
+REPLACE INTO `gameobject` VALUES ( 5016579, 2020058, 1, -2313.44, -296.054, -9.42382, 5.06333, 0, 0, 0.572808, -0.81969, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5016580, 2020059, 1, -2319.04, -297.628, -9.42382, 0.757002, 0, 0, 0.369528, 0.92922, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016580';
+DELETE FROM game_event_gameobject WHERE guid = '5016580';
+DELETE FROM gameobject_battleground WHERE guid = '5016580';
+DELETE FROM gameobject WHERE guid = '5016579';
+DELETE FROM game_event_gameobject WHERE guid = '5016579';
+DELETE FROM gameobject_battleground WHERE guid = '5016579';
