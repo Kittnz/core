@@ -139,3 +139,4 @@ DELETE FROM gameobject_battleground WHERE guid = '5016580';
 DELETE FROM gameobject WHERE guid = '5016579';
 DELETE FROM game_event_gameobject WHERE guid = '5016579';
 DELETE FROM gameobject_battleground WHERE guid = '5016579';
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (897,-5033.862793,503.472870,411.927521,0.610259,0,'gnomereganreclamationfacility');
