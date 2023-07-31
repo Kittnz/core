@@ -1186,7 +1186,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 {
                     sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
                     {
-                        uint32 minLevel = 60;
+                        uint32 minLevel = 40;
                         auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
                         if (levelCheck.has_value())
                             minLevel = std::atoi(levelCheck.value().c_str());
