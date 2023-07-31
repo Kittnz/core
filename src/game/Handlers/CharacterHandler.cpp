@@ -333,7 +333,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     bool have_same_race = false;
     if (!AllowTwoSideAccounts || skipCinematics == CINEMATICS_SKIP_SAME_RACE)
     {
-        std::list<PlayerCacheData*> characters;
+        std::vector<PlayerCacheData*> characters;
         sObjectMgr.GetPlayerDataForAccount(GetAccountId(), characters);
 
         if (!characters.empty())
@@ -357,7 +357,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
 
             // search same race for cinematic or same class if need
             // TODO: check if cinematic already shown? (already logged in?; cinematic field)
-            std::list<PlayerCacheData*>::iterator iter = characters.begin();
+            std::vector<PlayerCacheData*>::iterator iter = characters.begin();
             while (iter != characters.end() && skipCinematics == CINEMATICS_SKIP_SAME_RACE && !have_same_race)
             {
                 acc_race = (*iter)->uiRace;

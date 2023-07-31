@@ -399,8 +399,7 @@ class Guild
         std::unordered_set<uint32> m_onlineMemberCache;
 
         /** These are actually ordered lists. The first element is the oldest entry.*/
-        typedef std::list<GuildEventLogEntry> GuildEventLog;
-        GuildEventLog m_GuildEventLog;
+        std::list<GuildEventLogEntry> m_GuildEventLog;
 
         std::unordered_set<ObjectGuid> m_GmListeners;
 
