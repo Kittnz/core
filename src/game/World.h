@@ -382,6 +382,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME,
     CONFIG_UINT32_AUTO_RESTART_HOUR_MIN,
     CONFIG_UINT32_AUTO_RESTART_HOUR_MAX,
+    CONFIG_UINT32_DIFF_HC_PROTECTION,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -856,7 +857,16 @@ class World
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
 
-        void SetLastDiff(uint32 diff) { m_lastDiff = diff; }
+        void SetLastDiff(uint32 diff);
+        bool HitsDiffThreshold() const;
+
+
+        uint32 GetThresholdFlags() const { return m_diffThresholdHits; }
+
+        uint32 GetAverageDiff() const;
+
+        void CheckDiffProtection();
+
         uint32 GetLastDiff() const { return m_lastDiff; }
 
         /// Get the active session server limit (or security level limitations)
@@ -1200,6 +1210,9 @@ class World
 
         std::unordered_map<uint32, std::unordered_set<std::string>> m_fingerprintAccounts;
 
+        std::vector<uint32> m_lastDiffs;
+
+        uint32 m_diffThresholdHits = 0;
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
         SessionSet m_disconnectedSessions;
