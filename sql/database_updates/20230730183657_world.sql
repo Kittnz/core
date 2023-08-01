@@ -143,3 +143,27 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 
 -- Changes by VOJI
 REPLACE INTO `gameobject` VALUES ( 5016581, 1000001, 0, -11169, 840.83, 40.3507, 4.86981, 0, 0, 0.649319, -0.760517, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016581';
+DELETE FROM game_event_gameobject WHERE guid = '5016581';
+DELETE FROM gameobject_battleground WHERE guid = '5016581';
+REPLACE INTO `gameobject` VALUES ( 5016582, 1000236, 0, -11169.9, 839.555, 40.3894, 1.41013, 0, 0, 0.648083, 0.761569, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016582';
+DELETE FROM game_event_gameobject WHERE guid = '5016582';
+DELETE FROM gameobject_battleground WHERE guid = '5016582';
+REPLACE INTO `gameobject` VALUES ( 5016583, 1000009, 0, -11168.2, 840.168, 40.2042, 0.357696, 0, 0, 0.177896, 0.984049, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016583';
+DELETE FROM game_event_gameobject WHERE guid = '5016583';
+DELETE FROM gameobject_battleground WHERE guid = '5016583';
+
+-- Changes by SHANG
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (898,9366.015625,6141.939453,21.084576,5.602934,1,'shangtest2');
+
+-- Changes by VOJI
+REPLACE INTO `gameobject` VALUES ( 5016584, 1000236, 0, -11168.2, 840.168, 40.2021, 0.357696, 0, 0, 0.177896, 0.984049, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016584';
+DELETE FROM game_event_gameobject WHERE guid = '5016584';
+DELETE FROM gameobject_battleground WHERE guid = '5016584';
+REPLACE INTO `gameobject` VALUES ( 5016585, 1000001, 0, -11166.3, 843.247, 39.9935, 3.57783, 0, 0, 0.976306, -0.216396, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016585';
+DELETE FROM game_event_gameobject WHERE guid = '5016585';
+DELETE FROM gameobject_battleground WHERE guid = '5016585';
