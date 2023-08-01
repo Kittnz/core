@@ -171,3 +171,6 @@ REPLACE INTO `gameobject` VALUES ( 5016586, 1000001, 0, -10991.9, 1809.79, 46.23
 DELETE FROM gameobject WHERE guid = '5016586';
 DELETE FROM game_event_gameobject WHERE guid = '5016586';
 DELETE FROM gameobject_battleground WHERE guid = '5016586';
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2578507,11500,0,0,0,0,-4837.35,640.982,378.473,0.436684,120,120,0,100,100,0,0,0);
