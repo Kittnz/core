@@ -140,3 +140,6 @@ DELETE FROM gameobject WHERE guid = '5016579';
 DELETE FROM game_event_gameobject WHERE guid = '5016579';
 DELETE FROM gameobject_battleground WHERE guid = '5016579';
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (897,-5033.862793,503.472870,411.927521,0.610259,0,'gnomereganreclamationfacility');
+
+-- Changes by VOJI
+REPLACE INTO `gameobject` VALUES ( 5016581, 1000001, 0, -11169, 840.83, 40.3507, 4.86981, 0, 0, 0.649319, -0.760517, 300, 300, 100, 1, 0, 0);
