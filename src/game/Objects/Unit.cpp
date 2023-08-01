@@ -5742,20 +5742,6 @@ uint32 Unit::SpellHealingBonusTaken(WorldObject* pCaster, SpellEntry const* spel
         }
     }
 
-
-    if (HasAura(45707)) // tree of life healing taken aura (Custom)
-    {
-        auto passiveFormAura = sSpellMgr.GetSpellEntry(45706);
-        auto percentage = passiveFormAura->EffectBasePoints[0];
-        auto aura = GetSpellAuraHolder(45707);
-        auto caster = aura->GetCaster();
-
-        if (caster && caster->IsPlayer())
-        {
-            TakenTotal += (caster->GetStat(STAT_SPIRIT) / 100 * percentage);
-        }
-    }
-
     // apply benefit affected by spell power implicit coeffs and spell level penalties
     TakenTotal = SpellBonusWithCoeffs(spellProto, effectIndex, TakenTotal, TakenAdvertisedBenefit, 0, damagetype, false, pCaster, spell);
 
