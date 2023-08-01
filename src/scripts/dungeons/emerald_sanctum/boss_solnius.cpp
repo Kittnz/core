@@ -215,6 +215,7 @@ struct boss_solniusAI : public ScriptedAI
 				case EVENT_GO_TO_SLEEP:
 					if (m_creature->GetStandState() != UNIT_STAND_STATE_SLEEP && m_creature->HealthBelowPct(60))
 					{
+						m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 						m_creature->GetMotionMaster()->MovePoint(MOVEMENT_TO_HOME_AND_SLEEP, m_creature->GetHomePosition().x, m_creature->GetHomePosition().y, m_creature->GetHomePosition().z, MOVE_PATHFINDING, MOVE_WALK_MODE, m_creature->GetHomePosition().o);
 					}
 					else
@@ -451,7 +452,6 @@ struct boss_solniusAI : public ScriptedAI
 				m_creature->AttackStop();
 				m_creature->RemoveAllAttackers();
 				m_creature->SetReactState(REACT_PASSIVE);
-				m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 				m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
 				m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
 				m_creature->AddAura(SPELL_SLEEP_VISUAL);
