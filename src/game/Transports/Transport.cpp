@@ -151,9 +151,7 @@ void Transport::Update(uint32 update_diff, uint32 /*time_diff*/)
         DEBUG_LOG("Transport %u (%s) moved to node %u %u %f %f %f", GetEntry(), GetName(), _currentFrame->Node->index, _currentFrame->Node->mapid, _currentFrame->Node->x, _currentFrame->Node->y, _currentFrame->Node->z);
 
         // Departure event
-        if (_currentFrame->IsTeleportFrame() ||
-        // Also need to teleport if crossing continent instance boundary
-           (GetMapId() == _nextFrame->Node->mapid && GetInstanceId() != sMapMgr.GetContinentInstanceId(_nextFrame->Node->mapid, _nextFrame->Node->x, _nextFrame->Node->y)))
+        if (_currentFrame->IsTeleportFrame())
         {
             if (TeleportTransport(_nextFrame->Node->mapid, _nextFrame->Node->x, _nextFrame->Node->y, _nextFrame->Node->z, _nextFrame->InitialOrientation))
                 return; // Update more in new map thread
@@ -162,6 +160,12 @@ void Transport::Update(uint32 update_diff, uint32 /*time_diff*/)
         {
             SendOutOfRangeUpdateToMap();
             SendCreateUpdateToMap();
+        }
+        // Also need to teleport if crossing continent instance boundary
+        else if (GetMapId() == _currentFrame->Node->mapid && GetInstanceId() != sMapMgr.GetContinentInstanceId(_currentFrame->Node->mapid, _currentFrame->Node->x, _currentFrame->Node->y))
+        {
+            if (TeleportTransport(_currentFrame->Node->mapid, _currentFrame->Node->x, _currentFrame->Node->y, _currentFrame->Node->z, _currentFrame->InitialOrientation))
+                return; // Update more in new map thread
         }
     }
 
