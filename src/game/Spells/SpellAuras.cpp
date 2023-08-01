@@ -4952,10 +4952,21 @@ void Aura::HandleModSpellHealingPercentFromStat(bool /*apply*/, bool /*Real*/)
     ((Player*)GetTarget())->UpdateSpellDamageAndHealingBonus();
 }
 
-void Aura::HandleModHealingDone(bool /*apply*/, bool /*Real*/)
+void Aura::HandleModHealingDone(bool apply, bool /*Real*/)
 {
     if (GetTarget()->GetTypeId() != TYPEID_PLAYER)
         return;
+
+    if (apply)
+    {
+        // Tree of Life Aura
+        if (GetId() == 45707)
+        {
+            if (Unit* pCaster = GetCaster())
+                m_modifier.m_amount = pCaster->GetStat(STAT_SPIRIT);
+        }
+    }
+
     // implemented in Unit::SpellHealingBonusDone
     // this information is for client side only
     ((Player*)GetTarget())->UpdateSpellDamageAndHealingBonus();
