@@ -3100,7 +3100,11 @@ bool World::HitsDiffThreshold() const
 
 uint32 World::GetAverageDiff() const
 {
-    return std::accumulate(m_lastDiffs.begin(), m_lastDiffs.end(), 0) / m_lastDiffs.size();
+    uint32 sum = 0;
+    for (auto i : m_lastDiffs)
+        sum += i;
+
+    return sum / m_lastDiffs.size();
 }
 
 void World::SetPlayerLimit(int32 limit, bool needUpdate)
