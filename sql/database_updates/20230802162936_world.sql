@@ -164,3 +164,6 @@ UPDATE `gameobject_template` SET `displayId` = 33258 WHERE `entry` = 1000236;
 
 UPDATE `gameobject_template` SET `type` = 14 WHERE `entry` = 1000001;
 UPDATE `gameobject_template` SET `type` = 14 WHERE `entry` = 1000236;
+
+DELETE FROM `quest_template` WHERE `entry` = 70059;
+DELETE FROM `creature_template` WHERE `entry` = 70030;
