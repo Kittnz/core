@@ -20679,7 +20679,6 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
 
         RewardBountyHuntKill(pVictim);
-        RewardExpansionPvPQuest(pVictim);
     }    
 }
 
@@ -23062,19 +23061,6 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
             dummy_player = DUMMY_NPC_ALLIANCE_PLAYER;
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
-
-        if (cInfo != nullptr)
-            KilledMonster(cInfo, ObjectGuid());
-    }
-}
-
-void Player::RewardExpansionPvPQuest(Unit* pVictim)
-{
-    uint32 redridge_boss = 185143;
-
-    if (GetQuestStatus(70059) == QUEST_STATUS_INCOMPLETE && redridge_boss == pVictim->GetObjectGuid()) // WANTED: Redridgeboss!
-    {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(70030);
 
         if (cInfo != nullptr)
             KilledMonster(cInfo, ObjectGuid());

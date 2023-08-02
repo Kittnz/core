@@ -934,11 +934,6 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
             WantedHordePlayerName << "WANTED: " << HordePlayerName;
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
-
-        if (pPlayer->GetQuestStatus(70059) == QUEST_STATUS_NONE || !pPlayer->GetQuestRewardStatus(70059)) // WANTED: Redridgeboss!
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Redridgeboss!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        }
         break;
 
     case HORDE:
@@ -971,12 +966,6 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     if (action == GOSSIP_ACTION_INFO_DEF + 2) 
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
-    if (action == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(70059); // WANTED: Redridgeboss!
         pPlayer->AddQuest(pQuest, nullptr);
     }
 
