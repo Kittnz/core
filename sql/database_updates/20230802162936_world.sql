@@ -35,7 +35,7 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 
 -- NPC Greymane Enforcer set scale to 1
 
-UPDATE `creature_template` SET `scale` =` 1 WHERE `entry` = 61397;
+UPDATE `creature_template` SET `scale` = 1 WHERE `entry` = 61397;
 
 -- Item Wolfwood Sash (Entry 61727) change display ID to 
 
@@ -79,3 +79,9 @@ UPDATE `item_template` SET `flags` = 0 WHERE `entry` IN (61442, 61707, 61711, 61
 
 UPDATE `quest_template` SET `objectives` = 'Bring 15 Arena Marks of Honor to Grenthor at the Gurubashi Arena in Stranglethorn Vale.' WHERE `entry` = 41109;
 UPDATE `quest_template` SET `objectives` = 'Win a battle in Blood Ring and report to Grenthor at the Gurubashi Arena in Stranglethorn Vale.' WHERE `entry` = 41110;
+
+-- fix enchanted leather armor kit and libram of focus
+update spell_template SET EffectBasePoints1 = 13, EffectBasePoints2 = 14 WHERE entry = 22843; -- Arcanum of Focus (Effect)
+update spell_template SET description = 'Permanently adds +14 to your Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; -- Arcanum of Focus (Enchant)
+update spell_template SET name = 'Spell Power +9', description = 'Permanently adds +9 to your Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57136; -- Enchanted Armor Kit
+update spell_template SET description = 'Permanently adds +9 to your Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57135; -- Enchanted Armor Kit
