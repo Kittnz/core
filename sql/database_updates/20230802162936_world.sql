@@ -151,3 +151,7 @@ UPDATE `creature_template` SET `equipment_id` = 1911 WHERE `entry` = 11500;
 
 DELETE FROM `pool_gameobject` WHERE `pool_entry` IN (50000, 50001);
 DELETE FROM `pool_template` WHERE `entry` IN (50000, 50001);
+
+-- Fixed Potent Venom having weird visual effect.
+
+UPDATE `spell_template` SET `spellVisual1` = 0 WHERE `entry` = 45417;
