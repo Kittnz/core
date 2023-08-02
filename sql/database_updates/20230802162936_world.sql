@@ -91,3 +91,7 @@ update spell_template SET EffectBasePoints1 = 11, EffectBasePoints2 = 12 WHERE e
 
 -- Arcanum of Focus (Enchant)
 update spell_template SET description = 'Permanently adds +12 to your Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; 
+
+-- Creatures in Gilneas should have their respawn rates set to 5mins (They are currently 2min) 
+
+UPDATE `creature` SET `spawntimesecsmin` = 300, `spawntimesecsmax` = 300 WHERE `guid` > 2575112 and `spawntimesecsmin` = 120 and `map` < 3; 
