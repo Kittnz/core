@@ -85,3 +85,9 @@ update spell_template SET EffectBasePoints1 = 13, EffectBasePoints2 = 14 WHERE e
 update spell_template SET description = 'Permanently adds +14 to your Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; -- Arcanum of Focus (Enchant)
 update spell_template SET name = 'Spell Power +9', description = 'Permanently adds +9 to your Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57136; -- Enchanted Armor Kit
 update spell_template SET description = 'Permanently adds +9 to your Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57135; -- Enchanted Armor Kit
+
+-- too much sp
+update spell_template SET EffectBasePoints1 = 11, EffectBasePoints2 = 12 WHERE entry = 22843; -- Arcanum of Focus (Effect)
+
+-- Arcanum of Focus (Enchant)
+update spell_template SET description = 'Permanently adds +12 to your Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; 
