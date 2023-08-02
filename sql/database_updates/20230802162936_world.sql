@@ -8,3 +8,10 @@ UPDATE spell_template SET EffectBasePoints2 = 3, EffectBasePoints3 = 6 WHERE ent
 UPDATE spell_template SET EffectBasePoints2 = 4, EffectBasePoints3 = 8 WHERE entry = 13681; -- Haste 4
 UPDATE spell_template SET EffectBasePoints2 = 5, EffectBasePoints3 = 10 WHERE entry = 13682; -- Haste 5
 UPDATE spell_template SET EffectBasePoints2 = 10, EffectBasePoints3 = 20 WHERE entry = 18065; -- Haste 10
+
+-- Add graveyard for hyjal and emerald sanctum:
+
+DELETE FROM `game_graveyard_zone` WHERE `id` = 947;
+
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (947, 616, 0);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (947, 5097, 0);
