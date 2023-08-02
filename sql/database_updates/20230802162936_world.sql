@@ -95,3 +95,21 @@ update spell_template SET description = 'Permanently adds +12 to your Healing an
 -- Creatures in Gilneas should have their respawn rates set to 5mins (They are currently 2min) 
 
 UPDATE `creature` SET `spawntimesecsmin` = 300, `spawntimesecsmax` = 300 WHERE `guid` > 2575112 and `spawntimesecsmin` = 120 and `map` < 3; 
+
+-- Quest Blooming Hyjalroot (entry 40870), replace instance of 'fifteen' in main description to 'eight'
+
+-- Change required amount of Hyjalroot item to 8
+
+-- change short description to 'Collect 8 Hyjalroot from around the region of Hyjal for Enthos at Noradnaar in Hyjal.'
+
+UPDATE `quest_template` SET `Objectives` = 'Collect 8 Hyjalroot from around the region of Hyjal for Enthos at Nordanaar in Hyjal.' WHERE `entry` = 40870;
+UPDATE `quest_template` SET `ReqItemCount1` = 8 WHERE `entry` = 40870;
+
+-- Quest Stockpiling Hyjalroot(entry 40871), replace instance of 'fifteen' in main description to 'eight'
+
+-- Change required amount of Hyjalroot item to 8
+
+-- change short description to 'Collect 8 Hyjalroot from around the region of Hyjal for Enthos at Noradnaar in Hyjal.'
+
+UPDATE `quest_template` SET `Objectives` = 'Collect 8 Hyjalroot from around the region of Hyjal for Enthos at Nordanaar in Hyjal.' WHERE `entry` = 40871;
+UPDATE `quest_template` SET `ReqItemCount1` = 8 WHERE `entry` = 40871;
