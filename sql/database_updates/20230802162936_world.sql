@@ -136,3 +136,9 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (61066, 91246, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 UPDATE `gossip_menu` SET `text_id` = 61066 WHERE `entry` = 41359 AND `text_id` = 61259;
+
+-- gobject 2020049 should drop both 61763 and 61764 once looted
+
+DELETE FROM `gameobject_loot_template` WHERE `entry` = 2020049;
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2020049, 61764, -100, 1, 1, 1, 0);
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2020049, 61763, -100, 2, 1, 1, 0);
