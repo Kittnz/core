@@ -161,3 +161,6 @@ UPDATE `spell_template` SET `spellVisual1` = 0 WHERE `entry` = 45417;
 
 UPDATE `gameobject_template` SET `displayId` = 33257 WHERE `entry` = 1000001;
 UPDATE `gameobject_template` SET `displayId` = 33258 WHERE `entry` = 1000236;
+
+UPDATE `gameobject_template` SET `type` = 14 WHERE `entry` = 1000001;
+UPDATE `gameobject_template` SET `type` = 14 WHERE `entry` = 1000236;
