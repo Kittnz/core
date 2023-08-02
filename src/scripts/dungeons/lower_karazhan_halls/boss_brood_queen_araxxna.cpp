@@ -100,13 +100,10 @@ struct skitterweb_eggAI : public Scripted_NoMovementAI
 
 	ScriptedInstance* m_pInstance;
 	uint32 m_SpawnTimer;
-	std::vector<uint32> entries;
 
 	void Reset() override
 	{
 		m_SpawnTimer = 20 * IN_MILLISECONDS;
-
-		entries = {61206,61207,61209};
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -127,6 +124,7 @@ struct skitterweb_eggAI : public Scripted_NoMovementAI
 		{
 			if (Creature* queen = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BROOD_QUEEN_ARAXXNA)))
 			{
+				std::vector<uint32> entries = { 61206,61207,61209 };
 				auto randEntry = SelectRandomContainerElement(entries);
 				if (Creature* spider = DoSpawnCreature(randEntry, 0.0f, 0.0f, 0.0f, m_creature->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
 				{

@@ -84,6 +84,8 @@ dungeons/hateforge_quarry/boss_hatereaver_annhilator.cpp
 dungeons/hateforge_quarry/hateforge_quarry_trash.cpp
 dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/lower_karazhan_halls/boss_brood_queen_araxxna.cpp
+dungeons/lower_karazhan_halls/boss_blackwald_ii.cpp
+dungeons/lower_karazhan_halls/boss_clawlord_howlfang.cpp
 dungeons/lower_karazhan_halls/instance_lower_karazhan_halls.cpp
 dungeons/lower_karazhan_halls/lower_karazhan_halls.h
 dungeons/crescent_grove/instance_crescent_grove.cpp
