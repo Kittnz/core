@@ -200,3 +200,6 @@ DELETE FROM creature_movement WHERE id=2578573;
 DELETE FROM game_event_creature WHERE guid=2578573;
 DELETE FROM game_event_creature_data WHERE guid=2578573;
 DELETE FROM creature_battleground WHERE guid=2578573;
+
+-- Changes by VOJI
+UPDATE `creature` SET `position_x` = -554.969604, `position_y` = -4609.637695, `position_z` = 9.612373, `orientation` = 2.590369 WHERE `guid` = 2578451;
