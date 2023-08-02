@@ -86,6 +86,8 @@ dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/lower_karazhan_halls/boss_brood_queen_araxxna.cpp
 dungeons/lower_karazhan_halls/boss_blackwald_ii.cpp
 dungeons/lower_karazhan_halls/boss_clawlord_howlfang.cpp
+dungeons/lower_karazhan_halls/boss_grizikil.cpp
+dungeons/lower_karazhan_halls/boss_moroes.cpp
 dungeons/lower_karazhan_halls/instance_lower_karazhan_halls.cpp
 dungeons/lower_karazhan_halls/lower_karazhan_halls.h
 dungeons/crescent_grove/instance_crescent_grove.cpp

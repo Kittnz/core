@@ -12,14 +12,14 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 	ScriptedInstance* m_pInstance;
 	std::vector<ObjectGuid> summonList;
 	uint32 m_BroodVenomVolleyTimer;
-	uint32 m_AraxxnaPoisonTimer;
+	uint32 m_GrellFireTimer;
 	uint32 m_SpawnEggsTimer;
 
 	void Reset() override
 	{
 		summonList.clear();
 		m_BroodVenomVolleyTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
-		m_AraxxnaPoisonTimer = 15 * IN_MILLISECONDS;
+		m_GrellFireTimer = 15 * IN_MILLISECONDS;
 		m_SpawnEggsTimer = 35 * IN_MILLISECONDS;
 	}
 
@@ -62,16 +62,16 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		else
 			m_BroodVenomVolleyTimer -= uiDiff;
 
-		if (m_AraxxnaPoisonTimer < uiDiff)
+		if (m_GrellFireTimer < uiDiff)
 		{
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, nullptr, SELECT_FLAG_PLAYER))
 			{
 				if (DoCastSpellIfCan(pTarget, 57089) == CAST_OK)
-					m_AraxxnaPoisonTimer = urand(40 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);
+					m_GrellFireTimer = urand(40 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);
 			}
 		}
 		else
-			m_AraxxnaPoisonTimer -= uiDiff;
+			m_GrellFireTimer -= uiDiff;
 
 		if (m_SpawnEggsTimer < uiDiff)
 		{
