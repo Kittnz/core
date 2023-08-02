@@ -271,9 +271,11 @@ void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
 void AddSC_instance_emerald_sanctum();
+void AddSC_boss_solnius();
 void AddSC_instance_lower_karazhan_halls();
 void AddSC_boss_brood_queen_araxxna();
-void AddSC_boss_solnius();
+void AddSC_boss_blackwald_ii();
+void AddSC_boss_clawlord_howlfang();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
@@ -592,9 +594,11 @@ void AddScripts()
     AddSC_gardening();
     AddSC_boss_dark_reaver();
     AddSC_instance_emerald_sanctum();
+    AddSC_boss_solnius();
     AddSC_instance_lower_karazhan_halls();
     AddSC_boss_brood_queen_araxxna();
-    AddSC_boss_solnius();
+    AddSC_boss_blackwald_ii();
+    AddSC_boss_clawlord_howlfang();
 
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
