@@ -146,3 +146,8 @@ REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 -- equip.
 
 UPDATE `creature_template` SET `equipment_id` = 1911 WHERE `entry` = 11500;
+
+-- Delete current pools:
+
+DELETE FROM `pool_gameobject` WHERE `pool_entry` IN (50000, 50001);
+DELETE FROM `pool_template` WHERE `entry` IN (50000, 50001);
