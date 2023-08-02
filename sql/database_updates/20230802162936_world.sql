@@ -113,3 +113,16 @@ UPDATE `quest_template` SET `ReqItemCount1` = 8 WHERE `entry` = 40870;
 
 UPDATE `quest_template` SET `Objectives` = 'Collect 8 Hyjalroot from around the region of Hyjal for Enthos at Nordanaar in Hyjal.' WHERE `entry` = 40871;
 UPDATE `quest_template` SET `ReqItemCount1` = 8 WHERE `entry` = 40871;
+
+-- had to revert because too op for healers:
+update spell_template SET EffectBasePoints2 = 1, EffectBasePoints3 = 1, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 13679; -- Haste 1
+update spell_template SET EffectBasePoints2 = 2, EffectBasePoints3 = 2, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 8815; -- Haste 2
+update spell_template SET EffectBasePoints2 = 3, EffectBasePoints3 = 3, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 13680; -- Haste 3
+update spell_template SET EffectBasePoints2 = 4, EffectBasePoints3 = 4, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 13681; -- Haste 4
+update spell_template SET EffectBasePoints2 = 5, EffectBasePoints3 = 5, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 13682; -- Haste 5
+update spell_template SET EffectBasePoints2 = 10, EffectBasePoints3 = 10, description = 'Increases your attack and casting speed by $s1%.' WHERE entry = 18065; -- Haste 10
+-- fix enchanted leather armor kit and libram of focus
+update spell_template SET EffectBasePoints1 = 11, EffectBasePoints2 = 12 WHERE entry = 22843; -- Arcanum of Focus (Effect)
+update spell_template SET description = 'Permanently adds +12 Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; -- Arcanum of Focus (Enchant)
+update spell_template SET name = 'Spell Power +9', description = 'Permanently adds +9 Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57136; -- Enchanted Armor Kit
+update spell_template SET description = 'Permanently adds +9 Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57135; -- Enchanted Armor Kit
