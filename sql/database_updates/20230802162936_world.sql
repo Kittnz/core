@@ -126,3 +126,13 @@ update spell_template SET EffectBasePoints1 = 11, EffectBasePoints2 = 12 WHERE e
 update spell_template SET description = 'Permanently adds +12 Healing and Damage from spells to a leg or head slot item. Does not stack with other enchantments for the selected equipment slot.' WHERE entry = 22844; -- Arcanum of Focus (Enchant)
 update spell_template SET name = 'Spell Power +9', description = 'Permanently adds +9 Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57136; -- Enchanted Armor Kit
 update spell_template SET description = 'Permanently adds +9 Healing and Damage from spells to an item worn on the chest, legs, hands or feet. Only usable on items level 60 and above.' WHERE entry = 57135; -- Enchanted Armor Kit
+
+UPDATE `broadcast_text` SET `male_text` = 'The Gilnean Brigade has finally returned home. We are here to reclaim these lands in the name of Greymane.' WHERE `entry` = 61265;
+
+-- Darius:
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (91246, 'Gilneas has seen darker days. With newfound allies, such as you, hope remains.$B$BI feared the Alliance would\'ve abandoned us, but here we stand.$B$BI will bend no knee to these Alteraci scum.$B$BWe will prevail.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (61066, 91246, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+UPDATE `gossip_menu` SET `text_id` = 61066 WHERE `entry` = 41359 AND `text_id` = 61259;
