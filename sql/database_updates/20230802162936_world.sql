@@ -155,3 +155,9 @@ DELETE FROM `pool_template` WHERE `entry` IN (50000, 50001);
 -- Fixed Potent Venom having weird visual effect.
 
 UPDATE `spell_template` SET `spellVisual1` = 0 WHERE `entry` = 45417;
+
+
+-- New non-collidable tents:
+
+UPDATE `gameobject_template` SET `displayId` = 33257 WHERE `entry` = 1000001;
+UPDATE `gameobject_template` SET `displayId` = 33258 WHERE `entry` = 1000236;
