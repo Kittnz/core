@@ -2259,9 +2259,9 @@ bool GossipSelect_npc_ropaw(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
 bool GossipHello_ArenaMaster(Player* player, Creature* creature)
 {
-    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (2v2 Solo).", GOSSIP_SENDER_MAIN, 1);
+    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (3v3 Solo).", GOSSIP_SENDER_MAIN, 1);
     if (player->GetGroup())
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (2v2 Group).", GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (3v3 Group).", GOSSIP_SENDER_MAIN, 2);
     player->PlayerTalkClass->SendGossipMenu(195007, creature->GetGUID());
 
     return true;
