@@ -194,3 +194,9 @@ REPLACE INTO `creature` VALUES (2578572,61341,0,0,0,1,5060.01,-2109.2,1373.15,1.
 
 -- Changes by TAMMO
 REPLACE INTO `creature` VALUES (2578573,11500,0,0,0,0,-4837.38,639.639,378.473,0.260755,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2578573;
+DELETE FROM creature_addon WHERE guid=2578573;
+DELETE FROM creature_movement WHERE id=2578573;
+DELETE FROM game_event_creature WHERE guid=2578573;
+DELETE FROM game_event_creature_data WHERE guid=2578573;
+DELETE FROM creature_battleground WHERE guid=2578573;
