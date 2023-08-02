@@ -142,3 +142,7 @@ UPDATE `gossip_menu` SET `text_id` = 61066 WHERE `entry` = 41359 AND `text_id` =
 DELETE FROM `gameobject_loot_template` WHERE `entry` = 2020049;
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2020049, 61764, -100, 1, 1, 1, 0);
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (2020049, 61763, -100, 2, 1, 1, 0);
+
+-- equip.
+
+UPDATE `creature_template` SET `equipment_id` = 1911 WHERE `entry` = 11500;
