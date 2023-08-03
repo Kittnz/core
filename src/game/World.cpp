@@ -2174,6 +2174,7 @@ void World::Update(uint32 diff)
     _asyncTasks.clear();
     lock.unlock();
 
+    sTransportMgr->Update(diff);
     sMapMgr.Update(diff);
     sBattleGroundMgr.Update(diff);
     sLFGMgr.Update(diff);

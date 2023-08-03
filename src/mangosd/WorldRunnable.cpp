@@ -116,6 +116,9 @@ void WorldRunnable::operator()()
     sLog.outString("Unloading all maps...");
     sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
 
+    sLog.outString("Unloading all transports...");
+    sTransportMgr->Unload();
+
     // End the database thread
     WorldDatabase.ThreadEnd(); // free mySQL thread resources
 }

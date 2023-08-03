@@ -107,6 +107,33 @@ void MapManager::InitializeVisibilityDistanceInfo()
         itr.second->InitVisibilityDistance();
 }
 
+void MapManager::GetOrCreateContinentInstances(uint32 mapId, WorldObject* obj, std::unordered_set<Map*>& instances)
+{
+    if (sWorld.getConfig(CONFIG_BOOL_CONTINENTS_INSTANCIATE))
+    {
+        if (mapId == 0)
+        {
+            for (uint32 i = MAP0_TOP_NORTH; i <= MAP0_SOUTH; ++i)
+            {
+                obj->SetLocationInstanceId(i);
+                instances.insert(CreateMap(0, obj));
+            }
+            return;
+        }
+        else if (mapId == 1)
+        {
+            for (uint32 i = MAP1_NORTH; i <= MAP1_SOUTH; ++i)
+            {
+                obj->SetLocationInstanceId(i);
+                instances.insert(CreateMap(1, obj));
+            }
+            return;
+        }
+    }
+    
+    instances.insert(CreateMap(mapId, obj));
+}
+
 Map* MapManager::CreateMap(uint32 id, const WorldObject* obj)
 {
     MANGOS_ASSERT(obj);
