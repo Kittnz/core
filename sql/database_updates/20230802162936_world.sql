@@ -167,3 +167,65 @@ UPDATE `gameobject_template` SET `type` = 14 WHERE `entry` = 1000236;
 
 DELETE FROM `quest_template` WHERE `entry` = 70059;
 DELETE FROM `creature_template` WHERE `entry` = 70030;
+
+-- Quest things:
+
+UPDATE quest_template SET NextQuestInChain = 40843 WHERE entry = 40842;
+UPDATE quest_template SET NextQuestInChain = 40859 WHERE entry = 40858;
+UPDATE quest_template SET NextQuestInChain = 40868 WHERE entry = 40867;
+UPDATE quest_template SET NextQuestInChain = 40869 WHERE entry = 40868;
+UPDATE quest_template SET NextQuestInChain = 41132 WHERE entry = 41131;
+UPDATE quest_template SET NextQuestInChain = 41133 WHERE entry = 41132;
+UPDATE quest_template SET NextQuestInChain = 41134 WHERE entry = 41133;
+UPDATE quest_template SET NextQuestInChain = 40927 WHERE entry = 40926;
+UPDATE quest_template SET NextQuestInChain = 40930 WHERE entry = 40929;
+UPDATE quest_template SET NextQuestInChain = 40931 WHERE entry = 40930;
+UPDATE quest_template SET NextQuestInChain = 40933 WHERE entry = 40932;
+UPDATE quest_template SET NextQuestInChain = 40935 WHERE entry = 40934;
+UPDATE quest_template SET NextQuestInChain = 40938 WHERE entry = 40937;
+UPDATE quest_template SET NextQuestInChain = 40941 WHERE entry = 40940;
+UPDATE quest_template SET NextQuestInChain = 40942 WHERE entry = 40941;
+UPDATE quest_template SET NextQuestInChain = 40943 WHERE entry = 40942;
+UPDATE quest_template SET NextQuestInChain = 40947 WHERE entry = 40946;
+UPDATE quest_template SET NextQuestInChain = 40970 WHERE entry = 40969;
+UPDATE quest_template SET NextQuestInChain = 40971 WHERE entry = 40970;
+UPDATE quest_template SET NextQuestInChain = 40981 WHERE entry = 40980;
+UPDATE quest_template SET NextQuestInChain = 40982 WHERE entry = 40981;
+UPDATE quest_template SET NextQuestInChain = 40845 WHERE entry = 40844;
+UPDATE quest_template SET NextQuestInChain = 40847 WHERE entry = 40846;
+UPDATE quest_template SET NextQuestInChain = 40849 WHERE entry = 40848;
+UPDATE quest_template SET NextQuestInChain = 40878 WHERE entry = 40877;
+UPDATE quest_template SET NextQuestInChain = 40879 WHERE entry = 40878;
+UPDATE quest_template SET NextQuestInChain = 40880 WHERE entry = 40879;
+UPDATE quest_template SET NextQuestInChain = 40881 WHERE entry = 40880;
+UPDATE quest_template SET NextQuestInChain = 40882 WHERE entry = 40881;
+UPDATE quest_template SET NextQuestInChain = 40994 WHERE entry = 40993;
+UPDATE quest_template SET NextQuestInChain = 40995 WHERE entry = 40994;
+UPDATE quest_template SET NextQuestInChain = 40996 WHERE entry = 40995;
+UPDATE quest_template SET NextQuestInChain = 40997 WHERE entry = 40996;
+UPDATE quest_template SET NextQuestInChain = 40949 WHERE entry = 40948;
+UPDATE quest_template SET NextQuestInChain = 40950 WHERE entry = 40949;
+UPDATE quest_template SET NextQuestInChain = 40951 WHERE entry = 40950;
+UPDATE quest_template SET NextQuestInChain = 40952 WHERE entry = 40951;
+UPDATE quest_template SET NextQuestInChain = 40953 WHERE entry = 40952;
+UPDATE quest_template SET NextQuestInChain = 40954 WHERE entry = 40953;
+UPDATE quest_template SET NextQuestInChain = 40955 WHERE entry = 40954;
+UPDATE quest_template SET NextQuestInChain = 40956 WHERE entry = 40955;
+UPDATE quest_template SET NextQuestInChain = 41028 WHERE entry = 41027;
+UPDATE quest_template SET NextQuestInChain = 41029 WHERE entry = 41028;
+UPDATE quest_template SET NextQuestInChain = 41030 WHERE entry = 41029;
+UPDATE quest_template SET NextQuestInChain = 41023 WHERE entry = 41022;
+UPDATE quest_template SET NextQuestInChain = 41024 WHERE entry = 41023;
+
+DELETE FROM quest_template WHERE entry = 40751;
+DELETE FROM creature_questrelation WHERE quest = 40751;
+DELETE FROM creature_involvedrelation WHERE quest = 40751;
+
+-- Quest Lost and Found ((entry 40999) turn into a ((RAID)) quest so it is doable in a raid group. 
+
+UPDATE `quest_template` SET `Type` = 62 WHERE `entry` = 40999;
+UPDATE `quest_template` SET `QuestFlags` = 64 WHERE `entry` = 40999;
+
+-- NPC Snarlclaw (Entry 61405) had his display ID overwritten, revert to 1947
+
+UPDATE `creature_template` SET `display_id1` = 1947 WHERE `entry` = 61405;
