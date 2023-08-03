@@ -328,3 +328,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61555, 61585, 20, 2, 1, 1, 0),
 
 (61555, 30074, 0.01, 0, -30074, 1, 0);
+
+-- Note to myself: remove Island From from Speedy's box
+DELETE FROM `item_loot_template` WHERE `item` = 50079;
