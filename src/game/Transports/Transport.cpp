@@ -442,10 +442,10 @@ void Transport::UpdatePassengerPosition(WorldObject* passenger)
 
             break;
         case TYPEID_GAMEOBJECT:
-            //GetMap()->GameObjectRelocation(passenger->ToGameObject(), x, y, z, o, false);
+            //passenger->GetMap()->GameObjectRelocation(passenger->ToGameObject(), x, y, z, o, false);
             break;
         case TYPEID_DYNAMICOBJECT:
-            //GetMap()->DynamicObjectRelocation(passenger->ToDynObject(), x, y, z, o);
+            //passenger->GetMap()->DynamicObjectRelocation(passenger->ToDynObject(), x, y, z, o);
             break;
         default:
             break;
