@@ -6368,6 +6368,10 @@ bool ChatHandler::HandleGPSCommand(char* args)
     GridMapLiquidStatus res = terrain->getLiquidStatus(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), MAP_ALL_LIQUIDS, &liquid_status);
     if (res)
         PSendSysMessage(LANG_LIQUID_STATUS, liquid_status.level, liquid_status.depth_level, liquid_status.type_flags, res);
+
+    if (obj->GetTransport())
+        PSendSysMessage("Transport: %s (%u)", obj->GetTransport()->GetName(), obj->GetTransport()->GetEntry());
+
     return true;
 }
 
