@@ -58,7 +58,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		if (m_ClawFurryTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57081) == CAST_OK)
-				m_ClawFurryTimer = 5 * IN_MILLISECONDS;
+				m_ClawFurryTimer = 7 * IN_MILLISECONDS;
 		}
 		else
 			m_ClawFurryTimer -= uiDiff;
@@ -67,7 +67,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		{
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 			{
-				if (DoCastSpellIfCan(pTarget, 57073) == CAST_OK)
+				if (DoCastSpellIfCan(pTarget, 57076) == CAST_OK)
 					m_SlaveringBiteTimer = urand(12 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
 			}
 		}
