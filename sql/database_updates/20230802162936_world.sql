@@ -331,3 +331,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 
 -- Note to myself: remove Island From from Speedy's box
 DELETE FROM `item_loot_template` WHERE `item` = 50079;
+== Zul'Gurub should require level 60 to enter, similiar to Ruins of Ahn'Qiraj.
+UPDATE `areatrigger_teleport` SET `required_level` = 60 WHERE `id` = 3928;
