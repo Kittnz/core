@@ -12,14 +12,14 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 	ScriptedInstance* m_pInstance;
 	std::vector<ObjectGuid> summonList;
 	uint32 m_BroodVenomVolleyTimer;
-	uint32 m_GrellFireTimer;
+	uint32 m_LeechingBiteTimer;
 	uint32 m_SpawnEggsTimer;
 
 	void Reset() override
 	{
 		summonList.clear();
 		m_BroodVenomVolleyTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
-		m_GrellFireTimer = 15 * IN_MILLISECONDS;
+		m_LeechingBiteTimer = 15 * IN_MILLISECONDS;
 		m_SpawnEggsTimer = 35 * IN_MILLISECONDS;
 	}
 
@@ -62,16 +62,16 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		else
 			m_BroodVenomVolleyTimer -= uiDiff;
 
-		if (m_GrellFireTimer < uiDiff)
+		if (m_LeechingBiteTimer < uiDiff)
 		{
-			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, nullptr, SELECT_FLAG_PLAYER))
+			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 			{
-				if (DoCastSpellIfCan(pTarget, 57089) == CAST_OK)
-					m_GrellFireTimer = urand(40 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);
+				if (DoCastSpellIfCan(pTarget, 57056) == CAST_OK)
+					m_LeechingBiteTimer = urand(20 * IN_MILLISECONDS, 24 * IN_MILLISECONDS);
 			}
 		}
 		else
-			m_GrellFireTimer -= uiDiff;
+			m_LeechingBiteTimer -= uiDiff;
 
 		if (m_SpawnEggsTimer < uiDiff)
 		{
