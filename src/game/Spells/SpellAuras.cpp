@@ -1604,6 +1604,45 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
     switch (GetSpellProto()->SpellFamilyName)
     {
+        case SPELLFAMILY_DRUID:
+        {
+            switch (GetId())
+            {
+                case 45851: // Moonclaw
+                {
+                    // Leader of the Pack
+                    if (Aura* pAura = target->GetAura(24932, EFFECT_INDEX_0))
+                    {
+                        if (pAura->GetCasterGuid() == target->GetObjectGuid())
+                        {
+                            pAura->ApplyModifier(false);
+                            if (!apply)
+                            {
+                                if (pAura->GetModifier()->m_amount > 3)
+                                    pAura->GetModifier()->m_amount -= 1;
+                            }
+                            pAura->ApplyModifier(true);
+                        }
+                    }
+                    // Moonkin Aura
+                    if (Aura* pAura = target->GetAura(24907, EFFECT_INDEX_0))
+                    {
+                        if (pAura->GetCasterGuid() == target->GetObjectGuid())
+                        {
+                            pAura->ApplyModifier(false);
+                            if (!apply)
+                            {
+                                if (pAura->GetModifier()->m_amount > 3)
+                                    pAura->GetModifier()->m_amount -= 1;
+                            }
+                            pAura->ApplyModifier(true);
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
         case SPELLFAMILY_HUNTER:
         {
             switch (GetId())
@@ -1628,6 +1667,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                 caster->RemoveAurasDueToSpell(45663);
                         }
                     }
+                    break;
                 }
             }
             break;

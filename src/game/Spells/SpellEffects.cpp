@@ -2777,7 +2777,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellData.SpellId))
                                         {
                                             // nerf chance for overpowered effects
-                                            if (pSpellEntry->Id == 48102 ||
+                                            if (pSpellEntry->Id == 16602 ||
+                                                pSpellEntry->Id == 16928 ||
+                                                pSpellEntry->Id == 16939 ||
+                                                pSpellEntry->Id == 23605 ||
+                                                pSpellEntry->Id == 48102 ||
                                                 pSpellEntry->IsCCSpell() ||
                                                 pSpellEntry->HasAura(SPELL_AURA_MOD_CONFUSE) ||
                                                 pSpellEntry->HasAura(SPELL_AURA_MOD_DECREASE_SPEED) ||
