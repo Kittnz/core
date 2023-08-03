@@ -10,7 +10,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 	}
 
 	ScriptedInstance* m_pInstance;
-	uint32 m_ClawFurryTimer;
+	uint32 m_TerrifyingPresenceTimer;
 	uint32 m_SlaveringBiteTimer;
 	uint32 m_ShadowbaneCurseTimer;
 	bool phase;
@@ -18,7 +18,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_ClawFurryTimer = 2 * IN_MILLISECONDS;
+		m_TerrifyingPresenceTimer = 2 * IN_MILLISECONDS;
 		m_SlaveringBiteTimer = urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_ShadowbaneCurseTimer = 60 * IN_MILLISECONDS;
 		phase = false;
@@ -55,13 +55,13 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 			DoCastSpellIfCan(m_creature, 57082);
 		}
 
-		if (m_ClawFurryTimer < uiDiff)
+		if (m_TerrifyingPresenceTimer < uiDiff)
 		{
-			if (DoCastSpellIfCan(m_creature, 57081) == CAST_OK)
-				m_ClawFurryTimer = 7 * IN_MILLISECONDS;
+			if (DoCastSpellIfCan(m_creature, 57083) == CAST_OK)
+				m_TerrifyingPresenceTimer = 5 * IN_MILLISECONDS;
 		}
 		else
-			m_ClawFurryTimer -= uiDiff;
+			m_TerrifyingPresenceTimer -= uiDiff;
 
 		if (m_SlaveringBiteTimer < uiDiff)
 		{
