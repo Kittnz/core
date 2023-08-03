@@ -1,6 +1,6 @@
 -- Pool black lotus spawns in telabim and hyjal.
-INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`) VALUES (12903, 3, 'Tel\'abim Black Lotus', 0, 0);
-INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`) VALUES (12904, 3, 'Hyjal Black Lotus', 0, 0);
+INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`) VALUES (12903, 1, 'Tel\'abim Black Lotus', 0, 0);
+INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`) VALUES (12904, 1, 'Hyjal Black Lotus', 0, 0);
 DELETE FROM `pool_gameobject` WHERE `guid` IN (5016415, 5016416, 5016417, 5016418, 5016419, 5016420, 5016421, 5016422, 5016423, 5016424, 5016425, 5016426, 5016427, 5016428, 5016429, 5016430, 5016431);
 INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`) VALUES
 (5016415, 12903, 0, 'Tel\'abim Black Lotus'),
