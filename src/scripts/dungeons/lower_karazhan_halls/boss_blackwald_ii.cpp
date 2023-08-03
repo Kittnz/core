@@ -80,11 +80,13 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 		if (m_BlackwaldBoonTimer < uiDiff)
 		{
-			DoCastSpellIfCan(m_creature, 57074);
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 			{
 				if (DoCastSpellIfCan(pTarget, 57073) == CAST_OK)
-					m_BlackwaldBoonTimer = 30 * IN_MILLISECONDS;
+				{
+					if (DoCastSpellIfCan(m_creature, 57074, CF_TRIGGERED) == CAST_OK)
+						m_BlackwaldBoonTimer = 30 * IN_MILLISECONDS;
+				}
 			}
 		}
 		else
