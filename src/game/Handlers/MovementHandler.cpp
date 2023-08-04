@@ -1037,6 +1037,9 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                     if (Pet* pMiniPet = pPlayerMover->GetMiniPet())
                         pMiniPet->Unsummon(PET_SAVE_AS_DELETED, pPlayerMover);
                 }
+                else
+                    sLog.outError("Cannot find transport for player %s!", pPlayerMover->GetName());
+
                 // fix an 1.12 client problem with transports
                 pPlayerMover->SetJustBoarded(true);
             }
