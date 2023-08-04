@@ -131,3 +131,13 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61556, 30048, 5, 0, -30048, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61556, 5759, 5.4545, 0, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61556, 8952, 7.2727, 0, 1, 1, 0);
+-- Add specialization requirements.
+update item_template set required_spell = 17040 where entry = 61805; -- Plans: Towerforge Annihilator
+update item_template set required_spell = 9788 where entry = 61806; -- Plans: Towerforge Pauldrons
+update item_template set required_spell = 9788 where entry = 61807; -- Plans: Towerforge Breastplate
+update item_template set required_spell = 9788 where entry = 61808; -- Plans: Towerforge Crown
+update item_template set required_spell = 9788 where entry = 61809; -- Plans: Towerforge Crown (copy)
+-- Item adjust.
+update item_template set spellppmrate_1 = 1.3 where entry = 60010; -- Towerforge Annihilator
+update item_template set spellid_1 = 9331, stat_value1 = 10, stat_value2 = 10, stat_type1 = 4, stat_type2 = 3, delay = 1700, dmg_min1 = 95, dmg_max1 = 127 where entry = 22804; -- Maexxna's Fang
+update item_template set spellid_1 = 18035, stat_value1 = 9, stat_value2 = 9, spellid_2 = 0 where entry = 83480; -- Tome of Infalliable Truth
