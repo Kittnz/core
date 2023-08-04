@@ -4778,6 +4778,13 @@ void Spell::EffectEnchantItemPerm(SpellEffectIndex eff_idx)
     if (!item_owner)
         return;
 
+    if (item_owner->HasChallenge(CHALLENGE_VAGRANT_MODE) && itemTarget->IsEquipped())
+    {
+        p_caster->GetSession()->SendNotification("You cannot enchant items that are currently equipped while participating in a Vargant's Endeavor challenge.");
+        return;
+    }
+
+
     if (!sWorld.getConfig(CONFIG_BOOL_GM_ALLOW_TRADES) && p_caster->GetSession()->GetSecurity() > SEC_PLAYER)
         return;
 

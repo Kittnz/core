@@ -10566,9 +10566,16 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < 60)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
+                    {
+                        this->GetSession()->SendNotification("You can equip items only poor or common quality in a Vargant's Endeavor challenge.");
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                    }
 
-                    // Forbid enchanting!
+                    if ((pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT) > 0) || (pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) > 0))
+                    {
+                        this->GetSession()->SendNotification("You cannot equip enchanted items while participating in a Vargant's Endeavor challenge.");
+                        return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                    }
                 }
             }
 
