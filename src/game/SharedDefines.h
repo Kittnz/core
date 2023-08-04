@@ -1199,6 +1199,7 @@ enum SkillType
     SKILL_RACIAL_TROLL             = 733,
     SKILL_RACIAL_GNOME             = 753,
     SKILL_RACIAL_HUMAN             = 754,
+    SKILL_JEWELCRAFTING            = 755,
     SKILL_PET_EVENT_RC             = 758,
     SKILL_RIDING                   = 762,
 };
