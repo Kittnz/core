@@ -706,7 +706,6 @@ class Map : public GridRefManager<NGridType>
         // Objects that must update even in inactive grids without activating them
         typedef std::set<Transport*> TransportsContainer;
         TransportsContainer _transports;
-        TransportsContainer::iterator _transportsUpdateIter;
         bool m_unloading = false;
         bool m_crashed = false;
         bool m_updateFinished = false;

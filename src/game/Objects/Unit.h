@@ -1026,6 +1026,7 @@ class Unit : public WorldObject
         float m_meleeZReach;
         ThreatManager m_ThreatManager; // Manage all Units threatening us
         HostileRefManager m_HostileRefManager; // Manage all Units that are threatened by us
+        std::vector<ObjectGuid> m_tauntGuids;
     protected:
         uint32 m_attackTimer[MAX_ATTACK];
         AttackerSet m_attackers;
@@ -1222,6 +1223,8 @@ class Unit : public WorldObject
         Unit* GetTauntTarget() const;
         void TauntApply(Unit* pVictim);
         void TauntFadeOut(Unit* taunter);
+        void AddTauntCaster(ObjectGuid guid) { m_tauntGuids.push_back(guid); }
+        void RemoveTauntCaster(ObjectGuid guid);
 
         // Threat related methods
         bool CanHaveThreatList() const;
