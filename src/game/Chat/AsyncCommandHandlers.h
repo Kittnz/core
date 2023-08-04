@@ -61,6 +61,8 @@ struct PInfoData
     bool hasAccount = false;
     std::string two_factor_enabled;
     std::string username;
+    uint32 m_activePlayerTime = 0;
+    uint32 m_activeSessionTime = 0;
     std::string email;
     std::string last_ip;
     AccountTypes security = SEC_PLAYER;

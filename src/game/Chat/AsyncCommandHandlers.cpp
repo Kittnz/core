@@ -65,6 +65,8 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
             data->email = target->GetSession()->GetEmail();
         data->m_hasUsedClickToMove = target->GetSession()->HasUsedClickToMove();
         data->m_extendedFingerprint = target->GetSession()->_analyser->GetCurrentSample().GetHash();
+        data->m_activePlayerTime = target->GetTimeLoggedIn();
+        data->m_activeSessionTime = target->GetSession()->GetTimeActive();
         HandleDataAfterPlayerLookup(data);
     }
     else
@@ -220,6 +222,9 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     cHandler.PSendSysMessage("Extended Fingerprint: %s", cHandler.playerLink(std::to_string(data->m_extendedFingerprint)).c_str());
     cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
+
+    cHandler.PSendSysMessage("Actively logged in time: %s", secsToTimeString(data->m_activePlayerTime / 1000, true, false).c_str());
+    cHandler.PSendSysMessage("Active session time: %s", secsToTimeString(data->m_activeSessionTime / 1000, true, false).c_str());
     if (data->m_hasUsedClickToMove)
         cHandler.SendSysMessage("Using Click To Move!");
 

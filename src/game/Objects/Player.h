@@ -1251,6 +1251,9 @@ class Player final: public Unit
         TradeData* GetTradeData() const { return m_trade; }
         void TradeCancel(bool sendback);
 
+        uint32 GetTimeLoggedIn() const { return m_timeLoggedIn; }
+        void AddLoggedInTime(uint32 diff) { m_timeLoggedIn += diff; }
+
         uint32 GetMoney() const { return GetUInt32Value(PLAYER_FIELD_COINAGE); }
         void LogModifyMoney(int32 d, const char* type, ObjectGuid fromGuid = ObjectGuid(), uint32 data = 0);
         void ModifyMoney(int32 d)
@@ -2294,6 +2297,7 @@ class Player final: public Unit
         bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
+        uint32 m_timeLoggedIn = 0;
         
         void SendMountResult(UnitMountResult result) const;
         void SendDismountResult(UnitDismountResult result) const;

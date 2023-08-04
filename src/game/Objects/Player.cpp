@@ -1375,6 +1375,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             m_cameraUpdateTimer -= update_diff;
     }
 
+    AddLoggedInTime(update_diff);
+
     if (!m_timedquests.empty())
     {
         QuestSet::iterator iter = m_timedquests.begin();

@@ -2950,6 +2950,7 @@ void World::UpdateSessions(uint32 diff)
         WorldSession * pSession = itr->second;
         WorldSessionFilter updater(pSession);
 
+        pSession->AddActiveTime(diff);
         if (!pSession->Update(updater))
         {
             if (pSession->PlayerLoading())
