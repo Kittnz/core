@@ -5783,8 +5783,10 @@ void Player::RepopAtGraveyard()
                 GetTransport()->RemovePassenger(this);
                 ResurrectPlayer(1.0f);
             }
-
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+            if (GetAreaId() == 4011 && GetRace() == RACE_GOBLIN) // Venture Camp, temporary hackfix.
+                TeleportTo(1, 1788.58, 1335.74, 144.35, 4.0, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+            else
+                TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
         }
 
         // Fix invisible spirit healer if you die close to graveyard.

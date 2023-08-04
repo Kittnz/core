@@ -334,8 +334,7 @@ DELETE FROM `item_loot_template` WHERE `item` = 50079;
 -- Zul'Gurub should require level 60 to enter, similiar to Ruins of Ahn'Qiraj.
 UPDATE `areatrigger_teleport` SET `required_level` = 60 WHERE `id` = 3928;
 
--- Add graveyard for Goblin's starting location:
+-- Remove graveyard for Goblin's starting location:
 
 DELETE FROM `game_graveyard_zone` WHERE `id` = 944;
-REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (947, 4011, 67);
-
+DELETE FROM `world_safe_locs_facing` WHERE `id` = 944;
