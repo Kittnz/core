@@ -23977,12 +23977,21 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_GRAND_FROGUS:
     {
-        static constexpr uint32 FrogPets[5] = {
+        static constexpr uint32 FrogPets[14] = {
         10701, // Dart Frog
         10703, // Wood Frog
         10702, // Island Frog
         10704, // Tree Frog
-        23811  // Jubling
+        23811, // Jubling
+        57200, // Azure Frog 
+        57201, // Dream Frog
+        57202, // Bullfrog
+        57203, // Infinite Frog
+        57204, // Poison Frog
+        57205, // Snow Frog
+        57206, // Pink Frog
+        57207, // Golden frog
+        57208  // Pond Frog
         };
         for (auto spell : FrogPets)
         {
