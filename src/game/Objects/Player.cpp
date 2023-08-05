@@ -7646,6 +7646,8 @@ void Player::DuelComplete(DuelCompleteType type)
     // Hack to prevent duel projectiles from damaging players upon the end of a duel:
     m_disableGeneralDamage = true;
     m_Events.AddLambdaEventAtOffset([this]() { m_disableGeneralDamage = false; }, 2000);
+    m_duel->opponent->m_disableGeneralDamage = true;
+    m_duel->opponent->m_Events.AddLambdaEventAtOffset([pOpponent = m_duel->opponent]() { pOpponent->m_disableGeneralDamage = false; }, 2000);
 
     if (m_duel->opponent->m_duel)
         m_duel->opponent->m_duel->finished = true;;
