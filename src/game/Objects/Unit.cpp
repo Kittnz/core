@@ -9722,23 +9722,21 @@ Unit* Unit::FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDif
 {
     std::list<Unit*> targets;
 
-    if (Unit* pVictim{ GetVictim() })
+    if (Player* pVictim = ::ToPlayer(GetVictim()))
     {
-        if (HostileReference* pReference{ pVictim->GetHostileRefManager().getFirst() })
-        {
-            while (pReference)
-            {
-                if (Unit* pTarget{ pReference->getSourceUnit() })
-                {
-                    if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
-                        ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
-                    {
-                        targets.push_back(pTarget);
-                    }
-                }
+        HostileReference* pReference = pVictim->GetHostileRefManager().getFirst();
 
-                pReference = pReference->next();
+        while (pReference)
+        {
+            if (Unit* pTarget = pReference->getSourceUnit())
+            {
+                if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
+                    ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
+                {
+                    targets.push_back(pTarget);
+                }
             }
+            pReference = pReference->next();
         }
     }
     else
