@@ -21,6 +21,7 @@
 #include "MapManager.h"
 #include "ObjectMgr.h"
 #include "MoveMap.h"
+#include <unordered_set>
 #include "World.h"
 
 TransportTemplate::~TransportTemplate()
