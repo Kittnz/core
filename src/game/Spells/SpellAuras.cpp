@@ -4968,7 +4968,7 @@ void Aura::HandleModHealingDone(bool apply, bool /*Real*/)
         if (GetId() == 45707)
         {
             if (Unit* pCaster = GetCaster())
-                m_modifier.m_amount = pCaster->GetStat(STAT_SPIRIT);
+                m_modifier.m_amount = pCaster->GetStat(STAT_SPIRIT) * (float(m_modifier.m_amount) / 100.0f);
         }
     }
 
