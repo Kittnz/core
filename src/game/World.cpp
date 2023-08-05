@@ -433,6 +433,9 @@ bool World::RemoveQueuedSession(WorldSession* sess)
 /// Initialize config values
 void World::LoadConfigSettings(bool reload)
 {
+    if (!reload)
+        m_lastDiffs.resize(10);
+
     if (reload)
     {
         if (!sConfig.Reload())
@@ -702,6 +705,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME, "AutoRestart.MaxServerUptime", 0);
     setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MIN, "AutoRestart.HourMin", 0);
     setConfig(CONFIG_UINT32_AUTO_RESTART_HOUR_MAX, "AutoRestart.HourMax", 0);
+
+    setConfig(CONFIG_UINT32_DIFF_HC_PROTECTION, "Hardcore.DiffProtection", 1100);
 
     setConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY, "SaveRespawnTimeImmediately", true);
     setConfig(CONFIG_BOOL_WEATHER, "ActivateWeather", true);
@@ -2168,6 +2173,7 @@ void World::Update(uint32 diff)
     _asyncTasks.clear();
     lock.unlock();
 
+    sTransportMgr->Update(diff);
     sMapMgr.Update(diff);
     sBattleGroundMgr.Update(diff);
     sLFGMgr.Update(diff);
@@ -2967,6 +2973,7 @@ void World::UpdateSessions(uint32 diff)
         WorldSession * pSession = itr->second;
         WorldSessionFilter updater(pSession);
 
+        pSession->AddActiveTime(diff);
         if (!pSession->Update(updater))
         {
             if (pSession->PlayerLoading())
@@ -3083,6 +3090,45 @@ std::unordered_set<std::string> World::GetAccountNamesByFingerprint(uint32 finge
 void World::AddFingerprint(uint32 fingerprint, std::string accountName)
 {
     m_fingerprintAccounts[fingerprint].insert(accountName);
+}
+
+void World::SetLastDiff(uint32 diff)
+{
+    m_lastDiff = diff;
+    static uint32 currentDiffIndex = 0;
+
+    if (currentDiffIndex >= m_lastDiffs.size())
+        currentDiffIndex = 0;
+
+    m_lastDiffs[currentDiffIndex] = m_lastDiff;
+    ++currentDiffIndex;
+
+    CheckDiffProtection();
+}
+
+void World::CheckDiffProtection()
+{
+    if (m_lastDiff > sWorld.getConfig(CONFIG_UINT32_DIFF_HC_PROTECTION) && m_diffThresholdHits < 20)
+        m_diffThresholdHits += 5;
+
+    if (m_diffThresholdHits > 0)
+        --m_diffThresholdHits;
+
+}
+
+//If this triggers we should prevent HCs from dying as there's something badly wrong.
+bool World::HitsDiffThreshold() const
+{
+    return m_diffThresholdHits > 0;
+}
+
+uint32 World::GetAverageDiff() const
+{
+    uint32 sum = 0;
+    for (auto i : m_lastDiffs)
+        sum += i;
+
+    return sum / m_lastDiffs.size();
 }
 
 void World::SetPlayerLimit(int32 limit, bool needUpdate)

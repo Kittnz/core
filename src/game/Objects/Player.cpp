@@ -670,7 +670,8 @@ Player::Player(WorldSession *session) : Unit(),
 Player::~Player()
 {
     // Clear all pointers to this player in all zone scripts
-    sZoneScriptMgr.OnPlayerGettingDestroyed(this);
+    if (m_uint32Values)
+        sZoneScriptMgr.OnPlayerGettingDestroyed(this);
 
     DeletePacketBroadcaster();
     RemoveAI();
@@ -1373,6 +1374,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         else
             m_cameraUpdateTimer -= update_diff;
     }
+
+    AddLoggedInTime(update_diff);
 
     if (!m_timedquests.empty())
     {
@@ -7617,6 +7620,8 @@ void Player::DuelComplete(DuelCompleteType type)
     // Hack to prevent duel projectiles from damaging players upon the end of a duel:
     m_disableGeneralDamage = true;
     m_Events.AddLambdaEventAtOffset([this]() { m_disableGeneralDamage = false; }, 2000);
+    m_duel->opponent->m_disableGeneralDamage = true;
+    m_duel->opponent->m_Events.AddLambdaEventAtOffset([pOpponent = m_duel->opponent]() { pOpponent->m_disableGeneralDamage = false; }, 2000);
 
     if (m_duel->opponent->m_duel)
         m_duel->opponent->m_duel->finished = true;;
@@ -22588,7 +22593,7 @@ void Player::RewardHonorOnDeath()
     for (const auto& itr : damagePerGroup)
     {
         Group* g = itr.first;
-        std::list<Player*> rewarded;
+        std::vector<Player*> rewarded;
         for (const auto& grItr : g->GetMemberSlots())
         {
             if (Player* pl = GetMap()->GetPlayer(grItr.guid))
@@ -22939,12 +22944,14 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
         case 50:
             sWorld.SendWorldTextChecked(50301, [level](Player* player) -> bool
             {
+                uint32 minLevel = 40;
                 auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
-                if (!levelCheck.has_value())
+                if (levelCheck.has_value())
+                    minLevel = std::atoi(levelCheck.value().c_str());
+
+                if (minLevel <= level)
                     return true;
 
-                if (std::atoi(levelCheck.value().c_str()) <= level)
-                    return true;
                 return false;
             },GetName(), level);
             break;

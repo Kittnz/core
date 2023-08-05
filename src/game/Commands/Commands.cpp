@@ -4144,7 +4144,7 @@ bool ChatHandler::HandleBanInfoAccountCommand(char* args)
         return false;
 
     std::string accountName;
-    uint32 accountId = ExtractAccountId(&args, &accountName);
+    uint32 accountId = ExtractAccountId(&args, &accountName, nullptr, false);
     if (!accountId)
         return false;
 
@@ -5098,8 +5098,7 @@ bool ChatHandler::HandleSendItemsHelper(MailDraft& draft, char* args)
 
     // extract items
     typedef std::pair<uint32, uint32> ItemPair;
-    typedef std::vector< ItemPair > ItemPairs;
-    ItemPairs items;
+    std::vector<ItemPair> items;
 
     // get from tail next item str
     while (char* itemStr = ExtractArg(&args))
@@ -5963,7 +5962,9 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 
     if (GetSession() && GetSession()->GetSecurity() >= SEC_MODERATOR)
     {
-        PSendSysMessage("Server diff: %u ms", sWorld.GetLastDiff());
+        PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
+        PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
+        PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());
@@ -6071,7 +6072,7 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
             {
                 if (ItemPrototype const* itemProto = sObjectMgr.GetItemPrototype(sWorld.getConfig(CONFIG_UINT32_PASSWORD_CHANGE_REWARD_ITEM)))
                 {
-                    std::list<PlayerCacheData*> characters;
+                    std::vector<PlayerCacheData*> characters;
                     sObjectMgr.GetPlayerDataForAccount(GetAccountId(), characters);
                     for (auto const& pChar : characters)
                     {
@@ -6447,6 +6448,10 @@ bool ChatHandler::HandleGPSCommand(char* args)
     GridMapLiquidStatus res = terrain->getLiquidStatus(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), MAP_ALL_LIQUIDS, &liquid_status);
     if (res)
         PSendSysMessage(LANG_LIQUID_STATUS, liquid_status.level, liquid_status.depth_level, liquid_status.type_flags, res);
+
+    if (obj->GetTransport())
+        PSendSysMessage("Transport: %s (%u)", obj->GetTransport()->GetName(), obj->GetTransport()->GetEntry());
+
     return true;
 }
 

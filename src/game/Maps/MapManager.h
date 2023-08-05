@@ -86,19 +86,20 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
     public:
         typedef std::map<MapID, Map* > MapMapType;
 
+        void GetOrCreateContinentInstances(uint32 mapId, WorldObject* obj, std::unordered_set<Map*>& instances);
         uint32 GetContinentInstanceId(uint32 mapId, float x, float y, bool* transitionArea = nullptr);
-        Map* CreateMap(uint32, const WorldObject* obj);
-        Map* CreateBgMap(uint32 mapid, BattleGround* bg);
-        Map* CreateTestMap(uint32 mapid, bool instanced, float posX, float posY);
+        Map* CreateMap(uint32 mapId, const WorldObject* obj);
+        Map* CreateBgMap(uint32 mapId, BattleGround* bg);
+        Map* CreateTestMap(uint32 mapId, bool instanced, float posX, float posY);
         void DeleteTestMap(Map* map);
-        Map* FindMap(uint32 mapid, uint32 instanceId = 0) const;
+        Map* FindMap(uint32 mapId, uint32 instanceId = 0) const;
         void ScheduleNewWorldOnFarTeleport(Player* pPlayer);
         void CancelInstanceCreationForPlayer(Player* pPlayer) { m_scheduledNewInstancesForPlayers.erase(pPlayer); }
 
         void UpdateGridState(grid_state_t state, Map& map, NGridType& ngrid, GridInfo& ginfo, const uint32 &x, const uint32 &y, const uint32 &t_diff);
 
         // only const version for outer users
-        void DeleteInstance(uint32 mapid, uint32 instanceId);
+        void DeleteInstance(uint32 mapId, uint32 instanceId);
 
         void Initialize(void);
         void Update(uint32);
@@ -120,25 +121,25 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
             i_timer.Reset();
         }
 
-        //void LoadGrid(int mapid, int instId, float x, float y, const WorldObject* obj, bool no_unload = false);
+        //void LoadGrid(int mapId, int instId, float x, float y, const WorldObject* obj, bool no_unload = false);
         void UnloadAll();
 
-        static bool ExistMapAndVMap(uint32 mapid, float x, float y);
-        static bool IsValidMAP(uint32 mapid);
+        static bool ExistMapAndVMap(uint32 mapId, float x, float y);
+        static bool IsValidMAP(uint32 mapId);
 
-        static bool IsValidMapCoord(uint32 mapid, float x,float y)
+        static bool IsValidMapCoord(uint32 mapId, float x,float y)
         {
-            return IsValidMAP(mapid) && MaNGOS::IsValidMapCoord(x,y);
+            return IsValidMAP(mapId) && MaNGOS::IsValidMapCoord(x,y);
         }
 
-        static bool IsValidMapCoord(uint32 mapid, float x,float y,float z)
+        static bool IsValidMapCoord(uint32 mapId, float x,float y,float z)
         {
-            return IsValidMAP(mapid) && MaNGOS::IsValidMapCoord(x,y,z);
+            return IsValidMAP(mapId) && MaNGOS::IsValidMapCoord(x,y,z);
         }
 
-        static bool IsValidMapCoord(uint32 mapid, float x,float y,float z,float o)
+        static bool IsValidMapCoord(uint32 mapId, float x,float y,float z,float o)
         {
-            return IsValidMAP(mapid) && MaNGOS::IsValidMapCoord(x,y,z,o);
+            return IsValidMAP(mapId) && MaNGOS::IsValidMapCoord(x,y,z,o);
         }
 
         static bool IsValidMapCoord(WorldLocation const& loc)
@@ -163,7 +164,7 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
 
         void RemoveAllObjectsInRemoveList();
 
-        bool CanPlayerEnter(uint32 mapid, Player* player);
+        bool CanPlayerEnter(uint32 mapId, Player* player);
         uint32 GenerateInstanceId() { return ++i_MaxInstanceId; }
         void InitMaxInstanceId();
         void InitializeVisibilityDistanceInfo();

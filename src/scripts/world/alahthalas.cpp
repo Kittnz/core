@@ -450,6 +450,9 @@ struct npc_dralox_felstarAI : public ScriptedAI
     void Reset() {}
     void UpdateAI(const uint32 diff)
     {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
         if (m_creature->GetHealthPercent() > 50 && m_creature->GetHealthPercent() < 75)
         {
             if (Creature* pCreature = m_creature->FindNearestCreature(NPC_EVENT_TRIGGER, 100.0f))

@@ -46,6 +46,31 @@ Transport::~Transport()
 {
     sObjectAccessor.RemoveObject(this);
     ASSERT(_passengers.empty());
+    ASSERT(m_maps.empty());
+}
+
+void Transport::AddToWorld()
+{
+    if (m_model)
+        GetMap()->InsertGameObjectModel(*m_model);
+
+    Object::AddToWorld();
+
+    // After Object::AddToWorld so that for initial state the GO is added to the world (and hence handled correctly)
+    UpdateCollisionState();
+
+    if (!i_AI)
+        AIM_Initialize();
+}
+
+void Transport::RemoveFromWorld()
+{
+    RemoveAllDynObjects();
+
+    if (m_model && GetMap()->ContainsGameObjectModel(*m_model))
+        GetMap()->RemoveGameObjectModel(*m_model);
+
+    Object::RemoveFromWorld();
 }
 
 bool Transport::Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, float y, float z, float ang, uint32 animprogress)
@@ -230,7 +255,14 @@ void Transport::RemovePassenger(WorldObject* passenger)
 void Transport::UpdatePosition(float x, float y, float z, float o)
 {
     Relocate(x, y, z, o);
-    UpdateModelPosition();
+
+    Map* pOldMap = GetMap();
+    for (auto const& pMap : m_maps)
+    {
+        SetMap(pMap);
+        UpdateModelPosition();
+    }
+    SetMap(pOldMap);
 
     UpdatePassengerPositions(_passengers);
 }
@@ -278,13 +310,18 @@ float Transport::CalculateSegmentPos(float now)
 
 bool Transport::TeleportTransport(uint32 newMapid, float x, float y, float z, float o)
 {
+    bool const differentMap = newMapid != GetMapId();
     Map const* oldMap = GetMap();
+    
+    if (differentMap)
+    {
+        std::unordered_set<Map*> mapsCopy = m_maps;
+        for (auto const& pMap : mapsCopy)
+            pMap->Remove<Transport>(this, false);
+        MANGOS_ASSERT(m_maps.empty());
+    }
 
     uint32 newInstanceId = sMapMgr.GetContinentInstanceId(newMapid, x, y);
-    SetLocationInstanceId(newInstanceId);
-    Map* newMap = sMapMgr.CreateMap(newMapid, this);
-    GetMap()->Remove<Transport>(this, false);
-    SetMap(newMap);
 
     for (_passengerTeleportItr = _passengers.begin(); _passengerTeleportItr != _passengers.end();)
     {
@@ -305,11 +342,7 @@ bool Transport::TeleportTransport(uint32 newMapid, float x, float y, float z, fl
                 break;
             case TYPEID_GAMEOBJECT:
             {
-                GameObject* go = obj->ToGameObject();
-                go->GetMap()->Remove(go, false);
-                go->Relocate(destX, destY, destZ, destO);
-                go->SetMap(newMap);
-                newMap->Add(go);
+                MANGOS_ASSERT(false && "clients before wotlk do not support boarding gameobject on transport");
                 break;
             }
             case TYPEID_PLAYER:
@@ -353,7 +386,19 @@ bool Transport::TeleportTransport(uint32 newMapid, float x, float y, float z, fl
     }
 
     Relocate(x, y, z, o);
-    GetMap()->Add<Transport>(this);
+
+    if (differentMap)
+    {
+        sMapMgr.GetOrCreateContinentInstances(newMapid, this, m_maps);
+        for (auto const& pMap : m_maps)
+            pMap->Add<Transport>(this);
+    }
+
+    // set the instance at these coordinates as the main one
+    SetLocationInstanceId(newInstanceId);
+    Map* newMap = sMapMgr.CreateMap(newMapid, this);
+    SetMap(newMap);
+    MANGOS_ASSERT(m_maps.find(newMap) != m_maps.end());
 
     return newMap != oldMap;
 }
@@ -366,7 +411,7 @@ void Transport::UpdatePassengerPositions(PassengerSet& passengers)
 void Transport::UpdatePassengerPosition(WorldObject* passenger)
 {
     // transport teleported but passenger not yet (can happen for players)
-    if (passenger->FindMap() != GetMap())
+    if (m_maps.find(passenger->FindMap()) == m_maps.end())
         return;
 
     // Do not use Unit::UpdatePosition here, we don't want to remove auras
@@ -387,20 +432,20 @@ void Transport::UpdatePassengerPosition(WorldObject* passenger)
         case TYPEID_UNIT:
         {
             Creature* creature = passenger->ToCreature();
-            GetMap()->CreatureRelocation(creature, x, y, z, o);
+            passenger->GetMap()->CreatureRelocation(creature, x, y, z, o);
             break;
         }
         case TYPEID_PLAYER:
             //relocate only passengers in world and skip any player that might be still logging in/teleporting
             if (passenger->IsInWorld())
-                GetMap()->PlayerRelocation(passenger->ToPlayer(), x, y, z, o);
+                passenger->GetMap()->PlayerRelocation(passenger->ToPlayer(), x, y, z, o);
 
             break;
         case TYPEID_GAMEOBJECT:
-            //GetMap()->GameObjectRelocation(passenger->ToGameObject(), x, y, z, o, false);
+            //passenger->GetMap()->GameObjectRelocation(passenger->ToGameObject(), x, y, z, o, false);
             break;
         case TYPEID_DYNAMICOBJECT:
-            //GetMap()->DynamicObjectRelocation(passenger->ToDynObject(), x, y, z, o);
+            //passenger->GetMap()->DynamicObjectRelocation(passenger->ToDynObject(), x, y, z, o);
             break;
         default:
             break;
@@ -426,31 +471,37 @@ void Transport::BuildUpdate(UpdateDataMapType& data_map)
 
 void Transport::SendOutOfRangeUpdateToMap()
 {
-    Map::PlayerList const& players = GetMap()->GetPlayers();
-    if (!players.isEmpty())
+    for (auto const& pMap : m_maps)
     {
-        UpdateData data;
-        BuildOutOfRangeUpdateBlock(&data);
-        WorldPacket packet;
-        data.BuildPacket(&packet);
-        for (const auto& player : players)
-            if (player.getSource()->GetTransport() != this)
-                player.getSource()->SendDirectMessage(&packet);
+        Map::PlayerList const& players = pMap->GetPlayers();
+        if (!players.isEmpty())
+        {
+            UpdateData data;
+            BuildOutOfRangeUpdateBlock(&data);
+            WorldPacket packet;
+            data.BuildPacket(&packet);
+            for (const auto& player : players)
+                if (player.getSource()->GetTransport() != this)
+                    player.getSource()->SendDirectMessage(&packet);
+        }
     }
 }
 
 void Transport::SendCreateUpdateToMap()
 {
-    Map::PlayerList const& players = GetMap()->GetPlayers();
-    if (!players.isEmpty())
+    for (auto const& pMap : m_maps)
     {
-        for (const auto& player : players)
+        Map::PlayerList const& players = pMap->GetPlayers();
+        if (!players.isEmpty())
         {
-            if (player.getSource()->GetTransport() != this)
+            for (const auto& player : players)
             {
-                UpdateData data;
-                BuildCreateUpdateBlockForPlayer(&data, player.getSource());
-                data.Send(player.getSource()->GetSession());
+                if (player.getSource()->GetTransport() != this)
+                {
+                    UpdateData data;
+                    BuildCreateUpdateBlockForPlayer(&data, player.getSource());
+                    data.Send(player.getSource()->GetSession());
+                }
             }
         }
     }

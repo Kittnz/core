@@ -176,12 +176,12 @@ void PetAI::UpdateAI(uint32 const diff)
         return;
 
     // Autocast (casted only in combat or persistent spells in any state)
-    if (m_uiCastingDelay >= CREATURE_CASTING_DELAY)
+    if (m_uiCastingDelay >= BATCHING_INTERVAL)
     {
         if (!m_creature->IsNonMeleeSpellCasted(false))
             UpdateSpells();
 
-        m_uiCastingDelay -= CREATURE_CASTING_DELAY;
+        m_uiCastingDelay -= BATCHING_INTERVAL;
     }
     else
         m_uiCastingDelay += diff;
