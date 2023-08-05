@@ -93,11 +93,11 @@ struct instance_blackrock_depths : ScriptedInstance
     uint32 m_uiThunderbrewCount;
     uint32 m_uiRelicCofferDoorCount;
 
-    std::list<uint64> m_lRibblySCronyMobGUIDList;
-    std::list<uint64> m_lArenaSpectatorMobGUIDList;
-    std::list<uint64> m_lArgelmachProtectorsMobGUIDList;
-    std::list<uint64> m_sBarPatronNpcGuids;
-    std::list<uint64> m_sBarPatrolGuids;
+    std::vector<uint64> m_lRibblySCronyMobGUIDList;
+    std::vector<uint64> m_lArenaSpectatorMobGUIDList;
+    std::vector<uint64> m_lArgelmachProtectorsMobGUIDList;
+    std::vector<uint64> m_sBarPatronNpcGuids;
+    std::vector<uint64> m_sBarPatrolGuids;
 
     bool m_bDoorDughalOpened;
     bool m_bDoorTobiasOpened;
@@ -260,8 +260,20 @@ struct instance_blackrock_depths : ScriptedInstance
             case NPC_MAGMUS:
                 m_uiMagmusGUID = pCreature->GetGUID();
                 break;
+            // Arena Crowd
             case NPC_ARENA_SPECTATOR:
+            case NPC_SHADOWFORGE_PEASANT:
+            case NPC_SHADOWFORGE_CITIZEN:
+            case NPC_SHADOWFORGE_SENATOR:
+            case NPC_ANVILRAGE_SOLDIER:
+            case NPC_ANVILRAGE_MEDIC:
+            case NPC_ANVILRAGE_OFFICER:
+                if (pCreature->GetPositionZ() < aArenaCrowdVolume.m_fCenterZ || pCreature->GetPositionZ() > aArenaCrowdVolume.m_fCenterZ + aArenaCrowdVolume.m_uiHeight ||
+                    !pCreature->IsWithinDist2d(aArenaCrowdVolume.m_fCenterX, aArenaCrowdVolume.m_fCenterY, aArenaCrowdVolume.m_uiRadius))
+                    break;
                 m_lArenaSpectatorMobGUIDList.push_back(pCreature->GetGUID());
+                if (m_auiEncounter[TYPE_RING_OF_LAW] == DONE)
+                    pCreature->SetFactionTemporary(FACTION_ARENA_NEUTRAL, TEMPFACTION_RESTORE_RESPAWN);
                 break;
             /*case NPC_PANZOR: m_uiPanzorGUID = pCreature->GetGUID();
                 switch (urand (0,1))
@@ -723,7 +735,7 @@ struct instance_blackrock_depths : ScriptedInstance
                         if (Creature* pCreature = instance->GetCreature(guid))
                         {
                             if (pCreature->IsAlive())
-                                pCreature->SetFactionTemplateId(674);
+                                pCreature->SetFactionTemporary(FACTION_ARENA_NEUTRAL, TEMPFACTION_RESTORE_RESPAWN);
                         }
                     }
                 }

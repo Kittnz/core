@@ -101,7 +101,7 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
     : i_mapEntry(sMapStorage.LookupEntry<MapEntry>(id)),
       i_id(id), i_InstanceId(InstanceId), m_unloadTimer(0),
       m_VisibleDistance(DEFAULT_VISIBILITY_DISTANCE), m_persistentState(nullptr),
-      m_activeNonPlayersIter(m_activeNonPlayers.end()), _transportsUpdateIter(_transports.end()),
+      m_activeNonPlayersIter(m_activeNonPlayers.end()),
       i_gridExpiry(expiry), m_TerrainData(sTerrainMgr.LoadTerrain(id)),
       i_data(nullptr), i_script_id(0), m_unloading(false), m_crashed(false),
       _processingSendObjUpdates(false), _processingUnitsRelocation(false),
@@ -471,9 +471,7 @@ template<>
 void Map::Add(Transport* obj)
 {
     MANGOS_ASSERT(obj);
-    //TODO: Needs clean up. An object should not be added to map twice.
-    if (obj->IsInWorld())
-        return;
+    MANGOS_ASSERT(_transports.find(obj) == _transports.end());
 
     CellPair p = MaNGOS::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
@@ -484,13 +482,6 @@ void Map::Add(Transport* obj)
 
     obj->SetMap(this);
     obj->AddToWorld();
-
-    if (obj->isActiveObject() && !IsUnloading())
-        AddToActive(obj);
-
-    //DEBUG_LOG("%s enters grid[%u,%u]", obj->GetObjectGuid().GetString().c_str(), cell.GridX(), cell.GridY());
-
-    //obj->GetViewPoint().Event_AddedToWorld(&(*grid)(cell.CellX(), cell.CellY()));
     _transports.insert(obj);
 
     // Broadcast creation to players
@@ -592,6 +583,7 @@ void Map::UpdateSync(const uint32 diff)
 {
     // Needs to be updated here.
     // Can lead to map <-> map teleports
+    /*
     for (_transportsUpdateIter = _transports.begin(); _transportsUpdateIter != _transports.end();)
     {
         WorldObject* obj = *_transportsUpdateIter;
@@ -602,6 +594,7 @@ void Map::UpdateSync(const uint32 diff)
 
         obj->Update(diff, diff);
     }
+    */
 }
 
 inline void Map::UpdateCellsAroundObject(uint32 now, uint32 diff, WorldObject const* object)
@@ -1213,28 +1206,25 @@ Map::Remove(T *obj, bool remove)
 template<>
 void Map::Remove(Transport* obj, bool remove)
 {
+    MANGOS_ASSERT(!remove && "transports should not be deleted by the map");
+    MANGOS_ASSERT(_transports.find(obj) != _transports.end());
+
+    if (obj->FindMap() != this)
+        obj->SetMap(this);
+
     if (obj->isActiveObject())
         RemoveFromActive(obj);
+
     if (remove)
         obj->CleanupsBeforeDelete();
     else
         obj->RemoveFromWorld();
 
     obj->SendOutOfRangeUpdateToMap();
-
-    if (_transportsUpdateIter != _transports.end())
-    {
-        TransportsContainer::iterator itr = _transports.find(obj);
-        if (itr == _transports.end())
-            return;
-        if (itr == _transportsUpdateIter)
-            ++_transportsUpdateIter;
-        _transports.erase(itr);
-    }
-    else
-        _transports.erase(obj);
+    _transports.erase(obj);
 
     obj->ResetMap();
+    obj->RemoveMapReference(this);
 
     if (remove)
     {
@@ -1472,7 +1462,7 @@ void Map::UnloadAll(bool pForce)
         Transport* transport = *itr;
         ++itr;
 
-        Remove<Transport>(transport, true);
+        Remove<Transport>(transport, false);
     }
 
     // Bones list should be empty at this point.
@@ -1673,9 +1663,9 @@ void Map::RemoveAllObjectsInRemoveList()
             {
                 GameObject* go = obj->ToGameObject();
                 if (Transport* transport = go->ToTransport())
-                    Remove(transport, true);
+                    Remove(transport, false);
                 else
-                    Remove(go, true);
+                    Remove(go, false);
                 break;
             }
             case TYPEID_UNIT:
@@ -2582,8 +2572,12 @@ Creature* Map::GetAnyTypeCreature(ObjectGuid guid)
 
 Transport* Map::GetTransport(ObjectGuid guid)
 {
-    if (!guid.IsMOTransport())
-        return nullptr;
+    if (guid.IsMOTransport())
+    {
+        for (auto const& pTransport : _transports)
+            if (pTransport->GetObjectGuid() == guid)
+                return pTransport;
+    }
 
     GameObject* go = GetGameObject(guid);
     return go ? go->ToTransport() : nullptr;

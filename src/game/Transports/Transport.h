@@ -27,13 +27,16 @@ struct CreatureData;
 
 class Transport : public GameObject
 {
-        friend Transport* TransportMgr::CreateTransport(uint32, uint32, Map*);
+        friend Transport* TransportMgr::CreateTransport(uint32, uint32);
 
         Transport();
     public:
         typedef std::set<WorldObject*> PassengerSet;
 
         ~Transport() override;
+
+        void AddToWorld() override;
+        void RemoveFromWorld() override;
 
         bool Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, float y, float z, float ang, uint32 animprogress);
         void CleanupsBeforeDelete() override;
@@ -94,6 +97,8 @@ class Transport : public GameObject
         void UpdatePassengerPosition(WorldObject* object);
         void SendOutOfRangeUpdateToMap();
         void SendCreateUpdateToMap();
+        void RemoveMapReference(Map* pMap) { m_maps.erase(pMap); }
+
     private:
         void MoveToNextWaypoint();
         float CalculateSegmentPos(float perc);
@@ -117,6 +122,7 @@ class Transport : public GameObject
         PassengerSet::iterator _passengerTeleportItr;
 
         uint32 _pathProgress;
+        std::unordered_set<Map*> m_maps;
 };
 
 #endif

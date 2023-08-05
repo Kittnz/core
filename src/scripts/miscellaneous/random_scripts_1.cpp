@@ -5241,7 +5241,7 @@ struct npc_baxxilAI : public ScriptedAI
             if (m_followCheckTimer <= diff)
             {
                 auto player = sObjectAccessor.FindPlayer(m_followingGuid);
-                if (!player || m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == RANDOM_MOTION_TYPE)
+                if (!player || m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == RANDOM_MOTION_TYPE || player->GetDistance(player) > 100.f)
                     m_creature->ForcedDespawn();
                 m_followCheckTimer = 1000;
             }

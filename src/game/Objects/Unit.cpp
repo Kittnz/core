@@ -152,8 +152,6 @@ Unit::Unit()
     m_canModifyStats = false;
     m_modelCollisionHeight = 2.f;
 
-    for (auto& immunityList : m_spellImmune)
-        immunityList.clear();
     for (auto& modifier : m_auraModifiersGroup)
     {
         modifier[BASE_VALUE] = 0.0f;
@@ -234,7 +232,7 @@ Unit::~Unit()
 
     // those should be already removed at "RemoveFromWorld()" call
     MANGOS_ASSERT(m_spellGameObjects.empty());
-    MANGOS_ASSERT(m_dynObjGUIDs.empty());
+    MANGOS_ASSERT(m_spellDynObjects.empty());
     MANGOS_ASSERT(m_deletedAuras.empty());
     MANGOS_ASSERT(m_deletedHolders.empty());
     MANGOS_ASSERT(!m_needUpdateVisibility);
@@ -813,6 +811,12 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             if (pPlayer->IsGod())
                 return 0;
 
+        if (auto player = pVictim->ToPlayer(); player && player->IsHardcore() && sWorld.HitsDiffThreshold())
+        {
+            //don't deal damage nor kill.
+            return 0;
+        }
+
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage: victim just died");
         Kill(pVictim, spellProto, durabilityLoss); // Function too long, we cut
         // last damage from non m_duel opponent or opponent controlled creature
@@ -1184,12 +1188,14 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 {
                     sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
                     {
+                        uint32 minLevel = 40;
                         auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
-                        if (!levelCheck.has_value())
+                        if (levelCheck.has_value())
+                            minLevel = std::atoi(levelCheck.value().c_str());
+
+                        if (minLevel <= level)
                             return true;
 
-                        if (std::atoi(levelCheck.value().c_str()) <= level)
-                            return true;
                         return false;
                     }, pVictim->GetName(), deathReason.str().c_str(), pVictim->GetLevel());
                 }
@@ -3795,7 +3801,7 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
         if (rule != SPELL_GROUP_STACK_RULE_DEFAULT)
         {
             // Attempt to add apply less powerfull spell
-            if (rule == SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN && sSpellMgr.IsMorePowerfullSpell(i_spellId, spellId, spellGroup))
+            if (rule == SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN && sSpellMgr.IsMorePowerfulSpell(i_spellId, spellId, spellGroup))
             {
                 DETAIL_LOG("[STACK][DB] Powerfull chain %u > %u (group %u). Aura %u will not be applied.", i_spellId, spellId, spellGroup, spellId);
                 return false;
@@ -3910,8 +3916,8 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
         }
     }
     // Sorts moins puissants :
-    std::list<uint32> lessPowerfullSpells;
-    if (sSpellMgr.ListLessPowerfullSpells(spellId, lessPowerfullSpells))
+    std::vector<uint32> lessPowerfullSpells;
+    if (sSpellMgr.ListLessPowerfulSpells(spellId, lessPowerfullSpells))
         for (const auto& it : lessPowerfullSpells)
             RemoveAurasDueToSpell(it);
     return true;
@@ -5731,20 +5737,6 @@ uint32 Unit::SpellHealingBonusTaken(WorldObject* pCaster, SpellEntry const* spel
                 else if (spellProto->IsFitToFamilyMask<CF_PALADIN_FLASH_OF_LIGHT1>() && i->GetEffIndex() == EFFECT_INDEX_1)
                     TakenTotal += i->GetModifier()->m_amount;
             }
-        }
-    }
-
-
-    if (HasAura(45707)) // tree of life healing taken aura (Custom)
-    {
-        auto passiveFormAura = sSpellMgr.GetSpellEntry(45706);
-        auto percentage = passiveFormAura->EffectBasePoints[0];
-        auto aura = GetSpellAuraHolder(45707);
-        auto caster = aura->GetCaster();
-
-        if (caster && caster->IsPlayer())
-        {
-            TakenTotal += (caster->GetStat(STAT_SPIRIT) / 100 * percentage);
         }
     }
 
@@ -7755,6 +7747,22 @@ void Unit::TauntApply(Unit* taunter)
 
 //======================================================================
 
+void Unit::RemoveTauntCaster(ObjectGuid guid)
+{
+    // remove only 1 occurance, starting from the front
+    // since guids are pushed back on taunt aura apply
+    for (auto itr = m_tauntGuids.begin(); itr != m_tauntGuids.end(); ++itr)
+    {
+        if ((*itr) == guid)
+        {
+            m_tauntGuids.erase(itr);
+            return;
+        }
+    }
+}
+
+//======================================================================
+
 void Unit::TauntFadeOut(Unit* taunter)
 {
     MANGOS_ASSERT(IsCreature());
@@ -7797,31 +7805,14 @@ void Unit::TauntFadeOut(Unit* taunter)
 
 Unit* Unit::GetTauntTarget() const
 {
-    const AuraList& tauntAuras = GetAurasByType(SPELL_AURA_MOD_TAUNT);
-    if (tauntAuras.empty())
-        return nullptr;
-
-    Unit* caster = nullptr;
-
-    // The last taunt aura caster is alive an we are happy to attack him
-    if ((caster = tauntAuras.back()->GetCaster()) && IsValidAttackTarget(caster))
-        return caster;
-    else if (tauntAuras.size() > 1)
+    // taunters are pushed back, last caster will be at the end
+    for (auto itr = m_tauntGuids.rbegin(); itr != m_tauntGuids.rend(); ++itr)
     {
-        // We do not have last taunt aura caster but we have more taunt auras,
-        // so find first available target
-
-        // Auras are pushed_back, last caster will be on the end
-        AuraList::const_iterator aura = --tauntAuras.end();
-        do
+        if (Unit* pTaunter = GetMap()->GetUnit(*itr))
         {
-            --aura;
-            if ((caster = (*aura)->GetCaster()) && caster->IsInMap(this) && IsValidAttackTarget(caster))
-            {
-                return caster;
-                break;
-            }
-        } while (aura != tauntAuras.begin());
+            if (IsValidAttackTarget(pTaunter))
+                return pTaunter;
+        }
     }
 
     return nullptr;
@@ -7835,7 +7826,7 @@ bool Unit::SelectHostileTarget()
 
     MANGOS_ASSERT(IsCreature());
 
-    if (!this->IsAlive())
+    if (!IsAlive())
         return false;
 
     //This function only useful once AI has been initialized
@@ -7843,7 +7834,7 @@ bool Unit::SelectHostileTarget()
         return false;
 
     // Nostalrius: delai de 5 sec avant attaque apres spawn.
-    if (ToCreature()->IsTempPacified())
+    if (((Creature*)this)->IsTempPacified())
         return false;
 
     Unit* target = GetTauntTarget();
@@ -9729,23 +9720,21 @@ Unit* Unit::FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDif
 {
     std::list<Unit*> targets;
 
-    if (Unit* pVictim{ GetVictim() })
+    if (Player* pVictim = ::ToPlayer(GetVictim()))
     {
-        if (HostileReference* pReference{ pVictim->GetHostileRefManager().getFirst() })
-        {
-            while (pReference)
-            {
-                if (Unit* pTarget{ pReference->getSourceUnit() })
-                {
-                    if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
-                        ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
-                    {
-                        targets.push_back(pTarget);
-                    }
-                }
+        HostileReference* pReference = pVictim->GetHostileRefManager().getFirst();
 
-                pReference = pReference->next();
+        while (pReference)
+        {
+            if (Unit* pTarget = pReference->getSourceUnit())
+            {
+                if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
+                    ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
+                {
+                    targets.push_back(pTarget);
+                }
             }
+            pReference = pReference->next();
         }
     }
     else
@@ -10807,8 +10796,8 @@ SpellAuraHolder* Unit::RefreshAura(uint32 spellId, int32 duration)
 
 bool Unit::HasMorePowerfulSpellActive(SpellEntry const* spell) const
 {
-    std::list<uint32> morePowerfullSpells;
-    if (!sSpellMgr.ListMorePowerfullSpells(spell->Id, morePowerfullSpells))
+    std::vector<uint32> morePowerfullSpells;
+    if (!sSpellMgr.ListMorePowerfulSpells(spell->Id, morePowerfullSpells))
         return false;
     for (const auto& i : m_spellAuraHolders)
         for (const auto& it : morePowerfullSpells)

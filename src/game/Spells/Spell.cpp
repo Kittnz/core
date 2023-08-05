@@ -2043,14 +2043,21 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         //CUSTOM Thunderhead
         case SPELLFAMILY_SHAMAN:
         {
-            if (m_spellInfo->SpellIconID == 19 && m_casterUnit && m_casterUnit->HasAura(45508)) // lightning shields
+            // lightning shields
+            if (m_spellInfo->SpellIconID == 19 &&
+                m_casterUnit && m_casterUnit->HasAura(45508) &&
+               !m_casterUnit->GetTargetGuid().IsEmpty())
             {
                 targetMode = TARGET_UNIT_FRIEND;
-                auto playerTarget = ObjectAccessor::GetUnit(*m_casterUnit, m_casterUnit->GetTargetGuid());
-                if (playerTarget && playerTarget->IsPlayer() && !playerTarget->IsHostileTo(m_casterUnit) && m_spellInfo->MinTargetLevel <= playerTarget->GetLevel())
+                auto playerTarget = m_casterUnit->GetMap()->GetPlayer(m_casterUnit->GetTargetGuid());
+                if (playerTarget &&
+                    !playerTarget->IsHostileTo(m_casterUnit) &&
+                    m_spellInfo->MinTargetLevel <= playerTarget->GetLevel() &&
+                    !(!m_casterUnit->IsPvP() && playerTarget->IsPvP()))
                     m_targets.setUnitTarget(playerTarget);
             }
-        }break;
+            break;
+        }
 
         case SPELLFAMILY_GENERIC:
         {
@@ -6174,7 +6181,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 {
                     if (m_casterUnit->IsInWater() || !m_casterUnit->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) || 
                         m_caster->GetZoneId() == 1519 || m_caster->GetZoneId() == 1637 || m_caster->GetZoneId() == 1497 || m_caster->GetZoneId() == 1537 ||
-                        m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetInstanceId())
+                        m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetMap()->IsDungeon())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't build here.");
                         return SPELL_FAILED_DONT_REPORT;

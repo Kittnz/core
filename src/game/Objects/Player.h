@@ -227,7 +227,7 @@ struct PlayerCreateInfoItem
     uint32 item_amount;
 };
 
-typedef std::list<PlayerCreateInfoItem> PlayerCreateInfoItems;
+typedef std::vector<PlayerCreateInfoItem> PlayerCreateInfoItems;
 
 struct PlayerClassLevelInfo
 {
@@ -267,9 +267,7 @@ struct LogItemInfo
     LogItemAction action;
 };
 
-
-
-typedef std::list<uint32> PlayerCreateInfoSpells;
+typedef std::vector<uint32> PlayerCreateInfoSpells;
 
 struct PlayerCreateInfoAction
 {
@@ -281,7 +279,7 @@ struct PlayerCreateInfoAction
     uint32 action = 0;
 };
 
-typedef std::list<PlayerCreateInfoAction> PlayerCreateInfoActions;
+typedef std::vector<PlayerCreateInfoAction> PlayerCreateInfoActions;
 
 struct PlayerInfo
 {
@@ -1251,6 +1249,9 @@ class Player final: public Unit
         Player* GetTrader() const { return m_trade ? m_trade->GetTrader() : nullptr; }
         TradeData* GetTradeData() const { return m_trade; }
         void TradeCancel(bool sendback);
+
+        uint32 GetTimeLoggedIn() const { return m_timeLoggedIn; }
+        void AddLoggedInTime(uint32 diff) { m_timeLoggedIn += diff; }
 
         uint32 GetMoney() const { return GetUInt32Value(PLAYER_FIELD_COINAGE); }
         void LogModifyMoney(int32 d, const char* type, ObjectGuid fromGuid = ObjectGuid(), uint32 data = 0);
@@ -2295,6 +2296,7 @@ class Player final: public Unit
         bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
+        uint32 m_timeLoggedIn = 0;
         
         void SendMountResult(UnitMountResult result) const;
         void SendDismountResult(UnitDismountResult result) const;

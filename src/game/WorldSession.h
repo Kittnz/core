@@ -482,6 +482,9 @@ class WorldSession
         time_t m_muteTime;
         time_t m_lastPubChannelMsgTime;
 
+        uint32 GetTimeActive() const { return m_activeTime; }
+        void AddActiveTime(uint32 diff) { m_activeTime += diff; }
+
         // Locales
         LocaleConstant GetSessionDbcLocale() const { return m_sessionDbcLocale; }
         int GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
@@ -951,6 +954,8 @@ class WorldSession
 
         AccountTypes _security;
         uint32 _accountId;
+
+        uint32 m_activeTime = 0;
 
         WhisperTargetLimits _whisper_targets;
 

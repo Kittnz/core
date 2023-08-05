@@ -66,6 +66,8 @@ void WorldRunnable::operator()()
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
             sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
 
+        sWorld.SetLastDiff(diff);
+
         // ANTICRASH
         if (sWorld.GetAnticrashRearmTimer())
         {
@@ -113,6 +115,9 @@ void WorldRunnable::operator()()
 
     sLog.outString("Unloading all maps...");
     sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
+
+    sLog.outString("Unloading all transports...");
+    sTransportMgr->Unload();
 
     // End the database thread
     WorldDatabase.ThreadEnd(); // free mySQL thread resources

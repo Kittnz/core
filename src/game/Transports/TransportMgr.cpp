@@ -40,6 +40,10 @@ TransportMgr::~TransportMgr() { }
 
 void TransportMgr::Unload()
 {
+    for (auto const& pTransport : m_shipTransports)
+        delete pTransport;
+    m_shipTransports.clear();
+
     _transportTemplates.clear();
 }
 
@@ -336,12 +340,8 @@ void TransportMgr::GeneratePath(GameObjectInfo const* goInfo, TransportTemplate*
     transport->pathTime = keyFrames.back().DepartureTime;
 }
 
-Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map* map /*= nullptr*/)
+Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/)
 {
-    // instance case, execute GetGameObjectEntry hook
-    if (map && !entry)
-        return nullptr;
-
     TransportTemplate const* tInfo = GetTransportTemplate(entry);
     if (!tInfo)
     {
@@ -392,12 +392,21 @@ Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map*
         }
     }
 
-    // use preset map for instances (need to know which instance)
-    trans->SetLocationInstanceId(sMapMgr.GetContinentInstanceId(mapId, x, y));
-    trans->SetMap(map ? map : sMapMgr.CreateMap(mapId, trans));
+    // Add transport to all continent instances.
+    sMapMgr.GetOrCreateContinentInstances(mapId, trans, trans->m_maps);
+    for (auto const& pMap : trans->m_maps)
+    {
+        trans->SetMap(pMap);
+        trans->GetMap()->Add<Transport>(trans);
+    }
 
-    // Passengers will be loaded once a player is near
-    trans->GetMap()->Add<Transport>(trans);
+    // set the instance at these coordinates as the main one
+    uint32 newInstanceId = sMapMgr.GetContinentInstanceId(mapId, x, y);
+    trans->SetLocationInstanceId(newInstanceId);
+    Map* newMap = sMapMgr.CreateMap(mapId, trans);
+    trans->SetMap(newMap);
+    MANGOS_ASSERT(trans->m_maps.find(newMap) != trans->m_maps.end());
+    
     return trans;
 }
 
@@ -420,25 +429,24 @@ void TransportMgr::SpawnContinentTransports()
             uint32 entry = fields[1].GetUInt32();
 
             if (TransportTemplate const* tInfo = GetTransportTemplate(entry))
+            {
                 if (!tInfo->inInstance)
-                    if (CreateTransport(entry, guid))
+                {
+                    if (Transport* pTransport = CreateTransport(entry, guid))
+                    {
                         ++count;
-
+                        m_shipTransports.insert(pTransport);
+                    }
+                }
+            }
         }
         while (result->NextRow());
         delete result;
     }
 }
 
-void TransportMgr::CreateInstanceTransports(Map* map)
+void TransportMgr::Update(uint32 const diff)
 {
-    TransportInstanceMap::const_iterator mapTransports = _instanceTransports.find(map->GetId());
-
-    // no transports here
-    if (mapTransports == _instanceTransports.end() || mapTransports->second.empty())
-        return;
-
-    // create transports
-    for (const auto itr : mapTransports->second)
-        CreateTransport(itr, 0, map);
+    for (auto const& pTransport : m_shipTransports)
+        pTransport->Update(diff, diff);
 }
