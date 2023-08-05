@@ -15,3 +15,10 @@ REPLACE INTO `gameobject` VALUES ( 5016580, 2020058, 451, 4313.68, -87.8349, 267
 REPLACE INTO `gameobject` VALUES ( 5016581, 2020058, 451, 4325.65, -74.286, 267.966, 4.05733, 0, 0, 0.896997, -0.442036, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5016582, 2020059, 451, 4305.01, -72.7651, 267.966, 5.71295, 0, 0, 0.281272, -0.959628, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (899,4325.692871,-80.279953,267.966003,3.150976,451,'tamamoshrine');
+REPLACE INTO `creature` VALUES (2578578,4950,0,0,0,1,16228.6,16268.7,13.1373,4.35576,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2578578;
+DELETE FROM creature_addon WHERE guid=2578578;
+DELETE FROM creature_movement WHERE id=2578578;
+DELETE FROM game_event_creature WHERE guid=2578578;
+DELETE FROM game_event_creature_data WHERE guid=2578578;
+DELETE FROM creature_battleground WHERE guid=2578578;
