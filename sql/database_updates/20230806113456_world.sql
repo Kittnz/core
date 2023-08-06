@@ -1,3 +1,0 @@
--- Add social media information
-INSERT INTO `autobroadcast` (`string_id`) VALUES (50006);
-INSERT INTO `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (50006, 'Did you know that we are on Discord, Reddit, Instagram, Twitter, Facebook, YouTube and other platforms? Check the buttons at the top of our website. For example, our Reddit sub is called /r/turtlewow/. Our music is available on Spotify, Apple Music and Soundcloud.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
