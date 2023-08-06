@@ -260,6 +260,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraAuraSpell,
     &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT       implemented in Unit::CalculateAbsorbAndResist
     &Aura::HandleNoImmediateEffect,                         //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonusTaken and Unit::SpellDamageBonusTaken
+    &Aura::HandleNoImmediateEffect,                         //195 SPELL_AURA_MOD_HONOR_GAIN               implemented in Player::RewardHonorOnDeath
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };

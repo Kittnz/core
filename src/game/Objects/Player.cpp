@@ -22622,6 +22622,8 @@ void Player::RewardHonorOnDeath()
             }
 
             uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
+            rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+
             if (rewPoints)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
@@ -22634,6 +22636,8 @@ void Player::RewardHonorOnDeath()
             continue;
 
         uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+
         if (rewPoints)
         {
             if (!InBattleGround())
