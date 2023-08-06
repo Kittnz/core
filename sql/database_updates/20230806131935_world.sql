@@ -163,3 +163,8 @@ UPDATE `creature` SET `position_x` = -2627.648438, `position_y` = 354.024597, `p
 REPLACE INTO `creature` VALUES (2578619,1412,0,0,0,1,-2404.31,358.047,174.001,4.26846,120,120,5,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2578620,1412,0,0,0,1,-2492.17,330.896,190.524,0.669766,120,120,5,100,100,1,0,0);
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (902,-2256.147461,380.858643,186.499283,3.596385,1,'windsweptheights');
+
+-- Changes by TORTA
+DELETE FROM gameobject WHERE guid = '4014204';
+DELETE FROM game_event_gameobject WHERE guid = '4014204';
+DELETE FROM gameobject_battleground WHERE guid = '4014204';
