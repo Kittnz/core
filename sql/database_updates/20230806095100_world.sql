@@ -132,7 +132,7 @@ UPDATE `creature_template` SET `movement_type` = 0 WHERE `entry` = 61642;
 
 set @gossip_menu_id = 41540; set @magic_number = 61641;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Yo pal! Welcome to my studio! it is a little crowded but I make due. You are talkin\' to Rashi Goldtongue, the DJ broadcasting live from Everlook! Tune in to my show sometime aight?');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Yo pal! Welcome to my studio! It is a little crowded, but I make due.\n\nYou are talkin\' to Rashi Goldtongue, the DJ broadcasting live from Everlook! Tune in to my show sometime, aight?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -141,3 +141,5 @@ UPDATE `spell_template` SET `auraDescription` = 'Increases speed based on your R
 
 -- fix
 update spell_template SET name = 'Armor +32/Stamina +4', description = 'Permanently increase the armor value of an item worn on the chest, legs, hands or feet by 32 and Stamina by 4. Only usable on items level 25 and above.' WHERE entry = 10344; -- Armor +32 (Thick Armor Kit)
+
+UPDATE `spell_template` SET `effectBonusCoefficient2` = 1 WHERE `entry` = 16886;
