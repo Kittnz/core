@@ -171,3 +171,6 @@ DELETE FROM gameobject_battleground WHERE guid = '4014204';
 DELETE FROM gameobject WHERE guid = '4014201';
 DELETE FROM game_event_gameobject WHERE guid = '4014201';
 DELETE FROM gameobject_battleground WHERE guid = '4014201';
+
+-- Changes by TAMMO
+REPLACE INTO `gameobject` VALUES ( 5016604, 2006699, 451, 4565.37, -197.7, 270.1, 3.05752, 0, 0, 0.999117, 0.0420228, 300, 300, 100, 1, 0, 0);
