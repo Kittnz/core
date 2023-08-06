@@ -168,3 +168,6 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 DELETE FROM gameobject WHERE guid = '4014204';
 DELETE FROM game_event_gameobject WHERE guid = '4014204';
 DELETE FROM gameobject_battleground WHERE guid = '4014204';
+DELETE FROM gameobject WHERE guid = '4014201';
+DELETE FROM game_event_gameobject WHERE guid = '4014201';
+DELETE FROM gameobject_battleground WHERE guid = '4014201';
