@@ -151,8 +151,6 @@ replace into shop_items values
 (188, 5, 81158, 'Armored Frostmane Bear', 400),
 (189, 5, 81091, 'Big Blizzard Bear', 500),
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
-(223, 5, 81239, 'Happy Whimsyshire Cloud', 200), 
-(224, 5, 81240, 'Sad Whimsyshire Cloud', 200), 
 -- Patch 1.16.6
 (225, 5, 83150,	'Big Turtle WoW Bear', 360),
 (226, 5, 83151,	'Black Spectral Tiger', 360),
