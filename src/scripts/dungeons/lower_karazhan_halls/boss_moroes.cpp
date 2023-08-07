@@ -27,42 +27,46 @@ struct boss_moroesAI : public ScriptedAI
 		m_creature->RestoreFaction();
 		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 		m_InterludeTimer = 0;
+		m_SacrificeTimer = 0;
+		ResetBattleTimers();
+		sound1 = false;
+		intermission1 = false;
+		sacrifice = false;
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_MOROES_STAGE, 0);
+	}
+
+	void ResetBattleTimers()
+	{
 		m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
 		m_SmokeBombTimer = urand(20 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
 		m_ShuffleKickTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
 		m_ShadowBlastTimer = urand(12 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
 		m_MoroesCurseTimer = urand(50 * IN_MILLISECONDS, 60 * IN_MILLISECONDS);
 		m_ReflectionTimer = 30 * IN_MILLISECONDS;
-		m_SacrificeTimer = 0;
-		sound1 = false;
-		intermission1 = false;
-		sacrifice = false;
 	}
 
 	void Aggro(Unit* /*pWho*/) override
 	{
 		m_creature->SetInCombatWithZone();
+		ResetBattleTimers();
+	}
+
+	void SetHostile()
+	{
+		m_creature->SetFactionTemplateId(14);
+		m_creature->SetInCombatWithZone();
 	}
 
 	void EnterEvadeMode() override
 	{
-		ScriptedAI::EnterEvadeMode();
-	}
-
-	void JustReachedHome() override
-	{
-		if (m_pInstance)
-		{
-			if (m_pInstance->GetData(DATA_MOROES_STAGE) == 1)
-				m_pInstance->SetData(DATA_MOROES_STAGE, 0);
-			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
-				m_pInstance->SetData(DATA_MOROES_STAGE, 2);
-		}
-		m_creature->RestoreFaction();
 		uint32 oldRespawnDelay = m_creature->GetRespawnDelay();
-		m_creature->SetRespawnDelay(10);
+		m_creature->SetRespawnDelay(30);
 		m_creature->DisappearAndDie();
 		m_creature->SetRespawnDelay(oldRespawnDelay);
+
+		Reset();
 	}
 
 	void JustDied(Unit* pKiller) override
@@ -102,7 +106,7 @@ struct boss_moroesAI : public ScriptedAI
 						if (m_pInstance)
 							m_pInstance->SetData(DATA_MOROES_STAGE, 1);
 
-						m_creature->SetFactionTemplateId(14);
+						SetHostile();
 						m_InterludeTimer = 0;
 					}
 					else
@@ -190,7 +194,7 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (m_InterludeTimer < uiDiff)
 					{
-						m_creature->SetFactionTemplateId(14);
+						SetHostile();
 						m_InterludeTimer = 0;
 					}
 					else
