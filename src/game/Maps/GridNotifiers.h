@@ -981,6 +981,9 @@ namespace MaNGOS
                 if (!i_obj->IsWithinDistInMap(u, i_range))
                     return false;
 
+                if (i_obj->IsPlayer() && !((Player*)i_obj)->IsPvP() && u->IsPvP())
+                    return false;
+
                 return i_originalCaster->IsValidAttackTarget(u);
             }
         private:
