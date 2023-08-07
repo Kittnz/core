@@ -398,3 +398,56 @@ DELETE FROM creature_movement WHERE id=2575782;
 DELETE FROM game_event_creature WHERE guid=2575782;
 DELETE FROM game_event_creature_data WHERE guid=2575782;
 DELETE FROM creature_battleground WHERE guid=2575782;
+DELETE FROM creature WHERE guid=2575786;
+DELETE FROM creature_addon WHERE guid=2575786;
+DELETE FROM creature_movement WHERE id=2575786;
+DELETE FROM game_event_creature WHERE guid=2575786;
+DELETE FROM game_event_creature_data WHERE guid=2575786;
+DELETE FROM creature_battleground WHERE guid=2575786;
+
+-- Changes by SHANG
+DELETE FROM gameobject WHERE guid = '5014821';
+DELETE FROM game_event_gameobject WHERE guid = '5014821';
+DELETE FROM gameobject_battleground WHERE guid = '5014821';
+DELETE FROM gameobject WHERE guid = '5014820';
+DELETE FROM game_event_gameobject WHERE guid = '5014820';
+DELETE FROM gameobject_battleground WHERE guid = '5014820';
+
+-- Changes by VOJI
+DELETE FROM creature WHERE guid=2575784;
+DELETE FROM creature_addon WHERE guid=2575784;
+DELETE FROM creature_movement WHERE id=2575784;
+DELETE FROM game_event_creature WHERE guid=2575784;
+DELETE FROM game_event_creature_data WHERE guid=2575784;
+DELETE FROM creature_battleground WHERE guid=2575784;
+
+-- Changes by SHANG
+DELETE FROM gameobject WHERE guid = '5014819';
+DELETE FROM game_event_gameobject WHERE guid = '5014819';
+DELETE FROM gameobject_battleground WHERE guid = '5014819';
+REPLACE INTO `gameobject` VALUES ( 5014818, 3000303, 1, -375.888, 2217.05, 88.9817, 2.86594, 0, 0, 0.990517, 0.13739, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5014818';
+DELETE FROM game_event_gameobject WHERE guid = '5014818';
+DELETE FROM gameobject_battleground WHERE guid = '5014818';
+
+-- Changes by VOJI
+DELETE FROM creature WHERE guid=2575785;
+DELETE FROM creature_addon WHERE guid=2575785;
+DELETE FROM creature_movement WHERE id=2575785;
+DELETE FROM game_event_creature WHERE guid=2575785;
+DELETE FROM game_event_creature_data WHERE guid=2575785;
+DELETE FROM creature_battleground WHERE guid=2575785;
+
+-- Changes by SHANG
+DELETE FROM gameobject WHERE guid = '5014817';
+DELETE FROM game_event_gameobject WHERE guid = '5014817';
+DELETE FROM gameobject_battleground WHERE guid = '5014817';
+DELETE FROM gameobject WHERE guid = '5014816';
+DELETE FROM game_event_gameobject WHERE guid = '5014816';
+DELETE FROM gameobject_battleground WHERE guid = '5014816';
+DELETE FROM gameobject WHERE guid = '5014815';
+DELETE FROM game_event_gameobject WHERE guid = '5014815';
+DELETE FROM gameobject_battleground WHERE guid = '5014815';
+DELETE FROM gameobject WHERE guid = '5014832';
+DELETE FROM game_event_gameobject WHERE guid = '5014832';
+DELETE FROM gameobject_battleground WHERE guid = '5014832';
