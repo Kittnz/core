@@ -16,6 +16,14 @@ update quest_template set details = 'The land is tainted with the foul mark of w
 -- Quest 40853 - The Staff of Shinban - insert a comma after "Oh" in the sentence "Oh don't look at me like that, you know I'm right." 
 update quest_template set details = 'Truthfully, $N, I don\'t really care how many dumb ogres are killed by gold-a-dozen mercenaries. Whether it\'s you or some other that brings me a bag of heads, it makes no difference.$B$BOh, don\'t look at me like that, you know I\'m right. Anyway, if you want something meaningful to do, listen: our scouts overheard that two ogres are vying for power amongst the Brol\'ok. One of which calls himself Shinban Four-Eyes. A two headed ogre with three actual eyes, claims the fourth is a hidden one that gives him the vision required to lead!$B$BI would be worried about that, $N. Either he is telling the truth and is a caster powerful enough to have magical sight, or he is smart enough to understand metaphors. Both are worrying. Regardless, he is your primary target.' where entry = 40853;
 -- Link NPC GUID 2578322 and 2578321 to pull together when one is attacked.
+delete from creature_groups where leader_guid = 2578321 and member_guid = 2578322;
+delete from creature_groups where leader_guid = 2578322 and member_guid = 2578321;
 INSERT INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES 
 (2578322, 2578321, 0, 0, 2),
 (2578321, 2578322, 0, 0, 2);
+-- GO 2020049 loot table currently  61764 is set to negative chance drop as it would be quest item. It's wrong. Please creater a condition for this drop to appear ONLY if player has quest 41074 in their log.
+REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES
+(41074, 9, 41074, 1, 0, 0, 0);
+update gameobject_loot_template set ChanceOrQuestChance = 100, condition_id = 41074 where item = 61764 and entry = 2020049;
+
+
