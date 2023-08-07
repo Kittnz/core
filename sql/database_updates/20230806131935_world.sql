@@ -376,3 +376,11 @@ REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.27, -4655.2, 724.43
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417503130127416, 0.800000);
 REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.27, -4655.2, 724.433, 1.64345, 0, 0, 0.73232, 0.68096, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.17, -4655.2, 724.433, 1.64345, 0, 0, 0.73232, 0.68096, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417503130127416, 0.900000);
+REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.17, -4655.2, 724.433, 1.64345, 0, 0, 0.73232, 0.68096, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417503130127416, 0.850000);
+REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.17, -4655.2, 724.433, 1.64345, 0, 0, 0.73232, 0.68096, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TORTA
+DELETE FROM `game_tele` WHERE `name` = 'karazhanproper';
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (903,-11099.788086,-1996.333130,49.853367,0.600000,532,'"kara"');
