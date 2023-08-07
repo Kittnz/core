@@ -2152,8 +2152,8 @@ void World::Update(uint32 diff)
         uint32 tmpDiff = uint32(m_gameTime - m_startTime);
         uint32 onlineClientsNum = GetActiveSessionCount();
         uint32 maxClientsNum = GetMaxActiveSessionCount();
-        uint32 queuedClientsNum = sWorld.GetQueuedSessionCount();
-        uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
+        uint32 queuedClientsNum = GetQueuedSessionCount();
+        uint32 maxQueuedClientsNum = GetMaxQueuedSessionCount();
 
         m_timers[WUPDATE_UPTIME].Reset();
         LoginDatabase.PExecute("UPDATE `uptime` SET `uptime` = %u, `onlineplayers` = %u, `maxplayers` = %u, `queue` = %u, `maxqueue` = %u WHERE `realmid` = %u AND `starttime` = " UI64FMTD, tmpDiff, onlineClientsNum, maxClientsNum, queuedClientsNum, maxQueuedClientsNum, realmID, uint64(m_startTime));
