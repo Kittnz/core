@@ -25,5 +25,6 @@ INSERT INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `f
 REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES
 (41074, 9, 41074, 1, 0, 0, 0);
 update gameobject_loot_template set ChanceOrQuestChance = 100, condition_id = 41074 where item = 61764 and entry = 2020049;
-
-
+-- Remove description.
+update item_template set description = '' where entry = 61597; -- Conspirator's Trickpockets
+update item_template set bonding = 0 where entry = 61802; -- Celia's Journal
