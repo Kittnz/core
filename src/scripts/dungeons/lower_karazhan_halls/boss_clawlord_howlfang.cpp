@@ -49,7 +49,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 			m_creature->MonsterYell("My pack shall tear you apart, bone by bone!");
 		}
 
-		if (!phase && m_creature->GetHealthPercent() <= 30.0f)
+		if (!frenzy && m_creature->GetHealthPercent() <= 30.0f)
 		{
 			frenzy = true;
 			DoCastSpellIfCan(m_creature, 57082);
