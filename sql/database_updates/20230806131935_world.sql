@@ -384,3 +384,11 @@ REPLACE INTO `gameobject` VALUES ( 5016632, 2011082, 1, 6777.17, -4655.2, 724.43
 -- Changes by TORTA
 DELETE FROM `game_tele` WHERE `name` = 'karazhanproper';
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (903,-11099.788086,-1996.333130,49.853367,0.600000,532,'"kara"');
+
+-- Changes by VOJI
+DELETE FROM creature WHERE guid=2575783;
+DELETE FROM creature_addon WHERE guid=2575783;
+DELETE FROM creature_movement WHERE id=2575783;
+DELETE FROM game_event_creature WHERE guid=2575783;
+DELETE FROM game_event_creature_data WHERE guid=2575783;
+DELETE FROM creature_battleground WHERE guid=2575783;
