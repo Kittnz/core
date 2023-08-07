@@ -451,3 +451,11 @@ DELETE FROM gameobject_battleground WHERE guid = '5014815';
 DELETE FROM gameobject WHERE guid = '5014832';
 DELETE FROM game_event_gameobject WHERE guid = '5014832';
 DELETE FROM gameobject_battleground WHERE guid = '5014832';
+
+-- Changes by VOJI
+DELETE FROM creature WHERE guid=2561618;
+DELETE FROM creature_addon WHERE guid=2561618;
+DELETE FROM creature_movement WHERE id=2561618;
+DELETE FROM game_event_creature WHERE guid=2561618;
+DELETE FROM game_event_creature_data WHERE guid=2561618;
+DELETE FROM creature_battleground WHERE guid=2561618;
