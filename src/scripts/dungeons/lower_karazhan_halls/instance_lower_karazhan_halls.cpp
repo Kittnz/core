@@ -9,6 +9,8 @@ instance_lower_karazhan_halls::instance_lower_karazhan_halls(Map* p_Map) : Scrip
 void instance_lower_karazhan_halls::Initialize()
 {
 	m_uiBroodQueenAraxxnaGUID = 0;
+	m_uiMoroesGUID = 0;
+	m_uiMoroesStage = 0;
 }
 
 void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
@@ -17,6 +19,9 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 	{
 	    case 61221:
 			m_uiBroodQueenAraxxnaGUID = pCreature->GetGUID();
+			break;
+		case 61225:
+			m_uiMoroesGUID = pCreature->GetGUID();
 			break;
 	}
 }
@@ -31,8 +36,29 @@ uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
 	{
 	    case DATA_BROOD_QUEEN_ARAXXNA:
 			return m_uiBroodQueenAraxxnaGUID;
+		case DATA_MOROES:
+			return m_uiMoroesGUID;
 		default:
 			return 0;
+	}
+}
+
+uint32 instance_lower_karazhan_halls::GetData(uint32 uiType)
+{
+	switch (uiType)
+	{
+		case DATA_MOROES_STAGE:
+			return m_uiMoroesStage;
+	}
+}
+
+void instance_lower_karazhan_halls::SetData(uint32 uiType, uint32 uiData)
+{
+	switch (uiType)
+	{
+		case DATA_MOROES_STAGE:
+			m_uiMoroesStage = uiData;
+			break;
 	}
 }
 
