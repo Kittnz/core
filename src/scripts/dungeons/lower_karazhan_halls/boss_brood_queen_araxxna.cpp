@@ -23,9 +23,16 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		m_SpawnEggsTimer = 35 * IN_MILLISECONDS;
 	}
 
+	void Aggro(Unit* /*pWho*/) override
+	{
+		m_creature->PlayDirectSound(60421);
+		m_creature->MonsterYell("What goes there, new prey to be entangled?");
+	}
+
 	void SpawnEggs()
 	{
-		m_creature->MonsterYell("Brood Queen Araxxna spawns two Skitterweb Egg!");
+		m_creature->PlayDirectSound(60420);
+		m_creature->MonsterYell("My minions shall consume you!");
 		for (uint8 i = 0; i < 2; ++i)
 			DoSpawnCreature(30008, 15.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
 	}
@@ -42,6 +49,12 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		}
 
 		summonList.clear();
+	}
+
+	void JustDied(Unit* pKiller) override
+	{
+		m_creature->PlayDirectSound(60419);
+		m_creature->MonsterYell("My Brood... Destroyed.");
 	}
 
 	void JustSummoned(Creature* summon) override
