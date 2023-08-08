@@ -1918,48 +1918,31 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             uint32 finalSpellId = 0;
             switch (GetId())
             {
-                case 19548:
-                    finalSpellId = 19597;
-                    break;
-                case 19674:
-                    finalSpellId = 19677;
-                    break;
-                case 19687:
-                    finalSpellId = 19676;
-                    break;
-                case 19688:
-                    finalSpellId = 19678;
-                    break;
-                case 19689:
-                    finalSpellId = 19679;
-                    break;
-                case 19692:
-                    finalSpellId = 19680;
-                    break;
-                case 19693:
-                    finalSpellId = 19684;
-                    break;
-                case 19694:
-                    finalSpellId = 19681;
-                    break;
-                case 19696:
-                    finalSpellId = 19682;
-                    break;
-                case 19697:
-                    finalSpellId = 19683;
-                    break;
-                case 19699:
-                    finalSpellId = 19685;
-                    break;
-                case 19700:
-                    finalSpellId = 19686;
-                    break;
-               // Temporary hack for Undead Hunters:
-                case 50901:
-                case 50902:
-                case 50903:
-                    finalSpellId = 19681;
-                    break;
+                // I have a feeling this isn't supposed to be this way?
+                case 19548: finalSpellId = 19597; break;
+                case 19674: finalSpellId = 19677; break;
+                case 19687: finalSpellId = 19676; break;
+                case 19688: finalSpellId = 19678; break;
+                case 19689: finalSpellId = 19679; break;
+                case 19692: finalSpellId = 19680; break;
+                case 19693: finalSpellId = 19684; break;
+                case 19694: finalSpellId = 19681; break;
+                case 19696: finalSpellId = 19682; break;
+                case 19697: finalSpellId = 19683; break;
+                case 19699: finalSpellId = 19685; break;
+                case 19700: finalSpellId = 19686; break;
+                case 44000: finalSpellId = 44001; break;
+                case 44002: finalSpellId = 44003; break;
+                case 44004: finalSpellId = 44005; break; 
+                case 44006: finalSpellId = 44007; break;   
+                case 44008: finalSpellId = 44009; break;   
+                case 44010: finalSpellId = 44011; break; 
+                case 44012: finalSpellId = 44013; break;
+                case 44014: finalSpellId = 44015; break;
+                case 44016: finalSpellId = 44017; break;
+                case 44018: finalSpellId = 44019; break;
+                case 44020: finalSpellId = 44021; break;
+                case 44022: finalSpellId = 44023; break;
             }
 
             if (finalSpellId)

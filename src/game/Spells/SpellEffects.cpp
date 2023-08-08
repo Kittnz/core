@@ -7309,26 +7309,6 @@ void Spell::EffectQuestComplete(SpellEffectIndex eff_idx)
 
     uint32 quest_id = m_spellInfo->EffectMiscValue[eff_idx];
 
-    std::array<std::pair<uint32, uint32>, 9> custom =
-    { {
-        { 6062, 80331 }, // Goblin hunter's Taming the Beast I
-        { 6083, 80332 }, // Goblin hunter's Taming the Beast II
-        { 6082, 80333 }, // Goblin hunter's Taming the Beast III
-        { 6064, 80340 }, // Gnome hunter's Taming the Beast III
-        { 6084, 80341 }, // Gnome hunter's Taming the Beast III
-        { 6085, 80342 }, // Gnome hunter's Taming the Beast III
-        // TEMPORARY FOR TESTING ONLY!!!
-        { 6062, 40248 }, // Undead hunter's Taming the Beast III
-        { 6062, 40249 }, // Undead hunter's Taming the Beast III
-        { 6062, 40250 }, // Undead hunter's Taming the Beast III
-    } };
-
-    for (auto const& data : custom)
-    {
-        if (m_spellInfo->GetEffectMiscValue(eff_idx) == data.first && unitTarget->ToPlayer()->GetQuestStatus(data.second) == QUEST_STATUS_INCOMPLETE)
-            quest_id = data.second;
-    }
-
     ((Player*)unitTarget)->AreaExploredOrEventHappens(quest_id);
 }
 
