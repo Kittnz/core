@@ -41,7 +41,7 @@
 void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, ObjectGuid& target_guid, std::string& name)
 {
     PInfoData* data = new PInfoData;
-    data->m_accountId = session->GetAccountId();
+    data->m_accountId = session ? session->GetAccountId() : 1;
     data->target_name = name;
 
     if (target)
@@ -61,7 +61,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
         data->fingerprint = target->GetSession()->GetAntiCheat()->GetFingerprint();
         data->isFingerprintBanned = target->GetSession()->IsFingerprintBanned();
         data->isSuspicious = target->GetSession()->IsSuspicious();
-        if (session->GetSecurity() >= SEC_ADMINISTRATOR)
+        if (!session || session->GetSecurity() >= SEC_ADMINISTRATOR)
             data->email = target->GetSession()->GetEmail();
         data->m_hasUsedClickToMove = target->GetSession()->HasUsedClickToMove();
         data->m_extendedFingerprint = target->GetSession()->_analyser->GetCurrentSample().GetHash();
