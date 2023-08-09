@@ -817,11 +817,17 @@ void Guild::Disband()
     CharacterDatabase.PExecute("DELETE FROM guild_bank_money WHERE guildid = '%u'", m_Id);
     CharacterDatabase.CommitTransaction();
 
-	_Bank->DeleteFromDB();
-	delete _Bank;
+    if (_Bank)
+    {
+        _Bank->DeleteFromDB();
+        delete _Bank;
+    }
 
-    _InfernoBank->DeleteFromDB();
-    delete _InfernoBank;
+    if (_InfernoBank)
+    {
+        _InfernoBank->DeleteFromDB();
+        delete _InfernoBank;
+    }
 
     sGuildMgr.RemoveGuild(m_Id);
 }

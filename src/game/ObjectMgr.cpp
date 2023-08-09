@@ -3350,8 +3350,8 @@ void ObjectMgr::LoadQuests()
                           "`IncompleteEmote`, `CompleteEmote`, `OfferRewardEmote1`, `OfferRewardEmote2`, `OfferRewardEmote3`, `OfferRewardEmote4`,"
     //                      119                       120                       121                       122
                           "`OfferRewardEmoteDelay1`, `OfferRewardEmoteDelay2`, `OfferRewardEmoteDelay3`, `OfferRewardEmoteDelay4`,"
-    //                      123            124               125         126             127
-                          "`StartScript`, `CompleteScript`, `MaxLevel`, `RewMailMoney`, `RewXP` "
+    //                      123            124               125         126             127      128
+                          "`StartScript`, `CompleteScript`, `MaxLevel`, `RewMailMoney`, `RewXP`, `RequiredCondition` "
                           " FROM `quest_template`"));
     if (!result)
     {
@@ -8729,6 +8729,18 @@ void ObjectMgr::LoadConditions()
             sLog.outErrorDb("ObjectMgr::LoadConditions: invalid condition_entry %u, skip", i);
             sConditionStorage.EraseEntry(i);
             continue;
+        }
+    }
+
+    for (auto& itr : m_QuestTemplatesMap) // needs to be checked after loading conditions
+    {
+        Quest* qinfo = itr.second.get();
+
+        if (qinfo->RequiredCondition)
+        {
+            const ConditionEntry* condition = sConditionStorage.LookupEntry<ConditionEntry>(qinfo->RequiredCondition);
+            if (!condition) // condition does not exist for some reason
+                sLog.outErrorDb("Quest %u has `RequiredCondition` = %u but it does not exist.", qinfo->GetQuestId(), qinfo->RequiredCondition);
         }
     }
 }

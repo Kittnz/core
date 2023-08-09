@@ -62,9 +62,8 @@ namespace DiscordBot
                     {
                         RequeueMessage(std::move(message));
                     }
+                    utility::log_error()(confirmation);
                 }
-
-                utility::log_error()(confirmation);
             });
     }
 
