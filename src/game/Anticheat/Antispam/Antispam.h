@@ -64,7 +64,7 @@ struct MessageBlock
     uint8 count;
     time_t time;
     std::string channelName;
-    Guild* guild;
+    uint32 guildId;
 };
 
 struct MessageCounter
