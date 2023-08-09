@@ -39,19 +39,22 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 	void EnterEvadeMode() override
 	{
-		if (summonList.empty())
-			return;
-
-		for (const auto& guid : summonList)
+		if (!summonList.empty())
 		{
-			if (Creature* summon = m_pInstance->instance->GetCreature(guid))
-				summon->DespawnOrUnsummon();
-		}
 
-		summonList.clear();
+			for (const auto& guid : summonList)
+			{
+				if (Creature* summon = m_pInstance->instance->GetCreature(guid))
+					summon->DespawnOrUnsummon();
+			}
+
+			summonList.clear();
+		}
 
 		if (m_pInstance)
 			m_pInstance->SetData(DATA_BLACKWALD_II, FAIL);
+
+		ScriptedAI::EnterEvadeMode();
 	}
 
 	void JustSummoned(Creature* summon) override
@@ -70,7 +73,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 	void CallForHelp()
 	{
-		std::vector<uint32> entries = { 61191, 61192, 61193, 61194, 61211 };
+		std::vector<uint32> entries = { 61192, 61193, 61194, 61211 };
 		auto randEntry = SelectRandomContainerElement(entries);
 		if (Creature* guard = DoSpawnCreature(randEntry, 15.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
 			guard->SetInCombatWithZone();
