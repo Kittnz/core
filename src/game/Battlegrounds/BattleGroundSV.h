@@ -117,6 +117,12 @@ enum BG_SV_Sounds
     BG_SV_SOUND_NODE_ASSAULTED_HORDE = 8174,
 };
 
+enum BG_SV_Spells
+{
+    SV_SPELL_NORTH_TOWER = 45925,
+    SV_SPELL_SOUTH_TOWER = 45926,
+};
+
 enum BG_SV_Locations
 {
     SV_BASE_HUMAN = 930,
@@ -345,6 +351,7 @@ class BattleGroundSV : public BattleGround
 
         Team GetWinningTeam() const override;
 
+        uint32 GetAuraForTower(uint8 node);
         uint32 GetTowerNameId(uint8 node);
         Team GetHeraldControlledTeam();
         uint32 GetTeamSparks(TeamId team) const { return m_resources[team]; }
@@ -362,6 +369,7 @@ class BattleGroundSV : public BattleGround
         /* Creature spawning/despawning */
         void NodeOccupied(uint8 node, Team team);
         void NodeDeOccupied(uint8 node);
+        void ApplyTowerBuffOnTeam(uint32 spellId, Team teamId);
 
         void UpdateNodeWorldState(uint8 node);
 

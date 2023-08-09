@@ -825,33 +825,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
     {
-        AccountMgr accountMgr;
-        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD) && accountMgr.IsPlayerAccount(GetSecurity()))
-        {
-            pCurrChar->JoinBeginnersGuild();
-        }
-
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
-    }
-
-    // Temporary (haha) hackfix for missing spells and racials for existing characters:
-
-    if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER)
-    {
-        if (!pCurrChar->HasSpell(20592)) pCurrChar->LearnSpell(20592, false); // Arcane Resistance
-        if (!pCurrChar->HasSpell(7340))  pCurrChar->LearnSpell(7340, false);  // Language: Gnomish
-        if  (pCurrChar->HasSpell(672))   pCurrChar->RemoveSpell(672, false);  // Langue: Dwarven (cleanup in DB later).
-    }
-
-    if (pCurrChar->GetRace() == RACE_HIGH_ELF && !pCurrChar->HasSpell(813))
-    {
-        pCurrChar->LearnSpell(813, false); // Thalassian Language
-    }
-
-    if (pCurrChar->GetClass() == CLASS_SHAMAN)
-    {
-        if (!pCurrChar->HasSpell(199)) pCurrChar->LearnSpell(199, false); // Two-Handed Maces
-        if (!pCurrChar->HasSpell(197)) pCurrChar->LearnSpell(197, false); // Two-Handed Axes
     }
 
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))

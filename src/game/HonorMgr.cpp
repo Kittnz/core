@@ -232,7 +232,7 @@ void HonorMaintenancer::SetCityRanks()
 
 void HonorMaintenancer::FlushWeeklyQuests()
 {
-    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (50322, 50323, 70059)");
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (50322, 50323)");
 }
 
 void HonorMaintenancer::AssignBountyTargets()

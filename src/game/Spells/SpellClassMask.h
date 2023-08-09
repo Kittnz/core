@@ -207,6 +207,7 @@ enum ClassFlag
     CF_DRUID_GROWL                          = 35,   // CM1 00000008
     CF_DRUID_TIGERS_FURY                    = 36,   // CM1 00000010
     CF_DRUID_SAVAGE_BITE                    = 37,   // CM1 00000020
+    CF_DRUID_BARKSKIN                       = 38,   // CM1 00000040
 
     // -- Rogue (8)
     CF_ROGUE_THROW                          = 0,    // CM0 00000001
@@ -333,7 +334,7 @@ enum ClassFlag
     CF_SHAMAN_STONESKIN_WINDWALL            = 15,   // CM0 00008000 Stoneskin & Windwall
     CF_SHAMAN_STRENGTH_OF_EARTH             = 16,   // CM0 00010000
     CF_SHAMAN_GRACE_OF_AIR                  = 17,   // CM0 00020000
-    CF_SHAMAN_UNK18                         = 18,   // CM0 00040000
+    CF_SHAMAN_GROUNDING_TOTEM               = 18,   // CM0 00040000
     CF_SHAMAN_HEALING_MANA_TOTEM            = 19,   // CM0 00080000 Healing Stream Totem & Mana Spring Totem
     CF_SHAMAN_EARTH_SHOCK                   = 20,   // CM0 00100000
     CF_SHAMAN_FLAMETONGUE_WEAPON            = 21,   // CM0 00200000
@@ -342,7 +343,7 @@ enum ClassFlag
     CF_SHAMAN_FROSTBRAND_ATTACK             = 24,   // CM0 01000000
     CF_SHAMAN_FLAMETONGUE_ATTACK            = 25,   // CM0 02000000
     CF_SHAMAN_TOTEM_EFFECTS                 = 26,   // CM0 04000000
-    CF_SHAMAN_UNK27                         = 27,   // CM0 08000000
+    CF_SHAMAN_FIRE_NOVA_TOTEM               = 27,   // CM0 08000000
     CF_SHAMAN_FLAME_SHOCK                   = 28,   // CM0 10000000
     CF_SHAMAN_TOTEMS                        = 29,   // CM0 20000000 Non-attacking totems
     CF_SHAMAN_FIRE_TOTEM_ATTACK             = 30,   // CM0 40000000
@@ -352,6 +353,8 @@ enum ClassFlag
     CF_SHAMAN_WINDFURY_TOTEM                = 33,   // CM1 00000002
     CF_SHAMAN_FLAMETONGUE_TOTEM             = 34,   // CM1 00000004
     CF_SHAMAN_CURES                         = 35,   // CM1 00000008 Cure Poison & Cure Disease
+    CF_SHAMAN_HEX                           = 36,   // CM1 00000010
+    CF_SHAMAN_MANA_TIDE_TOTEM               = 37,   // CM1 00000020
 };
 
 #endif // _SPELL_CLASS_MASK_H

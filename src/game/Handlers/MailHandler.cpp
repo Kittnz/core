@@ -794,7 +794,8 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         it->SetState(ITEM_UNCHANGED);                       // need to set this state, otherwise item cannot be removed later, if necessary
         loadedPlayer->MoveItemToInventory(dest, it, true);
 
-        sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item entry %u.", loadedPlayer->GetShortDescription().c_str(), it->GetEntry());
+        sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item (%s) with entry %u.",
+                 loadedPlayer->GetShortDescription().c_str(), it->GetProto()->Name1, it->GetEntry());
 
         CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
         loadedPlayer->SaveInventoryAndGoldToDB();
