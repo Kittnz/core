@@ -18,6 +18,8 @@ struct boss_grizikilAI : public ScriptedAI
 
 	void Reset() override
 	{
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_GRIZIKIL, NOT_STARTED);
 		m_GrellkinFireballTimer = 2 * IN_MILLISECONDS;
 		m_GrellkinROFTimer = 15 * IN_MILLISECONDS;
 		m_GrellkinFlameweaveTimer = 30 * IN_MILLISECONDS;
@@ -37,12 +39,18 @@ struct boss_grizikilAI : public ScriptedAI
 			if (cr->IsAlive())
 				cr->SetInCombatWithZone();
 		}
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_GRIZIKIL, IN_PROGRESS);
 	}
 
 	void JustDied(Unit* pKiller) override
 	{
 		m_creature->PlayDirectSound(60411);
 		m_creature->MonsterYell("Orb is mine, no take orb...");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_GRIZIKIL, DONE);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override

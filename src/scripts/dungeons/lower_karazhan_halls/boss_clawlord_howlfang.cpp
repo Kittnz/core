@@ -18,6 +18,8 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 
 	void Reset() override
 	{
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, NOT_STARTED);
 		m_TerrifyingPresenceTimer = 2 * IN_MILLISECONDS;
 		m_SlaveringBiteTimer = urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_ShadowbaneCurseTimer = 60 * IN_MILLISECONDS;
@@ -29,12 +31,18 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 	{
 		m_creature->PlayDirectSound(60415);
 		m_creature->MonsterYell("So it was you I smelled! Such a foul taint.");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, IN_PROGRESS);
 	}
 
 	void JustDied(Unit* pKiller) override
 	{
 		m_creature->PlayDirectSound(60417);
 		m_creature->MonsterYell("You vile, disgusting creatures, how could I lose to you?");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, DONE);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override

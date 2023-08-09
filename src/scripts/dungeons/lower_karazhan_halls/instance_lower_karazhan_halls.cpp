@@ -8,8 +8,6 @@ instance_lower_karazhan_halls::instance_lower_karazhan_halls(Map* p_Map) : Scrip
 
 void instance_lower_karazhan_halls::Initialize()
 {
-	m_uiBroodQueenAraxxnaGUID = 0;
-	m_uiMoroesGUID = 0;
 	m_uiMoroesStage = 0;
 }
 
@@ -18,11 +16,24 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 	switch (pCreature->GetEntry())
 	{
 	    case 61221:
-			m_uiBroodQueenAraxxnaGUID = pCreature->GetGUID();
+			m_uiBossGUID[DATA_BROOD_QUEEN_ARAXXNA] = pCreature->GetGUID();
 			break;
 		case 61225:
-			m_uiMoroesGUID = pCreature->GetGUID();
+			m_uiBossGUID[DATA_MOROES] = pCreature->GetGUID();
 			break;
+		case 61222:
+			m_uiBossGUID[DATA_BLACKWALD_II] = pCreature->GetGUID();
+			pCreature->SetVisibility(VISIBILITY_OFF);
+			break;
+		case 61204:
+		{
+			for (uint8 i = 0; i < 2; ++i)
+			{
+				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+					m_uiAppretinceGUID[i] = slave->GetGUID();
+			}
+			break;
+		}
 	}
 }
 
@@ -32,33 +43,56 @@ void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
 {
-	switch (uiType)
-	{
-	    case DATA_BROOD_QUEEN_ARAXXNA:
-			return m_uiBroodQueenAraxxnaGUID;
-		case DATA_MOROES:
-			return m_uiMoroesGUID;
-		default:
-			return 0;
-	}
+	return m_uiBossGUID[uiType];
 }
 
 uint32 instance_lower_karazhan_halls::GetData(uint32 uiType)
 {
-	switch (uiType)
-	{
-		case DATA_MOROES_STAGE:
-			return m_uiMoroesStage;
-	}
+	if (uiType == DATA_MOROES_STAGE)
+		return m_uiMoroesStage;
+	else
+		return m_uiBossState[uiType];
 }
 
 void instance_lower_karazhan_halls::SetData(uint32 uiType, uint32 uiData)
 {
-	switch (uiType)
+	if (uiType == DATA_MOROES_STAGE)
+		m_uiMoroesStage = uiData;
+	else
+		m_uiBossState[uiType] = uiData;
+
+	if (uiData == DONE)
 	{
-		case DATA_MOROES_STAGE:
-			m_uiMoroesStage = uiData;
-			break;
+		OUT_SAVE_INST_DATA;
+
+		std::ostringstream saveStream;
+
+		for (uint32 i : m_uiBossState)
+			saveStream << i << " ";
+
+		m_strInstData = saveStream.str();
+
+		SaveToDB();
+		OUT_SAVE_INST_DATA_COMPLETE;
+	}
+}
+
+void instance_lower_karazhan_halls::Load(const char* chrIn)
+{
+	if (!chrIn)
+	{
+		OUT_LOAD_INST_DATA_FAIL;
+		return;
+	}
+
+	OUT_LOAD_INST_DATA(chrIn);
+
+	std::istringstream loadStream(chrIn);
+	for (uint32& i : m_uiBossState)
+	{
+		loadStream >> i;
+		if (i == IN_PROGRESS)
+			i = NOT_STARTED;
 	}
 }
 
@@ -974,16 +1008,28 @@ struct dark_rider_championAI : public ScriptedAI
 	uint32 m_ReaverStormTimer;
 	uint32 m_DarkRiderScreamTimer;
 	uint32 m_HamstringTimer;
+	uint32 m_ApprenticeCheck;
 
 	void Reset() override
 	{
 		m_ReaverStormTimer = urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS);
 		m_DarkRiderScreamTimer = urand(15 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
 		m_HamstringTimer = urand(8 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+		m_ApprenticeCheck = 5 * IN_MILLISECONDS;
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
 	{
+		/*if (m_creature->IsAlive() && !m_creature->IsInCombat())
+		{
+			if (m_ApprenticeCheck < uiDiff)
+			{
+				m_ApprenticeCheck = 5 * IN_MILLISECONDS;
+			}
+			else
+				m_ApprenticeCheck -= uiDiff;
+		}*/
+
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
 
@@ -1024,14 +1070,28 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 {
 	dark_rider_apprenticeAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
+		m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
 		Reset();
 	}
 
+	ScriptedInstance* m_pInstance;
 	uint32 m_SoulExchangeTimer;
 
 	void Reset() override
 	{
 		m_SoulExchangeTimer = urand(1 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
+	}
+
+	void JustDied(Unit* pKiller) override
+	{
+		if (m_pInstance)
+		{
+			if (Creature* boss = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BLACKWALD_II)))
+			{
+				boss->SetVisibility(VISIBILITY_ON);
+				boss->MonsterYell("Appear");
+			}
+		}
 	}
 
 	void UpdateAI(const uint32 uiDiff) override

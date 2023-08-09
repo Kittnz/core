@@ -19,6 +19,8 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 	void Reset() override
 	{
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BLACKWALD_II, NOT_STARTED);
 		summonList.clear();
 		m_ReaverStormTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_EmpoweredSoulTimer = urand(32 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);
@@ -30,6 +32,9 @@ struct boss_blackwald_iiAI : public ScriptedAI
 	{
 		m_creature->PlayDirectSound(60412);
 		m_creature->MonsterYell("You dare disturb the Dark Rider Lord?");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BLACKWALD_II, IN_PROGRESS);
 	}
 
 	void EnterEvadeMode() override
@@ -44,6 +49,9 @@ struct boss_blackwald_iiAI : public ScriptedAI
 		}
 
 		summonList.clear();
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BLACKWALD_II, FAIL);
 	}
 
 	void JustSummoned(Creature* summon) override
@@ -55,6 +63,9 @@ struct boss_blackwald_iiAI : public ScriptedAI
 	{
 		m_creature->PlayDirectSound(60414);
 		m_creature->MonsterYell("Master, this was not fortold, this was not supposed to be my fate...");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BLACKWALD_II, DONE);
 	}
 
 	void CallForHelp()
