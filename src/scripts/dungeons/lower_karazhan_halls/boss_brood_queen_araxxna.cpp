@@ -17,6 +17,8 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 
 	void Reset() override
 	{
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, NOT_STARTED);
 		summonList.clear();
 		m_BroodVenomVolleyTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_LeechingBiteTimer = 15 * IN_MILLISECONDS;
@@ -27,6 +29,9 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 	{
 		m_creature->PlayDirectSound(60421);
 		m_creature->MonsterYell("What goes there, new prey to be entangled?");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, IN_PROGRESS);
 	}
 
 	void SpawnEggs()
@@ -49,12 +54,18 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		}
 
 		summonList.clear();
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, FAIL);
 	}
 
 	void JustDied(Unit* pKiller) override
 	{
 		m_creature->PlayDirectSound(60419);
 		m_creature->MonsterYell("My Brood... Destroyed.");
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, DONE);
 	}
 
 	void JustSummoned(Creature* summon) override

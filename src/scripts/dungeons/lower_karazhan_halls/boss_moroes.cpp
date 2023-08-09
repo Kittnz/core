@@ -34,7 +34,10 @@ struct boss_moroesAI : public ScriptedAI
 		sacrifice = false;
 
 		if (m_pInstance)
+		{
+			m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 			m_pInstance->SetData(DATA_MOROES_STAGE, 0);
+		}
 	}
 
 	void ResetBattleTimers()
@@ -51,6 +54,9 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		m_creature->SetInCombatWithZone();
 		ResetBattleTimers();
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_MOROES, IN_PROGRESS);
 	}
 
 	void SetHostile()
@@ -73,6 +79,9 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		m_creature->MonsterYell("Medivh, I have failed you...");
 		m_creature->PlayDirectSound(60408);
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_MOROES, DONE);
 	}
 
 	void StartBattle(bool newPhase)
@@ -302,15 +311,19 @@ bool OnGossipHello_boss_moroes(Player* pPlayer, Creature* pCreature)
 {
 	if (InstanceData* pInstance = pCreature->GetInstanceData())
 	{
-		if (pInstance->GetData(DATA_MOROES_STAGE) == 0)
+		if (pInstance->GetData(DATA_BROOD_QUEEN_ARAXXNA) == DONE && pInstance->GetData(DATA_BLACKWALD_II) == DONE && pInstance->GetData(DATA_CLAWLORD_HOWLFANG) == DONE &&
+			pInstance->GetData(DATA_GRIZIKIL) == DONE)
 		{
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am here to challenge you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-		}
-		else if (pInstance->GetData(DATA_MOROES_STAGE) == 2)
-		{
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to challenge you again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-			pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+			if (pInstance->GetData(DATA_MOROES_STAGE) == 0)
+			{
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am here to challenge you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+				pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+			}
+			else if (pInstance->GetData(DATA_MOROES_STAGE) == 2)
+			{
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to challenge you again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+				pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+			}
 		}
 		else
 			pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
