@@ -44,19 +44,22 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 
 	void EnterEvadeMode() override
 	{
-		if (summonList.empty())
-			return;
-
-		for (const auto& guid : summonList)
+		if (!summonList.empty())
 		{
-			if (Creature* summon = m_pInstance->instance->GetCreature(guid))
-				summon->DespawnOrUnsummon();
-		}
 
-		summonList.clear();
+			for (const auto& guid : summonList)
+			{
+				if (Creature* summon = m_pInstance->instance->GetCreature(guid))
+					summon->DespawnOrUnsummon();
+			}
+
+			summonList.clear();
+		}
 
 		if (m_pInstance)
 			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, FAIL);
+
+		ScriptedAI::EnterEvadeMode();
 	}
 
 	void JustDied(Unit* pKiller) override

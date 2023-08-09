@@ -21,10 +21,6 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 		case 61225:
 			m_uiBossGUID[DATA_MOROES] = pCreature->GetGUID();
 			break;
-		case 61222:
-			m_uiBossGUID[DATA_BLACKWALD_II] = pCreature->GetGUID();
-			pCreature->SetVisibility(VISIBILITY_OFF);
-			break;
 		case 61204:
 		{
 			for (uint8 i = 0; i < 2; ++i)
@@ -998,6 +994,8 @@ CreatureAI* GetAI_grellkin_channeler(Creature* pCreature)
 	return new grellkin_channelerAI(pCreature);
 }
 
+
+
 struct dark_rider_championAI : public ScriptedAI
 {
 	dark_rider_championAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -1016,6 +1014,13 @@ struct dark_rider_championAI : public ScriptedAI
 		m_DarkRiderScreamTimer = urand(15 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
 		m_HamstringTimer = urand(8 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_ApprenticeCheck = 5 * IN_MILLISECONDS;
+	}
+
+	void JustDied(Unit* pKiller) override
+	{
+		float pos[4] = { -11088.2f, -1995.74f, 76.1774f, 1.72157f };
+		if (Creature* boss = m_creature->SummonCreature(61222, pos[0], pos[1], pos[2], pos[3]))
+			boss->MonsterYell("APPEAR!");
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -1080,18 +1085,6 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 	void Reset() override
 	{
 		m_SoulExchangeTimer = urand(1 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
-	}
-
-	void JustDied(Unit* pKiller) override
-	{
-		if (m_pInstance)
-		{
-			if (Creature* boss = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BLACKWALD_II)))
-			{
-				boss->SetVisibility(VISIBILITY_ON);
-				boss->MonsterYell("Appear");
-			}
-		}
 	}
 
 	void UpdateAI(const uint32 uiDiff) override

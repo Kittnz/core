@@ -218,7 +218,10 @@ struct boss_moroesAI : public ScriptedAI
 					if (DoCastSpellIfCan(m_creature->GetVictim(), 57095) == CAST_OK)
 					{
 						if (Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, nullptr, SELECT_FLAG_PLAYER))
+						{
+							DoResetThreat();
 							m_creature->AI()->AttackStart(pSecond);
+						}
 						m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
 					}
 				}
