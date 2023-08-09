@@ -20,6 +20,7 @@
 
 #include <G3D/Quat.h>
 #include "spline.h"
+#include <unordered_set>
 #include "DBCStores.h"
 
 struct KeyFrame;

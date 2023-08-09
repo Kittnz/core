@@ -19,7 +19,7 @@ enum SV_Spells
     SPELL_SUNDER_ARMOR = 24317,
     SPELL_SLOW = 22356,
     SPELL_KNOCK = 20686,
-    SPELL_SHADOW_FLAME = 22539,
+    SPELL_DRAGON_BREATH = 47360,
     SPELL_BLAST_WAVE = 30092,
     /*human_footman*/
     /*human_archer*/
@@ -352,7 +352,7 @@ struct SV_human_leaderAI : public ScriptedAI
                 }
                 case EVENT_SHADOW_FLAME:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_FLAME) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAGON_BREATH) == CAST_OK)
                         m_events.Repeat(Seconds(20));
                     else
                         m_events.Repeat(100);
@@ -534,7 +534,7 @@ struct SV_orc_leaderAI : public ScriptedAI
                 }
                 case EVENT_SHADOW_FLAME:
                 {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_FLAME) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAGON_BREATH) == CAST_OK)
                         m_events.Repeat(Seconds(20));
                     else
                         m_events.Repeat(100);

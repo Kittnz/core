@@ -260,6 +260,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraAuraSpell,
     &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT       implemented in Unit::CalculateAbsorbAndResist
     &Aura::HandleNoImmediateEffect,                         //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonusTaken and Unit::SpellDamageBonusTaken
+    &Aura::HandleNoImmediateEffect,                         //195 SPELL_AURA_MOD_HONOR_GAIN               implemented in Player::RewardHonorOnDeath
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };
@@ -1604,6 +1605,45 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
     switch (GetSpellProto()->SpellFamilyName)
     {
+        case SPELLFAMILY_DRUID:
+        {
+            switch (GetId())
+            {
+                case 45851: // Moonclaw
+                {
+                    // Leader of the Pack
+                    if (Aura* pAura = target->GetAura(24932, EFFECT_INDEX_0))
+                    {
+                        if (pAura->GetCasterGuid() == target->GetObjectGuid())
+                        {
+                            pAura->ApplyModifier(false);
+                            if (!apply)
+                            {
+                                if (pAura->GetModifier()->m_amount > 3)
+                                    pAura->GetModifier()->m_amount -= 1;
+                            }
+                            pAura->ApplyModifier(true);
+                        }
+                    }
+                    // Moonkin Aura
+                    if (Aura* pAura = target->GetAura(24907, EFFECT_INDEX_0))
+                    {
+                        if (pAura->GetCasterGuid() == target->GetObjectGuid())
+                        {
+                            pAura->ApplyModifier(false);
+                            if (!apply)
+                            {
+                                if (pAura->GetModifier()->m_amount > 3)
+                                    pAura->GetModifier()->m_amount -= 1;
+                            }
+                            pAura->ApplyModifier(true);
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
         case SPELLFAMILY_HUNTER:
         {
             switch (GetId())
@@ -1628,6 +1668,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                 caster->RemoveAurasDueToSpell(45663);
                         }
                     }
+                    break;
                 }
             }
             break;
@@ -1815,6 +1856,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 47357: // Calming River
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 5000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -1871,48 +1918,31 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             uint32 finalSpellId = 0;
             switch (GetId())
             {
-                case 19548:
-                    finalSpellId = 19597;
-                    break;
-                case 19674:
-                    finalSpellId = 19677;
-                    break;
-                case 19687:
-                    finalSpellId = 19676;
-                    break;
-                case 19688:
-                    finalSpellId = 19678;
-                    break;
-                case 19689:
-                    finalSpellId = 19679;
-                    break;
-                case 19692:
-                    finalSpellId = 19680;
-                    break;
-                case 19693:
-                    finalSpellId = 19684;
-                    break;
-                case 19694:
-                    finalSpellId = 19681;
-                    break;
-                case 19696:
-                    finalSpellId = 19682;
-                    break;
-                case 19697:
-                    finalSpellId = 19683;
-                    break;
-                case 19699:
-                    finalSpellId = 19685;
-                    break;
-                case 19700:
-                    finalSpellId = 19686;
-                    break;
-               // Temporary hack for Undead Hunters:
-                case 50901:
-                case 50902:
-                case 50903:
-                    finalSpellId = 19681;
-                    break;
+                // I have a feeling this isn't supposed to be this way?
+                case 19548: finalSpellId = 19597; break;
+                case 19674: finalSpellId = 19677; break;
+                case 19687: finalSpellId = 19676; break;
+                case 19688: finalSpellId = 19678; break;
+                case 19689: finalSpellId = 19679; break;
+                case 19692: finalSpellId = 19680; break;
+                case 19693: finalSpellId = 19684; break;
+                case 19694: finalSpellId = 19681; break;
+                case 19696: finalSpellId = 19682; break;
+                case 19697: finalSpellId = 19683; break;
+                case 19699: finalSpellId = 19685; break;
+                case 19700: finalSpellId = 19686; break;
+                case 44000: finalSpellId = 44001; break;
+                case 44002: finalSpellId = 44003; break;
+                case 44004: finalSpellId = 44005; break; 
+                case 44006: finalSpellId = 44007; break;   
+                case 44008: finalSpellId = 44009; break;   
+                case 44010: finalSpellId = 44011; break; 
+                case 44012: finalSpellId = 44013; break;
+                case 44014: finalSpellId = 44015; break;
+                case 44016: finalSpellId = 44017; break;
+                case 44018: finalSpellId = 44019; break;
+                case 44020: finalSpellId = 44021; break;
+                case 44022: finalSpellId = 44023; break;
             }
 
             if (finalSpellId)
@@ -2424,50 +2454,35 @@ void Aura::HandleWaterBreathing(bool /*apply*/, bool /*Real*/)
         ((Player*)GetTarget())->UpdateMirrorTimers();
 }
 
-std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Unit* target){
+std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Unit* target)
+{
     unsigned int display_id = 0;
     float mod = 1;
     switch (form)
     {
     case FORM_CAT:
-
         if (target->IsPlayer())
-        {
-            if (target->ToPlayer()->HasItemCount(51057, 1))
-                // Glyph of the Frostsaber, Turtle WoW:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 11444 : 10054;
-            else    
-                // Blizzlike cat models:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 892 : 8571;  
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 892;
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        // Glyph of the Stag, Alliance glyph makes you a black Stag and the Horde one a brown Stag.
-        if (target->ToPlayer()->HasItemCount(51056, 1))       
-            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 1992 : 2161;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else 
             display_id = 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:
-        // Glyph of the Orca
-        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51830, 1)) ? 4591 : 2428;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
     case FORM_BEAR:
     case FORM_DIREBEAR:
         if (target->IsPlayer())
-        {
-            if (target->ToPlayer()->HasItemCount(51266, 1))
-                // Glyph of the Icebear, Turtle WoW:
-                display_id = 8837;
-            else
-                // Blizzlike bear models:
-                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 2281 : 2289;
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 2281;
         break;
@@ -2478,31 +2493,17 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_CREATUREBEAR:
         display_id = 902;
         break;
-
     case FORM_NEW_TREE:
-    {
-        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;
-    }break;
-
+        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;        
+       break;
     case FORM_GHOSTWOLF:
-        // Glyph of the Spectral Wolf
-        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
+        if (target->IsPlayer())
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
     case FORM_MOONKIN:
         if (target->IsPlayer())
-        {
-            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 15374 : 15375;
-
-            // Glyph of the Frostkin
-            if (target->ToPlayer()->HasItemCount(51431, 1))
-                display_id = 12237;
-
-            // Glyph of Stars
-            if (target->ToPlayer()->HasItemCount(51432, 1))
-                display_id = target->ToPlayer()->GetNativeDisplayId();
-
-        }
+            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else
             display_id = 15374;
         break;
@@ -2512,12 +2513,6 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_SPIRITOFREDEMPTION:
         display_id = 16031;
         break;
-    /*case FORM_BATTLESTANCE:
-    case FORM_BERSERKERSTANCE:
-    case FORM_DEFENSIVESTANCE:
-    case FORM_AMBIENT:
-    case FORM_SHADOW:
-    case FORM_STEALTH:*/
     default:
         break;
     }
@@ -5256,6 +5251,19 @@ void Aura::HandleAuraModCritPercent(bool apply, bool Real)
     if (target->GetTypeId() != TYPEID_PLAYER)
         return;
 
+    if (apply)
+    {
+        switch (GetId())
+        {
+            case 24932: // Leader of the Pack
+            {
+                if (Unit* pCaster = GetCaster())
+                    if (pCaster->HasAura(45851)) // Moonclaw
+                        m_modifier.m_amount += 1;
+            }
+        }
+    }
+
     // apply item specific bonuses for already equipped weapon
     if (Real)
     {
@@ -5299,6 +5307,19 @@ void Aura::HandleModSpellCritChance(bool apply, bool Real)
     // spells required only Real aura add/remove
     if (!Real)
         return;
+
+    if (apply)
+    {
+        switch (GetId())
+        {
+            case 24907: // Moonkin Aura
+            {
+                if (Unit* pCaster = GetCaster())
+                    if (pCaster->HasAura(45851)) // Moonclaw
+                        m_modifier.m_amount += 1;
+            }
+        }
+    }
 
     if (GetTarget()->GetTypeId() == TYPEID_PLAYER)
         ((Player*)GetTarget())->UpdateAllSpellCritChances();
@@ -6870,9 +6891,14 @@ void Aura::PeriodicDummyTick()
                     if (distance < 10 || distance > 100)
                         return;
 
-                    target->SendSpellGo(pSelection, 100); // todo: remove in 1.16.6
                     target->CastSpell(pSelection, 45871, false);
 
+                    return;
+                }
+                case 47357: // Calming River
+                {
+                    if (target->HasAura(45527))
+                        target->CastSpell(target, 47358, true, nullptr, this);
                     return;
                 }
             }

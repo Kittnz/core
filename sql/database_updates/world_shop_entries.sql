@@ -99,7 +99,7 @@ replace into shop_items values
 (88, 4, 51431, 'Druid: Glyph of the Frostkin', 100),
 (89, 4, 51830, 'Druid: Glyph of the Orca', 100),
 (90, 4, 51432, 'Druid: Glyph of Stars', 100),
--- (91, 4, 50406, 'Druid: Glyph of the Stag', 100),
+(94, 4, 50406, 'Druid: Glyph of the Stag', 100),
 -- Mounts
 (101, 5, 50071, 'Ivory Tallstrider', 100),
 (102, 5, 50072, 'Brown Tallstrider', 100), 
@@ -151,8 +151,14 @@ replace into shop_items values
 (188, 5, 81158, 'Armored Frostmane Bear', 400),
 (189, 5, 81091, 'Big Blizzard Bear', 500),
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
-(223, 5, 81239, 'Happy Whimsyshire Cloud', 200), 
-(224, 5, 81240, 'Sad Whimsyshire Cloud', 200), 
+-- Patch 1.16.6
+(225, 5, 83150,	'Big Turtle WoW Bear', 360),
+(226, 5, 83151,	'Black Spectral Tiger', 360),
+(227, 5, 83152,	'Green Spectral Tiger', 360),
+(228, 5, 83154,	'Armored Ice Raptor', 360),
+(229, 5, 83155,	'Scarlet Charger', 360),
+(230, 5, 83158,	'Brown Zhevra', 360),
+(231, 5, 83159,	'Grim Totem Kodo', 360),
 -- Companions
 (241, 6, 13584, 'Diablo Stone', 80),
 (242, 6, 13583, 'Panda Collar', 80),
