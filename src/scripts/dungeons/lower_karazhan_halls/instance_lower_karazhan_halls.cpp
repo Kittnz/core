@@ -994,8 +994,6 @@ CreatureAI* GetAI_grellkin_channeler(Creature* pCreature)
 	return new grellkin_channelerAI(pCreature);
 }
 
-
-
 struct dark_rider_championAI : public ScriptedAI
 {
 	dark_rider_championAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -1020,7 +1018,7 @@ struct dark_rider_championAI : public ScriptedAI
 	{
 		float pos[4] = { -11088.2f, -1995.74f, 76.1774f, 1.72157f };
 		if (Creature* boss = m_creature->SummonCreature(61222, pos[0], pos[1], pos[2], pos[3]))
-			boss->MonsterYell("APPEAR!");
+			boss->MonsterYell("I sense a disturbance here, who dares intrude?!");
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -1084,7 +1082,7 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_SoulExchangeTimer = urand(1 * IN_MILLISECONDS, 2 * IN_MILLISECONDS);
+		m_SoulExchangeTimer = urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -1094,11 +1092,12 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 
 		if (m_SoulExchangeTimer < uiDiff)
 		{
-			if (Creature* master = m_creature->FindNearestCreature(61204, 15.0f, true, m_creature))
+			if (Creature* master = m_creature->FindNearestCreature(61204, 40.0f, true, m_creature))
 			{
-				if (DoCastSpellIfCan(master->ToUnit(), 57065) == CAST_OK)
-					m_SoulExchangeTimer = 6 * IN_MILLISECONDS;
+				if (!master->HasAura(57065))
+					DoCastSpellIfCan(master->ToUnit(), 57065, true);
 			}
+			m_SoulExchangeTimer = 6 * IN_MILLISECONDS;
 		}
 		else
 			m_SoulExchangeTimer -= uiDiff;

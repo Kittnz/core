@@ -96,6 +96,7 @@ struct boss_moroesAI : public ScriptedAI
 		{
 			m_creature->MonsterYell("It is my duty to protect and watch over this tower, as approved by my master. I shall make sure to endulge in your little spectacle. Why don't we put on a show for those in attendance, hmm? Legalbrow, if you would please, play my theme.");
 			m_creature->PlayDirectSound(60405);
+			m_creature->PlayDirectMusic(60418);
 			if (m_pInstance)
 				m_pInstance->SetData(DATA_MOROES_STAGE, 3);
 			m_InterludeTimer = 12000;
@@ -131,7 +132,7 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (DoCastSpellIfCan(m_creature->GetVictim(), 57095) == CAST_OK)
 					{
-						if (Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, nullptr, SELECT_FLAG_PLAYER))
+						if (Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1, nullptr, SELECT_FLAG_PLAYER))
 							m_creature->AI()->AttackStart(pSecond);
 						m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
 					}
