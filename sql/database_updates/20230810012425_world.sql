@@ -69,3 +69,6 @@ UPDATE `creature` SET `spawntimesecsmin`=120, `spawntimesecsmax`=120 WHERE `guid
 UPDATE `creature` SET `spawntimesecsmin`=120, `spawntimesecsmax`=120 WHERE `guid`=2561327;
 UPDATE `creature` SET `spawntimesecsmin`=120, `spawntimesecsmax`=120 WHERE `guid`=2561326;
 UPDATE `creature` SET `spawntimesecsmin`=120, `spawntimesecsmax`=120 WHERE `guid`=2578641;
+UPDATE `creature` SET `spawntimesecsmin`=120, `spawntimesecsmax`=120 WHERE `guid`=2561322;
+UPDATE `creature` SET `position_x` = 1871.437134, `position_y` = -1114.601440, `position_z` = 96.759018, `orientation` = 4.296077 WHERE `guid` = 2561325;
+UPDATE `creature` SET `position_x` = 1902.989868, `position_y` = -1161.002563, `position_z` = 90.099609, `orientation` = 2.385202 WHERE `guid` = 2561325;
