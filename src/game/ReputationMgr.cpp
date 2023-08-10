@@ -320,6 +320,15 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
         res = SetOneFactionReputation(factionEntry, standing, incremental);
         SendState(&faction->second);
     }
+        
+    if (m_player && m_player->GetSession())
+    {
+        if (m_player->GetReputationRank(576) == REP_EXALTED || m_player->GetReputationRank(609) == REP_EXALTED || m_player->GetReputationRank(59) == REP_EXALTED)
+        {
+            if (m_player->HasEarnedTitle(TITLE_LOREKEEPER))
+                m_player->AwardTitle(TITLE_LOREKEEPER);
+        }
+    }
 
     return res;
 }
