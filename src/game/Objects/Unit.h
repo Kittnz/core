@@ -1327,6 +1327,7 @@ class Unit : public WorldObject
         void SetPvP(bool state);
         bool IsPvPContested() const;
         void SetPvPContested(bool state);
+        bool CanAttackWithoutEnablingPvP(Unit* pTarget) const;
         bool IsPassiveToHostile() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC); }
 
         void SetTargetGuid(ObjectGuid targetGuid) { SetGuidValue(UNIT_FIELD_TARGET, targetGuid); }
