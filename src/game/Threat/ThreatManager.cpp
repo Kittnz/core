@@ -428,10 +428,12 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
     if (!requester || !requester->IsAlive() || requester->GetTypeId() != TYPEID_PLAYER || !requester->GetGroup())
         return;
 
-    if (!creature->GetThreatManager().getHostileTarget() || creature->GetThreatManager().isThreatListEmpty())
+    auto hostileTarget = creature->GetThreatManager().getHostileTarget();
+
+    if (!hostileTarget || creature->GetThreatManager().isThreatListEmpty())
         return;
 
-	std::string tankName           = creature->GetThreatManager().getHostileTarget()->GetName();
+	std::string tankName           = hostileTarget->GetName();
 	std::string creatureName       = creature->GetName();
 	std::string threatSeparator    = ":";
 	std::string rowSeparator       = ";";
@@ -453,7 +455,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 	ThreatList const& threatList = creature->GetThreatManager().getThreatList();
 
-	tankThreat = (int)round(creature->GetThreatManager().getThreat(creature->GetThreatManager().getHostileTarget()));
+	tankThreat = (int)round(creature->GetThreatManager().getThreat(hostileTarget));
 
 	if (tankThreat <= 0)
 		return;
