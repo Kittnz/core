@@ -23824,6 +23824,9 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 // Saves primary or secondary spec
 bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return false;
+
     // Prevent untalented saves
     if (m_usedTalentCount == 0)
     {
@@ -23831,8 +23834,13 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
         return false;
     }
 
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+
     CharacterDatabase.BeginTransaction();
     CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
+
+    auto& savedSpec = m_savedSpecSpells[specIndex];
+    savedSpec.clear();
 
     for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
     {
@@ -23849,10 +23857,9 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 
         for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
         {
-            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(talentInfo->RankID[j]) };
-
             if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
             {
+                savedSpec.push_back(talentInfo->RankID[j]);
                 CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
             }
         }
