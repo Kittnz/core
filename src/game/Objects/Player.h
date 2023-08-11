@@ -662,6 +662,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS,
     PLAYER_LOGIN_QUERY_LOADVARIABLES,
     PLAYER_LOGIN_QUERY_ITEM_LOGS,
+    PLAYER_LOGIN_QUERY_SAVED_SPECS,
 
     MAX_PLAYER_LOGIN_QUERY
 };
@@ -1365,6 +1366,7 @@ class Player final: public Unit
 
         bool SatisfyQuestChallenges(Quest const* quest, bool msg) const;
         bool SatisfyQuestSkill(Quest const* qInfo, bool msg) const;
+        bool SatisfyQuestCondition(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLevel(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLog(bool msg) const;
         bool SatisfyQuestPreviousQuest(Quest const* qInfo, bool msg) const;
@@ -1553,6 +1555,8 @@ class Player final: public Unit
         uint32 m_lastFromClientCastedSpellID;
         void _LoadSpellCooldowns(QueryResult* result);
         void _SaveSpellCooldowns();
+
+        void _LoadPlayerSavedSpecs(QueryResult* result);
 
         bool IsNeedCastPassiveLikeSpellAtLearn(SpellEntry const* spellInfo) const;
         void SendInitialSpells() const;
@@ -1755,6 +1759,10 @@ class Player final: public Unit
         void UpdateSkillsForLevel();
         SkillStatusMap mSkillStatus;
         std::unordered_map<uint16, uint16> m_mForgottenSkills;
+
+
+        std::array<std::vector<uint32>, 2> m_savedSpecSpells;
+        
     public:
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS2); }
         void SetFreePrimaryProfessions(uint16 profs) { SetUInt32Value(PLAYER_CHARACTER_POINTS2, profs); }

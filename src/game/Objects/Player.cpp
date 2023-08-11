@@ -4414,6 +4414,26 @@ void Player::ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs)
     Unit::ProhibitSpellSchool(idSchoolMask, unTimeMs);
 }
 
+void Player::_LoadPlayerSavedSpecs(QueryResult* result)
+{
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+
+            uint32 spellId = fields[1].GetUInt32();
+            uint32 spec = fields[2].GetUInt8();
+
+            if (spec != 1 && spec != 2)
+                continue;
+
+            --spec; // minus 1 for indexing because somehow specs are saved as 1 and 2.
+            m_savedSpecSpells[spec].push_back(spellId);
+
+        } while (result->NextRow());
+    }
+}
+
 void Player::_LoadSpellCooldowns(QueryResult *result)
 {
     // some cooldowns can be already set at aura loading...
@@ -13397,10 +13417,10 @@ Quest const* Player::GetNextQuest(ObjectGuid guid, Quest const *pQuest)
 bool Player::CanSeeStartQuest(Quest const *pQuest) const
 {
     if (SatisfyQuestClass(pQuest, false) && SatisfyQuestRace(pQuest, false) && SatisfyQuestSkill(pQuest, false) &&
-            SatisfyQuestExclusiveGroup(pQuest, false) && SatisfyQuestReputation(pQuest, false) &&
-            SatisfyQuestPreviousQuest(pQuest, false) && SatisfyQuestNextChain(pQuest, false) &&
-            SatisfyQuestPrevChain(pQuest, false) &&
-            pQuest->IsActive())
+        SatisfyQuestCondition(pQuest, false) && SatisfyQuestExclusiveGroup(pQuest, false) && SatisfyQuestReputation(pQuest, false) &&
+        SatisfyQuestPreviousQuest(pQuest, false) && SatisfyQuestNextChain(pQuest, false) &&
+        SatisfyQuestPrevChain(pQuest, false) &&
+        pQuest->IsActive())
     {
         int32 highLevelDiff = sWorld.getConfig(CONFIG_INT32_QUEST_HIGH_LEVEL_HIDE_DIFF);
         if (highLevelDiff < 0)
@@ -13418,7 +13438,7 @@ bool Player::CanTakeQuest(Quest const *pQuest, bool msg, bool skipStatusCheck /*
 
     return (skipStatusCheck || SatisfyQuestStatus(pQuest, msg)) && SatisfyQuestExclusiveGroup(pQuest, msg) &&
            SatisfyQuestClass(pQuest, msg) && SatisfyQuestRace(pQuest, msg) && SatisfyQuestLevel(pQuest, msg) &&
-           SatisfyQuestSkill(pQuest, msg) && SatisfyQuestReputation(pQuest, msg) &&
+           SatisfyQuestSkill(pQuest, msg) && SatisfyQuestCondition(pQuest, msg) && SatisfyQuestReputation(pQuest, msg) &&
            SatisfyQuestPreviousQuest(pQuest, msg) && SatisfyQuestTimed(pQuest, msg) &&
            SatisfyQuestNextChain(pQuest, msg) && SatisfyQuestPrevChain(pQuest, msg) &&
            pQuest->IsActive() && SatisfyQuestChallenges(pQuest, msg);
@@ -14159,6 +14179,20 @@ bool Player::SatisfyQuestSkill(Quest const* qInfo, bool msg) const
         return false;
     }
 
+    return true;
+}
+
+bool Player::SatisfyQuestCondition(Quest const* qInfo, bool msg) const
+{
+    if (uint32 conditionId = qInfo->GetRequiredCondition())
+    {
+        bool result = sObjectMgr.IsConditionSatisfied(conditionId, this, GetMap(), nullptr, CONDITION_FROM_QUEST);
+
+        if (!result && msg)
+            SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
+
+        return result;
+    }
     return true;
 }
 
@@ -15799,6 +15833,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // has to be called after last Relocate() in Player::LoadFromDB
     SetFallInformation(0, GetPositionZ());
+
+    _LoadPlayerSavedSpecs(holder->GetResult(PLAYER_LOGIN_QUERY_SAVED_SPECS));
 
     _LoadSpellCooldowns(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSPELLCOOLDOWNS));
 
@@ -23788,6 +23824,9 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 // Saves primary or secondary spec
 bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return false;
+
     // Prevent untalented saves
     if (m_usedTalentCount == 0)
     {
@@ -23795,8 +23834,13 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
         return false;
     }
 
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+
     CharacterDatabase.BeginTransaction();
     CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
+
+    auto& savedSpec = m_savedSpecSpells[specIndex];
+    savedSpec.clear();
 
     for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
     {
@@ -23813,10 +23857,9 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 
         for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
         {
-            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(talentInfo->RankID[j]) };
-
             if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
             {
+                savedSpec.push_back(talentInfo->RankID[j]);
                 CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
             }
         }
@@ -23841,33 +23884,23 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 // Activates primary or secondary spec
 bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-    ResetTalents(true);
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return false;
 
-    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
-
-    if (!talents)
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+    if (m_savedSpecSpells[specIndex].empty())
     {
-        // Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
-        if (uiPrimaryOrSecondary == 1)
-        {
-            ChatHandler(this).SendSysMessage("Primary Specialization not saved.");
-        }
-        else if (uiPrimaryOrSecondary == 2)
-        {
-            ChatHandler(this).SendSysMessage("Secondary Specialization not saved.");
-        }
-
+        ChatHandler(this).SendSysMessage("Specialization not saved.");
         return false;
     }
 
-    do
+    ResetTalents(true);
+
+
+    for (uint32 spellId : m_savedSpecSpells[specIndex])
     {
-        Field* fields{ talents->Fetch() };
-        const uint32 uiTalentSpellId{ fields[0].GetUInt32() };
-
-        LearnSpell(uiTalentSpellId, false, true);
-
-    } while (talents->NextRow());
+        LearnSpell(spellId, false, true);
+    }
 
     if (uiPrimaryOrSecondary == 1)
     {
