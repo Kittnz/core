@@ -117,6 +117,7 @@ bool LoginQueryHolder::Initialize()
     res &= SetPQuery(PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS,    "SELECT skill, value FROM character_forgotten_skills WHERE guid = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADVARIABLES,       "SELECT variableType, value FROM character_variables WHERE lowGuid = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_ITEM_LOGS,           "SELECT itemLowGuid, itemEntry, itemCount, action, timestamp FROM character_item_logs WHERE playerLowGuid = '%u' ORDER BY timestamp DESC", m_guid.GetCounter());
+    res &= SetPQuery(PLAYER_LOGIN_QUERY_SAVED_SPECS,         "SELECT guid, spell, spec FROM `character_spell_dual_spec` WHERE guid = '%u'", m_guid.GetCounter());
 
     return res;
 }

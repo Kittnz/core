@@ -6723,6 +6723,12 @@ SpellCastResult Spell::CheckCast(bool strict)
                     else if (m_caster->ToPlayer()->InBattleGround())
                         return SPELL_FAILED_NOT_HERE;
                 }
+
+                if (m_casterUnit->GetClass() == CLASS_MAGE && m_casterUnit->IsPlayer())
+                {
+                    if (m_casterUnit->ToPlayer()->InBattleGround())
+                        return SPELL_FAILED_NOT_HERE;
+                }
                 break;
             }
             case SPELL_EFFECT_SUMMON_PLAYER:
@@ -8616,10 +8622,8 @@ public:
                             continue;
 
                         // Negative AoE from non flagged players cannot target other players
-                        if (Player* attackedPlayer = unit->GetCharmerOrOwnerPlayerOrPlayerItself())
-                            if (Player* casterPlayer = casterUnit->GetCharmerOrOwnerPlayerOrPlayerItself())
-                                if (!casterPlayer->IsPvP() && !(casterPlayer->IsFFAPvP() && attackedPlayer->IsFFAPvP()) && !casterPlayer->IsInDuelWith(attackedPlayer))
-                                    continue;
+                        if (!casterUnit->CanAttackWithoutEnablingPvP(unit))
+                            continue;
                     }
                     else if (GameObject* gobj = i_originalCaster->ToGameObject())
                     {
