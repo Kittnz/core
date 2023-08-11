@@ -934,7 +934,7 @@ namespace MaNGOS
             WorldObject const& GetFocusObject() const { return *i_obj; }
             bool operator()(Unit* u)
             {
-                if (i_owner && i_owner->IsPlayer() && u->IsPlayer() && !i_owner->IsPvP() && !i_owner->ToPlayer()->IsInDuelWith(u->ToPlayer()))
+                if (i_owner && !i_owner->CanAttackWithoutEnablingPvP(u))
                     return false;
 
                 if (i_obj->IsWithinDistInMap(u, i_range) && i_funit->IsValidAttackTarget(u) &&
@@ -981,7 +981,7 @@ namespace MaNGOS
                 if (!i_obj->IsWithinDistInMap(u, i_range))
                     return false;
 
-                if (i_obj->IsPlayer() && !((Player*)i_obj)->IsPvP() && u->IsPvP())
+                if (i_originalCaster->IsUnit() && !((Unit const*)i_originalCaster)->CanAttackWithoutEnablingPvP(u))
                     return false;
 
                 return i_originalCaster->IsValidAttackTarget(u);
