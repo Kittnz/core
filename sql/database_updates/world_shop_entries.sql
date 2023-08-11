@@ -153,12 +153,13 @@ replace into shop_items values
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
 -- Patch 1.16.6
 (225, 5, 83150,	'Big Turtle WoW Bear', 360),
-(226, 5, 83151,	'Black Spectral Tiger', 360),
-(227, 5, 83152,	'Green Spectral Tiger', 360),
+(226, 5, 83151,	'Black Spectral Tiger', 2000),
+(227, 5, 83152,	'Green Spectral Tiger', 2000),
 (228, 5, 83154,	'Armored Ice Raptor', 360),
 (229, 5, 83155,	'Scarlet Charger', 360),
 (230, 5, 83158,	'Brown Zhevra', 360),
 (231, 5, 83159,	'Grim Totem Kodo', 360),
+(231, 5, 50536, 'Twilight', 1000),
 -- Companions
 (241, 6, 13584, 'Diablo Stone', 80),
 (242, 6, 13583, 'Panda Collar', 80),
