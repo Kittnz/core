@@ -1579,38 +1579,6 @@ struct magically_sealed_door : public GameObjectAI
 
 GameObjectAI* GetAI_magically_sealed_door(GameObject* Obj) { return new magically_sealed_door(Obj); }
 
-bool QuestAccept_npc_iselus(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
-{
-    if (!pQuestGiver || !pPlayer) return false;
-
-    if (pQuest->GetQuestId() == 40247) // Staff of Eldara
-    {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-        pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
-
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("We Keepers have been active within Azshara to leave the secrets of the region a mystery. We have fallen into shadow, into dissaray unable to even communicate effectively with one another, and spread over large distances. We are surrounded by enemies at all sides and what once was is nothing more then a faded memory of ruins.", player);
-            });
-
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("It has been a long time since I have had the chance to wield my magic in such a manner, and now, crafting this Staff of Eldara has granted me some glimmer of hope.", player);
-            });
-
-        DoAfterTime(pPlayer, 33 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->CastSpell(npc, 24171, false);
-            });
-
-        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("It is done.", player);
-            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60335))
-                player->KilledMonster(dummy_bunny, ObjectGuid());
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            });
-    }
-    return false;
-}
-
 bool GossipHello_npc_iselus(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40285) == QUEST_STATUS_INCOMPLETE)
@@ -6415,7 +6383,6 @@ void AddSC_random_scripts_3()
 
     newscript = new Script;
     newscript->Name = "npc_iselus";
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_iselus;
     newscript->pGossipHello = &GossipHello_npc_iselus;
     newscript->pGossipSelect = &GossipSelect_npc_iselus;
     newscript->RegisterSelf();
