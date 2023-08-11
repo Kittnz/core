@@ -11,6 +11,8 @@ enum
 	DATA_MAX_ENCOUNTER,
 
 	DATA_MOROES_STAGE,
+	DATA_APPRETINCE_FIRST,
+	DATA_APPRETINCE_SECOND,
 };
 
 class instance_lower_karazhan_halls : public ScriptedInstance

@@ -39,7 +39,12 @@ void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
 {
-	return m_uiBossGUID[uiType];
+	if (uiType == DATA_APPRETINCE_FIRST)
+		return m_uiAppretinceGUID[0];
+	else if (uiType == DATA_APPRETINCE_SECOND)
+		return m_uiAppretinceGUID[1];
+	else
+		return m_uiBossGUID[uiType];
 }
 
 uint32 instance_lower_karazhan_halls::GetData(uint32 uiType)
@@ -998,9 +1003,11 @@ struct dark_rider_championAI : public ScriptedAI
 {
 	dark_rider_championAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
+		m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
 		Reset();
 	}
 
+	ScriptedInstance* m_pInstance;
 	uint32 m_ReaverStormTimer;
 	uint32 m_DarkRiderScreamTimer;
 	uint32 m_HamstringTimer;
@@ -1021,17 +1028,48 @@ struct dark_rider_championAI : public ScriptedAI
 			boss->MonsterYell("I sense a disturbance here, who dares intrude?!");
 	}
 
+	void CheckAppretinces()
+	{
+		Creature* first = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_APPRETINCE_FIRST));
+		Creature* second = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_APPRETINCE_SECOND));
+
+		if (!first || !second)
+			return;
+
+		if (!first->IsAlive())
+			first->Respawn();
+
+		if (!second->IsAlive())
+			second->Respawn();
+
+		float firstFAngle = PET_FOLLOW_ANGLE + M_PI_F;
+		float secondFAngle = PET_FOLLOW_ANGLE + 2 * M_PI_F;
+
+		while (firstFAngle > M_PI_F * 2)
+			firstFAngle -= M_PI_F * 2;
+
+		while (secondFAngle > M_PI_F * 2)
+			secondFAngle -= M_PI_F * 2;
+
+		if (first->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
+			first->GetMotionMaster()->MoveFollow(m_creature, PET_FOLLOW_DIST, firstFAngle);
+
+		if (second->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
+			second->GetMotionMaster()->MoveFollow(m_creature, PET_FOLLOW_DIST, secondFAngle);
+	}
+
 	void UpdateAI(const uint32 uiDiff) override
 	{
-		/*if (m_creature->IsAlive() && !m_creature->IsInCombat())
+		if (m_creature->IsAlive() && !m_creature->IsInCombat())
 		{
 			if (m_ApprenticeCheck < uiDiff)
 			{
-				m_ApprenticeCheck = 5 * IN_MILLISECONDS;
+				CheckAppretinces();
+				m_ApprenticeCheck = 1 * IN_MILLISECONDS;
 			}
 			else
 				m_ApprenticeCheck -= uiDiff;
-		}*/
+		}
 
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
