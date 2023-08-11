@@ -163,6 +163,8 @@ enum KeeperRemulosData
     SAY_MALFURION_4        = 10876,
     SAY_MALFURION_5        = 10878,
 
+    ZONE_MOONGLADE         = 493,
+
     POINT_ID_ERANIKUS_FLIGHT   = 0,
     POINT_ID_ERANIKUS_COMBAT   = 1,
     POINT_ID_ERANIKUS_REDEEMED = 2,
@@ -302,7 +304,9 @@ struct npc_keeper_remulosAI : public npc_escortAI
         {
             if (Player* pPlayer = GetPlayerForEscort())
             {
-                if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS && m_creature->IsWithinDistInMap(pPlayer, 200))
+                if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS &&
+                    m_creature->IsWithinDistInMap(pPlayer, 200) &&
+                    pPlayer->IsCurrentQuest(QUEST_NIGHTMARE_MANIFESTS, 1))
                     m_creature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
             }
         }
@@ -511,6 +515,12 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     void UpdateEscortAI(const uint32 uiDiff) override
     {
+        if (m_creature->GetZoneId() != ZONE_MOONGLADE)
+        {
+            m_creature->DoKillUnit();
+            return;
+        }
+
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
             if (m_uiOutroTimer)
@@ -1014,10 +1024,7 @@ bool QuestAccept_npc_keeper_remulos(Player* pPlayer, Creature* pCreature, const 
         // avoid starting the escort twice
         pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         if (npc_keeper_remulosAI* pEscortAI = dynamic_cast<npc_keeper_remulosAI*>(pCreature->AI()))
-        {
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
-            pEscortAI->SetMaxPlayerDistance(0);
-        }
     }
     if (pQuest->GetQuestId() == QUEST_WAKING_LEGENDS)
     {
