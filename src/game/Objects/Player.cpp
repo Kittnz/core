@@ -4414,6 +4414,26 @@ void Player::ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs)
     Unit::ProhibitSpellSchool(idSchoolMask, unTimeMs);
 }
 
+void Player::_LoadPlayerSavedSpecs(QueryResult* result)
+{
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+
+            uint32 spellId = fields[1].GetUInt32();
+            uint32 spec = fields[2].GetUInt8();
+
+            if (spec != 1 && spec != 2)
+                continue;
+
+            --spec; // minus 1 for indexing because somehow specs are saved as 1 and 2.
+            m_savedSpecSpells[spec].push_back(spellId);
+
+        } while (result->NextRow());
+    }
+}
+
 void Player::_LoadSpellCooldowns(QueryResult *result)
 {
     // some cooldowns can be already set at aura loading...
@@ -15814,6 +15834,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // has to be called after last Relocate() in Player::LoadFromDB
     SetFallInformation(0, GetPositionZ());
 
+    _LoadPlayerSavedSpecs(holder->GetResult(PLAYER_LOGIN_QUERY_SAVED_SPECS));
+
     _LoadSpellCooldowns(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSPELLCOOLDOWNS));
 
     // Spell code allow apply any auras to dead character in load time in aura/spell/item loading
@@ -23855,33 +23877,23 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 // Activates primary or secondary spec
 bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-    ResetTalents(true);
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return false;
 
-    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
-
-    if (!talents)
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+    if (m_savedSpecSpells[specIndex].empty())
     {
-        // Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
-        if (uiPrimaryOrSecondary == 1)
-        {
-            ChatHandler(this).SendSysMessage("Primary Specialization not saved.");
-        }
-        else if (uiPrimaryOrSecondary == 2)
-        {
-            ChatHandler(this).SendSysMessage("Secondary Specialization not saved.");
-        }
-
+        ChatHandler(this).SendSysMessage("Specialization not saved.");
         return false;
     }
 
-    do
+    ResetTalents(true);
+
+
+    for (uint32 spellId : m_savedSpecSpells[specIndex])
     {
-        Field* fields{ talents->Fetch() };
-        const uint32 uiTalentSpellId{ fields[0].GetUInt32() };
-
-        LearnSpell(uiTalentSpellId, false, true);
-
-    } while (talents->NextRow());
+        LearnSpell(spellId, false, true);
+    }
 
     if (uiPrimaryOrSecondary == 1)
     {
