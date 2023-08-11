@@ -6723,6 +6723,12 @@ SpellCastResult Spell::CheckCast(bool strict)
                     else if (m_caster->ToPlayer()->InBattleGround())
                         return SPELL_FAILED_NOT_HERE;
                 }
+
+                if (m_casterUnit->GetClass() == CLASS_MAGE && m_casterUnit->IsPlayer())
+                {
+                    if (m_casterUnit->ToPlayer()->InBattleGround())
+                        return SPELL_FAILED_NOT_HERE;
+                }
                 break;
             }
             case SPELL_EFFECT_SUMMON_PLAYER:
