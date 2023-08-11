@@ -321,14 +321,9 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
         SendState(&faction->second);
     }
         
-    if (m_player && m_player->GetSession())
-    {
-        if (m_player->GetReputationRank(576) == REP_EXALTED || m_player->GetReputationRank(609) == REP_EXALTED || m_player->GetReputationRank(59) == REP_EXALTED)
-        {
-            if (m_player->HasEarnedTitle(TITLE_DIPLOMAT))
-                m_player->AwardTitle(TITLE_DIPLOMAT);
-        }
-    }
+    if ((factionEntry->ID == 576 || factionEntry->ID == 609 || factionEntry->ID == 59) &&
+        m_player->HasEarnedTitle(TITLE_DIPLOMAT))
+        m_player->AwardTitle(TITLE_DIPLOMAT);
 
     return res;
 }
