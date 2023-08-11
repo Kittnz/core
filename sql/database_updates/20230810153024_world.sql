@@ -7,7 +7,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Cat Form will take the appearance of a Frostsaber.';
 
 SET @skillline_id = 36511;
-SET @icon_id = 2287;
+SET @icon_id = 2304;
 
 SET @spell_id1 = 53001;
 SET @spell_id2 = 53002;
@@ -33,7 +33,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Travel Form will take the appearance of a Forest Stag.';
 
 SET @skillline_id = 36512;
-SET @icon_id = 2287;
+SET @icon_id = 2300;
 
 SET @spell_id1 = 53004;
 SET @spell_id2 = 53005;
@@ -59,7 +59,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Bear Form will take the appearance of an Ice Bear.';
 
 SET @skillline_id = 36513;
-SET @icon_id = 2287;
+SET @icon_id = 2290;
 
 SET @spell_id1 = 53007;
 SET @spell_id2 = 53008;
@@ -85,7 +85,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Bear Form will take the appearance of an Emerald Bear.';
 
 SET @skillline_id = 36514;
-SET @icon_id = 2287;
+SET @icon_id = 2299;
 
 SET @spell_id1 = 53010;
 SET @spell_id2 = 53011;
@@ -111,7 +111,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Moonkin Form will take the appearance of a Dreamkin.';
 
 SET @skillline_id = 36515;
-SET @icon_id = 2287;
+SET @icon_id = 2295;
 
 SET @spell_id1 = 53013;
 SET @spell_id2 = 53014;
@@ -137,7 +137,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Cat Form will take the appearance of a Dream Panther.';
 
 SET @skillline_id = 36516;
-SET @icon_id = 2287;
+SET @icon_id = 2289;
 
 SET @spell_id1 = 53016;
 SET @spell_id2 = 53017;
@@ -163,7 +163,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Moonkin Form will take the appearance of a Frostkin.';
 
 SET @skillline_id = 36517;
-SET @icon_id = 2287;
+SET @icon_id = 2302;
 
 SET @spell_id1 = 53019;
 SET @spell_id2 = 53020;
@@ -189,7 +189,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Moonkin Form will take the appearance of an Astral Form.'; 
 
 SET @skillline_id = 36518;
-SET @icon_id = 2287;
+SET @icon_id = 2292;
 
 SET @spell_id1 = 53022;
 SET @spell_id2 = 53023;
@@ -215,7 +215,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Aquatic Form will take the appearance of an Orca.'; 
 
 SET @skillline_id = 36519;
-SET @icon_id = 2287;
+SET @icon_id = 2294;
 
 SET @spell_id1 = 53025;
 SET @spell_id2 = 53026;
@@ -241,7 +241,7 @@ SET @description_1 = 'Add a new glyph to your spellbook.';
 SET @description_2 = 'While active, your Ghost Form will take the appearance of a Spectral Wolf.'; 
 
 SET @skillline_id = 36520;
-SET @icon_id = 2287;
+SET @icon_id = 2296;
 
 SET @spell_id1 = 53028;
 SET @spell_id2 = 53029;
@@ -257,3 +257,7 @@ REPLACE INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`
 UPDATE `item_template` SET `spellid_1` = @spell_id1, `description` = @description_2, `spellcharges_1` = -1, `bag_family` = 0, `max_count` = 1 WHERE `entry` = @item_id;
 DELETE FROM `skill_line_ability` WHERE `spell_id` = @spell_id2;
 REPLACE INTO `skill_line_ability` VALUES (@skillline_id, 1007, @spell_id2, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Delete deprecated Glyphs:
+
+DELETE FROM `item_template` WHERE `entry` = 51430;

@@ -15928,13 +15928,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     UpdateOldRidingSkillToNew(has_epic_mount); // TODO: Remove later
 
-    // Do it later in DB.
-    if (HasItemCount(50010, 1, false))
-    {
-        if (!HasSpell(50000))
-            LearnSpell(50000, false, false);
-    }
-
     m_hardcoreStatus = fields[61].GetUInt8();
 
     // Load all titles from the db
