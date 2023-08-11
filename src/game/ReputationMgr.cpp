@@ -325,8 +325,8 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
     {
         if (m_player->GetReputationRank(576) == REP_EXALTED || m_player->GetReputationRank(609) == REP_EXALTED || m_player->GetReputationRank(59) == REP_EXALTED)
         {
-            if (m_player->HasEarnedTitle(TITLE_LOREKEEPER))
-                m_player->AwardTitle(TITLE_LOREKEEPER);
+            if (m_player->HasEarnedTitle(TITLE_DIPLOMAT))
+                m_player->AwardTitle(TITLE_DIPLOMAT);
         }
     }
 
