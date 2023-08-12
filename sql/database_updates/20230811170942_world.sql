@@ -9,3 +9,7 @@ UPDATE `spell_template` SET `name` = 'Blackwald\'s Blessing', `description` = 'I
 -- QA reported issues in Kara 10:
 
 UPDATE `map_template` SET `reset_delay` = 5 WHERE `entry` = 532;
+
+UPDATE `map_template` SET `linked_zone` = 3457 WHERE `entry` = 532;
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (36, 3457, 0);
+UPDATE `map_template` SET `ghost_entrance_map` = 0, `ghost_entrance_x` = -11104.3, `ghost_entrance_y` = -1999.42 WHERE `entry` = 532;
