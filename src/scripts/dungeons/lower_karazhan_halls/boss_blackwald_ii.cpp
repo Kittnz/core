@@ -122,7 +122,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 			m_creature->PlayDirectSound(60413);
 			m_creature->MonsterYell("I call upon the Scythe of Elune, grant me your power!");
 			CallForHelp();
-			m_CallHelpTimer = urand(48 * IN_MILLISECONDS, 55 * IN_MILLISECONDS);
+			m_CallHelpTimer = urand(56 * IN_MILLISECONDS, 63 * IN_MILLISECONDS);
 		}
 		else
 			m_CallHelpTimer -= uiDiff;

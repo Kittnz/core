@@ -25,7 +25,7 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 		{
 			for (uint8 i = 0; i < 2; ++i)
 			{
-				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60 * IN_MILLISECONDS))
 					m_uiAppretinceGUID[i] = slave->GetGUID();
 			}
 			break;
@@ -647,7 +647,7 @@ struct skitterweb_venomfangAI : public ScriptedAI
 
 		if (m_PoisonBoltVolleyTimer < uiDiff)
 		{
-			if (DoCastSpellIfCan(m_creature, 25991) == CAST_OK)
+			if (DoCastSpellIfCan(m_creature, 57063) == CAST_OK)
 				m_PoisonBoltVolleyTimer = urand(23 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
 		}
 		else
