@@ -24,7 +24,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 		summonList.clear();
 		m_ReaverStormTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		m_EmpoweredSoulTimer = urand(32 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);
-		m_BlackwaldBoonTimer = 30 * IN_MILLISECONDS;
+		m_BlackwaldBoonTimer = 25 * IN_MILLISECONDS;
 		m_CallHelpTimer = 35 * IN_MILLISECONDS;
 	}
 
@@ -99,7 +99,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 				if (DoCastSpellIfCan(pTarget, 57073) == CAST_OK)
 				{
 					if (DoCastSpellIfCan(m_creature, 57074, CF_TRIGGERED) == CAST_OK)
-						m_BlackwaldBoonTimer = 30 * IN_MILLISECONDS;
+						m_BlackwaldBoonTimer = 25 * IN_MILLISECONDS;
 				}
 			}
 		}
