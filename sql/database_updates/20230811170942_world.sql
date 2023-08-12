@@ -27,4 +27,6 @@ REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2574357,
 
 REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2574273, 2574276, 3073);
 
-GUID 2574273 needs to be linked with GUID 2574276
+-- Quest The Key to Karazhan I (40817) needs to be marked as RAID
+
+UPDATE `quest_template` SET `Type` = 62, `QuestFlags` = 64 WHERE `entry` = 40817;
