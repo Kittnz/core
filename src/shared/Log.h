@@ -239,7 +239,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
         void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
         void outDiscord(char const* str, ...) ATTR_PRINTF(2, 3);
-        void outDiscordCore(char const* str, ...) ATTR_PRINTF(2, 3);
+        void outDiscordCore(char const* str);
         void outSpam(char const* wrd, ...) ATTR_PRINTF(2, 3);
         void outErrorDb(); // any log level
         void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
