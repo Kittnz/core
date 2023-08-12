@@ -119,7 +119,8 @@ namespace DiscordBot
             {
                 std::ostringstream ss;
                 ss << "[" << dpp::utility::current_date_time() << "] " << dpp::utility::loglevel(event.severity) << ": " << event.message;
-                sLog.outDiscordCore(ss.str().c_str());
+                if (ss.rdbuf()->in_avail())
+                    sLog.outDiscordCore(ss.str().c_str());
             }
         });
 
