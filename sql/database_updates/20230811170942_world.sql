@@ -40,3 +40,7 @@ UPDATE `creature_template` SET `health_min` = 202970, `health_max` = 202970 WHER
 UPDATE `spell_template` SET `effectBasePoints2` = 899 WHERE `entry` = 57075;
 UPDATE `spell_template` SET `effectBasePoints1` = 484 WHERE `entry` = 57093;
 UPDATE `spell_template` SET `spellVisual1` = 329 WHERE `entry` = 57093;
+
+-- Increase the HP of Dark Rider Champion to 79034 
+
+UPDATE `creature_template` SET `health_min` = 79034, `health_max` = 79034 WHERE `entry` = 61204;
