@@ -88,9 +88,9 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		if (!newPhase)
 		{
-			m_creature->MonsterYell("New guests ? It has been a while since we have had those. I assume your arrival has taken -some- effort even if you were uninvited!");
+			m_creature->MonsterYell("New guests? It has been a while since we have had those. I assume your arrival has taken -some- effort even if you were uninvited!");
 			m_creature->PlayDirectSound(60402);
-			m_InterludeTimer = 3000;
+			m_InterludeTimer = 7000;
 		}
 		else
 		{
