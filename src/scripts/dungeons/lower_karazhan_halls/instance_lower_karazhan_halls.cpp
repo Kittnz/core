@@ -636,7 +636,7 @@ struct skitterweb_venomfangAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_PoisonBoltVolleyTimer = urand(7 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
+		m_PoisonBoltVolleyTimer = urand(14 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
 		m_CorrosiveBoltTimer = 2 * IN_MILLISECONDS;
 	}
 
