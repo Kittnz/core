@@ -30,3 +30,13 @@ REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2574273,
 -- Quest The Key to Karazhan I (40817) needs to be marked as RAID
 
 UPDATE `quest_template` SET `Type` = 62, `QuestFlags` = 64 WHERE `entry` = 40817;
+
+-- increase the worgen spawn timer by 8 secaonds on the Lord Blackwald fight, decrease the HP of Lord Blackwald by 5200
+
+UPDATE `creature_template` SET `health_min` = 202970, `health_max` = 202970 WHERE `entry` = 61222;
+
+-- Spell fixes:
+
+UPDATE `spell_template` SET `effectBasePoints2` = 899 WHERE `entry` = 57075;
+UPDATE `spell_template` SET `effectBasePoints1` = 484 WHERE `entry` = 57093;
+UPDATE `spell_template` SET `spellVisual1` = 329 WHERE `entry` = 57093;
