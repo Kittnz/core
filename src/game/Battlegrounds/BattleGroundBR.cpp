@@ -30,6 +30,18 @@ BattleGroundBR::~BattleGroundBR()
 
 void BattleGroundBR::Update(uint32 diff)
 {
+    // prevent players from falling under the floor
+    for (const auto& itr : m_Players)
+    {
+        Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
+        if (!pPlayer)
+            continue;
+
+        if (pPlayer->GetPositionZ() < -1.0f)
+            pPlayer->NearLandTo(pPlayer->GetPositionX(), pPlayer->GetPositionY(), 3.0f, pPlayer->GetOrientation());
+    }
+
+
     // Execute this at the end, since it can delete the BattleGround object!
     BattleGround::Update(diff);
 }
