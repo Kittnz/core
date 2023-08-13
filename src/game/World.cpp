@@ -562,6 +562,8 @@ void World::LoadConfigSettings(bool reload)
     ///- Read other configuration items from the config file
     setConfig(CONFIG_UINT32_LOGIN_PER_TICK, "LoginPerTick", 0);
     setConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT, "PlayerHardLimit", 0);
+    setConfig(CONFIG_BOOL_LOGIN_VIP_QUEUE, "LoginVIPQueue", false);
+    setConfig(CONFIG_UINT32_LOGIN_VIP_QUEUE_LEVEL_THRESHOLD, "LoginVIPQueueLevelThreshold", 55);
     setConfig(CONFIG_UINT32_LOGIN_QUEUE_GRACE_PERIOD_SECS, "LoginQueue.GracePeriodSecs", 0);
     setConfig(CONFIG_UINT32_CHARACTER_SCREEN_MAX_IDLE_TIME, "CharacterScreenMaxIdleTime", 0);
     setConfig(CONFIG_UINT32_ASYNC_QUERIES_TICK_TIMEOUT, "AsyncQueriesTickTimeout", 0);
@@ -3982,12 +3984,24 @@ bool World::CanSkipQueue(WorldSession const* sess)
 {
     if (sess->GetSecurity() > SEC_PLAYER)
         return true;
+
+    // Queue skip checks.
+    if (getConfig(CONFIG_BOOL_LOGIN_VIP_QUEUE))
+    {
+        if (!sess->HasChineseEmail() ||
+            sAccountMgr.IsDonator(sess->GetAccountId()) ||
+            sess->GetMaxLevelCharacterValue() >= getConfig(CONFIG_UINT32_LOGIN_VIP_QUEUE_LEVEL_THRESHOLD))
+            return true;
+    }
+
     uint32 grace_period = getConfig(CONFIG_UINT32_LOGIN_QUEUE_GRACE_PERIOD_SECS);
     if (!grace_period)
         return false;
+
     auto prev_logout = m_accountsLastLogout.find(sess->GetAccountId());
     if (prev_logout == m_accountsLastLogout.end())
         return false;
+
     time_t now = time(nullptr);
     return (now - prev_logout->second) < grace_period;
 }
