@@ -41,3 +41,7 @@ update item_template set spellid_2 = 0 where entry = 13503; -- Alchemists' Stone
 -- Fix SpellID 48100 to say "110 Attack Power" instead of "111 to 110 attack power" in the description.
 
 UPDATE `spell_template` SET `description` = 'Your Shock spells have a chance to grant 100 Attack Power for $48101d.' WHERE `entry` = 48100;
+
+-- Fix "A Friend in Glenshire" quest.
+
+UPDATE quest_template` SET `ZoneOrSort` = 85 WHERE `entry` = 40086;
