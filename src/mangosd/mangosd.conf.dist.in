@@ -92,7 +92,7 @@ PlayerLimit = 0
 
 PlayerHardLimit = 4000
 
-# LoginVIPQueue. Enable (1) or Disable (0) checks that allows skipping the queue.
+# LoginVIPQueue. Enable (1) or Disable (0) checks that allow skipping the queue.
 
 LoginVIPQueue = 0
 
