@@ -20,7 +20,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_pInstance)
 			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, NOT_STARTED);
 		summonList.clear();
-		m_BroodVenomVolleyTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+		m_BroodVenomVolleyTimer = urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 		m_LeechingBiteTimer = 15 * IN_MILLISECONDS;
 		m_SpawnEggsTimer = 35 * IN_MILLISECONDS;
 	}
@@ -84,7 +84,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_BroodVenomVolleyTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57063) == CAST_OK)
-				m_BroodVenomVolleyTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
+				m_BroodVenomVolleyTimer = urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 		}
 		else
 			m_BroodVenomVolleyTimer -= uiDiff;
