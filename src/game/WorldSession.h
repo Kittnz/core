@@ -323,6 +323,7 @@ class WorldSession
         void SetUsername(std::string const& s) { m_username = s; }
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
+        bool HasChineseEmail() const;
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
         void SetSecurity(AccountTypes security) { _security = security; }
@@ -988,7 +989,6 @@ class WorldSession
         uint32          _characterMaxLevel;
         bool m_fingerprintBanned = false;
         bool m_shouldBackupCharacters = false;
-        uint32 m_highestCharLevel = 0;
         bool m_hasUsedClickToMove = false;
 
         enum ClientHashStep

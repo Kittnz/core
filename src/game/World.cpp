@@ -3982,12 +3982,21 @@ bool World::CanSkipQueue(WorldSession const* sess)
 {
     if (sess->GetSecurity() > SEC_PLAYER)
         return true;
+
+    // Allow non chinese players to skip queue.
+    if (!sess->HasChineseEmail() ||
+        sAccountMgr.IsDonator(sess->GetAccountId()) ||
+        sess->HasHighLevelCharacter())
+        return true;
+
     uint32 grace_period = getConfig(CONFIG_UINT32_LOGIN_QUEUE_GRACE_PERIOD_SECS);
     if (!grace_period)
         return false;
+
     auto prev_logout = m_accountsLastLogout.find(sess->GetAccountId());
     if (prev_logout == m_accountsLastLogout.end())
         return false;
+
     time_t now = time(nullptr);
     return (now - prev_logout->second) < grace_period;
 }
