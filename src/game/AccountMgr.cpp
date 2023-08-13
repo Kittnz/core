@@ -214,6 +214,8 @@ void AccountMgr::Load()
     LoadAccountEmail();
     LoadIPBanList();
     LoadFingerprintBanList();
+    LoadAccountHighestCharLevel();
+    LoadDonatorAccounts();
 }
 
 void AccountMgr::LoadAccountNames()
@@ -481,6 +483,48 @@ void AccountMgr::LoadAccountEmail()
         Field* fields = banresult->Fetch();
         m_accountEmail[fields[0].GetUInt32()] = fields[1].GetCppString();
     } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountHighestCharLevel()
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `account`, `level` FROM `characters`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    m_accountHighestCharLevel.clear();
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+        uint32 level = fields[1].GetUInt32();
+
+        if (level > m_accountHighestCharLevel[accountId])
+            m_accountHighestCharLevel[accountId] = level;
+
+    } while (result->NextRow());
+}
+
+void AccountMgr::LoadDonatorAccounts()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.Query("SELECT DISTINCT `account_id` FROM `shop_coins_history`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    m_donatorAccounts.clear();
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+
+        m_donatorAccounts.insert(accountId);
+
+    } while (result->NextRow());
 }
 
 void AccountMgr::LoadFingerprintBanList(bool silent)
