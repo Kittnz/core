@@ -3520,6 +3520,8 @@ void Player::GiveLevel(uint32 level)
             {
                 AnnounceHardcoreModeLevelUp(level);
                 SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
+                if (HasTitle(TITLE_STILL_ALIVE))
+                    AwardTitle(-TITLE_STILL_ALIVE);
                 AwardTitle(TITLE_IMMORTAL);
                 ChangeTitle(TITLE_IMMORTAL);
                 uint32 itemEntry = 80189;
@@ -23493,7 +23495,8 @@ bool Player::SetupHardcoreMode()
                 auctionHouse->RemoveAllAuctions(this);
         }
     }
-
+    AwardTitle(TITLE_STILL_ALIVE);
+    ChangeTitle(TITLE_STILL_ALIVE);
     CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
     return true;
 }
