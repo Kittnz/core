@@ -562,6 +562,7 @@ class WorldSession
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
 
+        uint32 GetMaxLevelCharacterValue() const { return _characterMaxLevel; }
         bool HasHighLevelCharacter() const;
 
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
