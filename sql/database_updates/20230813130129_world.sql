@@ -17,3 +17,27 @@ UPDATE `quest_template` SET `ObjectiveText1` = 'Upper Karazhan Tower Key Reforge
 -- NPC Shattercage Magiskull reduce HP to 39807
 
 UPDATE `creature_template` SET `health_min` = 39807, `health_max` = 39807 WHERE `entry` = 61199;
+
+-- new icons for kara10
+update item_template set display_id = 67821 where entry = 61262; -- Royal Signet of Blackwald II
+update item_template set display_id = 67822 where entry = 61270; -- Pendant of Shadra's Chosen
+update item_template set display_id = 67823 where entry = 61294; -- Dark Rider's Signet
+update item_template set display_id = 67824, name = 'Medivh\'s Foresight' where entry = 61251; -- Azora's Mind
+update item_template set display_id = 67826 where entry = 61527; -- Breath of Solnius
+update item_template set display_id = 67825 where entry = 61194; -- The Heart of Dreams
+-- fix
+update item_template set stat_value2 = 0, inventory_type = 6 where entry = 61273; -- Earthbreaker Belt
+update item_template set spellid_2 = 9332, spellid_3 = 0 where entry = 61280; -- Granitized Bracers
+update item_template set spellid_4 = 9330, stat_value1 = 11, stat_value2 = 30, armor = 683 where entry = 60365; -- Bloody Gladiator's Helm
+update item_template set bonding = 1 where entry = 61248; -- Beasthunter's Blunderbuss
+update item_template set bonding = 1 where entry = 61277; -- Fist of the Forgotten Order
+update item_template set bonding = 1 where entry = 61276; -- Hyperchromatic Deflector
+update item_template set bonding = 1 where entry = 61178; -- Plans: Thorium Spurs
+update item_template set bonding = 2 where entry = 61564; -- Chromie's Broken Pocket Watch
+update item_template set name = 'Anasterian\'s Legacy' where entry = 61453; -- Anastarian's Legacy
+update item_template set description = '' where entry = 61570; -- Old Champion's Helmet
+update item_template set spellid_2 = 0 where entry = 13503; -- Alchemists' Stone
+
+-- Fix SpellID 48100 to say "110 Attack Power" instead of "111 to 110 attack power" in the description.
+
+UPDATE `spell_template` SET `description` = 'Your Shock spells have a chance to grant 100 Attack Power for $48101d.' WHERE `entry` = 48100;
