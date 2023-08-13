@@ -1120,25 +1120,25 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_SoulExchangeTimer = urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS);
+		m_SoulExchangeTimer = urand(5, 9) * IN_MILLISECONDS;
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
 	{
-		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-			return;
-
 		if (m_SoulExchangeTimer < uiDiff)
 		{
 			if (Creature* master = m_creature->FindNearestCreature(61204, 40.0f, true, m_creature))
 			{
 				if (!master->HasAura(57065))
-					DoCastSpellIfCan(master->ToUnit(), 57065, true);
+					DoCastSpellIfCan(master, 57065, true);
 			}
-			m_SoulExchangeTimer = 6 * IN_MILLISECONDS;
+			m_SoulExchangeTimer = urand(5, 9) * IN_MILLISECONDS;
 		}
 		else
 			m_SoulExchangeTimer -= uiDiff;
+
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
 
 		DoMeleeAttackIfReady();
 	}
