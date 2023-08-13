@@ -96,7 +96,7 @@ PlayerHardLimit = 4000
 
 LoginVIPQueue = 0
 
-# LoginVIPQueueLevelThreshold. All accounts with characters above this level will skip the queue.
+# LoginVIPQueueLevelThreshold. All accounts with characters above or equal to this level will skip the queue.
 
 LoginVIPQueueLevelThreshold = 55
 
