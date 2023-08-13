@@ -122,6 +122,8 @@ class AccountMgr
         void LoadAccountIP();
         void LoadAccountEmail();
         void LoadAccountForumName();
+        void LoadAccountHighestCharLevel();
+        void LoadDonatorAccounts();
         void SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer);
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
@@ -193,6 +195,19 @@ class AccountMgr
             m_accountMails[accountId]++;
         }
 
+        uint32 GetHighestCharLevel(uint32 accountId)
+        {
+            auto itr = m_accountHighestCharLevel.find(accountId);
+            if (itr != m_accountHighestCharLevel.end())
+                return itr->second;
+            return 0;
+        }
+
+        bool IsDonator(uint32 accountId)
+        {
+            return m_donatorAccounts.find(accountId) != m_donatorAccounts.end();
+        }
+
         void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
         bool BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
         void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
@@ -220,6 +235,7 @@ class AccountMgr
         std::map<uint32, std::string> m_accountIp;
         std::map<uint32, std::string> m_accountWarnings;
         std::map<std::string, uint32> m_accountNameToId;
+        std::map<uint32, uint32> m_accountHighestCharLevel;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
         uint32 m_fingerprintAutobanTimer;
@@ -227,6 +243,7 @@ class AccountMgr
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_fingerprintBanned;
         std::unordered_set<uint32> m_traineeGms;
+        std::unordered_set<uint32> m_donatorAccounts;
         std::set<uint32> m_fingerprintAutoban;
         std::map<uint32, uint32> m_accountBanned;
         std::map<uint32, uint32> m_accountMails;

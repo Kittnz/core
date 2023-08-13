@@ -430,6 +430,7 @@ class ChatHandler
         bool HandleNpcSetWanderDistanceCommand(char* args);
         bool HandleNpcDeleteCommand(char* args);
         bool HandleNpcDelVendorItemCommand(char* args);
+        bool HandleNpcEvadeCommand(char* args);
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
         bool HandleNpcInfoCommand(char* args);

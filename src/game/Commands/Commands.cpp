@@ -10013,6 +10013,22 @@ bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcEvadeCommand(char* /*args*/)
+{
+    Creature* pTarget = GetSelectedCreature();
+
+    if (!pTarget)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->OnLeaveCombat();
+
+    return true;
+}
+
 //show info about AI
 bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
 {

@@ -614,6 +614,13 @@ void Creature::Update(uint32 update_diff, uint32 diff)
         AIM_Initialize();
     }
 
+    if (HasCreatureState(CSTATE_EVADE_ON_UPDATE))
+    {
+        ClearCreatureState(CSTATE_EVADE_ON_UPDATE);
+        if (IsInCombat() && AI())
+            AI()->EnterEvadeMode();
+    }
+
     switch (m_deathState)
     {
         case JUST_ALIVED:

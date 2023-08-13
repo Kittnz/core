@@ -53,7 +53,7 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
     {
 		// register new goblin player
 		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
-		miracleEvent->SetRaceMap(p_Creature->GetMapId());
+		miracleEvent->SetRaceMap(p_Creature->GetMapId(), sMapMgr.GetContinentInstanceId(p_Creature->GetMapId(), p_Creature->GetPositionX(), p_Creature->GetPositionY()));
 
 		if (miracleEvent != nullptr)
 		{
@@ -131,7 +131,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
-				event->SetRaceMap(p_Creature->GetMapId());
+				event->SetRaceMap(p_Creature->GetMapId(), sMapMgr.GetContinentInstanceId(p_Creature->GetMapId(), p_Creature->GetPositionX(), p_Creature->GetPositionY()));
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Goblin);
 				p_Creature->AI()->InformGuid(p_Player->GetObjectGuid());
             }
@@ -148,7 +148,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
-				event->SetRaceMap(p_Creature->GetMapId());
+				event->SetRaceMap(p_Creature->GetMapId(), sMapMgr.GetContinentInstanceId(p_Creature->GetMapId(), p_Creature->GetPositionX(), p_Creature->GetPositionY()));
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Gnome);
 				p_Creature->AI()->InformGuid(p_Player->GetObjectGuid());
             }

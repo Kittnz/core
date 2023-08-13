@@ -973,7 +973,7 @@ void Log::outDiscord(char const* str, ...)
 
 
 //For internal Discord hooks such as rate limits and bad gateways.
-void Log::outDiscordCore(char const* str, ...)
+void Log::outDiscordCore(char const* str)
 {
     if (!str)
         return;
@@ -981,22 +981,14 @@ void Log::outDiscordCore(char const* str, ...)
     if (m_includeTime)
         outTime(stdout);
 
-    va_list ap;
-    va_start(ap, str);
-    vutf8printf(stdout, str, &ap);
-    va_end(ap);
-
-    printf("\n");
+    puts(str);
 
     if (discordCoreLogFile)
     {
-        va_list ap;
-        outTimestamp(logfile);
-        va_start(ap, str);
-        vfprintf(logfile, str, ap);
-        fprintf(logfile, "\n");
-        va_end(ap);
-        fflush(logfile);
+        outTimestamp(discordCoreLogFile);
+        fprintf(discordCoreLogFile, str);
+        fprintf(discordCoreLogFile, "\n");
+        fflush(discordCoreLogFile);
     }
 }
 
