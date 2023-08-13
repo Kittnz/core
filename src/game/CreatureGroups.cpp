@@ -118,17 +118,17 @@ void CreatureGroup::OnLeaveCombat(Creature* member)
         for (const auto& itr : m_members)
             if (itr.first != member->GetObjectGuid())
                 if (Creature* otherMember = member->GetMap()->GetCreature(itr.first))
-                    if (otherMember->IsInWorld() && otherMember->IsAlive() && otherMember->AI())
-                        otherMember->AI()->EnterEvadeMode();
+                    if (otherMember->IsInWorld() && otherMember->IsInCombat() && otherMember->AI())
+                        otherMember->AddCreatureState(CSTATE_EVADE_ON_UPDATE);
 
         if (!masterEvade)
         {
             if (Creature* originaLeader = member->GetMap()->GetCreature(GetOriginalLeaderGuid()))
             {
-                if (originaLeader->IsInWorld() && originaLeader->IsAlive() && originaLeader->AI())
+                if (originaLeader->IsInWorld() && originaLeader->IsInCombat() && originaLeader->AI())
                 {
                     masterEvade = true;
-                    originaLeader->AI()->EnterEvadeMode();
+                    originaLeader->AddCreatureState(CSTATE_EVADE_ON_UPDATE);
                 }
             }
         }
