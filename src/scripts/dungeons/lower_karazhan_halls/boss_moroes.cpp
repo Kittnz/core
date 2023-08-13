@@ -18,6 +18,7 @@ struct boss_moroesAI : public ScriptedAI
 	uint32 m_MoroesCurseTimer;
 	uint32 m_ReflectionTimer;
 	uint32 m_SacrificeTimer;
+	uint32 m_PlayMusicTimer;
 	bool sound1;
 	bool intermission1;
 	bool sacrifice;
@@ -28,6 +29,7 @@ struct boss_moroesAI : public ScriptedAI
 		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
+		m_PlayMusicTimer = 0;
 		ResetBattleTimers();
 		sound1 = false;
 		intermission1 = false;
@@ -96,7 +98,7 @@ struct boss_moroesAI : public ScriptedAI
 		{
 			m_creature->MonsterYell("It is my duty to protect and watch over this tower, as approved by my master. I shall make sure to endulge in your little spectacle. Why don't we put on a show for those in attendance, hmm? Legalbrow, if you would please, play my theme.");
 			m_creature->PlayDirectSound(60405);
-			m_creature->PlayDirectMusic(60418);
+			m_PlayMusicTimer = 15000;
 			if (m_pInstance)
 				m_pInstance->SetData(DATA_MOROES_STAGE, 3);
 			m_InterludeTimer = 12000;
@@ -105,6 +107,17 @@ struct boss_moroesAI : public ScriptedAI
 
 	void UpdateAI(const uint32 uiDiff) override
 	{
+		if (m_PlayMusicTimer)
+		{
+			if (m_PlayMusicTimer <= uiDiff)
+			{
+				m_creature->PlayDirectMusic(60418);
+				m_PlayMusicTimer = 0;
+			}
+			else
+				m_PlayMusicTimer -= uiDiff;
+		}
+
 		if (m_pInstance)
 		{
 			if (m_pInstance->GetData(DATA_MOROES_STAGE) == 0)
