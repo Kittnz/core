@@ -18,7 +18,6 @@ struct boss_moroesAI : public ScriptedAI
 	uint32 m_MoroesCurseTimer;
 	uint32 m_ReflectionTimer;
 	uint32 m_SacrificeTimer;
-	uint32 m_PlayMusicTimer;
 	bool sound1;
 	bool intermission1;
 	bool sacrifice;
@@ -29,7 +28,6 @@ struct boss_moroesAI : public ScriptedAI
 		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
-		m_PlayMusicTimer = 0;
 		ResetBattleTimers();
 		sound1 = false;
 		intermission1 = false;
@@ -65,6 +63,9 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		m_creature->SetFactionTemplateId(14);
 		m_creature->SetInCombatWithZone();
+
+		if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
+			m_creature->PlayDirectMusic(60418);
 	}
 
 	void EnterEvadeMode() override
@@ -98,26 +99,20 @@ struct boss_moroesAI : public ScriptedAI
 		{
 			m_creature->MonsterYell("It is my duty to protect and watch over this tower, as approved by my master. I shall make sure to endulge in your little spectacle. Why don't we put on a show for those in attendance, hmm? Legalbrow, if you would please, play my theme.");
 			m_creature->PlayDirectSound(60405);
-			m_PlayMusicTimer = 15000;
 			if (m_pInstance)
 				m_pInstance->SetData(DATA_MOROES_STAGE, 3);
 			m_InterludeTimer = 12000;
 		}
 	}
 
+	void Teleport()
+	{
+		m_creature->CastSpell(m_creature, 12980, true);
+		m_creature->NearTeleportTo(-10893.5, -1758.96, 90.477, 4.60134);
+	}
+
 	void UpdateAI(const uint32 uiDiff) override
 	{
-		if (m_PlayMusicTimer)
-		{
-			if (m_PlayMusicTimer <= uiDiff)
-			{
-				m_creature->PlayDirectMusic(60418);
-				m_PlayMusicTimer = 0;
-			}
-			else
-				m_PlayMusicTimer -= uiDiff;
-		}
-
 		if (m_pInstance)
 		{
 			if (m_pInstance->GetData(DATA_MOROES_STAGE) == 0)
@@ -205,10 +200,10 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (m_InterludeTimer < uiDiff)
 					{
-						m_creature->NearTeleportTo(-10893.5, -1758.96, 90.477, 4.60134);
+						Teleport();
 						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-						m_creature->SetMaxHealth(195312);
-						m_creature->SetHealth(195312);
+						m_creature->SetMaxHealth(175312);
+						m_creature->SetHealth(175312);
 						m_InterludeTimer = 0;
 					}
 					else
@@ -235,11 +230,10 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (DoCastSpellIfCan(m_creature->GetVictim(), 57095) == CAST_OK)
 					{
-						if (Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1, nullptr, SELECT_FLAG_PLAYER))
-						{
-							DoResetThreat();
+						Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1, nullptr, SELECT_FLAG_PLAYER);
+						m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+						if (pSecond)
 							m_creature->AI()->AttackStart(pSecond);
-						}
 						m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
 					}
 				}
