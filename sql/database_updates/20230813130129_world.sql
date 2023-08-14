@@ -45,3 +45,10 @@ UPDATE `spell_template` SET `description` = 'Your Shock spells have a chance to 
 -- Fix "A Friend in Glenshire" quest.
 
 UPDATE `quest_template` SET `ZoneOrSort` = 85 WHERE `entry` = 40086;
+
+-- https://database.turtle-wow.org/?item=69006
+-- https://database.turtle-wow.org/?item=69004
+-- remove sell and buy price, can be bought with turtle tokens and turned into ingame currency
+
+UPDATE `item_template` SET `buy_price` = 0, `sell_price` = 0 WHERE `entry` = 69006;
+UPDATE `item_template` SET `buy_price` = 0, `sell_price` = 0 WHERE `entry` = 69004;
