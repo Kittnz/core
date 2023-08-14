@@ -44,4 +44,4 @@ UPDATE `spell_template` SET `description` = 'Your Shock spells have a chance to 
 
 -- Fix "A Friend in Glenshire" quest.
 
-UPDATE quest_template` SET `ZoneOrSort` = 85 WHERE `entry` = 40086;
+UPDATE `quest_template` SET `ZoneOrSort` = 85 WHERE `entry` = 40086;
