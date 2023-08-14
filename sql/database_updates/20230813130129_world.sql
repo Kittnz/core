@@ -52,3 +52,8 @@ UPDATE `quest_template` SET `ZoneOrSort` = 85 WHERE `entry` = 40086;
 
 UPDATE `item_template` SET `buy_price` = 0, `sell_price` = 0 WHERE `entry` = 69006;
 UPDATE `item_template` SET `buy_price` = 0, `sell_price` = 0 WHERE `entry` = 69004;
+
+-- Gilneas City needs a Meeting Stone made to be placed next to the portal, how did we forget about this?
+
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (1872030, 23, 5494, 'Meeting Stone', 35, 0, 1, 43, 49, 5208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+	
