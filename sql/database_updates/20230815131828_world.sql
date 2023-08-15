@@ -1,0 +1,1 @@
+UPDATE `creature_template` SET `scale` = 0.03 WHERE `entry` = 80609;
