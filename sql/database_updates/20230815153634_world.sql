@@ -1,6 +1,6 @@
 -- recipe items for missing stuff
 replace into item_template values
- ('62000', '9', '1', 'Pattern: Blue Dragonscale Boots', '', '5928', '3', '0', '1', '22000', '5500', '0', '-1', '-1', '58',
+ ('62000', '9', '1', 'Pattern: Blue Dragonscale Boots', '', '1097', '3', '0', '1', '22000', '5500', '0', '-1', '-1', '58',
  '0', '165', '290', '10656', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -285,7 +285,7 @@ SET @skill_required_to_train = 0; -- Fill only if it's trainer spell.
 
 -- DO NOT MODIFY THIS PART:
 
-SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to make a ', @recipe_spell_name, '.');
 REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @recipe_spell_id, 0, 0, 1, 0, 0, @skill_level_max, @skill_level_required , @skill_required_to_train);
 UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
 REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_spell_id, 0, 0, 0, 0, 0, 108, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
@@ -336,7 +336,7 @@ SET @skill_required_to_train = 0; -- Fill only if it's trainer spell.
 
 -- DO NOT MODIFY THIS PART:
 
-SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to sew a ', @recipe_spell_name, '.');
 REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @recipe_spell_id, 0, 0, 1, 0, 0, @skill_level_max, @skill_level_required , @skill_required_to_train);
 UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
 REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_spell_id, 0, 0, 0, 0, 0, 108, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
@@ -388,7 +388,7 @@ SET @skill_required_to_train = 0; -- Fill only if it's trainer spell.
 
 -- DO NOT MODIFY THIS PART:
 
-SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to make a ', @recipe_spell_name, '.');
 REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @recipe_spell_id, 0, 0, 1, 0, 0, @skill_level_max, @skill_level_required , @skill_required_to_train);
 UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
 REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_spell_id, 0, 0, 0, 0, 0, 108, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
@@ -490,7 +490,7 @@ SET @skill_required_to_train = 0; -- Fill only if it's trainer spell.
 
 -- DO NOT MODIFY THIS PART:
 
-SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to make a ', @recipe_spell_name, '.');
 REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @recipe_spell_id, 0, 0, 1, 0, 0, @skill_level_max, @skill_level_required , @skill_required_to_train);
 UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
 REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_spell_id, 0, 0, 0, 0, 0, 108, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
