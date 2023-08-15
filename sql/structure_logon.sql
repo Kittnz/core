@@ -579,6 +579,10 @@ CREATE TABLE `uptime`  (
   PRIMARY KEY (`realmid`, `starttime`) USING BTREE
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Uptime system' ROW_FORMAT = DYNAMIC;
 
+ALTER TABLE `uptime`
+	ADD COLUMN `queue` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' AFTER `maxplayers`,
+	ADD COLUMN `maxqueue` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' AFTER `queue`;
+
 -- ----------------------------
 -- Function structure for account_balance_update
 -- ----------------------------
