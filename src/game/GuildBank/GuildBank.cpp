@@ -1104,6 +1104,33 @@ void GuildBank::DepositItem(std::string msg) {
 	}
 }
 
+void GuildBank::DepositInternal(uint32 bankTab, Item* item)
+{
+	for (uint32 slot = 1; slot <= BANK_TAB_SIZE; ++slot)
+	{
+		if (!GetItem(bankTab, slot))
+		{
+			BankItem* bItem;
+
+			bItem = new BankItem;
+			bItem->is_inferno = b_infernoBank;
+			bItem->guid = GetNewGuid();
+			bItem->guildid = guildid;
+			bItem->count = item->GetCount();
+			bItem->tab = bankTab;
+			bItem->slot = slot;
+
+			bItem->state = ITEM_NEW;
+
+			CloneItem(bItem, item);
+
+			b_itemUpdateQueue.push_back(*bItem);
+
+			AddItem(bItem);
+		}
+	}
+}
+
 // Deposits a player item into the bank
 void GuildBank::DepositItemInFreeSlot(uint32 bankTab, Item* pItem)
 {
@@ -1150,9 +1177,12 @@ void GuildBank::DepositItemInFreeSlot(uint32 bankTab, Item* pItem)
 		}
 	}
 
-	// couldnt find a free slot, tab is full
-	_player->GetSession()->SendNotification("Your bank tab is full.");
-	_player->SendAddonMessage(prefix, "DepositItem:Error:BankTabFullAdd");
+	if (_player)
+	{
+		// couldnt find a free slot, tab is full
+		_player->GetSession()->SendNotification("Your bank tab is full.");
+		_player->SendAddonMessage(prefix, "DepositItem:Error:BankTabFullAdd");
+	}
 }
 
 // Deposits a player item into the bank
@@ -2454,6 +2484,7 @@ BankItem* GuildBank::CloneBankItem(BankItem* sItem)
 	cItem->durability       = sItem->durability;
 	cItem->text             = sItem->text;
 	cItem->generated_loot   = sItem->generated_loot;
+	cItem->is_inferno       = sItem->is_inferno;
 
 	return cItem;
 }

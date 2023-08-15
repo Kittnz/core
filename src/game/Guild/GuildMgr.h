@@ -38,6 +38,8 @@ class GuildMgr
         GuildMgr();
         ~GuildMgr();
 
+        void FixupInfernoBanks();
+
         void AddGuild(Guild* guild);
         void RemoveGuild(uint32 guildId);
 
