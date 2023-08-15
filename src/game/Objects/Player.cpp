@@ -2251,12 +2251,11 @@ bool Player::SwitchInstance(uint32 newInstanceId)
         m_movementInfo.ClearTransportData();
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_ONTRANSPORT);
     }
+
     // Stop duel
     if (m_duel)
         if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
-    // Fix movement flags
-    m_movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING_OR_TURN);
 
     SetSelectionGuid(ObjectGuid());
     CombatStop();
@@ -2283,7 +2282,10 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING);
     RemoveCharmAuras();
     ResolvePendingMovementChanges(false, false);
-    DisableSpline();
+
+    if (HasMovementFlag(MOVEFLAG_SPLINE_ENABLED))
+        DisableSpline();
+
     SetMover(this);
 
     // Clear hostile refs so that we have no cross-map (and thread) references being maintained
