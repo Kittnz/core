@@ -7479,7 +7479,8 @@ void Spell::EffectDispelMechanic(SpellEffectIndex eff_idx)
         next = iter;
         ++next;
         SpellEntry const *spell = iter->second->GetSpellProto();
-        if (iter->second->HasMechanic(mechanic))
+        if (iter->second->HasMechanic(mechanic) &&
+           !spell->HasAttribute(SPELL_ATTR_CANT_CANCEL))
         {
             unitTarget->RemoveAurasDueToSpell(spell->Id);
             if (Auras.empty())
