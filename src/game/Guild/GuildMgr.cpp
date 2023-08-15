@@ -81,7 +81,7 @@ void GuildMgr::FixupInfernoBanks()
                 }
             }
 
-        }
+        } while (result->NextRow());
     }
 }
 
