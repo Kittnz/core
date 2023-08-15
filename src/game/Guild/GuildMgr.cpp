@@ -50,6 +50,41 @@ void GuildMgr::CleanUpPetitions()
     m_petitionMap.clear();
 }
 
+
+//have to run this once on maint to cleanup remnant items from gbank bug
+void GuildMgr::FixupInfernoBanks()
+{
+    auto result = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT guildid, guid, isInferno, tab, item_template, count FROM guild_bank WHERE `isInferno` > 1"));
+
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            uint32 guid = fields[1].GetUInt32();
+            uint8 isInferno = fields[2].GetUInt8();
+            uint32 tab = fields[3].GetUInt32();
+            uint32 itemEntry = fields[4].GetUInt32();
+            uint32 count = fields[5].GetUInt32();
+
+
+            if (auto guild = GetGuildById(guildId))
+            {
+                if (guild->_Bank)
+                {
+                    Item* item = Item::CreateItem(itemEntry, count);
+                    if (item)
+                    {
+                        guild->_Bank->DepositInternal(tab, item);
+                        CharacterDatabase.PExecute("DELETE FROM `guild_bank` WHERE `guildId` = %u AND `guid` = %u AND `isInferno` = %u", guildId, guid, isInferno);
+                    }
+                }
+            }
+
+        }
+    }
+}
+
 void GuildMgr::AddGuild(Guild* guild)
 {
     std::lock_guard<std::mutex> guard(m_guildMutex);
