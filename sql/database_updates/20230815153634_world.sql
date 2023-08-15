@@ -106,7 +106,7 @@ SET @reagent_item_2 = 15415;
 SET @reagent_item_count_2 = 25;
 
 SET @reagent_item_3 = 15407;
-SET @reagent_item_count_4 = 1;
+SET @reagent_item_count_3 = 1;
 
 SET @reagent_item_4 = 14341;
 SET @reagent_item_count_4 = 1;
@@ -121,10 +121,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36530; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 310; -- Required to craft.
@@ -160,7 +157,7 @@ SET @reagent_item_2 = 17010;
 SET @reagent_item_count_2 = 5;
 
 SET @reagent_item_3 = 17011;
-SET @reagent_item_count_4 = 3;
+SET @reagent_item_count_3 = 3;
 
 SET @reagent_item_4 = 12607;
 SET @reagent_item_count_4 = 6;
@@ -175,10 +172,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36536; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
@@ -215,7 +209,7 @@ SET @reagent_item_2 = 17012;
 SET @reagent_item_count_2 = 12;
 
 SET @reagent_item_3 = 12810;
-SET @reagent_item_count_4 = 12;
+SET @reagent_item_count_3 = 12;
 
 SET @reagent_item_4 = 12607;
 SET @reagent_item_count_4 = 6;
@@ -230,10 +224,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36533; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
@@ -269,7 +260,7 @@ SET @reagent_item_2 = 17010;
 SET @reagent_item_count_2 = 6;
 
 SET @reagent_item_3 = 17011;
-SET @reagent_item_count_4 = 5;
+SET @reagent_item_count_3 = 5;
 
 SET @reagent_item_4 = 0;
 SET @reagent_item_count_4 = 0;
@@ -284,10 +275,8 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
+SET @reagent_item_count_8 = 0;
 
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
 
 SET @skill_line_entry = 36534; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
@@ -323,7 +312,7 @@ SET @reagent_item_2 = 17010;
 SET @reagent_item_count_2 = 5;
 
 SET @reagent_item_3 = 17011;
-SET @reagent_item_count_4 = 4;
+SET @reagent_item_count_3 = 4;
 
 SET @reagent_item_4 = 7078;
 SET @reagent_item_count_4 = 10;
@@ -338,10 +327,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36535; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
@@ -377,7 +363,7 @@ SET @reagent_item_2 = 7076;
 SET @reagent_item_count_2 = 3;
 
 SET @reagent_item_3 = 7078;
-SET @reagent_item_count_4 = 3;
+SET @reagent_item_count_3 = 3;
 
 SET @reagent_item_4 = 0;
 SET @reagent_item_count_4 = 0;
@@ -392,10 +378,8 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
+SET @reagent_item_count_8 = 0;
 
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
 
 SET @skill_line_entry = 36531; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 310; -- Required to craft.
@@ -431,7 +415,7 @@ SET @reagent_item_2 = 17010;
 SET @reagent_item_count_2 = 3;
 
 SET @reagent_item_3 = 14227;
-SET @reagent_item_count_4 = 4;
+SET @reagent_item_count_3 = 4;
 
 SET @reagent_item_4 = 7076;
 SET @reagent_item_count_4 = 6;
@@ -446,10 +430,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36537; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
@@ -485,7 +466,7 @@ SET @reagent_item_2 = 12360;
 SET @reagent_item_count_2 = 2;
 
 SET @reagent_item_3 = 7076;
-SET @reagent_item_count_4 = 6;
+SET @reagent_item_count_3 = 6;
 
 SET @reagent_item_4 = 7078;
 SET @reagent_item_count_4 = 6;
@@ -500,10 +481,7 @@ SET @reagent_item_7 = 0;
 SET @reagent_item_count_7 = 0;
 
 SET @reagent_item_8 = 0;
-SET @reagent_item_count_6 = 8;
-
-SET @reagent_item_6 = 0;
-SET @reagent_item_count_6 = 0;
+SET @reagent_item_count_8 = 0;
 
 SET @skill_line_entry = 36532; -- Unique entry that isn't taken yet.
 SET @skill_level_required = 315; -- Required to craft.
