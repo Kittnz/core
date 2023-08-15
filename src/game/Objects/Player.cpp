@@ -7843,11 +7843,11 @@ void Player::_ApplyItemBonuses(ItemPrototype const *proto, uint8 slot, bool appl
         if (proto->Delay)
         {
             if (slot == EQUIPMENT_SLOT_RANGED)
-                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
             else if (slot == EQUIPMENT_SLOT_MAINHAND)
-                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
             else if (slot == EQUIPMENT_SLOT_OFFHAND)
-                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
         }
 
         if (CanModifyStats() && proto->Delay)
