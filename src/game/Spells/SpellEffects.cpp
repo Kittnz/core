@@ -2541,9 +2541,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 19266:
                             spellid = 19254;
                             break; // Rank 6
-                        case 25461:
-                            spellid = 25460;
-                            break; // Rank 7
                         default:
                             sLog.outError("Spell::EffectDummy: Spell 28598 triggered by unhandeled spell %u", m_triggeredByAuraSpell->Id);
                             return;
