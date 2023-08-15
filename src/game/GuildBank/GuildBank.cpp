@@ -1127,6 +1127,7 @@ void GuildBank::DepositInternal(uint32 bankTab, Item* item)
 			b_itemUpdateQueue.push_back(*bItem);
 
 			AddItem(bItem);
+			break;
 		}
 	}
 }
