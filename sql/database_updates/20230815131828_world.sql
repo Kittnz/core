@@ -283,3 +283,9 @@ UPDATE `spell_template` SET `description` = 'Increases the attack power of party
 UPDATE `spell_template` SET `description` = 'Causes the caster to automatically inflict $25819s1 Nature damage every $t1 sec. to nearby enemies. The aura lasts until cancelled.', `Auradescription` = 'Automatically inflicting $25819s1 Nature damage every $t1 sec. to nearby enemies.' WHERE `entry` = 25818;
 UPDATE `spell_template` SET `description` = 'Causes the caster to automatically inflict $17466s1 Shadow damage every $t1 sec. to nearby enemies. The aura lasts until cancelled.', `Auradescription` = 'Automatically inflicting $27988s1 Shadow damage every $t1 sec. to nearby enemies.' WHERE `entry` = 27987;
 UPDATE `spell_template` SET `description` = 'Causes the caster to automatically inflict $17466s1 Shadow damage every $t1 sec. to nearby enemies. The aura lasts until cancelled.', `Auradescription` = 'Automatically inflicting $17466s1 Shadow damage every $t1 sec. to nearby enemies.' WHERE `entry` = 28340;
+
+-- fix new crescent grove rare drops to be bind on equip
+update item_template set bonding = 2 where entry = 61552; -- Corrupted Sword
+update item_template set bonding = 2 where entry = 61553; -- Satrykin Leggings
+update item_template set bonding = 2 where entry = 61554; -- Crescent Band
+update item_template set bonding = 2 where entry = 61555; -- Ancient Grove Reed;
