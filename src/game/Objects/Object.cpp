@@ -3619,7 +3619,8 @@ SpellMissInfo WorldObject::SpellHitResult(Unit* pVictim, SpellEntry const* spell
         return SPELL_MISS_EVADE;
 
     // Check for immune (use charges)
-    if (pVictim != this && !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
+    if (/* pVictim != this && */
+       !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
         pVictim->IsImmuneToSpell(spell, pVictim == this))
         return SPELL_MISS_IMMUNE;
 
