@@ -1262,15 +1262,25 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;
 
-                    // Need remove self if Lightning Shield not active
-                    Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
-                    for (const auto& aura : auras)
+                    if (!m_triggeredBySpellInfo)
+                        return;
+
+                    switch (m_triggeredBySpellInfo->Id)
                     {
-                        SpellEntry const* spell = aura.second->GetSpellProto();
-                        if (spell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_SHIELD>())
-                            return;
+                        case 28820: // Shaman T3 8-Piece Bonus
+                        {
+                            // Need remove self if Lightning Shield not active
+                            Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
+                            for (const auto& aura : auras)
+                            {
+                                SpellEntry const* spell = aura.second->GetSpellProto();
+                                if (spell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_SHIELD>())
+                                    return;
+                            }
+                            unitTarget->RemoveAurasDueToSpell(28820);
+                            break;
+                        }
                     }
-                    unitTarget->RemoveAurasDueToSpell(28820);
                     return;
                 }
                 case 19411:                                 // Lava Bomb
