@@ -83,6 +83,8 @@ void GuildMgr::FixupInfernoBanks()
 
         } while (result->NextRow());
     }
+
+    SaveGuildBanks();
 }
 
 void GuildMgr::AddGuild(Guild* guild)
