@@ -33,3 +33,7 @@ UPDATE `spell_template` SET `name` = 'Black Qiraji Battle Tank' WHERE `entry` = 
 UPDATE `spell_template` SET `name` = 'Black Qiraji Battle Tank' WHERE `entry` = 26655;
 UPDATE `spell_template` SET `name` = 'Black Qiraji Battle Tank' WHERE `entry` = 26656;
 UPDATE `spell_template` SET `name` = 'Black Qiraji Battle Tank' WHERE `entry` = 31700;
+
+-- Fix spell icon of Black Battlestrider (https://database.turtle-wow.org/?spell=22719).  Currently a Nightsaber, change to a Mechanostrider.
+
+UPDATE `spell_template` SET `spellIconId` = 1240 WHERE `entry` = 22719;
