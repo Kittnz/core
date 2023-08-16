@@ -397,6 +397,8 @@ class ChatHandler
         bool HandleLookupItemSetCommand(char* args);
         bool HandleLookupEventCommand(char* args);
         bool HandleLookupGuildCommand(char* args);
+        bool HandleLookupHwPrintCommand(char* args);
+
 
         bool HandleModifyHPCommand(char* args);
         bool HandleModifyManaCommand(char* args);
