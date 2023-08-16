@@ -806,6 +806,7 @@ struct AccountCacheData
     uint32 id;
     std::string username;
     std::string email;
+    uint64 lastExtendedFingerprint;
 };
 
 
@@ -1145,6 +1146,11 @@ class World
         AccountDataWrapper GetAccountData(uint32 accountId)
         {
             return &m_accountData[accountId];
+        }
+
+        const auto& GetAllAccountData() const
+        {
+            return m_accountData;
         }
 
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI

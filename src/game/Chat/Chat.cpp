@@ -308,6 +308,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "itemset",        SEC_DEVELOPER, true,  &ChatHandler::HandleLookupItemSetCommand,       "", nullptr },
         { "event",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupEventCommand,         "", nullptr },
         { "guild",          SEC_DEVELOPER, true,  &ChatHandler::HandleLookupGuildCommand,         "", nullptr },
+        { "hwprint",        SEC_DEVELOPER, false, &ChatHandler::HandleLookupHwPrintCommand,       "", nullptr },
 		{ nullptr,          0,                  false, nullptr,                                    "", nullptr }
     };
 

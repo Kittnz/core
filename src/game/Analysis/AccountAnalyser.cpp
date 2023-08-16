@@ -356,6 +356,9 @@ void AccountAnalyser::Initialize()
             _session->MarkSuspicious();
     }
     
+
+    auto accountData = sWorld.GetAccountData(_accountId);
+    accountData->lastExtendedFingerprint = _currentSample.GetHash();
 }
 
 
