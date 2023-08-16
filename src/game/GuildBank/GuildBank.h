@@ -53,7 +53,7 @@ struct BankItem
 	uint8 durability;
 	uint32 text;
 	int8 generated_loot;
-	bool is_inferno;
+	bool is_inferno = false;
 
 	// extra
 	uint32 quality; 
@@ -177,6 +177,7 @@ typedef std::unordered_map<uint32, MoneyLog> MoneyLogMap;
 
 class GuildBank
 {
+	friend class GuildMgr;
     public:
 		GuildBank(bool isInfernoBank);
 
@@ -244,6 +245,8 @@ class GuildBank
 		void MoveItem(BankItem* sItem, BankItem* dItem, uint8 bankTab, uint8 fromSlot, uint8 toSlot);
 		void SplitItem(std::string msg);
 		void DestroyItem(std::string msg);
+
+		void DepositInternal(uint32 bankTab, Item* item);
 
 		// weekly withdrawals
 		void SendTabWithdrawalsLeft(uint8 tab);

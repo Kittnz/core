@@ -2028,6 +2028,9 @@ void World::SetInitialWorldSettings()
 
     AccountAnalyser::CheckExtendedHashes();
 
+    sLog.outString("Fixing Hardcore Guild bank items..");
+    sGuildMgr.FixupInfernoBanks();
+
 #ifdef USING_DISCORD_BOT
     sLog.outString("Loading Discord Bot...");
 
