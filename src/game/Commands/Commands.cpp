@@ -88,6 +88,7 @@
 #include <ace/OS_NS_dirent.h>
 #include "SuspiciousStatisticMgr.h"
 #include "ChannelMgr.h"
+#include "CommandStream.h"
 
 uint32 GetTokenBalance(uint32 accountId)
 {
@@ -1732,6 +1733,34 @@ bool ChatHandler::HandleLookupEventCommand(char* args)
 
     if (counter == 0)
         SendSysMessage(LANG_NOEVENTFOUND);
+
+    return true;
+}
+
+bool ChatHandler::HandleLookupHwPrintCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    uint64 extendedPrint;
+
+    if (!(stream >> extendedPrint))
+    {
+        SendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+
+    SendSysMessage("Listing all accounts with hwprint:");
+
+    const auto& accountDatas = sWorld.GetAllAccountData();
+
+    for (const auto& data : accountDatas)
+    {
+        if (data.second.lastExtendedFingerprint == extendedPrint)
+        {
+            PSendSysMessage("Got match on account username %s", data.second.username.c_str());
+        }
+    }
 
     return true;
 }
