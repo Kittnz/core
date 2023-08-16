@@ -2315,14 +2315,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (m_CastItem)
                     {
                         auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
-
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
-                            uint32 count = 1;
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
-
-                            // item consumption is done this way instead of just setting charges
-                            // in db so that it's only consumed if the companion is learned
                             m_forceConsumeItem = true;
                         }
                     }
@@ -2333,12 +2328,10 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (m_CastItem)
                     {
                         auto spellIdOpt = sMountMgr->GetMountSpellId(m_CastItem->GetEntry());
-
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
-                            m_caster->ToPlayer()->DestroyItemCount(m_CastItem->GetEntry(), 1, true);
-                            m_caster->ToPlayer()->SaveInventoryAndGoldToDB();
+                            m_forceConsumeItem = true;
                         }
                     }
                     return;
