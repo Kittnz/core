@@ -14247,32 +14247,23 @@ bool ChatHandler::HandlePlayCommand(char* args)
 
 bool ChatHandler::HandleRadioCommand(char* args)
 {
-    if (!*args)
-    {
-        SendSysMessage("Syntax: .radio on/off");
-        SetSentErrorMessage(true);
+    char* cmd = ExtractLiteralArg(&args);
+
+    if (!cmd)
         return false;
-    }
 
-    bool value;
+    std::string cmd_str(cmd);
 
-    if (!ExtractOnOff(&args, value))
+    if (cmd_str == "1")
     {
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (value)
-    {
-        m_session->GetPlayer()->PlayDirectMusic(60401);  // http://turtle-wow.org/radio
+        m_session->GetPlayer()->PlayDirectMusic(60401); 
         return true;
     }
-    else
+    else if (cmd_str == "2")
     {
-        m_session->GetPlayer()->PlayDirectMusic(68); 
+        m_session->GetPlayer()->PlayDirectMusic(60423);
         return true;
     }
-
     return false;
 }
 
