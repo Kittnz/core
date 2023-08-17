@@ -115,7 +115,8 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 				_owner->GetGUIDLow(),
 				itemID,
 				price,
-				false
+				false,
+				(uint32)time(nullptr)
 			};
 
 			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
