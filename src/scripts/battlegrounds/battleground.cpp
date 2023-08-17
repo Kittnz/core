@@ -69,12 +69,15 @@ struct npc_spirit_guideAI : ScriptedAI
             m_creature->InterruptNonMeleeSpells(true);
             m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL, true);
             m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL_CHANNEL, false);
+            Team team = m_creature->GetEntry() == 13117 ? HORDE : ALLIANCE;
 
             Map::PlayerList const& PlayerList = m_creature->GetMap()->GetPlayers();
             for (const auto& itr : PlayerList)
             {
                 Player* pPlayer = itr.getSource();
-                if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || pPlayer->IsAlive())
+                if (!pPlayer || pPlayer->IsAlive() ||
+                    !pPlayer->IsWithinDistInMap(m_creature, 20.0f) ||
+                    team != pPlayer->GetTeam())
                     continue;
 
                 if (pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT))
