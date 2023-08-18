@@ -8,3 +8,5 @@ REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (181069, 12363, 3, 1, 1, 1, 0);
 -- Fishing lootables in gillijim and lapidis may have shorter than normal respawn rates.
 update gameobject set spawntimesecsmin = 1800, spawntimesecsmax = 3600 where guid BETWEEN 5012804 AND 5012980;
+-- The Key to Karazhan VI should require completion of The Key to Karazhan V.
+update quest_template set prevquestid = 40824 where entry = 40825;
