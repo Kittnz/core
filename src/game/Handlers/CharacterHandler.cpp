@@ -521,7 +521,7 @@ uint32 WorldSession::GetBasePriority() const
         priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY);
 
 
-    priority += GetMaxLevelCharacterValue() >= sWorld.getConfig(CONFIG_UINT32_LOGIN_VIP_QUEUE_LEVEL_THRESHOLD) ? sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR) : 0;
+    priority += GetMaxLevelCharacterValue() >= sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR) ? sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR) : 0;
 
     return priority;
 }
