@@ -664,3 +664,4 @@ REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566524, 378);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2566523, 378);
 REPLACE INTO `creature` VALUES (2578706,92151,0,0,0,0,-13816.5,3094.19,26.7567,0.276526,120,120,5,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2578706,92151,0,0,0,0,-13816.5,3094.19,26.7567,0.276526,300,300,0,100,100,0,0,0);
+UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2575908;
