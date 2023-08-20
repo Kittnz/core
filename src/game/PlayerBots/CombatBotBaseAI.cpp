@@ -2444,8 +2444,8 @@ Unit* CombatBotBaseAI::SelectAttackerDifferentFrom(Unit const* pExcept) const
 
 bool CombatBotBaseAI::IsValidBuffTarget(Unit const* pTarget, SpellEntry const* pSpellEntry) const
 {
-    std::list<uint32> morePowerfullSpells;
-    sSpellMgr.ListMorePowerfullSpells(pSpellEntry->Id, morePowerfullSpells);
+    std::vector<uint32> morePowerfulSpells;
+    sSpellMgr.ListMorePowerfulSpells(pSpellEntry->Id, morePowerfulSpells);
 
     for (const auto& i : pTarget->GetSpellAuraHolderMap())
     {
@@ -2455,7 +2455,7 @@ bool CombatBotBaseAI::IsValidBuffTarget(Unit const* pTarget, SpellEntry const* p
         if (sSpellMgr.IsRankSpellDueToSpell(pSpellEntry, i.first))
             return false;
 
-        for (const auto& it : morePowerfullSpells)
+        for (const auto& it : morePowerfulSpells)
             if (it == i.first)
                 return false;
     }
@@ -3144,9 +3144,9 @@ bool CombatBotBaseAI::UseItemEffect(Item* pItem)
     return false;
 }
 
-bool CombatBotBaseAI::IsWearingShield() const
+bool CombatBotBaseAI::IsWearingShield(Player* pPlayer) const
 {
-    Item* pItem = me->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+    Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
     if (!pItem)
         return false;
 

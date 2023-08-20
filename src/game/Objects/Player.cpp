@@ -1133,12 +1133,18 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
 
         CalculateDamageAbsorbAndResist(this, SPELL_SCHOOL_MASK_NATURE, DIRECT_DAMAGE, damage, &absorb, &resist, nullptr);
     }
-    else if (type == DAMAGE_DROWNING)
+
+    else if (type == DAMAGE_EXHAUSTED || type == DAMAGE_DROWNING || type == DAMAGE_FALL)
     {
         if (IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
             return 0;
 
-        // drowning damage is not absorbable
+        // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+        // - Damage absorption no longer protects against falling, drowning, or
+        //   fatigue damage.
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
+        CalculateDamageAbsorbAndResist(this, SPELL_SCHOOL_MASK_NORMAL, DIRECT_DAMAGE, damage, &absorb, &resist, nullptr);
+#endif
     }
 
     uint32 const bonus = (resist < 0 ? uint32(std::abs(resist)) : 0);
@@ -1152,7 +1158,10 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
 
     damage = DealDamage(this, damage, nullptr, SELF_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-    if (type == DAMAGE_FALL && !IsAlive())                  // DealDamage not apply item durability loss at self damage
+    // DealDamage not apply item durability loss at self damage
+    // Confirmed on classic that dying from lava, fatigue and
+    // drowning causes durability loss. Probably applies to all.
+    if (!IsAlive())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "We are fall to death, loosing 10 percents durability");
         DurabilityLossAll(0.10f, false);
@@ -1164,7 +1173,7 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
     return damage;
 }
 
-///The player sobers by 256 every 10 seconds
+// The player sobers by 256 every 10 seconds
 void Player::HandleSobering()
 {
     m_drunkTimer = 0;
@@ -1776,6 +1785,12 @@ void Player::OnDisconnected()
             }, 1);
         }
 
+        if (HasUnitState(UNIT_STAT_ROOT_ON_LANDING))
+        {
+            SetRootedReal(ShouldBeRooted());
+            ClearUnitState(UNIT_STAT_ROOT_ON_LANDING);
+        }
+
         // Update position after bot takes over
         // And remove movement flags, so he doesn't run into the void
         if (!GetMover()->HasUnitState(UNIT_STAT_FLEEING | UNIT_STAT_CONFUSED | UNIT_STAT_TAXI_FLIGHT))
@@ -2169,8 +2184,6 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     if (duel)
         if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
-    // Fix movement flags
-    m_movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING_OR_TURN);
 
     SetSelectionGuid(ObjectGuid());
     CombatStop();
@@ -2196,7 +2209,10 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     //remove auras before removing from map...
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_LEAVE_WORLD_CANCELS | AURA_INTERRUPT_MOVING_CANCELS | AURA_INTERRUPT_TURNING_CANCELS);
     RemoveCharmAuras();
-    DisableSpline();
+
+    if (HasMovementFlag(MOVEFLAG_SPLINE_ENABLED))
+        DisableSpline();
+
     SetMover(this);
 
     // Clear hostile refs so that we have no cross-map (and thread) references being maintained
@@ -2582,9 +2598,9 @@ void Player::ProcessDelayedOperations()
 
 void Player::AddToWorld()
 {
-    ///- Do not add/remove the player from the object storage
-    ///- It will crash when updating the ObjectAccessor
-    ///- The player should only be added when logging in
+    // Do not add/remove the player from the object storage
+    // It will crash when updating the ObjectAccessor
+    // The player should only be added when logging in
     Unit::AddToWorld();
 
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
@@ -2602,7 +2618,7 @@ void Player::RemoveFromWorld()
 
     if (IsInWorld())
     {
-        ///- Release charmed creatures, unsummon totems and remove pets/guardians
+        // Release charmed creatures, unsummon totems and remove pets/guardians
         UnsummonAllTotems();
         RemoveMiniPet();
         sZoneScriptMgr.HandlePlayerLeaveZone(this, m_zoneUpdateId);
@@ -2619,12 +2635,12 @@ void Player::RemoveFromWorld()
     }
 
     // remove duel before calling Unit::RemoveFromWorld
-    // otherwise there will be an existing duel flag pointer but no entry in m_gameObj
+    // otherwise there will be an existing duel flag pointer but no entry in m_spellGameObjects
     DuelComplete(DUEL_INTERRUPTED);
 
-    ///- Do not add/remove the player from the object storage
-    ///- It will crash when updating the ObjectAccessor
-    ///- The player should only be removed when logging out
+    // Do not add/remove the player from the object storage
+    // It will crash when updating the ObjectAccessor
+    // The player should only be removed when logging out
     if (IsInWorld())
         GetCamera().ResetView();
 
@@ -3293,8 +3309,8 @@ bool Player::IsInSameGroupWith(Player const* p) const
                           GetGroup()->SameSubGroup((Player*)this, (Player*)p)));
 }
 
-///- If the player is invited, remove him. If the group if then only 1 person, disband the group.
-/// \todo Shouldn't we also check if there is no other invitees before disbanding the group?
+// If the player is invited, remove him. If the group if then only 1 person, disband the group.
+// TODO: Shouldn't we also check if there is no other invitees before disbanding the group?
 void Player::UninviteFromGroup()
 {
     Group* group = GetGroupInvite();
@@ -5933,17 +5949,17 @@ void Player::UpdateSkillsForLevel()
         uint32 max = SKILL_MAX(data);
         uint32 val = SKILL_VALUE(data);
 
-        /// update only level dependent max skill values
+        // update only level dependent max skill values
         if (max != 1)
         {
-            /// maximize skill always
+            // maximize skill always
             if (alwaysMaxSkill || (rcEntry->flags & SKILL_FLAG_ALWAYS_MAX_VALUE))
             {
                 SetUInt32Value(valueIndex, MAKE_SKILL_VALUE(maxSkill, maxSkill));
                 if (itr->second.uState != SKILL_NEW)
                     itr->second.uState = SKILL_CHANGED;
             }
-            else if (max != maxconfskill)                   /// update max skill value if current max skill not maximized
+            else if (max != maxconfskill)                   // update max skill value if current max skill not maximized
             {
                 SetUInt32Value(valueIndex, MAKE_SKILL_VALUE(val, maxSkill));
                 if (itr->second.uState != SKILL_NEW)
@@ -7199,7 +7215,15 @@ void Player::DuelComplete(DuelCompleteType type)
     SpellAuraHolderMap const& vAuras = duel->opponent->GetSpellAuraHolderMap();
     for (const auto& itr : vAuras)
     {
-        if (!itr.second->IsPositive() && itr.second->GetCasterGuid() == GetObjectGuid() && itr.second->GetAuraApplyTime() >= duel->startTime)
+        if (!itr.second->IsPositive() && 
+            // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+            // - You are no longer able to kill players in duels with reflected DoT spells
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
+           (itr.second->GetCasterGuid() == GetObjectGuid() || itr.second->IsReflected()) &&
+#else
+            itr.second->GetCasterGuid() == GetObjectGuid() &&
+#endif
+            itr.second->GetAuraApplyTime() >= duel->startTime)
             auras2remove.push_back(itr.second->GetId());
     }
 
@@ -7210,7 +7234,15 @@ void Player::DuelComplete(DuelCompleteType type)
     SpellAuraHolderMap const& auras = GetSpellAuraHolderMap();
     for (const auto& aura : auras)
     {
-        if (!aura.second->IsPositive() && aura.second->GetCasterGuid() == duel->opponent->GetObjectGuid() && aura.second->GetAuraApplyTime() >= duel->startTime)
+        if (!aura.second->IsPositive() &&
+            // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+            // - You are no longer able to kill players in duels with reflected DoT spells
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
+           (aura.second->GetCasterGuid() == duel->opponent->GetObjectGuid() || aura.second->IsReflected()) &&
+#else
+            aura.second->GetCasterGuid() == duel->opponent->GetObjectGuid() &&
+#endif
+            aura.second->GetAuraApplyTime() >= duel->startTime)
             auras2remove.push_back(aura.second->GetId());
     }
     for (uint32 i : auras2remove)
@@ -7404,12 +7436,23 @@ void Player::_ApplyItemBonuses(ItemPrototype const* proto, uint8 slot, bool appl
 
         if (proto->Delay)
         {
+            // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+            // - When you swap weapons in combat, you start your swing again, instead
+            //   of continuing your last swing.
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
+#define RESET_ATTACK_TIME IsInCombat()
+#else
+#define RESET_ATTACK_TIME false
+#endif
+
             if (slot == EQUIPMENT_SLOT_RANGED)
-                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, RESET_ATTACK_TIME);
             else if (slot == EQUIPMENT_SLOT_MAINHAND)
-                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, RESET_ATTACK_TIME);
             else if (slot == EQUIPMENT_SLOT_OFFHAND)
-                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, RESET_ATTACK_TIME);
+
+#undef RESET_ATTACK_TIME
         }
 
         if (CanModifyStats() && proto->Delay)
@@ -8395,11 +8438,10 @@ void Player::SendNotifyLootItemRemoved(uint8 lootSlot) const
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendUpdateWorldState(uint32 field, uint32 value) const
+void Player::SendUpdateWorldState(uint32 state, uint32 value) const
 {
     WorldPacket data(SMSG_UPDATE_WORLD_STATE, 8);
-    data << field;
-    data << value;
+    WriteUpdateWorldStatePair(data, state, value);
     GetSession()->SendPacket(&data);
 }
 
@@ -8528,45 +8570,47 @@ void Player::SendInitWorldStates(uint32 zoneid) const
     uint32 count = 1; // count of world states in packet, 1 extra for the terminator
 
     WorldPacket data(SMSG_INIT_WORLD_STATES, (4 + 4 + 2 + 6));
-    data << uint32(mapid);                              // mapid
+    data << uint32(mapid);                              // map id
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     data << uint32(zoneid);                             // zone id
+#endif
+
     size_t count_pos = data.wpos();
     data << uint16(0);                                  // count of uint32 blocks, placeholder
 
     // Scourge Invasion - Patch 1.11
     if (sGameEventMgr.IsActiveEvent(GAME_EVENT_SCOURGE_INVASION))
     {
-        int VICTORIES = sObjectMgr.GetSavedVariable(VARIABLE_SI_ATTACK_COUNT);
-        int REMAINING_AZSHARA = sObjectMgr.GetSavedVariable(VARIABLE_SI_AZSHARA_REMAINING);
-        int REMAINING_BLASTED_LANDS = sObjectMgr.GetSavedVariable(VARIABLE_SI_BLASTED_LANDS_REMAINING);
-        int REMAINING_BURNING_STEPPES = sObjectMgr.GetSavedVariable(VARIABLE_SI_BURNING_STEPPES_REMAINING);
-        int REMAINING_EASTERN_PLAGUELANDS = sObjectMgr.GetSavedVariable(VARIABLE_SI_EASTERN_PLAGUELANDS_REMAINING);
-        int REMAINING_TANARIS = sObjectMgr.GetSavedVariable(VARIABLE_SI_TANARIS_REMAINING);
-        int REMAINING_WINTERSPRING = sObjectMgr.GetSavedVariable(VARIABLE_SI_WINTERSPRING_REMAINING);
+        int victories = sObjectMgr.GetSavedVariable(VARIABLE_SI_ATTACK_COUNT);
+        int remainingAzshara = sObjectMgr.GetSavedVariable(VARIABLE_SI_AZSHARA_REMAINING);
+        int remainingBlastedLands = sObjectMgr.GetSavedVariable(VARIABLE_SI_BLASTED_LANDS_REMAINING);
+        int remainingBurningSteppes = sObjectMgr.GetSavedVariable(VARIABLE_SI_BURNING_STEPPES_REMAINING);
+        int remainingEasternPlaguelands = sObjectMgr.GetSavedVariable(VARIABLE_SI_EASTERN_PLAGUELANDS_REMAINING);
+        int remainingTanaris = sObjectMgr.GetSavedVariable(VARIABLE_SI_TANARIS_REMAINING);
+        int remainingWinterspring = sObjectMgr.GetSavedVariable(VARIABLE_SI_WINTERSPRING_REMAINING);
 
-        data << uint32(WORLDSTATE_AZSHARA)              << uint32(REMAINING_AZSHARA > 0 ? 1 : 0);
-        data << uint32(WORLDSTATE_BLASTED_LANDS)        << uint32(REMAINING_BLASTED_LANDS > 0 ? 1 : 0);
-        data << uint32(WORLDSTATE_BURNING_STEPPES)      << uint32(REMAINING_BURNING_STEPPES > 0 ? 1 : 0);
-        data << uint32(WORLDSTATE_EASTERN_PLAGUELANDS)  << uint32(REMAINING_EASTERN_PLAGUELANDS > 0 ? 1 : 0);
-        data << uint32(WORLDSTATE_TANARIS)              << uint32(REMAINING_TANARIS > 0 ? 1 : 0);
-        data << uint32(WORLDSTATE_WINTERSPRING)         << uint32(REMAINING_WINTERSPRING > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_AZSHARA_INVADED,             remainingAzshara > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_BLASTED_LANDS_INVADED,       remainingBlastedLands > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_BURNING_STEPPES_INVADED,     remainingBurningSteppes > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_EASTERN_PLAGUELANDS_INVADED, remainingEasternPlaguelands > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_TANARIS_INVADED,             remainingTanaris > 0 ? 1 : 0);
+        WriteInitialWorldStatePair(data, WS_SI_WINTERSPRING_INVADED,        remainingWinterspring > 0 ? 1 : 0);
 
         // Battles & remaining necropolisses
-        data << uint32(WORLDSTATE_SI_BATTLES_WON) << uint32(VICTORIES);
-        data << uint32(WORLDSTATE_SI_AZSHARA_REMAINING) << uint32(REMAINING_AZSHARA);
-        data << uint32(WORLDSTATE_SI_BLASTED_LANDS_REMAINING) << uint32(REMAINING_BLASTED_LANDS);
-        data << uint32(WORLDSTATE_SI_BURNING_STEPPES_REMAINING) << uint32(REMAINING_BURNING_STEPPES);
-        data << uint32(WORLDSTATE_SI_EASTERN_PLAGUELANDS) << uint32(REMAINING_EASTERN_PLAGUELANDS);
-        data << uint32(WORLDSTATE_SI_TANARIS) << uint32(REMAINING_TANARIS);
-        data << uint32(WORLDSTATE_SI_WINTERSPRING) << uint32(REMAINING_WINTERSPRING);
+        WriteInitialWorldStatePair(data, WS_SI_BATTLES_WON,               victories);
+        WriteInitialWorldStatePair(data, WS_SI_AZSHARA_REMAINING,         remainingAzshara);
+        WriteInitialWorldStatePair(data, WS_SI_BLASTED_LANDS_REMAINING,   remainingBlastedLands);
+        WriteInitialWorldStatePair(data, WS_SI_BURNING_STEPPES_REMAINING, remainingBurningSteppes);
+        WriteInitialWorldStatePair(data, WS_SI_PLAGUELANDS_REMAINING,     remainingEasternPlaguelands);
+        WriteInitialWorldStatePair(data, WS_SI_TANARIS_REMAINING,         remainingTanaris);
+        WriteInitialWorldStatePair(data, WS_SI_WINTERSPRING_REMAINING,    remainingWinterspring);
 
         count += 13;
     }
 
     for (WorldStatePair const* itr = def_world_states; itr->state; ++itr)
     {
-        data << uint32(itr->state);
-        data << uint32(itr->value);
+        WriteInitialWorldStatePair(data, itr->state, itr->value);
         ++count;
     }
 
@@ -14634,9 +14678,9 @@ void Player::SendQuestReward(Quest const* pQuest, uint32 XP) const
     GetSession()->SendPacket(&data);
 }
 
-/// Sent when a quest is failed to be given off at questtaker. Specifically handled reasons:
-/// INVALIDREASON_QUEST_FAILED_INVENTORY_FULL=4 (or 50)
-/// INVALIDREASON_QUEST_FAILED_DUPLICATE_ITEM=17
+// Sent when a quest is failed to be given off at questtaker. Specifically handled reasons:
+// INVALIDREASON_QUEST_FAILED_INVENTORY_FULL=4 (or 50)
+// INVALIDREASON_QUEST_FAILED_DUPLICATE_ITEM=17
 void Player::SendQuestFailedAtTaker(uint32 quest_id, uint32 reason) const
 {
     if (quest_id)
@@ -16291,7 +16335,7 @@ void Player::SendSavedInstances() const
 #endif
 }
 
-/// convert the player's binds to the group
+// convert the player's binds to the group
 void Player::ConvertInstancesToGroup(Player* player, Group* group, ObjectGuid player_guid)
 {
     bool has_binds = false;
@@ -17345,7 +17389,7 @@ void Player::SendResetFailedNotify()
     ChatHandler(this).SendSysMessage(LANG_LEAVE_TO_RESET_INSTANCE);
 }
 
-/// Reset all solo instances and optionally send a message on success for each
+// Reset all solo instances and optionally send a message on success for each
 void Player::ResetInstances(InstanceResetMethod method)
 {
     // method can be INSTANCE_RESET_ALL, INSTANCE_RESET_GROUP_JOIN
@@ -19259,7 +19303,14 @@ void Player::SendInitialPacketsAfterAddToMap(bool login)
     UpdateZone(newzone, newarea);                           // also call SendInitWorldStates();
 
     if (login)
-        CastSpell(this, 836, true);                             // LOGINEFFECT
+    {
+        m_Events.AddLambdaEventAtOffset([this]
+        {
+            ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(GetRace());
+            uint32 const spellId = raceEntry ? raceEntry->loginSpellId : SPELL_ID_LOGIN_EFFECT;
+            CastSpell(this, spellId, true); // LOGINEFFECT
+        }, 1);
+    }
 
     // set some aura effects that send packet to player client after add player to map
     // SendMessageToSet not send it to player not it map, only for aura that not changed anything at re-apply
@@ -20142,12 +20193,12 @@ uint32 Player::GetBaseWeaponSkillValue(WeaponAttackType attType) const
 
 void Player::ResurectUsingRequestData()
 {
-    /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
+    // Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
     if (m_resurrectGuid.IsPlayer())
         TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
 
-    //we cannot resurrect player when we triggered any kind of teleport
-    //player will be resurrected upon teleportation (in MSG_MOVE_TELEPORT_ACK handler)
+    // We cannot resurrect player when we triggered any kind of teleport
+    // Player will be resurrected upon teleportation (in MSG_MOVE_TELEPORT_ACK handler)
     if (IsBeingTeleported())
     {
         ScheduleDelayedOperation(DELAYED_RESURRECT_PLAYER);
@@ -20750,8 +20801,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
     //Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
     // 14.57 can be calculated by resolving damageperc formula below to 0
     if (z_diff >= 14.57f && !IsDead() && !IsGameMaster() &&
-            !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
-            !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
+        !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL))
     {
         //Safe fall, fall height reduction
         int32 safe_fall = GetTotalAuraModifier(SPELL_AURA_SAFE_FALL);
@@ -21898,7 +21948,7 @@ void Player::RewardHonorOnDeath()
     for (const auto& itr : damagePerGroup)
     {
         Group* g = itr.first;
-        std::list<Player*> rewarded;
+        std::vector<Player*> rewarded;
         for (const auto& grItr : g->GetMemberSlots())
             if (Player* pl = GetMap()->GetPlayer(grItr.guid))
                 if (pl->IsAtGroupRewardDistance(this) && pl->IsAlive() && pl->GetTeam() != GetTeam())
