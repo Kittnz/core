@@ -271,25 +271,57 @@ Player* WorldBotAI::GetPartyLeader() const
     return nullptr;
 }
 
-void WorldBotAI::RunAwayFromTarget(Unit* pTarget)
+bool WorldBotAI::IsValidDistancingTarget(Unit* pTarget, Unit* pEnemy)
+{
+    if (pTarget->IsInWorld() && pTarget->IsAlive() &&
+        pTarget->GetMap() == me->GetMap())
+    {
+        float const distance = me->GetDistance(pTarget);
+        if (distance >= 15.0f && distance <= 30.0f &&
+            pTarget->GetDistance(pEnemy) >= 15.0f)
+            return true;
+    }
+
+    return false;
+}
+
+Unit* WorldBotAI::GetDistancingTarget(Unit* pEnemy)
 {
     if (Player* pLeader = GetPartyLeader())
+        if (IsValidDistancingTarget(pLeader, pEnemy))
+            return pLeader;
+
+    Unit* pNonTank = nullptr;
+    Group* pGroup = me->GetGroup();
+    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
     {
-        if (pLeader->IsInWorld() &&
-            pLeader->GetMap() == me->GetMap())
+        if (Player* pMember = itr->getSource())
         {
-            float const distance = me->GetDistance(pLeader);
-            if (distance >= 15.0f && distance <= 30.0f &&
-                pLeader->GetDistance(pTarget) >= 15.0f)
+            if (pMember == me)
+                continue;
+
+            if (IsValidDistancingTarget(pMember, pEnemy))
             {
-                me->GetMotionMaster()->MoveIdle();
-                me->MonsterMove(pLeader->GetPositionX(), pLeader->GetPositionY(), pLeader->GetPositionZ());
-                return;
+                if (IsTankingForm(pMember->GetShapeshiftForm()) || IsWearingShield(pMember))
+                    return pMember;
+                else
+                    pNonTank = pMember;
             }
         }
     }
 
-    me->GetMotionMaster()->MoveDistance(pTarget, 15.0f);
+    return pNonTank;
+}
+
+bool WorldBotAI::RunAwayFromTarget(Unit* pEnemy)
+{
+    if (Unit* pTarget = GetDistancingTarget(pEnemy))
+    {
+        me->MonsterMove(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+        return true;
+    }
+
+    return me->GetMotionMaster()->MoveDistance(pEnemy, 15.0f);
 }
 
 bool WorldBotAI::DrinkAndEat()
@@ -764,15 +796,10 @@ void WorldBotAI::UpdateWaypointMovement()
             return;
     }
 
-    // Handle task roaming
-    if (currentTaskID == TASK_ROAM)
-    {
-        // normal pathing
-        if (StartNewPathFromBeginning())
-            return;
+    if (StartNewPathFromBeginning())
+        return;
 
-        StartNewPathFromAnywhere();
-    }
+    StartNewPathFromAnywhere();
 }
 
 void WorldBotAI::OnJustDied()
@@ -1014,15 +1041,22 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             me->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK);
         }
 
+        // Identify task by name
+        std::string name = me->GetName();
+        if (name.find("bank") != std::string::npos)
+            currentTaskID = TASK_BANKER;
+
         // Choose a TASK todo
-        /*int32 rtask = urand(0, 1);
-        if (rtask==1)
+        if (currentTaskID == TASK_NONE)
+        {
+			currentTaskID = TASK_GRIND;
+		}
+
+        /*uint32 rtask = urand(0, 1);
+        if (rtask == 1)
             currentTaskID = TASK_ROAM;
         else
-            currentTaskID = TASK_EXPLORE;
-        */
-
-        currentTaskID = TASK_EXPLORE;
+        currentTaskID = TASK_EXPLORE;*/
 
         uint32 newzone, newarea;
         me->GetZoneAndAreaId(newzone, newarea);
@@ -2226,9 +2260,14 @@ bool WorldBotAI::TaskDestination()
 
         // move to position
         if (DestMap == 0)
-            StartNewPathToPosition(dest_loc, vPaths_Map_Eastern_Kingdoms);
+        {
+            //StartNewPathToPosition(dest_loc, vPaths_Map_Eastern_Kingdoms);
+
+        }
         else if (DestMap == 1)
-            StartNewPathToPosition(dest_loc, vPaths_Map_Kalimdor);
+        {
+            //StartNewPathToPosition(dest_loc, vPaths_Map_Kalimdor);
+        }
 
         hasPoiDestination = true;
             

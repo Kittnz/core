@@ -1294,7 +1294,7 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
             }
 
             if (m_spells.warrior.pShieldBash &&
-                IsWearingShield() &&
+                IsWearingShield(me) &&
                 CanTryToCastSpell(pVictim, m_spells.warrior.pShieldBash))
             {
                 if (DoCastSpell(pVictim, m_spells.warrior.pShieldBash) == SPELL_CAST_OK)
@@ -1334,7 +1334,7 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
         }
 
         if (me->GetShapeshiftForm() == FORM_DEFENSIVESTANCE &&
-            IsWearingShield())
+            IsWearingShield(me))
         {
             if (!me->GetAttackers().empty() &&
                 IsPhysicalDamageClass(pVictim->GetClass()))

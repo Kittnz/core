@@ -79,12 +79,6 @@ void WSG_AtAllianceFlag(WorldBotAI* pAI)
                     pAI->ClearPath();
                     ObjectGuid guid = pFlag->GetObjectGuid();
                     pAI->me->GetMotionMaster()->MovePoint(0, pFlag->GetPositionX(), pFlag->GetPositionY(), 353.0f);
-                    pAI->me->m_Events.AddLambdaEventAtOffset([pAI, guid]
-                    {
-                        WorldPacket data(CMSG_GAMEOBJ_USE);
-                        data << guid;
-                        pAI->me->GetSession()->HandleGameObjectUseOpcode(data);
-                    }, 2000);
                     return;
                 }
             }
@@ -92,12 +86,6 @@ void WSG_AtAllianceFlag(WorldBotAI* pAI)
             {
                 pAI->ClearPath();
                 pAI->me->GetMotionMaster()->MovePoint(0, pFlag->GetPositionX(), pFlag->GetPositionY(), 353.0f);
-                pAI->me->m_Events.AddLambdaEventAtOffset([pAI]
-                {
-                    WorldPacket data(CMSG_AREATRIGGER);
-                    data << uint32(AT_SILVERWING_FLAG);
-                    pAI->me->GetSession()->HandleAreaTriggerOpcode(data);
-                }, 2000);
                 return;
             }
         }
@@ -564,6 +552,210 @@ std::vector<WorldBotPath*> vPaths_Map_Alterac_Valley;
 std::vector<WorldBotPath*> vPaths_Map_Eastern_Kingdoms;
 std::vector<WorldBotPath*> vPaths_Map_Kalimdor;
 std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
+extern std::vector<WorldBotPath*> vPaths_Grind;
+
+void WorldBotAI::LoadGrindingDBWaypoints()
+{
+    float x, y, z = 0.f;
+    uint32 guid, maxlevel, lastGuidPoint = 0;
+    std::string filename, name, faction, race, mapid, hotspots, entrytarget = "";
+
+    QueryResult* result = WorldDatabase.PQuery("SELECT Guid, FileName, Name, Faction, Race, MapId, HotSpots, EntryTarget, MaxLevel FROM worldbot_easy_quest_profiles WHERE `QuestId` = '' AND QuestType = 'KillAndLoot' AND MapId != 2 AND HotSpots != '' ORDER BY Guid ASC;");
+
+    if (result)
+    {
+        do
+        {
+            auto fields = result->Fetch();
+
+            guid = fields[0].GetUInt32();
+            filename = fields[1].GetString();
+            name = fields[2].GetString();
+            faction = fields[3].GetString();
+            race = fields[4].GetString();
+            mapid = fields[5].GetString();
+            hotspots = fields[6].GetString();
+            entrytarget = fields[7].GetString();
+            maxlevel = fields[8].GetUInt32();
+
+            std::string delimiter = "), (";
+            std::string token = hotspots.substr(0, hotspots.find(delimiter)); // token is "scott"
+            size_t pos = 0;
+            while ((pos = hotspots.find(delimiter)) != std::string::npos) {
+                token = hotspots.substr(0, pos);
+                std::cout << token << std::endl;
+                hotspots.erase(0, pos + delimiter.length());
+            }
+
+            /*Waypoints wpoint;
+            wpoint.guid = guid;
+            wpoint.id = 0;
+            wpoint.x = x;
+            wpoint.y = y;
+            wpoint.z = z;
+            wpoint.func = "func";
+            wpoint.area = "area";
+            wpoint.zone = "zone";
+            wpoint.map = mapid;
+            wpoint.reverse = 0;
+            wpoint.chance = 100;
+            wpoint.faction = "faction";
+            wpoint.minlevel = 0;
+            wpoint.comment = "comment";
+            myWaypoints.push_back(wpoint);*/
+
+        } while (result->NextRow());
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: unable to load worldbot waypoints.");
+        return;
+    }
+
+    delete result;
+
+    /*uint32 lastGuid = -1;
+    for (auto v : myWaypoints)
+    {
+        uint32 guid = v.guid;
+        WorldBotPath* path = new WorldBotPath();
+
+        if (guid != lastGuid)
+        {
+            for (auto v_ : myWaypoints)
+            {
+                uint32 guid_ = v_.guid;
+                uint32 id_ = v_.id;
+                std::string func_ = v_.func;
+                uint32 chance_ = v_.chance;
+                uint32 faction_ = v_.faction;
+                uint32 minlevel_ = v_.minlevel;
+                std::string comment_ = v_.comment;
+
+                if (guid_ == guid)
+                {
+                    WorldBotWaypointFunc tempFunc{};
+                    if (func_.empty())
+                        tempFunc = nullptr;
+                    else
+                    {
+                        if (func_ == "MoveToNextPointSpecial")
+                            tempFunc = &MoveToNextPointSpecial;
+
+                        if (func_ == "WSG_AtAllianceFlag")
+                            tempFunc = &WSG_AtAllianceFlag;
+
+                        if (func_ == "WSG_AtHordeFlag")
+                            tempFunc = &WSG_AtHordeFlag;
+
+                        if (func_ == "WSG_AtAllianceGraveyard")
+                            tempFunc = &WSG_AtAllianceGraveyard;
+
+                        if (func_ == "WSG_AtHordeGraveyard")
+                            tempFunc = &WSG_AtHordeGraveyard;
+
+                        if (func_ == "AB_AtFlag")
+                            tempFunc = &AB_AtFlag;
+
+                        if (func_ == "AV_AtFlag")
+                            tempFunc = &AV_AtFlag;
+
+                        if (func_ == "AtCaveExit")
+                            tempFunc = &AtCaveExit;
+
+                        if (func_ == "TaxiToOtherZone")
+                            tempFunc = &TaxiToOtherZone;
+
+                        if (func_ == "QueueForBG")
+                            tempFunc = &QueueForBG;
+
+                        if (func_ == "QueueForWS")
+                            tempFunc = &QueueForWS;
+
+                        if (func_ == "QueueForAB")
+                            tempFunc = &QueueForAB;
+
+                        if (func_ == "QueueForAV")
+                            tempFunc = &QueueForAV;
+
+                        if (func_ == "HoldPosition")
+                            tempFunc = &HoldPosition;
+
+                        if (func_ == "TransportTeleportToUndercityFromOrgrimmar")
+                            tempFunc = &TransportTeleportToUndercityFromOrgrimmar;
+
+                        if (func_ == "TransportTeleportToOrgrimmarFromUndercity")
+                            tempFunc = &TransportTeleportToOrgrimmarFromUndercity;
+
+                        if (func_ == "TransportTeleportToOrgrimmarFromGromgol")
+                            tempFunc = &TransportTeleportToOrgrimmarFromGromgol;
+
+                        if (func_ == "TransportTeleportToGromgolFromOrgrimmar")
+                            tempFunc = &TransportTeleportToGromgolFromOrgrimmar;
+
+                        if (func_ == "TransportTeleportToGromgolFromUndercity")
+                            tempFunc = &TransportTeleportToGromgolFromUndercity;
+
+                        if (func_ == "TransportTeleportToUndercityFromGromgol")
+                            tempFunc = &TransportTeleportToUndercityFromGromgol;
+
+                        if (func_ == "TransportTeleportToMenethilHarborFromTheramoreIsle")
+                            tempFunc = &TransportTeleportToMenethilHarborFromTheramoreIsle;
+
+                        if (func_ == "TransportTeleportToTheramoreIsleFromMenethilHarbor")
+                            tempFunc = &TransportTeleportToTheramoreIsleFromMenethilHarbor;
+
+                        if (func_ == "TransportTeleportToRatchetFromBootyBay")
+                            tempFunc = &TransportTeleportToRatchetFromBootyBay;
+
+                        if (func_ == "TransportTeleportToBootyBayFromRatchet")
+                            tempFunc = &TransportTeleportToBootyBayFromRatchet;
+
+                    }
+                    path->push_back(WorldBotWaypoint({ v_.x, v_.y, v_.z, v_.map, tempFunc, v_.reverse, chance_, faction_, minlevel_, comment_ }));
+                }
+            }
+
+            lastGuid = v.guid;
+
+            switch (v.map)
+            {
+            case MAP_EASTERN_KINGDOMS:
+            {
+                vPaths_Map_Eastern_Kingdoms.push_back(path);
+                break;
+            }
+            case MAP_KALIMDOR:
+            {
+                vPaths_Map_Kalimdor.push_back(path);
+                break;
+            }
+            case MAP_AV:
+            {
+                vPaths_Map_Alterac_Valley.push_back(path);
+                break;
+            }
+            case MAP_AB:
+            {
+                vPaths_Map_Arathi_Basin.push_back(path);
+                break;
+            }
+            case MAP_WS:
+            {
+                vPaths_Map_Warsong_Gulch.push_back(path);
+                break;
+            }
+            default:
+                break;
+            }
+
+            if (v.reverse == 1)
+            {
+                vPaths_NoReverseAllowed.push_back(path);
+            }
+        }
+    }*/
+}
 
 void WorldBotAI::LoadDBWaypoints()
 {
@@ -772,6 +964,8 @@ void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
             (*m_currentPath->at(data).pFunc)(this);
         else
             MoveToNextPoint();
+
+        ActivateNearbyAreaTrigger();
     }
 }
 
@@ -785,14 +979,6 @@ void WorldBotAI::MoveToNextPoint()
         if (!m_allowedToMove)
             return;
     }
-
-    // let bank characters not roam around
-        /*if (me->GetLevel() == 1)
-            return;*/
-
-    std::string name = me->GetName();
-    if (name.find("bank") != std::string::npos)
-        return;
 
     uint32 const lastPointInPath = m_movingInReverse ? 0 : ((*m_currentPath).size() - 1);
 
@@ -814,6 +1000,41 @@ void WorldBotAI::MoveToNextPoint()
 
     me->GetMotionMaster()->MovePoint(m_currentPoint, nextPoint.x + frand(-2, 2), nextPoint.y + frand(-2, 2), nextPoint.z, MOVE_PATHFINDING);
 }
+
+void WorldBotAI::StartNewGrindPath()
+{
+    WorldBotPath* pClosestPath = nullptr;
+    uint32 closestPoint = 0;
+    float closestDistance = FLT_MAX;
+
+    std::vector<WorldBotPath*> const* vPaths;
+    vPaths = &vPaths_Grind;
+
+    for (const auto& pPath : *vPaths)
+    {
+        for (uint32 i = 0; i < pPath->size(); i++)
+        {
+            WorldBotWaypoint& waypoint = ((*pPath)[i]);
+            float const distanceToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
+            if (distanceToPoint < closestDistance)
+            {
+                pClosestPath = pPath;
+                closestPoint = i;
+                closestDistance = distanceToPoint;
+            }
+        }
+    }
+
+    if (!pClosestPath)
+        return;
+
+    m_currentPath = pClosestPath;
+    m_movingInReverse = false;
+    m_currentPoint = closestPoint - 1;
+
+    MoveToNextPoint();
+}
+
 
 bool WorldBotAI::StartNewPathFromBeginning()
 {
@@ -940,9 +1161,6 @@ bool WorldBotAI::StartNewPathFromBeginning()
 
 void WorldBotAI::StartNewPathFromAnywhere()
 {
-    /*if (currentTaskID != TASK_ROAM)
-        return;*/
-
     WorldBotPath* pClosestPath = nullptr;
     uint32 closestPoint = 0;
     float closestDistance = FLT_MAX;
@@ -1000,6 +1218,7 @@ void WorldBotAI::StartNewPathFromAnywhere()
     m_currentPath = pClosestPath;
     m_movingInReverse = false;
     m_currentPoint = closestPoint-1;
+
     MoveToNextPoint();
 }
 

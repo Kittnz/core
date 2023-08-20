@@ -114,6 +114,7 @@ enum WorldBotWsgWaitSpot
 
 enum WorldBotTasks
 {
+    TASK_NONE, // No task
     TASK_ROAM, // Follow waypoint path
     TASK_EXPLORE, // Go to points of interest 
     TASK_DUAL, // Is dualer at the gates of a big city
@@ -121,9 +122,11 @@ enum WorldBotTasks
     TASK_LFG, // Wants to do dungeons for its level range
     TASK_QUEST, // Goes questing
     TASK_GRIND, // Goes grinding
+    TASK_LUCKY_ROLLER, // Lucky Roller - "Missgreen is back in town. Come and try your luck 1-59=lose 60-96=x2 97-99=x3 100=x4 150-3500max good luck and /w me for [inv] :)"
+    TASK_BANKER, // Goes to bank
     TASK_PROTECTOR, // Moves to conflicted area's or zones
-    TASK_FIRST = TASK_ROAM,
-    TASK_LAST = TASK_PROTECTOR
+    TASK_FIRST = TASK_ROAM,     // First task
+    TASK_LAST = TASK_PROTECTOR, // Last task
 };
 
 typedef std::vector<std::string> Speech;
@@ -169,7 +172,9 @@ public:
     Unit* SelectAttackTarget(Unit* pExcept = nullptr) const;
     Unit* SelectFollowTarget() const;
     Player* GetPartyLeader() const;
-    void RunAwayFromTarget(Unit* pTarget);
+    bool IsValidDistancingTarget(Unit* pTarget, Unit* pEnemy);
+    Unit* GetDistancingTarget(Unit* pEnemy);
+    bool RunAwayFromTarget(Unit* pEnemy);
 
     bool ShouldEnterStealth() const;
     bool EnterStealthIfNeeded(SpellEntry const* pStealthSpell);
@@ -228,9 +233,11 @@ public:
 
     // Movement System
     void LoadDBWaypoints();
+    void LoadGrindingDBWaypoints();
     void UpdateWaypointMovement();
     void DoGraveyardJump();
     void MoveToNextPoint();
+    void StartNewGrindPath();
     bool StartNewPathFromBeginning();
     void StartNewPathFromAnywhere();
     bool BGStartNewPathToObjective();
@@ -273,6 +280,7 @@ public:
     bool TaskDestination();
     void SetExploreDestination();
 
+    std::vector<WorldBotPath*> vPaths_Grind;
 };
 
 #endif
