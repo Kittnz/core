@@ -1742,6 +1742,8 @@ RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& In
 {
 	racers.reserve(InRaces.size());
 
+    theMap = sMapMgr.FindMap(mapId.first, mapId.second);
+
 	for (const RacePlayerSetup& racer : InRaces)
 	{
 		racers.emplace_back(RacePlayer(racer, this, mapId));
