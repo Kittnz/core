@@ -414,13 +414,15 @@ struct RaceSubEvent
 		return checkpoints.size() > index;
 	}
 
+    Map* theMap = nullptr;
+
 private:
 	// we need cached version, because we allow editing race checkpoints in-game
 	std::vector<RaceCheckpoint> checkpoints;
 	std::vector<RaceCreature> creatures;
 	std::vector<RaceGameobject> gameobjects;
 	MiracleRaceEvent* pEvent;
-	Map* theMap = nullptr;
+	
 
 	std::list<std::string> leaderboard;
 	std::vector<ObjectGuid> spawnedCreatures;
