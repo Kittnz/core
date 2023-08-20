@@ -666,3 +666,11 @@ REPLACE INTO `creature` VALUES (2578706,92151,0,0,0,0,-13816.5,3094.19,26.7567,0
 REPLACE INTO `creature` VALUES (2578706,92151,0,0,0,0,-13816.5,3094.19,26.7567,0.276526,300,300,0,100,100,0,0,0);
 UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2575908;
 UPDATE `creature` SET `position_x` = -1089.422485, `position_y` = 2371.818604, `position_z` = 184.842773, `orientation` = 4.295690 WHERE `guid` = 2575908;
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2574355;
+DELETE FROM creature_addon WHERE guid=2574355;
+DELETE FROM creature_movement WHERE id=2574355;
+DELETE FROM game_event_creature WHERE guid=2574355;
+DELETE FROM game_event_creature_data WHERE guid=2574355;
+DELETE FROM creature_battleground WHERE guid=2574355;
