@@ -14864,6 +14864,8 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         return false;
     }
 
+    auto timeNow = time(nullptr);
+    const uint32 refundWindow = HOUR * 48; // 48 hour refund window.
 
     for (const auto& elem : entries)
     {
@@ -14874,8 +14876,15 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         if (cachedPlayerData)
             charName = cachedPlayerData->sName;
 
-        ChatHandler(session).PSendSysMessage("%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s", elem->date.c_str(),
-            elem->id, charName.c_str(), elem->charGuid, elem->itemPrice, elem->itemEntry, elem->refunded ? "([REFUNDED])" : "");
+        std::string colorString = "";
+
+        if (elem->refunded)
+            colorString = "|cff0cbecf";
+        else if (timeNow - refundWindow > elem->dateUnix) // refund window passed.
+            colorString = "|cffb81d0f";
+
+        ChatHandler(session).PSendSysMessage("%s%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s%s", colorString.c_str(), elem->date.c_str(),
+            elem->id, charName.c_str(), elem->charGuid, elem->itemPrice, elem->itemEntry, elem->refunded ? "([REFUNDED])" : "", colorString.empty() ? "" : "|r");
     }
     return true;
 }
