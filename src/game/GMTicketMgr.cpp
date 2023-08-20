@@ -351,10 +351,15 @@ void TicketMgr::LoadTickets()
             _lastTicketId = id;
 
 
+        std::unique_ptr<GmTicket> tick = std::make_unique<GmTicket>(ticket);
         auto& elem = _ticketList[id];
-        elem = std::move(ticket);
+        elem = std::move(tick);
+
         if (!ticket.IsClosed())
-            _accountTicketList.insert({ elem.GetCreatorLowGuid(), std::ref(elem) });
+        {
+            _accountTicketList.insert({ elem->GetCreatorLowGuid(), elem.get() });
+            _openTickets.push_back(elem.get());
+        }
         ++count;
     } while (result->NextRow());
     delete result;
@@ -378,9 +383,13 @@ void TicketMgr::LoadSurveys()
 void TicketMgr::AddTicket(GmTicket&& ticket)
 {
     uint32 id = ticket.GetId();
+    std::unique_ptr<GmTicket> tick = std::make_unique<GmTicket>(ticket);
     auto& elem = _ticketList[id];
-    elem = std::move(ticket);
-    _accountTicketList.insert({ elem.GetCreatorLowGuid(), std::ref(elem) });
+    elem = std::move(tick);
+
+    _accountTicketList.insert({ elem->GetCreatorLowGuid(), elem.get() });
+    _openTickets.push_back(elem.get());
+    
     if (!ticket.IsClosed())
         ++_openTicketCount;
     ticket.SaveToDB();
@@ -394,6 +403,9 @@ void TicketMgr::CloseTicket(uint32 ticketId, ObjectGuid source)
         if (source)
             --_openTicketCount;
         _accountTicketList.erase(ticket->GetCreatorLowGuid());
+        auto itr = std::find(_openTickets.begin(), _openTickets.end(), ticket);
+        if (itr != _openTickets.end())
+            _openTickets.erase(itr);
         ticket->SaveToDB();
     }
 }
@@ -402,19 +414,19 @@ void TicketMgr::CloseTicket(uint32 ticketId, ObjectGuid source)
 void TicketMgr::SendTicketsInAddonMessage(Player* pPlayer) const
 {
     pPlayer->SendAddonMessage("GM_ADDON", "tickets;;start");
-    for (const auto& itr : _ticketList)
-        if (!itr.second.IsClosed() && !itr.second.IsCompleted())
-            pPlayer->SendAddonMessage("GM_ADDON", itr.second.FormatAddonMessage());
+    for (const auto& itr : _openTickets)
+        if (!itr->IsClosed() && !itr->IsCompleted())
+            pPlayer->SendAddonMessage("GM_ADDON", itr->FormatAddonMessage());
     pPlayer->SendAddonMessage("GM_ADDON", "tickets;;end");
 }
 
 void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly, uint8 category) const
 {
     handler.SendSysMessage(onlineOnly ? LANG_COMMAND_TICKETSHOWONLINELIST : LANG_COMMAND_TICKETSHOWLIST);
-    for (const auto& itr : _ticketList)
-        if (!itr.second.IsClosed() && !itr.second.IsCompleted())
-            if ((!onlineOnly || itr.second.GetPlayer()) && (!category || (itr.second.GetTicketType() == TicketType(category))))
-                handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
+    for (const auto& itr : _openTickets)
+        if (!itr->IsClosed() && !itr->IsCompleted())
+            if ((!onlineOnly || itr->GetPlayer()) && (!category || (itr->GetTicketType() == TicketType(category))))
+                handler.SendSysMessage(itr->FormatMessageString(handler).c_str());
     
 }
 
@@ -422,8 +434,8 @@ void TicketMgr::ShowClosedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWCLOSEDLIST);
     for (const auto& itr : _ticketList)
-        if (itr.second.IsClosed())
-            handler.SendSysMessage(itr.second.FormatMessageString(handler).c_str());
+        if (itr.second->IsClosed())
+            handler.SendSysMessage(itr.second->FormatMessageString(handler).c_str());
     
 }
 
@@ -431,8 +443,8 @@ void TicketMgr::ShowEscalatedList(ChatHandler& handler) const
 {
     handler.SendSysMessage(LANG_COMMAND_TICKETSHOWESCALATEDLIST);
     for (const auto& itr : _ticketList)
-        if (!itr.second.IsClosed() && itr.second.GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
-            handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second.FormatMessageString(handler).c_str(), itr.second.GetNeededSecurityLevel());
+        if (!itr.second->IsClosed() && itr.second->GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
+            handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second->FormatMessageString(handler).c_str(), itr.second->GetNeededSecurityLevel());
     
 }
 

@@ -182,7 +182,7 @@ private:
     std::string _response;
     std::string _chatLog; // No need to store in db, will be refreshed every session client side
 };
-typedef std::unordered_map<uint32, GmTicket> GmTicketList;
+typedef std::unordered_map<uint32, std::unique_ptr<GmTicket>> GmTicketList;
 
 class TicketMgr
 {
@@ -204,7 +204,7 @@ public:
     {
         GmTicketList::iterator itr = _ticketList.find(ticketId);
         if (itr != _ticketList.end())
-            return &itr->second;
+            return itr->second.get();
 
         return nullptr;
     }
@@ -213,7 +213,7 @@ public:
     {
         auto itr = _accountTicketList.find(playerGuid.GetCounter());
         if (itr != _accountTicketList.end())
-            return &itr->second.get();
+            return itr->second;
 
         return nullptr;
     }
@@ -255,7 +255,8 @@ protected:
     void _RemoveTicket(uint32 ticketId, int64 source = -1, bool permanently = false);
 
     GmTicketList _ticketList;
-    std::unordered_map<uint32, std::reference_wrapper<GmTicket>> _accountTicketList;
+    std::unordered_map<uint32, GmTicket*> _accountTicketList;
+    std::vector<GmTicket*> _openTickets;
 
     bool   _status;
     uint32 _lastTicketId;
