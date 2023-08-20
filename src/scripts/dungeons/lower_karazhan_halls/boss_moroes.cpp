@@ -202,8 +202,8 @@ struct boss_moroesAI : public ScriptedAI
 					{
 						Teleport();
 						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-						m_creature->SetMaxHealth(175312);
-						m_creature->SetHealth(175312);
+						m_creature->SetMaxHealth(220388);
+						m_creature->SetHealth(220388);
 						m_InterludeTimer = 0;
 					}
 					else

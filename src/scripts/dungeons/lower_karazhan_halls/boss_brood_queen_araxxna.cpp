@@ -37,7 +37,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 	void SpawnEggs()
 	{
 		m_creature->PlayDirectSound(60420);
-		m_creature->MonsterYell("My minions shall consume you!");
+		m_creature->MonsterYell("My minions shall consume you!"); 
 		for (uint8 i = 0; i < 2; ++i)
 			DoSpawnCreature(30008, 15.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
 	}
