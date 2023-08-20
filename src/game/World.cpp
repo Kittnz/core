@@ -1160,6 +1160,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY, "PriorityQueue.DonatorPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY, "PriorityQueue.WesternPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR, "PriorityQueue.HighLevelChar", 50);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY, "PriorityQueue.HighLevelCharPriority", 0);
 
     // Movement Anticheat
     /*setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
