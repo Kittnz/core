@@ -384,6 +384,11 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AUTO_RESTART_HOUR_MAX,
     CONFIG_UINT32_DIFF_HC_PROTECTION,
     CONFIG_UINT32_LOGIN_VIP_QUEUE_LEVEL_THRESHOLD,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK,
+    CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS,
+    CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -659,6 +664,8 @@ enum eConfigBoolValues
     CONFIG_BOOL_SUSPICIOUS_FISHING_ENABLE,
     CONFIG_BOOL_SUSPICIOUS_NPC_KILLED_ENABLE,
     CONFIG_BOOL_LOGIN_VIP_QUEUE,
+    CONFIG_BOOL_ENABLE_PRIORITY_QUEUE,
+    CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -854,8 +861,8 @@ class World
         /// Get the number of current active sessions
         void UpdateMaxSessionCounters();
         uint32 GetActiveAndQueuedSessionCount() const { return m_sessions.size(); }
-        uint32 GetActiveSessionCount() const { return m_sessions.size() - m_QueuedSessions.size(); }
-        uint32 GetQueuedSessionCount() const { return m_QueuedSessions.size(); }
+        uint32 GetActiveSessionCount() const { return m_sessions.size() - GetQueuedSessionCount(); }
+        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size(); }
         /// Get the maximum number of parallel sessions on the server since last reboot
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
@@ -1270,6 +1277,10 @@ class World
 
         //Player Queue
         Queue m_QueuedSessions;
+
+        //higher is first in the map, higher points -> higher priority.
+        //Priority is built from multiple factors, acc reg date, char levels etc etc.
+        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue;
 
         //sessions that are added async
         void AddSession_(WorldSession* s);
