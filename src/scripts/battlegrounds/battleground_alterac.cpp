@@ -3986,6 +3986,30 @@ class go_av_landmineAI: public GameObjectAI
         uint32 m_respawnTimer;
 };
 
+class go_av_ryson_eyeAI : public GameObjectAI
+{
+public:
+    go_av_ryson_eyeAI(GameObject* gobj) : GameObjectAI(gobj)
+    {
+    }
+
+    bool OnUse(Unit* user) override
+    {
+        GameObjectAI::OnUse(user);
+
+        if (me->GetGUIDLow() == 407741)
+            DoOrSimulateScriptTextForMap(9034, 14021, me->GetMap(), nullptr, user);
+
+        me->DestroyForNearbyPlayers();
+        me->m_Events.AddLambdaEventAtOffset([this]()
+        {
+            me->DeleteLater();
+        }, 1000);
+        
+        return false;
+    }
+};
+
 /******* WORLD BOSS HORDE ********/
 
 enum
@@ -4797,6 +4821,11 @@ GameObjectAI* GetAI_go_av_landmine(GameObject* gobj)
     return new go_av_landmineAI(gobj);
 }
 
+GameObjectAI* GetAI_go_av_ryson_eye(GameObject* gobj)
+{
+    return new go_av_ryson_eyeAI(gobj);
+}
+
 enum
 {
     SPELL_BOMB              =   9143,  /* Distance spell */
@@ -5381,6 +5410,11 @@ void AddSC_bg_alterac()
     newscript = new Script;
     newscript->Name = "go_av_landmine";
     newscript->GOGetAI = &GetAI_go_av_landmine;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_av_ryson_eye";
+    newscript->GOGetAI = &GetAI_go_av_ryson_eye;
     newscript->RegisterSelf();
 
     newscript = new Script;
