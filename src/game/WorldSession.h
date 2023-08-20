@@ -293,6 +293,13 @@ public:
 typedef std::map<std::string, WorldSessionScript*> SessionScriptsMap;
 #define ALL_SESSION_SCRIPTS(session, what) for (SessionScriptsMap::iterator it = session->scripts.begin(); it != session->scripts.end(); ++it) it->second->what;
 
+enum WorldRegion
+{
+    Western = 0,
+    Eastern,
+    MaxRegions
+};
+
 /// Player session in the World
 class WorldSession
 {
@@ -316,6 +323,9 @@ class WorldSession
         void SendPartyResult(PartyOperation operation, std::string const& member, PartyResult res);
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2,3);
         void SendQueryTimeResponse();
+
+        //simple email check for now, can expand later.
+        WorldRegion GetRegion() const { return HasChineseEmail() ? WorldRegion::Eastern : WorldRegion::Western;  }
 
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
