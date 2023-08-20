@@ -23788,17 +23788,19 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
     if (GetClass() == CLASS_MAGE)
         return "";
 
-    const std::unique_ptr<QueryResult> savedTalents(CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and spec = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return "";
 
-    if (!savedTalents)
+
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+    if (m_savedSpecSpells[specIndex].empty())
         return "";
 
     std::vector<uint32> vTreeTalents = { 0, 0, 0 };
 
-    do
+    for (uint32 spellId : m_savedSpecSpells[specIndex])
     {
-        Field* fields{ savedTalents->Fetch() };
-        const uint32 uiSavedTalentID{ fields[0].GetUInt32() };
+        const uint32 uiSavedTalentID{ spellId };
 
         for (uint32 i{}; i < sTalentStore.GetNumRows(); ++i)
         {
@@ -23822,7 +23824,7 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
             }
         }
 
-    } while (savedTalents->NextRow());
+    } 
 
     return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }
