@@ -813,7 +813,8 @@ namespace MaNGOS
             //WorldObject const& GetFocusObject() const { return *i_obj; }
             bool operator()(Unit* u) const
             {
-                if (u->IsAlive() && u->IsInCombat() && i_obj->IsFriendlyTo(u) && i_obj->IsWithinDistInMap(u, i_range))
+                if (u->IsAlive() && (i_obj->IsInCombat() == u->IsInCombat()) &&
+                    i_obj->IsFriendlyTo(u) && i_obj->IsWithinDistInMap(u, i_range))
                 {
                     if (i_percent)
                         return 100 - u->GetHealthPercent() > i_hp;
