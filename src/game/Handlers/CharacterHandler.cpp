@@ -501,6 +501,31 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     CharacterDatabase.DelayQueryHolderUnsafe(&chrHandler, &CharacterHandler::HandlePlayerLoginCallback, holder);
 }
 
+//This is what most initial priority is given.
+//These values should stay in match with CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK to make sure whatever bonuses we give is in line.
+//Should probably in future also take last login time into account.. ?
+uint32 WorldSession::GetBasePriority() const
+{
+    const uint32 donatorSettings = sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS);
+
+    uint32 priority = 0;
+    if (donatorSettings == 1) // enable donator boost on any account.
+        priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY);
+    else if (donatorSettings == 2) // donator boost for non-western only.
+    {
+        if (HasChineseEmail())
+            priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY);
+    }
+
+    if (sWorld.getConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY))
+        priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY);
+
+
+    priority += GetMaxLevelCharacterValue() >= sWorld.getConfig(CONFIG_UINT32_LOGIN_VIP_QUEUE_LEVEL_THRESHOLD) ? sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR) : 0;
+
+    return priority;
+}
+
 void WorldSession::LoginPlayer(ObjectGuid loginPlayerGuid)
 {
     ASSERT(loginPlayerGuid.IsPlayer());

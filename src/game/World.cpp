@@ -1153,8 +1153,13 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS, "Progression.RestoreDeletedItems", true);
 
     setConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE, "PriorityQueue.Enable", false);
+    setConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY, "PriorityQueue.WesternEnable", false);
 
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK, "PriorityQueue.PriorityPerTick", 50);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS, "PriorityQueue.DonatorSettings", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY, "PriorityQueue.DonatorPriority", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY, "PriorityQueue.WesternPriority", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR, "PriorityQueue.HighLevelChar", 50);
 
     // Movement Anticheat
     /*setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
