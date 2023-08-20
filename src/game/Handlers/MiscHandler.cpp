@@ -801,7 +801,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
                 pPlayer->AreaExploredOrEventHappens(quest_id);
         }
     }
-    SendAreaTriggerMessage("Area trigger found: %u", triggerId);
+    // SendAreaTriggerMessage("Area trigger found: %u", triggerId);
 
     // enter to tavern, not overwrite city rest
     if (sObjectMgr.IsTavernAreaTrigger(triggerId))
