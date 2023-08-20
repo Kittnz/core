@@ -699,3 +699,15 @@ DELETE FROM game_event_creature WHERE guid=2574346;
 DELETE FROM game_event_creature_data WHERE guid=2574346;
 DELETE FROM creature_battleground WHERE guid=2574346;
 REPLACE INTO `creature` VALUES (2578707,61222,0,0,0,451,15833.4,16259.4,19.9798,0.623915,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2578707;
+DELETE FROM creature_addon WHERE guid=2578707;
+DELETE FROM creature_movement WHERE id=2578707;
+DELETE FROM game_event_creature WHERE guid=2578707;
+DELETE FROM game_event_creature_data WHERE guid=2578707;
+DELETE FROM creature_battleground WHERE guid=2578707;
+
+-- Changes by GHOSTPTR
+REPLACE INTO `gameobject` VALUES ( 5016657, 180717, 451, 16076.8, 16212.1, 69.4444, 4.96396, 0, 0, 0.612809, -0.790231, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5016657';
+DELETE FROM game_event_gameobject WHERE guid = '5016657';
+DELETE FROM gameobject_battleground WHERE guid = '5016657';
