@@ -79,7 +79,13 @@ void WSG_AtAllianceFlag(WorldBotAI* pAI)
                     pAI->ClearPath();
                     ObjectGuid guid = pFlag->GetObjectGuid();
                     pAI->me->GetMotionMaster()->MovePoint(0, pFlag->GetPositionX(), pFlag->GetPositionY(), 353.0f);
-                    return;
+                    pAI->me->m_Events.AddLambdaEventAtOffset([pAI, guid]
+                    {
+                        WorldPacket data(CMSG_GAMEOBJ_USE);
+                        data << guid;
+                        pAI->me->GetSession()->HandleGameObjectUseOpcode(data);
+                    }, 2000);
+                return;
                 }
             }
             else if (pAI->me->HasAura(AURA_WARSONG_FLAG))
@@ -90,7 +96,7 @@ void WSG_AtAllianceFlag(WorldBotAI* pAI)
             }
         }
     }
-    
+
     pAI->MoveToNextPoint();
 }
 
@@ -128,12 +134,6 @@ void WSG_AtHordeFlag(WorldBotAI* pAI)
             {
                 pAI->ClearPath();
                 pAI->me->GetMotionMaster()->MovePoint(0, pFlag->GetPositionX(), pFlag->GetPositionY(), pFlag->GetPositionZ());
-                pAI->me->m_Events.AddLambdaEventAtOffset([pAI]
-                {
-                    WorldPacket data(CMSG_AREATRIGGER);
-                    data << uint32(AT_WARSONG_FLAG);
-                    pAI->me->GetSession()->HandleAreaTriggerOpcode(data);
-                }, 2000);
                 return;
             }
         }
