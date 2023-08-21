@@ -346,7 +346,7 @@ class WorldSession
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
-        uint32 GetBasePriority() const;
+        uint32 GetBasePriority() const { return 0; };
 
         uint32 m_tokenBalance = 0;
 

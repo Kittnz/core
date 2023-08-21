@@ -414,7 +414,7 @@ struct RaceSubEvent
 		return checkpoints.size() > index;
 	}
 
-    Map* theMap = nullptr;
+    std::pair<uint32, uint32> m_mapId;
 
 private:
 	// we need cached version, because we allow editing race checkpoints in-game
