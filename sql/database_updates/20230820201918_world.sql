@@ -31,3 +31,25 @@ UPDATE `spell_template` SET `attributesEx3` = 1048576 WHERE `entry` = 53020;
 UPDATE `spell_template` SET `attributesEx3` = 1048576 WHERE `entry` = 53023;
 UPDATE `spell_template` SET `attributesEx3` = 1048576 WHERE `entry` = 53026;
 UPDATE `spell_template` SET `attributesEx3` = 1048576 WHERE `entry` = 53029;
+
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53002;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53005;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53008;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53011;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53014;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53017;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53020;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53023;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53026;
+UPDATE `spell_template` SET `attributes` = 65536 WHERE `entry` = 53029;
+
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53002;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53005;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53008;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53011;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53014;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53017;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53020;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53023;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53026;
+UPDATE `spell_template` SET `attributesEx` = 268435456 WHERE `entry` = 53029;
