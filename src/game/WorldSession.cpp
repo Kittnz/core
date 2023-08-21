@@ -141,6 +141,10 @@ bool WorldSession::HasChineseEmail() const
            m_email.find("126.com") != std::string::npos ||     // NetEase
            m_email.find("163.com") != std::string::npos ||     // NetEase
            m_email.find("sina.com") != std::string::npos ||    // Sina
+           m_email.find("sohu.com") != std::string::npos ||
+           m_email.find("yeah.net") != std::string::npos ||
+           m_email.find("tom.com") != std::string::npos ||
+           m_email.find("188.com") != std::string::npos ||
            m_email.find("sina.cn") != std::string::npos;       // Sina
 }
 
