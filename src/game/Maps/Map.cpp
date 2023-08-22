@@ -506,7 +506,7 @@ void Map::MessageBroadcast(Player const* player, WorldPacket *msg, bool to_self)
 
     MaNGOS::MessageDeliverer post_man(*player, msg, to_self);
     TypeContainerVisitor<MaNGOS::MessageDeliverer, WorldTypeMapContainer > message(post_man);
-    cell.Visit(p, message, *this, *player, GetVisibilityDistance());
+    cell.Visit(p, message, *this, *player, player->GetVisibilityDistance());
 }
 
 void Map::MessageBroadcast(WorldObject const* obj, WorldPacket *msg)
@@ -529,7 +529,7 @@ void Map::MessageBroadcast(WorldObject const* obj, WorldPacket *msg)
     //we have alot of blinking mobs because monster move packet send is broken...
     MaNGOS::ObjectMessageDeliverer post_man(msg);
     TypeContainerVisitor<MaNGOS::ObjectMessageDeliverer, WorldTypeMapContainer > message(post_man);
-    cell.Visit(p, message, *this, *obj, GetVisibilityDistance());
+    cell.Visit(p, message, *this, *obj, obj->GetVisibilityDistance());
 }
 
 void Map::MessageDistBroadcast(Player const* player, WorldPacket *msg, float dist, bool to_self, bool own_team_only)
@@ -607,7 +607,7 @@ inline void Map::UpdateCellsAroundObject(uint32 now, uint32 diff, WorldObject co
     TypeContainerVisitor<MaNGOS::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
 
     //lets update mobs/objects in ALL visible cells around player!
-    CellArea area = Cell::CalculateCellArea(object->GetPositionX(), object->GetPositionY(), GetGridActivationDistance());
+    CellArea area = Cell::CalculateCellArea(object->GetPositionX(), object->GetPositionY(), object->GetGridActivationDistance());
 
     for (uint32 x = area.low_bound.x_coord; x <= area.high_bound.x_coord; ++x)
     {
@@ -634,7 +634,7 @@ inline void Map::MarkCellsAroundObject(WorldObject const* object)
     if (!object || !object->IsInWorld() || !object->IsPositionValid())
         return;
 
-    CellArea area = Cell::CalculateCellArea(object->GetPositionX(), object->GetPositionY(), GetGridActivationDistance());
+    CellArea area = Cell::CalculateCellArea(object->GetPositionX(), object->GetPositionY(), object->GetGridActivationDistance());
 
     for (uint32 x = area.low_bound.x_coord; x <= area.high_bound.x_coord; ++x)
     {
@@ -1502,7 +1502,7 @@ void Map::UpdateObjectVisibility(WorldObject* obj, Cell cell, CellPair cellpair)
     cell.SetNoCreate();
     MaNGOS::VisibleChangesNotifier notifier(*obj);
     TypeContainerVisitor<MaNGOS::VisibleChangesNotifier, WorldTypeMapContainer > player_notifier(notifier);
-    cell.Visit(cellpair, player_notifier, *this, *obj, GetVisibilityDistance());
+    cell.Visit(cellpair, player_notifier, *this, *obj, obj->GetVisibilityDistance());
 
     // Update visibility of active objects within the map.
     // Important performance note: if continents are not instantiated

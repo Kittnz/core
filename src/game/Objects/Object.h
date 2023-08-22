@@ -32,6 +32,7 @@
 #include "SpellDefines.h"
 #include "DBCEnums.h"
 #include "Utilities/EventProcessor.h"
+#include "DynamicVisibilityMgr.h"
 
 #include <set>
 #include <string>
@@ -764,6 +765,7 @@ enum CurrentSpellTypes
 class WorldObject : public Object
 {
     friend struct WorldObjectChangeAccumulator;
+    friend class CreatureCreatePos;
 
     public:
 
@@ -803,7 +805,13 @@ class WorldObject : public Object
         void Relocate(float x, float y, float z, float orientation);
         void Relocate(float x, float y, float z);
 
+        uint32 GetCachedZoneId() const { return m_zoneUpdateId; }
+        uint32 GetCachedAreaId() const { return m_areaUpdateId; }
+
         void SetOrientation(float orientation);
+
+        float GetVisibilityDistance() const;
+        float GetGridActivationDistance() const;
 
         bool isFacing(const Position location, const float tolerance = (M_PI_F/2)) const;
 
@@ -1207,6 +1215,9 @@ virtual uint32 GetLevel() const = 0;
 
         uint32 m_mapId;                                     // object at map with map_id
         uint32 m_InstanceId;                                // in map copy with instance id
+
+        uint32 m_areaUpdateId;
+        uint32 m_zoneUpdateId;
 
         Position m_position;
 

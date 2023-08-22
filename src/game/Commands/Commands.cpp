@@ -89,6 +89,7 @@
 #include "SuspiciousStatisticMgr.h"
 #include "ChannelMgr.h"
 #include "CommandStream.h"
+#include "DynamicVisibilityMgr.h"
 
 uint32 GetTokenBalance(uint32 accountId)
 {
@@ -5909,11 +5910,27 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
+
     if (GetSession() && GetSession()->GetSecurity() >= SEC_MODERATOR)
     {
         PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
+
+
+        uint32 numHcs = 0;
+        const auto& sess = sWorld.GetAllSessions();
+        for (const auto& sessPair : sess)
+        {
+            auto session = sessPair.second;
+            auto player = session->GetPlayer();
+            if (!player || !player->IsInWorld())
+                continue;
+
+            if (player->IsHardcore())
+                ++numHcs;
+        }
+        PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());
@@ -13978,6 +13995,8 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
     if (Player* target = GetSelectedPlayer())
         PSendSysMessage("Target: %s, map %u instance %u", target->GetName(), target->GetMapId(), target->GetInstanceId());
 
+    auto pl = GetPlayer();
+
     for (int mapId = 0; mapId < 2; ++mapId)
     {
         PSendSysMessage("MAP %u", mapId);
@@ -13995,8 +14014,22 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
                     ++it;
                 }
                 PSendSysMessage("[Instance%2u] %u players, dist visible:%.1f activate:%.1f", i, count, m->GetVisibilityDistance(), m->GetGridActivationDistance());
+
+                if (pl)
+                {
+                    auto dynVis = sDynamicVisMgr->GetDynamicVisibility(pl->GetAreaId());
+                    if (dynVis)
+                        PSendSysMessage("Current dynamic visibility for this area: %u.", dynVis.value());
+                }
             }
     }
+    return true;
+}
+
+bool ChatHandler::HandleReloadDynamicVisibilityCommand(char*)
+{
+    sDynamicVisMgr->LoadFromDB(true);
+    SendSysMessage("Dynamic Visibility Templates Reloaded.");
     return true;
 }
 
