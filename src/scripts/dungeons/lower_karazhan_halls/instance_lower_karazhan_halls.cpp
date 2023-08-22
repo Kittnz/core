@@ -1120,7 +1120,7 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_SoulExchangeTimer = urand(5, 9) * IN_MILLISECONDS;
+		m_SoulExchangeTimer = urand(7, 14) * IN_MILLISECONDS;
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -1132,7 +1132,7 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 				if (!master->HasAura(57065))
 					DoCastSpellIfCan(master, 57065, true);
 			}
-			m_SoulExchangeTimer = urand(5, 9) * IN_MILLISECONDS;
+			m_SoulExchangeTimer = urand(7, 14) * IN_MILLISECONDS;
 		}
 		else
 			m_SoulExchangeTimer -= uiDiff;
