@@ -96,11 +96,6 @@ void GlobalCooldownMgr::AddGlobalCooldown(SpellEntry const* spellInfo, uint32 gc
     m_GlobalCooldowns[spellInfo->StartRecoveryCategory] = GlobalCooldown(gcd, WorldTimer::getMSTime());
 }
 
-void GlobalCooldownMgr::AddGlobalCooldown(uint32 category, uint32 gcd)
-{
-    m_GlobalCooldowns[category] = GlobalCooldown(gcd, WorldTimer::getMSTime());
-}
-
 void GlobalCooldownMgr::CancelGlobalCooldown(SpellEntry const* spellInfo)
 {
     m_GlobalCooldowns[spellInfo->StartRecoveryCategory].duration = 0;
@@ -3082,7 +3077,6 @@ void Unit::_UpdateAutoRepeatSpell()
 
         // all went good, reset attack
         ResetAttackTimer(RANGED_ATTACK);
-        GetGlobalCooldownMgr().AddGlobalCooldown(133, GetAttackTimer(RANGED_ATTACK));
         SetStandState(UNIT_STAND_STATE_STAND);
     }
 }
