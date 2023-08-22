@@ -1306,6 +1306,28 @@ void WorldObject::SetOrientation(float orientation)
         unit->m_movementInfo.ChangeOrientation(orientation);
 }
 
+float WorldObject::GetVisibilityDistance() const
+{
+    if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
+    {
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        if (optVis)
+            return optVis.value();
+    }
+    return GetMap()->GetVisibilityDistance();
+}
+
+float WorldObject::GetGridActivationDistance() const
+{
+    if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
+    {
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        if (optVis)
+            return optVis.value();
+    }
+    return GetMap()->GetGridActivationDistance();
+}
+
 uint32 WorldObject::GetZoneId() const
 {
     return m_currMap ? GetTerrain()->GetZoneId(m_position.x, m_position.y, m_position.z) : 0;
@@ -1899,7 +1921,7 @@ void WorldObject::SendObjectMessageToSet(WorldPacket *data, bool self, WorldObje
 
     ObjectViewersDeliverer post_man(this, data, except);
     TypeContainerVisitor<ObjectViewersDeliverer, WorldTypeMapContainer> message(post_man);
-    cell.Visit(p, message, *GetMap(), *this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    cell.Visit(p, message, *GetMap(), *this, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
 }
 
 void WorldObject::SendMovementMessageToSet(WorldPacket data, bool self, WorldObject const* except)
@@ -1928,7 +1950,7 @@ void WorldObject::SendMessageToSetExcept(WorldPacket *data, Player const* skippe
     if (IsInWorld())
     {
         MaNGOS::MessageDelivererExcept notifier(data, skipped_receiver);
-        Cell::VisitWorldObjects(this, notifier, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+        Cell::VisitWorldObjects(this, notifier, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     }
 }
 
@@ -1962,7 +1984,7 @@ bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject c
     }
     else if (!GetTransport() || GetTransport() != viewer->GetTransport())
     {
-        float distance = std::max(GetMap()->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleUnitGreyDistance() : 0.0f), GetVisibilityModifier());
+        float distance = std::max(GetVisibilityDistance() + (inVisibleList ? World::GetVisibleUnitGreyDistance() : 0.0f), GetVisibilityModifier());
 
         // Any units far than max visible distance for viewer or not in our map are not visible too
         if (!IsWithinDistInMap(viewPoint, distance, false))
@@ -1978,6 +2000,7 @@ void WorldObject::SetMap(Map * map)
     //lets save current map's Id/instanceId
     m_mapId = map->GetId();
     m_InstanceId = map->GetInstanceId();
+
 
     // Order is important, must be done after m_currMap is set
     SetZoneScript();
@@ -2584,7 +2607,7 @@ void WorldObject::BuildUpdateData(UpdateDataMapType & update_players)
 {
     WorldObjectChangeAccumulator notifier(*this, update_players);
     // Update with modifier for long range players
-    Cell::VisitWorldObjects(this, notifier, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    Cell::VisitWorldObjects(this, notifier, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
 
     ClearUpdateMask(false);
 }
@@ -2653,9 +2676,9 @@ void WorldObject::DestroyForNearbyPlayers()
 
     std::list<Player*> targets;
     // Use visibility modifier for long range players
-    MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
-    Cell::VisitWorldObjects(this, searcher, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    Cell::VisitWorldObjects(this, searcher, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     for (Player* plr : targets)
     {
         if (plr == this)

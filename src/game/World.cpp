@@ -1155,12 +1155,15 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE, "PriorityQueue.Enable", false);
     setConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY, "PriorityQueue.WesternEnable", false);
 
+    setConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES, "DynamicVisibility.Enable", false);
+
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK, "PriorityQueue.PriorityPerTick", 50);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS, "PriorityQueue.DonatorSettings", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY, "PriorityQueue.DonatorPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY, "PriorityQueue.WesternPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR, "PriorityQueue.HighLevelChar", 50);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY, "PriorityQueue.HighLevelCharPriority", 0);
+
 
     // Movement Anticheat
     /*setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
@@ -1987,6 +1990,9 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading mount manager...");
     sMountMgr->LoadFromDB();
 
+    sLog.outString("Loading dynamic visibility templates...");
+    sDynamicVisMgr->LoadFromDB(false);
+
     sLog.outString("Loading cached Account data...");
     LoadAccountData();
 
@@ -2274,6 +2280,7 @@ void World::Update(uint32 diff)
     sLFGMgr.Update(diff);
     sGuardMgr.Update(diff);
     sZoneScriptMgr.Update(diff);
+    sDynamicVisMgr->UpdateVisibility(diff);
 
     ///- Update groups with offline leaders
     if (m_timers[WUPDATE_GROUPS].Passed())
@@ -3008,6 +3015,7 @@ void World::UpdateSessions(uint32 diff)
     uint32 queuedSessions = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size();
     uint32 loggedInSessions = uint32(m_sessions.size() - queuedSessions); 
     if (m_playerLimit >= 0 && static_cast <int32> (loggedInSessions) < hardPlayerLimit)
+    {
         if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
         {
             m_playerLimit = std::min(m_playerLimit + acceptNow, loggedInSessions + acceptNow);
@@ -3055,6 +3063,7 @@ void World::UpdateSessions(uint32 diff)
                     (*iter)->SendAuthWaitQue(position);
             }
         }
+    }
 
     ///- Add new sessions
     WorldSession* sess;

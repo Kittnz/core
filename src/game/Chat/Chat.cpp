@@ -490,6 +490,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "gmlevels",                     SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadGmLevelsCommand,                "", nullptr},
         { "gm_ticket_template",           SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadGmTicketTemplatesCommand,       "", nullptr},
         { "housing",                      SEC_DEVELOPER,        true,  &ChatHandler::HandleReloadHousingCommand,                 "", nullptr},
+        { "visibilities",                 SEC_DEVELOPER,        true, &ChatHandler::HandleReloadDynamicVisibilityCommand,        "", nullptr},
         { nullptr,                       0,                     false, nullptr,                                                  "", nullptr }
     };
 

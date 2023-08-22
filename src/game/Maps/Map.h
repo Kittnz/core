@@ -373,7 +373,11 @@ class Map : public GridRefManager<NGridType>
         void MessageDistBroadcast(Player const*, WorldPacket*, float dist, bool to_self, bool own_team_only = false);
         void MessageDistBroadcast(WorldObject const*, WorldPacket*, float dist);
 
-        float GetVisibilityDistance() const { return m_VisibleDistance; }
+        float GetVisibilityDistance() const 
+        { 
+            return m_VisibleDistance; 
+        }
+
         void SetVisibilityDistance(float dist) { m_VisibleDistance = dist; }
         float GetGridActivationDistance() const { return m_GridActivationDistance; }
 
@@ -504,6 +508,7 @@ class Map : public GridRefManager<NGridType>
         Creature* SummonCreature(uint32 entry, float x, float y, float z, float ang, TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN, uint32 despwtime = 25000, bool asActiveObject = false);
         Creature* LoadCreatureSpawn(uint32 dbGuid, bool delaySpawn = false);
         Creature* LoadCreatureSpawnWithGroup(uint32 leaderDbGuid, bool delaySpawn = false);
+
 
         Player* GetPlayer(ObjectGuid guid);
         GameObject* GetGameObject(ObjectGuid const& guid) { return GetObject<GameObject>(guid); }

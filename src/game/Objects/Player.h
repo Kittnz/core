@@ -42,6 +42,7 @@
 #include "SpellMgr.h"
 #include "HonorMgr.h"
 #include "TransmogMgr.h"
+#include "DynamicVisibilityMgr.h"
 
 #include <string>
 #include <vector>
@@ -1800,9 +1801,8 @@ class Player final: public Unit
         /*********************************************************/
 
     private:
-        uint32 m_zoneUpdateId;
+        
         uint32 m_zoneUpdateTimer;
-        uint32 m_areaUpdateId;
 
         bool m_BGQueueAllowed;
 
@@ -1936,8 +1936,6 @@ class Player final: public Unit
 
         void UpdateZone(uint32 newZone,uint32 newArea);
         void UpdateArea(uint32 newArea);
-        uint32 GetCachedZoneId() const { return m_zoneUpdateId; }
-        uint32 GetCachedAreaId() const { return m_areaUpdateId; }
 
         GridReference<Player> &GetGridRef() { return m_gridRef; }
         MapReference &GetMapRef() { return m_mapRef; }

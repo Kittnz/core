@@ -1572,7 +1572,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             {
                 UpdateUnderwaterState();
                 CheckAreaExploreAndOutdoor();
-                LoadMapCellsAround(GetMap()->GetGridActivationDistance());
+                LoadMapCellsAround(GetGridActivationDistance());
                 m_areaCheckTimer = 0;
             }
             else
@@ -2380,7 +2380,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         if (!(options & TELE_TO_NOT_UNSUMMON_PET))
         {
             //same map, only remove pet if out of range for new position
-            if (pet && !pet->IsWithinDist3d(x, y, z, GetMap()->GetGridActivationDistance()))
+            if (pet && !pet->IsWithinDist3d(x, y, z, GetGridActivationDistance()))
                 UnsummonPetTemporaryIfAny();
         }
 
@@ -2390,7 +2390,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             CombatStop();
         }
 
-        if (!IsWithinDist3d(x, y, z, GetMap()->GetVisibilityDistance()))
+        if (!IsWithinDist3d(x, y, z, GetVisibilityDistance()))
             RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TELEPORTED);
 
         // this will be used instead of the current location in SaveToDB
@@ -6903,7 +6903,7 @@ bool Player::SetPosition(float x, float y, float z, float orientation, bool tele
     {
         UpdateUnderwaterState();
         CheckAreaExploreAndOutdoor();
-        LoadMapCellsAround(GetMap()->GetGridActivationDistance());
+        LoadMapCellsAround(GetGridActivationDistance());
     }
 
     return true;
@@ -6984,6 +6984,8 @@ void Player::CheckAreaExploreAndOutdoor()
     // Pas d'exploration en cinematique
     if (watching_cinematic_entry)
         return;
+
+    GetZoneAndAreaId(m_zoneUpdateId, m_areaUpdateId);
 
     bool isOutdoor;
     uint16 areaFlag = GetTerrain()->GetAreaFlag(GetPositionX(), GetPositionY(), GetPositionZ(), &isOutdoor);
