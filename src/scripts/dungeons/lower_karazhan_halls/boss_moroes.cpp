@@ -24,20 +24,30 @@ struct boss_moroesAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_creature->RestoreFaction();
-		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
-		ResetBattleTimers();
 		sound1 = false;
 		intermission1 = false;
 		sacrifice = false;
+
+		m_creature->RestoreFaction();
+		RestoreFlags();
+		ResetBattleTimers();
 
 		if (m_pInstance)
 		{
 			m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 			m_pInstance->SetData(DATA_MOROES_STAGE, 0);
 		}
+	}
+
+	void RestoreFlags()
+	{
+		if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+			m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+
+		if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING))
+			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 	}
 
 	void ResetBattleTimers()
@@ -70,12 +80,7 @@ struct boss_moroesAI : public ScriptedAI
 
 	void EnterEvadeMode() override
 	{
-		uint32 oldRespawnDelay = m_creature->GetRespawnDelay();
-		m_creature->SetRespawnDelay(30);
-		m_creature->DisappearAndDie();
-		m_creature->SetRespawnDelay(oldRespawnDelay);
-
-		Reset();
+		m_creature->DespawnOrUnsummon(0, 30);
 	}
 
 	void JustDied(Unit* pKiller) override
@@ -115,6 +120,9 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		if (m_pInstance)
 		{
+			if (!m_creature->HasAura(9617))
+				m_creature->AddAura(9617);
+
 			if (m_pInstance->GetData(DATA_MOROES_STAGE) == 0)
 			{
 				if (m_InterludeTimer)
@@ -185,6 +193,7 @@ struct boss_moroesAI : public ScriptedAI
 					intermission1 = true;
 					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
 					m_creature->PlayDirectSound(60404);
+					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 					m_creature->RemoveAllAuras();
 					m_creature->DeleteThreatList();
 					m_creature->CombatStop(true);
@@ -201,6 +210,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (m_InterludeTimer < uiDiff)
 					{
 						Teleport();
+						m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 						m_creature->SetMaxHealth(220388);
 						m_creature->SetHealth(220388);
