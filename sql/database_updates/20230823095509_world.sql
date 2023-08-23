@@ -32,3 +32,11 @@ DELETE FROM creature_movement WHERE id=2578707;
 DELETE FROM game_event_creature WHERE guid=2578707;
 DELETE FROM game_event_creature_data WHERE guid=2578707;
 DELETE FROM creature_battleground WHERE guid=2578707;
+
+-- Changes by VOJI
+DELETE FROM creature WHERE guid=2569312;
+DELETE FROM creature_addon WHERE guid=2569312;
+DELETE FROM creature_movement WHERE id=2569312;
+DELETE FROM game_event_creature WHERE guid=2569312;
+DELETE FROM game_event_creature_data WHERE guid=2569312;
+DELETE FROM creature_battleground WHERE guid=2569312;
