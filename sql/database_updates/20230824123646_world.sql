@@ -1,0 +1,9 @@
+-- fix bind on pickup
+update item_template set bonding = 1 where entry = 61269; -- Clutchweave Robe
+update item_template set bonding = 1 where entry = 61267; -- Sparkgrasp Gloves
+update item_template set stat_value1 = 22, stat_value2 = 16, stat_value3 = 22, fire_res = 10, spellid_2 = 13669, spellid_3 = 0, spellid_1 = 7597 where entry = 61265; -- Leggings of the Inferno
+update item_template set stat_value1 = 20, stat_value2 = 15, stat_value3 = 20, spellid_1 = 7597, spellid_2 = 13669, spelltrigger_2 = 1 where entry = 61260; -- Flamescorched Hood
+-- replacement item
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (61816, 'Araxxna\'s Husk', '', 4, 0, 1, 3, 22805, 1, 60, 1, -1, -1, 346016, 86504, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 140, 0, 0, 68, 0, 49, 0, 0, 0, 0, 0, 0, 7, 15, 13669, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Replace item ID 61285 from Brood Queen Araxxna's loottable. (61221) with this item. Make sure to give it an item id and has the same drop chance and the same loottable as the item its replacing.
+update creature_loot_template set item = 61816 where entry = 61221 and item = 61285;
