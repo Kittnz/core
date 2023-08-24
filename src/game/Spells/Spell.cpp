@@ -1652,7 +1652,8 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                         unit->GetHostileRefManager().threatAssist(pRealUnitCaster, 0.0f, m_spellInfo);
                     }
                 }
-                else if (unit->IsPvP() && unit->IsCharmerOrOwnerPlayerOrPlayerItself() &&
+                // Turtle: Do not flag players for buffing friendlies inside dungeons.
+                else if (unit->IsPvP() && unit->IsCharmerOrOwnerPlayerOrPlayerItself() && unit->GetMapId() <= 1 &&
                          IsFriendlyTarget(m_spellInfo->EffectImplicitTargetA[GetFirstEffectIndexInMask(effectMask)]))
                 {
                     if (Player* pPlayer = pRealUnitCaster->GetCharmerOrOwnerPlayerOrPlayerItself())

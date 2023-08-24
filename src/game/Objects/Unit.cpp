@@ -6397,7 +6397,8 @@ void Unit::SetInCombatWithAssisted(Unit* pAssisted)
         return;
 
     // PvP combat participation pulse: refresh pvp timers on pvp combat (we are the assister)
-    if (pAssisted->IsPvP())
+    // Turtle: Do not flag people for PvP when buffing friendlies in dungeon.
+    if (pAssisted->IsPvP() && GetMapId() <= 1)
     {
         if (Player* pThisPlayer = GetCharmerOrOwnerPlayerOrPlayerItself())
         {
