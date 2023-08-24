@@ -2375,6 +2375,24 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
 	if (spellInfo->Id == 22564 && player && player->InBattleGround() && player->GetTeamId() != TEAM_ALLIANCE)
 		return SPELL_FAILED_SPELL_UNAVAILABLE;
 
+    // Custom arena spell blacklist.
+    if (player && player->GetMapId() == 26)
+    {
+        if (spellInfo->HasEffect(SPELL_EFFECT_RESURRECT_NEW))
+            return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+
+        switch (spellInfo->Id)
+        {
+            case 633:   // Lay on Hands (rank 1)
+            case 2800:  // Lay on Hands (rank 2)
+            case 10310: // Lay on Hands (rank 3)
+            case 1719:  // Recklessness
+            case 13180: // Gnomish Mind Control Cap
+            case 22641: // Reckless Charge (Goblin Rocket Helmet)
+                return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+        }
+    }
+
     switch (spellInfo->Id)
     {
         // Alterac Valley
