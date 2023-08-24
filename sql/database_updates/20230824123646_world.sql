@@ -35,3 +35,7 @@ update quest_template set exclusivegroup = 40824 where entry in (40824,41137);
 
 update quest_template set nextquestID = 40825 where entry = 40824;
 update quest_template set nextquestID = 40825 where entry = 41137;
+
+-- Item 61231 should drop from NPC ID 61226 from a new loottable with a 100% chance. Make sure the item is lootable by everyone.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61226, 61231, -100, 6, 1, 1, 0);
