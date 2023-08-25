@@ -1681,6 +1681,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
     if (m_spellInfo->IsSpellAppliesAura(effectMask))
     {
         m_spellAuraHolder = CreateSpellAuraHolder(m_spellInfo, unit, pRealUnitCaster ? pRealUnitCaster : unit, m_caster, m_CastItem);
+        m_spellAuraHolder->SetAddedBySpell(true);
         m_spellAuraHolder->SetTriggered(IsTriggered());
         m_spellAuraHolder->SetReflected(isReflected);
         m_spellAuraHolder->setDiminishGroup(m_diminishGroup);
