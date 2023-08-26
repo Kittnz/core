@@ -5140,7 +5140,7 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
 
 bool GossipHello_npc_hizzle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(50034))
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(50060))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here you are Hizzle, I got your prisoner red handed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
@@ -5158,7 +5158,7 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         pCreature->MonsterSay("Good! All the damage he caused and now he's finally going to pay for it!");
-        pPlayer->RemoveAurasDueToSpell(50034);
+        pPlayer->RemoveAurasDueToSpell(50060);
         pPlayer->RemoveMiniPet();
     }
     pPlayer->CLOSE_GOSSIP_MENU();
