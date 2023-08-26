@@ -19,3 +19,7 @@ UPDATE `spell_template` SET `description` = 'For generations, the ravens of Giln
 
 UPDATE `spell_template` SET `name` = 'Gilnean Raven' WHERE `entry` = 49508;
 UPDATE `spell_template` SET `spellIconId` = 2310 WHERE `entry` = 49508;
+
+-- Fix Druid glyph spell effects:
+
+update spell_template set spellvisual1 = 212 where name like '%glyph of the%' and description like '%while%';
