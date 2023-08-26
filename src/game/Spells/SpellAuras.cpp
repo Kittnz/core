@@ -1860,7 +1860,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         m_isPeriodic = true;
                         m_modifier.periodictime = 5000;
-						 break;
+                        break;
+                    }
                     case 50034: // Baxxil Dummy
                     {
                         m_isPeriodic = true;
@@ -6911,6 +6912,7 @@ void Aura::PeriodicDummyTick()
                 {
                     if (target->HasAura(45527))
                         target->CastSpell(target, 47358, true, nullptr, this);
+                    return;
 				}
                 case 50034: // Baxxil Dummy
                 {
