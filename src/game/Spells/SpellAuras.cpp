@@ -1815,6 +1815,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 50034: // Baxxil Dummy
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -6880,6 +6886,15 @@ void Aura::PeriodicDummyTick()
                     target->SendSpellGo(pSelection, 100); // todo: remove in 1.16.6
                     target->CastSpell(pSelection, 45871, false);
 
+                    return;
+                }
+                case 50034: // Baxxil Dummy
+                {
+                    if (Player* pPlayer = target->ToPlayer())
+                    {
+                        if (!pPlayer->GetMiniPet())
+                            pPlayer->CastSpell(pPlayer, 50009, true);
+                    }
                     return;
                 }
             }
