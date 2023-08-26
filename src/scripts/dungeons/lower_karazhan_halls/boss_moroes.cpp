@@ -303,7 +303,7 @@ struct boss_moroesAI : public ScriptedAI
 				if (!sacrifice && m_creature->GetHealthPercent() <= 75.0f)
 				{
 					sacrifice = true;
-					m_creature->MonsterYell("Now, how about a little drama to our show?! Make your choice, sacrifice a dearest friend. Do not choose, and they shall all perish!");
+					// m_creature->MonsterYell("Now, how about a little drama to our show?! Make your choice, sacrifice a dearest friend. Do not choose, and they shall all perish!");
 					//SacrificeRaid();
 				}
 			}
