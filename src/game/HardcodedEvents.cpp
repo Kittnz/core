@@ -1778,6 +1778,10 @@ void RaceSubEvent::Start()
 
 void RaceSubEvent::Update(uint32 deltaTime)
 {
+    Map* pMap = sMapMgr.FindMap(m_mapId.first, m_mapId.second);
+    if (!pMap)
+        return;
+
 	// also check if players quited race mode
 	// in that case - finish event
 	switch (state)
@@ -1796,16 +1800,16 @@ void RaceSubEvent::Update(uint32 deltaTime)
 				{
 					pPlayer->SetRooted(false);
 					
-					if (theMap == nullptr)
+					if (pMap == nullptr)
 					{
-						theMap = pPlayer->GetMap();
+                        pMap = pPlayer->GetMap();
 					}
 				}
 			}
 
 			AnnounceToRacers("GO! GO! GO!");
 
-			if (theMap != nullptr)
+			if (pMap != nullptr)
 			{
 				//	creatures
 				spawnedCreatures.reserve(creatures.size());
@@ -1814,7 +1818,7 @@ void RaceSubEvent::Update(uint32 deltaTime)
 					float fChance = float(creature.chance);
 					if (rand_chance_f() < fChance)
 					{
-						if (Creature* spawnedCreature = theMap->SummonCreature(creature.entry, creature.pos.x, creature.pos.y, creature.pos.z, creature.pos.o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
+						if (Creature* spawnedCreature = pMap->SummonCreature(creature.entry, creature.pos.x, creature.pos.y, creature.pos.z, creature.pos.o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
 						{
 							spawnedCreatures.push_back(spawnedCreature->GetObjectGuid());
 						}
@@ -1827,7 +1831,7 @@ void RaceSubEvent::Update(uint32 deltaTime)
 					float fChance = float(gameobject.chance);
 					if (rand_chance_f() < fChance)
 					{
-						if (GameObject* spawnedGameobject = theMap->SummonGameObject(gameobject.entry, gameobject.pos.x, gameobject.pos.y, gameobject.pos.z, gameobject.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 10 * MINUTE * IN_MILLISECONDS, 1))
+						if (GameObject* spawnedGameobject = pMap->SummonGameObject(gameobject.entry, gameobject.pos.x, gameobject.pos.y, gameobject.pos.z, gameobject.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 10 * MINUTE * IN_MILLISECONDS, 1))
 						{
 							for (const RacePlayer& racer : racers)
 							{
@@ -1895,6 +1899,10 @@ void RaceSubEvent::AnnounceToRacers(const char* msg)
 
 void RaceSubEvent::End()
 {
+    Map* pMap = sMapMgr.FindMap(m_mapId.first, m_mapId.second);
+    if (!pMap)
+        return;
+
 	for (RacePlayer& player : racers)
 	{
 		player.LeaveRaceMode();
@@ -1903,7 +1911,7 @@ void RaceSubEvent::End()
 	// despawn the shit
 	for (ObjectGuid guid : spawnedCreatures)
 	{
-		if (Creature* creature = theMap->GetAnyTypeCreature(guid))
+		if (Creature* creature = pMap->GetAnyTypeCreature(guid))
 		{
 			creature->DespawnOrUnsummon();
 		}
@@ -1911,7 +1919,7 @@ void RaceSubEvent::End()
 
 	for (ObjectGuid guid : spawnedGameobjects)
 	{
-		if (GameObject* gameobject = theMap->GetGameObject(guid))
+		if (GameObject* gameobject = pMap->GetGameObject(guid))
 		{
 			gameobject->Despawn();
 			gameobject->Delete();

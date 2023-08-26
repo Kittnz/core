@@ -88,6 +88,8 @@
 #include <ace/OS_NS_dirent.h>
 #include "SuspiciousStatisticMgr.h"
 #include "ChannelMgr.h"
+#include "CommandStream.h"
+#include "DynamicVisibilityMgr.h"
 
 uint32 GetTokenBalance(uint32 accountId)
 {
@@ -1812,6 +1814,34 @@ bool ChatHandler::HandleLookupEventCommand(char* args)
 
     if (counter == 0)
         SendSysMessage(LANG_NOEVENTFOUND);
+
+    return true;
+}
+
+bool ChatHandler::HandleLookupHwPrintCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    uint64 extendedPrint;
+
+    if (!(stream >> extendedPrint))
+    {
+        SendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+
+    SendSysMessage("Listing all accounts with hwprint:");
+
+    const auto& accountDatas = sWorld.GetAllAccountData();
+
+    for (const auto& data : accountDatas)
+    {
+        if (data.second.lastExtendedFingerprint == extendedPrint)
+        {
+            PSendSysMessage("Got match on account username %s", data.second.username.c_str());
+        }
+    }
 
     return true;
 }
@@ -5960,11 +5990,27 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
+
     if (GetSession() && GetSession()->GetSecurity() >= SEC_MODERATOR)
     {
         PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
+
+
+        uint32 numHcs = 0;
+        const auto& sess = sWorld.GetAllSessions();
+        for (const auto& sessPair : sess)
+        {
+            auto session = sessPair.second;
+            auto player = session->GetPlayer();
+            if (!player || !player->IsInWorld())
+                continue;
+
+            if (player->IsHardcore())
+                ++numHcs;
+        }
+        PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());
@@ -14029,6 +14075,8 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
     if (Player* target = GetSelectedPlayer())
         PSendSysMessage("Target: %s, map %u instance %u", target->GetName(), target->GetMapId(), target->GetInstanceId());
 
+    auto pl = GetPlayer();
+
     for (int mapId = 0; mapId < 2; ++mapId)
     {
         PSendSysMessage("MAP %u", mapId);
@@ -14046,8 +14094,22 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
                     ++it;
                 }
                 PSendSysMessage("[Instance%2u] %u players, dist visible:%.1f activate:%.1f", i, count, m->GetVisibilityDistance(), m->GetGridActivationDistance());
+
+                if (pl)
+                {
+                    auto dynVis = sDynamicVisMgr->GetDynamicVisibility(pl->GetAreaId());
+                    if (dynVis)
+                        PSendSysMessage("Current dynamic visibility for this area: %u.", dynVis.value());
+                }
             }
     }
+    return true;
+}
+
+bool ChatHandler::HandleReloadDynamicVisibilityCommand(char*)
+{
+    sDynamicVisMgr->LoadFromDB(true);
+    SendSysMessage("Dynamic Visibility Templates Reloaded.");
     return true;
 }
 
@@ -14937,6 +14999,8 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         return false;
     }
 
+    auto timeNow = time(nullptr);
+    const uint32 refundWindow = HOUR * 48; // 48 hour refund window.
 
     for (const auto& elem : entries)
     {
@@ -14947,8 +15011,15 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         if (cachedPlayerData)
             charName = cachedPlayerData->sName;
 
-        ChatHandler(session).PSendSysMessage("%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s", elem->date.c_str(),
-            elem->id, charName.c_str(), elem->charGuid, elem->itemPrice, elem->itemEntry, elem->refunded ? "([REFUNDED])" : "");
+        std::string colorString = "";
+
+        if (elem->refunded)
+            colorString = "|cff0cbecf";
+        else if (timeNow - refundWindow > elem->dateUnix) // refund window passed.
+            colorString = "|cffb81d0f";
+
+        ChatHandler(session).PSendSysMessage("%s%s | (ID %u) | %s (GUID:%u) spent %u tokens on item %u %s%s", colorString.c_str(), elem->date.c_str(),
+            elem->id, charName.c_str(), elem->charGuid, elem->itemPrice, elem->itemEntry, elem->refunded ? "([REFUNDED])" : "", colorString.empty() ? "" : "|r");
     }
     return true;
 }

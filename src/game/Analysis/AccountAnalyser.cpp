@@ -172,6 +172,12 @@ void AccountAnalyser::Initialize()
         return;
     }
 
+
+
+    auto accountData = sWorld.GetAccountData(_accountId);
+    accountData->lastExtendedFingerprint = _currentSample.GetHash();
+
+
     CheckExtendedPrintMark();
 
     if (_totalLogins < 20 || _loadedSamples.size() < 20)
@@ -355,7 +361,6 @@ void AccountAnalyser::Initialize()
         if (sWorld.getConfig(CONFIG_BOOL_ANALYSIS_AUTOMATIC_PUNIHSMENT))
             _session->MarkSuspicious();
     }
-    
 }
 
 

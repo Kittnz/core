@@ -22,6 +22,8 @@ set (game_SRCS
     Camera.cpp
     Conditions.cpp
     CreatureGroups.cpp
+    DynamicVisibilityMgr.cpp
+    DynamicVisibilityMgr.h
     DailyQuestHandler.cpp
     GameEventMgr.cpp
     GuardMgr.cpp

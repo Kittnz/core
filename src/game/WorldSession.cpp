@@ -136,9 +136,16 @@ void WorldSession::SizeError(WorldPacket const& packet, uint32 size) const
 
 bool WorldSession::HasChineseEmail() const
 {
-    return m_email.find("qq.com") != std::string::npos ||
-           m_email.find("126.com") != std::string::npos ||
-           m_email.find("163.com") != std::string::npos;
+    return m_email.find("qq.com") != std::string::npos ||      // Tencent
+           m_email.find("foxmail.com") != std::string::npos || // Tencent
+           m_email.find("126.com") != std::string::npos ||     // NetEase
+           m_email.find("163.com") != std::string::npos ||     // NetEase
+           m_email.find("sina.com") != std::string::npos ||    // Sina
+           m_email.find("sohu.com") != std::string::npos ||
+           m_email.find("yeah.net") != std::string::npos ||
+           m_email.find("tom.com") != std::string::npos ||
+           m_email.find("188.com") != std::string::npos ||
+           m_email.find("sina.cn") != std::string::npos;       // Sina
 }
 
 /// Get the player name

@@ -730,7 +730,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     {
         if (strstr(msg.c_str(), "TW_TRANSMOG")) // prefix
         {
-			_player->_transmogMgr->HandleAddonMessages(msg);
+            if (_player->FindNearestInteractableNpcWithFlag(UNIT_NPC_FLAG_TRANSMOG))
+			    _player->_transmogMgr->HandleAddonMessages(msg);
 			return;
         }
     }

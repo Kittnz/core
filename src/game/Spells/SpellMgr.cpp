@@ -2376,7 +2376,7 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
 		return SPELL_FAILED_SPELL_UNAVAILABLE;
 
     // Custom arena spell blacklist.
-    if (player && player->InArena())
+    if (player && player->GetMapId() == 26)
     {
         if (spellInfo->HasEffect(SPELL_EFFECT_RESURRECT_NEW))
             return SPELL_FAILED_ONLY_BATTLEGROUNDS;

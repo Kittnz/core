@@ -1164,7 +1164,7 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
     }
 
     // check distance
-    return IsWithinDistInMap(viewPoint, std::max(GetMap()->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f), GetVisibilityModifier()), false);
+    return IsWithinDistInMap(viewPoint, std::max(pDetector->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f), GetVisibilityModifier()), false);
 }
 
 void GameObject::Respawn()

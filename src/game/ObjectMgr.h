@@ -99,6 +99,7 @@ struct ShopLogEntry
     uint32 itemEntry;
     uint32 itemPrice;
     bool refunded;
+    uint32 dateUnix;
 };
 
 struct BattlegroundEntranceTrigger
