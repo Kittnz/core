@@ -139,6 +139,10 @@ uint32 AuctionHouseMgr::GetAuctionDeposit(AuctionHouseEntry const* entry, uint32
     if (deposit < min_deposit)
         deposit = min_deposit;
 
+    //increase deposit depending on how low count goes vs stack size to reduce amount of 1-stacked auctions
+    int32 diffSize = pItem->GetProto()->GetMaxStackSize() - pItem->GetCount();
+    deposit *= (1.0f + (diffSize * 0.05f));
+
     return uint32(deposit * sWorld.getConfig(CONFIG_FLOAT_RATE_AUCTION_DEPOSIT));
 }
 

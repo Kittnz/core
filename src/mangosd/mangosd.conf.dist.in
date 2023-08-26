@@ -92,6 +92,14 @@ PlayerLimit = 0
 
 PlayerHardLimit = 4000
 
+# LoginVIPQueue. Enable (1) or Disable (0) checks that allow skipping the queue.
+
+LoginVIPQueue = 0
+
+# LoginVIPQueueLevelThreshold. All accounts with characters above or equal to this level will skip the queue.
+
+LoginVIPQueueLevelThreshold = 55
+
 # LoginQueue.GracePeriodSecs. How many seconds after last logout can we login and skip the queue.
 
 LoginQueue.GracePeriodSecs = 300

@@ -348,19 +348,48 @@ void World::AddSession_(WorldSession* s)
 
 int32 World::GetQueuedSessionPos(WorldSession* sess)
 {
-    uint32 position = 1;
+    if (getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE))
+    {
+        uint32 position = 1;
 
-    for (Queue::const_iterator iter = m_QueuedSessions.begin(); iter != m_QueuedSessions.end(); ++iter, ++position)
-        if ((*iter) == sess)
-            return position;
+        for (const auto& elem : m_priorityQueue)
+        {
+            if (elem.second == sess)
+                return position;
+            ++position;
+        }
+    }
+    else
+    {
+        uint32 position = 1;
 
+        for (Queue::const_iterator iter = m_QueuedSessions.begin(); iter != m_QueuedSessions.end(); ++iter, ++position)
+            if ((*iter) == sess)
+                return position;
+    }
     return 0;
 }
 
 void World::AddQueuedSession(WorldSession* sess)
 {
     sess->SetInQueue(true);
-    m_QueuedSessions.push_back(sess);
+
+    if (getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE))
+    {
+        static uint32 idxMarker = 0; // use in future to collect latest search and start there next search instead of iterating whole queue.
+
+        uint32 priority = sess->GetBasePriority();
+        auto itr = m_priorityQueue.begin();
+        for (; itr != m_priorityQueue.end(); ++itr)
+        {
+            if (itr->first < priority)
+                break;
+        }
+
+        m_priorityQueue.insert(itr, std::make_pair(priority, sess));
+    }
+    else
+        m_QueuedSessions.push_back(sess);
 
     // [-ZERO] Possible wrong
     // The 1st SMSG_AUTH_RESPONSE needs to contain other info too.
@@ -381,53 +410,101 @@ bool World::RemoveQueuedSession(WorldSession* sess)
     uint32 sessions = GetActiveSessionCount();
 
     uint32 position = 1;
-    Queue::iterator iter = m_QueuedSessions.begin();
 
-    // search to remove and count skipped positions
-    bool found = false;
-
-    for (; iter != m_QueuedSessions.end(); ++iter, ++position)
+    //we have to copy most of OG queue over because it wont allow to do runtime container ifs with different iterator traits.
+    if (getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE))
     {
-        if (*iter == sess)
+        auto itr = m_priorityQueue.begin();
+
+        bool found = false;
+
+        for (; itr != m_priorityQueue.end(); ++itr, ++position)
         {
-            sess->SetInQueue(false);
-            iter = m_QueuedSessions.erase(iter);
-            found = true;                                   // removing queued session
-            break;
+            if (itr->second == sess)
+            {
+                sess->SetInQueue(false);
+                found = true;
+                itr = m_priorityQueue.erase(itr);
+                break;
+            }
         }
-    }
 
-    // iter point to next socked after removed or end()
-    // position store position of removed socket and then new position next socket after removed
+        if (!found && sessions)
+            --sessions;
 
-    // if session not queued then we need decrease sessions count
-    if (!found && sessions)
-        --sessions;
+        uint32 loggedInSessions = uint32(m_sessions.size() - m_priorityQueue.size());
+        if (loggedInSessions >= getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT))
+            return found;
 
-    uint32 loggedInSessions = uint32(m_sessions.size() - m_QueuedSessions.size());
-    if (loggedInSessions >= getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT))
+        // accept first in queue
+        if ((!m_playerLimit || (int32)sessions < m_playerLimit) && !m_priorityQueue.empty())
+        {
+            WorldSession* pop_sess = m_priorityQueue.begin()->second;
+            pop_sess->SetInQueue(false);
+            pop_sess->m_idleTime = WorldTimer::getMSTime();
+            pop_sess->SendAuthWaitQue(0);
+            m_priorityQueue.erase(m_priorityQueue.begin());
+
+            itr = m_priorityQueue.begin();
+            position = 1;
+        }
+
+        for (; itr != m_priorityQueue.end(); ++itr, ++position)
+            itr->second->SendAuthWaitQue(position);
+
         return found;
-
-    // accept first in queue
-    if ((!m_playerLimit || (int32)sessions < m_playerLimit) && !m_QueuedSessions.empty())
+    }
+    else
     {
-        WorldSession* pop_sess = m_QueuedSessions.front();
-        pop_sess->SetInQueue(false);
-        pop_sess->m_idleTime = WorldTimer::getMSTime();
-        pop_sess->SendAuthWaitQue(0);
-        m_QueuedSessions.pop_front();
+        Queue::iterator iter = m_QueuedSessions.begin();
 
-        // update iter to point first queued socket or end() if queue is empty now
-        iter = m_QueuedSessions.begin();
-        position = 1;
+        // search to remove and count skipped positions
+        bool found = false;
+
+        for (; iter != m_QueuedSessions.end(); ++iter, ++position)
+        {
+            if (*iter == sess)
+            {
+                sess->SetInQueue(false);
+                iter = m_QueuedSessions.erase(iter);
+                found = true;                                   // removing queued session
+                break;
+            }
+        }
+
+        // iter point to next socked after removed or end()
+        // position store position of removed socket and then new position next socket after removed
+
+        // if session not queued then we need decrease sessions count
+        if (!found && sessions)
+            --sessions;
+
+        uint32 loggedInSessions = uint32(m_sessions.size() - m_QueuedSessions.size());
+        if (loggedInSessions >= getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT))
+            return found;
+
+        // accept first in queue
+        if ((!m_playerLimit || (int32)sessions < m_playerLimit) && !m_QueuedSessions.empty())
+        {
+            WorldSession* pop_sess = m_QueuedSessions.front();
+            pop_sess->SetInQueue(false);
+            pop_sess->m_idleTime = WorldTimer::getMSTime();
+            pop_sess->SendAuthWaitQue(0);
+            m_QueuedSessions.pop_front();
+
+            // update iter to point first queued socket or end() if queue is empty now
+            iter = m_QueuedSessions.begin();
+            position = 1;
+        }
+
+        // update position from iter to end()
+        // iter point to first not updated socket, position store new position
+        for (; iter != m_QueuedSessions.end(); ++iter, ++position)
+            (*iter)->SendAuthWaitQue(position);
+
+        return found;
     }
 
-    // update position from iter to end()
-    // iter point to first not updated socket, position store new position
-    for (; iter != m_QueuedSessions.end(); ++iter, ++position)
-        (*iter)->SendAuthWaitQue(position);
-
-    return found;
 }
 
 /// Initialize config values
@@ -563,6 +640,8 @@ void World::LoadConfigSettings(bool reload)
     ///- Read other configuration items from the config file
     setConfig(CONFIG_UINT32_LOGIN_PER_TICK, "LoginPerTick", 0);
     setConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT, "PlayerHardLimit", 0);
+    //setConfig(CONFIG_BOOL_LOGIN_REGION_QUEUE, "LoginRegionQueue", false);
+    //setConfig(CONFIG_UINT32_LOGIN_REGION_QUEUE_LEVEL_THRESHOLD, "LoginVIPQueueLevelThreshold", 55);
     setConfig(CONFIG_UINT32_LOGIN_QUEUE_GRACE_PERIOD_SECS, "LoginQueue.GracePeriodSecs", 0);
     setConfig(CONFIG_UINT32_CHARACTER_SCREEN_MAX_IDLE_TIME, "CharacterScreenMaxIdleTime", 0);
     setConfig(CONFIG_UINT32_ASYNC_QUERIES_TICK_TIMEOUT, "AsyncQueriesTickTimeout", 0);
@@ -1073,6 +1152,19 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_NO_RESPEC_PRICE_DECAY, "Progression.NoRespecPriceDecay", true);
     setConfig(CONFIG_BOOL_NO_QUEST_XP_TO_GOLD, "Progression.NoQuestXpToGold", true);
     setConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS, "Progression.RestoreDeletedItems", true);
+
+    setConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE, "PriorityQueue.Enable", false);
+    setConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY, "PriorityQueue.WesternEnable", false);
+
+    setConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES, "DynamicVisibility.Enable", false);
+
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK, "PriorityQueue.PriorityPerTick", 50);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS, "PriorityQueue.DonatorSettings", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY, "PriorityQueue.DonatorPriority", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY, "PriorityQueue.WesternPriority", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR, "PriorityQueue.HighLevelChar", 50);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY, "PriorityQueue.HighLevelCharPriority", 0);
+
 
     // Movement Anticheat
     /*setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
@@ -1897,6 +1989,9 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading mount manager...");
     sMountMgr->LoadFromDB();
 
+    sLog.outString("Loading dynamic visibility templates...");
+    sDynamicVisMgr->LoadFromDB(false);
+
     sLog.outString("Loading cached Account data...");
     LoadAccountData();
 
@@ -2024,6 +2119,9 @@ void World::SetInitialWorldSettings()
 	sLog.outString("Loading possible transmogs: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
 
     AccountAnalyser::CheckExtendedHashes();
+
+    sLog.outString("Fixing Hardcore Guild bank items..");
+    sGuildMgr.FixupInfernoBanks();
 
 #ifdef USING_DISCORD_BOT
     sLog.outString("Loading Discord Bot...");
@@ -2181,6 +2279,7 @@ void World::Update(uint32 diff)
     sLFGMgr.Update(diff);
     sGuardMgr.Update(diff);
     sZoneScriptMgr.Update(diff);
+    sDynamicVisMgr->UpdateVisibility(diff);
 
     ///- Update groups with offline leaders
     if (m_timers[WUPDATE_GROUPS].Passed())
@@ -2590,6 +2689,7 @@ void World::SendHardcoreMessage(WorldPacket* packet, WorldSession* self)
 void World::KickAll()
 {
     m_QueuedSessions.clear();                               // prevent send queue update packet and login queued sessions
+    m_priorityQueue.clear();
 
     // session not removed at kick and will removed in next update tick
     for (const auto& itr : m_sessions)
@@ -2933,8 +3033,11 @@ void World::UpdateSessions(uint32 diff)
     int32 hardPlayerLimit = getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT);
     if (hardPlayerLimit)
         m_playerLimit = std::min(hardPlayerLimit, m_playerLimit);
-    uint32 loggedInSessions = uint32(m_sessions.size() - m_QueuedSessions.size());
+
+    uint32 queuedSessions = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size();
+    uint32 loggedInSessions = uint32(m_sessions.size() - queuedSessions); 
     if (m_playerLimit >= 0 && static_cast <int32> (loggedInSessions) < hardPlayerLimit)
+    {
         if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
         {
             m_playerLimit = std::min(m_playerLimit + acceptNow, loggedInSessions + acceptNow);
@@ -2943,22 +3046,46 @@ void World::UpdateSessions(uint32 diff)
                 m_playerLimit = hardPlayerLimit;
                 acceptNow = 0;
             }
-            for (uint32 i = 0; i < acceptNow && !m_QueuedSessions.empty(); ++i)
-            {
-                // accept first in queue
-                WorldSession* pop_sess = m_QueuedSessions.front();
-                pop_sess->SetInQueue(false);
-                pop_sess->m_idleTime = WorldTimer::getMSTime();
-                pop_sess->SendAuthWaitQue(0);
-                m_QueuedSessions.pop_front();
-            }
 
-            // update position from iter to end()
-            // iter point to first not updated socket, position store new position
-            int position = 1;
-            for (Queue::iterator iter = m_QueuedSessions.begin(); iter != m_QueuedSessions.end(); ++iter, ++position)
-                (*iter)->SendAuthWaitQue(position);
+            if (getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE))
+            {
+                for (uint32 i = 0; i < acceptNow && !m_priorityQueue.empty(); ++i)
+                {
+                    // accept first in queue
+                    WorldSession* pop_sess = m_priorityQueue.front().second;
+                    pop_sess->SetInQueue(false);
+                    pop_sess->m_idleTime = WorldTimer::getMSTime();
+                    pop_sess->SendAuthWaitQue(0);
+                    m_priorityQueue.pop_front();
+                }
+
+                for (auto& elem : m_priorityQueue)
+                {
+                    elem.first += getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK);
+                }
+
+                int position = 1;
+                for (auto iter = m_priorityQueue.begin(); iter != m_priorityQueue.end(); ++iter, ++position)
+                    iter->second->SendAuthWaitQue(position);
+            }
+            else
+            {
+                for (uint32 i = 0; i < acceptNow && !m_QueuedSessions.empty(); ++i)
+                {
+                    // accept first in queue
+                    WorldSession* pop_sess = m_QueuedSessions.front();
+                    pop_sess->SetInQueue(false);
+                    pop_sess->m_idleTime = WorldTimer::getMSTime();
+                    pop_sess->SendAuthWaitQue(0);
+                    m_QueuedSessions.pop_front();
+                }
+
+                int position = 1;
+                for (Queue::iterator iter = m_QueuedSessions.begin(); iter != m_QueuedSessions.end(); ++iter, ++position)
+                    (*iter)->SendAuthWaitQue(position);
+            }
         }
+    }
 
     ///- Add new sessions
     WorldSession* sess;
@@ -3150,8 +3277,9 @@ void World::SetPlayerLimit(int32 limit, bool needUpdate)
 
 void World::UpdateMaxSessionCounters()
 {
-    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size() - m_QueuedSessions.size()));
-    m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(m_QueuedSessions.size()));
+    uint32 queueSize = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size();
+    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size() - queueSize));
+    m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(queueSize));
 }
 
 void World::setConfig(eConfigUInt32Values index, char const* fieldname, uint32 defvalue)
@@ -4003,12 +4131,6 @@ void World::SendDiscordMessage(uint64 channelId, std::string message)
 bool World::CanSkipQueue(WorldSession const* sess)
 {
     if (sess->GetSecurity() > SEC_PLAYER)
-        return true;
-
-    // Allow non chinese players to skip queue.
-    if (!sess->HasChineseEmail() ||
-        sAccountMgr.IsDonator(sess->GetAccountId()) ||
-        sess->HasHighLevelCharacter())
         return true;
 
     uint32 grace_period = getConfig(CONFIG_UINT32_LOGIN_QUEUE_GRACE_PERIOD_SECS);

@@ -32,6 +32,7 @@
 #include "SpellDefines.h"
 #include "DBCEnums.h"
 #include "Utilities/EventProcessor.h"
+#include "DynamicVisibilityMgr.h"
 
 #include <set>
 #include <string>
@@ -721,7 +722,7 @@ struct SpellNonMeleeDamage
 {
   SpellNonMeleeDamage(WorldObject *_attacker, Unit *_target, uint32 _SpellID, SpellSchools _school)
       : target(_target), attacker(_attacker), SpellID(_SpellID), damage(0), school(_school),
-        absorb(0), resist(0), periodicLog(false), unused(false), blocked(0), HitInfo(0), spell(nullptr)
+        absorb(0), resist(0), periodicLog(false), reflected(false), blocked(0), HitInfo(0), spell(nullptr)
   {
   }
 
@@ -733,7 +734,7 @@ struct SpellNonMeleeDamage
   uint32 absorb;
   int32 resist;
   bool periodicLog;
-  bool unused;
+  bool reflected;
   uint32 blocked;
   uint32 HitInfo;
   Spell *spell;
@@ -764,6 +765,7 @@ enum CurrentSpellTypes
 class WorldObject : public Object
 {
     friend struct WorldObjectChangeAccumulator;
+    friend class CreatureCreatePos;
 
     public:
 
@@ -803,7 +805,13 @@ class WorldObject : public Object
         void Relocate(float x, float y, float z, float orientation);
         void Relocate(float x, float y, float z);
 
+        uint32 GetCachedZoneId() const { return m_zoneUpdateId; }
+        uint32 GetCachedAreaId() const { return m_areaUpdateId; }
+
         void SetOrientation(float orientation);
+
+        float GetVisibilityDistance() const;
+        float GetGridActivationDistance() const;
 
         bool isFacing(const Position location, const float tolerance = (M_PI_F/2)) const;
 
@@ -1163,7 +1171,7 @@ virtual uint32 GetLevel() const = 0;
         uint32 MeleeDamageBonusDone(Unit* pVictim, uint32 damage, WeaponAttackType attType, SpellEntry const* spellProto = nullptr, SpellEffectIndex effectIndex = EFFECT_INDEX_0, DamageEffectType damagetype = DIRECT_DAMAGE, uint32 stack = 1, Spell* spell = nullptr, bool flat = true);
         virtual SpellSchoolMask GetMeleeDamageSchoolMask() const;
         float GetAPMultiplier(WeaponAttackType attType, bool normalized) const;
-        virtual uint32 DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell = nullptr, bool addThreat = true);
+        virtual uint32 DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell = nullptr, bool addThreat = true, bool reflected = false);
         void DealDamageMods(Unit *pVictim, uint32 &damage, uint32* absorb);
         void DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss);
         void SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log) const;
@@ -1207,6 +1215,9 @@ virtual uint32 GetLevel() const = 0;
 
         uint32 m_mapId;                                     // object at map with map_id
         uint32 m_InstanceId;                                // in map copy with instance id
+
+        uint32 m_areaUpdateId;
+        uint32 m_zoneUpdateId;
 
         Position m_position;
 

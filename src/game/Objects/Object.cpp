@@ -1306,6 +1306,28 @@ void WorldObject::SetOrientation(float orientation)
         unit->m_movementInfo.ChangeOrientation(orientation);
 }
 
+float WorldObject::GetVisibilityDistance() const
+{
+    if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
+    {
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        if (optVis)
+            return optVis.value();
+    }
+    return GetMap()->GetVisibilityDistance();
+}
+
+float WorldObject::GetGridActivationDistance() const
+{
+    if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
+    {
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        if (optVis)
+            return optVis.value();
+    }
+    return GetMap()->GetGridActivationDistance();
+}
+
 uint32 WorldObject::GetZoneId() const
 {
     return m_currMap ? GetTerrain()->GetZoneId(m_position.x, m_position.y, m_position.z) : 0;
@@ -1899,7 +1921,7 @@ void WorldObject::SendObjectMessageToSet(WorldPacket *data, bool self, WorldObje
 
     ObjectViewersDeliverer post_man(this, data, except);
     TypeContainerVisitor<ObjectViewersDeliverer, WorldTypeMapContainer> message(post_man);
-    cell.Visit(p, message, *GetMap(), *this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    cell.Visit(p, message, *GetMap(), *this, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
 }
 
 void WorldObject::SendMovementMessageToSet(WorldPacket data, bool self, WorldObject const* except)
@@ -1928,7 +1950,7 @@ void WorldObject::SendMessageToSetExcept(WorldPacket *data, Player const* skippe
     if (IsInWorld())
     {
         MaNGOS::MessageDelivererExcept notifier(data, skipped_receiver);
-        Cell::VisitWorldObjects(this, notifier, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+        Cell::VisitWorldObjects(this, notifier, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     }
 }
 
@@ -1962,7 +1984,7 @@ bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject c
     }
     else if (!GetTransport() || GetTransport() != viewer->GetTransport())
     {
-        float distance = std::max(GetMap()->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleUnitGreyDistance() : 0.0f), GetVisibilityModifier());
+        float distance = std::max(GetVisibilityDistance() + (inVisibleList ? World::GetVisibleUnitGreyDistance() : 0.0f), GetVisibilityModifier());
 
         // Any units far than max visible distance for viewer or not in our map are not visible too
         if (!IsWithinDistInMap(viewPoint, distance, false))
@@ -1978,6 +2000,7 @@ void WorldObject::SetMap(Map * map)
     //lets save current map's Id/instanceId
     m_mapId = map->GetId();
     m_InstanceId = map->GetInstanceId();
+
 
     // Order is important, must be done after m_currMap is set
     SetZoneScript();
@@ -2584,7 +2607,7 @@ void WorldObject::BuildUpdateData(UpdateDataMapType & update_players)
 {
     WorldObjectChangeAccumulator notifier(*this, update_players);
     // Update with modifier for long range players
-    Cell::VisitWorldObjects(this, notifier, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    Cell::VisitWorldObjects(this, notifier, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
 
     ClearUpdateMask(false);
 }
@@ -2653,9 +2676,9 @@ void WorldObject::DestroyForNearbyPlayers()
 
     std::list<Player*> targets;
     // Use visibility modifier for long range players
-    MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
-    Cell::VisitWorldObjects(this, searcher, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
+    Cell::VisitWorldObjects(this, searcher, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
     for (Player* plr : targets)
     {
         if (plr == this)
@@ -3619,7 +3642,8 @@ SpellMissInfo WorldObject::SpellHitResult(Unit* pVictim, SpellEntry const* spell
         return SPELL_MISS_EVADE;
 
     // Check for immune (use charges)
-    if (pVictim != this && !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
+    if (/* pVictim != this && */
+       !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
         pVictim->IsImmuneToSpell(spell, pVictim == this))
         return SPELL_MISS_IMMUNE;
 
@@ -3757,17 +3781,16 @@ float WorldObject::MeleeSpellMissChance(Unit* pVictim, WeaponAttackType attType,
 // Melee based spells hit result calculations
 SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* spell, Spell* spellPtr)
 {
-    WeaponAttackType attType = BASE_ATTACK;
-
-    if (spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED)
-        attType = RANGED_ATTACK;
+    WeaponAttackType attType = spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED ? RANGED_ATTACK : BASE_ATTACK;
 
     // Warrior spell Execute (5308) should never dodge, miss, resist ... Only the trigger can (20647)
     if (spell->IsFitToFamily<SPELLFAMILY_WARRIOR, CF_WARRIOR_EXECUTE>() && spell->Id != 20647)
         return SPELL_MISS_NONE;
 
+    // Hammer of Wrath should not use weapon skill, but Bloodthirst should.
     // bonus from skills is 0.04% per skill Diff
-    int32 attackerWeaponSkill = int32(GetWeaponSkillValue(attType, pVictim));
+    int32 attackerWeaponSkill = (spell->rangeIndex == SPELL_RANGE_IDX_COMBAT || spell->EquippedItemClass == ITEM_CLASS_WEAPON) ?
+                                int32(GetWeaponSkillValue(attType, pVictim)) : GetSkillMaxForLevel();
     int32 skillDiff = attackerWeaponSkill - int32(pVictim->GetSkillMaxForLevel(this));
     int32 fullSkillDiff = attackerWeaponSkill - int32(pVictim->GetDefenseSkillValue(this));
     int32 minWeaponSkill = GetSkillMaxForLevel(pVictim) < attackerWeaponSkill ? GetSkillMaxForLevel(pVictim) : attackerWeaponSkill;
@@ -4208,7 +4231,7 @@ void WorldObject::SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log) const
     data << uint32(log->absorb);                            // AbsorbedDamage
     data << int32(log->resist);                             // resist
     data << uint8(log->periodicLog);                        // if 1, then client show spell name (example: %s's ranged shot hit %s for %u school or %s suffers %u school damage from %s's spell_name
-    data << uint8(log->unused);                             // unused
+    data << uint8(false);                                   // unused
     data << uint32(log->blocked);                           // blocked
     data << uint32(log->HitInfo);
     data << uint8(0);                                       // flag to use extend data
@@ -4317,7 +4340,21 @@ int32 WorldObject::CalculateSpellDamage(Unit const* target, SpellEntry const* sp
     if (pUnit)
     {
         if (Player* modOwner = pUnit->GetSpellModOwner())
+        {
             modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_ALL_EFFECTS, value, spell);
+
+            // Apply speed aura mods at cast time.
+            // Fixes Curse of Exhaustion not removing Amplify Curse.
+            switch (spellProto->EffectApplyAuraName[effect_index])
+            {
+                case SPELL_AURA_MOD_INCREASE_SPEED:
+                case SPELL_AURA_MOD_SPEED_ALWAYS:
+                case SPELL_AURA_MOD_SPEED_NOT_STACK:
+                case SPELL_AURA_MOD_DECREASE_SPEED:
+                    modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_SPEED, value, spell);
+                    break;
+            }
+        }
     }
 
     if (spellProto->Attributes & SPELL_ATTR_LEVEL_DAMAGE_CALCULATION && spellProto->spellLevel &&
@@ -4964,16 +5001,16 @@ void WorldObject::DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabili
 
     // Call default DealDamage (send critical in hit info for threat calculation)
     CleanDamage cleanDamage(0, BASE_ATTACK, damageInfo->HitInfo & SPELL_HIT_TYPE_CRIT ? MELEE_HIT_CRIT : MELEE_HIT_NORMAL, damageInfo->absorb, damageInfo->resist);
-    DealDamage(pVictim, damageInfo->damage, &cleanDamage, spellProto->HasAttribute(SPELL_ATTR_EX3_TREAT_AS_PERIODIC) ? DOT : SPELL_DIRECT_DAMAGE, GetSchoolMask(damageInfo->school), spellProto, durabilityLoss, damageInfo->spell);
+    DealDamage(pVictim, damageInfo->damage, &cleanDamage, spellProto->HasAttribute(SPELL_ATTR_EX3_TREAT_AS_PERIODIC) ? DOT : SPELL_DIRECT_DAMAGE, GetSchoolMask(damageInfo->school), spellProto, durabilityLoss, damageInfo->spell, true, damageInfo->reflected);
 }
 
-uint32 WorldObject::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell, bool addThreat)
+uint32 WorldObject::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell, bool addThreat, bool reflected)
 {
     // Should never happen since DealDamage is overriden in Unit class.
     if (pVictim == this)
         return 0;
 
-    return pVictim->DealDamage(pVictim, damage, cleanDamage, damagetype, damageSchoolMask, spellProto, durabilityLoss, spell, addThreat);
+    return pVictim->DealDamage(pVictim, damage, cleanDamage, damagetype, damageSchoolMask, spellProto, durabilityLoss, spell, addThreat, reflected);
 }
 
 bool WorldObject::CheckAndIncreaseCastCounter()

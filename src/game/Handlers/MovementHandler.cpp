@@ -847,7 +847,7 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket& recvData)
             pet->ClearUnitState(UNIT_STAT_POSSESSED);
             pet->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
             // out of range pet dismissed
-            if (!pet->IsWithinDistInMap(_player, pet->GetMap()->GetGridActivationDistance()))
+            if (!pet->IsWithinDistInMap(_player, pet->GetGridActivationDistance()))
                 _player->RemovePet(PET_SAVE_REAGENTS);
         }
     }

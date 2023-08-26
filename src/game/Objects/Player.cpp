@@ -1572,7 +1572,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             {
                 UpdateUnderwaterState();
                 CheckAreaExploreAndOutdoor();
-                LoadMapCellsAround(GetMap()->GetGridActivationDistance());
+                LoadMapCellsAround(GetGridActivationDistance());
                 m_areaCheckTimer = 0;
             }
             else
@@ -2251,12 +2251,11 @@ bool Player::SwitchInstance(uint32 newInstanceId)
         m_movementInfo.ClearTransportData();
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_ONTRANSPORT);
     }
+
     // Stop duel
     if (m_duel)
         if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
-    // Fix movement flags
-    m_movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING_OR_TURN);
 
     SetSelectionGuid(ObjectGuid());
     CombatStop();
@@ -2283,7 +2282,10 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING);
     RemoveCharmAuras();
     ResolvePendingMovementChanges(false, false);
-    DisableSpline();
+
+    if (HasMovementFlag(MOVEFLAG_SPLINE_ENABLED))
+        DisableSpline();
+
     SetMover(this);
 
     // Clear hostile refs so that we have no cross-map (and thread) references being maintained
@@ -2378,7 +2380,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         if (!(options & TELE_TO_NOT_UNSUMMON_PET))
         {
             //same map, only remove pet if out of range for new position
-            if (pet && !pet->IsWithinDist3d(x, y, z, GetMap()->GetGridActivationDistance()))
+            if (pet && !pet->IsWithinDist3d(x, y, z, GetGridActivationDistance()))
                 UnsummonPetTemporaryIfAny();
         }
 
@@ -2388,7 +2390,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             CombatStop();
         }
 
-        if (!IsWithinDist3d(x, y, z, GetMap()->GetVisibilityDistance()))
+        if (!IsWithinDist3d(x, y, z, GetVisibilityDistance()))
             RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TELEPORTED);
 
         // this will be used instead of the current location in SaveToDB
@@ -6877,7 +6879,7 @@ bool Player::SetPosition(float x, float y, float z, float orientation, bool tele
     {
         UpdateUnderwaterState();
         CheckAreaExploreAndOutdoor();
-        LoadMapCellsAround(GetMap()->GetGridActivationDistance());
+        LoadMapCellsAround(GetGridActivationDistance());
     }
 
     return true;
@@ -6958,6 +6960,8 @@ void Player::CheckAreaExploreAndOutdoor()
     // Pas d'exploration en cinematique
     if (watching_cinematic_entry)
         return;
+
+    GetZoneAndAreaId(m_zoneUpdateId, m_areaUpdateId);
 
     bool isOutdoor;
     uint16 areaFlag = GetTerrain()->GetAreaFlag(GetPositionX(), GetPositionY(), GetPositionZ(), &isOutdoor);
@@ -7597,7 +7601,9 @@ void Player::DuelComplete(DuelCompleteType type)
     SpellAuraHolderMap const& vAuras = m_duel->opponent->GetSpellAuraHolderMap();
     for (const auto& itr : vAuras)
     {
-        if (!itr.second->IsPositive() && itr.second->GetCasterGuid() == GetObjectGuid() && itr.second->GetAuraApplyTime() >= m_duel->startTime)
+        if (!itr.second->IsPositive() &&
+           (itr.second->GetCasterGuid() == GetObjectGuid() || itr.second->IsReflected()) &&
+            itr.second->GetAuraApplyTime() >= m_duel->startTime)
             auras2remove.push_back(itr.second->GetId());
     }
 
@@ -7608,7 +7614,9 @@ void Player::DuelComplete(DuelCompleteType type)
     SpellAuraHolderMap const& auras = GetSpellAuraHolderMap();
     for (const auto& aura : auras)
     {
-        if (!aura.second->IsPositive() && aura.second->GetCasterGuid() == m_duel->opponent->GetObjectGuid() && aura.second->GetAuraApplyTime() >= m_duel->startTime)
+        if (!aura.second->IsPositive() &&
+           (aura.second->GetCasterGuid() == m_duel->opponent->GetObjectGuid() || aura.second->IsReflected()) &&
+            aura.second->GetAuraApplyTime() >= m_duel->startTime)
             auras2remove.push_back(aura.second->GetId());
     }
 
@@ -7813,11 +7821,11 @@ void Player::_ApplyItemBonuses(ItemPrototype const *proto, uint8 slot, bool appl
         if (proto->Delay)
         {
             if (slot == EQUIPMENT_SLOT_RANGED)
-                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(RANGED_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
             else if (slot == EQUIPMENT_SLOT_MAINHAND)
-                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(BASE_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
             else if (slot == EQUIPMENT_SLOT_OFFHAND)
-                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME);
+                SetAttackTime(OFF_ATTACK, apply ? proto->Delay : BASE_ATTACK_TIME, IsInCombat());
         }
 
         if (CanModifyStats() && proto->Delay)
@@ -23777,17 +23785,19 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
     if (GetClass() == CLASS_MAGE)
         return "";
 
-    const std::unique_ptr<QueryResult> savedTalents(CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and spec = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return "";
 
-    if (!savedTalents)
+
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+    if (m_savedSpecSpells[specIndex].empty())
         return "";
 
     std::vector<uint32> vTreeTalents = { 0, 0, 0 };
 
-    do
+    for (uint32 spellId : m_savedSpecSpells[specIndex])
     {
-        Field* fields{ savedTalents->Fetch() };
-        const uint32 uiSavedTalentID{ fields[0].GetUInt32() };
+        const uint32 uiSavedTalentID{ spellId };
 
         for (uint32 i{}; i < sTalentStore.GetNumRows(); ++i)
         {
@@ -23811,7 +23821,7 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
             }
         }
 
-    } while (savedTalents->NextRow());
+    } 
 
     return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }

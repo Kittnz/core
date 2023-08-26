@@ -293,6 +293,13 @@ public:
 typedef std::map<std::string, WorldSessionScript*> SessionScriptsMap;
 #define ALL_SESSION_SCRIPTS(session, what) for (SessionScriptsMap::iterator it = session->scripts.begin(); it != session->scripts.end(); ++it) it->second->what;
 
+enum WorldRegion
+{
+    Western = 0,
+    Eastern,
+    MaxRegions
+};
+
 /// Player session in the World
 class WorldSession
 {
@@ -317,6 +324,9 @@ class WorldSession
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2,3);
         void SendQueryTimeResponse();
 
+        //simple email check for now, can expand later.
+        WorldRegion GetRegion() const { return HasChineseEmail() ? WorldRegion::Eastern : WorldRegion::Western;  }
+
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
         std::string GetUsername() const { return m_username; }
@@ -335,6 +345,8 @@ class WorldSession
         WorldSocket* GetSocket() { return m_Socket; }
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
+
+        uint32 GetBasePriority() const;
 
         uint32 m_tokenBalance = 0;
 
@@ -562,6 +574,7 @@ class WorldSession
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
 
+        uint32 GetMaxLevelCharacterValue() const { return _characterMaxLevel; }
         bool HasHighLevelCharacter() const;
 
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }

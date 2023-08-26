@@ -9025,7 +9025,7 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-    result = LoginDatabase.Query("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` ORDER BY `account`, `time` ASC");
+    result = LoginDatabase.Query("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` ORDER BY `account`, `time` ASC");
 
     if (result)
     {
@@ -9040,10 +9040,11 @@ void ObjectMgr::LoadShop()
             uint32 itemEntry = fields[4].GetUInt32();
             uint32 itemPrice = fields[5].GetUInt32();
             bool refunded = fields[6].GetBool();
+            uint32 dateUnix = fields[7].GetUInt32();
 
 
             //ordered by time ASC so last elem in vec is latest log for easier shop log output
-            auto item = new ShopLogEntry{ id, date, accountId, charGuid, itemEntry, itemPrice, refunded };
+            auto item = new ShopLogEntry{ id, date, accountId, charGuid, itemEntry, itemPrice, refunded, dateUnix };
             m_shopLogs[accountId].push_back(item);
             m_shopLogsLookup[id] = item;
 

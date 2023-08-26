@@ -203,6 +203,9 @@ bool CreatureCreatePos::Relocate(Creature* cr) const
         return false;
     }
 
+    //don't expect creatures to change this v much.
+    cr->GetZoneAndAreaId(cr->m_areaUpdateId, cr->m_zoneUpdateId);
+
     return true;
 }
 

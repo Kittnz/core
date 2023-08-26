@@ -399,6 +399,8 @@ class ChatHandler
         bool HandleLookupItemSetCommand(char* args);
         bool HandleLookupEventCommand(char* args);
         bool HandleLookupGuildCommand(char* args);
+        bool HandleLookupHwPrintCommand(char* args);
+
 
         bool HandleModifyHPCommand(char* args);
         bool HandleModifyManaCommand(char* args);
@@ -634,6 +636,7 @@ class ChatHandler
         bool HandleReloadBgAmounts(char* args);
         bool HandleReloadGmLevelsCommand(char* args);
         bool HandleReloadGmTicketTemplatesCommand(char* args);
+        bool HandleReloadDynamicVisibilityCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
