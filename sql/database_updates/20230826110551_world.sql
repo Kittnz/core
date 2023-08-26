@@ -9,3 +9,7 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 update creature_template set display_id1 = 20492, display_id2 = 20495 where entry = 61426;
 update creature_template set display_id1 = 20493 where entry = 61238;
 update creature_template set display_id1 = 20495 where entry = 61405;
+
+-- Change faction of npc 13699 to 994.
+update creature_template set faction = 994 where entry = 13699;
+
