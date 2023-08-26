@@ -13,3 +13,7 @@ update creature_template set display_id1 = 20495 where entry = 61405;
 -- Change faction of npc 13699 to 994.
 update creature_template set faction = 994 where entry = 13699;
 
+-- New NPC: Raven, display id 20496 (enable serverside), faction 31, level 1, critter, scale 1.
+REPLACE INTO creature_template VALUES
+(61643, 20496, 0, 0, 0, 0, 'Raven', '', 0, 1, 1, 8, 8, 0, 0, 20, 31, 0, 1, 0.857143, 1, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
+
