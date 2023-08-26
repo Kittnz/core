@@ -2552,7 +2552,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         {
             // Cast Shapeshift Form Effect to remove slows and roots.
             target->CastSpell(target, 9033, true);
-            if (form == FORM_MOONKIN && target->HasAura(53023))
+            if (form == FORM_MOONKIN && target->IsPlayer() && target->HasAura(53023))
                 target->AddAura(22650); // Glyph of the Moon
             break;
         }
@@ -2581,7 +2581,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         }
         else
         {
-            if (form == FORM_MOONKIN && !target->HasAura(53023))
+            if (form == FORM_MOONKIN && target->IsPlayer() && target->HasAura(53023))
                 target->ToPlayer()->RemoveAurasDueToSpell(22650);
 
             target->ResetTransformScale();
