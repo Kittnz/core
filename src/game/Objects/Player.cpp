@@ -18419,13 +18419,13 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
        // spell id, alliance display, horde display, default_alliance, defaut_horde 
         { FORM_CAT,       53002, 11444, 10054, 892,   8571  }, // Glyph of the Frostsaber
         { FORM_TRAVEL,    53005, 1992,  2161,  632,   632  },  // Glyph of the Stag
-        { FORM_AQUA,      53026, 4591,  2428,  2428,  2428  }, // Glyph of the Orca
+        { FORM_AQUA,      53026, 4591,  4591,  2428,  2428  }, // Glyph of the Orca
         { FORM_BEAR,      53008, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
         { FORM_DIREBEAR,  53008, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
         { FORM_GHOSTWOLF, 53029, 3123,  4613,  4613,  4613  }, // Glyph of the Ghostwolf
         { FORM_MOONKIN,   53020, 12237, 12237, 15374, 15375 }, // Glyph of the Frostkin
         { FORM_BEAR,      53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
-        { FORM_DIREBEAR,  53012, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
+        { FORM_DIREBEAR,  53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
         { FORM_MOONKIN,   53014, 20408, 20409, 15374, 15375 }, // Glyph of the Dreamkin
         { FORM_CAT,       53017, 20410, 20410, 892,   8571 },  // Glyph of the Panther
         { FORM_MOONKIN,   53023, GetNativeDisplayId(), GetNativeDisplayId(), 15374, 15375 }, // Glyph of the Moon

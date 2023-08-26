@@ -50,8 +50,10 @@ bool GossipHello_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature)
         pPlayer->SEND_GOSSIP_MENU(4719, pCreature->GetGUID());
     }
     else
+    {
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(4718, pCreature->GetGUID());
-
+    }
     return true;
 }
 

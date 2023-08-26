@@ -2552,10 +2552,8 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         {
             // Cast Shapeshift Form Effect to remove slows and roots.
             target->CastSpell(target, 9033, true);
-            if (form == FORM_MOONKIN && target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1))
-            {
-                target->AddAura(22650); // Glyph of Stars
-            }
+            if (form == FORM_MOONKIN && target->HasAura(53023))
+                target->AddAura(22650); // Glyph of the Moon
             break;
         }
         case FORM_BERSERKERSTANCE:
@@ -2583,10 +2581,8 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         }
         else
         {
-            if (form == FORM_MOONKIN && target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1))
-            {
+            if (form == FORM_MOONKIN && !target->HasAura(53023))
                 target->ToPlayer()->RemoveAurasDueToSpell(22650);
-            }
 
             target->ResetTransformScale();
             target->SetDisplayId(target->GetNativeDisplayId());
