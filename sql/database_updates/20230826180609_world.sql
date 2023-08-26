@@ -10,3 +10,12 @@ replace into item_template (entry, name, description, class, subclass, material,
 -- Attack and casting speed should just be reduced by 15% and displayed as such.
 
 UPDATE `spell_template` SET `auraDescription` = 'Movement speed reduced by $s2%. Attack and casting speed reduced by 15%.' WHERE `entry` = 57058;
+
+UPDATE `creature_template` SET `display_id1` = 20496 WHERE `entry` = 89000;
+UPDATE `creature_template` SET `scale` = 1 WHERE `entry` = 89000;
+
+UPDATE `item_template` SET `description` = 'For generations, the ravens of Gilneas have served as a timeless symbol of regal authority, reminding all of the lasting influence of House Greymane, even in the darkest of nights.' WHERE `entry` = 69000;
+UPDATE `spell_template` SET `description` = 'For generations, the ravens of Gilneas have served as a timeless symbol of regal authority, reminding all of the lasting influence of House Greymane, even in the darkest of nights.' WHERE `entry` = 49508;
+
+UPDATE `spell_template` SET `name` = 'Gilnean Raven' WHERE `entry` = 49508;
+UPDATE `spell_template` SET `spellIconId` = 2310 WHERE `entry` = 49508;
