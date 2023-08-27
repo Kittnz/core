@@ -3072,11 +3072,17 @@ void Unit::_UpdateAutoRepeatSpell()
         }
 
         // we want to shoot
-        Spell* spell = new Spell(this, m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo, true);
+        SpellEntry const* pSpellEntry = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo;
+        Spell* spell = new Spell(this, pSpellEntry, true);
         spell->prepare(m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_targets);
 
         // all went good, reset attack
         ResetAttackTimer(RANGED_ATTACK);
+
+        // Shooting with Wand should apply GCD to spells.
+        if (pSpellEntry->Category == SPELLCATEGORY_RANGED_WEAPON)
+            GetGlobalCooldownMgr().AddGlobalCooldown(SPELLCATEGORY_GLOBAL, GetAttackTimer(RANGED_ATTACK));
+
         SetStandState(UNIT_STAND_STATE_STAND);
     }
 }
@@ -6386,7 +6392,8 @@ void Unit::SetInCombatWithAssisted(Unit* pAssisted)
         return;
 
     // PvP combat participation pulse: refresh pvp timers on pvp combat (we are the assister)
-    if (pAssisted->IsPvP())
+    // Turtle: Do not flag people for PvP when buffing friendlies in dungeon.
+    if (pAssisted->IsPvP() && GetMapId() <= 1)
     {
         if (Player* pThisPlayer = GetCharmerOrOwnerPlayerOrPlayerItself())
         {

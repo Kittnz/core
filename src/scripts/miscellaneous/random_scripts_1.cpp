@@ -5221,123 +5221,10 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
     return true;
 }
 
-static std::unordered_set<ObjectGuid> baxxil_following;
-uint32 escortPlayerGuid;
-
-struct npc_baxxilAI : public ScriptedAI
-{
-    npc_baxxilAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset()
-    {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
-        m_dialogueOver = false;
-        m_followCheckTimer = 1000;
-        m_followingGuid = 0;
-    }
-    void UpdateAI(const uint32 diff)
-    {
-        if (m_creature->GetHealthPercent() < 30 && !m_dialogueOver)
-        {
-            m_creature->CombatStop(true);
-            m_creature->ClearInCombat();
-            m_creature->DeleteThreatList();
-            m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
-
-            m_dialogueOver = true;
-        }
-
-
-        if (!m_followingGuid.IsEmpty())
-        {
-            if (m_followCheckTimer <= diff)
-            {
-                auto player = sObjectAccessor.FindPlayer(m_followingGuid);
-                if (!player || m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == RANDOM_MOTION_TYPE || player->GetDistance(player) > 100.f)
-                    m_creature->ForcedDespawn();
-                m_followCheckTimer = 1000;
-            }
-            else
-                m_followCheckTimer -= diff;
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        DoMeleeAttackIfReady();
-    }
-    void JustRespawned() { Reset(); }
-
-    ObjectGuid m_followingGuid;
-    uint32 m_followCheckTimer;
-    bool m_dialogueOver;
-
-};
-
-CreatureAI* GetAI_npc_baxxil(Creature* _Creature) { return new npc_baxxilAI(_Creature); }
-
-bool GossipHello_npc_baxxil(Player* pPlayer, Creature* pCreature)
-{
-    auto baxxilAI = dynamic_cast<npc_baxxilAI*>(pCreature->AI());
-
-    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && !baxxilAI->m_dialogueOver)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're coming back to Sparkwater to serve your sentence.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    else if (baxxilAI->m_dialogueOver)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You cant escape the long arm of the law, partner. Let's go.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(91297, pCreature->GetGUID());
-
-    return true;
-}
-
-bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {        
-        pCreature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
-        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-        pCreature->Attack(pPlayer, true);
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pPlayer->CombatStop();
-
-        auto baxxilAI = dynamic_cast<npc_baxxilAI*>(pCreature->AI());
-        baxxilAI->Reset();
-
-        pCreature->MonsterSay("Okay, okay! Just whatever you say boss!");
-        pCreature->DestroyForPlayer(pPlayer);
-
-        Creature* escortNPC = pCreature->SummonCreature(91297, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN);
-
-        auto escortBaxxilAI = dynamic_cast<npc_baxxilAI*>(escortNPC->AI());
-        escortBaxxilAI->m_followingGuid = pPlayer->GetObjectGuid();
-
-        escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-        escortNPC->UpdateSpeed(MOVE_RUN, false, escortNPC->GetSpeedRate(MOVE_RUN) * 1.5);
-        baxxil_following.insert(pPlayer->GetObjectGuid());
-        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-        escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GossipHello_npc_hizzle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && baxxil_following.find(pPlayer->GetObjectGuid()) != baxxil_following.end())
-    {
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(50034))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here you are Hizzle, I got your prisoner red handed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        baxxil_following.erase(pPlayer->GetObjectGuid());
-    }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -5354,14 +5241,8 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         pCreature->MonsterSay("Good! All the damage he caused and now he's finally going to pay for it!");
-        if (Creature* prisoner = pPlayer->FindNearestCreature(91297, 30.0F))
-        {
-            prisoner->GetMotionMaster()->Clear();
-            prisoner->ForcedDespawn();
-        }
-        auto itr = std::find(baxxil_following.begin(), baxxil_following.end(), pPlayer->GetObjectGuid());
-        if (itr != baxxil_following.end())
-            baxxil_following.erase(itr);
+        pPlayer->RemoveAurasDueToSpell(50034);
+        pPlayer->RemoveMiniPet();
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
@@ -7352,13 +7233,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_hizzle";
     newscript->pGossipHello = &GossipHello_npc_hizzle;
     newscript->pGossipSelect = &GossipSelect_npc_hizzle;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_baxxil";
-    newscript->pGossipHello = &GossipHello_npc_baxxil;
-    newscript->pGossipSelect = &GossipSelect_npc_baxxil;
-    newscript->GetAI = &GetAI_npc_baxxil;
     newscript->RegisterSelf();
 
     newscript = new Script;

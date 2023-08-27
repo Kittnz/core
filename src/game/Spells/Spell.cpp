@@ -1652,7 +1652,8 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                         unit->GetHostileRefManager().threatAssist(pRealUnitCaster, 0.0f, m_spellInfo);
                     }
                 }
-                else if (unit->IsPvP() && unit->IsCharmerOrOwnerPlayerOrPlayerItself() &&
+                // Turtle: Do not flag players for buffing friendlies inside dungeons.
+                else if (unit->IsPvP() && unit->IsCharmerOrOwnerPlayerOrPlayerItself() && unit->GetMapId() <= 1 &&
                          IsFriendlyTarget(m_spellInfo->EffectImplicitTargetA[GetFirstEffectIndexInMask(effectMask)]))
                 {
                     if (Player* pPlayer = pRealUnitCaster->GetCharmerOrOwnerPlayerOrPlayerItself())
@@ -1680,6 +1681,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
     if (m_spellInfo->IsSpellAppliesAura(effectMask))
     {
         m_spellAuraHolder = CreateSpellAuraHolder(m_spellInfo, unit, pRealUnitCaster ? pRealUnitCaster : unit, m_caster, m_CastItem);
+        m_spellAuraHolder->SetAddedBySpell(true);
         m_spellAuraHolder->SetTriggered(IsTriggered());
         m_spellAuraHolder->SetReflected(isReflected);
         m_spellAuraHolder->setDiminishGroup(m_diminishGroup);
