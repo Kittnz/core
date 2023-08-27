@@ -4193,6 +4193,9 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
                 case 26056:
                     m_modifier.m_amount = 100;
                     break;
+                case 50061: // Gnome Racing Car
+                case 50062: // Goblin Racing Car
+                    break;
                 default:
                     uint32 skillValue = player->GetSkillValue(762);
 
