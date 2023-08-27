@@ -266,3 +266,8 @@ REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2578776, 1);
 REPLACE INTO `creature` VALUES (2578777,61643,0,0,0,0,-1075.51,1932.75,114.908,4.25368,120,120,5,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2578777,61643,0,0,0,0,-1075.51,1932.75,114.908,4.25368,300,300,0,100,100,0,0,0);
 REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2578777, 1);
+
+-- Changes by DRAGUNOVI
+DELETE FROM gameobject WHERE guid = '5010764';
+DELETE FROM game_event_gameobject WHERE guid = '5010764';
+DELETE FROM gameobject_battleground WHERE guid = '5010764';
