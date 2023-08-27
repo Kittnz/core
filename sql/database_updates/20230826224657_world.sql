@@ -271,3 +271,6 @@ REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2578777, 1);
 DELETE FROM gameobject WHERE guid = '5010764';
 DELETE FROM game_event_gameobject WHERE guid = '5010764';
 DELETE FROM gameobject_battleground WHERE guid = '5010764';
+
+-- Changes by VOJI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2578708, 1);
