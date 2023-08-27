@@ -222,6 +222,7 @@ if(MINGW)
 endif()
 
 target_link_libraries(shared PUBLIC re2::re2)
+target_link_libraries(shared PUBLIC fmt)
 
 
 SET_TARGET_PROPERTIES (shared PROPERTIES FOLDER "Game Libs")

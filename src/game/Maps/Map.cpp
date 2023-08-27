@@ -768,7 +768,7 @@ void Map::ProcessSessionPackets(PacketProcessing type)
     }
     beginTime = WorldTimer::getMSTimeDiffToNow(beginTime);
     if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS) && beginTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS))
-        sLog.out(LOG_PERFORMANCE, "Map %u inst %u: %3ums to update packets type %u", GetId(), GetInstanceId(), beginTime, type);
+        sLog.out(LOG_PERFORMANCE, "Map %u inst %u: %3ums to update packets type %u", GetId(), GetInstanceId(), beginTime, (uint32)type);
 }
 
 void Map::UpdateSessionsMovementAndSpellsIfNeeded()

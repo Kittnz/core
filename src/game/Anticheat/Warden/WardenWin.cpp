@@ -1405,7 +1405,7 @@ void WardenWin::LoadScriptedScans()
         if ((val & Required) != Required || !!(val & Prohibited))
         {
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: CWorld::enables expected 0x%lx prohibited 0x%lx received 0x%lx",
-                Required, Prohibited, val);
+                (uint32)Required, (uint32)Prohibited, val);
 
             return true;
         }

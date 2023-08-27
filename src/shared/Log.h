@@ -28,6 +28,8 @@
 #include <shared_mutex>
 #include "Util.h"
 
+#include "fmt/core.h"
+
 class Config;
 class ByteBuffer;
 

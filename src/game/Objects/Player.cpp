@@ -19426,7 +19426,7 @@ void Player::LeaveBattleground(bool teleportToEntryPoint)
                  bg->GetMapId(), bg->GetInstanceID(),
                  GetName(),
                  GetGUIDLow(), GetSession()->GetAccountId(), GetSession()->GetRemoteAddress().c_str(),
-                 bg->GetTypeID());
+                 (uint32)bg->GetTypeID());
     }
 }
 

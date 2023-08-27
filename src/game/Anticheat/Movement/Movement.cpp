@@ -1040,7 +1040,7 @@ bool Movement::CheckTeleport(uint16 opcode, MovementInfo& movementInfo)
         {
             // XXX temporary debug logging
             sLog.out(LOG_ANTICHEAT_BASIC, "ANTICHEAT: Player %s sent bad movement flags (0x%lx) with opcode %s (%u)",
-                mover->GetName(), moveFlags, LookupOpcodeName(opcode), opcode);
+                mover->GetName(), (uint32)moveFlags, LookupOpcodeName(opcode), opcode);
             movementInfo.RemoveMovementFlag(MovementFlags(removeFlags));
         }
     }
