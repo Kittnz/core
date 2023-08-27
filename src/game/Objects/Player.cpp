@@ -22987,7 +22987,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
             },GetName(), level);
             break;
         case 60:
-            !IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("%s has laughed in the face of death in the Hardcore challenge. %s has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
+            !IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("{} has laughed in the face of death in the Hardcore challenge. {} has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
             break;
         default:
             return;

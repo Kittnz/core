@@ -1621,7 +1621,7 @@ void ExportLogs()
 
                 
 
-                insertValues.push_back(string_format("('%s', '%s', %u, %u, '%s', '%s', %u, %u, %u, %u, %u, '%s')", dateTime.c_str(), logEntry.receiverName.c_str(), logEntry.receiverGuid, logEntry.receiverAccountId, logEntry.receiverIp.c_str(), logEntry.sourceType.data(),
+                insertValues.push_back(string_format("('{}', '{}', {}, {}, '{}', '{}', {}, {}, {}, {}, {}, '{}')", dateTime.c_str(), logEntry.receiverName.c_str(), logEntry.receiverGuid, logEntry.receiverAccountId, logEntry.receiverIp.c_str(), logEntry.sourceType.data(),
                     logEntry.sourceGuid, logEntry.sourceEntry, logEntry.money, logEntry.itemEntry, logEntry.itemCount, logEntry.lootType.data()));
 
                 if (insertValues.size() >= 500)
@@ -2797,8 +2797,8 @@ public:
 
         banResult = BAN_SUCCESS;
 
-        sWorld.SendGMText(string_format("%s banned %s %s (Reason %s).", holder->GetAuthor().c_str(), holder->GetBanTarget().c_str(), holder->GetDuration() > 0 ?
-            string_format("for %u seconds", holder->GetDuration()).c_str() : "permanently", holder->GetReason().c_str()));
+        sWorld.SendGMText(string_format("{} banned {} {} (Reason {}).", holder->GetAuthor().c_str(), holder->GetBanTarget().c_str(), holder->GetDuration() > 0 ?
+            string_format("for {} seconds", holder->GetDuration()).c_str() : "permanently", holder->GetReason().c_str()));
 
         if (session)
         {
@@ -4210,13 +4210,13 @@ std::string World::FormatLoggedChat(WorldSession* sess, const char* type, std::s
     ss << plr->GetName() << ":" << sess->GetAccountId();
 
     if (target)
-        return string_format("[%s] %s:%u -> %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[{}] {}:{} -> {}:{} : {}", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        return string_format("[%s:%u] %s:%u : %s", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[{}:{}] {}:{} : {}", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        return string_format("[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[{}:{}] {}:{} : {}", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        return string_format("[%s] %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[{}] {}:{} : {}", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
 
 
