@@ -204,6 +204,7 @@ class GlobalCooldownMgr                                     // Shared by Player 
     public:
         bool HasGlobalCooldown(SpellEntry const* spellInfo) const;
         void AddGlobalCooldown(SpellEntry const* spellInfo, uint32 gcd);
+        void AddGlobalCooldown(uint32 category, uint32 gcd);
         void CancelGlobalCooldown(SpellEntry const* spellInfo);
 
     private:
