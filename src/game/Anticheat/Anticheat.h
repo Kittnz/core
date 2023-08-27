@@ -162,7 +162,7 @@ class NullSessionAnticheat : public SessionAnticheatInterface
         bool ReadAddonInfo(WorldPacket* source, WorldPacket& target) override
         {
 #ifdef USING_DISCORD_BOT
-            std::string Message = string_format("[Fingerprint]: Account ID %u, IP %s reading addoninfo has no sessionAnticheat. Fingerprint will be 0.", _session->GetAccountId(), _session->GetRemoteAddress().c_str());
+            std::string Message = string_format("[Fingerprint]: Account ID {}, IP {} reading addoninfo has no sessionAnticheat. Fingerprint will be 0.", _session->GetAccountId(), _session->GetRemoteAddress().c_str());
             sDiscordBot->SendMessageToChannel(1083954369503973416, Message,
                 DiscordBot::MessagePriority::Requeue);
 #endif

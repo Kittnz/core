@@ -134,7 +134,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
         sWorld.SendGMTicketText(LANG_COMMAND_TICKETNEW, GetPlayer()->GetName(), newTicket.GetTicketCategoryName(TicketType(ticketType)), newTicket.GetId());
 
-        sWorld.SendDiscordMessage(1075859522268180540, string_format("New ticket %u created by %s:%u. Message: %s", newTicketId, GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), ticketText.c_str()));
+        sWorld.SendDiscordMessage(1075859522268180540, string_format("New ticket {} created by {}:{}. Message: {}", newTicketId, GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), ticketText.c_str()));
 
         sTicketMgr->AddTicket(std::move(newTicket));
         sTicketMgr->UpdateLastChange();

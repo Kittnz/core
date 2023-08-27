@@ -1422,7 +1422,7 @@ void ChatHandler::ExecuteCommand(const char* text)
 #ifdef USING_DISCORD_BOT
 
                     try {
-                        std::string message = string_format("Command: %s [Player: %s (Group Leader \"%s\", Account: %u) X: %f Y: %f Z: %f O: %f Map: %u Selected: %s]",
+                        std::string message = string_format("Command: {} [Player: {} (Group Leader \"{}\", Account: {}) X: {} Y: {} Z: {} O: {} Map: {} Selected: {}]",
                             realCommandFull.c_str(), p->GetName(), p->GetGroup() ? p->GetGroup()->GetLeaderGuid().GetString().c_str() : "NULL", GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetOrientation(), p->GetMapId(),
                             sel_guid.GetString().c_str());
 

@@ -151,7 +151,7 @@ void AccountAnalyser::CheckExtendedPrintMark()
 {
     if (_markedExtendedPrints.find(_currentSample.GetHash()) != _markedExtendedPrints.end())
     {
-        std::string message = string_format("Marked extended print logged in! %llu on account %s (ID %u). IP %s. ", _currentSample.GetHash(), _session->GetUsername(), _session->GetAccountId(),
+        std::string message = string_format("Marked extended print logged in! {} on account {} (ID {}). IP {}.", _currentSample.GetHash(), _session->GetUsername(), _session->GetAccountId(),
             _session->GetRemoteAddress().c_str());
 
         sWorld.SendGMText(message);
@@ -345,7 +345,7 @@ void AccountAnalyser::Initialize()
     if (sWorld.getConfig(CONFIG_BOOL_ANALYSIS_LOG_DISCORD_SUMMARY))
     {
 #ifdef USING_DISCORD_BOT
-        sDiscordBot->SendMessageToChannel(1089390435350360134, string_format("Character %s(%u)/ Account ID(%u) logged in from un-trusted IP. Suspicion rating %u / %u",
+        sDiscordBot->SendMessageToChannel(1089390435350360134, string_format("Character {}({})/ Account ID({}) logged in from un-trusted IP. Suspicion rating {} / {}",
             _session->GetPlayerName(), _session->GetPlayer() ? _session->GetPlayer()->GetGUIDLow() : 0, _accountId, susRating, RatingThreshold));
 #endif
     }
@@ -355,7 +355,7 @@ void AccountAnalyser::Initialize()
 #ifdef USING_DISCORD_BOT
         const static std::string SeniorGMPing = "<@&1085904084122468373> ";
 
-        sDiscordBot->SendMessageToChannel(1089390435350360134, string_format("%sWARNING! Character %s(%u)/ Account ID(%u) logged in from un-trusted IP. Suspicion rating %u / %u. THRESHOLD BROKEN.",
+        sDiscordBot->SendMessageToChannel(1089390435350360134, string_format("{}WARNING! Character {}({})/ Account ID({}) logged in from un-trusted IP. Suspicion rating {} / {}. THRESHOLD BROKEN.",
             PingOnWarning ? SeniorGMPing.c_str() : "", _session->GetPlayerName(), _session->GetPlayer() ? _session->GetPlayer()->GetGUIDLow() : 0, _accountId, susRating, RatingThreshold));
 #endif
         if (sWorld.getConfig(CONFIG_BOOL_ANALYSIS_AUTOMATIC_PUNIHSMENT))
@@ -371,10 +371,10 @@ void AccountAnalyser::LoadFromDB()
 
     //Get extended fingerprint history first.
     LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadFingerprintsCallback,
-        _session->GetAccountId(), string_format("SELECT * FROM `system_fingerprint_usage` WHERE `account` = %u", _session->GetAccountId()).c_str());
+        _session->GetAccountId(), string_format("SELECT * FROM `system_fingerprint_usage` WHERE `account` = {}", _session->GetAccountId()).c_str());
 
     LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadIPHistoryCallback,
-        _session->GetAccountId(), string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = %u  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
+        _session->GetAccountId(), string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = {}  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
 
 }
 
