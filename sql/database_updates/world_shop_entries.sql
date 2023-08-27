@@ -99,8 +99,8 @@ replace into shop_items values
 (87, 4, 51266, 'Druid: Glyph of the Ice Bear', 100),
 (88, 4, 51431, 'Druid: Glyph of the Frostkin', 100),
 (89, 4, 51830, 'Druid: Glyph of the Orca', 100),
-(90, 4, 51432, 'Druid: Glyph of Stars', 100),
-(94, 4, 50406, 'Druid: Glyph of the Stag', 100),
+(90, 4, 51432, 'Druid: Glyph of the Moon', 100),
+(94, 4, 51056, 'Druid: Glyph of the Stag', 100),
 -- Mounts
 (101, 5, 50071, 'Ivory Tallstrider', 100),
 (102, 5, 50072, 'Brown Tallstrider', 100), 
