@@ -239,7 +239,7 @@ BattleGround::~BattleGround()
 
     sBattleGroundMgr.RemoveBattleGround(GetInstanceID(), GetTypeID());
     if (GetInstanceID()) // Do not log deleted battleground templates.
-        sLog.out(LOG_BG, "[%u,%u]: winner=%u, duration=%s", GetTypeID(), GetInstanceID(), GetWinner(), secsToTimeString(GetStartTime() / 1000, true).c_str());
+        sLog.out(LOG_BG, "[%u,%u]: winner=%u, duration=%s", (uint32)GetTypeID(), GetInstanceID(), (uint32)GetWinner(), secsToTimeString(GetStartTime() / 1000, true).c_str());
 
     // Pas un BG 'template'
     if (GetBracketId() != BG_BRACKET_ID_NONE)

@@ -1197,7 +1197,7 @@ void ObjectMgr::CheckCreatureTemplates()
         if (cInfo->dmg_school >= MAX_SPELL_SCHOOL)
         {
             sLog.outErrorDb("Creature (Entry: %u) has invalid spell school value (%u) in `dmg_school`", cInfo->entry, cInfo->dmg_school);
-            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `dmg_school`=%u WHERE entry=%u;", SPELL_SCHOOL_NORMAL, cInfo->entry);
+            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `dmg_school`=%u WHERE entry=%u;", (uint32)SPELL_SCHOOL_NORMAL, cInfo->entry);
             const_cast<CreatureInfo*>(cInfo)->dmg_school = SPELL_SCHOOL_NORMAL;
         }
 
@@ -1219,7 +1219,7 @@ void ObjectMgr::CheckCreatureTemplates()
         if (cInfo->type && !sCreatureTypeStore.LookupEntry(cInfo->type))
         {
             sLog.outErrorDb("Creature (Entry: %u) has invalid creature type (%u) in `type`", cInfo->entry, cInfo->type);
-            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `type`=%u WHERE entry=%u;", CREATURE_TYPE_HUMANOID, cInfo->entry);
+            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `type`=%u WHERE entry=%u;", (uint32)CREATURE_TYPE_HUMANOID, cInfo->entry);
             const_cast<CreatureInfo*>(cInfo)->type = CREATURE_TYPE_HUMANOID;
         }
 
@@ -1234,7 +1234,7 @@ void ObjectMgr::CheckCreatureTemplates()
         if (cInfo->inhabit_type <= 0 || cInfo->inhabit_type > INHABIT_ANYWHERE)
         {
             sLog.outErrorDb("Creature (Entry: %u) has wrong value (%u) in `inhabit_type`, creature will not correctly walk/swim", cInfo->entry, cInfo->inhabit_type);
-            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `inhabit_type`=%u WHERE entry=%u;", INHABIT_ANYWHERE, cInfo->entry);
+            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `inhabit_type`=%u WHERE entry=%u;", (uint32)INHABIT_ANYWHERE, cInfo->entry);
             const_cast<CreatureInfo*>(cInfo)->inhabit_type = INHABIT_ANYWHERE;
         }
 
@@ -1279,7 +1279,7 @@ void ObjectMgr::CheckCreatureTemplates()
         if (cInfo->movement_type >= MAX_DB_MOTION_TYPE)
         {
             sLog.outErrorDb("Creature (Entry: %u) has wrong movement generator type (%u), ignored and set to IDLE.", cInfo->entry, cInfo->movement_type);
-            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `movement_type`=%u WHERE entry=%u;", IDLE_MOTION_TYPE, cInfo->entry);
+            sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `movement_type`=%u WHERE entry=%u;", (uint32)IDLE_MOTION_TYPE, cInfo->entry);
             const_cast<CreatureInfo*>(cInfo)->movement_type = IDLE_MOTION_TYPE;
         }
 
@@ -1857,7 +1857,7 @@ void ObjectMgr::LoadCreatures(bool reload)
             if (data.wander_distance == 0.0f)
             {
                 sLog.outErrorDb("Table `creature` have creature (GUID: %u Entry: %u) with `MovementType`=1 (random movement) but with `wander_distance`=0, replace by idle movement type (0).", guid, data.creature_id[0]);
-                sLog.out(LOG_DBERRFIX, "UPDATE `creature` SET `movement_type`=%u WHERE `guid`=%u AND `id`=%u;", IDLE_MOTION_TYPE, guid, data.creature_id[0]);
+                sLog.out(LOG_DBERRFIX, "UPDATE `creature` SET `movement_type`=%u WHERE `guid`=%u AND `id`=%u;", (uint32)IDLE_MOTION_TYPE, guid, data.creature_id[0]);
                 data.movement_type = IDLE_MOTION_TYPE;
             }
         }

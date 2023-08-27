@@ -216,7 +216,7 @@ GroupQueueInfo * BattleGroundQueue::AddGroup(Player *leader, Group* grp, BattleG
 
                         member->GetName(),
                         member->GetGUIDLow(), member->GetSession()->GetAccountId(), member->GetSession()->GetRemoteAddress().c_str(),
-                        BgTypeId, leader->GetName());
+                        (uint32)BgTypeId, leader->GetName());
                 }
             }
         }
@@ -230,7 +230,7 @@ GroupQueueInfo * BattleGroundQueue::AddGroup(Player *leader, Group* grp, BattleG
             sLog.out(LOG_BG, "%s:%u [%u:%s] tag BG=%u",
                      leader->GetName(),
                      leader->GetGUIDLow(), leader->GetSession()->GetAccountId(), leader->GetSession()->GetRemoteAddress().c_str(),
-                     BgTypeId);
+                (uint32)BgTypeId);
         }
 
         //add GroupInfo to m_QueuedGroups
