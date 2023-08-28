@@ -90,6 +90,7 @@
 #include "ChannelMgr.h"
 #include "CommandStream.h"
 #include "DynamicVisibilityMgr.h"
+#include "CommandStream.h"
 
 uint32 GetTokenBalance(uint32 accountId)
 {
@@ -14550,8 +14551,15 @@ bool ChatHandler::HandleReloadBgAmounts(char* args)
 
 bool ChatHandler::HandleReloadGmLevelsCommand(char* args)
 {
-    sAccountMgr.Load();
-    SendSysMessage("GM account levels and ban list reloaded.");
+    CommandStream stream{ args };
+    std::string x;
+    stream >> x;
+
+    if (x.empty())
+        sAccountMgr.LoadGmLevels();
+    else
+        sAccountMgr.Load();
+    SendSysMessage("GM account levels reloaded.");
     return true;
 }
 
