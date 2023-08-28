@@ -10602,13 +10602,13 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                     {
-                        this->GetSession()->SendNotification("You can equip items only poor or common quality in a Vargant's Endeavor challenge.");
+                        this->GetSession()->SendNotification("You can only equip items of poor and common quality in the Vagrant's Endeavor challenge.");
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
                     }
 
                     if ((pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT) > 0) || (pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) > 0))
                     {
-                        this->GetSession()->SendNotification("You cannot equip enchanted items while participating in a Vargant's Endeavor challenge.");
+                        this->GetSession()->SendNotification("You cannot equip enchanted items while participating in a Vagrant's Endeavor challenge.");
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
                     }
                 }
@@ -23011,7 +23011,7 @@ void Player::MailVagrantModeRewards(uint32 level)
     Item* ToMailItem = Item::CreateItem(50007, 1, this);
     ToMailItem->SaveToDB();
 
-    MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vargant Mode! As a gesture of gratitude, we give you a reliable Forworn Mule companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
+    MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vagrant Mode! As a gesture of gratitude, we give you a reliable Forworn Mule companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 }
