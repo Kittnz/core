@@ -124,7 +124,7 @@ class PlayerSocial
         MasterPlayer* GetMasterPlayer() const { return m_masterPlayer; }
     private:
         ObjectGuid m_playerGUID;
-        typedef std::map<ObjectGuid, FriendInfo> PlayerSocialMap;
+        typedef robin_hood::unordered_map<ObjectGuid, FriendInfo> PlayerSocialMap;
         PlayerSocialMap m_playerSocialMap;
         MasterPlayer* m_masterPlayer;
 };

@@ -513,8 +513,10 @@ set_property(DIRECTORY APPEND PROPERTY
 message(STATUS "Build flags (RELEASE) : ${CMAKE_CXX_FLAGS_RELEASE}")
 message(STATUS "Build flags (DEBUG)   : ${CMAKE_CXX_FLAGS_DEBUG}")
 
+
 add_subdirectory(src)
 add_subdirectory(dep)
+
 
 if (USE_EXTRACTORS)
     add_subdirectory(tools)

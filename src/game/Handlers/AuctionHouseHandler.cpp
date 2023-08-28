@@ -105,7 +105,7 @@ void WorldSession::SendAuctionCommandResult(AuctionEntry *auc, AuctionAction Act
             break;
     }
 
-    sLog.out(LOG_MAIL_AH, "SendAuctionCommandResult for auc Id %u, value %u, player %s(%u).", auc ? auc->Id : 0, ErrorCode,  GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
+    sLog.out(LOG_MAIL_AH, "SendAuctionCommandResult for auc Id %u, value %u, player %s(%u).", auc ? auc->Id : 0, (uint32)ErrorCode,  GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
     SendPacket(&data);
 }
 

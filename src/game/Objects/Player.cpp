@@ -17345,8 +17345,8 @@ void Player::_SaveAuras()
 
 bool Player::SaveAura(SpellAuraHolder* holder, AuraSaveStruct& saveStruct)
 {
-    // Double croise : pas de sauvegarde dans la DB (clef unique, peut pas avoir 2x meme aura)
-    if (holder->GetId() == 20007)
+    // Do not save these auras to database.
+    if (holder->GetSpellProto()->HasAuraInterruptFlag(SpellAuraInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_TELEPORTED)))
         return false;
 
     // Skip all holders from spells that are passive or channeled do not save single target holders (unless they were cast by the player)
@@ -19438,7 +19438,7 @@ void Player::LeaveBattleground(bool teleportToEntryPoint)
                  bg->GetMapId(), bg->GetInstanceID(),
                  GetName(),
                  GetGUIDLow(), GetSession()->GetAccountId(), GetSession()->GetRemoteAddress().c_str(),
-                 bg->GetTypeID());
+                 (uint32)bg->GetTypeID());
     }
 }
 
@@ -22999,7 +22999,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
             },GetName(), level);
             break;
         case 60:
-            !IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("%s has laughed in the face of death in the Hardcore challenge. %s has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
+            !IsHC60() ? sWorld.SendWorldText(50302, GetName(), GetName()) : sWorld.SendGMText(string_format("{} has laughed in the face of death in the Hardcore challenge. {} has begun the Inferno Challenge!", GetName(), GetName()).c_str(), 0);
             break;
         default:
             return;

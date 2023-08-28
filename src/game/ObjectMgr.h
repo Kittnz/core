@@ -523,7 +523,7 @@ typedef std::vector<FactionChangeMountData> FactionChangeMountsData;
 
 bool IsLanguageSkill(uint32 Skill);
 
-typedef std::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyTemplateMap;
+typedef robin_hood::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyTemplateMap;
 
 enum PermVariables
 {

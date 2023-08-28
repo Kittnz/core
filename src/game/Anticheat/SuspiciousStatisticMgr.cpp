@@ -43,7 +43,7 @@ INSTANTIATE_SINGLETON_1(SuspiciousStatisticMgr);
 
 std::string FormatPlayerNameToLink(const char* InPlayerName)
 {
-    return string_format("|cffffc0c0|Hplayer:%s|h[%s]|h|r", InPlayerName, InPlayerName);
+    return string_format("|cffffc0c0|Hplayer:{}|h[{}]|h|r", InPlayerName, InPlayerName);
 }
 
 void SuspiciousStatisticMgr::Initialize()
@@ -281,7 +281,7 @@ void SuspiciousStatisticMgr::RecordSuspiciousActivity(SuspiciousType::Value type
     sWorld.SendGMTextFlags(ACCOUNT_FLAG_SHOW_SUSPICIOUS, LANG_GM_ANNOUNCE_COLOR, "Suspicious", FinalMessage.c_str());
 
 #ifdef USING_DISCORD_BOT
-	std::string Message = string_format("[Suspicious]: %s", FinalMessage.c_str());
+	std::string Message = string_format("[Suspicious]: {}", FinalMessage.c_str());
 	sDiscordBot->SendMessageToChannel(1083954369503973416, Message,
 		DiscordBot::MessagePriority::Requeue);
 #endif

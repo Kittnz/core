@@ -111,6 +111,8 @@ add_library(framework STATIC
   ${framework_SRCS}
 )
 
+target_link_libraries(framework PUBLIC fmt)
+
 SET_TARGET_PROPERTIES (framework PROPERTIES FOLDER "Game Libs")
 
 target_link_libraries(framework

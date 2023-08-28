@@ -542,7 +542,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
                      _player->GetName(),
                      _player->GetGUIDLow(),
                      GetAccountId(), GetRemoteAddress().c_str(),
-                     bgTypeId);
+                (uint32)bgTypeId);
             break;
         default:
             sLog.outError("Battleground port: unknown action %u", action);
