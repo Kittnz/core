@@ -107,6 +107,8 @@ class AuthSocket: public BufferedSocket
         std::string _lastIP;
         std::string _email;
 
+        uint32 _joindateStamp = 0;
+
         BigNumber serverSecuritySalt;
         LockFlag lockFlags;
         uint32 gridSeed;
