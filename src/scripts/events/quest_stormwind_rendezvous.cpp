@@ -669,8 +669,6 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
             if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
             {
                 Onyxia->ForcedDespawn();
-                Onyxia->SetRespawnDelay(3 * MINUTE);
-                Onyxia->SetRespawnTime(3 * MINUTE);
                 Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
             }
             Timer = 15000;
