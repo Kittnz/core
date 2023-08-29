@@ -22082,7 +22082,7 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
 bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
 {
     Team newTeam = TeamForRace(newRace);
-    // 1- Change of mounts
+    // 1 - Change of mounts
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {
         auto ChangeItem = [&](Item* item)
@@ -22143,7 +22143,22 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
-    // 2- Items to reverse
+    // collect destroyed items for trash collector gaston
+    std::set<uint32> destroyedItems;
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT DISTINCT `item_entry` FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow()));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 itemId = fields[0].GetUInt32();
+            destroyedItems.insert(itemId);
+
+        } while (result->NextRow());
+    }
+
+    // 2 - Items to reverse
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_items.begin(); it != sObjectMgr.factionchange_items.end(); ++it)
     {
         ItemPrototype const* pNewItemProto    = ObjectMgr::GetItemPrototype(newTeam == ALLIANCE ? it->first : it->second);
@@ -22151,6 +22166,12 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
             continue;
 
         uint32 removeItemId = newTeam == ALLIANCE ? it->second : it->first;
+
+        // update destroyed items in db
+        if (destroyedItems.find(removeItemId) != destroyedItems.end())
+            CharacterDatabase.PExecute("UPDATE `character_destroyed_items` SET `item_entry`=%u WHERE `item_entry`=%u && `player_guid`=%u", pNewItemProto->ItemId, removeItemId, GetGUIDLow());
+
+        // update current items in inventory
         auto ChangeItem = [&](Item* item)
         {
             if (item && item->GetEntry() == removeItemId)
@@ -22186,7 +22207,7 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
-    // 3- And we finally check if there are still non-equipable items
+    // 3 - And we finally check if there are still non-equipable items
     //std::map<uint32, uint32> addItems;
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {
@@ -22247,6 +22268,7 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
             }
         }
     }
+
     CHANGERACE_LOG("Change of items [OK]");
     return true;
 }
