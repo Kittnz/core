@@ -1,3 +1,6 @@
+#ifndef _MANGOS_COMMAND_STREAM
+#define _MANGOS_COMMAND_STREAM
+
 #include <sstream>
 #include <type_traits>
 
@@ -56,3 +59,5 @@ public:
 private:
     std::istringstream _inputStream;
 };
+
+#endif
