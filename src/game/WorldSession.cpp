@@ -80,7 +80,7 @@ bool MapSessionFilter::Process(WorldPacket * packet)
 }
 
 /// WorldSession constructor
-WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip) :
+WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip, uint32 binaryIp) :
     m_muteTime(mute_time), m_connected(true), m_disconnectTimer(0), m_who_recvd(false),
     m_ah_list_recvd(false), _scheduleBanLevel(0), m_lastMailOpenTime(0),
     _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(sec), _accountId(id), _logoutTime(0), m_inQueue(false),
@@ -88,7 +88,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_cheatData(nullptr),
     m_bot(nullptr), m_lastReceivedPacketTime(0), m_clientOS(CLIENT_OS_UNKNOWN), m_clientPlatform(CLIENT_PLATFORM_UNKNOWN), _gameBuild(0),
     _charactersCount(10), _characterMaxLevel(sAccountMgr.GetHighestCharLevel(id)), _clientHashComputeStep(HASH_NOT_COMPUTED),
-    m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr),
+    m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr), m_BinaryAddress(binaryIp),
     _whisper_targets(id, sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_MAX), sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_BYPASS_LEVEL),
     sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_DECAY))
 {
