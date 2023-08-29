@@ -301,6 +301,7 @@ void World::AddSession_(WorldSession* s)
     }
 
     m_sessions[s->GetAccountId()] = s;
+    m_Ipconnections[s->GetBinaryAddress()]++;
 
     uint32 Sessions = GetActiveAndQueuedSessionCount();
     uint32 pLimit = GetPlayerAmountLimit();
@@ -369,6 +370,15 @@ int32 World::GetQueuedSessionPos(WorldSession* sess)
     return 0;
 }
 
+uint32 World::GetConnectionCountByIp(uint32 ip) const
+{
+    auto itr = m_Ipconnections.find(ip);
+    if (itr != m_Ipconnections.end())
+        return itr->second;
+    return 0;
+}
+
+
 void World::AddQueuedSession(WorldSession* sess)
 {
     sess->SetInQueue(true);
@@ -378,6 +388,18 @@ void World::AddQueuedSession(WorldSession* sess)
         static uint32 idxMarker = 0; // use in future to collect latest search and start there next search instead of iterating whole queue.
 
         uint32 priority = sess->GetBasePriority();
+
+        if (getConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY))
+        {
+            if (GetConnectionCountByIp(sess->GetBinaryAddress()) > 1)
+            {
+                const uint32 priorityReduction = getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX);
+                if (priorityReduction >= priority)
+                    priority = 0;
+                else
+                    priority -= priorityReduction;
+            }
+        }
         auto itr = m_priorityQueue.begin();
         for (; itr != m_priorityQueue.end(); ++itr)
         {
@@ -1157,12 +1179,15 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES, "DynamicVisibility.Enable", false);
 
-    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK, "PriorityQueue.PriorityPerTick", 50);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK, "PriorityQueue.PriorityPerTick", 1);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS, "PriorityQueue.DonatorSettings", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY, "PriorityQueue.DonatorPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY, "PriorityQueue.WesternPriority", 0);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR, "PriorityQueue.HighLevelChar", 50);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY, "PriorityQueue.HighLevelCharPriority", 0);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY, "PriorityQueue.PriorityPerAccountDay", 0);
+    setConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY, "PriorityQueue.IpPenaltyEnable", false);
+    setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX, "PriorityQueue.IpPenaltyPriorityReduction", 0);
 
 
     // Movement Anticheat
@@ -3039,7 +3064,7 @@ void World::UpdateSessions(uint32 diff)
 
                 for (auto& elem : m_priorityQueue)
                 {
-                    elem.first += getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK);
+                    elem.first += diff * getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK);
                 }
 
                 int position = 1;
@@ -3088,6 +3113,7 @@ void World::UpdateSessions(uint32 diff)
             if (!RemoveQueuedSession(pSession))
                 m_accountsLastLogout[pSession->GetAccountId()] = time_now;
             m_sessions.erase(itr);
+            m_Ipconnections[pSession->GetBinaryAddress()]--;
             delete pSession;
         }
     }

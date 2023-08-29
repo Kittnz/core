@@ -523,6 +523,13 @@ uint32 WorldSession::GetBasePriority() const
 
     priority += GetMaxLevelCharacterValue() >= sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR) ? sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY) : 0;
 
+    time_t currentTime = time(nullptr);
+    uint32 diff = currentTime - GetJoinTimeStamp();
+    uint32 diffInDays = diff / DAY;
+
+    priority += diffInDays * sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY);
+
+
     return priority;
 }
 

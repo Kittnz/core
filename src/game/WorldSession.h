@@ -305,7 +305,7 @@ class WorldSession
 {
     friend class CharacterHandler;
     public:
-        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip);
+        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip, uint32 binaryIp);
         ~WorldSession();
 
         bool PlayerLoading() const { return m_playerLoading; }
@@ -332,7 +332,7 @@ class WorldSession
         std::string GetUsername() const { return m_username; }
         void SetUsername(std::string const& s) { m_username = s; }
         void SetJoinTimeStamp(uint32 timestamp) { m_joinTimestamp = timestamp; }
-        uint32 GetJoinTimestamp() const { return m_joinTimestamp; }
+        uint32 GetJoinTimeStamp() const { return m_joinTimestamp; }
 
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
@@ -341,6 +341,7 @@ class WorldSession
         char const* GetPlayerName() const;
         void SetSecurity(AccountTypes security) { _security = security; }
         std::string const& GetRemoteAddress() const { return m_Address; }
+        uint32 GetBinaryAddress() const { return m_BinaryAddress; }
         std::string const& GetClientHash() const { return _clientHash; }
         void SetPlayer(Player *plr) { _player = plr; }
         void SetMasterPlayer(MasterPlayer *plr) { m_masterPlayer = plr; }
@@ -968,6 +969,7 @@ class WorldSession
         uint32 m_moveRejectTime;
         WorldSocket *m_Socket;
         std::string m_Address;
+        uint32 m_BinaryAddress = 0;
 
         AccountTypes _security;
         uint32 _accountId;
