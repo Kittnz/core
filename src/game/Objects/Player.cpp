@@ -22192,6 +22192,9 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
     {
         auto ChangeItem = [&](Item* pItem)
         {
+            if (!pItem)
+                return;
+
             // Also, don't wear it ? (ObjectMgr)
             bool previouslyHandled = false;
             for (std::map<uint32, uint32>::const_iterator it2 = sObjectMgr.factionchange_items.begin(); it2 != sObjectMgr.factionchange_items.end(); ++it2)
