@@ -170,7 +170,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, "
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate) "
 		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
@@ -251,7 +251,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 accFlags = fields[11].GetUInt32();
     std::string email = fields[12].GetCppString();
     std::string username = fields[13].GetCppString();
-    bool isBanned = fields[14].GetBool();
+    uint32 joinTimestamp = fields[14].GetUInt32();
+    bool isBanned = fields[15].GetBool();
     delete result;
 
     
@@ -338,6 +339,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Crypt.Init();
 
     m_Session->SetShouldBackupCharacters(sAccountMgr.UpdateAccountIP(id, GetRemoteAddress()));
+    m_Session->SetJoinTimeStamp(joinTimestamp);
     m_Session->SetUsername(account);
     m_Session->SetEmail(email);
     m_Session->SetGameBuild(BuiltNumberClient);

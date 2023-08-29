@@ -331,6 +331,9 @@ class WorldSession
         uint32 GetAccountId() const { return _accountId; }
         std::string GetUsername() const { return m_username; }
         void SetUsername(std::string const& s) { m_username = s; }
+        void SetJoinTimeStamp(uint32 timestamp) { m_joinTimestamp = timestamp; }
+        uint32 GetJoinTimestamp() const { return m_joinTimestamp; }
+
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
         bool HasChineseEmail() const;
@@ -989,6 +992,8 @@ class WorldSession
         bool _receivedPacketType[PACKET_PROCESS_MAX_TYPE];
 
         Anticheat::Movement* m_cheatData;
+
+        uint32 m_joinTimestamp = 0;
         std::string m_username, m_email;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
         PlayerBotEntry* m_bot;
