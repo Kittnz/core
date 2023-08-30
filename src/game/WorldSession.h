@@ -354,6 +354,8 @@ class WorldSession
 
         uint32 m_tokenBalance = 0;
 
+        bool CanQueueSkip() const { return m_canSkipQueue; }
+        void SetQueueSkip(bool value) { m_canSkipQueue = value; }
 
         void MarkSuspicious() { m_suspicious = true; }
         void UnmarkSuspicious() { m_suspicious = false; }
@@ -978,6 +980,7 @@ class WorldSession
 
         WhisperTargetLimits _whisper_targets;
 
+        bool m_canSkipQueue = false;
         time_t m_lastMailOpenTime;
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
