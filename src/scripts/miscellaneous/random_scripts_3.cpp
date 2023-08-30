@@ -5705,14 +5705,14 @@ bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
     case 61143: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         }
         pPlayer->SEND_GOSSIP_MENU(61143, pCreature->GetGUID());
         break;
     case 61147: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(61147, pCreature->GetGUID());
         break;
@@ -5812,14 +5812,14 @@ bool GossipHello_npc_commander_starwind(Player* pPlayer, Creature* pCreature)
     case 61143: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         }
         pPlayer->SEND_GOSSIP_MENU(61143, pCreature->GetGUID());
         break;
     case 61147: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(61147, pCreature->GetGUID());
         break;
