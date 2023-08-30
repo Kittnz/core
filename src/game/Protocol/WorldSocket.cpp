@@ -170,7 +170,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate), "
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate), a.queue_skip, "
 		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
@@ -252,7 +252,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     std::string email = fields[12].GetCppString();
     std::string username = fields[13].GetCppString();
     uint32 joinTimestamp = fields[14].GetUInt32();
-    bool isBanned = fields[15].GetBool();
+    bool canQueueSkip = fields[15].GetBool();
+    bool isBanned = fields[16].GetBool();
     delete result;
 
     
@@ -347,6 +348,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetOS(clientOs);
     m_Session->SetPlatform(clientPlatform);
     m_Session->LoadTutorialsData();
+    m_Session->SetQueueSkip(canQueueSkip);
     m_Session->InitAntiCheatSession(&K);
 
 
