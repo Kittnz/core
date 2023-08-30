@@ -325,7 +325,7 @@ class WorldSession
         void SendQueryTimeResponse();
 
         //simple email check for now, can expand later.
-        WorldRegion GetRegion() const { return HasChineseEmail() ? WorldRegion::Eastern : WorldRegion::Western;  }
+        WorldRegion GetRegion() const { return (HasChineseEmail() || GetSessionDbcLocale() == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
 
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
