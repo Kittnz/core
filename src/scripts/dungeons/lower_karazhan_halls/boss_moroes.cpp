@@ -342,16 +342,16 @@ bool OnGossipHello_boss_moroes(Player* pPlayer, Creature* pCreature)
 			if (pInstance->GetData(DATA_MOROES_STAGE) == 0)
 			{
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am here to challenge you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-				pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+				pPlayer->SEND_GOSSIP_MENU(61226, pCreature->GetGUID());
 			}
 			else if (pInstance->GetData(DATA_MOROES_STAGE) == 2)
 			{
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to challenge you again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-				pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+				pPlayer->SEND_GOSSIP_MENU(61226, pCreature->GetGUID());
 			}
 		}
 		else
-			pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+			pPlayer->SEND_GOSSIP_MENU(61225, pCreature->GetGUID());
 		return true;
 	}
 	return false;
