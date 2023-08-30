@@ -513,11 +513,11 @@ uint32 WorldSession::GetBasePriority() const
         priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY);
     else if (donatorSettings == 2) // donator boost for non-western only.
     {
-        if (HasChineseEmail())
+        if (GetRegion() == WorldRegion::Eastern)
             priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY);
     }
 
-    if (sWorld.getConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY))
+    if (sWorld.getConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY) && GetRegion() == WorldRegion::Western)
         priority += sWorld.getConfig(CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY);
 
 
