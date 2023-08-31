@@ -247,6 +247,26 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Dragunovi: Change the following equip effect's extra elemental attack to only count as a spell hit, currently hit counts both as a melee attack and a spell hit.
+        // brotalnia: I dont understand what this means, because these spells are already considered magic spell hits, not melee, and procFlags only includes ranged spell flag when they go off.
+        // brotalnia: Assuming he doesn't want them to trigger anything that can proc from melee, even if it can proc from spells too.
+        if ((procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_TAKE_MELEE_SWING | PROC_FLAG_TAKE_MELEE_ABILITY)) ||
+            (spellProto->procFlags & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_TAKE_MELEE_SWING | PROC_FLAG_TAKE_MELEE_ABILITY)))
+        {
+            switch (procSpell->Id)
+            {
+                case 7712:
+                case 7714:
+                case 7715:
+                case 7716:
+                case 7717:
+                case 7718:
+                case 7719:
+                case 16614:
+                    return SPELL_PROC_TRIGGER_FAILED;
+            }
+        }
+
         // Sanctified Command (Custom Paladin Talent)
         if (spellProto->Id == 45954 || spellProto->Id == 45955)
         {
