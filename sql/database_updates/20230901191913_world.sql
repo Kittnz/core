@@ -65,3 +65,14 @@ UPDATE `item_template` SET `description` = 'This token will alter your character
 UPDATE `item_template` SET `description` = 'This token will alter your character\'s skin, while leaving the haircut, hair color, and facial features unchanged.' WHERE `entry` = 61104;
 UPDATE `item_template` SET `description` = 'This token will alter your character\'s skin, while leaving the haircut, hair color, and facial features unchanged.' WHERE `entry` = 61105;
 UPDATE `item_template` SET `description` = 'This token will alter your character\'s skin, while leaving the haircut, hair color, and facial features unchanged.' WHERE `entry` = 61106;
+
+UPDATE `item_template` SET `bonding` = 1 WHERE `entry` = 53016;
+
+UPDATE quest_template SET
+Method = 0,
+Details = '',
+Objectives = '',
+RequestItemsText = 'You there! Are you looking to cash out those Arena Marks of Honor you''ve got lying around? Well, if you''re looking for rewards from our coffers, I could take some of those marks off your hands in exchange for a Token of Blood. Think of it as the local currency around here.'
+WHERE entry = 41118;
+
+UPDATE `quest_template` SET `Objectives` = 'Bring 50 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.', `ReqItemCount1` = 50 WHERE `entry` = 41119;
