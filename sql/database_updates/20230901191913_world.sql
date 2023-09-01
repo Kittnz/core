@@ -17,3 +17,7 @@ UPDATE `spell_template` SET `description` = 'The caster is surrounded by $n glob
 -- Assigned correct factions to some schmucks:
 
 UPDATE `creature_template` SET `subname` = '' WHERE `entry` in ( 65000, 65001, 65002, 65003, 65005, 65006, 65007, 65008, 65009, 65010, 65011, 65012, 65013, 65014, 65015, 65016, 65017, 65018, 60622, 65128);
+
+-- npc 80458 change lvl to 55, remove boss and leader tag
+
+UPDATE creature_template set level_min = 55, level_max = 55, rank = 1, racial_leader = 0 where entry = 80458;
