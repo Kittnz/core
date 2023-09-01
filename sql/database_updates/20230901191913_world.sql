@@ -13,3 +13,7 @@ UPDATE `faction` SET `reputation_list_id` = -1, `base_rep_race_mask1` = 0, `base
 
 
 UPDATE `spell_template` SET `description` = 'The caster is surrounded by $n globes of water. When a spell, melee or ranged attack hits the caster, 130 mana is restored to the caster. This expends one water globe. Only one globe will activate every few seconds. Lasts $d. Only one elemental shield can be active on the Shaman at any one time.' WHERE `entry` = 45527;
+
+-- Assigned correct factions to some schmucks:
+
+UPDATE `creature_template` SET `subname` = '' WHERE `entry` in ( 65000, 65001, 65002, 65003, 65005, 65006, 65007, 65008, 65009, 65010, 65011, 65012, 65013, 65014, 65015, 65016, 65017, 65018, 60622, 65128);
