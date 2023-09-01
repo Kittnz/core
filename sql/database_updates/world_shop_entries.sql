@@ -45,7 +45,7 @@ replace into shop_items values
 -- Skins
 (20, 2, 50105, 'Scarlet [Human, female only]', 160),
 (21, 2, 50106, 'Necromancer I [Human]', 160),
-(22, 2, 61106, 'Necromancer II [Human, male only]', 160),
+(22, 2, 61106, 'Necromancer II [Night Elf, male only]', 160),
 (23, 2, 50292, 'Arcane [Human]', 160),
 (24, 2, 50290, 'Azotha [Human, female only]', 160),
 (25, 2, 50291, 'Fel [Human, male only]', 160),
@@ -61,7 +61,7 @@ replace into shop_items values
 (35, 2, 81229, 'Death Knight [Dwarf, male only]', 160),
 (36, 2, 61105, 'Demon Hunter [Night Elf]', 160),
 (37, 2, 61104, 'Demon [Night Elf, male only]', 160),
-(38, 2, 83092, 'Naturalist I [Night Elf, male only]', 160),
+(38, 2, 83092, 'Naturalist I [Night Elf]', 160),
 (39, 2, 83099, 'Naturalist II [Night Elf]', 160),
 (40, 2, 83100, 'Naturalist III [Night Elf, male only]', 160),
 (41, 2, 50212, 'Leper [Gnome]', 160),
