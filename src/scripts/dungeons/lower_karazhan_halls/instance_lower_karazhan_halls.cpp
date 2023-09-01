@@ -23,10 +23,11 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 			break;
 		case 61204:
 		{
+			m_uiDRChampionGUID = pCreature->GetGUID();
 			for (uint8 i = 0; i < 2; ++i)
 			{
 				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60 * IN_MILLISECONDS))
-					m_uiAppretinceGUID[i] = slave->GetGUID();
+					m_uiDRAppretinceGUID[i] = slave->GetGUID();
 			}
 			break;
 		}
@@ -39,10 +40,12 @@ void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
 {
-	if (uiType == DATA_APPRETINCE_FIRST)
-		return m_uiAppretinceGUID[0];
-	else if (uiType == DATA_APPRETINCE_SECOND)
-		return m_uiAppretinceGUID[1];
+	if (uiType == DATA_DR_APPRETINCE_FIRST)
+		return m_uiDRAppretinceGUID[0];
+	else if (uiType == DATA_DR_APPRETINCE_SECOND)
+		return m_uiDRAppretinceGUID[1];
+	else if (uiType == DATA_DR_CHAMPION)
+		return m_uiDRChampionGUID;
 	else
 		return m_uiBossGUID[uiType];
 }
@@ -1030,8 +1033,8 @@ struct dark_rider_championAI : public ScriptedAI
 
 	void CheckAppretinces()
 	{
-		Creature* first = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_APPRETINCE_FIRST));
-		Creature* second = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_APPRETINCE_SECOND));
+		Creature* first = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_DR_APPRETINCE_FIRST));
+		Creature* second = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_DR_APPRETINCE_SECOND));
 
 		if (!first || !second)
 			return;
@@ -1120,25 +1123,26 @@ struct dark_rider_apprenticeAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_SoulExchangeTimer = urand(7, 14) * IN_MILLISECONDS;
+		m_SoulExchangeTimer = urand(7 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
 	{
+		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+			return;
+
 		if (m_SoulExchangeTimer < uiDiff)
 		{
-			if (Creature* master = m_creature->FindNearestCreature(61204, 40.0f, true, m_creature))
+			if (m_pInstance)
 			{
-				if (!master->HasAura(57065))
-					DoCastSpellIfCan(master, 57065, true);
+				if (Creature* master = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_DR_CHAMPION)))
+					DoCastSpellIfCan(master, 57065);
+
+				m_SoulExchangeTimer = urand(7 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
 			}
-			m_SoulExchangeTimer = urand(7, 14) * IN_MILLISECONDS;
 		}
 		else
 			m_SoulExchangeTimer -= uiDiff;
-
-		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-			return;
 
 		DoMeleeAttackIfReady();
 	}

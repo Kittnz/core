@@ -11,8 +11,9 @@ enum
 	DATA_MAX_ENCOUNTER,
 
 	DATA_MOROES_STAGE,
-	DATA_APPRETINCE_FIRST,
-	DATA_APPRETINCE_SECOND,
+	DATA_DR_CHAMPION,
+	DATA_DR_APPRETINCE_FIRST,
+	DATA_DR_APPRETINCE_SECOND,
 };
 
 class instance_lower_karazhan_halls : public ScriptedInstance
@@ -36,7 +37,8 @@ public:
 protected:
 	uint64 m_uiBossGUID[DATA_MAX_ENCOUNTER]{};
 	uint32 m_uiBossState[DATA_MAX_ENCOUNTER]{};
-	uint64 m_uiAppretinceGUID[2]{};
+	uint64 m_uiDRChampionGUID{};
+	uint64 m_uiDRAppretinceGUID[2]{};
 	uint32 m_uiMoroesStage;
 	std::string m_strInstData{};
 };
