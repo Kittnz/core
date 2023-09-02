@@ -99,3 +99,9 @@ UPDATE quest_template SET
 Details = 'Travel to the summit of Mount Hyjal and find my superior, Annesastrasza. She needs to know every pertinent detail about what happened.$B$BLeaving those demons lurking in the Barrow Deeps would have endangered us all. I will make sure to seal the cave while you deliver the news.$B$BYou have done us a great service, $N.',
 OfferRewardText = 'This is ill news you bring me. You have done well in assisting my daughter. The Greens are currently dealing with an emergency here and cannot spare the forces to deal with the demons in the Barrows right this moment.$B$BRest assured, however, we will most certainly keep them at bay.$B$BTake this as a gift for your efforts. You will find these to be of use here in Nordanaar. Now, if you will excuse me, I have much work to do in order to suppress the demon threat.'
 WHERE entry = 41097;
+
+-- Change quest requirement of The Upper Binding II , from 5 Elemental Fire to 5 Essence of Fire
+
+UPDATE `quest_template` SET `ReqItemId1` = 7078 WHERE `entry` = 41012;
+
+UPDATE `quest_template` SET `Objectives` = 'Gather 5 Essence of Fire, and 1 Fragment of Earth for Parnabus in Gilneas.', `Details` = 'I have attempted to use the Dragonkin Charge to repower the relic, but I have had no luck in energizing its latent power. I suspect we will require a more active source of ley energy.$B$BI will require some items before I can begin this ritual. First, I need you to collect the following items which should be easier to obtain. Five essence of fire, and a single fragment of earth should be enough to get us started. These materials might be tricky to find, but I do know that fragments of earth can be found from earth elementals seen in Silithus. I suggest that you start there.' WHERE `entry` = 41012;
