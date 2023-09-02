@@ -81,8 +81,9 @@ UPDATE quest_template SET
 Method = 0,
 Objectives = '',
 Details = '',
-RequestItemsText = 'Does your heart burn with a yearning for battle? The best of the best compete in the Blood Ring. Heed the call, and fight against the strongest competitors in Azeroth! Bring me proof of your triumphs, and you shall be showered in the spoils of war.',
+RequestItemsText = 'Does your heart burn with a yearning for battle? The best of the best compete in the Blood Ring. Heed the call, and fight against the strongest competitors in Azeroth! Bring me proof of your triumphs, and you shall be showered in the spoils of war.'
 WHERE entry = 41109;
+
 UPDATE quest_template SET
 Method = 0,
 Objectives = '',
