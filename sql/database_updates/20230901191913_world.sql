@@ -88,7 +88,7 @@ UPDATE quest_template SET
 Method = 0,
 Objectives = '',
 Details = '',
-RequestItemsText = 'You there, champion!$B$BLooking to make a name for yourself with us? Well, we are currently taking donations. Tokens of Blood are what we''re looking for. If you don''t think you will be using yours, return them to us, and I will put in a good word with the bosses on your behalf.',
+RequestItemsText = 'You there, champion!$B$BLooking to make a name for yourself with us? Well, we are currently taking donations. Tokens of Blood are what we''re looking for. If you don''t think you will be using yours, return them to us, and I will put in a good word with the bosses on your behalf.'
 WHERE entry = 41123;
 
 UPDATE quest_template SET
