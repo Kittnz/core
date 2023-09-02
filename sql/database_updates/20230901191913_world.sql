@@ -76,3 +76,25 @@ RequestItemsText = 'You there! Are you looking to cash out those Arena Marks of 
 WHERE entry = 41118;
 
 UPDATE `quest_template` SET `Objectives` = 'Bring 50 Tokens of Blood to Bradley Steel at the Gurubashi Arena in Stranglethorn Vale.', `ReqItemCount1` = 50 WHERE `entry` = 41119;
+
+UPDATE quest_template SET
+Method = 0,
+Objectives = '',
+Details = '',
+RequestItemsText = 'Does your heart burn with a yearning for battle? The best of the best compete in the Blood Ring. Heed the call, and fight against the strongest competitors in Azeroth! Bring me proof of your triumphs, and you shall be showered in the spoils of war.',
+WHERE entry = 41109;
+UPDATE quest_template SET
+Method = 0,
+Objectives = '',
+Details = '',
+RequestItemsText = 'You there, champion!$B$BLooking to make a name for yourself with us? Well, we are currently taking donations. Tokens of Blood are what we''re looking for. If you don''t think you will be using yours, return them to us, and I will put in a good word with the bosses on your behalf.',
+WHERE entry = 41123;
+
+UPDATE quest_template SET
+Details = 'The foul demons are mustering their strength, performing obscene rituals for some dark purpose I shudder to imagine. I am certain these Succubi are receiving some form of direction from their commanders, so it stands to reason that documented orders must be among them.$B$BIt is imperative that we acquire whatever plans we can find, and so I rely upon you, $N. Slay those vile temptresses until you find their orders, then return them to me promptly!'
+WHERE entry = 41090;
+
+UPDATE quest_template SET
+Details = 'Travel to the summit of Mount Hyjal and find my superior, Annesastrasza. She needs to know every pertinent detail about what happened.$B$BLeaving those demons lurking in the Barrow Deeps would have endangered us all. I will make sure to seal the cave while you deliver the news.$B$BYou have done us a great service, $N.',
+OfferRewardText = 'This is ill news you bring me. You have done well in assisting my daughter. The Greens are currently dealing with an emergency here and cannot spare the forces to deal with the demons in the Barrows right this moment.$B$BRest assured, however, we will most certainly keep them at bay.$B$BTake this as a gift for your efforts. You will find these to be of use here in Nordanaar. Now, if you will excuse me, I have much work to do in order to suppress the demon threat.'
+WHERE entry = 41097;
