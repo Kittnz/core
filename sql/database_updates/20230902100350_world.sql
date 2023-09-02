@@ -1,1 +1,4 @@
+-- Removed Scarlet Basilica from Cartographer's requirement.
 DELETE FROM `cartographer` WHERE `area_id` = 2267;
+-- Thorium Greatsword is now disenchantable.
+UPDATE `item_template` SET `disenchant_id` = 28 WHERE `entry` = 12764;
