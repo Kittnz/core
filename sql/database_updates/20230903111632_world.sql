@@ -7,3 +7,21 @@ update broadcast_text set male_text = 'I had always wondered what this place loo
 update quest_template set details = 'The wretched Greymane forces, perpetrators of my demise and desecrators of my church. Why did they target me?$B$BThe answer remains an enigma, yet I sense it is intertwined with the significance of this place. Centuries ago, a battle unfolded upon this very hill, where the forces of Gilneas, against all odds, triumphed over Arathor. I am convinced that the key to their triumph lay buried within these grounds, and the Regent\'s bloodlust coveted this dormant power for their own malevolent purposes.$B$BWe must delve deep into this mystery. Unearthing such power would bestow upon us a formidable advantage. I shall sift through these weathered tomes, unearthing knowledge that may shed light on our quarry.$B$BIn the interim, I ask you to embark on a perilous journey to Desolace. There, amidst the demons, seek out and retrieve the Eye of Xythos—an artifact rumored to possess the ability to uncover the secrets of the past, if one can channel the energies of the Forgotten Shadow, of course.' where entry = 40993;
 update quest_template set details = 'In my previous life as a living man, I was enthralled by the tales of the Azotha, our long-lost human predecessors from a bygone age. Their ancient knowledge and artifacts fascinated me.$B$BAlas, the tumultuous situation in Gilneas hindered my research on the Azotha, trapping me within these confining walls. Now, the gates have finally opened, but as a forsaken, venturing into human lands would be my ultimate demise.$B$BHowever, I have heard whispers of a secluded city known as Corthan, nestled in the treacherous Badlands. Legends speak of a powerful and enigmatic Azotha artifact hidden within its abandoned walls—the Hand of Corthan. Although the true nature of this relic eludes me, I am certain that it holds great significance and would be a valuable addition to my collection.' where entry = 40991;
 update quest_template set details = 'Greetings, $N.$B$BIt is rare that I admit my incorrect assumptions, but I must atone for this one. I previously thought the ogres of Brol\'ok should be allowed to grow and fester, like a pustulant sore, right next to Ravenshire. Let the living there be the ones to suffer with it.$B$BBut alas, whatever still holds vigil over this godforsaken land has a sense of irony. It was just last night that I saw a group of ogres attack, and kill, one of our own Deathstalkers. Out of my own pocket, I now purchase vengeance. Bring me twenty of their heads, and be rewarded.' where entry = 40854;
+-- Add the title Innkeeper to NPC ID 65003.
+update creature_template set subname = 'Innkeeper' where entry = 65003;
+-- Add the title General Goods Vendor to NPC ID 65002.
+update creature_template set subname = 'General Goods' where entry = 65002;
+-- NPC ID 61611 should have the Stormwind faction ID.
+update creature_template set faction = 72 where entry = 61611;
+-- NPC ID 61612 should have the Undercity faction ID.
+update creature_template set faction = 68 where entry = 61612;
+-- NPC ID 65015 should have the following gossip: Just go. I do not enjoy conversing with your kind anymore. Or rather yet.$B$BMove along.
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41541, 30136, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30136, 'Just go. I do not enjoy conversing with your kind anymore. Or rather yet.$B$BMove along.');
+replace into npc_text (ID, BroadcastTextID0) values (30136, 30136);
+update creature_template set gossip_menu_id = 41541 where entry = 65015;
+-- NPC ID 65000 should have the following gossip: What is it, mortal? Inside? Yes, you may. I believe you still hold an ability to see that there is nothing that blocks your way in. Correct?
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41542, 30137, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30137, 'What is it, mortal? Inside? Yes, you may. I believe you still hold an ability to see that there is nothing that blocks your way in. Correct?');
+replace into npc_text (ID, BroadcastTextID0) values (30137, 30137);
+update creature_template set gossip_menu_id = 41542 where entry = 65000;
