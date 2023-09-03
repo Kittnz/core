@@ -1,0 +1,2 @@
+-- Quest "Revenge After Death" should make you choose a reward and not give both.
+update quest_template set RewItemId1 = 0, RewItemId2 = 0, RewItemCount1 = 0, RewItemCount2 = 0, RewChoiceItemId1 = 61490, RewChoiceItemId2 = 61619, RewChoiceItemCount1 = 1, RewChoiceItemCount2 = 1 where entry = 40974;
