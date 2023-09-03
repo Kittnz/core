@@ -25,3 +25,7 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (41542, 30137, '0
 replace into broadcast_text (entry, Male_Text) values (30137, 'What is it, mortal? Inside? Yes, you may. I believe you still hold an ability to see that there is nothing that blocks your way in. Correct?');
 replace into npc_text (ID, BroadcastTextID0) values (30137, 30137);
 update creature_template set gossip_menu_id = 41542 where entry = 65000;
+-- Fixes item type to idol for a druid idol.
+update item_template set subclass = 7 where entry = 61293; -- Idol of the Moonfang
+update item_template set spellid_1 = 47357 where entry = 61698; -- Totem of the Calming River
+update item_template set max_durability = 120 where entry = 51738; -- Tunnel Fiend Carapace
