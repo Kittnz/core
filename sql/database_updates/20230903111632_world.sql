@@ -29,3 +29,5 @@ update creature_template set gossip_menu_id = 41542 where entry = 65000;
 update item_template set subclass = 7 where entry = 61293; -- Idol of the Moonfang
 update item_template set spellid_1 = 47357 where entry = 61698; -- Totem of the Calming River
 update item_template set max_durability = 120 where entry = 51738; -- Tunnel Fiend Carapace
+-- NPC gossip grammar fix.
+update broadcast_text set male_text = 'I had always wondered what this place looked like beyond the wall... Now that I\'ve been there I must admit I am disappointed. Perhaps once you have seen one kingdom you\'ve seen them all$B$BYou looking to do some work around here, or just admire the scenery?' where entry = 61289;
