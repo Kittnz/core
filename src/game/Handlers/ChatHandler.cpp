@@ -146,19 +146,20 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
-void EnforceEnglish(WorldSession* session, const std::string& msg)
+bool EnforceEnglish(WorldSession* session, const std::string& msg)
 {
     std::wstring w_normMsg;
     if (!Utf8toWStr(msg, w_normMsg))
     {
         ChatHandler(session).SendSysMessage("Don't use invalid characters in public chats!");
-        return;
+        return true;
     }
     if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
     {
         ChatHandler(session).SendSysMessage("Please use English in public chats.");
-        return;
+        return true;
     }
+    return false;
 }
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
@@ -806,7 +807,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         }
 
                         if (channel == u8"World")
-                            EnforceEnglish(this, msg);
+                        {
+                            if (EnforceEnglish(this, msg))
+                            return;
+                        }
 
                         // Check strict Latin for general chat channels
                         //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
@@ -914,7 +918,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (!GetPlayer()->IsAlive())
                 return;
 
-            EnforceEnglish(this, msg);
+            if (EnforceEnglish(this, msg))
+                return;
 
             GetPlayer()->Yell(msg, lang);
 
