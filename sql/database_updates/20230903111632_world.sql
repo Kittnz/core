@@ -35,3 +35,5 @@ update broadcast_text set male_text = 'I had always wondered what this place loo
 update spell_template SET Effect2 = 6, Effect3 = 6, effectDieSides2 = 1, effectDieSides3 = 1, effectBaseDice2 = 1, effectBaseDice3 = 1, EffectBasePoints1 = 4, EffectBasePoints2 = 4, EffectBasePoints3 = 4, effectApplyAuraName1 = 138, effectApplyAuraName2 = 140, effectApplyAuraName3 = 65, effectMiscValue2 = 1, effectMiscValue3 = 1, description = 'Increases attack and casting speed by %$s1 for $d.', auraDescription = 'Increases attack speed by %$s1 for $d.' WHERE entry = 18946; -- The Lion Horn of Stormwind (Proc Buff Effect).
 update spell_template SET procchance = 2, description = 'When struck in combat has a 2% chance of increasing all party member\'s attack and casting speed by %$18946s1 for $18946d.' WHERE entry = 20847; -- The Lion Horn of Stormwind (Equip Spell).
 update spell_template SET description = 'Increases the duration of your Hex by 1.5 secs.' WHERE entry = 45864; -- Hex Mastery.
+-- Fix justicar libram.
+update item_template set spellid_1 = 45666 where entry = 61337; -- Libram of the Justicar
