@@ -146,22 +146,6 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
-bool DontYellInFunnyCubes(WorldSession * session, const std::string & msg)
-{
-    std::wstring w_normMsg;
-    if (!Utf8toWStr(msg, w_normMsg))
-    {
-        ChatHandler(session).SendSysMessage("Don't use invalid characters in public chats!");
-        return true;
-    }
-    if (hasChinese(w_normMsg))
-    {
-        ChatHandler(session).SendSysMessage("Please use English in public chats.");
-        return true;
-    }
-    return false;
-}
-
 bool EnforceEnglish(WorldSession* session, const std::string& msg)
 {
     std::wstring w_normMsg;
@@ -171,6 +155,11 @@ bool EnforceEnglish(WorldSession* session, const std::string& msg)
         return true;
     }
     if (hasCyrillic(w_normMsg) || hasChinese(w_normMsg))
+    {
+        ChatHandler(session).SendSysMessage("Please use English in public chats.");
+        return true;
+    }
+    if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
     {
         ChatHandler(session).SendSysMessage("Please use English in public chats.");
         return true;
@@ -821,7 +810,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                         }
 
-                        if (channel == u8"World" || chn->HasFlag(Channel::CHANNEL_FLAG_TRADE)/* || chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL)*/)
+                        if (channel == u8"World")
                         {
                             if (EnforceEnglish(this, msg))
                                 return;
@@ -933,7 +922,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (!GetPlayer()->IsAlive())
                 return;
 
-            if (DontYellInFunnyCubes(this, msg))
+            if (EnforceEnglish(this, msg))
                 return;
 
             GetPlayer()->Yell(msg, lang);
