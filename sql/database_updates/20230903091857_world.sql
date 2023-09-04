@@ -1,1 +1,1 @@
-UPDATE quest_template SET Name = 'Unraveling the Mystery' WHERE entry = 8314;
+UPDATE quest_template SET title = 'Unraveling the Mystery' WHERE entry = 8314;
