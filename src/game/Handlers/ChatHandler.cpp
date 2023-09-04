@@ -146,6 +146,22 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
+bool EnforceEnglish(WorldSession* session, const std::string& msg)
+{
+    std::wstring w_normMsg;
+    if (!Utf8toWStr(msg, w_normMsg))
+    {
+        ChatHandler(session).SendSysMessage("Don't use invalid characters in public chats!");
+        return true;
+    }
+    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+    {
+        ChatHandler(session).SendSysMessage("Please use English in public chats.");
+        return true;
+    }
+    return false;
+}
+
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
     uint32 now = WorldTimer::getMSTime();
@@ -789,24 +805,30 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                         }
 
-                        // Check strict Latin for general chat channels
-                        if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
+                        if (channel == u8"World" || chn->HasFlag(Channel::CHANNEL_FLAG_TRADE) || chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
                         {
-                            // remove color, punct, ctrl, space
-                            if (AntispamInterface* a = sAnticheatLib->GetAntispam())
-                            {
-                                std::string normMsg = a->NormalizeMessage(msg, 0x1D);
-                                std::wstring w_normMsg;
-                                if (Utf8toWStr(normMsg, w_normMsg))
-                                {
-                                    if (!isBasicLatinString(w_normMsg, true))
-                                    {
-                                        ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
-                                        return;
-                                    }
-                                }
-                            }
+                            if (EnforceEnglish(this, msg))
+                                return;
                         }
+
+                        // Check strict Latin for general chat channels
+                        //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
+                        //{
+                        //    // remove color, punct, ctrl, space
+                        //    if (AntispamInterface* a = sAnticheatLib->GetAntispam())
+                        //    {
+                        //        std::string normMsg = a->NormalizeMessage(msg, 0x1D);
+                        //        std::wstring w_normMsg;
+                        //        if (Utf8toWStr(normMsg, w_normMsg))
+                        //        {
+                        //            if (!isBasicLatinString(w_normMsg, true))
+                        //            {
+                        //                ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
+                        //                return;
+                        //            }
+                        //        }
+                        //    }
+                        //}
 
                         if (auto cooldown = ChatCooldown())
                         {
@@ -893,6 +915,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
 
             if (!GetPlayer()->IsAlive())
+                return;
+
+            if (EnforceEnglish(this, msg))
                 return;
 
             GetPlayer()->Yell(msg, lang);
@@ -998,19 +1023,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
                 {
-                    // Still Alive & Newcomers channels should be strictly English-speaking:
-                    std::wstring w_normMsg;
-                    if (!Utf8toWStr(msg, w_normMsg))
-                    {
-                        ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
+                    if (EnforceEnglish(this, msg))
                         return;
-                    }
-
-                    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
-                    {
-                        ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
-                        return;
-                    }
                 }
 
                 if (guild->GetId() == GUILD_HARDCORE || guild->GetId() == GUILD_NEWCOMERS)
