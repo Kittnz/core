@@ -501,8 +501,10 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     void DoHandleOutro(Creature* pTarget)
     {
-        if (Player* pPlayer = GetPlayerForEscort())
-            pPlayer->GroupEventHappens(QUEST_NIGHTMARE_MANIFESTS, pTarget);
+        std::list<Player*> players;
+        me->GetAlivePlayerListInRange(me, players, 200.0f);
+        for (auto const& pPlayer : players)
+            pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
         // despawn manifests
         for (auto&& itr : summonedGUIDs)
@@ -1026,7 +1028,10 @@ bool QuestAccept_npc_keeper_remulos(Player* pPlayer, Creature* pCreature, const 
         // avoid starting the escort twice
         pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         if (npc_keeper_remulosAI* pEscortAI = dynamic_cast<npc_keeper_remulosAI*>(pCreature->AI()))
+        {
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
+            pEscortAI->SetMaxPlayerDistance(0);
+        }
     }
     if (pQuest->GetQuestId() == QUEST_WAKING_LEGENDS)
     {
