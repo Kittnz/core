@@ -62,9 +62,14 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"Roleplay" || m_name == u8"Hardcore" || m_name == u8"China")
+        if (m_name == u8"World")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
+            m_announce = false;
+        }
+        if ( m_name == u8"Ru" || m_name == u8"China" || m_name == u8"Welt")
+        {
+            m_flags |= CHANNEL_FLAG_GLOBAL;
             m_announce = false;
         }
         else
