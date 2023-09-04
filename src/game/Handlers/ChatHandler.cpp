@@ -821,7 +821,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                         }
 
-                        if (channel == u8"World" || chn->HasFlag(Channel::CHANNEL_FLAG_TRADE) || chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
+                        if (channel == u8"World" || chn->HasFlag(Channel::CHANNEL_FLAG_TRADE)/* || chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL)*/)
                         {
                             if (EnforceEnglish(this, msg))
                                 return;
