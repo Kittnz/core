@@ -146,6 +146,21 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
+void EnforceEnglish(WorldSession* session, const std::string& msg)
+{
+    std::wstring w_normMsg;
+    if (!Utf8toWStr(msg, w_normMsg))
+    {
+        ChatHandler(session).SendSysMessage("Don't use invalid characters in public chats!");
+        return;
+    }
+    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+    {
+        ChatHandler(session).SendSysMessage("Please use English in public chats.");
+        return;
+    }
+}
+
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
     uint32 now = WorldTimer::getMSTime();
@@ -790,24 +805,27 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                         }
 
+                        if (channel == u8"World")
+                            EnforceEnglish(this, msg);
+
                         // Check strict Latin for general chat channels
-                        if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
-                        {
-                            // remove color, punct, ctrl, space
-                            if (AntispamInterface* a = sAnticheatLib->GetAntispam())
-                            {
-                                std::string normMsg = a->NormalizeMessage(msg, 0x1D);
-                                std::wstring w_normMsg;
-                                if (Utf8toWStr(normMsg, w_normMsg))
-                                {
-                                    if (!isBasicLatinString(w_normMsg, true))
-                                    {
-                                        ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
-                                        return;
-                                    }
-                                }
-                            }
-                        }
+                        //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
+                        //{
+                        //    // remove color, punct, ctrl, space
+                        //    if (AntispamInterface* a = sAnticheatLib->GetAntispam())
+                        //    {
+                        //        std::string normMsg = a->NormalizeMessage(msg, 0x1D);
+                        //        std::wstring w_normMsg;
+                        //        if (Utf8toWStr(normMsg, w_normMsg))
+                        //        {
+                        //            if (!isBasicLatinString(w_normMsg, true))
+                        //            {
+                        //                ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
+                        //                return;
+                        //            }
+                        //        }
+                        //    }
+                        //}
 
                         if (auto cooldown = ChatCooldown())
                         {
@@ -895,6 +913,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             if (!GetPlayer()->IsAlive())
                 return;
+
+            EnforceEnglish(this, msg);
 
             GetPlayer()->Yell(msg, lang);
 
