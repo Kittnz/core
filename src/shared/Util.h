@@ -400,6 +400,16 @@ inline bool hasCyrillic(std::wstring const& str)
     return false;
 }
 
+inline bool hasChinese(std::wstring const& str)
+{
+    for (const auto& elem : str)
+    {
+        if (isEastAsianCharacter(elem))
+            return true;
+    }
+    return false;
+}
+
 inline bool isEastAsianString(std::wstring const& wstr, bool numericOrSpace)
 {
     for(size_t i = 0; i < wstr.size(); ++i)
