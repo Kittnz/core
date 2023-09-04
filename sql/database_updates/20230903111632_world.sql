@@ -36,4 +36,6 @@ update spell_template SET Effect2 = 6, Effect3 = 6, effectDieSides2 = 1, effectD
 update spell_template SET procchance = 2, description = 'When struck in combat has a 2% chance of increasing all party member\'s attack and casting speed by %$18946s1 for $18946d.' WHERE entry = 20847; -- The Lion Horn of Stormwind (Equip Spell).
 update spell_template SET description = 'Increases the duration of your Hex by 1.5 secs.' WHERE entry = 45864; -- Hex Mastery.
 -- Fix justicar libram.
-update item_template set spellid_1 = 45666 where entry = 61337; -- Libram of the Justicar
+update item_template set spellid_1 = 45666 where entry = 61337; -- Libram of the Justicar.
+-- Rename radio DJ in Everlook to Zappo Zapblast.
+update creature_template set name = 'Zappo Zapblast' where entry = 61641;
