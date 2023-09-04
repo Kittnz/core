@@ -106,6 +106,7 @@ class Channel
         CHANNEL_FLAG_CITY       = 0x20,
         CHANNEL_FLAG_LFG        = 0x40,
         CHANNEL_FLAG_VOICE      = 0x80,
+        CHANNEL_FLAG_GLOBAL     = 0x100,
         // General                  0x18 = 0x10 | 0x08
         // Trade                    0x3C = 0x20 | 0x10 | 0x08 | 0x04
         // LocalDefence             0x18 = 0x10 | 0x08
