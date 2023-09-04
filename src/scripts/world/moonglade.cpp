@@ -1127,7 +1127,7 @@ struct boss_eranikusAI : public ScriptedAI
             m_creature->SetLootRecipient(nullptr);
 
             // Get Remulos guid and make him stop summoning shades
-            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 50.0f))
+            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 200.0f))
             {
                 m_uiRemulosGUID = pRemulos->GetObjectGuid();
                 pRemulos->AI()->EnterEvadeMode();
