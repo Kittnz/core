@@ -1124,7 +1124,6 @@ struct boss_eranikusAI : public ScriptedAI
             m_creature->DeleteThreatList();
             m_creature->CombatStop(true);
             m_creature->LoadCreatureAddon(true);
-
             m_creature->SetLootRecipient(nullptr);
 
             // Get Remulos guid and make him stop summoning shades
@@ -1136,6 +1135,12 @@ struct boss_eranikusAI : public ScriptedAI
                 pRemulos->DeleteThreatList();
                 pRemulos->CombatStop(true);
             }
+
+            // Complete quest for nearby players
+            std::list<Player*> players;
+            me->GetAlivePlayerListInRange(me, players, 200.0f);
+            for (auto const& pPlayer : players)
+                pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
             // Despawn the priestess
             DoDespawnSummoned();
