@@ -159,6 +159,11 @@ bool EnforceEnglish(WorldSession* session, const std::string& msg)
         ChatHandler(session).SendSysMessage("Please use English in public chats.");
         return true;
     }
+    if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+    {
+        ChatHandler(session).SendSysMessage("Please use English in public chats.");
+        return true;
+    }
     return false;
 }
 
@@ -806,7 +811,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                         }
 
-                        if (channel == u8"World" || chn->HasFlag(Channel::CHANNEL_FLAG_TRADE) || chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
+                        if (chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
                         {
                             if (EnforceEnglish(this, msg))
                             return;
