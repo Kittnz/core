@@ -300,7 +300,7 @@ enum ClassFlag
     CF_PALADIN_JUDGEMENT_OF_WISDOM_LIGHT    = 19,   // CM0 00080000 Judgement of Wisdom & Judgement of Light
     CF_PALADIN_JUDGEMENT_OF_JUSTICE         = 20,   // CM0 00100000
     CF_PALADIN_HOLY_SHOCK                   = 21,   // CM0 00200000
-    CF_PALADIN_UNK22                        = 22,   // CM0 00400000
+    CF_PALADIN_HOLY_SHIELD                  = 22,   // CM0 00400000
     CF_PALADIN_JUDGEMENT                    = 23,   // CM0 00800000
     CF_PALADIN_BLESSING_OF_KINGS            = 24,   // CM0 01000000 Blessing of Kings & Greater Blessing of Kings
     CF_PALADIN_SEAL_OF_COMMAND              = 25,   // CM0 02000000
