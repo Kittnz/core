@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <cstdio>
+// #include <cstdio>
 #include <sstream>
 #include "lodepng.h"
 #include "tga.h"
