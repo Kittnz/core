@@ -148,6 +148,9 @@ uint32_t WorldSession::ChatCooldown()
 
 bool EnforceEnglish(WorldSession* session, const std::string& msg)
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_ENFORCED_ENGLISH))
+        return false;
+
     std::wstring w_normMsg;
     if (!Utf8toWStr(msg, w_normMsg))
     {
