@@ -1396,6 +1396,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_SUSPICIOUS_NPC_KILLED_ENABLE, "Suspicious.Npckilling.Enable", true);
     setConfig(CONFIG_FLOAT_SUSPICIOUS_MOVEMENTSPEED_REPORT_THRESHOLD, "Suspicious.Movement.MovementSpeedThreshold", 100.0f);
 
+    // Enforce English only on EU realms:
+    setConfig(CONFIG_BOOL_ENFORCED_ENGLISH, "EnforceEnglish", false);
+
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
