@@ -76,13 +76,14 @@ struct ShopEntry
 	uint32 Category;
 	uint32 Item;
 	std::string Description;
+    std::string Description_loc4;
 	uint32 Price;
-	std::string DescriptionLong;
 };
 
 struct ShopCategory
 {
 	std::string Name;
+	std::string Name_loc4;
 	std::string Icon;
 };
 
