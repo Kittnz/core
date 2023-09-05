@@ -9000,7 +9000,7 @@ void ObjectMgr::LoadShop()
 	m_ShopCategoriesMap.clear();
     m_shopLogs.clear();
 
-	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, icon FROM shop_categories");
+	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, Name_loc4, icon FROM shop_categories");
 
 	if (!result)
 	{
@@ -9014,9 +9014,11 @@ void ObjectMgr::LoadShop()
 		uint8 id = fields[0].GetUInt8();
 		std::string name = fields[1].GetString();
 		std::string icon = fields[2].GetString();
+		std::string name_loc4 = fields[3].GetString();
 
 		ShopCategory shopcategory;
 		shopcategory.Name = name;
+		shopcategory.Name_loc4 = name_loc4;
 		shopcategory.Icon = icon;
 
 		m_ShopCategoriesMap[id] = shopcategory;
@@ -9028,7 +9030,7 @@ void ObjectMgr::LoadShop()
 
 	m_ShopEntriesMap.clear();
 
-	result = WorldDatabase.Query("SELECT ID, category, item, description, price, descriptionLong FROM shop_items");
+	result = WorldDatabase.Query("SELECT ID, category, item, description, price, description_loc4 FROM shop_items");
 
 	if (!result)
 	{
@@ -9044,14 +9046,14 @@ void ObjectMgr::LoadShop()
 		uint32 item = fields[2].GetUInt32();
 		std::string text = fields[3].GetString();
 		uint32 price = fields[4].GetUInt32();
-		std::string descriptionLong = fields[5].GetString();
+        std::string description_loc4 = fields[5].GetString();
 
 		ShopEntry shopentry;
 		shopentry.Category = category;
 		shopentry.Item = item;
 		shopentry.Description = text;
 		shopentry.Price = price;
-		shopentry.DescriptionLong = descriptionLong;
+		shopentry.Description_loc4 = description_loc4;
 
         if (!price)
         {
