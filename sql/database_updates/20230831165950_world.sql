@@ -19,4 +19,4 @@ INSERT INTO `quest_start_scripts` (`id`, `delay`, `priority`, `command`, `datalo
 (1713, 104, 0, 3, 0, 6000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 256.87, -1440.35, 50.09, 0.78, 0, 'The Summoning: Bath\'rah the Windwatcher - Move'),
 (1713, 110, 0, 3, 0, 7500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253.05, -1459.09, 52.09, 1.39, 0, 'The Summoning: Bath\'rah the Windwatcher - Move'),
 (1713, 120, 0, 3, 0, 4000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250.84, -1470.58, 55.4491, 1.39626, 0, 'The Summoning: Bath\'rah the Windwatcher - Move'),
-(1713, 124, 0, 4, 147, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Summoning: Bath\'rah the Windwatcher - Add Questgiver Flag');
+(1713, 124, 0, 4, 147, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Summoning: Bath\'rah the Windwatcher - Add Questgiver Flag');
