@@ -44,6 +44,7 @@ CREATE TABLE `account`  (
   `server` tinyint NOT NULL DEFAULT 0,
   `comments` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `geolock_pin` int NULL DEFAULT 0,
+  `queue_skip` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_username`(`username`) USING BTREE,
   INDEX `idx_gmlevel`(`rank`) USING BTREE
