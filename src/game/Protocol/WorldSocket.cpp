@@ -359,7 +359,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     //Should be sent over IPC / MMAP. 
 
 
-    LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
+    //LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
 
     //m_Session->InitWarden(&K);
 
