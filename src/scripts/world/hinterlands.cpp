@@ -547,7 +547,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         kheyna->CastSpell(kheyna, SPELL_WHELP_TRANSFORM, false);
 
                         if (Creature* chromie = antnormi->FindNearestCreature(NPC_CHROMIE, 100, true))
-                            chromie->PMonsterSay("What? You're a dragon too?! The same as her?!");
+                            chromie->PMonsterSay(66157);
 
                         antnormi->AddAura(SPELL_BRONZE_AFFLICTION);
                     }
@@ -566,7 +566,7 @@ struct go_corrupted_crystal : public GameObjectAI
 
                         if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                         {
-                            kheyna->PMonsterSay("Focus on Antnormi! I'll tell you everything I know once we've killed her!");
+                            kheyna->PMonsterSay(66156);
                             kheyna->Attack(antnormi, false);
                             kheyna->SetSpeedRate(MOVE_RUN, 0.0);
                             kheyna->SetSpeedRate(MOVE_WALK, 0.0);

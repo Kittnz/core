@@ -176,16 +176,31 @@ uint32 AccountMgr::GetId(std::string username)
 
 void AccountMgr::Load()
 {
+    LoadGmLevels();
+    LoadAccountNames();
+    LoadAccountBanList();
+    LoadAccountWarnings();
+    LoadAccountIP();
+    LoadAccountForumName();
+    LoadAccountEmail();
+    LoadIPBanList();
+    LoadFingerprintBanList();
+    LoadAccountHighestCharLevel();
+    LoadDonatorAccounts();
+}
+
+void AccountMgr::LoadGmLevels()
+{
     m_accountSecurity.clear();
 
-    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account`"));
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account` WHERE `rank` > 0"));
 
     if (!result)
     {
         return;
     }
 
-    Field *fields = nullptr;
+    Field* fields = nullptr;
     do
     {
         fields = result->Fetch();
@@ -193,8 +208,6 @@ void AccountMgr::Load()
         AccountTypes secu = AccountTypes(fields[1].GetUInt32());
         switch (secu)
         {
-        case SEC_PLAYER:
-            break;
         case SEC_OBSERVER:
         case SEC_MODERATOR:
         case SEC_DEVELOPER:
@@ -206,17 +219,6 @@ void AccountMgr::Load()
             break;
         }
     } while (result->NextRow());
-
-    LoadAccountNames();
-    LoadAccountBanList();
-    LoadAccountWarnings();
-    LoadAccountIP();
-    LoadAccountForumName();
-    LoadAccountEmail();
-    LoadIPBanList();
-    LoadFingerprintBanList();
-    LoadAccountHighestCharLevel();
-    LoadDonatorAccounts();
 }
 
 void AccountMgr::LoadAccountNames()

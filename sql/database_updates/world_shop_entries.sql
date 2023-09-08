@@ -2,6 +2,7 @@ drop table if exists shop_categories;
 create table shop_categories (
   id int(11) unsigned not null auto_increment,
   name text,
+  name_loc4 text,
   primary key (id)
 ) engine=innodb default charset=utf8;
 
@@ -11,23 +12,26 @@ create table shop_items (
   category tinyint(3) unsigned not null default '0',
   item int(11) unsigned not null default '0',
   description text,
+  description_loc4 text,
   price int(11) unsigned default '0',
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 
+ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
+
 alter table shop_categories add icon varchar(32) not null default 'default' after name;
 
 replace into shop_categories values
-(1,  'Miscellaneous', 'default'),
-(2,  'Skins', 'ticket'),
-(3,  'Gameplay', 'toys'),
-(4,  'Glyphs', 'service'),
-(5,  'Mounts', 'mount'),
-(6,  'Companions', 'pet'),
-(7,  'Tabards', 'tabard'),
-(8,  'Illusions', 'scroll');
+(1,  'Miscellaneous', '杂项', 'default'),
+(2,  'Skins', '外观', 'ticket'),
+(3,  'Gameplay', '玩法玩具', 'toys'),
+(4,  'Glyphs', '雕文', 'service'),
+(5,  'Mounts', '坐骑', 'mount'),
+(6,  'Companions', '小宠物', 'pet'),
+(7,  'Tabards', '战袍', 'tabard'),
+(8,  'Illusions', '幻象', 'scroll');
 
-replace into shop_items values
+replace into shop_items (`id`, `category`, `item`, `description`, `price`) values 
 -- Miscellaneous
 (1, 1, 50000, 'Token: Character Name Change', 160),
 (2, 1, 80499, 'Token: Guild Name Change', 300),
@@ -215,4 +219,166 @@ replace into shop_items values
 (300, 8, 51215, 'Illusion: Satyr', 120),
 (301, 8, 53008, 'Illusion: Ogre', 120);
 
-ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
+UPDATE `shop_items` SET `description_loc4` = '代币：角色名称变更' WHERE `id` = 1;
+UPDATE `shop_items` SET `description_loc4` = '代币：公会名称变更' WHERE `id` = 2;
+UPDATE `shop_items` SET `description_loc4` = '代币：外观变更' WHERE `id` = 3;
+UPDATE `shop_items` SET `description_loc4` = '猩红 [人类，仅限女性]' WHERE `id` = 20;
+UPDATE `shop_items` SET `description_loc4` = '死灵法师 I [人类]' WHERE `id` = 21;
+UPDATE `shop_items` SET `description_loc4` = '死灵法师 II [人类，仅限男性]' WHERE `id` = 22;
+UPDATE `shop_items` SET `description_loc4` = '奥术【人类】' WHERE `id` = 23;
+UPDATE `shop_items` SET `description_loc4` = '阿索拉 [人类，仅限女性]' WHERE `id` = 24;
+UPDATE `shop_items` SET `description_loc4` = '邪能 [人类，仅限男性]' WHERE `id` = 25;
+UPDATE `shop_items` SET `description_loc4` = '达拉然法师 [人类]' WHERE `id` = 26;
+UPDATE `shop_items` SET `description_loc4` = '冰霜亲和【人类，仅限男性】' WHERE `id` = 27;
+UPDATE `shop_items` SET `description_loc4` = '死亡骑士[人类，仅限男性]' WHERE `id` = 28;
+UPDATE `shop_items` SET `description_loc4` = '蛮锤 I [矮人]' WHERE `id` = 29;
+UPDATE `shop_items` SET `description_loc4` = '蛮锤 II [矮人]' WHERE `id` = 30;
+UPDATE `shop_items` SET `description_loc4` = '蛮锤 III [矮人]' WHERE `id` = 31;
+UPDATE `shop_items` SET `description_loc4` = '蛮锤 IV [矮人]' WHERE `id` = 32;
+UPDATE `shop_items` SET `description_loc4` = '黑铁[矮人]' WHERE `id` = 33;
+UPDATE `shop_items` SET `description_loc4` = '土灵[矮人，仅限男性]' WHERE `id` = 34;
+UPDATE `shop_items` SET `description_loc4` = '死亡骑士[矮人，仅限男性]' WHERE `id` = 35;
+UPDATE `shop_items` SET `description_loc4` = '恶魔猎手【暗夜精灵】' WHERE `id` = 36;
+UPDATE `shop_items` SET `description_loc4` = '恶魔【暗夜精灵，仅限男性】' WHERE `id` = 37;
+UPDATE `shop_items` SET `description_loc4` = '自然学家 I [暗夜精灵，仅限男性]' WHERE `id` = 38;
+UPDATE `shop_items` SET `description_loc4` = '自然学家 II [暗夜精灵]' WHERE `id` = 39;
+UPDATE `shop_items` SET `description_loc4` = '自然学家III [暗夜精灵，仅限男性]' WHERE `id` = 40;
+UPDATE `shop_items` SET `description_loc4` = '麻风 [侏儒]' WHERE `id` = 41;
+UPDATE `shop_items` SET `description_loc4` = '死灵法师 III [侏儒]' WHERE `id` = 42;
+UPDATE `shop_items` SET `description_loc4` = '黑暗游侠[高等精灵]' WHERE `id` = 43;
+UPDATE `shop_items` SET `description_loc4` = '血精灵【高等精灵】' WHERE `id` = 44;
+UPDATE `shop_items` SET `description_loc4` = '黑石 I [兽人]' WHERE `id` = 45;
+UPDATE `shop_items` SET `description_loc4` = '混沌[兽人]' WHERE `id` = 46;
+UPDATE `shop_items` SET `description_loc4` = '玛格哈[兽人，仅限男性]' WHERE `id` = 47;
+UPDATE `shop_items` SET `description_loc4` = '黑石 II [兽人]' WHERE `id` = 48;
+UPDATE `shop_items` SET `description_loc4` = '黑石 III [兽人]' WHERE `id` = 49;
+UPDATE `shop_items` SET `description_loc4` = '恐怖骷髅 II [兽人，仅限男性]' WHERE `id` = 50;
+UPDATE `shop_items` SET `description_loc4` = '恐怖骷髅 III [兽人，仅限男性]' WHERE `id` = 51;
+UPDATE `shop_items` SET `description_loc4` = '恐怖骷髅 [兽人，仅限男性]' WHERE `id` = 52;
+UPDATE `shop_items` SET `description_loc4` = '丛林 I [巨魔]' WHERE `id` = 53;
+UPDATE `shop_items` SET `description_loc4` = '丛林II [巨魔]' WHERE `id` = 55;
+UPDATE `shop_items` SET `description_loc4` = '黑暗[巨魔]' WHERE `id` = 56;
+UPDATE `shop_items` SET `description_loc4` = '冰霜[巨魔]' WHERE `id` = 57;
+UPDATE `shop_items` SET `description_loc4` = '僵尸[巨魔]' WHERE `id` = 58;
+UPDATE `shop_items` SET `description_loc4` = '牛头人灵魂行者[牛头人]' WHERE `id` = 59;
+UPDATE `shop_items` SET `description_loc4` = '背包：28格' WHERE `id` = 61;
+UPDATE `shop_items` SET `description_loc4` = '背包：36格' WHERE `id` = 62;
+UPDATE `shop_items` SET `description_loc4` = '召唤：邮箱' WHERE `id` = 63;
+UPDATE `shop_items` SET `description_loc4` = '召唤：洗脑装置' WHERE `id` = 64;
+UPDATE `shop_items` SET `description_loc4` = '召唤：拍卖师' WHERE `id` = 65;
+UPDATE `shop_items` SET `description_loc4` = '召唤：修理机器人' WHERE `id` = 66;
+UPDATE `shop_items` SET `description_loc4` = '召唤：银行（骡子）' WHERE `id` = 67;
+UPDATE `shop_items` SET `description_loc4` = '召唤：银行（科多兽）' WHERE `id` = 68;
+UPDATE `shop_items` SET `description_loc4` = '大袋时尚硬币' WHERE `id` = 69;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：霜刃豹雕文' WHERE `id` = 86;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：冰熊雕文' WHERE `id` = 87;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：寒霜枭雕文' WHERE `id` = 88;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：虎鲸雕文' WHERE `id` = 89;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：星辰雕文' WHERE `id` = 90;
+UPDATE `shop_items` SET `description_loc4` = '德鲁伊：雄鹿雕文' WHERE `id` = 94;
+UPDATE `shop_items` SET `description_loc4` = '象牙陆行鸟' WHERE `id` = 101;
+UPDATE `shop_items` SET `description_loc4` = '棕色陆行鸟' WHERE `id` = 102;
+UPDATE `shop_items` SET `description_loc4` = '灰色陆行鸟' WHERE `id` = 103;
+UPDATE `shop_items` SET `description_loc4` = '绿松石陆行鸟' WHERE `id` = 104;
+UPDATE `shop_items` SET `description_loc4` = '粉红高陆行鸟' WHERE `id` = 105;
+UPDATE `shop_items` SET `description_loc4` = '迅捷乌鸦领主' WHERE `id` = 106;
+UPDATE `shop_items` SET `description_loc4` = '乱羽角鹰兽' WHERE `id` = 107;
+UPDATE `shop_items` SET `description_loc4` = '塞纳里奥角鹰兽' WHERE `id` = 108;
+UPDATE `shop_items` SET `description_loc4` = '翠绿角鹰兽' WHERE `id` = 109;
+UPDATE `shop_items` SET `description_loc4` = '迅捷魔法公鸡' WHERE `id` = 110;
+UPDATE `shop_items` SET `description_loc4` = '斑点刃豹' WHERE `id` = 121;
+UPDATE `shop_items` SET `description_loc4` = '褐色刃豹' WHERE `id` = 122;
+UPDATE `shop_items` SET `description_loc4` = '黄金刃豹' WHERE `id` = 123;
+UPDATE `shop_items` SET `description_loc4` = '荆棘谷老虎' WHERE `id` = 124;
+UPDATE `shop_items` SET `description_loc4` = '虎纹黎明刃豹' WHERE `id` = 125;
+UPDATE `shop_items` SET `description_loc4` = '远古霜刃剑' WHERE `id` = 126;
+UPDATE `shop_items` SET `description_loc4` = '远古夜刃豹' WHERE `id` = 127;
+UPDATE `shop_items` SET `description_loc4` = '蔚蓝霜刃剑' WHERE `id` = 128;
+UPDATE `shop_items` SET `description_loc4` = '装甲黎明刃豹' WHERE `id` = 129;
+UPDATE `shop_items` SET `description_loc4` = '装甲幽灵虎' WHERE `id` = 130;
+UPDATE `shop_items` SET `description_loc4` = '黑色祖利安刃豹' WHERE `id` = 131;
+UPDATE `shop_items` SET `description_loc4` = '驯服的拉克希里' WHERE `id` = 132;
+UPDATE `shop_items` SET `description_loc4` = '上古奎尔多雷战马' WHERE `id` = 141;
+UPDATE `shop_items` SET `description_loc4` = '装甲联盟战马' WHERE `id` = 142;
+UPDATE `shop_items` SET `description_loc4` = '装甲灰骏马' WHERE `id` = 143;
+UPDATE `shop_items` SET `description_loc4` = '装甲黑色死亡战马' WHERE `id` = 144;
+UPDATE `shop_items` SET `description_loc4` = '装甲绯红死亡战马' WHERE `id` = 145;
+UPDATE `shop_items` SET `description_loc4` = '噩梦行者' WHERE `id` = 146;
+UPDATE `shop_items` SET `description_loc4` = '骑乘斑纹斑马' WHERE `id` = 147;
+UPDATE `shop_items` SET `description_loc4` = '美酒节公羊' WHERE `id` = 148;
+UPDATE `shop_items` SET `description_loc4` = '装甲美酒节公羊' WHERE `id` = 149;
+UPDATE `shop_items` SET `description_loc4` = '远古黑色公羊' WHERE `id` = 150;
+UPDATE `shop_items` SET `description_loc4` = '暗角雄鹿' WHERE `id` = 151;
+UPDATE `shop_items` SET `description_loc4` = '装甲美酒节科多兽' WHERE `id` = 162;
+UPDATE `shop_items` SET `description_loc4` = '远古黑色巨狼' WHERE `id` = 163;
+UPDATE `shop_items` SET `description_loc4` = '远古红色巨狼' WHERE `id` = 164;
+UPDATE `shop_items` SET `description_loc4` = '装甲部落战狼' WHERE `id` = 165;
+UPDATE `shop_items` SET `description_loc4` = '装甲象牙迅猛龙' WHERE `id` = 181;
+UPDATE `shop_items` SET `description_loc4` = '装甲紫罗兰迅猛龙' WHERE `id` = 182;
+UPDATE `shop_items` SET `description_loc4` = '装甲红色迅猛龙' WHERE `id` = 183;
+UPDATE `shop_items` SET `description_loc4` = '装甲黑曜石迅猛龙' WHERE `id` = 184;
+UPDATE `shop_items` SET `description_loc4` = '装甲黑色战熊' WHERE `id` = 185;
+UPDATE `shop_items` SET `description_loc4` = '装甲紫色战熊' WHERE `id` = 186;
+UPDATE `shop_items` SET `description_loc4` = '装甲红色战熊' WHERE `id` = 187;
+UPDATE `shop_items` SET `description_loc4` = '装甲霜鬃战熊' WHERE `id` = 188;
+UPDATE `shop_items` SET `description_loc4` = '暴雪大战熊' WHERE `id` = 189;
+UPDATE `shop_items` SET `description_loc4` = '暗月跳舞熊' WHERE `id` = 190;
+UPDATE `shop_items` SET `description_loc4` = '欢乐缤纷云' WHERE `id` = 223;
+UPDATE `shop_items` SET `description_loc4` = '悲伤缤纷云' WHERE `id` = 224;
+UPDATE `shop_items` SET `description_loc4` = '巨龟战熊' WHERE `id` = 225;
+UPDATE `shop_items` SET `description_loc4` = '黑色幽灵虎' WHERE `id` = 226;
+UPDATE `shop_items` SET `description_loc4` = '绿色幽灵虎' WHERE `id` = 227;
+UPDATE `shop_items` SET `description_loc4` = '装甲冰霜迅猛龙' WHERE `id` = 228;
+UPDATE `shop_items` SET `description_loc4` = '猩红战马' WHERE `id` = 229;
+UPDATE `shop_items` SET `description_loc4` = '棕色斑马' WHERE `id` = 230;
+UPDATE `shop_items` SET `description_loc4` = '恐怖图腾科多兽' WHERE `id` = 231;
+UPDATE `shop_items` SET `description_loc4` = '破坏神之石' WHERE `id` = 241;
+UPDATE `shop_items` SET `description_loc4` = '熊猫项圈' WHERE `id` = 242;
+UPDATE `shop_items` SET `description_loc4` = '奔波尔霸' WHERE `id` = 243;
+UPDATE `shop_items` SET `description_loc4` = '绿色小神龙' WHERE `id` = 245;
+UPDATE `shop_items` SET `description_loc4` = '骸骨魔像' WHERE `id` = 246;
+UPDATE `shop_items` SET `description_loc4` = '枭兽宝宝' WHERE `id` = 247;
+UPDATE `shop_items` SET `description_loc4` = '蓝龙雏龙' WHERE `id` = 248;
+UPDATE `shop_items` SET `description_loc4` = '肯瑞托魔仆' WHERE `id` = 249;
+UPDATE `shop_items` SET `description_loc4` = '波利' WHERE `id` = 250;
+UPDATE `shop_items` SET `description_loc4` = '霜狼幽灵幼崽' WHERE `id` = 251;
+UPDATE `shop_items` SET `description_loc4` = '泰达希尔树苗' WHERE `id` = 252;
+UPDATE `shop_items` SET `description_loc4` = '凤凰雏鸟' WHERE `id` = 253;
+UPDATE `shop_items` SET `description_loc4` = '幽灵飞蜥' WHERE `id` = 254;
+UPDATE `shop_items` SET `description_loc4` = '奇思妙想云' WHERE `id` = 255;
+UPDATE `shop_items` SET `description_loc4` = '幽灵虎幼崽' WHERE `id` = 256;
+UPDATE `shop_items` SET `description_loc4` = '小潘' WHERE `id` = 257;
+UPDATE `shop_items` SET `description_loc4` = '闪翼' WHERE `id` = 258;
+UPDATE `shop_items` SET `description_loc4` = '小克' WHERE `id` = 259;
+UPDATE `shop_items` SET `description_loc4` = '熔火恶犬小宠物' WHERE `id` = 260;
+UPDATE `shop_items` SET `description_loc4` = '小拉格纳罗斯' WHERE `id` = 261;
+UPDATE `shop_items` SET `description_loc4` = '夏日天空战袍' WHERE `id` = 271;
+UPDATE `shop_items` SET `description_loc4` = '夏日烈焰战袍' WHERE `id` = 272;
+UPDATE `shop_items` SET `description_loc4` = '冰霜战袍' WHERE `id` = 273;
+UPDATE `shop_items` SET `description_loc4` = '烈焰战袍' WHERE `id` = 274;
+UPDATE `shop_items` SET `description_loc4` = '虚空战袍' WHERE `id` = 275;
+UPDATE `shop_items` SET `description_loc4` = '自然战袍' WHERE `id` = 276;
+UPDATE `shop_items` SET `description_loc4` = '奥术战袍' WHERE `id` = 277;
+UPDATE `shop_items` SET `description_loc4` = '光辉战袍' WHERE `id` = 278;
+UPDATE `shop_items` SET `description_loc4` = '愤怒战袍' WHERE `id` = 279;
+UPDATE `shop_items` SET `description_loc4` = '暗月马戏团战袍' WHERE `id` = 280;
+UPDATE `shop_items` SET `description_loc4` = '天灾军团战袍' WHERE `id` = 281;
+UPDATE `shop_items` SET `description_loc4` = '被盗的达拉然战袍' WHERE `id` = 282;
+UPDATE `shop_items` SET `description_loc4` = '激流堡战袍' WHERE `id` = 283;
+UPDATE `shop_items` SET `description_loc4` = '猩红军团战袍' WHERE `id` = 285;
+UPDATE `shop_items` SET `description_loc4` = '探险家战袍' WHERE `id` = 286;
+UPDATE `shop_items` SET `description_loc4` = '希尔斯布莱德战袍' WHERE `id` = 287;
+UPDATE `shop_items` SET `description_loc4` = '黑色魔纹战袍' WHERE `id` = 288;
+UPDATE `shop_items` SET `description_loc4` = '红色魔纹战袍' WHERE `id` = 289;
+UPDATE `shop_items` SET `description_loc4` = '金色魔纹战袍' WHERE `id` = 290;
+UPDATE `shop_items` SET `description_loc4` = '幻象：狼人' WHERE `id` = 291;
+UPDATE `shop_items` SET `description_loc4` = '幻象：幽灵' WHERE `id` = 292;
+UPDATE `shop_items` SET `description_loc4` = '幻象：女妖' WHERE `id` = 293;
+UPDATE `shop_items` SET `description_loc4` = '幻象：魅魔' WHERE `id` = 294;
+UPDATE `shop_items` SET `description_loc4` = '幻象：暗影' WHERE `id` = 295;
+UPDATE `shop_items` SET `description_loc4` = '幻象：豺狼人' WHERE `id` = 296;
+UPDATE `shop_items` SET `description_loc4` = '幻象：熊怪' WHERE `id` = 297;
+UPDATE `shop_items` SET `description_loc4` = '幻象：熊猫人' WHERE `id` = 298;
+UPDATE `shop_items` SET `description_loc4` = '幻象：天灾军团' WHERE `id` = 299;
+UPDATE `shop_items` SET `description_loc4` = '幻象：萨特' WHERE `id` = 300;
+UPDATE `shop_items` SET `description_loc4` = '幻象：食人魔' WHERE `id` = 301;

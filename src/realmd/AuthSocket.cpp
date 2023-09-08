@@ -420,6 +420,8 @@ bool AuthSocket::_HandleLogonChallenge()
             _geoUnlockPIN = fields[8].GetUInt32();
             _email = fields[9].GetCppString();
 
+            _joindateStamp = fields[10].GetUInt32();
+
             uint8 securityRank = fields[11].GetUInt8();
             if (securityRank >= forcePinAccountRank)
             {

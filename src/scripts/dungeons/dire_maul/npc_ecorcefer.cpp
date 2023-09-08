@@ -80,7 +80,7 @@ bool GossipSelect_npc_ecorcefer(Player *player, Creature *_Creature, uint32 send
 //        _Creature->MonsterSay("Cheater Spotted", 0, 0);
         return true;
     }
-    _Creature->MonsterSay("As you wish...", 0, 0);
+    _Creature->MonsterSay(66104, 0, 0);
     _Creature->MonsterMoveWithSpeed(123.706f, -278.828f, -55.868f, -10.0f, 10, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
     ((npc_ecorceferAI*)_Creature->AI())->m_uiCheckDoorTimer = 10000;
     pInstance->SetData(TYPE_SPEAK_ECORCEFER, DONE);

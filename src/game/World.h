@@ -390,6 +390,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY,
     CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR,
     CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -653,6 +655,8 @@ enum eConfigBoolValues
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
     CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
     CONFIG_BOOL_ANNIVERSARY,
+    CONFIG_BOOL_ENFORCED_ENGLISH,
+    CONFIG_BOOL_SEA_REALM,
     CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY,
     CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA,
     CONFIG_BOOL_ANALYSIS_DO_SHARED_DATA_DETAILED_REPORT,
@@ -668,6 +672,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_ENABLE_PRIORITY_QUEUE,
     CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY,
     CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES,
+    CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -890,6 +895,7 @@ class World
 
         //player Queue
         typedef std::list<WorldSession*> Queue;
+        uint32 GetConnectionCountByIp(uint32 ip) const;
         void AddQueuedSession(WorldSession*);
         bool RemoveQueuedSession(WorldSession* session);
         int32 GetQueuedSessionPos(WorldSession*);
@@ -1284,6 +1290,8 @@ class World
         //higher is first in the map, higher points -> higher priority.
         //Priority is built from multiple factors, acc reg date, char levels etc etc.
         std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue;
+
+        std::unordered_map<uint32, uint32> m_Ipconnections; // binary IP, count
 
         //sessions that are added async
         void AddSession_(WorldSession* s);

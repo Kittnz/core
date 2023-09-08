@@ -135,6 +135,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::open(void *a)
     }
 
     m_Address = remote_addr.get_host_addr();
+    m_BinaryAddress = remote_addr.get_ip_address();
 
     if (((SocketName*)this)->SendStartupPacket() == -1)
         return -1;

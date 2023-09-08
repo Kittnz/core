@@ -148,6 +148,9 @@ uint32_t WorldSession::ChatCooldown()
 
 bool EnforceEnglish(WorldSession* session, const std::string& msg)
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_ENFORCED_ENGLISH))
+        return false;
+
     std::wstring w_normMsg;
     if (!Utf8toWStr(msg, w_normMsg))
     {
@@ -511,7 +514,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 				std::string categories = "Categories:";
 
 				for (auto &itr : sObjectMgr.GetShopCategoriesList())
-					categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
+                    if (sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
+                        categories += std::to_string(itr.first) + "=" + itr.second.Name_loc4 + "="+itr.second.Icon+";";
+                    else
+                        categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
 
 				_player->SendAddonMessage(prefix, categories);
 
@@ -547,15 +553,19 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 					if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
 					{
-						_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-							+ itr.second.Description + "="
+                        if(sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
+                            _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
+							+ itr.second.Description_loc4 + "="
 							+ std::to_string(itr.second.Price) + "="
 							+ pProto->Description + "="
 							+ std::to_string(itr.second.Item));
-					}
-
-					
-
+                        else
+                        _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
+                            + itr.second.Description + "="
+                            + std::to_string(itr.second.Price) + "="
+                            + pProto->Description + "="
+                            + std::to_string(itr.second.Item));
+					}		
 				}
 
 				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=end");
@@ -814,9 +824,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
                         {
                             if (EnforceEnglish(this, msg))
-                            return;
+								return;
                         }
-
                         // Check strict Latin for general chat channels
                         //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
                         //{
@@ -1027,46 +1036,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
             {
-                //if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
-                //{
-                //    // Still Alive & Newcomers channels should be strictly English-speaking:
-                //    std::wstring w_normMsg;
-                //    if (!Utf8toWStr(msg, w_normMsg))
-                //    {
-                //        ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
-                //        return;
-                //    }
-
-                //    if (hasCyrillic(w_normMsg) || isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
-                //    {
-                //        ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
-                //        return;
-                //    }
-                //}
-
-                //if (guild->GetId() == GUILD_HARDCORE || guild->GetId() == GUILD_NEWCOMERS)
-                //{
-                //    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
-                //    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, nullptr, guild))
-                //    {
-                //        guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
-
-
-                //        if (lang != LANG_ADDON)
-                //        {
-                //            try {
-                //                PlayerPointer plr = GetPlayerPointer();
-                //                std::ostringstream ss;
-                //                ss << plr->GetName() << ":" << GetAccountId();
-                //                //sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
-                //                //    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
-                //            }
-                //            catch (const std::exception&) {}
-                //        }
-                //    }
-                //}
-                /*else*/
-                    guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+				guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
             }
 
             if (lang != LANG_ADDON)

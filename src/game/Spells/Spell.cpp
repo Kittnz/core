@@ -6193,7 +6193,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_DONT_REPORT;
                     }
                     float range = 25.0F;
-                    if (m_caster->FindNearestGameObject(1000001, range) || m_caster->FindNearestGameObject(1000236, range))
+                    // if (m_caster->FindNearestGameObject(1000001, range) || m_caster->FindNearestGameObject(1000236, range))
+                    if (m_caster->FindNearestGameObject(1100000, range) || m_caster->FindNearestGameObject(1100001, range))
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("You cannot build tents too close to other tents.");
                         return SPELL_FAILED_DONT_REPORT;
