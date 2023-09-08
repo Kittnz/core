@@ -167,9 +167,8 @@ replace into shop_items (`id`, `category`, `item`, `description`, `price`) value
 (231, 5, 50536, 'Twilight', 1000),
 -- Companions
 (241, 6, 13584, 'Diablo Stone', 80),
-(242, 6, 13583, 'Panda Collar', 80),
+(242, 6, 13583, 'Panda Cub', 80),
 (243, 6, 20371, 'Murky', 80),
-(245, 6, 19055, 'Tiny Green Dragon', 80),
 (246, 6, 50013, 'Bone Golem', 80),
 (247, 6, 50019, 'Moonkin Hatchling', 80),
 (248, 6, 50083, 'Azure Whelpling', 80),
