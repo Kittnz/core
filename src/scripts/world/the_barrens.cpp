@@ -49,8 +49,8 @@ struct npc_pollyAI : public ScriptedAI
     {
         if (!b_text)
         {
-            m_creature->MonsterSay("MmmmmMmmmm... Enormous chemically altered cracker...", 0, 0);
-            m_creature->MonsterSay("What the squawk? Squawk squawk, squawk? SQUAWK!", 0, 0);
+            m_creature->MonsterSay(66149, 0, 0);
+            m_creature->MonsterSay(66150, 0, 0);
             b_text = true;
         }
     }

@@ -559,7 +559,7 @@ struct boss_ostariusAI : public ScriptedAI
 
             if (!spawn)
             {
-                m_creature->MonsterSay("Malfunction. Unable to create more constructs.");
+                m_creature->MonsterSay(66110);
                 return;
             }
 

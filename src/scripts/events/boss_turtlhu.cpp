@@ -104,7 +104,7 @@ struct boss_concaviusAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {   
-        m_creature->PMonsterSay("Void... awaits.");
+        m_creature->PMonsterSay(66111);
 
         uint32 m_respawn_delay_Timer = urand(3, 5) * DAY;
 
@@ -295,7 +295,7 @@ struct concavius_summonerAI : public ScriptedAI
     void EnterCombat()
     {
         if (m_creature->GetEntry() == 92212)
-            m_creature->MonsterSay("Too late, miserable mongrels! The Master has sent one of his best soldiers to aid us! Your end is now!");
+            m_creature->MonsterSay(66112);
     }
     void JustRespawned() {}
 };
