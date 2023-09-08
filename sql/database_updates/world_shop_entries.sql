@@ -21,7 +21,7 @@ ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT ''
 
 alter table shop_categories add icon varchar(32) not null default 'default' after name;
 
-replace into shop_categories values
+replace into shop_categories (id, name, name_loc4, icon) values 
 (1,  'Miscellaneous', '杂项', 'default'),
 (2,  'Skins', '外观', 'ticket'),
 (3,  'Gameplay', '玩法玩具', 'toys'),
