@@ -207,7 +207,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
             std::shared_lock<std::shared_mutex> l{ logLock };
 
 
-            std::string log = string_format(str, args...);
+            std::string log = string_format_depr(str, args...);
 
 #ifdef USING_DISCORD_BOT
             LogDiscord(type, log);

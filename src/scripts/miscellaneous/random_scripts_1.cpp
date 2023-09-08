@@ -1526,7 +1526,7 @@ bool GossipHello_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->HasAura(MOONKIN_FED))
     {
-        pCreature->MonsterSay("Hoot!");
+        pCreature->MonsterSay(66114);
         pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
     }
     else
@@ -1551,7 +1551,7 @@ bool GossipSelect_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature, ui
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("Hoot!");
+        pCreature->MonsterSay(66114);
         pCreature->MonsterTextEmote(90319);
         pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
         pPlayer->AddItem(51248); // Add Snow Covered Feather
@@ -1663,13 +1663,13 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("Ah, so Risa is now the one who throw out these parties nowadays, eh? That's very nice to know, thank for that, my friend! Knowledge is power and power can bring you a lot of gold, right? Exactly. I'll see you around, partner.");
+        pCreature->MonsterSay(66115);
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81000);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSay("You're telling me there's a beach party?! I get the feelin' that if I'm being invited this is no small get-together. Normally I'd say I'm too busy but I'm sensing an opportunity here - rest, relaxation, and revenue! I'll be there for sure, ya can bet on that.");
+        pCreature->MonsterSay(66116);
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -1677,7 +1677,7 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
     {
         pPlayer->DestroyItemCount(60254, 1, true);
         pPlayer->SaveInventoryAndGoldToDB();
-        pCreature->MonsterYell("You dare? You're not getting out of here alive bub!");
+        pCreature->MonsterYell(66117);
         auto faction1 = sObjectMgr.GetFactionEntry(21); // Booty Bay
         if (faction1)
         {
@@ -1703,7 +1703,7 @@ struct npc_chihkoaAI : public ScriptedPetAI
         if (m_creature && m_creature->IsAlive())
         {
             if (uiEmote == TEXTEMOTE_DANCE)
-                m_creature->MonsterSay("Yeee-ha!");
+                m_creature->MonsterSay(66118);
 
             if (pPlayer->ToPlayer()->GetQuestStatus(50328) == QUEST_STATUS_INCOMPLETE)
             {
@@ -1775,7 +1775,7 @@ struct lil_foot_petAI : public ScriptedPetAI
         if (!init && m_creature && m_creature->IsAlive() && m_creature->IsPet())
         {
             init = true;
-            m_creature->PMonsterSay("Aww! I hate being little!");
+            m_creature->PMonsterSay(66100);
             m_creature->GetMotionMaster()->MoveFollow(m_creature->GetCharmerOrOwnerPlayerOrPlayerItself(),
                 PET_FOLLOW_DIST,
                 270.0f * (M_PI_F / 180.0f));
@@ -1805,7 +1805,7 @@ bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
         }
         else
         {
-            pCreature->MonsterSay("Ba-a-a-h! Ba-a-a-h!");
+            pCreature->MonsterSay(66119);
             pCreature->GetMotionMaster()->MoveConfused();
         }
     }
@@ -1825,7 +1825,7 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
         if (!pPlayer)
             return false;
 
-        pCreature->MonsterSay("Ba-a-a-h!");
+        pCreature->MonsterSay(66120);
         pCreature->MonsterTextEmote("The sheep scarfs down the truffle, and then it jumps into your bags to rifle around for more!");
         pCreature->ForcedDespawn();
         pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
@@ -1852,12 +1852,12 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
 
         if (chance_rand[chance_array] >= 80)
         {
-            pCreature->MonsterSay("Ba-a-a-h?");
+            pCreature->MonsterSay(66120);
             pPlayer->AddItem(FLOCK_OF_WOOL, 1);
         }
         else
         {
-            pCreature->MonsterSay("Ba-a-a-h! Ba-a-a-h!");
+            pCreature->MonsterSay(66119);
             pCreature->GetMotionMaster()->MoveFleeing(pPlayer, 100);
             pPlayer->KnockBack(2.0F, 3.0F, 3.0F);
         }
@@ -2585,189 +2585,189 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("We are here Quel'dorei, from your words this summon seemed urgent. I pray you did not waste our time.");
+                tirande->MonsterSay(66121);
             }
             });
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("I did not High Priestess, we have grim tidings from my homeland. As you know it has been held by the Scourge ever since it's fall. The Sunwell perverted by the vile magics of Kel'thuzad.");
+                vereesa->MonsterSay(66122);
             }
             });
         DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("However, the Thalassian pass has recently been swarming with Undead pushing south, and our mages have felt the taint of Fel in the region. I worked with Ranger-Lord Hawkspear to send a scouting party into the region.Out of twelve rangers, only two returned.");
+                vereesa->MonsterSay(66123);
             }
             });
         DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("However, what those two witnessed was not something we could ignore. The Scourge is amassing it's army for an invasion in the south, and the northern region of Quel'thalas is swarming with demons.");
+                vereesa->MonsterSay(66124);
             }
             });
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("Even the Rangers, unattuned to magic, could feel the sway of the Fel in the air. We suspect the Sunwell has been tainted with fel, possibly it has even become a portal to summon demons.");
+                vereesa->MonsterSay(66125);
             }
             });
         DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("They are not attacking the Scourge yet. We surmise that they're either allied or the Demons are preparing for the offensive.");
+                vereesa->MonsterSay(66126);
             }
             });
         DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterYell("What?! Are you certain of this?! Once again your ways bring doom upon this world Highborne!");
+                tirande->MonsterYell(66127);
             }
             });
         DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* magni = player->FindNearestCreature(2784, 30.0F))
             {
                 magni->HandleEmote(EMOTE_ONESHOT_TALK);
-                magni->MonsterSay("Calm yerself High Priestess, the Quel'dorei are nae responsible for this. If anything they wish tae deal with the problem. Our forces are taxed but if the demons are returning, we cannae ignore it.");
+                magni->MonsterSay(66128);
             }
             });
         DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* mekkatorque = player->FindNearestCreature(7937, 30.0F))
             {
                 mekkatorque->HandleEmote(EMOTE_ONESHOT_YES);
-                mekkatorque->MonsterSay("We are in agreement.");
+                mekkatorque->MonsterSay(66128);
             }
             });
         DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("Very well. My people at your place tells me that yours respect our ways, some even have begun to follow Elune, so I will not doubt you. However, I demand your people clean your mess.");
+                tirande->MonsterSay(66130);
             }
             });
         DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_YES);
-                vereesa->MonsterSay("I would like nothing more High Priestess, however, we lack the forces to do so. We only have a handful of ships.");
+                vereesa->MonsterSay(66131);
             }
             });
         DoAfterTime(pPlayer, 75 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
-                vereesa->MonsterSay("Not enough to defeat the Undead vessels patrolling the sea. We have just joined the Alliance.");
+                vereesa->MonsterSay(66132);
             }
             });
         DoAfterTime(pPlayer, 80 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("So you would want us to fix your mess once more?");
+                tirande->MonsterSay(66133);
             }
             });
         DoAfterTime(pPlayer, 85 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* bolvar = player->FindNearestCreature(1748, 30.0F))
             {
                 bolvar->HandleEmote(EMOTE_ONESHOT_TALK);
-                bolvar->MonsterSay("High Priestess please, we are the Alliance. Their mess is our mess. I propose we work together. This is indeed an issue we cannot ignore.");
+                bolvar->MonsterSay(66134);
             }
             });
         DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* bolvar = player->FindNearestCreature(1748, 30.0F))
             {
                 bolvar->HandleEmote(EMOTE_ONESHOT_TALK);
-                bolvar->MonsterSay("I will convene with the Nobles and prepare our army and fleet to strike out. In a month we should be ready to head out.");
+                bolvar->MonsterSay(66135);
             }
             });
         DoAfterTime(pPlayer, 95 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_NO);
-                tirande->MonsterSay("A month of demonic vermin pourting into this world?! Have your lost your mind?");
+                tirande->MonsterSay(66136);
             }
             });
         DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* magni = player->FindNearestCreature(2784, 30.0F))
             {
                 magni->HandleEmote(EMOTE_ONESHOT_NO);
-                magni->MonsterSay("Mobilization takes time Lass, even we have tae convene with the senate. We lack a fleet to land ashore, so I propose we move through land an' prevent anything from passing through into the Plaguelands. The Argents will appreciate the effort.");
+                magni->MonsterSay(66137);
             }
             });
         DoAfterTime(pPlayer, 105 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* mekkatorque = player->FindNearestCreature(2784, 30.0F))
             {
                 mekkatorque->HandleEmote(EMOTE_ONESHOT_YES);
-                mekkatorque->MonsterSay("We don't have much, but we will put our flying machines, Siege tanks and pilots at the disposal of this offensive.");
+                mekkatorque->MonsterSay(66138);
             }
             });
         DoAfterTime(pPlayer, 110 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* mekkatorque = player->FindNearestCreature(2784, 30.0F))
             {
                 mekkatorque->HandleEmote(EMOTE_ONESHOT_YES);
-                mekkatorque->MonsterSay("It will take time for them to arrive but they will hopefully ensure nothing gets past the Thalassian pass.");
+                mekkatorque->MonsterSay(66139);
             }
             });
         DoAfterTime(pPlayer, 115 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* jaina = player->FindNearestCreature(4968, 30.0F))
             {
                 jaina->HandleEmote(EMOTE_ONESHOT_TALK);
-                jaina->MonsterSay("I of all people know how vile the demons can be. Theramore's fleets will be ready to assist as soon as possible.");
+                jaina->MonsterSay(66140);
             }
             });
         DoAfterTime(pPlayer, 120 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("Very well, you have your reasons and your ways, but I cannot ignore this threat and the earlier we act, the better things will be.");
+                tirande->MonsterSay(66141);
             }
             });
         DoAfterTime(pPlayer, 125 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("We will require a landing site for the main Alliance force, and we Kaldorei will secure it. Speaker Windrunner and Lady Proudmoore, do your best to assist this effort.");
+                tirande->MonsterSay(66142);
             }
             });
         DoAfterTime(pPlayer, 130 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* jaina = player->FindNearestCreature(4968, 30.0F))
             {
                 jaina->HandleEmote(EMOTE_ONESHOT_TALK);
-                jaina->MonsterSay("Of course, our ships will reinforce your fleets.");
+                jaina->MonsterSay(66143);
             }
             });
         DoAfterTime(pPlayer, 135 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_YES);
-                vereesa->MonsterSay("I will put my mages and Rangers at your disposal. We will assist in any way we can High Priestess, reclaiming our homeland is important to us as is stopping this threat.");
+                vereesa->MonsterSay(66144);
             }
             });
         DoAfterTime(pPlayer, 140 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* tirande = player->FindNearestCreature(7999, 30.0F))
             {
                 tirande->HandleEmote(EMOTE_ONESHOT_TALK);
-                tirande->MonsterSay("I am not doing it for you girl. We cannot allow the Legion to return. Now, I must convene with General Feathermoon. I need to return to Teldrassil.");
+                tirande->MonsterSay(66145);
             }
             });
         DoAfterTime(pPlayer, 145 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* bolvar = player->FindNearestCreature(1748, 30.0F))
             {
                 bolvar->HandleEmote(EMOTE_ONESHOT_YES);
-                bolvar->MonsterSay("I believe this meeting is adjourned, we all have our duties.");
+                bolvar->MonsterSay(66146);
             }
             });
         DoAfterTime(pPlayer, 155 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
             {
                 vereesa->HandleEmote(EMOTE_ONESHOT_YES);
-                vereesa->MonsterSay("Come see me in Alah'thalas, we have much to discuss.");
+                vereesa->MonsterSay(66147);
             }
             });
         DoAfterTime(pPlayer, 150 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -2838,7 +2838,7 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("Safe travels!");
+        pCreature->MonsterSay(66148);
         //float dis{ 1.0F };
         //float x, y, z;
         //pPlayer->GetSafePosition(x, y, z);
@@ -2867,7 +2867,7 @@ bool GossipSelect_npc_sunkiss(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("Al diel shala!", 10);
+        pCreature->MonsterSay(66149, 10);
         pPlayer->TeleportTo(0, -9009.26F, 883.30F, 29.62F, 0.57F);
     }
 

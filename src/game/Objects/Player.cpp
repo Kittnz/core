@@ -22093,89 +22093,156 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
 bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
 {
     Team newTeam = TeamForRace(newRace);
-    // 1- Changement des montures
+    // 1 - Change of mounts
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {
-        // Une monture
-        Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (item && item->GetProto()->Class == ITEM_CLASS_JUNK && item->GetProto()->RequiredSkill == 762)
+        auto ChangeItem = [&](Item* item)
         {
-            Races currMountRace;
-            uint8 currRaceNum   = 0;
-            if (!sObjectMgr.GetMountDataByEntry(item->GetEntry(), currMountRace, currRaceNum))
+            if (item && item->GetProto()->Class == ITEM_CLASS_JUNK && item->GetProto()->RequiredSkill == 762)
             {
-                CHANGERACE_ERR("Monture %u non renseignee dans `player_factionchange_mounts`.", item->GetEntry());
-                continue;
+                Races currMountRace;
+                uint8 currRaceNum = 0;
+                if (!sObjectMgr.GetMountDataByEntry(item->GetEntry(), currMountRace, currRaceNum))
+                {
+                    CHANGERACE_ERR("Mount %u not specified in `player_factionchange_mounts`.", item->GetEntry());
+                    return;
+                }
+
+                // Soit :
+                // - mount of my old race  -> Translate to new breed
+                // - mount of another race -> Translate into the opposite race
+                Races mountNewRace = (currMountRace == oldRace) ? Races(newRace) : sObjectMgr.GetOppositeRace(currMountRace);
+                uint32 newMountId = sObjectMgr.GetMountItemEntry(mountNewRace, currRaceNum);
+
+                // If not found, a random mount of the opposite race will suffice.
+                if (!newMountId)
+                    newMountId = sObjectMgr.GetRandomMountForRace(mountNewRace);
+
+                // Otherwise well done.
+                if (!newMountId)
+                {
+                    CHANGERACE_ERR("No mount for race %u in `player_factionchange_mounts` to transfer %u.", mountNewRace, item->GetEntry());
+                    return;
+                }
+
+                ItemPrototype const* pNewMountProto = ObjectMgr::GetItemPrototype(newMountId);
+                CHANGERACE_LOG("Changed mount %u to %u.", item->GetEntry(), newMountId);
+                if (!pNewMountProto || !item->ChangeEntry(pNewMountProto))
+                {
+                    CHANGERACE_ERR("Unable to change item %u.", item->GetEntry());
+                    return;
+                }
             }
-            // Soit :
-            // - monture de mon ancienne race -> Traduire en nouvelle race
-            // - monture d'une autre race     -> Traduire en la race opposee
-            Races mountNewRace = (currMountRace == oldRace) ? Races(newRace) : sObjectMgr.GetOppositeRace(currMountRace);
-            uint32 newMountId = sObjectMgr.GetMountItemEntry(mountNewRace, currRaceNum);
-            // Si on trouve pas, une monture aleatoire de la race opposee suffira.
-            if (!newMountId)
-                newMountId = sObjectMgr.GetRandomMountForRace(mountNewRace);
-            // Sinon ben tampis.
-            if (!newMountId)
+        };
+
+        if (i >= INVENTORY_SLOT_BAG_START && i < INVENTORY_SLOT_BAG_END ||
+            i >= BANK_SLOT_BAG_START && i < BANK_SLOT_BAG_END)
+        {
+            if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             {
-                CHANGERACE_ERR("Pas de monture pour la race %u dans `player_factionchange_mounts` pour transferer %u.", mountNewRace, item->GetEntry());
-                continue;
-            }
-            ItemPrototype const* pNewMountProto  = ObjectMgr::GetItemPrototype(newMountId);
-            CHANGERACE_LOG("Changement de la monture %u en %u.", item->GetEntry(), newMountId);
-            if (!pNewMountProto || !item->ChangeEntry(pNewMountProto))
-            {
-                CHANGERACE_ERR("Impossible de changer l'item %u.", item->GetEntry());
-                return false;
+                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                {
+                    Item* pItem = GetItemByPos(i, j);
+                    ChangeItem(pItem);
+                }
             }
         }
-        //else if (m_items[i])
-        //    CHANGERACE_LOG("Item %u pas une monture. Class %u != %u. RequiredSkill = %u", item->GetEntry(), item->GetProto()->Class, ITEM_CLASS_JUNK, m_items[i]->GetProto()->RequiredSkill);
+        else
+        {
+            Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+            ChangeItem(pItem);
+        }
     }
 
-    // 2- Les items a inverser
+    // collect destroyed items for trash collector gaston
+    std::set<uint32> destroyedItems;
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT DISTINCT `item_entry` FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow()));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 itemId = fields[0].GetUInt32();
+            destroyedItems.insert(itemId);
+
+        } while (result->NextRow());
+    }
+
+    // 2 - Items to reverse
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_items.begin(); it != sObjectMgr.factionchange_items.end(); ++it)
     {
         ItemPrototype const* pNewItemProto    = ObjectMgr::GetItemPrototype(newTeam == ALLIANCE ? it->first : it->second);
         if (!pNewItemProto)
             continue;
+
         uint32 removeItemId = newTeam == ALLIANCE ? it->second : it->first;
-        for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
+
+        // update destroyed items in db
+        if (destroyedItems.find(removeItemId) != destroyedItems.end())
+            CharacterDatabase.PExecute("UPDATE `character_destroyed_items` SET `item_entry`=%u WHERE `item_entry`=%u && `player_guid`=%u", pNewItemProto->ItemId, removeItemId, GetGUIDLow());
+
+        // update current items in inventory
+        auto ChangeItem = [&](Item* item)
         {
-            Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
             if (item && item->GetEntry() == removeItemId)
             {
-                CHANGERACE_LOG("Changement item %u -> %u.", removeItemId, pNewItemProto->ItemId);
+                CHANGERACE_LOG("Change item %u -> %u.", removeItemId, pNewItemProto->ItemId);
                 if (!item->ChangeEntry(pNewItemProto))
                 {
-                    CHANGERACE_ERR("Impossible de changer %u en %u.", removeItemId, pNewItemProto->ItemId);
-                    return false;
+                    CHANGERACE_ERR("Cannot change %u to %u.", removeItemId, pNewItemProto->ItemId);
+                    return;
                 }
+            }
+        };
+        
+        for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
+        {
+            if (i >= INVENTORY_SLOT_BAG_START && i < INVENTORY_SLOT_BAG_END ||
+                i >= BANK_SLOT_BAG_START && i < BANK_SLOT_BAG_END)
+            {
+                if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                {
+                    for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                    {
+                        Item* pItem = GetItemByPos(i, j);
+                        ChangeItem(pItem);
+                    }
+                }
+            }
+            else
+            {
+                Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+                ChangeItem(pItem);
             }
         }
     }
 
-    // 3- Et on regarde finalement si il reste des items non equipables
+    // 3 - And we finally check if there are still non-equipable items
     //std::map<uint32, uint32> addItems;
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
     {
-        if (Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        auto ChangeItem = [&](Item* pItem)
         {
-            // Item deja gere ? (ObjectMgr)
+            if (!pItem)
+                return;
+
+            // Also, don't wear it ? (ObjectMgr)
             bool previouslyHandled = false;
             for (std::map<uint32, uint32>::const_iterator it2 = sObjectMgr.factionchange_items.begin(); it2 != sObjectMgr.factionchange_items.end(); ++it2)
             {
                 if ((it2->first == pItem->GetEntry()) || (pItem->GetEntry() == it2->second))
                 {
                     previouslyHandled = true;
-                    CHANGERACE_LOG("Item %u deja gere.", pItem->GetEntry());
+                    CHANGERACE_LOG("Item %u is already running.", pItem->GetEntry());
                     break;
                 }
             }
-            if (previouslyHandled)
-                continue;
 
-            ItemPrototype const * pProto = pItem->GetProto();
+            if (previouslyHandled)
+                return;
+
+            ItemPrototype const* pProto = pItem->GetProto();
 
             bool canEquip = true;
             uint32 raceMask = (1 << (newRace - 1));
@@ -22186,12 +22253,34 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
 
             if (!canEquip)
             {
-                CHANGERACE_ERR("Objet %u non gere ! A ajouter dans player_factionchange_items.", pProto->ItemId);
+                CHANGERACE_ERR("Object %u not managed! To be added in player_factionchange_items.", pProto->ItemId);
                 //DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
+            }
+        };
+
+        for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
+        {
+            if (i >= INVENTORY_SLOT_BAG_START && i < INVENTORY_SLOT_BAG_END ||
+                i >= BANK_SLOT_BAG_START && i < BANK_SLOT_BAG_END)
+            {
+                if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                {
+                    for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                    {
+                        Item* pItem = GetItemByPos(i, j);
+                        ChangeItem(pItem);
+                    }
+                }
+            }
+            else
+            {
+                Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+                ChangeItem(pItem);
             }
         }
     }
-    CHANGERACE_LOG("Changement des items [OK]");
+
+    CHANGERACE_LOG("Change of items [OK]");
     return true;
 }
 

@@ -61,11 +61,17 @@ Channel::Channel(std::string const& name)
             m_name = "INVALIDCHANNEL";
             m_announce = false;
         }
-
         // Disable join/left announcements for Russians & Germans:
         if (m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"China")
         {
             m_flags |= CHANNEL_FLAG_NATIONAL;
+            m_announce = false;
+            return;
+        }
+
+        if ( m_name == u8"Ru" || m_name == u8"China" || m_name == u8"Welt")
+        {
+            m_flags |= CHANNEL_FLAG_GLOBAL;
             m_announce = false;
         }
         else

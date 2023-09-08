@@ -753,6 +753,7 @@ namespace MMAP
             /// Check every map vertice
             // x, y * -1
             Vector3 up(0, 0, 1);
+
             for (vector<GroupModel>::iterator it = groupModels.begin(); it != groupModels.end(); ++it)
                 for (int t = 0; t < mapVertsCount / 3; ++t)
                 {
@@ -766,7 +767,14 @@ namespace MMAP
                     float outDist = -1.0f;
                     float inDist  = -1.0f;
                     if (it->IsUnderObject(v, up, isM2, &outDist, &inDist)) // inDist < outDist
-                        terrainInsideModelsVerts[t] = inDist;
+                    {
+                        // If terrain is under wmo, mark terrain as unwalkable
+                        // If there are less than 1.5y between terrain and m2 then mark the terrain as unwalkable
+                        if (!isM2 || inDist < 1.5f)
+                        {
+                            terrainInsideModelsVerts[t] = inDist;
+                        }
+                    }
                 }
         }
         /// Correct triangles partially under models

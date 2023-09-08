@@ -170,7 +170,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, "
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate), a.queue_skip, "
 		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
@@ -251,7 +251,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 accFlags = fields[11].GetUInt32();
     std::string email = fields[12].GetCppString();
     std::string username = fields[13].GetCppString();
-    bool isBanned = fields[14].GetBool();
+    uint32 joinTimestamp = fields[14].GetUInt32();
+    bool canQueueSkip = fields[15].GetBool();
+    bool isBanned = fields[16].GetBool();
     delete result;
 
     
@@ -332,12 +334,13 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip, m_BinaryAddress), -1);
 
     m_Crypt.SetKey(K.AsByteArray());
     m_Crypt.Init();
 
     m_Session->SetShouldBackupCharacters(sAccountMgr.UpdateAccountIP(id, GetRemoteAddress()));
+    m_Session->SetJoinTimeStamp(joinTimestamp);
     m_Session->SetUsername(account);
     m_Session->SetEmail(email);
     m_Session->SetGameBuild(BuiltNumberClient);
@@ -345,6 +348,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetOS(clientOs);
     m_Session->SetPlatform(clientPlatform);
     m_Session->LoadTutorialsData();
+    m_Session->SetQueueSkip(canQueueSkip);
     m_Session->InitAntiCheatSession(&K);
 
 
@@ -355,7 +359,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     //Should be sent over IPC / MMAP. 
 
 
-    LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
+    //LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
 
     //m_Session->InitWarden(&K);
 

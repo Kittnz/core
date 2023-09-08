@@ -189,6 +189,9 @@ class MangosSocket : public WorldHandler
         /// Address of the remote peer
         std::string m_Address;
 
+        /// Address as uint32 for fast lookup and std::hash<>
+        uint32 m_BinaryAddress = 0;
+
         /// Class used for managing encryption of the headers
         Crypt m_Crypt;
 

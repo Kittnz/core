@@ -116,13 +116,13 @@ struct mob_assistant_kryll : public ScriptedAI
             switch (urand(0, 2))
             {
                 case 0:
-                    m_creature->MonsterSay("Psst... go to Booty Bay, Kryll needs hands...");
+                    m_creature->MonsterSay(66152);
                     break;
                 case 1:
-                    m_creature->MonsterSay("Kryll needs your help in Booty Bay!");
+                    m_creature->MonsterSay(66153);
                     break;
                 case 2:
-                    m_creature->MonsterSay("Kryll's invention may drastically change your life... Help him in Booty Bay!");
+                    m_creature->MonsterSay(66154);
                     break;
             }
             Speach_Timer = urand(15, 40)*60*1000;
