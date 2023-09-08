@@ -3,6 +3,7 @@ create table shop_categories (
   id int(11) unsigned not null auto_increment,
   name text,
   name_loc4 text,
+  icon text,
   primary key (id)
 ) engine=innodb default charset=utf8;
 
@@ -17,7 +18,6 @@ create table shop_items (
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 
-alter table shop_categories add icon varchar(32) not null default 'default' after name_loc4;
 
 replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values 
 (1,  'Miscellaneous', '杂项', 'default'),
@@ -379,3 +379,4 @@ UPDATE `shop_items` SET `description_loc4` = '幻象：熊猫人' WHERE `id` = 2
 UPDATE `shop_items` SET `description_loc4` = '幻象：天灾军团' WHERE `id` = 299;
 UPDATE `shop_items` SET `description_loc4` = '幻象：萨特' WHERE `id` = 300;
 UPDATE `shop_items` SET `description_loc4` = '幻象：食人魔' WHERE `id` = 301;
+UPDATE `shop_items` SET `description_loc4` = '大袋时尚硬币' WHERE `id` = 70;

@@ -8957,9 +8957,7 @@ void ObjectMgr::LoadShop()
 	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, Name_loc4, icon FROM shop_categories");
 
 	if (!result)
-	{
-		return;
-	}
+        return;
 
 	do
 	{
@@ -8981,15 +8979,12 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-
 	m_ShopEntriesMap.clear();
 
 	result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
 
 	if (!result)
-	{
-		return;
-	}
+        return;
 
 	do
 	{
