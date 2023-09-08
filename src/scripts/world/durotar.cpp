@@ -232,7 +232,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 if (m_creature->GetPositionX() == -580.90f)
                 {
-                    m_creature->PMonsterSay("Brace for the attack! Watch your enemy's movement!");
+                    m_creature->PMonsterSay(66162);
                     m_uiDialogueTimer = 10000;
                     m_uiTick++;
                 }
@@ -245,7 +245,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 if (m_creature->GetPositionX() == -576.38f)
                 {
-                    m_creature->PMonsterSay("My den mother hits harder than that!");
+                    m_creature->PMonsterSay(66160);
                     m_uiDialogueTimer = 10000;
                     m_uiTick++;
                 }
@@ -258,7 +258,7 @@ struct npc_den_commanderAI : ScriptedAI
                 if (m_creature->GetPositionX() == -571.19f)
                 {
                     m_creature->SetOrientation(5.59f);
-                    m_creature->PMonsterSay("Harder! The Alliance won't be so forgiving!");
+                    m_creature->PMonsterSay(66161);
                     m_uiDialogueTimer = 10000;
                     m_uiTick = 0;
                 }
@@ -277,7 +277,7 @@ struct npc_den_commanderAI : ScriptedAI
                 {
                 case 0:
                 {
-                    m_creature->PMonsterSay("Lok-Narash! Arms steady! Shoot!");
+                    m_creature->PMonsterSay(66158);
                     uint32 rand = urand(5000, 15000);
                     m_uiDialogueTimer2 = rand;
                     m_uiTick2++;
@@ -285,7 +285,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 case 1:
                 {
-                    m_creature->PMonsterSay("The night elves are quick. Shoot ahead of their movements!");
+                    m_creature->PMonsterSay(66159);
                     uint32 rand = urand(25000, 60000);
                     m_uiDialogueTimer2 = rand;
                     m_uiTick2 = 0;

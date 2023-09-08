@@ -4518,7 +4518,7 @@ bool QuestRewarded_npc_falgran_hastil(Player* pPlayer, Creature* pQuestGiver, Qu
 
     if (pQuest->GetQuestId() == 40723) // Honoring Treaties
     {
-        pQuestGiver->MonsterSay("You have brought peace to these lands, on behalf of all living souls in Theramore, we thank you, for putting your own lives at risk, to put an end to this crime.");
+        pQuestGiver->MonsterSay(66165);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
@@ -5383,7 +5383,7 @@ bool GossipSelect_npc_gelweg_darkbrow(Player* pPlayer, Creature* pCreature, uint
         pPlayer->AddItem(60998);
         if (pPlayer->HasItemCount(60998, 1, false))
         {
-            pCreature->MonsterSay("The Dark Iron Desecrator Plans? I- why... Bah, fine, he is asking a lot here, tell him that all of the favors I owe him are cleared.");
+            pCreature->MonsterSay(66164);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;

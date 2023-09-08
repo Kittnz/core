@@ -252,7 +252,7 @@ public:
 
             if (m_creature->HealthBelowPct(75))
             {
-                m_creature->MonsterSay("The souls of the fallen cry out for vengeance.");
+                m_creature->MonsterSay(66109);
                 SummonAdds();
                 SetPhase(Phase::TWO);
             }
