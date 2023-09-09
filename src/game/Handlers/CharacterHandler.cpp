@@ -887,7 +887,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
     {
-        if (!pCurrChar->HasItemCount(91781, 1) || !pCurrChar->HasSpell(23531))
+        if (!pCurrChar->HasItemCount(91781, 1) && !pCurrChar->HasSpell(23531))
             pCurrChar->AddItem(91781, 1);
     }
 
