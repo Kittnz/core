@@ -6,3 +6,17 @@ UPDATE `creature` SET `position_x` = -11267.840820, `position_y` = -1453.603516,
 UPDATE `creature` SET `position_x` = -11266.704102, `position_y` = -1453.238525, `position_z` = 2.748662, `orientation` = 0.028223 WHERE `guid` = 2578856;
 UPDATE `creature` SET `spawntimesecsmin`=200000, `spawntimesecsmax`=200000 WHERE `guid`=2578856;
 REPLACE INTO `creature` VALUES (2578857,91910,0,0,0,800,-11032.8,-1528.76,33.5322,4.69424,120,120,5,100,100,1,1,200);
+UPDATE `creature` SET `spawntimesecsmin`=7200, `spawntimesecsmax`=7200 WHERE `guid`=2578857;
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2578857;
+UPDATE `creature` SET `position_x` = -11032.758789, `position_y` = -1528.755981, `position_z` = 33.532246, `orientation` = 4.694237 WHERE `guid` = 2578857;
+REPLACE INTO `creature` VALUES (2578858,91910,0,0,0,800,-11064.9,-1528.98,28.4068,4.71073,120,120,5,100,100,1,1,200);
+UPDATE `creature` SET `spawntimesecsmin`=7200, `spawntimesecsmax`=7200 WHERE `guid`=2578858;
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2578858;
+REPLACE INTO `creature` VALUES (2578859,91910,0,0,0,800,-11096.7,-1518.11,28.2884,1.60527,120,120,5,100,100,1,1,200);
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2578859;
+UPDATE `creature` SET `spawntimesecsmin`=7200, `spawntimesecsmax`=7200 WHERE `guid`=2578859;
+REPLACE INTO `creature` VALUES (2578860,91918,0,0,0,800,-11064.6,-1514.61,29.5624,1.61391,120,120,5,100,100,1,1,200);
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2578860;
+UPDATE `creature` SET `spawntimesecsmin`=7200, `spawntimesecsmax`=7200 WHERE `guid`=2578860;
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2565624;
+UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2565566;
