@@ -31,6 +31,10 @@ class ShopMgr
     public:
         explicit ShopMgr(Player* owner);
         
+        static void UpdateBalances(uint32 diff);
+        static void UpdateBalanceCallback(QueryResult* result, int dummy);
+
+        void ScheduleBalanceUpdate();
         uint32 GetBalance();
 		std::string BuyItem(uint32 itemID);
 
