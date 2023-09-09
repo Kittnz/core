@@ -22,9 +22,9 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include "Platform/Define.h"
+#include "Database/DatabaseEnv.h"
 
 class Player;
-class QueryResult;
 
 class ShopMgr
 {
