@@ -1511,9 +1511,9 @@ bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature
 bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        p_Creature->MonsterSay("Ardent Watch is the central most base of operations for the Argent Dawn and its foreign operations battalion, The Argent Vanguard. Besides Light's Hope itself, it is one of the most well fortified bastions in the fight against the Scourge within the former Eastweald.", 7, 0);
+        p_Creature->MonsterSay(66166, 7, 0);
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        p_Creature->MonsterSay("Being members of the Argent Dawn, they hold no affiliations to the Horde and Alliance short of co-operation in our fight against the Scourge. Due to necessity, the Argent Dawn and Scarlet Crusade have signed a pact making them non-hostile for the moment, yet tensions exist. Members of the Scourge or other shadowy organizations will likely not be welcomed.", 7, 0);
+        p_Creature->MonsterSay(66167, 7, 0);
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -3124,7 +3124,7 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("You will not disturb what lays here!");
+        m_creature->MonsterSay(66168);
     }
 
     void Reset() {}
@@ -3133,7 +3133,7 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
     void JustDied(Unit*)
     {
-        m_creature->MonsterSay("There is only death for your people here! I am only one... of many...");
+        m_creature->MonsterSay(66169);
     }
 
     void UpdateAI(const uint32 diff)
@@ -3448,7 +3448,7 @@ bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_SPELLPRECAST);
-        pCreature->MonsterSay("Safe travels, friend!");
+        pCreature->MonsterSay(66170);
         pPlayer->SummonGameObject(3000204, -5660.109F, -4258.419F, 407.899F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     }
 
@@ -3713,11 +3713,11 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
 
         if (!sturk)
         {
-            pCreature->MonsterSay("Geeh, looks like this sneaky bastard is gone.");
+            pCreature->MonsterSay(66171);
             return false;
         }
 
-        pCreature->MonsterSay("About time The Rov gets to shut that idiot down, The Rov will beat him up.");
+        pCreature->MonsterSay(66172);
         pCreature->GetMotionMaster()->MovePoint(1, 2025.37f, -4633.34f, 29.55f, 0, 2.0F);
         pCreature->SetWalk(true);
 
@@ -3744,7 +3744,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS,
             [ me = sturk]()
         {
-            me->MonsterSay("Hey, hey, not the face man!");
+            me->MonsterSay(66173);
             me->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
             me->SetWalk(false);
         });
@@ -4229,7 +4229,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
                 [playerGuid = pPlayer->GetObjectGuid(), me = chromie]()
             {
                 me->HandleEmote(EMOTE_ONESHOT_TALK);
-                me->MonsterSay("We need to talk!");
+                me->MonsterSay(66174);
             });
         }
         else
@@ -4264,7 +4264,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
     if (pQuest->GetQuestId() == 70022)
     {
-        pQuestGiver->MonsterSay("I will go find my spear right this momen- <argh> -nt!");
+        pQuestGiver->MonsterSay(66175);
 
         Creature* Taupo = pPlayer->FindNearestCreature(70020, 10.0F);
 
@@ -4275,7 +4275,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
             {
 
                me->HandleEmote(EMOTE_ONESHOT_TALK);
-               me->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
+               me->MonsterSay(66176);
             });
         }
 
@@ -4479,7 +4479,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
         {
             damage = 0;
 
-            m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
+            m_creature->MonsterSay(66177);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
 
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
@@ -4514,7 +4514,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
     void EnterCombat(Unit* pVictim) override
     {
         if (pVictim && pVictim->IsPlayer())
-            m_creature->MonsterSay("For the Scarlet Crusade!");
+            m_creature->MonsterSay(66178);
     }
 };
 
@@ -4536,7 +4536,7 @@ bool GossipSelect_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature, 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->CombatStop();
-        pCreature->MonsterSay("I understand.");
+        pCreature->MonsterSay(66179);
         pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
         followed_units.push_back(pPlayer->GetObjectGuid());
@@ -4564,7 +4564,7 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50671))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pCreature->MonsterSay("Great find. My boys and I will put him up in chains. Go get yourself an ale while we handle this.");        
+        pCreature->MonsterSay(66180);
         if (Creature* prisoner = pPlayer->FindNearestCreature(50674, 30.0F))
         {
             prisoner->GetMotionMaster()->Clear();
@@ -4819,7 +4819,7 @@ struct npc_scarlet_magicianAI : public ScriptedAI
     }
     void EnterCombat()
     {
-        m_creature->MonsterSay("For the Scarlet Crusade!");
+        m_creature->MonsterSay(66181);
     }
     void JustRespawned(){}
 };
@@ -4892,7 +4892,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        m_creature->MonsterSay("I sensed magic! What are you doing here?");
+        m_creature->MonsterSay(66182);
     }
 
     void UpdateAI(const uint32 diff)
@@ -4905,7 +4905,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_1)
             {
                 speech_1 = true;
-                m_creature->MonsterSay("Is this all you can muster?");
+                m_creature->MonsterSay(66183);
             }
         }
         if (m_creature->GetHealthPercent() < 60 && m_creature->GetHealthPercent() > 50)
@@ -4913,7 +4913,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_2)
             {
                 speech_2 = true;
-                m_creature->MonsterSay("Young folk these days are disappointing.");
+                m_creature->MonsterSay(66184);
             }
         }
         if (m_creature->GetHealthPercent() < 30 && m_creature->GetHealthPercent() > 20)
@@ -4921,7 +4921,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_3)
             {
                 speech_3 = true;
-                m_creature->MonsterSay("Hardly a challenge!");
+                m_creature->MonsterSay(66185);
             }
         }
         if (m_creature->GetHealthPercent() < 10)
@@ -4929,7 +4929,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_4)
             {
                 speech_4 = true;
-                m_creature->MonsterSay("Hmph, I will admit you have some skills, I will let you flee this day!");
+                m_creature->MonsterSay(66186);
             }
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
@@ -5099,7 +5099,7 @@ bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSen
         }
         if (pPlayer->HasItemCount(60815, 1, false))
         {
-            pCreature->MonsterSay("Halister? I haven't heard from him in ages. We need to meet, as there is much to discuss. As for the Arcane Resonator, I can lend you one. But tell Halister that he needs to bring it back to me in person!");
+            pCreature->MonsterSay(66187);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -5157,7 +5157,7 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91296))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pCreature->MonsterSay("Good! All the damage he caused and now he's finally going to pay for it!");
+        pCreature->MonsterSay(66188);
         pPlayer->RemoveAurasDueToSpell(50060);
         pPlayer->RemoveMiniPet();
     }
@@ -5354,7 +5354,7 @@ struct npc_naxiarAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("Don't you just love, when the experiment simply shows up on your doorstep?");
+        m_creature->MonsterSay(66189);
     }
     void JustRespawned() { Reset(); }
 };
@@ -5486,7 +5486,7 @@ struct npc_speaker_gantoAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("What, did that foolish Yin'do send you? You shall perish!");
+        m_creature->MonsterSay(66190);
     }
     void JustRespawned() { Reset(); }
 };
@@ -5655,7 +5655,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
         playerOnQuestGUID = pPlayer->GetGUIDLow();
 
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-        pQuestGiver->PMonsterSay("I am ready for the audience.");
+        pQuestGiver->PMonsterSay(66191);
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
         Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
@@ -5688,7 +5688,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
     {
         GameObject* portal{ nullptr };
 
-        pQuestGiver->MonsterSay("Let's get goin mon.");
+        pQuestGiver->MonsterSay(66192);
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -5812,7 +5812,7 @@ struct npc_zuljinAI : public ScriptedAI
                 if (Creature* sylvanas = m_creature->FindNearestCreature(10181, 15, true))
                 {
                     sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                    sylvanas->PMonsterSay("What is the meaning of this? GUARDS! Ready your arms - it seems filth has made it into my city.");
+                    sylvanas->PMonsterSay(66193);
 
                     if (playerOnQuest)
                     {
@@ -5821,7 +5821,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Now, now, my lady there’s no reason to rus--");
+                                varimathras->PMonsterSay(66194);
                             }
                             });
 
@@ -5830,7 +5830,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(varimathras);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("Is this your doing, Varimathras? What have you plotted behind my back?");
+                                sylvanas->PMonsterSay(66195);
                             }
                             });
 
@@ -5839,7 +5839,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("My lady I would never plot against you. I feel truly hurt by your accusations. These trolls and that adventurer over there simply helped us with a task, you do remember the issues we had in Hillsbrad do you not? ");
+                                varimathras->PMonsterSay(66196);
                             }
                             });
 
@@ -5848,7 +5848,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(zuljin);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("And what does that have to do with forest frog filth in my chambers?");
+                                sylvanas->PMonsterSay(66197);
                             }
                             });
 
@@ -5856,7 +5856,7 @@ struct npc_zuljinAI : public ScriptedAI
                             if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                             {
                                 zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                                zuljin->PMonsterSay("Now, now, Banshee Queen. Dis be da way to treat a guest? Especially one ya have known for such a long time.");
+                                zuljin->PMonsterSay(66198);
                             }
                             });
 
@@ -5865,51 +5865,51 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(zuljin);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("You're not welcomed here troll. Now speak your piece before I lose my patience. I will deal with my advisor later.");
-                                varimathras->PMonsterSay("As you wish, my queen.");
+                                sylvanas->PMonsterSay(66199);
+                                varimathras->PMonsterSay(66200);
                             }
                             });
 
                         DoAfterTime(playerOnQuest, 70 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Don’t hold it against da demon, Sylvannas. It was us who asked him for an audience with da Banshee Queen after dealing with ya problems.");
+                            zuljin->PMonsterSay(66201);
                             });
 
                         DoAfterTime(playerOnQuest, 80 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("Hardly a problem. Nothing we couldn’t have dealt with. Do you expect me to grovel in gratitude now, Zul’jin?");
+                            sylvanas->PMonsterSay(66202);
                             });
 
                         DoAfterTime(playerOnQuest, 90 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Nothing of da sort, me queen, I want ya to reconsider signing da papers to approve da Revantusk into da Horde. Take dis help as a show of good faith if nothing else.");
+                            zuljin->PMonsterSay(66203);
                             });
 
                         DoAfterTime(playerOnQuest, 100 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("And what makes you think I will approve of that? How many of my people have you slaughtered, butchered and maimed?");
+                            sylvanas->PMonsterSay(66204);
                             });
 
                         DoAfterTime(playerOnQuest, 110 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("And how many of yours did the same to me people? And de people ya speak of see ya as enemy today but da Amani don’t. Ya can’t keep on holding grudges mon, ya will be around for years to come now, casualties of war happen every time. Let go of da past Sylvannas, I am willing toand I will prove to yaand everyone else in da Horde dat we be worthy of flying da Horde’s banner.");
+                            zuljin->PMonsterSay(66205);
                             });
 
                         DoAfterTime(playerOnQuest, 120 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Let go of da past Sylvannas. I be willin to. I will prove to ya and everyone else in da Horde dat we be worthy of flying da Horde's banner.");
+                            zuljin->PMonsterSay(66206);
                             });
 
                         DoAfterTime(playerOnQuest, 125 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("I don’t wish to be lectured by an old disfigured frog, Zul’jin. But there’s truth in your words, past grudges will merely do more harm than good.");
+                            sylvanas->PMonsterSay(66207);
                             });
 
                         DoAfterTime(playerOnQuest, 135 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                             {
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("If anything I should be the one to know of how persistent your people are. Very well, I will give you a chance, but remember this, stay out of my way. I don’t have to like you to be your ally.");
+                                sylvanas->PMonsterSay(66208);
                             }
                             });
 
@@ -5918,7 +5918,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Should I handle the formalities my lady?");
+                                varimathras->PMonsterSay(66209);
                             }
                             });
 
@@ -5927,7 +5927,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(varimathras);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("Do what you will Varimathras, this however, won’t change the fact that you have to answer to me later.");
+                                sylvanas->PMonsterSay(66210);
                             }
                             });
 
@@ -5936,25 +5936,25 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Of course, my queen.");
+                                varimathras->PMonsterSay(66211);
                             }
                             });
 
                         DoAfterTime(playerOnQuest, 170 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->SetFacingToObject(zuljin);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("Begone now Zul’jin, I’ve had enough of the living for today.");
+                            sylvanas->PMonsterSay(66212);
                             });
 
                         DoAfterTime(playerOnQuest, 175 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                            zuljin->MonsterTextEmote("Zul’jin nods and with his guards, he takes his leave.");
+                            zuljin->MonsterTextEmote(66213);
                             });
 
                         DoAfterTime(playerOnQuest, 180 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             if (playerOnQuest && playerOnQuest->FindNearestCreature(zuljin->GetEntry(), 20, true))
                             {
                                 zuljin->SetFacingToObject(playerOnQuest);
-                                zuljin->PMonsterSay("Ya did gud, %s. Meet me in da Hinterlands.", playerOnQuest->GetName());
+                                zuljin->PMonsterSay(66214, playerOnQuest->GetName());
 
                                 playerOnQuest->SetQuestStatus(65008, QUEST_STATUS_COMPLETE);
                             }
@@ -6085,11 +6085,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Welcome to Stormwind, Traveler! Stay safe!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Greetings!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Greetings, enjoy your stay in Stormwind!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("I'm here whenever you need help.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66215, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66216, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66217, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66218, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66219, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6111,10 +6111,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the Alliance!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("In the name of the King.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Stay safe, Traveler.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66220, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66221, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66222, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66223, Language::LANG_COMMON); break; }
                                             case 5: {break; }
                                         }
                                         switch (TextRandom)
@@ -6136,11 +6136,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Save travels, Friend!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I hope you enjoyed your stay in Stormwind.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Make sure to stock up on rations before you leave Stormwind.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Until next time.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("May the light protect you on your journey!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66224, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66225, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66226, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66227, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66228, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6161,12 +6161,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("I havn't heard this one in a while!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("That's a good one!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66229, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66230, Language::LANG_COMMON); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("A duck walked into an Apothecary and said 'Give me some ChapStick... and put it on my bill!'", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("So, an orc walks into a bar with a parrot on his shoulder. The bartender says 'Hey, where'd you get that?' The parrot says 'Durotar. They've got them all over the place!'", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("You have to try harder to make me laugh.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66231, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66232, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66233, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6189,10 +6189,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("HA! You seem strong! Look at this.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Keep training and you'll be as strong as me some day. Haha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("By the light, what strength!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Good to see strong Travelers like you around Stormwind.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66234, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66235, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66236, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66237, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6215,9 +6215,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Show some respect to the guards of Stormwind!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("This does not work on me.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You make a fool of yourself.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66238, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66239, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66240, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6239,9 +6239,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hey, back off!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Hahaha! STOP! I'm working here!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("What... i am in full armor. Did you really expect that works?", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66241, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66242, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66243, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6272,12 +6272,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Can i assist you?", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Welcome, Traveler. You must have countless battles. Please, stay as long as you wish and calm your body and mind under Mother Natures protection.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Ishnu-alah.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("What brings you here?", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Elune be with you.", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("Ishnu-dal-dieb.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66244, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66245, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66246, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66247, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66248, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66249, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6299,10 +6299,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the high priestess.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("May Elune guide you.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("For the Alliance.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("We will protect you during your rest here!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66250, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66251, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66252, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66253, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6323,10 +6323,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("May Elune protect you on your journey, Traveler!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Good bye, come back when ever you need a rest.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Till next we meet!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You're already leaving? Stay safe.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66254, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66255, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66256, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66257, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6347,11 +6347,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Haha! That's a good one!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Ha! Here is one for you. We are all Nightelves. But.. i'm more of a morning Elf.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Oh sorry, what was that? I was sunken in thoughts", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("By Elune, i have to remember that one!", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Is this the point where i should... laugh?", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66258, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66259, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66260, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66261, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66262, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6373,10 +6373,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Wow! Mother Nature has truely blessed you!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I am glad that someone as strong as you stays in here for a while.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You are not the only strong here.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Remember, with great strength comes great strength! No wait... With great strong... Ah, forget it! You look good!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66263, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66264, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66265, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66266, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6399,10 +6399,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You'd better be carefull who you taunt.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Your try is just a waste of our fresh air.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You dare to pest the air around is with that foul mouth?!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You should visit a priestess and cleansen your mind.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66267, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66268, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66269, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66270, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6424,9 +6424,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Stop it!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I need to focus and look for potential threats, don't distract me. Hahaha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("HEY! Only looking, no touching!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66271, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66272, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66273, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6456,12 +6456,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("I do hope the mountain is warm enough for ye.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Stop by at the inn for some relaxation.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("The mountain, home of the dwarves, is open to all of the Alliance.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome to Ironforge, Traveler. Don't miss out a good beer in one of our Taverns.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Ha! It's good to see ye again. Pull up a chair by the hearth.", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("Greetings, Pal. Come talk to me when you get lost!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66274, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66275, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66276, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66277, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66278, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66279, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6482,10 +6482,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the Bronzebeards!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("For King Magni!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("At your service.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("We keep you protected. Be welcome in our City.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66280, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66281, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66282, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66283, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6507,10 +6507,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Come back if you crave for some beer in a warm inn, will ya?", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Well met, Travevller. Stay safe and kill some creatures out there!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Don't forget, the mountain welcomes everyone of the Alliance!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Be blessed with fortune, friend!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66284, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66285, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66286, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66287, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6531,10 +6531,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("That's one for the inn. Bahahaha!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("By King Magnis beard! BAHahaha. Where'd you got that one from?!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Hahaha! I don't drink anymore... 'course, I don't drink any less either! BAHAHAhahaha!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Hm... Maybe i need more beer to laugh about that.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66288, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66289, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66290, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66291, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6556,10 +6556,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("What glorious muscles!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Ironforge will be surely safe with you stoping by.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You try to impress a dwarf with muscles? Look, i am 50% muscles and 50% beer! BAHAHA!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You are as slender as a straw of wheat!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66292, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66293, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66294, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66295, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6582,11 +6582,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("By the stinking fart of a Troll, you're lucky i am on duty right now!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("You should back off before i lose... My... TEMPER!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You shouldn't put your bare hand in a forge, you might burn yourself.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("My arms might be small but so is your brain!", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("I hope i misheared that.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66296, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66297, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66298, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66299, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66301, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6609,11 +6609,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Bahaha! Stop it Pal!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("G-ggg... Bahahaha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Oi, Mate. You... can't... just... tickle the guards around here! HAHA!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You... know i wear an armor with tickle-resistance + 10, right?", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Hey! Stay away from me!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66302, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66303, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66304, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66305, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66306, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6637,7 +6637,7 @@ struct npc_guard_emoteAI : public ScriptedAI
                             {
                                 if (CheckEmoteCooldown())
                                 {
-                                    m_creature->MonsterSay("lol", Language::LANG_ORCISH); // "kek" for alliance
+                                    m_creature->MonsterSay(66306, Language::LANG_ORCISH); // "kek" for alliance
                                     m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
                                 }
                             }
@@ -6664,12 +6664,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Throm'ka!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Lok'tar!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Lok'tar ogar!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome, Traveler.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Don't stay to long, the path of war never ends!", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Stay out of trouble.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66307, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66308, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66309, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66310, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66311, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66312, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6691,11 +6691,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Strength and honor!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Victory and honor!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("My life for the Horde!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("For the Warchief.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Blood and thunder!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66313, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66314, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66315, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66316, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66317, Language::LANG_ORCISH); break; }
                                             case 6: { break; }
                                         }
                                         switch (TextRandom)
@@ -6717,10 +6717,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Don't die out there!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Next time you come back, me want to see scars on you!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Always be on your guard.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Bring honor to the Horde!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66318, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66319, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66320, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66321, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6742,10 +6742,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Go away and slay some enemys! Don't waste your breath.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Tell your jokes someone else, i'm busy!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("BAHAHA!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("I got no time for that! I will CRUSH and DESTROY and... uh... oooh... shiny...", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66322, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66323, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66324, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66325, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6768,11 +6768,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You must have fought many battles!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("There should be more of your kind.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Think you strong? Me show you what strong! HAHAHA!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("A true fighter! Good to have you on our side!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Ha! A Draenei has more muscles than you! Bahahahaaa", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66326, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66327, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66328, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66329, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66330, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6796,10 +6796,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Trust me... you no wanna start this.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Your weapon should break in combat!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("If i wouldn't be on duty i would snap your neck like a branch!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("A gnome like you should not try to fight.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66331, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66332, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66333, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66334, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6821,9 +6821,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Why don't you lead an army instead of touching me!?", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("You no touch me!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Are you done?", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66335, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66336, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66337, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6844,7 +6844,7 @@ struct npc_guard_emoteAI : public ScriptedAI
                             {
                                 if (CheckEmoteCooldown())
                                 {
-                                    m_creature->MonsterSay("Poke poke poke - is that all you do?", Language::LANG_ORCISH);
+                                    m_creature->MonsterSay(66338, Language::LANG_ORCISH);
                                     m_creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                                 }
                             }
@@ -6867,12 +6867,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Peace, friend.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("The winds guide you.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("How may I aid you?", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome to Thunderbluff, stay away from the cliffs!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("The wind announced your arrival.", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Earth Mother protects you.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66339, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66340, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66341, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66342, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66343, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66344, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6893,11 +6893,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Ish-ne-alo Por-ah", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("May you find peace in the winds.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Relax a bit. We make sure to keep you safe. Well... if you stay away from the cliff.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Earth Mother shall keep you safe and cozzy here.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Strong as a rock and free as the wind. We protect you, Traveler.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66345, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66346, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66347, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66348, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66349, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6918,13 +6918,13 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 7);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Walk with the Earth Mother.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Winds be at your back.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Farewell!", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Well met, Traveler", Language::LANG_ORCISH); break; }
-                                            case 7: {m_creature->MonsterSay("Stay victorious, Friend", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66350, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66351, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66352, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66353, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66354, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66355, Language::LANG_ORCISH); break; }
+                                            case 7: {m_creature->MonsterSay(66356, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6945,10 +6945,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hohohoho. You should tell that one the others!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("I shouldn't laugh at this but... hm... hmhm.... Hoahahaha!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66357, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66358, Language::LANG_ORCISH); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("Oh... that was a joke. Haha... ha... it wasn't that good.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66359, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6970,10 +6970,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("And you took the lift up here? You could CLIMB up here without sweating!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("By the Earth Mother, i feel sorry for who ever stands against you in battle!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("You call that strong? I show you what strength looks like!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Stop that, you make the other jealous.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66360, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66361, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66362, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66363, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6996,11 +6996,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You know... a fall here is very deep.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("The wind will remember your conceit!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Thunderbluff is a home for everyone. Don't make me do something else.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Moo'. Are you happy now?!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Ha, you make a fool of yourself.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66364, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66365, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66366, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66367, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66368, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7022,10 +7022,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hohohoho!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Your fingers are as fast as the wind. Hahaha!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66369, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66370, Language::LANG_ORCISH); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("That doesn't work on me...", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66371, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
