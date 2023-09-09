@@ -123,15 +123,9 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (count == 0 || dest.empty())
 		return "bagsfulloralreadyhaveitem";
 
-	QueryResult* Result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u", _owner->GetSession()->GetAccountId());
 
-	if (!Result)
-		return "unknowndberror";
+	uint32 coins = GetBalance();
 
-	Field* fields = Result->Fetch();
-
-	uint32 coins = fields[0].GetUInt32();
-	delete Result;
 
 	if (coins > 0)
 	{
@@ -147,7 +141,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
 				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
 
-			bool success = LoginDatabase.CommitTransactionDirect();
+			bool success = LoginDatabase.CommitTransaction();
 
 			if (!success)
 				return "dberrorcantprocess";
