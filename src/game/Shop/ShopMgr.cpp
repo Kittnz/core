@@ -31,6 +31,7 @@
 #include "SpellMgr.h"
 #include "Policies/SingletonImp.h"
 #include "Database/DatabaseEnv.h"
+#include "Database/DatabaseImpl.h"
 #include "Player.h"
 #include "Chat.h"
 
