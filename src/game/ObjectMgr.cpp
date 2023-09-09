@@ -6576,7 +6576,7 @@ void ObjectMgr::LoadReservedPlayersNames()
     }
     while (result->NextRow());
 
-    std::unique_ptr<QueryResult> result2 (WorldDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
+    std::unique_ptr<QueryResult> result2 (CharacterDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
 
     if (!result2)
     {
