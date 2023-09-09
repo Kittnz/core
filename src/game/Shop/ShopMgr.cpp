@@ -30,6 +30,7 @@
 #include "MassMailMgr.h"
 #include "SpellMgr.h"
 #include "Policies/SingletonImp.h"
+#include "Database/DatabaseEnv.h"
 #include "Player.h"
 #include "Chat.h"
 
@@ -61,7 +62,7 @@ void ShopMgr::UpdateBalances(uint32 diff)
 		ss.seekp(-1, ss.cur);
 		ss << ")";
 
-		LoginDatabase.AsyncQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
+		LoginDatabase.AsyncPQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
 		m_shopDiffUpdateBalances = ShopUpdateTimeout;
 		m_accountbalanceUpdates.clear();
 	}
