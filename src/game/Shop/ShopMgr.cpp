@@ -54,18 +54,21 @@ void ShopMgr::UpdateBalances(uint32 diff)
 {
 	if (m_shopDiffUpdateBalances <= diff)
 	{
-		std::ostringstream ss;
-		ss << "SELECT `id`, `coins` FROM `shop_coins` WHERE `id` IN (";
-		for (const auto& val : m_accountbalanceUpdates)
-		{
-			ss << val << ",";
-		}
-		ss.seekp(-1, ss.cur);
-		ss << ")";
-
-		LoginDatabase.AsyncPQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
 		m_shopDiffUpdateBalances = ShopUpdateTimeout;
-		m_accountbalanceUpdates.clear();
+		if (!m_accountbalanceUpdates.empty())
+		{
+			std::ostringstream ss;
+			ss << "SELECT `id`, `coins` FROM `shop_coins` WHERE `id` IN (";
+			for (const auto& val : m_accountbalanceUpdates)
+			{
+				ss << val << ",";
+			}
+			ss.seekp(-1, ss.cur);
+			ss << ")";
+
+			LoginDatabase.AsyncPQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
+			m_accountbalanceUpdates.clear();
+		}
 	}
 	else
 		m_shopDiffUpdateBalances -= diff;
