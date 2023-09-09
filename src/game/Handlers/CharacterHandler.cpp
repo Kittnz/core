@@ -887,8 +887,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
     {
-        if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasItemCount(67000) && !pCurrChar->HasSpell(49517) && !pCurrChar->HasItemCount(67001))
-            pCurrChar->AddItem(67001, 1);
+        if (!pCurrChar->HasSpell(23531) && !pCurrChar->HasItemCount(91780))
+            pCurrChar->AddItem(91781, 1);
     }
 
     pCurrChar->CheckInfernoInvite();
