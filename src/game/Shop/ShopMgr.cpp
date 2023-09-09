@@ -33,29 +33,74 @@
 #include "Player.h"
 #include "Chat.h"
 
+
 ShopMgr::ShopMgr(Player* owner) : _owner(owner)
 {
 }
 
+
+static robin_hood::unordered_map<uint32, uint32> m_accountBalances;
+static robin_hood::unordered_set<uint32> m_accountbalanceUpdates;
+
+
+constexpr uint32 ShopUpdateTimeout = 8 * IN_MILLISECONDS;
+uint32 m_shopDiffUpdateBalances = ShopUpdateTimeout;
+
+
+
+void ShopMgr::UpdateBalances(uint32 diff)
+{
+	if (m_shopDiffUpdateBalances <= diff)
+	{
+		std::ostringstream ss;
+		ss << "SELECT `id`, `coins` FROM `shop_coins` WHERE `id` IN (";
+		for (const auto& val : m_accountbalanceUpdates)
+		{
+			ss << val << ",";
+		}
+		ss.seekp(-1, ss.cur);
+		ss << ")";
+
+		LoginDatabase.AsyncQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
+		m_shopDiffUpdateBalances = ShopUpdateTimeout;
+		m_accountbalanceUpdates.clear();
+	}
+	else
+		m_shopDiffUpdateBalances -= diff;
+}
+
+void ShopMgr::UpdateBalanceCallback(QueryResult* result, int dummy)
+{
+	if (!result)
+		return;
+
+	do {
+		auto fields = result->Fetch();
+
+		uint32 accId = fields[0].GetUInt32();
+		uint32 balance = fields[1].GetUInt32();
+
+		m_accountBalances[accId] = balance;
+	} while (result->NextRow());
+
+	delete result;
+}
+
+void ShopMgr::ScheduleBalanceUpdate()
+{
+	m_accountbalanceUpdates.insert(_owner->GetSession()->GetAccountId());
+}
+
+
 uint32 ShopMgr::GetBalance()
 {
-	uint32 balance = 0;
-	QueryResult* coins_result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", _owner->GetSession()->GetAccountId());
+	ScheduleBalanceUpdate();
+	auto itr = m_accountBalances.find(_owner->GetSession()->GetAccountId());
 
-	if (!coins_result)
-	{
-		LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", _owner->GetSession()->GetAccountId());
-		return balance;
-	}
+	if (itr == m_accountBalances.end())
+		return 0;
 
-	if (coins_result)
-	{
-		Field* fields = coins_result->Fetch();
-		balance = fields[0].GetUInt32();
-		delete coins_result;
-	}
-
-	return balance;
+	return itr->second;
 }
 
 std::string ShopMgr::BuyItem(uint32 itemID)

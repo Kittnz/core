@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "Shop/ShopMgr.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -2443,6 +2444,7 @@ void World::Update(uint32 diff)
     sAccountMgr.Update(diff);
 
     sDailyQuestHandler->Update(diff);
+    ShopMgr::UpdateBalances(diff);
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
