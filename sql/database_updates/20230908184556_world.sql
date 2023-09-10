@@ -24,3 +24,6 @@ UPDATE `creature` SET `position_x` = -11064.550781, `position_y` = -1529.035400,
 UPDATE `creature` SET `position_x` = -11032.131836, `position_y` = -1530.526489, `position_z` = 33.032284, `orientation` = 4.691860 WHERE `guid` = 2578857;
 UPDATE `creature` SET `position_x` = -11064.683594, `position_y` = -1514.058594, `position_z` = 29.625454, `orientation` = 1.637447 WHERE `guid` = 2578860;
 UPDATE `creature` SET `position_x` = -11096.802734, `position_y` = -1517.918823, `position_z` = 28.288122, `orientation` = 1.609961 WHERE `guid` = 2578859;
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5013369, 2010507, 1, -6478.58, -4911.36, 11.3461, 5.87006, 0, 0, 0.205099, -0.978741, 300, 300, 100, 1, 0, 0);
