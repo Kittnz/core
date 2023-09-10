@@ -39,7 +39,10 @@ class ShopMgr
         static void GetBalanceCallback(QueryResult* result, tuple_shop_t<Arg> tuple)
         {
             if (!result)
+            {
+                callbackFunc(accountId, 0, arg);
                 return;
+            }
 
             auto fields = result->Fetch();
             const auto& [callbackFunc, accountId, arg] = tuple;
