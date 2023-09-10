@@ -38,6 +38,8 @@ class ShopMgr
         template <typename Arg>
         static void GetBalanceCallback(QueryResult* result, tuple_shop_t<Arg> tuple)
         {
+            const auto& [callbackFunc, accountId, arg] = tuple;
+
             if (!result)
             {
                 callbackFunc(accountId, 0, arg);
@@ -45,8 +47,6 @@ class ShopMgr
             }
 
             auto fields = result->Fetch();
-            const auto& [callbackFunc, accountId, arg] = tuple;
-
             uint32 coins = fields[0].GetUInt32();
             callbackFunc(accountId, coins, arg);
             delete result;
