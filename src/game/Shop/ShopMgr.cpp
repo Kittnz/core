@@ -89,9 +89,9 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 					LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`, `realm_id`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price
 						, realmID);
 
-				bool success = LoginDatabase.CommitTransaction();
+				LoginDatabase.CommitTransaction();
 
-				if (!success)
+				if (!successTransaction)
 				{
 					response = "dberrorcantprocess";
 					_owner->SendAddonMessage(prefix, result + response);
