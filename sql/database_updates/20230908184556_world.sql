@@ -20,3 +20,4 @@ UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2578860;
 UPDATE `creature` SET `spawntimesecsmin`=7200, `spawntimesecsmax`=7200 WHERE `guid`=2578860;
 UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2565624;
 UPDATE `creature` SET `wander_distance`=0.000000 WHERE `guid`=2565566;
+UPDATE `creature` SET `position_x` = -11064.550781, `position_y` = -1529.035400, `position_z` = 28.415003, `orientation` = 4.700501 WHERE `guid` = 2578858;
