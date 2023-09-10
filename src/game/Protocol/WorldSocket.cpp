@@ -210,7 +210,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     //This should always be checked regardless of IP locking.
     //If the last_ip that was just modified by authserver is different than the client sending CMSG_AUTH_SESSION that's never okay.
-    if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
+   /* if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
     {
         packet.Initialize(SMSG_AUTH_RESPONSE, 1);
         packet << uint8(AUTH_FAILED);
@@ -219,7 +219,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         delete result;
         BASIC_LOG("WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
         return -1;
-    }
+    }*/
 
     id = fields[0].GetUInt32();
     security = sAccountMgr.GetSecurity(id); //fields[1].GetUInt16 ();
