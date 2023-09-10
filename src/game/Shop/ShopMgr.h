@@ -26,16 +26,38 @@
 
 class Player;
 
+template <typename Arg>
+using tuple_shop_t = std::tuple<std::function
+    <void(uint32, uint32, Arg)>, uint32, Arg>;
+
 class ShopMgr
 {
     public:
         explicit ShopMgr(Player* owner);
         
-        static void UpdateBalances(uint32 diff);
-        static void UpdateBalanceCallback(QueryResult* result, int dummy);
+        template <typename Arg>
+        static void GetBalanceCallback(QueryResult* result, tuple_shop_t<Arg> tuple)
+        {
+            if (!result)
+                return;
 
-        void ScheduleBalanceUpdate();
-        uint32 GetBalance();
+            auto fields = result->Fetch();
+            const auto& [callbackFunc, accountId, arg] = tuple;
+
+            uint32 coins = fields[0].GetUInt32();
+            callbackFunc(accountId, coins, arg);
+            delete result;
+        }
+
+
+        template <typename Arg>
+        void GetBalance(std::function<void(uint32, uint32, Arg)> callback, uint32 accountId, Arg arg)
+        {
+            LoginDatabase.AsyncPQueryOv<
+                tuple_shop_t<Arg>>(&GetBalanceCallback<Arg>, std::make_tuple(callback, accountId, arg), "SELECT `coins` FROM `shop_coins` WHERE `id` = %u", accountId);
+        }
+
+
 		std::string BuyItem(uint32 itemID);
 
     private:

@@ -2444,7 +2444,6 @@ void World::Update(uint32 diff)
     sAccountMgr.Update(diff);
 
     sDailyQuestHandler->Update(diff);
-    ShopMgr::UpdateBalances(diff);
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();

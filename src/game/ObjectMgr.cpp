@@ -9097,7 +9097,8 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-    result = LoginDatabase.Query("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` ORDER BY `account`, `time` ASC");
+    result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC",
+        realmID);
 
     if (result)
     {

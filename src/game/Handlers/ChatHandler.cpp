@@ -42,8 +42,10 @@
 #include "Anticheat.h"
 #include "AccountMgr.h"
 #include "Config/Config.h"
+#include "Database/DatabaseImpl.h"
 #include "Shop/ShopMgr.h"
 #include "GMTicketMgr.h"
+
 
 #include "rapidjson/document.h"
 #include "rapidjson/rapidjson.h"
@@ -493,18 +495,26 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		}
 	}
 
+    const std::string prefix = "TW_SHOP";
+
+    static const std::function<void(uint32, uint32, uint32)> balanceCallback = [=](uint32 accountId, uint32 coins, uint32 guidLow)
+    {
+        auto player = sObjectAccessor.FindPlayer(guidLow);
+        if (!player)
+            return;
+
+        player->SendAddonMessage(prefix, "Balance:" + std::to_string(coins));
+    };
+
 	// Shop Addon Coms
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{
 		if (strstr(msg.c_str(), "TW_SHOP"))
 		{
-			const std::string prefix = "TW_SHOP";
-
 			if (strstr(msg.c_str(), "Balance"))
 			{
-
-				uint32 balance = ShopMgr(_player).GetBalance();
-				_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
+                ShopMgr(_player).GetBalance<uint32>(balanceCallback, _player->GetSession()->GetAccountId(), _player->GetGUIDLow());
+				//_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
 			}
 
 			if (strstr(msg.c_str(), "Categories"))
@@ -592,9 +602,12 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 					return;
 				}
 
-				std::string result = "BuyResult:" + ShopMgr(_player).BuyItem(itemID);
-
-				_player->SendAddonMessage(prefix, result);
+                std::string buyResult = ShopMgr(_player).BuyItem(itemID);
+                if (!buyResult.empty())
+                {
+                    std::string result = "BuyResult:" + buyResult;
+                    _player->SendAddonMessage(prefix, result);
+                }
 
 			}
             LogPerformance(msg);
