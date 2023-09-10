@@ -196,6 +196,10 @@ class Database
         // PQuery / static
         template<typename ParamType1>
             bool AsyncPQuery(void (*method)(QueryResult*, ParamType1), ParamType1 param1, const char *format,...) ATTR_PRINTF(4,5);
+
+        template<typename ParamType1>
+            bool AsyncPQueryOv(void (*method)(QueryResult*, ParamType1), ParamType1 param1, const char* format, ...) ATTR_PRINTF(4, 5);
+
         template<typename ParamType1, typename ParamType2>
             bool AsyncPQuery(void (*method)(QueryResult*, ParamType1, ParamType2), ParamType1 param1, ParamType2 param2, const char *format,...) ATTR_PRINTF(5,6);
         template<typename ParamType1, typename ParamType2, typename ParamType3>

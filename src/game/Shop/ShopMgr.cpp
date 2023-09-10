@@ -41,72 +41,6 @@ ShopMgr::ShopMgr(Player* owner) : _owner(owner)
 }
 
 
-static robin_hood::unordered_map<uint32, uint32> m_accountBalances;
-static robin_hood::unordered_set<uint32> m_accountbalanceUpdates;
-
-
-constexpr uint32 ShopUpdateTimeout = 8 * IN_MILLISECONDS;
-uint32 m_shopDiffUpdateBalances = ShopUpdateTimeout;
-
-
-
-void ShopMgr::UpdateBalances(uint32 diff)
-{
-	if (m_shopDiffUpdateBalances <= diff)
-	{
-		m_shopDiffUpdateBalances = ShopUpdateTimeout;
-		if (!m_accountbalanceUpdates.empty())
-		{
-			std::ostringstream ss;
-			ss << "SELECT `id`, `coins` FROM `shop_coins` WHERE `id` IN (";
-			for (const auto& val : m_accountbalanceUpdates)
-			{
-				ss << val << ",";
-			}
-			ss.seekp(-1, ss.cur);
-			ss << ")";
-
-			LoginDatabase.AsyncPQuery(&ShopMgr::UpdateBalanceCallback, 2, ss.str().c_str());
-			m_accountbalanceUpdates.clear();
-		}
-	}
-	else
-		m_shopDiffUpdateBalances -= diff;
-}
-
-void ShopMgr::UpdateBalanceCallback(QueryResult* result, int dummy)
-{
-	if (!result)
-		return;
-
-	do {
-		auto fields = result->Fetch();
-
-		uint32 accId = fields[0].GetUInt32();
-		uint32 balance = fields[1].GetUInt32();
-
-		m_accountBalances[accId] = balance;
-	} while (result->NextRow());
-
-	delete result;
-}
-
-void ShopMgr::ScheduleBalanceUpdate()
-{
-	m_accountbalanceUpdates.insert(_owner->GetSession()->GetAccountId());
-}
-
-
-uint32 ShopMgr::GetBalance()
-{
-	ScheduleBalanceUpdate();
-	auto itr = m_accountBalances.find(_owner->GetSession()->GetAccountId());
-
-	if (itr == m_accountBalances.end())
-		return 0;
-
-	return itr->second;
-}
 
 std::string ShopMgr::BuyItem(uint32 itemID)
 {
@@ -115,6 +49,8 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 
 	if (!shopEntry)
 		return "itemnotinshop";
+
+
 
 	uint32 price = shopEntry->Price;
 	
@@ -128,56 +64,83 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (count == 0 || dest.empty())
 		return "bagsfulloralreadyhaveitem";
 
-
-	uint32 coins = GetBalance();
-
-
-	if (coins > 0)
+	const std::function<void(uint32, uint32, uint32)> balanceCallback = [price, itemID, dest, count](uint32 accountId, uint32 coins, uint32 guidLow)
 	{
-		int32 newBalance = coins - price;
+		auto _owner = sObjectAccessor.FindPlayer(guidLow);
+		if (!_owner)
+			return;
 
-		if (newBalance >= 0)
+		std::string response = "";
+		std::string result = "BuyResult:";
+		const std::string prefix = "TW_SHOP";
+
+		if (coins > 0)
 		{
-			LoginDatabase.BeginTransaction();
+			int32 newBalance = coins - price;
 
-			uint32 shopId = sObjectMgr.NextShopLogEntry();
+			if (newBalance >= 0)
+			{
+				LoginDatabase.BeginTransaction();
 
-			bool successTransaction =
-				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
-				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
+				uint32 shopId = sObjectMgr.NextShopLogEntry();
 
-			bool success = LoginDatabase.CommitTransaction();
+				bool successTransaction =
+					LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
+					LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`, `realm_id`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price
+						, realmID);
 
-			if (!success)
-				return "dberrorcantprocess";
+				bool success = LoginDatabase.CommitTransaction();
 
-
-			auto entry = new ShopLogEntry{
-				shopId,
-				GetCurrentTimeString(),
-				_owner->GetSession()->GetAccountId(),
-				_owner->GetGUIDLow(),
-				itemID,
-				price,
-				false,
-				(uint32)time(nullptr)
-			};
-
-			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
-
-			sObjectMgr.AddShopLogEntry(shopId, entry);
+				if (!success)
+				{
+					response = "dberrorcantprocess";
+					_owner->SendAddonMessage(prefix, result + response);
+					return;
+				}
 
 
+				auto entry = new ShopLogEntry{
+					shopId,
+					GetCurrentTimeString(),
+					_owner->GetSession()->GetAccountId(),
+					_owner->GetGUIDLow(),
+					itemID,
+					price,
+					false,
+					(uint32)time(nullptr)
+				};
 
-			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
-			_owner->SendNewItem(item, count, false, true);
 
-			return "ok";
+				sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
+
+				sObjectMgr.AddShopLogEntry(shopId, entry);
+
+
+
+				Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
+				_owner->SendNewItem(item, count, false, true);
+
+				response = "ok";
+				_owner->SendAddonMessage(prefix, result + response);
+				return;
+			}
+			else
+			{
+				response = "notenoughtokens";
+				_owner->SendAddonMessage(prefix, result + response);
+				return;
+			}
+
 		}
 		else
-			return "notenoughtokens";
-	}
-	else
-		return "notenoughtokens";
+		{
+			response = "notenoughtokens";
+			_owner->SendAddonMessage(prefix, result + response);
+			return;
+		}
+	};
 
+
+	GetBalance<uint32>(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
+	return "";
 }
