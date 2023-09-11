@@ -79,7 +79,7 @@ struct highborne_wraithAI : public ScriptedAI
         if (!fightBegun)
         {
             fightBegun = true;
-            m_creature->MonsterYell("Leave this place! Leave! It took us, it will take you!");
+            m_creature->MonsterYell(66425);
         }
 
         DoMeleeAttackIfReady();
@@ -353,7 +353,7 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
         case 60441: // Torble Sparksprocket
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Here we go! Awaken!");
+                npc->MonsterSay(66372);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
@@ -364,90 +364,90 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
                     analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x51->MonsterSay("Initiating...");
+                    analyzer_x51->MonsterSay(66373);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("Processing...");
+                    analyzer_x51->MonsterSay(66374);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("Processing...");
+                    analyzer_x51->MonsterSay(66374);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("Scanning Unknown beings, threat minimal, universal translator engaged.");
+                    analyzer_x51->MonsterSay(66375);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("Systems Online. Analyzer X-51 Online. Memory banks are currently restricted. How can I assist you?");
+                    analyzer_x51->MonsterSay(66376);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("It works! It speaks! It somehow scanned us and learned our language! Amazing! ahem... What are you?");
+                npc->MonsterSay(66377);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("I am Analyzer X-51, my primary purpose is to analyze systems and mechanisms in order to understand any flaw. Forexample, your purpose has been lost and you have been rendered soft and organic.");
+                    analyzer_x51->MonsterSay(66378);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("What? Wait, are you saying that you are...What Gnomes were originally?");
+                npc->MonsterSay(66379);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("We share a basal design, correct. However I cannot say whether you are an analyzer or not. In fact judging by your structure I cannot even ascertain if you were ever granted a purpose. I require more information.");
+                    analyzer_x51->MonsterSay(66380);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("That's... Amazing, what else can you tell us? Where did you work? Were you assigned to the facility here? Are there more like you?");
+                npc->MonsterSay(66381);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("My limbs are from different models, and my core was not designed for this body. It is fair to assume that others like me existed or exist. I cannot answer your other questions as I do not know. 97 persent of my memory banks are restricted.");
+                    analyzer_x51->MonsterSay(66382);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Is there any way to unrestrict them?");
+                npc->MonsterSay(66383);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("Negative. I require an additional component installed, an activation key.");
+                    analyzer_x51->MonsterSay(66384);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("I see... Then we will have to acquire one later. Thank you Analyzer X-51. $R come over here for a moment.");
+                npc->MonsterSay(66385);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->MonsterSay("I stand by for further instructions or inquiries.");
+                    analyzer_x51->MonsterSay(66386);
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60324))
                         player->KilledMonster(cInfo, ObjectGuid());
@@ -460,7 +460,7 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
         case 60443: // Kex Blowmaster
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Hah! Go on then turn on!");
+                npc->MonsterSay(66387);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
@@ -471,90 +471,90 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
                     analyzer_x48->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x48->MonsterSay("Initiating...");
+                    analyzer_x48->MonsterSay(66373);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("Processing...");
+                    analyzer_x48->MonsterSay(66374);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("Processing...");
+                    analyzer_x48->MonsterSay(66374);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("Scanning Unknown beings, threat minimal, universal translator engaged.");
+                    analyzer_x48->MonsterSay(66388);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("Systems Online. Analyzer X-48 Online. Memory banks are currently restricted. How can I assist you?");
+                    analyzer_x48->MonsterSay(66389);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Oh wow! I was afraid I had to get a Titanic translator or somethin', Yo dude! Tell us where to find gold and rare techologies!");
+                npc->MonsterSay(66390);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("I am Analyzer X-48, my primary purpose is to analyze systems and mechanisms in order to understand any flaw in them. Forexample, your unadulterated greed and thirst for technology is errant and can lead to your destruction.");
+                    analyzer_x48->MonsterSay(66391);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("What? Are you patronizing me?! I gave you life, ya know? I spent time, effort, and MONEY on makin' you work, so help me out yeah? Don't worry about me, I'll be fine even with my greed. Heck if I get enough money maybe it'll go away, so yeah, you can help.");
+                npc->MonsterSay(66392);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("I doubt your sincerity, however I am in your debt. Would that I could help more, but my memory banks are currently restricted. 98 persent of my memory banks are locked and require a key to function.");
+                    analyzer_x48->MonsterSay(66393);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("A key? Huh? Where would we find such a key? Is there another way to unlock your noggin? If we do it will you help?");
+                npc->MonsterSay(66394);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("There is no other way to my knowledge. A key to unlock the memories within me are required. Once I have my memories back I will divulge the knowledge you seek in return for rebuilding me.");
+                    analyzer_x48->MonsterSay("66395");
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Any idea what this knowledge is? Your analytic abilities might be useful, and could help me win some money through gambling or prospectin' or something, but I'd prefer something more substantial. Do you have the blueprints for yourself?");
+                npc->MonsterSay(66396);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("I do not know which knowledge is stored in my restricted memory banks. I however, surmise that since the memories are restricted, they would be valuable secrets to my people. So yes it could contain blueprints or technology and other things.");
+                    analyzer_x48->MonsterSay(66397);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
             DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay("Sweet! Hey Partner, come over here and talk to me! Analyzer you may rest or somethin', we'll talk later.");
+                npc->MonsterSay(66398);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
                 {
-                    analyzer_x48->MonsterSay("Affirmative, standing by.");
+                    analyzer_x48->MonsterSay(66399);
                     analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60324))
                         player->KilledMonster(cInfo, ObjectGuid());
@@ -845,7 +845,7 @@ struct npc_captain_saltbeardAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("We got company on the ship! Push back these mainlanders!");
+        m_creature->MonsterSay(66400);
     }
     void JustRespawned() { Reset(); }
 };
@@ -863,7 +863,7 @@ struct npc_captain_blackeyeAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("Who are you? You think you can take my ship without a fight?!");
+        m_creature->MonsterSay(66401);
     }
     void JustRespawned() { Reset(); }
 };
@@ -881,7 +881,7 @@ struct npc_captain_ironhoofAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("You wont stand a chance against me scurvy dog!");
+        m_creature->MonsterSay(66402);
     }
     void JustRespawned() { Reset(); }
 };
@@ -967,7 +967,7 @@ bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        //pCreature->MonsterSayToPlayer("Prepare to die!", pPlayer);
+        //pCreature->MonsterSayToPlayer(66403, pPlayer);
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -1021,11 +1021,11 @@ bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, 
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterYell("Ahoy! Now let\'s get some rum \'n party.");
+            npc->MonsterYell(66426);
             npc->HandleEmote(EMOTE_ONESHOT_APPLAUD);
             });
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterYell("Yo-ho-ho!");
+            npc->MonsterYell(66427);
             npc->HandleEmote(EMOTE_ONESHOT_CHEER);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60331))
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -1037,7 +1037,7 @@ bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-        pCreature->MonsterSay("The Crying Dandelion, eh? Didn't take ye for a romantic. So be it, the vessel's name will be so from now on, I will let the crew know.");
+        pCreature->MonsterSay(66404);
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -1208,15 +1208,15 @@ bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiS
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
         DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]() {
-            npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
+            npc->MonsterSay(66405);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pCreature, 21 * IN_MILLISECONDS, [npc = pCreature]() {
-            npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
+            npc->MonsterSay(66406);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pCreature, 41 * IN_MILLISECONDS, [ npc = pCreature]() {
-            npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
+            npc->MonsterSay(66407);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pCreature, 56 * IN_MILLISECONDS, [playerGuid, npc = pCreature]() {
@@ -1326,12 +1326,12 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
         {
             npc->SetWalk(true);
             npc->GetMotionMaster()->MovePoint(0, -12864.27F, 2809.63F, -6.85F, 0, 3.0F);
-            npc->PMonsterSay("Come, %s. It is time to banish this evil.", player->GetName());
+            npc->PMonsterSay("66408", player->GetName());
         }
         });
     DoAfterTime(pQuestGiver, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
-            npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim.");
+            npc->MonsterSay(66409);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
@@ -1342,7 +1342,7 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
         });
     DoAfterTime(pQuestGiver, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
-            npc->MonsterSay("With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
+            npc->MonsterSay(66410);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
@@ -1363,7 +1363,7 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
         });
     DoAfterTime(pQuestGiver, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
-            npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
+            npc->MonsterSay(66411);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
@@ -1410,7 +1410,7 @@ struct npc_fearothAI : public ScriptedAI
         if (!fightBegun)
         {
             fightBegun = true;
-            m_creature->MonsterSay("Who are you interlopers? Do you really think you can stop my plans?");
+            m_creature->MonsterSay(66412);
         }
 
         if (!transformed && m_creature->GetHealthPercent() < 25.0f)
@@ -1435,7 +1435,7 @@ struct npc_fearothAI : public ScriptedAI
 
         if (insomnius)
         {
-            insomnius->MonsterSay("It is done! The darkness has faded. Can you feel it dissipating before your very eyes? I'll be returning to the cave. Meet me there.");
+            insomnius->MonsterSay(66413);
             insomnius->DespawnOrUnsummon();
         }
     }
@@ -1465,11 +1465,11 @@ struct npc_lapidisAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("Who let you in this tower?! Do you know who you are messing with?!");
+        m_creature->MonsterSay(66414);
     }
     void JustDied(Unit*) override
     {
-        m_creature->MonsterSay("You know.. Nothing... I was more powerful then all of you.");
+        m_creature->MonsterSay(66415);
     }
     void EnterCombat() {}
     void JustRespawned() { Reset(); }
@@ -1893,7 +1893,7 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
             }, 11000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterYell("Spirits of Azshara, heed my call. Tell me, what is happening to this land.");
+                pQuestGiver->MonsterYell(66428);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_SHOUT);
             }, 19000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -1902,27 +1902,27 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
             }, 23000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I see... A radiant city... full of people.");
+                pQuestGiver->MonsterSay(66416);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 27000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("They are dying... A great wave swallows them all.");
+                pQuestGiver->MonsterSay(66417);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 35000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("Magical energies, waning, blue crystals... A roar.");
+                pQuestGiver->MonsterSay(66418);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 43000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("A shadow... Of a dragon?");
+                pQuestGiver->MonsterSay(66419);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 51000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("This is all... I need a rest.");
+                pQuestGiver->MonsterSay(66420);
                 pQuestGiver->HandleEmote(EMOTE_STATE_KNEEL);
             }, 59000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -2592,8 +2592,8 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
             if (!npc_cookie)
                 return;
 
-            npc_cookie->PMonsterEmote("Cookie looks at Grayson with sadness in his eyes and waves him off.");
-            npc_cookie->MonsterSay("Mrrgl?");
+            npc_cookie->PMonsterEmote(66421);
+            npc_cookie->MonsterSay(66422);
             });
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
             auto npc = player->GetMap()->GetCreature(npcGuid);
@@ -2602,7 +2602,7 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
 
             Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
             if (npc_captain_grayson)
-                npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
+                npc_captain_grayson->MonsterSay(66423);
             });
     }
 
@@ -2640,7 +2640,7 @@ bool QuestRewarded_npc_niremius(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == 40399) // By Any Means Necessary III
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay("I must apologize for lying to you, and using you for power, you must understand, it was all for the greater good of the region.");
+            npc->MonsterSay(66424);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
     }
@@ -2977,25 +2977,25 @@ bool GossipSelect_npc_orvak_sternrock(Player* pPlayer, Creature* pCreature, uint
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
-                    pCreature->MonsterSay("I was once the High Foreman of the Shadowforge Miners Union, me and my men helped build many of the halls of the city itself, and worked tirelessly to appease the Senators of their plots, and whims. We kept our loyalty, and we worked hard, given benefits for our work.");
+                    pCreature->MonsterSay(66429);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 1000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
-                    pCreature->MonsterSay("It was when the plans of the Senate failed, and the Master became upset did their wrath upon us only grow, the project at Hateforge Quarry put many to their limit, and pulled us away from our home to work in dangerous conditions without any regards for what we did in the past.");
+                    pCreature->MonsterSay(66430);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 15000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
-                    pCreature->MonsterSay("We were given impossible tasks, which we could not complete and I was placed to blame. Many of my fellow miners betrayed me, and a new High Foreman was put into my place, those that remained loyal were enslaved, and the rest of us, were exiled. We ended up travelling in exile for days, many of those that were once part of the Caraven died in those early days.");
+                    pCreature->MonsterSay(66431);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 30000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
-                    pCreature->MonsterSay("I was betrayed, backstabbed, and wronged, my heart burns hotter than the Blackrock Mountain, and I demand revenge. Do you see why I ask for help? No doubt you have your reasons to stop the Dark Iron, let me guide your hand, and we shall both be satisfied.");
+                    pCreature->MonsterSay(66432);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 50000);
 
@@ -3014,7 +3014,7 @@ bool QuestRewarded_npc_orvak_sternrock(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 40463) // The True High Foreman
     {
-        pQuestGiver->MonsterSay("Been an honor working with you.");
+        pQuestGiver->MonsterSay(66433);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_SALUTE);
     }
 
@@ -3028,15 +3028,15 @@ bool QuestRewarded_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver,
     if (pQuest->GetQuestId() == 40474) // The Harvest Golem Mystery V
     {
         pQuestGiver->MonsterTextEmote("Maltimor Gartside looks into the blueprints.", pPlayer);
-        pQuestGiver->MonsterSay("Weird... but clever.");
+        pQuestGiver->MonsterSay(66434);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay("Really? Goblins are insane.");
+            npc->MonsterSay(66435);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay("So it is possible...");
+            npc->MonsterSay(66436);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
