@@ -91,7 +91,7 @@ bool QuestRewarded_boss_magni_bronzebeard(Player* pPlayer, Creature* pQuestGiver
 
     if (pQuest->GetQuestId() == 40489) // Assaulting Hateforge
     {
-        pQuestGiver->MonsterSay("Good fortunes to you, and your own, you walk this world with dignity and honor, I hope others will follow in your example.");
+        pQuestGiver->MonsterSay(66155);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
