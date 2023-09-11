@@ -157,12 +157,7 @@ bool EnforceEnglish(WorldSession* session, const std::string& msg)
         ChatHandler(session).SendSysMessage("Don't use invalid characters in public chats!");
         return true;
     }
-    if (hasCyrillic(w_normMsg) || hasChinese(w_normMsg))
-    {
-        ChatHandler(session).SendSysMessage("Please use English in public chats.");
-        return true;
-    }
-    if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+    if (!IsAsciiOnly(w_normMsg))
     {
         ChatHandler(session).SendSysMessage("Please use English in public chats.");
         return true;
