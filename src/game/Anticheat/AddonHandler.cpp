@@ -55,8 +55,8 @@ uint32 GenerateFingerprint()
             fingerprint |= static_cast<uint8>(urand(0x03, 0xFF)) << 8*i;
 
         // if the fingerprint already exists, repeat
-        if (FingerprintExists(fingerprint))
-            continue;
+        //if (FingerprintExists(fingerprint))
+         //   continue;
 
         // if we reach here, we are done
 
