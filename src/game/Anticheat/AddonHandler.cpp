@@ -223,8 +223,8 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     auto& sample = _session->_analyser->GetCurrentSample();
     sample.fingerprint = _fingerprint;
     sample.ipAddress = _session->GetRemoteAddress();
-    _session->_analyser->Enable();
-    _session->_analyser->LoadFromDB();
+    //_session->_analyser->Enable();
+   // _session->_analyser->LoadFromDB();
 
     sWorld.AddFingerprint(_fingerprint, _session->GetUsername());
 
