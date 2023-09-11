@@ -1051,8 +1051,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
                 {
-                    if (EnforceEnglish(this, msg))
-                        return;
+                   // if (EnforceEnglish(this, msg))
+                    //    return;
                 }
 
                 if (guild->GetId() == GUILD_HARDCORE || guild->GetId() == GUILD_NEWCOMERS)
