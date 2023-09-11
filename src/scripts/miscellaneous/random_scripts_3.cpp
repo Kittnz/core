@@ -3955,7 +3955,7 @@ bool QuestRewarded_npc_khan_jehn(Player* pPlayer, Creature* pQuestGiver, Quest c
 
     if (pQuest->GetQuestId() == 40616) // One of Us
     {
-        pQuestGiver->MonsterYell("You are one of us now, the Magram has a champion! You shall bring us to victory!");
+        pQuestGiver->MonsterYell(66624);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_SHOUT);
     }
 
@@ -5212,7 +5212,7 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->PMonsterEmote("Magus Halister begins to call upon the arcane, his channeling draws forth the energy of the spiritual realm.");
+                    pQuestGiver->PMonsterEmote(66619);
                 }, 3000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -5902,7 +5902,7 @@ bool QuestRewarded_npc_commander_starwind(Player* pPlayer, Creature* pQuestGiver
 
     if (pQuest->GetQuestId() == 40812) // Kaldorei Weaponry
     {
-        pQuestGiver->MonsterSay("Hey! We should meditate together some time. We are cut from the same cloth, you and I.");
+        pQuestGiver->MonsterSay(66600);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
@@ -6043,7 +6043,7 @@ bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Qu
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("I invoke the powers of the Council of Tirisfal!");
+                    pQuestGiver->MonsterSay(66601);
                 }, 7000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6068,12 +6068,12 @@ bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Qu
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("Aranal, ledel! Endorel aluminor, endala finel endal!");
+                    pQuestGiver->MonsterSay(66602);
                 }, 17000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("Karazhan, selama am'oronor! Fala'andu, fallah.");
+                    pQuestGiver->MonsterSay(66603);
                 }, 23000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6083,7 +6083,7 @@ bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Qu
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("It is done. The key is whole once more.");
+                    pQuestGiver->MonsterSay(66604);
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 33000);
 
@@ -6306,7 +6306,7 @@ bool QuestRewarded_npc_master_chemist_volterwhite(Player* pPlayer, Creature* pQu
 
     if (pQuest->GetQuestId() == 40868) // Mastering the Formula II
     {
-        pQuestGiver->MonsterSay("Blasted... It would appear that the materials I am working with are not enough... Wait a second, I got it!");
+        pQuestGiver->MonsterSay(66605);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
@@ -6370,12 +6370,12 @@ bool QuestRewarded_npc_orvan_darkeye(Player* pPlayer, Creature* pQuestGiver, Que
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
-                pQuestGiver->PMonsterEmote("The concoction explodes violently, covering Orvan in blood.");
+                pQuestGiver->PMonsterEmote(66620);
             }, 6000);
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                pQuestGiver->MonsterSay("Damn it! We will need the blasted book after all.");
+                pQuestGiver->MonsterSay(66606);
             }, 9000);
     }
     return false;
@@ -6416,7 +6416,7 @@ bool GOSelect_go_aliattans_campfire(Player* pPlayer, GameObject* pGo, uint32 sen
 
             if (Creature* pWillow = pGo->SummonCreature(NPC_WILLOW, -1717.13F, 1811.13F, 59.90F, 1.02F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 2 * MINUTE * IN_MILLISECONDS))
             {
-                pWillow->MonsterSay("Another comes to bother these lands? I do not have the patience to toy with another. Join us in the cold, dead ground.");
+                pWillow->MonsterSay(66607);
                 if (Player* pPlayer = pWillow->FindNearestHostilePlayer(50.0f))
                     pWillow->AI()->AttackStart(pPlayer);
             }
@@ -6432,7 +6432,7 @@ bool QuestRewarded_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pQuestGi
 
     if (pQuest->GetQuestId() == 40956) // The Fall and Rise of Greymane
     {
-        pQuestGiver->MonsterYell("Tyranny has been defeated this day! Our land has been freed from the evil that has corrupted our forests, and murdered countless innocents. A new king has been crowned, glory to Gilneas!");
+        pQuestGiver->MonsterYell(66625);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_ROAR);
     }
 
@@ -6494,7 +6494,7 @@ bool QuestRewarded_npc_ralathius(Player* pPlayer, Creature* pQuestGiver, Quest c
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I invoke the Ancient Pact! Ysera, bless this mortal. Grant him access to the Emerald Dream!");
+                pQuestGiver->MonsterSay(66608);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 3000);
 
@@ -6509,7 +6509,7 @@ bool QuestRewarded_npc_ralathius(Player* pPlayer, Creature* pQuestGiver, Quest c
                 if (!NPC_YSERA)
                     return;
 
-                NPC_YSERA->MonsterSay("You have done well so far, and the Green Dragonflight is already in your debt. Hereby, I grant you my blessing to enter our sacred realm.");
+                NPC_YSERA->MonsterSay(66609);
             }, 6000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6518,7 +6518,7 @@ bool QuestRewarded_npc_ralathius(Player* pPlayer, Creature* pQuestGiver, Quest c
                 if (!NPC_YSERA)
                     return;
 
-                NPC_YSERA->MonsterSay("Stop the Awakening.");
+                NPC_YSERA->MonsterSay(66610);
             }, 9000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6612,7 +6612,7 @@ bool GOSelect_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo, 
                 if (!NPC_HARRISON_BLACKHEART)
                     return false;
 
-                NPC_HARRISON_BLACKHEART->MonsterSay("Rest easy Franklin, you will be missed.");
+                NPC_HARRISON_BLACKHEART->MonsterSay(66611);
                 NPC_HARRISON_BLACKHEART->HandleEmote(EMOTE_ONESHOT_TALK);
             }
         }
@@ -6636,7 +6636,7 @@ bool QuestAccept_npc_buthok_cloudhorn(Player* pPlayer, Creature* pQuestGiver, Qu
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("A dark magic lingers, it is foul in intent...");
+                pQuestGiver->MonsterSay(66612);
             }, 3000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6717,7 +6717,7 @@ bool QuestRewarded_npc_dark_bishop_mordren(Player* pPlayer, Creature* pQuestGive
     if (pQuest->GetQuestId() == 40993) // Through Greater Magic
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        pQuestGiver->MonsterSay("Now witness... The Eye!");
+        pQuestGiver->MonsterSay(66613);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6727,14 +6727,14 @@ bool QuestRewarded_npc_dark_bishop_mordren(Player* pPlayer, Creature* pQuestGive
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("I see... Stillward as it was... the battle.");
+                pQuestGiver->MonsterSay(66614);
             }, 5000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 pQuestGiver->InterruptNonMeleeSpells(true);
-                pQuestGiver->MonsterSay("This cannot be. A Greymane... holding such power.");
+                pQuestGiver->MonsterSay(66615);
                 pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 10000);
 
@@ -6760,7 +6760,7 @@ bool QuestAccept_npc_parnabus(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->PMonsterEmote("The Upper Binding begins to glow with energy.");
+                    pQuestGiver->PMonsterEmote(66621);
                 }, 10000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6770,7 +6770,7 @@ bool QuestAccept_npc_parnabus(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("It is complete, the binding is energized!");
+                    pQuestGiver->MonsterSay(66616);
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                     pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 }, 13500);
@@ -6793,7 +6793,7 @@ bool QuestRewarded_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pQuestGiv
     if (pQuest->GetQuestId() == 41020) // Lord Xanvarak
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay("Walk with the blessings of Cenarius, and may nature guide your path noble one.");
+            npc->MonsterSay(66617);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
     }
@@ -6818,12 +6818,12 @@ bool QuestAccept_npc_great_cat_spirit(Player* pPlayer, Creature* pQuestGiver, Qu
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->PMonsterEmote("Dark magic begins to lift from the Fang of Loresh.");
+                    pQuestGiver->PMonsterEmote(66622);
                 }, 3000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->PMonsterEmote("The dark magic dissipates from the Fang of Loresh.");
+                    pQuestGiver->PMonsterEmote(66623);
                 }, 8000);
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -6833,7 +6833,7 @@ bool QuestAccept_npc_great_cat_spirit(Player* pPlayer, Creature* pQuestGiver, Qu
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
-                    pQuestGiver->MonsterSay("It is done!");
+                    pQuestGiver->MonsterSay(66618);
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                     pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 }, 9500);
