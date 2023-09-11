@@ -31,8 +31,18 @@
 Channel::Channel(std::string const& name)
     : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0)
 {
+    // TODO: Hackfix to properly identify built-in Chinese channels until/if we add support for multi language DBC
+    //  loading.
+    std::string convertedName = name;
+    if (convertedName.find(u8"综合 - ") != std::string::npos) convertedName = "General - ";
+    else if (convertedName.find(u8"交易 - ") != std::string::npos) convertedName = "Trade - ";
+    else if (convertedName.find(u8"本地防务 - ") != std::string::npos) convertedName = "LocalDefense - ";
+    else if (convertedName == u8"世界防务") convertedName = "WorldDefense";
+    else if (convertedName == u8"寻求组队") convertedName = "LookingForGroup";
+    else if (convertedName.find(u8"公会招募 - ") != std::string::npos) convertedName = "GuildRecruitment - ";
+
     // set special flags if built-in channel
-    ChatChannelsEntry const* ch = GetChannelEntryFor(name);
+    ChatChannelsEntry const* ch = GetChannelEntryFor(convertedName);
     if (ch)                                                 // it's built-in channel
     {
         m_channelId = ch->ChannelID;                        // only built-in channel have channel id != 0
