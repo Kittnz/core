@@ -29,6 +29,7 @@
 #include "SqlPreparedStatement.h"
 #include <memory>
 #include <thread>
+#include <optional>
 #include <atomic>
 
 class SqlTransaction;
@@ -231,7 +232,7 @@ class Database
         bool BeginTransaction(uint32 serialId = 0);
         bool InTransaction();
         uint32 GetTransactionSerialId();
-        bool CommitTransaction();
+        bool CommitTransaction(std::function<void(bool)>* callback = nullptr);
         bool RollbackTransaction();
         //for sync transaction execution
         bool CommitTransactionDirect();

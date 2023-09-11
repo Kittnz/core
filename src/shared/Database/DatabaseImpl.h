@@ -218,7 +218,7 @@ template<typename ParamType1>
 bool Database::AsyncPQueryOv(void (*method)(QueryResult*, ParamType1), ParamType1 param1, const char* format, ...)
 {
     ASYNC_PQUERY_BODY(format, szQuery)
-    return AsyncQuery(method, param1, szQuery);
+    return AsyncQueryUnsafe(method, param1, szQuery);
 }
 
 template<typename ParamType1, typename ParamType2>
