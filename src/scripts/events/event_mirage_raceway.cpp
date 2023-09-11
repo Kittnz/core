@@ -867,7 +867,7 @@ CreatureAI* GetAI_npc_car_controller(Creature* creature)
 bool QuestAccepted_npc_daisy(Player* player, Creature* creature, const Quest* quest)
 {
     if (quest->GetQuestId() == QUEST_RACE_AGAINST_TIME)
-        creature->MonsterSay("Go ahead and queue for a race!");
+        creature->MonsterSay(66113);
        
     return true;
 }
