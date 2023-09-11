@@ -62,6 +62,8 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
+        m_announce = false;                                 // no join/leave announces
+
         if (m_name == u8"World")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
