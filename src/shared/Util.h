@@ -268,6 +268,11 @@ inline bool isPrintableAsciiCharacter(wchar_t wchar)
     return wchar >= 0x20 && wchar <= 0x7E;
 }
 
+inline bool isPrintableExtendedAsciiCharacter(wchar_t wchar)
+{
+    return wchar >= 0x20 && wchar < 0xFF;
+}
+
 inline bool isExtendedLatinCharacter(wchar_t wchar)
 {
     if (isBasicLatinCharacter(wchar))
@@ -414,6 +419,14 @@ inline bool isEastAsianString(std::wstring const& wstr, bool numericOrSpace)
 {
     for(size_t i = 0; i < wstr.size(); ++i)
         if(!isEastAsianCharacter(wstr[i]) && (!numericOrSpace || !isNumericOrSpace(wstr[i])))
+            return false;
+    return true;
+}
+
+inline bool IsAsciiOnly(std::wstring const& wstr)
+{
+    for (size_t i = 0; i < wstr.size(); ++i)
+        if (!isPrintableExtendedAsciiCharacter(wstr[i]))
             return false;
     return true;
 }
