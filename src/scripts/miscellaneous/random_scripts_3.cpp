@@ -2581,29 +2581,26 @@ bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 40396 && !pQuestGiver->FindNearestCreature(60709, 30.0F)) // Captain Grayson's Revenge
     {
-        Creature* npc_cookie = pQuestGiver->SummonCreature(60709, -11410.70F, 1966.56F, 10.60F, 6.12F, TEMPSUMMON_TIMED_DESPAWN, 0.125 * MINUTE * IN_MILLISECONDS);
+        pQuestGiver->SummonCreature(60709, -11410.70F, 1966.56F, 10.60F, 6.12F, TEMPSUMMON_TIMED_DESPAWN, 0.125 * MINUTE * IN_MILLISECONDS);
 
-        DoAfterTime(pQuestGiver, 5 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
-            auto npc = player->GetMap()->GetCreature(npcGuid);
-            if (!npc)
-                return;
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                Creature* npc_cookie = pQuestGiver->FindNearestCreature(60709, 30.0F);
+                if (!npc_cookie)
+                    return;
 
-            Creature* npc_cookie = npc->FindNearestCreature(60709, 30.0F);
-            if (!npc_cookie)
-                return;
+                npc_cookie->PMonsterEmote(66421);
+                npc_cookie->MonsterSay(66422);
+            }, 5000);
 
-            npc_cookie->PMonsterEmote(66421);
-            npc_cookie->MonsterSay(66422);
-            });
-        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pQuestGiver->GetObjectGuid().GetCounter()]() {
-            auto npc = player->GetMap()->GetCreature(npcGuid);
-            if (!npc)
-                return;
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                if (!pQuestGiver)
+                    return;
 
-            Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
-            if (npc_captain_grayson)
-                npc_captain_grayson->MonsterSay(66423);
-            });
+                pQuestGiver->MonsterSay(66423);
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
+            }, 9000);
     }
 
     return false;
