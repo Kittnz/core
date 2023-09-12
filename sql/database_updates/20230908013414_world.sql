@@ -526,4 +526,15 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 (66622, 'Dark magic begins to lift from the Fang of Loresh.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (66623, 'The dark magic dissipates from the Fang of Loresh.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (66624, 'You are one of us now, the Magram has a champion! You shall bring us to victory!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(66625, 'Tyranny has been defeated this day! Our land has been freed from the evil that has corrupted our forests, and murdered countless innocents. A new king has been crowned, glory to Gilneas!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(66625, 'Tyranny has been defeated this day! Our land has been freed from the evil that has corrupted our forests, and murdered countless innocents. A new king has been crowned, glory to Gilneas!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66626, 'I have come on behalf of Everwyl Moonseeker, he desires to borrow the book \'Bracing of Nature\'.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66627, 'The Bracing of Nature huh? I remember the name Everwyl fondly. Please, let him know that I expect this returned when he is finished with it.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+
+(66628, 'I\'d like to buy a glyph.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66629, 'I would like to end the Slow & Steady Challenge once and for all.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66630, 'I would like to end the Exhaustion Challenge once and for all.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66631, 'I would like to end the War Mode Challenge once and for all.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66632, 'Tell me about Glyph of the Turtle.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66633, 'Tell me about Glyph of Exhaustion.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66634, 'Tell me about Glyph of War.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(66635, 'Tell me about Glyph of the Vagrant.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
