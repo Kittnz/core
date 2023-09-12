@@ -83,22 +83,26 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 
 			if (newBalance >= 0)
 			{
-				LoginDatabase.BeginTransaction();
 
 				uint32 shopId = sObjectMgr.NextShopLogEntry();
+				LoginDatabase.BeginTransaction();
 
 				bool successTransaction =
 					LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` - %u WHERE `id` = %u", price, _owner->GetSession()->GetAccountId()) &&
 					LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`, `realm_id`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price
 						, realmID);
 
-				std::function<void(bool)> updateCallback = [ownerGuid = _owner->GetGUIDLow()](bool result)
+				std::function<void(bool)> updateCallback = [ownerGuid = _owner->GetGUIDLow(), prefix, result](bool queryResult)
 				{
 					auto owner = sObjectAccessor.FindPlayerNotInWorld(ownerGuid);
 					if (owner)
+					{
 						owner->SetShopAllowed(true);
+						std::string response = "ok";
+						owner->SendAddonMessage(prefix, result + response);
+					}
 
-					if (!result && owner)
+					if (!queryResult && owner)
 						sLog.out(LOG_EXPLOITS, "Player %s bought item but query did not go through.", owner->GetShortDescription().c_str());
 				};
 
@@ -133,8 +137,6 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 				Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
 				_owner->SendNewItem(item, count, false, true);
 
-				response = "ok";
-				_owner->SendAddonMessage(prefix, result + response);
 				_owner->SetShopAllowed(false);
 				return;
 			}

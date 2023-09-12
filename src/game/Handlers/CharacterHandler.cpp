@@ -418,13 +418,13 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     if (ObjectAccessor::FindPlayerNotInWorld(guid))
         return;
 
-    if (!_analyser->IsActive() || IsSuspicious())
+    /*if (!_analyser->IsActive() || IsSuspicious())
     {
         WorldPacket data(SMSG_CHAR_DELETE, 1);
         data << (uint8)CHAR_DELETE_FAILED;
         SendPacket(&data);
         return;
-    }
+    }*/
 
     uint32 accountId = 0;
     std::string name;

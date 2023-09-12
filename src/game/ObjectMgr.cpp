@@ -9121,10 +9121,26 @@ void ObjectMgr::LoadShop()
             m_shopLogs[accountId].push_back(item);
             m_shopLogsLookup[id] = item;
 
-            if (id > m_maxShopEntry.load())
-                m_maxShopEntry = id;
-
         } while (result->NextRow());
+        delete result;
+    }
+
+    constexpr uint32 ShopRealmStart = 1000000;
+    constexpr uint32 ShopRealmStep = 1000000;
+
+    uint32 shopIdsStart = ShopRealmStart + (realmID * ShopRealmStep);
+    uint32 shopIdsEnd = shopIdsStart + ShopRealmStep - 1;
+
+
+    result = LoginDatabase.PQuery("SELECT MAX(id) FROM shop_logs WHERE id >= %u AND id <= %u", shopIdsStart, shopIdsEnd);
+
+    if (!result)
+        m_maxShopEntry = shopIdsStart + 1;
+    else
+    {
+        m_maxShopEntry = result->Fetch()[0].GetUInt32() + 1;
+        if (m_maxShopEntry == 0 | m_maxShopEntry == 1)
+            m_maxShopEntry = shopIdsStart + 1;
         delete result;
     }
 
