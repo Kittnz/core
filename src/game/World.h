@@ -34,6 +34,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Utilities/robin_hood.h"
 //#include "Creature.h"
 
 #include <map>
@@ -859,7 +860,7 @@ class World
         void StopDiscordBot();
         void SendDiscordMessage(uint64 channelId, std::string message);
 
-        typedef std::unordered_map<uint32, WorldSession*> SessionMap;
+        typedef robin_hood::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
         SessionMap GetAllSessions() { return m_sessions; }
         WorldSession* FindSession(uint32 id) const;

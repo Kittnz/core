@@ -23,15 +23,16 @@
 #include "Policies/Singleton.h"
 #include "World.h"
 #include "GuildBank/GuildBank.h"
+#include "Utilities/robin_hood.h"
 
 class Guild;
 class ObjectGuid;
 class Petition;
 class PetitionSignature;
 
-typedef std::unordered_map<uint32, Petition*> PetitionMap;
+typedef robin_hood::unordered_map<uint32, Petition*> PetitionMap;
 typedef std::list<PetitionSignature*> PetitionSignatureList;
-typedef std::unordered_map<uint32, Guild*> GuildMap;
+typedef robin_hood::unordered_map<uint32, Guild*> GuildMap;
 class GuildMgr
 {
     public:
