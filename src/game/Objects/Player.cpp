@@ -23097,7 +23097,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 
 void Player::MailVagrantModeRewards(uint32 level)
 {
-    Item* ToMailItem = Item::CreateItem(50007, 1, this);
+    Item* ToMailItem = Item::CreateItem(GetTeam() == ALLIANCE ? 50007 : 51421, 1, this); 
     ToMailItem->SaveToDB();
 
     MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vagrant Mode! As a gesture of gratitude, we give you a reliable Forworn Mule companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
