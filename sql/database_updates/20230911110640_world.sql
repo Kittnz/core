@@ -15,4 +15,5 @@ update creature_template set npc_flags = 3 where entry = 61568;
 -- Quest The Binding of Xanthar, make sure it has no previous required quests.
 update quest_template set prevquestid = 0 where entry = 41015;
 -- Update Proclaim Champion description to state only one Champion can be proclaimed at a time.  Update Champion buffs to state only 1 Champion effect can be active at a time.
-UPDATE `spell_template` SET `description` = 'Proclaim the friendly target as your champion for 2 hours. Increases armor by 230, all resistances by 10 and allows the use of various Champion spells on that target. Only one Champion can be proclaimed at a time.' WHERE `entry` = 45562
+UPDATE `spell_template` SET `description` = 'Proclaim the friendly target as your champion for 2 hours. Increases armor by 230, all resistances by 10 and allows the use of various Champion spells on that target. Only one Champion can be proclaimed at a time.' WHERE `entry` = 45562;
+update spell_template SET description = 'Your Water Shield ability grants an additional 6 mana per 5 sec. while active.' WHERE entry = 47357; -- Calming River
