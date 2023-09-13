@@ -2216,7 +2216,7 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
 bool GossipHello_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66701, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2255,7 +2255,7 @@ bool QuestRewarded_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature, 
 bool GossipHello_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66701, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2278,7 +2278,7 @@ bool GossipSelect_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature, u
 bool GossipHello_npc_ancestor_of_humility(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66701, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2314,7 +2314,7 @@ bool QuestAccept_npc_bombay(Player* pPlayer, Creature* pQuestGiver, Quest const*
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 5906, false);
-            npc->MonsterSayToPlayer("It be done, I have put the power of the mojo into this serum.", player);
+            npc->MonsterSay(66702);
             player->CompleteQuest(40351);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return true;
@@ -2327,7 +2327,7 @@ bool QuestAccept_npc_bombay(Player* pPlayer, Creature* pQuestGiver, Quest const*
 bool GossipHello_npc_nribbi(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40352) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60509, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "N'ribbi, I have brought this serum for you as tribute.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66703, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2378,22 +2378,24 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
                 if (npc)
-                    npc->MonsterSayToPlayer("Ribbit!", player);
+                    npc->MonsterSay(66704);
                 });
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
                 if (npc)
-                    npc->MonsterSayToPlayer("Riiiibit!", player);
+                    npc->MonsterSay(66705);
                 });
             DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
                 if (npc)
-                    npc->MonsterSayToPlayer("Riibit!", player);
+                    npc->MonsterSay(66706);
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
                 if (npc)
-                    npc->MonsterSayToPlayer("Ribit!", player);                });
+                    npc->MonsterSay(66707);
+                });
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
                 if (npc)
-                    npc->MonsterSayToPlayer("We are saved!", player);                });
+                    npc->MonsterSay(66708);
+                });
             return true;
         }
     }
@@ -2404,7 +2406,7 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
 bool GossipHello_npc_ironpatch(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40355) == QUEST_STATUS_INCOMPLETE) // Sark's Grudge
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let me show what how in shape I am.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66709, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(2547, pCreature->GetGUID());
     return true;
@@ -2414,7 +2416,7 @@ bool GossipSelect_npc_ironpatch(Player* pPlayer, Creature* pCreature, uint32 uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSayToPlayer("Arrrgh!", pPlayer);
+        pCreature->MonsterSay(66710);
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -2427,7 +2429,7 @@ bool GossipHello_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature)
 {
     if (!pPlayer->GetQuestStatus(40358) == QUEST_STATUS_NONE)  // Golden Elves of Feralas
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Let's set sail for Feralas!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66711, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
@@ -2442,7 +2444,7 @@ bool GossipSelect_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature, uint32
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Roll your eyes in disbelief and leave>.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66712, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30015, pCreature->GetGUID());
     }
 
@@ -2457,7 +2459,7 @@ bool GossipSelect_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature, uint32
 bool GossipHello_npc_fazgel_mechaflame(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40360) == QUEST_STATUS_INCOMPLETE) // Highly Unexpected Event
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let's do it!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66713, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2470,7 +2472,7 @@ bool GossipSelect_npc_fazgel_mechaflame(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSayToPlayer("Yeah, I don't think so bub!", pPlayer);
+        pCreature->MonsterSay(66714);
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -2483,7 +2485,7 @@ bool GossipHello_npc_sovatir(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40362) == QUEST_STATUS_INCOMPLETE)  // A Historian Finds You
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Arcanist Sovatir, how is this possible?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66715, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
@@ -2555,7 +2557,7 @@ bool GOHello_mournful_apparition_atack(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestStatus(40370) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(60517, 1, 1))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Take Tattered Necklace.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66716, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30017, pGo->GetGUID());
         }
     }
@@ -2610,7 +2612,7 @@ bool GossipHello_npc_captain_grayson(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(40396))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What was Cookie to you, Grayson?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66717, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
@@ -2655,12 +2657,12 @@ bool QuestAccept_npc_niremius(Player* pPlayer, Creature* pQuestGiver, Quest cons
         pQuestGiver->CastSpell(pQuestGiver, 17447, false);
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("You have given me items of great power, and I will use them to defend this forest until my last breath. Deception can come from all forms, even friends, be wary within the future, and take this as a lesson.", player);
+            npc->MonsterSay(66718);
             });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_BOW);
-            npc->MonsterSayToPlayer("Carry my Glaive with conviction, and good luck.", player);
+            npc->MonsterSay(66719);
             player->CompleteQuest(40401);
             });
 
@@ -2680,13 +2682,13 @@ bool GossipHello_npc_jabbey(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, 66720, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(40411) == QUEST_STATUS_INCOMPLETE)
     {
         if (pCreature->GetEntry() == 8139 && !pPlayer->HasItemCount(60597, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am here to pick up a package for 'Groy'.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66721, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
     }
 
@@ -2694,7 +2696,7 @@ bool GossipHello_npc_jabbey(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 8139 && !pPlayer->HasItemCount(60670, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I was sent by Radgan Deepblaze to obtain something...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66722, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         }
     }
 
@@ -2712,7 +2714,7 @@ bool GossipSelect_npc_jabbey(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->AddItem(60597);
         if (pPlayer->HasItemCount(60597, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Hey now, hush, I don't need everyone knowing my business. Here it is, if you ever need more, you know where to find me bub!", pPlayer);
+            pCreature->MonsterSay(66723);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2727,7 +2729,7 @@ bool GossipSelect_npc_jabbey(Player* pPlayer, Creature* pCreature, uint32 uiSend
         pPlayer->AddItem(60670);
         if (pPlayer->HasItemCount(60670, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Oh, that, I was wondering if he would ever pick it up, I put a lot of time in obtaining this information. Now, go on before someone notices us.", pPlayer);
+            pCreature->MonsterSay(66724);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2749,7 +2751,7 @@ bool GossipHello_npc_captain_wallace_cross(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60729 && !pPlayer->HasItemCount(60602, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "'I have been sent by Colonel Breen to collect your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66725, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -2764,7 +2766,7 @@ bool GossipSelect_npc_captain_wallace_cross(Player* pPlayer, Creature* pCreature
         pPlayer->AddItem(60602);
         if (pPlayer->HasItemCount(60602, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Make sure that the Colonel gets it.", pPlayer);
+            pCreature->MonsterSay(66726);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2786,7 +2788,7 @@ bool GossipHello_npc_captain_harker(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60730 && !pPlayer->HasItemCount(60603, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "'I have been sent by Colonel Breen to collect your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66725, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -2801,7 +2803,7 @@ bool GossipSelect_npc_captain_harker(Player* pPlayer, Creature* pCreature, uint3
         pPlayer->AddItem(60603);
         if (pPlayer->HasItemCount(60603, 1, false))
         {
-            pCreature->MonsterSayToPlayer("The last one didn't make it back to Theramore, be quick.", pPlayer);
+            pCreature->MonsterSay(66727);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2820,7 +2822,7 @@ bool QuestRewarded_npc_koli_steamheart(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 40426) // Recovering Vault Shackles
     {
-        pQuestGiver->MonsterSayToPlayer("Thanks again for the help! I will make sure to study these so the same thing cannot happen again!", pPlayer);
+        pQuestGiver->MonsterSay(66728);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
@@ -2836,7 +2838,7 @@ bool GossipHello_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60792 && !pPlayer->HasItemCount(60635, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Commander Baelos is looking for your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66729, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -2851,7 +2853,7 @@ bool GossipSelect_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature, ui
         pPlayer->AddItem(60635);
         if (pPlayer->HasItemCount(60635, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Oh, here it is, I haven't had the time to deliver it yet, thanks.", pPlayer);
+            pCreature->MonsterSay(66730);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2873,7 +2875,7 @@ bool GossipHello_npc_engineer_wigglestip(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60794 && !pPlayer->HasItemCount(60640, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Adjutant Scheer sent me to get your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66731, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -2888,7 +2890,7 @@ bool GossipSelect_npc_engineer_wigglestip(Player* pPlayer, Creature* pCreature, 
         pPlayer->AddItem(60640);
         if (pPlayer->HasItemCount(60640, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Oh, well here it is! My experiments have been running late all day, take this to him.", pPlayer);
+            pCreature->MonsterSay(66732);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2907,14 +2909,14 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
 
     if (pQuest->GetQuestId() == 40440) // Fel Energy Irregularities III
     {
-        pQuestGiver->MonsterSayToPlayer("It is time to pray that the worst has not come.", pPlayer);
+        pQuestGiver->MonsterSay(66733);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
     if (pQuest->GetQuestId() == 40441) // Fel Energy Irregularities IV
     {
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("So, it is as we suspected, but I need to be sure, and completely sure before we take action.", player);
+            npc->MonsterSay(66734);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
 
@@ -2923,7 +2925,7 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
         if (NPC_riftwatcher_say)
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_riftwatcher_say]() {
-                npc->MonsterSayToPlayer("It would appear that these items are potent with fel energy, they cannot have been lingering for very long.", player);
+                npc->MonsterSay(66735);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             return true;
@@ -2932,7 +2934,7 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
 
     if (pQuest->GetQuestId() == 40444) // Fel Energy Irregularities VII
     {
-        pQuestGiver->MonsterSayToPlayer("It is time to pray that the worst has not come.", pPlayer);
+        pQuestGiver->MonsterSay(66736);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
     }
 
@@ -2945,7 +2947,7 @@ bool QuestRewarded_npc_chaser(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
     if (pQuest->GetQuestId() == 40450) // Repowering Chaser
     {
-        pQuestGiver->MonsterSayToPlayer("Initiating thank you protocols.... THANK YOU", pPlayer);
+        pQuestGiver->MonsterSay(66737);
     }
 
     return false;
@@ -2958,7 +2960,7 @@ bool GossipHello_npc_orvak_sternrock(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40460) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your story Orvak.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66738, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60833, pCreature->GetGUID());
@@ -3024,7 +3026,7 @@ bool QuestRewarded_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver,
 
     if (pQuest->GetQuestId() == 40474) // The Harvest Golem Mystery V
     {
-        pQuestGiver->MonsterTextEmote("Maltimor Gartside looks into the blueprints.", pPlayer);
+        pQuestGiver->MonsterTextEmote(66739);
         pQuestGiver->MonsterSay(66434);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
 
@@ -3129,7 +3131,7 @@ bool GossipHello_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40529) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60767, 1, 1))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Hand him the letter.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66740, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60858, pCreature->GetGUID());
@@ -3141,17 +3143,17 @@ bool GossipSelect_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66741, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30066, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66741, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30067, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66741, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30068, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
@@ -3173,7 +3175,7 @@ bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Qu
 
     if (pQuest->GetQuestId() == 40482) // The Harvest Golem Mystery XIII
     {
-        pQuestGiver->MonsterTextEmote("Franklin Hamar looks into the note.", pPlayer);
+        pQuestGiver->MonsterTextEmote(66742, pPlayer);
         pQuestGiver->MonsterSay(66439);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
 
@@ -3205,7 +3207,7 @@ bool GossipHello_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40485) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Did you produce Animation Runes for the Defias?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66743, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60854, pCreature->GetGUID());
@@ -3216,13 +3218,13 @@ bool GossipSelect_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature, uint
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
         {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Stare silently.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66744, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30024, pCreature->GetGUID());
         }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
         {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Attack.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66745, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30025, pCreature->GetGUID());
         }
 
@@ -3279,7 +3281,7 @@ bool GossipHello_npc_young_blackrock_worg(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60873 && pPlayer->HasItemCount(60720, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Capture the wolf into Worg Cage.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66746, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -3410,7 +3412,7 @@ bool GossipHello_npc_voljin(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40524) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent on behalf of the Sandfury, they have been driven from their home.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66747, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(10540, pCreature->GetGUID());
@@ -3422,13 +3424,13 @@ bool GossipSelect_npc_voljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The Sandfury in Sandmoon Village remind me of the Darkspear.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66748, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30028, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I don't know them well, but they welcomed me in their village like a friend. They had to leave Zul'Farrak because of persecution and despotism of their leader. They ran away, because they saw what is happening there. They saw the darkness, the corruption.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66749, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30029, pCreature->GetGUID());
     }
 
@@ -3454,7 +3456,7 @@ bool QuestRewarded_npc_ekka(Player* pPlayer, Creature* pQuestGiver, Quest const*
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 if (Creature* viceclaw = pQuestGiver->FindNearestCreature(60755, 15.0F))
-                    viceclaw->MonsterTextEmote("Viceclaw: <cackles>");
+                    viceclaw->MonsterTextEmote(66750);
             }, 3000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -3474,17 +3476,17 @@ bool GossipHello_npc_ancient_spirit_wolf(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40532) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf III
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Pour the powder around the site of the Ancient Wolf Spirit.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66751, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pPlayer->GetQuestStatus(40533) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf IV
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to listen to your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66752, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     if (pPlayer->GetQuestStatus(40534) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf V
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " I am ready to challenge you, let us fight.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "66753", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     }
 
     pPlayer->SEND_GOSSIP_MENU(66004, pCreature->GetGUID());
@@ -3576,7 +3578,7 @@ bool GossipHello_npc_sunchaser(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40536) == QUEST_STATUS_INCOMPLETE) // Bond Through Battle
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the meat.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66754, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
@@ -3659,13 +3661,13 @@ bool GOHello_go_abandoned_murloc(Player* pPlayer, GameObject* pGo)
     {
         if (pGo->GetEntry() == 2010918)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Hut.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66755, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30033, pGo->GetGUID());
         }
 
         if (pGo->GetEntry() == 2010919)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Nest.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66756, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(30034, pGo->GetGUID());
         }
     }
@@ -3702,17 +3704,17 @@ bool GossipHello_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatur
         Creature* valnor = pPlayer->FindNearestCreature(60951, 10.0F);
         if (talmand)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66757, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
         }
         if (sleightor)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66757, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
         }
         if (valnor)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66757, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
         }
     }
@@ -3757,12 +3759,12 @@ bool GossipHello_npc_bert_mano(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40567) == QUEST_STATUS_INCOMPLETE) // Sleepwalking at Day
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, your wife seems to think she has evidence of you with another woman.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66758, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pPlayer->GetQuestStatus(40571) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->FindNearestCreature(60954, 40.0F)) // Strange Bedfellows
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Present the Felbound Pendant.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66759, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     pPlayer->SEND_GOSSIP_MENU(52017, pCreature->GetGUID());
@@ -3806,7 +3808,7 @@ bool GossipHello_npc_broter_neals(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40597) == QUEST_STATUS_INCOMPLETE) // The Old Church of Westfall V
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, what exactly happened in Westfall?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66760, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(952, pCreature->GetGUID());
     return true;
@@ -3816,17 +3818,17 @@ bool GossipSelect_npc_broter_neals(Player* pPlayer, Creature* pCreature, uint32 
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66761, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30062, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66761, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30063, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66761, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30064, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
@@ -3909,7 +3911,7 @@ bool GossipHello_npc_khan_jehn(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40616) == QUEST_STATUS_INCOMPLETE) // One of Us
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Jochi sent me to you, Great Khan.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66762, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(560101, pCreature->GetGUID());
         return true;
     }
@@ -3925,8 +3927,8 @@ bool GossipSelect_npc_khan_jehn(Player* pPlayer, Creature* pCreature, uint32 uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Drink the blood.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66764, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66763, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(560102, pCreature->GetGUID());
     }
 
@@ -3962,7 +3964,7 @@ bool QuestRewarded_npc_khan_jehn(Player* pPlayer, Creature* pQuestGiver, Quest c
 bool GossipHello_npc_khan_shaka(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40629) == QUEST_STATUS_INCOMPLETE) // An Honorary Gelkis
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Yesu'gei said I have been summoned by you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66765, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -3975,8 +3977,8 @@ bool GossipSelect_npc_khan_shaka(Player* pPlayer, Creature* pCreature, uint32 ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Inhale deeply.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66766, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66767, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(560201, pCreature->GetGUID());
     }
 
@@ -4033,12 +4035,12 @@ bool GossipHello_npc_q_controlling_sailors(Player* pPlayer, Creature* pCreature)
         Creature* sailor_brewen = pPlayer->FindNearestCreature(61015, 10.0F);
         if (sailor_hylreth)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66768, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(61013, pCreature->GetGUID());
         }
         if (sailor_brewen)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66768, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(61015, pCreature->GetGUID());
         }
     }
@@ -4075,7 +4077,7 @@ bool GossipHello_npc_mally_o_flor(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40670) == QUEST_STATUS_INCOMPLETE) // Information for Thrall
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your information Mally.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66769, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61052, pCreature->GetGUID());
@@ -4167,28 +4169,28 @@ bool QuestRewarded_npc_gowlfang(Player* pPlayer, Creature* pQuestGiver, Quest co
         if (NPC_cheer1)
         {
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Bogpaw Truthsay knows that no gnoll is stronger then Gowlfang! Gowlfang will rule-rule!", player);
+                npc->MonsterSay(66770);
                 });
             DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                npc->MonsterSay(66771);
                 });
         }
         if (NPC_cheer2)
         {
             DoAfterTime(pPlayer, 14.2 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
-                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                npc->MonsterSay(66771);
                 });
         }
         if (NPC_cheer3)
         {
             DoAfterTime(pPlayer, 14.4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
-                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                npc->MonsterSay(66771);
                 });
         }
         if (NPC_cheer4)
         {
             DoAfterTime(pPlayer, 14.6 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer4]() {
-                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                npc->MonsterSay(66771);
                 });
         }
         return true;
@@ -4201,7 +4203,7 @@ bool GOHello_go_resonation_crystal(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010933)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Touch the Crystal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66772, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(2010933, pGo->GetGUID());
     }
     return true;
@@ -4225,7 +4227,7 @@ bool GOHello_go_harmonization_crystal(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010934)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Touch the Crystal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66773, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(2010934, pGo->GetGUID());
     }
     return true;
@@ -4265,12 +4267,12 @@ bool GossipHello_npc_falgran_hastil(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40558) == QUEST_STATUS_INCOMPLETE) // The Meeting with the Enemy.
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready for the meeting.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66774, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pPlayer->GetQuestStatus(40564) == QUEST_STATUS_INCOMPLETE) // The Second Meeting
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready for the meeting.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66774, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     pPlayer->SEND_GOSSIP_MENU(50880, pCreature->GetGUID());
@@ -4529,7 +4531,7 @@ bool GossipHello_npc_grumnir_battlebeard(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40691) == QUEST_STATUS_INCOMPLETE) // A Journey for Vengeance
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear the story.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66775, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60993, pCreature->GetGUID());
@@ -4591,7 +4593,7 @@ bool GossipHello_npc_faldan_moonshatter(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40698) == QUEST_STATUS_INCOMPLETE) // Conflicting Questions
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Maloran Oakbranch has sent me, he is currently looking into the corruption of the Deepmoss in Stonetalon, and heard you may have some insight.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66776, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60471, pCreature->GetGUID());
@@ -4657,7 +4659,7 @@ bool GOHello_go_gong_of_corthan(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestStatus(40713) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(20, 40.0F))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Strike the gong with the Mallet of Zeth", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66777, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30051, pGo->GetGUID());
         }
     }
@@ -4730,7 +4732,7 @@ bool GossipHello_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40714) == QUEST_STATUS_INCOMPLETE) // The Curse of Zetharia
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66778, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60916, pCreature->GetGUID());
@@ -4742,31 +4744,31 @@ bool GossipSelect_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66779, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30102, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66779, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30103, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66779, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30104, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66779, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(30105, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66779, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(30106, pCreature->GetGUID());
     }
 
@@ -5147,7 +5149,7 @@ bool GossipHello_npc_leeza_fraxtoggle(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40733) == QUEST_STATUS_INCOMPLETE) // Gargantuan Information!
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66780, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61116, pCreature->GetGUID());
@@ -5364,7 +5366,7 @@ bool GossipHello_npc_gelweg_darkbrow(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40761) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(60998, 1, false)) // Secrets of the Dark Iron Desecrator
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent by Bixxle Screwfuse, he is asking for you to repay your favors by giving him the plans to the Dark Iron Desecrator.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66781, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(60955, pCreature->GetGUID());
@@ -5399,7 +5401,7 @@ bool GossipHello_npc_nibu(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40771) == QUEST_STATUS_INCOMPLETE) // The Missing Friend!
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Nibu, you are free, return to Ebu!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66782, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61157, pCreature->GetGUID());
@@ -5428,42 +5430,42 @@ bool GossipHello_npc_winter_veil_storytailer(Player* pPlayer, Creature* pCreatur
     case 61182: // Tylekinah Lunalumina
         if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "So I can find this Ancient in Winterspring?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66783, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(61182, pCreature->GetGUID());
         break;
     case 61184: // Bulor Wheathoof
         if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find this Patriarch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66784, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
         pPlayer->SEND_GOSSIP_MENU(61184, pCreature->GetGUID());
         break;
     case 61187: // Brum Bamse
         if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66785, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         }
         pPlayer->SEND_GOSSIP_MENU(61187, pCreature->GetGUID());
         break;
     case 61177: // Raz'umdaj Frostnose
         if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "So where can I find this Great Spirit of Winter?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66786, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         }
         pPlayer->SEND_GOSSIP_MENU(61177, pCreature->GetGUID());
         break;
     case 61179: // Henning Silverbeard
         if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66787, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         }
         pPlayer->SEND_GOSSIP_MENU(61179, pCreature->GetGUID());
         break;
     case 61186: // Tikor Goldspin
         if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where can I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66788, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         }
         pPlayer->SEND_GOSSIP_MENU(61186, pCreature->GetGUID());
         break;
@@ -5702,14 +5704,14 @@ bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
     case 61143: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66789, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         }
         pPlayer->SEND_GOSSIP_MENU(61143, pCreature->GetGUID());
         break;
     case 61147: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66790, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(61147, pCreature->GetGUID());
         break;
@@ -5722,25 +5724,25 @@ bool GossipSelect_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not help them? Commander Starwind wishes the druids to fight with the sentinels!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66791, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30082, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just stand here and do nothing?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66792, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30083, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The sentinels will merely be a distraction then. Their loss of blood will be a way to strike at the backlines?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66793, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30084, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66794, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(30085, pCreature->GetGUID());
     }
 
@@ -5754,25 +5756,25 @@ bool GossipSelect_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature, u
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not retreat? Brolthan Ironglade wishes to aid once everyone is back to Forest Song safely!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66795, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
         pPlayer->SEND_GOSSIP_MENU(30087, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just continue fighting without a plan, without regrouping?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66796, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
         pPlayer->SEND_GOSSIP_MENU(30088, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The druids will be merely bystanders then, while the sentinels sacrifice themselves for glory?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66797, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
         pPlayer->SEND_GOSSIP_MENU(30089, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66794, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
         pPlayer->SEND_GOSSIP_MENU(30090, pCreature->GetGUID());
     }
 
@@ -5809,14 +5811,14 @@ bool GossipHello_npc_commander_starwind(Player* pPlayer, Creature* pCreature)
     case 61143: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the sentinels and the druids here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66789, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         }
         pPlayer->SEND_GOSSIP_MENU(61143, pCreature->GetGUID());
         break;
     case 61147: // 
         if (pPlayer->GetQuestStatus(40801) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40807) == QUEST_STATUS_INCOMPLETE)  // 
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What seems to be the matter between the druids and the sentinels here in Forest Song?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66790, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(61147, pCreature->GetGUID());
         break;
@@ -5829,25 +5831,25 @@ bool GossipSelect_npc_commander_starwind(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not help them? Commander Starwind wishes the druids to fight with the sentinels!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66791, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30082, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just stand here and do nothing?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66792, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30083, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The sentinels will merely be a distraction then. Their loss of blood will be a way to strike at the backlines?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66793, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30084, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66794, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(30085, pCreature->GetGUID());
     }
 
@@ -5861,25 +5863,25 @@ bool GossipSelect_npc_commander_starwind(Player* pPlayer, Creature* pCreature, u
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Then why not retreat? Brolthan Ironglade wishes to aid once everyone is back to Forest Song safely!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66795, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
         pPlayer->SEND_GOSSIP_MENU(30087, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So you will just continue fighting without a plan, without regrouping?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66796, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
         pPlayer->SEND_GOSSIP_MENU(30088, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The druids will be merely bystanders then, while the sentinels sacrifice themselves for glory?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66797, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
         pPlayer->SEND_GOSSIP_MENU(30089, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I must think about this.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66794, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
         pPlayer->SEND_GOSSIP_MENU(30090, pCreature->GetGUID());
     }
 
@@ -5924,7 +5926,7 @@ bool GossipHello_npc_lord_ebonlocke(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40817) == QUEST_STATUS_INCOMPLETE) // The Key to Karazhan I
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your tale Lord Ebonlocke.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66798, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61255, pCreature->GetGUID());
@@ -5936,43 +5938,43 @@ bool GossipSelect_npc_lord_ebonlocke(Player* pPlayer, Creature* pCreature, uint3
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30092, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30093, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30094, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(30095, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(30096, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
         pPlayer->SEND_GOSSIP_MENU(30097, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66799, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
         pPlayer->SEND_GOSSIP_MENU(30098, pCreature->GetGUID());
     }
 
@@ -5992,7 +5994,7 @@ bool GossipHello_npc_dolvan_bracewind(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40825) == QUEST_STATUS_INCOMPLETE) // The Key to Karazhan VI
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66800, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61137, pCreature->GetGUID());
@@ -6004,7 +6006,7 @@ bool GossipSelect_npc_dolvan_bracewind(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue the story.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66801, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30100, pCreature->GetGUID());
     }
 
@@ -6103,7 +6105,7 @@ bool GossipHello_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40837) == QUEST_STATUS_INCOMPLETE) // Rescuing Shizuru
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am here to free you!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66802, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
@@ -6133,10 +6135,10 @@ bool GossipHello_npc_greta_longpike(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40847) == QUEST_STATUS_INCOMPLETE) // Rendezvous with the Infiltrator
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Night Lady, gold in mouth at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Long Blizzard, ice dew at dawn.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Sun Lady, silver in ear at night.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66803, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66804, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66805, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66806, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61379, pCreature->GetGUID());
@@ -6153,7 +6155,7 @@ bool GossipSelect_npc_greta_longpike(Player* pPlayer, Creature* pCreature, uint3
             pPlayer->AddItem(61351, 1);
             if (pPlayer->HasItemCount(61351, 1))
             {
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66806, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                 pPlayer->SEND_GOSSIP_MENU(30109, pCreature->GetGUID());
             }
             else
@@ -6166,7 +6168,7 @@ bool GossipSelect_npc_greta_longpike(Player* pPlayer, Creature* pCreature, uint3
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66806, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30108, pCreature->GetGUID());
     }
 
@@ -6184,7 +6186,7 @@ bool GOHello_go_alpha_channel_valve(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Alpha Channel Valve.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66807, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30113, pGo->GetGUID());
         }
     }
@@ -6225,7 +6227,7 @@ bool GOHello_go_reserve_pump_lever(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestStatus(40856) == QUEST_STATUS_INCOMPLETE) // Backup System Activation
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Reserve Pump Lever.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66808, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30114, pGo->GetGUID());
         }
     }
@@ -6269,7 +6271,7 @@ bool GossipHello_npc_prospector_gehn(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 1255 && !pPlayer->HasItemCount(61403, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Chemist Volterwhite has sent me to request a shipment of Gol'Bolar Ore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66809, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -6284,7 +6286,7 @@ bool GossipSelect_npc_prospector_gehn(Player* pPlayer, Creature* pCreature, uint
         pPlayer->AddItem(61403);
         if (pPlayer->HasItemCount(61403, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Oh, he sent you for ore did he? Make sure he gets it this time.", pPlayer);
+            pCreature->MonsterSay(66810);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
