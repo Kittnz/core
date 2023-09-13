@@ -105,7 +105,7 @@ CreatureAI* GetAI_skeleton_thalo(Creature* _Creature) { return new highborne_wra
 bool GossipHello_analyzor_53(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40044) == QUEST_STATUS_INCOMPLETE) // The Analyzation Chip
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Attempt to pull out the Analyzation Chip.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66636, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(91775, pCreature->GetGUID());
     return true;
 }
@@ -125,7 +125,7 @@ bool GossipSelect_analyzor_53(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
 bool GossipHello_the_cow_king(Player* pPlayer, Creature* pCreature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "King Moo, I wish to challenge you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66637, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(91799, pCreature->GetGUID());
     return true;
 }
@@ -135,7 +135,7 @@ bool GossipSelect_the_cow_king(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, creature = pCreature]() {
-            creature->MonsterSayToPlayer("Very well, young one...", player);
+            creature->MonsterSay(66638);
             creature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
             creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             creature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -244,7 +244,7 @@ bool GossipHello_npc_bessy(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(40056))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport me to the Cow Level", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66639, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -299,7 +299,7 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
 bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(40099)->m_creatureOrGOcount[2] != 5)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66654, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     return true;
 }
@@ -332,8 +332,8 @@ bool GossipHello_npc_torble_and_kex(Player* pPlayer, Creature* pCreature)
     {
         if (pCreature->GetEntry() == 60441 || pCreature->GetEntry() == 60443)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let's do it!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Not right now, give me a moment.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66640, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66641, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
     }
 
@@ -441,7 +441,7 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
                 }
                 });
             DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66385);
+                npc->MonsterSayToPlayer("I see... Then we will have to acquire one later. Thank you Analyzer X-51. $R come over here for a moment.", player);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -661,7 +661,7 @@ bool GossipHello_npc_samuel_boran(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60205, 1, false))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66642, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
@@ -682,11 +682,11 @@ bool GossipSelect_npc_samuel_boran(Player* pPlayer, Creature* pCreature, uint32 
             pPlayer->SaveInventoryAndGoldToDB();
         }
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("I knew Arnold was still out there somewhere, though I cannot imagine what it would be like stranded on some island at sea. Hopefully he returns home safely.", player);
+            npc->MonsterSay(66643);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("I have a letter for you, deliver it to him and with haste.", player);
+            npc->MonsterSay(66644);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             player->AddItem(60203, 1);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60326))
@@ -704,7 +704,7 @@ bool GossipHello_npc_karl_boran(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60204, 1, false))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66642, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
@@ -725,11 +725,11 @@ bool GossipSelect_npc_karl_boran(Player* pPlayer, Creature* pCreature, uint32 ui
             pPlayer->SaveInventoryAndGoldToDB();
         }
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("A letter from Arnold... I thought he died at sea, I haven't heard from him in such a long time.", player);
+            npc->MonsterSay(66645);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("This is splendid news, here, please, take this to him.", player);
+            npc->MonsterSay(66646);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             player->AddItem(60202, 1);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60325))
@@ -749,15 +749,15 @@ bool GossipHello_npc_chef_jenkel(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy something?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, 66647, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Teach me how to cook, mon!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66648, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 
     if (pPlayer->GetQuestStatus(40142) == QUEST_STATUS_INCOMPLETE)
     {
         if (pCreature->GetEntry() == 91950 && !pPlayer->HasItemCount(60207, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Slim is asking for salt.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66649, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         }
     }
 
@@ -775,7 +775,7 @@ bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 u
         pPlayer->AddItem(60207);
         if (pPlayer->HasItemCount(60207, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Alright, fine, but he owes me, make sure you tell him!", pPlayer);
+            pCreature->MonsterSay(66650);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -797,13 +797,13 @@ bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 u
 bool GossipHello_npc_marty_moonshine(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, 66651, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(40148) == QUEST_STATUS_INCOMPLETE)
     {
         if (pCreature->GetEntry() == 92137 && !pPlayer->HasItemCount(60217, 1, false))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Give me the recipe for the Southsea Reserve and I'll let you live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66652, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
     }
 
@@ -821,7 +821,7 @@ bool GossipSelect_npc_marty_moonshine(Player* pPlayer, Creature* pCreature, uint
         pPlayer->AddItem(60217);
         if (pPlayer->HasItemCount(60217, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Fine! Spare me please, here is the recipe!", pPlayer);
+            pCreature->MonsterSay(66653);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -892,13 +892,13 @@ bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66655, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
     if (pPlayer->GetQuestStatus(40186) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60257, 1, false))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ignite the gunpowder.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66656, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
     return true;
@@ -930,7 +930,7 @@ bool GOHello_go_keg_of_rum(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40178) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60252, 1, false))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison the rum.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66657, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
     }
     return true;
@@ -954,7 +954,7 @@ bool GOSelect_go_keg_of_rum(Player* pPlayer, GameObject* pGo, uint32 sender, uin
 bool GossipHello_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40179) == QUEST_STATUS_INCOMPLETE) // Exterminate the Rat
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Spit in Morgan's face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66658, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -967,7 +967,7 @@ bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        //pCreature->MonsterSayToPlayer(66403, pPlayer);
+        //pCreature->MonsterSay(66403);
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -979,13 +979,13 @@ bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uin
 bool GossipHello_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40172) == QUEST_STATUS_INCOMPLETE) // Red Flag over the Sea
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I want to join you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66659, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(40187) == QUEST_STATUS_INCOMPLETE) // Captain of the Bloodsail Buccaneers
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66660, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pPlayer->GetQuestStatus(40354) == QUEST_STATUS_INCOMPLETE) // Naming the Vessel
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll call it The Crying Dandelion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66661, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -1013,11 +1013,11 @@ bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, 
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Well done, Cap'n!", player);
+            npc->MonsterSay(66662);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Set yer veils high 'n conquer this world under yer name 'n the Jolly Roger o' the Bloodsail Buccaneers!", player);
+            npc->MonsterSay(66663);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -1058,7 +1058,7 @@ bool GossipHello_npc_thirael(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40184) == QUEST_STATUS_INCOMPLETE) // No Hope for Tomorrow
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I will end your pain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66664, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -1112,11 +1112,11 @@ bool QuestRewarded_npc_blazno(Player* pPlayer, Creature* pQuestGiver, Quest cons
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("Now, behold my brilliance, my sheer wit and power of mind! With these items, I will be rich again! Haha!", player);
+            npc->MonsterSay(66665);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("Huh... Maybe its supposed to take a while, I'll think of a new method to make this work, thanks again pal!", player);
+            npc->MonsterSay(66666);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
@@ -1141,7 +1141,7 @@ bool QuestRewarded_npc_daela_evermoon(Player* pPlayer, Creature* pQuestGiver, Qu
 bool GossipHello_npc_old_greypaw(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40197) == QUEST_STATUS_INCOMPLETE) // Old Greypaw
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Daela Evermoon was asking if you were okay.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66667, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(60470, pCreature->GetGUID());
 
@@ -1153,11 +1153,11 @@ bool GossipSelect_npc_old_greypaw(Player* pPlayer, Creature* pCreature, uint32 u
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("WHO?! Evermoon asking if I am weak?! Evermoon want to kill me huh?! Who are you, messenger, scout?", player);
+            npc->MonsterSay(66668);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("You think you can probe me for weakness?!", player);
+            npc->MonsterSay(66669);
             npc->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             npc->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -1188,10 +1188,10 @@ bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66670, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(40214) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "We must banish this evil together.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66671, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
     return true;
@@ -1266,7 +1266,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 player->AddItem(60244);
                 if (player->HasItemCount(60244, 1, false))
                 {
-                    npc->MonsterSayToPlayer("There, it is done. The key is attuned. Do with it what you must. I hope that it serves you well for whatever purpose you are using it.", player);
+                    npc->MonsterSay(66672);
                     npc->HandleEmote(EMOTE_ONESHOT_TALK);
                     npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                     return true;
@@ -1297,7 +1297,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 player->AddItem(60345);
                 if (player->HasItemCount(60345, 1, false))
                 {
-                    npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
+                    npc->MonsterSay(66673);
                     npc->HandleEmote(EMOTE_ONESHOT_TALK);
                     return true;
                 }
@@ -1480,7 +1480,7 @@ CreatureAI* GetAI_npc_lapidis(Creature* _Creature) { return new npc_lapidisAI(_C
 bool GossipHello_npc_lorthiras(Player* pPlayer, Creature* pCreature)
 {
     //if (pPlayer->GetQuestStatus(00000) == QUEST_STATUS_INCOMPLETE)
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am looking for a fight dreadlord.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66674, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -1511,7 +1511,7 @@ bool QuestRewarded_npc_lorthiras(Player* pPlayer, Creature* pQuestGiver, Quest c
         pQuestGiver->CastSpell(pQuestGiver, 698, false); // Ritual of Summoning
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("You feel it, don't you, the knowledge swell within your mind, the very fabric of my magic clinging to your thoughts. You have been gifted knowledge which is forbidden to your kind, and once you craft the blade, it will be forgotten forever.", player);
+            npc->MonsterSay(66675);
             npc->CastSpell(npc, 1456, false); // Life Tap
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
@@ -1582,7 +1582,7 @@ GameObjectAI* GetAI_magically_sealed_door(GameObject* Obj) { return new magicall
 bool GossipHello_npc_iselus(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40285) == QUEST_STATUS_INCOMPLETE)
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I come asking for help in finding someone, have you met an orcish blademaster years ago?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66676, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -1596,7 +1596,7 @@ bool GossipSelect_npc_iselus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Hmm, now that you've mentioned it, I recall such a figure, he was a muscular orc, though quite friendly. This was during the demonic invasion a few years back, he sought battle within the Temple of Arrkoran the last I seen him, hopefully this helps your search.", player);
+            npc->MonsterSay(66677);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60340))
                 player->KilledMonster(dummy_bunny, ObjectGuid());
@@ -1618,13 +1618,13 @@ bool GOHello_go_way_stone(Player* pPlayer, GameObject* pGo)
         switch (pGo->GetEntry())
         {
         case 2010849:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to Shattered Strand.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66678, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
             return true;
             break;
 
         case 2010850:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to Temple of Arkkoran.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66679, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
             return true;
             break;
@@ -1655,7 +1655,7 @@ bool GOHello_go_ashan_stone(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40253) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Tizah Ashan Dal'asha.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66680, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->CLOSE_GOSSIP_MENU();
     }
     pPlayer->SEND_GOSSIP_MENU(100400, pGo->GetGUID());
@@ -1685,10 +1685,10 @@ bool GossipHello_npc_lord_crukzogg(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40264) == QUEST_STATUS_INCOMPLETE) // The Maul'ogg Crisis I
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Lord Cruk'Zogg, I come on behalf of Haz'gorg, he is asking you to end your foolhardy aggresion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66681, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(40272) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60345, 1, false)) // The Maul'ogg Crisis IX
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Lord Cruk'zogg, Haz'gorg has asked me to deliver this potion of strength to help enhance your mighty power!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66682, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     pPlayer->SEND_GOSSIP_MENU(92180, pCreature->GetGUID());
 
@@ -1701,7 +1701,7 @@ bool GossipSelect_npc_lord_crukzogg(Player* pPlayer, Creature* pCreature, uint32
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Hah!", player);
+            npc->MonsterSay(66683);
             npc->HandleEmote(EMOTE_ONESHOT_LAUGH);
             });
         DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -1723,11 +1723,11 @@ bool GossipSelect_npc_lord_crukzogg(Player* pPlayer, Creature* pCreature, uint32
             player->SaveInventoryAndGoldToDB();
             });
         DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("A potion of strength?! Haz'gorg has learned his place, hah!", player);
+            npc->MonsterSay(66385);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("I can feel it, yes, through my body! I... Hmm... I feel funny, and good. Tell Haz'gorg that I thank him for the potion, I have thought over what he said earlier, maybe Maul'ogg rest and think about strategy to expand, rather then smash enemy.", player);
+            npc->MonsterSay(66475);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -1748,7 +1748,7 @@ bool GossipHello_npc_seer_bolukk(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40266) == QUEST_STATUS_INCOMPLETE) // The Maul'ogg Crisis III
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I was sent on behalf of Haz'gorg the Great Seer to remedy the situation with Lord Cruk'Zogg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66684, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(91854, pCreature->GetGUID());
 
@@ -1761,12 +1761,12 @@ bool GossipSelect_npc_seer_bolukk(Player* pPlayer, Creature* pCreature, uint32 u
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("I have not spoken with Haz'gorg in some time, but my people are also going through much the same as he, the Gor'dosh have fallen on dark times, and are ruled by a tyrant. I hold no power any longer, but if I can help the Maul'ogg then perhaps I have done something for the greater good.", player);
+            npc->MonsterSay(66685);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Before the Tyrant King came into power, I had dabbled with the idea of making an elixir, a potion, or a spell to sway his mind into seeking less hostile means, perhaps this could work with Lord Cruk'Zogg, to pacify him from being engulfed into madness, bring this information back to Haz'gorg, perhaps he can figure out something that I could not.", player);
+            npc->MonsterSay(66686);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 33 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -1838,7 +1838,7 @@ bool QuestAccept_npc_pierce_shackleton(Player* pPlayer, Creature* pQuestGiver, Q
 bool GossipHello_npc_katokar_bladewind(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40289) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tak'gar Deephate.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66687, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -1852,7 +1852,7 @@ bool GossipSelect_npc_katokar_bladewind(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("You have honored the dead, may his soul be guided safely to his fellow masters.", player);
+            npc->MonsterSay(66688);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60341))
                 player->KilledMonster(dummy_bunny, ObjectGuid());
@@ -2013,7 +2013,7 @@ bool QuestAccept_npc_korgan(Player* pPlayer, Creature* pQuestGiver, Quest const*
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->MonsterSayToPlayer("It is done! The power of the arcane flowed through my veins, and I was able to mimic the magic that once lingered upon the key. Now, the protection of the Horde can dominate our thought, and guide our next step.", player);
+                npc->MonsterSay(66689);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60344))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
@@ -2046,7 +2046,7 @@ bool QuestAccept_npc_magus_ariden_dusktower(Player* pPlayer, Creature* pQuestGiv
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->MonsterSayToPlayer("There! It took a considerable amount of focus, but I was able to mimic the magic upon the key, now we can turn our attention to the evil present beneath Karazhan.", player);
+                npc->MonsterSay(66690);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60345))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
@@ -2067,7 +2067,7 @@ bool GossipHello_npc_inunquaq(Player* pPlayer, Creature* pCreature)
     case 81046: // Inunquaq in Darkshore
         if (!pPlayer->GetQuestStatus(40321) == QUEST_STATUS_NONE)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to travel Inunquaq, let us head out!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66691, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         if (pCreature->IsQuestGiver())
             pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2078,7 +2078,7 @@ bool GossipHello_npc_inunquaq(Player* pPlayer, Creature* pCreature)
     case 60611: // Inunquaq in The Northeast Passage
         if (pPlayer->GetQuestRewardStatus(40321) || pPlayer->GetQuestStatus(40321) == QUEST_STATUS_COMPLETE)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Inunquaq, I wish to return to Darkshore", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66692, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
         if (pCreature->IsQuestGiver())
             pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2115,7 +2115,7 @@ bool GOHello_go_moo_rune(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010799)
     {
-         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Teleport me to Bessy", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66693, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
          pPlayer->SEND_GOSSIP_MENU(2010799, pGo->GetGUID());
     }
     return true;
@@ -2141,7 +2141,7 @@ bool GossipHello_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40338) == QUEST_STATUS_INCOMPLETE) // The Azurestone
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to hear the tale of the Azurestone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66694, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(60629, pCreature->GetGUID());
 
@@ -2154,15 +2154,15 @@ bool GossipSelect_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Long, long ago, we first discovered the Azurestone when digging the very halls of Ironforge itself, at the beginning, it was simply seen as a beautiful blue jewel and held a natural value. Quite quickly thereafter, the power of the Azurestone was discovered by a dwarf naturally gifted with the arcana.", player);
+            npc->MonsterSay(66695);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Huidgrar Azurebrow was the one who studied the stone, and taught others of its power, the name 'Azurestone' came from his name, and those that studied beneath him created 'The Azurestone Order'. The Order has been pivotal in many key points in history, from the War of the Three Hammers, to when the orcs were getting close to Ironforge itself!", player);
+            npc->MonsterSay(66696);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("When Huidgrar died from his rather long and vibrant life, the Azurestone Order fell with him, falling into obscurity with time. It is up to us, the naturally gifted of our kind to reignite this ancient group, and to show the world our prowess with fire, frost, and the arcane!", player);
+            npc->MonsterSay(66697);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -2191,17 +2191,17 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("Spirits, it is I, Sage Palerunner, I call from the mortal plane to bring another into the fold. They have already braved the harsh wilds to gather the Spiritleaf required, they show true bravery in the face of adversity.", player);
+            npc->MonsterSay(66698);
             });
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("I ask of you to allow your magic to flow through into their body, and be blessed by the Earthmother's gift. They will be the bearer of our culture, and our traditions, from now until the end of time.", player);
+            npc->MonsterSay(66699);
             });
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 5906, false);
             });
         DoAfterTime(pPlayer, 26 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSayToPlayer("The ritual is complete, they will see you, to see if you are truly worthy.", player);
+                npc->MonsterSay(66700);
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -4142,7 +4142,7 @@ bool QuestRewarded_npc_war_crier_darnakk(Player* pPlayer, Creature* pQuestGiver,
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay(66475);
+            npc->MonsterSayToPlayer("You have destroyed our foe $N, and showed them true might. I bow in witness of such glory, Lok'tar", player);
             npc->HandleEmote(EMOTE_ONESHOT_BOW);
             });
     }
