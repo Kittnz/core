@@ -114,7 +114,7 @@ bool GossipSelect_analyzor_53(Player* pPlayer, Creature* pCreature, uint32 uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSayToPlayer("Foreign interference detected! Dispatch threat!", pPlayer);
+        pCreature->MonsterSay(66820);
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
@@ -281,10 +281,10 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
             npc->HandleEmote(EMOTE_STATE_WORK);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("Now, I just put this here, and then...", player);
+            npc->MonsterSay(66821);
             });
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("That's done it, I knew the Turbo-Charged Wobblefree Fizz-disk would come in handy.", player);
+            npc->MonsterSay(66822);
             });
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -3486,7 +3486,7 @@ bool GossipHello_npc_ancient_spirit_wolf(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40534) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf V
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "66753", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66753, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     }
 
     pPlayer->SEND_GOSSIP_MENU(66004, pCreature->GetGUID());
@@ -6395,7 +6395,7 @@ bool GOHello_go_aliattans_campfire(Player* pPlayer, GameObject* pGo)
 
         if (pPlayer->GetQuestStatus(40908) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect the fire more closely.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66811, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30115, pGo->GetGUID());
         }
     }
@@ -6445,7 +6445,7 @@ bool GossipHello_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestStatus(40972) == QUEST_STATUS_INCOMPLETE) // The Rebellion
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Debrief me on the situation in Gilneas.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66812, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61326, pCreature->GetGUID());
@@ -6457,19 +6457,19 @@ bool GossipSelect_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30123, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Continue>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30124, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I see.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66814, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30125, pCreature->GetGUID());
     }
 
@@ -6586,7 +6586,7 @@ bool GOHello_go_grave_of_franklin_blackheart(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestStatus(40982) == QUEST_STATUS_INCOMPLETE) // In Memory of Franklin
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Place the necklace on the grave.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66815, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(30126, pGo->GetGUID());
     }
@@ -6661,7 +6661,7 @@ bool GOHello_go_runestone_of_nordrassil(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestRewardStatus(40990))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Runestone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66816, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(30127, pGo->GetGUID());
     }
@@ -6688,7 +6688,7 @@ bool GOHello_go_runestone_of_cenarius(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestRewardStatus(40990))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Activate the Runestone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66816, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(30127, pGo->GetGUID());
     }
@@ -6863,7 +6863,7 @@ bool GOHello_go_velindes_memory(Player* pPlayer, GameObject* pGo)
 
         if (pPlayer->GetQuestStatus(41064) == QUEST_STATUS_COMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->GetQuestRewardStatus(41066))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect this item.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66817, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
         }
     }
@@ -6922,7 +6922,7 @@ bool GossipHello_npc_councilman_kyleson(Player* pPlayer, Creature* pCreature)
 
     if (pPlayer->GetQuestRewardStatus(41086)) // Wine for Kyleson
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Have you seen, or heard anything unusual in Karazhan?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66818, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->SEND_GOSSIP_MENU(61322, pCreature->GetGUID());
@@ -6946,7 +6946,7 @@ bool GOHello_go_strange_marble_bust(Player* pPlayer, GameObject* pGo)
     {
         if (pPlayer->GetQuestRewardStatus(41086))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect the Marble Bust closely.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66819, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(30132, pGo->GetGUID());
     }
