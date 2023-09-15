@@ -3406,38 +3406,41 @@ void SpellMgr::LoadSpells()
 
     } while (result->NextRow());
 
-    // Load localized texts.
-    //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12                  13                  14                  15                  16                  17                  18                  19                      20                      21                      22                      23                      24
-    result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `nameSubtext_loc1`, `nameSubtext_loc2`, `nameSubtext_loc3`, `nameSubtext_loc4`, `nameSubtext_loc5`, `nameSubtext_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `auraDescription_loc1`, `auraDescription_loc2`, `auraDescription_loc3`, `auraDescription_loc4`, `auraDescription_loc5`, `auraDescription_loc6` FROM `locales_spell`"));
-    if (result)
+    if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
     {
-        do
+        // Load localized texts.
+        //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12                  13                  14                  15                  16                  17                  18                  19                      20                      21                      22                      23                      24
+        result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `nameSubtext_loc1`, `nameSubtext_loc2`, `nameSubtext_loc3`, `nameSubtext_loc4`, `nameSubtext_loc5`, `nameSubtext_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `auraDescription_loc1`, `auraDescription_loc2`, `auraDescription_loc3`, `auraDescription_loc4`, `auraDescription_loc5`, `auraDescription_loc6` FROM `locales_spell`"));
+        if (result)
         {
-            fields = result->Fetch();
-            uint32 spellId = fields[0].GetUInt32();
-            if ((spellId > maxEntry) || (!mSpellEntryMap[spellId]))
-                continue;
+            do
+            {
+                fields = result->Fetch();
+                uint32 spellId = fields[0].GetUInt32();
+                if ((spellId > maxEntry) || (!mSpellEntryMap[spellId]))
+                    continue;
 
-            mSpellEntryMap[spellId]->SpellName[1] = fields[1].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[2] = fields[2].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[3] = fields[3].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[4] = fields[4].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[5] = fields[5].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[6] = fields[6].GetCppString();
-            mSpellEntryMap[spellId]->Rank[1] = fields[7].GetCppString();
-            mSpellEntryMap[spellId]->Rank[2] = fields[8].GetCppString();
-            mSpellEntryMap[spellId]->Rank[3] = fields[9].GetCppString();
-            mSpellEntryMap[spellId]->Rank[4] = fields[10].GetCppString();
-            mSpellEntryMap[spellId]->Rank[5] = fields[11].GetCppString();
-            mSpellEntryMap[spellId]->Rank[6] = fields[12].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[1] = fields[1].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[2] = fields[2].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[3] = fields[3].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[4] = fields[4].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[5] = fields[5].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[6] = fields[6].GetCppString();
+                mSpellEntryMap[spellId]->Rank[1] = fields[7].GetCppString();
+                mSpellEntryMap[spellId]->Rank[2] = fields[8].GetCppString();
+                mSpellEntryMap[spellId]->Rank[3] = fields[9].GetCppString();
+                mSpellEntryMap[spellId]->Rank[4] = fields[10].GetCppString();
+                mSpellEntryMap[spellId]->Rank[5] = fields[11].GetCppString();
+                mSpellEntryMap[spellId]->Rank[6] = fields[12].GetCppString();
 
-			mSpellEntryMap[spellId]->ToolTip[1] = fields[19].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[2] = fields[20].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[3] = fields[21].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[4] = fields[22].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[5] = fields[23].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[6] = fields[24].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[1] = fields[19].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[2] = fields[20].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[3] = fields[21].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[4] = fields[22].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[5] = fields[23].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[6] = fields[24].GetCppString();
 
-        } while (result->NextRow());
+            } while (result->NextRow());
+        }
     }
 }

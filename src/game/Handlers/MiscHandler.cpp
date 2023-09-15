@@ -247,6 +247,11 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
         return;
     //recv_data.hexlike();
 
+    time_t t = time(nullptr);
+
+    if (t - m_lastWhoRequest < 30)
+        return;
+
 
     std::string player_name, guild_name;
 
@@ -318,6 +323,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
     if (task.level_max >= MAX_LEVEL)
         task.level_max = PLAYER_STRONG_MAX_LEVEL;
 
+    m_lastWhoRequest = time(nullptr);
     SetReceivedWhoRequest(true);
     sWorld.AddAsyncTask(std::move(task));
 }

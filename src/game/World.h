@@ -34,6 +34,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Utilities/robin_hood.h"
 //#include "Creature.h"
 
 #include <map>
@@ -673,6 +674,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY,
     CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES,
     CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY,
+    CONFIG_BOOL_LOAD_LOCALES,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -859,7 +861,7 @@ class World
         void StopDiscordBot();
         void SendDiscordMessage(uint64 channelId, std::string message);
 
-        typedef std::unordered_map<uint32, WorldSession*> SessionMap;
+        typedef robin_hood::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
         SessionMap GetAllSessions() { return m_sessions; }
         WorldSession* FindSession(uint32 id) const;
@@ -1239,7 +1241,7 @@ class World
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
         SessionSet m_disconnectedSessions;
-        std::map<uint32 /*accountId*/, time_t /*last logout*/> m_accountsLastLogout;
+        robin_hood::unordered_map<uint32 /*accountId*/, time_t /*last logout*/> m_accountsLastLogout;
         bool CanSkipQueue(WorldSession const* session);
 
         uint32 m_maxActiveSessionCount = 0;

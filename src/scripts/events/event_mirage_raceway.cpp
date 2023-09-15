@@ -301,7 +301,7 @@ struct npc_daisy : public ScriptedAI
         m_countdownTimer = 3000;
     }
 
-    void EndRace(uint32 raceId)
+    void EndRace(uint32 raceId, bool completeQuest)
     {
         m_creature->MonsterYell("The race has ended!");
 
@@ -313,10 +313,14 @@ struct npc_daisy : public ScriptedAI
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_GNOME_CAR);
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_GOBLIN_CAR);
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
-            if (raceId == RACE_REAL)
-                pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_REAL_QUEST);
-            else if (raceId == RACE_TEST)
-                pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_TEST_RACE);
+
+            if (completeQuest)
+            {
+                if (raceId == RACE_REAL)
+                    pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_REAL_QUEST);
+                else if (raceId == RACE_TEST)
+                    pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_TEST_RACE);
+            }
         }
         gnomeRacerGuid[raceId].Clear();
         gnomeRacerCheckpoints.clear();
@@ -326,10 +330,14 @@ struct npc_daisy : public ScriptedAI
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_GNOME_CAR);
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_GOBLIN_CAR);
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
-            if (raceId == RACE_REAL)
-                pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_REAL_RACE);
-            else if (raceId == RACE_TEST)
-                pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_TEST_RACE);
+
+            if (completeQuest)
+            {
+                if (raceId == RACE_REAL)
+                    pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_REAL_RACE);
+                else if (raceId == RACE_TEST)
+                    pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_TEST_RACE);
+            }
         }
         goblinRacerGuid[raceId].Clear();
         goblinRacerCheckpoints.clear();
@@ -367,14 +375,14 @@ struct npc_daisy : public ScriptedAI
             if (!pGnomePlayer || !pGnomePlayer->IsAlive() ||
                 !pGoblinPlayer || !pGoblinPlayer->IsAlive())
             {
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, false);
                 return;
             }
 
             if (!pGnomePlayer->HasAura(SPELL_GNOME_CAR) &&
                 !pGoblinPlayer->HasAura(SPELL_GOBLIN_CAR))
             {
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, false);
                 return;
             }
 
@@ -453,7 +461,7 @@ struct npc_daisy : public ScriptedAI
             }
 
             if (gnomeWins || goblinWins)
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, true);
         }
 
         ScriptedAI::UpdateAI(uiDiff);

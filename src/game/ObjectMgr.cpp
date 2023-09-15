@@ -889,6 +889,9 @@ CreatureInfo const* ObjectMgr::GetCreatureTemplate(uint32 id)
 
 void ObjectMgr::LoadCreatureLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_CreatureLocaleMap.clear();                              // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `subname_loc1`, `name_loc2`, `subname_loc2`, `name_loc3`, `subname_loc3`, `name_loc4`, `subname_loc4`, `name_loc5`, `subname_loc5`, `name_loc6`, `subname_loc6`, `name_loc7`, `subname_loc7`, `name_loc8`, `subname_loc8` FROM `locales_creature`"));
@@ -945,6 +948,9 @@ void ObjectMgr::LoadCreatureLocales()
 
 void ObjectMgr::LoadGossipMenuItemsLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_GossipMenuItemsLocaleMap.clear();                      // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `menu_id`, `id`,"
@@ -1022,6 +1028,9 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
 
 void ObjectMgr::LoadPointOfInterestLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_PointOfInterestLocaleMap.clear();                              // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `icon_name_loc1`, `icon_name_loc2`, `icon_name_loc3`, `icon_name_loc4`, `icon_name_loc5`, `icon_name_loc6`, `icon_name_loc7`, `icon_name_loc8` FROM `locales_points_of_interest`"));
@@ -2398,6 +2407,9 @@ void ObjectMgr::LoadItemPrototypes()
 
 void ObjectMgr::LoadItemLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_ItemLocaleMap.clear();                                 // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `description_loc1`, `name_loc2`, `description_loc2`, `name_loc3`, `description_loc3`, `name_loc4`, `description_loc4`, `name_loc5`, `description_loc5`, `name_loc6`, `description_loc6`, `name_loc7`, `description_loc7`, `name_loc8`, `description_loc8` FROM `locales_item`"));
@@ -3957,6 +3969,9 @@ uint32 ObjectMgr::GetQuestStartingItemID(uint32 quest_id) const
 
 void ObjectMgr::LoadQuestLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_QuestLocaleMap.clear();                                // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`,"
@@ -4267,6 +4282,9 @@ void ObjectMgr::LoadPageTexts()
 
 void ObjectMgr::LoadPageTextLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_PageTextLocaleMap.clear();                             // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `text_loc1`, `text_loc2`, `text_loc3`, `text_loc4`, `text_loc5`, `text_loc6`, `text_loc7`, `text_loc8` FROM `locales_page_text`"));
@@ -5422,6 +5440,9 @@ uint32 ObjectMgr::CreateItemText(std::string text)
 
 void ObjectMgr::LoadGameObjectLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_GameObjectLocaleMap.clear();                           // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_loc8` FROM `locales_gameobject`"));
@@ -5974,27 +5995,30 @@ void ObjectMgr::LoadFactions()
 
         } while (result->NextRow());
 
-        // Load localized texts (currently we only have 1.12 locales).
-        //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12
-        result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6` FROM `locales_faction`"));
-        if (result)
+        if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
         {
-            do
+            // Load localized texts (currently we only have 1.12 locales).
+            //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12
+            result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6` FROM `locales_faction`"));
+            if (result)
             {
-                auto fields = result->Fetch();
-                uint32 factionId = fields[0].GetUInt32();
-                auto itr = m_FactionsMap.find(factionId);
-                if (itr == m_FactionsMap.end())
-                    continue;
+                do
+                {
+                    auto fields = result->Fetch();
+                    uint32 factionId = fields[0].GetUInt32();
+                    auto itr = m_FactionsMap.find(factionId);
+                    if (itr == m_FactionsMap.end())
+                        continue;
 
-                FactionEntry& faction = itr->second;
-                faction.name[1] = fields[1].GetCppString();
-                faction.name[2] = fields[2].GetCppString();
-                faction.name[3] = fields[3].GetCppString();
-                faction.name[4] = fields[4].GetCppString();
-                faction.name[5] = fields[5].GetCppString();
-                faction.name[6] = fields[6].GetCppString();
-            } while (result->NextRow());
+                    FactionEntry& faction = itr->second;
+                    faction.name[1] = fields[1].GetCppString();
+                    faction.name[2] = fields[2].GetCppString();
+                    faction.name[3] = fields[3].GetCppString();
+                    faction.name[4] = fields[4].GetCppString();
+                    faction.name[5] = fields[5].GetCppString();
+                    faction.name[6] = fields[6].GetCppString();
+                } while (result->NextRow());
+            }
         }
     }
     
@@ -6462,26 +6486,29 @@ void ObjectMgr::LoadTaxiNodes()
 
     } while (result->NextRow());
 
-    // Load localized texts (currently we only have 1.12 locales).
-    //                                        0        1            2            3            4            5            6
-    result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6` FROM `locales_taxi_node`"));
-    if (result)
+    if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
     {
-        do
+        // Load localized texts (currently we only have 1.12 locales).
+        //                                        0        1            2            3            4            5            6
+        result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6` FROM `locales_taxi_node`"));
+        if (result)
         {
-            fields = result->Fetch();
-            uint32 nodeId = fields[0].GetUInt32();
-            if ((nodeId > maxTaxiNodeEntry) || (!m_TaxiNodes[nodeId]))
-                continue;
+            do
+            {
+                fields = result->Fetch();
+                uint32 nodeId = fields[0].GetUInt32();
+                if ((nodeId > maxTaxiNodeEntry) || (!m_TaxiNodes[nodeId]))
+                    continue;
 
-            m_TaxiNodes[nodeId]->name[1] = fields[1].GetCppString();
-            m_TaxiNodes[nodeId]->name[2] = fields[2].GetCppString();
-            m_TaxiNodes[nodeId]->name[3] = fields[3].GetCppString();
-            m_TaxiNodes[nodeId]->name[4] = fields[4].GetCppString();
-            m_TaxiNodes[nodeId]->name[5] = fields[5].GetCppString();
-            m_TaxiNodes[nodeId]->name[6] = fields[6].GetCppString();
+                m_TaxiNodes[nodeId]->name[1] = fields[1].GetCppString();
+                m_TaxiNodes[nodeId]->name[2] = fields[2].GetCppString();
+                m_TaxiNodes[nodeId]->name[3] = fields[3].GetCppString();
+                m_TaxiNodes[nodeId]->name[4] = fields[4].GetCppString();
+                m_TaxiNodes[nodeId]->name[5] = fields[5].GetCppString();
+                m_TaxiNodes[nodeId]->name[6] = fields[6].GetCppString();
 
-        } while (result->NextRow());
+            } while (result->NextRow());
+        }
     }
 }
 
@@ -6992,6 +7019,9 @@ void ObjectMgr::LoadBroadcastTexts()
 
 void ObjectMgr::LoadBroadcastTextLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     //                                                               0     1                 2                 3                 4                 5                 6                 7                 8                 9                   10                  11                  12                  13                  14                  15                  16
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `male_text_loc1`, `male_text_loc2`, `male_text_loc3`, `male_text_loc4`, `male_text_loc5`, `male_text_loc6`, `male_text_loc7`, `male_text_loc8`, `female_text_loc1`, `female_text_loc2`, `female_text_loc3`, `female_text_loc4`, `female_text_loc5`, `female_text_loc6`, `female_text_loc7`, `female_text_loc8` FROM `locales_broadcast_text`"));
     if (!result)
@@ -7149,23 +7179,25 @@ bool ObjectMgr::LoadMangosStrings(DatabaseType& db, char const* table, int32 min
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[1].GetCppString();
 
-        for (int i = 1; i < MAX_LOCALE; ++i)
+        if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
         {
-            std::string str = fields[i + 1].GetCppString();
-            if (!str.empty())
+            for (int i = 1; i < MAX_LOCALE; ++i)
             {
-                int idx = GetOrNewIndexForLocale(LocaleConstant(i));
-                if (idx >= 0)
+                std::string str = fields[i + 1].GetCppString();
+                if (!str.empty())
                 {
-                    // 0 -> default, idx in to idx+1
-                    if ((int32)data.Content.size() <= idx + 1)
-                        data.Content.resize(idx + 2);
+                    int idx = GetOrNewIndexForLocale(LocaleConstant(i));
+                    if (idx >= 0)
+                    {
+                        // 0 -> default, idx in to idx+1
+                        if ((int32)data.Content.size() <= idx + 1)
+                            data.Content.resize(idx + 2);
 
-                    data.Content[idx + 1] = str;
+                        data.Content[idx + 1] = str;
+                    }
                 }
             }
         }
-
 
         // Load additional string content if necessary
         if (extra_content)
@@ -7278,19 +7310,22 @@ bool ObjectMgr::LoadQuestGreetings()
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[2].GetCppString();
 
-        for (int i = 1; i < MAX_LOCALE; ++i)
+        if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
         {
-            std::string str = fields[i + 2].GetCppString();
-            if (!str.empty())
+            for (int i = 1; i < MAX_LOCALE; ++i)
             {
-                int idx = GetOrNewIndexForLocale(LocaleConstant(i));
-                if (idx >= 0)
+                std::string str = fields[i + 2].GetCppString();
+                if (!str.empty())
                 {
-                    // 0 -> default, idx in to idx+1
-                    if ((int32)data.Content.size() <= idx + 1)
-                        data.Content.resize(idx + 2);
+                    int idx = GetOrNewIndexForLocale(LocaleConstant(i));
+                    if (idx >= 0)
+                    {
+                        // 0 -> default, idx in to idx+1
+                        if ((int32)data.Content.size() <= idx + 1)
+                            data.Content.resize(idx + 2);
 
-                    data.Content[idx + 1] = str;
+                        data.Content[idx + 1] = str;
+                    }
                 }
             }
         }
@@ -7338,19 +7373,22 @@ bool ObjectMgr::LoadTrainerGreetings()
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[1].GetCppString();
 
-        for (int i = 1; i < MAX_LOCALE; ++i)
+        if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
         {
-            std::string str = fields[i + 1].GetCppString();
-            if (!str.empty())
+            for (int i = 1; i < MAX_LOCALE; ++i)
             {
-                int idx = GetOrNewIndexForLocale(LocaleConstant(i));
-                if (idx >= 0)
+                std::string str = fields[i + 1].GetCppString();
+                if (!str.empty())
                 {
-                    // 0 -> default, idx in to idx+1
-                    if ((int32)data.Content.size() <= idx + 1)
-                        data.Content.resize(idx + 2);
+                    int idx = GetOrNewIndexForLocale(LocaleConstant(i));
+                    if (idx >= 0)
+                    {
+                        // 0 -> default, idx in to idx+1
+                        if ((int32)data.Content.size() <= idx + 1)
+                            data.Content.resize(idx + 2);
 
-                    data.Content[idx + 1] = str;
+                        data.Content[idx + 1] = str;
+                    }
                 }
             }
         }
@@ -8862,6 +8900,9 @@ void ObjectMgr::LoadAreaTemplate()
 
 void ObjectMgr::LoadAreaLocales()
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
+        return;
+
     m_AreaLocaleMap.clear();
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `Entry`, `NameLoc1`, `NameLoc2`, `NameLoc3`, `NameLoc4`, `NameLoc5`, `NameLoc6`, `NameLoc7`, `NameLoc8` FROM `locales_area`"));

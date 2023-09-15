@@ -10,19 +10,21 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 
 enum mob_entries
 {
-    maddened_guard = 60597,
-    hungry_rat = 93105,
-    black_bride = 80850,
-    thamgrarr = 80852,
-    aszosh_grimflame = 80853,
-    damian = 80854
+    NPC_VAULT_RAT = 93106,
+    NPC_MADDENED_GUARD = 60597,
+    NPC_HUNGRY_RAT = 93105,
+    NPC_BLACK_BRIDE = 80850,
+    NPC_THAMGARR = 80852,
+    NPC_AZOSH_GRIMFLAME = 80853,
+    NPC_DAMIAN = 80854,
+    NPC_ARCTIRAS = 93107,
 };
 
 enum object_entries
 {
-    NPC_VAULT_RAT   = 93106,
     GO_RAT_DOOR_ONE = 3000275,
     GO_RAT_DOOR_TWO = 3000276,
+    GO_VAULT_DOOR = 4000509,
 };
 
 const string dialog_lines[3] = { 
@@ -42,6 +44,7 @@ struct instance_stormwind_vault : public ScriptedInstance
     bool thamgrarr_killed;
     bool aszosh_killed;
     bool damian_killed;
+    ObjectGuid m_vaultDoorGuid;
 
     void Initialize() override
     {
@@ -51,6 +54,16 @@ struct instance_stormwind_vault : public ScriptedInstance
         damian_killed = false;
     }
 
+    void OnObjectCreate(GameObject* pGo) override
+    {
+        switch (pGo->GetEntry())
+        {
+            case GO_VAULT_DOOR:
+                m_vaultDoorGuid = pGo->GetObjectGuid();
+                break;
+        }
+    }
+
     void OnCreatureEnterCombat(Creature* pCreature) override
     {
         if (pCreature->IsAlive() && !pCreature->IsInCombat())
@@ -58,12 +71,32 @@ struct instance_stormwind_vault : public ScriptedInstance
 
         switch (pCreature->GetEntry())
         {
-        case maddened_guard:
-            int32 line = urand(0, 2);
-            int32 chance = urand(0, 100);
-            if (chance > 70)
-                pCreature->PMonsterSay("%s", dialog_lines[line].c_str());
-            break;
+            case NPC_MADDENED_GUARD:
+            {
+                int32 line = urand(0, 2);
+                int32 chance = urand(0, 100);
+                if (chance > 70)
+                    pCreature->PMonsterSay("%s", dialog_lines[line].c_str());
+                break;
+            }
+            case NPC_ARCTIRAS:
+            {
+                if (GameObject* pDoor = GetMap()->GetGameObject(m_vaultDoorGuid))
+                    pDoor->SetGoState(GO_STATE_READY);
+                break;
+            }
+        }
+    }
+
+    void OnCreatureEvade(Creature* pCreature) override
+    {
+        switch (pCreature->GetEntry())
+        {
+            case NPC_ARCTIRAS:
+                if (bride_killed && thamgrarr_killed && aszosh_killed && damian_killed)
+                    if (GameObject* pDoor = GetMap()->GetGameObject(m_vaultDoorGuid))
+                        pDoor->SetGoState(GO_STATE_ACTIVE);
+                break;
         }
     }
 
@@ -71,20 +104,20 @@ struct instance_stormwind_vault : public ScriptedInstance
     {
         switch (boss->GetEntry())
         {
-        case black_bride:
-        case thamgrarr: 
-        case aszosh_grimflame: 
-        case damian: 
-
-            if (black_bride) bride_killed = true;             
-            if (thamgrarr) thamgrarr_killed = true; 
-            if (aszosh_grimflame) aszosh_killed = true; 
-            if (damian) damian_killed = true;
-
-            if (bride_killed && thamgrarr_killed && aszosh_killed && damian_killed)
+            case NPC_BLACK_BRIDE:
+            case NPC_THAMGARR:
+            case NPC_AZOSH_GRIMFLAME:
+            case NPC_DAMIAN:
+            case NPC_ARCTIRAS:
             {
-                GameObject* vault_door = boss->FindNearestGameObject(4000509, 1500.0f);
-                vault_door->UseDoorOrButton(10800);
+                if (NPC_BLACK_BRIDE) bride_killed = true;             
+                if (NPC_THAMGARR) thamgrarr_killed = true; 
+                if (NPC_AZOSH_GRIMFLAME) aszosh_killed = true; 
+                if (NPC_DAMIAN) damian_killed = true;
+
+                if (bride_killed && thamgrarr_killed && aszosh_killed && damian_killed)
+                    if (GameObject* pDoor = GetMap()->GetGameObject(m_vaultDoorGuid))
+                        pDoor->SetGoState(GO_STATE_ACTIVE);
                 break;
             }
         }
