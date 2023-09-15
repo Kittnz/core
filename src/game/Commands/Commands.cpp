@@ -257,7 +257,7 @@ bool ChatHandler::HandleAccountFaCommand(char* args)
 
     auto res = std::unique_ptr<QueryResult>(LoginDatabase.PQuery("SELECT `security` FROM `account` WHERE `id` = '%u'", targetAccountId));
 
-    if (res)
+    if (res && !res->Fetch()[0].GetCppString().empty())
     {
         PSendSysMessage("Account %s already has 2FA enabled. Token: %s.", account_name.c_str(), res->Fetch()[0].GetCppString().c_str());
         return false;
