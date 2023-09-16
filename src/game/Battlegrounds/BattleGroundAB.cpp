@@ -106,12 +106,18 @@ void BattleGroundAB::Update(uint32 diff)
                 m_ReputationScoreTics[team] += BG_AB_TickPoints[points];
                 if (m_ReputationScoreTics[team] >= m_ReputationTics)
                 {
-                    (team == BG_TEAM_ALLIANCE) ? RewardReputationToTeam(509, 10, ALLIANCE) : RewardReputationToTeam(510, 10, HORDE);
+                    bool const isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+                    uint32 const amount = isBGWeekend ? 20 : 10;
+
+                    (team == BG_TEAM_ALLIANCE) ? RewardReputationToTeam(509, amount, ALLIANCE) : RewardReputationToTeam(510, amount, HORDE);
                     m_ReputationScoreTics[team] -= m_ReputationTics;
                 }
                 if (m_HonorScoreTics[team] >= m_HonorTics)
                 {
-                    RewardHonorToTeam(BG_AB_PerTickHonor[GetBracketId()], (team == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+                    bool const isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+                    uint32 const amount = isBGWeekend ? BG_AB_PerTickHonor[GetBracketId()] * 2 : BG_AB_PerTickHonor[GetBracketId()];
+
+                    RewardHonorToTeam(amount, (team == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
                     m_HonorScoreTics[team] -= m_HonorTics;
                 }
                 if (!m_IsInformedNearVictory && m_TeamScores[team] > BG_AB_WARNING_NEAR_VICTORY_SCORE)
