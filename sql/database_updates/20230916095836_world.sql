@@ -43,3 +43,20 @@ update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id in (
 update item_template set subclass = 7 where entry = 61293; -- Idol of the Moonfang.
 update item_template set spellid_1 = 47357 where entry = 61698; -- Totem of the Calming River.
 update item_template set max_durability = 120 where entry = 51738; -- Tunnel Fiend Carapace.
+
+-- Spell fixes by MOON.
+-- Fixed GCD interaction between Maul and Savage Bite.
+-- Corrected spell class mask flags on Savage Bite.
+-- Updated text for Druid "Ferocity" and "Savage Fury" talents.
+-- Corrected GCD on Holy Champion spells.
+UPDATE `spell_template` SET `spellFamilyFlags` = 2048 WHERE `entry` = 45736;
+UPDATE `spell_template` SET `description` = 'Reduces the cost of your Maul, Swipe, Savage Bite, Claw, and Rake abilities by $/10;s1 Rage or Energy.' WHERE `entry` = 16934;
+UPDATE `spell_template` SET `description` = 'Reduces the cost of your Maul, Swipe, Savage Bite, Claw, and Rake abilities by $/10;s1 Rage or Energy.' WHERE `entry` = 16935;
+UPDATE `spell_template` SET `description` = 'Reduces the cost of your Maul, Swipe, Savage Bite, Claw, and Rake abilities by $/10;s1 Rage or Energy.' WHERE `entry` = 16936;
+UPDATE `spell_template` SET `description` = 'Reduces the cost of your Maul, Swipe, Savage Bite, Claw, and Rake abilities by $/10;s1 Rage or Energy.' WHERE `entry` = 16937;
+UPDATE `spell_template` SET `description` = 'Reduces the cost of your Maul, Swipe, Savage Bite, Claw, and Rake abilities by $/10;s1 Rage or Energy.' WHERE `entry` = 16938;
+UPDATE `spell_template` SET `description` = 'Increases the damage caused by your Claw, Rake, Maul, Swipe and Savage Bite abilities by $s1%.' WHERE `entry` = 16998;
+UPDATE `spell_template` SET `description` = 'Increases the damage caused by your Claw, Rake, Maul, Swipe and Savage Bite abilities by $s1%.' WHERE `entry` = 16999;
+UPDATE `spell_template` SET `startRecoveryTime` = 1500 WHERE `entry` = 45565;
+UPDATE `spell_template` SET `startRecoveryTime` = 1500 WHERE `entry` = 45566;
+UPDATE `spell_template` SET `startRecoveryTime` = 1500 WHERE `entry` = 45567;
