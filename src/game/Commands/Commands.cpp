@@ -5934,7 +5934,7 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
             if (player->IsHardcore())
                 ++numHcs;
 
-            if (player->GetSession()->GetSessionDbcLocale() == LOCALE_zhCN)
+            if (player->GetSession()->sessionDbcLocaleRaw == LOCALE_zhCN)
                 ++numCn;
             else
                 ++numNonCn;
