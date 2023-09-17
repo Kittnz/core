@@ -611,6 +611,7 @@ class WorldSession
 
         uint32 m_lastUpdateTime;
         bool m_suspicious = false;
+        time_t m_lastWhoRequest = 0;
 
         std::unique_ptr<AccountAnalyser> _analyser;
 
