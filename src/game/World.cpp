@@ -532,7 +532,7 @@ bool World::RemoveQueuedSession(WorldSession* sess)
 void World::LoadConfigSettings(bool reload)
 {
     if (!reload)
-        m_lastDiffs.resize(10);
+        m_lastDiffs.resize(50);
 
     if (reload)
     {
