@@ -3254,9 +3254,9 @@ void World::UpdateSessions(uint32 diff)
         if (!pSession->UpdateDisconnected(diff))
         {
             if (pSession->sessionDbcLocaleRaw == LOCALE_zhCN)
-                ++loggedNonRegionSessions;
+                --loggedNonRegionSessions;
             else
-                ++loggedRegionSessions;
+                --loggedRegionSessions;
             delete pSession;
             m_disconnectedSessions.erase(itr);
         }
