@@ -278,7 +278,7 @@ void World::AddSession_(WorldSession* s)
     if (!RemoveSession(s->GetAccountId()))
     {
         s->KickPlayer();
-        if (s->GetSessionDbcLocale() == LOCALE_zhCN)
+        if (s->sessionDbcLocaleRaw == LOCALE_zhCN)
             --loggedNonRegionSessions;
         else
             --loggedRegionSessions;
@@ -328,8 +328,8 @@ void World::AddSession_(WorldSession* s)
     uint32 currentRegionalPop = loggedRegionSessions;
 
     uint32 index = s->GetQueueIndex();
-    uint32 currentPop = s->GetSessionDbcLocale() == LOCALE_zhCN ? currentNonRegionalPop : currentRegionalPop;
-    uint32 maxPop = s->GetSessionDbcLocale() == LOCALE_zhCN ? maxNonRegionalPop : maxRegionalPop;
+    uint32 currentPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? currentNonRegionalPop : currentRegionalPop;
+    uint32 maxPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? maxNonRegionalPop : maxRegionalPop;
 
     if (currentPop >= maxPop && !CanSkipQueue(s))
     {
@@ -340,7 +340,7 @@ void World::AddSession_(WorldSession* s)
     }
 
     //here we actually are logged in, so up the count.
-    if (s->GetSessionDbcLocale() == LOCALE_zhCN)
+    if (s->sessionDbcLocaleRaw == LOCALE_zhCN)
         ++loggedNonRegionSessions;
     else
         ++loggedRegionSessions;
@@ -3236,7 +3236,7 @@ void World::UpdateSessions(uint32 diff)
             m_sessions.erase(itr);
             m_Ipconnections[pSession->GetBinaryAddress()]--;
 
-            if (pSession->GetSessionDbcLocale() == LOCALE_zhCN)
+            if (pSession->sessionDbcLocaleRaw == LOCALE_zhCN)
                 --loggedNonRegionSessions;
             else
                 --loggedRegionSessions;
@@ -3253,7 +3253,7 @@ void World::UpdateSessions(uint32 diff)
 
         if (!pSession->UpdateDisconnected(diff))
         {
-            if (pSession->GetSessionDbcLocale() == LOCALE_zhCN)
+            if (pSession->sessionDbcLocaleRaw == LOCALE_zhCN)
                 ++loggedNonRegionSessions;
             else
                 ++loggedRegionSessions;

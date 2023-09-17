@@ -325,7 +325,7 @@ class WorldSession
         void SendQueryTimeResponse();
 
         //simple email check for now, can expand later.
-        WorldRegion GetRegion() const { return (HasChineseEmail() || GetSessionDbcLocale() == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
+        WorldRegion GetRegion() const { return (HasChineseEmail() || sessionDbcLocaleRaw == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
 
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
@@ -509,7 +509,9 @@ class WorldSession
         int GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
         const char *GetMangosString(int32 entry) const;
 
-        uint32 GetQueueIndex() const { return GetSessionDbcLocale() == LOCALE_zhCN ? 1 : 0; }
+        LocaleConstant sessionDbcLocaleRaw;
+
+        uint32 GetQueueIndex() const { return sessionDbcLocaleRaw == LOCALE_zhCN ? 1 : 0; }
 
         uint32 GetLatency() const { return m_latency; }
         void SetLatency(uint32 latency) { m_latency = latency; }
