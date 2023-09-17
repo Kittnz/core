@@ -2328,6 +2328,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+
+                            if (m_caster->ToPlayer()->HasEarnedTitle(TITLE_CRAZY_CAT_LADY))
+                                m_caster->ToPlayer()->AwardTitle(TITLE_CRAZY_CAT_LADY);
+
+                            if (m_caster->ToPlayer()->HasEarnedTitle(TITLE_GRAND_FROGUS))
+                                m_caster->ToPlayer()->AwardTitle(TITLE_GRAND_FROGUS);
+
                             m_forceConsumeItem = true;
                         }
                     }

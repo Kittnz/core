@@ -24118,6 +24118,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
                 return false;
         }
         return true;
+        break;
     }
     case TITLE_GRAND_FROGUS:
     {
