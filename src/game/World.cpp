@@ -436,8 +436,8 @@ void World::AddQueuedSession(WorldSession* sess)
                 break;
         }
 
-       // m_priorityQueue[index].insert(itr, std::make_pair(priority, sess));
-        m_priorityQueue[index].push_back(std::make_pair(priority, sess));
+        m_priorityQueue[index].insert(itr, std::make_pair(priority, sess));
+        //m_priorityQueue[index].push_back(std::make_pair(priority, sess));
     }
     else
         m_QueuedSessions.push_back(sess);
