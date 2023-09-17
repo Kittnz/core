@@ -41,7 +41,7 @@ LocaleNameStr const fullLocaleNameList[] =
     { "koKR", LOCALE_koKR },
     { "frFR", LOCALE_frFR },
     { "deDE", LOCALE_deDE },
-//  { "zhCN", LOCALE_zhCN },
+  { "zhCN", LOCALE_zhCN },
     { "zhTW", LOCALE_zhTW },
     { "esES", LOCALE_esES },
     { "esMX", LOCALE_esMX },
