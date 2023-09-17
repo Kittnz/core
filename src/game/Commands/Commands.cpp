@@ -5904,6 +5904,8 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     uint32 maxActiveClientsNum = sWorld.GetMaxActiveSessionCount();
     uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
     std::string str = secsToTimeString(sWorld.GetUptime());
+    uint32 queuedRegionOnePlayers = sWorld.GetRegionalIndexQueueCount(0);
+    uint32 queuedRegionTwoPlayers = sWorld.GetRegionalIndexQueueCount(1);
 
     PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
@@ -5915,8 +5917,12 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
 
+        PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
+
 
         uint32 numHcs = 0;
+        uint32 numCn = 0;
+        uint32 numNonCn = 0;
         const auto& sess = sWorld.GetAllSessions();
         for (const auto& sessPair : sess)
         {
@@ -5927,8 +5933,20 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 
             if (player->IsHardcore())
                 ++numHcs;
+
+            if (player->GetSession()->GetSessionDbcLocale() == LOCALE_zhCN)
+                ++numCn;
+            else
+                ++numNonCn;
         }
         PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
+        if (GetSession()->GetSecurity() >= SEC_ADMINISTRATOR)
+        {
+            PSendSysMessage("Total amount of CN characters logged in: %u", numCn);
+            PSendSysMessage("Total amount of regional characters logged in: %u", numNonCn);
+            PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions);
+            PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions);
+        }
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());

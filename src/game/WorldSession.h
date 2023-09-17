@@ -509,6 +509,8 @@ class WorldSession
         int GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
         const char *GetMangosString(int32 entry) const;
 
+        uint32 GetQueueIndex() const { return GetSessionDbcLocale() == LOCALE_zhCN ? 1 : 0; }
+
         uint32 GetLatency() const { return m_latency; }
         void SetLatency(uint32 latency) { m_latency = latency; }
         uint32 GetGameBuild() const { return _gameBuild; }
