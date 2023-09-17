@@ -5944,8 +5944,8 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         {
             PSendSysMessage("Total amount of CN characters logged in: %u", numCn);
             PSendSysMessage("Total amount of regional characters logged in: %u", numNonCn);
-            PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions);
-            PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions);
+            PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions.load());
+            PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions.load());
         }
     }
 
