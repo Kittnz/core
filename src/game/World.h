@@ -43,6 +43,7 @@
 #include <chrono>
 #include <memory>
 #include <unordered_map>
+#include <atomic>
 #include <thread>
 #include <any>
 
@@ -393,6 +394,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -871,10 +874,12 @@ class World
         void UpdateMaxSessionCounters();
         uint32 GetActiveAndQueuedSessionCount() const { return m_sessions.size(); }
         uint32 GetActiveSessionCount() const { return m_sessions.size() - GetQueuedSessionCount(); }
-        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size(); }
+        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue[0].size() + m_priorityQueue[1].size() : m_QueuedSessions.size(); }
         /// Get the maximum number of parallel sessions on the server since last reboot
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
+
+        uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
 
         void SetLastDiff(uint32 diff);
         bool HitsDiffThreshold() const;
@@ -885,6 +890,9 @@ class World
         uint32 GetAverageDiff() const;
 
         void CheckDiffProtection();
+
+        std::atomic<uint32> loggedNonRegionSessions = 0;
+        std::atomic<uint32> loggedRegionSessions = 0;
 
         uint32 GetLastDiff() const { return m_lastDiff; }
 
@@ -1290,7 +1298,7 @@ class World
 
         //higher is first in the map, higher points -> higher priority.
         //Priority is built from multiple factors, acc reg date, char levels etc etc.
-        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue;
+        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue[2];
 
         std::unordered_map<uint32, uint32> m_Ipconnections; // binary IP, count
 
