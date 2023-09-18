@@ -3096,7 +3096,7 @@ void World::UpdateSessions(uint32 diff)
         if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
         {
             m_playerLimit = std::min(m_playerLimit + acceptNow, currentNonRegionalPop + currentRegionalPop + acceptNow);
-            if (hardPlayerLimit && m_playerLimit > hardPlayerLimit)
+            if ((hardPlayerLimit && m_playerLimit > hardPlayerLimit) || hardPlayerLimit <= GetActiveSessionCount())
             {
                 m_playerLimit = hardPlayerLimit;
                 acceptNow = 0;
@@ -3131,11 +3131,12 @@ void World::UpdateSessions(uint32 diff)
         if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
         {
             m_playerLimit = std::min(m_playerLimit + acceptNow, currentNonRegionalPop + currentRegionalPop + acceptNow);
-            if (hardPlayerLimit && m_playerLimit > hardPlayerLimit)
+            if ((hardPlayerLimit && m_playerLimit > hardPlayerLimit) || hardPlayerLimit <= GetActiveSessionCount())
             {
                 m_playerLimit = hardPlayerLimit;
                 acceptNow = 0;
             }
+
 
             for (uint32 i = 0; i < acceptNow && !m_priorityQueue[NonRegionalPopIndex].empty(); ++i)
             {
