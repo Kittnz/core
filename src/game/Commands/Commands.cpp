@@ -5907,7 +5907,7 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     uint32 queuedRegionOnePlayers = sWorld.GetRegionalIndexQueueCount(0);
     uint32 queuedRegionTwoPlayers = sWorld.GetRegionalIndexQueueCount(1);
 
-    PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
+    PSendSysMessage("Players online: %i. Max online: %i.", activeClientsNum, maxActiveClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
 
