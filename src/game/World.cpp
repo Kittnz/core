@@ -278,11 +278,6 @@ void World::AddSession_(WorldSession* s)
     if (!RemoveSession(s->GetAccountId()))
     {
         s->KickPlayer();
-        if (s->sessionDbcLocaleRaw == LOCALE_zhCN)
-            --loggedNonRegionSessions;
-        else
-            --loggedRegionSessions;
-
         delete s;                                           // session not added yet in session list, so not listed in queue
         return;
     }
@@ -342,12 +337,6 @@ void World::AddSession_(WorldSession* s)
         return;
     }
 
-    //here we actually are logged in, so up the count.
-    if (s->sessionDbcLocaleRaw == LOCALE_zhCN)
-        ++loggedNonRegionSessions;
-    else
-        ++loggedRegionSessions;
-
     // Checked for 1.12.2
     WorldPacket packet(SMSG_AUTH_RESPONSE, 1 + 4 + 1 + 4);
     packet << uint8(AUTH_OK);
@@ -355,6 +344,8 @@ void World::AddSession_(WorldSession* s)
     packet << uint8(0);                                     // BillingPlanFlags
     packet << uint32(0);                                    // BillingTimeRested
     s->SendPacket(&packet);
+
+    s->OnPassedQueue();
 
     UpdateMaxSessionCounters();
 
@@ -3110,7 +3101,6 @@ void World::UpdateSessions(uint32 diff)
                 pop_sess->m_idleTime = WorldTimer::getMSTime();
                 pop_sess->SendAuthWaitQue(0);
                 m_priorityQueue[RegionalPopIndex].pop_front();
-                ++loggedRegionSessions;
             }
 
             for (auto& elem : m_priorityQueue[RegionalPopIndex])
@@ -3146,7 +3136,6 @@ void World::UpdateSessions(uint32 diff)
                 pop_sess->m_idleTime = WorldTimer::getMSTime();
                 pop_sess->SendAuthWaitQue(0);
                 m_priorityQueue[NonRegionalPopIndex].pop_front();
-                ++loggedNonRegionSessions;
             }
 
             for (auto& elem : m_priorityQueue[NonRegionalPopIndex])
@@ -3242,11 +3231,6 @@ void World::UpdateSessions(uint32 diff)
             m_sessions.erase(itr);
             m_Ipconnections[pSession->GetBinaryAddress()]--;
 
-            if (pSession->sessionDbcLocaleRaw == LOCALE_zhCN)
-                --loggedNonRegionSessions;
-            else
-                --loggedRegionSessions;
-
             delete pSession;
         }
     }
@@ -3259,10 +3243,6 @@ void World::UpdateSessions(uint32 diff)
 
         if (!pSession->UpdateDisconnected(diff))
         {
-            if (pSession->sessionDbcLocaleRaw == LOCALE_zhCN)
-                --loggedNonRegionSessions;
-            else
-                --loggedRegionSessions;
             delete pSession;
             m_disconnectedSessions.erase(itr);
         }
