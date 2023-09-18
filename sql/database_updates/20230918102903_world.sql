@@ -21,3 +21,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 -- Item "Jadestone Protector" fix: class, display, subclass.
 update item_template set display_id = 66448, class = 4, subclass = 6 where entry = 61526; -- Jadestone Protector.
+-- Finally caught the issue, stupid vanilla spaghetti.
+update spell_template SET effectMiscValue2 = 127 WHERE entry = 642; -- Divine Shield Rank 1.
+update spell_template SET effectMiscValue2 = 127 WHERE entry = 1020; -- Divine Shield Rank 2.
+update spell_template SET RecoveryTime = 400000 WHERE entry = 45604; -- Flourish.
