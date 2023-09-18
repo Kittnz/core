@@ -4973,7 +4973,8 @@ bool ChatHandler::HandleGMOnlineListCommand(char* args)
     SendSysMessage("Online GMs:");
     SendSysMessage("========================");
     bool empty = true;
-    for (const auto& [accId, session] : sWorld.GetAllSessions())
+    const World::SessionMap& AllSessions = sWorld.GetAllSessions();
+    for (const auto& [accId, session] : AllSessions)
     {
         if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_OBSERVER)
             continue;
@@ -5923,7 +5924,7 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         uint32 numHcs = 0;
         uint32 numCn = 0;
         uint32 numNonCn = 0;
-        const auto& sess = sWorld.GetAllSessions();
+        const World::SessionMap& sess = sWorld.GetAllSessions();
         for (const auto& sessPair : sess)
         {
             auto session = sessPair.second;
@@ -13755,7 +13756,7 @@ bool ChatHandler::HandleClientSearchCommand(char* args)
     ASSERT(args);
     std::string searchedHash = args;
     uint32 i = 0;
-    World::SessionMap const& sessMap = sWorld.GetAllSessions();
+    const World::SessionMap& sessMap = sWorld.GetAllSessions();
     for (const auto& itr : sessMap)
     {
         if (!itr.second)
