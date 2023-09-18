@@ -5202,11 +5202,11 @@ bool eventInProgress = false;
 bool GossipHello_npc_zuljin(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80801) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What happened to you, Zul'jin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67000, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (eventInProgress == true && pPlayer->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE && pPlayer->GetQuestStatus(65008) == QUEST_STATUS_NONE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Are you ready to go, Zul'jin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67001, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     if (pCreature->IsQuestGiver())
@@ -5221,41 +5221,41 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn't back down and me people and I paid da price.", pPlayer);
+        pCreature->MonsterSay(67002);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
+            c->MonsterSay(67003);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dey tormented me and even took me eye, dey wanted to take me back to dey settlement and probably end me life in front of every other elf to boost morality.", player);
+            c->MonsterSay(67004);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("It was den that ol' Zul'jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
+            c->MonsterSay(67005);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa's blessings we couldn't hold against the dead and failed.", player);
+            c->MonsterSay(67006);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Me lands lay in shambles, lost to da living dead and I will do anything to take our lands back, and no high elf or Scourge would stand against da powers of da Amani and da Horde.", player);
+            c->MonsterSay(67007);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dose were our lands, mon, troll lands, de Amani was there before anyone else and no Alliance, Scourge or Demons will stop us from getting it back.", player);
+            c->MonsterSay(67008);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Hear dis!", player);
+            c->MonsterSay(67009);
             c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
             });
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterYell("WE ARE DE AMANI, WE FEAR NOBODY!");
+            c->MonsterYell(67010);
             c->HandleEmote(EMOTE_ONESHOT_BATTLEROAR);
             });
         DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterYell("WE WILL NEVER GIVE UP BECAUSE WE NEVER DIE!");
+            c->MonsterYell(67011);
             c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -5266,7 +5266,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSayToPlayer("We not prepared yet, mon. Come see me soon.", pPlayer);
+        pCreature->MonsterSay(67012);
         pCreature->HandleEmote(EMOTE_ONESHOT_NO);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -5276,7 +5276,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 bool GossipHello_npc_harlus(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(55225) == QUEST_STATUS_INCOMPLETE) // The Hawk's Vigil
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Martin Corinth, you are to be executed for crimes against the Alliance.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67013, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(52119, pCreature->GetGUID());
     return true;
@@ -5288,15 +5288,15 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     {
         pCreature->SetCastingTarget(pPlayer);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Executed?! Do you know who it is you speak to?", player);
+            c->MonsterSay(67014);
             c->HandleEmote(EMOTE_ONESHOT_LAUGH);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Do you know who it is you're threatening?!", player);
+            c->MonsterSay(67015);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
+            c->MonsterSay(67016);
             c->SetFactionTemporary(14, TEMPFACTION_RESTORE_RESPAWN);
             c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
             c->ClearCastingTarget();
@@ -5407,11 +5407,11 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
 
     if (pQuest->GetQuestId() == 40124) //  Interfering Naga
     {
-        pQuestGiver->MonsterSayToPlayer("Now, let us see if the dampening has been halted...", pPlayer);
+        pQuestGiver->MonsterSay(67017);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pQuestGiver]() {
-            c->MonsterSayToPlayer("It would appear our efforts have been meaningless... We must think of a new solution...", player);
+            c->MonsterSay(67018);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             c->CastSpell(c, 1449, false);
             });
@@ -5433,7 +5433,7 @@ bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest co
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = speaker_ganzih]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("It would appear the bracers be having some sort of voodoo corruption tainting them, I can sense it from here.", player);
+                npc->MonsterSay(67019);
                 });
             return true;
         }
@@ -5455,13 +5455,13 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
             lord_rog->CastSpell(pQuestGiver, 13236, false);
 
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
-                npc->MonsterSayToPlayer("The curse upon the bracers has been lifted, the weak magic of mortals cannot compete with the Elemental Plane.", player);
+                npc->MonsterSay(67020);
                 });
             DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
                 npc->CastSpell(npc, 5906, false);
                 });
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
-                npc->MonsterSayToPlayer("I must thank you, your assistance has been instrumental.", player);
+                npc->MonsterSay(67021);
 
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
@@ -5504,28 +5504,28 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = exile1]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("You have saved Harborage!", player);
+                npc->MonsterSay(67022);
                 });
 
         Creature* exile2 = pPlayer->FindNearestCreature(60422, 40.0F);
         if (exile2)
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = exile2]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Noboru is dead? We thank you outsider!", player);
+                npc->MonsterSay(67023);
                 });
 
         Creature* exile3 = pPlayer->FindNearestCreature(60423, 40.0F);
         if (exile3)
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = exile3]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("We will fear no longer the menace Noboru.", player);
+                npc->MonsterSay(67024);
                 });
 
         Creature* exile4 = pPlayer->FindNearestCreature(60424, 40.0F);
         if (exile4)
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = exile4]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Our journey here was not pointless after all, thank you.", player);
+                npc->MonsterSay(67025);
                 });
             return true;
         }
