@@ -321,20 +321,20 @@ void World::AddSession_(WorldSession* s)
     uint32 maxNonRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL);
     uint32 maxRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL);
 
-    //uint32 maxNonRegionalPop = hardPlayerLimit / 100.f * (float)maxNonRegionalPercentage;
-    //uint32 maxRegionalPop = hardPlayerLimit / 100.f * (float)maxRegionalPercentage;
+    uint32 maxNonRegionalPop = hardPlayerLimit / 100.f * (float)maxNonRegionalPercentage;
+    uint32 maxRegionalPop = hardPlayerLimit / 100.f * (float)maxRegionalPercentage;
 
-    uint32 CorrectMaxNonRegionalPop = (uint32)((float(maxNonRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
-    uint32 CorrectMaxRegionalPop = (uint32)((float(maxRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
+    ///uint32 CorrectMaxNonRegionalPop = (uint32)((float(maxNonRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
+    //uint32 CorrectMaxRegionalPop = (uint32)((float(maxRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
 
     uint32 currentNonRegionalPop = loggedNonRegionSessions;
     uint32 currentRegionalPop = loggedRegionSessions;
 
     uint32 index = s->GetQueueIndex();
     uint32 currentPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? currentNonRegionalPop : currentRegionalPop;
-    uint32 maxPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? CorrectMaxNonRegionalPop : CorrectMaxRegionalPop;
+    uint32 maxPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? maxNonRegionalPop : maxRegionalPop;
 
-    if (currentPop >= maxPop && !CanSkipQueue(s))
+    if ((currentPop >= maxPop || GetActiveSessionCount() >= hardPlayerLimit) && !CanSkipQueue(s))
     {
         AddQueuedSession(s);
         UpdateMaxSessionCounters();
