@@ -595,6 +595,8 @@ class WorldSession
         bool ReceivedAHListRequest() const { return m_ah_list_recvd; }
         bool m_ah_list_recvd;
 
+        void OnPassedQueue();
+
         void AddonDetected(std::string const& addon) { _addons.insert(addon); }
         std::set<std::string> const& GetAddons() const { return _addons; }
         void SetScheduleBan(const char* reason, uint32 atLevel)
@@ -1018,6 +1020,7 @@ class WorldSession
         bool m_fingerprintBanned = false;
         bool m_shouldBackupCharacters = false;
         bool m_hasUsedClickToMove = false;
+        bool m_PassedQueue = false;
 
         enum ClientHashStep
         {
