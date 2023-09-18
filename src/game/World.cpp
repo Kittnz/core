@@ -3107,6 +3107,7 @@ void World::UpdateSessions(uint32 diff)
                 pop_sess->m_idleTime = WorldTimer::getMSTime();
                 pop_sess->SendAuthWaitQue(0);
                 m_priorityQueue[RegionalPopIndex].pop_front();
+                ++loggedRegionSessions;
             }
 
             for (auto& elem : m_priorityQueue[RegionalPopIndex])
@@ -3141,6 +3142,7 @@ void World::UpdateSessions(uint32 diff)
                 pop_sess->m_idleTime = WorldTimer::getMSTime();
                 pop_sess->SendAuthWaitQue(0);
                 m_priorityQueue[NonRegionalPopIndex].pop_front();
+                ++loggedNonRegionSessions;
             }
 
             for (auto& elem : m_priorityQueue[NonRegionalPopIndex])
