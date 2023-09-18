@@ -18,3 +18,6 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to the Gnomeregan Reclamation Facility! If you are looking for refuge from the cold snow, there is no better place.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Item "Jadestone Protector" fix: class, display, subclass.
+update item_template set display_id = 66448, class = 4, subclass = 6 where entry = 61526; -- Jadestone Protector.
