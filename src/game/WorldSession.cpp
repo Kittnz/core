@@ -107,6 +107,15 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
 /// WorldSession destructor
 WorldSession::~WorldSession()
 {
+    if (m_PassedQueue)
+    {
+		if (sessionDbcLocaleRaw == LOCALE_zhCN)
+			--sWorld.loggedNonRegionSessions;
+		else
+			--sWorld.loggedRegionSessions;
+        m_PassedQueue = false;
+    }
+
     ///- unload player if not unloaded
     if (_player)
         LogoutPlayer(true);
@@ -801,6 +810,7 @@ void WorldSession::SendAuthWaitQue(uint32 position)
         WorldPacket packet(SMSG_AUTH_RESPONSE, 1);
         packet << uint8(AUTH_OK);
         SendPacket(&packet);
+        OnPassedQueue();
     }
     else
     {
@@ -1061,6 +1071,17 @@ void WorldSession::ComputeClientHash()
             oss << char(digest[i] % (0x24 - 0x7A + 1) + 0x20);
     }
     _clientHash = oss.str();
+}
+
+void WorldSession::OnPassedQueue()
+{
+	//here we actually are logged in, so up the count.
+	if (sessionDbcLocaleRaw == LOCALE_zhCN)
+		++sWorld.loggedNonRegionSessions;
+	else
+		++sWorld.loggedRegionSessions;
+
+	m_PassedQueue = true;
 }
 
 bool WorldSession::ShouldBeBanned(uint32 currentLevel) const
