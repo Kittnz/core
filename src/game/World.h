@@ -866,7 +866,7 @@ class World
 
         typedef robin_hood::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
-        SessionMap GetAllSessions() { return m_sessions; }
+        const SessionMap& GetAllSessions() const { return m_sessions; }
         WorldSession* FindSession(uint32 id) const;
         void AddSession(WorldSession *s);
         bool RemoveSession(uint32 id);
@@ -1133,7 +1133,6 @@ class World
         void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = nullptr, uint32 chanId = 0, const char* chanStr = nullptr);
         std::string FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr);
         void Shutdown();
-        void AddSessionToSessionsMap(WorldSession* sess);
 
         // GM Logs
         struct ArchivedLogMessage

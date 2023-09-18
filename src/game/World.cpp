@@ -262,11 +262,6 @@ void World::AddSession(WorldSession* s)
     addSessQueue.add(s);
 }
 
-void World::AddSessionToSessionsMap(WorldSession* sess)
-{
-    m_sessions[sess->GetAccountId()] = sess;
-}
-
 void World::AddSession_(WorldSession* s)
 {
     MANGOS_ASSERT(s);
@@ -2395,7 +2390,7 @@ void World::Update(uint32 diff)
 
         uint32 alliancePlayers = 0, hordePlayers = 0;
 
-        const auto& players = sWorld.GetAllSessions();
+        const SessionMap& players = sWorld.GetAllSessions();
         for (const auto& [id, session] : players)
         {
             auto player = session->GetPlayer();
@@ -3213,38 +3208,43 @@ void World::UpdateSessions(uint32 diff)
 
     ///- Then send an update signal to remaining ones
     time_t time_now = time(nullptr);
-    for (SessionMap::iterator itr = m_sessions.begin(), next; itr != m_sessions.end(); itr = next)
-    {
-        next = itr;
-        ++next;
-        ///- and remove not active sessions from the list
-        WorldSession * pSession = itr->second;
-        WorldSessionFilter updater(pSession);
 
-        pSession->AddActiveTime(diff);
+    for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); )
+    {
+		WorldSession* pSession = itr->second;
+		WorldSessionFilter updater(pSession);
+
+		pSession->AddActiveTime(diff);
         if (!pSession->Update(updater))
         {
-            if (pSession->PlayerLoading())
-                sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
-            if (!RemoveQueuedSession(pSession))
-                m_accountsLastLogout[pSession->GetAccountId()] = time_now;
-            m_sessions.erase(itr);
-            m_Ipconnections[pSession->GetBinaryAddress()]--;
+			if (pSession->PlayerLoading())
+				sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
+			if (!RemoveQueuedSession(pSession))
+				m_accountsLastLogout[pSession->GetAccountId()] = time_now;
+            itr = m_sessions.erase(itr);
+			m_Ipconnections[pSession->GetBinaryAddress()]--;
 
-            delete pSession;
+			delete pSession;
+        }
+        else
+        {
+            itr++;
         }
     }
-    ///- Update disconnected sessions
-    for (SessionSet::iterator itr = m_disconnectedSessions.begin(), next; itr != m_disconnectedSessions.end(); itr = next)
-    {
-        next = itr;
-        ++next;
-        WorldSession * pSession = *itr;
 
-        if (!pSession->UpdateDisconnected(diff))
+    ///- Update disconnected sessions
+    for (SessionSet::iterator itr = m_disconnectedSessions.begin(); itr != m_disconnectedSessions.end(); )
+    {
+		WorldSession* pSession = *itr;
+
+		if (!pSession->UpdateDisconnected(diff))
+		{
+			delete pSession;
+            itr = m_disconnectedSessions.erase(itr);
+		}
+        else
         {
-            delete pSession;
-            m_disconnectedSessions.erase(itr);
+            itr++;
         }
     }
 }
