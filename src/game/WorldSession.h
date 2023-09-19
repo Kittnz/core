@@ -334,6 +334,9 @@ class WorldSession
         void SetJoinTimeStamp(uint32 timestamp) { m_joinTimestamp = timestamp; }
         uint32 GetJoinTimeStamp() const { return m_joinTimestamp; }
 
+
+        bool HadQueue() const { return m_hadQueue; }
+
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
         bool HasChineseEmail() const;
@@ -362,7 +365,7 @@ class WorldSession
         bool IsSuspicious() const { return m_suspicious; }
 
         /// Session in auth.queue currently
-        void SetInQueue(bool state) { m_inQueue = state; }
+        void SetInQueue(bool state) { m_inQueue = state; if (state) m_hadQueue = true;  }
 
         /// Is the user engaged in a log out process?
         bool isLogingOut() const { return _logoutTime || m_playerLogout; }
@@ -991,6 +994,7 @@ class WorldSession
         time_t m_lastMailOpenTime;
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
+        bool m_hadQueue = false;                            // true if the session was in a queue this session.
         bool m_playerLoading;                               // code processed in LoginPlayer
         bool m_playerLogout;                                // code processed in LogoutPlayer
         bool m_playerRecentlyLogout;

@@ -3219,7 +3219,7 @@ void World::UpdateSessions(uint32 diff)
         {
 			if (pSession->PlayerLoading())
 				sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
-			if (!RemoveQueuedSession(pSession))
+			if (!RemoveQueuedSession(pSession) && pSession->HadQueue())
 				m_accountsLastLogout[pSession->GetAccountId()] = time_now;
             itr = m_sessions.erase(itr);
 			m_Ipconnections[pSession->GetBinaryAddress()]--;
@@ -4224,7 +4224,9 @@ void World::SetSessionDisconnected(WorldSession* sess)
 {
     SessionMap::iterator itr = m_sessions.find(sess->GetAccountId());
     ASSERT(itr != m_sessions.end());
-    m_accountsLastLogout[sess->GetAccountId()] = time(nullptr);
+    if (sess->HadQueue())
+        m_accountsLastLogout[sess->GetAccountId()] = time(nullptr);
+
     m_sessions.erase(itr);
     m_disconnectedSessions.insert(sess);
 }
