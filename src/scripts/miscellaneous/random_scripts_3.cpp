@@ -6448,7 +6448,7 @@ bool GossipHello_npc_lord_darius_ravenwood(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66812, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    pPlayer->SEND_GOSSIP_MENU(61326, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(61259, pCreature->GetGUID());
 
     return true;
 }
