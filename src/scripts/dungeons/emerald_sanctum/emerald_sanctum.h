@@ -56,6 +56,12 @@ enum
 	GO_ERRENIUS_CHEST = 2020042,
 };
 
+template <typename Functor>
+void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
+{
+	pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
+}
+
 class instance_emerald_sanctum : public ScriptedInstance
 {
 public:
