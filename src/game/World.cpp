@@ -3103,10 +3103,8 @@ void World::UpdateSessions(uint32 diff)
 
     ///- Then send an update signal to remaining ones
     time_t time_now = time(nullptr);
-    for (SessionMap::iterator itr = m_sessions.begin(), next; itr != m_sessions.end(); itr = next)
+    for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end();)
     {
-        next = itr;
-        ++next;
         ///- and remove not active sessions from the list
         WorldSession * pSession = itr->second;
         WorldSessionFilter updater(pSession);
@@ -3118,22 +3116,28 @@ void World::UpdateSessions(uint32 diff)
                 sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
             if (!RemoveQueuedSession(pSession))
                 m_accountsLastLogout[pSession->GetAccountId()] = time_now;
-            m_sessions.erase(itr);
+            itr = m_sessions.erase(itr);
             m_Ipconnections[pSession->GetBinaryAddress()]--;
             delete pSession;
         }
+        else
+        {
+            ++itr;
+        }
     }
     ///- Update disconnected sessions
-    for (SessionSet::iterator itr = m_disconnectedSessions.begin(), next; itr != m_disconnectedSessions.end(); itr = next)
+    for (SessionSet::iterator itr = m_disconnectedSessions.begin(); itr != m_disconnectedSessions.end();)
     {
-        next = itr;
-        ++next;
         WorldSession * pSession = *itr;
 
         if (!pSession->UpdateDisconnected(diff))
         {
             delete pSession;
-            m_disconnectedSessions.erase(itr);
+            itr = m_disconnectedSessions.erase(itr);
+        }
+        else
+        {
+            ++itr;
         }
     }
 }
