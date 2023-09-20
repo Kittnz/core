@@ -594,6 +594,10 @@ KalimdorTimeOffset = 0
 
 DBC.Locale = 255
 
+# LoadLocales. Whether to load the text locale tables.
+
+LoadLocales = 1
+
 # StrictPlayerNames. Limit player name to language specific symbols set, not allow create characters, 
 # and set rename request and disconnect at not allowed symbols name.
 
