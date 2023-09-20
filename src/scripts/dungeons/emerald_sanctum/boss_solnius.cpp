@@ -15,7 +15,6 @@ enum Events
 	EVENT_GO_TO_SLEEP,
 	EVENT_WAKE_UP,
 	EVENT_SPAWN_PORTALS,
-	EVENT_ERENNIUS_DESPAWN,
 };
 
 enum Phase
@@ -177,7 +176,23 @@ struct boss_solniusAI : public ScriptedAI
 		m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
 		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_3);
 
-		events.ScheduleEvent(EVENT_ERENNIUS_DESPAWN, Seconds(20));
+		if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
+		{
+			DoAfterTime(pErennius, (20 * IN_MILLISECONDS), [creature = pErennius]()
+				{
+					if (creature->IsAlive() && creature->IsInCombat())
+					{
+						creature->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
+						creature->DeleteThreatList();
+						creature->CombatStop(true);
+						creature->SetReactState(REACT_PASSIVE);
+						creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+						creature->SetFactionTemplateId(7);
+						creature->DespawnOrUnsummon(1000);
+						creature->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
+					}
+				});
+		}
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -308,22 +323,6 @@ struct boss_solniusAI : public ScriptedAI
 								events.Repeat(Seconds(30));
 							}
 
-						}
-					}
-					break;
-				case EVENT_ERENNIUS_DESPAWN:
-					if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
-					{
-						if (pErennius->IsAlive() && pErennius->IsInCombat())
-						{
-							pErennius->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
-							pErennius->DeleteThreatList();
-							pErennius->CombatStop(true);
-							pErennius->SetReactState(REACT_PASSIVE);
-							pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
-							pErennius->SetFactionTemplateId(7);
-							pErennius->DespawnOrUnsummon(1000);
-							pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
 						}
 					}
 					break;
