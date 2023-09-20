@@ -8551,7 +8551,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
             break;
         case SPELLFAMILY_SHAMAN:
             // Strength of Earth (ID 8076, 8162, 8163, 10441, 25362)
-            if (spellproto->IsFitToFamilyMask<CF_SHAMAN_STRENGTH_OF_EARTH>())
+            if (spellproto->IsFitToFamilyMask<CF_SHAMAN_STRENGTH_OF_EARTH, CF_SHAMAN_GRACE_OF_AIR>())
                 return false;
             break;
         case SPELLFAMILY_WARRIOR:
