@@ -15735,12 +15735,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (GetPowerType() == POWER_RAGE || GetPowerType() == POWER_MANA)
         SetByteValue(UNIT_FIELD_BYTES_1, 1, 0xEE);
 
-    // rest bonus can only be calculated after InitStatsForLevel()
-    m_rest_bonus = fields[21].GetFloat();
-
-    if (time_diff > 0)
-        SetRestBonus(GetRestBonus() + ComputeRest(time_diff, true, (fields[23].GetInt32() > 0)));
-
     // load skills after InitStatsForLevel because it triggering aura apply also
     _LoadSkills(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSKILLS));
 
@@ -15764,6 +15758,13 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     InitTalentForLevel();
 
     LearnDefaultSpells();
+
+    // rest bonus can only be calculated after InitStatsForLevel()
+    // and it needs to be after spells because of glyph of exhaustion challenge
+    m_rest_bonus = fields[21].GetFloat();
+
+    if (time_diff > 0)
+        SetRestBonus(GetRestBonus() + ComputeRest(time_diff, true, (fields[23].GetInt32() > 0)));
 
     // after spell load, learn rewarded spell if need also
     _LoadQuestStatus(holder->GetResult(PLAYER_LOGIN_QUERY_LOADQUESTSTATUS));

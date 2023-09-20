@@ -2006,8 +2006,7 @@ public:
             player->Unmount();
 
             player->SetFlying(false);
-            player->UpdateSpeed(MOVE_SWIM, false, 1.0F);
-            player->UpdateSpeed(MOVE_RUN, false, player->GetSpeedRatePersistance(MOVE_RUN));
+            player->RemoveAurasDueToSpell(48305);
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
@@ -2069,20 +2068,24 @@ void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 remo
     }
 
     player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
+    {
+        player->SetClientControl(player, 1);
+        player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+        player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
+        player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
+        player->SetFlying(true);
+        if (removeEntry)
         {
-            player->SetClientControl(player, 1);
-            player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
-            player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
-            player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
-            player->SetFlying(true);
-            if (removeEntry)
-            {
-                player->DestroyItemCount(removeEntry, count ? count : 1, true);
-                player->SaveInventoryAndGoldToDB();
-            }
-            player->InterruptNonMeleeSpells(true);
-            player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
-        }, 1500);
+            player->DestroyItemCount(removeEntry, count ? count : 1, true);
+            player->SaveInventoryAndGoldToDB();
+        }
+        player->InterruptNonMeleeSpells(true);
+        if (SpellAuraHolder* pAura = player->AddAura(48305))
+        {
+            pAura->SetAuraDuration(duration * IN_MILLISECONDS);
+            pAura->SetAuraMaxDuration(duration * IN_MILLISECONDS);
+        }
+    }, 1500);
 }
 
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)

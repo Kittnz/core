@@ -533,7 +533,7 @@ bool World::RemoveQueuedSession(WorldSession* sess)
 void World::LoadConfigSettings(bool reload)
 {
     if (!reload)
-        m_lastDiffs.resize(10);
+        m_lastDiffs.resize(50);
 
     if (reload)
     {
@@ -1372,8 +1372,9 @@ void World::LoadConfigSettings(bool reload)
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
 
-    setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
+    setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
 
+    setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
     setConfig(CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA, "Analysis.StopOnCorrectExtendedData", false);
     setConfig(CONFIG_BOOL_ANALYSIS_DO_SHARED_DATA_DETAILED_REPORT, "Analysis.DoSharedDataDetailedReport", false);
