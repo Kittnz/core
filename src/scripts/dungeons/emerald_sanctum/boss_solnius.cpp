@@ -178,20 +178,17 @@ struct boss_solniusAI : public ScriptedAI
 
 		if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
 		{
-			DoAfterTime(pErennius, (20 * IN_MILLISECONDS), [creature = pErennius]()
-				{
-					if (creature->IsAlive() && creature->IsInCombat())
-					{
-						creature->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
-						creature->DeleteThreatList();
-						creature->CombatStop(true);
-						creature->SetReactState(REACT_PASSIVE);
-						creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
-						creature->SetFactionTemplateId(7);
-						creature->DespawnOrUnsummon(1000);
-						creature->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
-					}
-				});
+			if (pErennius->IsAlive() && pErennius->IsInCombat())
+			{
+				pErennius->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
+				pErennius->DeleteThreatList();
+				pErennius->CombatStop(true);
+				pErennius->SetReactState(REACT_PASSIVE);
+				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+				pErennius->SetFactionTemplateId(7);
+				pErennius->DespawnOrUnsummon(20000);
+				pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
+			}
 		}
 	}
 
