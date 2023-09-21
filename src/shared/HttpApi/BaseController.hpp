@@ -33,6 +33,8 @@ namespace HttpApi
             _controllers.push_back(this);
         }
 
+        virtual ~BaseController() = default;
+
         static void RegisterAll(SSLServer* server)
         {
             _source = server;
