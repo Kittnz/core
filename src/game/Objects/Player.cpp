@@ -5438,7 +5438,7 @@ void Player::KillPlayer()
         SpawnHardcoreGravestone();
         BuildPlayerRepop();
 
-        m_hardcoreKickTimer = 120 * IN_MILLISECONDS;
+        m_hardcoreKickTimer = 300 * IN_MILLISECONDS;
 
 
         auto& logEntries = sObjectMgr.GetShopLogEntries(GetSession()->GetAccountId());
