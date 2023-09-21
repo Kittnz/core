@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "HttpApi/ApiServer.hpp"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -97,6 +98,11 @@ namespace DiscordBot
     void RegisterHandlers();
 }
 #endif
+
+namespace HttpApi
+{
+    void RegisterControllers();
+}
 
 #include <filesystem>
 #include <fstream>
@@ -1698,6 +1704,9 @@ void ExportLogs()
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
+    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
+    HttpApi::RegisterControllers();
+    _server->Start("127.0.0.1", 1313);
     ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
@@ -2233,6 +2242,11 @@ void World::DetectDBCLang()
 
     sLog.outString("Using %s DBC locale as default.", localeNames[m_defaultDbcLocale]);
     
+}
+
+void World::ApiServerDeleter::operator()(HttpApi::ApiServer* p)
+{
+    delete p;
 }
 
 void World::ProcessAsyncPackets()
