@@ -39,7 +39,6 @@ namespace DiscordBot
             _handlers.push_back(this);
         }
 
-        virtual ~BaseCommandHandler() = default;
 
 
         template <typename T>
