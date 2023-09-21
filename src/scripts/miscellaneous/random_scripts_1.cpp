@@ -2006,7 +2006,7 @@ public:
             player->Unmount();
 
             player->SetFlying(false);
-            player->RemoveAurasDueToSpell(48305);
+            player->RemoveAurasDueToSpell(47036);
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
@@ -2080,7 +2080,7 @@ void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 remo
             player->SaveInventoryAndGoldToDB();
         }
         player->InterruptNonMeleeSpells(true);
-        if (SpellAuraHolder* pAura = player->AddAura(48305))
+        if (SpellAuraHolder* pAura = player->AddAura(47036))
         {
             pAura->SetAuraDuration(duration * IN_MILLISECONDS);
             pAura->SetAuraMaxDuration(duration * IN_MILLISECONDS);
