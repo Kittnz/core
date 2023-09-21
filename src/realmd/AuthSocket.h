@@ -59,6 +59,9 @@ class AuthSocket: public BufferedSocket
         AuthSocket();
         ~AuthSocket();
 
+
+        bool ReadProxyHeader();
+
         void OnAccept();
         void OnRead();
         void SendProof(Sha1Hash sha);
@@ -78,6 +81,17 @@ class AuthSocket: public BufferedSocket
         bool _HandleXferAccept();
 
         void _SetVSFields(const std::string& rI);
+
+
+        struct ProxyV1Header
+        {
+            char line[108];
+        };
+
+
+        ProxyV1Header proxyHeader;
+
+        bool _proxyIpReceived = false;
 
     private:
         enum eStatus

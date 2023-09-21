@@ -34,6 +34,7 @@
 #include "AuthCodes.h"
 #include "PatchHandler.h"
 #include "Util.h"
+#include "re2/re2.h"
 
 #ifdef USE_SENDGRID
 #include "MailerService.h"
@@ -177,6 +178,34 @@ void AuthSocket::OnAccept()
     BASIC_LOG("Accepting connection from '%s'", get_remote_address().c_str());
 }
 
+bool AuthSocket::ReadProxyHeader()
+{
+    static const re2::RE2 IpPattern = R"(TCP4 (\d+.\d+.\d+.\d+))";
+    std::string proxyString;
+    proxyString.resize(recv_len());
+    recv_soft((char*)&proxyString[0], recv_len());
+    if (memcmp("PROXY ", &proxyString[0], 6) == 0)
+    {
+        auto endIndex = proxyString.find_first_of('\r');
+
+        if (endIndex == std::string::npos || proxyString.size() == endIndex || proxyString[endIndex + 1] != '\n')
+            return false;
+
+        std::string ipString;
+        if (!re2::RE2::PartialMatch(proxyString, IpPattern, &ipString))
+            return false;
+
+        remote_address_ = ipString;
+
+        //we got a fine IP, consume now.
+        // + 2 for the \r and \n
+        recv_skip(endIndex + 2);
+        return true;
+
+    }
+    return false;
+}
+
 /// Read the packet from the client
 void AuthSocket::OnRead()
 {
@@ -196,6 +225,20 @@ void AuthSocket::OnRead()
     uint8 _cmd;
     while (1)
     {
+        if (sConfig.GetBoolDefault("Proxy.PassIp", false))
+        {
+            if (!_proxyIpReceived)
+            {
+                if (recv_len() < 6)
+                    return;
+
+                if (ReadProxyHeader())
+                    _proxyIpReceived = true;
+                else
+                    return;
+            }
+        }
+
         if (!recv_soft((char *)&_cmd, 1))
             return;
 
