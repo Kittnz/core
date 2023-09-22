@@ -35,6 +35,7 @@
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
 #include "Utilities/robin_hood.h"
+
 //#include "Creature.h"
 
 #include <map>
@@ -56,6 +57,12 @@ namespace DiscordBot
 {
     class Bot;
 }
+
+namespace HttpApi
+{
+    class ApiServer;
+}
+
 class MovementBroadcaster;
 struct CreatureInfo;
 
@@ -1308,6 +1315,14 @@ class World
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
+
+        struct ApiServerDeleter
+        {
+            void operator()(HttpApi::ApiServer* p);
+        };
+
+
+        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
