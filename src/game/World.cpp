@@ -87,6 +87,8 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "SocialMgr.h"
+#include <ace/OS_NS_dirent.h>
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -1403,6 +1405,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_SEA_REALM, "NiHao", false);
 
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
+    setConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL, "AutoPDump.MinCharLevel", 30);
+    setConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS, "AutoPDump.DeleteAfterDays", 60);
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
@@ -2139,6 +2143,9 @@ void World::SetInitialWorldSettings()
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
+
+    if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
+        DeleteOldPDumps();
 
 	sSuspiciousStatisticMgr.Initialize();
 
@@ -4396,4 +4403,45 @@ void World::AutoPDumpWorker()
         }
     }
     CharacterDatabase.ThreadEnd();
+}
+
+void World::DeleteOldPDumps()
+{
+    if (ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT(sWorld.GetPDumpDirectory().c_str())))
+    {
+        ACE_DIRENT* dp;
+        
+        std::set<std::string> filesToDelete;
+        while (!!(dp = ACE_OS::readdir(dirp)))
+        {
+            if (strstr(dp->d_name, "Char"))
+            {
+                if (char* pDash = strstr(dp->d_name, "-"))
+                {
+                    if (char* pDot = strstr(dp->d_name, ".bak"))
+                    {
+                        time_t timestamp = strtol(pDash + 1, &pDot, 10);
+                        
+                        if ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr))
+                        {
+                            std::string fullPath = sWorld.GetPDumpDirectory() + "/" + dp->d_name;
+                            filesToDelete.insert(fullPath);
+                        }
+                    }
+                }
+            }
+        }   
+
+#ifndef _WIN32
+        // this causes a crash on Windows, so just accept a minor memory leak for now
+        ACE_OS::closedir(dirp);
+#endif
+
+        if (!filesToDelete.empty())
+        {
+            sLog.outInfo("Deleting %u old pdumps...", (uint32)filesToDelete.size());
+            for (auto const& file : filesToDelete)
+                remove(file.c_str());
+        }
+    }
 }
