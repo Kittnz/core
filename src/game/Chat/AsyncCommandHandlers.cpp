@@ -221,7 +221,15 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
     cHandler.PSendSysMessage("Extended Fingerprint: %s", cHandler.playerLink(std::to_string(data->m_extendedFingerprint)).c_str());
     cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
+
+    auto player = sObjectAccessor.FindPlayer(data->target_guid);
+    if (player)
+        cHandler.PSendSysMessage("Is Warmode: %s", player->HasChallenge(CHALLENGE_WAR_MODE) ? "YES" : "NO");
+
+
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
+    
+
 
     cHandler.PSendSysMessage("Actively logged in time: %s", secsToTimeString(data->m_activePlayerTime / 1000, true, false).c_str());
     cHandler.PSendSysMessage("Active session time: %s", secsToTimeString(data->m_activeSessionTime / 1000, true, false).c_str());
