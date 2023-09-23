@@ -393,6 +393,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX,
+    CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL,
+    CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -1142,6 +1144,7 @@ class World
         // Automatic Player Dump
         void SchedulePlayerDump(uint32 guidLow);
         void AutoPDumpWorker();
+        void DeleteOldPDumps();
         void UnlockCharacter(uint32 guidLow);
         bool IsCharacterLocked(uint32 guidLow);
 
