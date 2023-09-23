@@ -89,7 +89,6 @@
 #include "SuspiciousStatisticMgr.h"
 #include "SocialMgr.h"
 #include <ace/OS_NS_dirent.h>
-#include <ace/FILE.h>
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
