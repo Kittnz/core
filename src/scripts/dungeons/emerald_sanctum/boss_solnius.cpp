@@ -187,7 +187,7 @@ struct boss_solniusAI : public ScriptedAI
 				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
 				pErennius->SetFactionTemplateId(7);
 				pErennius->DespawnOrUnsummon(20000);
-				pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3321.8437f, 3041.9804f, 25.4131f, 3.0498f, 0, 0, 0, 0, 0);
+				pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3276.224f, 3043.9492f, 27.1176f, 6.2332f, 0, 0, 0, 0, 0);
 			}
 		}
 	}
