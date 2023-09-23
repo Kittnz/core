@@ -605,8 +605,8 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                     ROLLBACK(DUMP_FILE_BROKEN);             // item_instance.guid update
                 if (!changenth(line, 3, newguid))           // item_instance.owner_guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
-                if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
-                    ROLLBACK(DUMP_FILE_BROKEN);
+               // if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
+                //    ROLLBACK(DUMP_FILE_BROKEN);
                 break;
             }
             case DTT_ITEM_GIFT:
