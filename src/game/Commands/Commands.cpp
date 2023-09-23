@@ -14814,6 +14814,12 @@ bool ChatHandler::HandleTranslateCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleStopApiServerCommand(char* args)
+{
+    sWorld.StopHttpApiServer();
+    SendSysMessage("OK. HTTP API server stopped.");
+    return true;
+}
 
 
 bool ChatHandler::HandleToggleTrainingCommand(char* args)

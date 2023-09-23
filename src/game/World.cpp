@@ -1680,13 +1680,19 @@ void ExportLogs()
     }
 }
 
+void World::StopHttpApiServer()
+{
+    if (_server)
+        _server->Stop();
+}
+
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
-    HttpApi::RegisterControllers();
-    _server->Start("127.0.0.1", 1313);
-    ///- Initialize the random number generator
+    //_server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
+    //HttpApi::RegisterControllers();
+    //_server->Start("127.0.0.1", 1313);
+    /////- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup

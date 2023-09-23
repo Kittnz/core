@@ -15,6 +15,7 @@ namespace HttpApi
         ApiServer() {}
 
         void Start(const std::string& address, int port);
+        void Stop();
 
     private:
         std::unique_ptr<httplib::SSLServer> _server;
