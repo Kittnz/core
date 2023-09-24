@@ -23,6 +23,14 @@ HonorDir = "../honor"
 
 PDumpDir = "../pdump"
 
+# AutoPDump.MinCharLevel. Minimum level to backup character.
+
+AutoPDump.MinCharLevel = 30
+
+# AutoPDump.DeleteAfterDays. Automatically delete pdumps older than this many days.
+
+AutoPDump.DeleteAfterDays = 60
+
 # HardcoreModeLogFile. HardcoreModeLogFile name.
 
 HardcoreModeLogFile = "hardcore.log"

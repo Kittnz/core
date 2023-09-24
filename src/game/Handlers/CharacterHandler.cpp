@@ -175,7 +175,7 @@ void WorldSession::HandleCharEnum(QueryResult * result)
             if (_characterMaxLevel < level)
                 _characterMaxLevel = level;
 
-            if (m_shouldBackupCharacters && level > 30)
+            if (m_shouldBackupCharacters && level > sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL))
                 sWorld.SchedulePlayerDump(guidlow);
 
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());

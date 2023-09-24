@@ -5286,7 +5286,6 @@ void Aura::HandleAuraModCritPercent(bool apply, bool Real)
     if (GetSpellProto()->EquippedItemClass == -1)
     {
         ((Player*)target)->HandleBaseModValue(CRIT_PERCENTAGE,         FLAT_MOD, float(m_modifier.m_amount), apply);
-        ((Player*)target)->HandleBaseModValue(OFFHAND_CRIT_PERCENTAGE, FLAT_MOD, float(m_modifier.m_amount), apply);
         ((Player*)target)->HandleBaseModValue(RANGED_CRIT_PERCENTAGE,  FLAT_MOD, float(m_modifier.m_amount), apply);
     }
     else
@@ -8552,7 +8551,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
             break;
         case SPELLFAMILY_SHAMAN:
             // Strength of Earth (ID 8076, 8162, 8163, 10441, 25362)
-            if (spellproto->IsFitToFamilyMask<CF_SHAMAN_STRENGTH_OF_EARTH>())
+            if (spellproto->IsFitToFamilyMask<CF_SHAMAN_STRENGTH_OF_EARTH, CF_SHAMAN_GRACE_OF_AIR>())
                 return false;
             break;
         case SPELLFAMILY_WARRIOR:
