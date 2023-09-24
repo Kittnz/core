@@ -319,16 +319,16 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     if (IsInCombat() && m_doExtraAttacks && GetExtraAttacks() && victim && (CanAutoAttackTarget(victim) == ATTACK_RESULT_OK))
     {
         m_doExtraAttacks = false;
-
         ExtraAttacksLocked(true);
 
+        uint32 timer = GetAttackTimer(BASE_ATTACK);
         while (m_extraAttacks)
         {
             AttackerStateUpdate(victim, BASE_ATTACK, true, true);
             if (m_extraAttacks > 0)
                 --m_extraAttacks;
         }
-        ResetAttackTimer(BASE_ATTACK);
+        SetAttackTimer(BASE_ATTACK, timer);
 
         ExtraAttacksLocked(false);
     }

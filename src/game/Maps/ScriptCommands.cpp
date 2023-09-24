@@ -460,7 +460,7 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     }
 
     if (script.summonCreature.scriptId)
-        ScriptsStart(sGenericScripts, script.summonCreature.scriptId, pCreature, target);
+        ScriptsStart(sGenericScripts, script.summonCreature.scriptId, pCreature->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
     return false;
 }
@@ -1291,7 +1291,7 @@ bool Map::ScriptCommand_StartScript(ScriptInfo const& script, WorldObject* sourc
     uint32 const scriptId = ChooseScriptIdToStart(script);
 
     if (scriptId)
-        ScriptsStart(sGenericScripts, scriptId, source, target);
+        ScriptsStart(sGenericScripts, scriptId, source ? source->GetObjectGuid() : ObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
     else
         return ShouldAbortScript(script);
 
@@ -1988,7 +1988,7 @@ bool Map::ScriptCommand_StartScriptForAll(const ScriptInfo& script, WorldObject*
         }
 
         if (!script.startScriptForAll.objectEntry || (pWorldObject->GetEntry() == script.startScriptForAll.objectEntry))
-            ScriptsStart(sGenericScripts, script.startScriptForAll.scriptId, pWorldObject, target);
+            ScriptsStart(sGenericScripts, script.startScriptForAll.scriptId, pWorldObject->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
     }
     
     return false;
@@ -2443,19 +2443,19 @@ bool Map::ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject
     if (!scriptId)
         return ShouldAbortScript(script);
 
-    ScriptsStart(sGenericScripts, scriptId, pSource, target);
+    ScriptsStart(sGenericScripts, scriptId, pSource->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
     if (Creature* pCreature = pSource->ToCreature())
     {
         if (CreatureGroup* pGroup = pCreature->GetCreatureGroup())
         {
             if (pGroup->GetLeaderGuid() != pCreature->GetObjectGuid())
-                ScriptsStart(sGenericScripts, scriptId, GetCreature(pGroup->GetLeaderGuid()), target);
+                ScriptsStart(sGenericScripts, scriptId, pGroup->GetLeaderGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
             for (auto const& itr : pGroup->GetMembers())
             {
                 if (itr.first != pCreature->GetObjectGuid())
-                    ScriptsStart(sGenericScripts, scriptId, GetCreature(itr.first), target);
+                    ScriptsStart(sGenericScripts, scriptId, itr.first, target ? target->GetObjectGuid() : ObjectGuid());
             }
         }
     }
@@ -2468,7 +2468,7 @@ bool Map::ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject
                 if (Player* pMember = itr->getSource())
                 {
                     if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
-                        ScriptsStart(sGenericScripts, scriptId, GetPlayer(pMember->GetObjectGuid()), target);
+                        ScriptsStart(sGenericScripts, scriptId, pMember->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
                 }
             }
         }
@@ -2501,7 +2501,7 @@ bool Map::ScriptCommand_StartScriptOnZone(ScriptInfo const& script, WorldObject*
     {
         if (itr.getSource()->GetCachedZoneId() == script.startScriptOnZone.zoneId)
         {
-            ScriptsStart(sGenericScripts, script.startScriptOnZone.scriptId, itr.getSource(), target);
+            ScriptsStart(sGenericScripts, script.startScriptOnZone.scriptId, itr.getSource()->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
         }
     }
 
