@@ -141,3 +141,7 @@ HostAddressOverride = "0.0.0.0"
 #   Force 2FA for accounts with rank.
 
 ForcePinAccountRank = 1
+
+#   MaxSessionDuration - Time in seconds after which session will be closed.
+
+MaxSessionDuration = 300
