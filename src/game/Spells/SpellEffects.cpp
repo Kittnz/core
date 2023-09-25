@@ -57,6 +57,7 @@
 #include "Chat.h"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
+#include "RadioManager.hpp"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -1967,39 +1968,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->SummonGameObject(2004895, x + 0.5, y + 0.5, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
                     }
                     return;
-                }
-                case 56066: // Music tapes:
-                {
-                    if (m_caster && m_caster->IsPlayer())
-                    {
-                        std::array<std::pair<uint32, uint32>, 16> items_and_sounds =
-                        { {
-                            { 70043, 30218 }, // Winds of Kamio
-                            { 70080, 30220 }, // Emerald Dream
-                            { 70081, 30297 }, // Bells of the Dawn
-                            { 70082, 30245 }, // Hourglass of Eternity
-                            { 70083, 15000 }, // Hyjal Summit
-                            { 70084, 30243 }, // Jaguero Isle
-                            { 70085, 30226 }, // Stratholme's Best Days
-                            { 70086, 30299 }, // Titanic Mystery
-                            { 70087, 30298 }, // Aerie Peak
-                            { 70088, 30296 }, // Hateforge Quarry
-                            { 70090, 30295 }, // Bastion
-                            { 70091, 30294 }, // Ιntraworld Ιmmortality
-                            { 70092, 30292 }, // Sparkwater Port
-                            { 70093, 30275 }, // Stormwind Vault
-                            { 70094, 30241 }, // Dun Argath        
-                            { 70095, 30311 }  // Snowing in the Vale 
-                        } };
-
-                        for (auto const& data : items_and_sounds)
-                        {
-                            if (m_CastItem->GetEntry() == data.first)
-                                m_caster->PlayDirectMusic(data.second, m_caster->ToPlayer());
-                        }
-                        return;
-                    }
-                }
+                }               
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -2353,6 +2322,20 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 57530: // Add Record to Collection
+                {
+                    if (m_CastItem)
+                    {
+                        auto spellIdOpt = sRadioMgr->GetRadioSpellId(m_CastItem->GetEntry());
+                        if (spellIdOpt && m_caster->IsPlayer())
+                        {
+                            m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                            m_forceConsumeItem = true;
+                        }
+                    }
+                    return;
+                }
+
                 case 56044: // Debug: Previous DisplayID (commands will become obsolete in 1.15.2)
                 {
                     uint16 display_id = m_caster->ToPlayer()->GetDisplayId();
