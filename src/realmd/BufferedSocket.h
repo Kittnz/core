@@ -59,7 +59,7 @@ class BufferedSocket: public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH>
 
         virtual int open(void *) override;
 
-        void close_connection(void) ;
+        void close_connection(void);
 
         virtual int handle_input(ACE_HANDLE = ACE_INVALID_HANDLE) override;
         virtual int handle_output(ACE_HANDLE = ACE_INVALID_HANDLE) override;
