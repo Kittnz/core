@@ -865,6 +865,35 @@ void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::vector<PlayerCach
 	}
 }
 
+void ObjectMgr::LoadActivePlayersPerFaction()
+{
+    m_ActivePlayersPerFaction.clear();                              // need for reload case
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `logout_time` > %u", (time(nullptr) - MONTH)));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 race = fields[0].GetUInt32();
+        Team team = Player::TeamForRace(race);
+        m_ActivePlayersPerFaction[team]++;
+
+    } while (result->NextRow());
+}
+
+bool ObjectMgr::IsFactionImbalanced(Team team)
+{
+    Team const oppositeTeam = team == ALLIANCE ? HORDE : ALLIANCE;
+    float const maxImbalance = sWorld.getConfig(CONFIG_FLOAT_MAX_FACTION_IMBALANCE) + 1.0f;
+    return m_ActivePlayersPerFaction[team] > uint32(m_ActivePlayersPerFaction[oppositeTeam] * maxImbalance);
+}
+
 Group* ObjectMgr::GetGroupById(uint32 id) const
 {
     GroupMap::const_iterator itr = m_GroupMap.find(id);
