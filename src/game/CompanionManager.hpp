@@ -15,7 +15,7 @@ public:
 	void LoadFromDB()
 	{
 		m_companionSpells.clear();
-		auto result = std::unique_ptr<QueryResult>{ WorldDatabase.Query("SELECT itemId, spellId FROM collection_pet") };
+		auto result = std::unique_ptr<QueryResult>{ WorldDatabase.Query("SELECT itemId, spellId FROM companion_spells") };
 		if (!result)
 			return;
 
