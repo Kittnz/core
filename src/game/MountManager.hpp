@@ -15,7 +15,7 @@ public:
 	void LoadFromDB()
 	{
 		m_MountSpells.clear();
-		auto result = std::unique_ptr<QueryResult>{ WorldDatabase.Query("SELECT itemId, spellId FROM collection_mount") };
+		auto result = std::unique_ptr<QueryResult>{ WorldDatabase.Query("SELECT itemId, spellId FROM mount_spells") };
 		if (!result)
 			return;
 

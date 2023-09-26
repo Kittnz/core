@@ -81,7 +81,6 @@
 #include "Database/AutoUpdater.hpp"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
-#include "RadioManager.hpp"
 #include "PlayerDump.h"
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
@@ -2021,7 +2020,6 @@ void World::SetInitialWorldSettings()
     sDailyQuestHandler->LoadFromDB(true);
     sLog.outString("Loading companion manager...");
     sCompanionMgr->LoadFromDB();
-    sRadioMgr->LoadFromDB();
     sLog.outString("Loading mount manager...");
     sMountMgr->LoadFromDB();
 
