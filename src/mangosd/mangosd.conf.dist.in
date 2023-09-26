@@ -860,6 +860,10 @@ AllowTwoSide.AddFriend = 1
 
 GM.JoinOppositeFactionChannels = 0
 
+# MaxFactionImbalance. Maximum difference between active player count per faction before character creation is disabled.
+
+MaxFactionImbalance = 0.1
+
 # Radius for creature to evade after being pulled away from combat start point.
 # If ThreatRadius is less than creature aggro radius then aggro radius will be used.
 
