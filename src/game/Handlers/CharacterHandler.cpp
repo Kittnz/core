@@ -229,29 +229,32 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
 
     WorldPacket data(SMSG_CHAR_CREATE, 1);                  // returned with diff.values in all cases
 
+    Team team = Player::TeamForRace(race_);
     if (GetSecurity() == SEC_PLAYER)
     {
+        bool disabled = false;
+
         if (uint32 mask = sWorld.getConfig(CONFIG_UINT32_CHARACTERS_CREATING_DISABLED))
         {
-            bool disabled = false;
-
-            Team team = Player::TeamForRace(race_);
             switch (team)
             {
-                case ALLIANCE:
-                    disabled = mask & (1 << 0);
-                    break;
-                case HORDE:
-                    disabled = mask & (1 << 1);
-                    break;
+            case ALLIANCE:
+                disabled = mask & (1 << 0);
+                break;
+            case HORDE:
+                disabled = mask & (1 << 1);
+                break;
             }
+        }
 
-            if (disabled)
-            {
-                data << (uint8)CHAR_CREATE_DISABLED;
-                SendPacket(&data);
-                return;
-            }
+        if (!disabled)
+            disabled = sObjectMgr.IsFactionImbalanced(team);
+
+        if (disabled)
+        {
+            data << (uint8)CHAR_CREATE_DISABLED;
+            SendPacket(&data);
+            return;
         }
     }
 
@@ -338,7 +341,6 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
         if (!characters.empty())
         {
             PlayerCacheData* cData = characters.front();
-            Team team_ = Player::TeamForRace(race_);
 
             uint8 acc_race = cData->uiRace;
 
@@ -346,7 +348,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
             // TODO: what to if account already has characters of both races?
             if (!AllowTwoSideAccounts)
             {
-                if (acc_race == 0 || Player::TeamForRace(acc_race) != team_)
+                if (acc_race == 0 || Player::TeamForRace(acc_race) != team)
                 {
                     data << (uint8)CHAR_CREATE_PVP_TEAMS_VIOLATION;
                     SendPacket(&data);
@@ -407,6 +409,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     BASIC_LOG("Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     sLog.out(LOG_CHAR, "[%s:%u@%s] Create Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     sDBLogger->LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
+    sObjectMgr.IncreaseActivePlayersCount(team);
 }
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
