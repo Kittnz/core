@@ -889,6 +889,8 @@ void ObjectMgr::LoadActivePlayersPerFaction()
 
 bool ObjectMgr::IsFactionImbalanced(Team team)
 {
+    if (!sWorld.getConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE))
+        return false;
     Team const oppositeTeam = team == ALLIANCE ? HORDE : ALLIANCE;
     float const maxImbalance = sWorld.getConfig(CONFIG_FLOAT_MAX_FACTION_IMBALANCE) + 1.0f;
     return m_ActivePlayersPerFaction[team] > uint32(m_ActivePlayersPerFaction[oppositeTeam] * maxImbalance);
