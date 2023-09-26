@@ -93,6 +93,8 @@ set (shared_SRCS
     HttpApi/ApiServer.cpp
     HttpApi/BaseController.cpp
     HttpApi/BaseController.hpp
+    HttpApi/Authorizers/ApiKeyAuthorizer.hpp
+    HttpApi/Authorizers/BaseAuthorizer.hpp
 )
 
 
