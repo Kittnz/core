@@ -16,11 +16,6 @@ namespace HttpApi
     class TestController final : public BaseController
     {
     public:
-        bool IsAuthorized(const Request&) const override
-        {
-            return true;
-        }
-
 
         void RegisterCommands(SSLServer* server) override
         {
