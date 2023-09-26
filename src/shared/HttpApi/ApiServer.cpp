@@ -13,4 +13,10 @@ namespace HttpApi
 
         _server->listen(address, port);
     }
+
+    void ApiServer::Stop()
+    {
+        if (_server && _server->is_running())
+            _server->stop();
+    }
 }
