@@ -860,6 +860,11 @@ AllowTwoSide.AddFriend = 1
 
 GM.JoinOppositeFactionChannels = 0
 
+
+#FactionBalance.Enable. Enables or disables below config to check for strict faction balance on active players.
+
+FactionBalance.Enable = 0
+
 # MaxFactionImbalance. Maximum difference between active player count per faction before character creation is disabled.
 
 MaxFactionImbalance = 0.1
@@ -2064,6 +2069,8 @@ Suspicious.Enable = 1
 Suspicious.Movement.Enable = 1
 Suspicious.Fishing.Enable = 1
 Suspicious.Npckilling.Enable = 1
+
+
 
 # If player reach speed higher then this - it will be reported
 # For reference - walking speed is 8 units per second
