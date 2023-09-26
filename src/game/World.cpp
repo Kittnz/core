@@ -1705,6 +1705,12 @@ void ExportLogs()
     }
 }
 
+void World::StopHttpApiServer()
+{
+    if (_server)
+        _server->Stop();
+}
+
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
