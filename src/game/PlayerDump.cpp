@@ -428,6 +428,12 @@ DumpReturn PlayerDumpWriter::WriteDump(std::string const& file, uint32 guid)
     return DUMP_SUCCESS;
 }
 
+DumpReturn PlayerDumpWriter::ReturnDump(std::string& dump, uint32 guid)
+{
+    dump = GetDump(guid);
+    return DUMP_SUCCESS;
+}
+
 // Reading - High-level functions
 #define ROLLBACK(DR) {CharacterDatabase.RollbackTransaction(); fclose(fin); return (DR);}
 

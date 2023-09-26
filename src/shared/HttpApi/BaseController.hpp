@@ -2,6 +2,7 @@
 #include "httplib.h"
 #include "Common.h"
 #include "Log.h"
+#include "Authorizers/BaseAuthorizer.hpp"
 
 #include <vector>
 
@@ -28,10 +29,7 @@ namespace HttpApi
     class BaseController
     {
     public:
-        BaseController() 
-        {
-            _controllers.push_back(this);
-        }
+        BaseController();
 
         virtual ~BaseController() = default;
 
@@ -44,26 +42,52 @@ namespace HttpApi
             }
         }
 
-        virtual bool IsAuthorized(const Request&) const = 0;
         virtual void RegisterCommands(SSLServer* server) = 0;
 
         template <HttpMethod method, typename F =
-        std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
-        void RegisterEndpoint(std::string endpoint, F&& handler)
+            std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
+            void RegisterEndpoint(std::string endpoint, F&& handler)
         {
             sLog.out(LOG_API, string_format("Registering endpoint {}..", endpoint).c_str());
+
+
             if constexpr (method == HttpMethod::Get)
             {
-                _source->Get(endpoint, std::forward<F>(handler));
+                _source->Get(endpoint, CreateAuthHandler<method>(std::forward<F>(handler)));
             }
             else if (method == HttpMethod::Post)
             {
-                _source->Post(endpoint, std::forward<F>(handler));
+                _source->Post(endpoint, CreateAuthHandler<method>(std::forward<F>(handler)));
             }
         }
+
+    protected:
+        std::unique_ptr<BaseAuthorizer> _authorizer;
 
     private:
         static std::vector<BaseController*> _controllers;
         static SSLServer* _source;
+
+        template <HttpMethod method, typename F =
+            std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
+            std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler> CreateAuthHandler(F&& handler)
+        {
+            if constexpr (method == HttpMethod::Get)
+            {
+                return[this, internalHandler = std::move(handler)](const Request& req, Response& resp)
+                {
+                    if (_authorizer->IsAuthorized(req, resp))
+                        internalHandler(req, resp);
+                };
+            }
+            else if (method == HttpMethod::Post)
+            {
+                return[this, internalHandler = std::move(handler)](const Request& req, Response& resp, const ContentReader& reader)
+                {
+                    if (_authorizer->IsAuthorized(req, resp))
+                        internalHandler(req, resp, reader);
+                };
+            }
+        }
     };
 }
