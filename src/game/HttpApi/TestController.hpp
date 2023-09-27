@@ -17,8 +17,6 @@ namespace HttpApi
     {
     public:
 
-        TestController(std::string key);
-
         void RegisterCommands(SSLServer* server) override
         {
             RegisterEndpoint<HttpMethod::Get>("/hi", &HiAction);

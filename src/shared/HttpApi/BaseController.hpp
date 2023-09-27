@@ -29,9 +29,9 @@ namespace HttpApi
     class BaseController
     {
     public:
-
         BaseController();
 
+        virtual ~BaseController() = default;
 
         static void RegisterAll(SSLServer* server)
         {
@@ -45,8 +45,8 @@ namespace HttpApi
         virtual void RegisterCommands(SSLServer* server) = 0;
 
         template <HttpMethod method, typename F =
-        std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
-        void RegisterEndpoint(std::string endpoint, F&& handler)
+            std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
+            void RegisterEndpoint(std::string endpoint, F&& handler)
         {
             sLog.out(LOG_API, string_format("Registering endpoint {}..", endpoint).c_str());
 
@@ -70,11 +70,11 @@ namespace HttpApi
 
         template <HttpMethod method, typename F =
             std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
-        std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler> CreateAuthHandler(F&& handler)
+            std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler> CreateAuthHandler(F&& handler)
         {
             if constexpr (method == HttpMethod::Get)
             {
-                return [this, internalHandler = std::move(handler)] (const Request& req, Response& resp)
+                return[this, internalHandler = std::move(handler)](const Request& req, Response& resp)
                 {
                     if (_authorizer->IsAuthorized(req, resp))
                         internalHandler(req, resp);
@@ -82,7 +82,7 @@ namespace HttpApi
             }
             else if (method == HttpMethod::Post)
             {
-                return [this, internalHandler = std::move(handler)] (const Request& req, Response& resp, const ContentReader& reader)
+                return[this, internalHandler = std::move(handler)](const Request& req, Response& resp, const ContentReader& reader)
                 {
                     if (_authorizer->IsAuthorized(req, resp))
                         internalHandler(req, resp, reader);
