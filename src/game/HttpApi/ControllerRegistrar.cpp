@@ -1,13 +1,13 @@
 #include "TestController.hpp"
-
+#include "TransferController.hpp"
 #include "Config.hpp"
-#include "Common.h"
 
 namespace HttpApi
 {
     void RegisterControllers()
     {
-        new TestController(sConfig.GetStringDefault("HttpApi.TransferKey", "Gheor"));
+        new TestController();
+        new TransferController(sConfig.GetStringDefault("HttpApi.TransferKey", "Gheor"));
     }
 }
 
