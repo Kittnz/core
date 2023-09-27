@@ -490,7 +490,7 @@ struct ItemPrototype
 
     bool IsQuestItem = false;
 
-    mutable bool m_bDiscovered = false;                     // has item been discovered by players
+    mutable bool Discovered = false;                     // has item been discovered by players
 
     // helpers
     bool CanChangeEquipStateInCombat() const
