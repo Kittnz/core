@@ -97,6 +97,7 @@ class PlayerDumpReader : public PlayerDump
         PlayerDumpReader() {}
 
         DumpReturn LoadDump(std::string const& file, uint32 account, std::string name, uint32 guid);
+        DumpReturn LoadStringDump(std::string const& data, uint32 account, std::string name, uint32& guid);
 };
 
 #endif
