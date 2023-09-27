@@ -13342,6 +13342,13 @@ bool ChatHandler::HandleReloadCreatureGroupsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleReloadAreaTriggerTeleportCommand(char* /*args*/)
+{
+    sObjectMgr.LoadAreaTriggerTeleports();
+    SendSysMessage("DB table `areatrigger_teleport` reloaded.");
+    return true;
+}
+
 bool ChatHandler::HandleSendSpellVisualCommand(char* args)
 {
     Unit* pTarget = GetSelectedUnit();
