@@ -52,10 +52,10 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 
 bool fov_build = false;
 
-#define NEW_BUILD 7069u
-#define NEW_VISUAL_BUILD "7069"
+#define NEW_BUILD 7070u
+#define NEW_VISUAL_BUILD "7075"
 #define NEW_VISUAL_VERSION "1.17.0"
-#define NEW_BUILD_DATE "Aug 30 2023"
+#define NEW_BUILD_DATE "Oct 03 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-4.mpq"
@@ -520,7 +520,7 @@ void PrintInstructions()
 	WriteLog(" ");
 	WriteLog("If it still doesn't work please use a direct download from our website.");
 	WriteLog(" ");
-	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy or contact us via e-mail help.turtlewow@gmail.com");
+	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy");
 }
 
 void ClearWDBCache()
