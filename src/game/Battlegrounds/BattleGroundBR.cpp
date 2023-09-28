@@ -135,8 +135,8 @@ bool BattleGroundBR::SetupBattleGround()
     /*doors
     for (int i = 0; i < BG_BR_NODES_MAX; ++i)
     {
-        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY)
-            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY))
+        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2))
+            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2)))
             sLog.outErrorDb("BatteGroundSV: Failed to spawn door objects!");
     }
     */
