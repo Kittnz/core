@@ -135,20 +135,20 @@ void BattleGroundSV::StartingEventCloseDoors()
     for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
     {
         for (uint8 j = 0; j < 5; j++)
-            SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_NEUTRAL + j + (i * 5)], RESPAWN_ONE_DAY);
+            SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_NEUTRAL + j + (i * 5)], RESPAWN_NEVER);
     }
     // despawn all flagstands
     //for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
-        //SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_FLAGSTAND + i], RESPAWN_ONE_DAY);
+        //SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_FLAGSTAND + i], RESPAWN_NEVER);
     // despawn all buffs
     for (uint8 i = 0; i < 6; ++i)
     {
         for (uint8 j = 0; j < 3; j++)
-            SpawnObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + j + (i * 3)], RESPAWN_ONE_DAY);
+            SpawnObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + j + (i * 3)], RESPAWN_NEVER);
     }
     // despawn all chests
     for (uint8 i = 0; i < 6; ++i)
-        SpawnObject(m_BgObjects[BG_SV_OBJECT_CHEST + i], RESPAWN_ONE_DAY);
+        SpawnObject(m_BgObjects[BG_SV_OBJECT_CHEST + i], RESPAWN_NEVER);
 }
 
 void BattleGroundSV::StartingEventOpenDoors()
@@ -586,7 +586,7 @@ void BattleGroundSV::CreateBanner(uint8 node, uint8 type, uint8 teamIndex, bool 
 void BattleGroundSV::DelBanner(uint8 node, uint8 type, uint8 teamIndex)
 {
     uint8 obj = type + teamIndex + (node * 5);
-    SpawnObject(m_BgObjects[obj], RESPAWN_ONE_DAY);
+    SpawnObject(m_BgObjects[obj], RESPAWN_NEVER);
 }
 
 void BattleGroundSV::NodeOccupied(uint8 node, Team team)
