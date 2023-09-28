@@ -61,7 +61,7 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, m_BannerTimers[node].type, m_BannerTimers[node].teamIndex, false);
                 }
             }
-
+            
             // 1-minute to occupy a tower from contested state
             if (m_NodeTimers[node])
             {
@@ -101,6 +101,19 @@ void BattleGroundSV::Update(uint32 diff)
 
             if (node >= BG_SV_HERALD_POINT)
                 continue;
+
+            if (uint32 buffSpell = GetAuraForTower(node))
+            {
+                switch (m_Nodes[node])
+                {
+                    case BG_SV_NODE_STATUS_ALLY_OCCUPIED:
+                        ApplyTowerBuffOnTeam(buffSpell, ALLIANCE);
+                        break;
+                    case BG_SV_NODE_STATUS_HORDE_OCCUPIED:
+                        ApplyTowerBuffOnTeam(buffSpell, HORDE);
+                        break;
+                }
+            }
 
             for (uint8 team = 0; team < BG_TEAMS_COUNT; ++team)
                 if (m_Nodes[node] == team + BG_SV_NODE_TYPE_OCCUPIED)
@@ -616,6 +629,43 @@ void BattleGroundSV::NodeDeOccupied(uint8 node)
     uint8 guardType = (node == 0) ? BG_SV_CREATURE_TOWER_GUARDS_A : BG_SV_CREATURE_TOWER_GUARDS_H;
     for (uint8 i = 0; i < 5; ++i)
         DelCreature(guardType+i);
+}
+
+void BattleGroundSV::ApplyTowerBuffOnTeam(uint32 spellId, Team teamId)
+{
+    for (const auto& itr : m_Players)
+    {
+        Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
+
+        if (!pPlayer)
+        {
+            sLog.outError("BattleGround:ApplyTowerBuffOnTeam: %s not found!", itr.first.GetString().c_str());
+            continue;
+        }
+
+        Team team = itr.second.PlayerTeam;
+        if (!team) team = pPlayer->GetTeam();
+
+        if (team == teamId)
+        {
+            if (pPlayer->IsAlive() && !pPlayer->HasAura(spellId))
+                pPlayer->CastSpell(pPlayer, spellId, true);
+        }
+        else
+            pPlayer->RemoveAurasDueToSpell(spellId);
+    }
+}
+
+uint32 BattleGroundSV::GetAuraForTower(uint8 node)
+{
+    switch (node)
+    {
+        case BG_SV_HUMAN_TOWER:
+            return SV_SPELL_NORTH_TOWER;
+        case BG_SV_ORC_TOWER:
+            return SV_SPELL_SOUTH_TOWER;
+    }
+    return 0;
 }
 
 uint32 BattleGroundSV::GetTowerNameId(uint8 node)

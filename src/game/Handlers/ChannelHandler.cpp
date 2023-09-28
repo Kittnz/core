@@ -46,13 +46,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     if (cMgr)
     {
         if (Channel* chn = cMgr->GetOrCreateChannel(channelname))
-        {
-            //Would do it in Channel::Join but we dont have sec checks available there yet unless we rewrite it. Zzz
-            if (channelname == u8"Hardcore" && GetSecurity() == SEC_PLAYER && !GetPlayer()->IsHardcore())
-                return;
-
             chn->Join(player->GetObjectGuid(), pass.c_str());
-        }
     }
 
     if (player->GetSession()->GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_JOIN_OPPOSITE_FACTION_CHANNELS))

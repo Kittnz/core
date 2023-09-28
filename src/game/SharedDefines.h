@@ -1199,6 +1199,7 @@ enum SkillType
     SKILL_RACIAL_TROLL             = 733,
     SKILL_RACIAL_GNOME             = 753,
     SKILL_RACIAL_HUMAN             = 754,
+    SKILL_JEWELCRAFTING            = 755,
     SKILL_PET_EVENT_RC             = 758,
     SKILL_RIDING                   = 762,
 };
@@ -1411,9 +1412,10 @@ enum ChatMsg
     CHAT_MSG_FILTERED                             = 0x5B,
     CHAT_MSG_BATTLEGROUND                         = 0x5C,
     CHAT_MSG_BATTLEGROUND_LEADER                  = 0x5D,
+    CHAT_MSG_HARDCORE                             = 0x5E,
 };
 
-#define MAX_CHAT_MSG_TYPE 0x5E
+#define MAX_CHAT_MSG_TYPE 0x5F
 
 enum ChatLinkColors
 {

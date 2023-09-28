@@ -223,23 +223,6 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) 
-        return false;
-
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += 2.0F * cos(pPlayer->GetOrientation());
-    y += 2.0F * sin(pPlayer->GetOrientation());
-    switch (pItem->GetEntry())
-    {
-    case 51021: pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
-    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
-    }
-    return true;
-}
-
 bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->AddAura(8067);
@@ -341,31 +324,6 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
         break;
     default: break;
     }
-    return true;
-}
-
-bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->HasItemCount(51425, 1, false))
-    {
-        if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
-        {
-            pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-            pPlayer->PlayDirectSound(1204, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
-            {
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-                pPlayer->DestroyItemCount(51425, 1, true);
-                return true;
-            }
-        }
-        else
-        {
-            pPlayer->GetSession()->SendNotification("Requires Stormwind Fountain.");
-            return false;
-        }
-    }
-
     return true;
 }
 
@@ -511,9 +469,9 @@ bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetRace() == RACE_GOBLIN)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair style.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66823, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         if (pPlayer->GetGender() == GENDER_MALE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to trim my beard.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66824, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
     pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
     return true;
@@ -557,12 +515,12 @@ bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
         switch (pPlayer->GetGender())
         {
         case GENDER_FEMALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my skin tone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66825, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66826, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             break;
         case GENDER_MALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my skin tone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66827, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66828, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
             break;
         }
     }
@@ -976,11 +934,6 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
             WantedHordePlayerName << "WANTED: " << HordePlayerName;
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
-
-        if (pPlayer->GetQuestStatus(70059) == QUEST_STATUS_NONE || !pPlayer->GetQuestRewardStatus(70059)) // WANTED: Redridgeboss!
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Redridgeboss!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        }
         break;
 
     case HORDE:
@@ -1016,12 +969,6 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
         pPlayer->AddQuest(pQuest, nullptr);
     }
 
-    if (action == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(70059); // WANTED: Redridgeboss!
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -1036,18 +983,18 @@ bool GOHello_go_airplane(Player* pPlayer, GameObject* pGo)
             if (pPlayer->GetZoneId() == 139)
             {
                 if (pPlayer->GetTeam() == ALLIANCE)
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Stormwind City.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66829, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 else
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Orgrimmar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66830, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             }
             else
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66831, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
         pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
         return true;
     case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
         if (pPlayer->GetQuestRewardStatus(50315))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66832, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
         return true;
     }    
@@ -1155,7 +1102,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 	{
         std::string activateText{};
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66833, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
 		// Primary
 		if (pPlayer->HasSavedTalentSpec(1))
@@ -1164,7 +1111,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 		}
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66834, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
 		// Secondary
 		if (pPlayer->HasSavedTalentSpec(2))
@@ -1173,7 +1120,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 		}
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66835, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 	}
 
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
@@ -1555,8 +1502,8 @@ GameObjectAI* GetAI_soulwell_clicks(GameObject* gameobject)
 
 bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
 {
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Who is allowed in Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66836, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66837, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     p_Player->SEND_GOSSIP_MENU(90343, p_Creature->GetGUID());
     return true;
 }
@@ -1564,9 +1511,9 @@ bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature
 bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        p_Creature->MonsterSay("Ardent Watch is the central most base of operations for the Argent Dawn and its foreign operations battalion, The Argent Vanguard. Besides Light's Hope itself, it is one of the most well fortified bastions in the fight against the Scourge within the former Eastweald.", 7, 0);
+        p_Creature->MonsterSay(66166, 7, 0);
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        p_Creature->MonsterSay("Being members of the Argent Dawn, they hold no affiliations to the Horde and Alliance short of co-operation in our fight against the Scourge. Due to necessity, the Argent Dawn and Scarlet Crusade have signed a pact making them non-hostile for the moment, yet tensions exist. Members of the Scourge or other shadowy organizations will likely not be welcomed.", 7, 0);
+        p_Creature->MonsterSay(66167, 7, 0);
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -1587,7 +1534,7 @@ bool GossipHello_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature)
         if (pPlayer->GetQuestStatus(ELUNE_WINTER_QUEST) == QUEST_STATUS_INCOMPLETE)
         {
             if (pPlayer->HasItemCount(EGGNOG_ITEM, 1, 0))
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Give moonkin a hot cup of Egg Nog>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66838, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         pPlayer->SEND_GOSSIP_MENU(90318, pCreature->GetGUID());
     }
@@ -1640,7 +1587,7 @@ bool GossipHello_npc_misletoe(Player* pPlayer, Creature* pCreature)
 
 bool GossipHello_npc_frosty(Player* pPlayer, Creature* pCreature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Happy Winter Veil, Frosty!\nTeleport me to the Winter Veil Vale!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66839, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(90326, pCreature->GetGUID());
     return true;
 }
@@ -1672,7 +1619,7 @@ struct npc_save_sharkAI : public ScriptedPetAI
                 {
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002))
                         pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                    m_creature->MonsterTextEmote("The shark looks scared to death and eager to get out of this horrific place full of people like you.");
+                    m_creature->MonsterTextEmote(66840);
                     m_creature->GetMotionMaster()->MoveConfused();
                 }
             }
@@ -1689,10 +1636,10 @@ bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
         switch (pCreature->GetEntry())
         {
         case 3391: // Gazlowe
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Sandrocket is hosting a beach party, please, pay her a visit!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66841, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             break;
         case 2496: // Baron Revilgaz
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Risa Sandrocket is hosting a beach party, please, pay her a visit!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66842, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             break;
         }
     }
@@ -1702,7 +1649,7 @@ bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
         switch (pCreature->GetEntry())
         {
         case 2496: // Baron Revilgaz
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "A present for you Baron.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66843, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
             break;
         }
     }
@@ -1854,7 +1801,7 @@ bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
     {
         if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 0))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me, if you want to live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66844, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         else
         {
@@ -1864,7 +1811,7 @@ bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
     }
     if (pPlayer->GetQuestStatus(WOOL_WILL_WORL) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Attempt to gather some wool.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66845, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     pPlayer->SEND_GOSSIP_MENU(90310, pCreature->GetGUID());
@@ -1879,7 +1826,7 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
             return false;
 
         pCreature->MonsterSay(66120);
-        pCreature->MonsterTextEmote("The sheep scarfs down the truffle, and then it jumps into your bags to rifle around for more!");
+        pCreature->MonsterTextEmote(66846);
         pCreature->ForcedDespawn();
         pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
         if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 1, false))
@@ -1922,11 +1869,11 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
 
 bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm not interested, goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66847, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
     if (pPlayer->IsIgnoringTitles())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66848, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     else if (pPlayer->GetMoney() >= 50000)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.\n\nWARNING: THIS WILL COST YOU 5 GOLD!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66849, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
@@ -1976,34 +1923,34 @@ bool GossipHello_rented_mount(Player* player, Creature* mount)
     {
     case 51560:
     case 51561:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66850, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
         return true;
     case 51580:
     case 51581:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this wolf for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66851, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
         return true;
     case 51588:
     case 51589:
     case 51587:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66852, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
         return true;
     case 4779:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this ram for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66853, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
         return true;
     case 4710:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this ram for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66854, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
         return true;
     case 12354:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this kodo for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66855, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
         return true;
     case 12355:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this kodo for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66856, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
         return true;
     default:
@@ -2059,7 +2006,7 @@ public:
             player->Unmount();
 
             player->SetFlying(false);
-            player->RemoveAurasDueToSpell(48305);
+            player->RemoveAurasDueToSpell(47036);
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
@@ -2079,31 +2026,31 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
     {
     case 51562: // Goldshire Gryphon
         if (pPlayer->GetQuestRewardStatus(60070))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the gryphon and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66857, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
         return true;
     case 51685: // Darkshore Wyvern
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66858, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
         return true;
     case 51569: // Riding Gryphon
     case 51686: // Beaky (Gryphon)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66858, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
         return true;
     case 65018: // Alormion (Bronze Drake)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please guide me through Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66859, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(51674, pCreature->GetGUID());
         return true;
     case 60539: // Durotar Wyvern
         if (pPlayer->GetQuestRewardStatus(40298))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the wyvern and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66860, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(60539, pCreature->GetGUID());
         return true;
     case 61217: // Zephyra
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66858, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(61217, pCreature->GetGUID());
         return true;
     }
@@ -2133,7 +2080,7 @@ void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 remo
             player->SaveInventoryAndGoldToDB();
         }
         player->InterruptNonMeleeSpells(true);
-        if (SpellAuraHolder* pAura = player->AddAura(48305))
+        if (SpellAuraHolder* pAura = player->AddAura(47036))
         {
             pAura->SetAuraDuration(duration * IN_MILLISECONDS);
             pAura->SetAuraMaxDuration(duration * IN_MILLISECONDS);
@@ -2287,7 +2234,7 @@ CreatureAI* GetAI_palkeote(Creature* _Creature)
 
 bool GossipHello_npc_ropaw(Player* p_Player, Creature* p_Creature)
 {
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Tell me my fortune.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66861, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     p_Player->SEND_GOSSIP_MENU(urand(90650, 90667), p_Creature->GetGUID());
     return true;
 }
@@ -2304,9 +2251,9 @@ bool GossipSelect_npc_ropaw(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
 bool GossipHello_ArenaMaster(Player* player, Creature* creature)
 {
-    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (2v2 Solo).", GOSSIP_SENDER_MAIN, 1);
+    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, 66862, GOSSIP_SENDER_MAIN, 1);
     if (player->GetGroup())
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Battle in the Blood Ring (2v2 Group).", GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, 66863, GOSSIP_SENDER_MAIN, 2);
     player->PlayerTalkClass->SendGossipMenu(195007, creature->GetGUID());
 
     return true;
@@ -2346,13 +2293,13 @@ bool GossipHello_MiningEnchanter(Player* player, Creature* creature)
         Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
         if (item && item->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) == MINING_ENCHANT_5)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I don't think I want it anymore...", GOSSIP_SENDER_MAIN,
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66864, GOSSIP_SENDER_MAIN,
                 GOSSIP_ACTION_INFO_DEF + 1);
             player->SEND_GOSSIP_MENU(ALREADY_INSTALLED_TEXT, creature->GetGUID());
         }
         else
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, install the telescopic lens!", GOSSIP_SENDER_MAIN,
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66865, GOSSIP_SENDER_MAIN,
                 GOSSIP_ACTION_INFO_DEF + 2);
             player->SEND_GOSSIP_MENU(DEFAULT_MINER_TEXT, creature->GetGUID());
         }
@@ -2450,7 +2397,7 @@ bool GossipHello_DinkaDinker(Player* player, Creature* creature)
 {
     if (player->GetGuildId() == TRAVELER_GUILD_ID)
     {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, use your magic on me!", GOSSIP_SENDER_MAIN,
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66866, GOSSIP_SENDER_MAIN,
             GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(OK_TEXT, creature->GetGUID());
         return true;
@@ -2487,12 +2434,12 @@ bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(ASSISTING_CHILDREN_OF_THE_SUN) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greetings! I'm here to help.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66867, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pPlayer->GetQuestStatus(40070) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes, we're ready.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66868, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2509,32 +2456,32 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(30070, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(30071, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(30072, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(30073, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
         pPlayer->SEND_GOSSIP_MENU(30074, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66869, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
         pPlayer->SEND_GOSSIP_MENU(30075, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
@@ -2883,7 +2830,7 @@ bool GossipHello_npc_elsharin(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(TO_ALAHTHALAS))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please open a portal to Alah'Thalas.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66870, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
@@ -2911,7 +2858,7 @@ bool GossipHello_npc_sunkiss(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(TO_ALAHTHALAS))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please open a portal to Stormwind.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66871, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -2953,7 +2900,7 @@ enum GoblinStartingZone
 bool GOHello_go_fm_acquisition(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetZoneId() != ZONE_DUROTAR && pPlayer->GetQuestStatus(QUEST_ME_NOT_ANY_KIND_OF_ORC) == QUEST_STATUS_COMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Durotar! Full speed!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66872, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(100100, pGo->GetGUID());
     return true;
@@ -3021,7 +2968,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Gar'Thok, Chief! Allow me to introduce you to my crew. We've got nowhere else to go, and we're willing to lend a hand to the Horde in exchange for food and lodge!", player);
+            me->MonsterSayToPlayer(66873, player);
         });
 
         DoAfterTime(GrizzleEnforcer, 13 * IN_MILLISECONDS,
@@ -3033,7 +2980,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                     return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
+            me->MonsterSayToPlayer(66874, player);
         });
 
         DoAfterTime(NertBlastenton, 21 * IN_MILLISECONDS,
@@ -3043,7 +2990,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
+            me->MonsterSayToPlayer(66875, player);
         });
 
         DoAfterTime(LeytiQuicktongue, 23 * IN_MILLISECONDS,
@@ -3053,7 +3000,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_BOW);
-            me->MonsterTextEmote("Leyti Quicktongue bows silently.");
+            me->MonsterTextEmote(66876);
         });
 
         DoAfterTime(WizetteIcewhistle, 31 * IN_MILLISECONDS,
@@ -3063,7 +3010,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
+            me->MonsterSayToPlayer(66877, player);
         });
 
         DoAfterTime(AmriDemondeal, 39 * IN_MILLISECONDS,
@@ -3073,7 +3020,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
+            me->MonsterSayToPlayer(66878, player);
         });
 
         DoAfterTime(SpratNozzleton, 48 * IN_MILLISECONDS,
@@ -3083,7 +3030,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
+            me->MonsterSayToPlayer(66879, player);
         });
 
         DoAfterTime(pQuestGiver, 53 * IN_MILLISECONDS,
@@ -3093,8 +3040,8 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            me->MonsterTextEmote("Gar'thok laughs.");
-            me->MonsterSayToPlayer("Very well, recruits. I'll give you the same chance as any orc or troll who arrives from the Valley of Trials. There is plenty of work for you in Razor Hill. Start here, earn the respect of your new allies, and bring honor to the Horde!", player);
+            me->MonsterTextEmote(66880);
+            me->MonsterSayToPlayer(66881, player);
         });
     }
     return false;
@@ -3117,7 +3064,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_NO);
-            me->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
+            me->MonsterSayToPlayer(66882, player);
         });
 
         DoAfterTime(pQuestGiver, 8 * IN_MILLISECONDS,
@@ -3127,7 +3074,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_QUESTION);
-            me->MonsterSayToPlayer("We can't go back to the Venture Co. or we're all dead meat! There's no way the Steamwheedle Cartel will take us in. Not with all the bad blood between us already.", player);
+            me->MonsterSayToPlayer(66883, player);
         });
 
 
@@ -3138,7 +3085,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            me->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. We've only got one chance left, and that's kissing Thrall's feet.", player);
+            me->MonsterSayToPlayer(66884, player);
         });
 
 
@@ -3150,7 +3097,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
 
             me->SetWalk(true);
             me->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
-            me->MonsterTextEmote("Nert Blastentom smiles.");
+            me->MonsterTextEmote(66885);
         });
 
         DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS,
@@ -3159,7 +3106,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
 
-            me->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
+            me->MonsterSayToPlayer(66886, player);
         });
 
         DoAfterTime(pQuestGiver, 35 * IN_MILLISECONDS,
@@ -3180,7 +3127,7 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("You will not disturb what lays here!");
+        m_creature->MonsterSay(66168);
     }
 
     void Reset() {}
@@ -3189,7 +3136,7 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
     void JustDied(Unit*)
     {
-        m_creature->MonsterSay("There is only death for your people here! I am only one... of many...");
+        m_creature->MonsterSay(66169);
     }
 
     void UpdateAI(const uint32 diff)
@@ -3233,7 +3180,7 @@ bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == QUEST_CLEARING_OUT_VERMINS)
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_NO);
-        pQuestGiver->MonsterSayToPlayer("Do not be frightened, these troggs are small and weak. They're easy to take out alone. However, if they swarm the caravans, people could get hurt, and we cannot spare more men to deal with them while keeping the other threats out there away from the lodge.", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66887, pPlayer);
     }
     return false;
 }
@@ -3260,10 +3207,10 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
 bool GossipHello_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_BURNT_WHEELS) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Malvinah, we need to talk.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66888, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetQuestStatus(QUEST_SUNBLADE_RENUNION) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm glad that your sister is safe and sound!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66889, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(100200, pCreature->GetGUID());
@@ -3281,7 +3228,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_CRY);
-            me->MonsterSayToPlayer("My sister was on that wagon!", player);
+            me->MonsterSayToPlayer(66890, player);
         });
 
         DoAfterTime(pCreature, 5 * IN_MILLISECONDS,
@@ -3290,7 +3237,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("We all knew there was a risk, but... she was practically here already! It could have been any of us!", player);
+            me->MonsterSayToPlayer(66891, player);
         });
 
         DoAfterTime(pCreature, 10 * IN_MILLISECONDS,
@@ -3300,7 +3247,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_CRY);
-            me->MonsterSayToPlayer("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!", player);
+            me->MonsterSayToPlayer(66892, player);
         });
 
         DoAfterTime(pCreature, 15 * IN_MILLISECONDS,
@@ -3310,7 +3257,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.", player);
+            me->MonsterSayToPlayer(66893, player);
         });
 
         DoAfterTime(pCreature, 20 * IN_MILLISECONDS,
@@ -3320,7 +3267,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.", player);
+            me->MonsterSayToPlayer(66894, player);
         });
 
         DoAfterTime(pCreature, 25 * IN_MILLISECONDS,
@@ -3330,7 +3277,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-            me->MonsterSayToPlayer("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!", player);
+            me->MonsterSayToPlayer(66895, player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -3347,7 +3294,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             me->SetCastingTarget(player);
             me->HandleEmote(EMOTE_ONESHOT_CRY);
-            me->MonsterSayToPlayer("You've saved my sister!", player);
+            me->MonsterSayToPlayer(66896, player);
             me->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
         });
 
@@ -3359,7 +3306,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.", player);
+            me->MonsterSayToPlayer(66897, player);
         });
 
 
@@ -3370,7 +3317,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever.", player);
+            me->MonsterSayToPlayer(66898, player);
         });
 
 
@@ -3381,7 +3328,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_APPLAUD);
-            me->MonsterSayToPlayer("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!", player);
+            me->MonsterSayToPlayer(66899, player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -3416,7 +3363,7 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 
         if (Alisha)
         {
-            Alisha->MonsterSayToPlayer("I thought I'd never see my sister again. Thank you, hero!", pPlayer);
+            Alisha->MonsterSayToPlayer(66900, pPlayer);
             // Change it later to real coords.
             float fX, fY, fZ;
             Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
@@ -3491,7 +3438,7 @@ bool GossipHello_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_PORTING_TO_GOLDSHIRE) == QUEST_STATUS_INCOMPLETE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready, Ishalah. Teleport me to Goldshire!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66901, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(100201, pCreature->GetGUID());
         return true;
     }
@@ -3504,7 +3451,7 @@ bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_SPELLPRECAST);
-        pCreature->MonsterSay("Safe travels, friend!");
+        pCreature->MonsterSay(66170);
         pPlayer->SummonGameObject(3000204, -5660.109F, -4258.419F, 407.899F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     }
 
@@ -3755,7 +3702,7 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 bool GossipHello_npc_rov(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80310) == QUEST_STATUS_INCOMPLETE) // Quark's Justice
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I hear Sturk owes The Rov a punching debt.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66902, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(80603, pCreature->GetGUID());
     return true;
@@ -3769,11 +3716,11 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
 
         if (!sturk)
         {
-            pCreature->MonsterSay("Geeh, looks like this sneaky bastard is gone.");
+            pCreature->MonsterSay(66171);
             return false;
         }
 
-        pCreature->MonsterSay("About time The Rov gets to shut that idiot down, The Rov will beat him up.");
+        pCreature->MonsterSay(66172);
         pCreature->GetMotionMaster()->MovePoint(1, 2025.37f, -4633.34f, 29.55f, 0, 2.0F);
         pCreature->SetWalk(true);
 
@@ -3800,7 +3747,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS,
             [ me = sturk]()
         {
-            me->MonsterSay("Hey, hey, not the face man!");
+            me->MonsterSay(66173);
             me->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
             me->SetWalk(false);
         });
@@ -3832,7 +3779,7 @@ bool GossipHello_npc_deino(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(80302)) // To Amani'Alor!
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Open a portal to Amani'Alor.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66903, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -3844,7 +3791,7 @@ bool GossipSelect_npc_deino(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSayToPlayer("May the spirits be with ya and the Loa guide ya steps.", pPlayer);
+        pCreature->MonsterSayToPlayer(66904, pPlayer);
 
         float dis{ -3.0F };
         float x, y, z;
@@ -3879,7 +3826,7 @@ bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
-        pQuestGiver->MonsterSayToPlayer("Thank you, thank you, thank you! I am so happy! We should go to Stormwind. Let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66905, pPlayer);
     }
     return false;
 }
@@ -3895,7 +3842,7 @@ bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-        pQuestGiver->MonsterSayToPlayer("Mommy is gone, but we will definitely find her! I am sure of it! Until then, I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! Hehe!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66906, pPlayer);
     }
     return false;
 }
@@ -3934,28 +3881,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oooh, this place is huge! Where do we go now? Let's start in the Mage District! We can also look at that weird-smelling place. The pub? I heard people drink special drinks there when they're sad! My mom is definitely sad without me.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66907, pPlayer);
                         break;
                     }
                     case 3000251:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80271);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("I feel the magic in the air! This place is nice, but not as pretty or magical as Silvermoon!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66908, pPlayer);
                         break;
                     }
                     case 3000252:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80272);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Mommy isn't here... Let's keep moving!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66909, pPlayer);
                         break;
                     }
                     case 3000253:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80273);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("This place is scary. There's bad magic here, and it smells horrible! Can we leave?! Please?", pPlayer);
+                        teslinah->MonsterSayToPlayer(66910, pPlayer);
                         break;
                     }
                     }
@@ -3973,28 +3920,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80274);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Look, it's a night elf priestess! And a moonwell! I love all the grass and glowing plants. This place is really nice. I bet Mommy would like it! Let's keep searching so that we can show it to her.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66911, pPlayer);
                         break;
                     }
                     case 3000255:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80275);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Yuck! This place smells. Would Mommy really be here?", pPlayer);
+                        teslinah->MonsterSayToPlayer(66912, pPlayer);
                         break;
                     }
                     case 3000256:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80276);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oooh, this place looks much kinder than the other one. But I'm sure my mom didn't go to the dwarf lands.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66913, pPlayer);
                         break;
                     }
                     case 3000257:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80277);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("This is the place where our people settled! It's pretty. Not as pretty as Silvermoon, but pretty. This place isn't large though, and Mommy isn't here. Let's keep looking!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66914, pPlayer);
                         break;
                     }
                     }
@@ -4012,28 +3959,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80278);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("That looks so weird. The gnomes made this, right? I'm sure Mommy isn't here. That tram leads to the dwarf city, I think. It's cold there, and Mommy hates the cold.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66915, pPlayer);
                         break;
                     }
                     case 3000259:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80279);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("The king lives there! We shouldn't disturb him, though, even if finding my mommy is super important. I know she isn't there either because they wouldn't allow her in. We don't have much. Mommy is very pretty, but we lost everything when Quel'Thalas fell.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66916, pPlayer);
                         break;
                     }
                     case 3000260:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that it's a little bit scary.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66917, pPlayer);
                         break;
                     }
                     case 3000261:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80281);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("This place is smelly. Mommy isn't here either. I am really worried. Where else could she be?", pPlayer);
+                        teslinah->MonsterSayToPlayer(66918, pPlayer);
                         break;
                     }
                     }
@@ -4051,21 +3998,21 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80282);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("The army is there. Could my mom have been arrested? But she didn't commit any crimes. I don't think this is the place, but we can come back here if we don't find her anywhere else.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66919, pPlayer);
                         break;
                     }
                     case 3000263:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80283);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("It's the Cathedral! Wow, it's so huge! That's amazing!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66920, pPlayer);
                         break;
                     }
                     case 3000264:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80284);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("If Mommy is really gone, then I could end up in that place. I don't even want to think about that. It makes me so sad that I could cry.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66921, pPlayer);
                         teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
                     }
                     break;
@@ -4073,7 +4020,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80285);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Look at this place! It's amazing! Wow, it's breathtaking!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66922, pPlayer);
                         break;
                     }
                     }
@@ -4091,28 +4038,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80286);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("This looks awful, and it's gross and scary. Can we leave, please? I don't like the way that man in red is looking at me.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66923, pPlayer);
                         break;
                     }
                     case 3000267:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80287);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("This is bad. This is really bad. I don't like it here. Let's go, please? I'm scared.", pPlayer);
+                        teslinah->MonsterSayToPlayer(66924, pPlayer);
                         break;
                     }
                     case 3000268:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80288);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oh, there's so many people here! I remember when we first arrived after flying on gryphon's back! Their feathers were really fluffy and soft. Could Mom be here?", pPlayer);
+                        teslinah->MonsterSayToPlayer(66925, pPlayer);
                         break;
                     }
                     case 3000269:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80289);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oh, in there! That's the Visitor's Center where we first checked in when we arrived. Maybe they might know something!", pPlayer);
+                        teslinah->MonsterSayToPlayer(66926, pPlayer);
                         break;
                     }
                     }
@@ -4136,7 +4083,7 @@ bool GossipHello_npc_iluria(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80315) == QUEST_STATUS_INCOMPLETE) // Apple a Day...
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "A young tree with few rings named Applebough came to us for guidance and expertise with his leaves. Will you offer your time to help us find a cure for his ailment?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66927, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
     return true;
@@ -4147,7 +4094,7 @@ bool GossipSelect_npc_iluria(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->AddItem(80865, 1);
-        pCreature->MonsterSayToPlayer("Ahh! Applebough. Of course. Here's the balm that will help.", pPlayer);
+        pCreature->MonsterSayToPlayer(66928, pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -4170,10 +4117,10 @@ bool QuestAccept_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest co
         if (pQuestGiver->GetDisplayId() == 18356) // Green
         {
             pQuestGiver->SetDisplayId(18029); // Yellow
-            pQuestGiver->MonsterSayToPlayer("My leaves. They fall. Big sad.", pPlayer);
+            pQuestGiver->MonsterSayToPlayer(66929, pPlayer);
         }
         else
-            pQuestGiver->MonsterSayToPlayer("Was green. Had fruits. Was happy...", pPlayer);
+            pQuestGiver->MonsterSayToPlayer(66930, pPlayer);
     }
     return false;
 }
@@ -4191,7 +4138,7 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
         // I don't understand why he's not cheering? Model has /cheer animation.
         pQuestGiver->SetDisplayId(18356); // Green
-        pQuestGiver->MonsterSayToPlayer("I feel revitalized! The life is flowing back into my branches. Thank you, $N. This is a kindness that I won't soon forget!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66931, pPlayer);
         return true;
     }
 
@@ -4216,7 +4163,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Loania and her sister Lieren are the daughters of a Human paladin named Dougan. I have known Dougan since the Second war when we fought the Horde together.", player);
+            me->MonsterSayToPlayer(66932, player);
         });
 
         DoAfterTime(pQuestGiver, 9 * IN_MILLISECONDS,
@@ -4226,7 +4173,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("During the Second war, Dougan, myself, and a dwarf of the Wildhammer clan known as Kardan were close companions. After the war, Dougan and his wife Adena settled down in Grand Hamlet. ", player);
+            me->MonsterSayToPlayer(66933, player);
         });
 
         DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS,
@@ -4236,7 +4183,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("Grand Hamlet later fell under a curse and became known as Darkshire, but I digress. One day, Dougan heard reports of villagers disappearing in the nearby cursed tower known as Karazhan. He summoned Kardan and I, and together we entered the tower to attempt a rescue.", player);
+            me->MonsterSayToPlayer(66934, player);
         });
 
         DoAfterTime(pQuestGiver, 23 * IN_MILLISECONDS,
@@ -4246,7 +4193,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_CRY);
-            me->MonsterSayToPlayer("It didn't go well, Karazhan was far more treacherous than we could have anticipated... Dougan didn't make it, and his wife subsequently lost the will to live. Kardan and I each adopted one of his infant twin daughters and raised them as our own.", player);
+            me->MonsterSayToPlayer(66935, player);
         });
 
         DoAfterTime(pQuestGiver, 30 * IN_MILLISECONDS,
@@ -4256,7 +4203,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!player) return;
 
             me->HandleEmote(EMOTE_ONESHOT_TALK);
-            me->MonsterSayToPlayer("I believe the girls have a destiny before them, perhaps you will play a part in it too. For now, take this as your reward with my blessing.", player);
+            me->MonsterSayToPlayer(66936, player);
         });
 
     }
@@ -4285,7 +4232,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
                 [playerGuid = pPlayer->GetObjectGuid(), me = chromie]()
             {
                 me->HandleEmote(EMOTE_ONESHOT_TALK);
-                me->MonsterSay("We need to talk!");
+                me->MonsterSay(66174);
             });
         }
         else
@@ -4320,7 +4267,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
     if (pQuest->GetQuestId() == 70022)
     {
-        pQuestGiver->MonsterSay("I will go find my spear right this momen- <argh> -nt!");
+        pQuestGiver->MonsterSay(66175);
 
         Creature* Taupo = pPlayer->FindNearestCreature(70020, 10.0F);
 
@@ -4331,7 +4278,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
             {
 
                me->HandleEmote(EMOTE_ONESHOT_TALK);
-               me->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
+               me->MonsterSay(66176);
             });
         }
 
@@ -4403,36 +4350,6 @@ bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
-bool GossipHello_npc_custodian_of_time(Player* pPlayer, Creature* pCreature)
-{
-    switch (pCreature->GetEntry())
-    {
-    case 65000: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I wish to enter Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); break;
-    case 65015: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am leaving.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
-    }
-    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(51673, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_custodian_of_time(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->AddAura(52004, 0, pPlayer);
-        pCreature->MonsterSayToPlayer("I would wish you luck, if such a thing existed.");
-        pPlayer->TeleportTo(1, -8170.67F, -4758.11F, 33.33F, 4.8F);
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pCreature->MonsterSayToPlayer("Farewell.");
-        pPlayer->TeleportTo(1, -8174.74F, -4734.51F, 33.25F, 1.8F);
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool QuestRewarded_npc_malanys_cloudpiercer(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -4441,7 +4358,7 @@ bool QuestRewarded_npc_malanys_cloudpiercer(Player* pPlayer, Creature* pQuestGiv
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 40010) // Antler�s Guidance
+    if (pQuest->GetQuestId() == 40010) // Antler's Guidance
     {
         pQuestGiver->SetDisplayId(12034); // Nigth Elf
         pQuestGiver->CastSpell(pQuestGiver, 21178, false);
@@ -4451,7 +4368,7 @@ bool QuestRewarded_npc_malanys_cloudpiercer(Player* pPlayer, Creature* pQuestGiv
     if (pQuest->GetQuestId() == 40012) // The White Stag and the Moon (A)
     {
         pQuestGiver->SetDisplayId(1991); // Deer(A)
-        pQuestGiver->MonsterSayToPlayer("May Elune bless you with a firm step, $N!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(67031, pPlayer);
         return true;
     }
 
@@ -4476,7 +4393,7 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
     if (pQuest->GetQuestId() == 40013) // The White Stag and the Moon (H)
     {
         pQuestGiver->SetDisplayId(2161); // Deer(H)
-        pQuestGiver->MonsterSayToPlayer("Let the Earth Mother be your foothold, $N!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(67032, pPlayer);
         return true;
     }
 
@@ -4493,20 +4410,20 @@ bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
         {
         case 1515: 
             if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[0] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're missing a few guards.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66937, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             break;
         case 1952: 
             if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[1] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Rumors say you've lost a couple of men, is that true?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66938, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             break;
         case 2215:
             if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[2] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Two other encampments have lost a few of their guards, did this also happen here?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66939, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             break;
         }
 
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy somethin', will ya?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, 66940, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -4522,18 +4439,18 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
         switch (pCreature->GetEntry())
         {
         case 1515: // Executor Zygand
-            pCreature->MonsterSayToPlayer("I don't know how you obtained that information but yes, some Scarlet Remnants attacked one of my Deathguard patrols, some never made it back and the others are in a deep sleep. Before falling into this weird slumber one of the guards said they were heading for the Monastery.", pPlayer);
+            pCreature->MonsterSayToPlayer(66941, pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 1952: // High Executor Hadrec
-            pCreature->MonsterSayToPlayer("A small force of the Scarlet Crusade has reached far enough into the forest to attack one of the patrols, we found only one lying about who had this strange ichor drooling out of his mouth. One of the other Deathguards touched it and soon fell into a deep slumber, one whose relative may be Death itself.", pPlayer);
+            pCreature->MonsterSayToPlayer(66942, pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 2215: // High Executor Darthalia
             pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
-            pCreature->MonsterSayToPlayer("Right on point, yes, our short numbers grew even shorter, we found no trail of their corpses yet we have found their weapons covered in mud yet no blood. It seems they didn't put up a fight.", pPlayer);
+            pCreature->MonsterSayToPlayer(66943, pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
@@ -4565,7 +4482,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
         {
             damage = 0;
 
-            m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
+            m_creature->MonsterSay(66177);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
 
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
@@ -4600,7 +4517,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
     void EnterCombat(Unit* pVictim) override
     {
         if (pVictim && pVictim->IsPlayer())
-            m_creature->MonsterSay("For the Scarlet Crusade!");
+            m_creature->MonsterSay(66178);
     }
 };
 
@@ -4609,7 +4526,7 @@ CreatureAI* GetAI_npc_vladeus_springriver(Creature* _Creature) { return new npc_
 bool GossipHello_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 1)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I\'m taking you to the local law enforcement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66944, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(51683, pCreature->GetGUID());
     return true;
@@ -4622,7 +4539,7 @@ bool GossipSelect_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature, 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->CombatStop();
-        pCreature->MonsterSay("I understand.");
+        pCreature->MonsterSay(66179);
         pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
         followed_units.push_back(pPlayer->GetObjectGuid());
@@ -4634,7 +4551,7 @@ bool GossipSelect_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature, 
 bool GossipHello_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && (std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid()) != followed_units.end()))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "This guy here is the only survivor of those who attacked the caravan that was ment to reach Aerie Peak, he yielded and I have spared his life.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66945, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -4650,7 +4567,7 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50671))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pCreature->MonsterSay("Great find. My boys and I will put him up in chains. Go get yourself an ale while we handle this.");        
+        pCreature->MonsterSay(66180);
         if (Creature* prisoner = pPlayer->FindNearestCreature(50674, 30.0F))
         {
             prisoner->GetMotionMaster()->Clear();
@@ -4669,12 +4586,12 @@ bool GossipHello_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80705) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80705)->m_creatureOrGOcount[0] == 0)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Vladeus Springriver, from Lakeshire, is it?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66946, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (pPlayer->GetQuestStatus(80706) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80706)->m_creatureOrGOcount[0] == 0)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "You smash your right fist into his sides.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66947, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     return true;
@@ -4685,40 +4602,40 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
     // The Means of Persuading:
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterTextEmote("Vladeus remains silent while slightly nodding his head, the nod is followed by a cough. You assume his throat was parched after being in chains for so long.");
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Offer water to Vladeus.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pCreature->MonsterTextEmote(66948);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66949, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSayToPlayer("Thank you, you're the one that captured me, right? I am grateful you spared my life but there's nothing I can tell you.", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please Vladeus, make this easier for both of us. You look like a decent man, the people of Lakeshire wanted me to bring all of you back.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pCreature->MonsterSayToPlayer(66950, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66951, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        pCreature->MonsterSayToPlayer("A bit late for that don't you think? Since you took the life of the rest, I have nothing to tell you, the man in the red hood would return home and ki... I have said too much.", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "There is nothing to fear with me at your side, the Alliance will protect your family. The Scarlet Crusade already failed so many times.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pCreature->MonsterSayToPlayer(66952, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66953, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        pCreature->MonsterSayToPlayer("Perhaps you are right. I didn't really want it to end this way, we were promised a better life, we... I... I didn't expect they'd make me kill innocents, you have to believe me!", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I do, take my word for it. Who recruited you and why?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pCreature->MonsterSayToPlayer(66954, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66955, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pCreature->MonsterSayToPlayer("I didn't see his face clearly, he was wearing a red hood and was simply laughing every few minutes. Looking back, it was the stupidest choice I have ever made. As to why they recruited us, I am not really sure. He said we would be taken to a hidden place of the Crusade to be trained, he was complaining that their number was low and since the death of two of their leaders they became broken. I think he mentioned a name, Aventis or Adentis?", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pCreature->MonsterSayToPlayer(66956, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66957, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        pCreature->MonsterSayToPlayer("Yes, that's the one! Please I don't know anything else, I wish to return home.", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pCreature->MonsterSayToPlayer(66958, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66959, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();
@@ -4726,50 +4643,50 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
     // Seeking Justice or Vengeance:
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
     {
-        pCreature->MonsterSayToPlayer("Ugh, bastard! What was that for?", pPlayer);
-        pCreature->MonsterTextEmote("Vladeus grits his teeth.");
+        pCreature->MonsterSayToPlayer(66960, pPlayer);
+        pCreature->MonsterTextEmote(66961);
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Silence mongrel, you will start talking before I do more than that.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66962, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
     {
-        pCreature->MonsterSayToPlayer("I won't te... tell you anything!", pPlayer);
-        pCreature->MonsterTextEmote("Vladeus short speech is followed by a cough. You assume he must be thirsty after being chained for so long.");
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Last time I visited the Monastery I remember your people using this tool.\n\n<You grab a hot poker and place it one Vladeus' neck.>\n\nNow talk!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pCreature->MonsterSayToPlayer(66963, pPlayer);
+        pCreature->MonsterTextEmote(66964);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66965, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
     {
-        pCreature->MonsterSayToPlayer("I will say nothing to the one that murdered my companions!", pPlayer);
+        pCreature->MonsterSayToPlayer(66966, pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Your COMPANIONS murdered innocents.\n\n<You reach for the prongs.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66967, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
     {
-        pCreature->MonsterSayToPlayer("Stop! Please stop, I will talk. I didn't want it to end up this way, I swear! The Red Hooded man said if we don't comply he'd kill my family, please, you have to understand!", pPlayer);
+        pCreature->MonsterSayToPlayer(66968, pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_BEG);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "He's not the one holding your life in his hands at this very moment.\n\n<You push the prongs close to his face.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66969, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 11)
     {
-        pCreature->MonsterSayToPlayer("He... he said we were going to be taken to a hidden place to train. They were lacking numbers an- and since two of their leaders were dead they weren't doing very well. He also mentioned a name, Aventis or Adentis?", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+        pCreature->MonsterSayToPlayer(66970, pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66971, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 12)
     {
-        pCreature->MonsterSayToPlayer("Yes, please, please. I don't know anything else.", pPlayer);
-        pCreature->MonsterTextEmote("Vladeus is utterly terrified.");
+        pCreature->MonsterSayToPlayer(66972, pPlayer);
+        pCreature->MonsterTextEmote(66973);
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Kick him in his knee.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66974, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
         pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 13)
     {
-        pCreature->MonsterTextEmote("Vladeus squeals in pain, so harshly it'd be heard outside.");
+        pCreature->MonsterTextEmote(66975);
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -4787,19 +4704,19 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
         DoAfterTime(pQuestGiver, 2 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
-            me->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
+            me->MonsterSayToPlayer(66976, player);});
         DoAfterTime(pQuestGiver, 10 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
-            me->MonsterSayToPlayer("The issue is she'd go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
+                me->MonsterSayToPlayer(66977, player); });
         DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
-            me->MonsterSayToPlayer("Last I heard she was in Tyr's Hand, but if there's a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
+                me->MonsterSayToPlayer(66978, player); });
         DoAfterTime(pQuestGiver, 28 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
-            me->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
+                me->MonsterSayToPlayer(66979, player);
             me->HandleEmote(EMOTE_ONESHOT_QUESTION); });
     }
     return false;
@@ -4808,10 +4725,10 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
 bool GossipHello_npc_maverick(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[0] == 0)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you ready, Maverick?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66980, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[1] == 2)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Inspect Maverick's condition.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66981, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(51691, pCreature->GetGUID());
         return true;
     }
@@ -4824,7 +4741,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        maverick->MonsterSayToPlayer("Let's bring demise upon these foolish zealots!", pPlayer);
+        maverick->MonsterSayToPlayer(66982, pPlayer);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
@@ -4840,14 +4757,14 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
 
-            me->MonsterSayToPlayer("A trap! It's a trap!", player);
+            me->MonsterSayToPlayer(66983, player);
             me->SummonCreature(50680, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
         DoAfterTime(maverick, 44 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = maverick]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
 
-            me->MonsterSayToPlayer("I feel... weird.", player);
+            me->MonsterSayToPlayer(66984, player);
             me->CastSpell(me, 25148, true);
             me->HandleEmote(EMOTE_STATE_SLEEP);
             me->SetStandState(UNIT_STAND_STATE_SLEEP);
@@ -4869,7 +4786,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
         if (!varimathras_spawned)
         {
             Creature* varimathras = pPlayer->SummonCreature(2425, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-            varimathras->MonsterSayToPlayer("He really is just unconscious, how strange...", pPlayer);
+            varimathras->MonsterSayToPlayer(66985, pPlayer);
         }
 
         if (pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 0)
@@ -4905,7 +4822,7 @@ struct npc_scarlet_magicianAI : public ScriptedAI
     }
     void EnterCombat()
     {
-        m_creature->MonsterSay("For the Scarlet Crusade!");
+        m_creature->MonsterSay(66181);
     }
     void JustRespawned(){}
 };
@@ -4978,7 +4895,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        m_creature->MonsterSay("I sensed magic! What are you doing here?");
+        m_creature->MonsterSay(66182);
     }
 
     void UpdateAI(const uint32 diff)
@@ -4991,7 +4908,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_1)
             {
                 speech_1 = true;
-                m_creature->MonsterSay("Is this all you can muster?");
+                m_creature->MonsterSay(66183);
             }
         }
         if (m_creature->GetHealthPercent() < 60 && m_creature->GetHealthPercent() > 50)
@@ -4999,7 +4916,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_2)
             {
                 speech_2 = true;
-                m_creature->MonsterSay("Young folk these days are disappointing.");
+                m_creature->MonsterSay(66184);
             }
         }
         if (m_creature->GetHealthPercent() < 30 && m_creature->GetHealthPercent() > 20)
@@ -5007,7 +4924,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_3)
             {
                 speech_3 = true;
-                m_creature->MonsterSay("Hardly a challenge!");
+                m_creature->MonsterSay(66185);
             }
         }
         if (m_creature->GetHealthPercent() < 10)
@@ -5015,7 +4932,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
             if (!speech_4)
             {
                 speech_4 = true;
-                m_creature->MonsterSay("Hmph, I will admit you have some skills, I will let you flee this day!");
+                m_creature->MonsterSay(66186);
             }
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
@@ -5037,7 +4954,7 @@ bool GossipHello_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(55030) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(55030)->m_creatureOrGOcount[0] == 0)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Revilgaz sent me to look for information about the group hunting the Brightwater crew.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66986, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -5051,7 +4968,7 @@ bool GossipSelect_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-        pCreature->MonsterSayToPlayer("Oh, he did , did he? Well, I might know a thing or two about that, the only crew that would be wanting the head of those goblins would be Captain Salt Tooth, he\'s got a camp to the north near the arena, and that\'s all I know, I swear!", pPlayer);
+        pCreature->MonsterSayToPlayer(66987, pPlayer);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91294))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();
@@ -5078,26 +4995,26 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_TALK);
-                me->MonsterSayToPlayer("Finally, I can sleep in a real bed!", player);
+                me->MonsterSayToPlayer(66988, player);
                 });
             DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_CHEER);
-                me->MonsterSayToPlayer("Well, maybe we can get back to sailing soon, after a nice break! Thanks!", player);
+                me->MonsterSayToPlayer(66989, player);
                 });
             DoAfterTime(pQuestGiver, 5 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), me = pQuestGiver]() {
                 auto player = ObjectAccessor::FindPlayer(playerGuid);
                 if (!player) return;
                 me->HandleEmote(EMOTE_ONESHOT_WAVE);
-                me->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", player);
+                me->MonsterSayToPlayer(66990, player);
                 });
             return true;
         }
         else
         {
             pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
-            pQuestGiver->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", pPlayer);
+            pQuestGiver->MonsterSayToPlayer(66990, pPlayer);
             return true;
         }
     }
@@ -5124,7 +5041,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
         DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
-            npc->MonsterSayToPlayer("That certainly was challenging, but I have finished my work, the key should be enchanted.", player);
+            npc->MonsterSayToPlayer(66991, player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -5150,7 +5067,7 @@ bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest con
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
         pQuestGiver->SummonGameObject(2005011, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 5, true);
         pQuestGiver->CastSpell(pPlayer, 10157, false);
-        pQuestGiver->MonsterSayToPlayer("Travel safely, friend!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66992, pPlayer);
         return true;
     }
     return true;
@@ -5166,7 +5083,7 @@ bool GossipHello_npc_ansirem(Player* pPlayer, Creature* pCreature)
         Creature* ansirem = pPlayer->FindNearestCreature(2543, 10.0F);
         if (ansirem && !pPlayer->HasItemCount(60815, 1))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Greetings. I am in need of an Arcane Resonator for Magus Halister in Theramore, do you have one?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66993, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -5185,7 +5102,7 @@ bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSen
         }
         if (pPlayer->HasItemCount(60815, 1, false))
         {
-            pCreature->MonsterSay("Halister? I haven't heard from him in ages. We need to meet, as there is much to discuss. As for the Arcane Resonator, I can lend you one. But tell Halister that he needs to bring it back to me in person!");
+            pCreature->MonsterSay(66187);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -5211,13 +5128,13 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
             npc->HandleEmote(EMOTE_ONESHOT_EAT_NOSHEATHE);
-            npc->MonsterSayToPlayer("Bottoms up!", player);
+            npc->MonsterSayToPlayer(66994, player);
             });
         DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
             npc->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            npc->MonsterSayToPlayer("Ack- that hits the spot!", player);
+            npc->MonsterSayToPlayer(66995, player);
             });
         return true;
     }
@@ -5226,8 +5143,8 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
 
 bool GossipHello_npc_hizzle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(50034))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here you are Hizzle, I got your prisoner red handed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(50060))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66996, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -5243,8 +5160,8 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91296))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pCreature->MonsterSay("Good! All the damage he caused and now he's finally going to pay for it!");
-        pPlayer->RemoveAurasDueToSpell(50034);
+        pCreature->MonsterSay(66188);
+        pPlayer->RemoveAurasDueToSpell(50060);
         pPlayer->RemoveMiniPet();
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -5259,18 +5176,18 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
     if (pQuest->GetQuestId() == 55211) // Occelation Inhibited Disk!
     {
         pQuestGiver->HandleEmote(69);
-        pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(66997, pPlayer);
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pQuestGiver, 6 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
-            npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
+            npc->MonsterSayToPlayer(66998, player);
             });
         DoAfterTime(pQuestGiver, 12 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]() {
             auto player = ObjectAccessor::FindPlayer(playerGuid);
             if (!player) return;
-            npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
+            npc->MonsterSayToPlayer(66999, player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
@@ -5288,11 +5205,11 @@ bool eventInProgress = false;
 bool GossipHello_npc_zuljin(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80801) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What happened to you, Zul'jin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67000, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (eventInProgress == true && pPlayer->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE && pPlayer->GetQuestStatus(65008) == QUEST_STATUS_NONE)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Are you ready to go, Zul'jin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67001, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     if (pCreature->IsQuestGiver())
@@ -5307,41 +5224,41 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn't back down and me people and I paid da price.", pPlayer);
+        pCreature->MonsterSayToPlayer(67002, pPlayer);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
+            c->MonsterSayToPlayer(67003, player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dey tormented me and even took me eye, dey wanted to take me back to dey settlement and probably end me life in front of every other elf to boost morality.", player);
+            c->MonsterSayToPlayer(67004, player);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("It was den that ol' Zul'jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
+            c->MonsterSayToPlayer(67005, player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa's blessings we couldn't hold against the dead and failed.", player);
+            c->MonsterSayToPlayer(67006, player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Me lands lay in shambles, lost to da living dead and I will do anything to take our lands back, and no high elf or Scourge would stand against da powers of da Amani and da Horde.", player);
+            c->MonsterSayToPlayer(67007, player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Dose were our lands, mon, troll lands, de Amani was there before anyone else and no Alliance, Scourge or Demons will stop us from getting it back.", player);
+            c->MonsterSayToPlayer(67008, player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Hear dis!", player);
+            c->MonsterSayToPlayer(67009, player);
             c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
             });
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterYell("WE ARE DE AMANI, WE FEAR NOBODY!");
+            c->MonsterYell(67010);
             c->HandleEmote(EMOTE_ONESHOT_BATTLEROAR);
             });
         DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterYell("WE WILL NEVER GIVE UP BECAUSE WE NEVER DIE!");
+            c->MonsterYell(67011);
             c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -5352,7 +5269,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSayToPlayer("We not prepared yet, mon. Come see me soon.", pPlayer);
+        pCreature->MonsterSayToPlayer(67012, pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_NO);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -5362,7 +5279,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 bool GossipHello_npc_harlus(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(55225) == QUEST_STATUS_INCOMPLETE) // The Hawk's Vigil
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Martin Corinth, you are to be executed for crimes against the Alliance.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67013, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(52119, pCreature->GetGUID());
     return true;
@@ -5374,15 +5291,15 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     {
         pCreature->SetCastingTarget(pPlayer);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Executed?! Do you know who it is you speak to?", player);
+            c->MonsterSayToPlayer(67014, player);
             c->HandleEmote(EMOTE_ONESHOT_LAUGH);
             });
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Do you know who it is you're threatening?!", player);
+            c->MonsterSayToPlayer(67015, player);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
+            c->MonsterSayToPlayer(67016, player);
             c->SetFactionTemporary(14, TEMPFACTION_RESTORE_RESPAWN);
             c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
             c->ClearCastingTarget();
@@ -5422,7 +5339,7 @@ bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Q
 
     if (pQuest->GetQuestId() == 40121) // Alpha Aggresion
     {
-        pQuestGiver->MonsterSayToPlayer("May my family staff serve you well $N.", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(67033, pPlayer);
         return true;
     }
 
@@ -5440,7 +5357,7 @@ struct npc_naxiarAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("Don't you just love, when the experiment simply shows up on your doorstep?");
+        m_creature->MonsterSay(66189);
     }
     void JustRespawned() { Reset(); }
 };
@@ -5487,17 +5404,17 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
 
     if (pQuest->GetQuestId() == 40127) // The Dampening Must End
     {
-        pQuestGiver->MonsterSayToPlayer("Thanks again $N, travel safely, you are a hero to the Kirin Tor.", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(67034, pPlayer);
         return true;
     }
 
     if (pQuest->GetQuestId() == 40124) //  Interfering Naga
     {
-        pQuestGiver->MonsterSayToPlayer("Now, let us see if the dampening has been halted...", pPlayer);
+        pQuestGiver->MonsterSayToPlayer(67017, pPlayer);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pQuestGiver]() {
-            c->MonsterSayToPlayer("It would appear our efforts have been meaningless... We must think of a new solution...", player);
+            c->MonsterSayToPlayer(67018, player);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             c->CastSpell(c, 1449, false);
             });
@@ -5506,27 +5423,6 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
     }
 
     return false;
-}
-
-bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    GameObject* spitelash_shrine = pPlayer->FindNearestGameObject(2010801, 10.0F); // Spitelash Shrine
-
-    if (!spitelash_shrine)
-    {
-        pPlayer->GetSession()->SendNotification("Requires Spitelash Shrine.");
-        return false;
-    }
-    
-    if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
-        pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
-
-    pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-    pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
-    pPlayer->SaveInventoryAndGoldToDB();
-    return true;
 }
 
 bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -5540,7 +5436,7 @@ bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest co
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = speaker_ganzih]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("It would appear the bracers be having some sort of voodoo corruption tainting them, I can sense it from here.", player);
+                npc->MonsterSayToPlayer(67019, player);
                 });
             return true;
         }
@@ -5562,13 +5458,13 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
             lord_rog->CastSpell(pQuestGiver, 13236, false);
 
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
-                npc->MonsterSayToPlayer("The curse upon the bracers has been lifted, the weak magic of mortals cannot compete with the Elemental Plane.", player);
+                npc->MonsterSayToPlayer(67020, player);
                 });
             DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
                 npc->CastSpell(npc, 5906, false);
                 });
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
-                npc->MonsterSayToPlayer("I must thank you, your assistance has been instrumental.", player);
+                npc->MonsterSayToPlayer(67021, player);
 
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
@@ -5593,7 +5489,7 @@ struct npc_speaker_gantoAI : public ScriptedAI
     }
     void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("What, did that foolish Yin'do send you? You shall perish!");
+        m_creature->MonsterSay(66190);
     }
     void JustRespawned() { Reset(); }
 };
@@ -5611,28 +5507,28 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = exile1]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("You have saved Harborage!", player);
+                npc->MonsterSayToPlayer(67022, player);
                 });
 
         Creature* exile2 = pPlayer->FindNearestCreature(60422, 40.0F);
         if (exile2)
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = exile2]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Noboru is dead? We thank you outsider!", player);
+                npc->MonsterSayToPlayer(67023, player);
                 });
 
         Creature* exile3 = pPlayer->FindNearestCreature(60423, 40.0F);
         if (exile3)
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = exile3]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("We will fear no longer the menace Noboru.", player);
+                npc->MonsterSayToPlayer(67024, player);
                 });
 
         Creature* exile4 = pPlayer->FindNearestCreature(60424, 40.0F);
         if (exile4)
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = exile4]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Our journey here was not pointless after all, thank you.", player);
+                npc->MonsterSayToPlayer(67025, player);
                 });
             return true;
         }
@@ -5645,24 +5541,25 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
 bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, 66628, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->HasSpell(SPELL_SLOW_AND_STEADY))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Slow & Steady Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66629, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66630, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     if (pPlayer->HasSpell(SPELL_WAR_MODE))
     {
         if (pPlayer->GetLevel() == 60 || !pPlayer->GetQuestStatus(55055) == QUEST_STATUS_COMPLETE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66631, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
     }
 
     // info about glyphs
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of the Turtle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of Exhaustion.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me more about this Glyph of War.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66632, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66633, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66634, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66635, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
@@ -5716,6 +5613,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
         return true;
     }
 
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pPlayer->SEND_GOSSIP_MENU(52132, pCreature->GetGUID());
+        return true;
+    }
+
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -5755,7 +5658,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
         playerOnQuestGUID = pPlayer->GetGUIDLow();
 
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-        pQuestGiver->PMonsterSay("I am ready for the audience.");
+        pQuestGiver->PMonsterSay(66191);
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
         Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
@@ -5788,7 +5691,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
     {
         GameObject* portal{ nullptr };
 
-        pQuestGiver->MonsterSay("Let's get goin mon.");
+        pQuestGiver->MonsterSay(66192);
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -5912,7 +5815,7 @@ struct npc_zuljinAI : public ScriptedAI
                 if (Creature* sylvanas = m_creature->FindNearestCreature(10181, 15, true))
                 {
                     sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                    sylvanas->PMonsterSay("What is the meaning of this? GUARDS! Ready your arms - it seems filth has made it into my city.");
+                    sylvanas->PMonsterSay(66193);
 
                     if (playerOnQuest)
                     {
@@ -5921,7 +5824,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Now, now, my lady there’s no reason to rus--");
+                                varimathras->PMonsterSay(66194);
                             }
                             });
 
@@ -5930,7 +5833,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(varimathras);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("Is this your doing, Varimathras? What have you plotted behind my back?");
+                                sylvanas->PMonsterSay(66195);
                             }
                             });
 
@@ -5939,7 +5842,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("My lady I would never plot against you. I feel truly hurt by your accusations. These trolls and that adventurer over there simply helped us with a task, you do remember the issues we had in Hillsbrad do you not? ");
+                                varimathras->PMonsterSay(66196);
                             }
                             });
 
@@ -5948,7 +5851,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(zuljin);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("And what does that have to do with forest frog filth in my chambers?");
+                                sylvanas->PMonsterSay(66197);
                             }
                             });
 
@@ -5956,7 +5859,7 @@ struct npc_zuljinAI : public ScriptedAI
                             if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                             {
                                 zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                                zuljin->PMonsterSay("Now, now, Banshee Queen. Dis be da way to treat a guest? Especially one ya have known for such a long time.");
+                                zuljin->PMonsterSay(66198);
                             }
                             });
 
@@ -5965,51 +5868,51 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(zuljin);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("You're not welcomed here troll. Now speak your piece before I lose my patience. I will deal with my advisor later.");
-                                varimathras->PMonsterSay("As you wish, my queen.");
+                                sylvanas->PMonsterSay(66199);
+                                varimathras->PMonsterSay(66200);
                             }
                             });
 
                         DoAfterTime(playerOnQuest, 70 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Don’t hold it against da demon, Sylvannas. It was us who asked him for an audience with da Banshee Queen after dealing with ya problems.");
+                            zuljin->PMonsterSay(66201);
                             });
 
                         DoAfterTime(playerOnQuest, 80 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("Hardly a problem. Nothing we couldn’t have dealt with. Do you expect me to grovel in gratitude now, Zul’jin?");
+                            sylvanas->PMonsterSay(66202);
                             });
 
                         DoAfterTime(playerOnQuest, 90 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Nothing of da sort, me queen, I want ya to reconsider signing da papers to approve da Revantusk into da Horde. Take dis help as a show of good faith if nothing else.");
+                            zuljin->PMonsterSay(66203);
                             });
 
                         DoAfterTime(playerOnQuest, 100 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("And what makes you think I will approve of that? How many of my people have you slaughtered, butchered and maimed?");
+                            sylvanas->PMonsterSay(66204);
                             });
 
                         DoAfterTime(playerOnQuest, 110 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("And how many of yours did the same to me people? And de people ya speak of see ya as enemy today but da Amani don’t. Ya can’t keep on holding grudges mon, ya will be around for years to come now, casualties of war happen every time. Let go of da past Sylvannas, I am willing toand I will prove to yaand everyone else in da Horde dat we be worthy of flying da Horde’s banner.");
+                            zuljin->PMonsterSay(66205);
                             });
 
                         DoAfterTime(playerOnQuest, 120 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
-                            zuljin->PMonsterSay("Let go of da past Sylvannas. I be willin to. I will prove to ya and everyone else in da Horde dat we be worthy of flying da Horde's banner.");
+                            zuljin->PMonsterSay(66206);
                             });
 
                         DoAfterTime(playerOnQuest, 125 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("I don’t wish to be lectured by an old disfigured frog, Zul’jin. But there’s truth in your words, past grudges will merely do more harm than good.");
+                            sylvanas->PMonsterSay(66207);
                             });
 
                         DoAfterTime(playerOnQuest, 135 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                             {
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("If anything I should be the one to know of how persistent your people are. Very well, I will give you a chance, but remember this, stay out of my way. I don’t have to like you to be your ally.");
+                                sylvanas->PMonsterSay(66208);
                             }
                             });
 
@@ -6018,7 +5921,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Should I handle the formalities my lady?");
+                                varimathras->PMonsterSay(66209);
                             }
                             });
 
@@ -6027,7 +5930,7 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 sylvanas->SetFacingToObject(varimathras);
                                 sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                                sylvanas->PMonsterSay("Do what you will Varimathras, this however, won’t change the fact that you have to answer to me later.");
+                                sylvanas->PMonsterSay(66210);
                             }
                             });
 
@@ -6036,25 +5939,25 @@ struct npc_zuljinAI : public ScriptedAI
                             {
                                 varimathras->SetFacingToObject(sylvanas);
                                 varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
-                                varimathras->PMonsterSay("Of course, my queen.");
+                                varimathras->PMonsterSay(66211);
                             }
                             });
 
                         DoAfterTime(playerOnQuest, 170 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             sylvanas->SetFacingToObject(zuljin);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                            sylvanas->PMonsterSay("Begone now Zul’jin, I’ve had enough of the living for today.");
+                            sylvanas->PMonsterSay(66212);
                             });
 
                         DoAfterTime(playerOnQuest, 175 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                            zuljin->MonsterTextEmote("Zul’jin nods and with his guards, he takes his leave.");
+                            zuljin->MonsterTextEmote(66213);
                             });
 
                         DoAfterTime(playerOnQuest, 180 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                             if (playerOnQuest && playerOnQuest->FindNearestCreature(zuljin->GetEntry(), 20, true))
                             {
                                 zuljin->SetFacingToObject(playerOnQuest);
-                                zuljin->PMonsterSay("Ya did gud, %s. Meet me in da Hinterlands.", playerOnQuest->GetName());
+                                zuljin->PMonsterSay(66214, playerOnQuest->GetName());
 
                                 playerOnQuest->SetQuestStatus(65008, QUEST_STATUS_COMPLETE);
                             }
@@ -6185,11 +6088,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Welcome to Stormwind, Traveler! Stay safe!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Greetings!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Greetings, enjoy your stay in Stormwind!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("I'm here whenever you need help.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66215, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66216, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66217, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66218, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66219, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6211,10 +6114,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the Alliance!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("In the name of the King.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Stay safe, Traveler.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66220, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66221, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66222, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66223, Language::LANG_COMMON); break; }
                                             case 5: {break; }
                                         }
                                         switch (TextRandom)
@@ -6236,11 +6139,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Save travels, Friend!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I hope you enjoyed your stay in Stormwind.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Make sure to stock up on rations before you leave Stormwind.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Until next time.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("May the light protect you on your journey!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66224, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66225, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66226, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66227, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66228, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6261,12 +6164,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("I havn't heard this one in a while!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("That's a good one!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66229, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66230, Language::LANG_COMMON); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("A duck walked into an Apothecary and said 'Give me some ChapStick... and put it on my bill!'", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("So, an orc walks into a bar with a parrot on his shoulder. The bartender says 'Hey, where'd you get that?' The parrot says 'Durotar. They've got them all over the place!'", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("You have to try harder to make me laugh.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66231, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66232, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66233, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6289,10 +6192,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("HA! You seem strong! Look at this.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Keep training and you'll be as strong as me some day. Haha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("By the light, what strength!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Good to see strong Travelers like you around Stormwind.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66234, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66235, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66236, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66237, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6315,9 +6218,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Show some respect to the guards of Stormwind!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("This does not work on me.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You make a fool of yourself.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66238, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66239, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66240, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6339,9 +6242,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hey, back off!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Hahaha! STOP! I'm working here!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("What... i am in full armor. Did you really expect that works?", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66241, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66242, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66243, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6372,12 +6275,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Can i assist you?", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Welcome, Traveler. You must have countless battles. Please, stay as long as you wish and calm your body and mind under Mother Natures protection.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Ishnu-alah.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("What brings you here?", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Elune be with you.", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("Ishnu-dal-dieb.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66244, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66245, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66246, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66247, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66248, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66249, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6399,10 +6302,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the high priestess.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("May Elune guide you.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("For the Alliance.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("We will protect you during your rest here!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66250, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66251, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66252, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66253, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6423,10 +6326,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("May Elune protect you on your journey, Traveler!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Good bye, come back when ever you need a rest.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Till next we meet!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You're already leaving? Stay safe.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66254, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66255, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66256, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66257, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6447,11 +6350,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Haha! That's a good one!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Ha! Here is one for you. We are all Nightelves. But.. i'm more of a morning Elf.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Oh sorry, what was that? I was sunken in thoughts", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("By Elune, i have to remember that one!", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Is this the point where i should... laugh?", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66258, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66259, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66260, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66261, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66262, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6473,10 +6376,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Wow! Mother Nature has truely blessed you!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I am glad that someone as strong as you stays in here for a while.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You are not the only strong here.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Remember, with great strength comes great strength! No wait... With great strong... Ah, forget it! You look good!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66263, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66264, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66265, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66266, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6499,10 +6402,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You'd better be carefull who you taunt.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Your try is just a waste of our fresh air.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You dare to pest the air around is with that foul mouth?!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You should visit a priestess and cleansen your mind.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66267, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66268, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66269, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66270, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6524,9 +6427,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Stop it!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("I need to focus and look for potential threats, don't distract me. Hahaha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("HEY! Only looking, no touching!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66271, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66272, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66273, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6556,12 +6459,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("I do hope the mountain is warm enough for ye.", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Stop by at the inn for some relaxation.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("The mountain, home of the dwarves, is open to all of the Alliance.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome to Ironforge, Traveler. Don't miss out a good beer in one of our Taverns.", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Ha! It's good to see ye again. Pull up a chair by the hearth.", Language::LANG_COMMON); break; }
-                                            case 6: {m_creature->MonsterSay("Greetings, Pal. Come talk to me when you get lost!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66274, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66275, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66276, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66277, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66278, Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay(66279, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6582,10 +6485,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("For the Bronzebeards!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("For King Magni!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("At your service.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("We keep you protected. Be welcome in our City.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66280, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66281, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66282, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66283, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6607,10 +6510,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Come back if you crave for some beer in a warm inn, will ya?", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Well met, Travevller. Stay safe and kill some creatures out there!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Don't forget, the mountain welcomes everyone of the Alliance!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Be blessed with fortune, friend!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66284, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66285, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66286, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66287, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6631,10 +6534,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("That's one for the inn. Bahahaha!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("By King Magnis beard! BAHahaha. Where'd you got that one from?!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Hahaha! I don't drink anymore... 'course, I don't drink any less either! BAHAHAhahaha!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("Hm... Maybe i need more beer to laugh about that.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66288, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66289, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66290, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66291, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6656,10 +6559,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("What glorious muscles!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("Ironforge will be surely safe with you stoping by.", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You try to impress a dwarf with muscles? Look, i am 50% muscles and 50% beer! BAHAHA!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You are as slender as a straw of wheat!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66292, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66293, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66294, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66295, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6682,11 +6585,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("By the stinking fart of a Troll, you're lucky i am on duty right now!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("You should back off before i lose... My... TEMPER!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("You shouldn't put your bare hand in a forge, you might burn yourself.", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("My arms might be small but so is your brain!", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("I hope i misheared that.", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66296, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66297, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66298, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66299, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66301, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6709,11 +6612,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Bahaha! Stop it Pal!", Language::LANG_COMMON); break; }
-                                            case 2: {m_creature->MonsterSay("G-ggg... Bahahaha!", Language::LANG_COMMON); break; }
-                                            case 3: {m_creature->MonsterSay("Oi, Mate. You... can't... just... tickle the guards around here! HAHA!", Language::LANG_COMMON); break; }
-                                            case 4: {m_creature->MonsterSay("You... know i wear an armor with tickle-resistance + 10, right?", Language::LANG_COMMON); break; }
-                                            case 5: {m_creature->MonsterSay("Hey! Stay away from me!", Language::LANG_COMMON); break; }
+                                            case 1: {m_creature->MonsterSay(66302, Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay(66303, Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay(66304, Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay(66305, Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay(66306, Language::LANG_COMMON); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6737,7 +6640,7 @@ struct npc_guard_emoteAI : public ScriptedAI
                             {
                                 if (CheckEmoteCooldown())
                                 {
-                                    m_creature->MonsterSay("lol", Language::LANG_ORCISH); // "kek" for alliance
+                                    m_creature->MonsterSay(66306, Language::LANG_ORCISH); // "kek" for alliance
                                     m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
                                 }
                             }
@@ -6764,12 +6667,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Throm'ka!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Lok'tar!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Lok'tar ogar!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome, Traveler.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Don't stay to long, the path of war never ends!", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Stay out of trouble.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66307, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66308, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66309, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66310, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66311, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66312, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6791,11 +6694,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Strength and honor!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Victory and honor!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("My life for the Horde!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("For the Warchief.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Blood and thunder!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66313, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66314, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66315, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66316, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66317, Language::LANG_ORCISH); break; }
                                             case 6: { break; }
                                         }
                                         switch (TextRandom)
@@ -6817,10 +6720,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Don't die out there!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Next time you come back, me want to see scars on you!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Always be on your guard.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Bring honor to the Horde!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66318, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66319, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66320, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66321, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6842,10 +6745,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Go away and slay some enemys! Don't waste your breath.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Tell your jokes someone else, i'm busy!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("BAHAHA!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("I got no time for that! I will CRUSH and DESTROY and... uh... oooh... shiny...", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66322, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66323, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66324, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66325, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6868,11 +6771,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You must have fought many battles!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("There should be more of your kind.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Think you strong? Me show you what strong! HAHAHA!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("A true fighter! Good to have you on our side!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Ha! A Draenei has more muscles than you! Bahahahaaa", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66326, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66327, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66328, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66329, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66330, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6896,10 +6799,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Trust me... you no wanna start this.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Your weapon should break in combat!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("If i wouldn't be on duty i would snap your neck like a branch!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("A gnome like you should not try to fight.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66331, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66332, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66333, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66334, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6921,9 +6824,9 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 3);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Why don't you lead an army instead of touching me!?", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("You no touch me!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Are you done?", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66335, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66336, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66337, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6944,7 +6847,7 @@ struct npc_guard_emoteAI : public ScriptedAI
                             {
                                 if (CheckEmoteCooldown())
                                 {
-                                    m_creature->MonsterSay("Poke poke poke - is that all you do?", Language::LANG_ORCISH);
+                                    m_creature->MonsterSay(66338, Language::LANG_ORCISH);
                                     m_creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                                 }
                             }
@@ -6967,12 +6870,12 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 6);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Peace, friend.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("The winds guide you.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("How may I aid you?", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Welcome to Thunderbluff, stay away from the cliffs!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("The wind announced your arrival.", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Earth Mother protects you.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66339, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66340, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66341, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66342, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66343, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66344, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -6993,11 +6896,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Ish-ne-alo Por-ah", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("May you find peace in the winds.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Relax a bit. We make sure to keep you safe. Well... if you stay away from the cliff.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Earth Mother shall keep you safe and cozzy here.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Strong as a rock and free as the wind. We protect you, Traveler.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66345, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66346, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66347, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66348, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66349, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7018,13 +6921,13 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 7);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Walk with the Earth Mother.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Winds be at your back.", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Farewell!", Language::LANG_ORCISH); break; }
-                                            case 6: {m_creature->MonsterSay("Well met, Traveler", Language::LANG_ORCISH); break; }
-                                            case 7: {m_creature->MonsterSay("Stay victorious, Friend", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66350, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66351, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66352, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66353, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66354, Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay(66355, Language::LANG_ORCISH); break; }
+                                            case 7: {m_creature->MonsterSay(66356, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7045,10 +6948,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hohohoho. You should tell that one the others!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("I shouldn't laugh at this but... hm... hmhm.... Hoahahaha!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66357, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66358, Language::LANG_ORCISH); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("Oh... that was a joke. Haha... ha... it wasn't that good.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66359, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7070,10 +6973,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("And you took the lift up here? You could CLIMB up here without sweating!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("By the Earth Mother, i feel sorry for who ever stands against you in battle!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("You call that strong? I show you what strength looks like!", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Stop that, you make the other jealous.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66360, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66361, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66362, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66363, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7096,11 +6999,11 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 5);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("You know... a fall here is very deep.", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("The wind will remember your conceit!", Language::LANG_ORCISH); break; }
-                                            case 3: {m_creature->MonsterSay("Thunderbluff is a home for everyone. Don't make me do something else.", Language::LANG_ORCISH); break; }
-                                            case 4: {m_creature->MonsterSay("Moo'. Are you happy now?!", Language::LANG_ORCISH); break; }
-                                            case 5: {m_creature->MonsterSay("Ha, you make a fool of yourself.", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66364, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66365, Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay(66366, Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66367, Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay(66368, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7122,10 +7025,10 @@ struct npc_guard_emoteAI : public ScriptedAI
                                         const auto TextRandom = urand(1, 4);
                                         switch (TextRandom)
                                         {
-                                            case 1: {m_creature->MonsterSay("Hohohoho!", Language::LANG_ORCISH); break; }
-                                            case 2: {m_creature->MonsterSay("Your fingers are as fast as the wind. Hahaha!", Language::LANG_ORCISH); break; }
+                                            case 1: {m_creature->MonsterSay(66369, Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay(66370, Language::LANG_ORCISH); break; }
                                             case 3: {break; }
-                                            case 4: {m_creature->MonsterSay("That doesn't work on me...", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay(66371, Language::LANG_ORCISH); break; }
                                         }
                                         switch (TextRandom)
                                         {
@@ -7180,11 +7083,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_lord_rog";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_lord_rog;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_dispelling_scroll";
-    newscript->pItemUseSpell = &ItemUseSpell_dispelling_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7323,12 +7221,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_malanys_cloudpiercer";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_malanys_cloudpiercer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_custodian_of_time";
-    newscript->pGossipHello = &GossipHello_npc_custodian_of_time;
-    newscript->pGossipSelect = &GossipSelect_npc_custodian_of_time;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7700,11 +7592,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_elwynn_coin";
-    newscript->pItemUseSpell = &ItemUseSpell_item_elwynn_coin;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_character_rename";
     newscript->pItemUseSpell = &ItemUseSpell_character_rename;
     newscript->RegisterSelf();
@@ -7727,11 +7614,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_hairdye";
     newscript->pItemUseSpell = &ItemUseSpell_hairdye;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_radio";
-    newscript->pItemUseSpell = &ItemUseSpell_item_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;

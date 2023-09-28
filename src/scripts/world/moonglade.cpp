@@ -50,8 +50,10 @@ bool GossipHello_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature)
         pPlayer->SEND_GOSSIP_MENU(4719, pCreature->GetGUID());
     }
     else
+    {
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(4718, pCreature->GetGUID());
-
+    }
     return true;
 }
 
@@ -499,8 +501,10 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     void DoHandleOutro(Creature* pTarget)
     {
-        if (Player* pPlayer = GetPlayerForEscort())
-            pPlayer->GroupEventHappens(QUEST_NIGHTMARE_MANIFESTS, pTarget);
+        std::list<Player*> players;
+        me->GetAlivePlayerListInRange(me, players, 200.0f);
+        for (auto const& pPlayer : players)
+            pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
         // despawn manifests
         for (auto&& itr : summonedGUIDs)
@@ -1024,7 +1028,10 @@ bool QuestAccept_npc_keeper_remulos(Player* pPlayer, Creature* pCreature, const 
         // avoid starting the escort twice
         pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         if (npc_keeper_remulosAI* pEscortAI = dynamic_cast<npc_keeper_remulosAI*>(pCreature->AI()))
+        {
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
+            pEscortAI->SetMaxPlayerDistance(0);
+        }
     }
     if (pQuest->GetQuestId() == QUEST_WAKING_LEGENDS)
     {
@@ -1117,11 +1124,10 @@ struct boss_eranikusAI : public ScriptedAI
             m_creature->DeleteThreatList();
             m_creature->CombatStop(true);
             m_creature->LoadCreatureAddon(true);
-
             m_creature->SetLootRecipient(nullptr);
 
             // Get Remulos guid and make him stop summoning shades
-            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 50.0f))
+            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 200.0f))
             {
                 m_uiRemulosGUID = pRemulos->GetObjectGuid();
                 pRemulos->AI()->EnterEvadeMode();
@@ -1129,6 +1135,12 @@ struct boss_eranikusAI : public ScriptedAI
                 pRemulos->DeleteThreatList();
                 pRemulos->CombatStop(true);
             }
+
+            // Complete quest for nearby players
+            std::list<Player*> players;
+            me->GetAlivePlayerListInRange(me, players, 200.0f);
+            for (auto const& pPlayer : players)
+                pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
             // Despawn the priestess
             DoDespawnSummoned();

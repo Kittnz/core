@@ -2687,18 +2687,6 @@ void Player::ProcessDelayedOperations()
     if (m_DelayedOperations & DELAYED_CAST_HONORLESS_TARGET)
         CastSpell(this, 2479, true);
 
-    if (m_DelayedOperations & DELAYED_TAXI_FLIGHT_WITH_TELEPORT)
-    {
-        // restore taxi route
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(0));
-        m_taxi.AddTaxiDestination(GetSaveTaxiData(1));
-
-        ClearTaxiFlightData(0);
-        ClearTaxiFlightData(1);
-
-        ContinueTaxiFlight();
-    }
-
     //we have executed ALL delayed ops, so clear the flag
     m_DelayedOperations = 0;
 }
@@ -3534,6 +3522,8 @@ void Player::GiveLevel(uint32 level)
             {
                 AnnounceHardcoreModeLevelUp(level);
                 SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
+                if (HasTitle(TITLE_STILL_ALIVE))
+                    AwardTitle(-TITLE_STILL_ALIVE);
                 AwardTitle(TITLE_IMMORTAL);
                 ChangeTitle(TITLE_IMMORTAL);
                 uint32 itemEntry = 80189;
@@ -5809,26 +5799,10 @@ void Player::RepopAtGraveyard()
             TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
     }
     else
-    {
-        CustomGraveyardEntry const* CustomGrave = sObjectMgr.GetCustomGraveyard(GetMapId(), GetZoneId(), GetAreaId(), GetLevel());
-
-        if (CustomGrave)
-        {
-            // Release spirit from transport => Teleport alive at nearest graveyard.
-            if (GetTransport())
-            {
-                GetTransport()->RemovePassenger(this);
-                ResurrectPlayer(1.0f);
-            }
-
-            if (GetTeam() == TEAM_ALLIANCE)
-                TeleportTo(CustomGrave->map_alliance, CustomGrave->x_alliance, CustomGrave->y_alliance, CustomGrave->z_alliance, CustomGrave->orientation_alliance, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
-            else
-                TeleportTo(CustomGrave->map_horde,    CustomGrave->x_horde,    CustomGrave->y_horde,    CustomGrave->z_horde,    CustomGrave->orientation_horde,    TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
-        }
+    { 
         // If no grave found, stay at the current location
         // and don't show spirit healer location
-        else if (ClosestGrave)
+        if (ClosestGrave)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())
@@ -5836,8 +5810,10 @@ void Player::RepopAtGraveyard()
                 GetTransport()->RemovePassenger(this);
                 ResurrectPlayer(1.0f);
             }
-
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+            if (GetAreaId() == 4011 && GetRace() == RACE_GOBLIN) // Venture Camp, temporary hackfix.
+                TeleportTo(1, 1788.58, 1335.74, 144.35, 4.0, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+            else
+                TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
         }
 
         // Fix invisible spirit healer if you die close to graveyard.
@@ -10623,7 +10599,16 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < 60)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
+                    {
+                        this->GetSession()->SendNotification("You can only equip items of poor and common quality in the Vagrant's Endeavor challenge.");
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                    }
+
+                    if ((pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT) > 0) || (pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) > 0))
+                    {
+                        this->GetSession()->SendNotification("You cannot equip enchanted items while participating in a Vagrant's Endeavor challenge.");
+                        return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+                    }
                 }
             }
 
@@ -15952,13 +15937,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     UpdateOldRidingSkillToNew(has_epic_mount); // TODO: Remove later
 
-    // Do it later in DB.
-    if (HasItemCount(50010, 1, false))
-    {
-        if (!HasSpell(50000))
-            LearnSpell(50000, false, false);
-    }
-
     m_hardcoreStatus = fields[61].GetUInt8();
 
     // Load all titles from the db
@@ -18430,6 +18408,45 @@ void Player::SendProficiency(ItemClass itemClass, uint32 itemSubclassMask) const
     GetSession()->SendPacket(&data);
 }
 
+unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
+{
+    uint32 display_id = 0;
+
+    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 12> glyph_map =
+    { {
+       // Move it to DB if more glyphs!
+       // spell id, alliance display, horde display, default_alliance, defaut_horde 
+        { FORM_CAT,       53002, 11444, 10054, 892,   8571  }, // Glyph of the Frostsaber
+        { FORM_TRAVEL,    53005, 1992,  2161,  632,   632  },  // Glyph of the Stag
+        { FORM_AQUA,      53026, 4591,  4591,  2428,  2428  }, // Glyph of the Orca
+        { FORM_BEAR,      53008, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
+        { FORM_DIREBEAR,  53008, 19168, 19169, 2281,  2289  }, // Glyph of the Icebear
+        { FORM_GHOSTWOLF, 53029, 3123,  4613,  4613,  4613  }, // Glyph of the Ghostwolf
+        { FORM_MOONKIN,   53020, 12237, 12237, 15374, 15375 }, // Glyph of the Frostkin
+        { FORM_BEAR,      53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
+        { FORM_DIREBEAR,  53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
+        { FORM_MOONKIN,   53014, 20408, 20409, 15374, 15375 }, // Glyph of the Dreamkin
+        { FORM_CAT,       53017, 20410, 20410, 892,   8571 },  // Glyph of the Panther
+        { FORM_MOONKIN,   53023, GetNativeDisplayId(), GetNativeDisplayId(), 15374, 15375 }, // Glyph of the Moon
+    } };
+
+    for (auto const& model : glyph_map)
+    {
+        const auto& [t_form, glyph_spell, a_model, h_model, a_default, h_default] = model;
+        if (form == t_form)
+        {
+            if (HasAura(glyph_spell))
+            {
+                display_id = GetTeam() == ALLIANCE ? a_model : h_model;
+                break;
+            }
+            else
+                display_id = GetTeam() == ALLIANCE ? a_default : h_default;
+        }
+    }
+    return display_id;
+}
+
 void Player::SetRestBonus(float rest_bonus_new)
 {
     // Prevent resting on max level or with the Glyph og Exhaustion 
@@ -18837,11 +18854,6 @@ void Player::ContinueTaxiFlight()
             break;
         }
     }
-
-    if (GetSaveTaxiData(2))
-        startNode = GetSaveTaxiData(2);
-    ClearTaxiFlightData(2);
-
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
 }
 
@@ -20719,7 +20731,6 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
 
         RewardBountyHuntKill(pVictim);
-        RewardExpansionPvPQuest(pVictim);
     }    
 }
 
@@ -22649,9 +22660,6 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
     if (uVictim->GetAura(2479, EFFECT_INDEX_0))
         return;
 
-    if (HasItemCount(50746, 1, false)) // Glyph of the Honorless or I PvP for Fun!
-        return;
-
     if (uVictim->GetTypeId() == TYPEID_UNIT)
     {
         Creature* cVictim = (Creature*)uVictim;
@@ -22741,6 +22749,8 @@ void Player::RewardHonorOnDeath()
             }
 
             uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
+            rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+
             if (rewPoints)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
@@ -22753,6 +22763,8 @@ void Player::RewardHonorOnDeath()
             continue;
 
         uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+
         if (rewPoints)
         {
             if (!InBattleGround())
@@ -22968,44 +22980,44 @@ void Player::CreatePacketBroadcaster()
 
 // Turtle WoW custom features:
 
-void Player::JoinBeginnersGuild()
-{
-    Guild* pBeginnersGuild = nullptr;
-
-    if (GetTeam() == ALLIANCE)
-    {
-        uint32 uiAllianceGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE);
-        if (uiAllianceGuild > 0)
-        {
-            pBeginnersGuild = sGuildMgr.GetGuildById(uiAllianceGuild);
-        }
-        else
-        {
-            sLog.outError("JoinBeginnersGuild: Alliance guild is not assigned in mangosd.conf.");
-        }
-    }
-    else if (GetTeam() == HORDE)
-    {
-        uint32 uiHordeGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE);
-        if (uiHordeGuild > 0)
-        {
-            pBeginnersGuild = sGuildMgr.GetGuildById(uiHordeGuild);
-        }
-        else
-        {
-            sLog.outError("JoinBeginnersGuild: Horde guild is not assigned in mangosd.conf.");
-        }
-    }
-    else
-    {
-        sLog.outError("JoinBeginnersGuild: Player has no valid faction.");
-    }
-
-    if (pBeginnersGuild)
-    {
-        pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
-    }
-}
+//void Player::JoinBeginnersGuild()
+//{
+//    Guild* pBeginnersGuild = nullptr;
+//
+//    if (GetTeam() == ALLIANCE)
+//    {
+//        uint32 uiAllianceGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE);
+//        if (uiAllianceGuild > 0)
+//        {
+//            pBeginnersGuild = sGuildMgr.GetGuildById(uiAllianceGuild);
+//        }
+//        else
+//        {
+//            sLog.outError("JoinBeginnersGuild: Alliance guild is not assigned in mangosd.conf.");
+//        }
+//    }
+//    else if (GetTeam() == HORDE)
+//    {
+//        uint32 uiHordeGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE);
+//        if (uiHordeGuild > 0)
+//        {
+//            pBeginnersGuild = sGuildMgr.GetGuildById(uiHordeGuild);
+//        }
+//        else
+//        {
+//            sLog.outError("JoinBeginnersGuild: Horde guild is not assigned in mangosd.conf.");
+//        }
+//    }
+//    else
+//    {
+//        sLog.outError("JoinBeginnersGuild: Player has no valid faction.");
+//    }
+//
+//    if (pBeginnersGuild)
+//    {
+//        pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
+//    }
+//}
 
 bool Player::InGurubashiArena(bool checkOutsideArea) const 
 {
@@ -23084,10 +23096,10 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 
 void Player::MailVagrantModeRewards(uint32 level)
 {
-    Item* ToMailItem = Item::CreateItem(50007, 1, this);
+    Item* ToMailItem = Item::CreateItem(GetTeam() == ALLIANCE ? 50007 : 51421, 1, this); 
     ToMailItem->SaveToDB();
 
-    MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vargant Mode! As a gesture of gratitude, we give you a reliable Forworn Mule companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
+    MailDraft("A Wanderer's Best Friend!", "Congratulations to you, brave warrior who has reached level 60 in Vagrant Mode! As a gesture of gratitude, we give you a reliable companion, who will carry your belongings on your dangerous adventures. May your travels be successful and your fights triumphant!")
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 }
@@ -23196,19 +23208,6 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
             dummy_player = DUMMY_NPC_ALLIANCE_PLAYER;
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
-
-        if (cInfo != nullptr)
-            KilledMonster(cInfo, ObjectGuid());
-    }
-}
-
-void Player::RewardExpansionPvPQuest(Unit* pVictim)
-{
-    uint32 redridge_boss = 185143;
-
-    if (GetQuestStatus(70059) == QUEST_STATUS_INCOMPLETE && redridge_boss == pVictim->GetObjectGuid()) // WANTED: Redridgeboss!
-    {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(70030);
 
         if (cInfo != nullptr)
             KilledMonster(cInfo, ObjectGuid());
@@ -23460,8 +23459,6 @@ bool Player::SetupHardcoreMode()
     // Remove trades
     if (GetTradeData())
         TradeCancel(true);
-
-
    
     SetMoney(0);
 
@@ -23578,8 +23575,6 @@ bool Player::SetupHardcoreMode()
     for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
         RemoveItemFromBuyBackSlot(i, true);
 
-
-
     //all modifications to auction containers are done in World::Update or its derivatives.
     //SetupHardcoreMode() being called only from RewardQuest, a Map-opcode means that we should only protect ourselves here.
     //Technically it's not needed either because map erasures only invalidate iterators to the currently erased element but for future-sake.
@@ -23596,9 +23591,9 @@ bool Player::SetupHardcoreMode()
                 auctionHouse->RemoveAllAuctions(this);
         }
     }
-
+    AwardTitle(TITLE_STILL_ALIVE);
+    ChangeTitle(TITLE_STILL_ALIVE);
     CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
-
     return true;
 }
 
@@ -24103,13 +24098,73 @@ bool Player::HasEarnedTitle(uint8 titleId)
             return true;
         break;
     }
+    case TITLE_CRAZY_CAT_LADY:
+    {
+        static constexpr uint32 CatPets[11] = {
+        10673,	// Bombay
+        10674,	// Cornish Rex
+        10675,	// Maine Coon
+        10676,	// Orange Tabby
+        10677,	// Siamese
+        10678,	// Silver Tabby
+        10679,	// White Kitten
+        15648,	// Corrupted Kitten
+        49513,	// Midnight
+        30152,	// White Tiger Cub
+        49503,	// Mr. Bigglesworth
+        };
+        for (auto spell : CatPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
+    case TITLE_GRAND_FROGUS:
+    {
+        static constexpr uint32 FrogPets[13] = {
+        10701, // Dart Frog
+        10703, // Wood Frog
+        10702, // Island Frog
+        10704, // Tree Frog
+        23811, // Jubling
+        57200, // Azure Frog 
+        57201, // Dream Frog
+        57202, // Bullfrog
+        57203, // Infinite Frog
+        57204, // Poison Frog
+        57205, // Snow Frog
+        // 57206, // Pink Frog
+        57207, // Golden frog
+        57208  // Pond Frog
+        };
+        for (auto spell : FrogPets)
+        {
+            if (!HasSpell(spell))
+                return false;
+        }
+        return true;
+        break;
+    }
+    case TITLE_BLOODTHIRSTY:
+    {
+        uint32 total_kills = GetHonorMgr().GetStoredHK();
+        if (total_kills >= 250000)
+            return true;
+        break;
+    }
     case TITLE_THE_WANDERER:
     {
         if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
             return true;
         break;
     }
-
+    case TITLE_BLOOD_RING_CHAMPION:
+    {
+        if (GetReputationRank(1008) == REP_EXALTED)
+            return true;
+    }
     default:
         return false;
     }

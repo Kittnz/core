@@ -1049,7 +1049,6 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pGroupTap = pPlayerTap->GetGroup();
     }
 
-
     // Nostalrius: Loots desactives / map (retire ici l'XP et les reputs)
     bool allowLoot = !sObjectMgr.IsMapLootDisabled(GetMapId());
     // call kill spell proc event (before real die and combat stop to triggering auras removed at death/combat stop)
@@ -1113,14 +1112,13 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
         pPlayerTap->SendDirectMessage(&data);
 
-		if (GetMap()->IsDungeon())
-		{
-			sSuspiciousStatisticMgr.OnNpcKilledInDungeon((Player*)this, pVictim);
-		}
-		else
-		{
-			sSuspiciousStatisticMgr.OnNpcKilledInWorld((Player*)this, pVictim);
-		}
+        if (IsPlayer())
+        {
+            if (GetMap()->IsDungeon())
+                sSuspiciousStatisticMgr.OnNpcKilledInDungeon(ToPlayer(), pVictim);
+            else
+                sSuspiciousStatisticMgr.OnNpcKilledInWorld(ToPlayer(), pVictim);
+        }
 
         if (pCreatureVictim)
         {

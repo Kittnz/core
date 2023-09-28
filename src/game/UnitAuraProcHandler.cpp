@@ -247,6 +247,47 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Dragunovi: Change the following equip effect's extra elemental attack to only count as a spell hit, currently hit counts both as a melee attack and a spell hit.
+        // brotalnia: I dont understand what this means, because these spells are already considered magic spell hits, not melee, and procFlags only includes ranged spell flag when they go off.
+        // brotalnia: Assuming he doesn't want them to trigger anything that can proc from melee, even if it can proc from spells too.
+        if ((procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_TAKE_MELEE_SWING | PROC_FLAG_TAKE_MELEE_ABILITY)) ||
+            (spellProto->procFlags & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_TAKE_MELEE_SWING | PROC_FLAG_TAKE_MELEE_ABILITY)))
+        {
+            switch (procSpell->Id)
+            {
+                case 7712:
+                case 7714:
+                case 7715:
+                case 7716:
+                case 7717:
+                case 7718:
+                case 7719:
+                case 16614:
+                    return SPELL_PROC_TRIGGER_FAILED;
+            }
+        }
+
+        // Lightning Speed
+        if (spellProto->Id == 45850)
+        {
+            if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_BOLT>())
+                return roll_chance_u(5) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+            if (procSpell->SpellIconID == 2210)
+                return roll_chance_u(25) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+            return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Bonus Healing
+        if (spellProto->Id == 45842)
+        {
+            if (pVictim->GetHealthPercent() > 50.0f)
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Conviction (Custom Paladin Spell) should proc seals
+        if (procSpell->Id == 45619 || procSpell->Id == 45620)
+        {
+            if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_SEAL_OF_THE_CRUSADER, CF_PALADIN_SEAL_OF_WISDOM_LIGHT, CF_PALADIN_SEAL_OF_COMMAND, CF_PALADIN_SEALS>())
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Sanctified Command (Custom Paladin Talent)
         if (spellProto->Id == 45954 || spellProto->Id == 45955)
         {
@@ -681,6 +722,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 
                     target = this;
                     break;
+                }
+                // Vampirism
+                case 45420:
+                case 45421:
+                case 45422:
+                case 45423:
+                case 45424:
+                {
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // heal amount
+                    basepoints[0] = std::max(1u, triggerAmount * damage / 100);
+                    CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+                    return SPELL_AURA_PROC_OK;
                 }
             }
             break;

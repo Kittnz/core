@@ -6,6 +6,7 @@
 
 #include "Util.h"
 #include "World.h"
+#include "GuildMgr.h"
 #include "ChannelMgr.h"
 #include "Anticheat.h"
 #include "re2/re2.h"
