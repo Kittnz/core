@@ -91,12 +91,10 @@ enum BattleGroundTimeIntervals
     INVITE_ACCEPT_WAIT_TIME         = 80000,                // ms
     TIME_TO_AUTOREMOVE              = 120000,               // ms
     MAX_OFFLINE_TIME                = 30,                   // secs
-    RESPAWN_ONE_DAY                 = 86400,                // secs
     RESPAWN_IMMEDIATELY             = 0,                    // secs
+    RESPAWN_2MINUTES                = 120,                  // secs
     BUFF_RESPAWN_TIME               = 180,                  // secs
-    RESPAWN_FOUR_DAYS               = 345600,               // secs
-    DESPAWN_IMMEDIATELY             = 345601,               // secs
-    RESPAWN_2MINUTES                = 120
+    RESPAWN_NEVER                   = 31536000,             // secs (1 year)
 };
 
 enum BattleGroundStartTimeIntervals
@@ -505,7 +503,7 @@ class BattleGround
         GuidVector m_BgObjects;
         GuidVector m_BgCreatures;
         void SpawnObject(ObjectGuid guid, uint32 respawntime);
-        bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime = 0);
+        bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3);
         void SpawnCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode mode);
         virtual Creature* AddCreature(uint32 entry, uint32 type, float x, float y, float z, float o, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
         Creature* AddCreature(uint32 entry, uint32 type, Position const& pos, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
