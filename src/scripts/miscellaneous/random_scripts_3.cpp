@@ -5616,13 +5616,30 @@ struct npc_horde_defenderAI : public GuardAI
 {
     npc_horde_defenderAI(Creature* c) : GuardAI(c) { }
 
+    uint32 m_uiDespawnTimer = 0;
+
     void MoveInLineOfSight(Unit* pWho) override
     {
-        // do not attack non pvp flagged players
-        if (pWho->IsPlayer() && !pWho->IsPvP())
+        // do not attack players
+        if (pWho->IsPlayer())
             return;
 
         GuardAI::MoveInLineOfSight(pWho);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        GuardAI::UpdateAI(uiDiff);
+
+        if (ToPlayer(m_creature->GetVictim()))
+            EnterEvadeMode();
+        
+        if (m_creature->IsAlive())
+        {
+            m_uiDespawnTimer += uiDiff;
+            if (m_uiDespawnTimer > 65000)
+                m_creature->DoKillUnit();
+        }
     }
 };
 

@@ -391,14 +391,13 @@ bool AuthSocket::_HandleLogonChallenge()
     // No SQL injection possible (paste the IP address as passed by the socket)
     std::string address = get_remote_address();
     LoginDatabase.escape_string(address);
-    QueryResult *result = LoginDatabase.PQuery("SELECT unbandate FROM ip_banned WHERE "
+    std::unique_ptr<QueryResult> result (LoginDatabase.PQuery("SELECT unbandate FROM ip_banned WHERE "
     //    permanent                    still banned
-        "(unbandate = bandate OR unbandate > UNIX_TIMESTAMP()) AND ip = '%s'", address.c_str());
+        "(unbandate = bandate OR unbandate > UNIX_TIMESTAMP()) AND ip = '%s'", address.c_str()));
     if (result)
     {
         pkt << (uint8)WOW_FAIL_DB_BUSY;
         BASIC_LOG("[AuthChallenge] Banned ip '%s' tries to login with account '%s'!", get_remote_address().c_str(), _login.c_str());
-        delete result;
 
         handle_logon = false;
     }
@@ -408,7 +407,7 @@ bool AuthSocket::_HandleLogonChallenge()
     const auto throttleDuration{ 300 };
     if (handle_logon && throttleCount > 0)
     {
-        result = LoginDatabase.PQuery("SELECT COUNT(id) FROM account WHERE last_ip = '%s' AND last_login > NOW() - '%d'", address.c_str(), throttleDuration);
+        result.reset(LoginDatabase.PQuery("SELECT COUNT(id) FROM account WHERE last_ip = '%s' AND last_login > NOW() - '%d'", address.c_str(), throttleDuration));
         if (result)
         {
             const auto connections{ result->Fetch()[0].GetInt32() + 1 }; // Include this connection in the throttle?
@@ -420,8 +419,6 @@ bool AuthSocket::_HandleLogonChallenge()
 
                 handle_logon = false;
             }
-
-            delete result;
         }
     }
 
@@ -429,7 +426,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank FROM account WHERE username = '%s'",_safelogin.c_str ()));
         if (result)
         {
             Field* fields = result->Fetch();
@@ -504,8 +501,8 @@ bool AuthSocket::_HandleLogonChallenge()
             {
                 uint32 account_id = fields[1].GetUInt32();
                 ///- If the account is banned, reject the logon attempt
-                QueryResult *banresult = LoginDatabase.PQuery("SELECT bandate,unbandate FROM account_banned WHERE "
-                    "id = %u AND active = 1 AND (unbandate > UNIX_TIMESTAMP() OR unbandate = bandate) LIMIT 1", account_id);
+                std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT bandate,unbandate FROM account_banned WHERE "
+                    "id = %u AND active = 1 AND (unbandate > UNIX_TIMESTAMP() OR unbandate = bandate) LIMIT 1", account_id));
                 if (banresult)
                 {
                     if((*banresult)[0].GetUInt64() == (*banresult)[1].GetUInt64())
@@ -518,8 +515,6 @@ bool AuthSocket::_HandleLogonChallenge()
                         pkt << (uint8) WOW_FAIL_SUSPENDED;
                         BASIC_LOG("[AuthChallenge] Temporarily banned account '%s' using IP '%s' tries to login!",_login.c_str (), get_remote_address().c_str());
                     }
-
-                    delete banresult;
                 }
                 else
                 {
@@ -574,7 +569,7 @@ bool AuthSocket::_HandleLogonChallenge()
                         LoginDatabase.escape_string(address);
 
 
-                        auto result = LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+                        result.reset(LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id));
 
                         if (result)
                         {
@@ -587,7 +582,6 @@ bool AuthSocket::_HandleLogonChallenge()
                             }
                             else
                                 promptPin = false;
-                            delete result;
                         }
                         else
                             promptPin = true;
@@ -623,8 +617,6 @@ bool AuthSocket::_HandleLogonChallenge()
                     _status = STATUS_LOGON_PROOF;
                 }
             }
-
-            delete result;
         }
         else // no account
         {
@@ -967,7 +959,8 @@ bool AuthSocket::_HandleLogonProof()
             //Increment number of failed logins by one and if it reaches the limit temporarily ban that account or IP
             LoginDatabase.PExecute("UPDATE account SET failed_logins = failed_logins + 1 WHERE username = '%s'",_safelogin.c_str());
 
-            if(QueryResult *loginfail = LoginDatabase.PQuery("SELECT id, failed_logins FROM account WHERE username = '%s'", _safelogin.c_str()))
+            std::unique_ptr<QueryResult> loginfail(LoginDatabase.PQuery("SELECT id, failed_logins FROM account WHERE username = '%s'", _safelogin.c_str()));
+            if(loginfail)
             {
                 Field* fields = loginfail->Fetch();
                 uint32 failed_logins = fields[1].GetUInt32();
@@ -996,8 +989,6 @@ bool AuthSocket::_HandleLogonProof()
                             current_ip.c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
                     }
                 }
-
-                delete loginfail;
             }
         }
     }
@@ -1180,12 +1171,11 @@ void AuthSocket::LoadRealmlist(ByteBuffer& pkt)
         uint8 AmountOfCharacters;
 
         // No SQL injection. id of realm is controlled by the database.
-        QueryResult* result = LoginDatabase.PQuery("SELECT `numchars` FROM `realmcharacters` WHERE `realmid` = '%d' AND `acctid`='%u'", i.second.m_ID, _accountId);
+        std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `numchars` FROM `realmcharacters` WHERE `realmid` = '%d' AND `acctid`='%u'", i.second.m_ID, _accountId));
         if (result)
         {
             Field* fields = result->Fetch();
             AmountOfCharacters = fields[0].GetUInt8();
-            delete result;
         }
         else
             AmountOfCharacters = 0;
@@ -1382,7 +1372,7 @@ void AuthSocket::InitPatch()
 
 void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
 {
-    QueryResult* result = LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId);
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId));
     if (!result)
         return;
 
@@ -1392,8 +1382,6 @@ void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
         AccountTypes security = AccountTypes(fields[0].GetUInt32());
         _accountDefaultSecurityLevel = security;
     } while (result->NextRow());
-
-    delete result;
 }
 
 bool AuthSocket::GeographicalLockCheck()
