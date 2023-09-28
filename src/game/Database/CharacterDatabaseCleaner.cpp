@@ -25,8 +25,11 @@
 #include "Database/DatabaseEnv.h"
 #include "DBCStores.h"
 #include "SpellMgr.h"
+#include "Util.h"
 #include "Player.h"
 #include "Util.h"
+#include "Guild.h"
+
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {

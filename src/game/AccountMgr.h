@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include <string>
+#include <unordered_set>
 #include <mutex>
 
 enum AccountOpResult

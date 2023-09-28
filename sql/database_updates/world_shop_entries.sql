@@ -3,6 +3,7 @@ create table shop_categories (
   id int(11) unsigned not null auto_increment,
   name text,
   name_loc4 text,
+  icon text,
   primary key (id)
 ) engine=innodb default charset=utf8;
 
@@ -17,11 +18,8 @@ create table shop_items (
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 
-ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
 
-alter table shop_categories add icon varchar(32) not null default 'default' after name;
-
-replace into shop_categories values
+replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values 
 (1,  'Miscellaneous', '杂项', 'default'),
 (2,  'Skins', '外观', 'ticket'),
 (3,  'Gameplay', '玩法玩具', 'toys'),
@@ -49,7 +47,7 @@ replace into shop_items (`id`, `category`, `item`, `description`, `price`) value
 -- Skins
 (20, 2, 50105, 'Scarlet [Human, female only]', 160),
 (21, 2, 50106, 'Necromancer I [Human]', 160),
-(22, 2, 61106, 'Necromancer II [Human, male only]', 160),
+(22, 2, 61106, 'Necromancer II [Night Elf, male only]', 160),
 (23, 2, 50292, 'Arcane [Human]', 160),
 (24, 2, 50290, 'Azotha [Human, female only]', 160),
 (25, 2, 50291, 'Fel [Human, male only]', 160),
@@ -65,7 +63,7 @@ replace into shop_items (`id`, `category`, `item`, `description`, `price`) value
 (35, 2, 81229, 'Death Knight [Dwarf, male only]', 160),
 (36, 2, 61105, 'Demon Hunter [Night Elf]', 160),
 (37, 2, 61104, 'Demon [Night Elf, male only]', 160),
-(38, 2, 83092, 'Naturalist I [Night Elf, male only]', 160),
+(38, 2, 83092, 'Naturalist I [Night Elf]', 160),
 (39, 2, 83099, 'Naturalist II [Night Elf]', 160),
 (40, 2, 83100, 'Naturalist III [Night Elf, male only]', 160),
 (41, 2, 50212, 'Leper [Gnome]', 160),
@@ -93,17 +91,18 @@ replace into shop_items (`id`, `category`, `item`, `description`, `price`) value
 (63, 3, 50011, 'Summon: Mailbox', 200),
 (64, 3, 51715, 'Summon: Brainwashing Device', 200),
 (65, 3, 50602, 'Summon: Auctioneer', 200),
-(66, 3, 50005, 'Summon: Repair Bot', 200),
-(67, 3, 50007, 'Summon: Bank (Mule)', 200),
-(68, 3, 51421, 'Summon: Bank (Kodo)', 200),
-(69, 3, 51306, 'Large Pouch of Fashion Coins', 200),
+(66, 3, 50009, 'Summon: Mechanical Auctioneer', 200),
+(67, 3, 50005, 'Summon: Repair Bot', 200),
+(68, 3, 50007, 'Summon: Bank (Mule)', 200),
+(69, 3, 51421, 'Summon: Bank (Kodo)', 200),
+(70, 3, 51306, 'Large Pouch of Fashion Coins', 200),
 -- Glyphs
 (86, 4, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (87, 4, 51266, 'Druid: Glyph of the Ice Bear', 100),
 (88, 4, 51431, 'Druid: Glyph of the Frostkin', 100),
 (89, 4, 51830, 'Druid: Glyph of the Orca', 100),
-(90, 4, 51432, 'Druid: Glyph of Stars', 100),
--- (91, 4, 50406, 'Druid: Glyph of the Stag', 100),
+(90, 4, 51432, 'Druid: Glyph of the Moon', 100),
+(94, 4, 51056, 'Druid: Glyph of the Stag', 100),
 -- Mounts
 (101, 5, 50071, 'Ivory Tallstrider', 100),
 (102, 5, 50072, 'Brown Tallstrider', 100), 
@@ -155,8 +154,15 @@ replace into shop_items (`id`, `category`, `item`, `description`, `price`) value
 (188, 5, 81158, 'Armored Frostmane Bear', 400),
 (189, 5, 81091, 'Big Blizzard Bear', 500),
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
-(223, 5, 81239, 'Happy Whimsyshire Cloud', 200), 
-(224, 5, 81240, 'Sad Whimsyshire Cloud', 200), 
+-- Patch 1.16.6
+(225, 5, 83150,	'Big Turtle WoW Bear', 360),
+(226, 5, 83151,	'Black Spectral Tiger', 2000),
+(227, 5, 83152,	'Green Spectral Tiger', 2000),
+(228, 5, 83154,	'Armored Ice Raptor', 360),
+(229, 5, 83155,	'Scarlet Charger', 360),
+(230, 5, 83158,	'Brown Zhevra', 360),
+(231, 5, 83159,	'Grim Totem Kodo', 360),
+(231, 5, 50536, 'Twilight', 1000),
 -- Companions
 (241, 6, 13584, 'Diablo Stone', 80),
 (242, 6, 13583, 'Panda Cub', 80),
@@ -373,3 +379,4 @@ UPDATE `shop_items` SET `description_loc4` = '幻象：熊猫人' WHERE `id` = 2
 UPDATE `shop_items` SET `description_loc4` = '幻象：天灾军团' WHERE `id` = 299;
 UPDATE `shop_items` SET `description_loc4` = '幻象：萨特' WHERE `id` = 300;
 UPDATE `shop_items` SET `description_loc4` = '幻象：食人魔' WHERE `id` = 301;
+UPDATE `shop_items` SET `description_loc4` = '大袋时尚硬币' WHERE `id` = 70;

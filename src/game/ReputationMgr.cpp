@@ -320,6 +320,10 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
         res = SetOneFactionReputation(factionEntry, standing, incremental);
         SendState(&faction->second);
     }
+        
+    if ((factionEntry->ID == 576 || factionEntry->ID == 609 || factionEntry->ID == 59) &&
+        m_player->HasEarnedTitle(TITLE_DIPLOMAT))
+        m_player->AwardTitle(TITLE_DIPLOMAT);
 
     return res;
 }

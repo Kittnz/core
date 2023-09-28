@@ -4686,42 +4686,6 @@ void ObjectMgr::LoadAreaTriggers()
     } while (result->NextRow());
 }
 
-void ObjectMgr::LoadCustomGraveyards()
-{
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT * FROM `custom_graveyards`"));
-
-    if (!result)
-        return;
-    do
-    {
-        Field* fields = result->Fetch();
-        CustomGraveyardEntry custom_graveyard;
-
-        uint32 id = fields[0].GetUInt32();
-
-        custom_graveyard.graveyard_id = id;
-        custom_graveyard.map_id = fields[2].GetUInt32();
-        custom_graveyard.zone_id = fields[3].GetUInt32();
-        custom_graveyard.area_id = fields[4].GetUInt32();
-        custom_graveyard.max_level = fields[5].GetUInt32();
-
-        custom_graveyard.map_alliance = fields[6].GetUInt32();
-        custom_graveyard.x_alliance = fields[7].GetFloat();
-        custom_graveyard.y_alliance = fields[8].GetFloat();
-        custom_graveyard.z_alliance = fields[9].GetFloat();
-        custom_graveyard.orientation_alliance = fields[10].GetFloat();
-
-        custom_graveyard.map_horde = fields[11].GetUInt32();
-        custom_graveyard.x_horde = fields[12].GetFloat();
-        custom_graveyard.y_horde = fields[13].GetFloat();
-        custom_graveyard.z_horde = fields[14].GetFloat();
-        custom_graveyard.orientation_horde = fields[15].GetFloat();
-
-        m_CustomGraveyardMap[id] = custom_graveyard;
-
-    } while (result->NextRow());
-}
-
 void ObjectMgr::LoadQuestAreaTriggers()
 {
     m_QuestAreaTriggerMap.clear();                           // need for reload case
@@ -5129,16 +5093,6 @@ WorldSafeLocsEntry const *ObjectMgr::GetClosestGraveYard(float x, float y, float
         return entryEntr;
 
     return entryFar;
-}
-
-CustomGraveyardEntry const* ObjectMgr::GetCustomGraveyard(uint32 player_map, uint32 player_zone, uint32 player_area, uint32 player_level)
-{
-    for (auto const& graveyard : m_CustomGraveyardMap)
-    {
-        if (player_map == graveyard.second.map_id && player_zone == graveyard.second.zone_id && player_area == graveyard.second.area_id && player_level <= graveyard.second.max_level)
-            return &graveyard.second;
-    }
-    return nullptr;
 }
 
 GraveYardData const* ObjectMgr::FindGraveYardData(uint32 id, uint32 zoneId) const
@@ -9090,9 +9044,7 @@ void ObjectMgr::LoadShop()
 	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, Name_loc4, icon FROM shop_categories");
 
 	if (!result)
-	{
-		return;
-	}
+        return;
 
 	do
 	{
@@ -9100,8 +9052,8 @@ void ObjectMgr::LoadShop()
 
 		uint8 id = fields[0].GetUInt8();
 		std::string name = fields[1].GetString();
-		std::string icon = fields[2].GetString();
-		std::string name_loc4 = fields[3].GetString();
+        std::string name_loc4 = fields[2].GetString();
+		std::string icon = fields[3].GetString();
 
 		ShopCategory shopcategory;
 		shopcategory.Name = name;
@@ -9114,15 +9066,12 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-
 	m_ShopEntriesMap.clear();
 
-	result = WorldDatabase.Query("SELECT ID, category, item, description, price, description_loc4 FROM shop_items");
+	result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
 
 	if (!result)
-	{
-		return;
-	}
+        return;
 
 	do
 	{
@@ -9132,15 +9081,15 @@ void ObjectMgr::LoadShop()
 		uint8 category = fields[1].GetUInt8();
 		uint32 item = fields[2].GetUInt32();
 		std::string text = fields[3].GetString();
-		uint32 price = fields[4].GetUInt32();
-        std::string description_loc4 = fields[5].GetString();
+        std::string description_loc4 = fields[4].GetString();
+		uint32 price = fields[5].GetUInt32();
 
 		ShopEntry shopentry;
 		shopentry.Category = category;
 		shopentry.Item = item;
 		shopentry.Description = text;
+        shopentry.Description_loc4 = description_loc4;
 		shopentry.Price = price;
-		shopentry.Description_loc4 = description_loc4;
 
         if (!price)
         {

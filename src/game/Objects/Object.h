@@ -1001,13 +1001,14 @@ class WorldObject : public Object
         void MonsterYell(const std::string& text, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterTextEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
-        void MonsterSayToPlayer(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
+        void MonsterSayToPlayer(const char* text, Unit const* target) const;
         void MonsterSay(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterYell(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
     void MonsterSendTextToZone(const char* text, ChatMsg messageType, Language language = LANG_UNIVERSAL, Unit* target = nullptr,
                                const char* senderName = nullptr) const;
     void MonsterTextEmote(int32 textId, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(int32 textId, Unit const* receiver, bool IsBossWhisper = false) const;
+        void MonsterSayToPlayer(int32 textId, Unit const* target) const;
         void MonsterYellToZone(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterScriptToZone(int32 textId, ChatMsg type, uint32 language = 0, Unit const* target = nullptr) const;
 

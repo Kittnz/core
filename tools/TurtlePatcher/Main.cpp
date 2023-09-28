@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string> 
 #include <sstream>
+#include <array>
+
+#include "PeUtils.h"
 
 #define fs std::filesystem
 
@@ -37,20 +40,27 @@ OFFSET_LARGE_ADDRESS_AWARE                    = 0x00000126, // Allows the game u
 OFFSET_SOUND_IN_BACKGROUND                    = 0x003A4869, // Allows the game to play music while user is alt-tabbed.
 OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game to play emote sounds for High Elves.
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
+OFFSET_HARDCORE_CHAT_CODECAVE1                = 0x0009B0B8,
+OFFSET_HARDCORE_CHAT_CODECAVE2                = 0x0009B193,
+OFFSET_HARDCORE_CHAT_CODECAVE3                = 0x0009F7A5,
+OFFSET_HARDCORE_CHAT_CODECAVE4                = 0x0009F864,
+OFFSET_HARDCORE_CHAT_CODECAVE5                = 0x0009F878,
+OFFSET_HARDCORE_CHAT_CODECAVE6                = 0x0009F887,
+OFFSET_HARDCORE_CHAT_CODECAVE7                = 0x0011BAE1,
+OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section 
 };
 
 bool fov_build = false;
 
-#define NEW_BUILD 7060u
-#define NEW_VISUAL_BUILD "7060"
-#define NEW_VISUAL_VERSION "1.16.5"
-#define NEW_BUILD_DATE "Jan 03 2023"
+#define NEW_BUILD 7069u
+#define NEW_VISUAL_BUILD "7069"
+#define NEW_VISUAL_VERSION "1.17.0"
+#define NEW_BUILD_DATE "Aug 30 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-3.mpq"
+#define PATCH_FILE "Data\\patch-4.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
-#define LFT_ADDON_FILE "LFT.mpq"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 
 const unsigned char LoadDLLShellcode[] =
@@ -212,6 +222,44 @@ void PatchBinary(FILE* hWoW)
 		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 	}
+
+	// Hardcore chat
+	char patch_16[] = { 0x5F };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE1, SEEK_SET);
+	fwrite(patch_16, sizeof(patch_16), 1, hWoW);
+
+	char patch_17[] = { 0xE9, 0xA8, 0xAE, 0x86 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE2, SEEK_SET);
+	fwrite(patch_17, sizeof(patch_17), 1, hWoW);
+
+	char patch_18[] = { 0x70, 0x53, 0x56, 0x33, 0xF6, 0xE9, 0x71, 0x68, 0x86, 0x00 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE3, SEEK_SET);
+	fwrite(patch_18, sizeof(patch_18), 1, hWoW);
+
+	char patch_19[] = { 0x94 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE4, SEEK_SET);
+	fwrite(patch_19, sizeof(patch_19), 1, hWoW);
+
+	char patch_20[] = { 0x0E };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE5, SEEK_SET);
+	fwrite(patch_20, sizeof(patch_20), 1, hWoW);
+
+	char patch_21[] = { 0x90 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE6, SEEK_SET);
+	fwrite(patch_21, sizeof(patch_21), 1, hWoW);
+
+	char patch_22[] = { 0x0C, 0x60, 0xD0 };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE7, SEEK_SET);
+	fwrite(patch_22, sizeof(patch_22), 1, hWoW);
+
+	char patch_23[] = { 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00, 0x00, 0x43, 0x48, 0x41, 0x54,
+	0x5F, 0x4D, 0x53, 0x47, 0x5F, 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00,
+	0x57, 0x8B, 0xDA, 0x8B, 0xF9, 0xC7, 0x45, 0x94, 0x00, 0x60, 0xD0, 0x00, 0xC7, 0x45, 0x90, 0x5E,
+	0x00, 0x00, 0x00, 0xE9, 0x77, 0x97, 0x79, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x68, 0x08, 0x46, 0x84, 0x00, 0x83, 0x7D, 0xF0, 0x5E, 0x75, 0x05, 0xB9, 0x1F, 0x02, 0x00, 0x00,
+	0xE9, 0x43, 0x51, 0x79, 0xFF };
+	fseek(hWoW, OFFSET_HARDCORE_CHAT_ADDED, SEEK_SET);
+	fwrite(patch_23, sizeof(patch_23), 1, hWoW);
 }
 
 constexpr int max_path = 260;
@@ -485,17 +533,33 @@ void ClearWDBCache()
 		if (fs::exists(wdb))
 		{
 			WriteLog("Deleting client cache...");
-			fs::remove_all(wdb);
+			std::error_code ec;
+			fs::remove_all(wdb, ec);
+			WriteLog("Failed to delete cache, error code: %s", ec.category().message(ec.value()));
 		}	
+	}
+}
+
+void DeleteChatCache()
+{
+	fs::path chat_cache_path = fs::current_path() / "WTF" / "Account";
+
+	for (const fs::directory_entry& dir_entry : fs::recursive_directory_iterator(chat_cache_path))
+	{
+		if (wcsstr(dir_entry.path().c_str(), L"chat-cache.txt"))
+		{
+			WriteLog("Removing %S", dir_entry.path().c_str());
+			fs::remove(dir_entry.path());
+		}
 	}
 }
 
 void DeleteDeprecatedMPQ()
 {
-	fs::path currentPath = fs::current_path();
+	fs::path currentPath = fs::current_path();	
 
 	{
-		int numerical_patches[6] = { 4, 5, 6, 7, 8, 9 };
+		int numerical_patches[5] = { 5, 6, 7, 8, 9 };
 		for (int i : numerical_patches)
 		{
 			WriteLog("Searching for patch-%i...", i);
@@ -570,9 +634,47 @@ void DeleteDeprecatedMPQ()
 	}
 }
 
+void DeleteLFTAddon()
+{
+	fs::path currentPath = fs::current_path();
+	{
+		fs::path lft = currentPath / "Interface" / "AddOns" / "LFT";
+
+		if (fs::exists(lft))
+		{
+			WriteLog("Deleting old LFT addon...");
+			std::error_code ec;
+			fs::remove_all(lft, ec);
+			WriteLog("Failed to delete LFT, error code: %s", ec.category().message(ec.value()));
+		}
+		else
+			WriteLog("LFT addon doesn't exist. Skip.");
+	}
+}
+
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
+
+	// check existing section
+	bool addSection = true;
+	PortableExecutable pe(const_cast<LPSTR>("Wow.exe"));
+	std::vector<PortableExecutable::SectionHeader>::iterator it = pe.SectionHeaders().begin();
+
+	while (it != pe.SectionHeaders().end()) 
+	{
+		if (it->GetName() == ".tdata")
+		{
+			addSection = false;
+			break;
+		}
+		++it;
+	}
+
+	if (addSection)
+		pe.AddSection(const_cast<LPSTR>(".tdata"), 0xE0000040, 0x20000, 0x20000);
+
+	Sleep(2000);
 
 	PatchWoWExe();
 
@@ -633,12 +735,10 @@ int GuardedMain(HINSTANCE hInstance)
 	// Then sleep for 5 sec. because there is a strange error if we working too fast
 	Sleep(5000);
 
-	// Delete deprecated MPQ files:
 	DeleteDeprecatedMPQ();
-
-	// Delete WDB:
+	DeleteChatCache();
 	ClearWDBCache();
-
+	DeleteLFTAddon();
 
 	// unpack patch files
 	{
@@ -744,146 +844,8 @@ int GuardedMain(HINSTANCE hInstance)
 				WriteLog("File WoWFoV.exe not found.");
 			}
 		}
-		
-		// Unpack LFT.mpq
-		{
-			if (StormFile* pFile = PatchFile.OpenFile(LFT_ADDON_FILE))
-			{
-				OnOpenFileLambda(LFT_ADDON_FILE);
-				std::unique_ptr<StormFile> patchData(pFile);
 
-				FILE* hTargetFile = OpenFileWithLogLambda(LFT_ADDON_FILE);
-				if (hTargetFile == nullptr)
-				{
-					return 1;
-				}
-
-				CopyFromMPQToFileLambda(pFile, hTargetFile);
-				fclose(hTargetFile);
-
-				fs::path LFTAddonPath = "Interface\\AddOns\\LFT";
-				if (fs::exists(LFTAddonPath))
-				{
-					fs::remove_all(LFTAddonPath);
-				}
-
-				fs::create_directories(LFTAddonPath);
-
-				{
-					StormArchive LFTArchive(LFT_ADDON_FILE);
-
-					for (StormArchive::FileIterator it(LFTArchive.mpq); it; it++)
-					{
-						std::unique_ptr<StormFile> FileInside( it.OpenCurrentFile());
-
-						WriteLog("Unpack LFT file %s", it.FileData.cFileName);
-
-						char FilePath[256] = {0};
-						sprintf(FilePath, "Interface\\AddOns\\LFT\\%s", it.FileData.cFileName);
-
-						std::string sFilePath = FilePath;
-						RemoveFilenameFromEnd(sFilePath);
-						fs::create_directories(sFilePath);
-
-						FILE* hTargetFile = OpenFileWithLogLambda(FilePath);
-						if (hTargetFile == nullptr)
-						{
-							continue;
-						}
-
-						CopyFromMPQToFileLambda(FileInside.get(), hTargetFile);
-
-						fclose(hTargetFile);
-					}
-				}
-
-				fs::remove(LFT_ADDON_FILE);
-			}
-		}
-
-		// unpack mpq
-		//if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
-		//{
-		//	OnOpenFileLambda(PATCH_FILE);
-		//	std::unique_ptr<StormFile> patchData(pFile);
-
-		//	// copy shit to target path
-		//	FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
-		//	if (hTargetFile == nullptr)
-		//	{
-		//		return 1;
-		//	}
-
-		//	// split to chunks
-		//	const DWORD chunkSize = 4096;
-		//	DWORD chunks = patchData->Size.QuadPart / chunkSize;
-		//	chunks += (patchData->Size.QuadPart % chunkSize) != 0;
-		//	char ReadingBuffer[4096];
-
-		//	PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
-
-		//	DWORD ExtractProgress = 0;
-
-		//	for (DWORD i = 0; i < chunks; i++)
-		//	{
-		//		if (hDialog == NULL)
-		//		{
-		//			break;
-		//		}
-
-		//		DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
-
-		//		patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
-
-		//		fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
-
-		//		// update progress
-		//		float progress = float(i) / float(chunks);
-		//		progress *= 100.0f;
-
-		//		DWORD NewExtractProgress = DWORD(progress);
-
-		//		for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
-		//		{
-		//			SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
-		//		}
-
-		//		while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
-		//		{
-		//			if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
-		//			{
-		//				TranslateMessage(&msg);
-		//				DispatchMessage(&msg);
-		//			}
-		//		}
-		//	}
-
-		//	fclose(hTargetFile);
-		//}
-		//else
-		//{
-		//	WriteLog("The file you're looking for is probably already installed!");
-		//	ErrorBox("Your client is already updated.");
-		//	return 1;
-		//}
 	}
-
-	//if (hDialog == NULL)
-	//{
-	//	WriteLog("INFO: User has cancelled update.");
-	//	if (fs::exists(PATCH_FILE))
-	//	{
-	//		WriteLog("Removing patch files...");
-	//		fs::remove(PATCH_FILE);
-	//	}
-
-	//	return 0;
-	//}
-	//else
-	//{
-	//	DestroyWindow(hDialog);
-	//	hDialog = NULL;
-	//}
 
 	WriteLog("Patching WoW.exe...");
 
