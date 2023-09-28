@@ -738,6 +738,10 @@ class ObjectMgr
         uint32 GetPlayerAccountIdByGUID(ObjectGuid guid) const;
         uint32 GetPlayerAccountIdByPlayerName(std::string const& name) const;
 
+        void LoadActivePlayersPerFaction();
+        bool IsFactionImbalanced(Team team);
+        void IncreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]++; }
+
         uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team );
         void GetTaxiPath( uint32 source, uint32 destination, uint32 &path, uint32 &cost);
         uint32 GetTaxiMountDisplayId( uint32 id, Team team, bool allowed_alt_team = false);
@@ -1672,6 +1676,8 @@ class ObjectMgr
 
         typedef std::vector<uint32> PlayerXPperLevel;       // [level]
         PlayerXPperLevel m_PlayerXPperLevel;
+
+        std::unordered_map<Team, uint32> m_ActivePlayersPerFaction;
 
 		ShopCategoriesMap m_ShopCategoriesMap;
 		ShopEntriesMap m_ShopEntriesMap;

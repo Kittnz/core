@@ -481,6 +481,7 @@ struct ItemPrototype
     uint32 FoodType;
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
+    uint32 WrappedGift = 0;
     uint32 ExtraFlags;                                      // see ItemExtraFlags
     uint32 OtherTeamEntry;
     uint32 ScriptId;                                        // Turtle WoW Services, such as: race/faction change, character rename etc, etc.
@@ -489,7 +490,7 @@ struct ItemPrototype
 
     bool IsQuestItem = false;
 
-    mutable bool m_bDiscovered = false;                     // has item been discovered by players
+    mutable bool Discovered = false;                     // has item been discovered by players
 
     // helpers
     bool CanChangeEquipStateInCombat() const

@@ -865,6 +865,37 @@ void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::vector<PlayerCach
 	}
 }
 
+void ObjectMgr::LoadActivePlayersPerFaction()
+{
+    m_ActivePlayersPerFaction.clear();                              // need for reload case
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `logout_time` > %u", (time(nullptr) - MONTH)));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 race = fields[0].GetUInt32();
+        Team team = Player::TeamForRace(race);
+        m_ActivePlayersPerFaction[team]++;
+
+    } while (result->NextRow());
+}
+
+bool ObjectMgr::IsFactionImbalanced(Team team)
+{
+    if (!sWorld.getConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE))
+        return false;
+    Team const oppositeTeam = team == ALLIANCE ? HORDE : ALLIANCE;
+    float const maxImbalance = sWorld.getConfig(CONFIG_FLOAT_MAX_FACTION_IMBALANCE) + 1.0f;
+    return m_ActivePlayersPerFaction[team] > uint32(m_ActivePlayersPerFaction[oppositeTeam] * maxImbalance);
+}
+
 Group* ObjectMgr::GetGroupById(uint32 id) const
 {
     GroupMap::const_iterator itr = m_GroupMap.find(id);
@@ -2141,8 +2172,10 @@ void ObjectMgr::LoadItemPrototypes()
         if (!proto)
             continue;
 
-        if ((obtainedItems.find(i) != obtainedItems.end()) || (proto->ExtraFlags & ITEM_EXTRA_MAIL_STATIONERY) || !sWorld.getConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING))
-            proto->m_bDiscovered = true;
+        if ((obtainedItems.find(i) != obtainedItems.end()) ||
+            (proto->ExtraFlags & ITEM_EXTRA_MAIL_STATIONERY) ||
+            !sWorld.getConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING))
+            proto->Discovered = true;
 
         if (proto->Class >= MAX_ITEM_CLASS)
         {
@@ -2223,7 +2256,7 @@ void ObjectMgr::LoadItemPrototypes()
 
         if (proto->RequiredSpell && !sSpellMgr.GetSpellEntry(proto->RequiredSpell))
         {
-            sLog.outErrorDb("Item (Entry: %u) have wrong (nonexistent) spell in RequiredSpell (%u)", i, proto->RequiredSpell);
+            sLog.outErrorDb("Item (Entry: %u) has wrong (nonexistent) spell in RequiredSpell (%u)", i, proto->RequiredSpell);
             const_cast<ItemPrototype*>(proto)->RequiredSpell = 0;
         }
 
@@ -2347,7 +2380,7 @@ void ObjectMgr::LoadItemPrototypes()
 
         if (proto->ItemSet && !sItemSetStore.LookupEntry(proto->ItemSet))
         {
-            sLog.outErrorDb("Item (Entry: %u) have wrong ItemSet (%u)", i, proto->ItemSet);
+            sLog.outErrorDb("Item (Entry: %u) has wrong ItemSet (%u)", i, proto->ItemSet);
             const_cast<ItemPrototype*>(proto)->ItemSet = 0;
         }
 
@@ -2385,6 +2418,17 @@ void ObjectMgr::LoadItemPrototypes()
         {
             sLog.outErrorDb("Item (Entry: %u) has wrong FoodType value (%u)", i, proto->FoodType);
             const_cast<ItemPrototype*>(proto)->FoodType = 0;
+        }
+
+        if (proto->WrappedGift)
+        {
+            if (ItemPrototype const* pGift = GetItemPrototype(proto->WrappedGift))
+                pGift->Discovered = true;
+            else
+            {
+                sLog.outErrorDb("Item (Entry: %u) has wrong (nonexistent) item in WrappedGift (%u)", i, proto->WrappedGift);
+                const_cast<ItemPrototype*>(proto)->WrappedGift = 0;
+            }
         }
 
         if (proto->ExtraFlags)
@@ -2756,7 +2800,9 @@ void ObjectMgr::LoadPlayerInfo()
 
                 uint32 item_id = fields[2].GetUInt32();
 
-                if (!GetItemPrototype(item_id))
+                if (ItemPrototype const* pProto = GetItemPrototype(item_id))
+                    pProto->Discovered = true;
+                else
                 {
                     sLog.outErrorDb("Item id %u (race %u class %u) in `playercreateinfo_item` table but not listed in `item_template`, ignoring.", item_id, current_race, current_class);
                     continue;
@@ -3548,7 +3594,7 @@ void ObjectMgr::LoadQuests()
         {
             if (ItemPrototype const* pItemProto = sItemStorage.LookupEntry<ItemPrototype>(qinfo->SrcItemId))
             {
-                pItemProto->m_bDiscovered = true; // all quest items count as discovered
+                pItemProto->Discovered = true; // all quest items count as discovered
                 if (qinfo->SrcItemCount == 0)
                 {
                     sLog.outErrorDb("Quest %u has `SrcItemId` = %u but `SrcItemCount` = 0, set to 1 but need fix in DB.",
@@ -3601,7 +3647,7 @@ void ObjectMgr::LoadQuests()
                 qinfo->SetSpecialFlag(QUEST_SPECIAL_FLAG_DELIVER);
 
                 if (ItemPrototype const* pItemProto = sItemStorage.LookupEntry<ItemPrototype>(id))
-                    pItemProto->m_bDiscovered = true;
+                    pItemProto->Discovered = true;
                 else
                 {
                     sLog.outErrorDb("Quest %u has `ReqItemId%d` = %u but item with entry %u does not exist, quest can't be done.",
@@ -3622,7 +3668,7 @@ void ObjectMgr::LoadQuests()
             if (uint32 id = qinfo->ReqSourceId[j])
             {
                 if (ItemPrototype const* pItemProto = sItemStorage.LookupEntry<ItemPrototype>(id))
-                    pItemProto->m_bDiscovered = true;
+                    pItemProto->Discovered = true;
                 else
                 {
                     sLog.outErrorDb("Quest %u has `ReqSourceId%d` = %u but item with entry %u does not exist, quest can't be done.",
@@ -3732,7 +3778,7 @@ void ObjectMgr::LoadQuests()
                 if (ItemPrototype const* pItemProto = sItemStorage.LookupEntry<ItemPrototype>(id))
                 {
                     choice_found = true;
-                    pItemProto->m_bDiscovered = true;
+                    pItemProto->Discovered = true;
                 }
                 else
                 {
@@ -3769,7 +3815,7 @@ void ObjectMgr::LoadQuests()
             if (uint32 id = qinfo->RewItemId[j])
             {
                 if (ItemPrototype const* pItemProto = sItemStorage.LookupEntry<ItemPrototype>(id))
-                    pItemProto->m_bDiscovered = true;
+                    pItemProto->Discovered = true;
                 else
                 {
                     sLog.outErrorDb("Quest %u has `RewItemId%d` = %u but item with entry %u does not exist, quest will not reward this item.",
@@ -8091,7 +8137,7 @@ bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32
     }
 
     if (ItemPrototype const* pItemProto = GetItemPrototype(item_id))
-        pItemProto->m_bDiscovered = true; // all vendor items count as discovered
+        pItemProto->Discovered = true; // all vendor items count as discovered
     else
     {
         if (pl)

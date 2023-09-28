@@ -266,7 +266,7 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
 		ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
 	}
 
-    itemProto->m_bDiscovered = true;
+    itemProto->Discovered = true;
 
     return true;
 }
