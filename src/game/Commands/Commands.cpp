@@ -14643,7 +14643,7 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     Utf8toWStr(name_str, name_wstr);
     wstrToLower(name_wstr);
 
-    if (!isBasicLatinString(name_wstr, false))
+    if (!isBasicLatinString(name_wstr, false) && !sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
     {
         m_session->SendNotification("Please use latin symbols only.");
         return false;
