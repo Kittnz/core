@@ -426,7 +426,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank,current_realm,active FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank,current_realm,active FROM account WHERE username = '%s'",_safelogin.c_str ()));
         if (result)
         {
             Field* fields = result->Fetch();
