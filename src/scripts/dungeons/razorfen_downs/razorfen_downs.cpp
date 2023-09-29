@@ -190,11 +190,13 @@ struct npc_belnistraszAI : public npc_escortAI
     bool m_bAggro;
     uint32 m_uiFireballTimer;
     uint32 m_uiFrostNovaTimer;
+    uint32 m_uiRegenTimer;
 
     void Reset() override
     {
         m_uiFireballTimer = 1000;
         m_uiFrostNovaTimer = 6000;
+        m_uiRegenTimer = 5000;
     }
 
     void AttackedBy(Unit* pAttacker) override
@@ -221,11 +223,11 @@ struct npc_belnistraszAI : public npc_escortAI
 
     void SpawnerSummon(Creature* pSummoner)
     {
-        Creature * crea = nullptr;
+        Creature * pCreature = nullptr;
         if (m_uiRitualPhase > 7)
         {
-            if(crea = pSummoner->SummonCreature(NPC_PLAGUEMAW_THE_ROTTING, pSummoner->GetPositionX(), pSummoner->GetPositionY(), pSummoner->GetPositionZ(), pSummoner->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000))
-               crea->SetRespawnDelay(600000);
+            if (pCreature = pSummoner->SummonCreature(NPC_PLAGUEMAW_THE_ROTTING, pSummoner->GetPositionX(), pSummoner->GetPositionY(), pSummoner->GetPositionZ(), pSummoner->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000))
+                pCreature->SetRespawnDelay(600000);
             return;
         }
 
@@ -249,8 +251,12 @@ struct npc_belnistraszAI : public npc_escortAI
                     uiEntry = NPC_DEATHS_HEAD_GEOMANCER;
                     break;
             }
-            if (crea = pSummoner->SummonCreature(uiEntry, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000))
-                crea->SetRespawnDelay(600000);
+            if (pCreature = pSummoner->SummonCreature(uiEntry, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000))
+            {
+                pCreature->SetRespawnDelay(600000);
+                if (Player* pPlayer = pCreature->FindNearestHostilePlayer(15.0f))
+                    pCreature->AddThreat(pPlayer, 100.0f);
+            }
         }
     }
 
@@ -262,8 +268,8 @@ struct npc_belnistraszAI : public npc_escortAI
     void DoSummonRandom()
     {
         uint32 type = urand(0, 2);
-        if(Creature * crea = m_creature->SummonCreature(NPC_IDOL_ROOM_SPAWNER, m_fSpawnerCoord[type][0], m_fSpawnerCoord[type][1], m_fSpawnerCoord[type][2], m_fSpawnerCoord[type][3], TEMPSUMMON_TIMED_DESPAWN, 10000))
-            crea->SetRespawnDelay(600000);
+        if (Creature* pSpawner = m_creature->SummonCreature(NPC_IDOL_ROOM_SPAWNER, m_fSpawnerCoord[type][0], m_fSpawnerCoord[type][1], m_fSpawnerCoord[type][2], m_fSpawnerCoord[type][3], TEMPSUMMON_TIMED_DESPAWN, 10000))
+            pSpawner->SetRespawnDelay(600000);
     }
 
     void WaypointReached(uint32 uiPointId) override
@@ -277,6 +283,15 @@ struct npc_belnistraszAI : public npc_escortAI
 
     void UpdateEscortAI(const uint32 uiDiff) override
     {
+        if (m_uiRegenTimer < uiDiff)
+        {
+            if (m_creature->GetHealth() < m_creature->GetMaxHealth())
+                m_creature->SetHealth(m_creature->GetHealth() + std::min(m_creature->GetMaxHealth() - m_creature->GetHealth(), 100u));
+            m_uiRegenTimer = 5000;
+        }
+        else
+            m_uiRegenTimer -= uiDiff;
+
         if (HasEscortState(STATE_ESCORT_PAUSED))
         {
             if (m_uiRitualTimer < uiDiff)
