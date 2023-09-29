@@ -521,8 +521,6 @@ void PrintInstructions()
 	WriteLog("If everything is done right, your Data folder should have %s installed an your binary file should have revision %s", PATCH_FILE, NEW_VISUAL_VERSION);
 	WriteLog(" ");
 	WriteLog("If it still doesn't work please use a direct download from our website.");
-	WriteLog(" ");
-	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy");
 }
 
 void ClearWDBCache()
@@ -534,10 +532,10 @@ void ClearWDBCache()
 
 		if (fs::exists(wdb))
 		{
-			WriteLog("Deleting client cache...");
+			WriteLog("Searching for the client cache...");
 			std::error_code ec;
 			fs::remove_all(wdb, ec);
-			WriteLog("Failed to delete cache, error code: %s", ec.category().message(ec.value()));
+			WriteLog("Deleting client cache: %s", ec.category().message(ec.value()));
 		}	
 	}
 }
@@ -644,10 +642,10 @@ void DeleteLFTAddon()
 
 		if (fs::exists(lft))
 		{
-			WriteLog("Deleting old LFT addon...");
+			WriteLog("Searching for the deprecated LFT addon...");
 			std::error_code ec;
 			fs::remove_all(lft, ec);
-			WriteLog("Failed to delete LFT, error code: %s", ec.category().message(ec.value()));
+			WriteLog("Deleting LFT addon: %s", ec.category().message(ec.value()));
 		}
 		else
 			WriteLog("LFT addon doesn't exist. Skip.");
