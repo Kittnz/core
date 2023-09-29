@@ -1689,10 +1689,11 @@ void World::StopHttpApiServer()
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    //_server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
-    //HttpApi::RegisterControllers();
-    //_server->Start("127.0.0.1", 1313);
-    /////- Initialize the random number generator
+    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
+    HttpApi::RegisterControllers();
+    _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
+
+    ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup
