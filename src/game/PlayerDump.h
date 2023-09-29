@@ -77,6 +77,7 @@ class PlayerDumpWriter : public PlayerDump
 
         std::string GetDump(uint32 guid);
         DumpReturn WriteDump(std::string const& file, uint32 guid);
+        DumpReturn ReturnDump(std::string& dump, uint32 guid);
     private:
         typedef std::set<uint32> GUIDs;
 
