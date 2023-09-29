@@ -23049,7 +23049,16 @@ void Player::MailHardcoreModeRewards(uint32 level)
 
     if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
     {
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
+        QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", GetSession()->GetAccountId());
+
+        if (!result)
+        {
+            LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 200)", GetSession()->GetAccountId());
+            delete result;
+        }
+        else
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId()); 
+
         ChatHandler(this).SendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 in Turtle Mode have not gone unnoticed. We've added additional 200 Turtle Tokes to your account balance!|r");
     }
 }
