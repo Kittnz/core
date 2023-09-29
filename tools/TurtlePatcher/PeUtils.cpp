@@ -207,7 +207,7 @@ BOOL PortableExecutable::ImportAddressTable::operator()(const PortableExecutable
 }
 
 // PE MAIN
-PortableExecutable::PortableExecutable(LPSTR lpSzFilename) : m_filename(lpSzFilename) 
+PortableExecutable::PortableExecutable(LPCSTR lpSzFilename) : m_filename(lpSzFilename)
 {
 	//m_stream.exceptions( std::fstream::failbit | std::fstream::badbit );
 	m_stream.open(m_filename.c_str(), std::ios::in | std::ios::out | std::ios::ate | std::ios::binary);

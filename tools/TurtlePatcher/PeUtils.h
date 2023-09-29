@@ -191,7 +191,7 @@ private:
 
 public:
 
-	PortableExecutable(LPSTR);
+	PortableExecutable(LPCSTR);
 	virtual ~PortableExecutable();
 	std::fstream& FilePointer();
 	std::string& Filename();

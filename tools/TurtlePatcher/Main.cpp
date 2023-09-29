@@ -51,9 +51,10 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 };
 
 bool fov_build = false;
+constexpr bool bPatcher = false;
 
 #define NEW_BUILD 7070u
-#define NEW_VISUAL_BUILD "7075"
+#define NEW_VISUAL_BUILD "7070"
 #define NEW_VISUAL_VERSION "1.17.0"
 #define NEW_BUILD_DATE "Oct 03 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
@@ -62,6 +63,7 @@ bool fov_build = false;
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
+#define MAIN_GAME_BINARY "WoW.exe"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -137,26 +139,26 @@ void PatchVisualVersion(
 void PatchBinary(FILE* hWoW)
 {
 	fseek(hWoW, 0x2f113a, SEEK_SET);
-	char patch_1[] = { 0xeb, 0x19 };
+	unsigned char patch_1[] = { 0xeb, 0x19 };
 	fwrite(patch_1, sizeof(patch_1), 1, hWoW);
 
-	char patch_2[] = { 0x03 };
+	unsigned char patch_2[] = { 0x03 };
 	fseek(hWoW, 0x2f1158, SEEK_SET);
 	fwrite(patch_2, sizeof(patch_2), 1, hWoW);
 
-	char patch_3[] = { 0x03 };
+	unsigned char patch_3[] = { 0x03 };
 	fseek(hWoW, 0x2f11a7, SEEK_SET);
 	fwrite(patch_3, sizeof(patch_3), 1, hWoW);
 
-	char patch_4[] = { 0xeb, 0xb2 };
+	unsigned char patch_4[] = { 0xeb, 0xb2 };
 	fseek(hWoW, 0x2f11f0, SEEK_SET);
 	fwrite(patch_4, sizeof(patch_4), 1, hWoW);
 
-	char patch_5[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+	unsigned char patch_5[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
 	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
 	fwrite(patch_5, sizeof(patch_5), 1, hWoW);
 
-	char patch_7[] = { 0xFE };
+	unsigned char patch_7[] = { 0xFE };
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_1, SEEK_SET);
 	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_2, SEEK_SET);
@@ -166,20 +168,20 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_4, SEEK_SET);
 	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 
-	char patch_14[] = { 0x40 };
+	unsigned char patch_14[] = { 0x40 };
 	fseek(hWoW, OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK, SEEK_SET);
 	fwrite(patch_14, sizeof(patch_14), 1, hWoW);
 
-	char patch_15[] = { 0x40 };
+	unsigned char patch_15[] = { 0x40 };
 	fseek(hWoW, OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK, SEEK_SET);
 	fwrite(patch_15, sizeof(patch_15), 1, hWoW);
 
-	char patch_11[] = { 0x00, 0x00, 0x24, 0x42 };
+	unsigned char patch_11[] = { 0x00, 0x00, 0x24, 0x42 };
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
 
 	// Increased value:
-	char patch_12[] = { 0x2F, 0x01 };
+	unsigned char patch_12[] = { 0x2F, 0x01 };
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
@@ -189,20 +191,20 @@ void PatchBinary(FILE* hWoW)
 	//fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
 	// Sound channel count original values:
-	char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
+	unsigned char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
 	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
 	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
 
-	char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
+	unsigned char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
 	fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
 	fwrite(patch_9, sizeof(patch_9), 1, hWoW);
 
-	char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
+	unsigned char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
 	fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
 	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 
 	// Sound in background, original value:
-	char patch_13[] = { 0x14 };
+	unsigned char patch_13[] = { 0x14 };
 	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 
@@ -213,46 +215,46 @@ void PatchBinary(FILE* hWoW)
 	if (fov_build)
 	{
 		// Improved FoV value:
-		char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
+		unsigned char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
 		fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
 		fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
 		// Sound while alt-tabbed:
-		char patch_13[] = { 0x27 };
+		unsigned char patch_13[] = { 0x27 };
 		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 	}
 
 	// Hardcore chat
-	char patch_16[] = { 0x5F };
+	unsigned char patch_16[] = { 0x5F };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE1, SEEK_SET);
 	fwrite(patch_16, sizeof(patch_16), 1, hWoW);
 
-	char patch_17[] = { 0xE9, 0xA8, 0xAE, 0x86 };
+	unsigned char patch_17[] = { 0xE9, 0xA8, 0xAE, 0x86 };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE2, SEEK_SET);
 	fwrite(patch_17, sizeof(patch_17), 1, hWoW);
 
-	char patch_18[] = { 0x70, 0x53, 0x56, 0x33, 0xF6, 0xE9, 0x71, 0x68, 0x86, 0x00 };
+	unsigned char patch_18[] = { 0x70, 0x53, 0x56, 0x33, 0xF6, 0xE9, 0x71, 0x68, 0x86, 0x00 };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE3, SEEK_SET);
 	fwrite(patch_18, sizeof(patch_18), 1, hWoW);
 
-	char patch_19[] = { 0x94 };
+	unsigned char patch_19[] = { 0x94 };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE4, SEEK_SET);
 	fwrite(patch_19, sizeof(patch_19), 1, hWoW);
 
-	char patch_20[] = { 0x0E };
+	unsigned char patch_20[] = { 0x0E };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE5, SEEK_SET);
 	fwrite(patch_20, sizeof(patch_20), 1, hWoW);
 
-	char patch_21[] = { 0x90 };
+	unsigned char patch_21[] = { 0x90 };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE6, SEEK_SET);
 	fwrite(patch_21, sizeof(patch_21), 1, hWoW);
 
-	char patch_22[] = { 0x0C, 0x60, 0xD0 };
+	unsigned char patch_22[] = { 0x0C, 0x60, 0xD0 };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_CODECAVE7, SEEK_SET);
 	fwrite(patch_22, sizeof(patch_22), 1, hWoW);
 
-	char patch_23[] = { 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00, 0x00, 0x43, 0x48, 0x41, 0x54,
+	unsigned char patch_23[] = { 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00, 0x00, 0x43, 0x48, 0x41, 0x54,
 	0x5F, 0x4D, 0x53, 0x47, 0x5F, 0x48, 0x41, 0x52, 0x44, 0x43, 0x4F, 0x52, 0x45, 0x00, 0x00, 0x00,
 	0x57, 0x8B, 0xDA, 0x8B, 0xF9, 0xC7, 0x45, 0x94, 0x00, 0x60, 0xD0, 0x00, 0xC7, 0x45, 0x90, 0x5E,
 	0x00, 0x00, 0x00, 0xE9, 0x77, 0x97, 0x79, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -497,7 +499,7 @@ int PatchWoWExe()
 	}
 	else
 	{
-		WriteLog("ERROR: Can't patch WoW.exe");
+		WriteLog("ERROR: Can't patch WoW.exe - can't open file!");
 //		ErrorBox("Can't patch WoW.exe");
 		return 1;
 	}
@@ -652,31 +654,9 @@ void DeleteLFTAddon()
 	}
 }
 
-int GuardedMain(HINSTANCE hInstance)
+int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 {
 	gHInstance = hInstance;
-
-	// check existing section
-	bool addSection = true;
-	PortableExecutable pe(const_cast<LPSTR>("Wow.exe"));
-	std::vector<PortableExecutable::SectionHeader>::iterator it = pe.SectionHeaders().begin();
-
-	while (it != pe.SectionHeaders().end()) 
-	{
-		if (it->GetName() == ".tdata")
-		{
-			addSection = false;
-			break;
-		}
-		++it;
-	}
-
-	if (addSection)
-		pe.AddSection(const_cast<LPSTR>(".tdata"), 0xE0000040, 0x20000, 0x20000);
-
-	Sleep(2000);
-
-	PatchWoWExe();
 
 	// create log file
 	// By default we try to create a log in working directory.
@@ -715,12 +695,52 @@ int GuardedMain(HINSTANCE hInstance)
 
 	WriteLog("Log file created.");
 
+	if (/*strstr(CmdLine, "-patch")*/ bPatcher)
+	{
+		// check existing section
+		bool addSection = true;
+		LPCSTR WoWExeName = "WoW.exe";
+
+		try
+		{
+			PortableExecutable pe(WoWExeName);
+			std::vector<PortableExecutable::SectionHeader>::iterator it = pe.SectionHeaders().begin();
+
+			while (it != pe.SectionHeaders().end())
+			{
+				if (it->GetName() == ".tdata")
+				{
+					addSection = false;
+					break;
+				}
+				++it;
+			}
+
+			if (addSection)
+				pe.AddSection(const_cast<LPSTR>(".tdata"), 0xE0000040, 0x20000, 0x20000);
+
+			WriteLog("Patching WoW.exe...");
+
+			if (int ErrCode = PatchWoWExe())
+			{
+				ErrorBox("Problem with patching WoW.exe, see log");
+				return ErrCode;
+			}
+		}
+		catch (const PortableExecutable::Exception& e)
+		{
+			WriteLog("Problem to parse WoW.exe: %s", e.what());
+			ErrorBox("Problem with parsing WoW.exe, see log");
+		}
+
+		return 0;
+	}
+
 	fs::path PatchDir = currentPath / "wow-patch.mpq";
 
 	// create a dialog
 	hDialog = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOGBAR), NULL, Dlgproc);
 	ShowWindow(hDialog, SW_SHOW);
-	//DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOGBAR), NULL, Dlgproc);
 
 	// Handle all dialog creation messages
 	MSG		msg;
@@ -778,6 +798,10 @@ int GuardedMain(HINSTANCE hInstance)
 				assert(hTargetFile != NULL);
 				return nullptr;
 			}
+			else
+			{
+				WriteLog("File created \"%s\"", File);
+			}
 
 			return hTargetFile;
 		};
@@ -791,14 +815,14 @@ int GuardedMain(HINSTANCE hInstance)
 			delete[] allFile;
 		};
 
-		// unpack discord overlay and discord game sdk
+		auto CopyFileFromMPQToGameFolder = [&PatchFile, &OnOpenFileLambda, &OpenFileWithLogLambda, &CopyFromMPQToFileLambda](LPCSTR Filename)
 		{
-			if (StormFile* pFile = PatchFile.OpenFile(DISCORD_OVERLAY_FILE))
+			if (StormFile* pFile = PatchFile.OpenFile(Filename))
 			{
-				OnOpenFileLambda(DISCORD_OVERLAY_FILE);
+				OnOpenFileLambda(Filename);
 				std::unique_ptr<StormFile> patchData(pFile);
 
-				FILE* hTargetFile = OpenFileWithLogLambda(DISCORD_OVERLAY_FILE);
+				FILE* hTargetFile = OpenFileWithLogLambda(Filename);
 				if (hTargetFile == nullptr)
 				{
 					return 1;
@@ -806,52 +830,18 @@ int GuardedMain(HINSTANCE hInstance)
 
 				CopyFromMPQToFileLambda(pFile, hTargetFile);
 				fclose(hTargetFile);
+
+				// Do not remove StormFile - it crashes sometimes. Don't know why
+				//delete pFile;
+				//pFile = nullptr;
 			}
+		};
 
-			if (StormFile* pFile = PatchFile.OpenFile(DISCORD_GAME_SDK_FILE))
-			{
-				OnOpenFileLambda(DISCORD_GAME_SDK_FILE);
-				std::unique_ptr<StormFile> patchData(pFile);
-
-				FILE* hTargetFile = OpenFileWithLogLambda(DISCORD_GAME_SDK_FILE);
-				if (hTargetFile == nullptr)
-				{
-					return 1;
-				}
-
-				CopyFromMPQToFileLambda(pFile, hTargetFile);
-				fclose(hTargetFile);
-			}
-
-			// Unpack additionally distributed binary:
-
-			if (StormFile* pFile = PatchFile.OpenFile(ADDITIONAL_GAME_BINARY))
-			{
-				OnOpenFileLambda(ADDITIONAL_GAME_BINARY);
-				std::unique_ptr<StormFile> patchData(pFile);
-
-				FILE* hTargetFile = OpenFileWithLogLambda(ADDITIONAL_GAME_BINARY);
-				if (hTargetFile == nullptr)
-				{
-					return 1;
-				}
-
-				CopyFromMPQToFileLambda(pFile, hTargetFile);
-				fclose(hTargetFile);
-			}
-			else
-			{
-				WriteLog("File WoWFoV.exe not found.");
-			}
-		}
-
-	}
-
-	WriteLog("Patching WoW.exe...");
-
-	if (int ErrCode = PatchWoWExe())
-	{
-		return ErrCode;
+		CopyFileFromMPQToGameFolder(PATCH_FILE);
+		CopyFileFromMPQToGameFolder(DISCORD_OVERLAY_FILE);
+		CopyFileFromMPQToGameFolder(DISCORD_GAME_SDK_FILE);
+		CopyFileFromMPQToGameFolder(ADDITIONAL_GAME_BINARY);
+		CopyFileFromMPQToGameFolder(MAIN_GAME_BINARY);
 	}
 
 #if 0
@@ -908,7 +898,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	__try
 	{
-		Result = GuardedMain(hInstance);
+		Result = GuardedMain(hInstance, lpCmdLine);
 	}
 	__except(UnhandledExceptionFilter(GetExceptionCode(), GetExceptionInformation()))
 	{}
