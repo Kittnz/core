@@ -185,6 +185,19 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_MESSAGECHAT with type %u, lang %u, message %s.", type, lang, message.c_str());
     };
 
+    struct MessageChatMonitor
+    {
+        std::string text = "NO MESSAGE";
+        std::function<void(std::string)> _logger;
+        MessageChatMonitor(std::function<void(std::string)> logger) : _logger(logger) {}
+        ~MessageChatMonitor()
+        {
+            _logger(text);
+        }
+    };
+
+    MessageChatMonitor mon{ LogPerformance };
+
     recv_data >> type;
     recv_data >> lang;
 
@@ -291,6 +304,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             recv_data >> channel;
             recv_data >> msg;
+            mon.text = msg;
 
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
@@ -317,6 +331,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_BATTLEGROUND_LEADER:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
             if (msg.empty())
@@ -327,6 +342,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_DND:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!CheckChatMessageValidity(msg, lang, type))
                 return;
             break;
@@ -379,7 +395,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         }
 #endif
-
+        mon.text = msg;
 		if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
 		{
 			// syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
