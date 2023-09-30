@@ -12,6 +12,8 @@
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 
+#define CPPHTTPLIB_USE_POLL
+
 /*
  * Configuration
  */
@@ -85,7 +87,7 @@
 #endif
 
 #ifndef CPPHTTPLIB_TCP_NODELAY
-#define CPPHTTPLIB_TCP_NODELAY false
+#define CPPHTTPLIB_TCP_NODELAY true
 #endif
 
 #ifndef CPPHTTPLIB_RECV_BUFSIZ
@@ -112,7 +114,7 @@
 #endif
 
 #ifndef CPPHTTPLIB_LISTEN_BACKLOG
-#define CPPHTTPLIB_LISTEN_BACKLOG 5
+#define CPPHTTPLIB_LISTEN_BACKLOG 25
 #endif
 
 /*
