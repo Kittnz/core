@@ -78,6 +78,11 @@ namespace HttpApi
                 {
                     if (_authorizer->IsAuthorized(req, resp))
                         internalHandler(req, resp);
+                    else
+                    {
+                        resp.status = 403;
+                        resp.set_content("Forbidden.", "text/plain");
+                    }
                 };
             }
             else if (method == HttpMethod::Post)
@@ -86,6 +91,11 @@ namespace HttpApi
                 {
                     if (_authorizer->IsAuthorized(req, resp))
                         internalHandler(req, resp, reader);
+                    else
+                    {
+                        resp.status = 403;
+                        resp.set_content("Forbidden.", "text/plain");
+                    }
                 };
             }
         }
