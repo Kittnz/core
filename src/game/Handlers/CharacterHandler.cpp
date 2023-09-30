@@ -889,12 +889,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (!pCurrChar->HasSpell(197)) pCurrChar->LearnSpell(197, false); // Two-Handed Axes
     }
 
-    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
-    {
-        if (!pCurrChar->HasItemCount(91781, 1) && !pCurrChar->HasSpell(23531))
-            pCurrChar->AddItem(91781, 1);
-    }
-
     pCurrChar->CheckInfernoInvite();
 
     // show time before shutdown if shutdown planned.
