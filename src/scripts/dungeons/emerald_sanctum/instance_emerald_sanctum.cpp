@@ -200,9 +200,6 @@ struct sanctum_supressorAI : public ScriptedAI
 	void Reset() override
 	{
 		m_uiEmeraldSupressionTimer = 15 * IN_MILLISECONDS;
-		
-		if (!m_creature->HasAura(SPELL_EMERALD_AURA))
-			m_creature->AddAura(SPELL_EMERALD_AURA);
 
 	}
 
