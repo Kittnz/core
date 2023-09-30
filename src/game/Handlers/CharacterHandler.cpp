@@ -172,11 +172,15 @@ void WorldSession::HandleCharEnum(QueryResult * result)
         {
             uint32 guidlow = (*result)[0].GetUInt32();
             uint32 level   = (*result)[7].GetUInt32();
+            uint8 active = (*result)[22].GetUInt8();
             if (_characterMaxLevel < level)
                 _characterMaxLevel = level;
 
             if (m_shouldBackupCharacters && level > 30)
                 sWorld.SchedulePlayerDump(guidlow);
+
+            if (!active)
+                continue;
 
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());
             if (Player::BuildEnumData(result, &data))
@@ -204,7 +208,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                                   //   8                9               10                     11                     12                     13                    14
                                   "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guildid, characters.playerFlags, "
                                   //  15                    16                   17                     18                   19                                20
-                                  "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, characters.mortality_status, characters.total_deaths "
+                                  "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, characters.mortality_status, characters.total_deaths, characters.active "
                                   "FROM characters LEFT JOIN character_pet ON characters.guid=character_pet.owner AND character_pet.slot='%u' "
                                   "LEFT JOIN guild_member ON characters.guid = guild_member.guid "
                                   "WHERE characters.account = '%u' ORDER BY characters.guid "

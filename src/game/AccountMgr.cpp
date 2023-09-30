@@ -236,6 +236,7 @@ void AccountMgr::LoadAccountNames()
                 continue;
 
             m_accountNameToId.insert({ username, id });
+            m_accountIdNames.insert({ id, username });
 
         } while (result->NextRow());
     }
@@ -257,6 +258,12 @@ void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 
 bool AccountMgr::GetName(uint32 acc_id, std::string &name)
 {
+    auto itr = m_accountIdNames.find(acc_id);
+    if (itr != m_accountIdNames.end())
+    {
+        name = itr->second;
+        return true;
+    }
     QueryResult *result = LoginDatabase.PQuery("SELECT username FROM account WHERE id = '%u'", acc_id);
     if (result)
     {

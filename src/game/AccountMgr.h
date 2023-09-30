@@ -236,6 +236,7 @@ class AccountMgr
         std::map<uint32, std::string> m_accountIp;
         std::map<uint32, std::string> m_accountWarnings;
         std::map<std::string, uint32> m_accountNameToId;
+        std::unordered_map<uint32, std::string> m_accountIdNames;
         std::map<uint32, uint32> m_accountHighestCharLevel;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;

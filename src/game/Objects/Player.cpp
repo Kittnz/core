@@ -23047,9 +23047,9 @@ void Player::MailHardcoreModeRewards(uint32 level)
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
-    if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
+    if (level == 60 /*&& GetSession()->GetSecurity() == SEC_PLAYER*/)
     {
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
+        LoginDatabase.PExecute("INSERT INTO `shop_coins` (`id`, `coins`) VALUES (%u, 200) ON DUPLICATE KEY UPDATE `coins` = `coins` + 200", GetSession()->GetAccountId()); 
         ChatHandler(this).SendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 in Turtle Mode have not gone unnoticed. We've added additional 200 Turtle Tokes to your account balance!|r");
     }
 }

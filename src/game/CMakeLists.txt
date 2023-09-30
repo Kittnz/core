@@ -124,6 +124,8 @@ set (game_SRCS
     HttpApi/ControllerRegistrar.cpp
     HttpApi/TestController.cpp
     HttpApi/TestController.hpp
+    HttpApi/TransferController.cpp
+    HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
     Logging/DatabaseLogger.cpp
     Mail/Mail.cpp
