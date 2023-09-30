@@ -949,11 +949,16 @@ struct mob_abomAI : public kt_p1AddAI
     {
         Reset();
     }
+
     uint32 mortalWoundTimer;
+
     void Reset() override
     {
         mortalWoundTimer = 7500;
+        m_creature->SetMaxHealth(90000);
+        m_creature->SetHealth(90000);
     }
+
     void UpdateAI(const uint32 diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -971,15 +976,20 @@ struct mob_abomAI : public kt_p1AddAI
         DoMeleeAttackIfReady();
     }
 };
+
 struct mob_soldierAI : public kt_p1AddAI
 {
     mob_soldierAI(Creature* pCreature) : kt_p1AddAI(pCreature)
     {
         Reset();
     }
+
     void Reset() override
     {
+        m_creature->SetMaxHealth(2000);
+        m_creature->SetHealth(2000);
     }
+
     void UpdateAI(const uint32 diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -1005,16 +1015,23 @@ struct mob_soldierAI : public kt_p1AddAI
         DoMeleeAttackIfReady();
     }
 };
+
 struct mob_soulweaverAI : public kt_p1AddAI
 {
     mob_soulweaverAI(Creature* pCreature) : kt_p1AddAI(pCreature)
     {
+        Reset();
     }
+
     bool hasHitSomeone;
+
     void Reset() override
     {
         hasHitSomeone = false;
+        m_creature->SetMaxHealth(70000);
+        m_creature->SetHealth(70000);
     }
+
     void UpdateAI(const uint32 diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -1033,6 +1050,7 @@ struct mob_soulweaverAI : public kt_p1AddAI
         DoMeleeAttackIfReady();
     }
 };
+
 struct mob_guardian_icecrownAI : public ScriptedAI
 {
     mob_guardian_icecrownAI(Creature* pCreature) : ScriptedAI(pCreature)
