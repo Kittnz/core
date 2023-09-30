@@ -827,6 +827,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
         { "toggleinferno", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleInfernoModeCommand,      "", nullptr },
         { "translate",     SEC_DEVELOPER,        false, &ChatHandler::HandleTranslateCommand,      "", nullptr },
+        { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand, "", nullptr},
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

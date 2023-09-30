@@ -665,6 +665,7 @@ class ChatHandler
 		bool HandleSuspiciousFishers(char* args);
         bool HandleSuspiciousNotify(char* args);
 
+        bool HandleStopApiServerCommand(char* args);
         bool HandleTranslateCommand(char* args);
         bool HandleToggleInfernoModeCommand(char* args);
 
