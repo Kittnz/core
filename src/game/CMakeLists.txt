@@ -121,6 +121,11 @@ set (game_SRCS
     Handlers/SpellHandler.cpp
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
+    HttpApi/ControllerRegistrar.cpp
+    HttpApi/TestController.cpp
+    HttpApi/TestController.hpp
+    HttpApi/TransferController.cpp
+    HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
     Logging/DatabaseLogger.cpp
     Mail/Mail.cpp
@@ -576,6 +581,10 @@ source_group("Anticheat"
 
 source_group("DiscordBot"
   REGULAR_EXPRESSION DiscordBot
+)
+
+source_group("HttpApi"
+  REGULAR_EXPRESSION HttpApi
 )
 
 

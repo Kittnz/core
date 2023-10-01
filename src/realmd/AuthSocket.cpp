@@ -426,7 +426,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank FROM account WHERE username = '%s'",_safelogin.c_str ()));
+        result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank,current_realm,active FROM account WHERE username = '%s'",_safelogin.c_str ()));
         if (result)
         {
             Field* fields = result->Fetch();
@@ -471,6 +471,24 @@ bool AuthSocket::_HandleLogonChallenge()
                 if (((lockFlags & TOTP) != TOTP && (lockFlags & FIXED_PIN) != FIXED_PIN))
                     lockFlags = (LockFlag)(uint32(lockFlags) | FIXED_PIN);
             }
+
+            uint8 current_realm = fields[12].GetUInt8();
+            uint8 active = fields[13].GetUInt8();
+
+            if (!active)
+            {
+                pkt << (uint8)WOW_FAIL_INCORRECT_PASSWORD;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }
+
+            if (current_realm)
+            {
+                pkt << (uint8)WOW_FAIL_ALREADY_ONLINE;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }
+
 
             if (lockFlags & IP_LOCK)
             {

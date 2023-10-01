@@ -35,6 +35,7 @@
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
 #include "Utilities/robin_hood.h"
+
 //#include "Creature.h"
 
 #include <map>
@@ -43,6 +44,7 @@
 #include <chrono>
 #include <memory>
 #include <unordered_map>
+#include <atomic>
 #include <thread>
 #include <any>
 
@@ -56,6 +58,12 @@ namespace DiscordBot
 {
     class Bot;
 }
+
+namespace HttpApi
+{
+    class ApiServer;
+}
+
 class MovementBroadcaster;
 struct CreatureInfo;
 
@@ -393,6 +401,8 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY,
     CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL,
     CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL,
     CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS,
     CONFIG_UINT32_VALUE_COUNT
@@ -867,7 +877,7 @@ class World
 
         typedef robin_hood::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
-        SessionMap GetAllSessions() { return m_sessions; }
+        const SessionMap& GetAllSessions() const { return m_sessions; }
         WorldSession* FindSession(uint32 id) const;
         void AddSession(WorldSession *s);
         bool RemoveSession(uint32 id);
@@ -875,10 +885,12 @@ class World
         void UpdateMaxSessionCounters();
         uint32 GetActiveAndQueuedSessionCount() const { return m_sessions.size(); }
         uint32 GetActiveSessionCount() const { return m_sessions.size() - GetQueuedSessionCount(); }
-        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size(); }
+        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue[0].size() + m_priorityQueue[1].size() : m_QueuedSessions.size(); }
         /// Get the maximum number of parallel sessions on the server since last reboot
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
+
+        uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
 
         void SetLastDiff(uint32 diff);
         bool HitsDiffThreshold() const;
@@ -889,6 +901,9 @@ class World
         uint32 GetAverageDiff() const;
 
         void CheckDiffProtection();
+
+        std::atomic<uint32> loggedNonRegionSessions = 0;
+        std::atomic<uint32> loggedRegionSessions = 0;
 
         uint32 GetLastDiff() const { return m_lastDiff; }
 
@@ -944,6 +959,8 @@ class World
             uint32 lvl = getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL);
             return lvl > 60 ? 300 + ((lvl - 60) * 75) / 10 : lvl*5;
         }
+
+        void StopHttpApiServer();
 
         void RestoreLostGOs();
         void SetInitialWorldSettings();
@@ -1129,7 +1146,6 @@ class World
         void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = nullptr, uint32 chanId = 0, const char* chanStr = nullptr);
         std::string FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr);
         void Shutdown();
-        void AddSessionToSessionsMap(WorldSession* sess);
 
         // GM Logs
         struct ArchivedLogMessage
@@ -1295,7 +1311,7 @@ class World
 
         //higher is first in the map, higher points -> higher priority.
         //Priority is built from multiple factors, acc reg date, char levels etc etc.
-        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue;
+        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue[2];
 
         std::unordered_map<uint32, uint32> m_Ipconnections; // binary IP, count
 
@@ -1314,6 +1330,14 @@ class World
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
+
+        struct ApiServerDeleter
+        {
+            void operator()(HttpApi::ApiServer* p);
+        };
+
+
+        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;

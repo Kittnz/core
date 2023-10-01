@@ -428,8 +428,289 @@ DumpReturn PlayerDumpWriter::WriteDump(std::string const& file, uint32 guid)
     return DUMP_SUCCESS;
 }
 
+DumpReturn PlayerDumpWriter::ReturnDump(std::string& dump, uint32 guid)
+{
+    dump = GetDump(guid);
+    return DUMP_SUCCESS;
+}
+
 // Reading - High-level functions
 #define ROLLBACK(DR) {CharacterDatabase.RollbackTransaction(); fclose(fin); return (DR);}
+
+#define ROLLBACK_STR(DR) {CharacterDatabase.RollbackTransaction(); return (DR);}
+
+DumpReturn PlayerDumpReader::LoadStringDump(std::string const& data, uint32 account, std::string name, uint32& guid)
+{
+    uint32 charcount = sAccountMgr.GetCharactersCount(account);
+    if (charcount >= 10)
+        return DUMP_TOO_MANY_CHARS;
+
+
+    QueryResult* result = nullptr;
+    char newguid[20], chraccount[20], newpetid[20], currpetid[20], lastpetid[20];
+
+    // make sure the same guid doesn't already exist and is safe to use
+    if (guid != 0 && guid < sObjectMgr.m_CharGuids.GetNextAfterMaxUsed())
+    {
+        result = CharacterDatabase.PQuery("SELECT * FROM `characters` WHERE `guid` = '%u'", guid);
+        if (result)
+        {
+            guid = sObjectMgr.GeneratePlayerLowGuid();
+            delete result;
+        }
+    }
+    else
+        guid = sObjectMgr.GeneratePlayerLowGuid();
+
+    // normalize the name if specified and check if it exists
+    if (!normalizePlayerName(name))
+        name.clear();
+
+    if (ObjectMgr::CheckPlayerName(name, true) == CHAR_NAME_SUCCESS)
+    {
+        CharacterDatabase.escape_string(name);              // for safe, we use name only for sql quearies anyway
+        result = CharacterDatabase.PQuery("SELECT * FROM `characters` WHERE `name` = '%s'", name.c_str());
+        if (result)
+        {
+            name.clear();                                      // use the one from the dump
+            delete result;
+        }
+    }
+    else
+        name.clear();
+
+    // name encoded or empty
+
+    snprintf(newguid, 20, "%u", guid);
+    snprintf(chraccount, 20, "%u", account);
+    snprintf(newpetid, 20, "%u", sObjectMgr.GeneratePetNumber());
+    snprintf(lastpetid, 20, "%s", "");
+
+    std::map<uint32, uint32> items;
+    std::map<uint32, uint32> mails;
+    std::map<uint32, uint32> itemTexts;
+
+    typedef std::map<uint32, uint32> PetIds;                // old->new petid relation
+    typedef PetIds::value_type PetIdsPair;
+    PetIds petids;
+
+    CharacterDatabase.BeginTransaction();
+    std::stringstream ss;
+    ss << data;
+    std::string line = "";
+    while (std::getline(ss, line))
+    {
+        // skip empty strings
+        size_t nw_pos = line.find_first_not_of(" \t\n\r\7");
+        if (nw_pos == std::string::npos)
+            continue;
+
+        // skip NOTE
+        if (line.substr(nw_pos, 15) == "IMPORTANT NOTE:")
+            continue;
+
+        // add required_ check
+        /*
+        if (line.substr(nw_pos, 41) == "UPDATE character_db_version SET required_")
+        {
+            if (!CharacterDatabase.Execute(line.c_str()))
+                ROLLBACK(DUMP_FILE_BROKEN);
+
+            continue;
+        }
+        */
+
+        // determine table name and load type
+        std::string tn = gettablename(line);
+        if (tn.empty())
+        {
+            sLog.outError("LoadPlayerDump: Can't extract table name from line: '%s'!", line.c_str());
+            ROLLBACK_STR(DUMP_FILE_BROKEN);
+        }
+
+        DumpTableType type = DTT_CHARACTER;                 //Fixed: Using uninitialized memory 'type'
+        DumpTable* dTable = &dumpTables[0];
+        for (; dTable->isValid(); ++dTable)
+        {
+            if (tn == dTable->name)
+            {
+                type = dTable->type;
+                break;
+            }
+        }
+
+        if (!dTable->isValid())
+        {
+            sLog.outError("LoadPlayerDump: Unknown table: '%s'!", tn.c_str());
+            ROLLBACK_STR(DUMP_FILE_BROKEN);
+        }
+
+        // change the data to server values
+        switch (type)
+        {
+        case DTT_CHAR_TABLE:
+            if (!changenth(line, 1, newguid))           // character_*.guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            break;
+
+        case DTT_CHARACTER:
+        {
+            if (!changenth(line, 1, newguid))           // characters.guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            if (!changenth(line, 2, chraccount))        // characters.account update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            if (name.empty())
+            {
+                // check if the original name already exists
+                name = getnth(line, 3);                 // characters.name
+                CharacterDatabase.escape_string(name);
+
+                result = CharacterDatabase.PQuery("SELECT * FROM `characters` WHERE `name` = '%s'", name.c_str());
+                if (result)
+                {
+                    delete result;
+
+                    if (!changenth(line, 35, "1"))      // characters.at_login set to "rename on login"
+                        ROLLBACK_STR(DUMP_FILE_BROKEN);
+                }
+            }
+            else
+            {
+                if (!changenth(line, 3, name.c_str()))  // characters.name update
+                    ROLLBACK_STR(DUMP_FILE_BROKEN);
+            }
+
+            break;
+        }
+        case DTT_INVENTORY:
+        {
+            if (!changenth(line, 1, newguid))           // character_inventory.guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid(), true))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // character_inventory.bag update
+            if (!changeGuid(line, 4, items, sObjectMgr.GenerateItemLowGuid()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // character_inventory.item update
+            break;
+        }
+        case DTT_ITEM:
+        {
+            // item, owner, data field:item, owner guid
+            if (!changeGuid(line, 1, items, sObjectMgr.GenerateItemLowGuid()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // item_instance.guid update
+            if (!changenth(line, 3, newguid))           // item_instance.owner_guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            // if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
+             //    ROLLBACK(DUMP_FILE_BROKEN);
+            break;
+        }
+        case DTT_ITEM_GIFT:
+        {
+            if (!changenth(line, 1, newguid))           // character_gifts.guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // character_gifts.item_guid update
+            break;
+        }
+        case DTT_ITEM_LOOT:
+        {
+            // item, owner
+            if (!changeGuid(line, 1, items, sObjectMgr.GenerateItemLowGuid()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // item_loot.guid update
+            if (!changenth(line, 2, newguid))           // item_Loot.owner_guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            break;
+        }
+        case DTT_PET:
+        {
+            //store a map of old pet id to new inserted pet id for use by type 5 tables
+            snprintf(currpetid, 20, "%s", getnth(line, 1).c_str());
+            if (strlen(lastpetid) == 0)
+                snprintf(lastpetid, 20, "%s", currpetid);
+
+            if (strcmp(lastpetid, currpetid) != 0)
+            {
+                snprintf(newpetid, 20, "%u", sObjectMgr.GeneratePetNumber());
+                snprintf(lastpetid, 20, "%s", currpetid);
+            }
+
+            std::map<uint32, uint32> ::const_iterator petids_iter = petids.find(strtoul(currpetid, nullptr, 10));
+
+            if (petids_iter == petids.end())
+                petids.insert(PetIdsPair(strtoul(currpetid, nullptr, 10), strtoul(newpetid, nullptr, 10)));
+
+            if (!changenth(line, 1, newpetid))          // character_pet.id update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            if (!changenth(line, 3, newguid))           // character_pet.owner update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            break;
+        }
+        case DTT_PET_TABLE:                             // pet_aura, pet_spell, pet_spell_cooldown
+        {
+            snprintf(currpetid, 20, "%s", getnth(line, 1).c_str());
+
+            // lookup currpetid and match to new inserted pet id
+            std::map<uint32, uint32> ::const_iterator petids_iter = petids.find(strtoul(currpetid, nullptr, 10));
+            if (petids_iter == petids.end())            // couldn't find new inserted id
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            snprintf(newpetid, 20, "%u", petids_iter->second);
+
+            if (!changenth(line, 1, newpetid))          // pet_*.guid -> petid in fact
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            break;
+        }
+        case DTT_MAIL:                                  // mail
+        {
+            if (!changeGuid(line, 1, mails, sObjectMgr.GenerateMailID()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // mail.id update
+            if (!changenth(line, 6, newguid))           // mail.receiver update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            if (!changeGuid(line, 8, itemTexts, sObjectMgr.GenerateItemTextID()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            break;
+        }
+        case DTT_MAIL_ITEM:                             // mail_items
+        {
+            if (!changeGuid(line, 1, mails, sObjectMgr.GenerateMailID()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // mail_items.id
+            if (!changeGuid(line, 2, items, sObjectMgr.GenerateItemLowGuid()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);             // mail_items.item_guid
+            if (!changenth(line, 4, newguid))           // mail_items.receiver
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            break;
+        }
+        case DTT_ITEM_TEXT:                             // item_text
+        {
+            // id
+            if (!changeGuid(line, 1, itemTexts, sObjectMgr.GenerateItemTextID()))
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+
+            // add it to cache
+            uint32 id = std::stoul(getnth(line, 1));
+            std::string text = getnth(line, 2);
+            sObjectMgr.AddItemText(id, text);
+            break;
+        }
+        default:
+            sLog.outError("Unknown dump table type: %u", type);
+            break;
+        }
+
+        ReplaceAll(line, "INSERT", "REPLACE");
+        if (!CharacterDatabase.Execute(line.c_str()))
+            ROLLBACK_STR(DUMP_FILE_BROKEN);
+    }
+
+    CharacterDatabase.CommitTransaction();
+
+
+    return DUMP_SUCCESS;
+}
 
 DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, std::string name, uint32 guid)
 {
@@ -605,8 +886,8 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                     ROLLBACK(DUMP_FILE_BROKEN);             // item_instance.guid update
                 if (!changenth(line, 3, newguid))           // item_instance.owner_guid update
                     ROLLBACK(DUMP_FILE_BROKEN);
-                if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
-                    ROLLBACK(DUMP_FILE_BROKEN);
+               // if (!changeGuid(line, 13, itemTexts, sObjectMgr.GenerateItemTextID(), true))           // item_instance.text update
+                //    ROLLBACK(DUMP_FILE_BROKEN);
                 break;
             }
             case DTT_ITEM_GIFT:

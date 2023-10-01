@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
 #include <ace/OS_NS_dirent.h>
 
@@ -99,6 +100,11 @@ namespace DiscordBot
     void RegisterHandlers();
 }
 #endif
+
+namespace HttpApi
+{
+    void RegisterControllers();
+}
 
 #include <filesystem>
 #include <fstream>
@@ -264,11 +270,6 @@ void World::AddSession(WorldSession* s)
     addSessQueue.add(s);
 }
 
-void World::AddSessionToSessionsMap(WorldSession* sess)
-{
-    m_sessions[sess->GetAccountId()] = sess;
-}
-
 void World::AddSession_(WorldSession* s)
 {
     MANGOS_ASSERT(s);
@@ -314,7 +315,24 @@ void World::AddSession_(WorldSession* s)
     if (decrease_session)
         --Sessions;
 
-    if (pLimit > 0 && Sessions >= pLimit && !CanSkipQueue(s))
+    int32 hardPlayerLimit = getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT);
+    uint32 maxNonRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL);
+    uint32 maxRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL);
+
+    uint32 maxNonRegionalPop = hardPlayerLimit / 100.f * (float)maxNonRegionalPercentage;
+    uint32 maxRegionalPop = hardPlayerLimit / 100.f * (float)maxRegionalPercentage;
+
+    ///uint32 CorrectMaxNonRegionalPop = (uint32)((float(maxNonRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
+    //uint32 CorrectMaxRegionalPop = (uint32)((float(maxRegionalPercentage) / 100.0f) * float(hardPlayerLimit));
+
+    uint32 currentNonRegionalPop = loggedNonRegionSessions;
+    uint32 currentRegionalPop = loggedRegionSessions;
+
+    uint32 index = s->GetQueueIndex();
+    uint32 currentPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? currentNonRegionalPop : currentRegionalPop;
+    uint32 maxPop = s->sessionDbcLocaleRaw == LOCALE_zhCN ? maxNonRegionalPop : maxRegionalPop;
+
+    if ((currentPop >= maxPop || GetActiveSessionCount() >= hardPlayerLimit) && !CanSkipQueue(s))
     {
         AddQueuedSession(s);
         UpdateMaxSessionCounters();
@@ -329,6 +347,8 @@ void World::AddSession_(WorldSession* s)
     packet << uint8(0);                                     // BillingPlanFlags
     packet << uint32(0);                                    // BillingTimeRested
     s->SendPacket(&packet);
+
+    s->OnPassedQueue();
 
     UpdateMaxSessionCounters();
 
@@ -354,7 +374,9 @@ int32 World::GetQueuedSessionPos(WorldSession* sess)
     {
         uint32 position = 1;
 
-        for (const auto& elem : m_priorityQueue)
+        uint32 index = sess->GetQueueIndex();
+
+        for (const auto& elem : m_priorityQueue[index])
         {
             if (elem.second == sess)
                 return position;
@@ -390,6 +412,7 @@ void World::AddQueuedSession(WorldSession* sess)
         static uint32 idxMarker = 0; // use in future to collect latest search and start there next search instead of iterating whole queue.
 
         uint32 priority = sess->GetBasePriority();
+        uint32 index = sess->GetQueueIndex();
 
         if (getConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY))
         {
@@ -402,14 +425,16 @@ void World::AddQueuedSession(WorldSession* sess)
                     priority -= priorityReduction;
             }
         }
-        auto itr = m_priorityQueue.begin();
-        for (; itr != m_priorityQueue.end(); ++itr)
+
+        auto itr = m_priorityQueue[index].begin();
+        for (; itr != m_priorityQueue[index].end(); ++itr)
         {
             if (itr->first < priority)
                 break;
         }
 
-        m_priorityQueue.insert(itr, std::make_pair(priority, sess));
+        m_priorityQueue[index].insert(itr, std::make_pair(priority, sess));
+        //m_priorityQueue[index].push_back(std::make_pair(priority, sess));
     }
     else
         m_QueuedSessions.push_back(sess);
@@ -437,17 +462,18 @@ bool World::RemoveQueuedSession(WorldSession* sess)
     //we have to copy most of OG queue over because it wont allow to do runtime container ifs with different iterator traits.
     if (getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE))
     {
-        auto itr = m_priorityQueue.begin();
+        uint32 index = sess->GetQueueIndex();
+        auto itr = m_priorityQueue[index].begin();
 
         bool found = false;
 
-        for (; itr != m_priorityQueue.end(); ++itr, ++position)
+        for (; itr != m_priorityQueue[index].end(); ++itr, ++position)
         {
             if (itr->second == sess)
             {
                 sess->SetInQueue(false);
                 found = true;
-                itr = m_priorityQueue.erase(itr);
+                itr = m_priorityQueue[index].erase(itr);
                 break;
             }
         }
@@ -455,24 +481,24 @@ bool World::RemoveQueuedSession(WorldSession* sess)
         if (!found && sessions)
             --sessions;
 
-        uint32 loggedInSessions = uint32(m_sessions.size() - m_priorityQueue.size());
-        if (loggedInSessions >= getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT))
-            return found;
+
+        //always return here for now.
+        return found;
 
         // accept first in queue
-        if ((!m_playerLimit || (int32)sessions < m_playerLimit) && !m_priorityQueue.empty())
+        if ((!m_playerLimit || (int32)sessions < m_playerLimit) && !m_priorityQueue[index].empty())
         {
-            WorldSession* pop_sess = m_priorityQueue.begin()->second;
+            WorldSession* pop_sess = m_priorityQueue[index].begin()->second;
             pop_sess->SetInQueue(false);
             pop_sess->m_idleTime = WorldTimer::getMSTime();
             pop_sess->SendAuthWaitQue(0);
-            m_priorityQueue.erase(m_priorityQueue.begin());
+            m_priorityQueue[index].erase(m_priorityQueue[index].begin());
 
-            itr = m_priorityQueue.begin();
+            itr = m_priorityQueue[index].begin();
             position = 1;
         }
 
-        for (; itr != m_priorityQueue.end(); ++itr, ++position)
+        for (; itr != m_priorityQueue[index].end(); ++itr, ++position)
             itr->second->SendAuthWaitQue(position);
 
         return found;
@@ -1192,7 +1218,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY, "PriorityQueue.PriorityPerAccountDay", 0);
     setConfig(CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY, "PriorityQueue.IpPenaltyEnable", false);
     setConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX, "PriorityQueue.IpPenaltyPriorityReduction", 0);
-
+    setConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL, "Queue.MaxNonRegionalPercentage", 100);
+    setConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL, "Queue.MaxRegionalPercentage", 100);
 
     // Movement Anticheat
     /*setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
@@ -1682,10 +1709,19 @@ void ExportLogs()
     }
 }
 
+void World::StopHttpApiServer()
+{
+    if (_server)
+        _server->Stop();
+}
+
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    ///- Initialize the random number generator
+    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
+    HttpApi::RegisterControllers();
+    _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
+    //- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup
@@ -2228,6 +2264,11 @@ void World::DetectDBCLang()
     
 }
 
+void World::ApiServerDeleter::operator()(HttpApi::ApiServer* p)
+{
+    delete p;
+}
+
 void World::ProcessAsyncPackets()
 {
     thread_name("AsyncPackets");
@@ -2383,7 +2424,7 @@ void World::Update(uint32 diff)
 
         uint32 alliancePlayers = 0, hordePlayers = 0;
 
-        const auto& players = sWorld.GetAllSessions();
+        const SessionMap& players = sWorld.GetAllSessions();
         for (const auto& [id, session] : players)
         {
             auto player = session->GetPlayer();
@@ -2712,7 +2753,8 @@ void World::SendZoneText(uint32 zone, const char* text, WorldSession *self, uint
 void World::KickAll()
 {
     m_QueuedSessions.clear();                               // prevent send queue update packet and login queued sessions
-    m_priorityQueue.clear();
+    m_priorityQueue[0].clear();
+    m_priorityQueue[1].clear();
 
     // session not removed at kick and will removed in next update tick
     for (const auto& itr : m_sessions)
@@ -3057,6 +3099,89 @@ void World::UpdateSessions(uint32 diff)
     if (hardPlayerLimit)
         m_playerLimit = std::min(hardPlayerLimit, m_playerLimit);
 
+    uint32 maxNonRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL);
+    uint32 maxRegionalPercentage = getConfig(CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL);
+
+    uint32 maxNonRegionalPop = hardPlayerLimit / 100.f * (float)maxNonRegionalPercentage;
+    uint32 maxRegionalPop = hardPlayerLimit / 100.f * (float)maxRegionalPercentage;
+
+    uint32 currentNonRegionalPop = loggedNonRegionSessions;
+    uint32 currentRegionalPop = loggedRegionSessions;
+
+    constexpr uint32 RegionalPopIndex = 0;
+    constexpr uint32 NonRegionalPopIndex = 1;
+
+    if (currentRegionalPop < maxRegionalPop && m_priorityQueue[RegionalPopIndex].size())
+    {
+        if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
+        {
+            m_playerLimit = std::min(m_playerLimit + acceptNow, currentNonRegionalPop + currentRegionalPop + acceptNow);
+            if ((hardPlayerLimit && m_playerLimit > hardPlayerLimit) || hardPlayerLimit <= GetActiveSessionCount())
+            {
+                m_playerLimit = hardPlayerLimit;
+                acceptNow = 0;
+            }
+
+            for (uint32 i = 0; i < acceptNow && !m_priorityQueue[RegionalPopIndex].empty(); ++i)
+            {
+                // accept first in queue
+                WorldSession* pop_sess = m_priorityQueue[RegionalPopIndex].front().second;
+                pop_sess->SetInQueue(false);
+                pop_sess->m_idleTime = WorldTimer::getMSTime();
+                pop_sess->SendAuthWaitQue(0);
+                m_priorityQueue[RegionalPopIndex].pop_front();
+            }
+
+            for (auto& elem : m_priorityQueue[RegionalPopIndex])
+            {
+                elem.first += diff * getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK);
+            }
+
+            int position = 1;
+            for (auto iter = m_priorityQueue[RegionalPopIndex].begin(); iter != m_priorityQueue[RegionalPopIndex].end(); ++iter, ++position)
+            {
+                iter->second->SendAuthWaitQue(position);
+            }
+        }
+    }
+
+    if (currentNonRegionalPop < maxNonRegionalPop && m_priorityQueue[NonRegionalPopIndex].size())
+    {
+        if (uint32 acceptNow = getConfig(CONFIG_UINT32_LOGIN_PER_TICK))
+        {
+            m_playerLimit = std::min(m_playerLimit + acceptNow, currentNonRegionalPop + currentRegionalPop + acceptNow);
+            if ((hardPlayerLimit && m_playerLimit > hardPlayerLimit) || hardPlayerLimit <= GetActiveSessionCount())
+            {
+                m_playerLimit = hardPlayerLimit;
+                acceptNow = 0;
+            }
+
+
+            for (uint32 i = 0; i < acceptNow && !m_priorityQueue[NonRegionalPopIndex].empty(); ++i)
+            {
+                // accept first in queue
+                WorldSession* pop_sess = m_priorityQueue[NonRegionalPopIndex].front().second;
+                pop_sess->SetInQueue(false);
+                pop_sess->m_idleTime = WorldTimer::getMSTime();
+                pop_sess->SendAuthWaitQue(0);
+                m_priorityQueue[NonRegionalPopIndex].pop_front();
+            }
+
+            for (auto& elem : m_priorityQueue[NonRegionalPopIndex])
+            {
+                elem.first += diff * getConfig(CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK);
+            }
+
+            int position = 1;
+            for (auto iter = m_priorityQueue[NonRegionalPopIndex].begin(); iter != m_priorityQueue[NonRegionalPopIndex].end(); ++iter, ++position)
+            {
+                iter->second->SendAuthWaitQue(position);
+            }
+        }
+    }
+
+
+    /*
     uint32 queuedSessions = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size();
     uint32 loggedInSessions = uint32(m_sessions.size() - queuedSessions); 
     if (m_playerLimit >= 0 && static_cast <int32> (loggedInSessions) < hardPlayerLimit)
@@ -3108,7 +3233,7 @@ void World::UpdateSessions(uint32 diff)
                     (*iter)->SendAuthWaitQue(position);
             }
         }
-    }
+    }*/
 
     ///- Add new sessions
     WorldSession* sess;
@@ -3117,37 +3242,43 @@ void World::UpdateSessions(uint32 diff)
 
     ///- Then send an update signal to remaining ones
     time_t time_now = time(nullptr);
-    for (SessionMap::iterator itr = m_sessions.begin(), next; itr != m_sessions.end(); itr = next)
-    {
-        next = itr;
-        ++next;
-        ///- and remove not active sessions from the list
-        WorldSession * pSession = itr->second;
-        WorldSessionFilter updater(pSession);
 
-        pSession->AddActiveTime(diff);
+    for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); )
+    {
+		WorldSession* pSession = itr->second;
+		WorldSessionFilter updater(pSession);
+
+		pSession->AddActiveTime(diff);
         if (!pSession->Update(updater))
         {
-            if (pSession->PlayerLoading())
-                sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
-            if (!RemoveQueuedSession(pSession))
-                m_accountsLastLogout[pSession->GetAccountId()] = time_now;
-            m_sessions.erase(itr);
-            m_Ipconnections[pSession->GetBinaryAddress()]--;
-            delete pSession;
+			if (pSession->PlayerLoading())
+				sLog.outInfo("[CRASH] World::UpdateSession attempt to delete session %u loading a player.", pSession->GetAccountId());
+			if (!RemoveQueuedSession(pSession) && pSession->HadQueue())
+				m_accountsLastLogout[pSession->GetAccountId()] = time_now;
+            itr = m_sessions.erase(itr);
+			m_Ipconnections[pSession->GetBinaryAddress()]--;
+
+			delete pSession;
+        }
+        else
+        {
+            itr++;
         }
     }
-    ///- Update disconnected sessions
-    for (SessionSet::iterator itr = m_disconnectedSessions.begin(), next; itr != m_disconnectedSessions.end(); itr = next)
-    {
-        next = itr;
-        ++next;
-        WorldSession * pSession = *itr;
 
-        if (!pSession->UpdateDisconnected(diff))
+    ///- Update disconnected sessions
+    for (SessionSet::iterator itr = m_disconnectedSessions.begin(); itr != m_disconnectedSessions.end(); )
+    {
+		WorldSession* pSession = *itr;
+
+		if (!pSession->UpdateDisconnected(diff))
+		{
+			delete pSession;
+            itr = m_disconnectedSessions.erase(itr);
+		}
+        else
         {
-            delete pSession;
-            m_disconnectedSessions.erase(itr);
+            itr++;
         }
     }
 }
@@ -3301,7 +3432,7 @@ void World::SetPlayerLimit(int32 limit, bool needUpdate)
 
 void World::UpdateMaxSessionCounters()
 {
-    uint32 queueSize = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue.size() : m_QueuedSessions.size();
+    uint32 queueSize = getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue[0].size() + m_priorityQueue[1].size() : m_QueuedSessions.size();
     m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size() - queueSize));
     m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(queueSize));
 }
@@ -4127,7 +4258,9 @@ void World::SetSessionDisconnected(WorldSession* sess)
 {
     SessionMap::iterator itr = m_sessions.find(sess->GetAccountId());
     ASSERT(itr != m_sessions.end());
-    m_accountsLastLogout[sess->GetAccountId()] = time(nullptr);
+    if (sess->HadQueue())
+        m_accountsLastLogout[sess->GetAccountId()] = time(nullptr);
+
     m_sessions.erase(itr);
     m_disconnectedSessions.insert(sess);
 }
