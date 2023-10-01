@@ -593,10 +593,6 @@ RealmZone = 1
 
 TimeZoneOffset = 0
 
-# KalimdorTimeOffset. Time offset in hours for Kalimdor to simulate Azeroth being a globe.
-
-KalimdorTimeOffset = 0
-
 # DBC.Locale. DBC Language Settings. 
 # 0 = English; 1 = Korean; 2 = French; 3 = German; 4 = Chinese; 5 = Taiwanese; 6 = Spanish;
 
