@@ -224,3 +224,30 @@ REPLACE INTO `creature` VALUES (2579069,51569,0,0,0,1,-6357.37,-4920.15,18.0853,
 
 -- Changes by ASTRICON
 REPLACE INTO `creature` VALUES (2579070,61170,0,0,0,0,-810.119,1552.91,22.1628,5.85695,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579070;
+DELETE FROM creature_addon WHERE guid=2579070;
+DELETE FROM creature_movement WHERE id=2579070;
+DELETE FROM game_event_creature WHERE guid=2579070;
+DELETE FROM game_event_creature_data WHERE guid=2579070;
+DELETE FROM creature_battleground WHERE guid=2579070;
+REPLACE INTO `creature` VALUES (2579071,4968,0,0,0,0,-812.249,1548.96,22.1252,1.56563,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579071;
+DELETE FROM creature_addon WHERE guid=2579071;
+DELETE FROM creature_movement WHERE id=2579071;
+DELETE FROM game_event_creature WHERE guid=2579071;
+DELETE FROM game_event_creature_data WHERE guid=2579071;
+DELETE FROM creature_battleground WHERE guid=2579071;
+REPLACE INTO `creature` VALUES (2579072,9836,0,0,0,0,-812.973,1548.1,22.1171,2.70794,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579072;
+DELETE FROM creature_addon WHERE guid=2579072;
+DELETE FROM creature_movement WHERE id=2579072;
+DELETE FROM game_event_creature WHERE guid=2579072;
+DELETE FROM game_event_creature_data WHERE guid=2579072;
+DELETE FROM creature_battleground WHERE guid=2579072;
+REPLACE INTO `creature` VALUES (2579073,60712,0,0,0,0,-812.515,1547.81,22.0695,3.11351,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579073;
+DELETE FROM creature_addon WHERE guid=2579073;
+DELETE FROM creature_movement WHERE id=2579073;
+DELETE FROM game_event_creature WHERE guid=2579073;
+DELETE FROM game_event_creature_data WHERE guid=2579073;
+DELETE FROM creature_battleground WHERE guid=2579073;
