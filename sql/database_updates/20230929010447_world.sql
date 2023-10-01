@@ -285,3 +285,9 @@ UPDATE `creature` SET `position_x` = -11222.124023, `position_y` = -1472.573120,
 
 -- Changes by ASTRICON
 REPLACE INTO `creature` VALUES (2579078,9836,0,0,0,269,-1535.85,7112.24,24.7617,3.41764,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579078;
+DELETE FROM creature_addon WHERE guid=2579078;
+DELETE FROM creature_movement WHERE id=2579078;
+DELETE FROM game_event_creature WHERE guid=2579078;
+DELETE FROM game_event_creature_data WHERE guid=2579078;
+DELETE FROM creature_battleground WHERE guid=2579078;
