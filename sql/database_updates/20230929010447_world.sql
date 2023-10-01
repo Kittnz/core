@@ -282,3 +282,6 @@ DELETE FROM creature_battleground WHERE guid=2579077;
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -11222.124023, `position_y` = -1472.573120, `position_z` = 3.575898, `orientation` = 4.728345 WHERE `guid` = 2567928;
+
+-- Changes by ASTRICON
+REPLACE INTO `creature` VALUES (2579078,9836,0,0,0,269,-1535.85,7112.24,24.7617,3.41764,120,120,0,100,100,0,0,0);
