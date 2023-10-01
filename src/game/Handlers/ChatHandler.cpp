@@ -158,10 +158,7 @@ bool EnforceEnglish(WorldSession* session, const std::string& msg)
         return true;
     }
     if (!IsAsciiOnly(w_normMsg))
-    {
-        ChatHandler(session).SendSysMessage("Please use English in public chats.");
         return true;
-    }
     return false;
 }
 

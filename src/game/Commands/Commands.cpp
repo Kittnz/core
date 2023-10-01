@@ -5053,7 +5053,8 @@ bool ChatHandler::HandleGMOnlineListCommand(char* args)
     SendSysMessage("Online GMs:");
     SendSysMessage("========================");
     bool empty = true;
-    for (const auto& [accId, session] : sWorld.GetAllSessions())
+    const World::SessionMap& AllSessions = sWorld.GetAllSessions();
+    for (const auto& [accId, session] : AllSessions)
     {
         if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_OBSERVER)
             continue;
@@ -5984,8 +5985,10 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     uint32 maxActiveClientsNum = sWorld.GetMaxActiveSessionCount();
     uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
     std::string str = secsToTimeString(sWorld.GetUptime());
+    uint32 queuedRegionOnePlayers = sWorld.GetRegionalIndexQueueCount(0);
+    uint32 queuedRegionTwoPlayers = sWorld.GetRegionalIndexQueueCount(1);
 
-    PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
+    PSendSysMessage("Players online: %i. Max online: %i.", activeClientsNum, maxActiveClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
 
@@ -5995,9 +5998,13 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
 
+        PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
+
 
         uint32 numHcs = 0;
-        const auto& sess = sWorld.GetAllSessions();
+        uint32 numCn = 0;
+        uint32 numNonCn = 0;
+        const World::SessionMap& sess = sWorld.GetAllSessions();
         for (const auto& sessPair : sess)
         {
             auto session = sessPair.second;
@@ -6007,8 +6014,20 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 
             if (player->IsHardcore())
                 ++numHcs;
+
+            if (player->GetSession()->sessionDbcLocaleRaw == LOCALE_zhCN)
+                ++numCn;
+            else
+                ++numNonCn;
         }
         PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
+        if (GetSession()->GetSecurity() >= SEC_ADMINISTRATOR)
+        {
+            PSendSysMessage("Total amount of CN characters logged in: %u", numCn);
+            PSendSysMessage("Total amount of regional characters logged in: %u", numNonCn);
+            PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions.load());
+            PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions.load());
+        }
     }
 
     std::tm* ptm = std::localtime(&sWorld.GetGameTime());
@@ -13824,7 +13843,7 @@ bool ChatHandler::HandleClientSearchCommand(char* args)
     ASSERT(args);
     std::string searchedHash = args;
     uint32 i = 0;
-    World::SessionMap const& sessMap = sWorld.GetAllSessions();
+    const World::SessionMap& sessMap = sWorld.GetAllSessions();
     for (const auto& itr : sessMap)
     {
         if (!itr.second)
@@ -14924,6 +14943,12 @@ bool ChatHandler::HandleTranslateCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleStopApiServerCommand(char* args)
+{
+    sWorld.StopHttpApiServer();
+    SendSysMessage("OK. HTTP API server stopped.");
+    return true;
+}
 
 
 bool ChatHandler::HandleToggleTrainingCommand(char* args)
