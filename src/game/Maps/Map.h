@@ -91,6 +91,7 @@ struct MapEntry
     uint32 linkedZone;
     uint32 maxPlayers;
     uint32 resetDelay;
+    int32 timeOffset;
     int32 ghostEntranceMap;
     float ghostEntranceX;
     float ghostEntranceY;
@@ -429,6 +430,7 @@ class Map : public GridRefManager<NGridType>
         uint32 GetInstanceId() const { return i_InstanceId; }
         virtual bool CanEnter(Player* /*player*/) { return true; }
         const char* GetMapName() const;
+        time_t GetTime() const;
 
         const MapEntry* GetMapEntry() const { return i_mapEntry; }
         bool Instanceable() const { return i_mapEntry && i_mapEntry->Instanceable(); }
