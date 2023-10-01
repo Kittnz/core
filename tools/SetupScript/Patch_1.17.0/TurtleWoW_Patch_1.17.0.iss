@@ -22,6 +22,9 @@ WizardStyle=modern
 OutputBaseFilename=twow_patch_1170
 WizardImageFile=twizard.bmp
 SolidCompression=True
+AppendDefaultDirName=False
+VersionInfoVersion=1.17.0
+VersionInfoCompany=Turtle WoW
 
 [Files]
 Source: "WoW.exe"; DestDir: "{app}"
