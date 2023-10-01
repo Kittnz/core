@@ -94,3 +94,16 @@ REPLACE INTO `gameobject` VALUES ( 5016767, 2020029, 1, -3645.8, -3398.77, 38.18
 
 -- Changes by ASTRICON
 REPLACE INTO `creature` VALUES (2579061,61375,0,0,0,1,6757.18,-4419.54,762.95,0.218273,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2579062,61378,0,0,0,1,6751.8,-4421.91,761.747,3.60247,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2579062;
+DELETE FROM creature_addon WHERE guid=2579062;
+DELETE FROM creature_movement WHERE id=2579062;
+DELETE FROM game_event_creature WHERE guid=2579062;
+DELETE FROM game_event_creature_data WHERE guid=2579062;
+DELETE FROM creature_battleground WHERE guid=2579062;
+DELETE FROM creature WHERE guid=2579061;
+DELETE FROM creature_addon WHERE guid=2579061;
+DELETE FROM creature_movement WHERE id=2579061;
+DELETE FROM game_event_creature WHERE guid=2579061;
+DELETE FROM game_event_creature_data WHERE guid=2579061;
+DELETE FROM creature_battleground WHERE guid=2579061;
