@@ -174,7 +174,7 @@ bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
 
     PSendSysMessage("Listing logged in clients with extended FP %llu:", extendedPrint);
 
-    const auto& sessions = sWorld.GetAllSessions();
+    const World::SessionMap& sessions = sWorld.GetAllSessions();
     for (const auto& sessionPair : sessions)
     {
         const auto& session = sessionPair.second;
