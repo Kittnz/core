@@ -40,6 +40,7 @@ namespace DiscordBot
         }
 
 
+
         template <typename T>
         dpp::command_handler MakeCommandHandler(T&& t)
         {

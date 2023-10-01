@@ -155,7 +155,7 @@ void MovementBroadcaster::UpdateConfiguration(std::size_t new_threads_count, std
     StartThreads();
 
     // Reregister all players
-    auto const& sessions = sWorld.GetAllSessions();
+    const World::SessionMap& sessions = sWorld.GetAllSessions();
 
     for (auto& session : sessions)
     {

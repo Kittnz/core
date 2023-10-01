@@ -325,7 +325,7 @@ class WorldSession
         void SendQueryTimeResponse();
 
         //simple email check for now, can expand later.
-        WorldRegion GetRegion() const { return (HasChineseEmail() || GetSessionDbcLocale() == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
+        WorldRegion GetRegion() const { return (HasChineseEmail() || sessionDbcLocaleRaw == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
 
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
@@ -333,6 +333,9 @@ class WorldSession
         void SetUsername(std::string const& s) { m_username = s; }
         void SetJoinTimeStamp(uint32 timestamp) { m_joinTimestamp = timestamp; }
         uint32 GetJoinTimeStamp() const { return m_joinTimestamp; }
+
+
+        bool HadQueue() const { return m_hadQueue; }
 
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
@@ -362,7 +365,7 @@ class WorldSession
         bool IsSuspicious() const { return m_suspicious; }
 
         /// Session in auth.queue currently
-        void SetInQueue(bool state) { m_inQueue = state; }
+        void SetInQueue(bool state) { m_inQueue = state; if (state) m_hadQueue = true;  }
 
         /// Is the user engaged in a log out process?
         bool isLogingOut() const { return _logoutTime || m_playerLogout; }
@@ -509,6 +512,10 @@ class WorldSession
         int GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
         const char *GetMangosString(int32 entry) const;
 
+        LocaleConstant sessionDbcLocaleRaw;
+
+        uint32 GetQueueIndex() const { return sessionDbcLocaleRaw == LOCALE_zhCN ? 1 : 0; }
+
         uint32 GetLatency() const { return m_latency; }
         void SetLatency(uint32 latency) { m_latency = latency; }
         uint32 GetGameBuild() const { return _gameBuild; }
@@ -590,6 +597,8 @@ class WorldSession
         void SetReceivedAHListRequest(bool v) { m_ah_list_recvd = v; }
         bool ReceivedAHListRequest() const { return m_ah_list_recvd; }
         bool m_ah_list_recvd;
+
+        void OnPassedQueue();
 
         void AddonDetected(std::string const& addon) { _addons.insert(addon); }
         std::set<std::string> const& GetAddons() const { return _addons; }
@@ -985,6 +994,7 @@ class WorldSession
         time_t m_lastMailOpenTime;
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
+        bool m_hadQueue = false;                            // true if the session was in a queue this session.
         bool m_playerLoading;                               // code processed in LoginPlayer
         bool m_playerLogout;                                // code processed in LogoutPlayer
         bool m_playerRecentlyLogout;
@@ -1014,6 +1024,7 @@ class WorldSession
         bool m_fingerprintBanned = false;
         bool m_shouldBackupCharacters = false;
         bool m_hasUsedClickToMove = false;
+        bool m_PassedQueue = false;
 
         enum ClientHashStep
         {
