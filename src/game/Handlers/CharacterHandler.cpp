@@ -864,11 +864,17 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
     {
         AccountMgr accountMgr;
-        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))/* && accountMgr.IsPlayerAccount(GetSecurity())*/
+        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD) && accountMgr.IsPlayerAccount(GetSecurity()))
         {
             pCurrChar->JoinBeginnersGuild();
         }
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
+    }
+
+    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
+    {
+        if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasItemCount(67000) && !pCurrChar->HasSpell(49517) && !pCurrChar->HasItemCount(67001))
+            pCurrChar->AddItem(67001, 1);
     }
 
     pCurrChar->CheckInfernoInvite();
