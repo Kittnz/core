@@ -1170,6 +1170,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_MAILSPAM_ITEM, "MailSpam.Item", false);
     setConfig(CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL, "Mails.COD.ForceTag.MaxLevel", 0);
 
+    // Presents:
+    setConfig(CONFIG_BOOL_ANNIVERSARY, "Anniversary", true);
+
     setConfigMinMax(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT,       "AsyncTasks.Threads", 1, 1, 20);
     setConfig(CONFIG_BOOL_KICK_PLAYER_ON_BAD_PACKET,               "Network.KickOnBadPacket", false);
     setConfig(CONFIG_UINT32_PACKET_BCAST_THREADS,                  "Network.PacketBroadcast.Threads", 0);
