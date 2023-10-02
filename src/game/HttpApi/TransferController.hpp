@@ -8,7 +8,10 @@
 
 #include "HttpApi/BaseController.hpp"
 
+
 #include "PlayerDump.h"
+#include "World.h"
+#include "ObjectMgr.h"
 
 using namespace httplib;
 
