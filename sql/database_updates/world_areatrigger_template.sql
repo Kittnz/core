@@ -45,3 +45,8 @@ REPLACE INTO `areatrigger_teleport` (`id`, `name`, `message`, `required_level`, 
 (5017, 'Emerald Sanctum - Entrance', 'You must be at least level 60 to enter.', 60, 19000, 807, 2762.248, 2972.768, 26.903, 1.9),
 (5018, 'Lower Karazhan Halls - Entrance', 'You must be at least level 60 to enter.', 60, 0, 532, -11104.279, -1999.422, 49.890, 0.6),
 (5019, 'Lower Karazhan Halls - Exit', '', 0, 0, 0, -11118.472, -2010.843, 47.082, 3.7);
+
+UPDATE `areatrigger_teleport` SET `required_level` = 61 WHERE `id` = 5017;
+UPDATE `areatrigger_teleport` SET `required_level` = 61 WHERE `id` = 5018;
+UPDATE `areatrigger_teleport` SET `message` = 'The doors of this raid will open on October 7th.' WHERE `id` = 5017;
+UPDATE `areatrigger_teleport` SET `message` = 'The doors of this raid will open on October 7th.' WHERE `id` = 5018; 

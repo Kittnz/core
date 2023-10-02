@@ -1593,3 +1593,6 @@ CREATE TABLE `worldstates`  (
 ) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE `characters`
+	ADD COLUMN `active` TINYINT UNSIGNED NOT NULL DEFAULT '1' AFTER `xp_gain`;
