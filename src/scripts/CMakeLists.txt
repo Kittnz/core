@@ -306,7 +306,6 @@ world/burning_steppes.cpp
 world/darkshore.cpp
 world/desolace.cpp
 world/dun_morogh.cpp
-world/dun_morogh.h
 world/durotar.cpp
 world/duskwood.cpp
 world/dustwallow_marsh.cpp
