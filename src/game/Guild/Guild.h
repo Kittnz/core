@@ -173,11 +173,10 @@ enum GuildEmblem
     ERR_GUILDEMBLEM_FAIL_NO_MESSAGE       = 5
 };
 
-//enum PublicGuilds
-//{
-//    GUILD_NEWCOMERS = 126,
-//    GUILD_HARDCORE  = 238
-//};
+enum PublicGuilds
+{
+    GUILD_NEWCOMERS = 126
+};
 
 struct GuildEventLogEntry
 {
@@ -331,9 +330,9 @@ class Guild
 
         void SendRoster(WorldSession* session = nullptr)
         {
-            //if (m_Id == GUILD_NEWCOMERS || m_Id == GUILD_HARDCORE)
-            //    TempRosterOnline(session);
-            //else
+            if (m_Id == GUILD_NEWCOMERS)
+                TempRosterOnline(session);
+            else
                 Roster(session);
         }
 

@@ -863,6 +863,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
     {
+        AccountMgr accountMgr;
+        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD) && accountMgr.IsPlayerAccount(GetSecurity()))
+        {
+            pCurrChar->JoinBeginnersGuild();
+        }
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
     }
 
