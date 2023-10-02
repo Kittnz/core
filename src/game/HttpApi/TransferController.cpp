@@ -2,6 +2,9 @@
 
 #include "HttpApi/Authorizers/ApiKeyAuthorizer.hpp"
 
+#include "World.h"
+#include "ObjectMgr.h"
+
 using namespace httplib;
 
 namespace HttpApi

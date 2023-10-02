@@ -10,8 +10,6 @@
 
 
 #include "PlayerDump.h"
-#include "World.h"
-#include "ObjectMgr.h"
 
 
 
