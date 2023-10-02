@@ -15,7 +15,7 @@ namespace HttpApi
     }
 
     //This is part 1 of transfer procedure, will EXTRACT char data.
-    static void InitTransferAction(const Request& req, Response& resp, const ContentReader& reader)
+    void InitTransferAction(const Request& req, Response& resp, const ContentReader& reader)
     {
         if (!req.has_header("Content-Type"))
             return;
@@ -75,7 +75,7 @@ namespace HttpApi
 
     //This is part 2 of the transfer procedure. This will IMPORT the pdump data and call the necessary import functions.
     //This should be done on the world thread on the OTHER server where extractions take place to do a successful transfer.
-    static void ProceedTransferAction(const Request& req, Response& resp, const ContentReader& reader)
+    void ProceedTransferAction(const Request& req, Response& resp, const ContentReader& reader)
     {
         if (!req.has_header("Content-Type"))
             return;
