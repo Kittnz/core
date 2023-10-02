@@ -156,8 +156,9 @@ void HonorMaintenancer::DistributeRankPoints(Team team)
         // Calculate rank points earning
         weeklyScore.earning = CalculateRpEarning(weeklyScore.cp, scores);
 
+
         // Calculate rank points with decay
-        weeklyScore.newRp = CalculateRpDecay(weeklyScore.earning, weeklyScore.oldRp);
+        weeklyScore.newRp = CalculateRpDecay(weeklyScore.earning, weeklyScore);
 
         // Level restrictions
         weeklyScore.newRp = std::min(MaximumRpAtLevel(weeklyScore.level), weeklyScore.newRp);
@@ -179,7 +180,7 @@ void HonorMaintenancer::InactiveDecayRankPoints()
 
         auto& weeklyScore = itrWS->second;
 
-        weeklyScore.newRp = finiteAlways(CalculateRpDecay(0, weeklyScore.oldRp));
+        weeklyScore.newRp = finiteAlways(CalculateRpDecay(0, weeklyScore));
     }
 }
 
@@ -579,9 +580,27 @@ float HonorMaintenancer::CalculateRpEarning(float cp, HonorScores sc)
     return sc.FY[i];
 }
 
-float HonorMaintenancer::CalculateRpDecay(float rpEarning, float rp)
+float HonorMaintenancer::CalculateRpDecay(float rpEarning, const WeeklyScore& wk)
 {
-    float decay = floor((0.2f * rp) + 0.5f);
+    //RP per rank needed, starting from rank 2
+    static const uint32 RankMinRP[] =
+    {
+        2000,
+        5000,
+        10000,
+        15000,
+        20000,
+        25000,
+        30000,
+        35000,
+        40000,
+        45000,
+        50000,
+        55000,
+        60000
+    };
+
+    float decay = floor((0.2f * wk.oldRp) + 0.5f);
     float delta = rpEarning - decay;
 
     if (delta < 0)
@@ -590,7 +609,16 @@ float HonorMaintenancer::CalculateRpDecay(float rpEarning, float rp)
     if (delta < -2500)
         delta = -2500;
 
-    return rp + delta;
+    float newRp = wk.oldRp + delta;
+
+    if (wk.highestRank > 1)
+    {
+        // -2 because -1 for 0 based accessing and another -1 for starting at rank 2 because rank 1 only has HK req.
+        float minRpForRank = (float)RankMinRP[wk.highestRank - 2];
+        if (newRp < minRpForRank)
+            newRp = minRpForRank;
+    }
+    return newRp;
 }
 
 float HonorMaintenancer::MaximumRpAtLevel(uint8 level)
