@@ -1474,7 +1474,7 @@ class Player final: public Unit
         bool HasAtLoginFlag(AtLoginFlags f) const { return m_atLoginFlags & f; }
         void SetAtLoginFlag(AtLoginFlags f) { m_atLoginFlags |= f; }
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
-        void JoinBeginnersGuild();
+        // void JoinBeginnersGuild();
         bool InGurubashiArena(bool checkOutsideArea) const;
   
         /*********************************************************/

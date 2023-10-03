@@ -22971,46 +22971,46 @@ void Player::CreatePacketBroadcaster()
     sWorld.GetBroadcaster()->RegisterPlayer(m_broadcaster);
 }
 
-// Turtle WoW custom features:
-
-void Player::JoinBeginnersGuild()
-{
-    Guild* pBeginnersGuild = nullptr;
-
-    if (GetTeam() == ALLIANCE)
-    {
-        uint32 uiAllianceGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE);
-        if (uiAllianceGuild > 0)
-        {
-            pBeginnersGuild = sGuildMgr.GetGuildById(uiAllianceGuild);
-        }
-        else
-        {
-            sLog.outError("JoinBeginnersGuild: Alliance guild is not assigned in mangosd.conf.");
-        }
-    }
-    else if (GetTeam() == HORDE)
-    {
-        uint32 uiHordeGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE);
-        if (uiHordeGuild > 0)
-        {
-            pBeginnersGuild = sGuildMgr.GetGuildById(uiHordeGuild);
-        }
-        else
-        {
-            sLog.outError("JoinBeginnersGuild: Horde guild is not assigned in mangosd.conf.");
-        }
-    }
-    else
-    {
-        sLog.outError("JoinBeginnersGuild: Player has no valid faction.");
-    }
-
-    if (pBeginnersGuild)
-    {
-        pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
-    }
-}
+//// Turtle WoW custom features:
+//
+//void Player::JoinBeginnersGuild()
+//{
+//    Guild* pBeginnersGuild = nullptr;
+//
+//    if (GetTeam() == ALLIANCE)
+//    {
+//        uint32 uiAllianceGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE);
+//        if (uiAllianceGuild > 0)
+//        {
+//            pBeginnersGuild = sGuildMgr.GetGuildById(uiAllianceGuild);
+//        }
+//        else
+//        {
+//            sLog.outError("JoinBeginnersGuild: Alliance guild is not assigned in mangosd.conf.");
+//        }
+//    }
+//    else if (GetTeam() == HORDE)
+//    {
+//        uint32 uiHordeGuild = sWorld.getConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE);
+//        if (uiHordeGuild > 0)
+//        {
+//            pBeginnersGuild = sGuildMgr.GetGuildById(uiHordeGuild);
+//        }
+//        else
+//        {
+//            sLog.outError("JoinBeginnersGuild: Horde guild is not assigned in mangosd.conf.");
+//        }
+//    }
+//    else
+//    {
+//        sLog.outError("JoinBeginnersGuild: Player has no valid faction.");
+//    }
+//
+//    if (pBeginnersGuild)
+//    {
+//        pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
+//    }
+//}
 
 bool Player::InGurubashiArena(bool checkOutsideArea) const 
 {
@@ -24031,6 +24031,14 @@ bool Player::HasEarnedTitle(uint8 titleId)
     case TITLE_SCARAB_LORD:
     {
         if (HasItemCount(21176, 1, 1))
+            return true;
+        break;
+    }
+    case TITLE_STILL_ALIVE:
+    {
+        if (GetLevel() == 60)
+            return false;
+        if (GetHardcoreStatus() == HARDCORE_MODE_STATUS_ALIVE)
             return true;
         break;
     }
