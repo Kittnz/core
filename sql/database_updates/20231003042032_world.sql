@@ -389,3 +389,12 @@ UPDATE `spell_template` SET `recoveryTime` = 40000 WHERE `entry` = 45604;
 DELETE FROM quest_template WHERE entry IN (40750, 40831, 40836);
 DELETE FROM creature_questrelation WHERE quest IN (40750, 40831, 40836);
 DELETE FROM creature_involvedrelation WHERE quest IN (40750, 40831, 40836);
+
+-- More item fixes:
+
+update item_template set spelltrigger_1 = 1 where entry = 17015; -- Dark Iron Reaver
+update item_template set spellid_1 = 15874, spellid_2 = 7578, spellid_3 = 7527, spellid_4 = 0 where entry = 14551; -- Edgemaster's Handguards
+update item_template set armor = 52 where entry = 61309; -- Mantle of Law
+update item_template set spelltrigger_2 = 1 where entry = 16927; -- Nemesis Boots
+update item_template set stat_value1 = 6, stat_value2 = 8, stat_value3 = 7, stat_value4 = 8, stat_type1 = 3, stat_type2 = 5, stat_type3 = 4, stat_type4 = 7, spellid_1 = 0, spellid_2 = 0  where entry = 19607; -- Vision of Voodress (Honored)
+update item_template set stat_type1 = 3 where entry = 19608; -- Vision of Voodress (Revered)
