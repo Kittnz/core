@@ -7939,6 +7939,18 @@ bool ChatHandler::HandleSetGMChatCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleSetHCChatCommand(char* args)
+{
+    if (!m_session || !m_session->GetPlayer())
+        return false;
+
+    auto player = m_session->GetPlayer();
+
+    player->SetHCChat(!player->IsHCChat());
+    PSendSysMessage("HC Chat is now %s", player->IsHCChat() ? "on" : "off");
+    return true;
+}
+
 bool ChatHandler::HandleSetViewCommand(char* /*args*/)
 {
     if (Unit* unit = GetSelectedUnit())
