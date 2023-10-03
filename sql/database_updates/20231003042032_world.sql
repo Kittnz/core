@@ -371,3 +371,7 @@ UPDATE `creature_template` SET `rank` = 1 WHERE `entry` = 61528;
 -- The Binding of Xanthar can now act as group loot:
 
 update item_template set flags = 2048 where entry = 61731;
+
+-- Replaced Venomlash Chimera spell list.
+
+UPDATE `creature_spells` SET `spellId_1` = 17183 WHERE `entry` = 180212;
