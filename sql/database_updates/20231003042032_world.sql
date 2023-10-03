@@ -379,3 +379,7 @@ UPDATE `creature_spells` SET `spellId_1` = 17183 WHERE `entry` = 180212;
 -- New mage portals learning spells should be only self-cast.
 
 UPDATE `spell_template` SET `targets` = 0 WHERE `entry` = (49360, 49365, 49357, 49363);
+
+-- Fixed Flourish cooldown.
+
+UPDATE `spell_template` SET `recoveryTime` = 40000 WHERE `entry` = 45604;
