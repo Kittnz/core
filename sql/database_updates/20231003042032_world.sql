@@ -400,3 +400,7 @@ update item_template set stat_value1 = 6, stat_value2 = 8, stat_value3 = 7, stat
 update item_template set stat_type1 = 3 where entry = 19608; -- Vision of Voodress (Revered)
 
 update item_template set stat_value1 = 18, spellid_1 = 14127 where entry = 22267; -- Spellweaver's Turban
+
+-- item 61684 should stack to 20
+
+UPDATE item_template SET stackable = 20 WHERE entry = 61684;
