@@ -552,6 +552,7 @@ class ChatHandler
         bool HandleWhispersCommand(char* args);
         bool HandleModifyDrunkCommand(char* args);
         bool HandleSetGMChatCommand(char* args);
+        bool HandleSetHCChatCommand(char* args);
         bool HandleSetViewCommand(char* args);
 
         bool HandleSetTimeCommand(char* args);

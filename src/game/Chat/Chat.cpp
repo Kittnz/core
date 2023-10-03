@@ -826,12 +826,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bw",             SEC_MODERATOR,       false, &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { "bi",             SEC_MODERATOR,       false, &ChatHandler::HandleBanInfoAccountCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
-        { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,           "", nullptr},
+        { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,          "", nullptr},
         { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
-        { "toggleinferno", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleInfernoModeCommand,      "", nullptr },
-        { "translate",     SEC_DEVELOPER,        false, &ChatHandler::HandleTranslateCommand,      "", nullptr },
-        { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand, "", nullptr},
-        { nullptr,          0,                   false, nullptr,                                         "", nullptr }
+        { "toggleinferno", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleInfernoModeCommand,   "", nullptr },
+        { "translate",     SEC_DEVELOPER,        false, &ChatHandler::HandleTranslateCommand,           "", nullptr },
+        { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
+        { "hcchat",        SEC_PLAYER,           false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
+        { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 
     static bool loaded = false;

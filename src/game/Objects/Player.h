@@ -1030,6 +1030,8 @@ class Player final: public Unit
         void SetGameMaster(bool on);
         bool IsGMChat() const { return GetSession()->GetSecurity() >= SEC_OBSERVER && (m_ExtraFlags & PLAYER_EXTRA_GM_CHAT); }
         void SetGMChat(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_GM_CHAT; else m_ExtraFlags &= ~PLAYER_EXTRA_GM_CHAT; }
+        bool IsHCChat() const { return !(m_ExtraFlags & PLAYER_EXTRA_DISABLE_HC_CHAT); }
+        void SetHCChat(bool on) { if (!on) m_ExtraFlags |= PLAYER_EXTRA_DISABLE_HC_CHAT; else m_ExtraFlags &= ~PLAYER_EXTRA_DISABLE_HC_CHAT; }
         bool IsTaxiCheater() const { return m_ExtraFlags & PLAYER_EXTRA_TAXICHEAT; }
         void SetTaxiCheater(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_TAXICHEAT; else m_ExtraFlags &= ~PLAYER_EXTRA_TAXICHEAT; }
         bool IsGMVisible() const { return !(m_ExtraFlags & PLAYER_EXTRA_GM_INVISIBLE); }
