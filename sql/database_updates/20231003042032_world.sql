@@ -383,3 +383,9 @@ UPDATE `spell_template` SET `targets` = 0 WHERE `entry` IN (49360, 49365, 49357,
 -- Fixed Flourish cooldown.
 
 UPDATE `spell_template` SET `recoveryTime` = 40000 WHERE `entry` = 45604;
+
+-- Delete deprecated quests:
+
+DELETE FROM quest_template WHERE entry IN (40750, 40831, 40836);
+DELETE FROM creature_questrelation WHERE quest IN (40750, 40831, 40836);
+DELETE FROM creature_involvedrelation WHERE quest IN (40750, 40831, 40836);
