@@ -24153,11 +24153,11 @@ bool Player::HasEarnedTitle(uint8 titleId)
             return true;
         break;
     }
-    case TITLE_BLOOD_RING_CHAMPION:
-    {
-        if (GetReputationRank(1008) == REP_EXALTED)
-            return true;
-    }
+    //case TITLE_BLOOD_RING_CHAMPION:
+    //{
+    //    if (GetReputationRank(1008) == REP_EXALTED)
+    //        return true;
+    //}
     default:
         return false;
     }
