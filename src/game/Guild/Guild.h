@@ -173,11 +173,6 @@ enum GuildEmblem
     ERR_GUILDEMBLEM_FAIL_NO_MESSAGE       = 5
 };
 
-enum PublicGuilds
-{
-    GUILD_NEWCOMERS = 126
-};
-
 struct GuildEventLogEntry
 {
     uint8  EventType;
@@ -330,9 +325,6 @@ class Guild
 
         void SendRoster(WorldSession* session = nullptr)
         {
-            if (m_Id == GUILD_NEWCOMERS)
-                TempRosterOnline(session);
-            else
                 Roster(session);
         }
 
