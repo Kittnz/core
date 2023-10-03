@@ -404,3 +404,8 @@ update item_template set stat_value1 = 18, spellid_1 = 14127 where entry = 22267
 -- item 61684 should stack to 20
 
 UPDATE item_template SET stackable = 20 WHERE entry = 61684;
+
+-- change quest 40929 description to:
+
+UPDATE quest_template SET details = 'I am Elaroth Ranworth and it is my charge to keep the fire of this lighthouse burning bright.$B$BBefore the war we relied on a steady supply of oil from Southshore.$B$BEver since the Greymane Wall was sealed shut, this lighthouse has been burning on what excess I could find.$B$BIt is only a matter of time before the light will cease burning. With it, I will also leave this world.$B$BI am not yet ready to depart, and so I am desperate.$B$BLordaeron has been consumed by the plague, but whispers tell me of a new bastion of human power, far away to the west.$B$BI ask of you to visit the city called Theramore, speak with their dockmaster, and see if there is any oil that can be given to me.' WHERE entry = 40929;
+
