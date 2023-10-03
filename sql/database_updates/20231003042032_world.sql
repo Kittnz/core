@@ -363,3 +363,7 @@ UPDATE `creature` SET `spawntimesecsmin` = 36000, `spawntimesecsmax` = 36000 WHE
 
 UPDATE `creature_loot_template` SET `groupid` = 7 WHERE `entry` = 61418 AND `item` = 61352 AND `groupid` = 0;
 UPDATE `creature_loot_template` SET `groupid` = 6 WHERE `entry` = 61418 AND `item` = 61496 AND `groupid` = 0;
+
+-- Fixed rank of Glanthas the Ancient.
+
+UPDATE `creature_template` SET `rank` = 1 WHERE `entry` = 61528;
