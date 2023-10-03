@@ -502,6 +502,13 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
         {
             switch (dummySpell->Id)
             {
+                // Illusion Passive
+                case 7131:
+                {
+                    if (Creature* pCreature = ToCreature())
+                        pCreature->DespawnOrUnsummon(1);
+                    return SPELL_AURA_PROC_OK;
+                }
                 // Eye for an Eye
                 case 9799:
                 case 25988:
