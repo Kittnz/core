@@ -398,3 +398,5 @@ update item_template set armor = 52 where entry = 61309; -- Mantle of Law
 update item_template set spelltrigger_2 = 1 where entry = 16927; -- Nemesis Boots
 update item_template set stat_value1 = 6, stat_value2 = 8, stat_value3 = 7, stat_value4 = 8, stat_type1 = 3, stat_type2 = 5, stat_type3 = 4, stat_type4 = 7, spellid_1 = 0, spellid_2 = 0  where entry = 19607; -- Vision of Voodress (Honored)
 update item_template set stat_type1 = 3 where entry = 19608; -- Vision of Voodress (Revered)
+
+update item_template set stat_value1 = 18, spellid_1 = 14127 where entry = 22267; -- Spellweaver's Turban
