@@ -2750,8 +2750,10 @@ void World::SendHardcoreMessage(WorldPacket* packet, WorldSession* self)
             if (session != self)
             {
                 Player* player = session->GetPlayer();
+
                 // base check
-                if (player && player->IsInWorld() && ((player->IsHardcore() || player->IsHC60()) || player->GetSession()->GetSecurity() > SEC_PLAYER))
+                if (player && player->IsInWorld() && player->IsHCChat() &&
+                   ((player->IsHardcore() || player->IsHC60()) || player->GetSession()->GetSecurity() > SEC_PLAYER))
                 {
                     // social check
                     if (player->GetSocial() && !player->GetSocial()->HasIgnore(self->GetPlayer()->GetObjectGuid()))
