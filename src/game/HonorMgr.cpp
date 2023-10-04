@@ -611,10 +611,11 @@ float HonorMaintenancer::CalculateRpDecay(float rpEarning, const WeeklyScore& wk
 
     float newRp = wk.oldRp + delta;
 
-    if (wk.highestRank > 1)
+    if (wk.highestRank > 1 + NEGATIVE_HONOR_RANK_COUNT)
     {
         // -2 because -1 for 0 based accessing and another -1 for starting at rank 2 because rank 1 only has HK req.
-        float minRpForRank = (float)RankMinRP[wk.highestRank - 2];
+        //And -4 for dishonorable ranks
+        float minRpForRank = (float)RankMinRP[wk.highestRank - 2 - NEGATIVE_HONOR_RANK_COUNT];
         if (newRp < minRpForRank)
             newRp = minRpForRank;
     }

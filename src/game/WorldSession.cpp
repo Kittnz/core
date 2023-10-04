@@ -316,14 +316,18 @@ bool WorldSession::Update(PacketFilter& updater)
         }
 
         if (_clientHashComputeStep == HASH_COMPUTED && GetPlayer())
-        {
             _clientHashComputeStep = HASH_NOTIFIED;
-        }
+
         ///- Cleanup socket pointer if need
         if (m_Socket && m_Socket->IsClosed())
         {
             m_Socket->RemoveReference();
             m_Socket = nullptr;
+
+            ///- Reset the online field in the account table if client is disconnected
+            static SqlStatementID id;
+            SqlStatement stmt = LoginDatabase.CreateStatement(id, "UPDATE account SET current_realm = ?, online = 0 WHERE id = ?");
+            stmt.PExecute(uint32(0), GetAccountId());
 
             // Character stays IG for 2 minutes
             return ForcePlayerLogoutDelay();
