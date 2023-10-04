@@ -59,3 +59,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- item 61014 (Shard of Eternity) has a broken display ID
 
 UPDATE `item_template` SET `display_id` = 25055 WHERE `entry` = 61014;
+
+-- Drifting Avatar of Sand, edited immunity mask.
+
+UPDATE `turtle_world`.`creature_template` SET `mechanic_immune_mask` = 646676319 WHERE `entry` = 61316;
