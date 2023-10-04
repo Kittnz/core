@@ -78,3 +78,9 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61340, 61556, 50, 6, 1, 1, 0),
 (61341, 61556, 50, 6, 1, 1, 0),
 (61338, 61556, 50, 6, 1, 1, 0);
+
+-- Link the following GUIDS together: 2570707, 2570709, 2570894, 2570895
+
+REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2570709, 2570707, 3);
+REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2570894, 2570707, 3);
+REPLACE INTO `creature_linking` (`guid`, `master_guid`, `flag`) VALUES (2570895, 2570707, 3);
