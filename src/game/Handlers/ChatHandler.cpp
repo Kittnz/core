@@ -1042,6 +1042,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 WorldPacket data;
                 ChatHandler::BuildChatPacket(data, CHAT_MSG_HARDCORE, msg.c_str(), Language(lang), _player->GetChatTag(), _player->GetObjectGuid(), _player->GetName());
+
+                if (EnforceEnglish(this, msg))
+                    return;
+
                 sWorld.SendHardcoreMessage(&data, _player->GetSession());
             }
             else
