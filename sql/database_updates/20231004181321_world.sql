@@ -69,3 +69,12 @@ UPDATE `creature_template` SET `mechanic_immune_mask` = 646676319 WHERE `entry` 
 
 UPDATE `creature_template` SET `skinning_loot_id` = 100003 WHERE `entry` = 60697;
 UPDATE `creature_template` SET `faction` = 89 WHERE `entry` = 60697;
+
+-- item 61556 needs to have 50% droprate from npc 61339, 61340, 61341, 61338 
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
+
+(61339, 61556, 50, 6, 1, 1, 0),
+(61340, 61556, 50, 6, 1, 1, 0),
+(61341, 61556, 50, 6, 1, 1, 0),
+(61338, 61556, 50, 6, 1, 1, 0);
