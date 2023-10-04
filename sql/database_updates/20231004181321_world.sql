@@ -55,3 +55,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61365, 61377, 0.05, 2, 1, 1, 0),
 (61365, 61378, 0.05, 2, 1, 1, 0),
 (61365, 61379, 0.05, 2, 1, 1, 0);
+
+-- item 61014 (Shard of Eternity) has a broken display ID
+
+UPDATE `item_template` SET `display_id` = 25055 WHERE `entry` = 61014;
