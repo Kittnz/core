@@ -704,6 +704,7 @@ void WorldSession::LogoutPlayer(bool Save)
         m_masterPlayer = nullptr;
     }
 
+    m_clientMoverGuid.Clear();
     m_playerLogout = false;
     m_playerSave = false;
     m_playerRecentlyLogout = true;

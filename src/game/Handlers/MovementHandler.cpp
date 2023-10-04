@@ -407,10 +407,6 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket& recvData)
     movementInfo.UpdateTime(recvData.GetPacketTime());
     /*----------------*/
 
-    // now can skip not our packet
-    if (guid != m_clientMoverGuid && guid != _player->GetObjectGuid() && guid != _player->GetMover()->GetObjectGuid())
-        return;
-
     UnitMoveType move_type;
     switch (opcode)
     {
@@ -437,8 +433,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket& recvData)
             return;
     }
 
-    Unit* pMover = _player->GetMap()->GetUnit(guid);
-
+    Unit* pMover = GetMoverFromGuid(guid);
     if (!pMover)
         return;
 
@@ -525,12 +520,7 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
     bool applyReceived = applyInt != 0u;
     /*----------------*/
 
-    // make sure this client is allowed to control the unit which guid is provided
-    if (guid != m_clientMoverGuid && guid != _player->GetObjectGuid() && guid != _player->GetMover()->GetObjectGuid())
-        return;
-
-    Unit* pMover = _player->GetMap()->GetUnit(guid);
-
+    Unit* pMover = GetMoverFromGuid(guid);
     if (!pMover)
         return;
 
@@ -640,12 +630,7 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
     movementInfo.UpdateTime(recvData.GetPacketTime());
     /*----------------*/
 
-    // make sure this client is allowed to control the unit which guid is provided
-    if (guid != m_clientMoverGuid && guid != _player->GetObjectGuid() && guid != _player->GetMover()->GetObjectGuid())
-        return;
-
-    Unit* pMover = _player->GetMap()->GetUnit(guid);
-
+    Unit* pMover = GetMoverFromGuid(guid);
     if (!pMover)
         return;
 
@@ -725,11 +710,7 @@ void WorldSession::HandleMoveKnockBackAck(WorldPacket& recvData)
     movementInfo.UpdateTime(recvData.GetPacketTime());
     /*----------------*/
 
-    if (guid != m_clientMoverGuid && guid != _player->GetObjectGuid() && guid != _player->GetMover()->GetObjectGuid())
-        return;
-
-    Unit* pMover = _player->GetMap()->GetUnit(guid);
-
+    Unit* pMover = GetMoverFromGuid(guid);
     if (!pMover)
         return;
 
@@ -941,11 +922,7 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket& recvData)
     uint32 lag;
     recvData >> lag;
 
-    if (guid != m_clientMoverGuid && guid != _player->GetObjectGuid() && guid != _player->GetMover()->GetObjectGuid())
-        return;
-
-    Unit* pMover = _player->GetMap()->GetUnit(guid);
-
+    Unit* pMover = GetMoverFromGuid(guid);
     if (!pMover)
         return;
 
@@ -973,6 +950,19 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket& recvData)
         data << lag;
         pMover->SendMovementMessageToSet(std::move(data), true, _player);
     }
+}
+
+// make sure this client is allowed to control the unit which guid is provided
+Unit* WorldSession::GetMoverFromGuid(ObjectGuid const& guid) const
+{
+    if (guid == _player->GetMover()->GetObjectGuid())
+        return _player->GetMover();
+    if (guid == _player->GetObjectGuid())
+        return _player;
+    if (guid == m_clientMoverGuid)
+        return _player->GetMap()->GetUnit(guid);
+
+    return nullptr;
 }
 
 bool WorldSession::VerifyMovementInfo(MovementInfo const& movementInfo) const
