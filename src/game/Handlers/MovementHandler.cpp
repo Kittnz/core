@@ -821,23 +821,17 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket& recvData)
 
     if (!guid.IsEmpty())
     {
-        ObjectGuid serverMoverGuid = _player->GetMover()->GetObjectGuid();
-        if (serverMoverGuid != guid)
+        Unit* pMover = _player->GetMover();
+        if (pMover->GetObjectGuid() != guid)
         {
             sLog.outError("HandleSetActiveMoverOpcode: incorrect mover guid: mover is %s and should be %s",
-                _player->GetMover()->GetGuidStr().c_str(), guid.GetString().c_str());
-            m_clientMoverGuid = _player->GetMover()->GetObjectGuid();
+                pMover->GetGuidStr().c_str(), guid.GetString().c_str());
+            m_clientMoverGuid = pMover->GetObjectGuid();
             return;
         }
 
-        if (guid.IsAnyTypeCreature())
-        {
-            if (Unit* pMover = _player->GetMap()->GetUnit(guid))
-            {
-                if (pMover->IsRooted())
-                    MovementPacketSender::AddMovementFlagChangeToController(pMover, MOVEFLAG_ROOT, true);
-            }
-        }
+        if (pMover->IsCreature() && pMover->IsRooted())
+            MovementPacketSender::AddMovementFlagChangeToController(pMover, MOVEFLAG_ROOT, true);
 
         // mover swap after Eyes of the Beast, PetAI::UpdateAI handle the pet's return
         // Check if we actually have a pet before looking up
