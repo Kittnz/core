@@ -63,3 +63,9 @@ UPDATE `item_template` SET `display_id` = 25055 WHERE `entry` = 61014;
 -- Drifting Avatar of Sand, edited immunity mask.
 
 UPDATE `creature_template` SET `mechanic_immune_mask` = 646676319 WHERE `entry` = 61316;
+
+-- https://database.turtle-wow.org/?npc=60697 has no loot table or skinning table.  (I'm going to ignore it being on the Murloc faction for now...)
+-- The 2 instances of Soothound are also not linked to one another or the Hateforge Watchers at the base of the Hateforge Quarry entrance ramp.
+
+UPDATE `creature_template` SET `skinning_loot_id` = 100003 WHERE `entry` = 60697;
+UPDATE `creature_template` SET `faction` = 89 WHERE `entry` = 60697;
