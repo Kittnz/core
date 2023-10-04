@@ -585,6 +585,7 @@ class WorldSession
 
         void ClearIncomingPacketsByType(PacketProcessing type);
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
+        ObjectGuid const& GetClientMoverGuid() const { return m_clientMoverGuid; }
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
 
         uint32 GetMaxLevelCharacterValue() const { return _characterMaxLevel; }
