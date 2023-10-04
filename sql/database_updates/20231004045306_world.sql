@@ -1,0 +1,1 @@
+UPDATE item_tempalte SET Quality = 2 WHERE entry IN (54001, 54003, 51739, 51261, 80010, 81283, 69000);
