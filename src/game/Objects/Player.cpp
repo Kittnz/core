@@ -3561,7 +3561,7 @@ void Player::GiveLevel(uint32 level)
 
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
     {
-        if (GetLevel() > 10 && !HasItemCount(67005) && !HasSpell(45023) && !HasItemCount(80004))
+        if (level == 10 && !HasItemCount(67005) && !HasSpell(45023) && !HasItemCount(80004))
             AddItem(67005, 1);
     }
 
