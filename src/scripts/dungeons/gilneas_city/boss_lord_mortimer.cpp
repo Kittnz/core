@@ -69,6 +69,16 @@ struct boss_lord_mortimerAI : public ScriptedAI
 
 		DoMeleeAttackIfReady();
 	}
+
+	void Aggro(Unit* who)
+	{
+		m_creature->MonsterYell(30138);
+	}
+
+	void JustDied(Unit*)
+	{
+		m_creature->MonsterYell(30139);
+	}
 };
 
 CreatureAI* GetAI_boss_lord_mortimer(Creature* pCreature)
