@@ -3559,6 +3559,12 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
+    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
+    {
+        if (GetLevel() > 10 && !HasItemCount(67005) && !HasSpell(45023) && !HasItemCount(80004))
+            AddItem(67005, 1);
+    }
+
     // leave lower level bg queue on levelup
     for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
     {
