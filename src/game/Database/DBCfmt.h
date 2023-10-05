@@ -64,6 +64,7 @@ const char SpellItemEnchantmentfmt[]="niiiiiixxxiiissssssssxii";
 const char SpellRadiusfmt[]="nfxx";
 const char SpellRangefmt[]="nffxxxxxxxxxxxxxxxxxxx";
 const char SpellShapeshiftfmt[]="nxxxxxxxxxxiix";
+char const SpellVisualfmt[] = "niiiiiiiiiiiiiii";
 const char SpellIconfmt[]="ns";
 const char StableSlotPricesfmt[] = "ni";
 const char TalentEntryfmt[]="niiiiiiiixxxxixxixxxi";
