@@ -89,6 +89,7 @@ DBCStorage <SpellRadiusEntry> sSpellRadiusStore(SpellRadiusfmt);
 DBCStorage <SpellRangeEntry> sSpellRangeStore(SpellRangefmt);
 DBCStorage <SpellIconEntry> sSpellIconStore(SpellIconfmt);
 DBCStorage <SpellShapeshiftFormEntry> sSpellShapeshiftFormStore(SpellShapeshiftfmt);
+DBCStorage <SpellVisualEntry> sSpellVisualStore(SpellVisualfmt);
 DBCStorage <StableSlotPricesEntry> sStableSlotPricesStore(StableSlotPricesfmt);
 //DBCStorage <SummonPropertiesEntry> sSummonPropertiesStore(SummonPropertiesfmt);
 DBCStorage <TalentEntry> sTalentStore(TalentEntryfmt);
@@ -301,6 +302,7 @@ void LoadDBCStores(std::string const& dataPath)
 	LoadDBC(availableDbcLocales, badDbcFiles, sSpellRadiusStore, dbcPath, "SpellRadius.dbc");
 	LoadDBC(availableDbcLocales, badDbcFiles, sSpellRangeStore, dbcPath, "SpellRange.dbc");
 	LoadDBC(availableDbcLocales, badDbcFiles, sSpellShapeshiftFormStore, dbcPath, "SpellShapeshiftForm.dbc");
+    LoadDBC(availableDbcLocales, badDbcFiles, sSpellVisualStore, dbcPath, "SpellVisual.dbc");
 	LoadDBC(availableDbcLocales, badDbcFiles, sSpellIconStore, dbcPath, "SpellIcon.dbc");
 	LoadDBC(availableDbcLocales, badDbcFiles, sStableSlotPricesStore, dbcPath, "StableSlotPrices.dbc");
 	LoadDBC(availableDbcLocales, badDbcFiles, sTalentStore, dbcPath, "Talent.dbc");
