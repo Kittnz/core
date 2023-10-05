@@ -386,6 +386,15 @@ bool AuthSocket::_HandleLogonChallenge()
     // Whether to continue handling the logon after prechecks or not
     bool handle_logon{ true };
 
+    // Temporary restrict build 7070 to CH realms!
+
+    if (_build == 7070)
+    {
+        pkt << (uint8)WOW_FAIL_VERSION_INVALID;
+        BASIC_LOG("[AuthChallenge] ip '%s' tries to login with forbidden build number!", get_remote_address().c_str());
+
+        handle_logon = false;
+    }
 
     ///- Verify that this IP is not in the ip_banned table
     // No SQL injection possible (paste the IP address as passed by the socket)
