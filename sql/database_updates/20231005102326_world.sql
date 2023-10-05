@@ -30,3 +30,6 @@ REPLACE INTO `locales_item` (`entry`, `name_loc4`, `description_loc4`) VALUES
 (80004, '顽皮猴子', '凭借它们淘气的性格和可爱的举动，它将是陪伴您在艾泽拉斯冒险的完美伙伴。'),
 (51904, '磨损的碎屑外衣', '这是一件罕见的遗物，颁发给那些选择将乌龟魔兽作为家园的玩家！');
 
+-- Unrelated:
+
+UPDATE item_template SET sell_price = 4000 WHERE entry = 19291;
