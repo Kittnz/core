@@ -591,7 +591,11 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         case CONDITION_LOCAL_TIME:
         {
             time_t rawtime;
-            time(&rawtime);
+
+            if (map)
+                rawtime = map->GetTime();
+            else
+                time(&rawtime);
 
             struct tm* timeinfo;
             timeinfo = localtime(&rawtime);

@@ -1374,6 +1374,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
+    setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
+
+    setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 

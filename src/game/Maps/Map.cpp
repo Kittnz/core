@@ -1496,6 +1496,14 @@ const char* Map::GetMapName() const
     return i_mapEntry ? i_mapEntry->name : "UNNAMEDMAP\x0";
 }
 
+time_t Map::GetTime() const
+{
+    time_t currentTime = sWorld.GetGameTime();
+    if (i_mapEntry)
+        currentTime += i_mapEntry->timeOffset;
+    return currentTime;
+}
+
 void Map::UpdateObjectVisibility(WorldObject* obj, Cell cell, CellPair cellpair)
 {
     // Update visibility of objects in cells within draw distance
