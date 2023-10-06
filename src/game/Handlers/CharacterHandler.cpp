@@ -46,6 +46,7 @@
 #include "PlayerBroadcaster.h"
 #include "Mail.h"
 #include "miscellaneous/feature_transmog.h"
+#include "Config.hpp"
 #include "Logging/DatabaseLogger.hpp"
 
 // config option SkipCinematics supported values
@@ -887,6 +888,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     {
         if (!pCurrChar->HasSpell(199)) pCurrChar->LearnSpell(199, false); // Two-Handed Maces
         if (!pCurrChar->HasSpell(197)) pCurrChar->LearnSpell(197, false); // Two-Handed Axes
+    }
+
+    if (sConfig.GetBoolDefault("Anniversary", false))
+    {
+        if (pCurrChar->GetLevel() > 10 && !pCurrChar->HasItemCount(67005) && !pCurrChar->HasSpell(45023) && !pCurrChar->HasItemCount(80004))
+            pCurrChar->AddItem(67005, 1);
     }
 
     pCurrChar->CheckInfernoInvite();
