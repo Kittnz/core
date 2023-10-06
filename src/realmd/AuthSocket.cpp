@@ -494,12 +494,12 @@ bool AuthSocket::_HandleLogonChallenge()
                 return true;
             }
 
-            if (current_realm)
+            /*if (current_realm)
             {
                 pkt << (uint8)WOW_FAIL_ALREADY_ONLINE;
                 send((char const*)pkt.contents(), pkt.size());
                 return true;
-            }
+            }*/
 
 
             if (lockFlags & IP_LOCK)
