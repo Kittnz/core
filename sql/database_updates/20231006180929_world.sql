@@ -1,3 +1,16 @@
 -- pain
 update item_template set stat_value1 = 15, stat_value2 = 18, stat_value3 = 15 where entry = 61756; -- Nordanaar Guardian Spaulders
 update item_template set stat_value1 = 11, stat_type1 = 7, stat_value2 = 0, spellid_1 = 15464, spellid_3 = 7523, spelltrigger_3 = 1, spellid_2 = 9331, nature_res = 7 where entry = 61523; -- Crystal Sword of the Blossom
+
+-- item Dawnstone Ore (entry 61390) change stacksize to 12
+
+-- NPC Snarlclaw entry 61405 has the incorrect display ID , change display ID to 736
+
+-- Quest The Deed to Ravenshire (Entry 40966) change zoneid to 5180
+
+-- Quest 40942 change objective quest text to : "Slay Firemurk Dragonkin in Dustwallow Marsh, and recover a Potent Draconic Jewel for Magus Orelius at Ravenshire in Gilneas."
+
+UPDATE `item_template` SET `stackable` = 12 WHERE `entry` = 61390;
+UPDATE `creature_template` SET `display_id1` = 736, `display_id2` = 0 WHERE `entry` = 61405;
+UPDATE `quest_template` SET `ZoneOrSort` = 5180 WHERE `entry` = 40966;
+UPDATE `quest_template` SET `objectives` = 'Slay Firemurk Dragonkin in Dustwallow Marsh, and recover a Potent Draconic Jewel for Magus Orelius at Ravenshire in Gilneas.' WHERE `entry` = 40942;
