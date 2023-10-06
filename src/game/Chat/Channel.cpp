@@ -73,6 +73,10 @@ Channel::Channel(std::string const& name)
             m_flags |= CHANNEL_FLAG_CUSTOM;
             m_levelRestricted = false;
         }
+        if (m_name == u8"World")
+        {
+            m_announce = false;
+        }
     }
 }
 
