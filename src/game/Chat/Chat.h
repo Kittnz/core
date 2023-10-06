@@ -200,6 +200,7 @@ class ChatHandler
         bool HandleServiceDeleteCharacters(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
+        bool HandleDebugConditionCommand(char* args);
 		bool HandleDebugSetInstanceDataCommand(char* args);
 		bool HandleCharacterInactivityDataCommand(char* args);
 

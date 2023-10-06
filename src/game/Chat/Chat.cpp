@@ -152,8 +152,9 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand debugCommandTable[] =
     {
-        { "instancedata",   SEC_DEVELOPER,       false,  &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
-        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
+        { "condition",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
+        { "instancedata",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
 
     static ChatCommand suspiciousCommandTable[] =
