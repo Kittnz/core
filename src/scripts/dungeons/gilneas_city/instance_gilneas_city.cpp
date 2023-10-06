@@ -40,11 +40,11 @@ struct instance_gilneas_city : public ScriptedInstance
         {
         case NPC_MATTHIAS_HOLTZ:
             pCreature->PlayDirectSound(60384);
-            pCreature->MonsterYell("This district is currently on lockdown...");
+            pCreature->MonsterYell("This district is currently on lockdown!");
             break;
         case NPC_JUDGE_SUTHERLAND:
             pCreature->PlayDirectSound(60382);
-            pCreature->MonsterYell("Order, must be maintained!");
+            pCreature->MonsterYell("Order must be maintained!");
             break;
         case NPC_DUSTIVAN_BLACKOWL:
             pCreature->PlayDirectSound(60391);
@@ -52,7 +52,7 @@ struct instance_gilneas_city : public ScriptedInstance
             break;
         case NPC_MAGNUS_GREYSTONE:
             pCreature->PlayDirectSound(60386);
-            pCreature->MonsterYell("I have served as Marshal throughout all of the orcish incursions, you will not put an end to Gilneas.");
+            pCreature->MonsterYell("I have served as Marshal throughout all of the orcish incursions. You will not put an end to Gilneas.");
             break;
         case NPC_GENN_GREYMANE:
             pCreature->PlayDirectSound(60388);
@@ -71,7 +71,7 @@ struct instance_gilneas_city : public ScriptedInstance
         {
         case NPC_MATTHIAS_HOLTZ:
             pCreature->PlayDirectSound(60385);
-            pCreature->MonsterYell("Foolish Interloper, you do not belong here...");
+            pCreature->MonsterYell("Foolish interloper, you do not belong here...");
             break;
         case NPC_JUDGE_SUTHERLAND:
             pCreature->PlayDirectSound(60383);
@@ -83,16 +83,16 @@ struct instance_gilneas_city : public ScriptedInstance
             break;
         case NPC_MAGNUS_GREYSTONE:
             pCreature->PlayDirectSound(60387);
-            pCreature->MonsterYell("The brave defenders... Of this city will not let you put it to ruin, outsider!");
+            pCreature->MonsterYell("The brave defenders of this city... will not let you put it to ruin, outsider!");
             break;
         case NPC_GENN_GREYMANE:
             pCreature->PlayDirectSound(60390);
-            pCreature->MonsterYell("It... It was pointless after all, this cannot be the way I fall...");
+            pCreature->MonsterYell("It... it was pointless after all... This cannot be the way I fall...");
             break;
         case NPC_CELIA_HARLOW:
             DoRespawnGameObject(m_uiHarlowFamilyChestGUID, HOUR * IN_MILLISECONDS);
             pCreature->PlayDirectSound(60399);
-            pCreature->MonsterYell("All of our progress, our influence. What a pointless end....");
+            pCreature->MonsterYell("All of our progress, our influence... What a pointless end...");
             break;
         }
     }
