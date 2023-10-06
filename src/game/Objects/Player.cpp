@@ -23227,7 +23227,7 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
     Group* grp = GetGroup();
     if (grp)
     {
-        uint32 err = grp->CanJoinArenaQueue(bgQueueTypeId, 2, 2, sObjectMgr.GetPlayer(grp->GetLeaderGuid()));
+        uint32 err = grp->CanJoinArenaQueue(bgQueueTypeId, 3, 3, sObjectMgr.GetPlayer(grp->GetLeaderGuid()));
         if (err == BG_JOIN_ERR_GROUP_DESERTER)
         {
             WorldPacket data;
