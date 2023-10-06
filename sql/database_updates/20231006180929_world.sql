@@ -41,3 +41,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- https://database.turtle-wow.org/?quest=41021 should reward experience. 
 
 UPDATE `quest_template` SET `RewXP` = 8300, `RewMoneyMaxLevel` = 29700 WHERE `entry` = 41021;
+
+-- Change faction ID for the following entryIDs: 3128, 3129, 5809, 3192 to Kul Tiras, faction ID 1011
+
+UPDATE `creature_template` SET `faction` = 1693 WHERE `entry` IN (3128, 3129, 5809, 3192);
