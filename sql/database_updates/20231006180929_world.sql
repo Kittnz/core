@@ -18,7 +18,7 @@ UPDATE `quest_template` SET `objectives` = 'Slay Firemurk Dragonkin in Dustwallo
 -- Add item ID 61455 to loot group 8, 9 and 10 for Solnius, with equal drop chance with the other drops
 -- Add item ID 70000 to loot group 12 with a 4.4% drop chance to Solnius.
 
-REPlACE INTO .`creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 70000, 4.4, 12, 1, 1, 0);
+REPlACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 70000, 4.4, 12, 1, 1, 0);
 
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 61203, 5.88, 8, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 61204, 5.88, 8, 1, 1, 0);
@@ -37,3 +37,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 61239, 5.88, 8, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 61448, 5.88, 8, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60748, 61455, 5.88, 8, 1, 1, 0);
+
+-- https://database.turtle-wow.org/?quest=41021 should reward experience. 
+
+UPDATE `quest_template` SET `RewXP` = 8300, `RewMoneyMaxLevel` = 29700 WHERE `entry` = 41021;
