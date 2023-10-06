@@ -279,6 +279,7 @@ struct npc_daisy : public ScriptedAI
             Player* pGnomePlayer = m_creature->GetMap()->GetPlayer(gnomeRacerGuid[raceId]);
             pGnomePlayer->CombatStop(true);
             pGnomePlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+            pGnomePlayer->RemoveSpellsCausingAura(SPELL_AURA_TRANSFORM);
             pGnomePlayer->CastSpell(pGnomePlayer, SPELL_GNOME_CAR, true);
             pGnomePlayer->NearLandTo(startPoint.pos.x, startPoint.pos.y + 2, startPoint.pos.z, M_PI_F * raceId);
             pGnomePlayer->AddAura(SPELL_ROOT_SELF);
@@ -290,6 +291,7 @@ struct npc_daisy : public ScriptedAI
             Player* pGoblinPlayer = m_creature->GetMap()->GetPlayer(goblinRacerGuid[raceId]);
             pGoblinPlayer->CombatStop(true);
             pGoblinPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+            pGoblinPlayer->RemoveSpellsCausingAura(SPELL_AURA_TRANSFORM);
             pGoblinPlayer->CastSpell(pGoblinPlayer, SPELL_GOBLIN_CAR, true);
             pGoblinPlayer->NearLandTo(startPoint.pos.x, startPoint.pos.y - 2, startPoint.pos.z, M_PI_F * raceId);
             pGoblinPlayer->AddAura(SPELL_ROOT_SELF);
@@ -301,7 +303,7 @@ struct npc_daisy : public ScriptedAI
         m_countdownTimer = 3000;
     }
 
-    void EndRace(uint32 raceId)
+    void EndRace(uint32 raceId, bool completeQuest)
     {
         m_creature->MonsterYell("The race has ended!");
 
@@ -310,26 +312,34 @@ struct npc_daisy : public ScriptedAI
 
         if (Player* pGnomePlayer = m_creature->GetMap()->GetPlayer(gnomeRacerGuid[raceId]))
         {
+            if (completeQuest && pGnomePlayer->HasAura(SPELL_GNOME_CAR))
+            {
+                if (raceId == RACE_REAL)
+                    pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_REAL_QUEST);
+                else if (raceId == RACE_TEST)
+                    pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_TEST_RACE);
+            }
+
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_GNOME_CAR);
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_GOBLIN_CAR);
             pGnomePlayer->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
-            if (raceId == RACE_REAL)
-                pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_REAL_QUEST);
-            else if (raceId == RACE_TEST)
-                pGnomePlayer->AreaExploredOrEventHappens(QUEST_GNOME_TEST_RACE);
         }
         gnomeRacerGuid[raceId].Clear();
         gnomeRacerCheckpoints.clear();
 
         if (Player * pGoblinPlayer = m_creature->GetMap()->GetPlayer(goblinRacerGuid[raceId]))
         {
+            if (completeQuest && pGoblinPlayer->HasAura(SPELL_GOBLIN_CAR))
+            {
+                if (raceId == RACE_REAL)
+                    pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_REAL_RACE);
+                else if (raceId == RACE_TEST)
+                    pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_TEST_RACE);
+            }
+
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_GNOME_CAR);
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_GOBLIN_CAR);
             pGoblinPlayer->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
-            if (raceId == RACE_REAL)
-                pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_REAL_RACE);
-            else if (raceId == RACE_TEST)
-                pGoblinPlayer->AreaExploredOrEventHappens(QUEST_GOBLIN_TEST_RACE);
         }
         goblinRacerGuid[raceId].Clear();
         goblinRacerCheckpoints.clear();
@@ -367,14 +377,14 @@ struct npc_daisy : public ScriptedAI
             if (!pGnomePlayer || !pGnomePlayer->IsAlive() ||
                 !pGoblinPlayer || !pGoblinPlayer->IsAlive())
             {
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, false);
                 return;
             }
 
             if (!pGnomePlayer->HasAura(SPELL_GNOME_CAR) &&
                 !pGoblinPlayer->HasAura(SPELL_GOBLIN_CAR))
             {
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, false);
                 return;
             }
 
@@ -453,7 +463,7 @@ struct npc_daisy : public ScriptedAI
             }
 
             if (gnomeWins || goblinWins)
-                EndRace(g_startedRace);
+                EndRace(g_startedRace, true);
         }
 
         ScriptedAI::UpdateAI(uiDiff);
