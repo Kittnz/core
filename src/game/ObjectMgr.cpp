@@ -2132,7 +2132,9 @@ void ObjectMgr::LoadItemPrototypes()
         if (!proto)
             continue;
 
-        if ((obtainedItems.find(i) != obtainedItems.end()) || (proto->ExtraFlags & ITEM_EXTRA_MAIL_STATIONERY) || !sWorld.getConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING))
+        if ((obtainedItems.find(i) != obtainedItems.end()) ||
+            (proto->ExtraFlags & ITEM_EXTRA_MAIL_STATIONERY) ||
+            !sWorld.getConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING))
             proto->m_bDiscovered = true;
 
         if (proto->Class >= MAX_ITEM_CLASS)
@@ -2214,7 +2216,7 @@ void ObjectMgr::LoadItemPrototypes()
 
         if (proto->RequiredSpell && !sSpellMgr.GetSpellEntry(proto->RequiredSpell))
         {
-            sLog.outErrorDb("Item (Entry: %u) have wrong (nonexistent) spell in RequiredSpell (%u)", i, proto->RequiredSpell);
+            sLog.outErrorDb("Item (Entry: %u) has wrong (nonexistent) spell in RequiredSpell (%u)", i, proto->RequiredSpell);
             const_cast<ItemPrototype*>(proto)->RequiredSpell = 0;
         }
 
@@ -2338,7 +2340,7 @@ void ObjectMgr::LoadItemPrototypes()
 
         if (proto->ItemSet && !sItemSetStore.LookupEntry(proto->ItemSet))
         {
-            sLog.outErrorDb("Item (Entry: %u) have wrong ItemSet (%u)", i, proto->ItemSet);
+            sLog.outErrorDb("Item (Entry: %u) has wrong ItemSet (%u)", i, proto->ItemSet);
             const_cast<ItemPrototype*>(proto)->ItemSet = 0;
         }
 
@@ -2376,6 +2378,17 @@ void ObjectMgr::LoadItemPrototypes()
         {
             sLog.outErrorDb("Item (Entry: %u) has wrong FoodType value (%u)", i, proto->FoodType);
             const_cast<ItemPrototype*>(proto)->FoodType = 0;
+        }
+
+        if (proto->WrappedGift)
+        {
+            if (ItemPrototype const* pGift = GetItemPrototype(proto->WrappedGift))
+                pGift->m_bDiscovered = true;
+            else
+            {
+                sLog.outError("Item (Entry: %u) has wrong (nonexistent) item in WrappedGift (%u)", i, proto->WrappedGift);
+                const_cast<ItemPrototype*>(proto)->WrappedGift = 0;
+            }
         }
 
         if (proto->ExtraFlags)
