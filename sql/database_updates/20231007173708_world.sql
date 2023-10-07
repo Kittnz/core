@@ -1,0 +1,1 @@
+UPDATE `areatrigger_teleport` SET `required_condition` = 30003 WHERE `id` = 5017;
