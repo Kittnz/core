@@ -259,7 +259,7 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
         // Bonus Healing
         if (spellProto->Id == 45842)
         {
-            if (pVictim->GetHealthPercent() > 50.0f)
+            if (pVictim && pVictim->GetHealthPercent() > 50.0f)
                 return SPELL_PROC_TRIGGER_FAILED;
         }
         // Conviction (Custom Paladin Spell) should proc seals
