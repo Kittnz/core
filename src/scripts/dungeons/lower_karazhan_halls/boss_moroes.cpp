@@ -50,6 +50,13 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 	}
 
+	void ResetCombat()
+	{
+		m_creature->RemoveAllAuras();
+		m_creature->DeleteThreatList();
+		m_creature->CombatStop(true);
+	}
+
 	void ResetBattleTimers()
 	{
 		m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
@@ -194,10 +201,8 @@ struct boss_moroesAI : public ScriptedAI
 					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
 					m_creature->PlayDirectSound(60404);
 					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-					m_creature->RemoveAllAuras();
-					m_creature->DeleteThreatList();
-					m_creature->CombatStop(true);
 					m_creature->SetFactionTemplateId(35);
+					ResetCombat();
 					if (m_pInstance)
 						m_pInstance->SetData(DATA_MOROES_STAGE, 2);
 					m_InterludeTimer = 10000;
@@ -209,6 +214,7 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (m_InterludeTimer < uiDiff)
 					{
+						ResetCombat();
 						Teleport();
 						m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
