@@ -6,3 +6,5 @@ REPLACE INTO item_template VALUES
 update quest_template set ReqItemId1 = 61817 where entry = 40860;
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (61399, 61817, -80, 0, 1, 1, 0);
+-- Fix deez nuts.
+update item_template set spellppmrate_1 = 1 where entry = 12798; -- Annihilator
