@@ -1788,6 +1788,8 @@ void World::SetInitialWorldSettings()
     ///- Remove the bones (they should not exist in DB though) and old corpses after a restart
     CharacterDatabase.PExecute("DELETE FROM corpse WHERE corpse_type = '0' OR time < (UNIX_TIMESTAMP()-'%u')", 3 * DAY);
 
+    sLog.outString("Loading chat channels...");
+    sObjectMgr.LoadChatChannels();
     sLog.outString("Loading spells...");
     sSpellMgr.LoadSpells();
     sLog.outString("Loading factions...");

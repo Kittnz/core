@@ -39,7 +39,6 @@ static WMOAreaInfoByTripple sWMOAreaInfoByTripple;
 
 DBCStorage <AuctionHouseEntry> sAuctionHouseStore(AuctionHouseEntryfmt);
 DBCStorage <BankBagSlotPricesEntry> sBankBagSlotPricesStore(BankBagSlotPricesEntryfmt);
-DBCStorage <ChatChannelsEntry> sChatChannelsStore(ChatChannelsEntryfmt);
 DBCStorage <ChrClassesEntry> sChrClassesStore(ChrClassesEntryfmt);
 DBCStorage <ChrRacesEntry> sChrRacesStore(ChrRacesEntryfmt);
 DBCStorage <CinematicSequencesEntry> sCinematicSequencesStore(CinematicSequencesEntryfmt);
@@ -195,7 +194,6 @@ void LoadDBCStores(std::string const& dataPath)
     LoadDBC(availableDbcLocales, badDbcFiles, sAuctionHouseStore,        dbcPath, "AuctionHouse.dbc");
     LoadDBC(availableDbcLocales, badDbcFiles, sBankBagSlotPricesStore,   dbcPath, "BankBagSlotPrices.dbc");
 
-    LoadDBC(availableDbcLocales, badDbcFiles, sChatChannelsStore,        dbcPath, "ChatChannels.dbc");
     LoadDBC(availableDbcLocales, badDbcFiles, sChrClassesStore,          dbcPath, "ChrClasses.dbc");
     LoadDBC(availableDbcLocales, badDbcFiles, sChrRacesStore,            dbcPath, "ChrRaces.dbc");
     LoadDBC(availableDbcLocales, badDbcFiles, sCinematicSequencesStore,  dbcPath, "CinematicSequences.dbc");
@@ -538,46 +536,6 @@ WMOAreaTableEntry const* GetWMOAreaTableEntryByTripple(int32 rootid, int32 adtid
         return nullptr;
     return i->second;
 
-}
-
-ChatChannelsEntry const* GetChannelEntryFor(uint32 channel_id)
-{
-    // not sorted, numbering index from 0
-    for (uint32 i = 0; i < sChatChannelsStore.GetNumRows(); ++i)
-    {
-        ChatChannelsEntry const* ch = sChatChannelsStore.LookupEntry(i);
-        if (ch && ch->ChannelID == channel_id)
-            return ch;
-    }
-    return nullptr;
-}
-
-ChatChannelsEntry const* GetChannelEntryFor(std::string const& name)
-{
-    // not sorted, numbering index from 0
-    for (uint32 i = 0; i < sChatChannelsStore.GetNumRows(); ++i)
-    {
-        ChatChannelsEntry const* ch = sChatChannelsStore.LookupEntry(i);
-        if (ch)
-        {
-            // need to remove %s from entryName if it exists before we match
-            for (const auto loc : ch->pattern)
-            {
-                std::string entryName(loc);
-                std::size_t removeString = entryName.find("%s");
-                // Not loaded locale
-                if (entryName.empty())
-                    continue;
-
-                if (removeString != std::string::npos)
-                    entryName.replace(removeString, 2, "");
-
-                if (name.find(entryName) != std::string::npos)
-                    return ch;
-            }
-        }
-    }
-    return nullptr;
 }
 
 bool Zone2MapCoordinates(float& x, float& y, uint32 zone)

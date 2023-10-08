@@ -660,6 +660,10 @@ class ObjectMgr
         typedef std::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
         typedef std::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
 
+        void LoadChatChannels();
+        ChatChannelsEntry const* GetChannelEntryFor(uint32 channelId);
+        ChatChannelsEntry const* GetChannelEntryFor(std::string const& name);
+
         static Player* GetPlayer(const char* name) { return ObjectAccessor::FindPlayerByName(name);}
         static Player* GetPlayer(ObjectGuid guid) { return ObjectAccessor::FindPlayer(guid); }
 
@@ -1731,6 +1735,7 @@ class ObjectMgr
         CacheVendorItemMap m_CacheVendorItemMap;
         CacheTrainerSpellMap m_CacheTrainerTemplateSpellMap;
         CacheTrainerSpellMap m_CacheTrainerSpellMap;
+        robin_hood::unordered_map<uint32, ChatChannelsEntry> m_chatChannelsMap;
 };
 
 //#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()

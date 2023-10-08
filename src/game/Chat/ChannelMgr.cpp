@@ -58,7 +58,7 @@ Channel *ChannelMgr::GetOrCreateChannel(std::string const& name, bool allowAreaD
 
     if (channels.find(wname) == channels.end())
     {
-        ChatChannelsEntry const* ch = GetChannelEntryFor(name);
+        ChatChannelsEntry const* ch = sObjectMgr.GetChannelEntryFor(name);
         if (!allowAreaDependantChans && ch && ch->flags & Channel::CHANNEL_DBC_FLAG_ZONE_DEP)
             return nullptr;
         Channel *nchan = new Channel(name);
