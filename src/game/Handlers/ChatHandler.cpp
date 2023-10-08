@@ -846,6 +846,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         }
                     }
 
+                    //There is a really nice arcane bug in Channel.dbc linux loading.
+                    //It blocks world from properly being loaded and seen as first-class channel.
+                    //Biggest hackfixes of the century
+                    if (channel == u8"World")
+                    {
+                        if (EnforceEnglish(this, msg))
+                            return;
+                    }
+
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
                     {
