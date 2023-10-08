@@ -353,11 +353,11 @@ struct erenniusAI : public ScriptedAI
 
 	void Reset() override
 	{
-		m_uiPoisonBoltVolleyTimer = urand(25 * IN_MILLISECONDS, 29 * IN_MILLISECONDS);
+		m_uiPoisonBoltVolleyTimer = 13 * IN_MILLISECONDS;
 		m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
-		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
-		m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
-		m_uiGreenDragonBindingTimer = 105 * IN_MILLISECONDS;
+		m_uiCallOfNightmareTimer = 7 * IN_MILLISECONDS;
+		m_uiWallOfErenniusTimer = 35 * IN_MILLISECONDS;
+		m_uiGreenDragonBindingTimer = 70 * IN_MILLISECONDS;
 		m_uiCurseOfErenniusTimer = urand(83 * IN_MILLISECONDS, 95 * IN_MILLISECONDS);
 		m_uiCastedCurseOfErennius = false;
 	}
@@ -380,7 +380,7 @@ struct erenniusAI : public ScriptedAI
 				if (m_uiWallOfErenniusTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WALL_OF_ERENNIUS) == CAST_OK)
-						m_uiWallOfErenniusTimer = 45 * IN_MILLISECONDS;
+						m_uiWallOfErenniusTimer = 35 * IN_MILLISECONDS;
 				}
 				else
 					m_uiWallOfErenniusTimer -= uiDiff;
@@ -388,7 +388,7 @@ struct erenniusAI : public ScriptedAI
 				if (m_uiGreenDragonBindingTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(pSolnius, SPELL_GREEN_DRAGON_BINDING) == CAST_OK)
-						m_uiGreenDragonBindingTimer = 105 * IN_MILLISECONDS;
+						m_uiGreenDragonBindingTimer = 70 * IN_MILLISECONDS;
 				}
 				else
 					m_uiGreenDragonBindingTimer -= uiDiff;
@@ -400,7 +400,7 @@ struct erenniusAI : public ScriptedAI
 			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
 
 			if (DoCastSpellIfCan(target, SPELL_CALL_OF_NIGHTMARE) == CAST_OK)
-				m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+				m_uiCallOfNightmareTimer = 7 * IN_MILLISECONDS;
 		}
 		else
 			m_uiCallOfNightmareTimer -= uiDiff;
@@ -408,7 +408,7 @@ struct erenniusAI : public ScriptedAI
 		if (m_uiPoisonBoltVolleyTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT_VOLLEY) == CAST_OK)
-				m_uiPoisonBoltVolleyTimer = urand(25 * IN_MILLISECONDS, 29 * IN_MILLISECONDS);
+				m_uiPoisonBoltVolleyTimer = 13 * IN_MILLISECONDS;
 		}
 		else
 			m_uiPoisonBoltVolleyTimer -= uiDiff;

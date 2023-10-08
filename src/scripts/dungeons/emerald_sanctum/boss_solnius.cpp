@@ -96,10 +96,10 @@ struct boss_solniusAI : public ScriptedAI
 	{
 		m_uiCorrosiveBoltTimer = 6 * IN_MILLISECONDS;
 		m_uiEmeraldRotTimer = 15 * IN_MILLISECONDS;
-		m_uiAcidBreathTimer = 25 * IN_MILLISECONDS;
-		m_uiGimmickTimer = urand(42 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);
-		m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
-		m_uiExpulsionOfCorruptionTimer = urand(18 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
+		m_uiAcidBreathTimer = 20 * IN_MILLISECONDS;
+		m_uiGimmickTimer = 33 * IN_MILLISECONDS;
+		m_uiCallOfNightmareTimer = 7 * IN_MILLISECONDS;
+		m_uiExpulsionOfCorruptionTimer = 17 * IN_MILLISECONDS;
 		m_bIsHardMode = false;
 		randomPlayers.clear();
 		phase = PHASE_1;
@@ -334,7 +334,7 @@ struct boss_solniusAI : public ScriptedAI
 			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
 
 			if (DoCastSpellIfCan(target, SPELL_CALL_OF_NIGHTMARE) == CAST_OK)
-				m_uiCallOfNightmareTimer = 11 * IN_MILLISECONDS;
+				m_uiCallOfNightmareTimer = 7 * IN_MILLISECONDS;
 		}
 		else
 			m_uiCallOfNightmareTimer -= uiDiff;
@@ -344,7 +344,7 @@ struct boss_solniusAI : public ScriptedAI
 			if (m_uiExpulsionOfCorruptionTimer < uiDiff)
 			{
 				if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EXPULSION_OF_CORRUPTION) == CAST_OK)
-					m_uiExpulsionOfCorruptionTimer = urand(18 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
+					m_uiExpulsionOfCorruptionTimer = 17 * IN_MILLISECONDS;
 			}
 			else
 				m_uiExpulsionOfCorruptionTimer -= uiDiff;
@@ -356,7 +356,7 @@ struct boss_solniusAI : public ScriptedAI
 				if (m_uiAcidBreathTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACID_BREATH) == CAST_OK)
-						m_uiAcidBreathTimer = 25 * IN_MILLISECONDS;
+						m_uiAcidBreathTimer = 20 * IN_MILLISECONDS;
 				}
 				else
 					m_uiAcidBreathTimer -= uiDiff;
@@ -382,7 +382,7 @@ struct boss_solniusAI : public ScriptedAI
 						{
 							m_creature->CastSpell(pPlayer, SPELL_EMERALD_INSTABILITY, true);
 						}
-						m_uiGimmickTimer = urand(42 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);
+						m_uiGimmickTimer = 33 * IN_MILLISECONDS;
 					}
 				}
 				else
