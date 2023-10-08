@@ -18,7 +18,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance)
+		if (m_pInstance && m_pInstance->GetData(DATA_CLAWLORD_HOWLFANG) != DONE)
 			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, NOT_STARTED);
 		m_TerrifyingPresenceTimer = 2 * IN_MILLISECONDS;
 		m_SlaveringBiteTimer = urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);

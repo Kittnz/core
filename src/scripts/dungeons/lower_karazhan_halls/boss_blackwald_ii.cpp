@@ -19,7 +19,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance)
+		if (m_pInstance && m_pInstance->GetData(DATA_BLACKWALD_II) != DONE)
 			m_pInstance->SetData(DATA_BLACKWALD_II, NOT_STARTED);
 		summonList.clear();
 		m_ReaverStormTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);

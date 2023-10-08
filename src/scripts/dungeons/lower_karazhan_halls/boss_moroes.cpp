@@ -34,7 +34,7 @@ struct boss_moroesAI : public ScriptedAI
 		RestoreFlags();
 		ResetBattleTimers();
 
-		if (m_pInstance)
+		if (m_pInstance && m_pInstance->GetData(DATA_MOROES) != DONE)
 		{
 			m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 			m_pInstance->SetData(DATA_MOROES_STAGE, 0);

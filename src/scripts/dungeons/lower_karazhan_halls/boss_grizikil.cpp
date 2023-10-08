@@ -18,7 +18,7 @@ struct boss_grizikilAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance)
+		if (m_pInstance && m_pInstance->GetData(DATA_GRIZIKIL) != DONE)
 			m_pInstance->SetData(DATA_GRIZIKIL, NOT_STARTED);
 		m_GrellkinFireballTimer = 2 * IN_MILLISECONDS;
 		m_GrellkinROFTimer = 15 * IN_MILLISECONDS;
