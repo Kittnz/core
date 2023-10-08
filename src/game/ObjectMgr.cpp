@@ -9518,3 +9518,81 @@ void ObjectMgr::BackupCharacterInventory()
     CharacterDatabase.DirectPExecute("INSERT INTO `character_inventory_copy` SELECT * FROM `character_inventory`");
     CharacterDatabase.DirectPExecute("ALTER TABLE `character_inventory_copy` ENABLE KEYS");
 }
+
+void ObjectMgr::LoadChatChannels()
+{
+    m_chatChannelsMap.clear();                                  // for reload case
+    //                                                               0     1        2                3       4            5            6            7            8            9            10           11            12          13               14               15               16               17               18               19               20
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `flags`, `faction_group`, `name`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_flags`, `shortcut`, `shortcut_loc1`, `shortcut_loc2`, `shortcut_loc3`, `shortcut_loc4`, `shortcut_loc5`, `shortcut_loc6`, `shortcut_loc7`, `shortcut_flags` FROM `chat_channels`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        ChatChannelsEntry channel;
+        channel.id = 1;
+        channel.flags = fields[1].GetUInt32();
+        channel.factionGroup = fields[2].GetUInt32();
+
+        for (int i = 0; i < MAX_DBC_LOCALE; ++i)
+            channel.name[i] = fields[3 + i].GetCppString();
+        channel.nameFlags = fields[11].GetUInt32();
+
+        for (int i = 0; i < MAX_DBC_LOCALE; ++i)
+            channel.shortcut[i] = fields[12 + i].GetCppString();
+        channel.shortcutFlags = fields[20].GetUInt32();
+
+        m_chatChannelsMap.insert({ id, channel });
+    } while (result->NextRow());
+}
+
+ChatChannelsEntry const* ObjectMgr::GetChannelEntryFor(uint32 channelId)
+{
+    auto itr = m_chatChannelsMap.find(channelId);
+    if (itr != m_chatChannelsMap.end())
+        return &itr->second;
+
+    return nullptr;
+}
+
+ChatChannelsEntry const* ObjectMgr::GetChannelEntryFor(std::string const& name)
+{
+    for (auto const& itr : m_chatChannelsMap)
+    {
+        // need to remove %s from entryName if it exists before we match
+        for (const auto loc : itr.second.name)
+        {
+            std::string entryName(loc);
+            std::size_t removeString = entryName.find("%s");
+
+            // Not loaded locale
+            if (entryName.empty())
+                continue;
+
+            if (removeString != std::string::npos)
+                entryName.replace(removeString, 2, "");
+
+            if (name.find(entryName) != std::string::npos)
+                return &itr.second;
+        }
+
+        // search in shortcut name
+        for (const auto loc : itr.second.shortcut)
+        {
+            // Not loaded locale
+            if (loc.empty())
+                continue;
+
+            if (loc == name)
+                return &itr.second;
+        }
+    }
+
+    return nullptr;
+}

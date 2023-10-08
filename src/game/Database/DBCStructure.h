@@ -90,13 +90,13 @@ struct BankBagSlotPricesEntry
 
 struct ChatChannelsEntry
 {
-    uint32  ChannelID;                                      // 0        m_ID
-    uint32  flags;                                          // 1        m_flags
-                                                            // 2        m_factionGroup
-    char*   pattern[8];                                     // 3-10     m_name_lang
-                                                            // 11 string flags
-    //char*       name[8];                                  // 12-19    m_shortcut_lang
-                                                            // 20 string flag
+    uint32 id;
+    uint32 flags;
+    uint32 factionGroup;
+    std::string name[8];
+    uint32 nameFlags;
+    std::string shortcut[8];
+    uint32 shortcutFlags;
 };
 
 struct ChrClassesEntry

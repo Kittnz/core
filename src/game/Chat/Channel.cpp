@@ -32,10 +32,10 @@ Channel::Channel(std::string const& name)
     : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0)
 {
     // set special flags if built-in channel
-    ChatChannelsEntry const* ch = GetChannelEntryFor(name);
+    ChatChannelsEntry const* ch = sObjectMgr.GetChannelEntryFor(name);
     if (ch)                                                 // it's built-in channel
     {
-        m_channelId = ch->ChannelID;                        // only built-in channel have channel id != 0
+        m_channelId = ch->id;                               // only built-in channel have channel id != 0
         m_announce = false;                                 // no join/leave announces
 
         m_flags |= CHANNEL_FLAG_GENERAL;                    // for all built-in channels
