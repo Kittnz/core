@@ -10,3 +10,6 @@ update item_template set stat_value1 = 12, stat_value2 = 12 where entry = 61453;
 -- For the creatures 60742,60743,60744,60745,60746,61212 set the drop chance of 61198 to 8.1%, set the drop chance of 20381 to 4.5%
 update creature_loot_template set ChanceOrQuestChance = 8.1 where item = 61198 and entry in (60742,60743,60744,60745,60746,61212);
 update creature_loot_template set ChanceOrQuestChance = 4.5 where item = 20381 and entry in (60742,60743,60744,60745,60746,61212);
+-- Bosses in Karazhan need to be made immune to deathcoil: 61225,61221,61223,61222,61224.
+update creature_template set mechanic_immune_mask = 8474193 where entry = 61225;
+update creature_template set mechanic_immune_mask = 8457809 where entry in (61221,61223,61222,61224);
