@@ -16891,3 +16891,772 @@ bool ChatHandler::HandleListClickToMoveCommand(char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleReloadQuestAreaTriggersCommand(char* /*args*/)
+{
+    sObjectMgr.LoadQuestAreaTriggers();
+    SendSysMessage("DB table `areatrigger_involvedrelation` (quest area triggers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadAreaTriggerTavernCommand(char* /*args*/)
+{
+    sObjectMgr.LoadTavernAreaTriggers();
+    SendSysMessage("DB table `areatrigger_tavern` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCharacterPetCommand(char* args)
+{
+    uint32 petId = 0;
+    if (!ExtractUInt32(&args, petId))
+        return false;
+    if (!petId)
+        return false;
+    sCharacterDatabaseCache.LoadAll(petId);
+    PSendSysMessage(">> Pet #%u reloaded from database.", petId);
+    return true;
+}
+
+bool ChatHandler::HandleReloadConditionsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadConditions();
+    SendSysMessage("DB table `conditions` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureCommand(char* /*args*/)
+{
+    sObjectMgr.LoadCreatures(true);
+    SendSysMessage("DB table `creature` reloaded.");
+    return true;
+}
+
+// Do not add separate reload command for scripts!
+// EventAI events must be loaded right after.
+bool ChatHandler::HandleReloadEventAIEventsCommand(char* args)
+{
+    sEventAIMgr.ClearEventData();
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `creature_ai_scripts`...");
+
+    sScriptMgr.LoadCreatureEventAIScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `creature_ai_scripts` reloaded.");
+
+    sLog.outInfo("Re-Loading Events from `creature_ai_events`...");
+    sEventAIMgr.LoadCreatureEventAI_Events();
+    SendSysMessage("DB table `creature_ai_events` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureQuestInvRelationsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadCreatureInvolvedRelations();
+    SendSysMessage("DB table `creature_involvedrelation` (creature quest takers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesCreatureCommand(char* /*args*/)
+{
+    LoadLootTemplates_Creature();
+    LootTemplates_Creature.CheckLootRefs();
+    SendSysMessage("DB table `creature_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureQuestRelationsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadCreatureQuestRelations();
+    SendSysMessage("DB table `creature_questrelation` (creature quest givers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureSpellsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadCreatureSpells();
+    SendSysMessage("DB table `creature_spells` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureSpellScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `creature_spells_scripts`...");
+
+    sScriptMgr.LoadCreatureSpellScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `creature_spells_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesDisenchantCommand(char* /*args*/)
+{
+    LoadLootTemplates_Disenchant();
+    LootTemplates_Disenchant.CheckLootRefs();
+    SendSysMessage("DB table `disenchant_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadEventScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `event_scripts`...");
+
+    sScriptMgr.LoadEventScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `event_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesFishingCommand(char* /*args*/)
+{
+    LoadLootTemplates_Fishing();
+    LootTemplates_Fishing.CheckLootRefs();
+    SendSysMessage("DB table `fishing_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGameGraveyardZoneCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGraveyardZones();
+    SendSysMessage("DB table `game_graveyard_zone` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGameTeleCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGameTele();
+    SendSysMessage("DB table `game_tele` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadTaxiPathTransitionsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadTaxiPathTransitions();
+    SendSysMessage("DB table `taxi_path_transitions` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGameObjectCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGameobjects(true);
+    SendSysMessage("DB table `gameobject` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGOQuestInvRelationsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGameobjectInvolvedRelations();
+    SendSysMessage("DB table `gameobject_involvedrelation` (gameobject quest takers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesGameobjectCommand(char* /*args*/)
+{
+    LoadLootTemplates_Gameobject();
+    LootTemplates_Gameobject.CheckLootRefs();
+    SendSysMessage("DB table `gameobject_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGOQuestRelationsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGameobjectQuestRelations();
+    SendSysMessage("DB table `gameobject_questrelation` (gameobject quest givers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGORequirementsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGameobjectsRequirements();
+    SendSysMessage("DB table `gameobject_requirement` (Game Objects requirements) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGameObjectScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `gameobject_scripts`...");
+
+    sScriptMgr.LoadGameObjectScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `gameobject_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadBattleEventCommand(char* /*args*/)
+{
+    sBattleGroundMgr.LoadBattleEventIndexes();
+    SendSysMessage("DB table `gameobject_battleground` and `creature_battleground` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGossipMenuCommand(char* /*args*/)
+{
+    std::set<uint32> gossipScriptSet;
+    for (const auto& itr : sGossipScripts)
+        gossipScriptSet.insert(itr.first);
+    sObjectMgr.LoadGossipMenu(gossipScriptSet);
+    SendSysMessage("DB table `gossip_menu` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGossipMenuOptionCommand(char* /*args*/)
+{
+    std::set<uint32> gossipScriptSet;
+    for (const auto& itr : sGossipScripts)
+        gossipScriptSet.insert(itr.first);
+    sObjectMgr.LoadGossipMenuItems(gossipScriptSet);
+    SendSysMessage("DB table `gossip_menu_option` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGenericScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `generic_scripts`...");
+
+    sScriptMgr.LoadGenericScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `generic_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadGossipScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `gossip_scripts`...");
+
+    sScriptMgr.LoadGossipScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `gossip_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadItemEnchantementsCommand(char* /*args*/)
+{
+    LoadRandomEnchantmentsTable();
+    SendSysMessage("DB table `item_enchantment_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesItemCommand(char* /*args*/)
+{
+    LoadLootTemplates_Item();
+    LootTemplates_Item.CheckLootRefs();
+    SendSysMessage("DB table `item_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadItemRequiredTragetCommand(char* /*args*/)
+{
+    sObjectMgr.LoadItemRequiredTarget();
+    SendSysMessage("DB table `item_required_target` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesCreatureCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Creature ...");
+    sObjectMgr.LoadCreatureLocales();
+    SendSysMessage("DB table `locales_creature` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesGameobjectCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Gameobject ... ");
+    sObjectMgr.LoadGameObjectLocales();
+    SendSysMessage("DB table `locales_gameobject` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesGossipMenuOptionCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Gossip Menu Option ... ");
+    sObjectMgr.LoadGossipMenuItemsLocales();
+    SendSysMessage("DB table `locales_gossip_menu_option` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesItemCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Item ... ");
+    sObjectMgr.LoadItemLocales();
+    SendSysMessage("DB table `locales_item` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesPageTextCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Page Text ... ");
+    sObjectMgr.LoadPageTextLocales();
+    SendSysMessage("DB table `locales_page_text` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesPointsOfInterestCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Points Of Interest ... ");
+    sObjectMgr.LoadPointOfInterestLocales();
+    SendSysMessage("DB table `locales_points_of_interest` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLocalesQuestCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading Locales Quest ... ");
+    sObjectMgr.LoadQuestLocales();
+    SendSysMessage("DB table `locales_quest` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesMailCommand(char* /*args*/)
+{
+    LoadLootTemplates_Mail();
+    LootTemplates_Mail.CheckLootRefs();
+    SendSysMessage("DB table `mail_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadNpcGossipCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading `npc_gossip` Table!");
+    sObjectMgr.LoadNpcGossips();
+    SendSysMessage("DB table `npc_gossip` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadNpcTextCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading `npc_text` Table!");
+    sObjectMgr.LoadNPCText();
+    SendSysMessage("DB table `npc_text` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadNpcTrainerCommand(char* /*args*/)
+{
+    sLog.outInfo("Re-Loading `npc_trainer_template` Table!");
+    sObjectMgr.LoadTrainerTemplates();
+    SendSysMessage("DB table `npc_trainer_template` reloaded.");
+
+    sLog.outInfo("Re-Loading `npc_trainer` Table!");
+    sObjectMgr.LoadTrainers();
+    SendSysMessage("DB table `npc_trainer` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadNpcVendorCommand(char* /*args*/)
+{
+    // not safe reload vendor template tables independent...
+    sLog.outInfo("Re-Loading `npc_vendor_template` Table!");
+    sObjectMgr.LoadVendorTemplates();
+    SendSysMessage("DB table `npc_vendor_template` reloaded.");
+
+    sLog.outInfo("Re-Loading `npc_vendor` Table!");
+    sObjectMgr.LoadVendors();
+    SendSysMessage("DB table `npc_vendor` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadPageTextsCommand(char* /*args*/)
+{
+    sObjectMgr.LoadPageTexts();
+    SendSysMessage("DB table `page_texts` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesPickpocketingCommand(char* /*args*/)
+{
+    LoadLootTemplates_Pickpocketing();
+    LootTemplates_Pickpocketing.CheckLootRefs();
+    SendSysMessage("DB table `pickpocketing_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadPointsOfInterestCommand(char* /*args*/)
+{
+    sObjectMgr.LoadPointsOfInterest();
+    SendSysMessage("DB table `points_of_interest` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadQuestEndScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `quest_end_scripts`...");
+
+    sScriptMgr.LoadQuestEndScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `quest_end_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadQuestStartScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `quest_start_scripts`...");
+
+    sScriptMgr.LoadQuestStartScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `quest_start_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadQuestGreetingCommand(char* /*args*/)
+{
+    sObjectMgr.LoadQuestGreetings();
+    SendSysMessage("DB table `quest_greeting` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadTrainerGreetingCommand(char* /*args*/)
+{
+    sObjectMgr.LoadTrainerGreetings();
+    SendSysMessage("DB table `npc_trainer_greeting` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesReferenceCommand(char* /*args*/)
+{
+    LootIdSet ids_set;
+    LoadLootTemplates_Reference(ids_set);
+    CheckLootTemplates_Reference(ids_set);
+    SendSysMessage("DB table `reference_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadReservedNameCommand(char* /*args*/)
+{
+    sObjectMgr.LoadReservedPlayersNames();
+    SendSysMessage("DB table `reserved_name` (player reserved names) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadReputationRewardRateCommand(char* /*args*/)
+{
+    sObjectMgr.LoadReputationRewardRate();
+    SendSysMessage("DB table `reputation_reward_rate` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadReputationSpilloverTemplateCommand(char* /*args*/)
+{
+    sObjectMgr.LoadReputationSpilloverTemplate();
+    SendSysMessage("DB table `reputation_spillover_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSkillFishingBaseLevelCommand(char* /*args*/)
+{
+    sObjectMgr.LoadFishingBaseSkillLevel();
+    SendSysMessage("DB table `skill_fishing_base_level` (fishing base level for zone/subzone) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadLootTemplatesSkinningCommand(char* /*args*/)
+{
+    LoadLootTemplates_Skinning();
+    LootTemplates_Skinning.CheckLootRefs();
+    SendSysMessage("DB table `skinning_loot_template` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellAffectCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellAffects();
+    SendSysMessage("DB table `spell_affect` (spell mods apply requirements) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellAreaCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellAreas();
+    SendSysMessage("DB table `spell_area` (spell dependences from area/quest/auras state) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellChainCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellChains();
+    SendSysMessage("DB table `spell_chain` (spell ranks) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellElixirCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellElixirs();
+    SendSysMessage("DB table `spell_elixir` (spell elixir types) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellLearnSpellCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellLearnSpells();
+    SendSysMessage("DB table `spell_learn_spell` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellPetAurasCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellPetAuras();
+    SendSysMessage("DB table `spell_pet_auras` reloaded.");
+    return true;
+}
+
+
+bool ChatHandler::HandleReloadSpellProcEventCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellProcEvents();
+    SendSysMessage("DB table `spell_proc_event` (spell proc trigger requirements) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellProcItemEnchantCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellProcItemEnchant();
+    SendSysMessage("DB table `spell_proc_item_enchant` (item enchantment ppm) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellScriptTargetCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellScriptTarget();
+    SendSysMessage("DB table `spell_script_target` (spell targets selection in case specific creature/GO requirements) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellScriptsCommand(char* args)
+{
+    if (sScriptMgr.IsScriptScheduled())
+    {
+        SendSysMessage("DB scripts used currently, please attempt reload later.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (*args != 'a')
+        sLog.outInfo("Re-Loading Scripts from `spell_scripts`...");
+
+    sScriptMgr.LoadSpellScripts();
+
+    if (*args != 'a')
+        SendSysMessage("DB table `spell_scripts` reloaded.");
+
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellTargetPositionCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellTargetPositions();
+    SendSysMessage("DB table `spell_target_position` (destination coordinates for spell targets) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellThreatsCommand(char* /*args*/)
+{
+    sSpellMgr.LoadSpellThreats();
+    SendSysMessage("DB table `spell_threat` (spell aggro definitions) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellModsCommand(char* args)
+{
+    sSpellModMgr.LoadSpellMods();
+    SendSysMessage("DB table `spell_mod` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadMapLootDisabledCommand(char* args)
+{
+    sObjectMgr.LoadMapLootDisabled();
+    SendSysMessage("DB table `map_loot_disabled` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCinematicWaypointsCommand(char* args)
+{
+    sObjectMgr.LoadCinematicsWaypoints();
+    SendSysMessage("DB table `cinematic_waypoints` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellGroupCommand(char*)
+{
+    sSpellMgr.LoadSpellGroups();
+    SendSysMessage("Table `spell_group` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadSpellGroupStackRulesCommand(char*)
+{
+    sSpellMgr.LoadSpellGroupStackRules();
+    SendSysMessage("Table `spell_group_stack_rules` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadExplorationBaseXp(char*)
+{
+    sObjectMgr.LoadExplorationBaseXP();
+    SendSysMessage(">> Table `exploration_basexp` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadPetNameGeneration(char*)
+{
+    sObjectMgr.LoadPetNames();
+    SendSysMessage(">> Table `pet_name_generation` reloaded.");
+    return true;
+}
+
+
+bool ChatHandler::HandleReloadCreatureOnKillReputation(char*)
+{
+    sObjectMgr.LoadReputationOnKill();
+    SendSysMessage(">> Table `creature_onkill_reputation` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGameWeather(char*)
+{
+    sWeatherMgr.LoadWeatherZoneChances();
+    SendSysMessage(">> Table `game_weather` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadFactionChangeReputations(char*)
+{
+    sObjectMgr.LoadFactionChangeReputations();
+    SendSysMessage(">> Table `player_factionchange_reputations` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadFactionChangeSpells(char*)
+{
+    sObjectMgr.LoadFactionChangeSpells();
+    SendSysMessage(">> Table `player_factionchange_spells` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadFactionChangeItems(char*)
+{
+    sObjectMgr.LoadFactionChangeItems();
+    SendSysMessage(">> Table `player_factionchange_items` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadFactionChangeQuests(char*)
+{
+    sObjectMgr.LoadFactionChangeQuests();
+    SendSysMessage(">> Table `player_factionchange_quests` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadFactionChangeMounts(char*)
+{
+    sObjectMgr.LoadFactionChangeMounts();
+    SendSysMessage(">> Table `player_factionchange_mounts` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureDisplayInfoAddon(char*)
+{
+    sObjectMgr.LoadCreatureDisplayInfoAddon();
+    SendSysMessage(">> Table `creature_display_info_addon` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadIPBanList(char*)
+{
+    sAccountMgr.LoadIPBanList();
+    SendSysMessage(">> Table `ip_banned` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadAccountBanList(char*)
+{
+    sAccountMgr.LoadAccountBanList();
+    SendSysMessage(">> Table `account_banned` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadInstanceBuffRemoval(char*)
+{
+    sAuraRemovalMgr.LoadFromDB();
+    SendSysMessage(">> Table `instance_buff_removal` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadPetitions(char*)
+{
+    sGuildMgr.LoadPetitions();
+    SendSysMessage(">> Table `petition` reloaded.");
+    return true;
+}
