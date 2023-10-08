@@ -13,3 +13,11 @@ update item_template set armor = 618 where entry = 61244; -- kara10 plate legs
 -- Fix Kara instance binds:
 
 update creature_template set flags_extra = 1  where entry in (61225,61221,61223,61222,61224);
+
+-- key fix:
+
+-- quest 40818 needs to be marked as a raid quest.
+-- quest 40826 needs to be marked as a dungeon quest
+
+UPDATE quest_template SET questflags = 64, type = 62 WHERE entry = 40818;
+UPDATE quest_template SET type = 81  WHERE entry = 40826;
