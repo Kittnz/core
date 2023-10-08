@@ -21,3 +21,11 @@ update creature_template set flags_extra = 1  where entry in (61225,61221,61223,
 
 UPDATE quest_template SET questflags = 64, type = 62 WHERE entry = 40818;
 UPDATE quest_template SET type = 81  WHERE entry = 40826;
+
+-- Rune-Etched Blacksmith Plans consume fix
+update item_template set spellcharges_1 = -1 where entry = 83505;
+update item_template set spellcharges_1 = -1 where entry = 83503;
+update item_template set spellcharges_1 = -1 where entry = 83504;
+update item_template set spellcharges_1 = -1 where entry = 83501;
+update item_template set spellcharges_1 = -1 where entry = 83506;
+update item_template set spellcharges_1 = -1 where entry = 83502;
