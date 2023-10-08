@@ -79,8 +79,7 @@ enum ChannelId
     CHANNEL_ID_WORLD_DEFENSE        = 23,
     CHANNEL_ID_GUILD_RECRUITMENT    = 25,
     CHANNEL_ID_LOOKING_FOR_GROUP    = 26, // It's actually 24 in DBC!
-    CHANNEL_ID_WORLD                = 27,
-    CHANNEL_ID_ROLEPLAY             = 30,
+    CHANNEL_ID_WORLD                = 27
 };
 
 inline bool IsDefenseChannel(uint32 channelId)
