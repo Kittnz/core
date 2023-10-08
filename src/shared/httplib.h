@@ -12,7 +12,7 @@
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 
-#if defined(_WIN32_WINNT_WIN10) || defined(LINUX)
+#if defined(_WIN32_WINNT_WIN10) || defined(linux)
 #define CPPHTTPLIB_USE_POLL
 #endif
 
