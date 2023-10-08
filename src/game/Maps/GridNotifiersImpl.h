@@ -179,6 +179,10 @@ inline void MaNGOS::DynamicObjectUpdater::VisitHelper(Unit* target)
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(i_dynobject.GetSpellId());
     SpellEffectIndex eff_index  = i_dynobject.GetEffIndex();
 
+    // Needed for "Faithful" paladin libram so it doesn't stack between casters.
+    if ((spellInfo->Custom & SPELL_CUSTOM_PERSISTENT_NO_STACK) && target->HasAura(spellInfo->Id))
+        return;
+
     // Enter combat
     if (pUnit && !i_positive &&
         !spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) &&
