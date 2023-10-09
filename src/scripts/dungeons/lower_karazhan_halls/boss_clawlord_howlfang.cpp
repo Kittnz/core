@@ -21,8 +21,8 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		if (m_pInstance && m_pInstance->GetData(DATA_CLAWLORD_HOWLFANG) != DONE)
 			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, NOT_STARTED);
 		m_TerrifyingPresenceTimer = 2 * IN_MILLISECONDS;
-		m_SlaveringBiteTimer = urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
-		m_ShadowbaneCurseTimer = 60 * IN_MILLISECONDS;
+		m_SlaveringBiteTimer = urand(8 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
+		m_ShadowbaneCurseTimer = 50 * IN_MILLISECONDS;
 		phase = false;
 		frenzy = false;
 	}
@@ -66,7 +66,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		if (m_TerrifyingPresenceTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57083) == CAST_OK)
-				m_TerrifyingPresenceTimer = 5 * IN_MILLISECONDS;
+				m_TerrifyingPresenceTimer = 4 * IN_MILLISECONDS;
 		}
 		else
 			m_TerrifyingPresenceTimer -= uiDiff;
@@ -76,7 +76,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 			{
 				if (DoCastSpellIfCan(pTarget, 57076) == CAST_OK)
-					m_SlaveringBiteTimer = urand(12 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
+					m_SlaveringBiteTimer = urand(8 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
 			}
 		}
 		else
@@ -85,7 +85,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		if (m_ShadowbaneCurseTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57084) == CAST_OK)
-				m_ShadowbaneCurseTimer = 60 * IN_MILLISECONDS;
+				m_ShadowbaneCurseTimer = 48 * IN_MILLISECONDS;
 		}
 		else
 			m_ShadowbaneCurseTimer -= uiDiff;

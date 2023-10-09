@@ -59,12 +59,12 @@ struct boss_moroesAI : public ScriptedAI
 
 	void ResetBattleTimers()
 	{
-		m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
-		m_SmokeBombTimer = urand(20 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
-		m_ShuffleKickTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
-		m_ShadowBlastTimer = urand(12 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
-		m_MoroesCurseTimer = urand(50 * IN_MILLISECONDS, 60 * IN_MILLISECONDS);
-		m_ReflectionTimer = 30 * IN_MILLISECONDS;
+		m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
+		m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+		m_ShuffleKickTimer = urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
+		m_ShadowBlastTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
+		m_MoroesCurseTimer = urand(35 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);
+		m_ReflectionTimer = 25 * IN_MILLISECONDS;
 	}
 
 	void Aggro(Unit* /*pWho*/) override
@@ -159,7 +159,7 @@ struct boss_moroesAI : public ScriptedAI
 						m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 						if (pSecond)
 							m_creature->AI()->AttackStart(pSecond);
-						m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
+						m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
 					}
 				}
 				else
@@ -170,7 +170,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 					{
 						if (DoCastSpellIfCan(pTarget, 57096) == CAST_OK)
-							m_SmokeBombTimer = urand(28 * IN_MILLISECONDS, 32 * IN_MILLISECONDS);
+							m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
 					}
 				}
 				else
@@ -181,7 +181,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 					{
 						if (DoCastSpellIfCan(pTarget, 57097) == CAST_OK)
-							m_ShuffleKickTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
+							m_ShuffleKickTimer = urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
 						DoCastSpellIfCan(pTarget, 57098, CF_TRIGGERED);
 					}
 				}
@@ -250,7 +250,7 @@ struct boss_moroesAI : public ScriptedAI
 						m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 						if (pSecond)
 							m_creature->AI()->AttackStart(pSecond);
-						m_GlitteringDustTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
+						m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
 					}
 				}
 				else
@@ -261,7 +261,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 					{
 						if (DoCastSpellIfCan(pTarget, 57096) == CAST_OK)
-							m_SmokeBombTimer = urand(28 * IN_MILLISECONDS, 32 * IN_MILLISECONDS);
+							m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
 					}
 				}
 				else
@@ -272,7 +272,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 					{
 						if (DoCastSpellIfCan(pTarget, 57097) == CAST_OK)
-							m_ShuffleKickTimer = urand(10 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
+							m_ShuffleKickTimer = urand(9 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 						DoCastSpellIfCan(pTarget, 57098, CF_TRIGGERED);
 					}
 				}
@@ -284,7 +284,7 @@ struct boss_moroesAI : public ScriptedAI
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 					{
 						if (DoCastSpellIfCan(pTarget, 57099) == CAST_OK)
-							m_ShadowBlastTimer = urand(12 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+							m_ShadowBlastTimer = urand(8 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 					}
 				}
 				else
@@ -293,7 +293,7 @@ struct boss_moroesAI : public ScriptedAI
 				if (m_MoroesCurseTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(m_creature, 57100) == CAST_OK)
-						m_MoroesCurseTimer = urand(68 * IN_MILLISECONDS, 72 * IN_MILLISECONDS);;
+						m_MoroesCurseTimer = urand(43 * IN_MILLISECONDS, 49 * IN_MILLISECONDS);;
 				}
 				else
 					m_MoroesCurseTimer -= uiDiff;
@@ -301,7 +301,7 @@ struct boss_moroesAI : public ScriptedAI
 				if (m_ReflectionTimer < uiDiff)
 				{
 					if (DoCastSpellIfCan(m_creature, 27564) == CAST_OK)
-						m_ReflectionTimer = urand(38 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);;
+						m_ReflectionTimer = urand(33 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);;
 				}
 				else
 					m_ReflectionTimer -= uiDiff;

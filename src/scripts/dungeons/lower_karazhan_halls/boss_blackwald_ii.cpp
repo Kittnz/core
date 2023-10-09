@@ -22,10 +22,10 @@ struct boss_blackwald_iiAI : public ScriptedAI
 		if (m_pInstance && m_pInstance->GetData(DATA_BLACKWALD_II) != DONE)
 			m_pInstance->SetData(DATA_BLACKWALD_II, NOT_STARTED);
 		summonList.clear();
-		m_ReaverStormTimer = urand(7 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
-		m_EmpoweredSoulTimer = urand(32 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);
-		m_BlackwaldBoonTimer = 25 * IN_MILLISECONDS;
-		m_CallHelpTimer = 35 * IN_MILLISECONDS;
+		m_ReaverStormTimer = urand(6 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
+		m_EmpoweredSoulTimer = urand(27 * IN_MILLISECONDS, 40 * IN_MILLISECONDS);
+		m_BlackwaldBoonTimer = 20 * IN_MILLISECONDS;
+		m_CallHelpTimer = 31 * IN_MILLISECONDS;
 	}
 
 	void Aggro(Unit* /*pWho*/) override
@@ -87,7 +87,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 		if (m_ReaverStormTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57066) == CAST_OK)
-				m_ReaverStormTimer = urand(8 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
+				m_ReaverStormTimer = urand(6 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		}
 		else
 			m_ReaverStormTimer -= uiDiff;
@@ -99,7 +99,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 				if (DoCastSpellIfCan(pTarget, 57073) == CAST_OK)
 				{
 					if (DoCastSpellIfCan(m_creature, 57074, CF_TRIGGERED) == CAST_OK)
-						m_BlackwaldBoonTimer = 25 * IN_MILLISECONDS;
+						m_BlackwaldBoonTimer = 22 * IN_MILLISECONDS;
 				}
 			}
 		}
@@ -111,7 +111,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 			{
 				if (DoCastSpellIfCan(pTarget, 57075) == CAST_OK)
-					m_EmpoweredSoulTimer = urand(32 * IN_MILLISECONDS, 48 * IN_MILLISECONDS);
+					m_EmpoweredSoulTimer = urand(26 * IN_MILLISECONDS, 42 * IN_MILLISECONDS);
 			}
 		}
 		else
@@ -122,7 +122,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 			m_creature->PlayDirectSound(60413);
 			m_creature->MonsterYell("I call upon the Scythe of Elune, grant me your power!");
 			CallForHelp();
-			m_CallHelpTimer = urand(56 * IN_MILLISECONDS, 63 * IN_MILLISECONDS);
+			m_CallHelpTimer = urand(44 * IN_MILLISECONDS, 51 * IN_MILLISECONDS);
 		}
 		else
 			m_CallHelpTimer -= uiDiff;

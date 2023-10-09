@@ -44,25 +44,34 @@ private:
     std::shared_timed_mutex& mut;
 };
 
+static uint32 disabledMapIds[] =
+{
+    532,
+    815,
+    808,
+    807
+};
+
 void AutoScaler::Scale(DungeonMap* map)
 {
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
-    if (maxCount <= 10 || playerCount == maxCount)
+    if (std::find(std::begin(disabledMapIds), std::end(disabledMapIds), map->GetId()) != std::end(disabledMapIds))
         return;
 
-    else if (maxCount == 20 && playerCount < 12)
-        playerCount = 12;
-    else if (maxCount == 40 && playerCount < 20)
-        playerCount = 20;
+
+    if (maxCount <= 10 || playerCount == maxCount)
+        return;
+    else if (maxCount == 20 && playerCount < 15)
+        playerCount = 15;
+    else if (maxCount == 40 && playerCount < 30)
+        playerCount = 30;
 
     // Naxxramas specific
     if (map->GetId() == 533 && playerCount < 35)
         playerCount = 35;
 
-    if (map->GetId() == 532) // kara, dont scale
-        return;
 
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
@@ -73,13 +82,13 @@ void AutoScaler::Scale(DungeonMap* map)
     {
         auto creature = pairItr.first->second;
         if (creature && !creature->IsInCombat())
-            ScaleCreature(creature, playerCount, maxCount);
+            ScaleCreature(creature, playerCount, maxCount, map);
 
         ++pairItr.first;
     }
 }
 
-void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount)
+void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount, Map* map)
 {
     if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;

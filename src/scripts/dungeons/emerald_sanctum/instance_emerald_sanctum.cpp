@@ -213,7 +213,7 @@ struct sanctum_supressorAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 			{
 				if (DoCastSpellIfCan(pTarget, SPELL_EMERALD_SUPRESSION) == CAST_OK)
-					m_uiEmeraldSupressionTimer = 15 * IN_MILLISECONDS;
+					m_uiEmeraldSupressionTimer = 14 * IN_MILLISECONDS;
 			}
 		}
 		else
@@ -269,7 +269,7 @@ struct sanctum_wyrmkinAI : public ScriptedAI
 						if (pPlayer->GetDistance3dToCenter(m_creature) < 5.0f)
 						{
 							if (DoCastSpellIfCan(pPlayer, SPELL_WYRMKINS_VENOM) == CAST_OK)
-								m_uiWyrmkinsVenomTimer = 25 * IN_MILLISECONDS;
+								m_uiWyrmkinsVenomTimer = 21 * IN_MILLISECONDS;
 						}
 					}
 				}
@@ -349,17 +349,19 @@ struct erenniusAI : public ScriptedAI
 	uint32 m_uiWallOfErenniusTimer;
 	uint32 m_uiGreenDragonBindingTimer;
 	uint32 m_uiCurseOfErenniusTimer;
+	uint32 m_killSayTimer;
 	bool m_uiCastedCurseOfErennius;
 
 	void Reset() override
 	{
-		m_uiPoisonBoltVolleyTimer = 13 * IN_MILLISECONDS;
-		m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
+		m_uiPoisonBoltVolleyTimer = urand(9 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
+		m_uiHowlOfErreniusTimer = 37 * IN_MILLISECONDS;
 		m_uiCallOfNightmareTimer = 7 * IN_MILLISECONDS;
 		m_uiWallOfErenniusTimer = 35 * IN_MILLISECONDS;
 		m_uiGreenDragonBindingTimer = 70 * IN_MILLISECONDS;
-		m_uiCurseOfErenniusTimer = urand(83 * IN_MILLISECONDS, 95 * IN_MILLISECONDS);
+		m_uiCurseOfErenniusTimer = urand(81 * IN_MILLISECONDS, 92 * IN_MILLISECONDS);
 		m_uiCastedCurseOfErennius = false;
+		m_killSayTimer = 0;
 	}
 
 	void EnterCombat(Unit* pWho)
@@ -395,6 +397,8 @@ struct erenniusAI : public ScriptedAI
 			}
 		}
 
+		m_killSayTimer += uiDiff;
+
 		if (m_uiCallOfNightmareTimer < uiDiff)
 		{
 			Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
@@ -408,7 +412,7 @@ struct erenniusAI : public ScriptedAI
 		if (m_uiPoisonBoltVolleyTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT_VOLLEY) == CAST_OK)
-				m_uiPoisonBoltVolleyTimer = 13 * IN_MILLISECONDS;
+				m_uiPoisonBoltVolleyTimer = urand(9 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
 		}
 		else
 			m_uiPoisonBoltVolleyTimer -= uiDiff;
@@ -416,7 +420,7 @@ struct erenniusAI : public ScriptedAI
 		if (m_uiHowlOfErreniusTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOWL_OF_ERRENIUS) == CAST_OK)
-				m_uiHowlOfErreniusTimer = 30 * IN_MILLISECONDS;
+				m_uiHowlOfErreniusTimer = urand(30 * IN_MILLISECONDS, 33 * IN_MILLISECONDS);
 		}
 		else
 			m_uiHowlOfErreniusTimer -= uiDiff;
@@ -437,8 +441,12 @@ struct erenniusAI : public ScriptedAI
 
 	void KilledUnit(Unit* pVictim)
 	{
-		m_creature->MonsterYell("Your efforts will disturb everything, begone...");
-		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_2);
+		if (m_killSayTimer >= 3000)
+		{
+			m_killSayTimer = 0;
+			m_creature->MonsterYell("Your efforts will disturb everything, begone...");
+			m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_2);
+		}
 	}
 
 	void JustDied(Unit* pWho)

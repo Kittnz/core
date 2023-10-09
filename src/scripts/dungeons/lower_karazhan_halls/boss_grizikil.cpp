@@ -32,7 +32,7 @@ struct boss_grizikilAI : public ScriptedAI
 		m_creature->MonsterYell("Whats this? You're here for the orb?! ITS MINE, Grellkin, get them!");
 
 		std::list<Creature*> grellkinsList;
-		GetCreatureListWithEntryInGrid(grellkinsList, m_creature, {61195,61196,61197}, 100.0f);
+		GetCreatureListWithEntryInGrid(grellkinsList, m_creature, {61195,61196,61197}, 190.0f);
 
 		for (const auto& cr : grellkinsList)
 		{
@@ -68,7 +68,7 @@ struct boss_grizikilAI : public ScriptedAI
 		if (m_GrellkinFireballTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature->GetVictim(), 57094) == CAST_OK)
-				m_GrellkinFireballTimer = urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS);
+				m_GrellkinFireballTimer = urand(4 * IN_MILLISECONDS, 6 * IN_MILLISECONDS);
 		}
 		else
 			m_GrellkinFireballTimer -= uiDiff;
@@ -78,7 +78,7 @@ struct boss_grizikilAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 			{
 				if (DoCastSpellIfCan(pTarget, 57093) == CAST_OK)
-					m_GrellkinROFTimer = urand(13 * IN_MILLISECONDS, 16 * IN_MILLISECONDS);
+					m_GrellkinROFTimer = urand(11 * IN_MILLISECONDS, 14 * IN_MILLISECONDS);
 			}
 		}
 		else
@@ -87,7 +87,7 @@ struct boss_grizikilAI : public ScriptedAI
 		if (m_GrellkinFlameweaveTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57091) == CAST_OK)
-				m_GrellkinFlameweaveTimer = urand(30 * IN_MILLISECONDS, 40 * IN_MILLISECONDS);
+				m_GrellkinFlameweaveTimer = urand(25 * IN_MILLISECONDS, 34 * IN_MILLISECONDS);
 		}
 		else
 			m_GrellkinFlameweaveTimer -= uiDiff;
