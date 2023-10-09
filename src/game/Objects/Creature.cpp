@@ -708,7 +708,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                         else if (maxCount == 40 && playerCount < 20)
                             playerCount = 20;
                         
-                        sAutoScaler->ScaleCreature(this, playerCount, maxCount);
+                        sAutoScaler->ScaleCreature(this, playerCount, maxCount, GetMap());
                     }
                 }
                 

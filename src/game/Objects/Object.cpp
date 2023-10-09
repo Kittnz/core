@@ -2158,7 +2158,7 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
             else if (maxCount == 40 && playerCount < 20)
                 playerCount = 20;
             
-            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount, pCreature->GetMap());
         }
     }
 
@@ -2229,7 +2229,7 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
             else if (maxCount == 40 && playerCount < 20)
                 playerCount = 20;
             
-            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount, pCreature->GetMap());
         }
     }
 
