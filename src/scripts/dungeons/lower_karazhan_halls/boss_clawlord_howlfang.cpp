@@ -66,7 +66,7 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 		if (m_TerrifyingPresenceTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57083) == CAST_OK)
-				m_TerrifyingPresenceTimer = 4 * IN_MILLISECONDS;
+				m_TerrifyingPresenceTimer = 1 * IN_MILLISECONDS;
 		}
 		else
 			m_TerrifyingPresenceTimer -= uiDiff;
