@@ -20,9 +20,9 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_pInstance && m_pInstance->GetData(DATA_BROOD_QUEEN_ARAXXNA) != DONE)
 			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, NOT_STARTED);
 		summonList.clear();
-		m_BroodVenomVolleyTimer = urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
-		m_LeechingBiteTimer = 15 * IN_MILLISECONDS;
-		m_SpawnEggsTimer = 35 * IN_MILLISECONDS;
+		m_BroodVenomVolleyTimer = urand(9 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
+		m_LeechingBiteTimer = 11 * IN_MILLISECONDS;
+		m_SpawnEggsTimer = 30 * IN_MILLISECONDS;
 	}
 
 	void Aggro(Unit* /*pWho*/) override
@@ -84,7 +84,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_BroodVenomVolleyTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, 57063) == CAST_OK)
-				m_BroodVenomVolleyTimer = urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
+				m_BroodVenomVolleyTimer = urand(9 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
 		}
 		else
 			m_BroodVenomVolleyTimer -= uiDiff;
@@ -94,7 +94,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 			{
 				if (DoCastSpellIfCan(pTarget, 57056) == CAST_OK)
-					m_LeechingBiteTimer = urand(20 * IN_MILLISECONDS, 24 * IN_MILLISECONDS);
+					m_LeechingBiteTimer = urand(16 * IN_MILLISECONDS, 21 * IN_MILLISECONDS);
 			}
 		}
 		else
@@ -103,7 +103,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_SpawnEggsTimer < uiDiff)
 		{
 			SpawnEggs();
-			m_SpawnEggsTimer = urand(48 * IN_MILLISECONDS, 58 * IN_MILLISECONDS);
+			m_SpawnEggsTimer = urand(44 * IN_MILLISECONDS, 49 * IN_MILLISECONDS);
 		}
 		else
 			m_SpawnEggsTimer -= uiDiff;
