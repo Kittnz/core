@@ -94,7 +94,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
 			{
 				if (DoCastSpellIfCan(pTarget, 57056) == CAST_OK)
-					m_LeechingBiteTimer = urand(16 * IN_MILLISECONDS, 21 * IN_MILLISECONDS);
+					m_LeechingBiteTimer = urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 			}
 		}
 		else
@@ -103,7 +103,7 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 		if (m_SpawnEggsTimer < uiDiff)
 		{
 			SpawnEggs();
-			m_SpawnEggsTimer = urand(44 * IN_MILLISECONDS, 49 * IN_MILLISECONDS);
+			m_SpawnEggsTimer = urand(28 * IN_MILLISECONDS, 34 * IN_MILLISECONDS);
 		}
 		else
 			m_SpawnEggsTimer -= uiDiff;
