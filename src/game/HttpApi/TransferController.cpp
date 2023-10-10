@@ -125,6 +125,8 @@ namespace HttpApi
         auto res = PlayerDumpReader().LoadStringDump(pdumpData, accountId, "", guid);
         sLog.out(LOG_API, "Result of transfer for targetAccount:%u\nres:%s.\nnewGuid:%u", accountId, (uint32)res, guid);
 
+        if (res == DumpReturn::DUMP_SUCCESS)
+            CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", guid);
 
         rapidjson::Document retDoc;
         retDoc.SetObject();
