@@ -11,3 +11,7 @@ REPLACE INTO creature_involvedrelation VALUES (80801, 80313);
 
 -- Fix missing prereq from quest Anchor's End
 UPDATE quest_template SET PrevQuestId = 40671 WHERE entry = 40672;
+
+-- Dragunovi enchant spell fixes
+update spell_template SET ReagentCount1 = 2 WHERE entry = 57178; -- arcanite belt buckle recipe
+update spell_template SET EffectAura1 = 87, EffectBasePoints1 = -4, description = 'Spell Damage received is reduced by $s1%.' WHERE entry = 27518; -- Spell Damage Reduction
