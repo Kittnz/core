@@ -78,56 +78,62 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (count == 0 || dest.empty())
 		return "bagsfulloralreadyhaveitem";
 
-	uint32 balance = GetBalance();
-	if (balance < price)
+	QueryResult* Result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u", _owner->GetSession()->GetAccountId());
+
+	if (!Result)
+		return "unknowndberror";
+
+	Field* fields = Result->Fetch();
+
+	uint32 coins = fields[0].GetUInt32();
+	delete Result;
+
+	if (coins > 0)
+	{
+		int32 newBalance = coins - price;
+
+		if (newBalance >= 0)
+		{
+			LoginDatabase.BeginTransaction();
+
+			uint32 shopId = sObjectMgr.NextShopLogEntry();
+
+			bool successTransaction =
+				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
+				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
+
+			bool success = LoginDatabase.CommitTransactionDirect();
+
+			if (!success)
+				return "dberrorcantprocess";
+
+
+			auto entry = new ShopLogEntry{
+				shopId,
+				GetCurrentTimeString(),
+				_owner->GetSession()->GetAccountId(),
+				_owner->GetGUIDLow(),
+				itemID,
+				price,
+				false,
+				(uint32)time(nullptr)
+			};
+
+			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
+
+			sObjectMgr.AddShopLogEntry(shopId, entry);
+
+
+
+			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
+			_owner->SendNewItem(item, count, false, true);
+
+			return "ok";
+		}
+		else
+			return "notenoughtokens";
+	}
+	else
 		return "notenoughtokens";
 
-
-	uint32 newBalance = balance - price;
-
-	if (newBalance >= 0)
-	{
-		LoginDatabase.BeginTransaction();
-
-		if (!LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %u WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()))
-		{
-			LoginDatabase.RollbackTransaction();
-			return "dberrorcantprocess";
-		}
-
-		uint32 shopId = sObjectMgr.NextShopLogEntry();
-		if (!LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price))
-		{
-			LoginDatabase.RollbackTransaction();
-			return "dberrorcantprocess";
-		}
-
-		if (!LoginDatabase.CommitTransactionDirect())
-		{
-			return "dberrorcantprocess";
-		}
-
-		auto entry = new ShopLogEntry{
-			shopId,
-			GetCurrentTimeString(),
-			_owner->GetSession()->GetAccountId(),
-			_owner->GetGUIDLow(),
-			itemID,
-			price,
-			false,
-			(uint32)time(nullptr)
-		};
-		sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
-		sObjectMgr.AddShopLogEntry(shopId, entry);
-
-		Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
-		_owner->SendNewItem(item, count, false, true);
-
-		return "ok";
-	}
-	else 
-	{
-		LoginDatabase.RollbackTransaction();
-		return "notenoughtokens";
-	}
 }
