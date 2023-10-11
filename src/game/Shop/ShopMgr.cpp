@@ -67,7 +67,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (count == 0 || dest.empty())
 		return "bagsfulloralreadyhaveitem";
 
-	const std::function<void(uint32, uint32, uint32)> balanceCallback = [price, itemID, dest, count](uint32 accountId, uint32 coins, uint32 guidLow)
+	const std::function<void(uint32, int32, uint32)> balanceCallback = [price, itemID, dest, count](uint32 accountId, int32 coins, uint32 guidLow)
 	{
 		auto _owner = sObjectAccessor.FindPlayer(guidLow);
 		if (!_owner)
@@ -79,11 +79,10 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 
 		if (coins > 0)
 		{
-			int32 newBalance = coins - price;
+			int64 newBalance = coins - price;
 
-			if (newBalance >= 0)
+			if (newBalance >= 0 && newBalance < INT_MAX)
 			{
-
 				uint32 shopId = sObjectMgr.NextShopLogEntry();
 				LoginDatabase.BeginTransaction();
 
@@ -157,6 +156,6 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	};
 
 
-	GetBalance<uint32>(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
+	GetBalance(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
 	return "";
 }

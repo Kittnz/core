@@ -92,17 +92,11 @@
 #include "DynamicVisibilityMgr.h"
 #include "CommandStream.h"
 
-uint32 GetTokenBalance(uint32 accountId)
+int32 GetTokenBalance(uint32 accountId)
 {
     QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId);
 
-    uint32 coins = 0;
-
-    if (!result)
-    {
-        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", accountId);
-        return coins;
-    }
+    int32 coins = 0;
 
     if (result)
     {
@@ -110,6 +104,12 @@ uint32 GetTokenBalance(uint32 accountId)
         coins = fields[0].GetInt32();
         delete result;
     }
+    else
+    {
+        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", accountId);
+        return coins;
+    }
+    
     return coins;
 }
 
@@ -14194,9 +14194,9 @@ bool ChatHandler::HandleBalanceCommand(char* args)
         return true;
     }
 
-    int32 updated_balance = currentCoins + coinsArg;
+    int64 updated_balance = currentCoins + coinsArg;
 
-    if (updated_balance < 0)
+    if (updated_balance < 0 || updated_balance > INT_MAX)
     {
         PSendSysMessage("Can't go below zero, the current balance is %i.", currentCoins);
         return false;
@@ -14895,7 +14895,7 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         }
     }
 
-    PSendSysMessage("Current tokens on accouns %s : %u", account_name.c_str(), GetTokenBalance(accountId));
+    PSendSysMessage("Current tokens on accouns %s : %i", account_name.c_str(), GetTokenBalance(accountId));
     PSendSysMessage("Payment history for account %s", account_name.c_str());
 
     auto& entries = sObjectMgr.GetShopLogEntries(accountId);

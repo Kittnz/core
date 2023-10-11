@@ -5020,7 +5020,7 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
             //if HC, refund tokens.
             if (isHardcore)
             {
-                uint32 totalRefund = 0;
+                int64 totalRefund = 0;
                 auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
                 LoginDatabase.BeginTransaction();
                 for (auto& elem : shopEntries)
@@ -5033,8 +5033,8 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                     }
                 }
 
-                if (totalRefund > 0)
-                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, accountId);
+                if (totalRefund > 0 && totalRefund < INT_MAX)
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, accountId);
                 LoginDatabase.CommitTransaction();
             }
 
@@ -5447,7 +5447,7 @@ void Player::KillPlayer()
 
         std::vector<std::reference_wrapper<ShopLogEntry*>> refundableItems;
 
-        uint32 totalRefund = 0;
+        int64 totalRefund = 0;
         const uint32 guidLow = GetGUIDLow();
         for (auto& elem : logEntries)
         {
@@ -5459,7 +5459,8 @@ void Player::KillPlayer()
             }           
         }
 
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
+        if (totalRefund > 0 && totalRefund < INT_MAX)
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
 
         bool successTransaction = LoginDatabase.CommitTransaction();
 
