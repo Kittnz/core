@@ -37,22 +37,21 @@ ShopMgr::ShopMgr(Player* owner) : _owner(owner)
 {
 }
 
-uint32 ShopMgr::GetBalance()
+int32 ShopMgr::GetBalance()
 {
-	uint32 balance = 0;
 	QueryResult* coins_result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", _owner->GetSession()->GetAccountId());
 
-	if (!coins_result)
-	{
-		LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", _owner->GetSession()->GetAccountId());
-		return balance;
-	}
-
+	int32 balance = 0;
 	if (coins_result)
 	{
 		Field* fields = coins_result->Fetch();
-		balance = fields[0].GetUInt32();
+		balance = fields[0].GetInt32();
 		delete coins_result;
+	}
+	else
+	{
+		LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", _owner->GetSession()->GetAccountId());
+		return balance;
 	}
 
 	return balance;
@@ -85,14 +84,14 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 
 	Field* fields = Result->Fetch();
 
-	uint32 coins = fields[0].GetUInt32();
+	int32 coins = fields[0].GetInt32();
 	delete Result;
 
 	if (coins > 0)
 	{
-		int32 newBalance = coins - price;
+		int64 newBalance = coins - price;
 
-		if (newBalance >= 0)
+		if (newBalance >= 0 && newBalance < INT_MAX)
 		{
 			LoginDatabase.BeginTransaction();
 

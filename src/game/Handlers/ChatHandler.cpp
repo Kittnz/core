@@ -496,7 +496,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (strstr(msg.c_str(), "Balance"))
 			{
 
-				uint32 balance = ShopMgr(_player).GetBalance();
+				int32 balance = ShopMgr(_player).GetBalance();
 				_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
 			}
 
