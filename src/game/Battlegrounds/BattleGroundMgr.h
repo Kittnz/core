@@ -23,6 +23,7 @@
 #define __BATTLEGROUNDMGR_H
 
 #include <vector>
+#include <mutex>
 
 #include "Common.h"
 #include "Policies/Singleton.h"
@@ -223,8 +224,8 @@ class BattleGroundMgr
 
         uint32 CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 minPlayersPerTeam, uint32 maxPlayersPerTeam, uint32 levelMin, uint32 levelMax, uint32 allianceWinSpell, uint32 allianceLoseSpell, uint32 hordeWinSpell, uint32 hordeLoseSpell, char const* battleGroundName, uint32 mapID, float team1StartLocX, float team1StartLocY, float team1StartLocZ, float team1StartLocO, float team2StartLocX, float team2StartLocY, float team2StartLocZ, float team2StartLocO, uint32 playerSkinReflootId);
 
-        void AddBattleGround(uint32 InstanceID, BattleGroundTypeId bgTypeId, BattleGround* BG) { m_BattleGrounds[bgTypeId][InstanceID] = BG; };
-        void RemoveBattleGround(uint32 instanceID, BattleGroundTypeId bgTypeId) { m_BattleGrounds[bgTypeId].erase(instanceID); }
+        void AddBattleGround(uint32 InstanceID, BattleGroundTypeId bgTypeId, BattleGround* BG);
+        void RemoveBattleGround(uint32 instanceID, BattleGroundTypeId bgTypeId);
         uint32 CreateClientVisibleInstanceId(BattleGroundTypeId bgTypeId, BattleGroundBracketId bracket_id);
         void DeleteClientVisibleInstanceId(BattleGroundTypeId bgTypeId, BattleGroundBracketId bracket_id, uint32 clientInstanceID)
         {
@@ -306,6 +307,7 @@ class BattleGroundMgr
         GameObjectBattleEventIndexesMap m_GameObjectBattleEventIndexMap;
 
         /* Battlegrounds */
+        std::mutex m_BattleGroundsMutex;
         BattleGroundSet m_BattleGrounds[MAX_BATTLEGROUND_TYPE_ID];
         std::vector<uint64> m_QueueUpdateScheduler;
         typedef std::set<uint32> ClientBattleGroundIdSet;
