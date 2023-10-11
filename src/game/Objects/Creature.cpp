@@ -2718,11 +2718,16 @@ void Creature::LogDeath(Unit* pKiller) const
         {
             if (Group* pGroup = pPlayer->GetGroup())
             {
+                float groupMembersCount = 0;
+                float groupItemLevel = 0;
                 std::string groupMemberNames;
                 for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
                 {
                     if (Player* pMember = itr->getSource())
                     {
+                        groupMembersCount++;
+                        groupItemLevel += pMember->GetAverageItemLevel();
+
                         // Not self.
                         if (pMember == pPlayer)
                             continue;
@@ -2734,7 +2739,7 @@ void Creature::LogDeath(Unit* pKiller) const
                     }
                 }
 
-                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) in group with: %s", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow(), groupMemberNames.c_str());
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) in group (ilvl %g) with: %s", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow(), (groupItemLevel / groupMembersCount), groupMemberNames.c_str());
             }
             else
                 sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) not in group.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow());
