@@ -37,7 +37,8 @@ void instance_emerald_sanctum::OnCreatureCreate(Creature* pCreature)
 
 uint32 instance_emerald_sanctum::GetData(uint32 type) 
 {
-	return 0;
+	if (type < MAX_DATA)
+		return m_encounters[type];
 }
 
 
