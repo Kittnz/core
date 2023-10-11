@@ -26,38 +26,35 @@
 
 class Player;
 
-template <typename Arg>
 using tuple_shop_t = std::tuple<std::function
-    <void(uint32, uint32, Arg)>, uint32, Arg>;
+    <void(uint32 /*accountId*/, int32 /*coins*/, uint32 /*guid*/)>, uint32 /*accountId*/, uint32 /*guid*/>;
 
 class ShopMgr
 {
     public:
         explicit ShopMgr(Player* owner);
         
-        template <typename Arg>
-        static void GetBalanceCallback(QueryResult* result, tuple_shop_t<Arg> tuple)
+        static void GetBalanceCallback(QueryResult* result, tuple_shop_t tuple)
         {
-            const auto& [callbackFunc, accountId, arg] = tuple;
+            const auto& [callbackFunc, accountId, guid] = tuple;
 
             if (!result)
             {
-                callbackFunc(accountId, 0, arg);
+                callbackFunc(accountId, 0, guid);
                 return;
             }
 
             auto fields = result->Fetch();
-            uint32 coins = fields[0].GetUInt32();
-            callbackFunc(accountId, coins, arg);
+            int32 coins = fields[0].GetInt32();
+            callbackFunc(accountId, coins, guid);
             delete result;
         }
 
 
-        template <typename Arg>
-        void GetBalance(std::function<void(uint32, uint32, Arg)> callback, uint32 accountId, Arg arg)
+        void GetBalance(std::function<void(uint32, int32, uint32)> callback, uint32 accountId, uint32 guid)
         {
             LoginDatabase.AsyncPQueryOv<
-                tuple_shop_t<Arg>>(&GetBalanceCallback<Arg>, std::make_tuple(callback, accountId, arg), "SELECT `coins` FROM `shop_coins` WHERE `id` = %u", accountId);
+                tuple_shop_t>(&GetBalanceCallback, std::make_tuple(callback, accountId, guid), "SELECT `coins` FROM `shop_coins` WHERE `id` = %u", accountId);
         }
 
 
