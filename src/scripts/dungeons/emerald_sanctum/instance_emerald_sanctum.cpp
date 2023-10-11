@@ -39,6 +39,7 @@ uint32 instance_emerald_sanctum::GetData(uint32 type)
 {
 	if (type < MAX_DATA)
 		return m_encounters[type];
+  return 0;
 }
 
 
