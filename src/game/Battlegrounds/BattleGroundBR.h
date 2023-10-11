@@ -32,7 +32,6 @@ class BattleGroundBR : public BattleGround
     public:
         /* Construction */
         BattleGroundBR();
-        ~BattleGroundBR();
         void Update(uint32 diff);
 
         /* inherited from BattlegroundClass */
