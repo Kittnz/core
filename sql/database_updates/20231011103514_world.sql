@@ -30,3 +30,5 @@ update creature_template set dmg_min = 1178, dmg_max = 1536 where entry = 61204;
 update creature_template set health_min = 85305, health_max = 85305 where entry = 61204;
 -- Item 61733 make Bind on Pickup.
 update item_template set bonding = 1 where entry = 61733;
+-- Change drop chance of Golden Frog (Entry 54007) to 0.015% from all sources.
+update creature_loot_template set chanceorquestchance = 0.015 where item = 54007 and entry in (61083,61084,61085,61086,61087,61088,61129,61130,61131,61079);
