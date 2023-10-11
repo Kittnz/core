@@ -32,3 +32,5 @@ update creature_template set health_min = 85305, health_max = 85305 where entry 
 update item_template set bonding = 1 where entry = 61733;
 -- Change drop chance of Golden Frog (Entry 54007) to 0.015% from all sources.
 update creature_loot_template set chanceorquestchance = 0.015 where item = 54007 and entry in (61083,61084,61085,61086,61087,61088,61129,61130,61131,61079);
+-- Spawn timers of some rare NPC incresed to 108000 secs.
+update creature set spawntimesecsmin = 108000, spawntimesecsmax = 108000 where guid in (2576943,2576945,2576974,2576981,2576990,2576993,2576994,2577157,2577159);
