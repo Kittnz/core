@@ -34,11 +34,11 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     ObjectGuid guid;
     recvPacket >> guid;
 
-    if (!GetPlayer()->m_duel) // Ignore accept from m_duel-sender
+    Player* pl = GetPlayer();
+    if (!pl || !pl->m_duel) // Ignore accept from m_duel-sender
         return;
 
-    Player *pl = GetPlayer();
-    Player *plTarget = pl->m_duel->opponent;
+    Player* plTarget = pl->m_duel->opponent;
 
     if (sWorld.getConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL))
     {
