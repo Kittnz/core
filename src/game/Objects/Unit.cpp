@@ -744,8 +744,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     if (pVictim->IsPlayer() && ((Player*)pVictim)->m_duel && damage >= (health - 1))
     {
         // prevent kill only if killed in m_duel and killed by opponent or opponent controlled creature
-        if (((Player*)pVictim)->m_duel->opponent == this ||
-            ((Player*)pVictim)->m_duel->opponent->GetObjectGuid() == GetOwnerGuid() ||
+        if (((Player*)pVictim)->m_duel->opponent == GetObjectGuid() ||
+            ((Player*)pVictim)->m_duel->opponent == GetOwnerGuid() ||
             pVictim == this && reflected)
             damage = health - 1;
 
@@ -834,7 +834,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
             MANGOS_ASSERT(he->m_duel);
 
-            he->m_duel->opponent->CombatStopWithPets(true);
+            if (Player* pOpponent = sObjectAccessor.FindPlayer(he->m_duel->opponent))
+                pOpponent->CombatStopWithPets(true);
             he->CombatStopWithPets(true);
 
             he->DuelComplete(DUEL_INTERRUPTED);
@@ -969,7 +970,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
             he->SetHealth(1);
 
-            he->m_duel->opponent->CombatStopWithPets(true);
+            if (Player* pOpponent = sObjectAccessor.FindPlayer(he->m_duel->opponent))
+                pOpponent->CombatStopWithPets(true);
             he->CombatStopWithPets(true);
 
             he->CastSpell(he, 7267, true);                  // beg
