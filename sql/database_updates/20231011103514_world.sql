@@ -28,3 +28,5 @@ update creature_template set armor = 4426 where entry = 65106;
 update creature_template set dmg_min = 1178, dmg_max = 1536 where entry = 61204;
 -- Increase the hp of Dark Rider Champion (Entry 61204) to 85305.
 update creature_template set health_min = 85305, health_max = 85305 where entry = 61204;
+-- Item 61733 make Bind on Pickup.
+update item_template set bonding = 1 where entry = 61733;
