@@ -7,6 +7,7 @@ enum Misc
 	MOVEMENT_TO_HOME_AND_SLEEP = 1,
 	SPELL_SLEEP_VISUAL = 25148,
 	GO_PORTAL = 177243,
+	SPELL_TELEPORT_VISUAL = 26638
 };
 
 enum Events
@@ -115,6 +116,8 @@ struct boss_solniusAI : public ScriptedAI
 		m_mSummonedPortals.clear();
 		m_creature->RemoveAllAuras();
 		m_creature->ClearUnitState(UNIT_STAT_CAN_NOT_MOVE);
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_SOLNIUS, NOT_STARTED);
 	}
 
 	std::vector<Player*> GetRandomPlayers(Map::PlayerList const& playerList, int8 count)
@@ -168,6 +171,9 @@ struct boss_solniusAI : public ScriptedAI
 			}
 		}
 
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_SOLNIUS, IN_PROGRESS);
+
 		events.ScheduleEvent(EVENT_TRANSFORM_TO_DRAGON, Seconds(12));
 	}
 
@@ -175,6 +181,9 @@ struct boss_solniusAI : public ScriptedAI
 	{
 		m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
 		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_3);
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_SOLNIUS, DONE);
 
 		if (Creature* pErennius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_ERENNIUS)))
 		{
@@ -228,7 +237,18 @@ struct boss_solniusAI : public ScriptedAI
 					if (m_creature->GetStandState() != UNIT_STAND_STATE_SLEEP && m_creature->HealthBelowPct(60))
 					{
 						m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
-						m_creature->GetMotionMaster()->MovePoint(MOVEMENT_TO_HOME_AND_SLEEP, m_creature->GetHomePosition().x, m_creature->GetHomePosition().y, m_creature->GetHomePosition().z, MOVE_PATHFINDING, MOVE_WALK_MODE, m_creature->GetHomePosition().o);
+
+						auto homePos = m_creature->GetHomePosition();
+
+						//anti-cheese tp instead of RP walk, takes too long.
+						if (m_creature->GetDistance(homePos) > 50.f)
+						{
+							DoCastSpellIfCan(m_creature, SPELL_TELEPORT_VISUAL);
+							m_creature->NearTeleportTo(homePos);
+							GoSleep();
+						}
+						else
+							m_creature->GetMotionMaster()->MovePoint(MOVEMENT_TO_HOME_AND_SLEEP, m_creature->GetHomePosition().x, m_creature->GetHomePosition().y, m_creature->GetHomePosition().z, MOVE_PATHFINDING, MOVE_WALK_MODE, m_creature->GetHomePosition().o);
 					}
 					else
 					{
@@ -435,6 +455,20 @@ struct boss_solniusAI : public ScriptedAI
 		DoMeleeAttackIfReady();
 	}
 
+	void GoSleep()
+	{
+		m_creature->AttackStop();
+		m_creature->RemoveAllAttackers();
+		m_creature->SetReactState(REACT_PASSIVE);
+		m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
+		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
+		m_creature->AddAura(SPELL_SLEEP_VISUAL);
+		m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+		m_creature->AddUnitState(UNIT_STAT_CAN_NOT_MOVE);
+		events.ScheduleEvent(EVENT_WAKE_UP, Seconds(45));
+		events.ScheduleEvent(EVENT_SPAWN_PORTALS, Seconds(5));
+	}
+
 	void MovementInform(uint32 uiMotionType, uint32 uiPointId) override
 	{
 		if (!(uiMotionType == POINT_MOTION_TYPE || uiMotionType == EFFECT_MOTION_TYPE))
@@ -445,16 +479,7 @@ struct boss_solniusAI : public ScriptedAI
 		switch (uiPointId)
 		{
 			case MOVEMENT_TO_HOME_AND_SLEEP:
-				m_creature->AttackStop();
-				m_creature->RemoveAllAttackers();
-				m_creature->SetReactState(REACT_PASSIVE);
-				m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
-				m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
-				m_creature->AddAura(SPELL_SLEEP_VISUAL);
-				m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
-				m_creature->AddUnitState(UNIT_STAT_CAN_NOT_MOVE);
-				events.ScheduleEvent(EVENT_WAKE_UP, Seconds(45));
-				events.ScheduleEvent(EVENT_SPAWN_PORTALS, Seconds(5));
+				GoSleep();
 				break;
 		}
 	}

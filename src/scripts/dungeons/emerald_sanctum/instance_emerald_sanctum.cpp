@@ -11,6 +11,7 @@ void instance_emerald_sanctum::Initialize()
 	m_uiSolniusGUID = 0;
 	m_uiErenniusGUID = 0;
 	m_mTrashGUID.clear();
+	std::memset(m_encounters, 0, sizeof(m_encounters));
 }
 
 void instance_emerald_sanctum::OnCreatureCreate(Creature* pCreature)
@@ -32,6 +33,29 @@ void instance_emerald_sanctum::OnCreatureCreate(Creature* pCreature)
 			m_mTrashGUID.push_back(pCreature->GetGUID());
 			break;
 	}
+}
+
+uint32 instance_emerald_sanctum::GetData(uint32 type) 
+{
+	return 0;
+}
+
+
+void instance_emerald_sanctum::SetData(uint32 type, uint32 data) 
+{
+	if (type < MAX_DATA)
+		m_encounters[type] = data;
+}
+
+
+
+
+bool instance_emerald_sanctum::IsEncounterInProgress() const
+{
+	for (uint32 i : m_encounters)
+		if (i == IN_PROGRESS)
+			return true;
+	return false;
 }
 
 void instance_emerald_sanctum::OnCreatureDeath(Creature* pCreature)
@@ -188,9 +212,9 @@ CreatureAI* GetAI_sanctum_wyrm(Creature* pCreature)
 	return new sanctum_wyrmAI(pCreature);
 }
 
-struct sanctum_supressorAI : public ScriptedAI
+struct sanctum_suppressorAI : public ScriptedAI
 {
-	sanctum_supressorAI(Creature* pCreature) : ScriptedAI(pCreature)
+	sanctum_suppressorAI(Creature* pCreature) : ScriptedAI(pCreature)
 	{
 		Reset();
 	}
@@ -225,7 +249,7 @@ struct sanctum_supressorAI : public ScriptedAI
 
 CreatureAI* GetAI_sanctum_supressor(Creature* pCreature)
 {
-	return new sanctum_supressorAI(pCreature);
+	return new sanctum_suppressorAI(pCreature);
 }
 
 struct sanctum_wyrmkinAI : public ScriptedAI
@@ -362,12 +386,21 @@ struct erenniusAI : public ScriptedAI
 		m_uiCurseOfErenniusTimer = urand(81 * IN_MILLISECONDS, 92 * IN_MILLISECONDS);
 		m_uiCastedCurseOfErennius = false;
 		m_killSayTimer = 0;
+
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_ERENNIUS, NOT_STARTED);
 	}
 
 	void EnterCombat(Unit* pWho)
 	{
 		m_creature->MonsterYell("You will not disturb the Awakener...");
 		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_1);
+	}
+
+	void Aggro(Unit* pWho) override
+	{
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_ERENNIUS, IN_PROGRESS);
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -453,6 +486,8 @@ struct erenniusAI : public ScriptedAI
 	{
 		m_creature->MonsterYell("The shadow must not prevail, the dragonflight must stand... Against it..");
 		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_3);
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_ERENNIUS, DONE);
 	}
 };
 
