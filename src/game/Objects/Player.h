@@ -312,7 +312,7 @@ struct PvPInfo
 struct DuelInfo
 {
     Player* initiator = nullptr;
-    Player* opponent = nullptr;
+    ObjectGuid opponent;
     time_t startTimer = 0;
     time_t startTime = 0;
     time_t outOfBound = 0;
@@ -2624,7 +2624,7 @@ public:
 
         // todo: -maybe move UpdateDuelFlag+DuelComplete to independent DuelHandler.
         DuelInfo* m_duel;
-        bool IsInDuelWith(Player const* player) const { return m_duel && m_duel->opponent == player && m_duel->startTime != 0; }
+        bool IsInDuelWith(Player const* player) const { return m_duel && m_duel->opponent == player->GetObjectGuid() && m_duel->startTime != 0; }
         void UpdateDuelFlag(time_t currTime);
         void CheckDuelDistance(time_t currTime);
         void DuelComplete(DuelCompleteType type);
