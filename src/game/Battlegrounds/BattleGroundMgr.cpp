@@ -1845,3 +1845,15 @@ bool BattleGroundQueue::IsAllQueuesEmpty(BattleGroundBracketId bracket_id)
 
     return queueEmptyCount == BG_QUEUE_MAX;
 }
+
+void BattleGroundMgr::AddBattleGround(uint32 InstanceID, BattleGroundTypeId bgTypeId, BattleGround* BG)
+{
+    std::lock_guard<std::mutex> guard(m_BattleGroundsMutex);
+    m_BattleGrounds[bgTypeId][InstanceID] = BG;
+};
+
+void BattleGroundMgr::RemoveBattleGround(uint32 instanceID, BattleGroundTypeId bgTypeId)
+{
+    std::lock_guard<std::mutex> guard(m_BattleGroundsMutex);
+    m_BattleGrounds[bgTypeId].erase(instanceID);
+}
