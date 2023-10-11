@@ -11,6 +11,7 @@ enum
 	DATA_SANCTUM_WYRMKIN,
 	DATA_SANCTUM_SCALEBANE,
 	DATA_ERENNIUS,
+	MAX_DATA,
 	SAY_PHASE_1,
 	SPELL_CORROSIVE_BOLT = 56507,
 	SPELL_EMERALD_ROT = 56508,
@@ -74,6 +75,11 @@ public:
 	void OnCreatureDeath(Creature* pCreature) override;
 
 	uint64 GetData64(uint32 uiData) override;
+	bool IsEncounterInProgress() const override;
+
+	uint32 GetData(uint32 /*Type*/) override;
+	void SetData(uint32 /*Type*/, uint32 /*Data*/) override;
+
 
 	GuidList GetTrashGUID() { return m_mTrashGUID; }
 
@@ -81,6 +87,8 @@ protected:
 	uint64 m_uiSolniusGUID;
 	uint64 m_uiErenniusGUID;
 	GuidList m_mTrashGUID;
+	uint32 m_encounters[MAX_DATA]{};
+
 };
 
 #endif

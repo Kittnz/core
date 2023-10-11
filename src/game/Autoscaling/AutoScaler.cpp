@@ -46,9 +46,6 @@ private:
 
 static uint32 disabledMapIds[] =
 {
-    532,
-    815,
-    808,
     807
 };
 
@@ -63,10 +60,10 @@ void AutoScaler::Scale(DungeonMap* map)
 
     if (maxCount <= 10 || playerCount == maxCount)
         return;
-    else if (maxCount == 20 && playerCount < 15)
-        playerCount = 15;
-    else if (maxCount == 40 && playerCount < 30)
-        playerCount = 30;
+    else if (maxCount == 20 && playerCount < 12)
+        playerCount = 12;
+    else if (maxCount == 40 && playerCount < 20)
+        playerCount = 20;
 
     // Naxxramas specific
     if (map->GetId() == 533 && playerCount < 35)
