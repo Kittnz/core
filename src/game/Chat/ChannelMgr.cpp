@@ -24,6 +24,7 @@
 #include "World.h"
 #include "Util.h"
 #include "DBCStores.h"
+#include "ObjectMgr.h"
 
 INSTANTIATE_SINGLETON_1(AllianceChannelMgr);
 INSTANTIATE_SINGLETON_1(HordeChannelMgr);
