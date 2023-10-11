@@ -92,24 +92,23 @@
 #include "DynamicVisibilityMgr.h"
 #include "CommandStream.h"
 
-uint32 GetTokenBalance(uint32 accountId)
+int32 GetTokenBalance(uint32 accountId)
 {
     QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId);
 
-    uint32 coins = 0;
-
-    if (!result)
-    {
-        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", accountId);
-        return coins;
-    }
-
+    int32 coins = 0;
     if (result)
     {
         Field* fields = result->Fetch();
         coins = fields[0].GetInt32();
         delete result;
     }
+    else
+    {
+        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", accountId);
+        return coins;
+    }
+    
     return coins;
 }
 
@@ -15036,7 +15035,7 @@ bool ChatHandler::HandleGetShopLogs(char* args)
         }
     }
 
-    PSendSysMessage("Current tokens on accouns %s : %u", account_name.c_str(), GetTokenBalance(accountId));
+    PSendSysMessage("Current tokens on accouns %s : %i", account_name.c_str(), GetTokenBalance(accountId));
     PSendSysMessage("Payment history for account %s", account_name.c_str());
 
     auto& entries = sObjectMgr.GetShopLogEntries(accountId);

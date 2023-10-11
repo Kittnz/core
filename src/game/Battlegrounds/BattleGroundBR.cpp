@@ -24,10 +24,6 @@ BattleGroundBR::BattleGroundBR()
     m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
 }
 
-BattleGroundBR::~BattleGroundBR()
-{
-}
-
 void BattleGroundBR::Update(uint32 diff)
 {
     // prevent players from falling under the floor

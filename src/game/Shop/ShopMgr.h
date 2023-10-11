@@ -31,7 +31,7 @@ class ShopMgr
     public:
         explicit ShopMgr(Player* owner);
         
-        uint32 GetBalance();
+        int32 GetBalance();
 		std::string BuyItem(uint32 itemID);
 
     private:
