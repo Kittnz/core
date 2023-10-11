@@ -24,3 +24,7 @@ update creature_template set armor = 3552 where entry = 65105;
 update creature_template set armor = 4035 where entry in (65100, 65101, 65102);
 -- 65106 to 4426.
 update creature_template set armor = 4426 where entry = 65106;
+-- Increase the damage of Dark Rider Champion (Entry 61204) by 30%.
+update creature_template set dmg_min = 1178, dmg_max = 1536 where entry = 61204;
+-- Increase the hp of Dark Rider Champion (Entry 61204) to 85305.
+update creature_template set health_min = 85305, health_max = 85305 where entry = 61204;
