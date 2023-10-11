@@ -22821,6 +22821,28 @@ void Player::OnReceivedItem(Item* item)
     LogItem(item, LogItemAction::Looted);
 }
 
+float Player::GetAverageItemLevel() const
+{
+    float itemCount = 0;
+    float itemLevel = 0;
+    for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+    {
+        if (i == EQUIPMENT_SLOT_BODY || i == EQUIPMENT_SLOT_TABARD)
+            continue;
+
+        Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (!pItem)
+            continue;
+
+        itemCount++;
+        itemLevel += pItem->GetProto()->ItemLevel;
+    }
+
+    if (!itemCount)
+        return 0;
+
+    return (itemLevel / itemCount);
+}
 
 bool Player::HasFreeBattleGroundQueueId() const
 {

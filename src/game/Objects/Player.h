@@ -1242,7 +1242,7 @@ class Player final: public Unit
         void SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast = false, bool showInChat = true);
         bool BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, uint8 bag, uint8 slot);
         void OnReceivedItem(Item* item);
-
+        float GetAverageItemLevel() const;
 
         const auto& GetItemLogs() const { return m_itemLogs; }
 
