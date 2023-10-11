@@ -15,3 +15,5 @@ update creature_template set health_min = 16104, health_max = 16104 where entry 
 update creature_template set health_min = 12179, health_max = 12179 where entry = 65102;
 -- 65106 to 26784.
 update creature_template set health_min = 26784, health_max = 26784 where entry = 65106;
+-- Nightmare Effigy can drop even if youre not on its related quest, should be fixed. 
+delete from creature_loot_template where item = 61556 and chanceorquestchance = 50;
