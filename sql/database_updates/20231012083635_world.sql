@@ -6,3 +6,7 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 
 UPDATE `skill_line_ability` SET `skill_id` = 142 WHERE `id` = 30033;
 DELETE FROM `npc_vendor` WHERE `item`= 60002;
+
+-- Removed deprecated Scarlet Monastery quartermaster.
+
+DELETE FROM `creature_template` WHERE `entry` = 80950;
