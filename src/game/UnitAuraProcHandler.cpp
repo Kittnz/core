@@ -722,7 +722,23 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 
                     // heal amount
                     basepoints[0] = std::max(1u, triggerAmount * damage / 100);
+                    int32& storedAmount = triggeredByAura->GetModifier()->m_miscvalue;
+
+                    if (HasSpellCooldown(45419))
+                    {
+                        // to avoid client lag on aoe from sending spell aura log
+                        // packet too many times, we only do the healing once a second
+                        // store the heal amount in the misc value on the aura for next proc
+                        storedAmount += basepoints[0];
+                        return SPELL_AURA_PROC_FAILED;
+                    }
+                    
+                    // add the stored damage from when spell was on cooldown
+                    basepoints[0] += storedAmount;
+                    storedAmount = 0;
+                    
                     CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+                    AddSpellCooldown(45419, 0, time(nullptr) + 1);
                     return SPELL_AURA_PROC_OK;
                 }
             }
