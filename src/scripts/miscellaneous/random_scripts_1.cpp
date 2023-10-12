@@ -5555,6 +5555,9 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66631, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
     }
 
+    if (pPlayer->HasSpell(SPELL_VARGANT_MODE) && (pPlayer->GetLevel() < 60))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67035, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+
     // info about glyphs
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66632, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66633, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
@@ -5573,11 +5576,7 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
-        {
-            pPlayer->RemoveSpell(SPELL_SLOW_AND_STEADY, false, false);
-            if (pPlayer->HasItemCount(50010, 1, true))
-                pPlayer->DestroyItemCount(50010, 1, true, false, true);
-        }
+            pPlayer->RemoveSpell(SPELL_SLOW_AND_STEADY, false, false);        
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
@@ -5593,6 +5592,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
             pPlayer->CompleteQuest(55055);
             pPlayer->RemoveSpell(SPELL_WAR_MODE, false, false);
         }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
+    {
+        if (pPlayer->HasChallenge(CHALLENGE_VAGRANT_MODE))
+            pPlayer->RemoveSpell(SPELL_VARGANT_MODE, false, false);
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
