@@ -113,6 +113,107 @@ int32 GetTokenBalance(uint32 accountId)
     return coins;
 }
 
+struct LookupPlayerHandler
+{
+    static void HandleLookupPlayerIpResult(QueryResult* result, std::pair<uint32, uint32> dataPair)
+    {
+        const auto& [accountId, lim] = dataPair;
+        uint32 limit = lim;
+
+        auto session = sWorld.FindSession(accountId);
+
+        if (session)
+            ChatHandler(session).LookupPlayerSearchCommand(result, &limit);
+        else
+            delete result;
+    }
+
+    static void HandleBanInfoCallback(QueryResult* result, std::pair<uint32, std::string> dataPair)
+    {
+        const auto& [accountId, accountname] = dataPair;
+        auto session = sWorld.FindSession(accountId);
+
+        if (!session)
+        {
+            delete result;
+            return;
+        }
+
+        auto handler = ChatHandler(session);
+
+        if (!result)
+        {
+            handler.PSendSysMessage(LANG_BANINFO_NOACCOUNTBAN, accountname.c_str());
+            return;
+        }
+
+        handler.PSendSysMessage(LANG_BANINFO_BANHISTORY, accountname.c_str());
+        do
+        {
+            Field* fields = result->Fetch();
+
+            time_t unbandate = time_t(fields[3].GetUInt64());
+            bool active = false;
+            if (fields[2].GetBool() && (fields[1].GetUInt64() == (uint64)0 || unbandate >= time(nullptr)))
+                active = true;
+            bool permanent = (fields[1].GetUInt64() == (uint64)0);
+            uint32 reqGmLevel = fields[6].GetUInt8();
+            std::string banreason = fields[4].GetString();
+            if (reqGmLevel > uint8(handler.GetAccessLevel()))
+                banreason = "<hidden>";
+
+            std::string authorName = fields[5].GetCppString() + " (" + fields[6].GetCppString() + ")";
+            std::string bantime = permanent ? handler.GetMangosString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[1].GetUInt64(), true);
+            handler.PSendSysMessage(LANG_BANINFO_HISTORYENTRY,
+                fields[0].GetString(), bantime.c_str(), active ? handler.GetMangosString(LANG_BANINFO_YES) : handler.GetMangosString(LANG_BANINFO_NO), banreason.c_str(), authorName.c_str());
+        } while (result->NextRow());
+
+        delete result;
+    }
+
+    static void HandleMuteHistoryCallback(QueryResult* result, std::pair<uint32, std::string> dataPair)
+    {
+
+        const auto& [accountId, accountname] = dataPair;
+        auto session = sWorld.FindSession(accountId);
+
+        if (!session)
+        {
+            delete result;
+            return;
+        }
+
+        auto handler = ChatHandler(session);
+
+
+
+        if (!result)
+        {
+            handler.PSendSysMessage("Account %s has never been muted", accountname.c_str());
+        }
+
+        handler.PSendSysMessage("Mute history for account %s:", accountname.c_str());
+        do
+        {
+            Field* fields = result->Fetch();
+
+            time_t unmutedate = time_t(fields[2].GetUInt64());
+            std::string mutereason = fields[3].GetString();
+            std::string authorName = fields[4].GetCppString();
+            std::string mutetime = secsToTimeString(fields[1].GetUInt64(), true);
+
+            handler.PSendSysMessage("Mute Date: %s Mutetime: %s Still active: %s  Reason: %s Set by: %s",
+                fields[0].GetString(),
+                mutetime.c_str(),
+                unmutedate > time(nullptr) ? handler.GetMangosString(LANG_BANINFO_YES) : handler.GetMangosString(LANG_BANINFO_NO),
+                mutereason.c_str(),
+                authorName.c_str());
+        } while (result->NextRow());
+
+        delete result;
+    }
+};
+
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
     sObjectMgr.LoadMangosStrings();
@@ -4124,75 +4225,20 @@ bool ChatHandler::HandleBanInfoCharacterCommand(char* args)
 
 bool ChatHandler::HandleBanInfoHelper(uint32 accountId, char const* accountname)
 {
-    QueryResult *result = LoginDatabase.PQuery(
+    LoginDatabase.AsyncPQuery(&LookupPlayerHandler::HandleBanInfoCallback, std::make_pair(GetSession()->GetAccountId(), std::string(accountname)),
     "SELECT FROM_UNIXTIME(bandate), unbandate-bandate, active, unbandate,banreason,bannedby,COALESCE(name, \"NoRealm\") , gmlevel "
     "FROM account_banned LEFT JOIN realmlist ON realmlist.id = realm "
     "WHERE account_banned.id = '%u' ORDER BY bandate ASC", accountId);
-    if (!result)
-    {
-        PSendSysMessage(LANG_BANINFO_NOACCOUNTBAN, accountname);
-        return true;
-    }
-
-    PSendSysMessage(LANG_BANINFO_BANHISTORY, accountname);
-    do
-    {
-        Field* fields = result->Fetch();
-
-        time_t unbandate = time_t(fields[3].GetUInt64());
-        bool active = false;
-        if (fields[2].GetBool() && (fields[1].GetUInt64() == (uint64)0 || unbandate >= time(nullptr)))
-            active = true;
-        bool permanent = (fields[1].GetUInt64() == (uint64)0);
-        uint32 reqGmLevel = fields[6].GetUInt8();
-        std::string banreason = fields[4].GetString();
-        if (reqGmLevel > uint8(GetAccessLevel()))
-            banreason = "<hidden>";
-
-        std::string authorName = fields[5].GetCppString() + " (" + fields[6].GetCppString() + ")";
-        std::string bantime = permanent ? GetMangosString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[1].GetUInt64(), true);
-        PSendSysMessage(LANG_BANINFO_HISTORYENTRY,
-                        fields[0].GetString(), bantime.c_str(), active ? GetMangosString(LANG_BANINFO_YES) : GetMangosString(LANG_BANINFO_NO), banreason.c_str(), authorName.c_str());
-    }
-    while (result->NextRow());
-
-    delete result;
     return true;
 }
 
 bool ChatHandler::HandleMuteHistoryHelper(uint32 accountId, char const* accountname)
 {
-    QueryResult* result = LoginDatabase.PQuery(
+    LoginDatabase.AsyncPQuery(&LookupPlayerHandler::HandleMuteHistoryCallback, std::make_pair(GetSession()->GetAccountId(), std::string(accountname)),
         //      0                        1                    2           3           4
         "SELECT FROM_UNIXTIME(mutedate), unmutedate-mutedate, unmutedate, mutereason, mutedby "
         "FROM account_muted "
         "WHERE id = '%u' ORDER BY mutedate ASC", accountId);
-
-    if (!result)
-    {
-        PSendSysMessage("Account %s has never been muted", accountname);
-        return true;
-    }
-
-    PSendSysMessage("Mute history for account %s:", accountname);
-    do
-    {
-        Field* fields = result->Fetch();
-
-        time_t unmutedate = time_t(fields[2].GetUInt64());
-        std::string mutereason = fields[3].GetString();
-        std::string authorName = fields[4].GetCppString();
-        std::string mutetime = secsToTimeString(fields[1].GetUInt64(), true);
-
-        PSendSysMessage("Mute Date: %s Mutetime: %s Still active: %s  Reason: %s Set by: %s",
-            fields[0].GetString(),
-            mutetime.c_str(),
-            unmutedate > time(nullptr) ? GetMangosString(LANG_BANINFO_YES) : GetMangosString(LANG_BANINFO_NO),
-            mutereason.c_str(),
-            authorName.c_str());
-    } while (result->NextRow());
-
-    delete result;
     return true;
 }
 
@@ -12418,7 +12464,8 @@ bool ChatHandler::HandleLookupPlayerIpCommand(char* args)
     QueryResult* result = nullptr;
     std::string ip = ipStr;
     LoginDatabase.escape_string(ip);
-    result = LoginDatabase.PQuery("SELECT id, username FROM account WHERE last_ip " _LIKE_ " " _CONCAT2_("'%s'", "'%%'"), ip.c_str());
+    LoginDatabase.AsyncPQuery(&LookupPlayerHandler::HandleLookupPlayerIpResult, std::make_pair(GetSession()->GetAccountId(), limit),
+        "SELECT id, username FROM account WHERE last_ip " _LIKE_ " " _CONCAT2_("'%s'", "'%%'"), ip.c_str());
 
     return LookupPlayerSearchCommand(result, &limit);
 }
