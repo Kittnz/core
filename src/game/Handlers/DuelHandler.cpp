@@ -27,6 +27,7 @@
 #include "UpdateData.h"
 #include "Player.h"
 #include "Chat.h"
+#include "ObjectAccessor.h"
 #include "World.h"
 
 void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
