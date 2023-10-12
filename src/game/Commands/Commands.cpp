@@ -190,6 +190,7 @@ struct LookupPlayerHandler
         if (!result)
         {
             handler.PSendSysMessage("Account %s has never been muted", accountname.c_str());
+            return;
         }
 
         handler.PSendSysMessage("Mute history for account %s:", accountname.c_str());
