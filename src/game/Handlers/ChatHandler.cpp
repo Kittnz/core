@@ -513,7 +513,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     const std::string prefix = "TW_SHOP";
 
-    static const std::function<void(uint32, uint32, uint32)> balanceCallback = [=](uint32 accountId, uint32 coins, uint32 guidLow)
+    static const std::function<void(uint32, uint32, uint32)> balanceCallback = [=](uint32 accountId, int32 coins, uint32 guidLow)
     {
         auto player = sObjectAccessor.FindPlayer(guidLow);
         if (!player)
@@ -529,7 +529,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		{
 			if (strstr(msg.c_str(), "Balance"))
 			{
-                ShopMgr(_player).GetBalance<uint32>(balanceCallback, _player->GetSession()->GetAccountId(), _player->GetGUIDLow());
+                ShopMgr(_player).GetBalance(balanceCallback, _player->GetSession()->GetAccountId(), _player->GetGUIDLow());
 				//_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
 			}
 
