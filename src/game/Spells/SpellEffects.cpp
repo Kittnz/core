@@ -6437,7 +6437,7 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
     Player *target = (Player*)unitTarget;
 
     // if the caster is already in a m_duel or has issued a challenge
-    if (caster->m_duel && caster->m_duel->opponent != target)
+    if (caster->m_duel && caster->m_duel->opponent != target->GetObjectGuid())
     {
         if (caster->m_duel->startTime)
             caster->DuelComplete(DUEL_WON);
@@ -6450,7 +6450,7 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
     }
 
     // if the caster attempts to m_duel somebody they're already in a m_duel with
-    if (caster->m_duel && caster->m_duel->opponent == target && caster->m_duel->startTime)
+    if (caster->m_duel && caster->m_duel->opponent == target->GetObjectGuid() && caster->m_duel->startTime)
     {
         SendCastResult(SPELL_FAILED_TARGET_ENEMY);
         return;
@@ -6526,13 +6526,13 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
     // create m_duel-info
     DuelInfo *m_duel   = new DuelInfo;
     m_duel->initiator  = caster;
-    m_duel->opponent   = target;
+    m_duel->opponent   = target->GetObjectGuid();
     m_duel->startTime  = 0;
     m_duel->startTimer = 0;
 
     DuelInfo *duel2   = new DuelInfo;
     duel2->initiator  = caster;
-    duel2->opponent   = caster;
+    duel2->opponent   = caster->GetObjectGuid();
     duel2->startTime  = 0;
     duel2->startTimer = 0;
 

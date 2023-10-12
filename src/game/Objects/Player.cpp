@@ -5020,7 +5020,7 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
             //if HC, refund tokens.
             if (isHardcore)
             {
-                uint32 totalRefund = 0;
+                int64 totalRefund = 0;
                 auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
                 LoginDatabase.BeginTransaction();
                 for (auto& elem : shopEntries)
@@ -5033,8 +5033,8 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                     }
                 }
 
-                if (totalRefund > 0)
-                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, accountId);
+                if (totalRefund > 0 && totalRefund < INT_MAX)
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, accountId);
                 LoginDatabase.CommitTransaction();
             }
 
@@ -5447,7 +5447,7 @@ void Player::KillPlayer()
 
         std::vector<std::reference_wrapper<ShopLogEntry*>> refundableItems;
 
-        uint32 totalRefund = 0;
+        int64 totalRefund = 0;
         const uint32 guidLow = GetGUIDLow();
         for (auto& elem : logEntries)
         {
@@ -5459,7 +5459,8 @@ void Player::KillPlayer()
             }           
         }
 
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
+        if (totalRefund > 0 && totalRefund < INT_MAX)
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
 
         bool successTransaction = LoginDatabase.CommitTransaction();
 
@@ -7582,8 +7583,8 @@ void Player::CheckDuelDistance(time_t currTime)
         else if (currTime >= (m_duel->outOfBound + 10))
         {
             CombatStopWithPets(true);
-            if (m_duel->opponent)
-                m_duel->opponent->CombatStopWithPets(true);
+            if (Player* pOpponent = sObjectAccessor.FindPlayer(m_duel->opponent))
+                pOpponent->CombatStopWithPets(true);
 
             DuelComplete(DUEL_FLED);
         }
@@ -7602,16 +7603,20 @@ void Player::DuelComplete(DuelCompleteType type)
     if (!m_duel || m_duel->finished)
         return;
 
-    WorldPacket data(SMSG_DUEL_COMPLETE, (1));
-    data << (uint8)((type != DUEL_INTERRUPTED) ? 1 : 0);
-    GetSession()->SendPacket(&data);
-    m_duel->opponent->GetSession()->SendPacket(&data);
+    Player* pOpponent = sObjectAccessor.FindPlayer(m_duel->opponent);
+    if (pOpponent)
+    {
+        WorldPacket data(SMSG_DUEL_COMPLETE, (1));
+        data << (uint8)((type != DUEL_INTERRUPTED) ? 1 : 0);
+        GetSession()->SendPacket(&data);
+        pOpponent->GetSession()->SendPacket(&data);
+    }
 
     if (type != DUEL_INTERRUPTED)
     {
-        data.Initialize(SMSG_DUEL_WINNER, (1 + 20)); // Guessed size
+        WorldPacket data(SMSG_DUEL_WINNER, (1 + 20)); // Guessed size
         data << (uint8)((type == DUEL_WON) ? 0 : 1); // 0 = just won; 1 = fled
-        data << m_duel->opponent->GetName();
+        data << (pOpponent ? pOpponent->GetName() : "");
         data << GetName();
         SendObjectMessageToSet(&data, true);
     }
@@ -7621,25 +7626,28 @@ void Player::DuelComplete(DuelCompleteType type)
         m_duel->initiator->RemoveGameObject(obj, true);
 
     // Remove auras
-    std::vector<uint32> auras2remove;
-    SpellAuraHolderMap const& vAuras = m_duel->opponent->GetSpellAuraHolderMap();
-    for (const auto& itr : vAuras)
+    if (pOpponent)
     {
-        if (!itr.second->IsPositive() &&
-           (itr.second->GetCasterGuid() == GetObjectGuid() || itr.second->IsReflected()) &&
-            itr.second->GetAuraApplyTime() >= m_duel->startTime)
-            auras2remove.push_back(itr.second->GetId());
+        std::vector<uint32> auras2remove;
+        SpellAuraHolderMap const& vAuras = pOpponent->GetSpellAuraHolderMap();
+        for (const auto& itr : vAuras)
+        {
+            if (!itr.second->IsPositive() &&
+                (itr.second->GetCasterGuid() == GetObjectGuid() || itr.second->IsReflected()) &&
+                itr.second->GetAuraApplyTime() >= m_duel->startTime)
+                auras2remove.push_back(itr.second->GetId());
+        }
+
+        for (uint32 i : auras2remove)
+            pOpponent->RemoveAurasDueToSpell(i);
     }
 
-    for (uint32 i : auras2remove)
-        m_duel->opponent->RemoveAurasDueToSpell(i);
-
-    auras2remove.clear();
+    std::vector<uint32> auras2remove;
     SpellAuraHolderMap const& auras = GetSpellAuraHolderMap();
     for (const auto& aura : auras)
     {
         if (!aura.second->IsPositive() &&
-           (aura.second->GetCasterGuid() == m_duel->opponent->GetObjectGuid() || aura.second->IsReflected()) &&
+           (aura.second->GetCasterGuid() == m_duel->opponent || aura.second->IsReflected()) &&
             aura.second->GetAuraApplyTime() >= m_duel->startTime)
             auras2remove.push_back(aura.second->GetId());
     }
@@ -7648,37 +7656,51 @@ void Player::DuelComplete(DuelCompleteType type)
         RemoveAurasDueToSpell(i);
 
     // Cleanup combo points
-    if (GetComboTargetGuid() == m_duel->opponent->GetObjectGuid())
+    if (GetComboTargetGuid() == m_duel->opponent)
         ClearComboPoints();
-    else if (GetComboTargetGuid() == m_duel->opponent->GetPetGuid())
+    else if (GetComboTargetGuid().IsPet())
         ClearComboPoints();
 
-    if (m_duel->opponent->GetComboTargetGuid() == GetObjectGuid())
-        m_duel->opponent->ClearComboPoints();
-    else if (m_duel->opponent->GetComboTargetGuid() == GetPetGuid())
-        m_duel->opponent->ClearComboPoints();
+    if (pOpponent)
+    {
+        if (pOpponent->GetComboTargetGuid() == GetObjectGuid())
+            pOpponent->ClearComboPoints();
+        else if (pOpponent->GetComboTargetGuid() == GetPetGuid())
+            pOpponent->ClearComboPoints();
+    }
 
     // Reset extraAttacks counter
     if (type != DUEL_INTERRUPTED)
     {
         ResetExtraAttacks();
-        m_duel->opponent->ResetExtraAttacks();
+
+        if (pOpponent)
+            pOpponent->ResetExtraAttacks();
     }
 
     // Cleanups
     SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
     SetUInt32Value(PLAYER_DUEL_TEAM, 0);
-    m_duel->opponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
-    m_duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
+
+    if (pOpponent)
+    {
+        pOpponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
+        pOpponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
+    }
 
     // Hack to prevent duel projectiles from damaging players upon the end of a duel:
     m_disableGeneralDamage = true;
     m_Events.AddLambdaEventAtOffset([this]() { m_disableGeneralDamage = false; }, 2000);
-    m_duel->opponent->m_disableGeneralDamage = true;
-    m_duel->opponent->m_Events.AddLambdaEventAtOffset([pOpponent = m_duel->opponent]() { pOpponent->m_disableGeneralDamage = false; }, 2000);
 
-    if (m_duel->opponent->m_duel)
-        m_duel->opponent->m_duel->finished = true;;
+    if (pOpponent)
+    {
+        pOpponent->m_disableGeneralDamage = true;
+        pOpponent->m_Events.AddLambdaEventAtOffset([pOpponent]() { pOpponent->m_disableGeneralDamage = false; }, 2000);
+
+        if (pOpponent->m_duel)
+            pOpponent->m_duel->finished = true;;
+    }
+    
     m_duel->finished = true;
 }
 
@@ -17964,16 +17986,18 @@ void Player::UpdateDuelFlag(time_t currTime)
         return;
 
     SetUInt32Value(PLAYER_DUEL_TEAM, 1);
-    m_duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 2);
-
     m_duel->startTimer = 0;
-    m_duel->startTime  = currTime;
+    m_duel->startTime = currTime;
 
-    if (m_duel->opponent->m_duel)
+    if (Player* pOpponent = sObjectAccessor.FindPlayer(m_duel->opponent))
     {
-        m_duel->opponent->m_duel->startTimer = 0;
-        m_duel->opponent->m_duel->startTime  = currTime;
-    }
+        pOpponent->SetUInt32Value(PLAYER_DUEL_TEAM, 2);
+        if (pOpponent->m_duel)
+        {
+            pOpponent->m_duel->startTimer = 0;
+            pOpponent->m_duel->startTime = currTime;
+        }
+    } 
 }
 
 void Player::RemovePet(PetSaveMode mode)
