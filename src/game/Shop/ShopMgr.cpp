@@ -50,10 +50,14 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (!shopEntry)
 		return "itemnotinshop";
 
-
 	if (!_owner->IsShopAllowed())
 		return "";
 
+	if (_owner->IsShopTransactionInprogress())
+	{
+		_owner->GetSession()->SendNotification("Shop transaction already in progress. Please wait.");
+		return "dberrorcantprocess";
+	}
 
 	uint32 price = shopEntry->Price;
 	
@@ -67,6 +71,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 	if (count == 0 || dest.empty())
 		return "bagsfulloralreadyhaveitem";
 
+	_owner->SetShopTransactionInProgress(true);
 	const std::function<void(uint32, int32, uint32)> balanceCallback = [price, itemID, dest, count](uint32 accountId, int32 coins, uint32 guidLow)
 	{
 		auto _owner = sObjectAccessor.FindPlayer(guidLow);
@@ -97,6 +102,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 					if (owner)
 					{
 						owner->SetShopAllowed(true);
+						owner->SetShopTransactionInProgress(false);
 						std::string response = "ok";
 						owner->SendAddonMessage(prefix, result + response);
 					}
@@ -111,9 +117,9 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 				{
 					response = "dberrorcantprocess";
 					_owner->SendAddonMessage(prefix, result + response);
+					_owner->SetShopTransactionInProgress(false);
 					return;
 				}
-
 
 				auto entry = new ShopLogEntry{
 					shopId,
@@ -126,12 +132,8 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 					(uint32)time(nullptr)
 				};
 
-
 				sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
-
 				sObjectMgr.AddShopLogEntry(shopId, entry);
-
-
 
 				Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
 				_owner->SendNewItem(item, count, false, true);
@@ -143,6 +145,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 			{
 				response = "notenoughtokens";
 				_owner->SendAddonMessage(prefix, result + response);
+				_owner->SetShopTransactionInProgress(false);
 				return;
 			}
 
@@ -151,10 +154,10 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 		{
 			response = "notenoughtokens";
 			_owner->SendAddonMessage(prefix, result + response);
+			_owner->SetShopTransactionInProgress(false);
 			return;
 		}
 	};
-
 
 	GetBalance(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
 	return "";
