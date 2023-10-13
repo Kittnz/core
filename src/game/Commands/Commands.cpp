@@ -663,6 +663,60 @@ bool ChatHandler::HandleLearnAllTrainerCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleLearnAllItemsCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    for (uint32 itemId = 0; itemId < sItemStorage.GetMaxEntry(); ++itemId)
+    {
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        if (!pProto)
+            continue;
+
+        if (pProto->ExtraFlags & ITEM_EXTRA_NOT_OBTAINABLE)
+            continue;
+
+        SpellEntry const* pLearnSpell = nullptr;
+        for (uint32 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+        {
+            if (!pProto->Spells[i].SpellId)
+                continue;
+
+            if (pProto->Spells[i].SpellTrigger != ITEM_SPELLTRIGGER_ON_USE)
+                continue;
+
+            SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(pProto->Spells[i].SpellId);
+            if (pSpellEntry->HasEffect(SPELL_EFFECT_LEARN_SPELL))
+                pLearnSpell = pSpellEntry;
+
+            // items have only one on use effect
+            break;
+        }
+
+        if (!pLearnSpell)
+            continue;
+        
+        if (pPlayer->CanUseItem(pProto) != EQUIP_ERR_OK)
+            continue;
+
+        for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+        {
+            uint32 spellId = pLearnSpell->EffectTriggerSpell[i];
+            if (spellId && pLearnSpell->Effect[i] == SPELL_EFFECT_LEARN_SPELL)
+            {
+                SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(spellId);
+                if (bounds.first == bounds.second)
+                    continue;
+
+                pPlayer->LearnSpell(spellId, false);
+            }
+        }
+    }
+
+    SendSysMessage("Learned all available spells from items.");
+    return true;
+}
+
 void ChatHandler::HandleLearnTrainerHelper(Player* player, TrainerSpellData const* tSpells)
 {
     // spells are not in rank order, so we need to do multiple loops to learn everything
