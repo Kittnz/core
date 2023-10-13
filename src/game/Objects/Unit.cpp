@@ -1164,7 +1164,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 std::ostringstream deathReason;
 
                 if (pPlayerVictim->IsHC60())
-                    deathReason << "A tragedy has occured. Inferno character ";
+                    deathReason << "A tragedy has occured. Inferno character " << pPlayerVictim->GetName() << " ";
 
                 if (attacker && attacker != pVictim)
                 {
