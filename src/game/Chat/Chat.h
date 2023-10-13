@@ -472,6 +472,7 @@ class ChatHandler
         bool HandleLearnAllMySpellsCommand(char* args);
         bool HandleLearnAllRecipesCommand(char* args);
         bool HandleLearnAllTrainerCommand(char* args);
+        bool HandleLearnAllItemsCommand(char* args);
 
         bool HandleLookupCreatureCommand(char* args);
         bool HandleLookupFactionCommand(char* args);
