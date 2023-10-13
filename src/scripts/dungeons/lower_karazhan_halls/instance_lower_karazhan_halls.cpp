@@ -26,7 +26,7 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 			m_uiDRChampionGUID = pCreature->GetGUID();
 			for (uint8 i = 0; i < 2; ++i)
 			{
-				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60 * IN_MILLISECONDS))
+				if (Creature* slave = pCreature->SummonCreature(61203, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 60 * IN_MILLISECONDS))
 					m_uiDRAppretinceGUID[i] = slave->GetGUID();
 			}
 			break;
