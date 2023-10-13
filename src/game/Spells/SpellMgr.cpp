@@ -1160,6 +1160,21 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             if (spellInfo_1->Id == 2825 && spellInfo_2->SpellIconID == 38 && spellInfo_2->SpellVisual == 0)
                 return false;
             break;
+        case SPELLFAMILY_POTION:
+
+            // Dreamshard Elixir and Greater Arcane Elixir
+            if (spellInfo_1->Id == 17539 && spellInfo_2->Id == 45427)
+                return false;
+            if (spellInfo_2->Id == 17539 && spellInfo_1->Id == 45427)
+                return false;
+
+            // Greater Nature Protection Potion and Elixir of Greater Nature Power
+            if (spellInfo_1->Id == 17546 && spellInfo_2->Id == 45988)
+                return false;
+            if (spellInfo_2->Id == 17546 && spellInfo_1->Id == 45988)
+                return false;
+
+            break;
         default:
             break;
     }
