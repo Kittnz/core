@@ -14710,29 +14710,6 @@ bool ChatHandler::HandleXPCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleHCInviteCommand(char* args)
-{
-    auto player = GetSession()->GetPlayer();
-    if (!player || !player->IsInWorld())
-        return false;
-
-    if (!player->IsHardcore())
-    {
-        SendSysMessage("You are not a Hardcore player.");
-        return true;
-    }
-
-    if (player->GetGuildId())
-    {
-        SendSysMessage("You are already in a guild.");
-        return true;
-    }
-
-    player->SetHCIniviteGuildTimer(1 * IN_MILLISECONDS);
-    return true;
-
-}
-
 bool ChatHandler::HandleReloadBgAmounts(char* args)
 {
     sBattleGroundMgr.ReloadBGPlayerCounts();

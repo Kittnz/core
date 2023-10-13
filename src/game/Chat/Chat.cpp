@@ -899,7 +899,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shop",           SEC_DEVELOPER,       true,  nullptr,                                        "", shopCommandTable },
         { "path",           SEC_DEVELOPER,       true,  nullptr,                                        "", pathCommandTable },
         { "xp",             SEC_PLAYER,          false, &ChatHandler::HandleXPCommand,                  "", nullptr },
-        { "hcinvite",       SEC_PLAYER,          false, &ChatHandler::HandleHCInviteCommand,            "", nullptr },
         { "settime",        SEC_DEVELOPER,       false, &ChatHandler::HandleSetTimeCommand,             "", nullptr},
         { "play",           SEC_DEVELOPER,       false, &ChatHandler::HandlePlayCommand,                "", nullptr},
         { "radio",          SEC_PLAYER,          false, &ChatHandler::HandleRadioCommand,                "", nullptr},

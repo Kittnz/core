@@ -652,7 +652,6 @@ Player::Player(WorldSession *session) : Unit(),
     // Hardcore mode
     m_hardcoreStatus = HARDCORE_MODE_STATUS_NONE;
     m_hardcoreKickTimer = 0;
-    m_hardcoreInvGuildTimer = 0;
     m_hardcoreSaveItemsTimer = 0;
 
     m_totalDeathCount = 0;
@@ -1613,36 +1612,11 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             if (update_diff >= m_hardcoreKickTimer)
             {
                 m_hardcoreKickTimer = 0;
-                // Remove from hardcore guild
-                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
-                    hardcoreGuild->DelMember(GetObjectGuid());
-
                 GetSession()->LogoutRequest(time(nullptr) - 20);
                 return;
             }
             else
                 m_hardcoreKickTimer -= update_diff;
-        }
-
-        if (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE && !GetGuildId() && m_hardcoreInvGuildTimer)
-        {
-            if (update_diff >= m_hardcoreInvGuildTimer)
-            {
-                m_hardcoreInvGuildTimer = 0;
-                // Add to hardcore guild
-                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
-                {
-                    GuildAddStatus invStatus = hardcoreGuild->AddMember(GetGUID(), GR_INITIATE);
-
-                    if (invStatus != GuildAddStatus::OK)
-                    {
-                        sLog.out(LOG_HARDCORE_MODE, "Player %s couldn't join in guild, status %u", GetName(), (uint8)invStatus);
-                        return;
-                    }
-                }
-            }
-            else
-                m_hardcoreInvGuildTimer -= update_diff;
         }
 
         if (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE && m_hardcoreSaveItemsTimer)
@@ -5422,6 +5396,22 @@ void Player::KillPlayer()
         ChatHandler(this).SendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
 
         sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetLevel());
+
+        // Promote another to guild master on death
+        if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(GetGuildId()))
+        {
+            if (hardcoreGuild->GetLeaderGuid() == GetObjectGuid())
+            {
+                MemberSlot* oldLeader = nullptr;
+                MemberSlot* best = nullptr;
+                ObjectGuid newLeaderGUID;
+                if (hardcoreGuild->GetSuitableNewLeader(newLeaderGUID, best, oldLeader))
+                {
+                    hardcoreGuild->SetNewLeader(newLeaderGUID, best, oldLeader);
+                    oldLeader->ChangeRank(GR_OFFICER);
+                }
+            }
+        }
 
         SpawnHardcoreGravestone();
         BuildPlayerRepop();
@@ -23433,9 +23423,6 @@ bool Player::SetupHardcoreMode()
 
     if (oldGuild)
         oldGuild->DelMember(GetGUID());
-
-    if (!m_hardcoreInvGuildTimer)
-        m_hardcoreInvGuildTimer = 1 * IN_MILLISECONDS;
 
     // Remove group and invites
     if (Group* group = GetGroup())
