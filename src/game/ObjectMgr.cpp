@@ -9145,7 +9145,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 {
     m_itemTransmogs.clear();
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID`, `SourceID` FROM `item_transmogrify_template` ORDER BY `ID` DESC"));
+    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID`, `SourceID` FROM `item_transmogs` ORDER BY `ID` DESC"));
 
     if (!result)
         return;
@@ -9204,7 +9204,7 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
 
     //Whoever wrote this should be burned at the stake.
     //sWorld.SendUpdateSingleItem(destId);
-    WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`, `SourceID`) VALUES ('%u','%u','%u', '%u')", 
+    CharacterDatabase.PExecuteLog("INSERT INTO `item_transmogs` (`ID`, `ItemID`, `DisplayID`, `SourceID`) VALUES ('%u','%u','%u', '%u')", 
         destId, destItemId, sourceDisplayId, sourceItemId);
 
     return destId;
@@ -9214,7 +9214,7 @@ void ObjectMgr::DeleteItemTransmogrifyTemplate(uint32 transmogrifyId)
 {
     m_itemTransmogs.erase(transmogrifyId);
     sWorld.SendSingleItemInvalidate(transmogrifyId);
-    WorldDatabase.PExecuteLog("DELETE FROM `item_transmogrify_template` WHERE `ID`=%u", transmogrifyId);
+    CharacterDatabase.PExecuteLog("DELETE FROM `item_transmogs` WHERE `ID`=%u", transmogrifyId);
 }
 
 bool ObjectMgr::IsItemTypeTransmoggable(uint32 invType)
