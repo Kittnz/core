@@ -1,3 +1,7 @@
+-- Fix janky boosted reputation rewards for Troll Necklace Bounty
+UPDATE quest_template SET RewRepFaction2 = 0, RewRepValue2 = 0, RewRepValue1 = 350 WHERE entry = 2880;
+UPDATE quest_template SET RewRepFaction2 = 0, RewRepValue2 = 0, RewRepValue1 = 125 WHERE entry = 2881;
+
 -- Fix quest category of Way of the Spiritwolf chain
 UPDATE quest_template SET ZoneOrSort = -82 WHERE entry BETWEEN 40530 AND 40534;
 UPDATE quest_template SET NextQuestInChain = 40531 WHERE entry = 40530;
