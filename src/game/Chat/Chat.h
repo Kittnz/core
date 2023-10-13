@@ -742,7 +742,6 @@ class ChatHandler
         bool HandleGuildNameCommand(char* args);
         bool HandleSendPacketCommand(char* args);
         bool HandleXPCommand(char* args);
-        bool HandleHCInviteCommand(char* args);
         bool HandlePlayCommand(char* args);
         bool HandleRadioCommand(char* args);
 

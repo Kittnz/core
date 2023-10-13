@@ -2301,7 +2301,6 @@ class Player final: public Unit
         uint8 m_hardcoreStatus;
         bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
-        uint32 m_hardcoreInvGuildTimer;
         uint32 m_timeLoggedIn = 0;
         
         void SendMountResult(UnitMountResult result) const;
@@ -2334,7 +2333,6 @@ class Player final: public Unit
         uint32 noAggroTimer = 0;
         bool HasHCImmunity() const override { return noAggroTimer != 0; }
 
-        void SetHCIniviteGuildTimer(uint32 timer) { m_hardcoreInvGuildTimer = timer; }
         void ScheduleStandStateChange(uint8 state);
         void ClearScheduledStandState() { m_newStandState = MAX_UNIT_STAND_STATE; m_standStateTimer = 0; }
         bool IsStandingUpForProc() const override;

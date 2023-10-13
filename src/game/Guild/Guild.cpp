@@ -527,36 +527,14 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
         MemberSlot* oldLeader = nullptr;
         MemberSlot* best = nullptr;
         ObjectGuid newLeaderGUID;
-        for (Guild::MemberList::iterator i = members.begin(); i != members.end(); ++i)
-        {
-            if (i->first == lowguid)
-            {
-                oldLeader = &(i->second);
-                continue;
-            }
-
-            if (!best || best->RankId > i->second.RankId)
-            {
-                best = &(i->second);
-                newLeaderGUID = ObjectGuid(HIGHGUID_PLAYER, i->first);
-            }
-        }
-
-        if (!best)
+        if (!GetSuitableNewLeader(newLeaderGUID, best, oldLeader))
             return true;
 
-        SetLeader(newLeaderGUID);
-
-        // If player not online data in data field will be loaded from guild tabs no need to update it !!
-        if (Player *newLeader = sObjectMgr.GetPlayer(newLeaderGUID))
-            newLeader->SetRank(GR_GUILDMASTER);
+        SetNewLeader(newLeaderGUID, best, oldLeader);
 
         // when leader non-exist (at guild load with deleted leader only) not send broadcasts
         if (oldLeader)
-        {
-            BroadcastEvent(GE_LEADER_CHANGED, oldLeader->Name.c_str(), best->Name.c_str());
             BroadcastEvent(GE_LEFT, guid, oldLeader->Name.c_str());
-        }
     }
 
     members.erase(lowguid);
@@ -577,6 +555,45 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
         UpdateAccountsNumber();
 
     return members.empty();
+}
+
+void Guild::SetNewLeader(ObjectGuid newLeaderGuid, MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot)
+{
+    SetLeader(newLeaderGuid);
+
+    // If player not online data in data field will be loaded from guild tabs no need to update it !!
+    if (Player* newLeader = sObjectMgr.GetPlayer(newLeaderGuid))
+        newLeader->SetRank(GR_GUILDMASTER);
+
+    // when leader non-exist (at guild load with deleted leader only) not send broadcasts
+    if (oldLeaderSlot)
+        BroadcastEvent(GE_LEADER_CHANGED, oldLeaderSlot->Name.c_str(), newLeaderSlot->Name.c_str());
+}
+
+bool Guild::GetSuitableNewLeader(ObjectGuid& newLeaderGuid, MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot)
+{
+    newLeaderGuid.Clear();
+    newLeaderSlot = nullptr;
+    oldLeaderSlot = nullptr;
+
+    uint32 lowGuid = m_LeaderGuid.GetCounter();
+
+    for (Guild::MemberList::iterator i = members.begin(); i != members.end(); ++i)
+    {
+        if (i->first == lowGuid)
+        {
+            oldLeaderSlot = &(i->second);
+            continue;
+        }
+
+        if (!newLeaderSlot || newLeaderSlot->RankId > i->second.RankId)
+        {
+            newLeaderSlot = &(i->second);
+            newLeaderGuid = ObjectGuid(HIGHGUID_PLAYER, i->first);
+        }
+    }
+
+    return newLeaderSlot != nullptr;;
 }
 
 void Guild::BroadcastToGuild(WorldSession *session, std::string const& msg, uint32 language)
@@ -831,7 +848,6 @@ void Guild::Disband()
 
     sGuildMgr.RemoveGuild(m_Id);
 }
-
 
 WorldPacket Guild::BuildOnlineRosterPacket(bool sendOfficerNote)
 {
