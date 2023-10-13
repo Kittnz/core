@@ -1,3 +1,10 @@
+-- Fix quest category of Way of the Spiritwolf chain
+UPDATE quest_template SET ZoneOrSort = -82 WHERE entry BETWEEN 40530 AND 40534;
+UPDATE quest_template SET NextQuestInChain = 40531 WHERE entry = 40530;
+UPDATE quest_template SET NextQuestInChain = 40532 WHERE entry = 40531;
+UPDATE quest_template SET NextQuestInChain = 40533 WHERE entry = 40532;
+UPDATE quest_template SET NextQuestInChain = 40534 WHERE entry = 40533;
+
 -- Update quests to point to Gnomeregan Reclamation Facility for former Tinker Town NPCs
 UPDATE quest_template SET Objectives = 'Bring Techbot''s Memory Core to Tinkmaster Overspark at the Gnomeregan Reclamation Facility.' WHERE entry = 2922;
 UPDATE quest_template SET Objectives = 'Find and bring Gigno''s Report to Tinkmaster Overspark at the Gnomeregan Reclamation Facility.' WHERE entry = 40047;
