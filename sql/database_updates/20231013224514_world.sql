@@ -6,10 +6,10 @@ WHERE entry = 40940;
 
 -- Add Level 60 money to Gilneas quests
 UPDATE quest_template SET RewMoneyMaxLevel = 400 WHERE entry = 40952;
-UPDATE quest_tempalte SET RewMoneyMaxLevel = 21300 WHERE entry IN (41032, 41033);
+UPDATE quest_template SET RewMoneyMaxLevel = 21300 WHERE entry IN (41032, 41033);
 
 -- Add wander radius to Hollow Web spiders in Gilneas
-UPDATE creature SET wander_distance = 10 WHERE entry IN (61232, 61233);
+UPDATE creature SET wander_distance = 10 WHERE id IN (61232, 61233);
 
 -- Fix janky boosted reputation rewards for Troll Necklace Bounty
 UPDATE quest_template SET RewRepFaction2 = 0, RewRepValue2 = 0, RewRepValue1 = 350 WHERE entry = 2880;
