@@ -1,3 +1,6 @@
+-- Add wander radius to Hollow Web spiders in Gilneas
+UPDATE creature SET wander_distance = 10 WHERE entry IN (61232, 61233);
+
 -- Fix janky boosted reputation rewards for Troll Necklace Bounty
 UPDATE quest_template SET RewRepFaction2 = 0, RewRepValue2 = 0, RewRepValue1 = 350 WHERE entry = 2880;
 UPDATE quest_template SET RewRepFaction2 = 0, RewRepValue2 = 0, RewRepValue1 = 125 WHERE entry = 2881;
