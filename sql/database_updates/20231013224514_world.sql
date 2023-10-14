@@ -1,3 +1,9 @@
+-- Typo fixes in Font of Arcana
+UPDATE quest_template SET
+OfferRewardText = 'Every time I interact with draconic magic, I am awed by the sheer power it possesses.$B$BTruly, we mortals cannot hope to compare to the power of our draconic rivals.',
+Details = 'A strange and foul magic lingers upon the air of Gilneas. I believe there is more going on behind the scenes than first meets the eye.$B$BThe Lord Prestor was well known for holding the ear of King Greymane and often influenced many of his decisions. When I met this Lord Prestor long ago, I was overwhelmed by the immense magical aura that emanated from him. This same magic I can sense within Gilneas, but from where, I cannot be sure.$B$BTo discover the source, I require an item of some rarity: a Font of Arcana that is often wielded by Blue Dragonkin. The nearest of their brood resides within the Badlands, in a place named the Crystalline Oasis.'
+WHERE entry = 40940;
+
 -- Add Level 60 money to Gilneas quests
 UPDATE quest_template SET RewMoneyMaxLevel = 400 WHERE entry = 40952;
 UPDATE quest_tempalte SET RewMoneyMaxLevel = 21300 WHERE entry IN (41032, 41033);
