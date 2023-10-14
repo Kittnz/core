@@ -38,6 +38,3 @@ DELETE FROM gameobject_battleground WHERE guid = '4005423';
 DELETE FROM gameobject WHERE guid = '4005414';
 DELETE FROM game_event_gameobject WHERE guid = '4005414';
 DELETE FROM gameobject_battleground WHERE guid = '4005414';
-DELETE FROM gameobject WHERE guid = '4006395';
-DELETE FROM game_event_gameobject WHERE guid = '4006395';
-DELETE FROM gameobject_battleground WHERE guid = '4006395';
