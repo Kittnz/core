@@ -1,6 +1,8 @@
 #include "scriptPCH.h"
 #include "lower_karazhan_halls.h"
 
+static const float g_lordBlackwaldPos[4] = { -11088.2f, -1995.74f, 76.1774f, 1.72157f };
+
 instance_lower_karazhan_halls::instance_lower_karazhan_halls(Map* p_Map) : ScriptedInstance(p_Map)
 {
 	instance_lower_karazhan_halls::Initialize();
@@ -15,13 +17,16 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 {
 	switch (pCreature->GetEntry())
 	{
-	    case 61221:
+	    case NPC_BROOD_QUEEN_ARAXXNA:
 			m_uiBossGUID[DATA_BROOD_QUEEN_ARAXXNA] = pCreature->GetGUID();
 			break;
-		case 61225:
+		case NPC_MOROES:
 			m_uiBossGUID[DATA_MOROES] = pCreature->GetGUID();
 			break;
-		case 61204:
+		case NPC_LORD_BLACKWALD_II:
+			m_uiLordBlackwaldGUID = pCreature->GetGUID();
+			break;
+		case NPC_DARK_RIDER_CHAMPION:
 		{
 			m_uiDRChampionGUID = pCreature->GetGUID();
 			for (uint8 i = 0; i < 2; ++i)
@@ -36,6 +41,7 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 
 void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 {
+
 }
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
@@ -97,6 +103,18 @@ void instance_lower_karazhan_halls::Load(const char* chrIn)
 		loadStream >> i;
 		if (i == IN_PROGRESS)
 			i = NOT_STARTED;
+	}
+}
+
+void instance_lower_karazhan_halls::Update(uint32 diff)
+{
+	if (!m_uiLordBlackwaldGUID && GetData(DATA_DR_CHAMPION) == DONE)
+	{
+		if (Creature* boss = GetMap()->SummonCreature(NPC_LORD_BLACKWALD_II, g_lordBlackwaldPos[0], g_lordBlackwaldPos[1], g_lordBlackwaldPos[2], g_lordBlackwaldPos[3]))
+		{
+			m_uiLordBlackwaldGUID = boss->GetGUID();
+			boss->MonsterYell("I sense a disturbance here, who dares intrude?!");
+		}
 	}
 }
 
@@ -1026,9 +1044,8 @@ struct dark_rider_championAI : public ScriptedAI
 
 	void JustDied(Unit* pKiller) override
 	{
-		float pos[4] = { -11088.2f, -1995.74f, 76.1774f, 1.72157f };
-		if (Creature* boss = m_creature->SummonCreature(61222, pos[0], pos[1], pos[2], pos[3]))
-			boss->MonsterYell("I sense a disturbance here, who dares intrude?!");
+		if (m_pInstance)
+			m_pInstance->SetData(DATA_DR_CHAMPION, DONE);
 	}
 
 	void CheckAppretinces()
