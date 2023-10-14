@@ -1,0 +1,3 @@
+update item_template set required_skill_rank = 300, required_skill = 164, spellid_1 = 14254, stat_value1 = 19 where entry = 61364; -- Dreamsteel Mantle
+update item_template set required_skill_rank = 300, required_skill = 197, spellid_1 = 7597, spellid_2 = 0, stat_value1 = 30, stat_value2 = 15, stat_type2 = 7 where entry = 61360; -- Dreamthread Mantle
+update item_template set inventory_type = 17, class = 2, subclass = 8 where entry = 61328; -- Wolfblood
