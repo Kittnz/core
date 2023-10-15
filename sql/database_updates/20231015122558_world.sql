@@ -18,3 +18,5 @@ update quest_template set Objectives = 'Listen to the Tale of the Ancient Wolf S
 update quest_template set Objectives = 'Prove your strength to the Ancient Wolf Spirit.', ObjectiveText1 = 'Prove your strength to the Ancient Wolf Spirit', details = 'You listen, and listen well, perhaps you are worthy after all. I have one final challenge for you, one to prove that you are truly worthy of my power. I challenge you to combat, show me your abilities, and show me your strength.$B$BIf you truly have the strength to defeat me, and can take my advice in heed, you will truly embody my spirit, and I will grant you my gift.$B$BIf you think you are worthy enough to challenge me, speak with me once more. Make sure you are ready, for I will not hold back.' where entry = 40534;
 -- Spell ID 45045 (Armored Brewfest Kodo) change 'Afestive mount' to 'A festive mount'.
 update spell_template set description = 'A festive mount, celebrating the joyous spirit of Brewfest.' where entry = 45045;
+-- Npc 60442 should be elemental instead of humanoid.
+update creature_template set type = 4 where entry = 60442;
