@@ -20,3 +20,5 @@ update quest_template set Objectives = 'Prove your strength to the Ancient Wolf 
 update spell_template set description = 'A festive mount, celebrating the joyous spirit of Brewfest.' where entry = 45045;
 -- Npc 60442 should be elemental instead of humanoid.
 update creature_template set type = 4 where entry = 60442;
+-- Sawtooth Leather item for quest Leather, a Draenic Luxury has no sound. 
+update item_template set material = 8 where entry = 60133;
