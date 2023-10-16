@@ -17723,3 +17723,49 @@ bool ChatHandler::HandleReloadPetitions(char*)
     SendSysMessage(">> Table `petition` reloaded.");
     return true;
 }
+
+bool ChatHandler::HandleAccountEmailCommand(char* args)
+{
+    char* oldEmail = ExtractLiteralArg(&args);
+    char* newEmail = ExtractLiteralArg(&args);
+    char* newEmail2 = ExtractLiteralArg(&args);
+
+    if (!oldEmail || !newEmail || !newEmail2)
+        return false;
+
+    if (strcmp(oldEmail, newEmail) == NULL)
+    {
+        SendSysMessage("New email must be different than old.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (strcmp(newEmail, newEmail2) != NULL)
+    {
+        SendSysMessage("Email confirmation doesn't match.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (m_session->GetEmail() != oldEmail)
+    {
+        SendSysMessage("Old email doesn't match.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (strchr(newEmail, '@') == NULL)
+    {
+        SendSysMessage("New email is not valid.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::string newEmailStr = newEmail;
+    LoginDatabase.escape_string(newEmailStr);
+    LoginDatabase.PExecute("UPDATE `account` SET `email`='%s' WHERE `id`=%u", newEmailStr.c_str(), m_session->GetAccountId());
+    m_session->SetEmail(newEmail);
+
+    SendSysMessage("Email changed.");
+    return true;
+}
