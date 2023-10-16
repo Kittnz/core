@@ -531,7 +531,6 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
     {
         MemberSlot* oldLeader = nullptr;
         MemberSlot* best = nullptr;
-        ObjectGuid newLeaderGUID;
         if (!GetSuitableNewLeader(best, oldLeader))
             return true;
 
