@@ -502,10 +502,15 @@ void Guild::SetLeader(ObjectGuid guid)
     if (!slot)
         return;
 
-    m_LeaderGuid = guid;
+    SetLeader(slot);
+}
+
+void Guild::SetLeader(MemberSlot* slot)
+{
+    m_LeaderGuid = slot->guid;
     slot->ChangeRank(GR_GUILDMASTER);
 
-    CharacterDatabase.PExecute("UPDATE guild SET leaderguid='%u' WHERE guildid='%u'", guid.GetCounter(), m_Id);
+    CharacterDatabase.PExecute("UPDATE guild SET leaderguid='%u' WHERE guildid='%u'", slot->guid.GetCounter(), m_Id);
 }
 
 /**
@@ -527,10 +532,10 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
         MemberSlot* oldLeader = nullptr;
         MemberSlot* best = nullptr;
         ObjectGuid newLeaderGUID;
-        if (!GetSuitableNewLeader(newLeaderGUID, best, oldLeader))
+        if (!GetSuitableNewLeader(best, oldLeader))
             return true;
 
-        SetNewLeader(newLeaderGUID, best, oldLeader);
+        SetNewLeader(best, oldLeader);
 
         // when leader non-exist (at guild load with deleted leader only) not send broadcasts
         if (oldLeader)
@@ -557,22 +562,46 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
     return members.empty();
 }
 
-void Guild::SetNewLeader(ObjectGuid newLeaderGuid, MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot)
+void Guild::SetNewLeader(ObjectGuid newLeaderGuid)
 {
-    SetLeader(newLeaderGuid);
+    MemberSlot* newLeaderSlot = GetMemberSlot(newLeaderGuid);
+    MemberSlot* oldLeaderSlot = GetMemberSlot(GetLeaderGuid());
 
-    // If player not online data in data field will be loaded from guild tabs no need to update it !!
-    if (Player* newLeader = sObjectMgr.GetPlayer(newLeaderGuid))
-        newLeader->SetRank(GR_GUILDMASTER);
+    if (!newLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - New leader slot not found!");
+        return;
+    }
+
+    if (!oldLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - Old leader slot not found!");
+        return;
+    }
+
+    if (newLeaderSlot == oldLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - Attempt to change leader to same player!");
+        return;
+    }
+
+    SetNewLeader(newLeaderSlot, oldLeaderSlot);
+}
+
+void Guild::SetNewLeader(MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot)
+{
+    SetLeader(newLeaderSlot);
 
     // when leader non-exist (at guild load with deleted leader only) not send broadcasts
     if (oldLeaderSlot)
+    {
+        oldLeaderSlot->ChangeRank(GR_OFFICER);
         BroadcastEvent(GE_LEADER_CHANGED, oldLeaderSlot->Name.c_str(), newLeaderSlot->Name.c_str());
+    }
 }
 
-bool Guild::GetSuitableNewLeader(ObjectGuid& newLeaderGuid, MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot)
+bool Guild::GetSuitableNewLeader(MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot)
 {
-    newLeaderGuid.Clear();
     newLeaderSlot = nullptr;
     oldLeaderSlot = nullptr;
 
@@ -587,10 +616,7 @@ bool Guild::GetSuitableNewLeader(ObjectGuid& newLeaderGuid, MemberSlot*& newLead
         }
 
         if (!newLeaderSlot || newLeaderSlot->RankId > i->second.RankId)
-        {
             newLeaderSlot = &(i->second);
-            newLeaderGuid = ObjectGuid(HIGHGUID_PLAYER, i->first);
-        }
     }
 
     return newLeaderSlot != nullptr;;

@@ -444,6 +444,7 @@ class ChatHandler
         bool HandleGuildRankCommand(char* args);
         bool HandleGuildDeleteCommand(char* args);
         bool HandleGuildRenameCommand(char* args);
+        bool HandleGuildLeaderCommand(char* args);
         bool HandleGuildListenCommand(char* args);
         bool HandleGuildHouseCommand(char* args);
 
