@@ -5405,10 +5405,7 @@ void Player::KillPlayer()
                 MemberSlot* oldLeaderSlot = nullptr;
                 MemberSlot* newLeaderSlot = nullptr;
                 if (hardcoreGuild->GetSuitableNewLeader(newLeaderSlot, oldLeaderSlot))
-                {
                     hardcoreGuild->SetNewLeader(newLeaderSlot, oldLeaderSlot);
-                    oldLeaderSlot->ChangeRank(GR_OFFICER);
-                }
             }
         }
 
