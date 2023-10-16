@@ -247,6 +247,12 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Vial of Potent Venoms
+        if (spellProto->Id == 45417)
+        {
+            if (procSpell->IsAreaOfEffectSpell())
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
         // Lightning Speed
         if (spellProto->Id == 45850)
         {
