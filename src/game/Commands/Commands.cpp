@@ -2435,6 +2435,39 @@ bool ChatHandler::HandleGuildRenameCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildLeaderCommand(char* args)
+{
+    Player* pPlayer;
+    ObjectGuid playerGuid;
+    std::string playerName;
+    if (!ExtractPlayerTarget(&args, &pPlayer, &playerGuid, &playerName))
+        return false;
+
+    Guild* pGuild;
+    if (pPlayer)
+        pGuild = sGuildMgr.GetGuildById(pPlayer->GetGuildId());
+    else
+        pGuild = sGuildMgr.GetPlayerGuild(playerGuid.GetCounter());
+    
+    if (!pGuild)
+    {
+        SendSysMessage("Player is not in a guild.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (pGuild->GetLeaderGuid() == playerGuid)
+    {
+        SendSysMessage("Player is already the guild leader.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pGuild->SetNewLeader(playerGuid);
+    PSendSysMessage("Leader of \"%s\" changed to %s.", pGuild->GetName().c_str(), playerName.c_str());
+    return true;
+}
+
 bool ChatHandler::HandleGuildListenCommand(char* args)
 {
     if (!args || !*args)

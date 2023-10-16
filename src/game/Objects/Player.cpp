@@ -5402,13 +5402,12 @@ void Player::KillPlayer()
         {
             if (hardcoreGuild->GetLeaderGuid() == GetObjectGuid())
             {
-                MemberSlot* oldLeader = nullptr;
-                MemberSlot* best = nullptr;
-                ObjectGuid newLeaderGUID;
-                if (hardcoreGuild->GetSuitableNewLeader(newLeaderGUID, best, oldLeader))
+                MemberSlot* oldLeaderSlot = nullptr;
+                MemberSlot* newLeaderSlot = nullptr;
+                if (hardcoreGuild->GetSuitableNewLeader(newLeaderSlot, oldLeaderSlot))
                 {
-                    hardcoreGuild->SetNewLeader(newLeaderGUID, best, oldLeader);
-                    oldLeader->ChangeRank(GR_OFFICER);
+                    hardcoreGuild->SetNewLeader(newLeaderSlot, oldLeaderSlot);
+                    oldLeaderSlot->ChangeRank(GR_OFFICER);
                 }
             }
         }
