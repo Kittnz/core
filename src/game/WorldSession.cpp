@@ -243,7 +243,6 @@ uint32 GetChatPacketProcessingType(ChatPacketHeader* header)
         case CHAT_MSG_BATTLEGROUND:
         case CHAT_MSG_BATTLEGROUND_LEADER:
         case CHAT_MSG_HARDCORE:
-        case CHAT_MSG_AFK:
         case CHAT_MSG_DND:
             return PACKET_PROCESS_DB_QUERY;
         // These can be handled on the map thread.
