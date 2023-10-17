@@ -225,7 +225,6 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
     SetGoType(GameobjectTypes(goinfo->type));
 
     SetGoAnimProgress(animprogress);
-    SetName(goinfo->name);
 
     if (GetGOInfo()->IsLargeGameObject())
     {
@@ -1027,11 +1026,6 @@ void GameObject::DeleteFromDB() const
     sWorld.ExecuteUpdate("DELETE FROM gameobject WHERE guid = '%u'", GetGUIDLow());
     sWorld.ExecuteUpdate("DELETE FROM game_event_gameobject WHERE guid = '%u'", GetGUIDLow());
     sWorld.ExecuteUpdate("DELETE FROM gameobject_battleground WHERE guid = '%u'", GetGUIDLow());
-}
-
-GameObjectInfo const *GameObject::GetGOInfo() const
-{
-    return m_goInfo;
 }
 
 /*********************************************************/
@@ -2053,7 +2047,7 @@ const char* GameObject::GetNameForLocaleIdx(int32 loc_idx) const
         }
     }
 
-    return GetName();
+    return GameObject::GetName();
 }
 
 void GameObject::UpdateRotationFields(float rotation2 /*=0.0f*/, float rotation3 /*=0.0f*/)
