@@ -19,3 +19,6 @@ UPDATE quest_template SET RewXP = 1550, RewMoneyMaxLevel = 9300, NextQuestInChai
 UPDATE quest_template SET RewXP = 2680, RewMoneyMaxLevel = 16080, NextQuestInChain = 41004 WHERE entry = 41003;
 UPDATE quest_template SET RewXP = 3150, RewMoneyMaxLevel = 18900 WHERE entry = 41004;
 UPDATE quest_template SET Type = 62 WHERE entry IN (40998, 41001, 41002, 41003, 41004);
+
+-- Fix faction requirement of The Black Waltz quest
+UPDATE quest_template SET RequiredRaces = 589 WHERE entry = 40908;
