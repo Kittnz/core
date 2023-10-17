@@ -685,7 +685,7 @@ class GameObject : public WorldObject
 
         bool Create(uint32 guidlow, uint32 name_id, Map *map, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 animprogress, GOState go_state);
         void Update(uint32 update_diff, uint32 p_time) override;
-        GameObjectInfo const* GetGOInfo() const;
+        GameObjectInfo const* GetGOInfo() const { return m_goInfo; }
 
         bool IsTransport() const;
 
@@ -695,8 +695,9 @@ class GameObject : public WorldObject
         void UpdateRotationFields(float rotation2 = 0.0f, float rotation3 = 0.0f);
         QuaternionData const GetLocalRotation() const;
 
+        char const* GetName() const final { return GetGOInfo()->name.c_str(); }
         // overwrite WorldObject function for proper name localization
-        const char* GetNameForLocaleIdx(int32 locale_idx) const override;
+        const char* GetNameForLocaleIdx(int32 locale_idx) const final;
 
         void SaveToDB();
         void SaveToDB(uint32 mapid);

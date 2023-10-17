@@ -120,7 +120,6 @@ bool Transport::Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, floa
     SetGoState(GO_STATE_READY);
     SetGoType(GAMEOBJECT_TYPE_MO_TRANSPORT);
     SetGoAnimProgress(animprogress);
-    SetName(goinfo->name);
     UpdateRotationFields(0.0f, 1.0f);
 
     sObjectAccessor.AddObject(this);
