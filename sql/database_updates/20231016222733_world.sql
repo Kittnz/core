@@ -6,3 +6,6 @@ UPDATE quest_template SET ReqItemId1 = 61794 WHERE entry = 41119;
 
 -- Fix name typo of Alchemist Stone recipe
 UPDATE item_template SET Name = 'Recipe: Alchemist''s Stone' WHERE entry = 13517;
+
+-- Fix missing prerequisite for Azuregos's Magical Ledger
+UPDATE quest_template SET PrevQuestId = 8555 WHERE entry = 8575;
