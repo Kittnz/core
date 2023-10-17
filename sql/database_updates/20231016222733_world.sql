@@ -3,3 +3,6 @@ UPDATE quest_template SET RequiredRaces = 0, RewRepValue1 = 0, RewRepValue2 = 0 
 
 -- Fix incorrect item requirements for Ornate Bloodstone Dagger Plans quest
 UPDATE quest_template SET ReqItemId1 = 61794 WHERE entry = 41119;
+
+-- Fix name typo of Alchemist Stone recipe
+UPDATE item_template SET Name = 'Recipe: Alchemist''s Stone' WHERE entry = 13517;
