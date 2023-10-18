@@ -37,3 +37,8 @@ UPDATE `item_template` SET `display_id` = 7393 WHERE `entry` = 50545;
 
 UPDATE `item_template` SET `display_id` = 31205 WHERE `entry` = 60381;
 UPDATE `item_template` SET `display_id` = 7735 WHERE `entry` = 60463;
+
+-- Fixed the vendor price of the gloves of the Unknown.
+
+UPDATE `item_template` SET `buy_price` = 52394 WHERE `entry` = 61040;
+UPDATE `item_template` SET `sell_price` = 10475 WHERE `entry` = 61040;
