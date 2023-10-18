@@ -29,3 +29,8 @@ UPDATE `areatrigger_teleport` SET `message` = 'To enter, you must be part of a r
 -- Quest "Wisdom of the Sages" drop only 1 item for party:
 
 UPDATE `item_template` SET `flags`=2048 WHERE `entry`= 81343;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4663
+-- Gemstone of Ysera missing inventory drag sound effects 
+
+UPDATE `item_template` SET `display_id` = 7393 WHERE `entry` = 50545;
