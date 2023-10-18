@@ -24,3 +24,8 @@ UPDATE quest_template SET objectives = 'Retrieve the Ravenwood Scepter from Rave
 -- Fix ES raid teleport condition:
 
 UPDATE `areatrigger_teleport` SET `message` = 'To enter, you must be part of a raid group, at least level 60, and have the Gemstone of Ysera in your inventory.' WHERE `id` = 5017;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4774
+-- Quest "Wisdom of the Sages" drop only 1 item for party:
+
+UPDATE `item_template` SET `flags`=2048 WHERE `entry`= 81343;
