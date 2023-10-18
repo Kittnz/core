@@ -34,3 +34,6 @@ UPDATE `item_template` SET `flags`=2048 WHERE `entry`= 81343;
 -- Gemstone of Ysera missing inventory drag sound effects 
 
 UPDATE `item_template` SET `display_id` = 7393 WHERE `entry` = 50545;
+
+UPDATE `item_template` SET `display_id` = 31205 WHERE `entry` = 60381;
+UPDATE `item_template` SET `display_id` = 7735 WHERE `entry` = 60463;
