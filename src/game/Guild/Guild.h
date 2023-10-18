@@ -249,6 +249,7 @@ class Guild
         uint32 GetBackgroundColor() const { return m_BackgroundColor; }
 
         void SetLeader(ObjectGuid guid);
+        void SetLeader(MemberSlot* slot);
         GuildAddStatus AddMember(ObjectGuid plGuid, uint32 plRank);
         bool DelMember(ObjectGuid guid, bool isDisbanding = false);
         //lowest rank is the count of ranks - 1 (the highest rank_id in table)
@@ -340,8 +341,9 @@ class Guild
         void   DisplayGuildEventLog(WorldSession *session);
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
         ObjectGuid GetGuildInviter(ObjectGuid playerGuid) const;
-        bool GetSuitableNewLeader(ObjectGuid& newLeaderGuid, MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot);
-        void SetNewLeader(ObjectGuid newLeaderGuid, MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot);
+        bool GetSuitableNewLeader(MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot);
+        void SetNewLeader(ObjectGuid newLeaderGuid);
+        void SetNewLeader(MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot);
 
         void AddToCache(uint32 guidLow)
         {

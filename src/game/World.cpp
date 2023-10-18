@@ -1437,6 +1437,7 @@ void World::LoadConfigSettings(bool reload)
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_SHELLCOIN].SetInterval(10 * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_TOTAL_MONEY].SetInterval(6 * HOUR * IN_MILLISECONDS);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -2287,6 +2288,16 @@ void World::ProcessAsyncPackets()
     }
 }
 
+void TotalMoneyCallback(QueryResult* result, uint32 money)
+{
+    if (!result)
+        return;
+
+    CharacterDatabase.PExecute("INSERT INTO characters_total_money (total_gold) VALUES (%u)", (*result)[0].GetUInt32());
+    delete result;
+}
+
+
 /// Update the World !
 void World::Update(uint32 diff)
 {
@@ -2311,6 +2322,13 @@ void World::Update(uint32 diff)
         m_timers[WUPDATE_AUCTIONS].Reset();
         ///- Handle expired auctions
         sAuctionMgr.Update();
+    }
+
+    if (m_timers[WUPDATE_TOTAL_MONEY].Passed())
+    {
+        m_timers[WUPDATE_TOTAL_MONEY].Reset();
+        uint32 money = 0;
+        CharacterDatabase.AsyncPQuery(&TotalMoneyCallback, money, "SELECT ROUND(SUM(money) / 10000) FROM characters");
     }
 
     m_canProcessAsyncPackets = false;

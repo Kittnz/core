@@ -216,18 +216,67 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         m_Socket->CloseSocket();
 }
 
+struct ChatPacketHeader
+{
+    uint32 chatType;
+    uint32 language;
+};
+
+uint32 GetChatPacketProcessingType(ChatPacketHeader* header)
+{
+    // We are forced to process those in world thread because of the custom addon messages which turtle core handles server side instead of using separate opcodes...
+    // Would be very nice if somebody could patch the client to register new lua commands to be used in turtle addons that would send packets with custom opcodes.
+    if (header->language == LANG_ADDON)
+        return PACKET_PROCESS_WORLD;
+
+    switch (header->chatType)
+    {
+        // These can be handled at any time session update in world thread is not running.
+        case CHAT_MSG_CHANNEL:
+        case CHAT_MSG_WHISPER:
+        case CHAT_MSG_PARTY:
+        case CHAT_MSG_GUILD:
+        case CHAT_MSG_OFFICER:
+        case CHAT_MSG_RAID:
+        case CHAT_MSG_RAID_LEADER:
+        case CHAT_MSG_RAID_WARNING:
+        case CHAT_MSG_BATTLEGROUND:
+        case CHAT_MSG_BATTLEGROUND_LEADER:
+        case CHAT_MSG_HARDCORE:
+        case CHAT_MSG_DND:
+            return PACKET_PROCESS_DB_QUERY;
+        // These can be handled on the map thread.
+        case CHAT_MSG_SAY:
+        case CHAT_MSG_EMOTE:
+        case CHAT_MSG_YELL:
+            return PACKET_PROCESS_MAP;
+    }
+
+    return PACKET_PROCESS_WORLD;
+}
+
 /// Add an incoming packet to the queue
 void WorldSession::QueuePacket(WorldPacket* newPacket)
 {
-    OpcodeHandler const& opHandle = opcodeTable[newPacket->GetOpcode()];
-    uint32 const processing = opHandle.packetProcessing;
-    if (processing >= PACKET_PROCESS_MAX_TYPE)
+    uint32 processing;
+
+    // Handle chat packets on async thread when possible
+    if (newPacket->GetOpcode() == CMSG_MESSAGECHAT &&
+        newPacket->size() >= sizeof(ChatPacketHeader) &&
+        GetSecurity() == SEC_PLAYER) // gm commands need to be executed in world thread to be safe
+        processing = GetChatPacketProcessingType((ChatPacketHeader*)newPacket->contents());
+    else
     {
-        sLog.outError("SESSION: opcode %s (0x%.4X) will be skipped",
-                      LookupOpcodeName(newPacket->GetOpcode()),
-                      newPacket->GetOpcode());
-        delete newPacket;
-        return;
+        OpcodeHandler const& opHandle = opcodeTable[newPacket->GetOpcode()];
+        processing = opHandle.packetProcessing;
+        if (processing >= PACKET_PROCESS_MAX_TYPE)
+        {
+            sLog.outError("SESSION: opcode %s (0x%.4X) will be skipped",
+                LookupOpcodeName(newPacket->GetOpcode()),
+                newPacket->GetOpcode());
+            delete newPacket;
+            return;
+        }
     }
 
     m_lastReceivedPacketTime = newPacket->GetPacketTime();

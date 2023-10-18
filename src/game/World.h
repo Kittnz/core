@@ -101,7 +101,8 @@ enum WorldTimers
     WUPDATE_GROUPS      = 5,
     WUPDATE_CENSUS      = 6,
     WUPDATE_SHELLCOIN   = 7,
-    WUPDATE_COUNT       = 8
+    WUPDATE_TOTAL_MONEY = 8,
+    WUPDATE_COUNT       = 9
 };
 
 /// Configuration elements
