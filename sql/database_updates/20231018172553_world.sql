@@ -48,3 +48,7 @@ UPDATE `item_template` SET `sell_price` = 10475 WHERE `entry` = 61040;
 DELETE FROM quest_template WHERE entry = 40011;
 DELETE FROM creature_template WHERE entry = 61411;
 DELETE FROM creature_template WHERE entry = 41001;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4427
+
+UPDATE `creature_template` SET `loot_id` = 0, `skinning_loot_id` = 0 WHERE `entry` = 80234;
