@@ -2435,6 +2435,39 @@ bool ChatHandler::HandleGuildRenameCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildLeaderCommand(char* args)
+{
+    Player* pPlayer;
+    ObjectGuid playerGuid;
+    std::string playerName;
+    if (!ExtractPlayerTarget(&args, &pPlayer, &playerGuid, &playerName))
+        return false;
+
+    Guild* pGuild;
+    if (pPlayer)
+        pGuild = sGuildMgr.GetGuildById(pPlayer->GetGuildId());
+    else
+        pGuild = sGuildMgr.GetPlayerGuild(playerGuid.GetCounter());
+    
+    if (!pGuild)
+    {
+        SendSysMessage("Player is not in a guild.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (pGuild->GetLeaderGuid() == playerGuid)
+    {
+        SendSysMessage("Player is already the guild leader.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pGuild->SetNewLeader(playerGuid);
+    PSendSysMessage("Leader of \"%s\" changed to %s.", pGuild->GetName().c_str(), playerName.c_str());
+    return true;
+}
+
 bool ChatHandler::HandleGuildListenCommand(char* args)
 {
     if (!args || !*args)
@@ -17688,5 +17721,51 @@ bool ChatHandler::HandleReloadPetitions(char*)
 {
     sGuildMgr.LoadPetitions();
     SendSysMessage(">> Table `petition` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleAccountEmailCommand(char* args)
+{
+    char* oldEmail = ExtractLiteralArg(&args);
+    char* newEmail = ExtractLiteralArg(&args);
+    char* newEmail2 = ExtractLiteralArg(&args);
+
+    if (!oldEmail || !newEmail || !newEmail2)
+        return false;
+
+    if (strcmp(oldEmail, newEmail) == NULL)
+    {
+        SendSysMessage("New email must be different than old.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (strcmp(newEmail, newEmail2) != NULL)
+    {
+        SendSysMessage("Email confirmation doesn't match.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (m_session->GetEmail() != oldEmail)
+    {
+        SendSysMessage("Old email doesn't match.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (strchr(newEmail, '@') == NULL)
+    {
+        SendSysMessage("New email is not valid.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::string newEmailStr = newEmail;
+    LoginDatabase.escape_string(newEmailStr);
+    LoginDatabase.PExecute("UPDATE `account` SET `email`='%s' WHERE `id`=%u", newEmailStr.c_str(), m_session->GetAccountId());
+    m_session->SetEmail(newEmail);
+
+    SendSysMessage("Email changed.");
     return true;
 }

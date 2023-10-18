@@ -2455,6 +2455,7 @@ public:
         typedef std::list<::Channel*> JoinedChannelsList;
         JoinedChannelsList m_channels;
         void UpdateLocalChannels(uint32 newZone);
+        std::string m_name;
     public:
         void JoinedChannel(::Channel* c);
         void LeftChannel(::Channel* c);
@@ -2569,6 +2570,9 @@ public:
 		// Inactivity end
 
         uint8 GetChatTag() const;
+
+        char const* GetName() const final { return m_name.c_str(); }
+        void SetName(std::string const& newname) { m_name = newname; }
 
         float GetYellRange() const;
         void Say(std::string const& text, const uint32 language) const;

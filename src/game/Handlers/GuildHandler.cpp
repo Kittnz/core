@@ -488,10 +488,13 @@ void WorldSession::HandleGuildLeaderOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    guild->SetLeader(slot->guid);
-    oldSlot->ChangeRank(GR_OFFICER);
+    if (oldSlot == slot)
+    {
+        SendGuildCommandResult(GUILD_INVITE_S, name, ERR_ALREADY_IN_GUILD_S);
+        return;
+    }
 
-    guild->BroadcastEvent(GE_LEADER_CHANGED, oldLeader->GetName(), name.c_str());
+    guild->SetNewLeader(slot, oldSlot);
 }
 
 void WorldSession::HandleGuildMOTDOpcode(WorldPacket& recvPacket)

@@ -384,7 +384,6 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
         LoadEquipment(addon->equipment_id);
     }
 
-    SetName(normalInfo->name);                              // at normal entry always
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 
     // update speed for the new CreatureInfo base speed mods
@@ -3120,7 +3119,7 @@ const char* Creature::GetNameForLocaleIdx(int32 loc_idx) const
         }
     }
 
-    return GetName();
+    return Creature::GetName();
 }
 
 void Creature::SetFactionTemporary(uint32 factionId, uint32 tempFactionFlags)

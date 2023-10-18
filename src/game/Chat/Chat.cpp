@@ -64,11 +64,12 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand accountCommandTable[] =
     {
         { "characters",     SEC_DEVELOPER,      true,  &ChatHandler::HandleAccountCharactersCommand,   "", nullptr },
-        { "create",         SEC_ADMINISTRATOR,      true,  &ChatHandler::HandleAccountCreateCommand,       "", nullptr },
+        { "create",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAccountCreateCommand,       "", nullptr },
         { "delete",         SEC_CONSOLE,        true,  &ChatHandler::HandleAccountDeleteCommand,       "", nullptr },
+        { "email",          SEC_PLAYER,         false, &ChatHandler::HandleAccountEmailCommand,        "", nullptr },
         { "set",            SEC_DEVELOPER,      true,  nullptr,                                        "", accountSetCommandTable },
         { "password",       SEC_PLAYER,         true,  &ChatHandler::HandleAccountPasswordCommand,     "", nullptr },
-        { "twofa",          SEC_ADMINISTRATOR,      true,  &ChatHandler::HandleAccountFaCommand,           "", nullptr },
+        { "twofa",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAccountFaCommand,           "", nullptr },
         { "",               SEC_PLAYER,         true,  &ChatHandler::HandleAccountCommand,             "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
@@ -239,6 +240,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "uninvite",       SEC_MODERATOR,     true,  &ChatHandler::HandleGuildUninviteCommand,       "", nullptr },
         { "rank",           SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildRankCommand,           "", nullptr },
         { "rename",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildRenameCommand,         "", nullptr },
+        { "leader",         SEC_DEVELOPER,     false, &ChatHandler::HandleGuildLeaderCommand,         "", nullptr },
         { "listen",         SEC_DEVELOPER,     false, &ChatHandler::HandleGuildListenCommand,         "", nullptr },
         { "house",          SEC_DEVELOPER,     false, &ChatHandler::HandleGuildHouseCommand,          "", nullptr },
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
