@@ -16,3 +16,7 @@ update item_template set item_level = 47, stat_value1 = 20, spellid_1 = 7597, sp
 update item_template set item_level = 47, stat_value1 = 8, dmg_min1 = 49, dmg_max1 = 90 where entry = 60953; -- Brackenwall Longbow
 update item_template set item_level = 47, stat_value1 = 8, dmg_min1 = 57, dmg_max1 = 106 where entry = 60821; -- Theramore Arbalest
 
+-- change short desc. of quest 40994 to
+-- "Retrieve the Ravenwood Scepter from Ravenwood Keep for Dark Bishop Mordren in Stillward Chuch."
+
+UPDATE quest_template SET objectives = 'Retrieve the Ravenwood Scepter from Ravenwood Keep for Dark Bishop Mordren in Stillward Chuch.' WHERE entry =  40994;
