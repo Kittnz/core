@@ -42,3 +42,9 @@ UPDATE `item_template` SET `display_id` = 7735 WHERE `entry` = 60463;
 
 UPDATE `item_template` SET `buy_price` = 52394 WHERE `entry` = 61040;
 UPDATE `item_template` SET `sell_price` = 10475 WHERE `entry` = 61040;
+
+-- Deleted deprecated quests:
+
+DELETE FROM quest_template WHERE entry = 40011;
+DELETE FROM creature_template WHERE entry = 61411;
+DELETE FROM creature_template WHERE entry = 41001;
