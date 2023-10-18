@@ -20,3 +20,7 @@ update item_template set item_level = 47, stat_value1 = 8, dmg_min1 = 57, dmg_ma
 -- "Retrieve the Ravenwood Scepter from Ravenwood Keep for Dark Bishop Mordren in Stillward Chuch."
 
 UPDATE quest_template SET objectives = 'Retrieve the Ravenwood Scepter from Ravenwood Keep for Dark Bishop Mordren in Stillward Chuch.' WHERE entry =  40994;
+
+-- Fix ES raid teleport condition:
+
+UPDATE `areatrigger_teleport` SET `message` = 'To enter, you must be part of a raid group, at least level 60, and have the Gemstone of Ysera in your inventory.' WHERE `id` = 5017;
