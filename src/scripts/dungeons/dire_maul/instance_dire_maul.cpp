@@ -954,19 +954,20 @@ bool GossipSelect_npc_mizzle_the_crafty(Player* pPlayer, Creature* pCreature, ui
 
 enum
 {
-    SPELL_GORDOK_OGRE_SUIT_T    = 22813,
-    SPELL_GORDOK_OGRE_SUIT_L    = 22815,
-    SPELL_LEARN_GOS_T           = 22814,
-    SPELL_LEARN_GOS_L           = 22816,
+    SPELL_GORDOK_OGRE_SUIT_T          = 22813,
+    SPELL_GORDOK_OGRE_SUIT_L          = 22815,
+    SPELL_LEARN_GOS_T                 = 22814,
+    SPELL_LEARN_GOS_L                 = 22816,
 
-    QUEST_GORDOK_OGRE_SUIT      = 5518,
-    QUEST_FREE_KNOT             = 5525,
-    QUEST_FREE_KNOT_REPEATABLE  = 7429,
+    QUEST_GORDOK_OGRE_SUIT            = 5518,
+    QUEST_GORDOK_OGRE_SUIT_REPEATABLE = 5519,
+    QUEST_FREE_KNOT                   = 5525,
+    QUEST_FREE_KNOT_REPEATABLE        = 7429,
 
-    GOSSIP_MENU_1               = 6795,
-    GOSSIP_MENU_2               = 6883,
+    GOSSIP_MENU_1                     = 6795,
+    GOSSIP_MENU_2                     = 6883,
 
-    GO_KNOTS_BALL_AND_CHAIN     = 179511,
+    GO_KNOTS_BALL_AND_CHAIN           = 179511,
 };
 
 struct npc_knot_thimblejackAI : public ScriptedAI
@@ -1076,15 +1077,23 @@ bool QuestRewarded_npc_knot_thimblejack(Player* pPlayer, Creature* pCreature, Qu
 {
     if (instance_dire_maul* pInstance = (instance_dire_maul*)pPlayer->GetInstanceData())
     {
-        if (pQuest && (pQuest->GetQuestId() == QUEST_FREE_KNOT || pQuest->GetQuestId() == QUEST_FREE_KNOT_REPEATABLE))
+        if (pQuest && pCreature)
         {
-            if (pCreature)
+            if (pQuest->GetQuestId() == QUEST_FREE_KNOT || pQuest->GetQuestId() == QUEST_FREE_KNOT_REPEATABLE)
             {
                 if (GameObject* pGo = pCreature->FindNearestGameObject(GO_KNOTS_BALL_AND_CHAIN, 20.0f))
                     pGo->Delete();
                 pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
                 //pCreature->SetActiveObjectState(true);
                 pCreature->GetMotionMaster()->MovePoint(1, 518.325f, 542.00f, -23.901f);
+                return true;
+            }
+            else if (pQuest->GetQuestId() == QUEST_GORDOK_OGRE_SUIT || pQuest->GetQuestId() == QUEST_GORDOK_OGRE_SUIT_REPEATABLE)
+            {
+                if (pPlayer->GetSkillValueBase(SKILL_LEATHERWORKING) >= 275 && !pPlayer->HasSpell(SPELL_GORDOK_OGRE_SUIT_L))
+                    pPlayer->CastSpell(pPlayer, SPELL_LEARN_GOS_L, true);
+                if (pPlayer->GetSkillValueBase(SKILL_TAILORING) >= 275 && !pPlayer->HasSpell(SPELL_GORDOK_OGRE_SUIT_T))
+                    pPlayer->CastSpell(pPlayer, SPELL_LEARN_GOS_T, true);
                 return true;
             }
         }
