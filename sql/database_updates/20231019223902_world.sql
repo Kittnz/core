@@ -1,0 +1,1 @@
+UPDATE `spell_template` SET `description` = 'Teaches Divine Spirit (Rank 1).' WHERE `entry` = 47324;
