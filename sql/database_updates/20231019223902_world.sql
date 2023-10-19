@@ -22,3 +22,7 @@ UPDATE `spell_template` SET `name` = 'Flurry', `description` = 'Increases your a
 UPDATE `spell_template` SET `name` = 'Flurry', `description` = 'Increases your attack speed by $16279s1% for your next 3 swings after dealing a melee critical strike.' WHERE `entry` = 16283;
 UPDATE `spell_template` SET `name` = 'Flurry', `description` = 'Increases your attack speed by $16280s1% for your next 3 swings after dealing a melee critical strike.' WHERE `entry` = 16284;
 UPDATE `spell_template` SET `name` = 'Flurry', `description` = '' WHERE `entry` = 17687;
+
+-- Vengeful Phantom, Spiteful Phantom, Wrath Phantom
+
+UPDATE `creature_template` SET `leash_range`=100 WHERE `entry` IN (10389, 10388, 10387);
