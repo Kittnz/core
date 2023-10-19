@@ -1232,7 +1232,8 @@ void Map::Remove(Transport* obj, bool remove)
         if (!sWorld.getConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY))
             obj->SaveRespawnTime();
 
-        delete obj;
+        // transports are deleted only in TransportMgr::Unload
+        //delete obj;
     }
 }
 
