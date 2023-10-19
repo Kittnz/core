@@ -5,3 +5,8 @@ WHERE entry = 40908;
 
 UPDATE spell_template SET Name = 'Great Chieftain''s Kodo' WHERE entry = 18363;
 UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 7582;
+
+update item_template set required_skill_rank = 300, required_skill = 197, spellid_1 = 14254, spellid_2 = 21364, stat_value1 = 19 where entry = 61360; -- Dreamthread Mantle
+update item_template set required_skill_rank = 300, required_skill = 164, spellid_1 = 7597, spellid_2 = 0, stat_value1 = 25, stat_value2 = 15, stat_type2 = 7 where entry = 61364; -- Dreamsteel Mantle
+update item_template set spellid_1 = 7598, spellid_2 = 48034 where entry = 61275; -- Breastplate of Earthen Might
+update item_template set spellid_1 = 48032 where entry = 60782; -- Shieldbreaker Arbalest
