@@ -5,3 +5,4 @@ Details = 'The Widows of the Wood are a fickle lot, $N. They hold a strong attac
 WHERE entry = 40908;
 
 UPDATE spell_template SET Name = 'Great Chieftain''s Kodo' WHERE entry = 18363;
+UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 7582;
