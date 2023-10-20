@@ -14847,9 +14847,25 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     Utf8toWStr(name_str, name_wstr);
     wstrToLower(name_wstr);
 
-    if (!isBasicLatinString(name_wstr, false))
+    wchar_t nonLatinCharacter = 0;
+    for (wchar_t chr : name_wstr)
     {
+        if (!isBasicLatinCharacter(chr) && chr != ' ')
+        {
+            nonLatinCharacter = chr;
+            break;
+        }
+    }
+
+    if (nonLatinCharacter != 0)
+    {
+        std::wstring wstr;
+        wstr += nonLatinCharacter;
+        std::string str;
+        WStrToUtf8(wstr, str);
+
         m_session->SendNotification("Please use latin symbols only.");
+        PSendSysMessage("You used invalid symbol %s (%u).", str.c_str(), (uint32)nonLatinCharacter);
         return false;
     }
 
