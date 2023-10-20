@@ -39,9 +39,25 @@ void instance_lower_karazhan_halls::OnCreatureCreate(Creature* pCreature)
 	}
 }
 
+void instance_lower_karazhan_halls::OnCreatureRespawn(Creature* pCreature)
+{
+	switch (pCreature->GetEntry())
+	{
+		case NPC_LORD_BLACKWALD_II:
+			if (GetData(DATA_BLACKWALD_II) == DONE)
+				pCreature->AddObjectToRemoveList();
+			break;
+	}
+}
+
 void instance_lower_karazhan_halls::OnCreatureDeath(Creature* pCreature)
 {
-
+	switch (pCreature->GetEntry())
+	{
+		case NPC_LORD_BLACKWALD_II:
+			SetData(DATA_BLACKWALD_II, DONE);
+			break;
+	}
 }
 
 uint64 instance_lower_karazhan_halls::GetData64(uint32 uiType)
@@ -108,12 +124,14 @@ void instance_lower_karazhan_halls::Load(const char* chrIn)
 
 void instance_lower_karazhan_halls::Update(uint32 diff)
 {
-	if (!m_uiLordBlackwaldGUID && GetData(DATA_DR_CHAMPION) == DONE)
+	if (!m_uiLordBlackwaldGUID && GetData(DATA_DR_CHAMPION) == DONE && GetData(DATA_BLACKWALD_II) != DONE)
 	{
-		if (Creature* boss = GetMap()->SummonCreature(NPC_LORD_BLACKWALD_II, g_lordBlackwaldPos[0], g_lordBlackwaldPos[1], g_lordBlackwaldPos[2], g_lordBlackwaldPos[3]))
+		if (Creature* boss = GetMap()->SummonCreature(NPC_LORD_BLACKWALD_II, g_lordBlackwaldPos[0], g_lordBlackwaldPos[1], g_lordBlackwaldPos[2], g_lordBlackwaldPos[3], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1 * DAY * IN_MILLISECONDS))
 		{
 			m_uiLordBlackwaldGUID = boss->GetGUID();
+			boss->SetRespawnDelay(7 * DAY);
 			boss->MonsterYell("I sense a disturbance here, who dares intrude?!");
+			SetData(DATA_BLACKWALD_II, NOT_STARTED);
 		}
 	}
 }
