@@ -167,6 +167,8 @@ struct boss_solniusAI : public ScriptedAI
 			if (pErennius->IsAlive())
 			{
 				m_bIsHardMode = true;
+				pErennius->SetInCombatWithZone();
+				me->SetInCombatWithZone();
 				pErennius->AI()->AttackStart(pWho);
 			}
 		}
