@@ -3,3 +3,13 @@ UPDATE gameobject SET spawntimesecsmin = 900, spawntimesecsmax = 900 WHERE id IN
 UPDATE gameobject SET spawntimesecsmin = 10800, spawntimesecsmax = 10800 WHERE id IN (180466, 180539, 180559);
 
 REPLACE INTO game_event_gameobject (guid, event) VALUES (49313, 1);
+
+UPDATE quest_template SET ReqCreatureOrGOId1 = 0, ReqCreatureOrGOCount1 = 0, NextQuestInChain = 41042 WHERE entry = 41041;
+UPDATE quest_template SET NextQuestInChain = 41054 WHERE entry = 41053;
+UPDATE quest_template SET NextQuestInChain = 41044 WHERE entry = 41043;
+UPDATE quest_template SET NextQuestInChain = 41045 WHERE entry = 41044;
+UPDATE quest_template SET NextQuestInChain = 41046 WHERE entry = 41045;
+UPDATE quest_template SET NextQuestInChain = 41047 WHERE entry = 41046;
+UPDATE quest_template SET NextQuestInChain = 41048 WHERE entry = 41047;
+UPDATE quest_template SET NextQuestInChain = 41051 WHERE entry = 41050;
+UPDATE quest_template SET NextQuestInChain = 41052 WHERE entry = 41051;
