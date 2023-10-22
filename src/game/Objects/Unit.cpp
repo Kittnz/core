@@ -1856,58 +1856,63 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
             ((Player*)this)->CastItemCombatSpell(pVictim, damageInfo->attackType);
 
         // victim's damage shield
-        std::set<Aura*> alreadyDone;
-        AuraList const& vDamageShields = pVictim->GetAurasByType(SPELL_AURA_DAMAGE_SHIELD);
-        for (AuraList::const_iterator i = vDamageShields.begin(); i != vDamageShields.end();)
+        TriggerDamageShields(pVictim);
+    }
+}
+
+void Unit::TriggerDamageShields(Unit* pVictim)
+{
+    std::set<Aura*> alreadyDone;
+    AuraList const& vDamageShields = pVictim->GetAurasByType(SPELL_AURA_DAMAGE_SHIELD);
+    for (AuraList::const_iterator i = vDamageShields.begin(); i != vDamageShields.end();)
+    {
+        if (alreadyDone.find(*i) == alreadyDone.end())
         {
-            if (alreadyDone.find(*i) == alreadyDone.end())
+            alreadyDone.insert(*i);
+            SpellEntry const* pSpellProto = (*i)->GetSpellProto();
+
+            // Damage shield can be resisted...
+            if (SpellMissInfo missInfo = pVictim->SpellHitResult(this, pSpellProto, (*i)->GetEffIndex()))
             {
-                alreadyDone.insert(*i);
-                SpellEntry const* pSpellProto = (*i)->GetSpellProto();
-
-                // Damage shield can be resisted...
-                if (SpellMissInfo missInfo = pVictim->SpellHitResult(this, pSpellProto, (*i)->GetEffIndex()))
-                {
-                    pVictim->SendSpellMiss(this, pSpellProto->Id, missInfo);
-                    continue;
-                }
-
-                // ...or immuned
-                if (IsImmuneToDamage(pSpellProto->GetSpellSchoolMask()))
-                {
-                    pVictim->SendSpellOrDamageImmune(this, pSpellProto->Id);
-                    continue;
-                }
-
-                uint32 damage = (*i)->GetModifier()->m_amount;
-
-                // Damage shield effects do benefit from damage done bonuses, including spell power if bonus coefficient is set.
-                // For example Flame Wrath has a coefficient of 1, making it scale with 100% of spell power.
-                damage = pVictim->SpellDamageBonusDone(this, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
-                damage = SpellDamageBonusTaken(pVictim, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
-
-                //Calculate absorb resist ??? no data in opcode for this possibly unable to absorb or resist?
-                //uint32 absorb;
-                //uint32 resist;
-                //CalcAbsorbResist(pVictim, SpellSchools(spellProto->School), SPELL_DIRECT_DAMAGE, damage, &absorb, &resist);
-                //damage-=absorb + resist;
-
-                pVictim->DealDamageMods(this, damage, nullptr);
-
-                WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8 + 8 + 4 + 4));
-                data << pVictim->GetObjectGuid();
-                data << GetObjectGuid();
-                data << uint32(damage);
-                data << uint32(pSpellProto->School);
-                pVictim->SendObjectMessageToSet(&data, true);
-
-                pVictim->DealDamage(this, damage, nullptr, SPELL_DIRECT_DAMAGE, pSpellProto->GetSpellSchoolMask(), pSpellProto, true);
-
-                i = vDamageShields.begin();
+                pVictim->SendSpellMiss(this, pSpellProto->Id, missInfo);
+                continue;
             }
-            else
-                ++i;
+
+            // ...or immuned
+            if (IsImmuneToDamage(pSpellProto->GetSpellSchoolMask()))
+            {
+                pVictim->SendSpellOrDamageImmune(this, pSpellProto->Id);
+                continue;
+            }
+
+            uint32 damage = (*i)->GetModifier()->m_amount;
+
+            // Damage shield effects do benefit from damage done bonuses, including spell power if bonus coefficient is set.
+            // For example Flame Wrath has a coefficient of 1, making it scale with 100% of spell power.
+            damage = pVictim->SpellDamageBonusDone(this, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
+            damage = SpellDamageBonusTaken(pVictim, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
+
+            //Calculate absorb resist ??? no data in opcode for this possibly unable to absorb or resist?
+            //uint32 absorb;
+            //uint32 resist;
+            //CalcAbsorbResist(pVictim, SpellSchools(spellProto->School), SPELL_DIRECT_DAMAGE, damage, &absorb, &resist);
+            //damage-=absorb + resist;
+
+            pVictim->DealDamageMods(this, damage, nullptr);
+
+            WorldPacket data(SMSG_SPELLDAMAGESHIELD, (8 + 8 + 4 + 4));
+            data << pVictim->GetObjectGuid();
+            data << GetObjectGuid();
+            data << uint32(damage);
+            data << uint32(pSpellProto->School);
+            pVictim->SendObjectMessageToSet(&data, true);
+
+            pVictim->DealDamage(this, damage, nullptr, SPELL_DIRECT_DAMAGE, pSpellProto->GetSpellSchoolMask(), pSpellProto, true);
+
+            i = vDamageShields.begin();
         }
+        else
+            ++i;
     }
 }
 
