@@ -1237,7 +1237,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     // All weapon based abilities can trigger weapon procs,
     // even if they do no damage, or break on damage, like Sap.
     // https://www.youtube.com/watch?v=klMsyF_Kz5o
-    bool triggerWeaponProcs = m_caster->IsPlayer() && m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON &&
+    bool triggerWeaponProcs = m_casterUnit && m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON &&
         // Turtle: Do not proc weapon enchants if current spell is not damaging, but we have damaging weapon proc.
         // This is custom behavior. There are multiple threads on blizzard forums of people complaining about
         // Sap proccing their weapon or poisons, and thus breaking itself, so this is a blizzlike problem.
@@ -1471,8 +1471,14 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             this);
     }
 
-    if (triggerWeaponProcs && m_caster->IsPlayer())
-        ((Player*)m_caster)->CastItemCombatSpell(unitTarget, m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON ? m_attackType : BASE_ATTACK);
+    if (triggerWeaponProcs && m_casterUnit)
+    {
+        if (m_casterUnit->IsPlayer() && unitTarget->IsAlive())
+            ((Player*)m_caster)->CastItemCombatSpell(unitTarget, m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON ? m_attackType : BASE_ATTACK);
+
+        if (m_damage)
+            m_casterUnit->TriggerDamageShields(unitTarget);
+    }
 
     if (missInfo != SPELL_MISS_NONE)
         return;
