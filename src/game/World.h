@@ -1328,6 +1328,7 @@ class World
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
+        std::thread m_shopThread;
 
         struct ApiServerDeleter
         {
