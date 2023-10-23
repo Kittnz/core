@@ -108,7 +108,7 @@ VisibleNotifier::Notify()
         {
             // Make sure mobs who become out of range leave combat before grid unload.
             if (Creature* targetCreature = player.GetMap()->GetCreature(*itr))
-                if (targetCreature->IsInCombat())
+                if (targetCreature->IsInCombat() && player.GetCamera().GetBody() == player.GetCamera().GetOwner())
                     targetCreature->GetThreatManager().modifyThreatPercent(&player, -101);
         }
 
