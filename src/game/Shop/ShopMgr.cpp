@@ -33,59 +33,194 @@
 #include "Player.h"
 #include "Chat.h"
 
-ShopMgr::ShopMgr(Player* owner) : _owner(owner)
+static char const* shopPrefix = "TW_SHOP";
+
+class ShopSendBalanceTask
 {
+public:
+	ShopSendBalanceTask(uint32 accountId, int32 balance) : m_accountId(accountId), m_balance(balance)
+	{
+	}
+	void operator ()()
+	{
+		if (WorldSession* sess = sWorld.FindSession(m_accountId))
+		{
+			Player* player = sess->GetPlayer();
+			if (!player || !player->IsInWorld())
+				return;
+
+			player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+		}
+	}
+	uint32 m_accountId;
+	int32 m_balance;
+};
+
+class ShopSendBuyResultTask
+{
+public:
+	ShopSendBuyResultTask(uint32 accountId, char const* message) : m_accountId(accountId), m_message(message)
+	{
+	}
+	void operator ()()
+	{
+		if (WorldSession* sess = sWorld.FindSession(m_accountId))
+		{
+			Player* player = sess->GetPlayer();
+			if (!player || !player->IsInWorld())
+				return;
+
+			player->SendAddonMessage(shopPrefix, "BuyResult:" + std::string(m_message));
+		}
+	}
+	uint32 m_accountId;
+	char const* m_message;
+};
+
+class ShopSendItemTask
+{
+public:
+	ShopSendItemTask(uint32 accountId, uint32 guidLow, uint32 itemId, uint32 shopId, uint32 price) : m_accountId(accountId), m_guidLow(guidLow), m_itemId(itemId), m_shopId(shopId), m_price(price)
+	{
+	}
+	void operator ()()
+	{
+		WorldSession* sess = sWorld.FindSession(m_accountId);
+		if (!sess)
+		{
+			RefundPurchase();
+			return;
+		}
+		
+		Player* player = sess->GetPlayer();
+		if (!player || !player->IsInWorld() || player->GetGUIDLow() != m_guidLow)
+		{
+			RefundPurchase();
+			return;
+		}
+
+		int32 count = 1;
+		ItemPosCountVec dest;
+		uint32 noSpaceForCount = 0;
+		uint8 msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, m_itemId, count, &noSpaceForCount);
+		if (msg != EQUIP_ERR_OK)
+			count -= noSpaceForCount;
+
+		if (count == 0 || dest.empty())
+		{
+			RefundPurchase();
+			player->SendAddonMessage(shopPrefix, "BuyResult:bagsfulloralreadyhaveitem");
+			return;
+		}
+
+		Item* item = player->StoreNewItem(dest, m_itemId, true, Item::GenerateItemRandomPropertyId(m_itemId));
+		player->SendNewItem(item, count, false, true);
+		player->SendAddonMessage(shopPrefix, "BuyResult:ok");
+	}
+	void RefundPurchase()
+	{
+		sLog.outError("Shop purchase failed, refunding! (Account %u Guid %u Item %u Shop %u Price %u)", m_accountId, m_guidLow, m_itemId, m_shopId, m_price);
+		auto entry = sObjectMgr.GetShopLogEntry(m_shopId);
+		MANGOS_ASSERT(entry);
+		MANGOS_ASSERT(!entry->refunded);
+		entry->refunded = true;
+		LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", m_price, m_accountId);
+		LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded`=1 WHERE `id`=%u", m_shopId);
+	}
+	uint32 m_accountId;
+	uint32 m_guidLow;
+	int32 m_itemId;
+	uint32 m_shopId;
+	uint32 m_price;
+};
+
+ShopMgr& ShopMgr::Instance()
+{
+	static ShopMgr shopMgr;
+	return shopMgr;
 }
 
-int32 ShopMgr::GetBalance()
+bool ShopMgr::RequestBalance(uint32 accountId)
 {
-	QueryResult* coins_result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", _owner->GetSession()->GetAccountId());
+	std::lock_guard<std::mutex> lock(m_mutex);
+	for (auto const& itr : m_pendingRequests)
+	{
+		if (itr.accountId == accountId && itr.itemId == 0)
+			return false;
+	}
+	m_pendingRequests.push_back(ShopRequest(accountId, 0, 0));
+	return true;
+}
+
+bool ShopMgr::RequestPurchase(uint32 accountId, uint32 guidLow, uint32 itemId)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	for (auto const& itr : m_pendingRequests)
+	{
+		if (itr.accountId == accountId && itr.guidLow == guidLow && itr.itemId == itemId)
+			return false;
+	}
+	m_pendingRequests.push_back(ShopRequest(accountId, guidLow, itemId));
+	return true;
+}
+
+void ShopMgr::ProcessRequestsWorker()
+{
+	LoginDatabase.ThreadStart();
+	thread_name("ShopMgr");
+	while (!sWorld.IsStopped())
+	{
+		std::vector<ShopRequest> requests;
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			std::swap(requests, m_pendingRequests);
+		}
+		
+		for (auto const& itr : requests)
+		{
+			if (itr.itemId)
+				BuyItem(itr.accountId, itr.guidLow, itr.itemId);
+			else
+				sWorld.AddAsyncTask({ ShopSendBalanceTask(itr.accountId, GetBalance(itr.accountId)) });
+		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	}
+	LoginDatabase.ThreadEnd();
+}
+
+int32 ShopMgr::GetBalance(uint32 accountId)
+{
+	std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId));
 
 	int32 balance = 0;
-	if (coins_result)
+	if (result)
 	{
-		Field* fields = coins_result->Fetch();
-		balance = fields[0].GetInt32();
-		delete coins_result;
+		Field* fields = result->Fetch();
+		balance = std::max(0, fields[0].GetInt32());
 	}
 	else
 	{
-		LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", _owner->GetSession()->GetAccountId());
+		LoginDatabase.PExecute("INSERT INTO `shop_coins` (`id`, `coins`) VALUES ('%u', 0)", accountId);
 		return balance;
 	}
 
 	return balance;
 }
 
-std::string ShopMgr::BuyItem(uint32 itemID)
+void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 {
-
-	auto shopEntry = sObjectMgr.GetShopEntryInfo(itemID);
+	auto shopEntry = sObjectMgr.GetShopEntryInfo(itemId);
 
 	if (!shopEntry)
-		return "itemnotinshop";
+	{
+		sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "itemnotinshop") });
+		return;
+	}
 
 	uint32 price = shopEntry->Price;
-	
 	int32 count = 1;
-	ItemPosCountVec dest;
-	uint32 noSpaceForCount = 0;
-	uint8 msg = _owner->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, itemID, count, &noSpaceForCount);
-	if (msg != EQUIP_ERR_OK)
-		count -= noSpaceForCount;
-
-	if (count == 0 || dest.empty())
-		return "bagsfulloralreadyhaveitem";
-
-	QueryResult* Result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u", _owner->GetSession()->GetAccountId());
-
-	if (!Result)
-		return "unknowndberror";
-
-	Field* fields = Result->Fetch();
-
-	int32 coins = fields[0].GetInt32();
-	delete Result;
+	int32 coins = GetBalance(accountId);
 
 	if (coins > 0)
 	{
@@ -98,41 +233,44 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 			uint32 shopId = sObjectMgr.NextShopLogEntry();
 
 			bool successTransaction =
-				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, _owner->GetSession()->GetAccountId()) &&
-				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, _owner->GetGUIDLow(), _owner->GetSession()->GetAccountId(), itemID, price);
+				LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, accountId) &&
+				LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, guidLow, accountId, itemId, price);
 
 			bool success = LoginDatabase.CommitTransactionDirect();
 
 			if (!success)
-				return "dberrorcantprocess";
-
+			{
+				sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "dberrorcantprocess") });
+				return;
+			}
 
 			auto entry = new ShopLogEntry{
 				shopId,
 				GetCurrentTimeString(),
-				_owner->GetSession()->GetAccountId(),
-				_owner->GetGUIDLow(),
-				itemID,
+				accountId,
+				guidLow,
+				itemId,
 				price,
 				false,
 				(uint32)time(nullptr)
 			};
 
-			sObjectMgr.GetShopLogEntries(_owner->GetSession()->GetAccountId()).push_back(entry);
-
+			sObjectMgr.GetShopLogEntries(accountId).push_back(entry);
 			sObjectMgr.AddShopLogEntry(shopId, entry);
 
-
-
-			Item* item = _owner->StoreNewItem(dest, itemID, true, Item::GenerateItemRandomPropertyId(itemID));
-			_owner->SendNewItem(item, count, false, true);
-
-			return "ok";
+			sWorld.AddAsyncTask({ ShopSendItemTask(accountId, guidLow, itemId, shopId, price) });
+			return;
 		}
 		else
-			return "notenoughtokens";
+		{
+			sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "notenoughtokens") });
+			return;
+		}
 	}
 	else
-		return "notenoughtokens";
+	{
+		sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "notenoughtokens") });
+		return;
+	}
 
 }

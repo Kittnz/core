@@ -89,6 +89,7 @@
 #include "SuspiciousStatisticMgr.h"
 #include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
+#include "Shop/ShopMgr.h"
 #include <ace/OS_NS_dirent.h>
 
 #ifdef USING_DISCORD_BOT
@@ -232,6 +233,9 @@ void World::InternalShutdown()
 
     if (m_asyncPacketsThread.joinable())
         m_asyncPacketsThread.join();
+
+    if (m_shopThread.joinable())
+        m_shopThread.join();
 
 #ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
@@ -2181,6 +2185,7 @@ void World::SetInitialWorldSettings()
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
+    m_shopThread = std::thread(&ShopMgr::ProcessRequestsWorker, &sShopMgr);
 
     if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
         DeleteOldPDumps();

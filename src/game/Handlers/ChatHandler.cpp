@@ -495,9 +495,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (strstr(msg.c_str(), "Balance"))
 			{
-
-				int32 balance = ShopMgr(_player).GetBalance();
-				_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
+                if (!sShopMgr.RequestBalance(GetAccountId()))
+                    SendNotification("Balance query in progress. Please wait.");
 			}
 
 			if (strstr(msg.c_str(), "Categories"))
@@ -571,24 +570,22 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 re2::RE2::GlobalReplace(&itemIDString, shopBuyPattern, R"(\1)");
 
 				//std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
-				uint32 itemID = 0;
+				uint32 itemId = 0;
 
 				if (itemIDString.empty() || itemIDString.length() > 6)
 					return;
 
 				try
 				{
-					itemID = std::stoi(itemIDString);
+                    itemId = std::stoi(itemIDString);
 				}
 				catch (...)
 				{
 					return;
 				}
 
-				std::string result = "BuyResult:" + ShopMgr(_player).BuyItem(itemID);
-
-				_player->SendAddonMessage(prefix, result);
-
+                if (!sShopMgr.RequestPurchase(GetAccountId(), _player->GetGUIDLow(), itemId))
+                    SendNotification("Purchase in progress. Please wait.");
 			}
             LogPerformance(msg);
 			return;
