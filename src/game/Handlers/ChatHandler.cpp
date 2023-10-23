@@ -240,9 +240,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
 
             // but overwrite it by SPELL_AURA_MOD_LANGUAGE auras (only single case used)
-			Unit::AuraList const& ModLangAuras = _player->GetAurasByType(SPELL_AURA_MOD_LANGUAGE);
-			if (!ModLangAuras.empty())
-				lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
+            Unit::AuraList const& ModLangAuras = _player->GetAurasByType(SPELL_AURA_MOD_LANGUAGE);
+            if (!ModLangAuras.empty())
+                lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
         }
 
         if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
@@ -266,12 +266,12 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
-	if (type != CHAT_MSG_AFK &&
+    if (type != CHAT_MSG_AFK &&
         type != CHAT_MSG_DND &&
         lang != LANG_ADDON)
-	{
-		_player->UpdateChatActivityTimer();
-	}
+    {
+        _player->UpdateChatActivityTimer();
+    }
 
     std::string msg, channel, to;
     // Message parsing
@@ -343,9 +343,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     const std::string debuffPrefix = "TW_Debuff";
 
-	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
-	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
-	{
+    // ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
         // Giperion to Someone who wrote that: Why you didn't finish?
 #if 0
         if (msg.find(debuffPrefix) != std::string::npos)
@@ -371,90 +371,90 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
 #endif
 
-		if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
-		{
-			// syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
-			// returns: TW_CHAT_MSG_WHISPER message (event has arg4 = from )
-			std::string to;
-			std::string message;
+        if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
+        {
+            // syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
+            // returns: TW_CHAT_MSG_WHISPER message (event has arg4 = from )
+            std::string to;
+            std::string message;
 
-			Tokenizer params(msg, '>', 2);
-			if (params.size() != 2)
-			{
-				// wrong syntax
-				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
-				return;
-			}
-			message = params[1];
+            Tokenizer params(msg, '>', 2);
+            if (params.size() != 2)
+            {
+                // wrong syntax
+                _player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
+                return;
+            }
+            message = params[1];
 
-			Tokenizer dest(params[0], '<', 2);
-			if (dest.size() != 2)
-			{
-				// wrong syntax
-				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
-				return;
-			}
-			to = dest[1];
-			if (!normalizePlayerName(to))
-				return;
+            Tokenizer dest(params[0], '<', 2);
+            if (dest.size() != 2)
+            {
+                // wrong syntax
+                _player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
+                return;
+            }
+            to = dest[1];
+            if (!normalizePlayerName(to))
+                return;
 
-			LoginDatabase.escape_string(to);
+            LoginDatabase.escape_string(to);
 
-			if (Player* pTargetPlayer = sObjectMgr.GetPlayer(to.c_str())) {
-				pTargetPlayer->SendAddonMessage("TW_CHAT_MSG_WHISPER", message, _player);
-			}
-			else
-			{
-				// wrong syntax
-				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "Error:CantFindPlayer:" + to);
-				return;
-			}
-			return;
-		}
-	}
+            if (Player* pTargetPlayer = sObjectMgr.GetPlayer(to.c_str())) {
+                pTargetPlayer->SendAddonMessage("TW_CHAT_MSG_WHISPER", message, _player);
+            }
+            else
+            {
+                // wrong syntax
+                _player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "Error:CantFindPlayer:" + to);
+                return;
+            }
+            return;
+        }
+    }
 
-	//guild bank
-	if (lang == LANG_ADDON && !msg.empty())
-	{
-		// no type == CHAT_MSG_GUILD on this, to protecc fraudulent messages
-		if (strstr(msg.c_str(), "TW_GUILDBANK"))
-		{
+    //guild bank
+    if (lang == LANG_ADDON && !msg.empty())
+    {
+        // no type == CHAT_MSG_GUILD on this, to protecc fraudulent messages
+        if (strstr(msg.c_str(), "TW_GUILDBANK"))
+        {
             const bool isInferno = _player->IsHC60();
-			// HC check
-			// no Newcommers check since we dont have anyone in Newcommers to unlock the feature
-			if (_player->IsHardcore() && !isInferno)
-			{
-				//_player->GetSession()->SendNotification("HC No Guild Bank");
-				_player->SendAddonMessage("TW_GUILDBANK", "Access:Error:HC");
-				return;
-			}
+            // HC check
+            // no Newcommers check since we dont have anyone in Newcommers to unlock the feature
+            if (_player->IsHardcore() && !isInferno)
+            {
+                //_player->GetSession()->SendNotification("HC No Guild Bank");
+                _player->SendAddonMessage("TW_GUILDBANK", "Access:Error:HC");
+                return;
+            }
 
-			if (GetMasterPlayer()->GetGuildId())
-			{
-				Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId());
-				if (!guild)
-					return;
+            if (GetMasterPlayer()->GetGuildId())
+            {
+                Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId());
+                if (!guild)
+                    return;
 
-				if (!guild->_Bank)
-				{
-					sLog.outInfo("cant get guild bank");
-					return;
-				}
+                if (!guild->_Bank)
+                {
+                    sLog.outInfo("cant get guild bank");
+                    return;
+                }
 
                 if (isInferno)
                     guild->_InfernoBank->HandleAddonMessages(msg, _player);
                 else
                     guild->_Bank->HandleAddonMessages(msg, _player);
-			}
-			else
-			{
-				_player->SendAddonMessage("TW_GUILDBANK", "Player:Unguilded");
-			}
+            }
+            else
+            {
+                _player->SendAddonMessage("TW_GUILDBANK", "Player:Unguilded");
+            }
 
             LogPerformance(msg);
-			return;
+            return;
 
-		}
+        }
 
 
 
@@ -465,133 +465,133 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (GetPlayer() && GetPlayer()->IsHardcore())
                 return;
         }
-	}
-	
-	// buff/debuff system
-	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
-	{
-		if (strstr(msg.c_str(), "TW_BUFF"))
-		{
-			std::string prefix = "TW_BUFF";
+    }
+    
+    // buff/debuff system
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "TW_BUFF"))
+        {
+            std::string prefix = "TW_BUFF";
 
-			if (!_player->GetSelectedCreature())
-				return;
+            if (!_player->GetSelectedCreature())
+                return;
 
-			Creature *target = _player->GetSelectedCreature();
+            Creature *target = _player->GetSelectedCreature();
 
-			_player->SendAddonMessage(prefix, target->GetDebuffs());
+            _player->SendAddonMessage(prefix, target->GetDebuffs());
             LogPerformance(msg);
-			return;
+            return;
 
-		}
-	}
+        }
+    }
 
-	// Shop Addon Coms
-	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
-	{
-		if (strstr(msg.c_str(), "TW_SHOP"))
-		{
-			const std::string prefix = "TW_SHOP";
+    // Shop Addon Coms
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "TW_SHOP"))
+        {
+            const std::string prefix = "TW_SHOP";
 
-			if (strstr(msg.c_str(), "Balance"))
-			{
+            if (strstr(msg.c_str(), "Balance"))
+            {
                 if (!sShopMgr.RequestBalance(GetAccountId()))
                     SendNotification("Balance query in progress. Please wait.");
-			}
+            }
 
-			if (strstr(msg.c_str(), "Categories"))
-			{
+            if (strstr(msg.c_str(), "Categories"))
+            {
 
-				std::string categories = "Categories:";
+                std::string categories = "Categories:";
 
-				for (auto &itr : sObjectMgr.GetShopCategoriesList())
+                for (auto &itr : sObjectMgr.GetShopCategoriesList())
                     if (sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
                         categories += std::to_string(itr.first) + "=" + itr.second.Name_loc4 + "="+itr.second.Icon+";";
                     else
                         categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
 
-				_player->SendAddonMessage(prefix, categories);
+                _player->SendAddonMessage(prefix, categories);
 
-			}
+            }
 
-			if (strstr(msg.c_str(), "Entries:"))
-			{
+            if (strstr(msg.c_str(), "Entries:"))
+            {
                 static const re2::RE2 shopEntriesPattern = "[^0-9]*([0-9]+).*";
                 std::string categoryIDString = msg;
                 re2::RE2::GlobalReplace(&categoryIDString, shopEntriesPattern, R"(\1)");
 
                 //std::string categoryIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
-				uint8 categoryID = 0;
+                uint8 categoryID = 0;
 
-				if (categoryIDString.empty() || categoryIDString.length() > 3)
-					return;
+                if (categoryIDString.empty() || categoryIDString.length() > 3)
+                    return;
 
-				try
-				{
-					categoryID = std::stoi(categoryIDString);
-				}
-				catch (...)
-				{
-					return;
-				}
+                try
+                {
+                    categoryID = std::stoi(categoryIDString);
+                }
+                catch (...)
+                {
+                    return;
+                }
 
-				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
+                _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
 
-				for (auto &itr : sObjectMgr.GetShopEntriesList())
-				{
-					if (itr.second.Category != categoryID)
-						continue;
+                for (auto &itr : sObjectMgr.GetShopEntriesList())
+                {
+                    if (itr.second.Category != categoryID)
+                        continue;
 
-					if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
-					{
+                    if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
+                    {
                         if(sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
                             _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-							+ itr.second.Description_loc4 + "="
-							+ std::to_string(itr.second.Price) + "="
-							+ pProto->Description + "="
-							+ std::to_string(itr.second.Item));
+                            + itr.second.Description_loc4 + "="
+                            + std::to_string(itr.second.Price) + "="
+                            + pProto->Description + "="
+                            + std::to_string(itr.second.Item));
                         else
                         _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
                             + itr.second.Description + "="
                             + std::to_string(itr.second.Price) + "="
                             + pProto->Description + "="
                             + std::to_string(itr.second.Item));
-					}		
-				}
+                    }        
+                }
 
-				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=end");
+                _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=end");
 
-			}
+            }
 
-			if (strstr(msg.c_str(), "Buy:"))
-			{
+            if (strstr(msg.c_str(), "Buy:"))
+            {
                 static const re2::RE2 shopBuyPattern = "[^0-9]*([0-9]+).*";
                 std::string itemIDString = msg;
                 re2::RE2::GlobalReplace(&itemIDString, shopBuyPattern, R"(\1)");
 
-				//std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
-				uint32 itemId = 0;
+                //std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+                uint32 itemId = 0;
 
-				if (itemIDString.empty() || itemIDString.length() > 6)
-					return;
+                if (itemIDString.empty() || itemIDString.length() > 6)
+                    return;
 
-				try
-				{
+                try
+                {
                     itemId = std::stoi(itemIDString);
-				}
-				catch (...)
-				{
-					return;
-				}
+                }
+                catch (...)
+                {
+                    return;
+                }
 
                 if (!sShopMgr.RequestPurchase(GetAccountId(), _player->GetGUIDLow(), itemId))
                     SendNotification("Purchase in progress. Please wait.");
-			}
+            }
             LogPerformance(msg);
-			return;
+            return;
 
-		}
-	}
+        }
+    }
 
     // Minimap Battleground Queue System
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
@@ -599,21 +599,21 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         if (strstr(msg.c_str(), "TW_BGQueue")) // prefix
         {
 
-			if (_player->IsInCombat())
-			{
-				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in combat.");
-				return;
-			}
-			else if (_player->InBattleGround())
-			{
-				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in a battleground.");
-				return;
-			}
-			else if (_player->GetDeathState() == CORPSE || _player->GetDeathState() == DEAD)
-			{
-				_player->GetSession()->SendNotification("You cannot queue for battlegrounds while dead.");
-				return;
-			}
+            if (_player->IsInCombat())
+            {
+                _player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in combat.");
+                return;
+            }
+            else if (_player->InBattleGround())
+            {
+                _player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in a battleground.");
+                return;
+            }
+            else if (_player->GetDeathState() == CORPSE || _player->GetDeathState() == DEAD)
+            {
+                _player->GetSession()->SendNotification("You cannot queue for battlegrounds while dead.");
+                return;
+            }
             else if (_player->IsBeingTeleported())
             {
                 ChatHandler(_player).PSendSysMessage("You do not meet the conditions to queue for battlegrounds.");
@@ -682,27 +682,27 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
-	// TWT Threat: Guid and UnitDetailedThreatSituation Request
-	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
-	{
-		// UnitDetailedThreatSituation
-		if (strstr(msg.c_str(), "TWT_UDTSv4"))
-		{
+    // TWT Threat: Guid and UnitDetailedThreatSituation Request
+    if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
+    {
+        // UnitDetailedThreatSituation
+        if (strstr(msg.c_str(), "TWT_UDTSv4"))
+        {
             if (!_player)
-				return;
+                return;
 
-			if (_player->IsGameMaster())
-				return;
+            if (_player->IsGameMaster())
+                return;
 
-			if (!_player->GetSelectedCreature())
-				return;
+            if (!_player->GetSelectedCreature())
+                return;
 
-			// CanHaveThreatList checks IsAlive too.
-			if (!_player->GetSelectedCreature()->CanHaveThreatList())
-				return;
+            // CanHaveThreatList checks IsAlive too.
+            if (!_player->GetSelectedCreature()->CanHaveThreatList())
+                return;
 
-			int limit     = 4;                                 // default low limit
-			bool tankMode = strstr(msg.c_str(), "_TM" );       // tank mode
+            int limit     = 4;                                 // default low limit
+            bool tankMode = strstr(msg.c_str(), "_TM" );       // tank mode
 
             if (msg.find("limit=") != std::string::npos)       // limit= key found
             {
@@ -727,23 +727,23 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     return;
                 }
             }
-			
+            
 
-			if (limit <= 0 || limit > 15) // 1-99, in practice 4-11
-				return;
+            if (limit <= 0 || limit > 15) // 1-99, in practice 4-11
+                return;
 
-			ThreatManager::UnitDetailedThreatSituation(
-				_player->GetSelectedCreature(),
-				_player, 
-				limit,
-				tankMode);
+            ThreatManager::UnitDetailedThreatSituation(
+                _player->GetSelectedCreature(),
+                _player, 
+                limit,
+                tankMode);
 
             LogPerformance(msg);
 
-			return;
-		}
+            return;
+        }
 
-	}
+    }
 
     // Transmog System Comms
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
@@ -751,8 +751,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         if (strstr(msg.c_str(), "TW_TRANSMOG")) // prefix
         {
             if (_player->FindNearestInteractableNpcWithFlag(UNIT_NPC_FLAG_TRANSMOG))
-			    _player->_transmogMgr->HandleAddonMessages(msg);
-			return;
+                _player->_transmogMgr->HandleAddonMessages(msg);
+            return;
         }
     }
 
@@ -813,7 +813,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (chn->HasFlag(Channel::CHANNEL_FLAG_GENERAL))
                         {
                             if (EnforceEnglish(this, msg))
-								return;
+                                return;
                         }
                         // Check strict Latin for general chat channels
                         //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
@@ -1034,7 +1034,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
             {
-				guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+                guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
             }
 
             if (lang != LANG_ADDON)
