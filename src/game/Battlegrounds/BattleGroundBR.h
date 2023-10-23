@@ -34,6 +34,8 @@ class BattleGroundBR : public BattleGround
         BattleGroundBR();
         void Update(uint32 diff);
 
+        static uint32 GetNextArenaId();
+
         /* inherited from BattlegroundClass */
         virtual void AddPlayer(Player *plr);
         virtual void StartingEventCloseDoors();
@@ -62,5 +64,7 @@ class BattleGroundBR : public BattleGround
     private:
         uint32 m_AllianceDeaths = 0;
         uint32 m_HordeDeaths = 0;
+        uint32 m_totalTime = 0;
+        uint32 m_arenaId = 0;
 };
 #endif
