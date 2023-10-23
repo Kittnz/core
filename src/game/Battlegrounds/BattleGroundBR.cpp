@@ -11,6 +11,25 @@
 #include "MapManager.h"
 #include "World.h"
 
+uint32 BattleGroundBR::GetNextArenaId()
+{
+    static std::atomic<uint32> arenaId = 0;
+
+    //initial state, query.
+    if (arenaId == 0)
+    {
+        std::unique_ptr<QueryResult> res = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT MAX(arena_id) FROM arena_stats_single"));
+
+        if (res)
+        {
+            arenaId = (*res)[0].GetUInt32();
+        }
+    }
+
+    return ++arenaId;
+}
+
+
 BattleGroundBR::BattleGroundBR()
 {
     m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = 0;
@@ -22,6 +41,8 @@ BattleGroundBR::BattleGroundBR()
     m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
     m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
     m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+
+    m_arenaId = GetNextArenaId();
 }
 
 void BattleGroundBR::Update(uint32 diff)
@@ -37,6 +58,8 @@ void BattleGroundBR::Update(uint32 diff)
             pPlayer->NearLandTo(pPlayer->GetPositionX(), pPlayer->GetPositionY(), 3.0f, pPlayer->GetOrientation());
     }
 
+    if (GetStatus() == STATUS_IN_PROGRESS)
+        m_totalTime += diff;
 
     // Execute this at the end, since it can delete the BattleGround object!
     BattleGround::Update(diff);
@@ -164,6 +187,20 @@ void BattleGroundBR::EndBattleGround(Team winner)
     RewardReputationToTeam(1008, isBGWeekend ? 50 : 25, loser);
     RewardHonorToTeam(isBGWeekend ? 400 : 200, winner);
     RewardHonorToTeam(isBGWeekend ? 100 : 50, loser);
+    
+    for (const auto& bgPlayer : m_Players)
+    {
+        auto player = sObjectAccessor.FindPlayer(bgPlayer.first);
+
+        if (player)
+        {
+            CharacterDatabase.PExecute("INSERT INTO arena_stats_single (`arena_id`, `team_id`, `level`, `item_level`, `class`, `race`, `won`, `duration`) VALUES (%u, %u, %u, %u, %u, %u, %u, %u)",
+                m_arenaId, player->GetTeam() == ALLIANCE ? 0 : 1,
+                player->GetLevel(), player->GetAverageItemLevel(), 
+                player->GetClass(), player->GetRace(), player->GetTeam() == winner ? 1 : 0, m_totalTime / IN_MILLISECONDS);
+        }
+    }
+
 
     BattleGround::EndBattleGround(winner);
 }
