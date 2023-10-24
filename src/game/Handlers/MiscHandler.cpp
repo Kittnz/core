@@ -857,6 +857,12 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
     if (!pTargetMap)
         return;
 
+    if (pTeleTrigger->requiredPhase > sWorld.GetContentPhase())
+    {
+        SendAreaTriggerMessage(GetMangosString(LANG_INSTANCE_AVAILABLE_IN_PHASE), pTeleTrigger->requiredPhase + 1);
+        return;
+    }
+
     // ghost resurrected at enter attempt to dungeon with corpse (including fail enter cases)
     if (!pPlayer->IsAlive() && pTargetMap->IsDungeon())
     {

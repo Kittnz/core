@@ -5172,9 +5172,9 @@ void ObjectMgr::LoadAreaTriggerTeleports()
     m_AreaTriggerTeleportMap.clear();                                  // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query(
-    //           0     1                 2                      3
-        "SELECT `id`, `required_level`, `required_condition`, `message`, "
-    //    4             5                    6                    7                    8 
+    //           0     1                 2                     3                4
+        "SELECT `id`, `required_level`, `required_condition`, `required_phase`, `message`, "
+    //    5             6                    7                    8                    9 
         "`target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation` "
         "FROM `areatrigger_teleport`"));
     
@@ -5193,12 +5193,13 @@ void ObjectMgr::LoadAreaTriggerTeleports()
 
         at.requiredLevel      = fields[1].GetUInt8();
         at.requiredCondition  = fields[2].GetUInt32();
-        at.message            = fields[3].GetCppString();
-        at.destination.mapId  = fields[4].GetUInt32();
-        at.destination.x      = fields[5].GetFloat();
-        at.destination.y      = fields[6].GetFloat();
-        at.destination.z      = fields[7].GetFloat();
-        at.destination.o      = fields[8].GetFloat();
+        at.requiredPhase      = fields[3].GetUInt8();
+        at.message            = fields[4].GetCppString();
+        at.destination.mapId  = fields[5].GetUInt32();
+        at.destination.x      = fields[6].GetFloat();
+        at.destination.y      = fields[7].GetFloat();
+        at.destination.z      = fields[8].GetFloat();
+        at.destination.o      = fields[9].GetFloat();
 
         AreaTriggerEntry const* atEntry = GetAreaTrigger(triggerId);
         if (!atEntry)

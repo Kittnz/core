@@ -1196,6 +1196,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ENABLE_DK, "PvP.DishonorableKills", true);
 
     // Progression settings
+    setConfig(CONFIG_UINT32_CONTENT_PHASE, "Progression.ContentPhase", CONTENT_PHASE_4);
     setConfig(CONFIG_BOOL_ACCURATE_PETS, "Progression.AccuratePetStatistics", true);
     setConfig(CONFIG_BOOL_ACCURATE_LFG, "Progression.AccurateLFGAvailability", true);
     setConfig(CONFIG_BOOL_ACCURATE_PVE_EVENTS, "Progression.AccuratePVEEvents", true);
@@ -2216,6 +2217,7 @@ void World::SetInitialWorldSettings()
     }
 #endif
 
+    sLog.outString("Current content phase is set to %u.", GetContentPhase() + 1);
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
 }

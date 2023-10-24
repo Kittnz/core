@@ -328,6 +328,10 @@ PvP.AccurateRewards = 1
 
 PvP.DishonorableKills = 1
 
+# Progression.ContentPhase. Controls availability of raids and events.
+
+Progression.ContentPhase = 3
+
 # Progression.AccuratePetStatistics. Whether to allow Blizzlike pet statistic (damage, speed, resists) progression.
 
 Progression.RestoreDeletedItems = 1
