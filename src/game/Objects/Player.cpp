@@ -18766,7 +18766,8 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     }
 
     // Remove pvp flag when starting a flight
-    UpdatePvP(false);
+    if (IsPvP() && !IsPvPDesired() && !HasChallenge(CHALLENGE_WAR_MODE))
+        UpdatePvP(false, true);
 
     //Checks and preparations done, DO FLIGHT
     ModifyMoney(-(int32)sourceCost);
