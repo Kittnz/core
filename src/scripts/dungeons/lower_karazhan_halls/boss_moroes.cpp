@@ -18,6 +18,7 @@ struct boss_moroesAI : public ScriptedAI
 	uint32 m_MoroesCurseTimer;
 	uint32 m_ReflectionTimer;
 	uint32 m_SacrificeTimer;
+	uint32 m_ResetStateTimer;
 	bool sound1;
 	bool intermission1;
 	bool sacrifice;
@@ -26,6 +27,7 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
+		m_ResetStateTimer = 0;
 		sound1 = false;
 		intermission1 = false;
 		sacrifice = false;
@@ -34,10 +36,11 @@ struct boss_moroesAI : public ScriptedAI
 		RestoreFlags();
 		ResetBattleTimers();
 
-		if (m_pInstance && m_pInstance->GetData(DATA_MOROES) != DONE)
+		if (m_pInstance)
 		{
-			m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 			m_pInstance->SetData(DATA_MOROES_STAGE, 0);
+			if (m_pInstance->GetData(DATA_MOROES) != DONE)
+				m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 		}
 	}
 
@@ -85,9 +88,19 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->PlayDirectMusic(60418);
 	}
 
+	void DamageTaken(Unit* pDealer, uint32& damage) override
+	{
+		if (m_pInstance && m_pInstance->GetData(DATA_MOROES_STAGE) == 1 && m_creature->GetHealthPercent() <= 10.0f)
+		{
+			m_creature->SetHealthPercent(100.0f);
+			return;
+		}
+	}
+
 	void EnterEvadeMode() override
 	{
-		m_creature->DespawnOrUnsummon(0, 30);
+		if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
+			m_creature->DespawnOrUnsummon(0, 30);
 	}
 
 	void JustDied(Unit* pKiller) override
@@ -148,6 +161,30 @@ struct boss_moroesAI : public ScriptedAI
 			}
 			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 1)
 			{
+				if (!intermission1 && m_creature->GetHealthPercent() <= 10.0f)
+				{
+					intermission1 = true;
+					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
+					m_creature->PlayDirectSound(60404);
+					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
+					m_creature->SetFactionTemplateId(35);
+					if (m_pInstance)
+						m_pInstance->SetData(DATA_MOROES_STAGE, 2);
+					m_InterludeTimer = 10000;
+					m_ResetStateTimer = 1000;
+				}
+
+				if (m_ResetStateTimer)
+				{
+					if (m_ResetStateTimer < uiDiff)
+					{
+						m_ResetStateTimer = 0;
+						ResetCombat();
+					}
+					else
+						m_ResetStateTimer -= uiDiff;
+				}
+
 				if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 					return;
 
@@ -194,19 +231,6 @@ struct boss_moroesAI : public ScriptedAI
 					m_creature->MonsterYell("Most impressive, it would appear your skills do match your bravery.");
 					m_creature->PlayDirectSound(60403);
 				}
-
-				if (!intermission1 && m_creature->GetHealthPercent() <= 10.0f)
-				{
-					intermission1 = true;
-					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
-					m_creature->PlayDirectSound(60404);
-					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-					m_creature->SetFactionTemplateId(35);
-					ResetCombat();
-					if (m_pInstance)
-						m_pInstance->SetData(DATA_MOROES_STAGE, 2);
-					m_InterludeTimer = 10000;
-				}
 			}
 			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 2)
 			{
@@ -214,16 +238,26 @@ struct boss_moroesAI : public ScriptedAI
 				{
 					if (m_InterludeTimer < uiDiff)
 					{
-						ResetCombat();
-						Teleport();
-						m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-						m_creature->SetMaxHealth(220388);
-						m_creature->SetHealth(220388);
 						m_InterludeTimer = 0;
+						Teleport();
+						m_ResetStateTimer = 1500;
 					}
 					else
 						m_InterludeTimer -= uiDiff;
+				}
+
+				if (m_ResetStateTimer)
+				{
+					if (m_ResetStateTimer < uiDiff)
+					{
+						m_ResetStateTimer = 0;
+						ResetCombat();
+						RestoreFlags();
+						m_creature->SetMaxHealth(220388);
+						m_creature->SetHealth(220388);
+					}
+					else
+						m_ResetStateTimer -= uiDiff;
 				}
 			}
 			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
@@ -353,6 +387,12 @@ bool OnGossipHello_boss_moroes(Player* pPlayer, Creature* pCreature)
 			else if (pInstance->GetData(DATA_MOROES_STAGE) == 2)
 			{
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to challenge you again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+				pPlayer->SEND_GOSSIP_MENU(61226, pCreature->GetGUID());
+			}
+			// temp
+			else
+			{
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Gossip error. Please contact to developer.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 				pPlayer->SEND_GOSSIP_MENU(61226, pCreature->GetGUID());
 			}
 		}
