@@ -1235,7 +1235,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     }
 
     bool hasDamagingWeaponProc = false;
-    if (m_casterUnit->IsPlayer())
+    if (m_casterUnit && m_casterUnit->IsPlayer())
         hasDamagingWeaponProc = m_casterUnit->ToPlayer()->HasDamagingWeaponProc();
 
     // All weapon based abilities can trigger weapon procs,
