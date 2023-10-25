@@ -5,13 +5,8 @@ UPDATE quest_template SET RewItemId4 = 61199 WHERE RewItemId4 = 61198 AND entry 
 
 UPDATE creature_loot_template SET ChanceOrQuestChance = ABS(ChanceOrQuestChance) WHERE ChanceOrQuestChance < 0 AND item IN (61409,61442,61706,61711,61712);
 
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61336, 61712, 98, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61337, 61712, 98, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61359, 61712, 50, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61358, 61712, 50, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61357, 61712, 50, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61356, 61712, 50, 0, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61367, 61712, 50, 0, 1, 1, 0);
+
+UPDATE creature_loot_template SET ChanceOrQuestChance = 50 WHERE item = 61707 AND entry IN(61359,61358,61356,61357,61367);
 
 UPDATE creature_loot_template SET ChanceOrQuestChance = 15 WHERE item = 61198 AND entry IN (61359,61358,61356,61357,61367);
 UPDATE creature_loot_template SET ChanceOrQuestChance = 100 WHERE item = 61706 AND entry IN (61352, 61353);
