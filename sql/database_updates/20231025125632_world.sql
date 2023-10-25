@@ -1,0 +1,2 @@
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4893.
+update item_template set disenchant_id = 64, armor = 242, item_level = 60, spellid_1 = 15464, spellid_2 = 22015, spelltrigger_2 = 1 where entry = 22015; -- Beastmaster's Gloves
