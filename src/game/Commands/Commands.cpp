@@ -10223,6 +10223,8 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
         TempSummonType despawnType = static_cast<TemporarySummon*>(pTarget)->GetDespawnType();
         PSendSysMessage("Despawn Type: %s (%u)", TempSummonTypeToString(despawnType), despawnType);
     }
+    if (CreatureGroup* pGroup = pTarget->GetCreatureGroup())
+        PSendSysMessage("Group Leader: %s", pGroup->GetLeaderGuid().GetString().c_str());
     pTarget->AI()->GetAIInformation(*this);
 
     return true;
