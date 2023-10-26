@@ -12,3 +12,5 @@ UPDATE `quest_template` SET `Objectives` = 'Find Moranna Rosenberg at the Hollow
 -- Should this not be "Quel'dorei"? Drops off.. Well, a Quel'dorei. (Or I guess technically Sin'dorei) 
 
 UPDATE `item_template` SET `name` = 'Quel\'dorei Channeling Rod' WHERE `entry` = 18311;
+
+UPDATE `spell_template` SET `description` = 'Permanently enchant a cloak to increase arcane magic resistance by 15.' WHERE `entry` = 57117;
