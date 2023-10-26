@@ -8,3 +8,7 @@ UPDATE `quest_template` SET `Details` = 'If Fel is in the soil, then it means th
 -- Issue: Typo, "Cemetary" should be "Cemetery"
 
 UPDATE `quest_template` SET `Objectives` = 'Find Moranna Rosenberg at the Hollow Web Cemetery in Gilneas.' WHERE `entry` = 40952;
+
+-- Should this not be "Quel'dorei"? Drops off.. Well, a Quel'dorei. (Or I guess technically Sin'dorei) 
+
+UPDATE `item_template` SET `name` = 'Quel\'dorei Channeling Rod' WHERE `entry` = 18311;
