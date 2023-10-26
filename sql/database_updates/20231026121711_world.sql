@@ -19,4 +19,4 @@ UPDATE `spell_template` SET `description` = 'Permanently enchant a cloak to incr
 -- Issue: Grammatical error
 -- Proposed Fix: Change to "...and burned them alive on the shore."
 
-UPDATE ``quest_template` SET `OfferRewardText` = 'I advised the Warchief against the sending of envoys. It was no use with a man like Alverold.$B$BOur men were cowardly assailed under the flag of peace. Those treacherous Kul Tirans tied them to stakes, soaked them in tar and burned them alive on the shore.$B$BNow we hold nothing back, now we put an end to them!' WHERE `entry` = 40671;
+UPDATE `quest_template` SET `OfferRewardText` = 'I advised the Warchief against the sending of envoys. It was no use with a man like Alverold.$B$BOur men were cowardly assailed under the flag of peace. Those treacherous Kul Tirans tied them to stakes, soaked them in tar and burned them alive on the shore.$B$BNow we hold nothing back, now we put an end to them!' WHERE `entry` = 40671;
