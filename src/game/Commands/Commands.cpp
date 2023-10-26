@@ -8037,6 +8037,13 @@ bool ChatHandler::HandleSetHCChatCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleToggleIllusionsCommand(char* args)
+{
+    m_session->GetPlayer()->hasIllusionsDisabled = !m_session->GetPlayer()->hasIllusionsDisabled;
+    PSendSysMessage("illusions are now %s", m_session->GetPlayer()->hasIllusionsDisabled ? "disabled" : "enabled");
+    return true;
+}
+
 bool ChatHandler::HandleSetViewCommand(char* /*args*/)
 {
     if (Unit* unit = GetSelectedUnit())
@@ -10223,8 +10230,6 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
         TempSummonType despawnType = static_cast<TemporarySummon*>(pTarget)->GetDespawnType();
         PSendSysMessage("Despawn Type: %s (%u)", TempSummonTypeToString(despawnType), despawnType);
     }
-    if (CreatureGroup* pGroup = pTarget->GetCreatureGroup())
-        PSendSysMessage("Group Leader: %s", pGroup->GetLeaderGuid().GetString().c_str());
     pTarget->AI()->GetAIInformation(*this);
 
     return true;

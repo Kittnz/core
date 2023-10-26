@@ -1069,6 +1069,10 @@ class Player final: public Unit
             m_variables[variable] = value;
         }
 
+
+        bool hasIllusion = false;
+        bool hasIllusionsDisabled = false;
+
         /*********************************************************/
         /***                    STORAGE SYSTEM                 ***/
         /*********************************************************/
