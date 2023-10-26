@@ -1286,6 +1286,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                 else
                 {
                     item->is_blocked = false;
+                    item->lootOwner = maxguid;
                     player->SendEquipError(msg, nullptr, nullptr, roll->itemid);
                 }
             }
