@@ -20,3 +20,17 @@ UPDATE `spell_template` SET `description` = 'Permanently enchant a cloak to incr
 -- Proposed Fix: Change to "...and burned them alive on the shore."
 
 UPDATE `quest_template` SET `OfferRewardText` = 'I advised the Warchief against the sending of envoys. It was no use with a man like Alverold.$B$BOur men were cowardly assailed under the flag of peace. Those treacherous Kul Tirans tied them to stakes, soaked them in tar and burned them alive on the shore.$B$BNow we hold nothing back, now we put an end to them!' WHERE `entry` = 40671;
+
+-- Add the following items to NPC ID 61533 with the listed drop chances in the same loottable:
+-- Item ID 61547 20%
+-- Item ID 61546 30%
+-- Item ID 61545: 20%
+-- Item ID 61548 30%
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
+(61533, 61545, 20, 2, 1, 1, 0),
+(61533, 61546, 30, 2, 1, 1, 0),
+(61533, 61547, 20, 2, 1, 1, 0),
+(61533, 61548, 30, 2, 1, 1, 0);
+
+
