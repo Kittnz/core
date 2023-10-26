@@ -234,7 +234,8 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
             bool successTransaction =
                 LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, accountId) &&
-                LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0)", shopId, guidLow, accountId, itemId, price);
+                LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, guidLow, accountId, itemId, price
+                , realmID);
 
             bool success = LoginDatabase.CommitTransactionDirect();
 

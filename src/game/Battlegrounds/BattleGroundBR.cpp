@@ -14,9 +14,10 @@
 uint32 BattleGroundBR::GetNextArenaId()
 {
     static std::atomic<uint32> arenaId = 0;
+    static bool init = false;
 
     //initial state, query.
-    if (arenaId == 0)
+    if (!init)
     {
         std::unique_ptr<QueryResult> res = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT MAX(arena_id) FROM arena_stats_single"));
 
@@ -24,6 +25,7 @@ uint32 BattleGroundBR::GetNextArenaId()
         {
             arenaId = (*res)[0].GetUInt32();
         }
+        init = true;
     }
 
     return ++arenaId;
