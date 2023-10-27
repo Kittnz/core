@@ -373,7 +373,7 @@ void Antispam::ProcessMessages(uint32 diff)
                     auto fromPlayer = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid);
                     if (!fromPlayer)
                          return;
-                    if (Channel* channel = channelMgr(fromPlayer->m_team)->GetChannel(messageBlock.channelName, nullptr, false))
+                    if (Channel* channel = channelMgr(sWorld.IsPvPRealm() ? fromPlayer->m_team : ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
                     {
                         if (channel->GetName() == u8"World")
                         {
