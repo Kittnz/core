@@ -779,6 +779,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
+    if (lang != LANG_ADDON)
+    {
+        if (sWorld.getConfig(CONFIG_BOOL_BLOCK_ALL_HANZI))
+        {
+            std::wstring w_normMsg;
+            if (!Utf8toWStr(msg, w_normMsg))
+                return;
+            if (hasChinese(w_normMsg))
+                return;
+        }
+    }
+
     // Message handling
     switch (type)
     {
