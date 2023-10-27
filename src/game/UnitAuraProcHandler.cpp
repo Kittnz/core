@@ -247,6 +247,14 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Wrath of Cenarius
+        if (spellProto->Id == 25906)
+        {
+            // Make all damaging paladin spells able to proc Wrath of Cenarius.
+            if (procSpell->SpellFamilyName == SPELLFAMILY_PALADIN)
+                if (procSpell->IsDirectDamageSpell() || procSpell->HasDamagingAura())
+                    return roll_chance_u(spellProto->procChance) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Vial of Potent Venoms
         if (spellProto->Id == 45417)
         {
