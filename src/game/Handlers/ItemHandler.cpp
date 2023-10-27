@@ -1228,27 +1228,27 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data)
     recv_data >> itemid;
     recv_data.read_skip<uint64>();                          // guid
 
-    DEBUG_LOG("WORLD: CMSG_ITEM_NAME_QUERY %u", itemid);
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemid);
+    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemid);
     if (pProto)
     {
-        std::string Name;
-        Name = pProto->Name1;
+        char const* name = pProto->Name1;
 
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
         {
-            ItemLocale const *il = sObjectMgr.GetItemLocale(pProto->ItemId);
+            ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->ItemId);
             if (il)
             {
                 if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
-                    Name = il->Name[loc_idx];
+                    name = il->Name[loc_idx].c_str();
             }
         }
-        // guess size
-        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4 + 10));
+
+        size_t const nameLen = strlen(name) + 1;
+
+        WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, (4 + nameLen));
         data << uint32(pProto->ItemId);
-        data << Name;
+        data.append(name, nameLen);
         //data << uint32(pProto->InventoryType);    [-ZERO]
         SendPacket(&data);
         return;

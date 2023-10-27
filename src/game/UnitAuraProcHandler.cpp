@@ -257,9 +257,9 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
         if (spellProto->Id == 45850)
         {
             if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_BOLT>())
-                return roll_chance_u(5) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+                return roll_chance_u(10) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
             if (procSpell->SpellIconID == 2210)
-                return roll_chance_u(25) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
             return SPELL_PROC_TRIGGER_FAILED;
         }
         // Bonus Healing
@@ -723,28 +723,18 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 45423:
                 case 45424:
                 {
-                    if (!damage)
+                    // Proc handlers are called with damage=1 by non damage spells to indicate they hit rather than missed.
+                    if (damage <= 1)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // For spells with travel time, proc handler can be called after caster died.
+                    if (!IsAlive())
                         return SPELL_AURA_PROC_FAILED;
 
                     // heal amount
                     basepoints[0] = std::max(1u, triggerAmount * damage / 100);
-                    int32& storedAmount = triggeredByAura->GetModifier()->m_miscvalue;
-
-                    if (HasSpellCooldown(45419))
-                    {
-                        // to avoid client lag on aoe from sending spell aura log
-                        // packet too many times, we only do the healing once a second
-                        // store the heal amount in the misc value on the aura for next proc
-                        storedAmount += basepoints[0];
-                        return SPELL_AURA_PROC_FAILED;
-                    }
-                    
-                    // add the stored damage from when spell was on cooldown
-                    basepoints[0] += storedAmount;
-                    storedAmount = 0;
-                    
-                    CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
-                    AddSpellCooldown(45419, 0, time(nullptr) + 1);
+                    ModifyHealth(basepoints[0]);
+                    //CastCustomSpell(this, 45419, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
                     return SPELL_AURA_PROC_OK;
                 }
             }

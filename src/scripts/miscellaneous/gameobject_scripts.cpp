@@ -38,6 +38,7 @@ go_darkmoon_faire_music
 EndContentData */
 
 #include "scriptPCH.h"
+#include "Language.h"
 
 /*######
 ## go_cat_figurine
@@ -219,10 +220,14 @@ bool GOHello_go_orb_of_command(Player* pPlayer, GameObject* /*pGo*/)
     if (!pPlayer)
         return true;
 
-    if (pPlayer->GetQuestRewardStatus(7761))
+    if (sWorld.GetContentPhase() < CONTENT_PHASE_2)
     {
-        pPlayer->TeleportTo(469, -7664.76f, -1100.87f, 399.679f, 0.561981f);
+        pPlayer->GetSession()->SendAreaTriggerMessage(pPlayer->GetSession()->GetMangosString(LANG_INSTANCE_AVAILABLE_IN_PHASE), CONTENT_PHASE_2 + 1);
+        return true;
     }
+
+    if (pPlayer->GetQuestRewardStatus(7761))
+        pPlayer->TeleportTo(469, -7664.76f, -1100.87f, 399.679f, 0.561981f);
 
     return true;
 }

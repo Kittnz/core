@@ -927,6 +927,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "translate",     SEC_DEVELOPER,        false, &ChatHandler::HandleTranslateCommand,           "", nullptr },
         { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
         { "hcchat",        SEC_PLAYER,           false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
+        { "toggleillusions", SEC_DEVELOPER,         false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

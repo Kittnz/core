@@ -1,0 +1,2 @@
+-- Remove reference 30019 from npc 61391 61388 61364 61389 61417 61365 61390 (lvl 5 items from lvl 40 elites).
+delete from creature_loot_template where item = 30019 and mincountorref = -30019 and entry in (61391,61388,61364,61389,61417,61365,61390);

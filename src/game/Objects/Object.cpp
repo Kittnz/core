@@ -601,6 +601,16 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                     *data << uint32(appendValue);
                 }
 
+                else if (index == UNIT_FIELD_DISPLAYID)
+                {
+                    if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->hasIllusion && target->hasIllusionsDisabled)
+                    {
+                        *data << ToPlayer()->GetNativeDisplayId();
+                    }
+                    else
+                        *data << m_uint32Values[UNIT_FIELD_DISPLAYID];
+                }
+
                 else if (index == OBJECT_FIELD_SCALE_X)
                 {
                     //limit scale to 2.0f if none are GM

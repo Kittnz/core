@@ -100,6 +100,12 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
+        if (sWorld.GetContentPhase() < CONTENT_PHASE_2)
+        {
+            m_creature->AddObjectToRemoveList();
+            return;
+        }
+
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;

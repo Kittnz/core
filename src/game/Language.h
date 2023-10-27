@@ -86,7 +86,7 @@ enum MangosStrings
     //                                  = 57, not used
     //                                  = 58, not used
     //                                  = 59, not used
-    //                                  = 60, not used
+    LANG_INSTANCE_AVAILABLE_IN_PHASE    = 60,
     LANG_RA_USER                        = 61,
     LANG_RA_PASS                        = 62,
     LANG_GM_ACCEPTS_WHISPER             = 63,

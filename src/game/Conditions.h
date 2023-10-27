@@ -125,9 +125,9 @@ enum ConditionType
                                                             // Requirement: Player Target
                                                             // Value1: item_id
                                                             // Value2: count
-    CONDITION_WOW_PATCH             = 24,                   // Checks the current content patch. (progression system)
+    CONDITION_CONTENT_PHASE         = 24,                   // Checks the current content patch. (progression system)
                                                             // Requirement: None
-                                                            // Value1: patch (0-10)
+                                                            // Value1: patch (0-3)
                                                             // Value2: 0, 1 or 2 (0: equal to, 1: equal or higher than, 2: equal or less than)
     CONDITION_ESCORT                = 25,                   // Checks the alive state of the source and target, and the distance between them. Used for escorts.
                                                             // Requirement: None (optionally Creature Source, Player Target)

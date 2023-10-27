@@ -2134,6 +2134,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     {
                         if (m_caster->ToPlayer()->GetDisplayId() != m_caster->ToPlayer()->GetNativeDisplayId())
                         {
+                            m_caster->ToPlayer()->hasIllusion = false;
                             m_caster->ToPlayer()->DeMorph();
                             return;
                         }
@@ -2252,6 +2253,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 break;
                             }
                         }
+                        m_caster->ToPlayer()->hasIllusion = true;
                         m_caster->ToPlayer()->SetDisplayId(displayid);
                     }
 

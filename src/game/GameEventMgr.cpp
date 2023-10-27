@@ -180,7 +180,8 @@ void GameEventMgr::LoadFromDB()
         mGameEvent.resize(max_event_id + 1);
     }
 
-    QueryResult *result = WorldDatabase.Query("SELECT `entry`, UNIX_TIMESTAMP(`start_time`), UNIX_TIMESTAMP(`end_time`), `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled` FROM `game_event`");
+    //                                                 0       1                             2                            3            4         5          6              7            8           9
+    QueryResult *result = WorldDatabase.Query("SELECT `entry`, UNIX_TIMESTAMP(`start_time`), UNIX_TIMESTAMP(`end_time`), `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `required_phase` FROM `game_event`");
     if (!result)
     {
         mGameEvent.clear();
@@ -218,6 +219,10 @@ void GameEventMgr::LoadFromDB()
             pGameEvent.description  = fields[6].GetCppString();
             pGameEvent.hardcoded    = fields[7].GetUInt8();
             pGameEvent.disabled     = fields[8].GetUInt8();
+            pGameEvent.requiredPhase = fields[9].GetUInt8();
+
+            if (pGameEvent.requiredPhase > sWorld.GetContentPhase())
+                pGameEvent.disabled = true;
 
             // Leap days are needed to adjust yearly events
             if (pGameEvent.occurence == default_year_length && pGameEvent.length < default_year_length)

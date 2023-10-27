@@ -49,7 +49,7 @@
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
 #include "Language.h"
-
+#include "Mail.h"
 #include "CreatureGroups.h"
 #include "ZoneScript.h"
 #include "MoveSplineInit.h"
@@ -291,6 +291,41 @@ void Creature::RemoveCorpse()
 
     // stop loot rolling before loot clear and for close client dialogs
     StopGroupLoot();
+
+    // send unlooted rares to player who won them by mail
+    if (loot.unlootedCount)
+    {
+        for (auto& itr : loot.items)
+        {
+            if (!itr.is_looted && !itr.needs_quest && !itr.lootOwner.IsEmpty())
+            {
+                if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr.itemid))
+                {
+                    if (pProto->Quality >= ITEM_QUALITY_RARE)
+                    {
+                        if (Player* pPlayer = sObjectMgr.GetPlayer(itr.lootOwner))
+                        {
+                            if (Item* pItem = Item::CreateItem(itr.itemid, itr.count, pPlayer))
+                            {
+                                itr.is_looted = true;
+                                --loot.unlootedCount;
+
+                                pItem->SaveToDB();
+                                std::string subject = pProto->Name1;
+                                std::string body = "You won a roll for this item but were unable to loot it in time.";
+                                MailDraft(subject, body)
+                                    .AddItem(pItem)
+                                    .SendMailTo(pPlayer, MailSender(MAIL_CREATURE, GetEntry()), MAIL_CHECK_MASK_COPIED, 15 * MINUTE, 1 * DAY);
+
+                                if (!loot.unlootedCount)
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     loot.clear();
     uint32 respawnDelay = 0;
