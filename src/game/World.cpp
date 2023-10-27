@@ -1405,6 +1405,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
 
+    setConfig(CONFIG_BOOL_BLOCK_ALL_HANZI, "Hanzi.BlockAll", false);
+
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
     setConfig(CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA, "Analysis.StopOnCorrectExtendedData", false);
