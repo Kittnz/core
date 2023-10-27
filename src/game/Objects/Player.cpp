@@ -6946,8 +6946,6 @@ void Player::CheckAreaExploreAndOutdoor()
     if (watching_cinematic_entry)
         return;
 
-    GetZoneAndAreaId(m_zoneUpdateId, m_areaUpdateId);
-
     bool isOutdoor;
     uint16 areaFlag = GetTerrain()->GetAreaFlag(GetPositionX(), GetPositionY(), GetPositionZ(), &isOutdoor);
 
