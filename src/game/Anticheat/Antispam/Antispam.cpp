@@ -370,7 +370,10 @@ void Antispam::ProcessMessages(uint32 diff)
             {
                 if (!messageBlock.channelName.empty())
                 {
-                    if (Channel* channel = channelMgr(ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
+                    auto fromPlayer = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid);
+                    if (!fromPlayer)
+                         return;
+                    if (Channel* channel = channelMgr(fromPlayer->m_team)->GetChannel(messageBlock.channelName, nullptr, false))
                     {
                         if (channel->GetName() == u8"World")
                         {
