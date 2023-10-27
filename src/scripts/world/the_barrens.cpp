@@ -743,9 +743,10 @@ struct npc_regthar_deathgateAI : public ScriptedAI
 
         ResetVars();
     }
+
     void Reset() override
     {
-
+        
     }
 
     void ResetVars()
@@ -754,6 +755,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         memset(&TimerTable, 0x0, sizeof(TimerTable));
         memset(&GuidPhaseOneGuards, 0x0, sizeof(GuidPhaseOneGuards));
         memset(&GuidPhaseTwoGuards, 0x0, sizeof(GuidPhaseTwoGuards));
+        guardAttackTimer = 0;
         kromzarGUID = ObjectGuid();
         AllKolkars.clear();
     }
@@ -767,6 +769,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
     uint32 TimerTable[12];
     uint64 GuidPhaseOneGuards[9];
     uint64 GuidPhaseTwoGuards[8];
+    uint32 guardAttackTimer;
     ObjectGuid kromzarGUID;
 
     void DoSummonKolkars()
@@ -777,8 +780,8 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             {
                 AllKolkars.push_back(a->GetGUID());
                 GuidKolkar[i] = a->GetGUID();
-                a->SetRespawnTime(600000);
-                a->SetRespawnDelay(600000);
+                a->SetRespawnTime(600);
+                a->SetRespawnDelay(600);
             }
         }
         //off-position.
@@ -789,7 +792,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             if (Creature* b = m_creature->SummonCreature(asSummonKolkarPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 AllKolkars.push_back(b->GetGUID());
-                b->SetRespawnTime(10000);
+                b->SetRespawnTime(30);
             }
         }
 
@@ -799,11 +802,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         float fX, fY, fZ;
         for (uint8 i = 0; i < 5; ++i)
         {
-            if (Creature* a = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (Creature* a = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 30000))
             {
                 GuidPhaseOneGuards[i] = a->GetGUID();
-                //a->SetRespawnDelay(30000);
-                a->SetRespawnTime(30000);
+                a->SetRespawnDelay(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetRandomPoint(-287.28f, -1874.94f, 92.76f, 5.0f, fX, fY, fZ); //a->GetPositionX(), a->GetPositionY(), a->GetPositionZ()
                 //go to random point near -287.28, -1874.94, 92.76 4m radius?
                 a->GetMotionMaster()->MovePoint(0, fX, fY, fZ);
@@ -813,10 +817,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         for (uint8 i = 0; i < 4; i++)
         {
             m_creature->GetRandomPoint(-207.977f, -1925.8556f, 93.5536f, 20.0f, fX, fY, fZ);
-            if (Creature* b = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (Creature* b = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 30000))
             {
                 GuidPhaseOneGuards[5 + i] = b->GetGUID();
-                b->SetRespawnTime(30000);
+                b->SetRespawnDelay(30);
+                b->SetWanderDistance(20.0f);
+                b->GetMotionMaster()->Initialize();
             }
         }
     }
@@ -830,13 +836,17 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             if (a = m_creature->SummonCreature(NPC_DEFENDER, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 GuidPhaseTwoGuards[i] = a->GetGUID();
-                a->SetRespawnTime(30000);
+                a->SetRespawnTime(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetMotionMaster()->MovePoint(0, fX, fY, fZ);
             }
             if (a = m_creature->SummonCreature(NPC_AXE_THROWER, asSummonDefenderPositions[i].fX - 1, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 GuidPhaseTwoGuards[7 - i] = a->GetGUID();
-                a->SetRespawnTime(30000);
+                a->SetRespawnTime(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetMotionMaster()->MovePoint(0, fX - 1, fY, fZ);
             }
         }
@@ -883,6 +893,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             AllKolkars.pop_front();
         }
 
+        if (Creature* pKromzar = m_creature->GetMap()->GetCreature(kromzarGUID))
+        {
+            pKromzar->DespawnOrUnsummon();
+            kromzarGUID.Clear();
+        }
+
         ResetVars();
     }
     void SummonedCreatureJustDied(Creature* pSummoned) override
@@ -927,17 +943,19 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                 if (phaseTimer < 200000)
                     phaseTimer = 200000;
                 //summon  NPC_KROMZAR + 2 adds en deaddespawn.
-                if (Creature* kromzar = m_creature->SummonCreature(NPC_KROMZAR, -288.344f, -1852.846f, 92.497f, 4.64f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                if (Creature* kromzar = m_creature->SummonCreature(NPC_KROMZAR, -288.344f, -1852.846f, 92.497f, 4.64f, TEMPSUMMON_MANUAL_DESPAWN))
                 {
-                    kromzar->JoinCreatureGroup(kromzar, 3, 0, (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER));
+                    kromzar->JoinCreatureGroup(kromzar, 3, 0, (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER | OPTION_RESPAWN_ALL_ON_ANY_EVADE));
                     kromzar->SetRespawnDelay(120);
                     kromzarGUID = kromzar->GetObjectGuid();
                     for (int i = 0; i < 2; i++)
                     {
-                        if (Creature* c = m_creature->SummonCreature(NPC_KOLKAR_INVADER, -288.344f + i, -1852.846f + i, 92.497f, 4.64f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                        if (Creature* c = m_creature->SummonCreature(NPC_KOLKAR_INVADER, -288.344f + i, -1852.846f + i, 92.497f, 4.64f, TEMPSUMMON_TIMED_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
                         {
-                            c->JoinCreatureGroup(kromzar, 3.0f, (3.0f + i) - kromzar->GetOrientation(), (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER));
+                            c->JoinCreatureGroup(kromzar, 3.0f, (3.0f + i) - kromzar->GetOrientation(), (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER | OPTION_RESPAWN_ALL_ON_ANY_EVADE));
                             c->SetRespawnDelay(120);
+                            c->GetMotionMaster()->Clear(false, true);
+                            c->GetMotionMaster()->MoveFollow(kromzar, 3.0f, (3.0f + i));
                         }
                     }
                     DoScriptText(YELL_KOLKAR_STRONGEST, kromzar);
@@ -999,6 +1017,33 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                     }
                 }
             }
+
+            if (guardAttackTimer < uiDiff)
+            {
+                if (eventPhase < 2)
+                {
+                    // Something causes the respawn timer of the defenders to reset to 5 minutes once the 30 seconds expire.
+                    // Force them to respawn once it has jumped over 30 seconds.
+                    for (uint64 guid : GuidPhaseOneGuards)
+                    {
+                        if (Creature* b = m_creature->GetMap()->GetCreature(guid))
+                        {
+                            if (!b->IsAlive() && (b->GetRespawnTimeEx() - time(nullptr) > 30))
+                                b->Respawn();
+                        }
+                    }
+                }
+
+                if (Creature* pDefender = m_creature->FindRandomCreature(NPC_DEFENDER, 300.0f))
+                    if (!pDefender->GetVictim())
+                        if (Creature* pInvader = pDefender->FindRandomCreature(NPC_KOLKAR_INVADER, 75.0f))
+                            pDefender->AI()->AttackStart(pInvader);
+
+                guardAttackTimer = 10000;
+            }
+            else
+                guardAttackTimer -= uiDiff;
+            
             if (phaseTimer < uiDiff)
                 endEvent();
             else

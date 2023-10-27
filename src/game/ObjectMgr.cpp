@@ -508,10 +508,10 @@ void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
 {
     // Must do this in a transaction, else if worker threads > 1 we could do one before the other
     // when order is important...
-    WorldDatabase.BeginTransaction();
-    WorldDatabase.PExecute("DELETE FROM `variables` WHERE `index` = %u", toSave.uiIndex);
-    WorldDatabase.PExecute("INSERT INTO `variables` (`index`, `value`) VALUES (%u, %u)", toSave.uiIndex, toSave.uiValue);
-    WorldDatabase.CommitTransaction();
+    CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM `variables` WHERE `index` = %u", toSave.uiIndex);
+    CharacterDatabase.PExecute("INSERT INTO `variables` (`index`, `value`) VALUES (%u, %u)", toSave.uiIndex, toSave.uiValue);
+    CharacterDatabase.CommitTransaction();
 }
 
 void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
@@ -579,7 +579,7 @@ void ObjectMgr::LoadSavedVariable()
 {
     m_SavedVariables.clear();
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `index`, `value` FROM `variables`"));
+    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `index`, `value` FROM `variables`"));
 
     if (!result)
     {
@@ -4297,29 +4297,29 @@ void ObjectMgr::LoadPageTexts()
         if (!page)
             continue;
 
-        if (page->Next_Page && !sPageTextStore.LookupEntry<PageText>(page->Next_Page))
+        if (page->next_page && !sPageTextStore.LookupEntry<PageText>(page->next_page))
         {
-            sLog.outErrorDb("Page text (Id: %u) has not existing next page (Id:%u)", i, page->Next_Page);
+            sLog.outErrorDb("Page text (Id: %u) has not existing next page (Id:%u)", i, page->next_page);
             continue;
         }
 
         // detect circular reference
         std::set<uint32> checkedPages;
-        for (PageText const* pageItr = page; pageItr; pageItr = sPageTextStore.LookupEntry<PageText>(pageItr->Next_Page))
+        for (PageText const* pageItr = page; pageItr; pageItr = sPageTextStore.LookupEntry<PageText>(pageItr->next_page))
         {
-            if (!pageItr->Next_Page)
+            if (!pageItr->next_page)
                 break;
-            checkedPages.insert(pageItr->Page_ID);
-            if (checkedPages.find(pageItr->Next_Page) != checkedPages.end())
+            checkedPages.insert(pageItr->entry);
+            if (checkedPages.find(pageItr->next_page) != checkedPages.end())
             {
                 std::ostringstream ss;
                 ss << "The text page(s) ";
                 for (const auto checkedPage : checkedPages)
                     ss << checkedPage << " ";
-                ss << "create(s) a circular reference, which can cause the server to freeze. Changing Next_Page of page "
-                   << pageItr->Page_ID << " to 0";
+                ss << "create(s) a circular reference, which can cause the server to freeze. Changing next_page of page "
+                   << pageItr->entry << " to 0";
                 sLog.outErrorDb("%s", ss.str().c_str());
-                const_cast<PageText*>(pageItr)->Next_Page = 0;
+                const_cast<PageText*>(pageItr)->next_page = 0;
                 break;
             }
         }
@@ -4363,10 +4363,10 @@ void ObjectMgr::LoadPageTextLocales()
             int idx = GetOrNewIndexForLocale(LocaleConstant(i));
             if (idx >= 0)
             {
-                if ((int32)data.Text.size() <= idx)
-                    data.Text.resize(idx + 1);
+                if ((int32)data.text.size() <= idx)
+                    data.text.resize(idx + 1);
 
-                data.Text[idx] = str;
+                data.text[idx] = str;
             }
         }
     }
@@ -5172,9 +5172,9 @@ void ObjectMgr::LoadAreaTriggerTeleports()
     m_AreaTriggerTeleportMap.clear();                                  // need for reload case
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query(
-    //           0     1                 2                      3
-        "SELECT `id`, `required_level`, `required_condition`, `message`, "
-    //    4             5                    6                    7                    8 
+    //           0     1                 2                     3                4
+        "SELECT `id`, `required_level`, `required_condition`, `required_phase`, `message`, "
+    //    5             6                    7                    8                    9 
         "`target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation` "
         "FROM `areatrigger_teleport`"));
     
@@ -5193,12 +5193,13 @@ void ObjectMgr::LoadAreaTriggerTeleports()
 
         at.requiredLevel      = fields[1].GetUInt8();
         at.requiredCondition  = fields[2].GetUInt32();
-        at.message            = fields[3].GetCppString();
-        at.destination.mapId  = fields[4].GetUInt32();
-        at.destination.x      = fields[5].GetFloat();
-        at.destination.y      = fields[6].GetFloat();
-        at.destination.z      = fields[7].GetFloat();
-        at.destination.o      = fields[8].GetFloat();
+        at.requiredPhase      = fields[3].GetUInt8();
+        at.message            = fields[4].GetCppString();
+        at.destination.mapId  = fields[5].GetUInt32();
+        at.destination.x      = fields[6].GetFloat();
+        at.destination.y      = fields[7].GetFloat();
+        at.destination.z      = fields[8].GetFloat();
+        at.destination.o      = fields[9].GetFloat();
 
         AreaTriggerEntry const* atEntry = GetAreaTrigger(triggerId);
         if (!atEntry)
@@ -9109,7 +9110,8 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-    result = LoginDatabase.Query("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` ORDER BY `account`, `time` ASC");
+    result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC"
+    , realmID);
 
     if (result)
     {

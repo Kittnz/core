@@ -340,17 +340,16 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
 
             return false;
         }
-        case CONDITION_WOW_PATCH:
+        case CONDITION_CONTENT_PHASE:
         {
-            // Always assume Turtle WoW is on patch 1.12 (10) for condition checks.
             switch (m_value2)
             {
                 case 0:
-                    return 10 == m_value1;
+                    return sWorld.GetContentPhase() == m_value1;
                 case 1:
-                    return 10 >= m_value1;
+                    return sWorld.GetContentPhase() >= m_value1;
                 case 2:
-                    return 10 <= m_value1;
+                    return sWorld.GetContentPhase() <= m_value1;
             }
             return false;
         }
@@ -1328,7 +1327,7 @@ bool ConditionEntry::IsValid()
         case CONDITION_IS_PLAYER:
         case CONDITION_OBJECT_IS_SPAWNED:
         case CONDITION_ESCORT:
-        case CONDITION_WOW_PATCH:
+        case CONDITION_CONTENT_PHASE:
         case CONDITION_CREATURE_GROUP_DEAD:
             break;
         default:

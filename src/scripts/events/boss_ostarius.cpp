@@ -1137,6 +1137,9 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
 
     if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
     {
+        if (sWorld.GetContentPhase() < CONTENT_PHASE_2)
+            return false;
+
         if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
         {
             if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))

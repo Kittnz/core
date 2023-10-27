@@ -30,6 +30,7 @@ public:
 	void Initialize() override;
 
 	void OnCreatureCreate(Creature* pCreature) override;
+	void OnCreatureRespawn(Creature* pCreature) override;
 	void OnCreatureDeath(Creature* pCreature) override;
 
 	uint32 GetData(uint32 uiData) override;

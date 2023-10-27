@@ -8037,6 +8037,13 @@ bool ChatHandler::HandleSetHCChatCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleToggleIllusionsCommand(char* args)
+{
+    m_session->GetPlayer()->hasIllusionsDisabled = !m_session->GetPlayer()->hasIllusionsDisabled;
+    PSendSysMessage("illusions are now %s", m_session->GetPlayer()->hasIllusionsDisabled ? "disabled" : "enabled");
+    return true;
+}
+
 bool ChatHandler::HandleSetViewCommand(char* /*args*/)
 {
     if (Unit* unit = GetSelectedUnit())
@@ -10223,6 +10230,8 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
         TempSummonType despawnType = static_cast<TemporarySummon*>(pTarget)->GetDespawnType();
         PSendSysMessage("Despawn Type: %s (%u)", TempSummonTypeToString(despawnType), despawnType);
     }
+     if (CreatureGroup* pGroup = pTarget->GetCreatureGroup())
+         PSendSysMessage("Group Leader: %s", pGroup->GetLeaderGuid().GetString().c_str());
     pTarget->AI()->GetAIInformation(*this);
 
     return true;
@@ -14847,9 +14856,25 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     Utf8toWStr(name_str, name_wstr);
     wstrToLower(name_wstr);
 
-    if (!isBasicLatinString(name_wstr, false))
+    wchar_t nonLatinCharacter = 0;
+    for (wchar_t chr : name_wstr)
     {
+        if (!isBasicLatinCharacter(chr) && chr != ' ')
+        {
+            nonLatinCharacter = chr;
+            break;
+        }
+    }
+
+    if (nonLatinCharacter != 0)
+    {
+        std::wstring wstr;
+        wstr += nonLatinCharacter;
+        std::string str;
+        WStrToUtf8(wstr, str);
+
         m_session->SendNotification("Please use latin symbols only.");
+        PSendSysMessage("You used invalid symbol %s (%u).", str.c_str(), (uint32)nonLatinCharacter);
         return false;
     }
 

@@ -67,6 +67,14 @@ namespace HttpApi
 class MovementBroadcaster;
 struct CreatureInfo;
 
+enum ContentPhase
+{
+    CONTENT_PHASE_1 = 0,
+    CONTENT_PHASE_2 = 1,
+    CONTENT_PHASE_3 = 2,
+    CONTENT_PHASE_4 = 3,
+};
+
 // ServerMessages.dbc
 enum ServerMessageType
 {
@@ -404,6 +412,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL,
     CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL,
     CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS,
+    CONFIG_UINT32_CONTENT_PHASE,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -686,6 +695,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY,
     CONFIG_BOOL_LOAD_LOCALES,
     CONFIG_BOOL_ENABLE_FACTION_BALANCE,
+    CONFIG_BOOL_BLOCK_ALL_HANZI,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -922,6 +932,8 @@ class World
         void SetMotd(std::string const& motd) { m_motd = motd; }
         /// Get the current Message of the Day
         const char* GetMotd() const { return m_motd.c_str(); }
+
+        uint32 GetContentPhase() const { return getConfig(CONFIG_UINT32_CONTENT_PHASE); }
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
@@ -1328,6 +1340,7 @@ class World
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
+        std::thread m_shopThread;
 
         struct ApiServerDeleter
         {

@@ -54,6 +54,7 @@ struct GameEventData
     std::string description;
     uint8 hardcoded;
     uint8 disabled;
+    uint8 requiredPhase;
     uint8 leapDays;                                         // Leap days between current and start date
 
     bool isValid() const { return length > 0; }

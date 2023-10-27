@@ -1120,6 +1120,7 @@ class Unit : public WorldObject
 
         void ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, SpellEntry const* procSpell, uint32 damage, ProcTriggeredList& triggeredList, Spell* spell = nullptr);
         void HandleTriggers(Unit* pVictim, uint32 procExtra, uint32 amount, SpellEntry const *procSpell, ProcTriggeredList const& procTriggered);
+        void TriggerDamageShields(Unit* pVictim);
         void ClearAllReactives();
         void StartReactiveTimer(ReactiveType reactive, ObjectGuid target) { m_reactiveTimer[reactive] = REACTIVE_TIMER_START; m_reactiveTarget[reactive] = target; }
         ObjectGuid const& GetReactiveTarget(ReactiveType reactive) const { return m_reactiveTarget[reactive]; }

@@ -89,6 +89,7 @@
 #include "SuspiciousStatisticMgr.h"
 #include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
+#include "Shop/ShopMgr.h"
 #include <ace/OS_NS_dirent.h>
 
 #ifdef USING_DISCORD_BOT
@@ -232,6 +233,9 @@ void World::InternalShutdown()
 
     if (m_asyncPacketsThread.joinable())
         m_asyncPacketsThread.join();
+
+    if (m_shopThread.joinable())
+        m_shopThread.join();
 
 #ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
@@ -1192,6 +1196,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ENABLE_DK, "PvP.DishonorableKills", true);
 
     // Progression settings
+    setConfig(CONFIG_UINT32_CONTENT_PHASE, "Progression.ContentPhase", CONTENT_PHASE_4);
     setConfig(CONFIG_BOOL_ACCURATE_PETS, "Progression.AccuratePetStatistics", true);
     setConfig(CONFIG_BOOL_ACCURATE_LFG, "Progression.AccurateLFGAvailability", true);
     setConfig(CONFIG_BOOL_ACCURATE_PVE_EVENTS, "Progression.AccuratePVEEvents", true);
@@ -1399,6 +1404,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
 
     setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
+
+    setConfig(CONFIG_BOOL_BLOCK_ALL_HANZI, "Hanzi.BlockAll", false);
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
 
@@ -2181,6 +2188,7 @@ void World::SetInitialWorldSettings()
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
+    m_shopThread = std::thread(&ShopMgr::ProcessRequestsWorker, &sShopMgr);
 
     if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
         DeleteOldPDumps();
@@ -2211,6 +2219,7 @@ void World::SetInitialWorldSettings()
     }
 #endif
 
+    sLog.outString("Current content phase is set to %u.", GetContentPhase() + 1);
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
 }

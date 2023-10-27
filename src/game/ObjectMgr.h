@@ -68,6 +68,7 @@ struct AreaTriggerTeleport
     std::string message;
     uint8 requiredLevel = 0;
     uint32 requiredCondition = 0;
+    uint8 requiredPhase = 0;
     WorldLocation destination;
 };
 
