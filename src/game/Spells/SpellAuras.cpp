@@ -8461,6 +8461,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
         case 24382:             // Buff zanza
         // Alcools
         case 57106: // Medivh's Merlot
+        case 57107: // Medivh's Merlot Blue Label
         case 25804:
         case 20875:
         case 25722:
