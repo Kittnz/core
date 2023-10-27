@@ -13,3 +13,6 @@ UPDATE quest_template SET NextQuestInChain = 41047 WHERE entry = 41046;
 UPDATE quest_template SET NextQuestInChain = 41048 WHERE entry = 41047;
 UPDATE quest_template SET NextQuestInChain = 41051 WHERE entry = 41050;
 UPDATE quest_template SET NextQuestInChain = 41052 WHERE entry = 41051;
+
+update item_template set spellid_1 = 48034, spellid_2 = 0, name = 'Band of Calamity' where entry = 60547; -- Band of Calamity
+update item_template set spellid_2 = 48034, name = 'Grand Slammer' where entry = 61532; -- Giants Heavy Mace
