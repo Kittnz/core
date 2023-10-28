@@ -6233,7 +6233,13 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 29710:
+                case 28732: // Naxxramas Worshipper - Widow's Embrace
+                {
+                    if (m_casterUnit && m_casterUnit->IsAlive())
+                        m_casterUnit->Kill(m_casterUnit, nullptr);
+                    return;
+                }
+                case 29710: // Test Ribbon Pole Channel Trigger
                 {
                     if (Player* pPlayerTarget = ToPlayer(unitTarget))
                     {
