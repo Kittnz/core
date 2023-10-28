@@ -121,7 +121,6 @@ struct boss_faerlinaAI : public ScriptedAI
         {
             m_uiEnrageTimer = std::max(m_uiEnrageTimer, (uint32)30000);
             m_creature->RemoveAurasDueToSpell(SPELL_ENRAGE);
-            pUnitCaster->Kill(pUnitCaster, nullptr);
         }
     }
 
