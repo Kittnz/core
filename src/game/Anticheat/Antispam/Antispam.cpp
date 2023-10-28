@@ -377,6 +377,8 @@ void Antispam::ProcessMessages(uint32 diff)
                     {
                         if (channel->GetName() == u8"World")
                         {
+                            ChannelMgr::AnnounceBothFactionsChannel("Global", messageBlock.fromGuid, string_format("|cff{}{}|r", fromPlayer->GetTeam() == HORDE ? "ff0000" : "2773ff"
+                            , messageBlock.msg.c_str()).c_str());
                             if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
                             {
                                // std::string logChat = sWorld.FormatLoggedChat(pSender->GetSession(), "Chan", messageBlock.msg, nullptr, 0, channel->GetName().c_str());

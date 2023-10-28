@@ -643,8 +643,15 @@ void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
 
         if (plr->GetLevel() > 20)
         {
-            factor /= (plr->GetLevel() / 10);
+            factor /= ((float)plr->GetLevel() / 10.f);
         }
+
+        if (GetTypeID() == BATTLEGROUND_BR)
+        {
+            //lower xp for BR, short BGs
+            factor /= 3;
+        }
+
         plr->GiveXP(static_cast<uint32>(sObjectMgr.GetXPForLevel(plr->GetLevel()) * factor), nullptr);
     }
 }

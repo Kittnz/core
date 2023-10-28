@@ -869,6 +869,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     {
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
+                        ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
+                            , msg.c_str()).c_str());
+
                         if (channel == u8"World" && lang != LANG_ADDON)
                         {
                             std::string logChat = sWorld.FormatLoggedChat(this, "Chan", msg, nullptr, 0, channel.c_str());
