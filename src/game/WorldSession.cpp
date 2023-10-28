@@ -573,6 +573,23 @@ void WorldSession::LogoutPlayer(bool Save)
 
         disabledSocials = _player->HasGMDisabledSocials();
 
+        if (_player->GetSession()->GetSecurity() >= SEC_DEVELOPER)
+        {
+            //Check if any GMs are still on. If not, send a distress signal.
+            bool gmOnline = false;
+            for (auto sessPair : sWorld.GetAllSessions())
+            {
+                if (sessPair.second->GetSecurity() >= SEC_DEVELOPER && sessPair.second->GetAccountId() != GetAccountId())
+                {
+                    gmOnline = true;
+                    break;
+                }
+            }
+
+            if (!gmOnline)
+                sWorld.SendDiscordMessage(1085875609265258496, "ALERT <@&1098560329623023696> , last GM just logged out.");
+        }
+
         ///- If the player just died before logging out, make him appear as a ghost
         if (inWorld && _player->GetDeathTimer())
         {
