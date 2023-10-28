@@ -105,7 +105,7 @@ struct boss_solniusAI : public ScriptedAI
 		randomPlayers.clear();
 		phase = PHASE_1;
 		events.Reset();
-		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+		m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 		m_creature->SetFactionTemplateId(7);
 		m_creature->SetDisplayId(m_creature->GetNativeDisplayId());
 		m_creature->SetTauntImmunity(false);
@@ -146,7 +146,7 @@ struct boss_solniusAI : public ScriptedAI
 		return randomPlayers;
 	}
 
-	void Aggro(Unit* pWho) override
+	void EnterCombat(Unit* pWho) override
 	{
 		if (m_creature->GetMapId() != 807)
 			return;
@@ -195,7 +195,7 @@ struct boss_solniusAI : public ScriptedAI
 				pErennius->DeleteThreatList();
 				pErennius->CombatStop(true);
 				pErennius->SetReactState(REACT_PASSIVE);
-				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+				pErennius->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 				pErennius->SetFactionTemplateId(7);
 				pErennius->DespawnOrUnsummon(20000);
 				pErennius->SummonGameObject(GO_ERRENIUS_CHEST, 3276.224f, 3043.9492f, 27.1176f, 6.2332f, 0, 0, 0, 0, 0);
@@ -238,7 +238,9 @@ struct boss_solniusAI : public ScriptedAI
 				case EVENT_GO_TO_SLEEP:
 					if (m_creature->GetStandState() != UNIT_STAND_STATE_SLEEP && m_creature->HealthBelowPct(60))
 					{
-						m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+						SetCombatMovement(false);
+						m_creature->SetReactState(REACT_PASSIVE);
+						m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 
 						auto homePos = m_creature->GetHomePosition();
 
@@ -261,7 +263,9 @@ struct boss_solniusAI : public ScriptedAI
 					if (m_creature->HasAura(SPELL_SLEEP_VISUAL))
 					{
 						m_creature->RemoveAurasDueToSpell(SPELL_SLEEP_VISUAL);
-						m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+						SetCombatMovement(true);
+						m_creature->SetReactState(REACT_AGGRESSIVE);
+						m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 						m_creature->ClearUnitState(UNIT_STAT_CAN_NOT_MOVE);
 						m_creature->SetStandState(UNIT_STAND_STATE_STAND);
 						m_creature->SetReactState(REACT_AGGRESSIVE);
@@ -461,7 +465,6 @@ struct boss_solniusAI : public ScriptedAI
 	{
 		m_creature->AttackStop();
 		m_creature->RemoveAllAttackers();
-		m_creature->SetReactState(REACT_PASSIVE);
 		m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
 		m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
 		m_creature->AddAura(SPELL_SLEEP_VISUAL);
@@ -564,7 +567,7 @@ bool GossipSelect_boss_solnius(Player* pPlayer, Creature* pCreature, uint32 uiSe
 				{
 					boss_solnius->MonsterYell("You think you can interfere with my eternal duty? The awakening has been fortold long before your kind has existed mortals, you shall regret setting foot on our hallowed ground!");
 					boss_solnius->PlayDirectSound(SOLNIUS_SAY_SOUND_1);
-					boss_solnius->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PLAYER);
+					boss_solnius->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
 					boss_solnius->SetFactionTemplateId(14);
 					pPlayer->CLOSE_GOSSIP_MENU();
 				}
