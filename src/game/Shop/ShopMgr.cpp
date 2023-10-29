@@ -72,6 +72,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 		return "bagsfulloralreadyhaveitem";
 
 	_owner->SetShopTransactionInProgress(true);
+
 	const std::function<void(uint32, int32, uint32)> balanceCallback = [price, itemID, dest, count](uint32 accountId, int32 coins, uint32 guidLow)
 	{
 		auto _owner = sObjectAccessor.FindPlayer(guidLow);
