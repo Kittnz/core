@@ -8,3 +8,18 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 -- Quest 41021 should be repeatable.
 update quest_template set specialflags = 1 where entry = 41021;
 
+-- Npc 61336 61337 shouldnt drop item 61712 at all, but should drop 61711 at 98% instead.
+delete from creature_loot_template where item = 61711 and entry in (61336,61337);
+delete from creature_loot_template where item = 61712 and entry in (61336,61337);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61336, 61711, 98, 0, 1, 1, 0),
+(61337, 61711, 98, 0, 1, 1, 0);
+-- Npc 61359 61358 61356 61357 61367 shouldnt drop item 61712.
+delete from creature_loot_template where item = 61712 and entry in (61359,61358,61356,61357,61367);
+-- Npc 61359 61358 61356 61357 61367 should drop item 61712 at 50%.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61359, 61712, 50, 0, 1, 1, 0),
+(61358, 61712, 50, 0, 1, 1, 0),
+(61356, 61712, 50, 0, 1, 1, 0),
+(61357, 61712, 50, 0, 1, 1, 0),
+(61367, 61712, 50, 0, 1, 1, 0);
