@@ -370,6 +370,8 @@ void Antispam::ProcessMessages(uint32 diff)
             {
                 if (!messageBlock.channelName.empty())
                 {
+					// Review if realm tyoe speficic!
+					// if (Channel* channel = channelMgr(ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
                     auto fromPlayer = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid);
                     if (!fromPlayer)
                          return;

@@ -5,13 +5,8 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/writer.h"
-
 #include "HttpApi/BaseController.hpp"
-
-
 #include "PlayerDump.h"
-
-
 
 namespace HttpApi
 {

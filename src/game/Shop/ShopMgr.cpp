@@ -30,12 +30,14 @@
 #include "MassMailMgr.h"
 #include "SpellMgr.h"
 #include "Policies/SingletonImp.h"
+#include "Database/DatabaseEnv.h"
+#include "Database/DatabaseImpl.h"
 #include "Player.h"
 #include "Chat.h"
 
 static char const* shopPrefix = "TW_SHOP";
-
 class ShopSendBalanceTask
+
 {
 public:
     ShopSendBalanceTask(uint32 accountId, int32 balance) : m_accountId(accountId), m_balance(balance)
@@ -193,6 +195,7 @@ int32 ShopMgr::GetBalance(uint32 accountId)
 {
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId));
 
+
     int32 balance = 0;
     if (result)
     {
@@ -274,4 +277,6 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
         return;
     }
 
+	GetBalance(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
+	return "";
 }

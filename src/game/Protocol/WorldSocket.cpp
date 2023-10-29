@@ -210,6 +210,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     //This should always be checked regardless of IP locking.
     //If the last_ip that was just modified by authserver is different than the client sending CMSG_AUTH_SESSION that's never okay.
+
    /*if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
     {
         packet.Initialize(SMSG_AUTH_RESPONSE, 1);
