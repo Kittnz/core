@@ -674,7 +674,6 @@ enum eConfigBoolValues
     CONFIG_BOOL_PTR,
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
     CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
-    CONFIG_BOOL_ANNIVERSARY,
     CONFIG_BOOL_ENFORCED_ENGLISH,
     CONFIG_BOOL_SEA_REALM,
     CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY,
@@ -696,7 +695,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_LOAD_LOCALES,
     CONFIG_BOOL_ENABLE_FACTION_BALANCE,
     CONFIG_BOOL_BLOCK_ALL_HANZI,
-    CONFIG_BOOL_VALUE_COUNT
+	CONFIG_BOOL_VALUE_COUNT
 };
 
 /// Type of server
@@ -1341,6 +1340,14 @@ class World
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
         std::thread m_shopThread;
+
+        struct ApiServerDeleter
+        {
+            void operator()(HttpApi::ApiServer* p);
+        };
+
+
+        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         struct ApiServerDeleter
         {

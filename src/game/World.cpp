@@ -1170,9 +1170,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_MAILSPAM_ITEM, "MailSpam.Item", false);
     setConfig(CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL, "Mails.COD.ForceTag.MaxLevel", 0);
 
-    // Presents:
-    setConfig(CONFIG_BOOL_ANNIVERSARY, "Anniversary", true);
-
     setConfigMinMax(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT,       "AsyncTasks.Threads", 1, 1, 20);
     setConfig(CONFIG_BOOL_KICK_PLAYER_ON_BAD_PACKET,               "Network.KickOnBadPacket", false);
     setConfig(CONFIG_UINT32_PACKET_BCAST_THREADS,                  "Network.PacketBroadcast.Threads", 0);
@@ -1400,11 +1397,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
 
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
-
     setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
 
     setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
-
     setConfig(CONFIG_BOOL_BLOCK_ALL_HANZI, "Hanzi.BlockAll", false);
 
     setConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY, "BackupCharacterInventory", false);
@@ -1723,7 +1718,7 @@ void World::SetInitialWorldSettings()
     _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
     HttpApi::RegisterControllers();
     _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
-    //- Initialize the random number generator
+///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup
@@ -3310,7 +3305,12 @@ void World::UpdateSessions(uint32 diff)
         {
             itr++;
         }
+        else
+        {
+            ++itr;
+        }
     }
+
 
     ///- Update disconnected sessions
     for (SessionSet::iterator itr = m_disconnectedSessions.begin(); itr != m_disconnectedSessions.end(); )

@@ -2427,6 +2427,7 @@ void ObjectMgr::LoadItemPrototypes()
             else
             {
                 sLog.outErrorDb("Item (Entry: %u) has wrong (nonexistent) item in WrappedGift (%u)", i, proto->WrappedGift);
+
                 const_cast<ItemPrototype*>(proto)->WrappedGift = 0;
             }
         }
@@ -6603,6 +6604,30 @@ void ObjectMgr::LoadReservedPlayersNames()
         m_ReservedNames.insert(wstr);
     }
     while (result->NextRow());
+
+    std::unique_ptr<QueryResult> result2 (CharacterDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
+
+    if (!result2)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result2->Fetch();
+
+        std::string name = fields[0].GetCppString();
+        std::wstring wstr;
+        if (!Utf8toWStr(name, wstr))
+        {
+            sLog.outError("Table `char_transfer_names` have invalid name: %s", name.c_str());
+            continue;
+        }
+
+        wstrToLower(wstr);
+
+        m_ReservedNames.insert(wstr);
+    } while (result2->NextRow());
 }
 
 void ObjectMgr::AddReservedName(std::string name)
@@ -9110,8 +9135,8 @@ void ObjectMgr::LoadShop()
 
 	delete result;
 
-    result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC"
-    , realmID);
+    result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC",
+		realmID);
 
     if (result)
     {

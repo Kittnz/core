@@ -334,6 +334,7 @@ void Log::Initialize()
     logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a+");
     logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
     logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
+    logFiles[LOG_API] = openLogFile("ApiLogFile", nullptr, "a+");
 
     timestampPrefix[LOG_DBERRFIX] = false;
 

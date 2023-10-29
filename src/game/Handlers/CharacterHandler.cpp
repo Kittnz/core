@@ -46,6 +46,7 @@
 #include "PlayerBroadcaster.h"
 #include "Mail.h"
 #include "miscellaneous/feature_transmog.h"
+#include "Config.hpp"
 #include "Logging/DatabaseLogger.hpp"
 
 // config option SkipCinematics supported values
@@ -425,13 +426,13 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     if (ObjectAccessor::FindPlayerNotInWorld(guid))
         return;
 
-    if (!_analyser->IsActive() || IsSuspicious())
+    /*if (!_analyser->IsActive() || IsSuspicious())
     {
         WorldPacket data(SMSG_CHAR_DELETE, 1);
         data << (uint8)CHAR_DELETE_FAILED;
         SendPacket(&data);
         return;
-    }
+    }*/
 
     uint32 accountId = 0;
     std::string name;
@@ -865,7 +866,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     {
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
     }
-
     if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
     {
         if (pCurrChar->GetLevel() > 10 && !pCurrChar->HasItemCount(67005) && !pCurrChar->HasSpell(45023) && !pCurrChar->HasItemCount(80004))

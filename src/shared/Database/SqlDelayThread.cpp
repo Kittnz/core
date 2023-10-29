@@ -92,14 +92,20 @@ void SqlDelayThread::ProcessRequests()
     SqlOperation* s = nullptr;
     while (m_dbEngine->NextDelayedOperation(s))
     {
-        s->Execute(m_dbConnection);
+        bool result = s->Execute(m_dbConnection);
+        const auto& callback = s->GetCallback();
+        if (callback)
+            (*callback)(result);
         delete s;
     }
 
     // Process any serial operations for this worker
     while (m_serialDelayQueue.next(s))
     {
-        s->Execute(m_dbConnection);
+        bool result = s->Execute(m_dbConnection);
+        const auto& callback = s->GetCallback();
+        if (callback)
+            (*callback)(result);
         delete s;
     }
 }

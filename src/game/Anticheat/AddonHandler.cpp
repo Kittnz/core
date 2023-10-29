@@ -55,8 +55,8 @@ uint32 GenerateFingerprint()
             fingerprint |= static_cast<uint8>(urand(0x03, 0xFF)) << 8*i;
 
         // if the fingerprint already exists, repeat
-        if (FingerprintExists(fingerprint))
-            continue;
+        //if (FingerprintExists(fingerprint))
+         //   continue;
 
         // if we reach here, we are done
 
@@ -223,8 +223,8 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     auto& sample = _session->_analyser->GetCurrentSample();
     sample.fingerprint = _fingerprint;
     sample.ipAddress = _session->GetRemoteAddress();
-    _session->_analyser->Enable();
-    _session->_analyser->LoadFromDB();
+    //_session->_analyser->Enable();
+   // _session->_analyser->LoadFromDB();
 
     sWorld.AddFingerprint(_fingerprint, _session->GetUsername());
 

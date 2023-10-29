@@ -22665,7 +22665,11 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
 
         if (cVictim->IsRacialLeader())
         {
-            m_honorMgr.Add(488.0, HONORABLE, cVictim);
+			if (sWorld.IsPvPRealm())
+				m_honorMgr.Add(732.0, HONORABLE, cVictim);
+			else
+				m_honorMgr.Add(488.0, HONORABLE, cVictim);			
+
             return;
         }
     }
@@ -23031,9 +23035,9 @@ void Player::MailHardcoreModeRewards(uint32 level)
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
-    if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
+    if (level == 60 /*&& GetSession()->GetSecurity() == SEC_PLAYER*/)
     {
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
+        LoginDatabase.PExecute("INSERT INTO `shop_coins` (`id`, `coins`) VALUES (%u, 200) ON DUPLICATE KEY UPDATE `coins` = `coins` + 200", GetSession()->GetAccountId()); 
         ChatHandler(this).SendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 in Turtle Mode have not gone unnoticed. We've added additional 200 Turtle Tokes to your account balance!|r");
     }
 }
@@ -23048,7 +23052,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
         case 50:
             sWorld.SendWorldTextChecked(50301, [level](Player* player) -> bool
             {
-                uint32 minLevel = 40;
+                uint32 minLevel = 20;
                 auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
                 if (levelCheck.has_value())
                     minLevel = std::atoi(levelCheck.value().c_str());

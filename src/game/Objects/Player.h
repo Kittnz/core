@@ -1022,6 +1022,8 @@ class Player final: public Unit
         uint32 m_gmInvisibilityLevel;
         uint32 m_currentTicketCounter;
         uint32 _playerOptions;
+        bool m_shopAllowed = true;
+        bool m_shopTransactionInProgress = false;
     public:
         bool IsAcceptTickets() const { return GetSession()->GetSecurity() >= SEC_DEVELOPER && (m_ExtraFlags & PLAYER_EXTRA_GM_ACCEPT_TICKETS); }
         void SetAcceptTicket(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_GM_ACCEPT_TICKETS; else m_ExtraFlags &= ~PLAYER_EXTRA_GM_ACCEPT_TICKETS; }
@@ -1041,6 +1043,11 @@ class Player final: public Unit
         void SetPvPDeath(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_PVP_DEATH; else m_ExtraFlags &= ~PLAYER_EXTRA_PVP_DEATH; }
         void SetGodMode(bool on) { SetOption(PLAYER_CHEAT_GOD, on); }
         bool IsGod() const { return HasOption(PLAYER_CHEAT_GOD); }
+
+        void SetShopAllowed(bool allowed) { m_shopAllowed = allowed; }
+        bool IsShopAllowed() const { return m_shopAllowed; }
+        bool IsShopTransactionInprogress() const { return m_shopTransactionInProgress; }
+        void SetShopTransactionInProgress(bool state) { m_shopTransactionInProgress = state; }
 
         bool HasOption(uint32 o) const { return (_playerOptions & o); }
         void EnableOption(uint32 o)    { _playerOptions |= o; }

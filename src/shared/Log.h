@@ -179,7 +179,9 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         discordCoreLogFile = nullptr;
 
-        
+        if (apiLogFile != nullptr)
+            fclose(apiLogFile);
+        apiLogFile = nullptr;
 
         for (auto& logFile : logFiles)
         {
@@ -276,6 +278,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* wardenLogfile;
         FILE* anticheatLogfile;
         FILE* discordLogFile;
+        FILE* apiLogFile;
         FILE* discordCoreLogFile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;

@@ -486,7 +486,7 @@ uint32 Database::GetTransactionSerialId()
     return 0;
 }
 
-bool Database::CommitTransaction()
+bool Database::CommitTransaction(std::function<void(bool)>* callback)
 {
     if (!m_pAsyncConn)
     {
@@ -503,12 +503,20 @@ bool Database::CommitTransaction()
     }
 
     //if async execution is not available
-    if(!m_bAllowAsyncTransactions)
-        return CommitTransactionDirect();
+    if (!m_bAllowAsyncTransactions)
+    {
+        bool res = CommitTransactionDirect();
+        if (callback)
+            (*callback)(res);
+        return res;
+    }
 
     //add SqlTransaction to the async queue
     // if serial ID > 0, add to the serial delay queue
     SqlTransaction *trans = m_TransStorage->detach();
+    if (callback)
+        trans->SetCallback(callback);
+
     if (trans->GetSerialId() > 0)
         AddToSerialDelayQueue(trans);
     else

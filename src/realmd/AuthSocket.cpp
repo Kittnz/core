@@ -386,6 +386,15 @@ bool AuthSocket::_HandleLogonChallenge()
     // Whether to continue handling the logon after prechecks or not
     bool handle_logon{ true };
 
+    // Temporary restrict build 7070 to CH realms!
+
+    if (_build == 7070)
+    {
+        pkt << (uint8)WOW_FAIL_VERSION_INVALID;
+        BASIC_LOG("[AuthChallenge] ip '%s' tries to login with forbidden build number!", get_remote_address().c_str());
+
+        handle_logon = false;
+    }
 
     ///- Verify that this IP is not in the ip_banned table
     // No SQL injection possible (paste the IP address as passed by the socket)
@@ -427,6 +436,7 @@ bool AuthSocket::_HandleLogonChallenge()
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
         result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank,current_realm,active FROM account WHERE username = '%s'",_safelogin.c_str ()));
+
         if (result)
         {
             Field* fields = result->Fetch();
@@ -482,7 +492,7 @@ bool AuthSocket::_HandleLogonChallenge()
                 return true;
             }
 
-           /* if (current_realm)
+			/* if (current_realm)
             {
                 pkt << (uint8)WOW_FAIL_ALREADY_ONLINE;
                 send((char const*)pkt.contents(), pkt.size());
