@@ -1428,8 +1428,6 @@ void World::LoadConfigSettings(bool reload)
 
     // Enforce English only on EU realms:
     setConfig(CONFIG_BOOL_ENFORCED_ENGLISH, "EnforceEnglish", false);
-    // SEA realms:
-    setConfig(CONFIG_BOOL_SEA_REALM, "NiHao", false);
 
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
     setConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL, "AutoPDump.MinCharLevel", 30);
