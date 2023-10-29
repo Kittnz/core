@@ -714,6 +714,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_WHO_LIST,            "AllowTwoSide.WhoList", false);
     setConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND,          "AllowTwoSide.AddFriend", false);
 
+    setConfig(CONFIG_FLOAT_MAX_FACTION_IMBALANCE, "MaxFactionImbalance", 0.1f);
+
     setConfig(CONFIG_UINT32_STRICT_PLAYER_NAMES,  "StrictPlayerNames",  0);
     setConfig(CONFIG_UINT32_STRICT_CHARTER_NAMES, "StrictCharterNames", 0);
     setConfig(CONFIG_UINT32_STRICT_PET_NAMES,     "StrictPetNames",     0);
@@ -1372,6 +1374,10 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
 
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
+    setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
+
+    setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
+
     setConfig(CONFIG_BOOL_LOAD_LOCALES, "LoadLocales", true);
 
     setConfig(CONFIG_BOOL_ENABLE_FACTION_BALANCE, "FactionBalance.Enable", false);
@@ -2132,6 +2138,9 @@ void World::SetInitialWorldSettings()
 
     sLog.outInfo("Beginning inactive character deletion...");
     CharacterDatabaseCleaner::DeleteInactiveCharacters();
+
+    sLog.outInfo("Loading active players per faction...");
+    sObjectMgr.LoadActivePlayersPerFaction();
 
     sLog.outInfo("Loading RBAC for chat commands...");
     ChatHandler::LoadRbacPermissions();
