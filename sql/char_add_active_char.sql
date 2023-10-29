@@ -1,2 +1,0 @@
-ALTER TABLE `characters`
-	ADD COLUMN `active` TINYINT UNSIGNED NOT NULL DEFAULT '1' AFTER `xp_gain`;
