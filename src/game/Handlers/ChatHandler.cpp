@@ -864,13 +864,29 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                     }
 
+                    if (sWorld.IsPvPRealm())
+                    {
+                        if (channel == "WorldH")
+                        {
+                            channelMgr(HORDE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                        }
+
+                        if (channel == "WorldA")
+                        {
+                            channelMgr(ALLIANCE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                        }
+                    }
+
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
                     {
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
-                        ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
-                            , msg.c_str()).c_str());
+                        if (lang != LANG_ADDON && channel == u8"World")
+                        {
+                            ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
+                                , msg.c_str()).c_str());
+                        }
 
                         if (channel == u8"World" && lang != LANG_ADDON)
                         {
