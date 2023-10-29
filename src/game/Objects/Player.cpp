@@ -22684,7 +22684,11 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
 
         if (cVictim->IsRacialLeader())
         {
-            m_honorMgr.Add(732.0, HONORABLE, cVictim);
+			if (sWorld.IsPvPRealm())
+				m_honorMgr.Add(732.0, HONORABLE, cVictim);
+			else
+				m_honorMgr.Add(488.0, HONORABLE, cVictim);			
+
             return;
         }
     }
