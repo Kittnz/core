@@ -476,6 +476,9 @@ CREATE TABLE `shop_logs`  (
   INDEX `time`(`time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 148122 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+ALTER TABLE `shop_logs`
+	ADD COLUMN `realm_id` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `refunded`;
+
 -- ----------------------------
 -- Table structure for statistics_online
 -- ----------------------------

@@ -1,3 +1,23 @@
+-- Deleted Mysterious Stranger spawns:
+DELETE FROM creature WHERE id = 81030;
+
+-- Higher values for BG min teams.
+
+UPDATE `battleground_template` SET `min_players_per_team` = 30, `max_players_per_team` = 40, `min_level` = 51, `max_level` = 60, `alliance_win_spell` = 24955, `alliance_lose_spell` = 24954, `horde_win_spell` = 24955, `horde_lose_spell` = 24954, `alliance_start_location` = 611, `horde_start_location` = 610, `player_loot_id` = 1 WHERE `id` = 1;
+UPDATE `battleground_template` SET `min_players_per_team` = 8, `max_players_per_team` = 10, `min_level` = 0, `max_level` = 60, `alliance_win_spell` = 24951, `alliance_lose_spell` = 24950, `horde_win_spell` = 24951, `horde_lose_spell` = 24950, `alliance_start_location` = 769, `horde_start_location` = 770, `player_loot_id` = 0 WHERE `id` = 2;
+UPDATE `battleground_template` SET `min_players_per_team` = 10, `max_players_per_team` = 15, `min_level` = 0, `max_level` = 60, `alliance_win_spell` = 24953, `alliance_lose_spell` = 24952, `horde_win_spell` = 24953, `horde_lose_spell` = 24952, `alliance_start_location` = 890, `horde_start_location` = 889, `player_loot_id` = 0 WHERE `id` = 3;
+UPDATE `battleground_template` SET `min_players_per_team` = 3, `max_players_per_team` = 3, `min_level` = 0, `max_level` = 60, `alliance_win_spell` = 29129, `alliance_lose_spell` = 29128, `horde_win_spell` = 29129, `horde_lose_spell` = 29128, `alliance_start_location` = 9000, `horde_start_location` = 9001, `player_loot_id` = 0 WHERE `id` = 4;
+UPDATE `battleground_template` SET `min_players_per_team` = 14, `max_players_per_team` = 20, `min_level` = 51, `max_level` = 60, `alliance_win_spell` = 0, `alliance_lose_spell` = 0, `horde_win_spell` = 0, `horde_lose_spell` = 0, `alliance_start_location` = 700, `horde_start_location` = 701, `player_loot_id` = 0 WHERE `id` = 5;
+
+-- Shellcoin BoP:
+
+UPDATE item_template SET bonding = 1 WHERE name = 'Shellcoin';
+
+-- Remove War Mode glyph:
+
+DELETE FROM npc_vendor WHERE item = 80060;
+DELETE FROM npc_vendor_template WHERE item = 80060;
+
 -- Mark all Paladin loot as Alliance only.
 UPDATE `creature_loot_template` SET `condition_id`=3 WHERE `condition_id`=0 && `item` IN (6953, 9607, 16409, 16410, 16411, 16412, 16433, 16434, 16435, 16436, 16469, 16470, 16471, 16472, 16473, 16474, 16475, 16476, 16853, 16854, 16855, 16856, 16857, 16858, 16859, 16860, 16951, 16952, 16953, 16954, 16955, 16956, 16957, 16958, 18359, 18472, 18749, 18752, 18864, 19343, 19579, 19585, 19586, 19588, 19783, 19815, 19825, 19826, 19827, 19952, 20042, 20049, 20058, 20106, 20107, 20108, 20109, 20110, 20111, 20177, 20178, 20179, 20180, 20181, 20182, 20183, 20184, 20185, 21387, 21388, 21389, 21390, 21391, 21395, 21396, 21397, 21889, 22400, 22401, 22402, 22424, 22425, 22426, 22427, 22428, 22429, 22430, 22431, 23006, 23066, 23201, 23203, 23272, 23273, 23274, 23275, 23276, 23277, 23666, 23667, 23668, 51270, 51271, 51272, 51273, 51274, 51275, 51276, 51799, 51804, 61203, 61337, 61443);
 UPDATE `reference_loot_template` SET `condition_id`=3 WHERE `condition_id`=0 && `item` IN (6953, 9607, 16409, 16410, 16411, 16412, 16433, 16434, 16435, 16436, 16469, 16470, 16471, 16472, 16473, 16474, 16475, 16476, 16853, 16854, 16855, 16856, 16857, 16858, 16859, 16860, 16951, 16952, 16953, 16954, 16955, 16956, 16957, 16958, 18359, 18472, 18749, 18752, 18864, 19343, 19579, 19585, 19586, 19588, 19783, 19815, 19825, 19826, 19827, 19952, 20042, 20049, 20058, 20106, 20107, 20108, 20109, 20110, 20111, 20177, 20178, 20179, 20180, 20181, 20182, 20183, 20184, 20185, 21387, 21388, 21389, 21390, 21391, 21395, 21396, 21397, 21889, 22400, 22401, 22402, 22424, 22425, 22426, 22427, 22428, 22429, 22430, 22431, 23006, 23066, 23201, 23203, 23272, 23273, 23274, 23275, 23276, 23277, 23666, 23667, 23668, 51270, 51271, 51272, 51273, 51274, 51275, 51276, 51799, 51804, 61203, 61337, 61443);
@@ -649,6 +669,3 @@ UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30569 && `it
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30571 && `item`=16949 && `groupid`=1;
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30572 && `item`=16839 && `groupid`=1;
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30573 && `item`=16843 && `groupid`=1;
-
-
-
