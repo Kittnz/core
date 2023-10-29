@@ -866,11 +866,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     {
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
     }
-    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
-    {
-        if (pCurrChar->GetLevel() > 10 && !pCurrChar->HasItemCount(67005) && !pCurrChar->HasSpell(45023) && !pCurrChar->HasItemCount(80004))
-            pCurrChar->AddItem(67005, 1);
-    }
 
     pCurrChar->CheckInfernoInvite();
 

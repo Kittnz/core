@@ -29,3 +29,5 @@ DELETE FROM `item_loot_template` WHERE `entry` = 91785;
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (91785, 51889, 100, 1, 1, 1, 0), -- Hyjal Bear
 (91785, 91780, 100, 2, 1, 1, 0); -- Lovely Green Shirt
+
+
