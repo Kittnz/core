@@ -388,7 +388,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     // Temporary restrict build 7070 to CH realms!
 
-    if (_build == 7070)
+    if (_build == 7070 && sConfig.GetBoolDefault("Network.CN", false))
     {
         pkt << (uint8)WOW_FAIL_VERSION_INVALID;
         BASIC_LOG("[AuthChallenge] ip '%s' tries to login with forbidden build number!", get_remote_address().c_str());
