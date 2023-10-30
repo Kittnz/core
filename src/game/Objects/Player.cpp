@@ -22732,11 +22732,6 @@ void Player::RewardHonorOnDeath()
             if (!rewItr->IsHonorOrXPTarget(this))
                 continue;
 
-            if (!InBattleGround())
-            {
-                honorRate = 0.25F;
-            }
-
             uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
@@ -22756,11 +22751,6 @@ void Player::RewardHonorOnDeath()
 
         if (rewPoints)
         {
-            if (!InBattleGround())
-            {
-                rewPoints *= 0.25F;
-            }
-
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
     }
