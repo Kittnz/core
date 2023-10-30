@@ -22699,7 +22699,7 @@ void Player::RewardHonorOnDeath()
         }
     }
 
-    if (!totalDamage)
+    if (!totalDamage || totalDamage >= INT_MAX)
     {
         m_damageTakenHistory.clear();
         return;
@@ -22735,7 +22735,7 @@ void Player::RewardHonorOnDeath()
             int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-            if (rewPoints && rewPoints > 0)
+            if (rewPoints > 0)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
             else
             {
@@ -22751,10 +22751,10 @@ void Player::RewardHonorOnDeath()
         if (!rewItr.first->IsHonorOrXPTarget(this))
             continue;
 
-        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * float(rewItr.second) / float(totalDamage));
         rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-        if (rewPoints && rewPoints > 0)
+        if (rewPoints > 0)
         {
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
