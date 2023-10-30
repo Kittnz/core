@@ -935,6 +935,8 @@ class World
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
+        bool IsChina() const { return GetDefaultDbcLocale() == 4; }
+
         /// Get the path where data (dbc, maps) are stored on disk
         std::string GetDataPath() const { return m_dataPath; }
 
@@ -1339,14 +1341,6 @@ class World
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
         std::thread m_shopThread;
-
-        struct ApiServerDeleter
-        {
-            void operator()(HttpApi::ApiServer* p);
-        };
-
-
-        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         struct ApiServerDeleter
         {

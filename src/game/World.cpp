@@ -3303,10 +3303,6 @@ void World::UpdateSessions(uint32 diff)
         {
             itr++;
         }
-        else
-        {
-            ++itr;
-        }
     }
 
 
