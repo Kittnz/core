@@ -276,7 +276,4 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
         sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "notenoughtokens") });
         return;
     }
-
-	GetBalance(balanceCallback, _owner->GetSession()->GetAccountId(), _owner->GetGUIDLow());
-	return "";
 }

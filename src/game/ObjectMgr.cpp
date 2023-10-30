@@ -6605,29 +6605,32 @@ void ObjectMgr::LoadReservedPlayersNames()
     }
     while (result->NextRow());
 
-    std::unique_ptr<QueryResult> result2 (CharacterDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
-
-    if (!result2)
+    if (sWorld.IsChina())
     {
-        return;
-    }
+        std::unique_ptr<QueryResult> result2(CharacterDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
 
-    do
-    {
-        Field* fields = result2->Fetch();
-
-        std::string name = fields[0].GetCppString();
-        std::wstring wstr;
-        if (!Utf8toWStr(name, wstr))
+        if (!result2)
         {
-            sLog.outError("Table `char_transfer_names` have invalid name: %s", name.c_str());
-            continue;
+            return;
         }
 
-        wstrToLower(wstr);
+        do
+        {
+            Field* fields = result2->Fetch();
 
-        m_ReservedNames.insert(wstr);
-    } while (result2->NextRow());
+            std::string name = fields[0].GetCppString();
+            std::wstring wstr;
+            if (!Utf8toWStr(name, wstr))
+            {
+                sLog.outError("Table `char_transfer_names` have invalid name: %s", name.c_str());
+                continue;
+            }
+
+            wstrToLower(wstr);
+
+            m_ReservedNames.insert(wstr);
+        } while (result2->NextRow());
+    }
 }
 
 void ObjectMgr::AddReservedName(std::string name)
