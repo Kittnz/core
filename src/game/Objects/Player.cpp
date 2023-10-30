@@ -22732,11 +22732,16 @@ void Player::RewardHonorOnDeath()
             if (!rewItr->IsHonorOrXPTarget(this))
                 continue;
 
-            uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
+            int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-            if (rewPoints)
+            if (rewPoints && rewPoints > 0)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
+            else
+            {
+                sLog.outError("HONOR GIVEN %i NEGATIVE. %f, %f, %f", rewPoints, honorRate, HonorMgr::HonorableKillPoints(rewItr, this, 1),
+                    rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN));
+            }
         }
     }
 
@@ -22746,12 +22751,17 @@ void Player::RewardHonorOnDeath()
         if (!rewItr.first->IsHonorOrXPTarget(this))
             continue;
 
-        uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
         rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-        if (rewPoints)
+        if (rewPoints && rewPoints > 0)
         {
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
+        }
+        else
+        {
+            sLog.outError("HONOR GIVEN %i NEGATIVE. %f, %f, %f", rewPoints, rewItr.second / float(totalDamage), HonorMgr::HonorableKillPoints(rewItr.first, this, 1),
+                rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN));
         }
     }
 
