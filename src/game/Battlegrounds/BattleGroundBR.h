@@ -32,6 +32,7 @@ class BattleGroundBR : public BattleGround
     public:
         /* Construction */
         BattleGroundBR();
+        BattleGroundBR(const BattleGroundBR& br);
         void Update(uint32 diff);
 
         static uint32 GetNextArenaId();

@@ -29,6 +29,7 @@
 #include "SqlPreparedStatement.h"
 #include <memory>
 #include <thread>
+#include <optional>
 #include <atomic>
 
 class SqlTransaction;
@@ -196,6 +197,10 @@ class Database
         // PQuery / static
         template<typename ParamType1>
             bool AsyncPQuery(void (*method)(QueryResult*, ParamType1), ParamType1 param1, const char *format,...) ATTR_PRINTF(4,5);
+
+        template<typename ParamType1>
+            bool AsyncPQueryOv(void (*method)(QueryResult*, ParamType1), ParamType1 param1, const char* format, ...) ATTR_PRINTF(4, 5);
+
         template<typename ParamType1, typename ParamType2>
             bool AsyncPQuery(void (*method)(QueryResult*, ParamType1, ParamType2), ParamType1 param1, ParamType2 param2, const char *format,...) ATTR_PRINTF(5,6);
         template<typename ParamType1, typename ParamType2, typename ParamType3>
@@ -227,7 +232,7 @@ class Database
         bool BeginTransaction(uint32 serialId = 0);
         bool InTransaction();
         uint32 GetTransactionSerialId();
-        bool CommitTransaction();
+        bool CommitTransaction(std::function<void(bool)>* callback = nullptr);
         bool RollbackTransaction();
         //for sync transaction execution
         bool CommitTransactionDirect();

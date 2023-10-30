@@ -51,7 +51,7 @@ namespace DiscordBot
             return;
         }
 
-        sLog.outDiscord(string_format("Executing command %s for Discord user %s (%llu). Account (%s / %u)", command.c_str(), src.issuer.format_username().c_str(),
+        sLog.outDiscord("%s", string_format_depr("Executing command %s for Discord user %s (%llu). Account (%s / %u)", command.c_str(), src.issuer.format_username().c_str(),
             static_cast<uint64>(src.issuer.id), authinfo->gameAccountName.c_str(), authinfo->gameAccountId).c_str());
 
         std::string commandParam;

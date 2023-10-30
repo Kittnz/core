@@ -42,8 +42,10 @@
 #include "Anticheat.h"
 #include "AccountMgr.h"
 #include "Config/Config.h"
+#include "Database/DatabaseImpl.h"
 #include "Shop/ShopMgr.h"
 #include "GMTicketMgr.h"
+
 
 #include "rapidjson/document.h"
 #include "rapidjson/rapidjson.h"
@@ -175,6 +177,19 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_MESSAGECHAT with type %u, lang %u, message %s.", type, lang, message.c_str());
     };
 
+    struct MessageChatMonitor
+    {
+        std::string text = "NO MESSAGE";
+        std::function<void(std::string)> _logger;
+        MessageChatMonitor(std::function<void(std::string)> logger) : _logger(logger) {}
+        ~MessageChatMonitor()
+        {
+            _logger(text);
+        }
+    };
+
+    MessageChatMonitor mon{ LogPerformance };
+
     recv_data >> type;
     recv_data >> lang;
 
@@ -281,6 +296,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             recv_data >> channel;
             recv_data >> msg;
+            mon.text = msg;
 
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
@@ -308,6 +324,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_HARDCORE:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
             if (msg.empty())
@@ -318,6 +335,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_DND:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!CheckChatMessageValidity(msg, lang, type))
                 return;
             break;
@@ -370,7 +388,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         }
 #endif
-
         if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
         {
             // syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
@@ -485,7 +502,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         }
     }
-
     // Shop Addon Coms
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
     {
@@ -505,7 +521,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 std::string categories = "Categories:";
 
                 for (auto &itr : sObjectMgr.GetShopCategoriesList())
-                    if (sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
+                    if (sWorld.GetDefaultDbcLocale() == 4 /* China */)
                         categories += std::to_string(itr.first) + "=" + itr.second.Name_loc4 + "="+itr.second.Icon+";";
                     else
                         categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
@@ -544,7 +560,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                     if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
                     {
-                        if(sWorld.getConfig(CONFIG_BOOL_SEA_REALM))
+                        if(sWorld.GetDefaultDbcLocale() == 4 /* China */)
                             _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
                             + itr.second.Description_loc4 + "="
                             + std::to_string(itr.second.Price) + "="
@@ -583,10 +599,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 {
                     return;
                 }
-
                 if (!sShopMgr.RequestPurchase(GetAccountId(), _player->GetGUIDLow(), itemId))
                     SendNotification("Purchase in progress. Please wait.");
             }
+
             LogPerformance(msg);
             return;
 
@@ -864,13 +880,29 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             return;
                     }
 
+                    if (sWorld.IsPvPRealm())
+                    {
+                        if (channel == "WorldH")
+                        {
+                            channelMgr(HORDE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                        }
+
+                        if (channel == "WorldA")
+                        {
+                            channelMgr(ALLIANCE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                        }
+                    }
+
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
                     {
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
-                        ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
-                            , msg.c_str()).c_str());
+                        if (lang != LANG_ADDON && channel == u8"World")
+                        {
+                            ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
+                                , msg.c_str()).c_str());
+                        }
 
                         if (channel == u8"World" && lang != LANG_ADDON)
                         {

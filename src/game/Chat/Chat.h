@@ -90,6 +90,9 @@ enum PlayerChatTag
 class ChatHandler
 {
     public:
+
+        friend struct LookupPlayerHandler;
+
         explicit ChatHandler(WorldSession* session);
         explicit ChatHandler(Player* player);
         virtual ~ChatHandler();

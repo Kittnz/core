@@ -47,6 +47,23 @@ BattleGroundBR::BattleGroundBR()
     m_arenaId = GetNextArenaId();
 }
 
+
+//somehow THIS is the reconstructuring constructor call.
+BattleGroundBR::BattleGroundBR(const BattleGroundBR& br) : BattleGround(br)
+{
+    m_StartMessageIds[BG_STARTING_EVENT_FIRST] = 0;
+    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
+    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = LANG_ARENA_FIFTEEN_SECONDS;
+    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_BEGUN;
+
+    m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_1M;
+    m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
+    m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
+    m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+
+    m_arenaId = GetNextArenaId();
+}
+
 void BattleGroundBR::Update(uint32 diff)
 {
     // prevent players from falling under the floor
@@ -185,8 +202,10 @@ void BattleGroundBR::EndBattleGround(Team winner)
 
     // rewards
     bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
-    RewardReputationToTeam(1008, isBGWeekend ? 200 : 100, winner);
-    RewardReputationToTeam(1008, isBGWeekend ? 50 : 25, loser);
+
+    uint32 repGain = isBGWeekend ? 90 : 60;
+    RewardReputationToTeam(1008, repGain, winner);
+    RewardReputationToTeam(1008, repGain / 4, loser);
     RewardHonorToTeam(isBGWeekend ? 400 : 200, winner);
     RewardHonorToTeam(isBGWeekend ? 100 : 50, loser);
     

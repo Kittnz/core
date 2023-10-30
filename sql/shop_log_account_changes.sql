@@ -1,2 +1,0 @@
-ALTER TABLE `shop_logs`
-	ADD COLUMN `realm_id` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `refunded`;
