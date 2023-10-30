@@ -587,7 +587,7 @@ void WorldSession::LogoutPlayer(bool Save)
             }
 
             if (!gmOnline)
-                sWorld.SendDiscordMessage(1085875609265258496, "ALERT <@&1098560329623023696> , last GM just logged out.");
+                sWorld.SendDiscordMessage(1168456188363542579, "ALERT <@&1098560329623023696> , last GM just logged out.");
         }
 
         ///- If the player just died before logging out, make him appear as a ghost
