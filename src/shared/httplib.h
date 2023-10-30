@@ -8654,6 +8654,7 @@ SSLClient::verify_host_with_subject_alt_name(X509 *server_cert) const {
     addr_len = sizeof(struct in_addr);
   }
 #endif
+#endif
 
   auto alt_names = static_cast<const struct stack_st_GENERAL_NAME *>(
       X509_get_ext_d2i(server_cert, NID_subject_alt_name, nullptr, nullptr));
