@@ -370,10 +370,10 @@ void AccountAnalyser::LoadFromDB()
         return;
 
     //Get extended fingerprint history first.
-    LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadFingerprintsCallback,
+    LoginDatabase.AsyncPQueryUnsafe(&AccountAnalyser::LoadFingerprintsCallback,
         _session->GetAccountId(), string_format("SELECT * FROM `system_fingerprint_usage` WHERE `account` = {}", _session->GetAccountId()).c_str());
 
-    LoginDatabase.AsyncPQuery(&AccountAnalyser::LoadIPHistoryCallback,
+    LoginDatabase.AsyncPQueryUnsafe(&AccountAnalyser::LoadIPHistoryCallback,
         _session->GetAccountId(), string_format("SELECT `account_ip`, `login_count`, SUM(login_count) FROM `account_ip_logins` WHERE `account_id` = {}  ORDER BY `login_count` DESC", _session->GetAccountId()).c_str());
 
 }
