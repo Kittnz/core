@@ -25,7 +25,9 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 
 REPLACE INTO `locales_item` (`entry`, `name_loc4`, `description_loc4`) VALUES (91785, '精心包装的礼物','在乌龟魔兽中国服务器开服的首周期间，我们想送给你们每个人一个小小的欢迎礼物，感谢你们对我们一如既往的支持！我们希望继续与大家一起探索艾泽拉斯之谜中令人激动人心的旅程！');
 
-DELETE FROM `item_loot_template` WHERE `entry` = 91781;
+DELETE FROM `item_loot_template` WHERE `entry` = 91785;
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (91785, 51889, 100, 1, 1, 1, 0), -- Hyjal Bear
 (91785, 91780, 100, 2, 1, 1, 0); -- Lovely Green Shirt
+
+

@@ -125,6 +125,12 @@ void ChannelMgr::CreateDefaultChannels()
     GetOrCreateChannel("BotsDetector")->SetSecurityLevel(SEC_DEVELOPER);
     GetOrCreateChannel("ChatSpam")->SetSecurityLevel(SEC_MODERATOR);
     GetOrCreateChannel("LowLevelBots")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Global")->SetSecurityLevel(SEC_MODERATOR);
+    if (sWorld.IsPvPRealm())
+    {
+        GetOrCreateChannel("WorldH")->SetSecurityLevel(SEC_MODERATOR);
+        GetOrCreateChannel("WorldA")->SetSecurityLevel(SEC_MODERATOR);
+    }
 
     for (const auto& channel : channels)
         channel.second->SetAnnounce(false);

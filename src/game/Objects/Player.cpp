@@ -3525,12 +3525,6 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
-    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
-    {
-        if (level == 10 && !HasItemCount(67005) && !HasSpell(45023) && !HasItemCount(80004))
-            AddItem(67005, 1);
-    }
-
     // leave lower level bg queue on levelup
     for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
     {
@@ -22665,7 +22659,11 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
 
         if (cVictim->IsRacialLeader())
         {
-            m_honorMgr.Add(488.0, HONORABLE, cVictim);
+			if (sWorld.IsPvPRealm())
+				m_honorMgr.Add(732.0, HONORABLE, cVictim);
+			else
+				m_honorMgr.Add(488.0, HONORABLE, cVictim);			
+
             return;
         }
     }
@@ -22734,16 +22732,16 @@ void Player::RewardHonorOnDeath()
             if (!rewItr->IsHonorOrXPTarget(this))
                 continue;
 
-            if (!InBattleGround())
-            {
-                honorRate = 0.25F;
-            }
-
-            uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
+            int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-            if (rewPoints)
+            if (rewPoints && rewPoints > 0)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
+            else
+            {
+                sLog.outError("HONOR GIVEN %i NEGATIVE. %f, %f, %f", rewPoints, honorRate, HonorMgr::HonorableKillPoints(rewItr, this, 1),
+                    rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN));
+            }
         }
     }
 
@@ -22753,17 +22751,17 @@ void Player::RewardHonorOnDeath()
         if (!rewItr.first->IsHonorOrXPTarget(this))
             continue;
 
-        uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
         rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-        if (rewPoints)
+        if (rewPoints && rewPoints > 0)
         {
-            if (!InBattleGround())
-            {
-                rewPoints *= 0.25F;
-            }
-
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
+        }
+        else
+        {
+            sLog.outError("HONOR GIVEN %i NEGATIVE. %f, %f, %f", rewPoints, rewItr.second / float(totalDamage), HonorMgr::HonorableKillPoints(rewItr.first, this, 1),
+                rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN));
         }
     }
 
@@ -23031,9 +23029,9 @@ void Player::MailHardcoreModeRewards(uint32 level)
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
-    if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
+    if (level == 60 /*&& GetSession()->GetSecurity() == SEC_PLAYER*/)
     {
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
+        LoginDatabase.PExecute("INSERT INTO `shop_coins` (`id`, `coins`) VALUES (%u, 200) ON DUPLICATE KEY UPDATE `coins` = `coins` + 200", GetSession()->GetAccountId()); 
         ChatHandler(this).SendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 in Turtle Mode have not gone unnoticed. We've added additional 200 Turtle Tokes to your account balance!|r");
     }
 }
@@ -23048,7 +23046,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
         case 50:
             sWorld.SendWorldTextChecked(50301, [level](Player* player) -> bool
             {
-                uint32 minLevel = 40;
+                uint32 minLevel = 35;
                 auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
                 if (levelCheck.has_value())
                     minLevel = std::atoi(levelCheck.value().c_str());
