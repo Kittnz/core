@@ -64,7 +64,7 @@ namespace MMAP
 
         // we have to use single dtNavMeshQuery for every instance, since those are not thread safe
         NavMeshQuerySet navMeshQueries; // threadId to query
-        std::shared_timed_mutex navMeshQueries_lock;
+        std::shared_mutex navMeshQueries_lock;
         MMapTileSet mmapLoadedTiles; // maps [map grid coords] to [dtTile]
         std::mutex tilesLoading_lock;
     };
@@ -98,7 +98,7 @@ namespace MMAP
             static uint32 packTileID(int32 x, int32 y);
 
             MMapDataSet loadedMMaps;
-            std::shared_timed_mutex loadedMMaps_lock;
+            std::shared_mutex loadedMMaps_lock;
             MMapDataSet loadedModels;
 
             uint32 loadedTiles;

@@ -147,10 +147,10 @@ enum
 
     SPELL_APPARITION          = 25035,
 
-    GO_TYPE_PIERRE_ERR        = 0,
-    GO_TYPE_PIERRE_INF        = 1,
-    GO_TYPE_PIERRE_MOYENNE    = 2,
-    GO_TYPE_PIERRE_SUP        = 3,
+    GO_TYPE_ERROR              = 0,
+    GO_TYPE_LESSER_WIND_STONE  = 1,
+    GO_TYPE_WIND_STONE         = 2,
+    GO_TYPE_GREATER_WIND_STONE = 3,
 
     // Pierre moyenne
     ITEM_ACCES_PIERRE_MOYENNE = 20422,
@@ -174,20 +174,20 @@ struct Silithus_WindStonesBossData
 };
 static Silithus_WindStonesBossData const windStonesBosses[] =
 {
-    {GO_TYPE_PIERRE_INF,    1,  15209,  20416, 10685 },
-    {GO_TYPE_PIERRE_INF,    2,  15307,  20419, 10691 },
-    {GO_TYPE_PIERRE_INF,    3,  15212,  20418, 10690 },
-    {GO_TYPE_PIERRE_INF,    4,  15211,  20420, 10692 },
+    {GO_TYPE_LESSER_WIND_STONE,    1,  15209,  20416, 10685 },
+    {GO_TYPE_LESSER_WIND_STONE,    2,  15307,  20419, 10691 },
+    {GO_TYPE_LESSER_WIND_STONE,    3,  15212,  20418, 10690 },
+    {GO_TYPE_LESSER_WIND_STONE,    4,  15211,  20420, 10692 },
 
-    {GO_TYPE_PIERRE_MOYENNE,1,  15206,  20432, 10699 },
-    {GO_TYPE_PIERRE_MOYENNE,2,  15208,  20435, 10701 },
-    {GO_TYPE_PIERRE_MOYENNE,3,  15220,  20433, 10700 },
-    {GO_TYPE_PIERRE_MOYENNE,4,  15207,  20436, 10702 },
+    {GO_TYPE_WIND_STONE,           1,  15206,  20432, 10699 },
+    {GO_TYPE_WIND_STONE,           2,  15208,  20435, 10701 },
+    {GO_TYPE_WIND_STONE,           3,  15220,  20433, 10700 },
+    {GO_TYPE_WIND_STONE,           4,  15207,  20436, 10702 },
 
-    {GO_TYPE_PIERRE_SUP,    1,  15203,  20447, 10708 },
-    {GO_TYPE_PIERRE_SUP,    2,  15205,  20449, 10710 },
-    {GO_TYPE_PIERRE_SUP,    3,  15204,  20448, 10709 },
-    {GO_TYPE_PIERRE_SUP,    4,  15305,  20450, 10711 },
+    {GO_TYPE_GREATER_WIND_STONE,   1,  15203,  20447, 10708 },
+    {GO_TYPE_GREATER_WIND_STONE,   2,  15205,  20449, 10710 },
+    {GO_TYPE_GREATER_WIND_STONE,   3,  15204,  20448, 10709 },
+    {GO_TYPE_GREATER_WIND_STONE,   4,  15305,  20450, 10711 },
 };
 
 struct go_pierre_ventsAI: public GameObjectAI
@@ -202,13 +202,13 @@ struct go_pierre_ventsAI: public GameObjectAI
             case 180466:
             case 180539:
             case 180559:
-                return GO_TYPE_PIERRE_SUP;
+                return GO_TYPE_GREATER_WIND_STONE;
             // Pierre MOYENNE
             case 180554:
             case 180534:
             case 180502:
             case 180461:
-                return GO_TYPE_PIERRE_MOYENNE;
+                return GO_TYPE_WIND_STONE;
             // Pierre INF
             case 180456:
             case 180518:
@@ -216,9 +216,9 @@ struct go_pierre_ventsAI: public GameObjectAI
             case 180544:
             case 180549:
             case 180564:
-                return GO_TYPE_PIERRE_INF;
+                return GO_TYPE_LESSER_WIND_STONE;
             default:
-                return GO_TYPE_PIERRE_ERR;
+                return GO_TYPE_ERROR;
         }
     }
     uint32 SelectRandomBoss(uint32 stoneType)
@@ -258,15 +258,15 @@ struct go_pierre_ventsAI: public GameObjectAI
         switch (GetStoneType())
         {
             // Pierre SUP
-            case GO_TYPE_PIERRE_SUP:
+            case GO_TYPE_GREATER_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_ACCES_PIERRE_SUP))
                     playerHasAura = false;
             // Pierre MOYENNE
-            case GO_TYPE_PIERRE_MOYENNE:
+            case GO_TYPE_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_ACCES_PIERRE_MOYENNE))
                     playerHasAura = false;
             // Pierre INF
-            case GO_TYPE_PIERRE_INF:
+            case GO_TYPE_LESSER_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_SET_HEAD) ||
                     !user->HasItemWithIdEquipped(ITEM_SET_SHOULDERS) ||
                     !user->HasItemWithIdEquipped(ITEM_SET_CHEST))
@@ -318,13 +318,13 @@ struct go_pierre_ventsAI: public GameObjectAI
         ///- Let's find out which mob we have to summon.
         switch (stoneType)
         {
-            case GO_TYPE_PIERRE_SUP:
+            case GO_TYPE_GREATER_WIND_STONE:
                 textId = 10805;
                 break;
-            case GO_TYPE_PIERRE_MOYENNE:
+            case GO_TYPE_WIND_STONE:
                 textId = 10802;
                 break;
-            case GO_TYPE_PIERRE_INF:
+            case GO_TYPE_LESSER_WIND_STONE:
                 textId = 10686;
                 break;
         }
@@ -357,13 +357,13 @@ struct go_pierre_ventsAI: public GameObjectAI
         {
             switch (stoneType)
             {
-                case GO_TYPE_PIERRE_SUP:
+                case GO_TYPE_GREATER_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_ACCES_PIERRE_SUP);
                 // no break
-                case GO_TYPE_PIERRE_MOYENNE:
+                case GO_TYPE_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_ACCES_PIERRE_MOYENNE);
                 // no break
-                case GO_TYPE_PIERRE_INF:
+                case GO_TYPE_LESSER_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_SET_SHOULDERS);
                     player->DestroyEquippedItem(ITEM_SET_CHEST);
                     player->DestroyEquippedItem(ITEM_SET_HEAD);
@@ -383,14 +383,13 @@ struct go_pierre_ventsAI: public GameObjectAI
 
         ///- Mark stone as used.
         me->UseDoorOrButton();
-        if (stoneType == GO_TYPE_PIERRE_SUP)
-            me->SetRespawnTime(3600);
-        else if (stoneType == GO_TYPE_PIERRE_MOYENNE)
+        if (stoneType == GO_TYPE_GREATER_WIND_STONE)
+            me->SetRespawnTime(10800);
+        else if (stoneType == GO_TYPE_WIND_STONE)
+            me->SetRespawnTime(900);
+        else if (stoneType == GO_TYPE_LESSER_WIND_STONE)
             me->SetRespawnTime(300);
-        else if (stoneType == GO_TYPE_PIERRE_INF)
-            me->SetRespawnTime(90);
-        else
-            me->SetRespawnTime(me->ComputeRespawnDelay());
+
         return true;
     }
 };

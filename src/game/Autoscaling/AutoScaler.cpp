@@ -28,7 +28,7 @@ void AutoScaler::LoadFromDB()
 class Read_Mutex_Guard
 {
 public:
-    explicit Read_Mutex_Guard(std::shared_timed_mutex& mut)
+    explicit Read_Mutex_Guard(std::shared_mutex& mut)
         : mut(mut)
     {	// construct and lock
         mut.lock_shared();
@@ -41,7 +41,7 @@ public:
     Read_Mutex_Guard(const Read_Mutex_Guard&) = delete;
     Read_Mutex_Guard& operator=(const Read_Mutex_Guard&) = delete;
 private:
-    std::shared_timed_mutex& mut;
+    std::shared_mutex& mut;
 };
 
 static uint32 disabledMapIds[] =

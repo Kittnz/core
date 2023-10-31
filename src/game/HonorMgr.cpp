@@ -812,7 +812,7 @@ void HonorMgr::Load(QueryResult* result)
 bool HonorMgr::Add(float cp, uint8 type, Unit* source)
 {
     // Prevent give fake records to db with 0 honor
-    if (!cp || !m_owner)
+    if (cp <= 0 || !m_owner)
         return false;
 
     // If not source, then give yourself

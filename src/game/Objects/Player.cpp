@@ -2266,7 +2266,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     SetMap(newmap);
 
     {
-        std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+        std::shared_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
         for (const ObjectGuid& guid : m_visibleGUIDs)
         {
             WorldPacket data(SMSG_DESTROY_OBJECT, 8);
@@ -19523,7 +19523,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, WorldObject* targe
             ObjectGuid t_guid = target->GetObjectGuid();
 
             target->DestroyForPlayer(this);
-            std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+            std::unique_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
             m_visibleGUIDs.erase(t_guid);
             lock.unlock();
 
@@ -19541,7 +19541,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, WorldObject* targe
             target->SendCreateUpdateToPlayer(this);
             if (target->GetTypeId() != TYPEID_GAMEOBJECT || !((GameObject*)target)->IsTransport())
             {
-                std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+                std::unique_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
                 m_visibleGUIDs.insert(target->GetObjectGuid());
                 lock.unlock();
 
@@ -19611,7 +19611,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateD
                     ((Creature*)target)->GetThreatManager().modifyThreatPercent(this, -101);
 
             target->BuildOutOfRangeUpdateBlock(&data);
-            std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+            std::unique_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
             m_visibleGUIDs.erase(t_guid);
             lock.unlock();
 
@@ -19625,7 +19625,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateD
         {
             visibleNow.insert(target);
             target->BuildCreateUpdateBlockForPlayer(&data, this);
-            std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+            std::unique_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
             UpdateVisibilityOf_helper(m_visibleGUIDs, target);
             lock.unlock();
 
@@ -20366,7 +20366,7 @@ void Player::UpdateForQuestWorldObjects()
 
     uint32 count = 0;
     UpdateData upd;
-    std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+    std::shared_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
     for (const auto& guid : m_visibleGUIDs)
     {
         if (guid.IsGameObject())
@@ -22523,7 +22523,7 @@ void Player::SendDestroyGroupMembers(bool includingSelf)
 {
     if (Group* group = GetGroup())
     {
-        std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+        std::unique_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
         for (const Group::MemberSlot& itr : group->GetMemberSlots())
         {
             if (!includingSelf && itr.guid == GetObjectGuid())
@@ -22543,7 +22543,7 @@ void Player::SendDestroyGroupMembers(bool includingSelf)
 void Player::RefreshBitsForVisibleUnits(UpdateMask* mask, uint32 objectTypeMask)
 {
     UpdateData data;
-    std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+    std::shared_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
     for (const ObjectGuid& guid : m_visibleGUIDs)
     {
         if (Object* obj = GetObjectByTypeMask(guid, TypeMask(objectTypeMask)))
@@ -22699,7 +22699,7 @@ void Player::RewardHonorOnDeath()
         }
     }
 
-    if (!totalDamage)
+    if (!totalDamage || totalDamage >= INT_MAX)
     {
         m_damageTakenHistory.clear();
         return;
@@ -22735,7 +22735,7 @@ void Player::RewardHonorOnDeath()
             int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-            if (rewPoints && rewPoints > 0)
+            if (rewPoints > 0)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
             else
             {
@@ -22751,10 +22751,10 @@ void Player::RewardHonorOnDeath()
         if (!rewItr.first->IsHonorOrXPTarget(this))
             continue;
 
-        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
+        int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * float(rewItr.second) / float(totalDamage));
         rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
 
-        if (rewPoints && rewPoints > 0)
+        if (rewPoints > 0)
         {
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
@@ -22951,7 +22951,7 @@ bool Player::IsInVisibleList(WorldObject const* u) const
 {
     if (u == this)
         return true;
-    std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+    std::shared_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);
     bool atClient = m_visibleGUIDs.find(u->GetObjectGuid()) != m_visibleGUIDs.end();
     return atClient; 
 }

@@ -1192,7 +1192,9 @@ void BattleGround::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
             break;
         case SCORE_BONUS_HONOR:                             // Honor bonus
             // reward honor instantly
-            if (Source->GetHonorMgr().Add(value, BONUS))
+            if (value >= INT_MAX)
+                sLog.outError("BattleGround::UpdatePlayerScore attempt to give %i honor to player %s.", value, Source->GetName());
+            else if (Source->GetHonorMgr().Add(value, BONUS))
                 itr->second->BonusHonor += value;
             break;
         default:
