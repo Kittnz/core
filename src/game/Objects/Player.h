@@ -2911,6 +2911,7 @@ public:
 	public:
 		bool HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
 		std::string SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary);
+        void CountTalentsSpentInSavedSpec(uint32 specIndex, std::vector<uint32>& vTreeTalents);
 		bool ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
 		bool SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
 		// Xerron Dual Spec End

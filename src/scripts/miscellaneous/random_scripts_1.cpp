@@ -1096,13 +1096,20 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+enum
+{
+    BCT_RESET_TALENTS = 66833,
+    BCT_SAVE_PRIMARY_SPEC = 66834,
+    BCT_SAVE_SECONDARY_SPEC = 66835,
+};
+
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
 	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
         std::string activateText{};
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66833, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, BCT_RESET_TALENTS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
 		// Primary
 		if (pPlayer->HasSavedTalentSpec(1))
@@ -1111,7 +1118,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 		}
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66834, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, BCT_SAVE_PRIMARY_SPEC, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
 		// Secondary
 		if (pPlayer->HasSavedTalentSpec(2))
@@ -1120,7 +1127,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 		}
 
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, 66835, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, BCT_SAVE_SECONDARY_SPEC, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 	}
 
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
@@ -1150,11 +1157,17 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
     }
     else if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pPlayer->SaveTalentSpec(1);
+        if (pPlayer->GetFreeTalentPoints())
+            pPlayer->GetSession()->SendNotification("You have unspent talent points.");
+        else
+            pPlayer->SaveTalentSpec(1);
     }
     else if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pPlayer->SaveTalentSpec(2);
+        if (pPlayer->GetFreeTalentPoints())
+            pPlayer->GetSession()->SendNotification("You have unspent talent points.");
+        else
+            pPlayer->SaveTalentSpec(2);
     }
 
 	pPlayer->CLOSE_GOSSIP_MENU();
