@@ -645,9 +645,6 @@ class Map : public GridRefManager<NGridType>
             return i_grids[x][y];
         }
 
-        bool isGridObjectDataLoaded(uint32 x, uint32 y) const { return getNGrid(x,y)->isGridObjectDataLoaded(); }
-        void setGridObjectDataLoaded(bool pLoaded, uint32 x, uint32 y) { getNGrid(x,y)->setGridObjectDataLoaded(pLoaded); }
-
         void setNGrid(NGridType* grid, uint32 x, uint32 y);
         void ScriptsProcess();
         bool FindScriptInitialTargets(WorldObject*& source, WorldObject*& target, const ScriptAction& step);
@@ -1048,14 +1045,15 @@ class BattleGroundMap : public Map
 template<class T, class CONTAINER>
 void Map::Visit(const Cell& cell, TypeContainerVisitor<T, CONTAINER> &visitor)
 {
-    const uint32 x = cell.GridX();
-    const uint32 y = cell.GridY();
-    const uint32 cell_x = cell.CellX();
-    const uint32 cell_y = cell.CellY();
+    uint32 const x = cell.GridX();
+    uint32 const y = cell.GridY();
+    uint32 const cell_x = cell.CellX();
+    uint32 const cell_y = cell.CellY();
 
-    if( !cell.NoCreate() || loaded(GridPair(x,y)) )
-    {
+    if (!cell.NoCreate())
         EnsureGridLoaded(cell);
-        getNGrid(x, y)->Visit(cell_x, cell_y, visitor);
-    }
+
+    NGridType* grid = getNGrid(x, y);
+    if (grid && grid->isGridObjectDataLoaded())
+        grid->Visit(cell_x, cell_y, visitor);
 }
