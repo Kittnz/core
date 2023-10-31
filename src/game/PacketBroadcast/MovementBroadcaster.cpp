@@ -22,7 +22,7 @@ void MovementBroadcaster::StartThreads()
     ASSERT(m_threads.empty());
 
     // Create new mutex vector - can't resize a vector of locks (non-copyable)
-    std::vector<std::mutex> locks(m_num_threads);
+    std::vector<std::shared_mutex> locks(m_num_threads);
     m_thread_locks = std::move(locks);
     m_thread_players.resize(m_num_threads);
     m_thread_update_stats.resize(m_num_threads);
@@ -50,7 +50,7 @@ void MovementBroadcaster::RegisterPlayer(const std::shared_ptr<PlayerBroadcaster
         return;
 
     std::size_t index = player->GetGUID().GetRawValue() % m_num_threads;
-    std::unique_lock<std::mutex> guard(m_thread_locks[index]);
+    std::unique_lock<std::shared_mutex> guard(m_thread_locks[index]);
     m_thread_players[index].insert(player);
 }
 
@@ -60,7 +60,7 @@ void MovementBroadcaster::RemovePlayer(const std::shared_ptr<PlayerBroadcaster>&
         return;
 
     std::size_t index = player->GetGUID().GetRawValue() % m_num_threads;
-    std::unique_lock<std::mutex> guard(m_thread_locks[index]);
+    std::unique_lock<std::shared_mutex> guard(m_thread_locks[index]);
     auto it = m_thread_players[index].find(player);
 
     if (it != m_thread_players[index].end())
@@ -102,7 +102,7 @@ uint32 MovementBroadcaster::IdentifySlowMap(std::size_t thread_id)
 {
     std::map<uint32 /* instanceId */, uint32 /* numPackets */> map_packets;
 
-    std::unique_lock<std::mutex> guard(m_thread_locks[thread_id]);
+    std::shared_lock<std::shared_mutex> guard(m_thread_locks[thread_id]);
 
     for (auto& player : m_thread_players[thread_id])
         map_packets[player->instanceId] += player->lastUpdatePackets;
@@ -124,7 +124,7 @@ void MovementBroadcaster::BroadcastPackets(std::size_t index, uint32& num_packet
 {
     PlayersBCastSet my_players;
     {
-        std::unique_lock<std::mutex> guard(m_thread_locks[index]);
+        std::shared_lock<std::shared_mutex> guard(m_thread_locks[index]);
         my_players = m_thread_players[index];
     }
 

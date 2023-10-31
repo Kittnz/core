@@ -704,6 +704,11 @@ struct go_corrupted_crystal : public GameObjectAI
 
                 break;
             }
+            default:
+            {
+                Reset();
+                break;
+            }
             }
         }
         else
@@ -717,8 +722,8 @@ struct go_corrupted_crystal : public GameObjectAI
 
     void SetInUse()
     {
-        me->SetGoState(GO_STATE_ACTIVE);
-        me->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
+        // me->SetGoState(GO_STATE_ACTIVE);
+        // me->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
         state = false;
         m_uiDialogueTimer = 0;
     }
@@ -766,26 +771,27 @@ GameObjectAI* GetAI_go_corrupted_crystal(GameObject* gameobject)
 
 bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
 {
-    if (pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) != QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->IsCurrentQuest(QUEST_AN_INFINITE_HUNT, 1))
     {
-        pGO->SetGoState(GO_STATE_READY);
-        pGO->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-        pGO->Respawn();
-
-        return false;
-    }
-
-    if (go_corrupted_crystal* gobAI = dynamic_cast<go_corrupted_crystal*>(pGO->AI()))
-    {
-        if (gobAI->CheckCanStartEvent())
+        if (go_corrupted_crystal* gobAI = dynamic_cast<go_corrupted_crystal*>(pGO->AI()))
         {
-            gobAI->SetInUse();
-            gobAI->PassPlayer(pPlayer);
+            if (gobAI->CheckCanStartEvent())
+            {
+                gobAI->SetInUse();
+                gobAI->PassPlayer(pPlayer);
 
-            pPlayer->SummonCreature(NPC_KHEYNA, 658.04f, -4105.24f, 99.43f, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                pPlayer->SummonCreature(NPC_KHEYNA, 658.04f, -4105.24f, 99.43f, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            }
+            else
+                pPlayer->GetSession()->SendNotification("Event in Progress");
         }
+        else
+            pPlayer->GetSession()->SendNotification("Internal Error");
     }
-    return false;
+    else
+        pPlayer->GetSession()->SendNotification("Requires An Infinite Hunt");
+    
+    return true;
 }
 
 void AddSC_hinterlands()

@@ -26,6 +26,8 @@
 #include "Database/DatabaseEnv.h"
 #include "ObjectGuid.h"
 
+#include <shared_mutex>
+
 class SocialMgr;
 class PlayerSocial;
 class Player;
@@ -150,7 +152,7 @@ class SocialMgr
         typedef std::map<ObjectGuid, PlayerSocial> SocialMap;
         SocialMap m_socialMap;
 
-        std::mutex _socialMapLock;
+        std::shared_mutex _socialMapLock;
 };
 
 #define sSocialMgr SocialMgr::instance()

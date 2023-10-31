@@ -34,7 +34,7 @@ class ACE_Configuration_Heap;
 class Config
 {
     public:
-        using Lock = MaNGOS::ClassLevelLockable<Config, std::shared_timed_mutex>;
+        using Lock = MaNGOS::ClassLevelLockable<Config, std::shared_mutex>;
 
     Config();
     ~Config();
