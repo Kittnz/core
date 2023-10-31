@@ -24,6 +24,7 @@
 #include "World.h"
 #include "GuildBank/GuildBank.h"
 #include "Utilities/robin_hood.h"
+#include <shared_mutex>
 
 class Guild;
 class ObjectGuid;
@@ -51,17 +52,17 @@ class GuildMgr
 
         void GuildMemberAdded(uint32 guildId, uint32 memberGuid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::shared_mutex> guard(m_guid2GuildMutex);
             m_guid2guild[memberGuid] = guildId;
         }
         void GuildMemberRemoved(uint32 memberGuid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::shared_mutex> guard(m_guid2GuildMutex);
             m_guid2guild.erase(memberGuid);
         }
         Guild* GetPlayerGuild(uint32 lowguid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::shared_lock<std::shared_mutex> guard(m_guid2GuildMutex);
             std::map<uint32, uint32>::iterator it = m_guid2guild.find(lowguid);
             if (it != m_guid2guild.end())
                 return GetGuildById(it->second);
@@ -82,12 +83,12 @@ class GuildMgr
 		
     private:
         void CleanUpPetitions();
-        mutable std::mutex m_guildMutex;
+        mutable std::shared_mutex m_guildMutex;
         GuildMap m_GuildMap;
-        std::mutex m_guid2GuildMutex;
+        std::shared_mutex m_guid2GuildMutex;
         std::map<uint32, uint32> m_guid2guild;
 
-        std::mutex m_petitionsMutex;
+        std::shared_mutex m_petitionsMutex;
         PetitionMap m_petitionMap;
 
 		uint32 m_guildBankSaveTimer;

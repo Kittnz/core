@@ -89,7 +89,7 @@ void GuildMgr::FixupInfernoBanks()
 
 void GuildMgr::AddGuild(Guild* guild)
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::lock_guard<std::shared_mutex> guard(m_guildMutex);
     m_GuildMap[guild->GetId()] = guild;
 
     guild->_Bank = new GuildBank{ false };
@@ -101,13 +101,13 @@ void GuildMgr::AddGuild(Guild* guild)
 
 void GuildMgr::RemoveGuild(uint32 guildId)
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::lock_guard<std::shared_mutex> guard(m_guildMutex);
     m_GuildMap.erase(guildId);
 }
 
 Guild* GuildMgr::GetGuildById(uint32 guildId) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     GuildMap::const_iterator itr = m_GuildMap.find(guildId);
     if (itr != m_GuildMap.end())
         return itr->second;
@@ -117,7 +117,7 @@ Guild* GuildMgr::GetGuildById(uint32 guildId) const
 
 Guild* GuildMgr::GetGuildByName(std::string const& name) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     for (const auto& itr : m_GuildMap)
         if (itr.second->GetName() == name)
             return itr.second;
@@ -127,7 +127,7 @@ Guild* GuildMgr::GetGuildByName(std::string const& name) const
 
 Guild* GuildMgr::GetGuildByLeader(ObjectGuid const& guid) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     for (const auto& itr : m_GuildMap)
         if (itr.second->GetLeaderGuid() == guid)
             return itr.second;
@@ -137,7 +137,7 @@ Guild* GuildMgr::GetGuildByLeader(ObjectGuid const& guid) const
 
 std::string GuildMgr::GetGuildNameById(uint32 guildId) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     GuildMap::const_iterator itr = m_GuildMap.find(guildId);
     if (itr != m_GuildMap.end())
         return itr->second->GetName();
@@ -280,13 +280,13 @@ void GuildMgr::CreatePetition(uint32 id, Player* player, const ObjectGuid& chart
     petition->SetTeam(player->GetTeam());
     petition->SaveToDB();
 
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::lock_guard<std::shared_mutex> guard(m_petitionsMutex);
     m_petitionMap[petition->GetId()] = petition;
 }
 
 void GuildMgr::DeletePetition(Petition* petition)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::lock_guard<std::shared_mutex> guard(m_petitionsMutex);
     m_petitionMap.erase(petition->GetId());
 
     petition->Delete();
@@ -326,7 +326,7 @@ void GuildMgr::SaveGuildBanks()
 
 Petition* GuildMgr::GetPetitionById(uint32 id)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     PetitionMap::iterator iter = m_petitionMap.find(id);
     if (iter != m_petitionMap.end())
         return iter->second;
@@ -336,7 +336,7 @@ Petition* GuildMgr::GetPetitionById(uint32 id)
 
 Petition* GuildMgr::GetPetitionByCharterGuid(const ObjectGuid& charterGuid)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     for (const auto& iter : m_petitionMap)
     {
         Petition* petition = iter.second;
@@ -349,7 +349,7 @@ Petition* GuildMgr::GetPetitionByCharterGuid(const ObjectGuid& charterGuid)
 
 Petition* GuildMgr::GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     for (const auto& iter : m_petitionMap)
     {
         Petition* petition = iter.second;
@@ -362,7 +362,7 @@ Petition* GuildMgr::GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid)
 
 PetitionSignature* GuildMgr::GetSignatureForPlayerGuid(const ObjectGuid& guid)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     for (const auto& iter : m_petitionMap)
     {
         Petition* petition = iter.second;
