@@ -3275,39 +3275,39 @@ VMAP::ModelInstance* Map::FindCollisionModel(float x1, float y1, float z1, float
 
 void Map::RemoveGameObjectModel(const GameObjectModel &model)
 {
-    std::unique_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::unique_lock<std::shared_mutex> lock(_dynamicTree_lock);
     _dynamicTree.remove(model);
     _dynamicTree.balance();
 }
 
 void Map::InsertGameObjectModel(const GameObjectModel &model)
 {
-    std::unique_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::unique_lock<std::shared_mutex> lock(_dynamicTree_lock);
     _dynamicTree.insert(model);
     _dynamicTree.balance();
 }
 
 bool Map::ContainsGameObjectModel(const GameObjectModel &model) const
 {
-    std::shared_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::shared_lock<std::shared_mutex> lock(_dynamicTree_lock);
     return _dynamicTree.contains(model);
 }
 
 bool Map::GetDynamicObjectHitPos(Movement::Vector3 start, Movement::Vector3 end, Movement::Vector3 &out, float finalDistMod) const
 {
-    std::shared_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::shared_lock<std::shared_mutex> lock(_dynamicTree_lock);
     return _dynamicTree.getObjectHitPos(start, end, out, finalDistMod);
 }
 
 float Map::GetDynamicTreeHeight(float x, float y, float z, float maxSearchDist) const
 {
-    std::shared_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::shared_lock<std::shared_mutex> lock(_dynamicTree_lock);
     return _dynamicTree.getHeight(x, y, z, maxSearchDist);
 }
 
 bool Map::CheckDynamicTreeLoS(float x1, float y1, float z1, float x2, float y2, float z2) const
 {
-    std::shared_lock<std::shared_timed_mutex> lock(_dynamicTree_lock);
+    std::shared_lock<std::shared_mutex> lock(_dynamicTree_lock);
     return _dynamicTree.isInLineOfSight(x1, y1, z1, x2, y2, z2);
 }
 

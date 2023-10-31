@@ -2003,7 +2003,7 @@ class Player final: public Unit
 
         // currently visible objects at player client
         ObjectGuidSet m_visibleGUIDs;
-        mutable std::shared_timed_mutex m_visibleGUIDs_lock;
+        mutable std::shared_mutex m_visibleGUIDs_lock;
         std::map<ObjectGuid, bool> m_visibleGobjQuestActivated;
         mutable std::mutex m_visibleGobjsQuestAct_lock;
 

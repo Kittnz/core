@@ -526,17 +526,17 @@ class Map : public GridRefManager<NGridType>
 
         template <typename T> void InsertObject(ObjectGuid const& guid, T* ptr)
         {
-            std::unique_lock<std::shared_timed_mutex> lock(m_objectsStore_lock);
+            std::unique_lock<std::shared_mutex> lock(m_objectsStore_lock);
             m_objectsStore.insert<T>(guid, ptr);
         }
         template <typename T> void EraseObject(ObjectGuid const& guid)
         {
-            std::unique_lock<std::shared_timed_mutex> lock(m_objectsStore_lock);
+            std::unique_lock<std::shared_mutex> lock(m_objectsStore_lock);
             m_objectsStore.erase<T>(guid, (T*)nullptr);
         }
         template <typename T> T* GetObject(ObjectGuid const& guid)
         {
-            std::shared_lock<std::shared_timed_mutex> lock(m_objectsStore_lock);
+            std::shared_lock<std::shared_mutex> lock(m_objectsStore_lock);
             return m_objectsStore.find<T>(guid, (T*)nullptr);
         }
         void AddUpdateObject(Object *obj);
@@ -694,7 +694,7 @@ class Map : public GridRefManager<NGridType>
         float m_VisibleDistance;
         float m_GridActivationDistance;
 
-        mutable std::shared_timed_mutex   _dynamicTree_lock;
+        mutable std::shared_mutex   _dynamicTree_lock;
         DynamicMapTree _dynamicTree;
 
         MapPersistentState* m_persistentState = nullptr;
@@ -707,7 +707,7 @@ class Map : public GridRefManager<NGridType>
         ActiveNonPlayers::iterator m_activeNonPlayersIter;
 
         typedef TypeUnorderedMapContainer<AllMapStoredObjectTypes, ObjectGuid> MapStoredObjectTypesContainer;
-        mutable std::shared_timed_mutex m_objectsStore_lock;
+        mutable std::shared_mutex m_objectsStore_lock;
         MapStoredObjectTypesContainer m_objectsStore;
 
         // Objects that must update even in inactive grids without activating them
