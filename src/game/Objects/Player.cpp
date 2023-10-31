@@ -22548,12 +22548,11 @@ void Player::RefreshBitsForVisibleUnits(UpdateMask* mask, uint32 objectTypeMask)
     {
         if (Object* obj = GetObjectByTypeMask(guid, TypeMask(objectTypeMask)))
         {
-            ByteBuffer buff(50);
+            ByteBuffer& buff = data.AddUpdateBlockAndGetBuffer();
 
             buff << uint8(UPDATETYPE_VALUES);
             buff << obj->GetPackGUID();
             obj->BuildValuesUpdate(UPDATETYPE_VALUES, &buff, mask, this);
-            data.AddUpdateBlock(buff);
         }
     }
     data.Send(GetSession());
