@@ -50,7 +50,7 @@ class HashMapHolder
     public:
 
         typedef robin_hood::unordered_map<ObjectGuid, T*> MapType;
-        typedef std::shared_timed_mutex LockType;
+        typedef std::shared_mutex LockType;
         typedef std::shared_lock<LockType> ReadGuard;
         typedef std::unique_lock<LockType> WriteGuard;
 
