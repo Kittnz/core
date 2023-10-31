@@ -4390,6 +4390,27 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
 
         } while (result->NextRow());
     }
+
+    for (size_t i = 0; i < m_savedSpecSpells.size(); ++i)
+    {
+        std::vector<uint32> vTreeTalents = { 0, 0, 0 };
+        CountTalentsSpentInSavedSpec(i, vTreeTalents);
+
+        uint32 talentsSpent = 0;
+        for (auto j : vTreeTalents)
+            talentsSpent += j;
+
+        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints())
+        {
+            CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
+            m_savedSpecSpells[i].clear();
+            m_Events.AddLambdaEventAtOffset([pPlayer = this]()
+            {
+                if (pPlayer->IsInWorld())
+                    ChatHandler(pPlayer).SendSysMessage("Your saved dual spec has been reset.");
+            }, 500);
+        }
+    }
 }
 
 void Player::_LoadSpellCooldowns(QueryResult *result)
@@ -23833,23 +23854,8 @@ bool Player::HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
     return static_cast<bool>(talents);
 }
 
-// Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
-std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
+void Player::CountTalentsSpentInSavedSpec(uint32 specIndex, std::vector<uint32>& vTreeTalents)
 {
-    // Mage trees are messed up, disable for them untill i find a fix
-    if (GetClass() == CLASS_MAGE)
-        return "";
-
-    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
-        return "";
-
-
-    uint32 specIndex = uiPrimaryOrSecondary - 1;
-    if (m_savedSpecSpells[specIndex].empty())
-        return "";
-
-    std::vector<uint32> vTreeTalents = { 0, 0, 0 };
-
     for (uint32 spellId : m_savedSpecSpells[specIndex])
     {
         const uint32 uiSavedTalentID{ spellId };
@@ -23875,8 +23881,26 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
                 }
             }
         }
+    }
+}
 
-    } 
+// Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
+std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
+{
+    // Mage trees are messed up, disable for them untill i find a fix
+    if (GetClass() == CLASS_MAGE)
+        return "";
+
+    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+        return "";
+
+
+    uint32 specIndex = uiPrimaryOrSecondary - 1;
+    if (m_savedSpecSpells[specIndex].empty())
+        return "";
+
+    std::vector<uint32> vTreeTalents = { 0, 0, 0 };
+    CountTalentsSpentInSavedSpec(specIndex, vTreeTalents);
 
     return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }
