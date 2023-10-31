@@ -51,7 +51,7 @@ void UpdateData::AddOutOfRangeGUID(ObjectGuid const &guid)
     m_outOfRangeGUIDs.insert(guid);
 }
 
-void UpdateData::AddUpdateBlock(const ByteBuffer &block)
+ByteBuffer& UpdateData::AddUpdateBlockAndGetBuffer()
 {
     if (m_datas.empty())
         m_datas.push_back(UpdatePacket());
@@ -63,8 +63,8 @@ void UpdateData::AddUpdateBlock(const ByteBuffer &block)
         it = m_datas.end();
         --it;
     }
-    it->data.append(block);
     ++it->blockCount;
+    return it->data;
 }
 
 inline auto GetCompressor()
