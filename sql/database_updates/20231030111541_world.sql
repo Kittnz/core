@@ -4416,3 +4416,48 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+
+-- Nagus (entry 80111), change subname to <Blackstone Field Cook>, change faction to 1682.
+update creature_template set subname = 'Blackstone Field Cook', faction = 1682 where entry = 80111;
+-- Sprat Nozzleton (Entry 80101), change subname to <Cooking Trainer>, change faction to 1682
+update creature_template set subname = 'Cooking Trainer', faction = 1682 where entry = 80101;
+-- Add to Sprat Nozzleton cooking flags, add basic cooking recipes.
+update creature_template set npc_flags = 19 where entry = 80101;
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 2551, 100, 0, 0, 5);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 2559, 50, 185, 10, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 2561, 100, 185, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 2562, 200, 185, 75, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 2563, 150, 185, 80, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 3412, 500, 185, 50, 10);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 6502, 100, 185, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 6503, 300, 185, 125, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (80101, 21176, 4000, 185, 200, 0);
+-- Kazznik, change subname to <Certified Sweeper>, change faction to 1682.
+update creature_template set subname = 'Certified Sweeper', faction = 1682 where entry = 80131;
+-- Flarnt Tightstitch, change faction to 1682.
+update creature_template set faction = 1682 where entry = 80109;
+-- Toxx Ringweave, change subname to <Mail Armor Merchant> , change faction to 1682.
+update creature_template set subname = 'Mail Armor Merchant', faction = 1682 where entry = 80110;
+-- Ohgi Cardya, change subname to <Trader>, change faction to 1682.
+update creature_template set subname = 'Trader', faction = 1682 where entry = 80102;
+-- Scribe Jazdis, change faction to 1682.
+update creature_template set faction = 1682 where entry = 51547;
+-- Wizette (Entry 80108) Icewhistle , change faction to 1682.
+update creature_template set faction = 1682 where entry = 80108;
+-- Mayten Boomrifle (Entry 80105) , change faction to 1682.
+update creature_template set faction = 1682 where entry = 80105;
+-- Grizzie the Enforcer(Entry 80104) , change faction to 1682.
+update creature_template set faction = 1682 where entry = 80104;
+-- Fareck, change faction to 1682.
+update creature_template set faction = 1682 where entry = 80130;
+-- Leyti Quicktongue (Entry 80106), change faction to 1682.
+update creature_template set faction = 1682 where entry = 80106;
+-- Amri Demondeal (Entry 80107), change faction to 1682.
+update creature_template set faction = 1682 where entry = 80107;
+-- NPC Malfunctioning Mine-Bot should be immune to bleed and poison.
+update creature_template set mechanic_immune_mask = 16384 where entry = 61687;
+-- NPC Faulty Battletron 1000 should be immune to bleed and poison.
+update creature_template set mechanic_immune_mask = 16384 where entry = 61688;
+-- Creature Muckfin Tidecaller remove spell 8216 (He currently stealths when spawned, he should not).
+update creature_template set auras = NULL where entry = 61685;
