@@ -18,7 +18,8 @@ struct boss_moroesAI : public ScriptedAI
 	uint32 m_MoroesCurseTimer;
 	uint32 m_ReflectionTimer;
 	uint32 m_SacrificeTimer;
-	uint32 m_ResetStateTimer;
+	uint32 m_TeleportTimer;
+	uint32 m_AfterTeleportTimer;
 	bool sound1;
 	bool intermission1;
 	bool sacrifice;
@@ -27,7 +28,8 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
-		m_ResetStateTimer = 0;
+		m_TeleportTimer = 0;
+		m_AfterTeleportTimer = 0;
 		sound1 = false;
 		intermission1 = false;
 		sacrifice = false;
@@ -70,6 +72,11 @@ struct boss_moroesAI : public ScriptedAI
 		m_ReflectionTimer = 25 * IN_MILLISECONDS;
 	}
 
+	uint8 GetPhase()
+	{
+		return m_pInstance->GetData(DATA_MOROES_STAGE);
+	}
+
 	void Aggro(Unit* /*pWho*/) override
 	{
 		m_creature->SetInCombatWithZone();
@@ -88,18 +95,9 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->PlayDirectMusic(60418);
 	}
 
-	void DamageTaken(Unit* pDealer, uint32& damage) override
-	{
-		if (m_pInstance && m_pInstance->GetData(DATA_MOROES_STAGE) == 1 && m_creature->GetHealthPercent() <= 10.0f)
-		{
-			m_creature->SetHealthPercent(100.0f);
-			return;
-		}
-	}
-
 	void EnterEvadeMode() override
 	{
-		if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
+		if (GetPhase() != 0 || GetPhase() != 2)
 			m_creature->DespawnOrUnsummon(0, 30);
 	}
 
@@ -133,7 +131,7 @@ struct boss_moroesAI : public ScriptedAI
 	void Teleport()
 	{
 		m_creature->CastSpell(m_creature, 12980, true);
-		m_creature->NearTeleportTo(-10893.5, -1758.96, 90.477, 4.60134);
+		m_TeleportTimer = 1000;
 	}
 
 	void UpdateAI(const uint32 uiDiff) override
@@ -143,7 +141,7 @@ struct boss_moroesAI : public ScriptedAI
 			if (!m_creature->HasAura(9617))
 				m_creature->AddAura(9617);
 
-			if (m_pInstance->GetData(DATA_MOROES_STAGE) == 0)
+			if (GetPhase() == 0)
 			{
 				if (m_InterludeTimer)
 				{
@@ -159,30 +157,21 @@ struct boss_moroesAI : public ScriptedAI
 						m_InterludeTimer -= uiDiff;
 				}
 			}
-			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 1)
+			else if (GetPhase() == 1)
 			{
-				if (!intermission1 && m_creature->GetHealthPercent() <= 10.0f)
+				if (!m_InterludeTimer && m_creature->GetHealthPercent() <= 10.0f)
 				{
 					intermission1 = true;
 					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
 					m_creature->PlayDirectSound(60404);
 					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 					m_creature->SetFactionTemplateId(35);
+					m_creature->SetHealthPercent(100.0f);
 					if (m_pInstance)
 						m_pInstance->SetData(DATA_MOROES_STAGE, 2);
+					ResetCombat();
 					m_InterludeTimer = 10000;
-					m_ResetStateTimer = 1000;
-				}
-
-				if (m_ResetStateTimer)
-				{
-					if (m_ResetStateTimer < uiDiff)
-					{
-						m_ResetStateTimer = 0;
-						ResetCombat();
-					}
-					else
-						m_ResetStateTimer -= uiDiff;
+					return;
 				}
 
 				if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -231,8 +220,10 @@ struct boss_moroesAI : public ScriptedAI
 					m_creature->MonsterYell("Most impressive, it would appear your skills do match your bravery.");
 					m_creature->PlayDirectSound(60403);
 				}
+
+				DoMeleeAttackIfReady();
 			}
-			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 2)
+			else if (GetPhase() == 2)
 			{
 				if (m_InterludeTimer)
 				{
@@ -240,27 +231,37 @@ struct boss_moroesAI : public ScriptedAI
 					{
 						m_InterludeTimer = 0;
 						Teleport();
-						m_ResetStateTimer = 1500;
 					}
 					else
 						m_InterludeTimer -= uiDiff;
 				}
 
-				if (m_ResetStateTimer)
+				if (m_TeleportTimer)
 				{
-					if (m_ResetStateTimer < uiDiff)
+					if (m_TeleportTimer < uiDiff)
 					{
-						m_ResetStateTimer = 0;
-						ResetCombat();
+						m_TeleportTimer = 0;
+						m_creature->NearTeleportTo(-10893.5, -1758.96, 90.477, 4.60134);
+						m_AfterTeleportTimer = 1500;
+					}
+					else
+						m_TeleportTimer -= uiDiff;
+				}
+
+				if (m_AfterTeleportTimer)
+				{
+					if (m_AfterTeleportTimer < uiDiff)
+					{
+						m_AfterTeleportTimer = 0;
 						RestoreFlags();
 						m_creature->SetMaxHealth(220388);
 						m_creature->SetHealth(220388);
 					}
 					else
-						m_ResetStateTimer -= uiDiff;
+						m_AfterTeleportTimer -= uiDiff;
 				}
 			}
-			else if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
+			else if (GetPhase() == 3)
 			{
 				if (m_InterludeTimer)
 				{
@@ -346,10 +347,10 @@ struct boss_moroesAI : public ScriptedAI
 					// m_creature->MonsterYell("Now, how about a little drama to our show?! Make your choice, sacrifice a dearest friend. Do not choose, and they shall all perish!");
 					//SacrificeRaid();
 				}
+
+				DoMeleeAttackIfReady();
 			}
 		}
-
-		DoMeleeAttackIfReady();
 	}
 };
 
