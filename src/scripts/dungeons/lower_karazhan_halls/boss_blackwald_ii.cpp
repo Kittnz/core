@@ -19,13 +19,14 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance && m_pInstance->GetData(DATA_BLACKWALD_II) != DONE)
-			m_pInstance->SetData(DATA_BLACKWALD_II, NOT_STARTED);
 		summonList.clear();
 		m_ReaverStormTimer = urand(6 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
 		m_EmpoweredSoulTimer = urand(27 * IN_MILLISECONDS, 40 * IN_MILLISECONDS);
 		m_BlackwaldBoonTimer = 20 * IN_MILLISECONDS;
 		m_CallHelpTimer = 31 * IN_MILLISECONDS;
+
+		if (m_pInstance && m_pInstance->GetData(DATA_BLACKWALD_II) != DONE)
+			m_pInstance->SetData(DATA_BLACKWALD_II, NOT_STARTED);
 	}
 
 	void Aggro(Unit* /*pWho*/) override

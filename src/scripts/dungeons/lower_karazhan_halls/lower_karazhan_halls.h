@@ -31,7 +31,6 @@ public:
 
 	void OnCreatureCreate(Creature* pCreature) override;
 	void OnCreatureRespawn(Creature* pCreature) override;
-	void OnCreatureDeath(Creature* pCreature) override;
 
 	uint32 GetData(uint32 uiData) override;
 	uint64 GetData64(uint32 uiData) override;
@@ -47,7 +46,6 @@ protected:
 	uint32 m_uiBossState[DATA_MAX_ENCOUNTER]{};
 	uint64 m_uiDRChampionGUID{};
 	uint64 m_uiDRAppretinceGUID[2]{};
-	uint64 m_uiLordBlackwaldGUID{};
 	uint32 m_uiMoroesStage{};
 	std::string m_strInstData{};
 };

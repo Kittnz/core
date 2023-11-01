@@ -17,12 +17,13 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance && m_pInstance->GetData(DATA_BROOD_QUEEN_ARAXXNA) != DONE)
-			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, NOT_STARTED);
 		summonList.clear();
 		m_BroodVenomVolleyTimer = urand(9 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
 		m_LeechingBiteTimer = 11 * IN_MILLISECONDS;
 		m_SpawnEggsTimer = 30 * IN_MILLISECONDS;
+
+		if (m_pInstance && m_pInstance->GetData(DATA_BROOD_QUEEN_ARAXXNA) != DONE)
+			m_pInstance->SetData(DATA_BROOD_QUEEN_ARAXXNA, NOT_STARTED);
 	}
 
 	void Aggro(Unit* /*pWho*/) override
