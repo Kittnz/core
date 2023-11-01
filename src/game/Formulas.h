@@ -90,7 +90,7 @@ namespace MaNGOS
                 }
             }
 
-            return 1.0f;
+            return 0;
         }
 
         inline uint32 BaseGain(uint32 ownerLevel, uint32 unitLevel, uint32 mob_level)
