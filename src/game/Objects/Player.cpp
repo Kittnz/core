@@ -10623,7 +10623,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
                     }
 
-                    if ((pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT) > 0) || (pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) > 0))
+                    if ((pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) > 0))
                     {
                         this->GetSession()->SendNotification("You cannot equip enchanted items while participating in a Vagrant's Endeavor challenge.");
                         return EQUIP_ERR_CANT_DO_RIGHT_NOW;
