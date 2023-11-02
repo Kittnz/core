@@ -4023,11 +4023,11 @@ enum
     SPELL_WB_SWELLOFSOULS  = 21307,
 };
 
-class av_world_boss_baseai: public npc_escortAI
+class av_world_boss_baseai: public ScriptedAI
 {
         uint8 m_bgEvent;
     public:
-        av_world_boss_baseai(Creature* c, uint8 bgEvent) : npc_escortAI(c), m_bgEvent(bgEvent)
+        av_world_boss_baseai(Creature* c, uint8 bgEvent) : ScriptedAI(c), m_bgEvent(bgEvent)
         {
             Map* m = c->GetMap();
             if (!m || !m->IsBattleGround())
@@ -4040,28 +4040,24 @@ class av_world_boss_baseai: public npc_escortAI
             }
             bg->SpawnEvent(bgEvent, 0, true, true);
         }
-        void EnterEvadeMode() override
-        {
-            // Modified version of npc_escortAI::EnterEvadeMode
-            Unit::SpellAuraHolderMap& creatureAuras = m_creature->GetSpellAuraHolderMap();
-            for (Unit::SpellAuraHolderMap::iterator iter = creatureAuras.begin(); iter != creatureAuras.end();)
-            {
-                if (!iter->second->IsPositive())
-                {
-                    m_creature->RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEFAULT);
-                    iter = creatureAuras.begin();
-                }
-                else
-                    ++iter;
-            }
-            m_creature->DeleteThreatList();
-            m_creature->CombatStop(true);
-            m_creature->SetLootRecipient(nullptr);
 
-            // Back on escart_ai path.
-            ReturnToCombatStartPosition();
-            Reset();
+        void MoveInLineOfSight(Unit* pWho) override
+        {
+            if (m_creature->GetVictim())
+                return;
+
+            if (!m_creature->IsWithinDistInMap(pWho, m_creature->GetAttackDistance(pWho), true, SizeFactor::None))
+                return;
+
+            if (pWho->IsPlayer() && pWho->IsTargetable(true, true) && m_creature->IsHostileTo(pWho))
+            {
+                if (pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
+                {
+                    AttackStart(pWho);
+                }
+            }
         }
+
         void JustDied(Unit* killer) override
         {
             Map* m = m_creature->GetMap();
@@ -4086,19 +4082,12 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
 {
     AV_NpcEventWorldBoss_H_AI(Creature* pCreature) : av_world_boss_baseai(pCreature, BG_AV_BOSS_LOKHOLAR_H)
     {
-        isAggro = false;
-        isEngageModeStarted = false;
-        isInvocated = false;
-
         Map::PlayerList const &liste = m_creature->GetMap()->GetPlayers();
         for (const auto& i : liste)
         {
             if (i.getSource()->IsAlive())
                 i.getSource()->RemoveAurasDueToSpell(11206);
         }
-
-        /** Once invocation is done, World Boss doesn't start waypoint path for 10 minutes. */
-        m_uiEngageTimer = 1000; //600000
 
         /** Once WB is invocated, suppress invocation rune to disable further invocation (only one per Battleground) */
         std::list<GameObject*> invocationObjectList;
@@ -4128,11 +4117,6 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
     uint32 m_uiFrostShockTimer;
     uint32 m_uiIceBlastTimer;
     uint32 m_uiIceTombTimer;
-    bool   isAggro;
-    bool   isEngageModeStarted;
-    uint32 Point;
-    uint32 m_uiEngageTimer;
-    bool   isInvocated;
     bool   isYelling;
 
     void Reset() override
@@ -4143,37 +4127,6 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
         m_uiFrostShockTimer = 4000;
         m_uiIceBlastTimer   = 9000;
         m_uiIceTombTimer    = 5500;
-
-        if (isAggro)
-        {
-            SetEscortPaused(false);
-            float fPosX, fPosY, fPosZ;
-            m_creature->GetCombatStartPosition(fPosX, fPosY, fPosZ);
-            m_creature->GetMotionMaster()->MovePoint(POINT_LAST_POINT, fPosX, fPosY, fPosZ);
-            m_creature->SetWalk(true);
-            isAggro = false;
-        }
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        isAggro = true;
-        SetEscortPaused(true);
-    }
-
-    void WaypointReached(uint32 i) override
-    {
-        /** If last waypoint reached, then say "Your base is forfeit, puny mortals!" */
-        switch (i)
-        {
-            case 30:
-                DoScriptText(SAY_LOKHOLAR_REACHED_BASE, m_creature);
-                m_creature->SetHomePosition(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f);
-                break;
-            case 31:
-                Stop();
-                break;
-        }
     }
 
     void KilledUnit(Unit* pVictim) override
@@ -4187,37 +4140,13 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
         }
     }
 
-    void UpdateEscortAI(uint32 const uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (!isYelling)
         {
             DoScriptText(SAY_LOKHOLAR_SPAWN_1, m_creature);
-
-            static ScriptInfo si;
-            si.command = SCRIPT_COMMAND_TALK;
-            si.talk.textId[0] = SAY_LOKHOLAR_SPAWN_2;
-            m_creature->GetMap()->ScriptCommandStart(si, 3, m_creature->GetObjectGuid(), m_creature->GetObjectGuid());
-
             isYelling = true;
         }
-
-        if (!isInvocated)
-        {
-            m_creature->SetHomePosition(-260.0f, -290.0f, 6.7f, 0.0f);
-            m_creature->SetDefaultMovementType(RANDOM_MOTION_TYPE);
-            m_creature->SetWanderDistance(55.0f);
-            m_creature->SetWalk(false);
-            isInvocated = true;
-        }
-        if (m_uiEngageTimer < uiDiff && !isEngageModeStarted)
-        {
-            /** Start waypoint path system */
-            Start(false, 0, nullptr, false);
-            isEngageModeStarted = true;
-        }
-        else
-            m_uiEngageTimer -= uiDiff;
-
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -4293,13 +4222,6 @@ struct AV_NpcEventWorldBoss_A_AI : public av_world_boss_baseai
 {
     AV_NpcEventWorldBoss_A_AI(Creature* pCreature) : av_world_boss_baseai(pCreature, BG_AV_BOSS_IVUS_A)
     {
-        isAggro = false;
-        isEngageModeStarted = false;
-
-        /** Once invocation is done, World Boss doesn't start waypoint path for 10 minutes. */
-        m_uiEngageTimer = 1000; //600000;
-        isInvocated = false;
-
         Map::PlayerList const &liste = m_creature->GetMap()->GetPlayers();
         for (const auto& i : liste)
         {
@@ -4328,6 +4250,7 @@ struct AV_NpcEventWorldBoss_A_AI : public av_world_boss_baseai
             it->InterruptNonMeleeSpells(true);
         m_RenferalList.clear();
 
+        isYelling = false;
         Reset();
     }
 
@@ -4336,11 +4259,7 @@ struct AV_NpcEventWorldBoss_A_AI : public av_world_boss_baseai
     uint32 m_uiMoonFireTimer;
     uint32 m_uiStarFireTimer;
     uint32 m_uiWrathTimer;
-    bool   isAggro;
-    bool   isEngageModeStarted;
-    uint32 Point;
-    uint32 m_uiEngageTimer;
-    bool   isInvocated;
+    bool   isYelling;
 
     void Reset() override
     {
@@ -4349,56 +4268,15 @@ struct AV_NpcEventWorldBoss_A_AI : public av_world_boss_baseai
         m_uiMoonFireTimer   = 7000;
         m_uiStarFireTimer   = 10000;
         m_uiWrathTimer      = 1000;
-
-        if (isAggro)
-        {
-            SetEscortPaused(false);
-            float fPosX, fPosY, fPosZ;
-            m_creature->GetCombatStartPosition(fPosX, fPosY, fPosZ);
-            m_creature->GetMotionMaster()->MovePoint(POINT_LAST_POINT, fPosX, fPosY, fPosZ);
-            m_creature->SetWalk(true);
-            isAggro = false;
-        }
     }
 
-    void Aggro(Unit* pWho) override
+    void UpdateAI(uint32 const uiDiff) override
     {
-        isAggro = true;
-        SetEscortPaused(true);
-    }
-
-    void WaypointReached(uint32 i) override
-    {
-        if (i == 1)
-            DoScriptText(SAY_IVUS_PAST_FIELD, m_creature);
-        else if (i == 21)
-        {
-            DoScriptText(SAY_IVUS_REACHED_BASE, m_creature);
-            Stop();
-        }
-    }
-
-    void UpdateEscortAI(uint32 const uiDiff) override
-    {
-        if (!isInvocated)
+        if (!isYelling)
         {
             DoScriptText(SAY_IVUS_SPAWNED, m_creature);
-            m_creature->SetHomePosition(-260.0f, -290.0f, 6.7f, 0.0f);
-            m_creature->SetDefaultMovementType(RANDOM_MOTION_TYPE);
-            m_creature->SetWanderDistance(55.0f);
-            m_creature->SetWalk(false);
-            isInvocated = true;
+            isYelling = true;
         }
-
-        if (m_uiEngageTimer < uiDiff && !isEngageModeStarted)
-        {
-            /** Start waypoint path system */
-            Start(false, 0, nullptr, false);
-            isEngageModeStarted = true;
-        }
-        else
-            m_uiEngageTimer -= uiDiff;
-
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
