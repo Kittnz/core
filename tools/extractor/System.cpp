@@ -999,7 +999,6 @@ inline void CloseMPQFiles()
 
 int main(int argc, char* arg[])
 {
-    std::cin.get();
     printf("Map & DBC Extractor\n");
     printf("===================\n\n");
 
