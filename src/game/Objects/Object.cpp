@@ -263,14 +263,12 @@ void Object::SendForcedObjectUpdate()
 
 void Object::BuildMovementUpdateBlock(UpdateData * data, uint8 flags) const
 {
-    ByteBuffer buf(500);
+    ByteBuffer& buf = data->AddUpdateBlockAndGetBuffer();
 
     buf << uint8(UPDATETYPE_MOVEMENT);
     buf << GetObjectGuid();
 
     BuildMovementUpdate(&buf, flags);
-
-    data->AddUpdateBlock(buf);
 }
 
 void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const
@@ -296,7 +294,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
 
     //DEBUG_LOG("BuildCreateUpdate: update-type: %u, object-type: %u got updateFlags: %X", updatetype, m_objectTypeId, updateFlags);
 
-    ByteBuffer buf(500);
+    ByteBuffer& buf = data->AddUpdateBlockAndGetBuffer();
     buf << (uint8)updatetype;
     buf << GetPackGUID();
     buf << uint8(m_objectTypeId);
@@ -307,7 +305,6 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
     updateMask.SetCount(m_valuesCount);
     _SetCreateBits(&updateMask, target);
     BuildValuesUpdate(updatetype, &buf, &updateMask, target);
-    data->AddUpdateBlock(buf);
 }
 
 void Object::SendCreateUpdateToPlayer(Player* player)
@@ -336,7 +333,7 @@ void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
         return;
 
     UpdateData data;
-    ByteBuffer buf(50);
+    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
     buf << uint8(UPDATETYPE_VALUES);
     buf << GetPackGUID();
 
@@ -350,7 +347,6 @@ void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
     for (int i = 0; i < count; i++)
         buf << uint32(m_uint32Values[index + i]);
 
-    data.AddUpdateBlock(buf);
     WorldPacket packet;
     data.BuildPacket(&packet);
     SendObjectMessageToSet(&packet, true);
@@ -358,7 +354,7 @@ void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
 
 void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) const
 {
-    ByteBuffer buf(500);
+    ByteBuffer& buf = data->AddUpdateBlockAndGetBuffer();
 
     buf << uint8(UPDATETYPE_VALUES);
     buf << GetPackGUID();
@@ -368,8 +364,6 @@ void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) c
 
     _SetUpdateBits(&updateMask, target);
     BuildValuesUpdate(UPDATETYPE_VALUES, &buf, &updateMask, target);
-
-    data->AddUpdateBlock(buf);
 }
 
 void Object::BuildOutOfRangeUpdateBlock(UpdateData * data) const
