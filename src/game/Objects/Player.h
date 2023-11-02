@@ -975,8 +975,8 @@ struct ScheduledTeleportData
 
     uint32 options = 0;
 
-	std::function<void()> recover = std::function<void()>();
-	std::function<void()> OnTeleportFinished = std::function<void()>();
+    std::function<void()> recover = std::function<void()>();
+    std::function<void()> OnTeleportFinished = std::function<void()>();
 };
 
 enum class PlayerVariables : uint32
@@ -1793,7 +1793,7 @@ class Player final: public Unit
 
         void SetSkill(uint16 id, uint16 currVal, uint16 maxVal, uint16 step = 0);
         uint16 GetSkill(uint16 id, bool bonusPerm, bool bonusTemp, bool max = false) const;
-		uint16 GetPureMaxSkillValue(uint32 skill) const;    // max
+        uint16 GetPureMaxSkillValue(uint32 skill) const;    // max
         inline uint16 GetSkillValue(uint16 id) const { return GetSkill(id, true, true); }           // skill value + perm. bonus + temp bonus
         inline uint16 GetSkillValueBase(uint16 id) const { return GetSkill(id, true, false); }      // skill value + perm. bonus
         inline uint16 GetSkillValuePure(uint16 id) const { return GetSkill(id, false, false); }     // skill value
@@ -1821,8 +1821,8 @@ class Player final: public Unit
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
         std::function<void()> m_teleportRecover;
-		std::function<void()> m_teleportRecoverDelayed;
-		std::function<void()> m_teleportFinishedDelayed;
+        std::function<void()> m_teleportRecoverDelayed;
+        std::function<void()> m_teleportFinishedDelayed;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
@@ -2318,8 +2318,8 @@ class Player final: public Unit
         void SendDismountResult(UnitDismountResult result) const;
         void UpdateCorpseReclaimDelay();
 
-		// For chronoboon item
-		uint32 m_worldBuffCheckTimer;
+        // For chronoboon item
+        uint32 m_worldBuffCheckTimer;
     public:
 
         uint32 m_hardcoreSaveItemsTimer;
@@ -2416,8 +2416,8 @@ class Player final: public Unit
         uint32 GetCorpseReclaimDelay(bool pvp) const;
         void SendCorpseReclaimDelay(bool load = false) const;
 
-		// Giperion Turtle: Z limit should be customized
-		float ZFelldownLimit = -500.0f;
+        // Giperion Turtle: Z limit should be customized
+        float ZFelldownLimit = -500.0f;
 
 public:
     bool IsPvP() const override
@@ -2497,88 +2497,88 @@ public:
         //************************************
         bool IsBasicallyInactive(bool bIncludeChat = false) const;
 
-		uint32 m_lastMovementTimer = 0;
-		uint32 m_lastSpellTimer = 0;
-		uint32 m_lastChatMessageTimer = 0;
-
-		//************************************
-		// Desc:    Last time when player moved in milliseconds. Call WorldTimer::getMSTime() - GetLastMovementTime() to get delta
-		// Returns:   uint32
-		//************************************
-		uint32 GetLastMovementTime() const
-		{
-			return m_lastMovementTimer;
-		}
+        uint32 m_lastMovementTimer = 0;
+        uint32 m_lastSpellTimer = 0;
+        uint32 m_lastChatMessageTimer = 0;
 
         //************************************
-		// Desc:    Last time when player casted spell in milliseconds. Call WorldTimer::getMSTime() - GetLastSpellCastedTime() to get delta
-		// Returns:   uint32
-		//************************************
-		uint32 GetLastSpellCastedTime() const
-		{
-			return m_lastSpellTimer;
-		}
+        // Desc:    Last time when player moved in milliseconds. Call WorldTimer::getMSTime() - GetLastMovementTime() to get delta
+        // Returns:   uint32
+        //************************************
+        uint32 GetLastMovementTime() const
+        {
+            return m_lastMovementTimer;
+        }
 
         //************************************
-		// Desc:    Last time when player send a chat message in milliseconds. Call WorldTimer::getMSTime() - GetLastChatMessageTime() to get delta
-		// Returns:   uint32
-		//************************************
-		uint32 GetLastChatMessageTime() const
-		{
-			return m_lastChatMessageTimer;
-		}
+        // Desc:    Last time when player casted spell in milliseconds. Call WorldTimer::getMSTime() - GetLastSpellCastedTime() to get delta
+        // Returns:   uint32
+        //************************************
+        uint32 GetLastSpellCastedTime() const
+        {
+            return m_lastSpellTimer;
+        }
+
+        //************************************
+        // Desc:    Last time when player send a chat message in milliseconds. Call WorldTimer::getMSTime() - GetLastChatMessageTime() to get delta
+        // Returns:   uint32
+        //************************************
+        uint32 GetLastChatMessageTime() const
+        {
+            return m_lastChatMessageTimer;
+        }
 
         // Internal functions that assign timer to current time
-		void UpdateMovementActivityTimer();
-		void UpdateSpellActivityTimer();
-		void UpdateChatActivityTimer();
+        void UpdateMovementActivityTimer();
+        void UpdateSpellActivityTimer();
+        void UpdateChatActivityTimer();
         void UpdateVelocity();
         void UpdateSavedVelocityPositionToCurrentPos();
 
         //velocity per second
-		float m_velocity = 0.0f;
+        float m_velocity = 0.0f;
 
-		//velocity per 3 min
-		float m_velocityPer3Min = 0.0f;
-
-		//************************************
-		// Desc:    Internal function which calculates 2D velocity. Doesn't change player
-		// Returns:   Calculated delta
-		// Parameter: uint32 deltaTime : in milliseconds
-		// Parameter: const WorldLocation & PrevPos : previous position
-		//************************************
-		float GetVelocity(uint32 deltaTime, const WorldLocation& PrevPos) const;
-
-
-		//************************************
-		// Desc:    A very approximate 2D velocity, which doesn't account a lot of things
-		// Returns:   float
-		//************************************
-		float GetVelocityPerSecond() const
-		{
-			return m_velocity;
-		}
+        //velocity per 3 min
+        float m_velocityPer3Min = 0.0f;
 
         //************************************
-		// Desc:    A very approximate 2D velocity, which doesn't account a lot of things. Calculated once per 3 min.
+        // Desc:    Internal function which calculates 2D velocity. Doesn't change player
+        // Returns:   Calculated delta
+        // Parameter: uint32 deltaTime : in milliseconds
+        // Parameter: const WorldLocation & PrevPos : previous position
+        //************************************
+        float GetVelocity(uint32 deltaTime, const WorldLocation& PrevPos) const;
+
+
+        //************************************
+        // Desc:    A very approximate 2D velocity, which doesn't account a lot of things
+        // Returns:   float
+        //************************************
+        float GetVelocityPerSecond() const
+        {
+            return m_velocity;
+        }
+
+        //************************************
+        // Desc:    A very approximate 2D velocity, which doesn't account a lot of things. Calculated once per 3 min.
         // NOTE:    We just compare previous position, so if player moved a 1000 units and then go back in less then 3 min, then his velocity will be 0
-		// Returns:   float
-		//************************************
-		float GetVelocityPer3Min() const
-		{
-			return m_velocityPer3Min;
-		}
+        // Returns:   float
+        //************************************
+        float GetVelocityPer3Min() const
+        {
+            return m_velocityPer3Min;
+        }
 
-		uint32 m_lastUpdatedVelocityPerSecondTimer = 0;
-		uint32 m_lastUpdatedVelocityPer3MinTimer = 0;
+        uint32 m_lastUpdatedVelocityPerSecondTimer = 0;
+        uint32 m_lastUpdatedVelocityPer3MinTimer = 0;
 
-		WorldLocation m_lastSecondPosition;
-		WorldLocation m_last3MinPosition;
+        WorldLocation m_lastSecondPosition;
+        WorldLocation m_last3MinPosition;
 
         // if we already reported a player moving too fast - don't do that again
         bool bIsReportedAsSpeedhacker = false;
 
-		// Inactivity end
+        // Inactivity end
 
         uint8 GetChatTag() const;
 
@@ -2888,40 +2888,41 @@ public:
 
 // Misc.
 
-	protected:
-	public:
-		//Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
-		void SendRaidWarning(uint32 textId);
-		void SendRaidWarning(const std::string& text);
-		void SendRaidWarning(const char* text);
+    protected:
+    public:
+        //Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
+        void SendRaidWarning(uint32 textId);
+        void SendRaidWarning(const std::string& text);
+        void SendRaidWarning(const char* text);
 
-		bool IsObjectIsExclusiveVisible(ObjectGuid guid);
-		void AddExclusiveVisibleObject(ObjectGuid guid);
-		void RemoveExclusiveVisibleObject(ObjectGuid guid);
-		std::list<ObjectGuid> m_exclusiveVisibleObjects;
+        bool IsObjectIsExclusiveVisible(ObjectGuid guid);
+        void AddExclusiveVisibleObject(ObjectGuid guid);
+        void RemoveExclusiveVisibleObject(ObjectGuid guid);
+        std::list<ObjectGuid> m_exclusiveVisibleObjects;
 
-		// Xerron Suspend World Buffs Start
-	public:
-		bool SuspendWorldBuffs();
-		bool RestoreSuspendedWorldBuffs();
-		void RemoveWorldBuffsIfAlreadySuspended();
-		// Xerron Suspend World Buffs End
+        // Xerron Suspend World Buffs Start
+    public:
+        bool SuspendWorldBuffs();
+        bool RestoreSuspendedWorldBuffs();
+        void RemoveWorldBuffsIfAlreadySuspended();
+        // Xerron Suspend World Buffs End
 
-		// Xerron Dual Spec
-	public:
-		bool HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
-		std::string SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary);
-		bool ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
-		bool SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
-		// Xerron Dual Spec End
+        // Xerron Dual Spec
+    public:
+        bool HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+        std::string SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary);
+        void CountTalentsSpentInSavedSpec(uint32 specIndex, std::vector<uint32>& vTreeTalents);
+        bool ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+        bool SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+        // Xerron Dual Spec End
 
         // Tanatos Transmog
     public:
         //uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
-		void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
+        void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
     private:
-		TransmogMgr* _transmogMgr;
+        TransmogMgr* _transmogMgr;
         // Tanatos Transmog End
 
         // Titles System
@@ -2937,10 +2938,10 @@ public:
         void UpdateAppearance();
         bool HasAllZonesExplored();
 
-		// General send addon message
-	public:
-		void SendAddonMessage(std::string prefix, std::string message);
-		void SendAddonMessage(std::string prefix, std::string message, Player* from);
+        // General send addon message
+    public:
+        void SendAddonMessage(std::string prefix, std::string message);
+        void SendAddonMessage(std::string prefix, std::string message, Player* from);
 };
 
 void AddItemsSetItem(Player*player,Item* item);

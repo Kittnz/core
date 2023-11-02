@@ -18,13 +18,14 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 
 	void Reset() override
 	{
-		if (m_pInstance && m_pInstance->GetData(DATA_CLAWLORD_HOWLFANG) != DONE)
-			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, NOT_STARTED);
 		m_TerrifyingPresenceTimer = 2 * IN_MILLISECONDS;
 		m_SlaveringBiteTimer = urand(8 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
 		m_ShadowbaneCurseTimer = 50 * IN_MILLISECONDS;
 		phase = false;
 		frenzy = false;
+
+		if (m_pInstance && m_pInstance->GetData(DATA_CLAWLORD_HOWLFANG) != DONE)
+			m_pInstance->SetData(DATA_CLAWLORD_HOWLFANG, NOT_STARTED);
 	}
 
 	void Aggro(Unit* /*pWho*/) override
