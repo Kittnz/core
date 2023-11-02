@@ -563,8 +563,6 @@ inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
 
 std::string MoneyToString(uint32 copper);
 
-uint32 GenerateToken(const std::string& b32key, time_t timeOffset);
-
 std::string GetCurrentTimeString();
 
 /* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS

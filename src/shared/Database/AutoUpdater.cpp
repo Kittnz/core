@@ -173,9 +173,13 @@ namespace DBUpdater
         bool res = targetDatabase->CommitTransactionDirect();
 
         if (res)
+        {
             sLog.out(LOG_AUTOUPDATER, "[SUCCESS] Executed update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+        }
         else
+        {
             sLog.out(LOG_AUTOUPDATER, "[FAIL] Failed to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+        }
         return res;
     }
 
