@@ -770,9 +770,9 @@ bool ChatHandler::HandleLearnAllItemsCommand(char* args)
 {
     Player* pPlayer = m_session->GetPlayer();
 
-    for (uint32 itemId = 0; itemId < sItemStorage.GetMaxEntry(); ++itemId)
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
     {
-        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        ItemPrototype const* pProto = &itr.second;
         if (!pProto)
             continue;
 
@@ -1180,7 +1180,7 @@ bool ChatHandler::HandleListDestroyedItemsCommand(char* args)
             PSendSysMessage("%u - %s%s (%s ago)", itemId, itemStr.str().c_str(), stacksStr.c_str(), timeStr.c_str());
         }
         else
-            PSendSysMessage("%u - %s%s (%s ago)", itemId, pProto->Name1, stacksStr.c_str(), timeStr.c_str());
+            PSendSysMessage("%u - %s%s (%s ago)", itemId, pProto->Name1.c_str(), stacksStr.c_str(), timeStr.c_str());
 
     } while (result->NextRow());
 
@@ -1227,7 +1227,7 @@ bool ChatHandler::HandleListBuybackItemsCommand(char* args)
             PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, itemStr.str().c_str(), "");
         }
         else
-            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, pProto->Name1, "");
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, pProto->Name1.c_str(), "");
 
     } while (result->NextRow());
 
@@ -1310,7 +1310,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
 
     DETAIL_LOG(GetMangosString(LANG_ADDITEM), itemId, count);
 
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemId);
+    ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(itemId);
     if (!pProto)
     {
         PSendSysMessage(LANG_COMMAND_ITEMIDINVALID, itemId);
@@ -1543,9 +1543,9 @@ bool ChatHandler::HandleAddItemSetCommand(char* args)
     DETAIL_LOG(GetMangosString(LANG_ADDITEMSET), itemsetId);
 
     bool found = false;
-    for (uint32 id = 0; id < sItemStorage.GetMaxEntry(); id++)
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
     {
-        ItemPrototype const *pProto = sItemStorage.LookupEntry<ItemPrototype>(id);
+        ItemPrototype const *pProto = &itr.second;
         if (!pProto)
             continue;
 
@@ -1587,7 +1587,7 @@ bool ChatHandler::HandleAddItemSetCommand(char* args)
 
 void ChatHandler::ShowItemListHelper(uint32 itemId, int loc_idx, Player* target /*=nullptr*/)
 {
-    ItemPrototype const *itemProto = sItemStorage.LookupEntry<ItemPrototype >(itemId);
+    ItemPrototype const *itemProto = sObjectMgr.GetItemPrototype(itemId);
     if (!itemProto)
         return;
 
@@ -1637,9 +1637,9 @@ bool ChatHandler::HandleLookupItemCommand(char* args)
     uint32 counter = 0;
 
     // Search in `item_template`
-    for (uint32 id = 0; id < sItemStorage.GetMaxEntry(); id++)
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
     {
-        ItemPrototype const *pProto = sItemStorage.LookupEntry<ItemPrototype >(id);
+        ItemPrototype const *pProto = &itr.second;
         if (!pProto)
             continue;
 
@@ -3254,7 +3254,7 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
     if (!ExtractUInt32(&args, uiItemId))
         return false;
     
-    ItemPrototype const* pItemProto = ObjectMgr::GetItemPrototype(uiItemId);
+    ItemPrototype const* pItemProto = sObjectMgr.GetItemPrototype(uiItemId);
 
     if (!pItemProto)
     {
@@ -3272,7 +3272,7 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
     }
 
     pCreature->SetVirtualItem(VirtualItemSlot(uiSlotId_C), uiItemId);
-    PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, uiItemId, pItemProto->Name1, uiSlotId_C);
+    PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, uiItemId, pItemProto->Name1.c_str(), uiSlotId_C);
 
     return true;
 }
@@ -3880,9 +3880,9 @@ bool ChatHandler::HandleQuestAddCommand(char* args)
     }
 
     // check item starting quest (it can work incorrectly if added without item in inventory)
-    for (uint32 id = 0; id < sItemStorage.GetMaxEntry(); ++id)
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
     {
-        ItemPrototype const *pProto = sItemStorage.LookupEntry<ItemPrototype>(id);
+        ItemPrototype const *pProto = &itr.second;
         if (!pProto)
             continue;
 
@@ -4009,7 +4009,7 @@ bool ChatHandler::HandleQuestStatusCommand(char* args)
     {
         rewardInfo << "item: " << questData.m_reward_choice << " ";
 
-        const auto itemProto = sItemStorage.LookupEntry<ItemPrototype>(questData.m_reward_choice);
+        const auto itemProto = sObjectMgr.GetItemPrototype(questData.m_reward_choice);
 
         if (itemProto)
         {
@@ -5280,7 +5280,7 @@ bool ChatHandler::HandleSendItemsHelper(MailDraft& draft, char* args)
             return false;
         }
 
-        ItemPrototype const* item_proto = ObjectMgr::GetItemPrototype(item_id);
+        ItemPrototype const* item_proto = sObjectMgr.GetItemPrototype(item_id);
         if (!item_proto)
         {
             PSendSysMessage(LANG_COMMAND_ITEMIDINVALID, item_id);
@@ -5692,7 +5692,7 @@ bool ChatHandler::HandleDebugLootTableCommand(char* args)
     {
         if (itr.first == checkItem || !checkItem)
         {
-            ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype >(itr.first);
+            ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itr.first);
             if (!proto)
                 continue;
 
@@ -5701,9 +5701,9 @@ bool ChatHandler::HandleDebugLootTableCommand(char* args)
             chance << "%";
 
             if (m_session)
-                PSendSysMessage(LANG_ITEM_LIST_CHAT, itr.first, itr.first, proto->Name1, chance.str().c_str());
+                PSendSysMessage(LANG_ITEM_LIST_CHAT, itr.first, itr.first, proto->Name1.c_str(), chance.str().c_str());
             else
-                PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itr.first, proto->Name1, chance.str().c_str());
+                PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itr.first, proto->Name1.c_str(), chance.str().c_str());
         }
     }
 
@@ -5716,7 +5716,7 @@ bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, uint32 simCount)
     uint32 const MAX_TIME = 30;
     auto startTime = time(nullptr);
 
-    ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype >(lootid);
+    ItemPrototype const* proto = sObjectMgr.GetItemPrototype(lootid);
     if (!proto)
     {
         PSendSysMessage("Error: invalid item id %u", lootid);
@@ -5745,7 +5745,7 @@ bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, uint32 simCount)
         }
     }
 
-    PSendSysMessage("%u items dropped after %u attempts for item %s.", lootChances.size(), simCount, proto->Name1);
+    PSendSysMessage("%u items dropped after %u attempts for item %s.", lootChances.size(), simCount, proto->Name1.c_str());
     for (const auto& itr : lootChances)
     {
         std::stringstream chance;
@@ -10157,9 +10157,9 @@ bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     sObjectMgr.AddVendorItem(vendor_entry, itemId, maxcount, incrtime, itemflags);
 
-    ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(itemId);
+    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
 
-    PSendSysMessage(LANG_ITEM_ADDED_TO_LIST, itemId, pProto->Name1, maxcount, incrtime);
+    PSendSysMessage(LANG_ITEM_ADDED_TO_LIST, itemId, pProto->Name1.c_str(), maxcount, incrtime);
     return true;
 }
 
@@ -10223,9 +10223,9 @@ bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
         return false;
     }
 
-    ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(itemId);
+    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
 
-    PSendSysMessage(LANG_ITEM_DELETED_FROM_LIST, itemId, pProto->Name1);
+    PSendSysMessage(LANG_ITEM_DELETED_FROM_LIST, itemId, pProto->Name1.c_str());
     return true;
 }
 
@@ -12187,7 +12187,7 @@ bool ChatHandler::HandleCharacterHasItemCommand(char* args)
     if (!ExtractPlayerTarget(&args, &plTarget, &target_guid, &target_name))
         return false;
 
-    ItemPrototype const* pItem = ObjectMgr::GetItemPrototype(itemId);
+    ItemPrototype const* pItem = sObjectMgr.GetItemPrototype(itemId);
 
     if (!pItem)
     {
@@ -14045,9 +14045,10 @@ bool IsSimilarItem(ItemPrototype const* proto1, ItemPrototype const* proto2)
 
 bool ChatHandler::HandleFactionChangeItemsCommand(char* c)
 {
-    for (uint32 id = 0; id < sItemStorage.GetMaxEntry(); id++)
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
     {
-        ItemPrototype const* proto1 = sItemStorage.LookupEntry<ItemPrototype>(id);
+        uint32 id = itr.first;
+        ItemPrototype const* proto1 = &itr.second;
         if (!proto1)
             continue;
         Races currMountRace;
@@ -14078,8 +14079,8 @@ bool ChatHandler::HandleFactionChangeItemsCommand(char* c)
         if (!canEquip)
         {
             ItemPrototype const* similar = nullptr;
-            for (uint32 id2 = 0; id2 < sItemStorage.GetMaxEntry(); id2++)
-                if (ItemPrototype const* proto2 = sItemStorage.LookupEntry<ItemPrototype>(id2))
+            for (auto const& itr2 : sObjectMgr.GetItemPrototypeMap())
+                if (ItemPrototype const* proto2 = &itr2.second)
                     if (proto1 != proto2 && IsSimilarItem(proto1, proto2))
                     {
                         if (similar)
@@ -15420,7 +15421,7 @@ bool ChatHandler::HandleSendPacketCommand(char* args)
         m_session->SendPacket(&data);
     }*/
 
-    /*ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(37);
+    /*ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(37);
     if (pProto)
     {
         WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 600);
@@ -16579,7 +16580,7 @@ bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
                 PSendSysMessage("%u - %s", itr.second, itemStr.str().c_str());
             }
             else
-                PSendSysMessage("%u - %s", itr.second, pProto->Name1);
+                PSendSysMessage("%u - %s", itr.second, pProto->Name1.c_str());
         }
     }
 
@@ -16603,7 +16604,7 @@ bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
                 PSendSysMessage("%u - %s", itr.second, itemStr.str().c_str());
             }
             else
-                PSendSysMessage("%u - %s", itr.second, pProto->Name1);
+                PSendSysMessage("%u - %s", itr.second, pProto->Name1.c_str());
         }
     }
 

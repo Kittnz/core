@@ -262,7 +262,7 @@ class FindCreatureData
 typedef std::unordered_map<uint32, FactionEntry> FactionsMap;
 typedef std::unordered_map<uint32, FactionTemplateEntry> FactionTemplatesMap;
 typedef std::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
-
+typedef std::unordered_map<uint32, ItemPrototype> ItemPrototypeMap;
 typedef std::unordered_map<uint32,GameObjectData> GameObjectDataMap;
 typedef GameObjectDataMap::value_type GameObjectDataPair;
 
@@ -715,7 +715,12 @@ class ObjectMgr
             return sCreatureDataAddonStorage.LookupEntry<CreatureDataAddon>(lowguid);
         }
 
-        static ItemPrototype const* GetItemPrototype(uint32 id);
+        ItemPrototype const* GetItemPrototype(uint32 id) const;
+
+        ItemPrototypeMap const& GetItemPrototypeMap() const
+        {
+            return m_itemPrototypesMap;
+        }
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint32 level) const;
 
@@ -1726,6 +1731,7 @@ class ObjectMgr
         FactionTemplatesMap m_FactionTemplatesMap;
 
         SoundEntryMap m_SoundEntriesMap;
+        ItemPrototypeMap m_itemPrototypesMap;
         GameObjectInfoMap m_GameObjectInfoMap;
 
         typedef std::vector<std::unique_ptr<SkillLineAbilityEntry>> SkillLineAbiilityStore;

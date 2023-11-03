@@ -208,7 +208,7 @@ bool Corpse::LoadFromDB(uint32 lowguid, Field *fields)
     {
         uint32 visualbase = slot * 2;
         uint32 item_id = GetUInt32ValueFromArray(data, visualbase);
-        const ItemPrototype * proto = ObjectMgr::GetItemPrototype(item_id);
+        const ItemPrototype * proto = sObjectMgr.GetItemPrototype(item_id);
         if (!proto)
         {
             SetUInt32Value(CORPSE_FIELD_ITEM + slot, 0);

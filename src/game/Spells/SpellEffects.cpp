@@ -3485,7 +3485,7 @@ void Spell::DoCreateItem(SpellEffectIndex eff_idx, uint32 itemtype)
     Player* player = (Player*)unitTarget;
 
     uint32 newitemid = itemtype;
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(newitemid);
+    ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(newitemid);
     if (!pProto)
     {
         player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, nullptr, nullptr);
@@ -4801,7 +4801,7 @@ void Spell::EffectEnchantItemPerm(SpellEffectIndex eff_idx)
     {
         sLog.outCommand(p_caster->GetSession()->GetAccountId(), "GM %s (Account: %u) enchanting(perm): %s (Entry: %d) for player: %s (Account: %u)",
                         p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
-                        itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
+                        itemTarget->GetProto()->Name1.c_str(), itemTarget->GetEntry(),
                         item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 
@@ -4852,7 +4852,7 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
     {
         sLog.outCommand(p_caster->GetSession()->GetAccountId(), "GM %s (Account: %u) enchanting(temp): %s (Entry: %d) for player: %s (Account: %u)",
                         p_caster->GetName(), p_caster->GetSession()->GetAccountId(),
-                        itemTarget->GetProto()->Name1, itemTarget->GetEntry(),
+                        itemTarget->GetProto()->Name1.c_str(), itemTarget->GetEntry(),
                         item_owner->GetName(), item_owner->GetSession()->GetAccountId());
     }
 

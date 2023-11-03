@@ -11331,7 +11331,7 @@ void Unit::AddSpellAndCategoryCooldowns(SpellEntry const* spellInfo, uint32 item
 
     if (itemId)
     {
-        if (ItemPrototype const* proto = ObjectMgr::GetItemPrototype(itemId))
+        if (ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemId))
         {
             for (const auto& itr : proto->Spells)
             {

@@ -396,7 +396,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     if (GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
     {
         sLog.outCommand(GetAccountId(), "GM %s (Account: %u) create auction: %s (Entry: %u Count: %u)",
-                        GetPlayerName(), GetAccountId(), it->GetProto()->Name1, it->GetEntry(), it->GetCount());
+                        GetPlayerName(), GetAccountId(), it->GetProto()->Name1.c_str(), it->GetEntry(), it->GetCount());
     }
 
     pl->ModifyMoney(-int32(deposit));
