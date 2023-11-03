@@ -302,10 +302,6 @@ Anticrash.Options = 24
 
 Anticrash.Rearm.Timer = 60000
 
-# WowPatch. The current patch the server targets for quest, NPC, dungeon and raid availability.
-
-WowPatch = 10
-
 # PvP.AccurateEquipRequirements. Whether to enforce Blizzlike PVP rank requirements to equip PVP gear before patch 1.6.
 
 PvP.AccurateEquipRequirements = 1
