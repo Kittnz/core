@@ -251,3 +251,12 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61720, 18, 2324, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61720, 8, 2321, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61720, 7, 2320, 0, 0, 0, 0);
+
+-- NPC Fixes for Blackstone.
+update creature_template set faction = 32 where entry in (61656,61657); -- NPC Ashfeather Buzzard and NPC Ashfeather Swooper change faction to 32.
+update creature_template set scale = 0.7 where entry in (61681); -- Young Muckreef Crawler change scale to 0.7.
+update creature_template set scale = 0.8 where entry in (61680); -- Muckreef Crawler change scale to 0.8.
+
+set @equip_template = 20458; set @weapon_1 = 3269; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61669;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature; -- NPC Mudpaw Overseer add weapon 3269.
