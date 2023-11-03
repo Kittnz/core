@@ -4391,24 +4391,27 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
         } while (result->NextRow());
     }
 
-    for (size_t i = 0; i < m_savedSpecSpells.size(); ++i)
+    if (GetLevel() >= 60)
     {
-        std::vector<uint32> vTreeTalents = { 0, 0, 0 };
-        CountTalentsSpentInSavedSpec(i, vTreeTalents);
-
-        uint32 talentsSpent = 0;
-        for (auto j : vTreeTalents)
-            talentsSpent += j;
-
-        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints())
+        for (size_t i = 0; i < m_savedSpecSpells.size(); ++i)
         {
-            CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
-            m_savedSpecSpells[i].clear();
-            m_Events.AddLambdaEventAtOffset([pPlayer = this]()
+            std::vector<uint32> vTreeTalents = { 0, 0, 0 };
+            CountTalentsSpentInSavedSpec(i, vTreeTalents);
+
+            uint32 talentsSpent = 0;
+            for (auto j : vTreeTalents)
+                talentsSpent += j;
+
+            if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints())
             {
-                if (pPlayer->IsInWorld())
-                    ChatHandler(pPlayer).SendSysMessage("Your saved dual spec has been reset.");
-            }, 500);
+                CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
+                m_savedSpecSpells[i].clear();
+                m_Events.AddLambdaEventAtOffset([pPlayer = this]()
+                    {
+                        if (pPlayer->IsInWorld())
+                            ChatHandler(pPlayer).SendSysMessage("Your saved dual spec has been reset.");
+                    }, 500);
+            }
         }
     }
 }
