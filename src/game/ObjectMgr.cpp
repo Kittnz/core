@@ -9221,8 +9221,8 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
         copy->DestItemId = ItemID;
         copy->SourceItemId = SourceID;
         copy->Bonding = BIND_WHEN_PICKED_UP;
-        copy->Name1 = strdup(base->Name1);
-        copy->Description = strdup(base->Description);
+        copy->Name1 = mangos_strdup(base->Name1);
+        copy->Description = mangos_strdup(base->Description);
 
         m_itemTransmogs[ID] = copy;
     } while (result->NextRow());
@@ -9246,11 +9246,11 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
     copy->DestItemId = destItemId;
     copy->SourceItemId = sourceItemId;
     copy->Bonding = BIND_WHEN_PICKED_UP;
-    copy->Name1 = strdup(base->Name1);
-    copy->Description = strdup(base->Description);
+    copy->Name1 = mangos_strdup(base->Name1);
+    copy->Description = mangos_strdup(base->Description);
 
     //copy->Sheath = source->Sheath; // 3 hip, 1 back
-
+    
     m_itemTransmogs[destId] = copy;
 
     //Whoever wrote this should be burned at the stake.
@@ -9263,6 +9263,12 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
 
 void ObjectMgr::DeleteItemTransmogrifyTemplate(uint32 transmogrifyId)
 {
+    auto itr = m_itemTransmogs.find(transmogrifyId);
+    if (itr == m_itemTransmogs.end())
+        return;
+
+    delete[] itr->second->Name1;
+    delete[] itr->second->Description;
     m_itemTransmogs.erase(transmogrifyId);
     sWorld.SendSingleItemInvalidate(transmogrifyId);
     CharacterDatabase.PExecuteLog("DELETE FROM `item_transmogs` WHERE `ID`=%u", transmogrifyId);
