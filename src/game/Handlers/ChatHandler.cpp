@@ -558,7 +558,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     if (itr.second.Category != categoryID)
                         continue;
 
-                    if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
+                    if (ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(itr.second.Item))
                     {
                         if(sWorld.GetDefaultDbcLocale() == 4 /* China */)
                             _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="

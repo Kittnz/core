@@ -333,11 +333,11 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
 
     DETAIL_LOG("STORAGE: Item Query = %u", item);
 
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(item);
+    ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(item);
     if (pProto && (pProto->Discovered || (GetSecurity() > SEC_PLAYER)))
     {
-        std::string Name        = pProto->Name1;
-        std::string Description = pProto->Description;
+        std::string const* Name        = &pProto->Name1;
+        std::string const* Description = &pProto->Description;
 
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
@@ -352,9 +352,9 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
             if (il)
             {
                 if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
-                    Name = il->Name[loc_idx];
+                    Name = &il->Name[loc_idx];
                 if (il->Description.size() > size_t(loc_idx) && !il->Description[loc_idx].empty())
-                    Description = il->Description[loc_idx];
+                    Description = &il->Description[loc_idx];
             }
         }
         // guess size
@@ -363,7 +363,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
         data << pProto->Class;
         // client known only 0 subclass (and 1-2 obsolute subclasses)
         data << (pProto->Class == ITEM_CLASS_CONSUMABLE ? uint32(0) : pProto->SubClass);
-        data << Name;                                       // max length of any of 4 names: 256 bytes
+        data << *Name;                                      // max length of any of 4 names: 256 bytes
         data << uint8(0x00);                                //pProto->Name2; // blizz not send name there, just uint8(0x00); <-- \0 = empty string = empty name...
         data << uint8(0x00);                                //pProto->Name3; // blizz not send name there, just uint8(0x00);
         data << uint8(0x00);                                //pProto->Name4; // blizz not send name there, just uint8(0x00);
@@ -456,7 +456,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
             }
         }
         data << pProto->Bonding;
-        data << Description;
+        data << *Description;
         data << pProto->PageText;
         data << pProto->LanguageID;
         data << pProto->PageMaterial;
@@ -816,7 +816,7 @@ void WorldSession::HandleListRestoreItemsCallBack(QueryResult* result, uint32 ac
         uint32 itemId = pFields[0].GetUInt32();
         uint32 stackCount = pFields[1].GetUInt32();
 
-        ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(itemId);
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
         if (!pProto)
             continue;
 
@@ -913,7 +913,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
 
         if (crItem)
         {
-            if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(crItem->item))
+            if (ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(crItem->item))
             {
                 if (!_player->IsGameMaster())
                 {
@@ -1231,7 +1231,7 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data)
     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemid);
     if (pProto)
     {
-        char const* name = pProto->Name1;
+        char const* name = pProto->Name1.c_str();
 
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)

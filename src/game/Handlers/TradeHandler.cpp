@@ -155,7 +155,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 {
                     sLog.outCommand(_player->GetSession()->GetAccountId(), "GM %s (Account: %u) trade: %s (Entry: %d Count: %u) to player: %s (Account: %u)",
                                     _player->GetName(), _player->GetSession()->GetAccountId(),
-                                    myItems[i]->GetProto()->Name1, myItems[i]->GetEntry(), myItems[i]->GetCount(),
+                                    myItems[i]->GetProto()->Name1.c_str(), myItems[i]->GetEntry(), myItems[i]->GetCount(),
                                     trader->GetName(), trader->GetSession()->GetAccountId());
                 }
 
@@ -170,10 +170,10 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                     WorldPacket data;
                     auto proto = myItems[i]->GetProto();
 
-                    if (proto && proto->Name1)
+                    if (proto && !proto->Name1.empty())
                     {
                         WorldPacket data;
-                        std::string announce = _player->GetName() + std::string(" trades item ") + std::string((const char*)myItems[i]->GetProto()->Name1) + " to " + trader->GetName() + ".";
+                        std::string announce = _player->GetName() + std::string(" trades item ") +myItems[i]->GetProto()->Name1 + " to " + trader->GetName() + ".";
                         ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
                         _player->GetMap()->SendToPlayers(&data);
                     }
@@ -191,7 +191,7 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 {
                     sLog.outCommand(trader->GetSession()->GetAccountId(), "GM %s (Account: %u) trade: %s (Entry: %d Count: %u) to player: %s (Account: %u)",
                                     trader->GetName(), trader->GetSession()->GetAccountId(),
-                                    hisItems[i]->GetProto()->Name1, hisItems[i]->GetEntry(), hisItems[i]->GetCount(),
+                                    hisItems[i]->GetProto()->Name1.c_str(), hisItems[i]->GetEntry(), hisItems[i]->GetCount(),
                                     _player->GetName(), _player->GetSession()->GetAccountId());
                 }
 
@@ -206,9 +206,9 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                     WorldPacket data;
                     auto proto = hisItems[i]->GetProto();
 
-                    if (proto && proto->Name1)
+                    if (proto && !proto->Name1.empty())
                     {
-                        std::string announce = trader->GetName() + std::string(" trades item ") + std::string((const char*)hisItems[i]->GetProto()->Name1) + " to " + _player->GetName() + ".";
+                        std::string announce = trader->GetName() + std::string(" trades item ") + hisItems[i]->GetProto()->Name1 + " to " + _player->GetName() + ".";
                         ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
                         _player->GetMap()->SendToPlayers(&data);
                     }

@@ -96,7 +96,7 @@ void LearnEverythingKEKW(Player* pPlayer, ClassesAndRoles const classesAndRoles)
             {
                 if (!pPlayer->GetItemCount(item))
                 {
-                    ItemPrototype const* pItem{ ObjectMgr::GetItemPrototype(item) };
+                    ItemPrototype const* pItem{ sObjectMgr.GetItemPrototype(item) };
 
                     pPlayer->SatisfyItemRequirements(pItem);
                     pPlayer->StoreNewItemInBestSlots(item, 1);

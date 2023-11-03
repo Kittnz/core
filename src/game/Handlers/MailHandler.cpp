@@ -465,7 +465,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
             if (GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
             {
                 sLog.outCommand(GetAccountId(), "GM %s (Account: %u) mail item: %s (Entry: %u Count: %u) to player: %s (Account: %u)",
-                                GetPlayerName(), GetAccountId(), item->GetProto()->Name1, item->GetEntry(), item->GetCount(), req->receiver.GetString().c_str(), rc_account);
+                                GetPlayerName(), GetAccountId(), item->GetProto()->Name1.c_str(), item->GetEntry(), item->GetCount(), req->receiver.GetString().c_str(), rc_account);
             }
 
             loadedPlayer->LogItem(item, LogItemAction::Mailed);
@@ -509,7 +509,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 
     sLog.out(LOG_MAIL_AH,
         "HandleSendMailCallback [%s:%u@%s] %s sent a mail (%s:%u (%u) & %u copper) to %s:%u",
-        GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), GetPlayer()->GetName(), item ? item->GetProto()->Name1 : "EMPTY", item ? item->GetEntry() : 0,
+        GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), GetPlayer()->GetName(), item ? item->GetProto()->Name1.c_str() : "EMPTY", item ? item->GetEntry() : 0,
         item ? item->GetCount() : 0, req->money, req->receiver.GetString().c_str(), rc_account);
 
 
@@ -768,7 +768,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
                         sender_name = sObjectMgr.GetMangosStringForDBCLocale(LANG_UNKNOWN);
                 }
                 sLog.outCommand(GetAccountId(), "GM %s (Account: %u) receive mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
-                                GetPlayerName(), GetAccountId(), it->GetProto()->Name1, it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);
+                                GetPlayerName(), GetAccountId(), it->GetProto()->Name1.c_str(), it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);
             }
             else if (!sender)
                 sender_accId = sObjectMgr.GetPlayerAccountIdByGUID(sender_guid);
@@ -795,7 +795,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         loadedPlayer->MoveItemToInventory(dest, it, true);
 
         sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item (%s) with entry %u.",
-                 loadedPlayer->GetShortDescription().c_str(), it->GetProto()->Name1, it->GetEntry());
+                 loadedPlayer->GetShortDescription().c_str(), it->GetProto()->Name1.c_str(), it->GetEntry());
 
         CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
         loadedPlayer->SaveInventoryAndGoldToDB();
