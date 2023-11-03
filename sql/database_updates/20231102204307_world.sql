@@ -1755,3 +1755,15 @@ REPLACE INTO `gameobject` VALUES ( 5016909, 2003226, 1, -349.089, -7471.89, 80.6
 REPLACE INTO `gameobject` VALUES ( 5016909, 2003226, 1, -349.089, -7471.89, 80.4117, 3.83517, 0, 0, 0.940469, -0.339879, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5016909, 2003226, 1, -349.089, -7471.89, 80.6117, 3.83517, 0, 0, 0.940469, -0.339879, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5016909, 2003226, 1, -349.089, -7471.89, 80.8117, 3.83517, 0, 0, 0.940469, -0.339879, 300, 300, 100, 1, 0, 0);
+DELETE FROM creature WHERE guid=2579328;
+DELETE FROM creature_addon WHERE guid=2579328;
+DELETE FROM creature_movement WHERE id=2579328;
+DELETE FROM game_event_creature WHERE guid=2579328;
+DELETE FROM game_event_creature_data WHERE guid=2579328;
+DELETE FROM creature_battleground WHERE guid=2579328;
+DELETE FROM creature WHERE guid=2579264;
+DELETE FROM creature_addon WHERE guid=2579264;
+DELETE FROM creature_movement WHERE id=2579264;
+DELETE FROM game_event_creature WHERE guid=2579264;
+DELETE FROM game_event_creature_data WHERE guid=2579264;
+DELETE FROM creature_battleground WHERE guid=2579264;
