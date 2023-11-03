@@ -1715,3 +1715,4 @@ REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2579983, 69);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2579983, 233);
 REPLACE INTO `creature` VALUES (2579984,61723,0,0,0,1,-232.733,-7193.04,16.8465,0.790237,120,120,0,100,100,0,0,0);
 UPDATE `creature` SET `position_x` = -233.543777, `position_y` = -7193.858398, `position_z` = 16.857634, `orientation` = 0.790237 WHERE `guid` = 2579984;
+REPLACE INTO `gameobject` VALUES ( 5016906, 176768, 1, -356.433, -7474.61, 80.9661, 1.3989, 0, 0, 0.643796, 0.765198, 300, 300, 100, 1, 0, 0);
