@@ -9221,6 +9221,8 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
         copy->DestItemId = ItemID;
         copy->SourceItemId = SourceID;
         copy->Bonding = BIND_WHEN_PICKED_UP;
+        copy->Name1 = strdup(base->Name1);
+        copy->Description = strdup(base->Description);
 
         m_itemTransmogs[ID] = copy;
     } while (result->NextRow());
@@ -9244,6 +9246,9 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourc
     copy->DestItemId = destItemId;
     copy->SourceItemId = sourceItemId;
     copy->Bonding = BIND_WHEN_PICKED_UP;
+    copy->Name1 = strdup(base->Name1);
+    copy->Description = strdup(base->Description);
+
     //copy->Sheath = source->Sheath; // 3 hip, 1 back
 
     m_itemTransmogs[destId] = copy;
