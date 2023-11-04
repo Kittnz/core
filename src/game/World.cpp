@@ -3984,7 +3984,7 @@ void World::SendUpdateCreatureStats(const CreatureInfo& crInfo, WorldSession* se
 void World::SendUpdateSingleItem(uint32 entry, WorldSession* self)
 {
     // While only for transmogrification
-    ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(entry);
+    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(entry);
     if (pProto)
     {
         WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 600);
@@ -4154,7 +4154,7 @@ void World::SendUpdateMultipleItems(const std::vector<uint32>& items, WorldSessi
     data << uint8(items.size());
     for (const auto& entry : items)
     {
-        if (ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(entry))
+        if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(entry))
         {
             data << pProto->ItemId;
             data << pProto->Class;

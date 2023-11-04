@@ -194,7 +194,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
             uint32 owner_accid = sObjectMgr.GetPlayerAccountIdByGUID(owner_guid);
 
             sLog.outCommand(bidder_accId, "GM %s (Account: %u) won item in auction: %s (Entry: %u Count: %u) and pay money: %u. Original owner %s (Account: %u)",
-                            bidder_name.c_str(), bidder_accId, pItem->GetProto()->Name1, pItem->GetEntry(), pItem->GetCount(), auction->bid, owner_name.c_str(), owner_accid);
+                            bidder_name.c_str(), bidder_accId, pItem->GetProto()->Name1.c_str(), pItem->GetEntry(), pItem->GetCount(), auction->bid, owner_name.c_str(), owner_accid);
         }
     }
     else if (!bidder)
@@ -429,7 +429,7 @@ void AuctionHouseMgr::LoadAuctionItems()
         uint32 item_guid        = fields[11].GetUInt32();
         uint32 item_template    = fields[12].GetUInt32();
 
-        ItemPrototype const *proto = ObjectMgr::GetItemPrototype(item_template);
+        ItemPrototype const *proto = sObjectMgr.GetItemPrototype(item_template);
 
         if (!proto)
         {
