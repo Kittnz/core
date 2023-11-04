@@ -262,9 +262,9 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
 
     auto GetKnownItemRecipes = [](Player* player, std::vector<uint32>& recipes)
     {
-        for (uint32 i = 1; i < sItemStorage.GetMaxEntry(); ++i)
+        for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
         {
-            ItemPrototype const* pItem = sItemStorage.LookupEntry<ItemPrototype >(i);
+            ItemPrototype const* pItem = &itr.second;
             if (!pItem)
                 continue;
             
