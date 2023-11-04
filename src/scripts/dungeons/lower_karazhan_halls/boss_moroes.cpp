@@ -97,7 +97,8 @@ struct boss_moroesAI : public ScriptedAI
 
 	void EnterEvadeMode() override
 	{
-		if (GetPhase() != 0 || GetPhase() != 2)
+		// only in combat phases
+		if (GetPhase() == 1 || GetPhase() == 3)
 			m_creature->DespawnOrUnsummon(0, 30);
 	}
 
@@ -161,7 +162,6 @@ struct boss_moroesAI : public ScriptedAI
 			{
 				if (!m_InterludeTimer && m_creature->GetHealthPercent() <= 10.0f)
 				{
-					intermission1 = true;
 					m_creature->MonsterYell("Now now, why don't we save such pleasantries for a more, entertaining show. Meet me at the stage, and we shall truly decide the outcome of our engagement.");
 					m_creature->PlayDirectSound(60404);
 					m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
@@ -253,9 +253,12 @@ struct boss_moroesAI : public ScriptedAI
 					if (m_AfterTeleportTimer < uiDiff)
 					{
 						m_AfterTeleportTimer = 0;
-						RestoreFlags();
 						m_creature->SetMaxHealth(220388);
 						m_creature->SetHealth(220388);
+						// failsafe check test
+						if (m_creature->IsInCombat())
+							ResetCombat();
+						RestoreFlags();
 					}
 					else
 						m_AfterTeleportTimer -= uiDiff;
