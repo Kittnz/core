@@ -37,6 +37,9 @@ bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
     if (!pPlayer->HasItemCount(83019, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE) // Gnomeregan
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque, I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
+    if (IsConditionSatisfied(83029, pPlayer, pCreature->GetMap(), pCreature, CONDITION_FROM_GOSSIP_OPTION))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I need the response from Gnomeregan.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
@@ -69,6 +72,10 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
                 creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->GetMap()->ScriptsStart(sGossipScripts, 4144901, pCreature->GetObjectGuid(), pPlayer->GetObjectGuid());
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
