@@ -61,7 +61,7 @@ struct GameTele
     std::wstring wnameLow;
 };
 
-typedef std::unordered_map<uint32, GameTele > GameTeleMap;
+typedef robin_hood::unordered_map<uint32, GameTele > GameTeleMap;
 
 struct AreaTriggerTeleport
 {
@@ -88,7 +88,7 @@ struct ShopCategory
 	std::string Icon;
 };
 
-typedef std::unordered_map<uint32, ShopEntry> ShopEntriesMap;
+typedef robin_hood::unordered_map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 
@@ -156,7 +156,7 @@ struct BroadcastText
     }
 };
 
-typedef std::unordered_map<uint32, BroadcastText> BroadcastTextLocaleMap;
+typedef robin_hood::unordered_map<uint32, BroadcastText> BroadcastTextLocaleMap;
 
 struct SoundEntriesEntry
 {
@@ -187,7 +187,7 @@ struct CreatureSpellsEntry
 
 typedef std::vector<CreatureSpellsEntry> CreatureSpellsList;
 
-typedef std::unordered_map<uint32, CreatureSpellsList> CreatureSpellsMap;
+typedef robin_hood::unordered_map<uint32, CreatureSpellsList> CreatureSpellsMap;
 
 typedef std::map<uint32/*player guid*/,uint32/*instance*/> CellCorpseSet;
 struct CellObjectGuids
@@ -196,8 +196,8 @@ struct CellObjectGuids
     CellGuidSet gameobjects;
     CellCorpseSet corpses;
 };
-typedef std::unordered_map<uint32/*cell_id*/,CellObjectGuids> CellObjectGuidsMap;
-typedef std::unordered_map<uint32/*mapid*/,CellObjectGuidsMap> MapObjectGuids;
+typedef robin_hood::unordered_map<uint32/*cell_id*/,CellObjectGuids> CellObjectGuidsMap;
+typedef robin_hood::unordered_map<uint32/*mapid*/,CellObjectGuidsMap> MapObjectGuids;
 
 // mangos string ranges
 #define MIN_MANGOS_STRING_ID           1                    // 'mangos_string'
@@ -236,7 +236,7 @@ struct TrainerGreetingLocale
     std::vector<std::string> Content;                       // 0 -> default, i -> i-1 locale index
 };
 
-typedef std::unordered_map<uint32,CreatureData> CreatureDataMap;
+typedef robin_hood::unordered_map<uint32,CreatureData> CreatureDataMap;
 typedef CreatureDataMap::value_type CreatureDataPair;
 
 class FindCreatureData
@@ -259,11 +259,11 @@ class FindCreatureData
         float i_spawnedDist;
 };
 
-typedef std::unordered_map<uint32, FactionEntry> FactionsMap;
-typedef std::unordered_map<uint32, FactionTemplateEntry> FactionTemplatesMap;
-typedef std::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
-typedef std::unordered_map<uint32, ItemPrototype> ItemPrototypeMap;
-typedef std::unordered_map<uint32,GameObjectData> GameObjectDataMap;
+typedef robin_hood::unordered_map<uint32, FactionEntry> FactionsMap;
+typedef robin_hood::unordered_map<uint32, FactionTemplateEntry> FactionTemplatesMap;
+typedef robin_hood::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
+typedef robin_hood::unordered_map<uint32, ItemPrototype> ItemPrototypeMap;
+typedef robin_hood::unordered_map<uint32,GameObjectData> GameObjectDataMap;
 typedef GameObjectDataMap::value_type GameObjectDataPair;
 
 // ordered map so we can get max id easily
@@ -289,17 +289,17 @@ class FindGOData
         float i_spawnedDist;
 };
 
-typedef std::unordered_map<uint32,CreatureLocale> CreatureLocaleMap;
-typedef std::unordered_map<uint32,GameObjectLocale> GameObjectLocaleMap;
-typedef std::unordered_map<uint32,ItemLocale> ItemLocaleMap;
-typedef std::unordered_map<uint32,QuestLocale> QuestLocaleMap;
-typedef std::unordered_map<uint32,PageTextLocale> PageTextLocaleMap;
-typedef std::unordered_map<int32,MangosStringLocale> MangosStringLocaleMap;
-typedef std::unordered_map<uint32,QuestGreetingLocale> QuestGreetingLocaleMap;
-typedef std::unordered_map<uint32,GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
-typedef std::unordered_map<uint32,PointOfInterestLocale> PointOfInterestLocaleMap;
-typedef std::unordered_map<uint32,AreaLocale> AreaLocaleMap;
-typedef std::unordered_map<uint32, TrainerGreetingLocale> TrainerGreetingLocaleMap;
+typedef robin_hood::unordered_map<uint32,CreatureLocale> CreatureLocaleMap;
+typedef robin_hood::unordered_map<uint32,GameObjectLocale> GameObjectLocaleMap;
+typedef robin_hood::unordered_map<uint32,ItemLocale> ItemLocaleMap;
+typedef robin_hood::unordered_map<uint32,QuestLocale> QuestLocaleMap;
+typedef robin_hood::unordered_map<uint32,PageTextLocale> PageTextLocaleMap;
+typedef robin_hood::unordered_map<int32,MangosStringLocale> MangosStringLocaleMap;
+typedef robin_hood::unordered_map<uint32,QuestGreetingLocale> QuestGreetingLocaleMap;
+typedef robin_hood::unordered_map<uint32,GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
+typedef robin_hood::unordered_map<uint32,PointOfInterestLocale> PointOfInterestLocaleMap;
+typedef robin_hood::unordered_map<uint32,AreaLocale> AreaLocaleMap;
+typedef robin_hood::unordered_map<uint32, TrainerGreetingLocale> TrainerGreetingLocaleMap;
 
 typedef std::multimap<int32, uint32> ExclusiveQuestGroupsMap;
 typedef std::multimap<uint32, ItemRequiredTarget> ItemRequiredTargetMap;
@@ -410,7 +410,7 @@ struct GraveYardData
 
 typedef std::multimap<uint32, GraveYardData> GraveYardMap;
 typedef std::pair<GraveYardMap::const_iterator, GraveYardMap::const_iterator> GraveYardMapBounds;
-typedef std::unordered_map<uint32, float> WorldSafeLocsFacingMap;
+typedef robin_hood::unordered_map<uint32, float> WorldSafeLocsFacingMap;
 
 struct TaxiPathTransition
 {
@@ -425,10 +425,10 @@ typedef std::pair<TaxiPathTransitionsMap::const_iterator, TaxiPathTransitionsMap
 typedef std::vector<std::unique_ptr<TaxiNodesEntry>> TaxiNodesStore;
 
 // NPC gossip text id
-typedef std::unordered_map<uint32, uint32> CacheNpcTextIdMap;
-typedef std::unordered_map<uint32, NpcText> NpcTextMap;
-typedef std::unordered_map<uint32, VendorItemData> CacheVendorItemMap;
-typedef std::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellMap;
+typedef robin_hood::unordered_map<uint32, uint32> CacheNpcTextIdMap;
+typedef robin_hood::unordered_map<uint32, NpcText> NpcTextMap;
+typedef robin_hood::unordered_map<uint32, VendorItemData> CacheVendorItemMap;
+typedef robin_hood::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellMap;
 
 struct CustomCharacterSkinEntry
 {
@@ -643,23 +643,23 @@ class ObjectMgr
         bool IsExistingVendorTemplateId(uint32 id) const { return (m_VendorTemplateIdSet.find(id) != m_VendorTemplateIdSet.end()); }
         bool IsExistingGossipMenuId(uint32 id) const { return (m_GossipMenuIdSet.find(id) != m_GossipMenuIdSet.end()); }
 
-        typedef std::unordered_map<uint32, Item*> ItemMap;
+        typedef robin_hood::unordered_map<uint32, Item*> ItemMap;
 
-        typedef std::unordered_map<uint32, Group*> GroupMap;
+        typedef robin_hood::unordered_map<uint32, Group*> GroupMap;
 
-        typedef std::unordered_map<uint32, std::unique_ptr<Quest>> QuestMap;
-        typedef std::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
+        typedef robin_hood::unordered_map<uint32, std::unique_ptr<Quest>> QuestMap;
+        typedef robin_hood::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
         typedef std::map<uint32, AreaTriggerTeleport> AreaTriggerTeleportMap;
-        typedef std::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
-        typedef std::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
+        typedef robin_hood::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
+        typedef robin_hood::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
 
-        typedef std::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
-        typedef std::unordered_map<uint32, ReputationOnKillEntry> RepOnKillMap;
-        typedef std::unordered_map<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
+        typedef robin_hood::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
+        typedef robin_hood::unordered_map<uint32, ReputationOnKillEntry> RepOnKillMap;
+        typedef robin_hood::unordered_map<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
 
-        typedef std::unordered_map<uint32, PointOfInterest> PointOfInterestMap;
-        typedef std::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
-        typedef std::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
+        typedef robin_hood::unordered_map<uint32, PointOfInterest> PointOfInterestMap;
+        typedef robin_hood::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
+        typedef robin_hood::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
 
         void LoadChatChannels();
         ChatChannelsEntry const* GetChannelEntryFor(uint32 channelId);
@@ -1591,12 +1591,12 @@ class ObjectMgr
 
         QuestMap            m_QuestTemplatesMap;
 
-        std::unordered_map<uint32, std::string> m_fakeNames;
+        robin_hood::unordered_map<uint32, std::string> m_fakeNames;
 
-        typedef std::unordered_map<uint32, uint32> QuestAreaTriggerMap;
-        typedef std::unordered_map<uint32, std::string> ItemTextMap;
+        typedef robin_hood::unordered_map<uint32, uint32> QuestAreaTriggerMap;
+        typedef robin_hood::unordered_map<uint32, std::string> ItemTextMap;
         // Map quest_id->id of start item
-        typedef std::unordered_map<uint32, uint32> QuestStartingItemMap;
+        typedef robin_hood::unordered_map<uint32, uint32> QuestStartingItemMap;
         typedef std::set<uint32> TavernAreaTriggerSet;
         typedef std::set<uint32> GameObjectForQuestSet;
 
@@ -1687,13 +1687,13 @@ class ObjectMgr
         typedef std::vector<uint32> PlayerXPperLevel;       // [level]
         PlayerXPperLevel m_PlayerXPperLevel;
 
-        std::unordered_map<Team, uint32> m_ActivePlayersPerFaction;
+        robin_hood::unordered_map<Team, uint32> m_ActivePlayersPerFaction;
 
 		ShopCategoriesMap m_ShopCategoriesMap;
 		ShopEntriesMap m_ShopEntriesMap;
 
-        std::unordered_map<uint32, std::vector<ShopLogEntry*>> m_shopLogs;
-        std::unordered_map<uint32, ShopLogEntry*> m_shopLogsLookup;
+        robin_hood::unordered_map<uint32, std::vector<ShopLogEntry*>> m_shopLogs;
+        robin_hood::unordered_map<uint32, ShopLogEntry*> m_shopLogsLookup;
         std::atomic_uint32_t m_maxShopEntry = 0;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]

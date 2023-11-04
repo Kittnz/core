@@ -907,7 +907,7 @@ Group* ObjectMgr::GetGroupById(uint32 id) const
 
 Group* ObjectMgr::GetGroupByMember(ObjectGuid memberGuid)
 {
-    for (const std::pair<const uint32, Group*>& itr : m_GroupMap)
+    for (auto const& itr : m_GroupMap)
         if (itr.second->IsMember(memberGuid))
             return itr.second;
     return nullptr;
@@ -2542,7 +2542,7 @@ void ObjectMgr::LoadItemPrototypes()
         // Item starts a quest, insert it into the quest->startItem map
         {
             if (m_QuestStartingItemsMap.find(proto->StartQuest) == m_QuestStartingItemsMap.end())
-                m_QuestStartingItemsMap.insert( std::pair<uint32, uint32>(proto->StartQuest, proto->ItemId) );
+                m_QuestStartingItemsMap.insert(robin_hood::pair<uint32, uint32>(proto->StartQuest, proto->ItemId) );
             else
                 sLog.outErrorDb("Item #%u also starts quest #%u.", i, proto->StartQuest);
         }
@@ -7716,7 +7716,7 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
     CacheTrainerSpellMap& trainerList = isTemplates ? m_CacheTrainerTemplateSpellMap : m_CacheTrainerSpellMap;
 
     // For reload case
-	for (std::pair<const uint32, TrainerSpellData>& itr : trainerList)
+	for (robin_hood::pair<const uint32, TrainerSpellData>& itr : trainerList)
 	{
         itr.second.Clear();
 	}
