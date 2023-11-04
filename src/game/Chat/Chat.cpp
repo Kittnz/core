@@ -1464,6 +1464,14 @@ ChatCommandSearchResult ChatHandler::FindCommand(ChatCommand* table, char const*
     return CHAT_COMMAND_UNKNOWN;
 }
 
+bool IsCommandLogged(std::string& command)
+{
+    // Bowser said not to log this command
+    if (command.find("anticheat hwprint list") != std::string::npos)
+        return false;
+    return true;
+}
+
 /**
  * Execute (sub)command available for chat handler access level with options in command line string
  *
@@ -1509,7 +1517,7 @@ void ChatHandler::ExecuteCommand(const char* text)
             SetSentErrorMessage(false);
 
             // Always log GM commands, regardless of success
-            if (command->SecurityLevel > SEC_PLAYER && command->SecurityLevel < SEC_SIGMACHAD)
+            if (command->SecurityLevel > SEC_PLAYER && command->SecurityLevel < SEC_SIGMACHAD && IsCommandLogged(realCommandFull))
             {
                 // chat case
                 if (m_session && m_session->GetPlayer())
