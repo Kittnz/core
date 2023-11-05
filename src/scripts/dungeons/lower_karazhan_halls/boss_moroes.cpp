@@ -99,7 +99,10 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		// only in combat phases
 		if (GetPhase() == 1 || GetPhase() == 3)
-			m_creature->DespawnOrUnsummon(0, 30);
+		{
+			m_creature->DespawnOrUnsummon(0, 15);
+			m_creature->DestroyForNearbyPlayers();
+		}
 	}
 
 	void JustDied(Unit* pKiller) override
