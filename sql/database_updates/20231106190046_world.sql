@@ -1,0 +1,1 @@
+UPDATE `item_template` SET `max_count` = 1, `item_level` = 74, `dmg_min1` = 73, `dmg_max1` = 137, `spellid_2` = 18056, `stat_value1` = 7, `stat_value2` = 14 where `entry` = 21395; -- Blade of Eternal Justice
