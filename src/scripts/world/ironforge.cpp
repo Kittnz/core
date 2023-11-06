@@ -38,7 +38,7 @@ bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque, I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (IsConditionSatisfied(83029, pPlayer, pCreature->GetMap(), pCreature, CONDITION_FROM_GOSSIP_OPTION))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I need the response from Gnomeregan.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Apologies, my liege, but I seem to have misplaced your letter to the Quel\'dorei...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
