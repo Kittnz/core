@@ -2075,10 +2075,7 @@ void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 remo
 {
     player->SetClientControl(player, 0);
     if (player->IsMounted())
-    {
-        player->Unmount();
-        player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-    }
+        player->GetSession()->SendNotification("You are mounted.");
 
     player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
     {
@@ -2106,7 +2103,9 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (p_Player->HasItemCount(422, 1)) // Goldshire Quest Gryphon
+        {
             SetFlying(p_Player, 30, 18274, 422, 1);
+        }
         else
             p_Player->GetSession()->SendNotification("Requires Dwarven Mild.");
 
