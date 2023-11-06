@@ -485,6 +485,10 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
         }
     }
 
+    // confirmed you cant remove buffs while mind controlled on wotlk ptr
+    if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED))
+        return;
+
     // channeled spell case (it currently casted then)
     if (spellInfo->IsChanneledSpell())
     {
