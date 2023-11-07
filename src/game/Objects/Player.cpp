@@ -5674,6 +5674,7 @@ void Player::DurabilityPointsLoss(Item* item, int32 points)
             _ApplyItemMods(item, item->GetSlot(), true);
 
         item->SetState(ITEM_CHANGED, this);
+        FixTransmogItemAfterDurabilityUpdate(item);
     }
 }
 
@@ -5755,11 +5756,28 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
 
     item->SetUInt32Value(ITEM_FIELD_DURABILITY, maxDurability);
     item->SetState(ITEM_CHANGED, this);
+    FixTransmogItemAfterDurabilityUpdate(item);
 
     // reapply mods for total broken and repaired item if equipped
     if (IsEquipmentPos(pos) && !curDurability)
         _ApplyItemMods(item, pos & 255, true);
     return TotalCost;
+}
+
+void Player::FixTransmogItemAfterDurabilityUpdate(Item* pItem)
+{
+    if (pItem->GetTransmogrification() && pItem->IsEquipped())
+    {
+        uint32 index = PLAYER_VISIBLE_ITEM_1_0 + (pItem->GetSlot() * MAX_VISIBLE_ITEM_OFFSET);
+        SetUInt32Value(index, 0);
+        DirectSendPublicValueUpdate(index);
+        UpdateData data;
+        pItem->BuildValuesUpdateBlockForPlayer(&data, this);
+        data.Send(GetSession());
+        pItem->ClearUpdateMask(true);
+        SetUInt32Value(index, pItem->GetVisibleEntry());
+        DirectSendPublicValueUpdate(index);
+    }
 }
 
 void Player::ScheduleRepopAtGraveyard()
