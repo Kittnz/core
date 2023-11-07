@@ -52,3 +52,11 @@ WHERE entry = 40669;
 UPDATE quest_template SET
 Objectives = 'Wait until Grimshade performs the ritual of divination.'
 WHERE entry = 2992;
+-- Change gossip of the NPC with entryID: 61452.
+update broadcast_text set male_text = 'We are the Pellars. And order of faithful guardians of the land and its children. Healers, shepards and teachers,$B$BWe see beyond the mirages of politics to aid those in Gilneas who find refuge in the old ways. Farmers, huntsmen, humble folk who did not lose their true self in the groves of stone.$B$BJoin us, return to your roots.' where entry = 61452;
+-- Change gossip of the NPC with entryID: 61535.
+update broadcast_text set male_text = 'I expected Gilneas to be a safe haven for us refugees. I never imagined it would be as bad as Silverpine Forest.' where entry = 61535;
+-- Change gossip of the NPC with entryID: 10922.
+update broadcast_text set female_text = 'I welcome you, $N. And the Emerald Circle welcomes you.$B$BHopefully together we can help rejuvenate and protect this once-mighty forest. Many forces seek to destroy it from without... and within.$B$BDo not be persuaded by the powere here--it will only corrupt you, like it has this entire land.' where entry = 6296;
+-- Change the gossip of NPC Ysera (entryID: 61545) for quest "Into the Dream V" (entryID: 40961) to: 'Ralathius, my faithful servant. The fate of the Emerald Dream is in your hands.'
+update broadcast_text set male_text = 'Ralathius, my faithful servant. The fate of the Emerald Dream is in your hands.', female_text = 'Ralathius, my faithful servant. The fate of the Emerald Dream is in your hands.' where entry = 65028;
