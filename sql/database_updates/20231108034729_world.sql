@@ -22,3 +22,6 @@ DELETE FROM creature_movement WHERE id=2580114;
 DELETE FROM game_event_creature WHERE guid=2580114;
 DELETE FROM game_event_creature_data WHERE guid=2580114;
 DELETE FROM creature_battleground WHERE guid=2580114;
+
+-- Changes by SHANG
+UPDATE `creature` SET `position_x` = -267.908936, `position_y` = -7755.450195, `position_z` = 40.996395, `orientation` = 1.106992 WHERE `guid` = 2579660;
