@@ -1254,6 +1254,7 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 10 || uiAction == GOSSIP_ACTION_INFO_DEF + 11)
     {
         uint32 cost = uiAction == GOSSIP_ACTION_INFO_DEF + 10 ? 100 : 200;
+        
 
         if (pPlayer->GetMoney() < (cost * GOLD))
         {
@@ -1269,7 +1270,7 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
             return true;
 
         //ok all good.
-        pPlayer->LogModifyMoney(cost * GOLD, "Spec Machine");
+        pPlayer->LogModifyMoney(-(int32)cost * GOLD, "Spec Machine");
         pPlayer->SetPlayerVariable(PlayerVariables::UnlockedSpecTabs, std::to_string(unlockedTab));
         ChatHandler(pPlayer).SendSysMessage("Specialization tab bought.");
     }
