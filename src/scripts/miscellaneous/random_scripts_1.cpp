@@ -1103,10 +1103,29 @@ enum
     BCT_SAVE_SECONDARY_SPEC = 66835,
 };
 
+uint32 GetTabAmount(Player* player)
+{
+    auto unlockedTabs = player->GetPlayerVariable(PlayerVariables::UnlockedSpecTabs);
+
+    uint32 tabs = 2;
+    if (!unlockedTabs)
+        player->SetPlayerVariable(PlayerVariables::UnlockedSpecTabs, std::to_string(tabs));
+    else
+    {
+        try {
+            tabs = std::stoi(unlockedTabs.value());
+        }
+        catch (...) {}
+    }
+    return tabs;
+}
+
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
 	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
+        uint32 tabs = GetTabAmount(pPlayer);
+
         std::string activateText{};
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, BCT_RESET_TALENTS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -1114,7 +1133,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 		// Primary
 		if (pPlayer->HasSavedTalentSpec(1))
 		{
-			activateText = ("Activate Primary Specialization " + pPlayer->SpecTalentPoints(1));
+			activateText = ("Activate 1st Specialization " + pPlayer->SpecTalentPoints(1));
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 		}
 
@@ -1123,17 +1142,53 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 		// Secondary
 		if (pPlayer->HasSavedTalentSpec(2))
 		{
-			activateText = ("Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2));
+			activateText = ("Activate 2nd Specialization " + pPlayer->SpecTalentPoints(2));
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 		}
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, BCT_SAVE_SECONDARY_SPEC, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+
+        bool offeredTab = false;
+
+        if (tabs >= 3)
+        {
+            if (pPlayer->HasSavedTalentSpec(3))
+            {
+                activateText = ("Activate 3rd Specialization " + pPlayer->SpecTalentPoints(3));
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+            }
+
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save 3rd Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        }
+        else
+        {
+            offeredTab = true;
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Buy 3rd Specialization tab for 100 gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        }
+
+        if (tabs >= 4)
+        {
+            if (pPlayer->HasSavedTalentSpec(4))
+            {
+                activateText = ("Activate 4th Specialization " + pPlayer->SpecTalentPoints(4));
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+            }
+
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save 4th Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        }
+        else
+        {
+            if (!offeredTab)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Buy 4th Specialization tab for 200 gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        }
 	}
 
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
 
     return true;
 }
+
+
 
 bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uint32 uiSender, const uint32 uiAction)
 {
@@ -1168,6 +1223,56 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
             pPlayer->GetSession()->SendNotification("You have unspent talent points.");
         else
             pPlayer->SaveTalentSpec(2);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_DISARM);
+        pPlayer->ActivateTalentSpec(3);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
+    {
+        if (pPlayer->GetFreeTalentPoints())
+            pPlayer->GetSession()->SendNotification("You have unspent talent points.");
+        else
+            pPlayer->SaveTalentSpec(3);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_DISARM);
+        pPlayer->ActivateTalentSpec(4);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
+    {
+        if (pPlayer->GetFreeTalentPoints())
+            pPlayer->GetSession()->SendNotification("You have unspent talent points.");
+        else
+            pPlayer->SaveTalentSpec(4);
+    }
+    //I know ill fix it later
+
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10 || uiAction == GOSSIP_ACTION_INFO_DEF + 11)
+    {
+        uint32 cost = uiAction == GOSSIP_ACTION_INFO_DEF + 10 ? 100 : 200;
+        
+
+        if (pPlayer->GetMoney() < (cost * GOLD))
+        {
+            pPlayer->GetSession()->SendNotification("Not enough money.");
+            return true;
+        }
+
+        uint32 unlockedTab = uiAction == GOSSIP_ACTION_INFO_DEF + 10 ? 3 : 4;
+        uint32 tabs = GetTabAmount(pPlayer);
+
+        //prevent unlocking already unlocked tabs or skipping a number
+        if (unlockedTab == tabs || (unlockedTab == 4 && tabs == 2))
+            return true;
+
+        //ok all good.
+        pPlayer->LogModifyMoney(-(int32)cost * GOLD, "Spec Machine");
+        pPlayer->SetPlayerVariable(PlayerVariables::UnlockedSpecTabs, std::to_string(unlockedTab));
+        ChatHandler(pPlayer).SendSysMessage("Specialization tab bought.");
     }
 
 	pPlayer->CLOSE_GOSSIP_MENU();
@@ -2075,10 +2180,7 @@ void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 remo
 {
     player->SetClientControl(player, 0);
     if (player->IsMounted())
-    {
-        player->Unmount();
-        player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-    }
+        player->GetSession()->SendNotification("You are mounted.");
 
     player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
     {
@@ -2106,7 +2208,9 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (p_Player->HasItemCount(422, 1)) // Goldshire Quest Gryphon
+        {
             SetFlying(p_Player, 30, 18274, 422, 1);
+        }
         else
             p_Player->GetSession()->SendNotification("Requires Dwarven Mild.");
 

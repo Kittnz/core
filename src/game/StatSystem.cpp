@@ -292,7 +292,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                     case FORM_CAT:
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                    case FORM_MOONKIN:
                     {
                         Unit::AuraList const& mDummy = GetAurasByType(SPELL_AURA_DUMMY);
                         for (const auto itr : mDummy)
@@ -317,9 +316,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                         break;
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = GetLevel() * mLevelMult + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
-                        break;
-                    case FORM_MOONKIN:
                         val2 = GetLevel() * mLevelMult + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
                         break;
                     default:

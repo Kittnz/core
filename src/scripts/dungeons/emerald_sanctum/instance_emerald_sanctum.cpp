@@ -112,6 +112,9 @@ struct sanctum_dreamerAI : public ScriptedAI
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
 
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
 		if (m_uiDreamstateTimer < uiDiff)
 		{
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
@@ -151,6 +154,9 @@ struct sanctum_dragonkinAI : public ScriptedAI
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
 
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
 		if (m_uiReflectionTimer < uiDiff)
 		{
 			if (DoCastSpellIfCan(m_creature, SPELL_REFLECTION) == CAST_OK)
@@ -188,6 +194,9 @@ struct sanctum_wyrmAI : public ScriptedAI
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
+
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
 
 		if (m_uiAcidBreathTimer < uiDiff)
 		{
@@ -234,6 +243,9 @@ struct sanctum_suppressorAI : public ScriptedAI
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
 
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
 		if (m_uiEmeraldSupressionTimer < uiDiff)
 		{
 			if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
@@ -274,6 +286,9 @@ struct sanctum_wyrmkinAI : public ScriptedAI
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
+
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
 
 		if (m_uiAcidSpitTimer < uiDiff)
 		{
@@ -333,6 +348,9 @@ struct sanctum_scalebaneAI : public ScriptedAI
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
+
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
 
 		if (m_uiCleaveTimer < uiDiff)
 		{
@@ -409,6 +427,9 @@ struct erenniusAI : public ScriptedAI
 	{
 		if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
 			return;
+
+		if (m_creature->CantPathToVictim())
+			m_creature->CastSpell(m_creature->GetVictim(), SPELL_SUMMON_PLAYER, true);
 
 		if (Creature* pSolnius = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_SOLNIUS)))
 		{
