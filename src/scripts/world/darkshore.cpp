@@ -1330,6 +1330,18 @@ struct npc_murkdeepAI : public ScriptedAI
             m_bonfireGuid = bonfire->GetObjectGuid();
     }
 
+    void EnterCombat(Unit* pVictim) override
+    {
+        m_creature->SetVisibility(VISIBILITY_ON);
+        ScriptedAI::EnterCombat(pVictim);
+    }
+
+    void EnterEvadeMode() override
+    {
+        ScriptedAI::EnterEvadeMode();
+        m_creature->DespawnOrUnsummon(1);
+    }
+
     void JustSummoned(Creature* pWho) override
     {
         Player* player = GetPlayer();

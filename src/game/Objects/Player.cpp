@@ -4382,7 +4382,7 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
             uint32 spellId = fields[1].GetUInt32();
             uint32 spec = fields[2].GetUInt8();
 
-            if (spec != 1 && spec != 2)
+            if (spec < 1 || spec > 4)
                 continue;
 
             --spec; // minus 1 for indexing because somehow specs are saved as 1 and 2.
@@ -4391,27 +4391,24 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
         } while (result->NextRow());
     }
 
-    if (GetLevel() >= 60)
+    for (size_t i = 0; i < m_savedSpecSpells.size(); ++i)
     {
-        for (size_t i = 0; i < m_savedSpecSpells.size(); ++i)
+        std::vector<uint32> vTreeTalents = { 0, 0, 0 };
+        CountTalentsSpentInSavedSpec(i, vTreeTalents);
+
+        uint32 talentsSpent = 0;
+        for (auto j : vTreeTalents)
+            talentsSpent += j;
+
+        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == 60 || CalculateTalentsPoints() - talentsSpent > 5))
         {
-            std::vector<uint32> vTreeTalents = { 0, 0, 0 };
-            CountTalentsSpentInSavedSpec(i, vTreeTalents);
-
-            uint32 talentsSpent = 0;
-            for (auto j : vTreeTalents)
-                talentsSpent += j;
-
-            if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints())
-            {
-                CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
-                m_savedSpecSpells[i].clear();
-                m_Events.AddLambdaEventAtOffset([pPlayer = this]()
-                    {
-                        if (pPlayer->IsInWorld())
-                            ChatHandler(pPlayer).SendSysMessage("Your saved dual spec has been reset.");
-                    }, 500);
-            }
+            CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
+            m_savedSpecSpells[i].clear();
+            m_Events.AddLambdaEventAtOffset([pPlayer = this]()
+                {
+                    if (pPlayer->IsInWorld())
+                        ChatHandler(pPlayer).SendSysMessage("Your saved dual spec has been reset.");
+                }, 500);
         }
     }
 }
@@ -4525,6 +4522,24 @@ void Player::UpdateResetTalentsMultiplier() const
 
 uint32 Player::GetResetTalentsCost() const
 {
+    auto freeRespecs = GetPlayerVariable(PlayerVariables::FreeTalentResets);
+
+    bool free = false;
+    if (freeRespecs)
+    {
+        int32 amount = 0;
+        try {
+            amount = std::stoi(freeRespecs.value());
+        }
+        catch (...) {}
+
+        if (amount != 0)
+            free = true;
+    }
+
+    if (free)
+        return 0;
+
     // Decay respec cost
     UpdateResetTalentsMultiplier();
 
@@ -4558,6 +4573,24 @@ bool Player::ResetTalents(bool no_cost)
 
         return false;
     }
+
+    auto freeRespecs = GetPlayerVariable(PlayerVariables::FreeTalentResets);
+
+    if (freeRespecs && !no_cost)
+    {
+        int32 amount = 0;
+        try {
+            amount = std::stoi(freeRespecs.value());
+        }
+        catch (...) {}
+
+        if (amount != 0)
+        {
+            no_cost = true;
+            SetPlayerVariable(PlayerVariables::FreeTalentResets, std::to_string(amount - 1));
+        }
+    }
+
 
     uint32 uiCost{};
 
@@ -5674,6 +5707,7 @@ void Player::DurabilityPointsLoss(Item* item, int32 points)
             _ApplyItemMods(item, item->GetSlot(), true);
 
         item->SetState(ITEM_CHANGED, this);
+        FixTransmogItemAfterDurabilityUpdate(item);
     }
 }
 
@@ -5755,11 +5789,28 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
 
     item->SetUInt32Value(ITEM_FIELD_DURABILITY, maxDurability);
     item->SetState(ITEM_CHANGED, this);
+    FixTransmogItemAfterDurabilityUpdate(item);
 
     // reapply mods for total broken and repaired item if equipped
     if (IsEquipmentPos(pos) && !curDurability)
         _ApplyItemMods(item, pos & 255, true);
     return TotalCost;
+}
+
+void Player::FixTransmogItemAfterDurabilityUpdate(Item* pItem)
+{
+    if (pItem->GetTransmogrification() && pItem->IsEquipped())
+    {
+        uint32 index = PLAYER_VISIBLE_ITEM_1_0 + (pItem->GetSlot() * MAX_VISIBLE_ITEM_OFFSET);
+        SetUInt32Value(index, 0);
+        DirectSendPublicValueUpdate(index);
+        UpdateData data;
+        pItem->BuildValuesUpdateBlockForPlayer(&data, this);
+        data.Send(GetSession());
+        pItem->ClearUpdateMask(true);
+        SetUInt32Value(index, pItem->GetVisibleEntry());
+        DirectSendPublicValueUpdate(index);
+    }
 }
 
 void Player::ScheduleRepopAtGraveyard()
@@ -23894,7 +23945,7 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
     if (GetClass() == CLASS_MAGE)
         return "";
 
-    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+    if (uiPrimaryOrSecondary < 1 && uiPrimaryOrSecondary > 4)
         return "";
 
 
@@ -23911,7 +23962,7 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 // Saves primary or secondary spec
 bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+    if (uiPrimaryOrSecondary < 1 && uiPrimaryOrSecondary > 4)
         return false;
 
     // Prevent untalented saves
@@ -23971,7 +24022,7 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 // Activates primary or secondary spec
 bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-    if (uiPrimaryOrSecondary != 1 && uiPrimaryOrSecondary != 2)
+    if (uiPrimaryOrSecondary < 1 && uiPrimaryOrSecondary > 4)
         return false;
 
     uint32 specIndex = uiPrimaryOrSecondary - 1;

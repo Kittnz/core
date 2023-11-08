@@ -982,7 +982,9 @@ struct ScheduledTeleportData
 enum class PlayerVariables : uint32
 {
     HardcoreMessagesEnabled = 1,
-    HardcoreMessageLevel
+    HardcoreMessageLevel,
+    UnlockedSpecTabs,
+    FreeTalentResets
 };
 
 class Player final: public Unit
@@ -1064,10 +1066,10 @@ class Player final: public Unit
         uint32 GetGMTicketCounter() const { return m_currentTicketCounter; }
         void SetGMTicketCounter(uint32 counter) { m_currentTicketCounter = counter; }
 
-        std::optional<std::string> GetPlayerVariable(PlayerVariables variable)
+        std::optional<std::string> GetPlayerVariable(PlayerVariables variable) const
         {
             if (m_variables.find(variable) != m_variables.end())
-                return m_variables[variable];
+                return m_variables.find(variable)->second;
             return {};
         }
 
@@ -1773,7 +1775,7 @@ class Player final: public Unit
         std::unordered_map<uint16, uint16> m_mForgottenSkills;
 
 
-        std::array<std::vector<uint32>, 2> m_savedSpecSpells;
+        std::array<std::vector<uint32>, 4> m_savedSpecSpells;
         
     public:
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS2); }
@@ -2921,6 +2923,7 @@ public:
         //uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
+        void FixTransmogItemAfterDurabilityUpdate(Item* pItem);
     private:
         TransmogMgr* _transmogMgr;
         // Tanatos Transmog End

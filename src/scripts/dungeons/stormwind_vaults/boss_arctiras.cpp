@@ -127,6 +127,9 @@ struct boss_ArctirasAI : public GenericSpellMob
 		{
 			ObstructionObj2->Despawn();
 		}
+
+		// Summon Vault Armory Equipment
+		me->SummonGameObject(2010867, -46.262f, 179.477f, -40.0506f, 4.72486f, 0, 0, 0.702685f, -0.711501f, 86400, false);
 	}
 
 
