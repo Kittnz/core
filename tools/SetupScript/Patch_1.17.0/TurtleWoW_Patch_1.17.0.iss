@@ -37,6 +37,9 @@ UseRelativePaths=True
 [CustomMessages]
 MSG_TURTLE_INCORRECT_DIR=You must point to correct Turtle WoW 1.16.5 installation directory
 
+[Languages]
+Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+
 [Code]
 var
   ExistedWoWInstallation : String;
