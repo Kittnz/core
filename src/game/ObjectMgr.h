@@ -645,7 +645,7 @@ class ObjectMgr
 
         typedef robin_hood::unordered_map<uint32, Item*> ItemMap;
 
-        typedef robin_hood::unordered_map<uint32, Group*> GroupMap;
+        typedef std::unordered_map<uint32, Group*> GroupMap;
 
         typedef robin_hood::unordered_map<uint32, std::unique_ptr<Quest>> QuestMap;
         typedef robin_hood::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
