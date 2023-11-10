@@ -55,7 +55,7 @@ uint32 GenerateFingerprint()
             fingerprint |= static_cast<uint8>(urand(0x03, 0xFF)) << 8*i;
 
         // if the fingerprint already exists, repeat
-        if (!sWorld.IsChina())
+        if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
         {
             if (FingerprintExists(fingerprint))
                 continue;
@@ -227,7 +227,7 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     sample.fingerprint = _fingerprint;
     sample.ipAddress = _session->GetRemoteAddress();
 
-    if (!sWorld.IsChina())
+    if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
         _session->_analyser->Enable();
         _session->_analyser->LoadFromDB();

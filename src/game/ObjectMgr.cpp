@@ -6711,7 +6711,7 @@ void ObjectMgr::LoadReservedPlayersNames()
     }
     while (result->NextRow());
 
-    if (sWorld.IsChina())
+    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
         std::unique_ptr<QueryResult> result2(CharacterDatabase.Query("SELECT `name` FROM `char_transfer_names`"));
 

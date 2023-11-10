@@ -521,7 +521,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 std::string categories = "Categories:";
 
                 for (auto &itr : sObjectMgr.GetShopCategoriesList())
-                    if (sWorld.GetDefaultDbcLocale() == 4 /* China */)
+                    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
                         categories += std::to_string(itr.first) + "=" + itr.second.Name_loc4 + "="+itr.second.Icon+";";
                     else
                         categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
@@ -560,7 +560,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                     if (ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(itr.second.Item))
                     {
-                        if(sWorld.GetDefaultDbcLocale() == 4 /* China */)
+                        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
                             _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
                             + itr.second.Description_loc4 + "="
                             + std::to_string(itr.second.Price) + "="
