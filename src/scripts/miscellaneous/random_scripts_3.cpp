@@ -7030,9 +7030,105 @@ bool QuestAccept_npc_shade_of_senshi(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
+bool GossipHello_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41143) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30146, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61758, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 32 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30141);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30142);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 8000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30143);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 16000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30144);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 24000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    Creature* NPC_BROK_THUNDERFORGE = pCreature->FindNearestCreature(61756, 40.0F);
+
+                    if (!NPC_BROK_THUNDERFORGE)
+                        return;
+
+                    NPC_BROK_THUNDERFORGE->MonsterSay(30145);
+                    NPC_BROK_THUNDERFORGE->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 31000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    Creature* NPC_SINDRI_THUNDERFORGE = pCreature->FindNearestCreature(61757, 40.0F);
+
+                    if (!NPC_SINDRI_THUNDERFORGE)
+                        return;
+
+                    NPC_SINDRI_THUNDERFORGE->MonsterSay(30145);
+                    NPC_SINDRI_THUNDERFORGE->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 31000);
+
+            DoAfterTime(pPlayer, 32 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60052))
+                {
+                    player->KilledMonster(cInfo, ObjectGuid());
+
+                    if (Group* pGroup = player->GetGroup())
+                    {
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember->GetObjectGuid() != player->GetObjectGuid())
+                                    pMember->KilledMonster(cInfo, ObjectGuid());
+                            }
+                        }
+                    }
+                }
+                });
+        }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_frig_thunderforge";
+    newscript->pGossipHello = &GossipHello_npc_frig_thunderforge;
+    newscript->pGossipSelect = &GossipSelect_npc_frig_thunderforge;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_shade_of_senshi";
