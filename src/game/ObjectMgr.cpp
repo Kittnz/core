@@ -3422,7 +3422,7 @@ void ObjectMgr::LoadGroups()
         {
             itr->second->Disband();
             delete itr->second;
-            m_GroupMap.erase(itr++);
+            itr = m_GroupMap.erase(itr);
         }
         else
             ++itr;
