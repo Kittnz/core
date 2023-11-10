@@ -13,7 +13,14 @@ REPLACE INTO creature_template VALUES
 (61752, 7342, 0, 0, 0, 0, 'Bruiser Rakklan', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 1682, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 525312, 0, ''),
 (61753, 7212, 0, 0, 0, 0, 'Technician Spux', NULL, 0, 13, 13, 314, 314, 0, 0, 511, 1682, 0, 1, 1.14286, 1, 20, 5, 40, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61754, 7053, 0, 0, 0, 0, 'Dazlon Brassdigger', 'Hangmans Plunder Crew', 0, 16, 16, 356, 356, 0, 0, 713, 1682, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 60, 74, 0, 76, 1, 3000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61755, 15300, 0, 0, 0, 0, 'Ranala Greedvolt', 'Hangmans Plunder Crew', 0, 15, 15, 328, 328, 0, 0, 660, 1682, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61755, 15300, 0, 0, 0, 0, 'Ranala Greedvolt', 'Hangmans Plunder Crew', 0, 15, 15, 328, 328, 0, 0, 660, 1682, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61756, 20522, 0, 0, 0, 0, 'Brok Thunderforge', NULL, 0, 44, 44, 2117, 2117, 0, 0, 2625, 694, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61757, 20520, 0, 0, 0, 0, 'Sindri Thunderforge', NULL, 0, 46, 46, 2398, 2398, 0, 0, 2780, 694, 3, 1, 1.14286, 1, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61758, 20521, 0, 0, 0, 0, 'Frig Thunderforge', NULL, 0, 50, 50, 17720, 17720, 0, 0, 2888, 694, 3, 1, 1.14286, 1, 20, 5, 40, 1, 1, 292, 377, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 55.3248, 76.0716, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20520, 0, 0, 0, 0);
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20521, 0, 0, 0, 0);
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES (20522, 0, 0, 0, 0);
 
 set @equip_template = 20466; set @weapon_1 = 1906; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61755;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -46,6 +53,24 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20459; set @weapon_1 = 6982; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61744;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41571; set @magic_number = 61758;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Me boys are bundles of talent, but ye got to keep \'em in check. If they would stop bickerin\' for just one day, passin\' down te family traditions te them wouldn\'t be so hard fer me!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41570; set @magic_number = 61757;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Bronzebeard dwarves down in Ironforge might pride themselves on their skills, but they pale in comparison to the Wildhammer\'s years of refined craftsmanship.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41569; set @magic_number = 61756;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We Thunderforges are te best what Wildhammer smithin\' can offer ye! Blood, sweat an\' tears is what makes our craft one o\' a kind!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41567; set @magic_number = 61755;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -100,7 +125,6 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I really do have my work cut out for me!$B$BA batch of miscalculated fuses and faulty wires has sent all of the robots into chaos here!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
-
 
 -- Creature's vendor list: Gereno Topside. 
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61751, 0, 2509, 0, 0, 0, 0);
