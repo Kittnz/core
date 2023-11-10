@@ -6114,7 +6114,8 @@ bool ChatHandler::HandleUnstuckCommand(char* /*args*/)
 
 bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 {
-    SendSysMessage("Core revision: " REVISION_HASH " / " REVISION_DATE " / " _ENDIAN_PLATFORM);
+    if (!m_session || m_session->GetSecurity() > SEC_PLAYER)
+        SendSysMessage("Core revision: " REVISION_HASH " / " REVISION_DATE " / " _ENDIAN_PLATFORM);
 
     uint32 activeClientsNum = sWorld.GetActiveSessionCount();
     uint32 queuedClientsNum = sWorld.GetQueuedSessionCount();
