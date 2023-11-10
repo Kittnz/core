@@ -675,6 +675,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
     CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
     CONFIG_BOOL_ENFORCED_ENGLISH,
+    CONFIG_BOOL_SEA_NETWORK,
     CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY,
     CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA,
     CONFIG_BOOL_ANALYSIS_DO_SHARED_DATA_DETAILED_REPORT,
@@ -934,8 +935,6 @@ class World
         uint32 GetContentPhase() const { return getConfig(CONFIG_UINT32_CONTENT_PHASE); }
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
-
-        bool IsChina() const { return GetDefaultDbcLocale() == 4; }
 
         /// Get the path where data (dbc, maps) are stored on disk
         std::string GetDataPath() const { return m_dataPath; }

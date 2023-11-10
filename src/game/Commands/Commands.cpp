@@ -6114,9 +6114,6 @@ bool ChatHandler::HandleUnstuckCommand(char* /*args*/)
 
 bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 {
-    if (!m_session || m_session->GetSecurity() > SEC_PLAYER)
-        SendSysMessage("Core revision: " REVISION_HASH " / " REVISION_DATE " / " _ENDIAN_PLATFORM);
-
     uint32 activeClientsNum = sWorld.GetActiveSessionCount();
     uint32 queuedClientsNum = sWorld.GetQueuedSessionCount();
     uint32 maxActiveClientsNum = sWorld.GetMaxActiveSessionCount();
@@ -6135,7 +6132,8 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
 
-        PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
+        if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+            PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
 
 
         uint32 numHcs = 0;
@@ -6160,10 +6158,14 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
         if (GetSession()->GetSecurity() >= SEC_ADMINISTRATOR)
         {
-            PSendSysMessage("Total amount of CN characters logged in: %u", numCn);
-            PSendSysMessage("Total amount of regional characters logged in: %u", numNonCn);
-            PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions.load());
-            PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions.load());
+            if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+            {
+                PSendSysMessage("Total amount of CN characters logged in: %u", numCn);
+                PSendSysMessage("Total amount of regional characters logged in: %u", numNonCn);
+                PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions.load());
+                PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions.load());
+            }
+
         }
     }
 
