@@ -5458,6 +5458,22 @@ void Player::KillPlayer()
                 if (hardcoreGuild->GetSuitableNewLeader(newLeaderSlot, oldLeaderSlot))
                     hardcoreGuild->SetNewLeader(newLeaderSlot, oldLeaderSlot);
             }
+
+            GetSession()->SendGuildCommandResult(GUILD_QUIT_S, hardcoreGuild->GetName(), ERR_PLAYER_NO_MORE_IN_GUILD);
+
+            bool deleted = false;
+            if (hardcoreGuild->DelMember(GetObjectGuid()))
+            {
+                hardcoreGuild->Disband();
+                delete hardcoreGuild;
+                deleted = true;
+            }
+
+            if (!deleted)
+            {
+                hardcoreGuild->LogGuildEvent(GUILD_EVENT_LOG_LEAVE_GUILD, GetObjectGuid());
+                hardcoreGuild->BroadcastEvent(GE_LEFT, GetObjectGuid(), GetName());
+            }
         }
 
         SpawnHardcoreGravestone();
