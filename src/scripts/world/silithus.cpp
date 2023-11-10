@@ -383,12 +383,6 @@ struct go_pierre_ventsAI: public GameObjectAI
 
         ///- Mark stone as used.
         me->UseDoorOrButton();
-        if (stoneType == GO_TYPE_GREATER_WIND_STONE)
-            me->SetRespawnTime(10800);
-        else if (stoneType == GO_TYPE_WIND_STONE)
-            me->SetRespawnTime(900);
-        else if (stoneType == GO_TYPE_LESSER_WIND_STONE)
-            me->SetRespawnTime(300);
 
         return true;
     }
