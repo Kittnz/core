@@ -23957,13 +23957,8 @@ void Player::CountTalentsSpentInSavedSpec(uint32 specIndex, std::vector<uint32>&
 // Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
 std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 {
-    // Mage trees are messed up, disable for them untill i find a fix
-    if (GetClass() == CLASS_MAGE)
-        return "";
-
     if (uiPrimaryOrSecondary < 1 && uiPrimaryOrSecondary > 4)
         return "";
-
 
     uint32 specIndex = uiPrimaryOrSecondary - 1;
     if (m_savedSpecSpells[specIndex].empty())
