@@ -1050,7 +1050,6 @@ DWORD DoPatcherMainWork()
 
 		Downloader->OnAbortDownload = [&bShouldWait, &bWasOK]()
 		{
-			SetErrorState();
 			InterlockedExchange(&bWasOK, FALSE);
 			InterlockedExchange(&bShouldWait, FALSE);
 		};
@@ -1060,8 +1059,25 @@ DWORD DoPatcherMainWork()
 			InterlockedExchange(&bShouldWait, FALSE);
 		};
 
-		std::string LinkToPatch = "https://turtle-wow.b-cdn.net/cn/wow-patch.mpq";
+		auto TryToDownloadLambda = [&Downloader](std::string LinkToPatch) -> bool
+		{
+			if (!Downloader->Init(LinkToPatch))
+			{
+				return false;
+			}
 
+			if (!Downloader->DownloadAsync())
+			{
+				return false;
+			}
+
+			return true;
+		};
+
+		std::string MainLinkToPatch = "https://turtle-wow.b-cdn.net/cn/wow-patch.mpq";
+		std::string BackupLinkToPatch = "https://download.turtle-wow.org/cn/wow-patch.mpq";
+
+#if 0
 		if (FILE* DownloadLinkFile = fopen("downloadlink.txt", "rb"))
 		{
 			fseek(DownloadLinkFile, 0, SEEK_END);
@@ -1073,20 +1089,21 @@ DWORD DoPatcherMainWork()
 
 			fclose(DownloadLinkFile);
 		}
-
-		if (!Downloader->Init(LinkToPatch))
+#endif
+		
+		int Attempt = 0;
+		if (!TryToDownloadLambda(MainLinkToPatch))
 		{
-			SetErrorState();
-			ErrorBox(IDS_Err_Patching);
-			return 1;
+			Attempt = 1;
+			if (!TryToDownloadLambda(BackupLinkToPatch))
+			{
+				SetErrorState();
+				ErrorBox(IDS_Err_Patching);
+				return 1;
+			}
 		}
 
-		if (!Downloader->DownloadAsync())
-		{
-			SetErrorState();
-			ErrorBox(IDS_Err_Patching);
-			return 1;
-		}
+		WaitAgain:
 
 		while (bShouldWait)
 		{
@@ -1097,6 +1114,20 @@ DWORD DoPatcherMainWork()
 				Downloader->CancelDownload();
 				return 1;
 			}
+		}
+
+		if (!bWasOK && Attempt == 0)
+		{
+			Attempt = 1;
+			bShouldWait = TRUE;
+			bWasOK = TRUE;
+			if (!TryToDownloadLambda(BackupLinkToPatch))
+			{
+				SetErrorState();
+				ErrorBox(IDS_Err_Patching);
+				return 1;
+			}
+			goto WaitAgain;
 		}
 
 		if (!bWasOK)
