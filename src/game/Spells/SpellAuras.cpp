@@ -5161,11 +5161,20 @@ void Aura::HandleAuraModIncreaseHealth(bool apply, bool Real)
         {
             if (Real)
             {
-                target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_PCT, 15.0f, apply);
                 if (apply)
                 {
-                    int32 healAmount = target->GetMaxHealth() * 0.15f;
+                    target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, m_modifier.m_amount, apply);
+                    target->ModifyHealth(m_modifier.m_amount);
+                    int32 healAmount = dither(target->GetMaxHealth() * 0.15f);
                     target->CastCustomSpell(target, 23783, &healAmount, nullptr, nullptr, true, nullptr, this);
+                }
+                else
+                {
+                    if (int32(target->GetHealth()) > m_modifier.m_amount)
+                        target->ModifyHealth(-m_modifier.m_amount);
+                    else if (target->IsAlive())
+                        target->SetHealth(1);
+                    target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, m_modifier.m_amount, apply);
                 }
             }
             return;

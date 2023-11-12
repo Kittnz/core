@@ -1510,7 +1510,10 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
                 case 23725:                                 // Gift of Life (warrior bwl trinket)
                     if (m_casterUnit)
-                        m_casterUnit->CastSpell(m_casterUnit, 23782, true);
+                    {
+                        int32 lifegivingGemHealthMod = int32(m_casterUnit->GetMaxHealth() * 0.15);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 23782, &lifegivingGemHealthMod, nullptr, nullptr, true, nullptr);
+                    }
                     return;
                 case 24781:                                 // Dream Fog
                 {
