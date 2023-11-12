@@ -87,7 +87,7 @@ struct ReapplyAffectedPassiveAurasHelper;
 class SpellAuraHolder
 {
     public:
-        SpellAuraHolder (SpellEntry const* spellproto, Unit* target, Unit* caster, Item* castItem, WorldObject* realCaster);
+        SpellAuraHolder (SpellEntry const* spellproto, Unit* target, Unit* caster, Item* castItem, WorldObject* realCaster, bool castByItemSet);
         Aura* m_auras[MAX_EFFECT_INDEX];
 
         void AddAura(Aura* aura, SpellEffectIndex index);
@@ -237,6 +237,7 @@ class SpellAuraHolder
         bool IsReflected() const { return m_isReflected; }
         void SetAddedBySpell(bool spell) { m_addedBySpell = spell; }
         bool IsAddedBySpell() const { return m_addedBySpell; }
+        bool IsCastByItemSet() const { return m_castByItemSet; }
 
         ~SpellAuraHolder();
     private:
@@ -246,6 +247,7 @@ class SpellAuraHolder
         ObjectGuid m_casterGuid;
         ObjectGuid m_realCasterGuid;
         ObjectGuid m_castItemGuid;                          // it is NOT safe to keep a pointer to the item because it may get deleted
+        bool m_castByItemSet;
         time_t m_applyTime;
 
         SpellEntry const* m_spellProto;
@@ -487,6 +489,7 @@ class Aura
                 m_periodicTick = maxticks - GetAuraDuration() / m_modifier.periodictime;
         }
 
+        bool IsCastByItemSet() const { return GetHolder()->IsCastByItemSet(); }
         bool IsPositive() const { return m_positive; }
         bool IsPersistent() const { return m_isPersistent; }
         bool IsAreaAura() const { return m_isAreaAura; }
@@ -620,5 +623,5 @@ class SingleEnemyTargetAura : public Aura
 };
 
 Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
-SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem = nullptr);
+SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem = nullptr, bool castByItemSet = false);
 #endif

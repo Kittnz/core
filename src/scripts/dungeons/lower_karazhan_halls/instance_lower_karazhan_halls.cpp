@@ -125,6 +125,14 @@ void instance_lower_karazhan_halls::Update(uint32 diff)
 	}
 }
 
+bool instance_lower_karazhan_halls::IsEncounterInProgress() const
+{
+	for (uint32 i : m_uiBossState)
+		if (i == IN_PROGRESS)
+			return true;
+	return false;
+}
+
 InstanceData* GetInstanceData_instance_lower_karazhan_halls(Map* p_Map)
 {
 	return new instance_lower_karazhan_halls(p_Map);

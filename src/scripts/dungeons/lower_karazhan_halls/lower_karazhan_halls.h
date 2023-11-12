@@ -41,6 +41,8 @@ public:
 	const char* Save() override { return m_strInstData.c_str(); }
 	void Load(const char* chrIn) override;
 
+	bool IsEncounterInProgress() const override;
+
 protected:
 	uint64 m_uiBossGUID[DATA_MAX_ENCOUNTER]{};
 	uint32 m_uiBossState[DATA_MAX_ENCOUNTER]{};

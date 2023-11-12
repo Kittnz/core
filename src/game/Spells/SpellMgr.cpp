@@ -1174,6 +1174,12 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             if (spellInfo_2->Id == 17546 && spellInfo_1->Id == 45988)
                 return false;
 
+            // Nature Protection Potion and Elixir of Greater Nature Power
+            if (spellInfo_1->Id == 7254 && spellInfo_2->Id == 45988)
+                return false;
+            if (spellInfo_2->Id == 7254 && spellInfo_1->Id == 45988)
+                return false;
+
             break;
         default:
             break;

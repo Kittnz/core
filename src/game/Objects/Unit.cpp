@@ -8551,7 +8551,12 @@ void Unit::RemoveFromWorld()
     if (IsInWorld())
     {
         Uncharm();
-        RemoveNotOwnSingleTargetAuras();
+
+        // Do not remove single target auras from players on teleport.
+        // Priest's Holy Champion should not be removed when player exits instance.
+        if (!IsPlayer() || !static_cast<Player*>(this)->IsBeingTeleported())
+            RemoveNotOwnSingleTargetAuras();
+
         RemoveGuardians();
         // Remove non-guardian pet
         if (Pet* pet = GetPet())
