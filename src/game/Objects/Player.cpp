@@ -2588,8 +2588,9 @@ void Player::HandleReturnOnTeleportFail(WorldLocation const& oldLoc)
     // Teleport to previous place, if cannot be ported back TP to homebind place
     if (!TeleportTo(oldLoc))
     {
+        std::string GuidStr = GetGuidStr();
         DETAIL_LOG("WorldSession::HandleMoveWorldportAckOpcode: %s cannot be ported to his previous place, teleporting him to his homebind place...",
-            GetGuidStr().c_str());
+            GuidStr.c_str());
         TeleportToHomebind();
     }
 }
