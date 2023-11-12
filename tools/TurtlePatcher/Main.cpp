@@ -10,8 +10,14 @@
 #include <string> 
 #include <sstream>
 #include <array>
+#include <mutex>
+#include <thread>
+#include "ScopedHandle.h"
+#include "Common.h"
 
 #include "PeUtils.h"
+#include "Downloader.h"
+#include <strsafe.h>
 
 #define fs std::filesystem
 
@@ -52,6 +58,7 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 
 bool fov_build = false;
 constexpr bool bPatcher = false;
+constexpr bool bDownloadPatchFromInternet = true;
 
 #define NEW_BUILD 7070u
 #define NEW_VISUAL_BUILD "7070"
@@ -73,6 +80,63 @@ const unsigned char LoadDLLShellcode[] =
 };
 
 const char DiscordOverlayDllStr[] = "DiscordOverlay.dll";
+
+DWORD gMainThreadID = 0;
+
+volatile DWORD bRequestToCancelDownload = 0;
+
+DWORD G_WM_INCREMENT_PROGRESS = 0;
+DWORD G_WM_PATCHING_DONE = 0;
+DWORD G_WM_SET_PROGRESS = 0;
+DWORD G_WM_SET_ERROR = 0;
+DWORD G_WM_SET_STAGE = 0;
+
+unsigned long long TotalBytesToDownload = 0;
+
+bool IsOurMessage(UINT MsgID)
+{
+	return MsgID == G_WM_INCREMENT_PROGRESS ||
+		MsgID == G_WM_PATCHING_DONE ||
+		MsgID == G_WM_SET_PROGRESS ||
+		MsgID == G_WM_SET_STAGE ||
+		MsgID == G_WM_SET_ERROR;
+}
+
+DWORD StageIDToLocaleStringID(EPatcherStage Stage)
+{
+	switch (Stage)
+	{
+	case STAGE_INIT:
+		return IDS_StartupLabel;
+	case STAGE_BINARY_PATCH:
+		return IDS_Stage_BinaryPatch;
+	case STAGE_DOWNLOADING:
+		return IDS_Stage_Downloading;
+	case STAGE_CLEAR_CACHE:
+		return IDS_Stage_ClearCache;
+	case STAGE_UNPACK_FILES:
+		return IDS_Stage_UnpackFiles;
+	case STAGE_DONE:
+		return IDS_Stage_Done;
+	default:
+		return IDS_StartupLabel;
+	}
+}
+
+inline void SetProgress(int Progress)
+{
+	PostThreadMessageA(gMainThreadID, G_WM_SET_PROGRESS, Progress, 0);
+}
+
+inline void SetErrorState()
+{
+	PostThreadMessageA(gMainThreadID, G_WM_SET_ERROR, 0, 0);
+}
+
+inline void SetPatcherStage(EPatcherStage Stage)
+{
+	PostThreadMessageA(gMainThreadID, G_WM_SET_STAGE, (WPARAM)Stage, 0);
+}
 
 void RemoveFilenameFromEnd(std::string& InOutStr)
 {
@@ -297,7 +361,7 @@ struct StormFile
 struct StormArchive
 {
 	HANDLE mpq = NULL;
-	StormArchive(const char* pPath)
+	StormArchive(const TCHAR* pPath)
 	{
 		if (!SFileOpenArchive(pPath, 0, 0, &mpq))
 		{
@@ -400,11 +464,20 @@ struct StormArchive
 HINSTANCE gHInstance;
 HWND hDialog = NULL;
 
-#define WM_SETPROGRESS WM_USER + 1
+template<typename BufferType>
+void LocaleString(DWORD StringID, BufferType& OutString)
+{
+	ZeroMemory(OutString, sizeof(OutString));
+	LoadString(gHInstance, StringID, OutString, sizeof(OutString) / sizeof(OutString[0]));
+}
 
 INT_PTR CALLBACK Dlgproc(HWND Arg1, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hProgressBar = NULL;
+	static HWND hProgressTxt = NULL;
+	static HWND hCancelBtn = NULL;
+
+	static bool bDownloading = false;
 
 	switch (Message)
 	{
@@ -418,19 +491,31 @@ INT_PTR CALLBACK Dlgproc(HWND Arg1, UINT Message, WPARAM wParam, LPARAM lParam)
 		}
 
 		hProgressBar = GetDlgItem(Arg1, IDC_PROGRESS1);
+		hProgressTxt = GetDlgItem(Arg1, IDC_PROGRESSTXT);
+		hCancelBtn = GetDlgItem(Arg1, IDC_CANCELBTN);
 
 		SendMessage(hProgressBar, PBM_SETRANGE32, 0, 100);
 		SendMessage(hProgressBar, PBM_SETSTEP, 1, 0);
 
+		TCHAR StringBuffer[512];
+		LocaleString(IDS_TITLE, StringBuffer);
+		SetWindowText(Arg1, StringBuffer);
+
+		LocaleString(IDS_StartupLabel, StringBuffer);
+		SetWindowText(hProgressTxt, StringBuffer);
+
+		LocaleString(IDS_Cancel, StringBuffer);
+		SetWindowText(hCancelBtn, StringBuffer);
 		return TRUE;
 	}
-
+	break;
 	case WM_COMMAND:
 	{
 		switch (LOWORD(wParam))
 		{
 		case IDC_CANCELBTN:
 		{
+			InterlockedExchange(&bRequestToCancelDownload, 1);
 			DestroyWindow(Arg1);
 			hDialog = NULL;
 			return TRUE;
@@ -439,22 +524,77 @@ INT_PTR CALLBACK Dlgproc(HWND Arg1, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 	}
-
-	case WM_SETPROGRESS:
+	break;
+	case WM_DESTROY:
 	{
-		SendMessage(hProgressBar, PBM_STEPIT, 0, 0);
+		PostQuitMessage(0);
+		return TRUE;
 	}
-
+	break;
 	default:
 		break;
 	}
+
+	if (Message == G_WM_INCREMENT_PROGRESS)
+	{
+		SendMessage(hProgressBar, PBM_STEPIT, 0, 0);
+		return TRUE;
+	}
+	else if (Message == G_WM_SET_PROGRESS)
+	{
+		SendMessage(hProgressBar, PBM_SETPOS, wParam, 0);
+
+		if (bDownloading && TotalBytesToDownload > 0)
+		{
+			TCHAR DownloadTxt[256];
+			LocaleString(IDS_DownloadStatus, DownloadTxt);
+
+			float fTotalBytes = float(TotalBytesToDownload);
+			float TotalMegabytes = fTotalBytes / 1024.0f / 1024.0f;
+			float CurrentMegabytes = ((float(wParam) / 100.0f) * fTotalBytes) / 1024.0f / 1024.0f;
+			
+			TCHAR LabelTxt[256];
+			StringCbPrintf(LabelTxt, sizeof(LabelTxt), DownloadTxt, CurrentMegabytes, TotalMegabytes);
+			SetWindowText(hProgressTxt, LabelTxt);
+		}
+
+		return TRUE;
+	}
+	else if (Message == G_WM_SET_ERROR)
+	{
+		SendMessage(hProgressBar, PBM_SETSTATE, PBST_ERROR, 0);
+		return TRUE;
+	}
+	else if (Message == G_WM_PATCHING_DONE)
+	{
+		DestroyWindow(Arg1);
+		hDialog = NULL;
+		return TRUE;
+	}
+	else if (Message == G_WM_SET_STAGE)
+	{
+		TCHAR StringBuffer[512];
+
+		EPatcherStage PatcherStage = (EPatcherStage)wParam;
+		DWORD StringID = StageIDToLocaleStringID(PatcherStage);
+		LocaleString(StringID, StringBuffer);
+		SetWindowText(hProgressTxt, StringBuffer);
+
+		bDownloading = PatcherStage == STAGE_DOWNLOADING; 
+
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
 HANDLE hLogFile = NULL;
 
-void WriteLog(const char* format, ...)
+std::mutex LogMutex;
+
+void WriteLog(const TCHAR* format, ...)
 {
+	std::lock_guard LogGuard{ LogMutex };
 	if (hLogFile == NULL)
 	{
 		return;
@@ -462,21 +602,41 @@ void WriteLog(const char* format, ...)
 
 	va_list ap;
 	va_start(ap, format);
-	char Message[4096] = {0};
+	TCHAR Message[4096] = {0};
 
-	int NumBytes = vsnprintf_s(Message, sizeof(Message), format, ap);
+	size_t BytesLeft = 0;
+	StringCbVPrintfEx(Message, sizeof(Message), NULL, &BytesLeft, STRSAFE_NULL_ON_FAILURE, format, ap);
+
+	size_t CharsWritten = 4096 - (BytesLeft / sizeof(TCHAR));
 
 	va_end(ap);
-	Message[NumBytes] = '\n';
-	Message[NumBytes + 1] = '\0';
+	Message[CharsWritten] = _T('\n');
+	Message[CharsWritten + 1] = _T('\0');
 
 	DWORD bytesWritten = 0;
-	WriteFile(hLogFile, Message, NumBytes + 1, &bytesWritten, NULL);
+	WriteFile(hLogFile, Message, (CharsWritten + 1) * sizeof(TCHAR), &bytesWritten, NULL);
+
+#ifdef _DEBUG
+	OutputDebugString(Message);
+#endif
 }
 
-inline void ErrorBox(const char* errorTxt)
+[[deprecated("Strongly recommended to use ErrorBox(DWORD TxtID), since we need support localization")]]
+inline void ErrorBox(const TCHAR* errorTxt)
 {
-	MessageBox(NULL, errorTxt, "Error", MB_OK | MB_ICONERROR);
+	TCHAR ErrLabel[32] = { 0 };
+	LocaleString(IDS_Error, ErrLabel);
+	MessageBox(NULL, errorTxt, ErrLabel, MB_OK | MB_ICONERROR);
+}
+
+inline void ErrorBox(DWORD TxtID)
+{
+	TCHAR Message[1024] = {0};
+	LocaleString(TxtID, Message);
+
+	TCHAR ErrLabel[32] = {0};
+	LocaleString(IDS_Error, ErrLabel);
+	MessageBox(NULL, Message, ErrLabel, MB_OK | MB_ICONERROR);
 }
 
 int PatchWoWExe()
@@ -499,7 +659,7 @@ int PatchWoWExe()
 	}
 	else
 	{
-		WriteLog("ERROR: Can't patch WoW.exe - can't open file!");
+		WriteLog(_T("ERROR: Can't patch WoW.exe - can't open file!"));
 //		ErrorBox("Can't patch WoW.exe");
 		return 1;
 	}
@@ -509,18 +669,31 @@ int PatchWoWExe()
 
 void PrintInstructions()
 {
-	WriteLog(" ");
-	WriteLog("Hello! It seems that something went wrong with your installation process. Here's a list of possible solutions:");
-	WriteLog(" ");
-	WriteLog("Please ensure that your Antivirus, Backup Software or Windows Defender is not blocking TWPatcher.exe, DiscordOverlay.dll or WoW.exe. Open Window Security in your right bottom taskbar, go to Virus and Scan protection > Allowed Threats > Protected Threats and select the files and click the Restore option.");
-	WriteLog(" ");
-	WriteLog("Move the game out of read-only folders such as Program Files, User Folder, Downloads, Desktop, etc.");
-	WriteLog(" ");
-	WriteLog("Try to run WoW as Administrator!");
-	WriteLog(" ");
-	WriteLog("If everything is done right, your Data folder should have %s installed an your binary file should have revision %s", PATCH_FILE, NEW_VISUAL_VERSION);
-	WriteLog(" ");
-	WriteLog("If it still doesn't work please use a direct download from our website.");
+	TCHAR HelpStr[512];
+
+	LocaleString(IDS_HelpStr1, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr);
+
+	LocaleString(IDS_HelpStr2, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr);
+
+	LocaleString(IDS_HelpStr3, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr);
+
+	LocaleString(IDS_HelpStr4, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr);
+
+	LocaleString(IDS_HelpStr5, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr, PATCH_FILE, NEW_VISUAL_VERSION);
+
+	LocaleString(IDS_HelpStr6, HelpStr);
+	WriteLog(_T(" "));
+	WriteLog(HelpStr);
 }
 
 void ClearWDBCache()
@@ -532,10 +705,10 @@ void ClearWDBCache()
 
 		if (fs::exists(wdb))
 		{
-			WriteLog("Searching for the client cache...");
+			WriteLog(_T("Searching for the client cache..."));
 			std::error_code ec;
 			fs::remove_all(wdb, ec);
-			WriteLog("Deleting client cache: %s", ec.category().message(ec.value()));
+			WriteLog(_T("Deleting client cache: %S"), ec.category().message(ec.value()).c_str());
 		}	
 	}
 }
@@ -544,11 +717,17 @@ void DeleteChatCache()
 {
 	fs::path chat_cache_path = fs::current_path() / "WTF" / "Account";
 
+	if(!fs::exists(chat_cache_path))
+	{
+		return;
+	}
+
 	for (const fs::directory_entry& dir_entry : fs::recursive_directory_iterator(chat_cache_path))
 	{
 		if (wcsstr(dir_entry.path().c_str(), L"chat-cache.txt"))
 		{
-			WriteLog("Removing %S", dir_entry.path().c_str());
+			std::wstring wPath = dir_entry.path().wstring();
+			WriteLog(_T("Removing %s"), wPath.c_str());
 			fs::remove(dir_entry.path());
 		}
 	}
@@ -562,7 +741,7 @@ void DeleteDeprecatedMPQ()
 		int numerical_patches[5] = { 5, 6, 7, 8, 9 };
 		for (int i : numerical_patches)
 		{
-			WriteLog("Searching for patch-%i...", i);
+			WriteLog(_T("Searching for patch-%i..."), i);
 			std::stringstream ss;
 			std::stringstream ss_r;
 			ss << "patch-" << std::to_string(i) << ".mpq";
@@ -574,23 +753,23 @@ void DeleteDeprecatedMPQ()
 
 			if (fs::exists(patch_path))
 			{
-				WriteLog("Renaming deprecated patch-%i to %s...", i, patch_rename.c_str());
+				WriteLog(_T("Renaming deprecated patch-%i to %S..."), i, patch_rename.c_str());
 				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
 
 				fs::path patch_disabled = currentPath / "Data" / patch_rename;
 				if (fs::exists(patch_disabled))
 				{
-					WriteLog("Deleting deprecated patch-%i...", i);
+					WriteLog(_T("Deleting deprecated patch-%i..."), i);
 					fs::remove(patch_disabled);
 				}
 				else
 				{
-					WriteLog("Deprecated patch-%i not found.", i);
+					WriteLog(_T("Deprecated patch-%i not found."), i);
 				}
 			}
 			else
 			{
-				WriteLog("Patch-%i not found.", i);
+				WriteLog(_T("Patch-%i not found."), i);
 			}
 		}
 	}
@@ -602,7 +781,7 @@ void DeleteDeprecatedMPQ()
 			ss_n << "patch-" << let << ".mpq";
 			std::string i = ss_n.str();
 
-			WriteLog("Searching for %s...", i.c_str());
+			WriteLog(_T("Searching for %S..."), i.c_str());
 
 			std::stringstream ss_r;
 			ss_r << i << ".off";
@@ -612,23 +791,23 @@ void DeleteDeprecatedMPQ()
 
 			if (fs::exists(patch_path))
 			{
-				WriteLog("Renaming deprecated %s to %s...", i.c_str(), patch_rename.c_str());
+				WriteLog(_T("Renaming deprecated %S to %S..."), i.c_str(), patch_rename.c_str());
 				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
 
 				fs::path patch_disabled = currentPath / "Data" / patch_rename;
 				if (fs::exists(patch_disabled))
 				{
-					WriteLog("Deleting deprecated %s...", i.c_str());
+					WriteLog(_T("Deleting deprecated %S..."), i.c_str());
 					fs::remove(patch_disabled);
 				}
 				else
 				{
-					WriteLog("Deprecated %s not found.", i.c_str());
+					WriteLog(_T("Deprecated %S not found."), i.c_str());
 				}
 			}
 			else
 			{
-				WriteLog("%s not found.", i.c_str());
+				WriteLog(_T("%S not found."), i.c_str());
 			}
 		}
 	}
@@ -642,19 +821,27 @@ void DeleteLFTAddon()
 
 		if (fs::exists(lft))
 		{
-			WriteLog("Searching for the deprecated LFT addon...");
+			WriteLog(_T("Searching for the deprecated LFT addon..."));
 			std::error_code ec;
 			fs::remove_all(lft, ec);
-			WriteLog("Deleting LFT addon: %s", ec.category().message(ec.value()));
+			WriteLog(_T("Deleting LFT addon: %S"), ec.category().message(ec.value()).c_str());
 		}
 		else
-			WriteLog("LFT addon doesn't exist. Skip.");
+			WriteLog(_T("LFT addon doesn't exist. Skip."));
 	}
 }
+
+DWORD GuardPatchMainWork();
 
 int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 {
 	gHInstance = hInstance;
+
+	G_WM_INCREMENT_PROGRESS = RegisterWindowMessage(_T("WM_INCREMENT_PROGRESS"));
+	G_WM_PATCHING_DONE = RegisterWindowMessage(_T("WM_PATCHING_DONE"));
+	G_WM_SET_PROGRESS = RegisterWindowMessage(_T("WM_SET_PROGRESS"));
+	G_WM_SET_ERROR = RegisterWindowMessage(_T("WM_SET_ERROR"));
+	G_WM_SET_STAGE = RegisterWindowMessage(_T("WM_SET_STAGE"));
 
 	// create log file
 	// By default we try to create a log in working directory.
@@ -666,35 +853,140 @@ int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 	fs::path LogFilePlace1 = currentPath / LogFilename;
 	std::wstring LogFilePlace1str = LogFilePlace1.wstring();
 
-	hLogFile = CreateFileW(LogFilePlace1str.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	if (hLogFile == NULL)
+	FileScopedHandle LogFile{ CreateFileW(LogFilePlace1str.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL) };
+	if (!LogFile.IsValid())
 	{
 		fs::path TempPath = fs::temp_directory_path();
 		TempPath = TempPath / LogFilename;
 		std::wstring TempPathStr = TempPath.wstring();
-		hLogFile = CreateFileW(TempPathStr.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hLogFile == NULL)
+		FileScopedHandle NewLogHandle {CreateFileW(TempPathStr.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)};
+		if (!NewLogHandle.IsValid())
 		{
-			ErrorBox("Can't create log file. Perhaps you don't have enough free space on disk, or something wrong happened.\nPatcher will try to work anyway.");
+			ErrorBox(IDS_Err_LogFile);
+		}
+
+		LogFile.Swap(NewLogHandle);
+	}
+
+	hLogFile = LogFile.Get();
+	{
+		// write BOM
+		unsigned char BOM[2] = { 0xFF, 0xFE};
+		DWORD BytesWritten = 0;
+		WriteFile(hLogFile, &BOM, 2, &BytesWritten, NULL);
+	}
+
+	WriteLog(_T("Log file created."));
+
+	// create a dialog
+	hDialog = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOGBAR), NULL, Dlgproc);
+	ShowWindow(hDialog, SW_SHOW);
+
+	// Handle all dialog creation messages
+	MSG		msg;
+	while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+	{
+		if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
 	}
 
-	struct AutoLogCloser
+	std::thread PatcherThread{ GuardPatchMainWork };
+	PatcherThread.detach();
+
+	BOOL bRet = TRUE;
+	while ((bRet = GetMessage(&msg, NULL, 0, 0)) != 0)
 	{
-		~AutoLogCloser()
+		if (bRet == -1)
 		{
-			if (hLogFile != NULL)
+			break;
+		}
+		else
+		{
+			bool bOurMessage = IsOurMessage(msg.message);
+			if (!bOurMessage && (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))) // Not our message, and not a dialog message
 			{
-				CloseHandle(hLogFile);
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+
+			if (bOurMessage)
+			{
+				// this not looking good, but hey, it's working ok'ish
+				Dlgproc(hDialog, msg.message, msg.wParam, msg.lParam);
 			}
 		}
-	} closer;
+	}
 
-	WriteLog("Log file created.");
+	WriteLog(_T("Update is complete, starting the game..."));
+	if (hDialog != NULL)
+	{
+		DestroyWindow(hDialog);
+		hDialog = NULL;
+	}
+
+#ifndef _DEBUG
+	fs::remove("wow-patch.mpq");
+#endif
+
+	STARTUPINFO info;
+	PROCESS_INFORMATION pInfo;
+	ZeroMemory(&info, sizeof(info));
+	ZeroMemory(&pInfo, sizeof(pInfo));
+
+	TCHAR WoWExe[24] = _T("WoW.exe");
+	if (!CreateProcess(NULL, WoWExe, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &info, &pInfo))
+	{
+		WriteLog(_T("ERROR: Can't start WoW.exe"));
+	}
+
+	return 0;
+}
+
+int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
+{
+	TCHAR CriticalErrorTxt[256];
+	TCHAR CriticalErrorLabel[32];
+
+	LocaleString(IDS_CriticalError_Label, CriticalErrorLabel);
+	LocaleString(IDS_CriticalError_Txt, CriticalErrorTxt);
+	MessageBox(NULL, CriticalErrorTxt, CriticalErrorLabel, MB_OK | MB_ICONERROR);
+
+#ifdef _DEBUG
+	LocaleString(IDS_Dbg_MakeDump, CriticalErrorTxt);
+	MessageBox(NULL, CriticalErrorTxt, CriticalErrorLabel, MB_OK | MB_ICONERROR);
+#endif
+
+	PrintInstructions();
+
+	if (code == EXCEPTION_ACCESS_VIOLATION)
+	{
+		return EXCEPTION_EXECUTE_HANDLER;
+	}
+	else
+	{
+		return EXCEPTION_CONTINUE_SEARCH;
+	};
+}
+
+DWORD DoPatcherMainWork()
+{
+	fs::path currentPath = fs::current_path();
+	fs::path PatchDir = currentPath / "wow-patch.mpq";
+	fs::path ExecutableDir = currentPath / "WoW.exe";
+
+	if (!fs::exists(ExecutableDir))
+	{
+		SetErrorState();
+		ErrorBox(IDS_Err_NotWoWFolder);
+		return 1;
+	}
 
 	if (/*strstr(CmdLine, "-patch")*/ bPatcher)
 	{
+		SetPatcherStage(STAGE_BINARY_PATCH);
 		// check existing section
 		bool addSection = true;
 		LPCSTR WoWExeName = "WoW.exe";
@@ -715,74 +1007,146 @@ int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 			}
 
 			if (addSection)
+			{
 				pe.AddSection(const_cast<LPSTR>(".tdata"), 0xE0000040, 0x20000, 0x20000);
+			}
 
-			WriteLog("Patching WoW.exe...");
+			WriteLog(_T("Patching WoW.exe..."));
 
 			if (int ErrCode = PatchWoWExe())
 			{
-				ErrorBox("Problem with patching WoW.exe, see log");
+				SetErrorState();
+				ErrorBox(IDS_Err_Patching);
 				return ErrCode;
 			}
 		}
 		catch (const PortableExecutable::Exception& e)
 		{
-			WriteLog("Problem to parse WoW.exe: %s", e.what());
-			ErrorBox("Problem with parsing WoW.exe, see log");
+			SetErrorState();
+			WriteLog(_T("Problem to parse WoW.exe: %S"), e.what());
+			ErrorBox(IDS_Err_Patching);
 		}
 
 		return 0;
 	}
+	SetProgress(5);
 
-	fs::path PatchDir = currentPath / "wow-patch.mpq";
+	//bool bPatchExist = fs::exists(PatchDir);
 
-	// create a dialog
-	hDialog = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOGBAR), NULL, Dlgproc);
-	ShowWindow(hDialog, SW_SHOW);
-
-	// Handle all dialog creation messages
-	MSG		msg;
-	while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+	if(bDownloadPatchFromInternet /*!bPatchExist*/)
 	{
-		if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
+		SetPatcherStage(STAGE_DOWNLOADING);
+		std::unique_ptr< IDownloader> Downloader { CreateDownloader() };
+		fs::remove("wow-patch.mpq");
+
+		Downloader->DownloadProgressCallback = [](float Progress)
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			int CurrentProgress = int(Progress * 100.0f);
+			SetProgress(CurrentProgress);
+		};
+
+		volatile DWORD bShouldWait = TRUE;
+		volatile DWORD bWasOK = TRUE;
+
+		Downloader->OnAbortDownload = [&bShouldWait, &bWasOK]()
+		{
+			SetErrorState();
+			InterlockedExchange(&bWasOK, FALSE);
+			InterlockedExchange(&bShouldWait, FALSE);
+		};
+
+		Downloader->OnDownloadComplete = [&bShouldWait]()
+		{
+			InterlockedExchange(&bShouldWait, FALSE);
+		};
+
+		std::string LinkToPatch = "https://turtle-wow.b-cdn.net/cn/wow-patch.mpq";
+
+		if (FILE* DownloadLinkFile = fopen("downloadlink.txt", "rb"))
+		{
+			fseek(DownloadLinkFile, 0, SEEK_END);
+			int FilePos = ftell(DownloadLinkFile);
+			fseek(DownloadLinkFile, 0, SEEK_SET);
+
+			LinkToPatch.resize(FilePos + 1);
+			fread(LinkToPatch.data(), FilePos, 1, DownloadLinkFile);
+
+			fclose(DownloadLinkFile);
+		}
+
+		if (!Downloader->Init(LinkToPatch))
+		{
+			SetErrorState();
+			ErrorBox(IDS_Err_Patching);
+			return 1;
+		}
+
+		if (!Downloader->DownloadAsync())
+		{
+			SetErrorState();
+			ErrorBox(IDS_Err_Patching);
+			return 1;
+		}
+
+		while (bShouldWait)
+		{
+			Sleep(2);
+
+			if (bRequestToCancelDownload)
+			{
+				Downloader->CancelDownload();
+				return 1;
+			}
+		}
+
+		if (!bWasOK)
+		{
+			ErrorBox(IDS_Err_Patching);
+			return 1;
 		}
 	}
-	// Then sleep for 5 sec. because there is a strange error if we working too fast
-	Sleep(5000);
 
+	SetPatcherStage(STAGE_CLEAR_CACHE);
 	DeleteDeprecatedMPQ();
+	SetProgress(10);
+
 	DeleteChatCache();
+	SetProgress(15);
+
 	ClearWDBCache();
+	SetProgress(20);
+
 	DeleteLFTAddon();
+	SetProgress(25);
 
 	// unpack patch files
 	{
-		std::string strPathDir = PatchDir.u8string();
-		WriteLog("Trying open downloaded path file \"%S\"", PatchDir.c_str());
+		SetPatcherStage(STAGE_UNPACK_FILES);
+		std::wstring strPathDir = PatchDir.wstring();
+		WriteLog(_T("Trying open downloaded path file \"%s\""), strPathDir.c_str());
 		StormArchive PatchFile(strPathDir.c_str());
 
 		if (!PatchFile.IsValid())
 		{
-			WriteLog("ERROR: Can't open patch \"%S\"", PatchDir.c_str());
+			SetErrorState();
+			WriteLog(_T("ERROR: Can't open patch \"%s\""), strPathDir.c_str());
 			PrintInstructions();
+			return 1;
 		}
 		else
 		{
-			WriteLog("Opened \"%S\"", PatchDir.c_str());
+			WriteLog(_T("Opened \"%s\""), strPathDir.c_str());
 		}
 
-		auto OnOpenFileLambda = [&PatchDir](LPCSTR File)
+		auto OnOpenFileLambda = [&strPathDir](LPCSTR File)
 		{
-			WriteLog("Opened \"%s\" inside \"%S\"", File, PatchDir.c_str());
+			WriteLog(_T("Opened \"%S\" inside \"%s\""), File, strPathDir.c_str());
 			if (fs::exists(File))
 			{
-				WriteLog("File \"%s\" existed, removing", File);
+				WriteLog(_T("File \"%S\" existed, removing"), File);
 				if (!fs::remove(File))
 				{
-					WriteLog("ERROR: Can't remove file \"%s\"", File);
+					WriteLog(_T("ERROR: Can't remove file \"%S\""), File);
 				}
 			}
 		};
@@ -792,25 +1156,31 @@ int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 			FILE* hTargetFile = fopen(File, "wb");
 			if (hTargetFile == NULL)
 			{
-				WriteLog("Can't create \"%s\" for writting", File);
+				WriteLog(_T("Can't create \"%S\" for writting"), File);
 				assert(hTargetFile != NULL);
 				return nullptr;
 			}
-			else
-			{
-				WriteLog("File created \"%s\"", File);
-			}
+
+			WriteLog(_T("File created \"%S\""), File);
 
 			return hTargetFile;
 		};
 
 		auto CopyFromMPQToFileLambda = [](StormFile* pFile, FILE* hTargetFile)
 		{
-			char* allFile = new char[pFile->Size.LowPart]; // Only 4GB files are supported
-			pFile->ReadToBuffer(allFile, pFile->Size.LowPart);
-			fwrite(allFile, pFile->Size.LowPart, 1, hTargetFile);
+			assert(pFile->Size.HighPart == 0); // Files greater then 4GB is unsupported!
 
-			delete[] allFile;
+			DWORD DataLeft = pFile->Size.LowPart;
+			unsigned char Buffer[4096];
+			do 
+			{
+				DWORD BytesToRead = min(4096, DataLeft);
+
+				pFile->ReadToBuffer(Buffer, BytesToRead);
+				fwrite(Buffer, BytesToRead, 1, hTargetFile);
+
+				DataLeft -= BytesToRead;
+			} while (DataLeft > 0);
 		};
 
 		auto CopyFileFromMPQToGameFolder = [&PatchFile, &OnOpenFileLambda, &OpenFileWithLogLambda, &CopyFromMPQToFileLambda](LPCSTR Filename)
@@ -823,7 +1193,7 @@ int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 				FILE* hTargetFile = OpenFileWithLogLambda(Filename);
 				if (hTargetFile == nullptr)
 				{
-					return 1;
+					return;
 				}
 
 				CopyFromMPQToFileLambda(pFile, hTargetFile);
@@ -835,64 +1205,46 @@ int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
 			}
 		};
 
+		// 25 -> 85
 		CopyFileFromMPQToGameFolder(PATCH_FILE);
+		SetProgress(85);
+
 		CopyFileFromMPQToGameFolder(DISCORD_OVERLAY_FILE);
 		CopyFileFromMPQToGameFolder(DISCORD_GAME_SDK_FILE);
+		SetProgress(88);
 		CopyFileFromMPQToGameFolder(ADDITIONAL_GAME_BINARY);
+		SetProgress(95);
 		CopyFileFromMPQToGameFolder(MAIN_GAME_BINARY);
 	}
 
-#if 0
-	HMODULE hWoW = LoadLibrary("WoW.exe");
-
-	HRSRC VersionInfo = FindResourceEx(hWoW, MAKEINTRESOURCE(16), MAKEINTRESOURCE(1), MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
-
-	HGLOBAL hVersionInfoHandle = LoadResource(hWoW, VersionInfo);
-	LPVOID pVerInfo = LockResource(hVersionInfoHandle);
-#endif
-	WriteLog("Update is complete, starting the game...");
-	if (hDialog != NULL)
-	{
-		DestroyWindow(hDialog);
-		hDialog = NULL;
-	}
-
-#ifndef _DEBUG
-	fs::remove("wow-patch.mpq");
-#endif
-
-	STARTUPINFO info;
-	PROCESS_INFORMATION pInfo;
-	ZeroMemory(&info, sizeof(info));
-	ZeroMemory(&pInfo, sizeof(pInfo));
-
-	char WoWExe[24] = "WoW.exe";
-	if (!CreateProcess(NULL, WoWExe, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &info, &pInfo))
-	{
-		WriteLog("ERROR: Can't start WoW.exe");
-	}
+	SetPatcherStage(STAGE_DONE);
+	SetProgress(100);
 
 	return 0;
 }
 
-int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
+DWORD GuardPatchMainWork()
 {
-	MessageBox(NULL, "Couldn't patch Turtle WoW. See tw_update.log for details.", "Critical Error", MB_OK | MB_ICONERROR);
-	PrintInstructions();
+	DWORD Result = 0;
 
-	if (code == EXCEPTION_ACCESS_VIOLATION)
+	__try
 	{
-		return EXCEPTION_EXECUTE_HANDLER;
+		Result = DoPatcherMainWork();
 	}
-	else
+	__except (UnhandledExceptionFilter(GetExceptionCode(), GetExceptionInformation()))
 	{
-		return EXCEPTION_CONTINUE_SEARCH;
-	};
+		SetErrorState();
+	}
+
+	PostThreadMessageA(gMainThreadID, G_WM_PATCHING_DONE, NULL, NULL);
+
+	return Result;
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	int Result = 0;
+	gMainThreadID = GetCurrentThreadId();
 
 	__try
 	{

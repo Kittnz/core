@@ -257,7 +257,7 @@ bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const Spell
         return false;
 
     // summon runes to mark the ground, helpful for raid enocunters
-    if (pPlayer->GetInstanceId())
+    if (pPlayer->GetMap() && pPlayer->GetMap()->IsDungeon())
     {
         float dis{ 20.0F };
         float x, y, z;
@@ -286,7 +286,7 @@ bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const Spell
     }
     else
     {
-        ChatHandler(pPlayer).SendSysMessage("Can't place rune here! You need to be in an dungeon or in a raid.");
+        ChatHandler(pPlayer).SendSysMessage("Can't place rune here! You need to be in a dungeon or in a raid.");
         return false;
     }
 }

@@ -5458,6 +5458,22 @@ void Player::KillPlayer()
                 if (hardcoreGuild->GetSuitableNewLeader(newLeaderSlot, oldLeaderSlot))
                     hardcoreGuild->SetNewLeader(newLeaderSlot, oldLeaderSlot);
             }
+
+            GetSession()->SendGuildCommandResult(GUILD_QUIT_S, hardcoreGuild->GetName(), ERR_PLAYER_NO_MORE_IN_GUILD);
+
+            bool deleted = false;
+            if (hardcoreGuild->DelMember(GetObjectGuid()))
+            {
+                hardcoreGuild->Disband();
+                delete hardcoreGuild;
+                deleted = true;
+            }
+
+            if (!deleted)
+            {
+                hardcoreGuild->LogGuildEvent(GUILD_EVENT_LOG_LEAVE_GUILD, GetObjectGuid());
+                hardcoreGuild->BroadcastEvent(GE_LEFT, GetObjectGuid(), GetName());
+            }
         }
 
         SpawnHardcoreGravestone();
@@ -8079,7 +8095,7 @@ void Player::ApplyEquipSpell(SpellEntry const* spellInfo, Item* item, bool apply
 
         DEBUG_LOG("WORLD: cast %s Equip spellId - %i", (item ? "item" : "itemset"), spellInfo->Id);
 
-        CastSpell(this, spellInfo, true, item);
+        CastSpell(this, spellInfo, true, item, nullptr, ObjectGuid(), nullptr, nullptr, false, !item);
     }
     else
     {
@@ -23941,13 +23957,8 @@ void Player::CountTalentsSpentInSavedSpec(uint32 specIndex, std::vector<uint32>&
 // Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
 std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 {
-    // Mage trees are messed up, disable for them untill i find a fix
-    if (GetClass() == CLASS_MAGE)
-        return "";
-
     if (uiPrimaryOrSecondary < 1 && uiPrimaryOrSecondary > 4)
         return "";
-
 
     uint32 specIndex = uiPrimaryOrSecondary - 1;
     if (m_savedSpecSpells[specIndex].empty())

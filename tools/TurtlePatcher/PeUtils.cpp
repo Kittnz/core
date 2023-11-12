@@ -419,7 +419,8 @@ PortableExecutable::ImportAddressTable PortableExecutable::GetImportAddressTable
 			}
 		}
 	}
-	catch (const std::ios_base::failure& e) {
+	catch (const std::ios_base::failure&) 
+	{
 		//std::cout << "An exception occured: " << e.what() << std::endl;
 		::exit(EXIT_FAILURE);
 	}
