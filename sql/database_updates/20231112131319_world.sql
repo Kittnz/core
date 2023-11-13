@@ -22,3 +22,11 @@ DELETE FROM game_event_creature WHERE guid=2580117;
 DELETE FROM game_event_creature_data WHERE guid=2580117;
 DELETE FROM creature_battleground WHERE guid=2580117;
 REPLACE INTO `creature` VALUES (2580118,61756,0,0,0,0,216.434,-1961.72,140.199,4.99038,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM creature WHERE guid=2579359;
+DELETE FROM creature_addon WHERE guid=2579359;
+DELETE FROM creature_movement WHERE id=2579359;
+DELETE FROM game_event_creature WHERE guid=2579359;
+DELETE FROM game_event_creature_data WHERE guid=2579359;
+DELETE FROM creature_battleground WHERE guid=2579359;
