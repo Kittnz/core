@@ -489,9 +489,9 @@ Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *curr
     return new Aura(spellproto, eff, currentBasePoints, holder, target, caster, castItem);
 }
 
-SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem, bool castByItemSet)
+SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem)
 {
-    return new SpellAuraHolder(spellproto, target, caster, castItem, realCaster, castByItemSet);
+    return new SpellAuraHolder(spellproto, target, caster, castItem, realCaster);
 }
 
 void Aura::SetModifier(AuraType t, int32 a, uint32 pt, int32 miscValue)
@@ -7000,8 +7000,8 @@ bool Aura::IsLastAuraOnHolder()
     return true;
 }
 
-SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Unit *caster, Item *castItem, WorldObject* pRealCaster, bool castByItemSet) :
-    m_spellProto(spellproto), m_target(target), m_castItemGuid(castItem ? castItem->GetObjectGuid() : ObjectGuid()), m_castByItemSet(castByItemSet),
+SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Unit *caster, Item *castItem, WorldObject* pRealCaster) :
+    m_spellProto(spellproto), m_target(target), m_castItemGuid(castItem ? castItem->GetObjectGuid() : ObjectGuid()),
     m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0), m_skippedTime(0),
     m_stackAmount(1), m_removeMode(AURA_REMOVE_BY_DEFAULT), m_AuraDRGroup(DIMINISHING_NONE), m_timeCla(1000),
     m_permanent(false), m_isRemovedOnShapeLost(true), m_deleted(false), m_in_use(0),
