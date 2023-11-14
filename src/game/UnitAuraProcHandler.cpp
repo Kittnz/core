@@ -1709,7 +1709,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         basepoints[EFFECT_INDEX_2] ? &basepoints[EFFECT_INDEX_2] : nullptr,
                         true, castItem, triggeredByAura);
     else
-        pCaster->CastSpell(target, trigger_spell_id, true, castItem, triggeredByAura, pCaster->GetObjectGuid(), nullptr, procSpell, false, triggeredByAura->IsCastByItemSet());
+        pCaster->CastSpell(target, trigger_spell_id, true, castItem, triggeredByAura, pCaster->GetObjectGuid(), nullptr, procSpell);
 
     if (cooldown)
         AddSpellCooldown(trigger_spell_id, 0, time(nullptr) + cooldown);

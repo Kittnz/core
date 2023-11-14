@@ -2588,8 +2588,7 @@ void Player::HandleReturnOnTeleportFail(WorldLocation const& oldLoc)
     // Teleport to previous place, if cannot be ported back TP to homebind place
     if (!TeleportTo(oldLoc))
     {
-        DETAIL_LOG("WorldSession::HandleMoveWorldportAckOpcode: %s cannot be ported to his previous place, teleporting him to his homebind place...",
-            GetGuidStr().c_str());
+        DETAIL_LOG("WorldSession::HandleMoveWorldportAckOpcode: %s cannot be ported to his previous place, teleporting him to his homebind place...", GetName());
         TeleportToHomebind();
     }
 }
@@ -8095,7 +8094,7 @@ void Player::ApplyEquipSpell(SpellEntry const* spellInfo, Item* item, bool apply
 
         DEBUG_LOG("WORLD: cast %s Equip spellId - %i", (item ? "item" : "itemset"), spellInfo->Id);
 
-        CastSpell(this, spellInfo, true, item, nullptr, ObjectGuid(), nullptr, nullptr, false, !item);
+        CastSpell(this, spellInfo, true, item);
     }
     else
     {
