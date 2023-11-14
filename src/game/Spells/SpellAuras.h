@@ -237,7 +237,6 @@ class SpellAuraHolder
         bool IsReflected() const { return m_isReflected; }
         void SetAddedBySpell(bool spell) { m_addedBySpell = spell; }
         bool IsAddedBySpell() const { return m_addedBySpell; }
-        bool IsCastByItemSet() const { return m_castByItemSet; }
 
         ~SpellAuraHolder();
     private:
@@ -488,7 +487,6 @@ class Aura
                 m_periodicTick = maxticks - GetAuraDuration() / m_modifier.periodictime;
         }
 
-        bool IsCastByItemSet() const { return GetHolder()->IsCastByItemSet(); }
         bool IsPositive() const { return m_positive; }
         bool IsPersistent() const { return m_isPersistent; }
         bool IsAreaAura() const { return m_isAreaAura; }
