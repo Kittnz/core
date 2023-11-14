@@ -418,7 +418,6 @@ class Spell
         SpellEntry const* m_triggeredByParentSpellInfo; // Spell that triggered the spell that triggered this
         int32 m_currentBasePoints[MAX_EFFECT_INDEX]; // cache SpellEntry::CalculateSimpleValue and use for set custom base points
         Item* m_CastItem = nullptr;
-        bool m_castByItemSet = false;
         SpellCastTargets m_targets;
 
         bool IsCustomSpell() const { return m_isCustomSpell; }

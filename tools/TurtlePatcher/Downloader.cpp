@@ -281,6 +281,7 @@ InternetDownloader::~InternetDownloader()
 
 void InternetDownloader::DeInit()
 {
+	bOperationComplete = true;
 	if (hConnection != NULL)
 	{
 		InternetCloseHandle(hConnection);

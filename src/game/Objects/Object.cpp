@@ -5343,7 +5343,7 @@ void WorldObject::RemoveAllDynObjects()
     m_spellDynObjects.clear();
 }
 
-SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/, bool castByItemSet /*= false*/)
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
 
@@ -5356,7 +5356,7 @@ SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool trigg
         return SPELL_FAILED_SPELL_UNAVAILABLE;
     }
 
-    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent, bCanIgnoreLOS, castByItemSet);
+    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent, bCanIgnoreLOS);
 }
 
 SpellCastResult WorldObject::CastSpell(GameObject* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
@@ -5375,7 +5375,7 @@ SpellCastResult WorldObject::CastSpell(GameObject* pTarget, uint32 spellId, bool
     return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent);
 }
 
-SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/, bool castByItemSet /*= false*/)
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
 {
     if (!spellInfo)
     {
@@ -5426,7 +5426,6 @@ SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInf
             targets.setSource(caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ());
 
     spell->SetCastItem(castItem);
-    spell->m_castByItemSet = castByItemSet;
     return spell->prepare(std::move(targets), triggeredByAura);
 }
 
