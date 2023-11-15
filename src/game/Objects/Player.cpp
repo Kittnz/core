@@ -4399,7 +4399,7 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
         for (auto j : vTreeTalents)
             talentsSpent += j;
 
-        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == 60 || CalculateTalentsPoints() - talentsSpent > 5))
+        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == 60))
         {
             CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
             m_savedSpecSpells[i].clear();
