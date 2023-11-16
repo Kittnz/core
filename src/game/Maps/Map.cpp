@@ -1159,8 +1159,7 @@ void Map::Remove(Player *player, bool remove)
 }
 
 template<class T>
-void
-Map::Remove(T *obj, bool remove)
+void Map::Remove(T *obj, bool remove)
 {
     CellPair p = MaNGOS::ComputeCellPair(obj->GetPositionX(), obj->GetPositionY());
     if (p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
@@ -1173,6 +1172,12 @@ Map::Remove(T *obj, bool remove)
     if (!loaded(GridPair(cell.data.Part.grid_x, cell.data.Part.grid_y)))
         return;
 
+    if (obj->FindMap() == nullptr)
+    {
+        BASIC_LOG("[Crash]: Removing object which is already removed: %p", obj);
+        return;
+    }
+    
     DEBUG_LOG("Remove object (GUID: %u TypeId:%u) from grid[%u,%u]", obj->GetGUIDLow(), obj->GetTypeId(), cell.data.Part.grid_x, cell.data.Part.grid_y);
     NGridType *grid = getNGrid(cell.GridX(), cell.GridY());
     MANGOS_ASSERT(grid != nullptr);
