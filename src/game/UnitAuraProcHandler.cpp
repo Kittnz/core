@@ -307,21 +307,6 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             else
                 return SPELL_PROC_TRIGGER_FAILED;
         }
-        // Zandalarian Hero Charm - Unstable Power
-        if (spellProto->Id == 24658)
-        {
-            // World of Warcraft Client Patch 1.10.0 (2006-03-28)
-            // - The charges from the Zandalarian Hero Charm will now be consumed by
-            //   melee and ranged abilities and spells which do non - physical damage.
-            //   This includes : Hammer of Wrath, Judgement of Righteousness, Seal of
-            //   Command, Judgement of Command, Volley, and Arcane Shot.The trinket
-            //   will also now burn charges from each casting of a damage over time
-            //   spell, heal over time spell, and area aura spells such as Blizzard
-            //   and Consecration. Only one charge will be burned per area spell cast,
-            //   rather than multiple charges per target hit as was previously the case.  
-            if ((procFlag & (PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_DEAL_RANGED_ABILITY)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
-                return SPELL_PROC_TRIGGER_OK;
-        }
         // PRIEST
         // Inspiration
         if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST)
