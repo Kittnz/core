@@ -14509,8 +14509,8 @@ bool ChatHandler::HandleRadioCommand(char* args)
     }
     else if (cmd_str == "2")
     {
-        // m_session->GetPlayer()->PlayDirectMusic(60423); // direct2 server
-        m_session->GetPlayer()->PlayDirectMusic(60424, m_session->GetPlayer()); // static
+        m_session->GetPlayer()->PlayDirectMusic(60423); // direct2 server
+        // m_session->GetPlayer()->PlayDirectMusic(60424, m_session->GetPlayer()); // static
         return true;
     }
     return false;
