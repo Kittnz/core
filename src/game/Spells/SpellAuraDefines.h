@@ -332,7 +332,8 @@ enum AuraType
     SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT = 193, // Needed for Spirit Link.
     SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN = 194, // Needed for Pet Avoidance.
     SPELL_AURA_MOD_HONOR_GAIN = 195, // From WotLK.
-    TOTAL_AURAS=196
+    SPELL_AURA_ENABLE_FLYING = 196, // For flying mounts.
+    TOTAL_AURAS=197
 };
 
 enum AreaAuraType

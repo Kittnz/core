@@ -2111,33 +2111,6 @@ bool GossipSelect_rented_mount(Player* p_Player, Creature* p_Creature, uint32 /*
     return true;
 }
 
-class  StopFlyingAfterTime : public BasicEvent
-{
-public:
-    explicit StopFlyingAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
-
-    bool Execute(uint64 e_time, uint32 p_time) override
-    {
-        Player* player = ObjectAccessor::FindPlayer(player_guid);
-        if (player)
-        {
-            player->Unmount();
-
-            player->SetFlying(false);
-            player->RemoveAurasDueToSpell(47036);
-
-            player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-            WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
-            stop_swim << player->GetPackGUID();
-            stop_swim << player->m_movementInfo;
-            player->SendMovementMessageToSet(std::move(stop_swim), true);
-        }
-        return false;
-    }
-private:
-    uint64 player_guid;
-};
-
 bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 {
     switch (pCreature->GetEntry())
@@ -2178,29 +2151,25 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 
 void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 removeEntry = 0, uint32 count = 0)
 {
-    player->SetClientControl(player, 0);
     if (player->IsMounted())
-        player->GetSession()->SendNotification("You are mounted.");
-
-    player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
     {
-        player->SetClientControl(player, 1);
-        player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+        player->GetSession()->SendNotification("You are mounted.");
+        return;
+    }
+
+    player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+    if (removeEntry)
+    {
+        player->DestroyItemCount(removeEntry, count ? count : 1, true);
+        player->SaveInventoryAndGoldToDB();
+    }
+    player->InterruptNonMeleeSpells(true);
+    if (SpellAuraHolder* pAura = player->AddAura(47036))
+    {
+        pAura->SetAuraDuration(duration * IN_MILLISECONDS);
+        pAura->SetAuraMaxDuration(duration * IN_MILLISECONDS);
         player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
-        player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
-        player->SetFlying(true);
-        if (removeEntry)
-        {
-            player->DestroyItemCount(removeEntry, count ? count : 1, true);
-            player->SaveInventoryAndGoldToDB();
-        }
-        player->InterruptNonMeleeSpells(true);
-        if (SpellAuraHolder* pAura = player->AddAura(47036))
-        {
-            pAura->SetAuraDuration(duration * IN_MILLISECONDS);
-            pAura->SetAuraMaxDuration(duration * IN_MILLISECONDS);
-        }
-    }, 1500);
+    }
 }
 
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
