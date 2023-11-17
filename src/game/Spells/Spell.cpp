@@ -1282,6 +1282,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
                 procEx,
                 addhealth,
+                m_healing,
                 m_attackType,
                 spellInfo,
                 this);
@@ -1357,6 +1358,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
                 procEx,
                 damageInfo.damage,
+                m_damage,
                 m_attackType,
                 m_spellInfo,
                 this);
@@ -1469,6 +1471,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
             m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
             procEx,
+            dmg,
             dmg,
             m_attackType,
             m_spellInfo,
@@ -3888,11 +3891,11 @@ void Spell::cast(bool skipCheck)
         }
 
         // This will trigger only auras with PROC_EX_CAST_END.
-        m_casterUnit->ProcDamageAndSpell(pTarget, m_procAttacker, PROC_FLAG_NONE, procEx, 1, m_attackType, m_spellInfo, this);
+        m_casterUnit->ProcDamageAndSpell(pTarget, m_procAttacker, PROC_FLAG_NONE, procEx, 1, 1, m_attackType, m_spellInfo, this);
 
         // Trigger procs for spells with no unit targets at cast time.
         if (m_UniqueTargetInfo.empty())
-            m_casterUnit->ProcDamageAndSpell(nullptr, m_procAttacker, PROC_FLAG_NONE, PROC_EX_NORMAL_HIT, 1, m_attackType, m_spellInfo, this);
+            m_casterUnit->ProcDamageAndSpell(nullptr, m_procAttacker, PROC_FLAG_NONE, PROC_EX_NORMAL_HIT, 1, 1, m_attackType, m_spellInfo, this);
     }
 
     // Okay, everything is prepared. Now we need to distinguish between immediate and evented delayed spells
