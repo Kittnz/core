@@ -584,7 +584,7 @@ class Unit : public WorldObject
         void ResetTransformScale();
         virtual float GetNativeScale() const;
         void SetNativeScale(float scale);
-        float GetCollisionHeight() const { return m_modelCollisionHeight * m_nativeScaleOverride; }
+        float GetCollisionHeight() const final { return m_modelCollisionHeight * m_nativeScaleOverride; }
         void UpdateModelData(); // at any changes to scale and/or displayId
         void InitPlayerDisplayIds();
         static float GetScaleForDisplayId(uint32 displayId);
