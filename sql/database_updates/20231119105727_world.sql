@@ -20,3 +20,30 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- NPC Bruiser Rakklan (Entry 61752) add quest flags.
 update creature_template set npc_flags = 2 where entry = 61752;
+-- 
+-- 61720 NPC Tantaz Coppermud, make sure they teach journeyman mining and have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61720;
+-- 61722 NPC Sazzlix, should be a stablemaster, make sure they have appropriate flags.
+update creature_template set unit_flags = 4608, flags_extra = 524298 where entry = 61722;
+-- 61726 NPC Kana Togglebend should teach the first rank of first aid, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61726;
+-- 61728 NPC Shazzlan should teach the first rank of cooking and basic cooking spells, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61728;
+-- 61731 NPC Sindor Packfuse should teach the first rank of fishing, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61731;
+-- 61738 NPC Tinkerer Ozzlo should teach rank 1 engineering and all journeymen recipes, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61738;
+-- 61739 NPC Sasha Linelight, should teach rank 1 of herbalism, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61739;
+-- 61740 NPC Yox Rackgadge <Journeyman Alchemy> should teach rank 1 of alchemy, and beginning alchemy spells, make sure they have flags for training spells.
+update creature_template set trainer_type = 2 where entry = 61740;
+-- 80104 NPC Grizzie the Enforcer (Entry 80104) should teach ALL warrior spells (He currently only teaches beginning warrior spells).
+update creature_template set trainer_type = 1 where entry = 80104;
+-- 80105 NPC Mayten Boomrifle (Entry 80105) should teach ALL hunter spells (He currently only teaches beginning hunter spells).
+update creature_template set trainer_type = 1 where entry = 80105;
+-- 80106 NPC Leyti Quicktongue (Entry 80106) should teach ALL rogue spells (She currently only teaches beginning rogue spells).
+update creature_template set trainer_type = 1 where entry = 80106;
+-- 80107 NPC Amri Demondeal (Entry 80107) should teach ALL warlock spells (She currently only teaches beginning warlock spells).
+update creature_template set trainer_type = 1 where entry = 80107;
+-- 80108 NPC Wizette Icewhistle (Entry 80108) should teach ALL mage spells (She currently only teaches beginning mage spells).
+update creature_template set trainer_type = 1 where entry = 80108;
