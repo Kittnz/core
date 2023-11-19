@@ -872,6 +872,7 @@ class GameObject : public WorldObject
 
         uint32 GetPhaseQuestId() const { return GetGOInfo()->PhaseQuestId; }
 
+        float GetCollisionHeight() const final;
         bool IsAtInteractDistance(Position const& pos, float radius) const;
         bool IsAtInteractDistance(Player const* player, uint32 maxRange = 0) const;
 

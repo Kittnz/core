@@ -435,6 +435,7 @@ class Aura
         // Nostalrius
         void HandleAuraAuraSpell(bool apply, bool real);
         void HandleInterruptRegen(bool apply, bool real);
+        void HandleEnableFlying(bool apply, bool real);
 
         virtual ~Aura();
 

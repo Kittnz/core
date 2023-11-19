@@ -455,15 +455,9 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
         if (!_player->IsSelfMover())
         {
             // except own aura spells
-            bool allow = false;
-            for (uint32 k : spellInfo->EffectApplyAuraName)
-            {
-                if (k == SPELL_AURA_MOD_POSSESS || k == SPELL_AURA_MOD_POSSESS_PET)
-                {
-                    allow = true;
-                    break;
-                }
-            }
+            bool allow = spellInfo->HasEffect(SPELL_EFFECT_SUMMON_POSSESSED) ||
+                         spellInfo->HasAura(SPELL_AURA_MOD_POSSESS) ||
+                         spellInfo->HasAura(SPELL_AURA_MOD_POSSESS_PET);
 
             // this also include case when aura not found
             if (!allow)
