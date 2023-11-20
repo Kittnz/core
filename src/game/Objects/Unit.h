@@ -584,7 +584,7 @@ class Unit : public WorldObject
         void ResetTransformScale();
         virtual float GetNativeScale() const;
         void SetNativeScale(float scale);
-        float GetCollisionHeight() const final { return m_modelCollisionHeight * m_nativeScaleOverride; }
+        float GetCollisionHeight() const { return m_modelCollisionHeight * m_nativeScaleOverride; }
         void UpdateModelData(); // at any changes to scale and/or displayId
         void InitPlayerDisplayIds();
         static float GetScaleForDisplayId(uint32 displayId);
@@ -663,6 +663,7 @@ class Unit : public WorldObject
         virtual bool IsInWater() const;
         virtual bool IsUnderWater() const;
         bool isInAccessablePlaceFor(Creature const* c) const;
+        void GetLosCheckPosition(float& x, float& y, float& z) const final;
 
         void SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, bool critical = false);
         void SendEnvironmentalDamageLog(uint8 type, uint32 damage, uint32 absorb, int32 resist) const;
