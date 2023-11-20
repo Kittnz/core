@@ -104,10 +104,6 @@ static constexpr uint32 RESPAWN_BUG_FREQUENCY       = 10000;    // How often do 
 static constexpr float  BUG_SPELL_MAX_DIST          = 20.0f;    // Max distance a bug can be for the twin to choose it
 
 // Vek'nilash constants
-static constexpr uint32 UPPERCUT_MIN_CD             = 14000;
-static constexpr uint32 UPPERCUT_MAX_CD             = 29000;
-static constexpr uint32 UNBALANCING_STRIKE_MIN_CD   = 8000;
-static constexpr uint32 UNBALANCING_STRIKE_MAX_CD   = 18000;
 static constexpr uint32 MUTATE_BUG_MIN_CD           = 10000;
 static constexpr uint32 MUTATE_BUG_MAX_CD           = 15000;
 
@@ -810,16 +806,12 @@ struct boss_veknilashAI : public boss_twinemperorsAI
         Reset();
     }
 
-    uint32 UpperCut_Timer;
-    uint32 UnbalancingStrike_Timer;
     uint32 Scarabs_Timer;
     
     void Reset() override
     {
         SharedReset();
         bugMutationTimer        = boss_veknilashAI::GetBugSpellCooldown();
-        UpperCut_Timer          = urand(UPPERCUT_MIN_CD, UPPERCUT_MAX_CD);
-        UnbalancingStrike_Timer = urand(UNBALANCING_STRIKE_MIN_CD, UNBALANCING_STRIKE_MAX_CD);
 
         //Added. Can be removed if its included in DB.
         m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_SPELL, true);
@@ -839,31 +831,6 @@ struct boss_veknilashAI : public boss_twinemperorsAI
     {
         return SPELL_MUTATE_BUG;
     }
-
-    Unit *GetPlayerInMeleeRange()
-    {
-        std::list<HostileReference*> candidates;
-
-        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-        if (tList.empty())
-            return nullptr;
-
-        for (const auto i : tList) {
-            Unit* pUnit = m_creature->GetMap()->GetUnit(i->getUnitGuid());
-            if (!pUnit) continue;
-
-            if (m_creature->CanReachWithMeleeAutoAttack(pUnit)) {
-                candidates.push_back(i);
-            }
-        }
-
-        if (candidates.empty())
-            return nullptr;
-
-        auto it = candidates.begin();
-        std::advance(it, candidates.size() - 1);
-        return m_creature->GetMap()->GetUnit((*it)->getUnitGuid());
-    }
     
     void UpdateEmperor(uint32 diff) override
     {
@@ -876,26 +843,8 @@ struct boss_veknilashAI : public boss_twinemperorsAI
         if(!m_creature->HasAura(SPELL_DOUBLE_ATTACK))
             m_creature->CastSpell(m_creature, SPELL_DOUBLE_ATTACK, true);
 
-        //UnbalancingStrike_Timer
-        if (UnbalancingStrike_Timer < diff) {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_UNBALANCING_STRIKE) == CAST_OK) {
-                UnbalancingStrike_Timer = urand(UNBALANCING_STRIKE_MIN_CD, UNBALANCING_STRIKE_MAX_CD);
-            }
-        }
-        else {
-            UnbalancingStrike_Timer -= diff;
-        }
-
-        if (UpperCut_Timer < diff) {
-            if (Unit* randomMelee = GetPlayerInMeleeRange()) {
-                if (DoCastSpellIfCan(randomMelee, SPELL_UPPERCUT) == CAST_OK) {
-                    UpperCut_Timer = urand(UPPERCUT_MIN_CD, UPPERCUT_MAX_CD);
-                }
-            }
-        }
-        else {
-            UpperCut_Timer -= diff;
-        }
+        if (!m_CreatureSpells.empty())
+            UpdateSpellsList(diff);
 
         DoMeleeAttackIfReady();
     }
