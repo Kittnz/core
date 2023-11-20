@@ -848,7 +848,7 @@ class GameObject : public WorldObject
         void UpdateModel();                                 // updates model in case displayId were changed
         GameObjectModel* m_model;
         void UpdateModelPosition();
-
+        void GetLosCheckPosition(float& x, float& y, float& z) const final;
         float GetStationaryX() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.x; return 0.f; }
         float GetStationaryY() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.y; return 0.f; }
         float GetStationaryZ() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.z; return 0.f; }
@@ -872,7 +872,6 @@ class GameObject : public WorldObject
 
         uint32 GetPhaseQuestId() const { return GetGOInfo()->PhaseQuestId; }
 
-        float GetCollisionHeight() const final;
         bool IsAtInteractDistance(Position const& pos, float radius) const;
         bool IsAtInteractDistance(Player const* player, uint32 maxRange = 0) const;
 

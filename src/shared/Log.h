@@ -179,9 +179,6 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         discordCoreLogFile = nullptr;
 
-        if (apiLogFile != nullptr)
-            fclose(apiLogFile);
-        apiLogFile = nullptr;
 
         for (auto& logFile : logFiles)
         {

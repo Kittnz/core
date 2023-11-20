@@ -375,8 +375,12 @@ int Master::Run()
 
     ///- Exit the process with specified return value
 	// WORLD SHUTDOWN
+
 	sWorld.InternalShutdown();
-    return World::GetExitCode();
+
+    uint8 exitCode = World::GetExitCode();
+    std::quick_exit(exitCode);
+    return exitCode;
 }
 
 bool StartDB(std::string name, DatabaseType& database)
