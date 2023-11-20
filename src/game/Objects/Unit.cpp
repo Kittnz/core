@@ -3159,6 +3159,12 @@ bool Unit::IsInAccessablePlaceFor(Creature const* c) const
         return c->CanWalk() || c->CanFly();
 }
 
+void Unit::GetLosCheckPosition(float& x, float& y, float& z) const
+{
+    GetPosition(x, y, z);
+    z += GetCollisionHeight();
+}
+
 bool Unit::IsReachableBySwmming() const
 {
     return GetTerrain()->IsSwimmable(GetPositionX(), GetPositionY(), GetPositionZ());
