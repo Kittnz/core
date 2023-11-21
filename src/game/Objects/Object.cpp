@@ -5626,7 +5626,7 @@ void WorldObject::PMonsterEmote(const char *text, Unit const* target, bool IsBos
 {
     va_list ap;
     char str[2048];
-    va_start(ap, text);
+    va_start(ap, IsBossEmote);
     vsnprintf(str, 2048, text, ap);
     va_end(ap);
     MonsterTextEmote(str, target, IsBossEmote);
@@ -5635,7 +5635,7 @@ void WorldObject::PMonsterEmote(const char *text, Unit const* target, bool IsBos
 void WorldObject::PMonsterEmote(int32 textId, Unit const* target, bool IsBossEmote, ...) const
 {
     va_list ap;
-    va_start(ap, textId);
+    va_start(ap, IsBossEmote);
     float range = sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
     MaNGOS::MonsterChatBuilderFormat emote_build(*this, CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, nullptr, &ap);
     MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> emote_do(emote_build);
