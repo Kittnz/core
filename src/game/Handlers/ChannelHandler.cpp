@@ -35,8 +35,15 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
 
     DEBUG_LOG("Opcode CMSG_JOIN_CHANNEL channel \"%s\"", channelname.c_str());
 
-    if (channelname.empty())
+    // Channel name must begin with a letter.
+    if (channelname.empty() || (uint8(channelname[0]) <= 127 && !isalpha(channelname[0])))
+    {
+        WorldPacket data(SMSG_CHANNEL_NOTIFY, 1 + channelname.size() + 1);
+        data << uint8(CHAT_INVALID_NAME_NOTICE);
+        data << channelname;
+        SendPacket(&data);
         return;
+    }
 
     recvPacket >> pass;
 
