@@ -55,6 +55,12 @@ if(WIN32)
   )
 endif()
 
+if (ENABLE_PROFILING)
+    include_directories(
+        ${OPTICK_INCLUDE_DIR}
+)
+endif()
+
 add_executable(${EXECUTABLE_NAME}
   ${EXECUTABLE_SRCS}
 )
@@ -72,6 +78,11 @@ if(WIN32)
     debug ${MYSQL_DEBUG_LIBRARY}
     debug ${OPENSSL_DEBUG_LIBRARIES}
   )
+
+if (ENABLE_PROFILING)
+      target_link_libraries(${EXECUTABLE_NAME}
+        ${OPTICK_LIBRARY})
+endif()
 
 if(MINGW)
   target_link_libraries(${EXECUTABLE_NAME}
