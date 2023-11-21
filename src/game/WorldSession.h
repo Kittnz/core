@@ -891,6 +891,9 @@ class WorldSession
         void SendWrongFactionNotice();
         void SendChatRestrictedNotice();
         void HandleMessagechatOpcode(WorldPacket& recvPacket);
+
+        bool HandleTurtleAddonMessages(uint32 lang, uint32 type, std::string& msg);
+
         void HandleTextEmoteOpcode(WorldPacket& recvPacket);
         void HandleChatIgnoredOpcode(WorldPacket& recvPacket);
         uint32_t ChatCooldown();

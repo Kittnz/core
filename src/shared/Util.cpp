@@ -204,7 +204,7 @@ float GetFloatValueFromArray(Tokens const& data, uint16 index)
 
 void stripLineInvisibleChars(std::string &str)
 {
-    static std::string invChars = " \t\7\n";
+    static std::string invChars = " \t\7\n\r";
 
     size_t wpos = 0;
 
