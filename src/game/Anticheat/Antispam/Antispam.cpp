@@ -168,26 +168,32 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     if (!m_enabled || from->IsGameMaster() || to && to->IsGameMaster())
         return true;
 
-    if (from->GetLevel() > m_restrictionLevel)
-        return true;
-
+    MessageBlock messageBlock;
     uint8 chatType = GetConvertedChatType(type);
 
-    if (chatType == A_CHAT_TYPE_MAX)
-        return true;
+    //Add LFT messages to the off-loading thread regardless of checks passing or failing for now.
+    //Reduces mainthread work.
+    if (channel && channel->GetName() == "Lft")
+    {
+        messageBlock.skipChecking = true;
+    }
+    else
+    {
+        if (from->GetLevel() > m_restrictionLevel)
+            return true;       
 
-    //dont process self-whispers. Often used by RMT.
-    if (chatType == A_CHAT_TYPE_WHISPER && from && to && from->GetObjectGuid().GetCounter() == to->GetObjectGuid().GetCounter())
-        return true;
+        if (chatType == A_CHAT_TYPE_MAX)
+            return true;
 
-    if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
-        return true;
+        //dont process self-whispers. Often used by RMT.
+        if (chatType == A_CHAT_TYPE_WHISPER && from && to && from->GetObjectGuid().GetCounter() == to->GetObjectGuid().GetCounter())
+            return true;
 
-    //block purely-client sided LFT for now from being blocked by anti spam.
-    if (channel && channel->GetName() == "LFT")
-        return true;
+        if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
+            return true;
+    }
 
-    MessageBlock messageBlock;
+
     messageBlock.fromGuid = from->GetObjectGuid();
     messageBlock.fromAccount = from->GetSession()->GetAccountId();
     messageBlock.toGuid = (to && !m_mergeAllWhispers ? to->GetObjectGuid() : ObjectGuid());
@@ -269,64 +275,75 @@ void Antispam::ProcessMessages(uint32 diff)
         if (IsMuted(messageBlock.fromAccount))
             continue;
 
-        auto type = messageBlock.type;
-        auto guidFrom = messageBlock.fromGuid.GetCounter();
-        auto guidTo = messageBlock.toGuid.GetCounter();
-
-        LowGuidPair lowGuidPair(guidFrom, guidTo);
-
-        m_messageRepeats[type][guidFrom].push_back(messageBlock.msg);
-
-        auto counter = m_messageCounters[type].find(guidFrom);
-        auto hasCounter = counter != m_messageCounters[type].end();
-
-        if (hasCounter)
+        if (!messageBlock.skipChecking)
         {
-            counter->second.count++;
-            counter->second.timeDiff = counter->second.timeDiff + (messageBlock.time - counter->second.timeLast);
-            counter->second.timeLast = messageBlock.time;
-        }
-        else
-        {
-            MessageCounter messageCounter;
-            messageCounter.count = 1;
-            messageCounter.timeDiff = 0;
-            messageCounter.timeLast = messageBlock.time;
-            messageCounter.detectMarker = false;
-            m_messageCounters[type][guidFrom] = messageCounter;
-        }
+            auto type = messageBlock.type;
+            auto guidFrom = messageBlock.fromGuid.GetCounter();
+            auto guidTo = messageBlock.toGuid.GetCounter();
 
-        if (hasCounter)
-        {
-            auto repeats = std::count_if(m_messageRepeats[type][guidFrom].begin(), m_messageRepeats[type][guidFrom].end(), FindMsg(messageBlock.msg));
-            if (repeats > m_messageRepeatCount)
+            LowGuidPair lowGuidPair(guidFrom, guidTo);
+
+            m_messageRepeats[type][guidFrom].push_back(messageBlock.msg);
+
+            auto counter = m_messageCounters[type].find(guidFrom);
+            auto hasCounter = counter != m_messageCounters[type].end();
+
+            if (hasCounter)
             {
-                ApplySanction(messageBlock, DETECT_FLOOD, repeats);
-                continue;
+                counter->second.count++;
+                counter->second.timeDiff = counter->second.timeDiff + (messageBlock.time - counter->second.timeLast);
+                counter->second.timeLast = messageBlock.time;
+            }
+            else
+            {
+                MessageCounter messageCounter;
+                messageCounter.count = 1;
+                messageCounter.timeDiff = 0;
+                messageCounter.timeLast = messageBlock.time;
+                messageCounter.detectMarker = false;
+                m_messageCounters[type][guidFrom] = messageCounter;
             }
 
-            if (counter->second.detectMarker || !m_frequencyCount ||
-                ((counter->second.count >= m_frequencyCount) && ((counter->second.count / m_frequencyCoeff) > counter->second.timeDiff)))
+            if (hasCounter)
             {
-                counter->second.detectMarker = true;
-
-                auto itr = m_messageBlocks[type].find(lowGuidPair);
-                if (itr != m_messageBlocks[type].end())
+                auto repeats = std::count_if(m_messageRepeats[type][guidFrom].begin(), m_messageRepeats[type][guidFrom].end(), FindMsg(messageBlock.msg));
+                if (repeats > m_messageRepeatCount)
                 {
-                    itr->second.msg.append(messageBlock.msg);
-                    itr->second.count++;
+                    ApplySanction(messageBlock, DETECT_FLOOD, repeats);
+                    continue;
+                }
 
-                    if (FilterMessage(itr->second))
+                if (counter->second.detectMarker || !m_frequencyCount ||
+                    ((counter->second.count >= m_frequencyCount) && ((counter->second.count / m_frequencyCoeff) > counter->second.timeDiff)))
+                {
+                    counter->second.detectMarker = true;
+
+                    auto itr = m_messageBlocks[type].find(lowGuidPair);
+                    if (itr != m_messageBlocks[type].end())
                     {
-                        ApplySanction(itr->second, DETECT_SEPARATED);
+                        itr->second.msg.append(messageBlock.msg);
+                        itr->second.count++;
+
+                        if (FilterMessage(itr->second))
+                        {
+                            ApplySanction(itr->second, DETECT_SEPARATED);
+                            SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
+                            m_messageBlocks[type].erase(itr);
+                            continue;
+                        }
+
+                        if (itr->second.count == m_messageBlockSize)
+                            m_messageBlocks[type].erase(itr);
+
+                    }
+                    else if (FilterMessage(messageBlock))
+                    {
+                        ApplySanction(messageBlock, DETECT_STANDARD);
                         SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
-                        m_messageBlocks[type].erase(itr);
                         continue;
                     }
-
-                    if (itr->second.count == m_messageBlockSize)
-                        m_messageBlocks[type].erase(itr);
-
+                    else
+                        m_messageBlocks[type][lowGuidPair] = messageBlock;
                 }
                 else if (FilterMessage(messageBlock))
                 {
@@ -334,8 +351,6 @@ void Antispam::ProcessMessages(uint32 diff)
                     SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                     continue;
                 }
-                else
-                    m_messageBlocks[type][lowGuidPair] = messageBlock;
             }
             else if (FilterMessage(messageBlock))
             {
@@ -343,15 +358,9 @@ void Antispam::ProcessMessages(uint32 diff)
                 SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                 continue;
             }
+            else if (!m_frequencyCount)
+                m_messageBlocks[type][lowGuidPair] = messageBlock;
         }
-        else if (FilterMessage(messageBlock))
-        {
-            ApplySanction(messageBlock, DETECT_STANDARD);
-            SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
-            continue;
-        }
-        else if (!m_frequencyCount)
-            m_messageBlocks[type][lowGuidPair] = messageBlock;
 
         switch (messageBlock.type)
         {
