@@ -428,6 +428,57 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
 
     m_defaultMovementType = MovementGeneratorType(data ? data->movement_type : cinfo->movement_type);
 
+    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
+    switch (GetCreatureInfo()->type)
+    {
+        case CREATURE_TYPE_MECHANICAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL_MAX_HEALTH, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_LEECH, true);
+            // no break
+        }
+        case CREATURE_TYPE_ELEMENTAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+            break;
+        }
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_TAUNT))
+    {
+        ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_STAT))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_STAT, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_CAST_SPEED))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_DISEASE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_POISON))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_CURSE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_CURSE, true);
+    }
+
     return true;
 }
 
@@ -1141,13 +1192,6 @@ bool Creature::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo cons
         default:
             m_corpseDelay = sWorld.getConfig(CONFIG_UINT32_CORPSE_DECAY_NORMAL);
             break;
-    }
-
-    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
-    if (GetCreatureInfo()->type == CREATURE_TYPE_ELEMENTAL || (GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL))
-    {
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
     }
 
     // Add to CreatureLinkingHolder if needed
@@ -2126,50 +2170,10 @@ bool Creature::IsImmuneToDamage(SpellSchoolMask meleeSchoolMask, SpellEntry cons
     return Unit::IsImmuneToDamage(meleeSchoolMask, spellInfo);
 }
 
-// hacky - seems to be the only way of doing this without wasting more time
-void Creature::SetTauntImmunity(bool immune)
-{
-    if (immune)
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra |= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-    else
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra ^= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-}
-
 bool Creature::IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex index, bool castOnSelf) const
 {
     if (!castOnSelf && spellInfo->EffectMechanic[index] && GetCreatureInfo()->mechanic_immune_mask & (1 << (spellInfo->EffectMechanic[index] - 1)))
         return true;
-
-    // Taunt immunity special flag check
-    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NOT_TAUNTABLE))
-    {
-        // Taunt aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_MOD_TAUNT)
-                return true;
-        }
-        // Spell effect taunt check
-        else if (spellInfo->Effect[index] == SPELL_EFFECT_ATTACK_ME)
-            return true;
-    }
-
-    // Ustaag <Nostalrius> : Mechanical Creature Type check
-    if (GetCreatureInfo()->type && GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL)
-    {
-        // Periodic leech aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_PERIODIC_LEECH)
-                return true;
-        }
-    }
 
     return Unit::IsImmuneToSpellEffect(spellInfo, index, castOnSelf);
 }
