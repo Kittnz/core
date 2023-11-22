@@ -46,12 +46,23 @@ class ChannelMgr
         void LeftChannel(std::string const& name);
         void CreateDefaultChannels();
         static void AnnounceBothFactionsChannel(std::string const& channelName, ObjectGuid playerGuid, char const* message);
+
+    protected:
+        Team m_team = ALLIANCE;
     private:
         ChannelMap channels;
 };
 
-class AllianceChannelMgr : public ChannelMgr {};
-class HordeChannelMgr    : public ChannelMgr {};
+class AllianceChannelMgr : public ChannelMgr 
+{
+public:
+    AllianceChannelMgr();
+};
+class HordeChannelMgr    : public ChannelMgr 
+{
+public:
+    HordeChannelMgr();
+};
 
 ChannelMgr* channelMgr(Team team);
 

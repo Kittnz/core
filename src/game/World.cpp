@@ -90,6 +90,7 @@
 #include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
 #include "Shop/ShopMgr.h"
+#include "ChannelBroadcaster.h"
 #include <ace/OS_NS_dirent.h>
 
 #ifdef USING_DISCORD_BOT
@@ -224,6 +225,7 @@ void World::InternalShutdown()
 	//TODO free addSessQueue
 
 	m_broadcaster.reset();
+    m_ChannelBroadcaster.reset();
 
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
@@ -2180,6 +2182,7 @@ void World::SetInitialWorldSettings()
         std::make_unique<MovementBroadcaster>(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_THREADS),
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
 
+    m_ChannelBroadcaster = std::make_unique<ChannelBroadcaster>();
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
     m_autoPDumpThread = std::thread(&World::AutoPDumpWorker, this);
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);

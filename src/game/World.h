@@ -54,6 +54,7 @@ class Player;
 class SqlResultQueue;
 class QueryResult;
 class World;
+class ChannelBroadcaster;
 namespace DiscordBot
 {
     class Bot;
@@ -1126,6 +1127,7 @@ class World
 
         // Nostalrius
         MovementBroadcaster* GetBroadcaster() { return m_broadcaster.get(); }
+        ChannelBroadcaster* GetChannelBroadcaster() { return m_ChannelBroadcaster.get(); } const
         float GetTimeRate() const { return m_timeRate; }
         void SetTimeRate(float rate) { m_timeRate = rate; }
         float m_timeRate;
@@ -1354,6 +1356,7 @@ class World
 
         // Packet broadcaster
         std::unique_ptr<MovementBroadcaster> m_broadcaster;
+        std::unique_ptr<ChannelBroadcaster> m_ChannelBroadcaster;
 
         std::unique_ptr<ThreadPool> m_updateThreads;
 };

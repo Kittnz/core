@@ -416,26 +416,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                             if (EnforceEnglish(this, msg))
                                 return;
                         }
-                        // Check strict Latin for general chat channels
-                        //if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
-                        //{
-                        //    // remove color, punct, ctrl, space
-                        //    if (AntispamInterface* a = sAnticheatLib->GetAntispam())
-                        //    {
-                        //        std::string normMsg = a->NormalizeMessage(msg, 0x1D);
-                        //        std::wstring w_normMsg;
-                        //        if (Utf8toWStr(normMsg, w_normMsg))
-                        //        {
-                        //            if (!isBasicLatinString(w_normMsg, true))
-                        //            {
-                        //                ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
-                        //                return;
-                        //            }
-                        //        }
-                        //    }
-                        //}
 
-                        if (auto cooldown = ChatCooldown())
+                        if (uint32 cooldown = ChatCooldown())
                         {
                             ChatHandler(this).PSendSysMessage(
                                 "Please wait %u seconds before sending another message.", cooldown
@@ -444,10 +426,12 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         }
                     }
 
+                    bool bIsWorldChannel = channel == "World";
+
                     //There is a really nice arcane bug in Channel.dbc linux loading.
                     //It blocks world from properly being loaded and seen as first-class channel.
                     //Biggest hackfixes of the century
-                    if (channel == "World")
+                    if (bIsWorldChannel)
                     {
                         if (EnforceEnglish(this, msg))
                             return;
@@ -457,27 +441,27 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     {
                         if (channel == "WorldH")
                         {
-                            channelMgr(HORDE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                            channelMgr(HORDE)->GetOrCreateChannel("World")->AsyncSay(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
                         }
 
                         if (channel == "WorldA")
                         {
-                            channelMgr(ALLIANCE)->GetOrCreateChannel("World")->Say(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
+                            channelMgr(ALLIANCE)->GetOrCreateChannel("World")->AsyncSay(playerPointer->GetObjectGuid(), msg.c_str(), LANG_UNIVERSAL, true);
                         }
                     }
 
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
                     {
-                        chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
+                        chn->AsyncSay(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
-                        if (lang != LANG_ADDON && channel == u8"World")
+                        if (lang != LANG_ADDON && bIsWorldChannel)
                         {
                             ChannelMgr::AnnounceBothFactionsChannel("Global", playerPointer->GetObjectGuid(), string_format("|cff{}{}|r", playerPointer->GetTeam() == HORDE ? "ff0000" : "2773ff"
                                 , msg.c_str()).c_str());
                         }
 
-                        if (channel == "World" && lang != LANG_ADDON)
+                        if (bIsWorldChannel && lang != LANG_ADDON)
                         {
                             std::string logChat = sWorld.FormatLoggedChat(this, "Chan", msg, nullptr, 0, channel.c_str());
                            // sWorld.SendDiscordMessage(1075224002013962250, logChat);
