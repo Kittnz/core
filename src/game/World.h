@@ -111,7 +111,8 @@ enum WorldTimers
     WUPDATE_CENSUS      = 6,
     WUPDATE_SHELLCOIN   = 7,
     WUPDATE_TOTAL_MONEY = 8,
-    WUPDATE_COUNT       = 9
+    WUPDATE_COMMANDS    = 9,
+    WUPDATE_COUNT       = 10
 };
 
 /// Configuration elements
@@ -1117,6 +1118,7 @@ class World
 
         void ProcessCliCommands();
         void QueueCliCommand(CliCommandHolder* commandHolder) { cliCmdQueue.add(commandHolder); }
+        void LoadPendingCommands(QueryResult* pResult);
 
         void UpdateResultQueue();
         void InitResultQueue();

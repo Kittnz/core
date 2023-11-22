@@ -1442,6 +1442,7 @@ void World::LoadConfigSettings(bool reload)
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_SHELLCOIN].SetInterval(10 * MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_TOTAL_MONEY].SetInterval(6 * HOUR * IN_MILLISECONDS);
+    m_timers[WUPDATE_COMMANDS].SetInterval(1 * MINUTE * IN_MILLISECONDS);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -2339,6 +2340,12 @@ void World::Update(uint32 diff)
     }
 
     m_canProcessAsyncPackets = false;
+
+    if (m_timers[WUPDATE_COMMANDS].Passed())
+    {
+        m_timers[WUPDATE_COMMANDS].Reset();
+        LoginDatabase.AsyncPQuery(this, &World::LoadPendingCommands, "SELECT `id`, `command` FROM `pending_commands` WHERE `realm_id`=%u && `run_at_time` <= %u", realmID, GetGameTime());
+    }
 
     /// <li> Handle session updates
     uint32 updateSessionsTime = WorldTimer::getMSTime();
@@ -3345,6 +3352,30 @@ void World::ProcessCliCommands()
 
         delete command;
     }
+}
+
+void utf8print(std::any, const char* str);
+void commandFinished(std::any, bool /*sucess*/);
+
+void World::LoadPendingCommands(QueryResult* pResult)
+{
+    if (!pResult)
+        return;
+
+    do
+    {
+        auto fields = pResult->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        std::string command = fields[1].GetCppString();
+
+        sLog.outBasic("Loaded command %u from database: %s", id, command.c_str());
+        QueueCliCommand(new CliCommandHolder(0, SEC_CONSOLE, nullptr, command.c_str(), &utf8print, &commandFinished));
+        LoginDatabase.PExecute("DELETE FROM `pending_commands` WHERE `id`=%u", id);
+
+    } while (pResult->NextRow());
+
+    delete pResult;
 }
 
 void World::InitResultQueue()
