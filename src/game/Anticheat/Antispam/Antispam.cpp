@@ -398,7 +398,7 @@ void Antispam::ProcessMessages(uint32 diff)
                         }
 
 
-                        channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                        channel->AsyncSay(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
                     }
                 }
                 break;

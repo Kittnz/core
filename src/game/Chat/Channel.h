@@ -95,6 +95,7 @@ inline bool IsDefenseChannel(uint32 channelId)
 
 class Channel
 {
+    friend class ChannelBroadcaster;
     public:
     enum ChannelFlags
     {
@@ -169,7 +170,7 @@ class Channel
         }
     };
 
-        Channel(std::string const& name);
+        Channel(std::string const& name, Team InTeam);
         std::string const& GetName() const { return m_name; }
         uint32 GetChannelId() const { return m_channelId; }
         bool IsConstant() const { return m_channelId != 0; }
@@ -184,6 +185,7 @@ class Channel
         bool HasFlag(uint8 flag) { return m_flags & flag; }
         void SetSecurityLevel(uint8 sec) { m_securityLevel = sec; }
         uint8 GetSecurityLevel() const { return m_securityLevel; }
+        Team GetTeam() const { return m_Team;}
 
         void Join(ObjectGuid guid, const char *password, bool checkPassword = true);
         void Leave(ObjectGuid guid, bool send = true);
@@ -203,7 +205,7 @@ class Channel
         void List(PlayerPointer guid);
         void Announce(ObjectGuid guid);
         void Moderate(ObjectGuid guid);
-        void Say(ObjectGuid guid, const char *what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
+        void AsyncSay(ObjectGuid guid, const char *what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
         void Invite(ObjectGuid guid, const char *newp);
         void Voice(ObjectGuid guid1, ObjectGuid guid2);
         void DeVoice(ObjectGuid guid1, ObjectGuid guid2);
@@ -216,6 +218,10 @@ class Channel
         */
         static void MakeNotOnPacket(WorldPacket* data, const std::string &name);
     private:
+
+        // Should be only called from ChannelBroadcaster
+		void Say(ObjectGuid guid, const char* what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
+
         // initial packet data (notify type and channel name)
         void MakeNotifyPacket(WorldPacket *data, uint8 notify_type);
         // type specific packet data
@@ -304,6 +310,7 @@ class Channel
         std::string m_password;
         uint8       m_flags;
         uint8       m_securityLevel;
+        Team        m_Team;
         uint32      m_channelId;
         ObjectGuid  m_ownerGuid;
 

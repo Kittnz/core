@@ -33,6 +33,7 @@
 #include "Map.h"
 #include "ThreadPool.h"
 #include "MoveMap.h"
+#include "ChannelBroadcaster.h"
 
 typedef MaNGOS::ClassLevelLockable<MapManager, std::recursive_mutex> MapManagerLock;
 INSTANTIATE_SINGLETON_2(MapManager, MapManagerLock);
@@ -333,6 +334,7 @@ void MapManager::Update(uint32 diff)
 
     uint32 mapsDiff = (uint32)i_timer.GetCurrent();
     asyncMapUpdating = true;
+	sWorld.GetChannelBroadcaster()->EnableSendingMessages(); // should be active only on async map updating
 
     int continentsIdx = 0;
     uint32 now = WorldTimer::getMSTime();
@@ -400,6 +402,7 @@ void MapManager::Update(uint32 diff)
     if (continents.valid())
         continents.wait();
 
+    sWorld.GetChannelBroadcaster()->DisableSendingMessages();
     SwitchPlayersInstances();
     asyncMapUpdating = false;
 
