@@ -1,6 +1,8 @@
 #pragma once
 
+#include "SharedDefines.h"
 #include "ObjectGuid.h"
+#include <atomic>
 
 
 struct ChannelMessage
