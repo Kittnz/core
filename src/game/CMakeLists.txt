@@ -98,6 +98,7 @@ set (game_SRCS
     Handlers/AddonHandler.cpp
     Handlers/AuctionHouseHandler.cpp
     Handlers/BattleGroundHandler.cpp
+    Handlers/ChannelBroadcaster.cpp
     Handlers/ChannelHandler.cpp
     Handlers/CharacterHandler.cpp
     Handlers/ChatHandler.cpp
@@ -304,6 +305,7 @@ set (game_SRCS
     Guild/Guild.h
     Guild/GuildMgr.h
     Handlers/AddonHandler.h
+    Handlers/ChannelBroadcaster.h
     Handlers/NPCHandler.h
     Handlers/LFGHandler.h
     LFG/LFGMgr.h

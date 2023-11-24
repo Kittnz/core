@@ -66,6 +66,7 @@ struct MessageBlock
     time_t time;
     std::string channelName;
     uint32 guildId;
+    bool skipChecking = false;
 };
 
 struct MessageCounter

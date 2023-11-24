@@ -54,6 +54,7 @@ class Player;
 class SqlResultQueue;
 class QueryResult;
 class World;
+class ChannelBroadcaster;
 namespace DiscordBot
 {
     class Bot;
@@ -110,7 +111,8 @@ enum WorldTimers
     WUPDATE_CENSUS      = 6,
     WUPDATE_SHELLCOIN   = 7,
     WUPDATE_TOTAL_MONEY = 8,
-    WUPDATE_COUNT       = 9
+    WUPDATE_COMMANDS    = 9,
+    WUPDATE_COUNT       = 10
 };
 
 /// Configuration elements
@@ -1116,6 +1118,7 @@ class World
 
         void ProcessCliCommands();
         void QueueCliCommand(CliCommandHolder* commandHolder) { cliCmdQueue.add(commandHolder); }
+        void LoadPendingCommands(QueryResult* pResult);
 
         void UpdateResultQueue();
         void InitResultQueue();
@@ -1126,6 +1129,7 @@ class World
 
         // Nostalrius
         MovementBroadcaster* GetBroadcaster() { return m_broadcaster.get(); }
+        ChannelBroadcaster* GetChannelBroadcaster() { return m_ChannelBroadcaster.get(); } const
         float GetTimeRate() const { return m_timeRate; }
         void SetTimeRate(float rate) { m_timeRate = rate; }
         float m_timeRate;
@@ -1354,6 +1358,7 @@ class World
 
         // Packet broadcaster
         std::unique_ptr<MovementBroadcaster> m_broadcaster;
+        std::unique_ptr<ChannelBroadcaster> m_ChannelBroadcaster;
 
         std::unique_ptr<ThreadPool> m_updateThreads;
 };

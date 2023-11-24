@@ -807,6 +807,25 @@ struct instance_blackwing_lair : public ScriptedInstance
         }
     }
 
+    void Update(uint32 diff) override
+    {
+        if (GetData(TYPE_RAZORGORE) != DONE)
+        {
+            Map::PlayerList const& playerList = GetMap()->GetPlayers();
+            for (auto const& itr : playerList)
+            {
+                if (Player* pPlayer = itr.getSource())
+                {
+                    if (!pPlayer->IsGameMaster() && !pPlayer->IsBeingTeleported() && (pPlayer->GetDistance(razorgoreRoomCenter) > 100.0f || pPlayer->GetPositionZ() > 420.0f))
+                    {
+                        ChatHandler(pPlayer).SendSysMessage("Cheating detected. Cannot leave boss room before encounter is complete.");
+                        pPlayer->TeleportTo(pPlayer->GetMapId(), razorgoreRoomCenter.x, razorgoreRoomCenter.y, razorgoreRoomCenter.z, razorgoreRoomCenter.o, TELE_TO_NOT_LEAVE_COMBAT);
+                    }
+                }
+            }
+        }
+    }
+
     bool CheckConditionCriteriaMeet(Player const* player, uint32 map_id, WorldObject const* source, uint32 instance_condition_id) const override
     {
         ObjectGuid scepterChampion = m_auiData[DATA_SCEPTER_CHAMPION];
