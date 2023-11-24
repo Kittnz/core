@@ -2,6 +2,7 @@
 #include <chrono>
 #include "ChannelBroadcaster.h"
 #include "ChannelMgr.h"
+#include "World.h"
 
 ChannelBroadcaster::ChannelBroadcaster()
 {
