@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ObjectGuid.h"
+
 
 struct ChannelMessage
 {
