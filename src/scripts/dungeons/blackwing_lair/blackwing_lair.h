@@ -48,4 +48,6 @@ enum
     MAX_DATAS                   = 26
 };
 
+static Position razorgoreRoomCenter(-7596.10, -1053.41, 408.15f, 0.0f);
+
 #endif

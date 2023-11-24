@@ -27,9 +27,11 @@
 #include "Chat.h"
 #include "Config/Config.h"
 #include "Util.h"
+#include "ChannelBroadcaster.h"
 
-Channel::Channel(std::string const& name)
-    : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0)
+Channel::Channel(std::string const& name, Team InTeam)
+    : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0),
+    m_Team(InTeam)
 {
     // TODO: Hackfix to properly identify built-in Chinese channels until/if we add support for multi language DBC
     //  loading.
@@ -688,11 +690,20 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
     ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, text, Language(lang), pPlayer ? pPlayer->GetChatTag() : 0, guid, nullptr, ObjectGuid(), "", m_name.c_str(), honor_rank);
 
     if (!skipCheck && pPlayer &&
-       (pPlayer->GetSession()->IsFingerprintBanned() ||
-        ((pPlayer->GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS) && pPlayer->GetSession()->GetAccountMaxLevel() < sWorld.getConfig(CONFIG_UINT32_PUB_CHANS_MUTE_VANISH_LEVEL))))
+        (pPlayer->GetSession()->IsFingerprintBanned() ||
+            ((pPlayer->GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS) && pPlayer->GetSession()->GetAccountMaxLevel() < sWorld.getConfig(CONFIG_UINT32_PUB_CHANS_MUTE_VANISH_LEVEL))))
+    {
         pPlayer->GetSession()->SendPacket(&data);
+    }
     else
+    {
         SendToAll(&data, (!skipCheck && !m_players[guid].IsModerator()) ? guid : ObjectGuid());
+    }
+}
+
+void Channel::AsyncSay(ObjectGuid guid, const char* what, uint32 lang /*= LANG_UNIVERSAL*/, bool skipCheck /*= false*/)
+{
+    sWorld.GetChannelBroadcaster()->EnqueueMessage(what, GetName(), guid, lang, GetTeam(), skipCheck);
 }
 
 void Channel::Invite(ObjectGuid guid, const char *targetName)

@@ -78,13 +78,12 @@ if(WIN32)
   include_directories(
     ${CMAKE_SOURCE_DIR}/dep/include-windows
   )
+endif()
 
-  if (ENABLE_PROFILING)
+if (ENABLE_PROFILING)
     include_directories(
         ${OPTICK_INCLUDE_DIR}
     )
-endif()
-
 endif()
 
 # Display some debug informations at server startup

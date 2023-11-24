@@ -588,6 +588,9 @@ bool GossipHello_npc_carlos_matos(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, sellStr.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
     pPlayer->SEND_GOSSIP_MENU(pCreature->GetEntry() == 51243 ? 47024 : 60903, pCreature->GetGUID());
     return true;
 }

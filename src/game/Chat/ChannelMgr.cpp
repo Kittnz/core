@@ -62,7 +62,7 @@ Channel *ChannelMgr::GetOrCreateChannel(std::string const& name, bool allowAreaD
         ChatChannelsEntry const* ch = sObjectMgr.GetChannelEntryFor(name);
         if (!allowAreaDependantChans && ch && ch->flags & Channel::CHANNEL_DBC_FLAG_ZONE_DEP)
             return nullptr;
-        Channel *nchan = new Channel(name);
+        Channel *nchan = new Channel(name, m_team);
         channels[wname] = nchan;
         return nchan;
     }
@@ -139,8 +139,18 @@ void ChannelMgr::CreateDefaultChannels()
 void ChannelMgr::AnnounceBothFactionsChannel(std::string const& channelName, ObjectGuid playerGuid, char const* message)
 {
     if (Channel* c = channelMgr(HORDE)->GetOrCreateChannel(channelName))
-        c->Say(playerGuid, message, LANG_UNIVERSAL, true);
+        c->AsyncSay(playerGuid, message, LANG_UNIVERSAL, true);
     if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
         if (Channel* c = channelMgr(ALLIANCE)->GetOrCreateChannel(channelName))
-            c->Say(playerGuid, message, LANG_UNIVERSAL, true);
+            c->AsyncSay(playerGuid, message, LANG_UNIVERSAL, true);
+}
+
+AllianceChannelMgr::AllianceChannelMgr()
+{
+    m_team = ALLIANCE;
+}
+
+HordeChannelMgr::HordeChannelMgr()
+{
+    m_team = HORDE;
 }

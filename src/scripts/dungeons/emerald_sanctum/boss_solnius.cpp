@@ -108,7 +108,8 @@ struct boss_solniusAI : public ScriptedAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
         m_creature->SetFactionTemplateId(7);
         m_creature->SetDisplayId(m_creature->GetNativeDisplayId());
-        m_creature->SetTauntImmunity(false);
+        m_creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
+        m_creature->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
         DespawnHelpers();
         DespawnPortals();
         m_mSummonedMajorCreature.clear();
@@ -214,7 +215,8 @@ struct boss_solniusAI : public ScriptedAI
                     if (m_creature->GetDisplayId() != MODEL_DRAGON && m_creature->HealthBelowPct(90))
                     {
                         m_creature->SetDisplayId(MODEL_DRAGON);
-                        m_creature->SetTauntImmunity(true);
+                        m_creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
+                        m_creature->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
                         if (m_creature->GetThreatManager().getThreat(m_creature->GetVictim()))
                         {
                             m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);

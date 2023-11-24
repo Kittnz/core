@@ -255,6 +255,12 @@ struct boss_razorgoreAI : public ScriptedAI
     {
         if (m_creature->HasUnitState(UNIT_STAT_POSSESSED))
         {
+            if (m_creature->GetDistance(razorgoreRoomCenter) > 80.0f)
+            {
+                m_creature->InterruptSpellsCastedOnMe(true, true);
+                return;
+            }
+
             ScriptedAI::UpdateAI(uiDiff);
             return;
         }
