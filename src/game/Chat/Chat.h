@@ -205,6 +205,8 @@ class ChatHandler
         bool HandleGoldRemoval(char* args);
         bool HandleDebugConditionCommand(char* args);
 		bool HandleDebugSetInstanceDataCommand(char* args);
+        bool HandleWarEffortInfoCommand(char* args);
+        bool HandleWarEffortSetStageCommand(char* args);
 		bool HandleCharacterInactivityDataCommand(char* args);
 
         // spell_disabled
