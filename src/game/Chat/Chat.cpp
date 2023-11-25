@@ -158,6 +158,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
 
+    static ChatCommand warEffortCommandTable[] =
+    {
+        { "info",           SEC_DEVELOPER,     true, &ChatHandler::HandleWarEffortInfoCommand,             "", nullptr },
+        { "setstage",       SEC_DEVELOPER,     true, &ChatHandler::HandleWarEffortSetStageCommand,         "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                             "", nullptr }
+    };
+
     static ChatCommand suspiciousCommandTable[] =
     {
         { "enable",               SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousEnable,               "", nullptr },
@@ -807,6 +814,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "worldstate",     SEC_ADMINISTRATOR,   false, nullptr,                                        "", worldStateCommandTable},
         { "bg",             SEC_ADMINISTRATOR,   false, nullptr,                                        "", bgCommandTable},
         { "debug",          SEC_DEVELOPER,       false, nullptr,                                        "", debugCommandTable},
+        { "wareffort",      SEC_DEVELOPER,       true, nullptr,                                         "", warEffortCommandTable},
         { "sus",            SEC_DEVELOPER,       false, nullptr,                                        "", suspiciousCommandTable},
         { "cartographer",   SEC_PLAYER,          false, &ChatHandler::HandleCartographerCommand,        "", nullptr},
         { "variable",       SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleVariableCommand,            "", nullptr},
