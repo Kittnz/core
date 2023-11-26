@@ -206,6 +206,7 @@ class ChatHandler
         bool HandleDebugConditionCommand(char* args);
 		bool HandleDebugSetInstanceDataCommand(char* args);
         bool HandleWarEffortInfoCommand(char* args);
+        bool HandleWarEffortSetGongTimeCommand(char* args);
         bool HandleWarEffortSetStageCommand(char* args);
 		bool HandleCharacterInactivityDataCommand(char* args);
 
