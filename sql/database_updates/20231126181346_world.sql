@@ -438,3 +438,240 @@ DELETE FROM gameobject_battleground WHERE guid = '4004635';
 -- Changes by WOJI
 REPLACE INTO `creature` VALUES (2580390,61698,0,0,0,0,3561.42,-2793.97,94.7202,6.08792,120,120,5,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2580390,61698,0,0,0,0,3561.42,-2793.97,94.7202,6.08792,300,300,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM creature WHERE guid=2560441;
+DELETE FROM creature_addon WHERE guid=2560441;
+DELETE FROM creature_movement WHERE id=2560441;
+DELETE FROM game_event_creature WHERE guid=2560441;
+DELETE FROM game_event_creature_data WHERE guid=2560441;
+DELETE FROM creature_battleground WHERE guid=2560441;
+DELETE FROM creature WHERE guid=2560374;
+DELETE FROM creature_addon WHERE guid=2560374;
+DELETE FROM creature_movement WHERE id=2560374;
+DELETE FROM game_event_creature WHERE guid=2560374;
+DELETE FROM game_event_creature_data WHERE guid=2560374;
+DELETE FROM creature_battleground WHERE guid=2560374;
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580391,61698,0,0,0,0,3525.4,-2924.47,103.334,2.3235,120,120,5,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2580391,61698,0,0,0,0,3525.4,-2924.47,103.334,2.3235,300,300,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM creature WHERE guid=2560350;
+DELETE FROM creature_addon WHERE guid=2560350;
+DELETE FROM creature_movement WHERE id=2560350;
+DELETE FROM game_event_creature WHERE guid=2560350;
+DELETE FROM game_event_creature_data WHERE guid=2560350;
+DELETE FROM creature_battleground WHERE guid=2560350;
+DELETE FROM creature WHERE guid=2560351;
+DELETE FROM creature_addon WHERE guid=2560351;
+DELETE FROM creature_movement WHERE id=2560351;
+DELETE FROM game_event_creature WHERE guid=2560351;
+DELETE FROM game_event_creature_data WHERE guid=2560351;
+DELETE FROM creature_battleground WHERE guid=2560351;
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580392,61698,0,0,0,0,3637.7,-2952.03,104.346,2.88506,120,120,5,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2580392,61698,0,0,0,0,3637.7,-2952.03,104.346,2.88506,300,300,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM creature WHERE guid=2560340;
+DELETE FROM creature_addon WHERE guid=2560340;
+DELETE FROM creature_movement WHERE id=2560340;
+DELETE FROM game_event_creature WHERE guid=2560340;
+DELETE FROM game_event_creature_data WHERE guid=2560340;
+DELETE FROM creature_battleground WHERE guid=2560340;
+DELETE FROM creature WHERE guid=2560352;
+DELETE FROM creature_addon WHERE guid=2560352;
+DELETE FROM creature_movement WHERE id=2560352;
+DELETE FROM game_event_creature WHERE guid=2560352;
+DELETE FROM game_event_creature_data WHERE guid=2560352;
+DELETE FROM creature_battleground WHERE guid=2560352;
+DELETE FROM creature WHERE guid=2560342;
+DELETE FROM creature_addon WHERE guid=2560342;
+DELETE FROM creature_movement WHERE id=2560342;
+DELETE FROM game_event_creature WHERE guid=2560342;
+DELETE FROM game_event_creature_data WHERE guid=2560342;
+DELETE FROM creature_battleground WHERE guid=2560342;
+DELETE FROM creature WHERE guid=2560341;
+DELETE FROM creature_addon WHERE guid=2560341;
+DELETE FROM creature_movement WHERE id=2560341;
+DELETE FROM game_event_creature WHERE guid=2560341;
+DELETE FROM game_event_creature_data WHERE guid=2560341;
+DELETE FROM creature_battleground WHERE guid=2560341;
+DELETE FROM gameobject WHERE guid = '4004334';
+DELETE FROM game_event_gameobject WHERE guid = '4004334';
+DELETE FROM gameobject_battleground WHERE guid = '4004334';
+DELETE FROM gameobject WHERE guid = '4004333';
+DELETE FROM game_event_gameobject WHERE guid = '4004333';
+DELETE FROM gameobject_battleground WHERE guid = '4004333';
+DELETE FROM gameobject WHERE guid = '4004332';
+DELETE FROM game_event_gameobject WHERE guid = '4004332';
+DELETE FROM gameobject_battleground WHERE guid = '4004332';
+DELETE FROM gameobject WHERE guid = '4004331';
+DELETE FROM game_event_gameobject WHERE guid = '4004331';
+DELETE FROM gameobject_battleground WHERE guid = '4004331';
+DELETE FROM gameobject WHERE guid = '4004345';
+DELETE FROM game_event_gameobject WHERE guid = '4004345';
+DELETE FROM gameobject_battleground WHERE guid = '4004345';
+DELETE FROM creature WHERE guid=2561541;
+DELETE FROM creature_addon WHERE guid=2561541;
+DELETE FROM creature_movement WHERE id=2561541;
+DELETE FROM game_event_creature WHERE guid=2561541;
+DELETE FROM game_event_creature_data WHERE guid=2561541;
+DELETE FROM creature_battleground WHERE guid=2561541;
+DELETE FROM creature WHERE guid=2560475;
+DELETE FROM creature_addon WHERE guid=2560475;
+DELETE FROM creature_movement WHERE id=2560475;
+DELETE FROM game_event_creature WHERE guid=2560475;
+DELETE FROM game_event_creature_data WHERE guid=2560475;
+DELETE FROM creature_battleground WHERE guid=2560475;
+DELETE FROM gameobject WHERE guid = '4004363';
+DELETE FROM game_event_gameobject WHERE guid = '4004363';
+DELETE FROM gameobject_battleground WHERE guid = '4004363';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580393,61699,0,0,0,0,3571.07,-2983.81,105.569,2.05097,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4004561';
+DELETE FROM game_event_gameobject WHERE guid = '4004561';
+DELETE FROM gameobject_battleground WHERE guid = '4004561';
+DELETE FROM creature WHERE guid=2560404;
+DELETE FROM creature_addon WHERE guid=2560404;
+DELETE FROM creature_movement WHERE id=2560404;
+DELETE FROM game_event_creature WHERE guid=2560404;
+DELETE FROM game_event_creature_data WHERE guid=2560404;
+DELETE FROM creature_battleground WHERE guid=2560404;
+DELETE FROM gameobject WHERE guid = '4004448';
+DELETE FROM game_event_gameobject WHERE guid = '4004448';
+DELETE FROM gameobject_battleground WHERE guid = '4004448';
+DELETE FROM gameobject WHERE guid = '4004407';
+DELETE FROM game_event_gameobject WHERE guid = '4004407';
+DELETE FROM gameobject_battleground WHERE guid = '4004407';
+DELETE FROM gameobject WHERE guid = '4004409';
+DELETE FROM game_event_gameobject WHERE guid = '4004409';
+DELETE FROM gameobject_battleground WHERE guid = '4004409';
+DELETE FROM gameobject WHERE guid = '4004408';
+DELETE FROM game_event_gameobject WHERE guid = '4004408';
+DELETE FROM gameobject_battleground WHERE guid = '4004408';
+DELETE FROM gameobject WHERE guid = '4004406';
+DELETE FROM game_event_gameobject WHERE guid = '4004406';
+DELETE FROM gameobject_battleground WHERE guid = '4004406';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580394,61700,0,0,0,0,3998.1,-2634.52,28.9981,5.6905,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580395,61700,0,0,0,0,4033.47,-2648.5,31.8917,5.61196,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580396,61700,0,0,0,0,4063.7,-2675.83,33.7689,5.42739,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580397,61700,0,0,0,0,4071.97,-2717.84,31.5768,4.36318,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4004377';
+DELETE FROM game_event_gameobject WHERE guid = '4004377';
+DELETE FROM gameobject_battleground WHERE guid = '4004377';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580398,61700,0,0,0,0,4050,-2750.26,31.0987,3.9587,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580399,61700,0,0,0,0,4013.06,-2762.27,33.0675,2.66279,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580400,61700,0,0,0,0,3956.18,-2713.9,34.0151,2.01091,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580401,61700,0,0,0,0,3994.48,-2572.91,28.1423,0.970261,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580402,61700,0,0,0,0,4012.13,-2528.36,17.6942,1.71246,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580403,61700,0,0,0,0,3984.3,-2486.56,23.9849,2.05804,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580404,61700,0,0,0,0,4006.63,-2429.86,10.1926,1.09985,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580405,61700,0,0,0,0,3989.24,-2360.13,12.5659,1.66926,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4007657';
+DELETE FROM game_event_gameobject WHERE guid = '4007657';
+DELETE FROM gameobject_battleground WHERE guid = '4007657';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580406,61700,0,0,0,0,3983.24,-2295.11,12.0046,1.6889,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM creature WHERE guid=2569286;
+DELETE FROM creature_addon WHERE guid=2569286;
+DELETE FROM creature_movement WHERE id=2569286;
+DELETE FROM game_event_creature WHERE guid=2569286;
+DELETE FROM game_event_creature_data WHERE guid=2569286;
+DELETE FROM creature_battleground WHERE guid=2569286;
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580407,61700,0,0,0,0,3942.68,-2188.53,15.4117,1.9795,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580408,61700,0,0,0,0,3952.05,-2138.1,8.41624,1.36688,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580409,61700,0,0,0,0,3898.43,-2056.67,9.34045,1.86169,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580410,61700,0,0,0,0,3844.28,-1969.9,4.60675,2.23632,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2580411,61700,0,0,0,0,3943.62,-2053.98,5.53515,5.24598,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4004342';
+DELETE FROM game_event_gameobject WHERE guid = '4004342';
+DELETE FROM gameobject_battleground WHERE guid = '4004342';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2580412,61700,0,0,0,0,3986.6,-2173.19,11.7743,4.93183,120,120,0,100,100,0,0,0);
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4004366';
+DELETE FROM game_event_gameobject WHERE guid = '4004366';
+DELETE FROM gameobject_battleground WHERE guid = '4004366';
+DELETE FROM gameobject WHERE guid = '4004556';
+DELETE FROM game_event_gameobject WHERE guid = '4004556';
+DELETE FROM gameobject_battleground WHERE guid = '4004556';
+DELETE FROM gameobject WHERE guid = '4004600';
+DELETE FROM game_event_gameobject WHERE guid = '4004600';
+DELETE FROM gameobject_battleground WHERE guid = '4004600';
+DELETE FROM gameobject WHERE guid = '4004329';
+DELETE FROM game_event_gameobject WHERE guid = '4004329';
+DELETE FROM gameobject_battleground WHERE guid = '4004329';
+DELETE FROM gameobject WHERE guid = '4004362';
+DELETE FROM game_event_gameobject WHERE guid = '4004362';
+DELETE FROM gameobject_battleground WHERE guid = '4004362';
+DELETE FROM gameobject WHERE guid = '4004375';
+DELETE FROM game_event_gameobject WHERE guid = '4004375';
+DELETE FROM gameobject_battleground WHERE guid = '4004375';
+DELETE FROM gameobject WHERE guid = '4004376';
+DELETE FROM game_event_gameobject WHERE guid = '4004376';
+DELETE FROM gameobject_battleground WHERE guid = '4004376';
+DELETE FROM creature WHERE guid=2560396;
+DELETE FROM creature_addon WHERE guid=2560396;
+DELETE FROM creature_movement WHERE id=2560396;
+DELETE FROM game_event_creature WHERE guid=2560396;
+DELETE FROM game_event_creature_data WHERE guid=2560396;
+DELETE FROM creature_battleground WHERE guid=2560396;
+DELETE FROM creature WHERE guid=2560397;
+DELETE FROM creature_addon WHERE guid=2560397;
+DELETE FROM creature_movement WHERE id=2560397;
+DELETE FROM game_event_creature WHERE guid=2560397;
+DELETE FROM game_event_creature_data WHERE guid=2560397;
+DELETE FROM creature_battleground WHERE guid=2560397;
+DELETE FROM gameobject WHERE guid = '4004399';
+DELETE FROM game_event_gameobject WHERE guid = '4004399';
+DELETE FROM gameobject_battleground WHERE guid = '4004399';
+DELETE FROM creature WHERE guid=2560400;
+DELETE FROM creature_addon WHERE guid=2560400;
+DELETE FROM creature_movement WHERE id=2560400;
+DELETE FROM game_event_creature WHERE guid=2560400;
+DELETE FROM game_event_creature_data WHERE guid=2560400;
+DELETE FROM creature_battleground WHERE guid=2560400;
+DELETE FROM creature WHERE guid=2560408;
+DELETE FROM creature_addon WHERE guid=2560408;
+DELETE FROM creature_movement WHERE id=2560408;
+DELETE FROM game_event_creature WHERE guid=2560408;
+DELETE FROM game_event_creature_data WHERE guid=2560408;
+DELETE FROM creature_battleground WHERE guid=2560408;
+DELETE FROM creature WHERE guid=2560402;
+DELETE FROM creature_addon WHERE guid=2560402;
+DELETE FROM creature_movement WHERE id=2560402;
+DELETE FROM game_event_creature WHERE guid=2560402;
+DELETE FROM game_event_creature_data WHERE guid=2560402;
+DELETE FROM creature_battleground WHERE guid=2560402;
+DELETE FROM creature WHERE guid=2560401;
+DELETE FROM creature_addon WHERE guid=2560401;
+DELETE FROM creature_movement WHERE id=2560401;
+DELETE FROM game_event_creature WHERE guid=2560401;
+DELETE FROM game_event_creature_data WHERE guid=2560401;
+DELETE FROM creature_battleground WHERE guid=2560401;
+UPDATE `creature` SET `position_x` = -5678.078125, `position_y` = -4251.811523, `position_z` = 407.006836, `orientation` = 5.973141 WHERE `guid` = 2560406;
+UPDATE `creature` SET `position_x` = -5668.546875, `position_y` = -4245.753418, `position_z` = 407.007935, `orientation` = 4.933272 WHERE `guid` = 8254;
