@@ -874,3 +874,6 @@ DELETE FROM creature_movement WHERE id=2580132;
 DELETE FROM game_event_creature WHERE guid=2580132;
 DELETE FROM game_event_creature_data WHERE guid=2580132;
 DELETE FROM creature_battleground WHERE guid=2580132;
+
+-- Changes by DRAGU
+REPLACE INTO `creature` VALUES (2580133,90977,0,0,0,0,3361.9,-3408.97,142.25,1.71704,120,120,0,100,100,0,0,0);
