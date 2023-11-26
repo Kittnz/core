@@ -161,6 +161,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand warEffortCommandTable[] =
     {
         { "info",           SEC_DEVELOPER,     true, &ChatHandler::HandleWarEffortInfoCommand,             "", nullptr },
+        { "setgongtime",    SEC_DEVELOPER,     true, &ChatHandler::HandleWarEffortSetGongTimeCommand,      "", nullptr },
         { "setstage",       SEC_DEVELOPER,     true, &ChatHandler::HandleWarEffortSetStageCommand,         "", nullptr },
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };

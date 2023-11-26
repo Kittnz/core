@@ -17907,6 +17907,19 @@ bool ChatHandler::HandleWarEffortInfoCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleWarEffortSetGongTimeCommand(char* args)
+{
+    uint32 gongTime;
+    if (!ExtractUInt32(&args, gongTime))
+        return false;
+
+    sObjectMgr.SetSavedVariable(VAR_WE_GONG_TIME, gongTime, true);
+    PSendSysMessage("War effort gong ring time set to '%s' (%u).", TimeToTimestampStr(gongTime), gongTime);
+    sGameEventMgr.Update();
+
+    return true;
+}
+
 bool ChatHandler::HandleWarEffortSetStageCommand(char* args)
 {
     uint32 stage;
