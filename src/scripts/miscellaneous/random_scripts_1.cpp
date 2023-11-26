@@ -973,114 +973,6 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     return true;
 }
 
-bool GOHello_go_airplane(Player* pPlayer, GameObject* pGo)
-{
-    switch (pGo->GetEntry())
-    {
-    case 1000295: // Argent Vanguard's Flying Machine
-        if (pPlayer->GetLevel() >= 25)
-        {
-            if (pPlayer->GetZoneId() == 139)
-            {
-                if (pPlayer->GetTeam() == ALLIANCE)
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66829, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                else
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66830, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            }
-            else
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66831, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        }
-        pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
-        return true;
-    case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
-        if (pPlayer->GetQuestRewardStatus(50315))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, 66832, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
-        return true;
-    }    
-    return false;
-}
-
-bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    uint32 mapid = 0;
-    float x, y, z, o = 0.0F;
-
-    switch (pGo->GetEntry())
-    {
-    case 1000295: // Argent Vanguard's Flying Machine
-        if (action == GOSSIP_ACTION_INFO_DEF + 1)
-        {
-            if (pPlayer->GetMoney() >= 5000)
-            {
-                switch (pPlayer->GetTeam())
-                {
-                case ALLIANCE:
-                    mapid = 0;
-                    x = -9046.90F;
-                    y = 343.26F;
-                    z = 160.00F;
-                    o = 2.97F;
-                    break;
-                case HORDE:
-                    mapid = 1;
-                    x = 1271.40F;
-                    y = -4271.94F;
-                    z = 80.00F;
-                    o = 2.37F;
-                    break;
-                }
-            }
-            else
-            {
-                pPlayer->GetSession()->SendNotification("You don't have enough money!");
-                pPlayer->CLOSE_GOSSIP_MENU();
-                return false;
-            }
-        }
-        if (action == GOSSIP_ACTION_INFO_DEF + 2)
-        {
-            if (pPlayer->GetMoney() >= 5000)
-            {
-                mapid = 0;
-                x = 1645.70F;
-                y = -3044.90F;
-                z = 160.00F;
-                o = 2.07F;
-            }
-            else
-            {
-                pPlayer->GetSession()->SendNotification("You don't have enough money!");
-                pPlayer->CLOSE_GOSSIP_MENU();
-                return false;
-            }
-        }
-        pPlayer->ModifyMoney(-5000);
-        pPlayer->CastSpell(pPlayer, 130, true); // Snow Fall
-        pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15 * IN_MILLISECONDS));
-        pPlayer->TeleportTo(mapid, x, y, z, o);
-        return true;
-    case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
-        int32 cost = pPlayer->GetLevel() * 100;
-        if (pPlayer->GetMoney() >= cost)
-        {
-            pPlayer->ModifyMoney(-cost);
-            pPlayer->CastSpell(pPlayer, 130, true);
-            pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18 * IN_MILLISECONDS));
-            pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 55.00f, 3.57f);
-            return true;
-        }
-        else
-        {
-            pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->GetLevel());
-            return false;
-        }
-    } 
-    return false;
-}
-
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 {
     int32 coin = 51600 + urand(0, 45);
@@ -2006,6 +1898,37 @@ bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender
         }
         ChatHandler(player).SendSysMessage("Please logout and login again!");
     }
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
+bool GossipHello_npc_flying_machine(Player* player, Creature* creature)
+{
+    if (creature->GetEntry() == 50597) // Blackstone Island
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Fly to Sparkwater Port.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(52098, creature->GetGUID());
+        return true;
+    }
+    else if (creature->GetEntry() == 50598) // Sparkwater Port
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Fly to Blackstone Island.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        player->SEND_GOSSIP_MENU(52099, creature->GetGUID());
+        return true;
+    }
+    return false;
+}
+
+bool GossipSelect_npc_flying_machine(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (!creature || !player)
+        return true;
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        player->ActivateTaxiPathTo(1619, 0, true); // Weeeee!
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        player->ActivateTaxiPathTo(1633, 0, true); // Weeeee!
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -3024,8 +2947,6 @@ bool GossipHello_npc_nert_blastentom(Player* pPlayer, Creature* pCreature)
     pPlayer->SEND_GOSSIP_MENU(80100, pCreature->GetGUID());
     return true;
 }
-
-
 
 bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -7608,14 +7529,14 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_stormwind_fountain";
-    newscript->pGOHello = &GOHello_go_stormwind_fountain;
+    newscript->Name = "npc_flying_machine";
+    newscript->pGossipHello = &GossipHello_npc_flying_machine;
+    newscript->pGossipSelect = &GossipSelect_npc_flying_machine;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_airplane";
-    newscript->pGOHello = &GOHello_go_airplane;
-    newscript->pGOGossipSelect = &GOSelect_go_airplane;
+    newscript->Name = "go_stormwind_fountain";
+    newscript->pGOHello = &GOHello_go_stormwind_fountain;
     newscript->RegisterSelf();
 
     newscript = new Script;
