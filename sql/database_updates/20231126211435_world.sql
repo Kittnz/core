@@ -14,9 +14,8 @@ REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `displa
 
 DELETE FROM creature where id in (50598, 50597);
 
-REPLACE INTO `creature`  `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (50597, 0, 0, 0, 1, -570.74, -7849.85, 52.11, 3.38495, 120, 120, 0, 100, 100, 0, 0, 0);
+REPLACE INTO `creature` ( `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (50597, 0, 0, 0, 1, -570.74, -7849.85, 52.11, 3.38495, 120, 120, 0, 100, 100, 0, 0, 0);
 REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (50598, 0, 0, 0, 1, 818.97, -5006.33, 19.9117, 1.43109, 120, 120, 0, 100, 100, 0, 0, 0);
-
 
 REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (92950, '<The flying machine whirrs in place, awaiting a passenger to fly to Sparkwater Port in Durotar.>', '<The flying machine whirrs in place, awaiting a passenger to fly to Sparkwater Port in Durotar.>', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
