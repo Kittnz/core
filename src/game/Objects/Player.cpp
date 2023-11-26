@@ -24092,7 +24092,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_SCARAB_LORD:
     {
-        if (HasItemCount(21176, 1, 1))
+        if (HasSpell(26656))
             return true;
         break;
     }
