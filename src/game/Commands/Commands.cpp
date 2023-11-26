@@ -14404,7 +14404,7 @@ bool ChatHandler::HandleSaleCommand(char* args)
         SendSysMessage("Shop sale is OFF.");
     }
     // Static price for Spectral Tiger:
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 2000 where item = 80430;");
+    WorldDatabase.PExecute("UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152);");
 
     SendSysMessage("Use this command to update prices: |cff0ccaec.reload shop|r");
     return true;
