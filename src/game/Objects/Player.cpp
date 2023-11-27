@@ -4485,7 +4485,7 @@ void Player::_SaveSpellCooldowns()
             m_spellCooldowns.erase(itr++);
         else if (itr->second.end <= infTime)                // not save locked cooldowns, it will be reset or set at reload
         {
-            stmt = CharacterDatabase.CreateStatement(insertSpellCooldown, "INSERT INTO character_spell_cooldown (guid, spell, item, time, cattime) VALUES( ?, ?, ?, ?, ?)");
+            stmt = CharacterDatabase.CreateStatement(insertSpellCooldown, "REPLACE INTO character_spell_cooldown (guid, spell, item, time, cattime) VALUES( ?, ?, ?, ?, ?)");
             stmt.PExecute(GetGUIDLow(), itr->first, itr->second.itemid, uint64(itr->second.end), uint64(itr->second.categoryEnd));
             ++itr;
         }
@@ -17613,7 +17613,7 @@ void Player::_SaveQuestStatus()
         {
             case QUEST_NEW :
             {
-                SqlStatement stmt = CharacterDatabase.CreateStatement(insertQuestStatus, "INSERT INTO character_queststatus (guid,quest,status,rewarded,explored,timer,mobcount1,mobcount2,mobcount3,mobcount4,itemcount1,itemcount2,itemcount3,itemcount4,reward_choice) "
+                SqlStatement stmt = CharacterDatabase.CreateStatement(insertQuestStatus, "REPLACE INTO character_queststatus (guid,quest,status,rewarded,explored,timer,mobcount1,mobcount2,mobcount3,mobcount4,itemcount1,itemcount2,itemcount3,itemcount4,reward_choice) "
                                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 stmt.addUInt32(GetGUIDLow());
@@ -17727,7 +17727,7 @@ void Player::_SaveSpells()
     static SqlStatementID insSpells ;
 
     SqlStatement stmtDel = CharacterDatabase.CreateStatement(delSpells, "DELETE FROM character_spell WHERE guid = ? and spell = ?");
-    SqlStatement stmtIns = CharacterDatabase.CreateStatement(insSpells, "INSERT INTO character_spell (guid,spell,active,disabled) VALUES (?, ?, ?, ?)");
+    SqlStatement stmtIns = CharacterDatabase.CreateStatement(insSpells, "REPLACE INTO character_spell (guid,spell,active,disabled) VALUES (?, ?, ?, ?)");
 
     for (PlayerSpellMap::iterator itr = m_spells.begin(); itr != m_spells.end();)
     {
@@ -24008,7 +24008,7 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
             if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
             {
                 savedSpec.push_back(talentInfo->RankID[j]);
-                CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
+                CharacterDatabase.PExecute("REPLACE INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
             }
         }
     }
