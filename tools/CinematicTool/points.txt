@@ -1,18 +1,17 @@
-189 -8347 32; Original Point
-62; Duration in Seconds
-164; Cinematic ID (for SQL)
-189 -8346 32:70 -7931 42:0; First Point, start on water
-120 -8101 32:70 -7930 42:6; Finished fly from water
--17 -8007 69:-169 -7811 42:12; Ruins
--168 -7824 46:-239 -7724 47:18; Lumber yard
--207 -7768 46:-361 -7549 96:23; Finishing Lumber yard
--269 -7605 116:-289 -7425 75:30; Path to village
--309 -7421 101:-323 -7377 77:41; Finishing village
--321 -7372 74:-219 -7357 41:45; Flying on road
--314 -7372 69:-219 -7356 41:46; Flying on road 2
--279 -7369 60:-196 -7254 19:49; Flying on road 3
--277 -7361 58:-214 -7216 17:50; Flying on road 4
--244 -7314 40:-237 -7182 17:55; Flying on road 5
--238 -7233 32:-233 -7177.5 17:59; Arrived at spawn point
--236 -7202 26:-233 -7177.2 17:61; Zoom on spawn point
--236 -7202 25.9:-233 -7177 17:62; Stand still for one second
+4929 -3057 54; Original Point
+88; Duration in Seconds
+162; Cinematic ID (for SQL)
+4926 -3056 54:4590 -2918 34:0; First Point, start in front of statue
+4832 -3021 53:4590 -2918 33:4; Enough staring at statue, let's go!
+4629 -2935 53:4401 -2874 9:12.5; On top of circle building
+4511 -2904 24:4356 -2867 11:16; Fountain 1
+4326 -2847 15:4223 -2733 8:25; On the way to second fountain
+4146 -2752 54:3976 -2702 35:33; Fountain 2
+4018 -2741 68:3878 -2557 32:37; 2 elf statue
+3986 -2705 61:3879 -2478 28:39; smooth after 2 elf statue
+3878 -2551 47:3669 -2393 62:49; Crossroad 1
+3840 -2545 51:3478 -2449 80:51; Smooth Crossroad 1
+3619 -2472 99:3478 -2449 97:63; Crossroad 2
+3405 -2457 112:3313 -2468 107:71; Before podium
+3338 -2450 143:3237 -2473 109:75; Podium
+3231 -2488 128:3212 -2500 111:87; Zoom on character
