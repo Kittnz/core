@@ -42,3 +42,12 @@ update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 WHERE id 
 update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 WHERE id = 175404 AND spawntimesecsmin <= 300;
 -- GO Entry 153454 set to timer 7200 IF below 300 seconds.
 update gameobject set spawntimesecsmin = 7200, spawntimesecsmax = 7200 WHERE id = 153454 AND spawntimesecsmin <= 300;
+-- Quest 'Why Not Both?' from Frig Thunderforge in Aerie Peak needs a money reward, 1g50s should be fine.
+update quest_template set reworreqmoney = 15000 where entry = 41142;
+-- Change name of npc 80877 to Vereesa Windrunner, <Regency Council>.
+update creature_template set name = 'Vereesa Windrunner', subname = 'Regency Council' where entry = 80877;
+-- Also rename Bright Lynx Martiarch to Bright Lynx Matriarch.
+update creature_template set name = 'Bright Lynx Matriarch' where entry = 61698;
+-- NPC Gelwex Goldfingers make elite, adjust his stats to match this change.
+REPLACE INTO creature_template VALUES
+(61670, 7242, 0, 0, 0, 0, 'Gelwex Goldfingers', NULL, 0, 11, 11, 666, 666, 639, 639, 538, 47, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 32, 47, 0, 64, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 17.732, 24.3815, 100, 7, 0, 61670, 1537, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 44, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, '');
