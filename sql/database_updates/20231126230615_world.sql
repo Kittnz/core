@@ -890,3 +890,11 @@ DELETE FROM creature_battleground WHERE guid=2559971;
 DELETE FROM gameobject WHERE guid = '4004282';
 DELETE FROM game_event_gameobject WHERE guid = '4004282';
 DELETE FROM gameobject_battleground WHERE guid = '4004282';
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2580234;
+DELETE FROM creature_addon WHERE guid=2580234;
+DELETE FROM creature_movement WHERE id=2580234;
+DELETE FROM game_event_creature WHERE guid=2580234;
+DELETE FROM game_event_creature_data WHERE guid=2580234;
+DELETE FROM creature_battleground WHERE guid=2580234;
