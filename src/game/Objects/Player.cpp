@@ -3472,7 +3472,7 @@ void Player::GiveLevel(uint32 level)
 
     if (HasChallenge(CHALLENGE_VAGRANT_MODE))
     {
-        if (level == 60)
+        if (level == PLAYER_MAX_LEVEL)
         {
             AwardTitle(TITLE_THE_WANDERER);
             MailVagrantModeRewards(level);
@@ -3481,7 +3481,7 @@ void Player::GiveLevel(uint32 level)
 
     if (IsHardcore())
     {
-        if (level == 60)
+        if (level == PLAYER_MAX_LEVEL)
         {
             if (m_hardcoreStatus != HARDCORE_MODE_STATUS_HC60)
             {
@@ -4399,7 +4399,7 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
         for (auto j : vTreeTalents)
             talentsSpent += j;
 
-        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == 60))
+        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == PLAYER_MAX_LEVEL))
         {
             CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
             m_savedSpecSpells[i].clear();
@@ -10693,7 +10693,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < 60)
+                if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < PLAYER_MAX_LEVEL)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                     {
@@ -24107,7 +24107,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_STILL_ALIVE:
     {
-        if (GetLevel() == 60)
+        if (GetLevel() == PLAYER_MAX_LEVEL)
             return false;
         if (GetHardcoreStatus() == HARDCORE_MODE_STATUS_ALIVE)
             return true;
@@ -24228,7 +24228,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_THE_WANDERER:
     {
-        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
+        if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_VAGRANT_MODE))
             return true;
         break;
     }
