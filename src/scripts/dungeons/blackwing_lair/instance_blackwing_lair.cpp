@@ -811,6 +811,7 @@ struct instance_blackwing_lair : public ScriptedInstance
     {
         if (GetData(TYPE_RAZORGORE) != DONE)
         {
+            // Prevent players from leaving first room before encounter is complete.
             Map::PlayerList const& playerList = GetMap()->GetPlayers();
             for (auto const& itr : playerList)
             {
@@ -823,6 +824,22 @@ struct instance_blackwing_lair : public ScriptedInstance
                     }
                 }
             }
+        }
+        else
+        {
+            // Only spawn the other bosses once Razorgore has been defeated.
+            if (!GetData64(DATA_VAELASTRASZ_GUID) && GetData(TYPE_VAELASTRASZ) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_VAELASTRASZ);
+            if (!GetData64(DATA_LASHLAYER_GUID) && GetData(TYPE_LASHLAYER) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_LASHLAYER);
+            if (!GetData64(DATA_FIREMAW_GUID) && GetData(TYPE_FIREMAW) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_FIREMAW);
+            if (!GetData64(DATA_EBONROC_GUID) && GetData(TYPE_EBONROC) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_EBONROC);
+            if (!GetData64(DATA_FLAMEGOR_GUID) && GetData(TYPE_FLAMEGOR) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_FLAMEGOR);
+            if (!GetData64(DATA_CHROMAGGUS_GUID) && GetData(TYPE_CHROMAGGUS) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_CHROMAGGUS);
         }
     }
 

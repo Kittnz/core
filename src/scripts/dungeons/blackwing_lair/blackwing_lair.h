@@ -45,7 +45,14 @@ enum
     DATA_DOOR_NEFARIAN          = 23,
     DATA_SCEPTER_CHAMPION       = 24,
     DATA_SCEPTER_RUN_TIME       = 25,
-    MAX_DATAS                   = 26
+    MAX_DATAS                   = 26,
+
+    DB_GUID_VAELASTRASZ         = 84512,
+    DB_GUID_LASHLAYER           = 84387,
+    DB_GUID_FIREMAW             = 84572,
+    DB_GUID_EBONROC             = 85780,
+    DB_GUID_FLAMEGOR            = 85783,
+    DB_GUID_CHROMAGGUS          = 85784,
 };
 
 static Position razorgoreRoomCenter(-7596.10, -1053.41, 408.15f, 0.0f);
