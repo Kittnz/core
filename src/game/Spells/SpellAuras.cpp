@@ -8481,6 +8481,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
     // Exceptions - se stack avec tout.
     switch (spellproto->Id)
     {
+        case 7363: // Fire's Glow
         // Terres foudroyees et Zanza
         case 10693:
         case 10691: // +25 esprit
