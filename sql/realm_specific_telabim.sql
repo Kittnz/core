@@ -15780,3 +15780,10 @@ UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30569 && `it
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30571 && `item`=16949 && `groupid`=1;
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30572 && `item`=16839 && `groupid`=1;
 UPDATE `reference_loot_template` SET `condition_id`=2 WHERE `entry`=30573 && `item`=16843 && `groupid`=1;
+
+-- Fix Onyxia dropping only 1 set item on Horde.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (10184, 30000, 100, 1, -30000, 1, 0);
+
+-- Fix Ragnaros dropping only 1 set item on both factions.
+UPDATE `creature_loot_template` SET `maxcount`=2 WHERE `entry`=11502 && `item`=30484;
+UPDATE `creature_loot_template` SET `maxcount`=2 WHERE `entry`=11502 && `item`=30547;
