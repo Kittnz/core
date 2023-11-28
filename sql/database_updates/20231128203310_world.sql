@@ -453,3 +453,4 @@ DELETE FROM game_event_creature WHERE guid=2580235;
 DELETE FROM game_event_creature_data WHERE guid=2580235;
 DELETE FROM creature_battleground WHERE guid=2580235;
 REPLACE INTO `creature` VALUES (2581143,61786,0,0,0,0,3330.19,-2626.82,122.882,2.86074,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2580947, 1);
