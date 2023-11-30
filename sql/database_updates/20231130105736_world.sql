@@ -586,3 +586,27 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Replace display id of npc 61715 with 20507.
+update creature_template set display_id1 = 20507 where entry = 61715;
+-- Enable display ids for npcs 61770 - 61788.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20545, 0, 0, 0, 0),
+(20545, 0, 0, 0, 0),
+(20503, 0, 0, 0, 0),
+(18191, 0, 0, 0, 0),
+(20519, 0, 0, 0, 0),
+(20515, 0, 0, 0, 0),
+(20516, 0, 0, 0, 0),
+(18022, 0, 0, 0, 0),
+(18023, 0, 0, 0, 0),
+(18021, 0, 0, 0, 0),
+(20532, 0, 0, 0, 0),
+(20525, 0, 0, 0, 0),
+(20529, 0, 0, 0, 0),
+(20528, 0, 0, 0, 0),
+(20524, 0, 0, 0, 0),
+(20535, 0, 0, 0, 0),
+(20537, 0, 0, 0, 0),
+(20512, 0, 0, 0, 0),
+(20523, 0, 0, 0, 0);
