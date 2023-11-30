@@ -7123,9 +7123,39 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+bool GossipHello_npc_gazzik(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41166) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30147, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61748, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_gazzik(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30148, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_gazzik";
+    newscript->pGossipHello = &GossipHello_npc_gazzik;
+    newscript->pGossipSelect = &GossipSelect_npc_gazzik;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_frig_thunderforge";
