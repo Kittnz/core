@@ -182,3 +182,407 @@ replace into creature_loot_template values
 (61672,41039,-80,0,1,1,0),
 (61673,41039,-80,0,1,1,0),
 (61674,41039,-80,0,1,1,0);
+
+-- New Rare Mobs for TH and their Items.
+REPLACE INTO creature_template VALUES
+(61789, 20512, 0, 0, 0, 0, 'Moonfeather', NULL, 0, 9, 9, 176, 176, 0, 0, 406, 14, 0, 1, 1.14286, 1.2, 20, 5, 0, 4, 1, 10, 12, 0, 60, 1, 1400, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.856, 19.052, 100, 1, 0, 61789, 0, 14430, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61790, 18031, 0, 0, 0, 0, 'Arcandir', NULL, 0, 10, 10, 198, 198, 815, 815, 512, 14, 0, 1, 0.857143, 1.2, 20, 5, 0, 4, 1, 14, 17, 0, 62, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 15.1624, 20.8483, 100, 4, 0, 61790, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61791, 18194, 0, 0, 0, 0, 'Kal\'mantir the Mad', NULL, 0, 12, 12, 247, 247, 819, 819, 573, 14, 0, 1.2, 1.14286, 1.1, 20, 5, 0, 4, 1, 18, 31, 0, 66, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 23.8896, 32.8482, 100, 7, 0, 61791, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 21, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Moonfeather.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, random_property, required_reputation_faction, required_reputation_rank) values (41040, 'Moonclaw', '', 2, 13, 1, 2, 23270, 2, 5, 0, -1, -1, 1224, 244, 21, 3, 0, 0, 1, 1, 0, 6, 11, 1600, 0, 0, 25, 0, 0, 0, 10, 0, 21, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, random_property, required_reputation_faction, required_reputation_rank) values (41041, 'Moonfeather Cloak', '', 4, 1, 7, 2, 23032, 2, 5, 0, -1, -1, 533, 133, 16, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 10, 0, 21, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0);
+-- Arcandir.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (41042, 'Arcane-infused Branch', '', 4, 0, 1, 2, 11919, 2, 5, 0, -1, -1, 1700, 425, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 21, 0, 0, 0, 0, 0, 0, 5, -3, 9395, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (41043, 'Bark Buckler', '', 4, 6, 6, 2, 2552, 2, 5, 0, -1, -1, 1016, 204, 14, 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 45, 172, 3, 0, 10, 0, 21, 0, 0, 0, 0, 0, 0, 7, 1, 6, 1, 0, 0, 0);
+-- Kal'mantir the Mad.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (41044, 'Staff of Withering Power', '', 2, 10, 1, 2, 40047, 2, 7, 0, -1, -1, 2334, 466, 17, 1, 0, 0, 1, 1, 0, 18, 27, 2700, 0, 0, 50, 0, 0, 0, 1, 0, 21, 0, 0, 0, 0, 0, 0, 5, 4, 7, -2, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (41045, 'Enchanted Scalemail', '', 4, 3, 5, 2, 8672, 2, 7, 0, -1, -1, 1420, 284, 5, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 65, 122, 0, 0, 12, 0, 21, 0, 0, 0, 0, 0, 0, 5, 2, 4, 3, 0, 0, 0);
+
+-- Creature loot table: Kal'mantir the Mad.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61791, 41044, 50, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61791, 41045, 50, 1, 1, 1, 0);
+-- Creature loot table: Arcandir.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 41042, 50, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 41043, 50, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4560, 0.1, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 768, 0.12, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4563, 0.12, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4565, 0.12, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 8181, 0.12, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 8179, 0.14, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2598, 0.22, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 3609, 0.22, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 805, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 828, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4496, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 5571, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 5572, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 3189, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 8182, 0.3, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 766, 0.32, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 3190, 0.32, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 8177, 0.32, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 767, 0.36, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 818, 0.38, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 30019, 0.5, 0, -30019, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 774, 1.3, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 1181, 1.34, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 3013, 1.66, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 118, 1.9732, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2447, 2.2074, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 30017, 2.5, 0, -30017, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 2449, 2.6421, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 785, 2.6756, 0, 1, 3, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 765, 2.9766, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 159, 3.612, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61790, 4604, 6.5886, 0, 1, 1, 0);
+-- Creature loot table: Moonfeather.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 41040, 50, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 41041, 50, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 765, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4408, 0.04, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 7288, 0.04, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 767, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 768, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4563, 0.06, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 8179, 0.08, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 8181, 0.08, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 3189, 0.1, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 3190, 0.1, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4560, 0.1, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4565, 0.12, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 2598, 0.16, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 766, 0.18, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 8177, 0.18, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 3609, 0.24, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 8182, 0.24, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 805, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 828, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4496, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 5571, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 5572, 0.25, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 818, 0.42, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 30019, 0.5, 0, -30019, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 774, 1.14, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4776, 5.2829, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 7097, 10.4034, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4775, 14.9369, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 4757, 29.4617, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61789, 7096, 30.1861, 0, 1, 1, 0);
+
+-- Kal'mantir the Mad
+set @creature_entry = 61791;
+set @description = ': Kal\'mantir the Mad';
+set @spell_list_id = 180277;
+
+set @spellid_1 = 9613; -- Shadow Bolt
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 3.5;
+set @delayrepeatmax_1 = 3.5;
+
+set @spellid_2 = 0;
+set @probability_2 = 0;
+set @casttarget_2 = 0;
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0;
+set @delayinitialmax_2 = 0;
+set @delayrepeatmin_2 = 0;
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0;
+set @casttarget_3 = 0;
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0;
+set @delayinitialmax_3 = 0;
+set @delayrepeatmin_3 = 0;
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0;
+set @casttarget_4 = 0;
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0;
+set @delayinitialmax_4 = 0;
+set @delayrepeatmin_4 = 0;
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0;
+set @probability_5 = 0;
+set @casttarget_5 = 0;
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0;
+set @delayinitialmax_5 = 0;
+set @delayrepeatmin_5 = 0;
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0;
+set @probability_6 = 0;
+set @casttarget_6 = 0;
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0;
+set @delayinitialmax_6 = 0;
+set @delayrepeatmin_6 = 0;
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0;
+set @probability_7 = 0;
+set @casttarget_7 = 0;
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0;
+set @delayinitialmax_7 = 0;
+set @delayrepeatmin_7 = 0;
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0;
+set @probability_8 = 0;
+set @casttarget_8 = 0;
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0;
+set @delayinitialmax_8 = 0;
+set @delayrepeatmin_8 = 0;
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Arcandir
+set @creature_entry = 61790;
+set @description = ': Arcandir';
+set @spell_list_id = 180276;
+
+set @spellid_1 = 15736; -- Arcane Missiles
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 10;
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 0;
+set @probability_2 = 0;
+set @casttarget_2 = 0;
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0;
+set @delayinitialmax_2 = 0;
+set @delayrepeatmin_2 = 0;
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0;
+set @casttarget_3 = 0;
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0;
+set @delayinitialmax_3 = 0;
+set @delayrepeatmin_3 = 0;
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0;
+set @casttarget_4 = 0;
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0;
+set @delayinitialmax_4 = 0;
+set @delayrepeatmin_4 = 0;
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0;
+set @probability_5 = 0;
+set @casttarget_5 = 0;
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0;
+set @delayinitialmax_5 = 0;
+set @delayrepeatmin_5 = 0;
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0;
+set @probability_6 = 0;
+set @casttarget_6 = 0;
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0;
+set @delayinitialmax_6 = 0;
+set @delayrepeatmin_6 = 0;
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0;
+set @probability_7 = 0;
+set @casttarget_7 = 0;
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0;
+set @delayinitialmax_7 = 0;
+set @delayrepeatmin_7 = 0;
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0;
+set @probability_8 = 0;
+set @casttarget_8 = 0;
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0;
+set @delayinitialmax_8 = 0;
+set @delayrepeatmin_8 = 0;
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Moonfeather
+set @creature_entry = 61789;
+set @description = ': Moonfeather';
+set @spell_list_id = 180275;
+
+set @spellid_1 = 3604; -- Tendon Rip
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 10;
+set @delayrepeatmax_1 = 10;
+
+set @spellid_2 = 0;
+set @probability_2 = 0;
+set @casttarget_2 = 0;
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0;
+set @delayinitialmax_2 = 0;
+set @delayrepeatmin_2 = 0;
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0;
+set @casttarget_3 = 0;
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0;
+set @delayinitialmax_3 = 0;
+set @delayrepeatmin_3 = 0;
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0;
+set @casttarget_4 = 0;
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0;
+set @delayinitialmax_4 = 0;
+set @delayrepeatmin_4 = 0;
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0;
+set @probability_5 = 0;
+set @casttarget_5 = 0;
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0;
+set @delayinitialmax_5 = 0;
+set @delayrepeatmin_5 = 0;
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0;
+set @probability_6 = 0;
+set @casttarget_6 = 0;
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0;
+set @delayinitialmax_6 = 0;
+set @delayrepeatmin_6 = 0;
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0;
+set @probability_7 = 0;
+set @casttarget_7 = 0;
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0;
+set @delayinitialmax_7 = 0;
+set @delayrepeatmin_7 = 0;
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0;
+set @probability_8 = 0;
+set @casttarget_8 = 0;
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0;
+set @delayinitialmax_8 = 0;
+set @delayrepeatmin_8 = 0;
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
