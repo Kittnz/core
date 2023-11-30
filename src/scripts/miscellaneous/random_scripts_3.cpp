@@ -7052,7 +7052,7 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
         if (!pPlayer->FindNearestCreature(10, 30.0F))
         {
-            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 32 * IN_MILLISECONDS);
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 42 * IN_MILLISECONDS);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
@@ -7064,19 +7064,19 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
                 {
                     pCreature->MonsterSay(30142);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 8000);
+                }, 11000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30143);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 16000);
+                }, 21000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30144);
                     pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 24000);
+                }, 31000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
@@ -7087,7 +7087,7 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
 
                     NPC_BROK_THUNDERFORGE->MonsterSay(30145);
                     NPC_BROK_THUNDERFORGE->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 31000);
+                }, 41000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
@@ -7098,9 +7098,9 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
 
                     NPC_SINDRI_THUNDERFORGE->MonsterSay(30145);
                     NPC_SINDRI_THUNDERFORGE->HandleEmote(EMOTE_ONESHOT_TALK);
-                }, 31000);
+                }, 41000);
 
-            DoAfterTime(pPlayer, 32 * IN_MILLISECONDS, [player = pPlayer]() {
+            DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer]() {
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60052))
                 {
                     player->KilledMonster(cInfo, ObjectGuid());

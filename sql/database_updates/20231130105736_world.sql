@@ -610,3 +610,12 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20537, 0, 0, 0, 0),
 (20512, 0, 0, 0, 0),
 (20523, 0, 0, 0, 0);
+-- Thunderforge Mastery (41143) fixes:
+-- Increased timer between dialogue event phrases to 10 seconds.
+update creature_template set script_name = 'npc_frig_thunderforge' where entry = 61758;
+-- Item Thunderforge Lance (40080) is not being rewarded but is in the 'Required Item' section instead.
+update quest_template set reqitemid1 = 0, reqitemid2 = 0, reqitemid3 = 0, reqitemid4 = 0, reqitemcount1 = 0, reqitemcount2 = 0, reqitemcount3 = 0, reqitemcount4 = 0, rewitemid1 = 40080, rewitemcount1 = 1, questflags = 512 where entry = 41143;
+-- Alter the third dialogue text of the event to:
+update broadcast_text set male_text = 'Sindri. Yer mace is well made in all the ways theory teaches us. But it lacks any soul. A blacksmith breathes life into their creations. Not ye, though. This thing has as much to say as Brok after his tenth ale. If ye don\'t learn to feel yer craft, ye not gonna craft weapons worthy of the Thunderforge name.' where entry = 30143;
+-- Under the Sea quest text error fix.
+update quest_template set details = 'Just look at it. A broken shell, nothing more. Do you even know how many years Dazlon and I worked to be able to afford our own ship, let alone this lucrative lifestyle? Probably not. Most definitely not.$B$BYou know, I had quite the fortune on that ship. Saved it from several trades and other more... unconventional practices. Nothing out of the ordinary for a gal of the sea, after all. I worked months, almost a year for this and now - all gone, sunken to the depths.$B$BI heard you are going to the wreckage for Dazlon. I don\'t have any hope you\'ll find it, but should you come across a green stash full of gold coins anywhere down there - I beg of you, bring it to me, please.' where entry = 41160;
