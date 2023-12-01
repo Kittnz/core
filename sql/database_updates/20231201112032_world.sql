@@ -393,3 +393,14 @@ REPLACE INTO `creature` VALUES (2581308,61761,0,0,0,1,-334.598,-7462.27,74.3563,
 UPDATE `creature` SET `position_x` = -270.651398, `position_y` = -7482.081055, `position_z` = 73.196014, `orientation` = 2.565651 WHERE `guid` = 2579986;
 REPLACE INTO `creature` VALUES (2581309,61760,0,0,0,1,-290.599,-7483.88,73.1913,3.59926,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581309, 69);
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2580868;
+DELETE FROM creature_addon WHERE guid=2580868;
+DELETE FROM creature_movement WHERE id=2580868;
+DELETE FROM game_event_creature WHERE guid=2580868;
+DELETE FROM game_event_creature_data WHERE guid=2580868;
+DELETE FROM creature_battleground WHERE guid=2580868;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2581310,61762,0,0,0,1,-494.32,-7830.79,37.4154,6.03793,120,120,0,100,100,0,0,0);
