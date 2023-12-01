@@ -421,3 +421,6 @@ UPDATE `creature_addon` SET `stand_state`=3 WHERE `guid`=2580863;
 UPDATE `creature_addon` SET `stand_state`=4 WHERE `guid`=2580863;
 UPDATE `creature_addon` SET `stand_state`=6 WHERE `guid`=2580863;
 UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2580863;
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017291, 2003983, 0, 1506.37, 285.71, -61.1542, 0.729009, 0, 0, 0.356486, 0.934301, 300, 300, 100, 1, 0, 0);
