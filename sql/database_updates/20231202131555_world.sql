@@ -286,3 +286,9 @@ update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 18027
 update creature_spells set delayrepeatmin_1 = 3, delayrepeatmax_1 = 3 where entry = 180277;
 -- Kal'mathir the Mad should have a random respawn timer between 12 and 24 hours.
 update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61791;
+-- Change needed kills for 'Clearing Nuisances' from 8 Ashfeather Scavenger to 8 Ashfeather Swooper.
+update quest_template set ReqCreatureOrGOId1 = 61657 where entry = 41162;
+
+
+
+
