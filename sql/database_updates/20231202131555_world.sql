@@ -246,7 +246,13 @@ update quest_template set reworreqmoney = 0 where entry = 41159;
 update quest_template set reworreqmoney = 75 where entry = 41160;
 -- Quest 'Battletron Calamity' change money reward to 1silver instead of 10.
 update quest_template set reworreqmoney = 100 where entry = 41163;
-
+-- Apply Item sound fix sql.
 update item_template set display_id = 1012 where entry = 40078; -- Memento of Quel'thalas.
 update item_template set display_id = 15308 where entry = 40076; -- Tattered Crimson Cloth.
 update item_template set display_id = 6614 where entry = 40073; -- Arcane Golem Splinter.
+-- Object Venture Co. Lockbox change display to look like Chest01c.m2.
+update gameobject_template set displayid = 23435 where entry = 2020068;
+-- NPC Bruiser Yevo change display ID to 11377.
+update creature_template set display_id1 = 11377 where entry = 61747;
+-- Item 'Rustgate Tool' change display ID to 19392.
+update item_template set display_id = 19392 where entry = 41031;
