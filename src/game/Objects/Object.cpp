@@ -1500,7 +1500,7 @@ bool WorldObject::IsWithinLOSAtPosition(float ownX, float ownY, float ownZ, floa
 {
     if (IsInWorld())
     {
-        float height = IsUnit() ? static_cast<Unit const*>(this)->GetCollisionHeight() : 1.0f;
+        float height = IsUnit() ? static_cast<Unit const*>(this)->GetCollisionHeight() : 2.0f;
         return GetMap()->isInLineOfSight(ownX, ownY, ownZ + height, targetX, targetY, targetZ + targetHeight, checkDynLos);
     }
 

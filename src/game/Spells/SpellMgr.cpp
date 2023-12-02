@@ -887,14 +887,14 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                     // Soulstone Resurrection and Twisting Nether (resurrector)
                     if (spellInfo_1->SpellIconID == 92 && spellInfo_2->SpellIconID == 92 && (
-                                (spellInfo_1->SpellVisual == 99 && spellInfo_2->SpellVisual == 0) ||
-                                (spellInfo_2->SpellVisual == 99 && spellInfo_1->SpellVisual == 0)))
+                       (spellInfo_1->SpellVisual == 99 && spellInfo_2->SpellVisual == 0) ||
+                       (spellInfo_2->SpellVisual == 99 && spellInfo_1->SpellVisual == 0)))
                         return false;
 
                     // Heart of the Wild and (Primal Instinct (Idol of Terror) triggering spell or Agility)
                     if (spellInfo_1->SpellIconID == 240 && spellInfo_2->SpellIconID == 240 && (
-                                (spellInfo_1->SpellVisual == 0 && spellInfo_2->SpellVisual == 78) ||
-                                (spellInfo_2->SpellVisual == 0 && spellInfo_1->SpellVisual == 78)))
+                       (spellInfo_1->SpellVisual == 0 && spellInfo_2->SpellVisual == 78) ||
+                       (spellInfo_2->SpellVisual == 0 && spellInfo_1->SpellVisual == 78)))
                         return false;
 
                     // Personalized Weather (thunder effect should overwrite rainy aura)
@@ -903,12 +903,17 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                     // Brood Affliction: Bronze
                     if ((spellInfo_1->Id == 23170 && spellInfo_2->Id == 23171) ||
-                            (spellInfo_2->Id == 23170 && spellInfo_1->Id == 23171))
+                        (spellInfo_2->Id == 23170 && spellInfo_1->Id == 23171))
                         return false;
 
                     // Regular and Night Elf Ghost
                     if ((spellInfo_1->Id == 8326 && spellInfo_2->Id == 20584) ||
-                            (spellInfo_2->Id == 8326 && spellInfo_1->Id == 20584))
+                        (spellInfo_2->Id == 8326 && spellInfo_1->Id == 20584))
+                        return false;
+
+                    // Allow Lightning Speed to stack with Haste.
+                    if (spellInfo_1->SpellIconID == 30 && spellInfo_2->SpellIconID == 30 && 
+                        spellInfo_1->SpellVisual == 1508 && spellInfo_2->SpellVisual == 1508)
                         return false;
 
                     break;
