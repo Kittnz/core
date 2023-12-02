@@ -246,3 +246,7 @@ update quest_template set reworreqmoney = 0 where entry = 41159;
 update quest_template set reworreqmoney = 75 where entry = 41160;
 -- Quest 'Battletron Calamity' change money reward to 1silver instead of 10.
 update quest_template set reworreqmoney = 100 where entry = 41163;
+
+update item_template set display_id = 1012 where entry = 40078; -- Memento of Quel'thalas.
+update item_template set display_id = 15308 where entry = 40076; -- Tattered Crimson Cloth.
+update item_template set display_id = 6614 where entry = 40073; -- Arcane Golem Splinter.
