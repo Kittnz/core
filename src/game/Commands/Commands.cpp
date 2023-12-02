@@ -722,9 +722,9 @@ bool ChatHandler::HandleLearnAllTrainerCommand(char* args)
     else
     {
         std::set<uint32> checkedTrainerTemplates;
-        for (uint32 i = 0; i < sCreatureStorage.GetMaxEntry(); ++i)
+        for (auto const& itr : sObjectMgr.GetCreatureInfoMap())
         {
-            CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(i);
+            CreatureInfo const* cInfo = itr.second.get();
             if (!cInfo)
                 continue;
 
@@ -747,7 +747,7 @@ bool ChatHandler::HandleLearnAllTrainerCommand(char* args)
                 }
             }
 
-            if (TrainerSpellData const* cSpells = sObjectMgr.GetNpcTrainerSpells(i))
+            if (TrainerSpellData const* cSpells = sObjectMgr.GetNpcTrainerSpells(itr.first))
                 HandleLearnTrainerHelper(pPlayer, cSpells);
 
             if (trainerId = cInfo->trainer_id) // assignment
@@ -968,7 +968,7 @@ bool ChatHandler::HandleListCreatureCommand(char* args)
         return false;
     }
 
-    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(cr_id);
+    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(cr_id);
     if (!cInfo)
     {
         PSendSysMessage(LANG_COMMAND_INVALIDCREATUREID, cr_id);
@@ -1012,9 +1012,9 @@ bool ChatHandler::HandleListCreatureCommand(char* args)
             int mapid = fields[4].GetUInt16();
 
             if (m_session)
-                PSendSysMessage(LANG_CREATURE_LIST_CHAT, guid, PrepareStringNpcOrGoSpawnInformation<Creature>(guid).c_str(), guid, cInfo->name, x, y, z, mapid);
+                PSendSysMessage(LANG_CREATURE_LIST_CHAT, guid, PrepareStringNpcOrGoSpawnInformation<Creature>(guid).c_str(), guid, cInfo->name.c_str(), x, y, z, mapid);
             else
-                PSendSysMessage(LANG_CREATURE_LIST_CONSOLE, guid, PrepareStringNpcOrGoSpawnInformation<Creature>(guid).c_str(), cInfo->name, x, y, z, mapid);
+                PSendSysMessage(LANG_CREATURE_LIST_CONSOLE, guid, PrepareStringNpcOrGoSpawnInformation<Creature>(guid).c_str(), cInfo->name.c_str(), x, y, z, mapid);
         } while (result->NextRow());
 
         delete result;
@@ -2145,9 +2145,10 @@ bool ChatHandler::HandleLookupCreatureCommand(char* args)
 
     uint32 counter = 0;
 
-    for (uint32 id = 0; id < sCreatureStorage.GetMaxEntry(); ++id)
+    for (auto const& itr : sObjectMgr.GetCreatureInfoMap())
     {
-        CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo> (id);
+        uint32 id = itr.first;
+        CreatureInfo const* cInfo = itr.second.get();
         if (!cInfo)
             continue;
 
@@ -8777,7 +8778,7 @@ bool ChatHandler::HandleGoCreatureCommand(char* args)
             if (!tEntry)
                 return false;
 
-            if (!ObjectMgr::GetCreatureTemplate(tEntry))
+            if (!sObjectMgr.GetCreatureTemplate(tEntry))
             {
                 SendSysMessage(LANG_COMMAND_GOCREATNOTFOUND);
                 SetSentErrorMessage(true);
@@ -10066,7 +10067,7 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
             return false;
     }
 
-    CreatureInfo const* cinfo = ObjectMgr::GetCreatureTemplate(id);
+    CreatureInfo const* cinfo = sObjectMgr.GetCreatureTemplate(id);
     if (!cinfo)
     {
         PSendSysMessage(LANG_COMMAND_INVALIDCREATUREID, id);
@@ -11342,7 +11343,7 @@ bool ChatHandler::HandleWpAddCommand(char* args)
 {
     DEBUG_LOG("DEBUG: HandleWpAddCommand");
 
-    CreatureInfo const* waypointInfo = ObjectMgr::GetCreatureTemplate(VISUAL_WAYPOINT);
+    CreatureInfo const* waypointInfo = sObjectMgr.GetCreatureTemplate(VISUAL_WAYPOINT);
     if (!waypointInfo || waypointInfo->GetHighGuid() != HIGHGUID_UNIT)
         return false;                                       // must exist as normal creature in mangos.sql 'creature_template'
 
@@ -11524,7 +11525,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         return false;
     }
 
-    CreatureInfo const* waypointInfo = ObjectMgr::GetCreatureTemplate(VISUAL_WAYPOINT);
+    CreatureInfo const* waypointInfo = sObjectMgr.GetCreatureTemplate(VISUAL_WAYPOINT);
     if (!waypointInfo || waypointInfo->GetHighGuid() != HIGHGUID_UNIT)
     {
         return false;
@@ -11753,7 +11754,7 @@ bool ChatHandler::HandleWpShowCommand(char* args)
         return false;
     }
 
-    CreatureInfo const* waypointInfo = ObjectMgr::GetCreatureTemplate(VISUAL_WAYPOINT);
+    CreatureInfo const* waypointInfo = sObjectMgr.GetCreatureTemplate(VISUAL_WAYPOINT);
     if (!waypointInfo || waypointInfo->GetHighGuid() != HIGHGUID_UNIT)
     {
         return false;
@@ -15716,7 +15717,7 @@ bool ChatHandler::HandleNpcAddEntryCommand(char* args)
     if (!ExtractUInt32(&args, uiCreatureId))
         return false;
 
-    if (!ObjectMgr::GetCreatureTemplate(uiCreatureId))
+    if (!sObjectMgr.GetCreatureTemplate(uiCreatureId))
     {
         PSendSysMessage(LANG_COMMAND_INVALIDCREATUREID, uiCreatureId);
         SetSentErrorMessage(true);
@@ -17072,6 +17073,22 @@ bool ChatHandler::HandleReloadCreatureCommand(char* /*args*/)
 {
     sObjectMgr.LoadCreatures(true);
     SendSysMessage("DB table `creature` reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureTemplateCommand(char* args)
+{
+    uint32 entry;
+    if (ExtractUInt32(&args, entry))
+    {
+        sObjectMgr.LoadCreatureTemplate(entry);
+        PSendSysMessage("Creature template %u reloaded.", entry);
+    }
+    else
+    {
+        sObjectMgr.LoadCreatureTemplates();
+        SendSysMessage("DB table `creature_template` reloaded.");
+    }
     return true;
 }
 
