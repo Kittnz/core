@@ -30,3 +30,9 @@ DELETE FROM gameobject_battleground WHERE guid = '5017348';
 -- Changes by WILLBERG
 REPLACE INTO `creature` VALUES (2581316,7559,0,0,0,0,3303.89,-2464.1,107.271,5.91877,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2581317,7559,0,0,0,0,3305.34,-2465.72,107.262,2.40215,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2581317;
+DELETE FROM creature_addon WHERE guid=2581317;
+DELETE FROM creature_movement WHERE id=2581317;
+DELETE FROM game_event_creature WHERE guid=2581317;
+DELETE FROM game_event_creature_data WHERE guid=2581317;
+DELETE FROM creature_battleground WHERE guid=2581317;
