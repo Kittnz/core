@@ -26,3 +26,6 @@ REPLACE INTO `gameobject` VALUES ( 5017348, 1000275, 1, 1334.87, 1696.93, 142.35
 DELETE FROM gameobject WHERE guid = '5017348';
 DELETE FROM game_event_gameobject WHERE guid = '5017348';
 DELETE FROM gameobject_battleground WHERE guid = '5017348';
+
+-- Changes by WILLBERG
+REPLACE INTO `creature` VALUES (2581316,7559,0,0,0,0,3303.89,-2464.1,107.271,5.91877,120,120,0,100,100,0,0,0);
