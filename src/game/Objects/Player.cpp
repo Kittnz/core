@@ -3472,7 +3472,7 @@ void Player::GiveLevel(uint32 level)
 
     if (HasChallenge(CHALLENGE_VAGRANT_MODE))
     {
-        if (level == 60)
+        if (level == PLAYER_MAX_LEVEL)
         {
             AwardTitle(TITLE_THE_WANDERER);
             MailVagrantModeRewards(level);
@@ -3481,7 +3481,7 @@ void Player::GiveLevel(uint32 level)
 
     if (IsHardcore())
     {
-        if (level == 60)
+        if (level == PLAYER_MAX_LEVEL)
         {
             if (m_hardcoreStatus != HARDCORE_MODE_STATUS_HC60)
             {
@@ -4399,7 +4399,7 @@ void Player::_LoadPlayerSavedSpecs(QueryResult* result)
         for (auto j : vTreeTalents)
             talentsSpent += j;
 
-        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == 60))
+        if (talentsSpent > 0 && talentsSpent < CalculateTalentsPoints() && (GetLevel() == PLAYER_MAX_LEVEL))
         {
             CharacterDatabase.PExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid`=%u && `spec`=%u", GetGUIDLow(), i);
             m_savedSpecSpells[i].clear();
@@ -4485,7 +4485,7 @@ void Player::_SaveSpellCooldowns()
             m_spellCooldowns.erase(itr++);
         else if (itr->second.end <= infTime)                // not save locked cooldowns, it will be reset or set at reload
         {
-            stmt = CharacterDatabase.CreateStatement(insertSpellCooldown, "INSERT INTO character_spell_cooldown (guid, spell, item, time, cattime) VALUES( ?, ?, ?, ?, ?)");
+            stmt = CharacterDatabase.CreateStatement(insertSpellCooldown, "REPLACE INTO character_spell_cooldown (guid, spell, item, time, cattime) VALUES( ?, ?, ?, ?, ?)");
             stmt.PExecute(GetGUIDLow(), itr->first, itr->second.itemid, uint64(itr->second.end), uint64(itr->second.categoryEnd));
             ++itr;
         }
@@ -6201,16 +6201,6 @@ inline int SkillGainChance(uint32 SkillValue, uint32 GrayLevel, uint32 GreenLeve
     return sWorld.getConfig(CONFIG_UINT32_SKILL_CHANCE_ORANGE) * 10;
 }
 
-inline int CraftingSkillGainChance(uint32 SkillValue, uint32 GrayLevel, uint32 YellowLevel)
-{
-    if (YellowLevel >= GrayLevel)
-        return 0;
-
-    // Linear decrease in chance as you go from the YellowLevel -> GrayLevel.
-    // To avoid casting to floats and back to uint32 we multiply the numerator by 1000, to get into a range of 0-1000.
-    return G3D::iClamp(((GrayLevel - SkillValue) * 1000) / (GrayLevel - YellowLevel), 0, 1000);
-}
-
 bool Player::UpdateCraftSkill(uint32 spellid)
 {
     DEBUG_LOG("UpdateCraftSkill spellid %d", spellid);
@@ -6225,8 +6215,9 @@ bool Player::UpdateCraftSkill(uint32 spellid)
 
             uint32 craft_skill_gain = sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_CRAFTING);
 
-            return UpdateSkillPro(_spell_idx->second->skillId, CraftingSkillGainChance(SkillValue,
+            return UpdateSkillPro(_spell_idx->second->skillId, SkillGainChance(SkillValue,
                                   _spell_idx->second->max_value,
+                                  (_spell_idx->second->max_value + _spell_idx->second->min_value) / 2,
                                   _spell_idx->second->min_value),
                                   craft_skill_gain);
         }
@@ -10693,7 +10684,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
                 if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                     return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
 
-                if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < 60)
+                if (HasChallenge(CHALLENGE_VAGRANT_MODE) && GetLevel() < PLAYER_MAX_LEVEL)
                 {
                     if (pProto->Quality > ITEM_QUALITY_NORMAL)
                     {
@@ -17622,7 +17613,7 @@ void Player::_SaveQuestStatus()
         {
             case QUEST_NEW :
             {
-                SqlStatement stmt = CharacterDatabase.CreateStatement(insertQuestStatus, "INSERT INTO character_queststatus (guid,quest,status,rewarded,explored,timer,mobcount1,mobcount2,mobcount3,mobcount4,itemcount1,itemcount2,itemcount3,itemcount4,reward_choice) "
+                SqlStatement stmt = CharacterDatabase.CreateStatement(insertQuestStatus, "REPLACE INTO character_queststatus (guid,quest,status,rewarded,explored,timer,mobcount1,mobcount2,mobcount3,mobcount4,itemcount1,itemcount2,itemcount3,itemcount4,reward_choice) "
                                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 stmt.addUInt32(GetGUIDLow());
@@ -17736,7 +17727,7 @@ void Player::_SaveSpells()
     static SqlStatementID insSpells ;
 
     SqlStatement stmtDel = CharacterDatabase.CreateStatement(delSpells, "DELETE FROM character_spell WHERE guid = ? and spell = ?");
-    SqlStatement stmtIns = CharacterDatabase.CreateStatement(insSpells, "INSERT INTO character_spell (guid,spell,active,disabled) VALUES (?, ?, ?, ?)");
+    SqlStatement stmtIns = CharacterDatabase.CreateStatement(insSpells, "REPLACE INTO character_spell (guid,spell,active,disabled) VALUES (?, ?, ?, ?)");
 
     for (PlayerSpellMap::iterator itr = m_spells.begin(); itr != m_spells.end();)
     {
@@ -24017,7 +24008,7 @@ bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
             if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
             {
                 savedSpec.push_back(talentInfo->RankID[j]);
-                CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
+                CharacterDatabase.PExecute("REPLACE INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
             }
         }
     }
@@ -24107,7 +24098,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_STILL_ALIVE:
     {
-        if (GetLevel() == 60)
+        if (GetLevel() == PLAYER_MAX_LEVEL)
             return false;
         if (GetHardcoreStatus() == HARDCORE_MODE_STATUS_ALIVE)
             return true;
@@ -24228,7 +24219,7 @@ bool Player::HasEarnedTitle(uint8 titleId)
     }
     case TITLE_THE_WANDERER:
     {
-        if (GetLevel() == 60 && HasChallenge(CHALLENGE_VAGRANT_MODE))
+        if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_VAGRANT_MODE))
             return true;
         break;
     }

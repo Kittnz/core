@@ -23,7 +23,6 @@ dungeons/blackfathom_deeps/instance_blackfathom_deeps.cpp
 dungeons/blackrock_depths/arena_challenge_ai.cpp
 dungeons/blackrock_depths/blackrock_depths.cpp
 dungeons/blackrock_depths/blackrock_depths.h
-dungeons/blackrock_depths/boss_ambassador_flamelash.cpp
 dungeons/blackrock_depths/boss_anubshiah.cpp
 dungeons/blackrock_depths/boss_emperor_dagran_thaurissan.cpp
 dungeons/blackrock_depths/boss_general_angerforge.cpp
