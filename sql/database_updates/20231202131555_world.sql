@@ -294,4 +294,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61680, 2674, 33, 0, 1, 1, 0),
 (61681, 4873, 28.7647, 0, 1, 1, 0),
 (61681, 2674, 33, 0, 1, 1, 0);
-
+-- Fix items display ids.
+update item_template set display_id = 13806 where entry = 41036; -- Makrura Leg.
+update item_template set display_id = 7494 where entry = 41031; -- Rustgate Tool.
+update item_template set display_id = 9288 where entry = 41032; -- Crate of Rebalanced Frameworks.
