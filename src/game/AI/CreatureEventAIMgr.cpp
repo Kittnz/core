@@ -77,7 +77,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
             temp.raw.param4 = fields[10].GetUInt32();
 
             //Creature does not exist in database
-            if (!sCreatureStorage.LookupEntry<CreatureInfo>(temp.creature_id))
+            if (!sObjectMgr.GetCreatureTemplate(temp.creature_id))
             {
                 if (!sObjectMgr.IsExistingCreatureId(temp.creature_id))
                     sLog.outErrorDb("CreatureEventAI:  Event %u has script for non-existing creature entry (%u), skipping.", i, temp.creature_id);
@@ -198,7 +198,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
                 case EVENT_T_SUMMONED_UNIT:
                 case EVENT_T_SUMMONED_JUST_DIED:
                 case EVENT_T_SUMMONED_JUST_DESPAWN:
-                    if (!sCreatureStorage.LookupEntry<CreatureInfo>(temp.summoned.creatureId))
+                    if (!sObjectMgr.GetCreatureTemplate(temp.summoned.creatureId))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(temp.group_member_died.creatureId))
                             sLog.outErrorDb("CreatureEventAI:  Creature %u are using event(%u) with nonexistent creature template id (%u) in param1, skipped.", temp.creature_id, i, temp.summoned.creatureId);
@@ -277,7 +277,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
                 {
                     if (temp.group_member_died.creatureId)
                     {
-                        if (!sCreatureStorage.LookupEntry<CreatureInfo>(temp.group_member_died.creatureId))
+                        if (!sObjectMgr.GetCreatureTemplate(temp.group_member_died.creatureId))
                         {
                             if (!sObjectMgr.IsExistingCreatureId(temp.group_member_died.creatureId))
                                 sLog.outErrorDb("CreatureEventAI:  Creature %u are using event(%u) with nonexistent creature template id (%u) in param1, skipped.", temp.creature_id, i, temp.group_member_died.creatureId);

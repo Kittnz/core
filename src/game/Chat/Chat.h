@@ -285,6 +285,7 @@ class ChatHandler
         bool HandleReloadCharacterPetCommand(char* args);
         bool HandleReloadConditionsCommand(char* args);
         bool HandleReloadCreatureCommand(char* args);
+        bool HandleReloadCreatureTemplateCommand(char* args);
         bool HandleReloadEventAIEventsCommand(char* args);
         bool HandleReloadCreatureQuestInvRelationsCommand(char* args);
         bool HandleReloadLootTemplatesCreatureCommand(char* args);

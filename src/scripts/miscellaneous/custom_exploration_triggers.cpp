@@ -35,7 +35,7 @@ struct custom_exploration_trigger : public GameObjectAI
                         const auto& [quest_id, objective_id, gameobject_id] = quest;
                         if ((player->GetQuestStatus(quest_id) == QUEST_STATUS_INCOMPLETE) && me->GetEntry() == gameobject_id)
                         {
-                            if (CreatureInfo const* objective = ObjectMgr::GetCreatureTemplate(objective_id))
+                            if (CreatureInfo const* objective = sObjectMgr.GetCreatureTemplate(objective_id))
                                 player->KilledMonster(objective, ObjectGuid());
                         }                                                        
                     }
