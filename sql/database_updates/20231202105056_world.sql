@@ -105,3 +105,8 @@ DELETE FROM creature_movement WHERE id=2581326;
 DELETE FROM game_event_creature WHERE guid=2581326;
 DELETE FROM game_event_creature_data WHERE guid=2581326;
 DELETE FROM creature_battleground WHERE guid=2581326;
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '5017034';
+DELETE FROM game_event_gameobject WHERE guid = '5017034';
+DELETE FROM gameobject_battleground WHERE guid = '5017034';
