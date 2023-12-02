@@ -434,8 +434,13 @@ bool LootStoreItem::AllowedForTeam(Loot const& loot) const
 
         // Check non-player dependant conditions
         if (ConditionEntry::CanBeUsedWithoutPlayer(conditionId))
-            if (!condition->Meets(nullptr, nullptr, loot.GetLootTarget(), CONDITION_FROM_LOOT))
+        {
+            WorldObject const* target = loot.GetLootTarget();
+            Map const* map = target ? target->FindMap() : nullptr;
+            if (!condition->Meets(nullptr, map, target, CONDITION_FROM_LOOT))
                 return false;
+        }
+            
     }
 
     return true;
