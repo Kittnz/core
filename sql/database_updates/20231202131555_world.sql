@@ -256,3 +256,33 @@ update gameobject_template set displayid = 23435 where entry = 2020068;
 update creature_template set display_id1 = 11377 where entry = 61747;
 -- Item 'Rustgate Tool' change display ID to 19392.
 update item_template set display_id = 19392 where entry = 41031;
+-- Vanessa Moneybutton should cast her abilities on her target instead of herself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180280;
+-- Vanessa Moneybutton should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61794;
+-- Vanessa Moneybutton should wield Item ID 41051 as her weapon.
+set @equip_template = 20482; set @weapon_1 = 41051; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61794;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Dysfunctional Shreddertron 1200 should cast its abilities on its target instead of itself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180279;
+-- Dysfunctional Shreddertron 1200 should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61793;
+-- The Snipper should cast its abilities on its target instead of itself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180278;
+-- The Snipper should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61792;
+-- Moonfeather should cast its abilities on its target instead of itself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180275;
+-- Moonfeather should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61789;
+-- Arcandir should cast its abilities on its target instead of itself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180276;
+-- Arcandir should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61790;
+-- Kal'mathir the Mad should cast its abilities on its target instead of itself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180277;
+-- Kal'mathir the Mad should cast its ability every 3 seconds instead of 3.5 seconds.
+update creature_spells set delayrepeatmin_1 = 3, delayrepeatmax_1 = 3 where entry = 180277;
+-- Kal'mathir the Mad should have a random respawn timer between 12 and 24 hours.
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61791;
