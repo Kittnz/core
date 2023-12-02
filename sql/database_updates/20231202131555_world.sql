@@ -288,7 +288,10 @@ update creature_spells set delayrepeatmin_1 = 3, delayrepeatmax_1 = 3 where entr
 update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61791;
 -- Change needed kills for 'Clearing Nuisances' from 8 Ashfeather Scavenger to 8 Ashfeather Swooper.
 update quest_template set ReqCreatureOrGOId1 = 61657 where entry = 41162;
-
-
-
+-- Add Crawler Meat (Crawler Meat - Items - Turtle WoW Database (turtle-wow.org)) to Young Muckreef Crawler and Muckreef Crawler (33% dropchance).
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61680, 4873, 28.7647, 0, 1, 1, 0),
+(61680, 2674, 33, 0, 1, 1, 0),
+(61681, 4873, 28.7647, 0, 1, 1, 0),
+(61681, 2674, 33, 0, 1, 1, 0);
 
