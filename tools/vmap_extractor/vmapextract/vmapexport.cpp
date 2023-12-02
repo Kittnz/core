@@ -427,7 +427,6 @@ bool processArgv(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    std::cin.get();
     bool success = true;
 
     // Use command line arguments, when some
