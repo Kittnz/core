@@ -231,7 +231,9 @@ void Creature::AddToWorld()
     if (!IsInWorld() && GetObjectGuid().GetHigh() == HIGHGUID_UNIT)
         GetMap()->InsertObject<Creature>(GetObjectGuid(), this);
 
-    sCreatureGroupsManager->LoadCreatureGroup(this, m_creatureGroup);
+    if (!m_creatureGroup && HasStaticDBSpawnData())
+        sCreatureGroupsManager->LoadCreatureGroup(GetObjectGuid(), m_creatureGroup);
+
     if (m_creatureGroup)
     {
         if (m_creatureGroup->IsFormation())
@@ -351,33 +353,70 @@ bool Creature::InitEntry(uint32 entry, GameEventCreatureData const* eventData /*
     SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, minfo->gender);
 
     // Load creature equipment
-    if (eventData && eventData->equipment_id)
-    {
-        // use event equipment if any for active event
-        LoadEquipment(eventData->equipment_id);
-    }
-    else if (m_creatureDataAddon && m_creatureDataAddon->equipment_id >= 0)
-    {
-        // override with per spawn data
-        LoadEquipment(m_creatureDataAddon->equipment_id, true);
-    }
-    else
-    {
-        // use default from the template
-        LoadEquipment(cinfo->equipment_id, true);
-    }
+    LoadDefaultEquipment(eventData);
 
 #if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
 #endif
+
     // update speed for the new CreatureInfo base speed mods
     UpdateSpeed(MOVE_WALK, false);
     UpdateSpeed(MOVE_RUN,  false);
     SetFly(CanFly());
-
     m_defaultMovementType = MovementGeneratorType(m_creatureData ? m_creatureData->movement_type : cinfo->movement_type);
+
+    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
+    switch (GetCreatureInfo()->type)
+    {
+        case CREATURE_TYPE_MECHANICAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL_MAX_HEALTH, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_LEECH, true);
+            // no break
+        }
+        case CREATURE_TYPE_ELEMENTAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+            break;
+        }
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_TAUNT))
+    {
+        ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_STAT))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_STAT, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_CAST_SPEED))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_DISEASE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_POISON))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_CURSE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_CURSE, true);
+    }
 
     return true;
 }
@@ -666,17 +705,17 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                 RemoveAllAuras();
 
                 // pick a new creature id if db spawn has multiple
-                uint32 const newCreatureId = m_creatureData ? m_creatureData->ChooseCreatureId() : m_originalEntry;
+                uint32 const newCreatureId = m_creatureData ? (m_creatureGroup ? m_creatureGroup->ChooseCreatureId(GetObjectGuid(), m_creatureData, GetMap()) : m_creatureData->ChooseCreatureId()) : m_originalEntry;
 
                 if (newCreatureId != m_originalEntry)
                     m_originalEntry = newCreatureId;
 
+                // need to preserve game event state
+                GameEventCreatureData const* eventData = sGameEventMgr.GetCreatureUpdateDataForActiveEvent(GetGUIDLow());
                 if (newCreatureId != GetEntry())
-                {
-                    // need to preserve game event state
-                    GameEventCreatureData const* eventData = sGameEventMgr.GetCreatureUpdateDataForActiveEvent(GetGUIDLow());
                     UpdateEntry(newCreatureId, eventData);
-                }
+                else
+                    LoadDefaultEquipment(eventData);
 
                 SelectLevel(m_creatureData ? m_creatureData->health_percent : 100.0f, m_creatureData ? m_creatureData->mana_percent : 100.0f);
                 UpdateAllStats();
@@ -1162,13 +1201,6 @@ bool Creature::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo cons
         default:
             m_corpseDelay = sWorld.getConfig(CONFIG_UINT32_CORPSE_DECAY_NORMAL);
             break;
-    }
-
-    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
-    if (GetCreatureInfo()->type == CREATURE_TYPE_ELEMENTAL || (GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL))
-    {
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
     }
 
     // Add to CreatureLinkingHolder if needed
@@ -1738,10 +1770,12 @@ bool Creature::LoadFromDB(uint32 guidlow, Map* map, bool force)
     if (!force && (data->spawn_flags & SPAWN_FLAG_DISABLED))
         return false;
 
+    ObjectGuid fullGuid = ObjectGuid(HIGHGUID_UNIT, data->creature_id[0], guidlow);
     m_creatureData = data;
     m_creatureDataAddon = sObjectMgr.GetCreatureAddon(guidlow);
+    sCreatureGroupsManager->LoadCreatureGroup(fullGuid, m_creatureGroup);
 
-    uint32 const creatureId = data->ChooseCreatureId();
+    uint32 const creatureId = m_creatureGroup ? m_creatureGroup->ChooseCreatureId(fullGuid, data, map) : data->ChooseCreatureId();
     CreatureInfo const* cinfo = ObjectMgr::GetCreatureTemplate(creatureId);
     if (!cinfo)
     {
@@ -1752,7 +1786,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map* map, bool force)
     GameEventCreatureData const* eventData = sGameEventMgr.GetCreatureUpdateDataForActiveEvent(guidlow);
 
     // Creature can be loaded already in map if grid has been unloaded while creature walk to another grid
-    if (map->GetCreature(cinfo->GetObjectGuid(guidlow)))
+    if (map->GetCreature(fullGuid))
         return false;
 
     CreatureCreatePos pos(map, data->position.x, data->position.y, data->position.z, data->position.o);
@@ -1839,24 +1873,46 @@ bool Creature::LoadFromDB(uint32 guidlow, Map* map, bool force)
     return true;
 }
 
-void Creature::LoadEquipment(uint32 equip_entry, bool force)
+void Creature::LoadEquipment(uint32 equipmentId, bool force)
 {
-    if (equip_entry == 0)
+    if (equipmentId == 0)
     {
         if (force)
         {
             for (uint8 i = 0; i < MAX_VIRTUAL_ITEM_SLOT; ++i)
-                SetVirtualItem(VirtualItemSlot(i), 0);
+                SetVirtualItem(WeaponAttackType(i), 0);
             m_equipmentId = 0;
         }
         return;
     }
 
-    if (EquipmentInfo const* einfo = sObjectMgr.GetEquipmentInfo(equip_entry))
+    if (EquipmentTemplate const* pEquipTemplate = sObjectMgr.GetEquipmentTemplate(equipmentId))
     {
-        m_equipmentId = equip_entry;
-        for (uint8 i = 0; i < MAX_VIRTUAL_ITEM_SLOT; ++i)
-            SetVirtualItem(VirtualItemSlot(i), einfo->equipentry[i]);
+        m_equipmentId = equipmentId;
+        if (EquipmentEntry const* pEquipEntry = pEquipTemplate->ChooseEquipmentEntry())
+        {
+            for (uint8 i = 0; i < MAX_VIRTUAL_ITEM_SLOT; ++i)
+                SetVirtualItem(WeaponAttackType(i), pEquipEntry->item[i]);
+        }
+    }
+}
+
+void Creature::LoadDefaultEquipment(GameEventCreatureData const* eventData)
+{
+    if (eventData && eventData->equipment_id)
+    {
+        // use event equipment if any for active event
+        LoadEquipment(eventData->equipment_id);
+    }
+    else if (m_creatureDataAddon && m_creatureDataAddon->equipment_id >= 0)
+    {
+        // override with per spawn data
+        LoadEquipment(m_creatureDataAddon->equipment_id, true);
+    }
+    else
+    {
+        // use default from the template
+        LoadEquipment(m_creatureInfo->equipment_id, true);
     }
 }
 
@@ -2206,50 +2262,10 @@ bool Creature::IsImmuneToDamage(SpellSchoolMask meleeSchoolMask, SpellEntry cons
     return Unit::IsImmuneToDamage(meleeSchoolMask, spellInfo);
 }
 
-// hacky - seems to be the only way of doing this without wasting more time
-void Creature::SetTauntImmunity(bool immune)
-{
-    if (immune)
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra |= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-    else
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra ^= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-}
-
 bool Creature::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const
 {
     if (!castOnSelf && spellInfo->EffectMechanic[index] && GetCreatureInfo()->mechanic_immune_mask & (1 << (spellInfo->EffectMechanic[index] - 1)))
         return true;
-
-    // Taunt immunity special flag check
-    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NOT_TAUNTABLE))
-    {
-        // Taunt aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_MOD_TAUNT)
-                return true;
-        }
-        // Spell effect taunt check
-        else if (spellInfo->Effect[index] == SPELL_EFFECT_ATTACK_ME)
-            return true;
-    }
-
-    // Ustaag <Nostalrius> : Mechanical Creature Type check
-    if (GetCreatureInfo()->type && GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL)
-    {
-        // Periodic leech aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_PERIODIC_LEECH)
-                return true;
-        }
-    }
 
     return Unit::IsImmuneToSpellEffect(spellInfo, index, castOnSelf);
 }
@@ -2747,7 +2763,12 @@ void Creature::SetInCombatWithZone(bool initialPulse)
                 continue;
 
             if (IsValidAttackTarget(pPlayer))
+            {
                 EnterCombatWithTarget(pPlayer);
+                Pet* pet = pPlayer->GetPet();
+                if (pet && IsValidAttackTarget(pet))
+                    EnterCombatWithTarget(pet);
+            }
         }
     }
 }
@@ -2794,7 +2815,11 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
             return false;
     }
 
-    if (!IsValidAttackTarget(pTarget))
+    // It makes more sense to check IsValidAttackTarget, but will break Kel'Thuzad script.
+    // He is immune to players in first phase, but picks random targets from threat list for summons to attack.
+    if (pTarget->IsDead() ||
+        pTarget->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_SELECTABLE) ||
+        IsFriendlyTo(pTarget))
         return false;
 
     if (pSpellInfo)
@@ -3037,11 +3062,10 @@ bool Creature::IsInEvadeMode() const
 
 bool Creature::HasSpell(uint32 spellId) const
 {
-    uint8 i;
-    for (i = 0; i < CREATURE_MAX_SPELLS; ++i)
+    for (uint8 i = 0; i < CREATURE_MAX_SPELLS; ++i)
         if (spellId == m_spells[i])
-            break;
-    return i < CREATURE_MAX_SPELLS;                         // break before end of iteration of known spells
+            return true;
+    return false;
 }
 
 void Creature::LockOutSpells(SpellSchoolMask schoolMask, uint32 duration)
@@ -4034,7 +4058,7 @@ uint32 Creature::GetDBTableGUIDLow() const
     return 0;
 }
 
-void Creature::SetVirtualItem(VirtualItemSlot slot, uint32 item_id)
+void Creature::SetVirtualItem(WeaponAttackType slot, uint32 item_id)
 {
     if (item_id == 0)
     {
@@ -4058,6 +4082,26 @@ void Creature::SetVirtualItem(VirtualItemSlot slot, uint32 item_id)
     SetByteValue(UNIT_VIRTUAL_ITEM_INFO + (slot * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_INVENTORYTYPE, proto->InventoryType);
 
     SetByteValue(UNIT_VIRTUAL_ITEM_INFO + (slot * 2) + 1, VIRTUAL_ITEM_INFO_1_OFFSET_SHEATH,        proto->Sheath);
+}
+
+uint32 Creature::GetVirtualItemDisplayId(WeaponAttackType slot) const
+{
+    return GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + slot);
+}
+
+uint32 Creature::GetVirtualItemClass(WeaponAttackType slot) const
+{
+    return GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (slot * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_CLASS);
+}
+
+uint32 Creature::GetVirtualItemSubclass(WeaponAttackType slot) const
+{
+    return GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (slot * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_SUBCLASS);
+}
+
+uint32 Creature::GetVirtualItemInventoryType(WeaponAttackType slot) const
+{
+    return GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (slot * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_INVENTORYTYPE);
 }
 
 void Creature::JoinCreatureGroup(Creature* leader, float dist, float angle, uint32 options)

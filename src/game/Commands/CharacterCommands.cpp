@@ -506,6 +506,32 @@ bool ChatHandler::HandleCheatWallclimbCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCheatDebugTargetInfoCommand(char* args)
+{
+    if (*args)
+    {
+        bool value;
+        if (!ExtractOnOff(&args, value))
+        {
+            SendSysMessage(LANG_USE_BOL);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        Player* target;
+        if (!ExtractPlayerTarget(&args, &target))
+            return false;
+
+        target->SetCheatDebugTargetInfo(value, true);
+
+        PSendSysMessage(LANG_YOU_SET_DEBUG_TARGET_INFO, value ? "on" : "off", GetNameLink(target).c_str());
+        if (needReportToTarget(target))
+            ChatHandler(target).PSendSysMessage(LANG_YOUR_DEBUG_TARGET_INFO_SET, value ? "on" : "off", GetNameLink().c_str());
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleCheatStatusCommand(char* args)
 {
     Player* target;
@@ -549,6 +575,8 @@ bool ChatHandler::HandleCheatStatusCommand(char* args)
         SendSysMessage("- Water walking");
     if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_0))
         SendSysMessage("- Wall climbing");
+    if (target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
+        SendSysMessage("- Debug target info");
 
     return true;
 }
@@ -2278,8 +2306,12 @@ bool ChatHandler::HandleHonorShow(char* /*args*/)
     uint32 today_dishonorable_kills = target->GetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 1);
     uint32 yesterday_kills          = target->GetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS);
     uint32 yesterday_honor          = target->GetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION);
+// World of Warcraft Client Patch 1.6.0 (2005-07-12)
+// - There is a new "This Week" section of the Honor tab, which will display PvP accomplishments of the current week.
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
     uint32 this_week_kills          = target->GetUInt32Value(PLAYER_FIELD_THIS_WEEK_KILLS);
     uint32 this_week_honor          = target->GetUInt32Value(PLAYER_FIELD_THIS_WEEK_CONTRIBUTION);
+#endif
     uint32 last_week_kills          = target->GetUInt32Value(PLAYER_FIELD_LAST_WEEK_KILLS);
     uint32 last_week_honor          = target->GetUInt32Value(PLAYER_FIELD_LAST_WEEK_CONTRIBUTION);
     uint32 last_week_standing       = target->GetUInt32Value(PLAYER_FIELD_LAST_WEEK_RANK);
@@ -2360,7 +2392,9 @@ bool ChatHandler::HandleHonorShow(char* /*args*/)
     PSendSysMessage(LANG_RANK, target->GetName(), rank_name, honor_rank);
     PSendSysMessage(LANG_HONOR_TODAY, today_honorable_kills, today_dishonorable_kills);
     PSendSysMessage(LANG_HONOR_YESTERDAY, yesterday_kills, yesterday_honor);
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
     PSendSysMessage(LANG_HONOR_THIS_WEEK, this_week_kills, this_week_honor);
+#endif
     PSendSysMessage(LANG_HONOR_LAST_WEEK, last_week_kills, last_week_honor, last_week_standing);
     PSendSysMessage(LANG_HONOR_LIFE, target->GetHonorMgr().GetRankPoints(), honorable_kills, dishonorable_kills, highest_rank, hrank_name);
 
@@ -2432,8 +2466,13 @@ bool ChatHandler::HandleModifyHonorCommand(char* args)
     {
         if (amount < 0 || amount > 255)
             return false;
+
+// World of Warcraft Client Patch 1.6.0 (2005-07-12)
+// - There is now a progress bar on the Honor tab of your character window that displays how close you are to your next rank.
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
         // rank points is sent to client with same size of uint8(255) for each rank
         target->SetByteValue(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_HONOR_RANK_BAR, amount);
+#endif
     }
     else if (hasStringAbbr(field, "rank"))
     {
@@ -2447,10 +2486,14 @@ bool ChatHandler::HandleModifyHonorCommand(char* args)
         target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS, (uint32)amount);
     else if (hasStringAbbr(field, "yesterdayhonor"))
         target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, (uint32)amount);
+// World of Warcraft Client Patch 1.6.0 (2005-07-12)
+// - There is a new "This Week" section of the Honor tab, which will display PvP accomplishments of the current week.
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
     else if (hasStringAbbr(field, "thisweekkills"))
         target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_KILLS, (uint32)amount);
     else if (hasStringAbbr(field, "thisweekhonor"))
         target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_CONTRIBUTION, (uint32)amount);
+#endif
     else if (hasStringAbbr(field, "lastweekkills"))
         target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_KILLS, (uint32)amount);
     else if (hasStringAbbr(field, "lastweekhonor"))
@@ -2818,6 +2861,58 @@ void ChatHandler::HandleLearnTrainerHelper(Player* player, TrainerSpellData cons
     } while (learnedAnything);
 }
 
+bool ChatHandler::HandleLearnAllItemsCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
+    {
+        ItemPrototype const* pProto = &itr.second;
+
+        if (pProto->ExtraFlags & ITEM_EXTRA_NOT_OBTAINABLE)
+            continue;
+
+        SpellEntry const* pLearnSpell = nullptr;
+        for (uint32 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+        {
+            if (!pProto->Spells[i].SpellId)
+                continue;
+
+            if (pProto->Spells[i].SpellTrigger != ITEM_SPELLTRIGGER_ON_USE)
+                continue;
+
+            SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(pProto->Spells[i].SpellId);
+            if (pSpellEntry->HasEffect(SPELL_EFFECT_LEARN_SPELL))
+                pLearnSpell = pSpellEntry;
+
+            // items have only one on use effect
+            break;
+        }
+
+        if (!pLearnSpell)
+            continue;
+
+        if (pPlayer->CanUseItem(pProto) != EQUIP_ERR_OK)
+            continue;
+
+        for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+        {
+            uint32 spellId = pLearnSpell->EffectTriggerSpell[i];
+            if (spellId && pLearnSpell->Effect[i] == SPELL_EFFECT_LEARN_SPELL)
+            {
+                SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(spellId);
+                if (bounds.first == bounds.second)
+                    continue;
+
+                pPlayer->LearnSpell(spellId, false);
+            }
+        }
+    }
+
+    SendSysMessage("Learned all available spells from items.");
+    return true;
+}
+
 bool ChatHandler::HandleLearnAllMyTaxisCommand(char* /*args*/)
 {
     Player* player = m_session->GetPlayer();
@@ -2849,7 +2944,12 @@ bool ChatHandler::HandleLearnAllLangCommand(char* /*args*/)
 
     // skipping UNIVERSAL language (0)
     for (int i = 1; i < LANGUAGES_COUNT; ++i)
-        pPlayer->LearnSpell(lang_description[i].spell_id, false);
+    {
+        if (lang_description[i].spell_id)
+            pPlayer->LearnSpell(lang_description[i].spell_id, false);
+        if (lang_description[i].skill_id)
+            pPlayer->SetSkill(lang_description[i].skill_id, 300, 300);
+    }
 
     SendSysMessage(LANG_COMMAND_LEARN_ALL_LANG);
     return true;
@@ -5704,7 +5804,7 @@ bool ChatHandler::HandleListExploredAreasCommand(char* args)
         sObjectMgr.GetAreaLocaleString(itr->Id, GetSessionDbLocaleIndex(), &name);
 
         if (!itr->ExploreFlag || itr->ExploreFlag == 0xffff)
-            continue;;
+            continue;
 
         int offset = itr->ExploreFlag / 32;
         if (offset >= PLAYER_EXPLORED_ZONES_SIZE)

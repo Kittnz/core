@@ -91,6 +91,7 @@ class WorldBotAI;
 
 class ChatHandler
 {
+    friend class CombatBotBaseAI;
     friend class PartyBotAI;
     friend class BattleBotAI;
     friend class WorldBotAI;
@@ -203,6 +204,7 @@ class ChatHandler
         bool HandleCheatUntargetableCommand(char *);
         bool HandleCheatWaterwalkCommand(char* args);
         bool HandleCheatWallclimbCommand(char* args);
+        bool HandleCheatDebugTargetInfoCommand(char* args);
 
         //Custom
         bool HandleSendSpellVisualCommand(char *);
@@ -279,6 +281,7 @@ class ChatHandler
         bool HandleBattleBotAddArathiCommand(char* args);
         bool HandleBattleBotAddWarsongCommand(char* args);
         bool HandleBattleBotRemoveCommand(char* args);
+        bool HandleBattleBotRemoveAllCommand(char* args);
         bool HandleBattleBotShowPathCommand(char* args);
         bool HandleBattleBotShowAllPathsCommand(char* args);
         bool HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot);
@@ -326,8 +329,11 @@ class ChatHandler
         bool HandleVariableCommand(char* args);
         bool HandleReloadVariablesCommand(char* args);
         //  AQ variables
-        bool HandleGetWarEffortResource(char* args);
-        bool HandleSetWarEffortResource(char* args);
+        bool HandleWarEffortGetResource(char* args);
+        bool HandleWarEffortSetResource(char* args);
+        bool HandleWarEffortInfoCommand(char* args);
+        bool HandleWarEffortSetGongTimeCommand(char* args);
+        bool HandleWarEffortSetStageCommand(char* args);
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
@@ -594,6 +600,7 @@ class ChatHandler
         bool HandleLearnAllMyTalentsCommand(char* args);
         bool HandleLearnAllMyTaxisCommand(char* args);
         bool HandleLearnAllTrainerCommand(char* args);
+        bool HandleLearnAllItemsCommand(char* args);
 
         bool HandleListAurasCommand(char* args);
         bool HandleListCreatureCommand(char* args);
@@ -954,6 +961,7 @@ class ChatHandler
         bool HandleDamageCommand(char* args);
         bool HandleAoEDamageCommand(char* args);
         bool HandleReviveCommand(char* args);
+        bool HandleDeplenishCommand(char* args);
         bool HandleReplenishCommand(char* args);
         bool HandleModifyMorphCommand(char* args);
         bool HandleNameAuraCommand(char* args);

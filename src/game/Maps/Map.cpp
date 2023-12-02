@@ -371,7 +371,7 @@ bool Map::EnsureGridLoaded(Cell const& cell)
         ASSERT(false);
     }
 
-    if (!isGridObjectDataLoaded(cell.GridX(), cell.GridY()))
+    if (!grid->isGridObjectDataLoaded())
     {
         //it's important to set it loaded before loading!
         //otherwise there is a possibility of infinity chain (grid loading will be called many times for the same grid)
@@ -379,7 +379,7 @@ bool Map::EnsureGridLoaded(Cell const& cell)
         //active object A(loaded with loader.LoadN call and added to the  map)
         //summons some active object B, while B added to map grid loading called again and so on..
         ASSERT(!m_unloading && "Trying to load grid while unloading the whole map !");
-        setGridObjectDataLoaded(true, cell.GridX(), cell.GridY());
+        grid->setGridObjectDataLoaded(true);
         ObjectGridLoader loader(*grid, this, cell);
         loader.LoadN();
 
@@ -669,7 +669,8 @@ void Map::MessageDistBroadcast(WorldObject const* obj, WorldPacket* msg, float d
 
 bool Map::loaded(GridPair const& p) const
 {
-    return (getNGrid(p.x_coord, p.y_coord) && isGridObjectDataLoaded(p.x_coord, p.y_coord));
+    NGridType const* grid = getNGrid(p.x_coord, p.y_coord);
+    return (grid && grid->isGridObjectDataLoaded());
 }
 
 void Map::UpdateSync(uint32 const diff)
@@ -1283,16 +1284,15 @@ Map::Remove(T* obj, bool remove)
         UpdateObjectVisibility(obj, cell, p); // i think will be better to call this function while object still in grid, this changes nothing but logically is better(as for me)
     RemoveFromGrid(obj, grid, cell);
 
-    obj->ResetMap();
     if (remove)
-    {
         // if option set then object already saved at this moment
         if (!sWorld.getConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY))
-            obj->SaveRespawnTime();
+            obj->SaveRespawnTime(); // requires map not being reset
 
-        // Note: In case resurrectable corpse and pet its removed from global lists in own destructor
+    obj->ResetMap();
+    
+    if (remove) // Note: In case resurrectable corpse and pet its removed from global lists in own destructor
         delete obj;
-    }
 }
 
 template<>
@@ -3626,6 +3626,12 @@ Creature* Map::LoadCreatureSpawn(uint32 dbGuid, bool delaySpawn)
     CreatureData const* pSpawnData = sObjectMgr.GetCreatureData(dbGuid);
     if (!pSpawnData)
         return nullptr;
+
+    if (GetId() != pSpawnData->position.mapId)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to load creature spawn guid %u on wrong map %u.", dbGuid, GetId());
+        return nullptr;
+    }
 
     Creature* pCreature;
     ObjectGuid guid = pSpawnData->GetObjectGuid(dbGuid);
