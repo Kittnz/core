@@ -42,7 +42,11 @@ bool checkDirectories(bool debugOutput)
     if (getDirContents(dirFiles, "mmaps") == LISTFILE_DIRECTORY_NOT_FOUND)
     {
         printf("'mmaps' directory does not exist\n");
-        return false;
+#ifndef WIN32
+		mkdir("mmaps", 0777);
+#else
+		_mkdir("mmaps");
+#endif
     }
 
     dirFiles.clear();
@@ -268,8 +272,6 @@ int main(int argc, char** argv)
          bigBaseUnit = false,
          quick = false;
     char* offMeshInputPath = nullptr;
-
-    std::cin.get();
 
     bool validParam = handleArgs(argc, argv, mapnum,
                                  tileX, tileY, maxAngle,
