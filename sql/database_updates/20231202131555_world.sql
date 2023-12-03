@@ -294,7 +294,12 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61680, 2674, 33, 0, 1, 1, 0),
 (61681, 4873, 28.7647, 0, 1, 1, 0),
 (61681, 2674, 33, 0, 1, 1, 0);
--- Fix items display ids.
-update item_template set display_id = 13806 where entry = 41036; -- Makrura Leg.
-update item_template set display_id = 7494 where entry = 41031; -- Rustgate Tool.
-update item_template set display_id = 9288 where entry = 41032; -- Crate of Rebalanced Frameworks.
+-- Gossip text for Gazzik <Tinkerer> when on the quest 'Redistribution' is not showing, it should say: Gazzik: Oh, those… Yes, they're in the warehouse. It's the building opposite of this one. We had to deal with… a few shortages in the workforce, so we weren't able to send 'em over to Rustgate.
+-- Just tell that to Maxlo and he's gonna understand, alright?
+-- <The goblin winks at you deviously.>
+update creature_template set script_name = 'npc_gazzik' where entry = 61748;
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30147, 'I am here for the overdue shipment of frameworks.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30148, 'Oh, those... Yes, they\'re in the warehouse. It\'s the building opposite of this one. We had to deal with... a few shortages in the workforce, so we weren\'t able to send \'em over to Rustgate.$B$BJust tell that to Maxlo and he\'s gonna understand, alright?$B$B<The goblin winks at you deviously.>', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO npc_text VALUES
+(30148, 30148, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
