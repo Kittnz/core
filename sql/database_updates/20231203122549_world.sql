@@ -2224,3 +2224,180 @@ DELETE FROM game_event_creature_data WHERE guid=2581418;
 DELETE FROM creature_battleground WHERE guid=2581418;
 REPLACE INTO `creature` VALUES (2581420,80235,0,0,0,0,4499.9,-2855.17,10.6953,6.0027,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581420, 1);
+REPLACE INTO `creature` VALUES (2581421,80235,0,0,0,0,4521.25,-2882.48,10.3298,3.06141,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 1);
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 4);
+UPDATE `creature` SET `position_x` = 4520.955078, `position_y` = -2882.484863, `position_z` = 9.878027, `orientation` = 3.128307 WHERE `guid` = 2581421;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 4);
+UPDATE `creature` SET `position_x` = 4521.997559, `position_y` = -2882.495850, `position_z` = 9.883510, `orientation` = 3.159401 WHERE `guid` = 2581421;
+
+-- Changes by WOJI
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 1);
+
+-- Changes by DRAGU
+UPDATE `creature` SET `position_x` = 4521.526855, `position_y` = -2882.517822, `position_z` = 10.525108, `orientation` = 3.201278 WHERE `guid` = 2581421;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 1);
+UPDATE `creature` SET `position_x` = 4521.501465, `position_y` = -2882.491699, `position_z` = 9.883754, `orientation` = 3.040271 WHERE `guid` = 2581421;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 4);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 6);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581421, 5);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581422,80235,0,0,0,0,4518.39,-2880.36,9.86602,5.46471,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581422, 1);
+REPLACE INTO `creature` VALUES (2581423,80235,0,0,0,0,4501.9,-2906.37,10.7066,3.4109,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581423, 7);
+
+-- Changes by DRAGU
+UPDATE `creature` SET `position_x` = 4502.294922, `position_y` = -2906.158936, `position_z` = 10.706207, `orientation` = 3.417834 WHERE `guid` = 2581423;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581423, 5);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581424,80235,0,0,0,0,4508.68,-2816.44,9.15025,3.80752,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,1, 4505.979492,-2818.666748,9.100657, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,2, 4500.533691,-2823.065186,9.307687, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,3, 4492.405762,-2829.712646,9.243965, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,4, 4487.006348,-2834.167236,9.083087, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,5, 4481.669434,-2838.695801,9.101017, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,6, 4476.498047,-2843.411377,9.124115, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,7, 4469.035156,-2849.963379,9.133497, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,8, 4463.826660,-2849.099121,9.651658, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,9, 4459.365723,-2843.709717,10.411277, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,10, 4454.939941,-2838.287598,10.421799, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,11, 4449.764160,-2832.058350,10.408200, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,12, 4449.764160,-2832.058350,10.408200, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,13, 4445.794434,-2837.822754,10.392193, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,14, 4445.497070,-2838.281006,10.389951, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,15, 4448.598633,-2836.660156,10.406411, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,16, 4456.293945,-2833.230957,10.403469, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,17, 4456.426270,-2833.651367,10.403469, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,18, 4457.251465,-2837.052002,10.398745, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,19, 4458.996094,-2841.877197,10.402826, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,20, 4460.731445,-2844.915039,10.421350, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,21, 4465.865234,-2850.450195,9.126207, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,22, 4468.824707,-2850.039307,9.129952, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,23, 4471.998047,-2847.713623,9.137710, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,24, 4475.747559,-2843.895508,9.129823, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581424,25, 4478.424316,-2841.640625,9.118692, 100);
+REPLACE INTO `creature` VALUES (2581424,80235,0,0,0,0,4508.68,-2816.44,9.15025,3.80752,300,300,0,100,100,2,0,0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature` VALUES (2581425,80235,0,0,0,0,4473.96,-2889.74,10.7065,4.96274,120,120,0,100,100,0,0,0);
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017348, 2002233, 0, 4446.54, -2829.01, 11.5326, 4.31801, 0, 0, 0.831937, -0.55487, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581425, 5);
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017348, 2002233, 0, 4446.54, -2829.01, 11.5326, 3.89389, 0, 0, 0.930086, -0.367341, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017348, 2002233, 0, 4446.54, -2829.41, 11.5326, 3.89389, 0, 0, 0.930086, -0.367341, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017348';
+DELETE FROM game_event_gameobject WHERE guid = '5017348';
+DELETE FROM gameobject_battleground WHERE guid = '5017348';
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 1.400000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 1.800000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 1.400000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 1.000000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2829.43, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4448.36, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4448.76, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4449.16, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4449.56, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4449.16, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4448.76, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4448.36, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.56, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.16, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.16, -2829.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.16, -2829.43, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.56, -2829.43, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.56, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.56, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature` VALUES (2581426,80235,0,0,0,0,4394.71,-2940.75,8.46312,5.25254,120,120,0,100,100,0,0,0);
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4448.36, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.96, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.56, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4447.16, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581426, 4);
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2827.83, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2828.23, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2828.63, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581426, 6);
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 0.400000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581426, 5);
+
+-- Changes by WOJI
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 0.800000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382434836229, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5017349, 2003888, 0, 4446.76, -2829.03, 11.5286, 4.34942, 0, 0, 0.82312, -0.567867, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 1.200000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 1.000000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.800000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.400000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.200000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4445.86, -2828.39, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.06, -2828.39, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.06, -2828.59, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.06, -2828.79, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.06, -2828.99, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.06, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.26, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.46, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.26, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.46, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.26, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.400000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.26, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417414579982086, 0.200000);
+REPLACE INTO `gameobject` VALUES ( 5017350, 2005804, 0, 4446.26, -2829.19, 11.5339, 2.2092, 0, 0, 0.893285, 0.449491, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017349';
+DELETE FROM game_event_gameobject WHERE guid = '5017349';
+DELETE FROM gameobject_battleground WHERE guid = '5017349';
