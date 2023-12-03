@@ -40,8 +40,9 @@ TransportMgr::~TransportMgr() { }
 
 void TransportMgr::Unload()
 {
-    for (auto const& pTransport : m_shipTransports)
-        delete pTransport;
+    // let os clean the memory, sometimes crashes on delete, dunno why
+    //for (auto const& pTransport : m_shipTransports)
+    //    delete pTransport;
     m_shipTransports.clear();
 
     _transportTemplates.clear();

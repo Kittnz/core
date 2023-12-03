@@ -680,7 +680,7 @@ bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
 
         if (pPlayer->GetQuestStatus(60104) == QUEST_STATUS_INCOMPLETE)
         {
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51573);
+            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(51573);
 
             if (cInfo != nullptr)
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -1627,7 +1627,7 @@ struct npc_save_sharkAI : public ScriptedPetAI
             {
                 if (pPlayer->ToPlayer()->GetQuestStatus(80383) == QUEST_STATUS_INCOMPLETE)
                 {
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002))
+                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(81002))
                         pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                     m_creature->MonsterTextEmote(66840);
                     m_creature->GetMotionMaster()->MoveConfused();
@@ -1674,13 +1674,13 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->MonsterSay(66115);
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81000);
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(81000);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pCreature->MonsterSay(66116);
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(81001);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
@@ -1693,7 +1693,7 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
         {
             pPlayer->GetReputationMgr().SetSingleReputation(faction1, -12000);
 
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60333))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60333))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
         }
     }
@@ -1720,7 +1720,7 @@ struct npc_chihkoaAI : public ScriptedPetAI
                 if (pPlayer->ToPlayer()->GetDrunkValue() > 0)
                 {
                     int32 dummy_player{ 70011 };
-                    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+                    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
 
                     if (cInfo != nullptr)
                         pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
@@ -2196,7 +2196,7 @@ struct palkeoteAI : public ScriptedAI
                 Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
                 if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
                 {
-                    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51598);
+                    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(51598);
                     pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                 }
             }
@@ -2495,7 +2495,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
     {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->SEND_GOSSIP_MENU(30076, pCreature->GetGUID());
     }
@@ -2825,7 +2825,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
             }
             });
         DoAfterTime(pPlayer, 161 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60322))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60322))
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             });
@@ -3285,7 +3285,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             me->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
             me->MonsterSayToPlayer(66895, player);
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
+            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
         });
@@ -3336,7 +3336,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             me->HandleEmote(EMOTE_ONESHOT_APPLAUD);
             me->MonsterSayToPlayer(66899, player);
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
+            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
         });
@@ -3362,7 +3362,7 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             gAI->SetData(ID_GOBJECT_SHADOWFORGECAGE_RESET, 1);
         }
 
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING);
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING);
         if (cInfo != nullptr)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
@@ -3471,7 +3471,7 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
     if (pPlayer->GetQuestStatus(QUEST_PORTING_TO_GOLDSHIRE) == QUEST_STATUS_INCOMPLETE)
     {
         pPlayer->TeleportTo(0, -9464.0f, 62.0f, 56.0f, 0.0f);
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE);
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE);
         if (cInfo != nullptr)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         // Remove Hearthstone:
@@ -3698,7 +3698,7 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
     // Complete quest if it's active and incomplete
     if (pPlayer->GetQuestStatus(GAMBLING_QUEST) == QUEST_STATUS_INCOMPLETE) // What's Yours is Ours
     {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(DUMMY_GAMBLING_OBJECTIVE);
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(DUMMY_GAMBLING_OBJECTIVE);
         if (cInfo != nullptr)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -3746,7 +3746,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
 
             creature->Attack(sturk_mob, true);
 
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80606);
+            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80606);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
         });
@@ -3886,28 +3886,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                     case 3000250:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80270);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66907, pPlayer);
                         break;
                     }
                     case 3000251:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80271);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80271);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66908, pPlayer);
                         break;
                     }
                     case 3000252:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80272);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80272);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66909, pPlayer);
                         break;
                     }
                     case 3000253:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80273);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80273);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66910, pPlayer);
                         break;
@@ -3925,28 +3925,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                     case 3000254:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80274);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80274);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66911, pPlayer);
                         break;
                     }
                     case 3000255:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80275);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80275);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66912, pPlayer);
                         break;
                     }
                     case 3000256:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80276);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80276);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66913, pPlayer);
                         break;
                     }
                     case 3000257:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80277);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80277);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66914, pPlayer);
                         break;
@@ -3964,28 +3964,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                     case 3000258:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80278);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80278);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66915, pPlayer);
                         break;
                     }
                     case 3000259:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80279);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80279);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66916, pPlayer);
                         break;
                     }
                     case 3000260:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66917, pPlayer);
                         break;
                     }
                     case 3000261:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80281);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80281);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66918, pPlayer);
                         break;
@@ -4003,21 +4003,21 @@ struct go_teslinah_search : public GameObjectAI
                     {
                     case 3000262:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80282);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80282);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66919, pPlayer);
                         break;
                     }
                     case 3000263:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80283);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80283);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66920, pPlayer);
                         break;
                     }
                     case 3000264:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80284);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80284);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66921, pPlayer);
                         teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
@@ -4025,7 +4025,7 @@ struct go_teslinah_search : public GameObjectAI
                     break;
                     case 3000265:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80285);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80285);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66922, pPlayer);
                         break;
@@ -4043,28 +4043,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                     case 3000266:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80286);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80286);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66923, pPlayer);
                         break;
                     }
                     case 3000267:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80287);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80287);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66924, pPlayer);
                         break;
                     }
                     case 3000268:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80288);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80288);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66925, pPlayer);
                         break;
                     }
                     case 3000269:
                     {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80289);
+                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80289);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
                         teslinah->MonsterSayToPlayer(66926, pPlayer);
                         break;
@@ -4222,7 +4222,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
     if (pGo->GetEntry() == 3000246)
     {
         if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_INCOMPLETE)
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81252))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(81252))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_COMPLETE)
@@ -4252,7 +4252,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
     else
     {
         if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE)
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80007))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80007))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         if (pPlayer->FindNearestCreature(81041, 15.0F))
@@ -4347,7 +4347,7 @@ bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40003) == QUEST_STATUS_INCOMPLETE) // Puffing Peace
     {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60301))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60301))
         {
             pPlayer->KilledMonster(cInfo, ObjectGuid());
             pPlayer->CastSpell(pPlayer, 26389, false);
@@ -4447,18 +4447,18 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
         {
         case 1515: // Executor Zygand
             pCreature->MonsterSayToPlayer(66941, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50665))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 1952: // High Executor Hadrec
             pCreature->MonsterSayToPlayer(66942, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50666))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 2215: // High Executor Darthalia
             pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
             pCreature->MonsterSayToPlayer(66943, pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50667))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         }
@@ -4498,7 +4498,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
                 Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
                 if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
                 {
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50670))
                         pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                 }
             }
@@ -4571,7 +4571,7 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50671))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50671))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         pCreature->MonsterSay(66180);
@@ -4643,7 +4643,7 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
         pCreature->MonsterSayToPlayer(66958, pPlayer);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66959, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50675))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();
     }
@@ -4695,7 +4695,7 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
     {
         pCreature->MonsterTextEmote(66975);
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50675))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();
     }
@@ -4749,7 +4749,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         maverick->MonsterSayToPlayer(66982, pPlayer);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50668))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         maverick->SetWalk(true);
@@ -4798,7 +4798,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 
         if (pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 0)
         {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(50670))
             {
                 pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -4976,7 +4976,7 @@ bool GossipSelect_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature, ui
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         pCreature->MonsterSayToPlayer(66987, pPlayer);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91294))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91294))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();
     }
@@ -5050,7 +5050,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
             if (!player) return;
             npc->MonsterSayToPlayer(66991, player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60327))
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
@@ -5164,7 +5164,7 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91296))
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91296))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         pCreature->MonsterSay(66188);
@@ -5197,7 +5197,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
             npc->MonsterSayToPlayer(66999, player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91301))
                 player->KilledMonster(cInfo, ObjectGuid());
             });
         DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS, [npc = pQuestGiver]() {
@@ -5267,7 +5267,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
         DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterYell(67011);
             c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
+            if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91320))
                 player->KilledMonster(cInfo, ObjectGuid());
             c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
@@ -5473,7 +5473,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
             DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
                 npc->MonsterSayToPlayer(67021, player);
 
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
+                if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);

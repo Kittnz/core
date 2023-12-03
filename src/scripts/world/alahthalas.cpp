@@ -115,7 +115,7 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                         vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
                         vestia->MonsterSay("It is done. Please go back to Feathermoon Stronghold. I shall meet you there.");
                     }
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
+                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60318))
                     {
                         player->KilledMonster(cInfo, ObjectGuid());
 

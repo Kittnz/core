@@ -2890,21 +2890,21 @@ public:
     {
         char const* text = i_textId > 0 ? sObjectMgr.GetBroadcastText(i_textId, loc_idx) : sObjectMgr.GetMangosString(i_textId, loc_idx);
 
-        std::string nameForLocale;
+        char const* nameForLocale = "";
         if (loc_idx >= 0)
         {
             CreatureLocale const *cl = sObjectMgr.GetCreatureLocale(i_cInfo->entry);
             if (cl)
             {
                 if (cl->Name.size() > (size_t)loc_idx && !cl->Name[loc_idx].empty())
-                    nameForLocale = cl->Name[loc_idx];
+                    nameForLocale = cl->Name[loc_idx].c_str();
             }
         }
 
-        if (nameForLocale.empty())
-            nameForLocale = i_cInfo->name;
+        if (!(*nameForLocale))
+            nameForLocale = i_cInfo->name.c_str();
 
-        ChatHandler::BuildChatPacket(data, i_msgtype, text, i_language, CHAT_TAG_NONE, i_senderGuid, nameForLocale.c_str(), i_target ? i_target->GetObjectGuid() : ObjectGuid(),
+        ChatHandler::BuildChatPacket(data, i_msgtype, text, i_language, CHAT_TAG_NONE, i_senderGuid, nameForLocale, i_target ? i_target->GetObjectGuid() : ObjectGuid(),
             i_target ? i_target->GetNameForLocaleIdx(loc_idx) : "");
     }
 
@@ -2930,7 +2930,7 @@ void Map::MonsterYellToMap(ObjectGuid guid, int32 textId, Language language, Uni
 {
     if (guid.IsAnyTypeCreature())
     {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(guid.GetEntry());
+        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(guid.GetEntry());
         if (!cInfo)
         {
             sLog.outError("Map::MonsterYellToMap: Called for nonexistent creature entry in guid: %s", guid.GetString().c_str());

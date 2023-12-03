@@ -656,7 +656,7 @@ struct go_corrupted_crystal : public GameObjectAI
 
                         if (pPlayer && pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) == QUEST_STATUS_INCOMPLETE)
                         {
-                            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60373); // dummy
+                            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60373); // dummy
                             if (cInfo != nullptr)
                                 pPlayer->KilledMonster(cInfo, ObjectGuid());
                         }
