@@ -7101,7 +7101,7 @@ bool GossipSelect_npc_frig_thunderforge(Player* pPlayer, Creature* pCreature, ui
                 }, 41000);
 
             DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer]() {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60052))
+                if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60052))
                 {
                     player->KilledMonster(cInfo, ObjectGuid());
 
