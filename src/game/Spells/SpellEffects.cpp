@@ -1720,7 +1720,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         {
                             if (unitTarget->ToPlayer()->IsGameMaster())
                             {
-                                CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(128);
+                                CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(128);
                                 if (cInfo != nullptr)
                                     m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                             }
@@ -1748,7 +1748,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             default: break;
                             }
 
-                            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+                            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
 
                             if (cInfo != nullptr)
                                 m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
@@ -1767,7 +1767,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 default: break;
                             }
 
-                            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+                            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
 
                             if (cInfo != nullptr)
                                 m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
@@ -2034,7 +2034,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             {
                                 m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
                                 m_caster->ToPlayer()->PlayDirectSound(1204, m_caster->ToPlayer());
-                                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
+                                if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(51301))
                                 {
                                     m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                                     m_forceConsumeItem = true;
@@ -2054,7 +2054,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             if (GameObject* spitelash_shrine = m_caster->ToPlayer()->FindNearestGameObject(2010801, 10.0F)) // Spitelash Shrine
                             {
                                 m_caster->ToPlayer()->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-                                if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
+                                if (CreatureInfo const* dummy_bunny = sObjectMgr.GetCreatureTemplate(60312))
                                 {
                                     m_caster->ToPlayer()->KilledMonster(dummy_bunny, ObjectGuid());
                                     m_forceConsumeItem = true;
@@ -3952,7 +3952,7 @@ void Spell::EffectSummon(SpellEffectIndex eff_idx)
     if (!pet_entry)
         return;
 
-    CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
+    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(pet_entry);
     if (!cInfo)
     {
         sLog.outErrorDb("Spell::DoSummon: creature entry %u not found for spell %u.", pet_entry, m_spellInfo->Id);
@@ -4484,7 +4484,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
     if (!pet_entry)
         return;
 
-    CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
+    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(pet_entry);
     if (!cInfo)
     {
         sLog.outErrorDb("Spell::DoSummonGuardian: creature entry %u not found for spell %u.", pet_entry, m_spellInfo->Id);
@@ -4955,7 +4955,7 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
     if (!UnsummonOldPetBeforeNewSummon(petEntry))
         return ObjectGuid();
 
-    CreatureInfo const* cInfo = petEntry ? sCreatureStorage.LookupEntry<CreatureInfo>(petEntry) : nullptr;
+    CreatureInfo const* cInfo = petEntry ? sObjectMgr.GetCreatureTemplate(petEntry) : nullptr;
 
     // == 0 in case call current pet, check only real summon case
     if (petEntry && !cInfo)
@@ -6861,7 +6861,7 @@ void Spell::EffectSummonTotem(SpellEffectIndex eff_idx)
 
     CreatureCreatePos pos(m_casterUnit, m_casterUnit->GetOrientation(), 2.0f, angle);
 
-    CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(m_spellInfo->EffectMiscValue[eff_idx]);
+    CreatureInfo const *cinfo = sObjectMgr.GetCreatureTemplate(m_spellInfo->EffectMiscValue[eff_idx]);
     if (!cinfo)
     {
         sLog.outErrorDb("Creature entry %u does not exist but used in spell %u totem summon.", m_spellInfo->EffectMiscValue[eff_idx], m_spellInfo->Id);
@@ -7064,7 +7064,7 @@ void Spell::EffectInebriate(SpellEffectIndex /*eff_idx*/)
     if (player->ToPlayer()->GetQuestStatus(50328) == QUEST_STATUS_INCOMPLETE) // The Winter Veil Gourmet
     {
             int32 dummy_player{ 70010 }; // DUMMY_PLAYER_YOURSELF 
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
 
             if (cInfo != nullptr)
                 player->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
@@ -7422,7 +7422,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     if (!pet_entry)
         return;
 
-    CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
+    CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(pet_entry);
 
     if (!cInfo)
     {

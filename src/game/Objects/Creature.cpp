@@ -354,7 +354,7 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     if (eventData && eventData->entry_id)
         Entry = eventData->entry_id;
 
-    CreatureInfo const *normalInfo = ObjectMgr::GetCreatureTemplate(Entry);
+    CreatureInfo const *normalInfo = sObjectMgr.GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
         sLog.outErrorDb("Creature::UpdateEntry creature entry %u does not exist.", Entry);
@@ -683,7 +683,7 @@ uint32 Creature::ChooseDisplayId(CreatureInfo const* cinfo, CreatureData const* 
     {
         sLog.outErrorDb("Creature::ChooseDisplayId can not select native display id for creature entry %u, model from creature entry 1 will be used instead.", cinfo->entry);
 
-        if (const CreatureInfo *creatureDefault = ObjectMgr::GetCreatureTemplate(1))
+        if (const CreatureInfo *creatureDefault = sObjectMgr.GetCreatureTemplate(1))
             display_id = creatureDefault->display_id[0];
     }
 
@@ -1694,7 +1694,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map *map, bool force)
         return false;
 
     uint32 const creatureId = data->ChooseCreatureId();
-    CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(creatureId);
+    CreatureInfo const *cinfo = sObjectMgr.GetCreatureTemplate(creatureId);
     if (!cinfo)
     {
         sLog.outErrorDb("Creature (Entry: %u) not found in table `creature_template`, can't load. ", creatureId);
@@ -3036,7 +3036,7 @@ void Creature::AllLootRemovedFromCorpse()
 
 std::string Creature::GetAIName() const
 {
-    return ObjectMgr::GetCreatureTemplate(GetEntry())->ai_name;
+    return sObjectMgr.GetCreatureTemplate(GetEntry())->ai_name;
 }
 
 std::string Creature::GetScriptName() const
@@ -3046,7 +3046,7 @@ std::string Creature::GetScriptName() const
 
 uint32 Creature::GetScriptId() const
 {
-    return ObjectMgr::GetCreatureTemplate(GetEntry())->script_id;
+    return sObjectMgr.GetCreatureTemplate(GetEntry())->script_id;
 }
 
 VendorItemData const* Creature::GetVendorItems() const
