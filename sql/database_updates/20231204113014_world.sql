@@ -1,6 +1,6 @@
 REPLACE INTO creature_template VALUES
 (61796, 2255, 0, 0, 0, 0, 'Ordenal Owlmane', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 80, 2, 1, 1.14286, 1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(61797, 18103, 0, 0, 0, 0, 'Warden Sira Moonwarden', NULL, 0, 60, 60, 4120, 4120, 0, 0, 3640, 1354, 2, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61797, 18103, 0, 0, 0, 0, 'Warden Sira Moonwarden', NULL, 0, 60, 60, 4120, 4120, 0, 0, 3640, 80, 2, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (61798, 18768, 0, 0, 0, 0, 'Viz\'neya Firefly', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 35, 2, 1, 1.14286, 1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (61799, 20560, 0, 0, 0, 0, 'Lor\'Themar Theron', 'Regency Council', 0, 60, 60, 19543, 19543, 0, 0, 3059, 371, 3, 1, 1.14286, 1, 18, 5, 0, 1, 1, 722, 821, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (61800, 20561, 0, 0, 0, 0, 'Grand Magister Rommath', 'Regency Council', 0, 60, 60, 19543, 19543, 0, 0, 3059, 371, 3, 1, 1.14286, 1, 18, 5, 0, 1, 1, 722, 821, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -276,3 +276,158 @@ delete from item_loot_template where item = 2072 and entry = 5759;
 update creature_template set spell_list_id = 0 where entry = 61704;
 -- Add spell 205 every 2 seconds to npc 61705.
 update creature_template set spell_list_id = 180245 where entry = 61705;
+-- Friendly NPCS for Thalassian Highlands vol 2.
+REPLACE INTO creature_template VALUES
+(61833, 16592, 0, 0, 0, 0, 'Aelira Dawnhand', 'First Aid', 0, 10, 10, 594, 594, 0, 0, 20, 371, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61834, 16655, 0, 0, 0, 0, 'Fenrion Rendall', NULL, 0, 10, 10, 594, 594, 0, 0, 20, 371, 16, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61835, 16682, 0, 0, 0, 0, 'Telina Shadehand', 'Alchemist', 0, 10, 10, 594, 594, 0, 0, 20, 371, 16, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61836, 16760, 0, 0, 0, 0, 'Velessa Brightstar', 'Tailor', 0, 10, 10, 594, 594, 0, 0, 20, 371, 17, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61837, 16767, 0, 0, 0, 0, 'Geherion Whitesnake', 'Ley-Technician', 0, 10, 10, 594, 594, 0, 0, 20, 371, 17, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61838, 16771, 0, 0, 0, 0, 'Talvas Whitesnake', 'Fisherman', 0, 10, 10, 594, 594, 0, 0, 20, 371, 16, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61839, 16814, 0, 0, 0, 0, 'Daemar Swiftstrike', 'Skinner', 0, 10, 10, 594, 594, 0, 0, 20, 371, 16, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61840, 16825, 0, 0, 0, 0, 'Shandlar Thethis', 'Leatherworker', 0, 10, 10, 594, 594, 0, 0, 20, 371, 17, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61841, 16859, 0, 0, 0, 0, 'Leshandra Fintri', 'Arcane Researcher', 0, 10, 10, 594, 594, 0, 0, 20, 371, 3, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61842, 5440, 0, 0, 0, 0, 'Delarion Featherwing', 'Herbalist', 0, 10, 10, 594, 594, 0, 0, 20, 80, 17, 1, 1.14286, 1, 20, 5, 0, 1, 1, 27, 35, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 14, 19.25, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61843, 20508, 0, 0, 0, 0, 'Ancient of Arcane', NULL, 0, 60, 60, 4120, 4120, 0, 0, 3640, 371, 2, 1, 1.14286, 1, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61844, 20505, 0, 0, 0, 0, 'Sister of Autumn', NULL, 0, 25, 25, 712, 712, 0, 0, 1026, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61845, 20505, 0, 0, 0, 0, 'Rine', NULL, 0, 25, 25, 712, 712, 0, 0, 1026, 35, 2, 1, 1.14286, 1, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61846, 3254, 0, 0, 0, 0, 'John Fendi', 'Fishing Supplies', 0, 5, 5, 102, 102, 0, 0, 145, 12, 5, 1, 1.14286, 1, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61847, 18038, 0, 0, 0, 0, 'Image of Kael\'Thas', NULL, 0, 63, 63, 116312, 116312, 88441, 88441, 4301, 35, 0, 1, 1.38571, 1, 20, 5, 0, 3, 1, 2334, 3094, 0, 290, 1, 2500, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 472, 649, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61848, 20564, 20565, 0, 0, 0, 'Silver Covenant Recruit', NULL, 0, 60, 60, 19543, 19543, 0, 0, 3059, 371, 0, 1, 1.14286, 1, 18, 5, 0, 1, 1, 722, 821, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61849, 20566, 0, 0, 0, 0, 'Commander Braedin', 'Silver Covenant', 0, 60, 60, 19543, 19543, 0, 0, 3059, 371, 3, 1, 1.14286, 1, 18, 5, 0, 1, 1, 722, 821, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61850, 18193, 0, 0, 0, 0, 'Ranathir', NULL, 0, 5, 5, 102, 102, 0, 0, 145, 371, 2, 1, 1.14286, 1, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61851, 18193, 0, 0, 0, 0, 'Commander Anarileth', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 371, 3, 1, 1.14714, 1, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(61852, 18194, 0, 0, 0, 0, 'Ka\'zmir Somberwind', NULL, 41574, 15, 15, 328, 328, 0, 0, 660, 371, 2, 1, 1.14286, 1, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20492; set @weapon_1 = 23556; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61851;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20491; set @weapon_1 = 23556; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61849;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20490; set @weapon_1 = 23556; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61848;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41591; set @magic_number = 61849;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Lady Windrunner speaks true, and under her command, our people thrived. The Regency Council\'s treachery will never hold sway over warriors like us; our loyalty lies solely with Lady Windrunner.$B$BWe\'ll follow her lead, undeterred by the machinations of those who betray our kin. In the heat of battle, it\'s Lady Windrunner\'s banner we rally behind, forging our path with the unyielding strength of warriors who recognize true leadership.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41590; set @magic_number = 61846;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I love fishing. I came here to see if there\'s any new species of fish to catch here, and these waters do not disappoint.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41589; set @magic_number = 61842;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ah, another young apprentice comes to me to learn about the secrets of nature.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41588; set @magic_number = 61841;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am of the firm belief that our pursuits should not be constrained by the moral dictates of the Regency Council. The arcane is a vast tapestry, woven with threads beyond our current understanding, and I am resolved to unveil its hidden secrets.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41587; set @magic_number = 61840;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am the finest leatherworker in Alah\'Thalas. And I\'m willing to share my knowledge.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41586; set @magic_number = 61837;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Before the fall of Quel\'Thalas, I served as the apprentice to the esteemed Ley-Technician Fenros. With his unfortunate demise, the responsibility now falls upon my shoulders as the sole bearer of this invaluable knowledge, entrusted with the task of passing it down to the generations that follow.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41585; set @magic_number = 61836;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The once-exquisite silks of our craftsmanship now lie ravaged and torn amidst the ruins of Silvermoon. It falls upon us, the artisans of the high elves, to weave anew and restore the resplendent glory that is rightfully ours.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Vendor list: John Fendi.
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 50, 6256, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 473, 6365, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 51, 6529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 52, 6530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 53, 6532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61846, 54, 6533, 2, 7200, 0, 0);
+-- Trainer: Delarion Featherwing.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61842, 2372, 10, 0, 0, 0);
+-- Trainer: Shandlar Thethis.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 2155, 10, 0, 0, 5);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 2338, 50, 165, 15, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 3782, 75, 165, 25, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 9061, 100, 165, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 9063, 100, 165, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 3821, 50, 165, 35, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 2883, 100, 165, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 2177, 100, 165, 55, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 3784, 150, 165, 55, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 2178, 100, 165, 60, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 9066, 450, 165, 70, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 3786, 500, 165, 75, 0);
+-- Trainer: Daemar Swiftstrike.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61839, 8615, 10, 0, 0, 0);
+-- Trainer: Talvas Whitesnake.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61838, 7733, 100, 0, 0, 5);
+-- Trainer: Geherion Whitesnake.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 4039, 10, 0, 0, 5);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3984, 115, 202, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3985, 130, 202, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3986, 150, 202, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3987, 150, 202, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 7431, 150, 202, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3988, 200, 202, 60, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3991, 225, 202, 65, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3992, 250, 202, 75, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3993, 250, 202, 75, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61837, 3994, 250, 202, 75, 0);
+-- Trainer: Velessa Brightstar.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3911, 10, 0, 0, 5);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2415, 22, 197, 1, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3917, 25, 197, 1, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 12118, 30, 197, 1, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2996, 45, 197, 10, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 8777, 45, 197, 10, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 12119, 45, 197, 20, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3916, 45, 197, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 7626, 45, 197, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 7627, 45, 197, 30, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3876, 90, 197, 35, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2414, 45, 197, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2416, 45, 197, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 8466, 45, 197, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3783, 90, 197, 45, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2419, 180, 197, 60, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3877, 180, 197, 60, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2967, 180, 197, 65, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2417, 270, 197, 70, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2418, 180, 197, 70, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 3878, 270, 197, 70, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2423, 225, 197, 75, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 2966, 90, 197, 75, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61836, 12120, 270, 197, 75, 0);
+-- Trainer: Telina Shadehand.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 2275, 10, 0, 0, 5);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 3184, 50, 171, 15, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 2339, 100, 171, 25, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 2340, 135, 171, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 11536, 225, 171, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61835, 2341, 250, 171, 55, 0);
+-- Trainer: Fenrion Rendall.
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3279, 100, 0, 0, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3280, 500, 129, 50, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3281, 100, 129, 40, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3282, 250, 129, 80, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3283, 1000, 129, 115, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 7930, 5000, 129, 150, 0);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 7936, 250, 129, 80, 0);
