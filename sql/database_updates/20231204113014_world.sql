@@ -270,3 +270,5 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20581, 0, 0, 0, 0),
 (20582, 0, 0, 0, 0),
 (20583, 0, 0, 0, 0);
+-- Delete item 15754 from item 5759 loot table please!
+delete from reference_loot_template where item = 15754 and entry = 2072;
