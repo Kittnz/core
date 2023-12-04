@@ -431,3 +431,15 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 3283, 1000, 129, 115, 0);
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 7930, 5000, 129, 150, 0);
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61834, 7936, 250, 129, 80, 0);
+-- Dysfunctional Shreddertron 1200 should have a random respawn timer between 12 and 24 hours. (Was missed).
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61793;
+-- Dysfunctional Shreddertron 1200 should cast Spell ID 12054 on its target first 3 seconds after engaging and then every 15 seconds.
+update creature_spells set spellId_2 = 12054, probability_2 = 100, casttarget_2 = 1, castflags_2 = 4, delayInitialMin_2 = 3, delayInitialMax_2 = 3, delayRepeatMin_2= 15, delayRepeatMax_2 = 15 where entry = 180279;
+-- The Snipper should have a random respawn timer between 12 and 24 hours. (Was missed).
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61792;
+-- The Snipper should cast its ability every 16-18 seconds instead of 10 seconds.
+update creature_spells set delayRepeatMin_1 = 16, delayRepeatMax_1 = 18 where entry = 180278;
+-- Vanessa Moneybutton should cast should have a random respawn timer between 12 and 24 hours. (Was missed).
+update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61794;
+-- Change name of npc 80245 to Damilara Sunsorrow, change lvl to 60, remove leader tag.
+update creature_template set name = 'Damilara Sunsorrow', racial_leader = 0, level_min = 60, level_max = 60 where entry = 80245;
