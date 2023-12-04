@@ -3465,6 +3465,10 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                 // Aura can stack on self -> Stack it;
                 if (aurSpellInfo->StackAmount)
                 {
+                    // updating stacks requires caster to be present
+                    // set to new caster in case previous caster despawned
+                    // allows Will of Shahram to stack with cast from previous pet
+                    foundHolder->SetCasterGuid(holder->GetCasterGuid());
                     // can be created with >1 stack by some spell mods
                     foundHolder->ModStackAmount(holder->GetStackAmount());
                     delete holder;
