@@ -624,3 +624,8 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- The quest 'Garbage Man' remove the item rewards 'Old Moneybag' from the quest.
+update quest_template set RewItemId1 = 0, RewItemCount1 = 0 where entry = 80120;
+-- Add the following required items to complete the quest : Trash (entry 80155) x8, which is looted from the following gobject entries (3000227, 3000228, 3000229).
+update quest_template set ReqItemId1 = 80155, ReqItemCount1 = 8 where entry = 80120;
