@@ -477,3 +477,150 @@ update broadcast_text set male_text = 'Whether you want to steal from a noble\'s
 -- Change gossip of Ranger Rubinah Sunsworn to:
 -- "The Farstriders were a proud group of rangers. With the downfall of our homeland, most of them, too, have passed away. Still, their legacy will live on through us."
 update broadcast_text set male_text = 'The Farstriders were a proud group of rangers. With the downfall of our homeland, most of them, too, have passed away. Still, their legacy will live on through us.' where entry = 80219;
+
+-- Forlorn Summit Rare.
+-- Professor Lysander [Level 59 Elite] (display ID: 16063).
+-- drops Refined Plague Strand (trinket).
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, random_property, required_reputation_faction, required_reputation_rank) values (41060, 'Refined Plague Strain', 'Add new Plague Strain on use spell to spellid_1 when implemented.', 4, 0, 1, 3, 3788, 2, 56, 1, -1, -1, 42775, 10693, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 49, 0, 0, 0, 0, 0, 0, 6, -10, 0, 0, 0);
+-- drops Frozen Rune of Naxxramas (necklace).
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (41061, 'Frozen Rune of Naxxramas', '', 4, 0, 1, 3, 35465, 2, 56, 0, -1, -1, 125601, 31400, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 49, 0, 0, 0, 15, 0, 0, 9404, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+-- drops Dangling Eyeball (ring).
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (41062, 'Peering Eyeball', 'Knows your weaknesses.', 4, 0, 1, 3, 1504, 2, 56, 1, -1, -1, 59630, 14907, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 49, 0, 0, 0, 0, 0, 0, 15464, 1, 0, 0, -1, 0, -1, 48032, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- drops Doctor’s Lab Coat (robe).
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (41063, 'Doctor\'s Labcoat', 'It would be wise to not question the stains on this thing.', 4, 1, 7, 3, 12652, 2, 56, 0, -1, -1, 105586, 21117, 20, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 80, 87, 0, 0, 61, 0, 49, 0, 0, 0, 0, 0, 0, 7, 26, 18031, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+-- fix name
+update item_template set name = 'Temporal Anomaly' where entry = 61014; -- Shard of Eternity.
+
+REPLACE INTO creature_template VALUES
+(61853, 16063, 0, 0, 0, 0, 'Professor Lysander', NULL, 0, 59, 59, 8883, 8883, 0, 0, 3489, 20, 0, 1, 1.14286, 1.1, 20, 5, 0, 2, 1, 372, 479, 0, 268, 1, 1158, 1274, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 6, 0, 61853, 0, 0, 0, 0, 0, 295, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 715, 938, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16, 64, 0, 0, 0, '');
+
+-- Creature loot table: Professor Lysander.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 41060, 25, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 41061, 25, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 41062, 25, 1, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 41063, 25, 1, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 30086, 0.005, 0, -30086, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 24032, 0.025, 0, -24032, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 10308, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 10309, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 12697, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 12704, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 17683, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 18697, 0.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 7909, 0.5, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 7910, 0.5, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 17414, 0.5, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 18700, 0.5, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 13446, 1, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 30080, 1, 0, -30080, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 30081, 1, 0, -30081, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 30107, 1, 2, -30107, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 5759, 1.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 8766, 3.26, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 24024, 5, 0, -24024, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 12808, 7.52, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 7972, 8.54, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 8948, 14.8, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 12841, 35, 0, 1, 1, 17);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 14047, 47.42, 0, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61853, 6530, 52.94, 0, 1, 1, 0);
+
+-- Professor Lysander
+set @creature_entry = 61853;
+set @description = ': Professor Lysander';
+set @spell_list_id = 180282;
+
+set @spellid_1 = 28153; -- Disease Cloud
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 12;
+set @delayrepeatmax_1 = 14;
+
+set @spellid_2 = 16809; -- Spawn Bile Slime
+set @probability_2 = 100;
+set @casttarget_2 = 1;
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 3;
+set @delayinitialmax_2 = 3;
+set @delayrepeatmin_2 = 10;
+set @delayrepeatmax_2 = 14;
+
+set @spellid_3 = 0;
+set @probability_3 = 0;
+set @casttarget_3 = 0;
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0;
+set @delayinitialmax_3 = 0;
+set @delayrepeatmin_3 = 0;
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0;
+set @casttarget_4 = 0;
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0;
+set @delayinitialmax_4 = 0;
+set @delayrepeatmin_4 = 0;
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0;
+set @probability_5 = 0;
+set @casttarget_5 = 0;
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0;
+set @delayinitialmax_5 = 0;
+set @delayrepeatmin_5 = 0;
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0;
+set @probability_6 = 0;
+set @casttarget_6 = 0;
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0;
+set @delayinitialmax_6 = 0;
+set @delayrepeatmin_6 = 0;
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0;
+set @probability_7 = 0;
+set @casttarget_7 = 0;
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0;
+set @delayinitialmax_7 = 0;
+set @delayrepeatmin_7 = 0;
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0;
+set @probability_8 = 0;
+set @casttarget_8 = 0;
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0;
+set @delayinitialmax_8 = 0;
+set @delayrepeatmin_8 = 0;
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
