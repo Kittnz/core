@@ -272,3 +272,7 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20583, 0, 0, 0, 0);
 -- Delete item 15754 from item 5759 loot table please!
 delete from reference_loot_template where item = 15754 and entry = 2072;
+-- Remove all spells from npc 61704, he shouldnt be casting anything.
+update creature_template set spell_list_id = 0 where entry = 61704;
+-- Add spell 205 every 2 seconds to npc 61705.
+update creature_template set spell_list_id = 180245 where entry = 61705;
