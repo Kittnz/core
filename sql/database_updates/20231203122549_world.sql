@@ -3259,3 +3259,6 @@ DELETE FROM creature_movement WHERE id=2570749;
 DELETE FROM game_event_creature WHERE guid=2570749;
 DELETE FROM game_event_creature_data WHERE guid=2570749;
 DELETE FROM creature_battleground WHERE guid=2570749;
+
+-- Changes by WILLBERG
+REPLACE INTO `creature` VALUES (2581567,7559,0,0,0,0,4594.04,-2904.43,4.01265,2.38285,120,120,0,100,100,0,0,0);
