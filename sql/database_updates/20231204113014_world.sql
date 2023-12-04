@@ -443,3 +443,37 @@ update creature_spells set delayRepeatMin_1 = 16, delayRepeatMax_1 = 18 where en
 update creature set spawntimesecsmin = 43200, spawntimesecsmax = 86400 where id = 61794;
 -- Change name of npc 80245 to Damilara Sunsorrow, change lvl to 60, remove leader tag.
 update creature_template set name = 'Damilara Sunsorrow', racial_leader = 0, level_min = 60, level_max = 60 where entry = 80245;
+-- Add gossip flag to Tenris Mirkblood and the following gossip:
+-- “Cursed by our gluttony, we now stand close to our soon-to-be demise. See us as we stand, shattered, broken, and wretched amidst the rubble and the unwanted muck of our brethren. They have cast us aside, claiming they shall seek the salvation we cannot desire.”
+set @gossip_menu_id = 41592; set @magic_number = 61772;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Cursed by our gluttony, we now stand close to our soon-to-be demise. See us as we stand, shattered, broken, and wretched amidst the rubble and the unwanted muck of our brethren. They have cast us aside, claiming they shall seek the salvation we cannot desire.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Change gossip of Vereesa Windrunner to:
+-- “In our people's most trying times, it was my unwavering commitment that brought us together to forge this sanctuary of hope. Through earnest efforts, I mended the bonds between our kin and the Alliance, restoring the trust that had faltered. I never sought regal titles or aspirations of grandeur, merely recognizing the pressing need for steadfast leadership.$B$BYet, in the halls of our own kin, where nobility should be defined by honor and foresight, a blindness persists. The noble families, entangled in webs of influence and wealth, fail to perceive the true nature of our collective journey. Unjustly stripped of the title of Speaker, a position embraced not for personal gain but for the welfare of our people, I stand witness to a disheartening diversion of focus.$B$BInstead of marshaling our resources and collective wisdom to face the pressing challenges that loom before us, we find ourselves mired in needless debates that obscure the clarity of our path forward.“
+update broadcast_text set male_text = 'In our people\'s most trying times, it was my unwavering commitment that brought us together to forge this sanctuary of hope. Through earnest efforts, I mended the bonds between our kin and the Alliance, restoring the trust that had faltered. I never sought regal titles or aspirations of grandeur, merely recognizing the pressing need for steadfast leadership.$B$BYet, in the halls of our own kin, where nobility should be defined by honor and foresight, a blindness persists. The noble families, entangled in webs of influence and wealth, fail to perceive the true nature of our collective journey. Unjustly stripped of the title of Speaker, a position embraced not for personal gain but for the welfare of our people, I stand witness to a disheartening diversion of focus.$B$BInstead of marshaling our resources and collective wisdom to face the pressing challenges that loom before us, we find ourselves mired in needless debates that obscure the clarity of our path forward.' where entry = 80877;
+-- Change gossip of Magister Ala’shor Sunblood to:
+-- "Ever since the Sunwell fell, we've strained to minimize the amount of mana we expend. We used to be paragons of arcane power; now, we are a mere shadow of our former selves."
+update broadcast_text set male_text = 'Ever since the Sunwell fell, we\'ve strained to minimize the amount of mana we expend. We used to be paragons of arcane power; now, we are a mere shadow of our former selves.' where entry = 80218;
+-- Change gossip of Priestess Maelah Sunsworn to:
+-- "These are bleak times, but our kin must be guided towards the Light. Their wounds, while they cannot be healed entirely, must be attended to with all our might."
+update broadcast_text set male_text = 'These are bleak times, but our kin must be guided towards the Light. Their wounds, while they cannot be healed entirely, must be attended to with all our might.' where entry = 80221;
+-- Change gossip of Lor’thas the Holy to:
+-- "It is only by the grace of the Light that we stand here today, and we will be the ones to defend our people against the Scourge and other threats. However, remember that justice is to be dealt fairly, not blindly guided by vengeance."
+update broadcast_text set male_text = 'It is only by the grace of the Light that we stand here today, and we will be the ones to defend our people against the Scourge and other threats. However, remember that justice is to be dealt fairly, not blindly guided by vengeance.' where entry = 80220;
+-- Change gossip of Magistrix Ishalah to:
+-- "Is there anything I can help you with? I am presently occupied."
+update broadcast_text set male_text = 'Is there anything I can help you with? I am presently occupied.' where entry = 100202;
+-- Change gossip of Ashanya Quel’belore to:
+-- "You have journeyed a great distance. Rest your weary body under our roof, and may the Sun guide you."
+update broadcast_text set male_text = 'You have journeyed a great distance. Rest your weary body under our roof, and may the Sun guide you.' where entry = 80227;
+-- Change gossip of Valanos Dawnfire to:
+-- "Our people pride themselves on their intellect and their mastery of magic, but you and I both know that occasionally, a more forceful approach is necessary."
+update broadcast_text set male_text = 'Our people pride themselves on their intellect and their mastery of magic, but you and I both know that occasionally, a more forceful approach is necessary.' where entry = 80217;
+-- Change gossip of Leela the Shadow to:
+-- "Whether you want to steal from a noble's pocket, explore the dark corners, or break into a chest, always remember the Sunwell.”
+update broadcast_text set male_text = 'Whether you want to steal from a noble\'s pocket, explore the dark corners, or break into a chest, always remember the Sunwell.' where entry = 80223;
+-- Change gossip of Ranger Rubinah Sunsworn to:
+-- "The Farstriders were a proud group of rangers. With the downfall of our homeland, most of them, too, have passed away. Still, their legacy will live on through us."
+update broadcast_text set male_text = 'The Farstriders were a proud group of rangers. With the downfall of our homeland, most of them, too, have passed away. Still, their legacy will live on through us.' where entry = 80219;
