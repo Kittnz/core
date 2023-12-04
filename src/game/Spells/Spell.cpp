@@ -1392,6 +1392,10 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_RIGHTEOUSNESS>() && m_spellInfo->SpellIconID == 25))
                     triggerWeaponProcs = true;
             }
+
+            // Stormstrike should trigger weapon procs.
+            else if (m_spellInfo->SpellVisual == 7660 && m_spellInfo->SpellIconID == 2210)
+                triggerWeaponProcs = true;
         }
 
         pCaster->DealSpellDamage(&damageInfo, true);
