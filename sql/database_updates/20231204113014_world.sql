@@ -85,7 +85,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41581; set @magic_number = 61805;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A throne to take, and oh, the delicious suspense that hangs in the air! The game of power, a riveting play with an ever-shifting cast, keeps the heart pounding with excitement. Let the drama unfold, for in the clash of pretenders, the true essence of Quel’dorei is laid bare—a spectacle of passion, ambition, and the ceaseless pursuit of glory!');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A throne to take, and oh, the delicious suspense that hangs in the air! The game of power, a riveting play with an ever-shifting cast, keeps the heart pounding with excitement. Let the drama unfold, for in the clash of pretenders, the true essence of Quel\'dorei is laid bare—a spectacle of passion, ambition, and the ceaseless pursuit of glory!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -97,7 +97,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41579; set @magic_number = 61803;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Vereesa\'s ineptitude in rallying Alliance forces to reclaim Quel\'Thalas marks the last straw. I refuse to witness our proud race reduced to a puppet state of Stormwind. With our reliance on the Alliance military, we stand exposed to the threats of both the Scourge and the resurgent Amani tribe.$B$BIt is only a matter of time until others recognize my rightful claim to leadership. The Sunsworn dynasty shall ascend, and under my rule, we will endure for countless millennia. The era of vulnerability and subservience is over; the dominion of the Quel’dorei shall be reestablished, unyielding against external threats.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Vereesa\'s ineptitude in rallying Alliance forces to reclaim Quel\'Thalas marks the last straw. I refuse to witness our proud race reduced to a puppet state of Stormwind. With our reliance on the Alliance military, we stand exposed to the threats of both the Scourge and the resurgent Amani tribe.$B$BIt is only a matter of time until others recognize my rightful claim to leadership. The Sunsworn dynasty shall ascend, and under my rule, we will endure for countless millennia. The era of vulnerability and subservience is over; the dominion of the Quel\'dorei shall be reestablished, unyielding against external threats.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -271,7 +271,7 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20582, 0, 0, 0, 0),
 (20583, 0, 0, 0, 0);
 -- Delete item 15754 from item 5759 loot table please!
-delete from reference_loot_template where item = 15754 and entry = 2072;
+delete from item_loot_template where item = 2072 and entry = 5759;
 -- Remove all spells from npc 61704, he shouldnt be casting anything.
 update creature_template set spell_list_id = 0 where entry = 61704;
 -- Add spell 205 every 2 seconds to npc 61705.
