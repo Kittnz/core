@@ -646,3 +646,24 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Remove current 'Strike' ability from Bonereaver Sentinel and replace it with this Strike variant: Strike - Spells - Turtle WoW Database (turtle-wow.org).
+update creature_spells set spellid_1 = 11976 where entry = 180259;
+-- Replace current 'Shadow Shock' ability from Overzealous Student with this 'Shadow Shock' variant: spell=16583.
+update creature_spells set spellid_1 = 16583 where entry = 180258;
+-- Replace current 'Virulent Poison' ability from Skittering Horror with this 'Virulent Poison' variant: spell=12251.
+update creature_spells set spellid_1 = 12251 where entry = 180260;
+-- Replace current 'Poison Bolt' ability from High Widow Arania with this 'Poison Bolt' variant: spell=21971.
+update creature_spells set spellid_1 = 21971 where entry = 180256;
+-- Overzealous Student - 1silver, 16copper.
+update creature_template set gold_min = 101, gold_max = 126 where entry = 61766;
+-- Failed Student Experiment - 1silver, 26copper.
+update creature_template set gold_min = 101, gold_max = 126 where entry = 61769;
+-- Bonereaver Sentinel - 1silver, 24copper.
+update creature_template set gold_min = 101, gold_max = 124 where entry = 61767;
+-- Dean LeGuin - 19silver, 7copper.
+update creature_template set gold_min = 1707, gold_max = 1907 where entry = 61763;
+-- Gunther - 15silver, 86copper.
+update creature_template set gold_min = 1301, gold_max = 1586 where entry = 61765;
+-- High Widow Arania - 11silver, 96copper.
+update creature_template set gold_min = 1001, gold_max = 1196 where entry = 61764;
