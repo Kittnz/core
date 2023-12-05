@@ -1335,3 +1335,30 @@ UPDATE `creature` SET `position_x` = 4583.301270, `position_y` = -2770.631836, `
 
 -- Changes by WOJI
 UPDATE `creature` SET `position_x` = 4583.058105, `position_y` = -2770.813232, `position_z` = 31.393570, `orientation` = 0.120940 WHERE `guid` = 2581574;
+
+-- Changes by REN
+UPDATE `creature` SET `position_x` = 4583.043945, `position_y` = -2770.807861, `position_z` = 31.468208, `orientation` = 6.144540 WHERE `guid` = 2581574;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581574, 5);
+UPDATE `creature` SET `position_x` = 4311.922852, `position_y` = -3041.321045, `position_z` = 23.116491, `orientation` = 4.785795 WHERE `guid` = 2581895;
+UPDATE `creature` SET `position_x` = 4312.429688, `position_y` = -3040.350830, `position_z` = 23.562929, `orientation` = 1.129767 WHERE `guid` = 2581895;
+UPDATE `creature` SET `position_x` = 4311.906250, `position_y` = -3040.938721, `position_z` = 22.923149, `orientation` = 3.234644 WHERE `guid` = 2581895;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581895, 3);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581895, 2);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581895, 1);
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2577129;
+DELETE FROM creature_addon WHERE guid=2577129;
+DELETE FROM creature_movement WHERE id=2577129;
+DELETE FROM game_event_creature WHERE guid=2577129;
+DELETE FROM game_event_creature_data WHERE guid=2577129;
+DELETE FROM creature_battleground WHERE guid=2577129;
+DELETE FROM gameobject WHERE guid = '4005918';
+DELETE FROM game_event_gameobject WHERE guid = '4005918';
+DELETE FROM gameobject_battleground WHERE guid = '4005918';
+DELETE FROM gameobject WHERE guid = '4005921';
+DELETE FROM game_event_gameobject WHERE guid = '4005921';
+DELETE FROM gameobject_battleground WHERE guid = '4005921';
+DELETE FROM gameobject WHERE guid = '4005917';
+DELETE FROM game_event_gameobject WHERE guid = '4005917';
+DELETE FROM gameobject_battleground WHERE guid = '4005917';
