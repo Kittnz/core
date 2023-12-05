@@ -6140,6 +6140,8 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         uint32 numHcs = 0;
         uint32 numCn = 0;
         uint32 numNonCn = 0;
+        uint32 numAlliance = 0;
+        uint32 numHorde = 0;
         const World::SessionMap& sess = sWorld.GetAllSessions();
         for (const auto& sessPair : sess)
         {
@@ -6155,8 +6157,15 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
                 ++numCn;
             else
                 ++numNonCn;
+
+            if (player->GetTeam() == HORDE)
+                ++numHorde;
+            else
+                ++numAlliance;
         }
         PSendSysMessage("Total amount of Hardcore characters logged in: %u", numHcs);
+        PSendSysMessage("Total amount of Alliance characters logged in: %u", numAlliance);
+        PSendSysMessage("Total amount of Horde characters logged in: %u", numHorde);
         if (GetSession()->GetSecurity() >= SEC_ADMINISTRATOR)
         {
             if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
@@ -6166,7 +6175,6 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
                 PSendSysMessage("Total amount of CN conn logged in: %u", sWorld.loggedNonRegionSessions.load());
                 PSendSysMessage("Total amount of regional conn logged in: %u", sWorld.loggedRegionSessions.load());
             }
-
         }
     }
 
