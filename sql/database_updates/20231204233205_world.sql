@@ -1036,3 +1036,4 @@ REPLACE INTO `creature` VALUES (2581895,7386,0,0,0,0,4311.91,-3044.19,22.9238,1.
 UPDATE `creature` SET `position_x` = 4312.351074, `position_y` = -3043.064453, `position_z` = 22.923803, `orientation` = 2.923728 WHERE `guid` = 2581895;
 UPDATE `creature` SET `position_x` = 4311.078125, `position_y` = -3040.896729, `position_z` = 22.923120, `orientation` = 4.631969 WHERE `guid` = 2581895;
 UPDATE `creature` SET `position_x` = 4361.807129, `position_y` = -2836.797852, `position_z` = 6.159143, `orientation` = 5.557959 WHERE `guid` = 2560846;
+UPDATE `creature` SET `position_x` = 4297.532227, `position_y` = -2841.561523, `position_z` = 5.929201, `orientation` = 5.540647 WHERE `guid` = 2581885;
