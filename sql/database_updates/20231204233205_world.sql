@@ -536,3 +536,14 @@ REPLACE INTO `creature` VALUES (2581854,61798,0,0,0,0,4386.36,-1810.28,29.1931,4
 
 -- Changes by MORIENA
 REPLACE INTO `gameobject` VALUES ( 5017415, 2000181, 0, 2518.22, -2643.71, 221.021, 2.13567, 0, 0, 0.876158, 0.482023, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017415';
+DELETE FROM game_event_gameobject WHERE guid = '5017415';
+DELETE FROM gameobject_battleground WHERE guid = '5017415';
+REPLACE INTO `gameobject` VALUES ( 5017416, 2006612, 0, 2519.73, -2641.84, 221.021, 3.36089, 0, 0, 0.993995, -0.109429, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017416';
+DELETE FROM game_event_gameobject WHERE guid = '5017416';
+DELETE FROM gameobject_battleground WHERE guid = '5017416';
+REPLACE INTO `gameobject` VALUES ( 5017417, 2006605, 0, 2520.38, -2642.81, 221.021, 2.4514, 0, 0, 0.941043, 0.338288, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017417';
+DELETE FROM game_event_gameobject WHERE guid = '5017417';
+DELETE FROM gameobject_battleground WHERE guid = '5017417';
