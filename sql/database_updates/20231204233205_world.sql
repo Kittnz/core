@@ -1362,3 +1362,307 @@ DELETE FROM gameobject_battleground WHERE guid = '4005921';
 DELETE FROM gameobject WHERE guid = '4005917';
 DELETE FROM game_event_gameobject WHERE guid = '4005917';
 DELETE FROM gameobject_battleground WHERE guid = '4005917';
+REPLACE INTO `creature` VALUES (2581897,61771,0,0,0,0,4159.09,-2584.22,105.367,4.95164,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2581898,61771,0,0,0,0,4139.64,-2573.85,105.171,3.56933,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2581899,61771,0,0,0,0,4170,-2565.86,105.696,0.184264,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2581900,61771,0,0,0,0,4150.63,-2553.89,105.519,1.92,120,120,0,100,100,0,0,0);
+DELETE FROM gameobject WHERE guid = '4005923';
+DELETE FROM game_event_gameobject WHERE guid = '4005923';
+DELETE FROM gameobject_battleground WHERE guid = '4005923';
+REPLACE INTO `creature` VALUES (2581901,61771,0,0,0,0,4223.54,-2534.89,111.322,1.92392,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,1, 4220.782227,-2529.417969,109.905182, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,2, 4225.902832,-2527.140869,110.003227, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,3, 4234.792480,-2523.718262,107.058372, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,4, 4241.554199,-2522.297363,104.719910, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,5, 4250.925781,-2522.249756,100.226799, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,6, 4257.286133,-2523.584473,96.928841, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,7, 4263.491699,-2527.184814,93.581467, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,8, 4268.732910,-2532.087402,89.943192, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,9, 4272.818848,-2538.826904,85.985054, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,10, 4274.337402,-2546.971680,82.081932, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,11, 4273.710938,-2552.338379,79.276337, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,12, 4271.389160,-2558.076416,76.284851, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,13, 4266.989746,-2564.647705,72.193184, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,14, 4263.377930,-2567.304932,69.447853, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,15, 4256.889648,-2568.967773,65.202148, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,16, 4249.000488,-2570.818604,64.770454, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,17, 4241.093262,-2574.033691,64.619637, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,18, 4233.553711,-2575.145264,64.497368, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,19, 4224.483398,-2572.974609,64.383606, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,20, 4219.236328,-2566.948486,64.360268, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,21, 4215.950195,-2559.289307,64.382019, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,22, 4215.913086,-2553.011230,64.438759, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,23, 4218.941895,-2546.005127,64.548058, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,24, 4223.852539,-2540.054932,64.675369, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,25, 4230.428711,-2537.031006,64.800606, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,26, 4238.112305,-2536.330322,64.921181, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,27, 4245.837402,-2538.569336,65.015411, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,28, 4251.714844,-2544.116211,65.051750, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,29, 4253.742188,-2550.078369,65.027618, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,30, 4253.802246,-2556.357666,64.971321, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,31, 4252.026367,-2563.214844,64.881386, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,32, 4248.223633,-2569.973877,64.766396, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,33, 4249.707520,-2571.218262,64.778183, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,34, 4257.436035,-2569.170166,65.455673, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,35, 4262.775391,-2567.788574,68.849648, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,36, 4267.508789,-2565.261475,72.201874, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,37, 4270.826660,-2559.355225,75.504562, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,38, 4273.453125,-2553.275146,78.828308, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,39, 4274.080566,-2546.515137,82.332954, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,40, 4273.535645,-2540.504883,85.170387, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,41, 4271.469727,-2534.111572,88.605957, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,42, 4266.445312,-2529.187744,91.687241, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,43, 4261.756836,-2524.582031,94.996185, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,44, 4255.967773,-2522.203857,97.756027, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,45, 4250.084473,-2520.506592,100.748497, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,46, 4245.390625,-2521.666016,102.714050, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,47, 4238.640137,-2522.447998,105.803818, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,48, 4230.507812,-2524.565430,108.458054, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,49, 4223.183594,-2527.332764,109.960121, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581901,50, 4222.862305,-2532.476074,110.572281, 100);
+REPLACE INTO `creature` VALUES (2581901,61771,0,0,0,0,4223.54,-2534.89,111.322,1.92392,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2581902,61771,0,0,0,0,4290.78,-2521.57,66.0498,0.588758,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,1, 4290.781738,-2521.566895,66.049751, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,2, 4313.164062,-2510.454102,61.084164, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,3, 4328.118652,-2512.871582,58.559200, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,4, 4341.319824,-2522.283447,55.524788, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,5, 4349.642090,-2539.985840,51.804249, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,6, 4347.172852,-2556.427002,48.603672, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,7, 4337.605469,-2569.954834,44.841064, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,8, 4322.086426,-2576.845459,41.167278, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,9, 4326.602539,-2575.381104,41.673233, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,10, 4341.953613,-2563.056396,46.851219, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,11, 4347.041016,-2553.704590,49.059521, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,12, 4343.190918,-2525.093506,54.974796, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,13, 4335.445801,-2517.565918,56.954491, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,14, 4335.445801,-2517.565918,56.954491, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,15, 4315.498047,-2510.573486,60.733360, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,16, 4302.375488,-2513.525146,63.067600, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581902,17, 4291.583008,-2520.344727,65.756508, 100);
+REPLACE INTO `creature` VALUES (2581902,61771,0,0,0,0,4290.78,-2521.57,66.0498,0.588758,300,300,0,100,100,2,0,0);
+REPLACE INTO `creature` VALUES (2581903,61771,0,0,0,0,4284.16,-2587.88,40.5377,3.32775,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,1, 4279.161621,-2589.211182,40.567444, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,2, 4279.161621,-2589.211182,40.567444, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,3, 4263.625488,-2593.142822,37.982086, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,4, 4252.402344,-2596.239502,32.550381, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,5, 4243.615234,-2598.669434,26.602539, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,6, 4228.342285,-2611.112793,26.054667, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,7, 4228.342285,-2611.112793,26.054667, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,8, 4217.299316,-2603.496094,25.959867, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,9, 4219.064453,-2600.197754,26.016514, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,10, 4235.436523,-2597.847412,26.281536, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,11, 4235.436523,-2597.847412,26.281536, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,12, 4242.333008,-2597.854004,26.390322, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,13, 4250.994141,-2596.866699,31.235582, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,14, 4258.792480,-2594.797363,36.183895, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581903,15, 4277.203125,-2589.827148,40.616344, 100);
+REPLACE INTO `creature` VALUES (2581903,61771,0,0,0,0,4284.16,-2587.88,40.5377,3.32775,300,300,0,100,100,2,0,0);
+DELETE FROM creature WHERE guid=2559547;
+DELETE FROM creature_addon WHERE guid=2559547;
+DELETE FROM creature_movement WHERE id=2559547;
+DELETE FROM game_event_creature WHERE guid=2559547;
+DELETE FROM game_event_creature_data WHERE guid=2559547;
+DELETE FROM creature_battleground WHERE guid=2559547;
+DELETE FROM gameobject WHERE guid = '4005517';
+DELETE FROM game_event_gameobject WHERE guid = '4005517';
+DELETE FROM gameobject_battleground WHERE guid = '4005517';
+DELETE FROM gameobject WHERE guid = '4005550';
+DELETE FROM game_event_gameobject WHERE guid = '4005550';
+DELETE FROM gameobject_battleground WHERE guid = '4005550';
+REPLACE INTO `creature` VALUES (2581904,61771,0,0,0,0,4212.73,-2596.44,25.9599,2.80152,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,1, 4207.705078,-2594.953613,28.175327, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,2, 4201.193359,-2592.195801,28.494797, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,3, 4183.033691,-2585.023193,25.652084, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,4, 4183.033691,-2585.023193,25.652084, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,5, 4166.421387,-2590.162598,26.884066, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,6, 4156.320312,-2591.030518,29.193125, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,7, 4141.480957,-2583.699707,33.059563, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,8, 4134.422852,-2573.876709,35.858242, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,9, 4135.657227,-2557.212158,40.008549, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,10, 4136.629883,-2555.962158,40.337360, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,11, 4140.579590,-2549.683594,42.122688, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,12, 4133.695801,-2563.465576,38.335629, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,13, 4135.148926,-2577.265869,35.163979, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,14, 4141.913574,-2586.476074,32.504879, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,15, 4155.228027,-2592.806641,29.364765, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,16, 4166.412598,-2591.591797,27.052790, 100);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017436, 2003224, 0, 4312.48, -3040.45, 22.9228, 6.04993, 0, 0, 0.116364, -0.993207, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,17, 4180.730957,-2588.774414,25.582865, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,18, 4186.138184,-2589.062012,25.660616, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581904,19, 4206.909180,-2594.642822,28.339384, 100);
+REPLACE INTO `creature` VALUES (2581904,61771,0,0,0,0,4212.73,-2596.44,25.9599,2.80152,300,300,0,100,100,2,0,0);
+DELETE FROM creature WHERE guid=2560555;
+DELETE FROM creature_addon WHERE guid=2560555;
+DELETE FROM creature_movement WHERE id=2560555;
+DELETE FROM game_event_creature WHERE guid=2560555;
+DELETE FROM game_event_creature_data WHERE guid=2560555;
+DELETE FROM creature_battleground WHERE guid=2560555;
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017436, 2003224, 0, 4312.48, -3040.45, 22.7229, 6.04993, 0, 0, 0.116364, -0.993207, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581905,61771,0,0,0,0,4152.16,-2537.32,42.2244,2.31457,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,1, 4149.082031,-2534.023682,42.208881, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,2, 4143.140625,-2526.824951,42.826008, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,3, 4137.211426,-2515.008545,46.459209, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,4, 4138.082520,-2502.810303,49.557091, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,5, 4147.756836,-2492.297119,53.702572, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,6, 4163.072266,-2486.986816,58.932964, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,7, 4177.893066,-2490.948730,64.234779, 100);
+
+-- Changes by REN
+DELETE FROM gameobject WHERE guid = '5017436';
+DELETE FROM game_event_gameobject WHERE guid = '5017436';
+DELETE FROM gameobject_battleground WHERE guid = '5017436';
+
+-- Changes by WOJI
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,8, 4178.773926,-2490.870117,64.395569, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,9, 4161.890137,-2485.643066,58.610432, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,10, 4148.860352,-2489.617432,54.462902, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,11, 4135.722656,-2505.507568,48.654446, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,12, 4136.041016,-2518.135010,45.818386, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,13, 4137.691406,-2522.716553,44.543148, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581905,14, 4148.878906,-2534.236084,42.204910, 100);
+REPLACE INTO `creature` VALUES (2581905,61771,0,0,0,0,4152.16,-2537.32,42.2244,2.31457,300,300,0,100,100,2,0,0);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 22.9228, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417371378650973, 0.400000);
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 22.9228, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581906,61771,0,0,0,0,4223.94,-2538.97,64.6867,2.04753,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,1, 4220.747070,-2532.753174,65.304504, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,2, 4217.341309,-2527.978271,66.966156, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,3, 4212.908691,-2521.636475,67.212555, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,4, 4208.364258,-2515.485107,65.674736, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,5, 4203.833496,-2510.093018,64.407677, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,6, 4204.004883,-2501.925049,64.485565, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,7, 4203.797363,-2500.801270,64.492973, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,8, 4194.747559,-2494.197021,64.418137, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,9, 4187.401367,-2495.325684,64.299530, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,10, 4183.334473,-2498.557861,64.209526, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,11, 4183.055176,-2502.377197,64.170174, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,12, 4184.977051,-2507.734863,64.149719, 100);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 23.9228, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,13, 4190.004395,-2511.572998,64.188942, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,14, 4197.165527,-2512.159668,64.290367, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,15, 4198.607910,-2511.924072,64.313385, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,16, 4204.957520,-2514.664307,64.814842, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,17, 4207.602539,-2517.061035,65.806213, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,18, 4207.602539,-2517.061035,65.806213, 100);
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2581906,19, 4218.170898,-2530.772461,66.268250, 100);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 23.7229, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581906,61771,0,0,0,0,4223.94,-2538.97,64.6867,2.04753,300,300,0,100,100,2,0,0);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 23.5229, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 23.3228, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017437, 2003229, 0, 4312.48, -3040.45, 23.1229, 4.94645, 0, 0, 0.619707, -0.784833, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = 4312.650391, `position_y` = -3040.530273, `position_z` = 23.371712, `orientation` = 4.231734 WHERE `guid` = 2581895;
+UPDATE `creature` SET `position_x` = 4311.273438, `position_y` = -3040.665039, `position_z` = 22.923195, `orientation` = 4.325981 WHERE `guid` = 2581895;
+DELETE FROM gameobject WHERE guid = '5017437';
+DELETE FROM game_event_gameobject WHERE guid = '5017437';
+DELETE FROM gameobject_battleground WHERE guid = '5017437';
+REPLACE INTO `gameobject` VALUES ( 5017438, 2003812, 0, 4312.54, -3040.4, 22.9232, 4.5027, 0, 0, 0.777224, -0.629224, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581907,61771,0,0,0,0,4261.29,-2549.3,65.1468,3.7322,120,120,0,100,100,0,0,0);
+
+-- Changes by REN
+DELETE FROM gameobject WHERE guid = '5017438';
+DELETE FROM game_event_gameobject WHERE guid = '5017438';
+DELETE FROM gameobject_battleground WHERE guid = '5017438';
+
+-- Changes by WOJI
+REPLACE INTO `creature` VALUES (2581908,61711,0,0,0,0,4252.67,-2535.01,65.1488,3.70078,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2581908;
+DELETE FROM creature_addon WHERE guid=2581908;
+DELETE FROM creature_movement WHERE id=2581908;
+DELETE FROM game_event_creature WHERE guid=2581908;
+DELETE FROM game_event_creature_data WHERE guid=2581908;
+DELETE FROM creature_battleground WHERE guid=2581908;
+REPLACE INTO `creature` VALUES (2581909,61771,0,0,0,0,4252.67,-2535.01,65.1488,3.9796,120,120,0,100,100,0,0,0);
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 22.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 25.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 28.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 25.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 22.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017439, 2002266, 0, 4312.51, -3040.42, 23.9232, 3.04579, 0, 0, 0.998853, 0.0478852, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017439';
+DELETE FROM game_event_gameobject WHERE guid = '5017439';
+DELETE FROM gameobject_battleground WHERE guid = '5017439';
+REPLACE INTO `gameobject` VALUES ( 5017440, 2003424, 0, 4312.53, -3040.42, 22.9229, 4.34169, 0, 0, 0.825307, -0.564684, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017440';
+DELETE FROM game_event_gameobject WHERE guid = '5017440';
+DELETE FROM gameobject_battleground WHERE guid = '5017440';
+REPLACE INTO `gameobject` VALUES ( 5017441, 2003439, 0, 4312.47, -3040.61, 22.9229, 4.03146, 0, 0, 0.90264, -0.430397, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017441, 2003439, 0, 4312.47, -3040.61, 23.7229, 4.03146, 0, 0, 0.90264, -0.430397, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2559541;
+DELETE FROM creature_addon WHERE guid=2559541;
+DELETE FROM creature_movement WHERE id=2559541;
+DELETE FROM game_event_creature WHERE guid=2559541;
+DELETE FROM game_event_creature_data WHERE guid=2559541;
+DELETE FROM creature_battleground WHERE guid=2559541;
+DELETE FROM creature WHERE guid=2559542;
+DELETE FROM creature_addon WHERE guid=2559542;
+DELETE FROM creature_movement WHERE id=2559542;
+DELETE FROM game_event_creature WHERE guid=2559542;
+DELETE FROM game_event_creature_data WHERE guid=2559542;
+DELETE FROM creature_battleground WHERE guid=2559542;
+DELETE FROM creature WHERE guid=2560557;
+DELETE FROM creature_addon WHERE guid=2560557;
+DELETE FROM creature_movement WHERE id=2560557;
+DELETE FROM game_event_creature WHERE guid=2560557;
+DELETE FROM game_event_creature_data WHERE guid=2560557;
+DELETE FROM creature_battleground WHERE guid=2560557;
+DELETE FROM creature WHERE guid=2560558;
+DELETE FROM creature_addon WHERE guid=2560558;
+DELETE FROM creature_movement WHERE id=2560558;
+DELETE FROM game_event_creature WHERE guid=2560558;
+DELETE FROM game_event_creature_data WHERE guid=2560558;
+DELETE FROM creature_battleground WHERE guid=2560558;
+DELETE FROM creature WHERE guid=2559543;
+DELETE FROM creature_addon WHERE guid=2559543;
+DELETE FROM creature_movement WHERE id=2559543;
+DELETE FROM game_event_creature WHERE guid=2559543;
+DELETE FROM game_event_creature_data WHERE guid=2559543;
+DELETE FROM creature_battleground WHERE guid=2559543;
+
+-- Changes by REN
+REPLACE INTO `gameobject` VALUES ( 5017441, 2003439, 0, 4312.47, -3040.61, 23.5229, 4.03146, 0, 0, 0.90264, -0.430397, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017441, 2003439, 0, 4312.47, -3040.61, 23.3229, 4.03146, 0, 0, 0.90264, -0.430397, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017441, 2003439, 0, 4312.47, -3040.61, 23.1229, 4.03146, 0, 0, 0.90264, -0.430397, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017441';
+DELETE FROM game_event_gameobject WHERE guid = '5017441';
+DELETE FROM gameobject_battleground WHERE guid = '5017441';
+REPLACE INTO `gameobject` VALUES ( 5017442, 2003261, 0, 4312.5, -3040.49, 22.9237, 3.66231, 0, 0, 0.966297, -0.257429, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017442, 2003261, 0, 4312.5, -3040.49, 23.5237, 3.66231, 0, 0, 0.966297, -0.257429, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017442, 2003261, 0, 4312.5, -3040.49, 23.3237, 3.66231, 0, 0, 0.966297, -0.257429, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017442, 2003261, 0, 4312.5, -3040.49, 23.5237, 3.66231, 0, 0, 0.966297, -0.257429, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017442';
+DELETE FROM game_event_gameobject WHERE guid = '5017442';
+DELETE FROM gameobject_battleground WHERE guid = '5017442';
+REPLACE INTO `gameobject` VALUES ( 5017443, 2003870, 0, 4312.57, -3040.47, 22.9237, 3.33637, 0, 0, 0.995261, -0.0972366, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017443, 2003870, 0, 4312.57, -3040.47, 23.1237, 3.33637, 0, 0, 0.995261, -0.0972366, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417382132846435, 0.800000);
+REPLACE INTO `gameobject` VALUES ( 5017443, 2003870, 0, 4312.57, -3040.47, 23.1237, 3.33637, 0, 0, 0.995261, -0.0972366, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = 4312.474609, `position_y` = -3040.553955, `position_z` = 23.564548, `orientation` = 3.481673 WHERE `guid` = 2581895;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581895, 3);
