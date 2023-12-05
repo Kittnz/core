@@ -246,7 +246,7 @@ namespace MMAP
             return;
         }
 
-        printf("Adding %i, %i, %i", mapID, tileX, tileY);
+        printf("Adding %i, %i, %i\n", mapID, tileX, tileY);
 
         TileInfo tileInfo;
         tileInfo.m_mapId = mapID;

@@ -19,6 +19,13 @@
 #include "MMapCommon.h"
 #include "MapBuilder.h"
 
+#ifdef WIN32
+#include <direct.h>
+#endif
+
+extern bool gForceOutput;
+extern bool gDoNotFilterDeepWater;
+
 using namespace MMAP;
 
 bool checkDirectories(bool debugOutput)
@@ -77,6 +84,8 @@ void printUsage()
     printf("--bigBaseUnit [true|false] : Generate tile/map using bigger basic unit.\n");
     printf("--quick : Does not remove undermap positions ... But generates way more quickly.\n");
     printf("--silent : Make script friendly. No wait for user input, error, completion.\n");
+    printf("--force : Generate mmtiles even if it's already exist.\n");
+    printf("--doNotFilterDeepWater : Generate navmesh on deep water.\n");
     printf("--offMeshInput [file.*] : Path to file containing off mesh connections data.\n\n");
     printf("Example:\nmovemapgen (generate all mmap with default arg\n"
            "movemapgen 0 (generate map 0)\n"
@@ -205,6 +214,14 @@ bool handleArgs(int argc, char** argv,
         {
             silent = true;
         }
+		else if (strcmp(argv[i], "--force") == 0)
+		{
+			gForceOutput = true;
+		}
+		else if (strcmp(argv[i], "--doNotFilterDeepWater") == 0)
+		{
+            gDoNotFilterDeepWater = true;
+		}
         else if (strcmp(argv[i], "--quick") == 0)
         {
             quick = true;
