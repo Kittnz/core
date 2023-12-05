@@ -142,3 +142,7 @@ DELETE FROM game_event_creature_data WHERE guid=2581501;
 DELETE FROM creature_battleground WHERE guid=2581501;
 REPLACE INTO `creature` VALUES (2581601,61797,0,0,0,0,4427.62,-1829.78,33.1886,4.26889,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2581602,61831,0,0,0,0,4157.27,-2703.46,20.5821,4.7252,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = 3251.126221, `position_y` = -1827.717285, `position_z` = 140.710312, `orientation` = 2.034659 WHERE `guid` = 2581121;
+UPDATE `creature` SET `position_x` = 3254.386230, `position_y` = -1822.661011, `position_z` = 140.710159, `orientation` = 2.780788 WHERE `guid` = 2581119;
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581121, 376);
+REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581121, 0);
