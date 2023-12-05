@@ -2,6 +2,27 @@
 #include "MapBuilder.h"
 #include "Maps/GridMapDefines.h"
 
+
+bool gForceOutput = false;
+
+static const int NAVMESHSET_MAGIC = 'M' << 24 | 'S' << 16 | 'E' << 8 | 'T'; //'MSET';
+static const int NAVMESHSET_VERSION = 1;
+
+// Copied from RecastDemo
+struct NavMeshSetHeader
+{
+	int magic;
+	int version;
+	int numTiles;
+	dtNavMeshParams params;
+};
+
+struct NavMeshTileHeader
+{
+	dtTileRef tileRef;
+	int dataSize;
+};
+
 inline void calcTriNormal(const float* v0, const float* v1, const float* v2, float* norm)
 {
     float e0[3], e1[3];
@@ -764,6 +785,30 @@ namespace MMAP
                     fwrite(navData, sizeof(unsigned char), navDataSize, file);
                     fclose(file);
                 }
+
+                // Save navigation data to show in RecastDemo
+                sprintf(fname, "meshes/map%03u%02u%02u.bin", mapID, tileY, tileX);
+                FILE* NavFile = fopen(fname, "wb");
+                if (NavFile != NULL)
+                {
+					NavMeshSetHeader header;
+					header.magic = NAVMESHSET_MAGIC;
+					header.version = NAVMESHSET_VERSION;
+					header.numTiles = 1;
+
+					memcpy(&header.params, navMesh->getParams(), sizeof(dtNavMeshParams));
+					fwrite(&header, sizeof(NavMeshSetHeader), 1, NavFile);
+
+                    NavMeshTileHeader tileHeader;
+                    tileHeader.tileRef = tileRef;
+                    tileHeader.dataSize = navDataSize;
+                    fwrite(&tileHeader, sizeof(tileHeader), 1, NavFile);
+
+                    fwrite(navData, navDataSize, 1, NavFile);
+
+                    fclose(NavFile);
+                }
+
             }
             // now that tile is written to disk, we can unload it
             navMesh->removeTile(tileRef, nullptr, nullptr);
@@ -773,6 +818,11 @@ namespace MMAP
     /**************************************************************************/
     bool TileBuilder::shouldSkipTile(uint32 mapID, uint32 tileX, uint32 tileY)
     {
+        if (gForceOutput)
+        {
+            return false;
+        }
+        
         char fileName[255];
         sprintf(fileName, "mmaps/%03u%02i%02i.mmtile", mapID, tileY, tileX);
         FILE* file = fopen(fileName, "rb");

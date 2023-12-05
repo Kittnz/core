@@ -220,10 +220,16 @@ namespace MMAP
         G3D::Array<float> allVerts;
         G3D::Array<int> allTris;
 
-        allTris.append(meshData.liquidTris);
-        allVerts.append(meshData.liquidVerts);
-        TerrainBuilder::copyIndices(meshData.solidTris, allTris, allVerts.size() / 3);
-        allVerts.append(meshData.solidVerts);
+#if 0
+		allVerts.append(meshData.solidVerts);
+		allVerts.append(meshData.liquidVerts);
+		allTris.append(meshData.solidTris);
+        TerrainBuilder::copyIndices(meshData.liquidTris, allTris, meshData.solidVerts.size());
+#else
+		allVerts.append(meshData.solidVerts);
+		allTris.append(meshData.solidTris);
+#endif
+
 
         float* verts = allVerts.getCArray();
         int* tris = allTris.getCArray();

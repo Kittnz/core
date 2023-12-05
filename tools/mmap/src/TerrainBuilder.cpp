@@ -24,6 +24,8 @@
 #include "ModelInstance.h"
 #include "Maps/GridMapDefines.h"
 
+bool gDoNotFilterDeepWater = false;
+
 namespace MMAP
 {
     TerrainBuilder::TerrainBuilder(bool skipLiquid, bool quick) : m_skipLiquid(skipLiquid), m_V9(nullptr), m_V8(nullptr), m_quick(quick), m_mapId(0) { }
@@ -161,7 +163,6 @@ namespace MMAP
             }
 
             // hole data
-            memset(holes, 0, fheader.holesSize);
             fseek(mapFile, fheader.holesOffset, SEEK_SET);
             fread(holes, fheader.holesSize, 1, mapFile);
 
@@ -310,7 +311,8 @@ namespace MMAP
         // now that we have gathered the data, we can figure out which parts to keep:
         // liquid above ground, ground above liquid
         int loopStart, loopEnd, loopInc, tTriCount = 4;
-        bool useTerrain, useLiquid;
+        bool useTerrain = true;
+        bool useLiquid = true;
 
         float* lverts = meshData.liquidVerts.getCArray();
         int* ltris = ltriangles.getCArray();
@@ -350,13 +352,16 @@ namespace MMAP
                     else
                         liquidType = MAP_LIQUID_TYPE_WATER;
 
-                    if (liquidType & MAP_LIQUID_TYPE_DARK_WATER)
+                    if (!gDoNotFilterDeepWater)
                     {
-                        // players should not be here, so logically neither should creatures
-                        useTerrain = false;
-                        useLiquid = false;
+                        if (liquidType & MAP_LIQUID_TYPE_DARK_WATER)
+                        {
+                            // players should not be here, so logically neither should creatures
+                            useTerrain = false;
+                            useLiquid = false;
+                        }
                     }
-                    else if ((liquidType & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN)) != 0)
+                    if ((liquidType & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN)) != 0)
                         liquidType = AREA_WATER;
                     else if (liquidType & MAP_LIQUID_TYPE_MAGMA)
                         liquidType = AREA_MAGMA;
@@ -422,8 +427,8 @@ namespace MMAP
                             maxLLevel = h;
                     }
 
-                    float maxTLevel = INVALID_MAP_LIQ_HEIGHT;
                     float minTLevel = INVALID_MAP_LIQ_HEIGHT_MAX;
+                    float maxTLevel = INVALID_MAP_LIQ_HEIGHT;
                     for (uint32 x = 0; x < 6; x++)
                     {
                         float h = tverts[ttris[x] * 3 + 1];
