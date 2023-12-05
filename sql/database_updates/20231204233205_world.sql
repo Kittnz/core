@@ -146,3 +146,6 @@ UPDATE `creature` SET `position_x` = 3251.126221, `position_y` = -1827.717285, `
 UPDATE `creature` SET `position_x` = 3254.386230, `position_y` = -1822.661011, `position_z` = 140.710159, `orientation` = 2.780788 WHERE `guid` = 2581119;
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581121, 376);
 REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (2581121, 0);
+
+-- Changes by DRAGU
+UPDATE `creature` SET `position_x` = 2677.332764, `position_y` = -2779.616211, `position_z` = 190.893875, `orientation` = 5.556782 WHERE `guid` = 2581180;
