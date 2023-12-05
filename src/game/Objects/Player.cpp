@@ -19171,6 +19171,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
 
                 if (Item* pItem = StoreNewItemInInventorySlot(item, stackCount))
                 {
+                    pItem->SetBinding(true);
                     SendNewItem(pItem, stackCount, true, false);
                     LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
                     CharacterDatabase.DirectPExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u && `stack_count`=%u && `time`=%u LIMIT 1", GetGUIDLow(), item, stackCount, timestamp);
