@@ -216,3 +216,9 @@ REPLACE INTO `gameobject` VALUES ( 5017412, 2020066, 1, -208.212, -7686.95, 42.2
 REPLACE INTO `gameobject` VALUES ( 5017413, 2020066, 1, -201.684, -7679.45, 42.2411, 4.11034, 0, 0, 0.884966, -0.465656, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017414, 2020066, 1, -208.533, -7679.37, 42.1395, 5.203, 0, 0, 0.514214, -0.857662, 300, 300, 100, 1, 0, 0);
 UPDATE `creature` SET `position_x` = 2111.377930, `position_y` = 1065.645874, `position_z` = 231.593430, `orientation` = 0.021928 WHERE `guid` = 29995;
+DELETE FROM creature WHERE guid=2559975;
+DELETE FROM creature_addon WHERE guid=2559975;
+DELETE FROM creature_movement WHERE id=2559975;
+DELETE FROM game_event_creature WHERE guid=2559975;
+DELETE FROM game_event_creature_data WHERE guid=2559975;
+DELETE FROM creature_battleground WHERE guid=2559975;
