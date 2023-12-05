@@ -6,5 +6,5 @@ update quest_template set details = 'Hey, pal, ever heard of Shellcoin? It\'s an
 update creature set spawntimesecsmin = 86400, spawntimesecsmax = 129600 where id = 61853;
 -- Professor Lysander should cast the spell id 28153 on his target every 6-7 seconds instead of 12-14 seconds.
 update creature_spells set delayRepeatMin_1 = 12, delayRepeatMax_1 = 14 where entry = 180282;
-
-
+-- Remove wealth from npc 10697, so it doesnt drop any money when its killed.
+update creature_template set gold_min = 0, gold_max = 0 where entry = 10697;
