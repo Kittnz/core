@@ -1911,3 +1911,16 @@ REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417372200734580
 REPLACE INTO `gameobject` VALUES ( 5017460, 2003278, 0, 4312.51, -3040.56, 21.8574, 2.2156, 0, 0, 0.894718, 0.446632, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017460, 2003278, 0, 4312.51, -3040.56, 22.0574, 2.2156, 0, 0, 0.894718, 0.446632, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017460, 2003278, 0, 4312.51, -3040.56, 22.2574, 2.2156, 0, 0, 0.894718, 0.446632, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417372200734580, 0.600000);
+REPLACE INTO `gameobject` VALUES ( 5017460, 2003278, 0, 4312.51, -3040.56, 22.2574, 2.2156, 0, 0, 0.894718, 0.446632, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017460, 2003278, 0, 4312.51, -3040.56, 22.4574, 2.2156, 0, 0, 0.894718, 0.446632, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = 4312.548828, `position_y` = -3040.552246, `position_z` = 23.540051, `orientation` = 3.710215 WHERE `guid` = 2581910;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581910, 1);
+UPDATE `creature` SET `position_x` = 4312.539551, `position_y` = -3040.591064, `position_z` = 23.559824, `orientation` = 3.396055 WHERE `guid` = 2581910;
+UPDATE `creature` SET `position_x` = 4312.486816, `position_y` = -3040.487061, `position_z` = 23.589993, `orientation` = 3.403908 WHERE `guid` = 2581910;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581910, 1);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581910, 3);
+UPDATE `creature` SET `position_x` = 4312.422363, `position_y` = -3040.562012, `position_z` = 23.589699, `orientation` = 3.608112 WHERE `guid` = 2581910;
+UPDATE `creature` SET `position_x` = 4312.422363, `position_y` = -3040.562012, `position_z` = 23.589699, `orientation` = 4.177526 WHERE `guid` = 2581910;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581910, 3);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581910, 1);
