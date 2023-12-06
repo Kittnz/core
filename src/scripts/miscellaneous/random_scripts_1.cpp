@@ -451,15 +451,12 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     }
 
     bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
-    pPlayer->SetUInt32Value(PLAYER_BYTES, bytes);
-    pPlayer->SetUInt32Value(PLAYER_BYTES_2, bytes2);
-    pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
 	if (pPlayer->ChangeRace(race, player_gender, bytes, bytes2))
 	{
 		uint32 Count = 1;
 		pPlayer->DestroyItemCount(pItem, Count, false);
 		pPlayer->SaveInventoryAndGoldToDB();
-		pPlayer->GetSession()->LogoutPlayer(false);
+		//pPlayer->GetSession()->LogoutPlayer(false);
 		return true;
 	}
     return false;
