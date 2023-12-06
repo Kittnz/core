@@ -50,3 +50,6 @@ REPLACE INTO `creature` VALUES (2581935,80236,0,0,0,0,4573.14,-2776.84,15.5076,0
 UPDATE `creature` SET `position_x` = 4238.204590, `position_y` = -2766.965332, `position_z` = 6.629169, `orientation` = 4.911366 WHERE `guid` = 2558648;
 REPLACE INTO `creature` VALUES (2581936,80236,0,0,0,0,4431.35,-2939.29,7.452,4.49508,120,120,0,100,100,0,0,0);
 UPDATE `creature` SET `position_x` = 4364.188477, `position_y` = -3107.452148, `position_z` = 15.822783, `orientation` = 0.332478 WHERE `guid` = 2581853;
+
+-- Changes by REN
+UPDATE `creature` SET `position_x` = 4311.842285, `position_y` = -3040.930664, `position_z` = 22.923079, `orientation` = 3.502104 WHERE `guid` = 2581910;
