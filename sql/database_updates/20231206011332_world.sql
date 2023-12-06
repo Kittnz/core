@@ -53,3 +53,11 @@ UPDATE `creature` SET `position_x` = 4364.188477, `position_y` = -3107.452148, `
 
 -- Changes by REN
 UPDATE `creature` SET `position_x` = 4311.842285, `position_y` = -3040.930664, `position_z` = 22.923079, `orientation` = 3.502104 WHERE `guid` = 2581910;
+UPDATE `creature` SET `position_x` = 4307.985352, `position_y` = -3040.679443, `position_z` = 22.923769, `orientation` = 5.175003 WHERE `guid` = 2581570;
+UPDATE `creature` SET `position_x` = 4307.809082, `position_y` = -3040.522217, `position_z` = 22.923513, `orientation` = 5.622677 WHERE `guid` = 2581570;
+UPDATE `creature_addon` SET `stand_state`=6 WHERE `guid`=2581570;
+UPDATE `creature` SET `position_x` = 4307.538086, `position_y` = -3040.661377, `position_z` = 23.539686, `orientation` = 5.791543 WHERE `guid` = 2581910;
+UPDATE `creature_addon` SET `stand_state`=3 WHERE `guid`=2581910;
+UPDATE `creature` SET `position_x` = 4307.632324, `position_y` = -3040.732178, `position_z` = 23.539709, `orientation` = 5.418476 WHERE `guid` = 2581910;
+UPDATE `creature` SET `position_x` = 4307.926758, `position_y` = -3040.556641, `position_z` = 22.923403, `orientation` = 5.724782 WHERE `guid` = 2581570;
+UPDATE `creature` SET `position_x` = 4307.926758, `position_y` = -3040.556641, `position_z` = 22.923403, `orientation` = 5.394912 WHERE `guid` = 2581570;
