@@ -6614,6 +6614,9 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (!go->IsUseRequirementMet())
                         return SPELL_FAILED_TRY_AGAIN;
 
+                    if (!go->IsAllowedLooter(m_caster->GetObjectGuid()))
+                        return SPELL_FAILED_NOT_TRADEABLE;
+
                     if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST && go->GetGOInfo()->chest.level > m_caster->GetLevel())
                         return SPELL_FAILED_LEVEL_REQUIREMENT;
 
