@@ -111,6 +111,18 @@ GameObject::~GameObject()
     MANGOS_ASSERT(m_spellDynObjects.empty());
 }
 
+bool CanOnlyBeLootedByPlayersOnMapAtSpawn(uint32 entry)
+{
+    switch (entry)
+    {
+        case 2020042: // Favor of Erennius (Solnius - Emerald Sanctum)
+        case 181366: // Four Horseman Chest (Four Horsemen - Naxxramas)
+        case 179703: // Cache of the Firelord (Majordomo Executus - Molten Core)
+            return true;
+    }
+    return false;
+}
+
 void GameObject::AddToWorld()
 {
     ///- Register the gameobject for guid lookup
@@ -130,6 +142,17 @@ void GameObject::AddToWorld()
 
     if (!i_AI)
         AIM_Initialize();
+
+    if (CanOnlyBeLootedByPlayersOnMapAtSpawn(GetEntry()))
+    {
+        m_allowedLooters.clear();
+        Map::PlayerList const& pList = GetMap()->GetPlayers();
+        for (const auto& it : pList)
+        {
+            if (Player* pPlayer = it.getSource())
+                m_allowedLooters.insert(pPlayer->GetObjectGuid());
+        }
+    }
 }
 
 void GameObject::AIM_Initialize()
@@ -2190,6 +2213,13 @@ bool GameObject::IsUseRequirementMet() const
                 break;
         }
     }
+    return true;
+}
+
+bool GameObject::IsAllowedLooter(ObjectGuid guid)
+{
+    if (!m_allowedLooters.empty() && m_allowedLooters.find(guid) == m_allowedLooters.end())
+        return false;
     return true;
 }
 
