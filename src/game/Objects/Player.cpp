@@ -21941,15 +21941,48 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
     uint32 mapId = GetMapId();
 
+	uint32 GuildId = GetGuildId();
+
+	//Giperion Elysium: early check for guild leader
+    if (bChangeTeam)
+    {
+		if (GuildId != 0)
+		{
+			if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
+			{
+				if (guild->GetLeaderGuid() == GetObjectGuid())
+				{
+					CHANGERACE_ERR("Impossible because target is a guild leader.");
+					return false;
+				}
+			}
+		}
+    }
+
+	//Leave current group
+	RemoveFromGroup();
+
     //Key - SkillId, Value - Skill value
     std::unordered_map<uint32, uint16> SkillValues;
-    for (const auto& SkillElemPair : mSkillStatus)
+    for (const std::pair<uint32, SkillStatusData>& SkillElemPair : mSkillStatus)
     {
         uint32 SkillId = SkillElemPair.first;
         SkillValues[SkillId] = GetSkillValuePure(SkillId);
     }
 
-    for (const auto& SkillElemPair : mSkillStatus)
+	std::unordered_map<uint16, int32> baseFactions;
+	if (!bChangeTeam)
+	{
+        for (auto const& pair : GetReputationMgr().GetStateList())
+        {
+            if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(pair.second.ID))
+            {
+				baseFactions[factionEntry->ID] = GetReputationMgr().GetBaseReputation(factionEntry);
+            }
+        }
+	}
+
+    for (const std::pair<uint32, SkillStatusData>& SkillElemPair : mSkillStatus)
     {
         uint32 SkillId = SkillElemPair.first;
         if (!IsLanguageSkill(SkillId))
@@ -22038,26 +22071,57 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     if (!ChangeReputationsForRace(oldRace, newRace))
     {
-        CHANGERACE_ERR("Impossible de changer les reputations.");
+        CHANGERACE_ERR("Impossible due reputation.");
         return false;
     }
     if (!ChangeQuestsForRace(oldRace, newRace))
     {
-        CHANGERACE_ERR("Impossible de changer les quetes.");
+        CHANGERACE_ERR("Impossible due quests.");
         return false;
     }
     if (!ChangeItemsForRace(oldRace, newRace))
     {
-        CHANGERACE_ERR("Impossible de changer les items.");
+        CHANGERACE_ERR("Impossible due items.");
         return false;
     }
 
+	for (auto const& pair : baseFactions)
+	{
+		FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(pair.first);
+		if (!factionEntry)
+			continue;
+
+		FactionState const* state = GetReputationMgr().GetState(factionEntry);
+		if (!state || state->Standing == 0)
+			continue;
+
+		int32 newBase = GetReputationMgr().GetBaseReputation(factionEntry);
+		if (newBase == pair.second)
+			continue;
+
+		GetReputationMgr().ModifyReputation(factionEntry, pair.second - newBase, true);
+	}
+
+	//Close socket before teleport, otherwise client crash
+	m_session->GetSocket()->CloseSocket();
+
     m_DbSaveDisabled = false;
     RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+	if (bChangeTeam)
+		m_honorMgr.ClearHonorCP();
     SaveToDB();
     m_DbSaveDisabled = true;
     if (bChangeTeam)
     {
+		//Giperion Elysium: Drop current guild
+		if (GuildId != 0)
+		{
+			if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
+			{
+				guild->DelMember(GetObjectGuid());
+			}
+		}
+
         if (TeamForRace(newRace) == ALLIANCE)
         {
             SavePositionInDB(GetObjectGuid(), 0, -8867.68f, 673.373f, 97.9034f, 0.0f, 1519);
@@ -22068,6 +22132,8 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
             SavePositionInDB(GetObjectGuid(), 1, 1633.33f, -4439.11f, 15.7588f, 0.0f, 1637);
             SetHomebindToLocation(WorldLocation(1, 1633.33f, -4439.11f, 15.7588f, 0.0f), 1637);
         }
+
+        TeleportToHomebind(0, false);
     }
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
         data->uiRace = newRace;
@@ -22122,7 +22188,7 @@ bool Player::ConvertSpell(uint32 oldSpellId, uint32 newSpellId)
     PlayerSpellMap::const_iterator mySpells_itr = m_spells.find(oldSpellId);
     if (mySpells_itr != m_spells.end() && mySpells_itr->second.state != PLAYERSPELL_REMOVED)
     {
-        CHANGERACE_LOG("Changement sort %u -> %u", oldSpellId, newSpellId);
+        CHANGERACE_LOG("Change spell %u -> %u", oldSpellId, newSpellId);
         RemoveSpell(oldSpellId, false, false);
         if (newSpellId > 0)
             LearnSpell(newSpellId, false);
@@ -22149,7 +22215,7 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
 
     PlayerInfo const *info = sObjectMgr.GetPlayerInfo(oldRace, GetClass());
     ASSERT(info);
-    for (const auto spell : info->spell)
+    for (const uint32 spell : info->spell)
     {
         ConvertSpell(spell, 0);
     }
@@ -22160,7 +22226,7 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
         uint32 myNewSpellId = oldTeam == ALLIANCE ? it->second : it->first;
         ConvertSpell(myOldSpellId, myNewSpellId);
     }
-    CHANGERACE_LOG("Transfert des sorts [OK]");
+    CHANGERACE_LOG("Spell convert [OK]");
     return true;
 }
 
@@ -22363,6 +22429,9 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
     bool changeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
     uint32 oldRaceMask = 1 << (oldRace - 1);
     uint32 newRaceMask = 1 << (newRace - 1);
+	FactionStateList const& stateList = GetReputationMgr().GetStateList();
+
+#if 0
     uint32 newCapitalId = GetCapitalReputationForRace(newRace);
     FactionEntry const* oldCapitalFaction = sObjectMgr.GetFactionEntry(GetCapitalReputationForRace(oldRace));
     FactionEntry const* newCapitalFaction = sObjectMgr.GetFactionEntry(newCapitalId);
@@ -22377,7 +22446,6 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
 
     int32 standingAtCapital = pStateAtCapital ? pStateAtCapital->Standing : 0;
     int32 standingAtOldCapital  = pStateAtOldCapital ? pStateAtOldCapital->Standing : 0;
-    FactionStateList const& stateList = GetReputationMgr().GetStateList();
 
     // Gestion des capitales
     if (changeTeam)
@@ -22390,12 +22458,15 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         GetReputationMgr().SetReputation(oldCapitalFaction, standingAtOldCapital + GetReputationMgr().GetBaseReputation(oldCapitalFaction));
         GetReputationMgr().SetReputation(newCapitalFaction, standingAtCapital + GetReputationMgr().GetBaseReputation(newCapitalFaction));
     }
+#endif
     // Les autres de maniere generique
     for (FactionStateList::const_iterator it = stateList.begin(); it != stateList.end(); ++it)
     {
         // Deja fait plus haut.
+#if 0
         if (it->second.ID == oldCapitalFaction->ID || it->second.ID == newCapitalFaction->ID)
             continue;
+#endif
         // Ou gere plus tard avec sObjectMgr
         bool found = false;
         for (std::map<uint32, uint32>::const_iterator it2 = sObjectMgr.factionchange_reputations.begin(); it2 != sObjectMgr.factionchange_reputations.end(); ++it2)
@@ -22422,7 +22493,7 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         // De signe different et non nulles.
         if (newBaseRep * oldBaseRep < 0)
         {
-            CHANGERACE_LOG("Inversion du Standing de %u (%i)", it->second.ID, pState->Standing);
+            CHANGERACE_LOG("Set reputation for %s (%u) to standing (%i)", pFactionEntry->name[0], it->second.ID, pState->Standing);
             pState->Standing = -pState->Standing;
             GetReputationMgr().SendState(pState);
             pState->needSave = true;
@@ -22447,7 +22518,9 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         if (!pNew || !pOld)
             continue;
 
-        CHANGERACE_LOG("Changement reputation %u (%i) <-> %u (%i)", my_new_reputation->ID, pNew->Standing, my_old_reputation->ID, pOld->Standing);
+		CHANGERACE_LOG("Changing reputation to %s (%u) Value: (%i) from %s (%u) Value: (%i)",
+			my_new_reputation->name[0], my_new_reputation->ID, pNew->Standing,
+			my_old_reputation->name[0], my_old_reputation->ID, pOld->Standing);
         SWAP_TYPE(uint32, pNew->Flags, pOld->Flags);
         SWAP_TYPE(int32, pNew->Standing, pOld->Standing);
         pOld->needSave = true;
@@ -22456,14 +22529,14 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         GetReputationMgr().SendState(pNew);
     }
 
-    CHANGERACE_LOG("Changements reputations OK");
+    CHANGERACE_LOG("Changing reputation OK");
     return true;
 }
 
 bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
 {
     Team newTeam = TeamForRace(newRace);
-    // 1 - Les quetes a inverser (player_factionchange_quests)
+    // 1 - Quests to reverse (player_factionchange_quests)
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_quests.begin(); it != sObjectMgr.factionchange_quests.end(); ++it)
     {
         if (it->first == it->second)
@@ -22494,15 +22567,15 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
                     // Et prendre la nouvelle
                     if (!CanAddQuest(pNewQuest, true))
                     {
-                        CHANGERACE_ERR("Impossible d'ajouter la quete %u !", pNewQuest->GetQuestId());
+                        CHANGERACE_ERR("Can't add new quest %s (%u) !", pNewQuest->GetTitle().c_str(), pNewQuest->GetQuestId());
                         return false;
                     }
-                    CHANGERACE_LOG("Changement quete %u -> %u (En cours)", pRemoveQuest->GetQuestId(), pNewQuest->GetQuestId());
+                    CHANGERACE_LOG("Convert quest from %s (%u) to %s (%u)", pRemoveQuest->GetTitle().c_str(), pRemoveQuest->GetQuestId(), pNewQuest->GetTitle().c_str(), pNewQuest->GetQuestId());
                     AddQuest(pNewQuest, nullptr);
                 }
                 else // Ne pas reset. Juste changer l'ID.
                 {
-                    CHANGERACE_LOG("Changement quete %u -> %u (Deja completee)", pRemoveQuest->GetQuestId(), pNewQuest->GetQuestId());
+                    CHANGERACE_LOG("Convert quest from %s (%u) to %s (%u) (Completed)", pRemoveQuest->GetTitle().c_str(), pRemoveQuest->GetQuestId(), pNewQuest->GetTitle().c_str(), pNewQuest->GetQuestId());
                     QuestStatusData newQuestStatus;
                     newQuestStatus.uState = QUEST_NEW;
                     newQuestStatus.m_rewarded = itr.second.m_rewarded;
@@ -22521,7 +22594,7 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
-    // 2 - Et supprimer les quetes non accessibles.
+    // 2 - Remove unaccessable quests.
     QuestStatusMap::iterator itr = mQuestStatus.begin();
     while (itr != mQuestStatus.end())
     {
@@ -22558,7 +22631,7 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
             TakeOrReplaceQuestStartItems(itr->first, true, false);
         }
         itr->second.uState = QUEST_DELETED;
-        CHANGERACE_LOG("Suppression de la quete %u", quest_id);
+        CHANGERACE_LOG("Remove quest %s (%u)", pQuest->GetTitle().c_str(), quest_id);
         ++itr;
     }
     return true;
