@@ -458,3 +458,8 @@ DELETE FROM creature_movement WHERE id=6071;
 DELETE FROM game_event_creature WHERE guid=6071;
 DELETE FROM game_event_creature_data WHERE guid=6071;
 DELETE FROM creature_battleground WHERE guid=6071;
+
+-- Changes by REN
+DELETE FROM gameobject WHERE guid = '5017456';
+DELETE FROM game_event_gameobject WHERE guid = '5017456';
+DELETE FROM gameobject_battleground WHERE guid = '5017456';
