@@ -667,3 +667,5 @@ update creature_template set gold_min = 1707, gold_max = 1907 where entry = 6176
 update creature_template set gold_min = 1301, gold_max = 1586 where entry = 61765;
 -- High Widow Arania - 11silver, 96copper.
 update creature_template set gold_min = 1001, gold_max = 1196 where entry = 61764;
+-- Replace current 'Drain Life' spell of Overzealous Student with this 'Drain Life' variant: spell 17173.
+update creature_spells set spellid_2 = 17173 where entry = 180258;
