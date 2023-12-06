@@ -463,3 +463,22 @@ DELETE FROM creature_battleground WHERE guid=6071;
 DELETE FROM gameobject WHERE guid = '5017456';
 DELETE FROM game_event_gameobject WHERE guid = '5017456';
 DELETE FROM gameobject_battleground WHERE guid = '5017456';
+UPDATE `creature` SET `position_x` = 3453.656982, `position_y` = -2507.971680, `position_z` = 99.461945, `orientation` = 6.158416 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 3630.723389, `position_y` = -2563.092529, `position_z` = 74.891701, `orientation` = 5.993483 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 3782.744385, `position_y` = -2588.895020, `position_z` = 45.221134, `orientation` = 6.260517 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 3959.197510, `position_y` = -2634.077637, `position_z` = 27.614973, `orientation` = 5.541879 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 4136.460449, `position_y` = -2732.650879, `position_z` = 20.392941, `orientation` = 5.777503 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 4288.216797, `position_y` = -2848.556885, `position_z` = 5.432946, `orientation` = 6.276237 WHERE `guid` = 2581878;
+UPDATE `creature` SET `position_x` = 4288.891602, `position_y` = -2848.999268, `position_z` = 5.420988, `orientation` = 1.940843 WHERE `guid` = 2581887;
+UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=2 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=3 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=4 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=7 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=0 WHERE `guid`=2581887;
+UPDATE `creature_addon` SET `stand_state`=8 WHERE `guid`=2581878;
+UPDATE `creature_addon` SET `stand_state`=0 WHERE `guid`=2581878;
+
+-- Changes by WOJI
+UPDATE `creature` SET `position_x` = 4853.059082, `position_y` = -2957.904785, `position_z` = 4.161482, `orientation` = 4.031439 WHERE `guid` = 2581364;
+REPLACE INTO `creature` VALUES (2582032,61771,0,0,0,0,4846.26,-2952.02,4.84332,4.01181,120,120,0,100,100,0,0,0);
