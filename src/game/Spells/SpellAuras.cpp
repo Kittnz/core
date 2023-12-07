@@ -1950,6 +1950,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 case 44018: finalSpellId = 44019; break;
                 case 44020: finalSpellId = 44021; break;
                 case 44022: finalSpellId = 44023; break;
+                case 46700: finalSpellId = 46701; break;
+                case 46702: finalSpellId = 46703; break;
+                case 46704: finalSpellId = 46705; break;
             }
 
             if (finalSpellId)
