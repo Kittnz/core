@@ -833,3 +833,10 @@ replace into item_template (entry, name, description, class, subclass, material,
 -- Add this item to Loot Group 3 with a 8% chance to NPC ID 15727.
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (15727, 41077, 8, 3, 1, 1, 0);
+
+-- Apply new fix spells.
+update item_template set spellid_1 = 45076, spellppmrate_1 = 0.7 where entry = 40080; -- Thunderforge Lance
+update item_template set spellid_1 = 45077, spellcooldown_1 = 900000, description = '' where entry = 41060; -- Refined Plague Strain
+update item_template set spellid_1 = 45075 where entry = 62008; -- Thornpod
+update item_template set stat_value2 = 0, spellid_1 = 23729 where entry = 61564; -- Chromie's Broken Pocket Watch
+update item_template set fire_res = 10 where entry = 51265; -- Blast Shield
