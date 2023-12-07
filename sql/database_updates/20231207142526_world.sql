@@ -652,3 +652,178 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61840, 20652, 1800, 165, 150, 0);
 -- 61842 should teach Herbalism rank 1.
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61842, 2372, 10, 0, 0, 0);
+
+-- Solnius Loottable Revamp:
+-- Aspect of Seradane is in the linked SQL file, remember to give it an item ID before applying.
+-- emerald sanctum buffs
+-- normal drops
+update item_template set armor = 118, item_level = 78, spellid_1 = 28264 where entry = 61206; -- Robe of the Dreamways
+update item_template set armor = 712, item_level = 78, stat_value1 = 18, stat_value2 = 16 where entry = 61207; -- Jadestone Helmet
+update item_template set spellid_1 = 26228, item_level = 78, spellid_4 = 21363 where entry = 61208; -- Staff of the Dreamer
+update item_template set spellid_1 = 18054, item_level = 78 where entry = 61209; -- Shard of Nightmare
+update item_template set spellid_1 = 15807, item_level = 78 where entry = 61210; -- Veil of Nightmare
+update item_template set armor = 81, spellid_3 = 9398, item_level = 78, spelltrigger_3 = 1, stat_value2 = 17 where entry = 61211; -- Sandals of Lucidity
+update item_template set armor = 96, item_level = 78, stat_value1 = 15, stat_value3 = 14 where entry = 61212; -- Sanctum Bark Wraps
+update item_template set armor = 309, item_level = 78, stat_value1 = 22 where entry = 61213; -- Talonwind Gauntlets
+update item_template set item_level = 78, spellid_1 = 14127 where entry = 61214; -- Mantle of the Wakener
+update item_template set dmg_min1 = 76, dmg_max1 = 140, item_level = 78, stat_value1 = 11 where entry = 61237; -- Mallet of the Awakening
+update item_template set armor = 2929, block = 55, item_level = 78, stat_value1 = 12, stat_value2 = 12, stat_value3 = 12, stat_value4 = 12, stat_value5 = 12 where entry = 61238; -- Scaleshield of Emerald Flight
+update item_template set armor = 432, item_level = 78, stat_value4 = 9, stat_type4 = 4 where entry = 61239; -- Ancient Jade Leggings
+update item_template set dmg_min1 = 92, dmg_max1 = 171, item_level = 78, stat_value1 = 9 where entry = 61448; -- Axe of Dormant Slumber
+update item_template set item_level = 78, spellid_2 = 18031, spellid_3 = 18384 where entry = 61205; -- Ring of Nature's Duality
+update item_template set item_level = 78 where entry = 61455; -- Idol of the Emerald Rot
+update item_template set item_level = 78 where entry = 61203; -- Libram of the Dreamguard
+update item_template set item_level = 78 where entry = 61204; -- Totem of the Stonebreaker
+-- hardmode drops
+update item_template set item_level = 81, nature_res = 12, spellid_3 = 14127, spelltrigger_3 = 1, spellid_2 = 23727 where entry = 61522; -- Choker of the Emerald Lord
+update item_template set dmg_min1 = 79, dmg_max1 = 147, item_level = 81 where entry = 61523; -- Crystal Sword of the Blossom
+update item_template set item_level = 81, armor = 237, stat_value1 = 21, stat_value2 = 20, stat_value3 = 25, max_durability = 120 where entry = 61524; -- Naturecaller's Tunic
+update item_template set dmg_min1 = 103, dmg_max1 = 191, item_level = 81, stat_value1 = 8 where entry = 61525; -- Nature's Call
+update item_template set armor = 3035, block = 57, item_level = 81, stat_value2 = 13, spellid_3 = 22912 where entry = 61526; -- Jadestone Protector
+update item_template set item_level = 81, stat_value1 = 11 where entry = 61527; -- Breath of Solnius
+-- claw of erennius quest rewards
+update item_template set dmg_min1 = 158, dmg_max1 = 294, item_level = 74, stat_value1 = 39, spellid_1 = 45439 where entry = 61650; -- Jadestone Skewer
+update item_template set item_level = 74, stat_value2 = 10, stat_value3 = 13, spellid_1 = 23264 where entry = 61651; -- Jadestone Mallet
+update item_template set dmg_min1 = 94, dmg_max1 = 175, item_level = 74, spellid_2 = 14027 where entry = 61740; -- Claw of Senthos
+-- new solnius drops
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (41076, 'Aspect of Seradane', 'replace proc with custom weaker version when added', 2, 8, 1, 4, 67768, 1, 60, 1, -1, -1, 994770, 198954, 17, 1, 0, 0, 1, 1, 0, 181, 335, 3300, 0, 0, 120, 0, 0, 0, 78, 0, 65, 0, 0, 0, 0, 0, 0, 3, 25, 45531, 1, 0, 0, 0, 0, 0, 16921, 2, 0, 1.6, 0, 0, -1, 0, 0, 0);
+
+-- Remove all items from the Solnius loottable and replace it with the loot distribution, loot groups, amounts and drop chances below:
+delete from creature_loot_template where entry = 60748;
+-- Loot Group 1:
+-- 1 Elven Spirit Claws, 10% chance
+-- 1 Six Demon Bag, 10% chance
+-- 1 Cow King's Hide, 10% chance
+-- 1 Basilisk Bone, 10% chance
+-- 1 Blanchard's Stout, 10% chance
+-- 1 Wand of Allistarj, 10% chance
+-- 1 Wyrmslayer Spaulders, 10% chance
+-- 1 Horizon Choker, 10% chance
+-- 1 Elven Chain Boots, 10% chance
+-- 1 Guttbuster, 10% chance
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30044, 2564 , 0, 1, 1, 1, 0),
+(30044, 7734 , 0, 1, 1, 1, 0),
+(30044, 13009, 0, 1, 1, 1, 0),
+(30044, 13030, 0, 1, 1, 1, 0),
+(30044, 13046, 0, 1, 1, 1, 0),
+(30044, 13065, 0, 1, 1, 1, 0),
+(30044, 13066, 0, 1, 1, 1, 0),
+(30044, 13085, 0, 1, 1, 1, 0),
+(30044, 13125, 0, 1, 1, 1, 0),
+(30044, 13139, 0, 1, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 30044, 100, 1, -30044, 1, 0);
+-- Loot Group 2:
+-- 1 Blue Sack of Gems, 20% chance.
+-- 1 Gray Sack of Gems, 20% chance.
+-- 1 Green Sack of Gems, 20% chance.
+-- 1 Yellow Sack of Gems, 20% chance.
+-- 1 Red Sack of Gems, 20% chance.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 17962, 20, 2, 1, 1, 0),
+(60748, 17964, 20, 2, 1, 1, 0),
+(60748, 17963, 20, 2, 1, 1, 0),
+(60748, 17965, 20, 2, 1, 1, 0),
+(60748, 17969, 20, 2, 1, 1, 0);
+-- Loot Group 3:
+-- 1 Dreamscale, 100% chance.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 20381, 100, 3, 1, 1, 0);
+-- Loot Group 4:
+-- 1 Glyph of the Dreamkin, 15% chance
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 51361, 15, 4, 1, 1, 0);
+-- Loot Group 5:
+-- 1 Bag of the Vast Conscious, 25% chance
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61196, 25, 5, 1, 1, 0);
+-- Loot Group 6:
+-- 1 Smoldering Dream Essence, 35% chance
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61444, 35, 6, 1, 1, 0);
+-- Loot Group 7:
+-- 1 Fading Dream Shard, 100% chance.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61197, 100, 7, 1, 1, 0);
+-- Loot Group 8:
+-- 1 Robe of the Dreamways, 16,7% chance.
+-- 1 Staff of the Dreamer, 16,7% chance.
+-- 1 Sandals of Lucidity, 16,7% chance.
+-- 1 Mantle of the Wakener, 16,7% chance.
+-- 1 Ring of Nature's Duality, 16,7% chance.
+-- 1 Shard of Nightmare, 16,7% chance.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30596, 61206, 0, 8, 1, 1, 0),
+(30596, 61208, 0, 8, 1, 1, 0),
+(30596, 61211, 0, 8, 1, 1, 0),
+(30596, 61214, 0, 8, 1, 1, 0),
+(30596, 61205, 0, 8, 1, 1, 0),
+(30596, 61209, 0, 8, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 30596, 100, 8, -30596, 1, 0);
+-- Loot Group 9:
+-- 1 Ancient Jade Leggings, 16,7% chance.
+-- 1 Axe of Dormant Slumber, 16,7% chance.
+-- 1 Sanctum Bark Wraps, 16,7% chance.
+-- 1 Talonwind Gauntlets, 16,7% chance.
+-- 1 Veil of Nightmare, 16,7% chance.
+-- 1 Jadestone Helmet, 16,7% chance.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30597, 61239, 0, 9, 1, 1, 0),
+(30597, 61448, 0, 9, 1, 1, 0),
+(30597, 61212, 0, 9, 1, 1, 0),
+(30597, 61213, 0, 9, 1, 1, 0),
+(30597, 61210, 0, 9, 1, 1, 0),
+(30597, 61207, 0, 9, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 30597, 100, 9, -30597, 1, 0);
+-- Loot Group 10:
+-- 1 Libram of the Dreamguard, 16,7% chance.
+-- 1 Totem of the Stonebreaker, 16,7% chance.
+-- 1 Idol of the Emerald Rot, 16,7% chance.
+-- 1 Scaleshield of Emerald Flight, 16,7% chance.
+-- 1 Mallet of the Awakening, 16,7% chance.
+-- 1 Aspect of Seradane, 16,7% chance.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30598, 61203, 0, 10, 1, 1, 0),
+(30598, 61204, 0, 10, 1, 1, 0),
+(30598, 61455, 0, 10, 1, 1, 0),
+(30598, 61238, 0, 10, 1, 1, 0),
+(30598, 61237, 0, 10, 1, 1, 0),
+(30598, 41076, 0, 10, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 30598, 100, 10, -30598, 1, 0);
+-- Loot Group 11:
+-- 1 Head of Solnius, 100% chance
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61215, 100, 11, 1, 1, 0);
+-- Loot Group 12:
+-- 1 Recipe: Elixir of Greater Nature Power, 4% chance.
+-- 1 Enchant Chest - Mighty Mana, 4% chance.
+-- 1 Plans: Dreamsteel Mantle, 4% chance.
+-- 1 Pattern: Dreamthread Mantle, 4% chance.
+-- 1 Pattern: Dreamhide Mantle, 4% chance.
+-- 1 Formula: Enchant Gloves - Nature Power, 4% chance.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61218, 4, 12, 1, 1, 0),
+(60748, 61217, 4, 12, 1, 1, 0),
+(60748, 61424, 4, 12, 1, 1, 0),
+(60748, 61432, 4, 12, 1, 1, 0),
+(60748, 61428, 4, 12, 1, 1, 0),
+(60748, 70000, 4, 12, 1, 1, 0);
+-- Loot Group 13:
+-- 1 Formula: Eternal Dreamstone Shard, 1% chance
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(60748, 61733, 1, 13, 1, 1, 0);
+
+-- Favor of Erennius Changes:
+-- Make the Loot Group 2's Fading Dream Shard 100% chance to drop instead of 48%.
+update gameobject_loot_template set ChanceOrQuestChance = 100 where entry = 2020042 and item = 61197;
+-- Add a new Loot Group 3 with 1 Bag of the Vast Conscious with 100% chance to drop.
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(2020042, 61196, 100, 2, 1, 1, 0);
