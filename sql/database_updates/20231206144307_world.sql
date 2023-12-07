@@ -482,3 +482,4 @@ UPDATE `creature_addon` SET `stand_state`=0 WHERE `guid`=2581878;
 -- Changes by WOJI
 UPDATE `creature` SET `position_x` = 4853.059082, `position_y` = -2957.904785, `position_z` = 4.161482, `orientation` = 4.031439 WHERE `guid` = 2581364;
 REPLACE INTO `creature` VALUES (2582032,61771,0,0,0,0,4846.26,-2952.02,4.84332,4.01181,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2582033,61852,0,0,0,0,4430.92,-3204.5,17.245,1.52703,120,120,0,100,100,0,0,0);
