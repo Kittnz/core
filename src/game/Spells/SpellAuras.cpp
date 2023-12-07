@@ -1857,12 +1857,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
-                    case 47357: // Calming River
-                    {
-                        m_isPeriodic = true;
-                        m_modifier.periodictime = 5000;
-                        break;
-                    }
                     case 50060: // Baxxil Dummy
                     {
                         m_isPeriodic = true;
@@ -1887,9 +1881,31 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 break;
             }
             case SPELLFAMILY_PALADIN:
+            {
+                switch (GetId())
+                {
+                    case 27850: // Devotion Armor Increased
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1 * IN_MILLISECONDS;
+                        return;
+                    }
+                }
                 break;
+            } 
             case SPELLFAMILY_SHAMAN:
+            {
+                switch (GetId())
+                {
+                    case 47357: // Calming River
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 5000;
+                        break;
+                    }
+                }
                 break;
+            }
             case SPELLFAMILY_PRIEST:
             {
                 switch (GetId())
@@ -2089,6 +2105,11 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 if (m_removeMode == AURA_REMOVE_BY_DEATH)
                     target->CastSpell(target, 23182, true, nullptr, this);
                     return;
+            }
+            case 27850: // Devotion Armor Increased
+            {
+                target->RemoveAurasDueToSpell(45073);
+                return;
             }
             case 28169:                                     // Mutating Injection
             {
@@ -6922,12 +6943,6 @@ void Aura::PeriodicDummyTick()
 
                     return;
                 }
-                case 47357: // Calming River
-                {
-                    if (target->HasAura(45527))
-                        target->CastSpell(target, 47358, true, nullptr, this);
-                    return;
-				}
                 case 50060: // Baxxil Dummy
                 {
                     if (Player* pPlayer = target->ToPlayer())
@@ -6940,9 +6955,44 @@ void Aura::PeriodicDummyTick()
             }
             break;
         }
-
         case SPELLFAMILY_PALADIN:
         {
+            switch (GetId())
+            {
+                case 27850: // Devotion Armor Increased
+                {
+                    if (target->HasAura(465) ||
+                        target->HasAura(10290) ||
+                        target->HasAura(643) ||
+                        target->HasAura(10291) ||
+                        target->HasAura(1032) ||
+                        target->HasAura(10292) ||
+                        target->HasAura(10293))
+                    {
+                        if (!target->HasAura(45073))
+                            target->CastSpell(target, 45073, true);
+                    }
+                    else
+                    {
+                        if (target->HasAura(45073))
+                            target->RemoveAurasDueToSpell(45073);
+                    }
+                    return;
+                }
+            }
+            break;
+        }
+        case SPELLFAMILY_SHAMAN:
+        {
+            switch (spell->Id)
+            {
+                case 47357: // Calming River
+                {
+                    if (target->HasAura(45527))
+                        target->CastSpell(target, 47358, true, nullptr, this);
+                    return;
+                }
+            }
             break;
         }
         default:

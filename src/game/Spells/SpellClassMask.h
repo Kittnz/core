@@ -355,6 +355,7 @@ enum ClassFlag
     CF_SHAMAN_CURES                         = 35,   // CM1 00000008 Cure Poison & Cure Disease
     CF_SHAMAN_HEX                           = 36,   // CM1 00000010
     CF_SHAMAN_MANA_TIDE_TOTEM               = 37,   // CM1 00000020
+    CF_SHAMAN_WATER_SHIELD                  = 38,   // CM1 00000040
 };
 
 #endif // _SPELL_CLASS_MASK_H
