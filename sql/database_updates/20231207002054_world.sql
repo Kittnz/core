@@ -620,3 +620,6 @@ REPLACE INTO `gameobject` VALUES ( 5017480, 2003142, 0, 3332.89, -2461.52, 107.9
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417369919033224, 0.600000);
 REPLACE INTO `gameobject` VALUES ( 5017480, 2003142, 0, 3332.89, -2461.52, 107.989, 5.534, 0, 0, 0.365896, -0.930656, 300, 300, 100, 1, 0, 0);
 UPDATE `creature` SET `position_x` = 3322.156738, `position_y` = -2460.025391, `position_z` = 107.181862, `orientation` = 6.126979 WHERE `guid` = 2581877;
+
+-- Changes by DRAGU
+UPDATE `creature` SET `position_x` = 4856.256348, `position_y` = -2961.093994, `position_z` = 4.662922, `orientation` = 4.152123 WHERE `guid` = 2581364;
