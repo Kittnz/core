@@ -623,3 +623,9 @@ UPDATE `creature` SET `position_x` = 3322.156738, `position_y` = -2460.025391, `
 
 -- Changes by DRAGU
 UPDATE `creature` SET `position_x` = 4856.256348, `position_y` = -2961.093994, `position_z` = 4.662922, `orientation` = 4.152123 WHERE `guid` = 2581364;
+
+-- Changes by WOJI
+UPDATE `creature` SET `position_x` = 4248.330566, `position_y` = -2793.740479, `position_z` = 6.632663, `orientation` = 2.321835 WHERE `guid` = 2560631;
+REPLACE INTO `gameobject` VALUES ( 5017481, 141839, 0, 4245.57, -2793.88, 6.62796, 1.8633, 0, 0, 0.802605, 0.596511, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017482, 141838, 0, 4247.65, -2795.92, 6.5726, 0.441728, 0, 0, 0.219073, 0.975709, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = 4245.982910, `position_y` = -2796.142334, `position_z` = 6.616269, `orientation` = 1.003301 WHERE `guid` = 2560631;
