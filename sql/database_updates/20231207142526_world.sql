@@ -827,3 +827,9 @@ update gameobject_loot_template set ChanceOrQuestChance = 100 where entry = 2020
 -- Add a new Loot Group 3 with 1 Bag of the Vast Conscious with 100% chance to drop.
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (2020042, 61196, 100, 2, 1, 1, 0);
+
+-- C'thun hood for C'thun:
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (41077, 'Yshgo\'lar, Cowl of Fanatical Devotion', 'You can feel the tendrils boring into the back of your head.', 4, 1, 7, 4, 67818, 1, 60, 1, -1, -1, 404848, 101212, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 60, 108, 0, 0, 88, 0, 65, 0, 0, 0, 0, -20, 0, 5, 22, 6, 17, 17367, 1, 0, 0, -1, 0, -1, 18382, 1, 0, 0, -1, 0, -1, 23729, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+-- Add this item to Loot Group 3 with a 8% chance to NPC ID 15727.
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(15727, 41077, 8, 3, 1, 1, 0);
