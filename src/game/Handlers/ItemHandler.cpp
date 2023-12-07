@@ -304,9 +304,12 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
 
     bool save = true;
 
-    if (pProto->Duration || hasSpellCharges || pProto->IsQuestItem) // don't recover these.
+    // don't recover these.
+    if (pProto->Duration ||
+        hasSpellCharges ||
+        pProto->IsQuestItem ||
+        pProto->DisplayInfoID == 33537) // Signet Ring of the Bronze Dragonflight
         save = false;
-
 
     // Turtle: save destroyed items so they can be restored
     if (save && (count <= pItem->GetCount()) &&
