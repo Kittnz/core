@@ -490,3 +490,6 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2582100,21, 4407.195312,-3134.935547,8.971555, 100);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2582100,22, 4410.248047,-3136.389648,8.925119, 100);
 REPLACE INTO `creature` VALUES (2582100,61834,0,0,0,0,4414.66,-3141.11,8.82509,2.37233,300,300,0,100,100,2,0,0);
+
+-- Changes by REN
+UPDATE `creature` SET `position_x` = 3315.334229, `position_y` = -2433.249023, `position_z` = 107.211472, `orientation` = 5.695035 WHERE `guid` = 2581916;
