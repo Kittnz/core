@@ -1969,6 +1969,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 case 46700: finalSpellId = 46701; break;
                 case 46702: finalSpellId = 46703; break;
                 case 46704: finalSpellId = 46705; break;
+                case 46090: finalSpellId = 46091; break;
+                case 46092: finalSpellId = 46093; break;
+                case 46094: finalSpellId = 46095; break;
             }
 
             if (finalSpellId)
