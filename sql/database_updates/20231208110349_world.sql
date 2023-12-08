@@ -364,3 +364,6 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '1', NULL);
+
+-- Item "Sandals of Lucidity" fix.
+update item_template set armor = 81, spellid_3 = 0, item_level = 78, spelltrigger_3 = 1, stat_value2 = 18, stat_value1 = 18 where entry = 61211;
