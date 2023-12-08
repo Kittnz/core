@@ -5688,7 +5688,7 @@ struct npc_feral_spiritAI : public PetAI
         if (!m_creature->IsValidAttackTarget(target))
             return;
 
-        // Pet desactive (monture)
+        // Pet deactivated (mounted)
         if (m_creature->IsPet() && !((Pet*)m_creature)->IsEnabled())
             return;
 
@@ -5713,6 +5713,55 @@ struct npc_feral_spiritAI : public PetAI
 };
 
 CreatureAI* GetAI_npc_feral_spirit(Creature* creature) { return new npc_feral_spiritAI(creature); }
+
+struct npc_compact_harvest_reaperAI : public PetAI
+{
+    npc_compact_harvest_reaperAI(Creature* c) : PetAI(c) { }
+
+    void UpdateAI(uint32 const diff) override
+    {
+        if (Unit* pOwner = m_creature->GetOwner())
+        {
+            // disenage from target if owner is not attacking
+            if (m_creature->GetVictim() && pOwner->GetTargetGuid().IsEmpty() && pOwner->IsMoving())
+                m_creature->HandlePetCommand(COMMAND_FOLLOW, pOwner);
+        }
+
+        PetAI::UpdateAI(diff);
+    }
+
+    // override to always attack owner's victim
+    // normally defensive pets only attack if you are hit
+    void OwnerAttacked(Unit* target) override
+    {
+        if (!m_creature->IsValidAttackTarget(target))
+            return;
+
+        // Pet deactivated (mounted)
+        if (m_creature->IsPet() && !((Pet*)m_creature)->IsEnabled())
+            return;
+
+        // Passive pets don't do anything
+        if (m_creature->HasReactState(REACT_PASSIVE))
+            return;
+
+        // In crowd control
+        if (m_creature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+            return;
+
+        // Always attack owner's target
+        if (m_creature->GetVictim() && m_creature->GetVictim()->IsAlive())
+        {
+            Unit* pOwner = m_creature->GetOwner();
+            if (!pOwner || pOwner->GetTargetGuid() != target->GetObjectGuid())
+                return;
+        }
+
+        AttackStart(target);
+    }
+};
+
+CreatureAI* GetAI_npc_compact_harvest_reaper(Creature* creature) { return new npc_compact_harvest_reaperAI(creature); }
 
 bool GossipHello_npc_brolthan_ironglade(Player* pPlayer, Creature* pCreature)
 {
@@ -7916,5 +7965,10 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_feral_spirit";
     newscript->GetAI = &GetAI_npc_feral_spirit;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_compact_harvest_reaper";
+    newscript->GetAI = &GetAI_npc_compact_harvest_reaper;
     newscript->RegisterSelf();
 }
