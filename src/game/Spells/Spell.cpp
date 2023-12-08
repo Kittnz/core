@@ -1392,6 +1392,10 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_RIGHTEOUSNESS>() && m_spellInfo->SpellIconID == 25))
                     triggerWeaponProcs = true;
             }
+
+            // Stormstrike should trigger weapon procs.
+            else if (m_spellInfo->SpellVisual == 7660 && m_spellInfo->SpellIconID == 2210)
+                triggerWeaponProcs = true;
         }
 
         pCaster->DealSpellDamage(&damageInfo, true);
@@ -4398,25 +4402,35 @@ void Spell::HandleAddTargetTriggerAuras()
             if (ihit.deleted)
                 continue;
 
+            SpellEntry const* auraSpellInfo = targetTrigger->GetSpellProto();
+            SpellEffectIndex auraSpellIdx = targetTrigger->GetEffIndex();
+            SpellEntry const* triggerSpellInfo = sSpellMgr.GetSpellEntry(auraSpellInfo->EffectTriggerSpell[auraSpellIdx]);
+            if (!triggerSpellInfo)
+                continue;
+
             Unit* target = nullptr;
             if (ihit.missCondition == SPELL_MISS_NONE)
                 target = m_casterUnit->GetObjectGuid() == ihit.targetGUID ? m_casterUnit : ObjectAccessor::GetUnit(*m_casterUnit, ihit.targetGUID);
             else if (ihit.missCondition == SPELL_MISS_REFLECT && ihit.reflectResult == SPELL_MISS_NONE)
                 target = m_casterUnit;
-            if (!target || !target->IsAlive())
+
+            if (!target)
+                continue;
+
+            // Don't skip dead target if the triggered spell is a self cast.
+            // This fixes Relentless Strikes not triggering when the finishing move kills the target.
+            if (!target->IsAlive() && (target == m_casterUnit || triggerSpellInfo->EffectImplicitTargetA[0] != TARGET_UNIT_CASTER))
                 continue;
 
             if (m_spellInfo->HasAttribute(SPELL_ATTR_EX4_CLASS_TRIGGER_ONLY_ON_TARGET) &&
                 target->GetObjectGuid() != m_casterUnit->GetTargetGuid())
                 continue;
-
-            SpellEntry const* auraSpellInfo = targetTrigger->GetSpellProto();
-            SpellEffectIndex auraSpellIdx = targetTrigger->GetEffIndex();
+            
             // Calculate chance at that moment (can be depend for example from combo points)
             int32 auraBasePoints = targetTrigger->GetBasePoints();
             int32 chance = m_casterUnit->CalculateSpellDamage(target, auraSpellInfo, auraSpellIdx, &auraBasePoints);
             if ((m_casterUnit->IsPlayer() && m_casterUnit->ToPlayer()->HasOption(PLAYER_CHEAT_ALWAYS_PROC)) || roll_chance_i(chance))
-                m_casterUnit->CastSpell(target, auraSpellInfo->EffectTriggerSpell[auraSpellIdx], true, nullptr, targetTrigger);
+                m_casterUnit->CastSpell(target, triggerSpellInfo, true, nullptr, targetTrigger);
         }
     }
 }
@@ -6599,6 +6613,9 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                     if (!go->IsUseRequirementMet())
                         return SPELL_FAILED_TRY_AGAIN;
+
+                    if (!go->IsAllowedLooter(m_caster->GetObjectGuid()))
+                        return SPELL_FAILED_NOT_TRADEABLE;
 
                     if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST && go->GetGOInfo()->chest.level > m_caster->GetLevel())
                         return SPELL_FAILED_LEVEL_REQUIREMENT;

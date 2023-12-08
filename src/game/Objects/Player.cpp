@@ -2290,9 +2290,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         return false;
     }
 
-    // preparing unsummon pet if lost (we must get pet before teleportation or will not find it later)
-    Pet* pet = GetPet();
-
     MapEntry const* mEntry = sMapStorage.LookupEntry<MapEntry>(mapid);
 
     // don't let enter battlegrounds without assigned battleground id (for example through areatrigger)...
@@ -2323,6 +2320,13 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     m_movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING_OR_TURN);
     if (!(options & TELE_TO_NOT_LEAVE_TRANSPORT) || !m_transport)
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_ONTRANSPORT);
+
+    // Always interrupt channeled spell on teleport.
+    // Fixes pet spells being lost on teleport if channeling Eye of Kilrog.
+    InterruptSpell(CURRENT_CHANNELED_SPELL, true);
+
+    // preparing unsummon pet if lost (we must get pet before teleportation or will not find it later)
+    Pet* pet = GetPet();
 
     // Near teleport, let it happen immediately since we remain in the same map
     if ((GetMapId() == mapid) && (!m_transport) && !(options & TELE_TO_FORCE_MAP_CHANGE))
@@ -2627,13 +2631,13 @@ void Player::ProcessDelayedOperations()
     {
         ResurrectPlayer(0.0f, false);
 
-        if (GetMaxHealth() > m_resurrectHealth)
-            SetHealth(m_resurrectHealth);
+        if (GetMaxHealth() > m_resurrectData.health)
+            SetHealth(m_resurrectData.health);
         else
             SetHealth(GetMaxHealth());
 
-        if (GetMaxPower(POWER_MANA) > m_resurrectMana)
-            SetPower(POWER_MANA, m_resurrectMana);
+        if (GetMaxPower(POWER_MANA) > m_resurrectData.mana)
+            SetPower(POWER_MANA, m_resurrectData.mana);
         else
             SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
 
@@ -19167,6 +19171,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
 
                 if (Item* pItem = StoreNewItemInInventorySlot(item, stackCount))
                 {
+                    pItem->SetBinding(true);
                     SendNewItem(pItem, stackCount, true, false);
                     LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
                     CharacterDatabase.DirectPExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u && `stack_count`=%u && `time`=%u LIMIT 1", GetGUIDLow(), item, stackCount, timestamp);
@@ -20901,8 +20906,33 @@ uint32 Player::GetBaseWeaponSkillValue(WeaponAttackType attType) const
 void Player::ResurectUsingRequestData()
 {
     /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
-    if (m_resurrectGuid.IsPlayer())
-        TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
+    if (m_resurrectData.resurrectorGuid.IsPlayer())
+    {
+        // If player is no longer saved the same instance, teleport to entrance instead.
+        // Prevents death exploit to reset dungeon and teleport directly to end boss.
+        if (m_resurrectData.instanceId && m_resurrectData.location.mapId != GetMapId() &&
+            sMapStorage.LookupEntry<MapEntry>(m_resurrectData.location.mapId)->IsDungeon())
+        {
+            DungeonPersistentState* state = GetBoundInstanceSaveForSelfOrGroup(m_resurrectData.location.mapId);
+            if (!state || state->GetInstanceId() != m_resurrectData.instanceId)
+            {
+                if (AreaTriggerTeleport const* at = sObjectMgr.GetMapEntranceTrigger(m_resurrectData.location.mapId))
+                    m_resurrectData.location = at->destination;
+                else if (AreaTriggerTeleport const* at = sObjectMgr.GetGoBackTrigger(m_resurrectData.location.mapId))
+                    m_resurrectData.location = at->destination;
+                else
+                {
+                    m_resurrectData.location.mapId = GetMapId();
+                    m_resurrectData.location.x = GetPositionX();
+                    m_resurrectData.location.y = GetPositionY();
+                    m_resurrectData.location.z = GetPositionZ();
+                    m_resurrectData.location.o = GetOrientation();
+                }
+            }
+        }
+
+        TeleportTo(m_resurrectData.location);
+    }
 
     //we cannot resurrect player when we triggered any kind of teleport
     //player will be resurrected upon teleportation (in MSG_MOVE_TELEPORT_ACK handler)
@@ -20914,13 +20944,13 @@ void Player::ResurectUsingRequestData()
 
     ResurrectPlayer(0.0f, false);
 
-    if (GetMaxHealth() > m_resurrectHealth)
-        SetHealth(m_resurrectHealth);
+    if (GetMaxHealth() > m_resurrectData.health)
+        SetHealth(m_resurrectData.health);
     else
         SetHealth(GetMaxHealth());
 
-    if (GetMaxPower(POWER_MANA) > m_resurrectMana)
-        SetPower(POWER_MANA, m_resurrectMana);
+    if (GetMaxPower(POWER_MANA) > m_resurrectData.mana)
+        SetPower(POWER_MANA, m_resurrectData.mana);
     else
         SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
 

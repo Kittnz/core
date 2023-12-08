@@ -837,6 +837,7 @@ class GameObject : public WorldObject
         // Nostalrius
         bool IsUseRequirementMet() const;
         bool PlayerCanUse(Player* pPlayer);
+        bool IsAllowedLooter(ObjectGuid guid);
         void SetOwnerGroupId(uint32 groupId) { m_playerGroupId = groupId; }
 
         // Gestion des GameObjectAI
@@ -901,6 +902,7 @@ class GameObject : public WorldObject
         // collected only for GAMEOBJECT_TYPE_SUMMONING_RITUAL
         ObjectGuid m_firstUser;                             // first GO user, in most used cases owner, but in some cases no, for example non-summoned multi-use GAMEOBJECT_TYPE_SUMMONING_RITUAL
         GuidsSet m_UniqueUsers;                             // all players who use item, some items activated after specific amount unique uses
+        GuidsSet m_allowedLooters;                          // if not empty only those players are allowed to use the gameobject
         std::shared_mutex m_UniqueUsers_lock;
         ObjectGuid m_summonTarget;                          // The player who is being summoned
 
