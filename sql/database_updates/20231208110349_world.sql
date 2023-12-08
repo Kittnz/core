@@ -61,7 +61,7 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (61882, 2581, 10, 0, 0, 0);
 
 -- Change name of npc:18193 to Withered Refugee and add display id 20584 20585 to them (in addition to current ones).
-update creature_template set name = 'Withered Refugee', display_id3 = 20584, display_id4 = 20585 where entry = 18193;
+update creature_template set name = 'Withered Refugee' where entry = 61773;
 -- Serverside enable the following display ids:
 REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
 (20587, 0, 0, 0, 0),
@@ -108,3 +108,8 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61795, 30600, 2 , 0, -30600, 1, 0),
 (61670, 30600, 2 , 0, -30600, 1, 0),
 (61794, 30600, 34, 0, -30600, 1, 0);
+
+-- Arcandir should cast his ability on his target instead of himself.
+update creature_spells set casttarget_1 = 1, castflags_1 = 4 where entry = 180276;
+-- Dysfunctional Shreddertron 1200 should cast 12054 on its target first 3 seconds after engaging then every 15 seconds.
+update creature_spells set spellId_2 = 12054, probability_2 = 100, casttarget_2 = 1, castflags_2 = 4, delayInitialMin_2 = 3, delayInitialMax_2 = 3, delayRepeatMin_2= 15, delayRepeatMax_2 = 15 where entry = 180279;
