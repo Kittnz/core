@@ -3465,6 +3465,10 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                 // Aura can stack on self -> Stack it;
                 if (aurSpellInfo->StackAmount)
                 {
+                    // updating stacks requires caster to be present
+                    // set to new caster in case previous caster despawned
+                    // allows Will of Shahram to stack with cast from previous pet
+                    foundHolder->SetCasterGuid(holder->GetCasterGuid());
                     // can be created with >1 stack by some spell mods
                     foundHolder->ModStackAmount(holder->GetStackAmount());
                     delete holder;
@@ -7656,15 +7660,25 @@ void Unit::SetDeathState(DeathState s)
 
         CombatStop();
         DeleteThreatList();
-        ClearComboPointHolders();                           // any combo points pointed to unit lost at it death
 
         if (IsNonMeleeSpellCasted(false))
             InterruptNonMeleeSpells(false);
     }
 
     m_deathState = s;
+
     if (s == JUST_DIED)
     {
+        if (!m_ComboPointHolders.empty())
+        {
+            // Delay clearing combo points until next update.
+            // This fixes Relentless Strikes not triggering when the finishing move kills the target.
+            m_Events.AddLambdaEventAtOffset([this]
+            {
+                ClearComboPointHolders();
+            }, 1);
+        }
+
         RemoveAllAurasOnDeath();
         UnsummonAllTotems();
 
@@ -7687,11 +7701,6 @@ void Unit::SetDeathState(DeathState s)
     else if (s == JUST_ALIVED || s == ALIVE)
     {
         RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);  // clear skinnable for creature and player (at battleground)
-    }
-
-    if (m_deathState != ALIVE && s == ALIVE)
-    {
-        //_ApplyAllAuraMods();
     }
 }
 

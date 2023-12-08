@@ -1,6 +1,18 @@
 #include "scriptPCH.h"
 #include "lower_karazhan_halls.h"
 
+enum MoroesStuff
+{
+	SPELL_GLITTERING_DUST = 57095,
+	SPELL_SMOKE_BOMB = 57096,
+	SPELL_SHUFFLE_KICK = 57097,
+	SPELL_AGONIZING_CONCUSSION = 57098,
+	SPELL_SHADOW_BLAST = 57099,
+	SPELL_MOROES_CURSE = 57100,
+	SPELL_TELEPORT = 12980,
+	SPELL_REFLECTION = 27564,
+};
+
 struct boss_moroesAI : public ScriptedAI
 {
 	boss_moroesAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -20,19 +32,21 @@ struct boss_moroesAI : public ScriptedAI
 	uint32 m_SacrificeTimer;
 	uint32 m_TeleportTimer;
 	uint32 m_AfterTeleportTimer;
-	bool sound1;
-	bool intermission1;
-	bool sacrifice;
+	bool bSound1;
+	bool bIntermission1;
 
-	void Reset() override
+	void TryCastSmokeBomb(const uint32 uiDiff);
+	void TryCastGlitteringDust(const uint32 uiDiff);
+	void TryCastShuffleKick(const uint32 uiDiff, const uint32 MinDelay, const uint32 MaxDelay);
+
+	virtual void Reset() override
 	{
 		m_InterludeTimer = 0;
 		m_SacrificeTimer = 0;
 		m_TeleportTimer = 0;
 		m_AfterTeleportTimer = 0;
-		sound1 = false;
-		intermission1 = false;
-		sacrifice = false;
+		bSound1 = false;
+		bIntermission1 = false;
 
 		m_creature->RestoreFaction();
 		RestoreFlags();
@@ -77,7 +91,7 @@ struct boss_moroesAI : public ScriptedAI
 		return m_pInstance->GetData(DATA_MOROES_STAGE);
 	}
 
-	void Aggro(Unit* /*pWho*/) override
+	virtual void Aggro(Unit* /*pWho*/) override
 	{
 		m_creature->SetInCombatWithZone();
 		ResetBattleTimers();
@@ -95,17 +109,19 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->PlayDirectMusic(60418);
 	}
 
-	void EnterEvadeMode() override
+	virtual void EnterEvadeMode() override
 	{
 		// only in combat phases
 		if (GetPhase() == 1 || GetPhase() == 3)
 		{
 			m_creature->DespawnOrUnsummon(0, 15);
-			m_creature->DestroyForNearbyPlayers();
+			//m_creature->DestroyForNearbyPlayers();
 		}
+
+		ScriptedAI::EnterEvadeMode();
 	}
 
-	void JustDied(Unit* pKiller) override
+	virtual void JustDied(Unit* pKiller) override
 	{
 		m_creature->MonsterYell("Medivh, I have failed you...");
 		m_creature->PlayDirectSound(60408);
@@ -134,12 +150,14 @@ struct boss_moroesAI : public ScriptedAI
 
 	void Teleport()
 	{
-		m_creature->CastSpell(m_creature, 12980, true);
+		m_creature->CastSpell(m_creature, SPELL_TELEPORT, true);
 		m_TeleportTimer = 1000;
 	}
 
-	void UpdateAI(const uint32 uiDiff) override
+	virtual void UpdateAI(const uint32 uiDiff) override
 	{
+		ScriptedAI::UpdateAI(uiDiff);
+
 		if (m_pInstance)
 		{
 			if (!m_creature->HasAura(9617))
@@ -177,54 +195,19 @@ struct boss_moroesAI : public ScriptedAI
 					return;
 				}
 
-				if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+				if (!m_creature->GetVictim())
 					return;
 
-				if (m_GlitteringDustTimer < uiDiff)
-				{
-					if (DoCastSpellIfCan(m_creature->GetVictim(), 57095) == CAST_OK)
-					{
-						Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1, nullptr, SELECT_FLAG_PLAYER);
-						m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
-						if (pSecond)
-							m_creature->AI()->AttackStart(pSecond);
-						m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
-					}
-				}
-				else
-					m_GlitteringDustTimer -= uiDiff;
+				TryCastGlitteringDust(uiDiff);
+				TryCastSmokeBomb(uiDiff);
+				TryCastShuffleKick(uiDiff, 7, 13);
 
-				if (m_SmokeBombTimer < uiDiff)
+				if (!bSound1 && m_creature->GetHealthPercent() <= 50.0f)
 				{
-					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
-					{
-						if (DoCastSpellIfCan(pTarget, 57096) == CAST_OK)
-							m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
-					}
-				}
-				else
-					m_SmokeBombTimer -= uiDiff;
-
-				if (m_ShuffleKickTimer < uiDiff)
-				{
-					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
-					{
-						if (DoCastSpellIfCan(pTarget, 57097) == CAST_OK)
-							m_ShuffleKickTimer = urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS);
-						DoCastSpellIfCan(pTarget, 57098, CF_TRIGGERED);
-					}
-				}
-				else
-					m_ShuffleKickTimer -= uiDiff;
-
-				if (!sound1 && m_creature->GetHealthPercent() <= 50.0f)
-				{
-					sound1 = true;
+					bSound1 = true;
 					m_creature->MonsterYell("Most impressive, it would appear your skills do match your bravery.");
 					m_creature->PlayDirectSound(60403);
 				}
-
-				DoMeleeAttackIfReady();
 			}
 			else if (GetPhase() == 2)
 			{
@@ -280,51 +263,19 @@ struct boss_moroesAI : public ScriptedAI
 						m_InterludeTimer -= uiDiff;
 				}
 
-				if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+				if (!m_creature->GetVictim())
 					return;
 
-				if (m_GlitteringDustTimer < uiDiff)
-				{
-					if (DoCastSpellIfCan(m_creature->GetVictim(), 57095) == CAST_OK)
-					{
-						Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1, nullptr, SELECT_FLAG_PLAYER);
-						m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
-						if (pSecond)
-							m_creature->AI()->AttackStart(pSecond);
-						m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
-					}
-				}
-				else
-					m_GlitteringDustTimer -= uiDiff;
 
-				if (m_SmokeBombTimer < uiDiff)
-				{
-					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
-					{
-						if (DoCastSpellIfCan(pTarget, 57096) == CAST_OK)
-							m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 22 * IN_MILLISECONDS);
-					}
-				}
-				else
-					m_SmokeBombTimer -= uiDiff;
-
-				if (m_ShuffleKickTimer < uiDiff)
-				{
-					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
-					{
-						if (DoCastSpellIfCan(pTarget, 57097) == CAST_OK)
-							m_ShuffleKickTimer = urand(9 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
-						DoCastSpellIfCan(pTarget, 57098, CF_TRIGGERED);
-					}
-				}
-				else
-					m_ShuffleKickTimer -= uiDiff;
+				TryCastGlitteringDust(uiDiff);
+				TryCastSmokeBomb(uiDiff);
+				TryCastShuffleKick(uiDiff, 9, 15);
 
 				if (m_ShadowBlastTimer < uiDiff)
 				{
 					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
 					{
-						if (DoCastSpellIfCan(pTarget, 57099) == CAST_OK)
+						if (DoCastSpellIfCan(pTarget, SPELL_SHADOW_BLAST) == CAST_OK)
 							m_ShadowBlastTimer = urand(8 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
 					}
 				}
@@ -333,7 +284,7 @@ struct boss_moroesAI : public ScriptedAI
 
 				if (m_MoroesCurseTimer < uiDiff)
 				{
-					if (DoCastSpellIfCan(m_creature, 57100) == CAST_OK)
+					if (DoCastSpellIfCan(m_creature, SPELL_MOROES_CURSE) == CAST_OK)
 						m_MoroesCurseTimer = urand(43 * IN_MILLISECONDS, 49 * IN_MILLISECONDS);;
 				}
 				else
@@ -341,24 +292,61 @@ struct boss_moroesAI : public ScriptedAI
 
 				if (m_ReflectionTimer < uiDiff)
 				{
-					if (DoCastSpellIfCan(m_creature, 27564) == CAST_OK)
+					if (DoCastSpellIfCan(m_creature, SPELL_REFLECTION) == CAST_OK)
 						m_ReflectionTimer = urand(33 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);;
 				}
 				else
 					m_ReflectionTimer -= uiDiff;
-
-				if (!sacrifice && m_creature->GetHealthPercent() <= 75.0f)
-				{
-					sacrifice = true;
-					// m_creature->MonsterYell("Now, how about a little drama to our show?! Make your choice, sacrifice a dearest friend. Do not choose, and they shall all perish!");
-					//SacrificeRaid();
-				}
-
-				DoMeleeAttackIfReady();
 			}
 		}
 	}
 };
+
+void boss_moroesAI::TryCastSmokeBomb(const uint32 uiDiff)
+{
+	if (m_SmokeBombTimer < uiDiff)
+	{
+		if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+		{
+			if (DoCastSpellIfCan(pTarget, SPELL_SMOKE_BOMB) == CAST_OK)
+				m_SmokeBombTimer = urand(15 * IN_MILLISECONDS, 18 * IN_MILLISECONDS);
+		}
+	}
+	else
+		m_SmokeBombTimer -= uiDiff;
+}
+
+void boss_moroesAI::TryCastGlitteringDust(const uint32 uiDiff)
+{
+	if (m_GlitteringDustTimer < uiDiff)
+	{
+		if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_GLITTERING_DUST) == CAST_OK)
+		{
+			Unit* pSecond = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1, nullptr, SELECT_FLAG_PLAYER);
+			m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+			if (pSecond)
+				m_creature->AI()->AttackStart(pSecond);
+			m_GlitteringDustTimer = urand(20 * IN_MILLISECONDS, 26 * IN_MILLISECONDS);
+		}
+	}
+	else
+		m_GlitteringDustTimer -= uiDiff;
+}
+
+void boss_moroesAI::TryCastShuffleKick(const uint32 uiDiff, const uint32 MinDelay, const uint32 MaxDelay)
+{
+	if (m_ShuffleKickTimer < uiDiff)
+	{
+		if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_IN_MELEE_RANGE))
+		{
+			if (DoCastSpellIfCan(pTarget, SPELL_SHUFFLE_KICK) == CAST_OK)
+				m_ShuffleKickTimer = urand(MinDelay * IN_MILLISECONDS, MaxDelay * IN_MILLISECONDS);
+			DoCastSpellIfCan(pTarget, SPELL_AGONIZING_CONCUSSION, CF_TRIGGERED);
+		}
+	}
+	else
+		m_ShuffleKickTimer -= uiDiff;
+}
 
 bool OnGossipSelect_boss_moroes(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
