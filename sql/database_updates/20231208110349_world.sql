@@ -79,3 +79,32 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (20590, 0, 0, 0, 0),
 (20593, 0, 0, 0, 0),
 (20589, 0, 0, 0, 0);
+
+-- Add Item ID 51286, 51285, 51277 to NPC ID 61781, 61782, 61784, 61780, 61788 in a loottable with a 2% drop chance each.
+-- Add Item ID 51286, 51285, 51277 to NPC ID 61791 in a loottable with a 34% drop chance each.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30599, 51286, 0, 1, 1, 1, 0),
+(30599, 51285, 0, 1, 1, 1, 0),
+(30599, 51277, 0, 1, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61781, 30599, 2 , 0, -30599, 1, 0),
+(61782, 30599, 2 , 0, -30599, 1, 0),
+(61784, 30599, 2 , 0, -30599, 1, 0),
+(61780, 30599, 2 , 0, -30599, 1, 0),
+(61788, 30599, 2 , 0, -30599, 1, 0),
+(61791, 30599, 34, 0, -30599, 1, 0);
+-- Add Item ID 51265, 51269, 51265 to NPC ID 61673, 61674, 61672, 61795, 61670 in a loottable with a 2% drop chance each.
+-- Add Item ID 51265, 51269, 51265 to NPC ID 61794 in a loottable with a 34% drop chance each.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30600, 51265, 0, 1, 1, 1, 0),
+(30600, 51269, 0, 1, 1, 1, 0),
+(30600, 51265, 0, 1, 1, 1, 0);
+
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61673, 30600, 2 , 0, -30600, 1, 0),
+(61674, 30600, 2 , 0, -30600, 1, 0),
+(61672, 30600, 2 , 0, -30600, 1, 0),
+(61795, 30600, 2 , 0, -30600, 1, 0),
+(61670, 30600, 2 , 0, -30600, 1, 0),
+(61794, 30600, 34, 0, -30600, 1, 0);
