@@ -20,3 +20,6 @@ REPLACE INTO `gameobject` VALUES ( 5017494, 2020071, 1, 294.265, -7603.56, 85.52
 DELETE FROM gameobject WHERE guid = '5017494';
 DELETE FROM game_event_gameobject WHERE guid = '5017494';
 DELETE FROM gameobject_battleground WHERE guid = '5017494';
+
+-- Changes by DRAGU
+UPDATE `creature_addon` SET `emote_state`=69 WHERE `guid`=2573046;
