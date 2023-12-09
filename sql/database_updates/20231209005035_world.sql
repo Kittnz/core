@@ -23,3 +23,5 @@ DELETE FROM gameobject_battleground WHERE guid = '5017494';
 
 -- Changes by DRAGU
 UPDATE `creature_addon` SET `emote_state`=69 WHERE `guid`=2573046;
+UPDATE `creature_addon` SET `emote_state`=69 WHERE `guid`=2573047;
+UPDATE `creature_addon` SET `emote_state`=69 WHERE `guid`=2573050;
