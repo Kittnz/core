@@ -22755,34 +22755,37 @@ void Player::LootMoney(int32 money, Loot* loot)
     LogModifyMoney(money, "Loot", target ? target->GetObjectGuid() : ObjectGuid());
 }
 
-void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
+void Player::RewardHonor(Unit* pVictim, uint32 groupSize)
 {
-    if (!uVictim)
+    if (!pVictim)
         return;
 
     // Honorless Target
-    if (uVictim->GetAura(2479, EFFECT_INDEX_0))
+    if (pVictim->GetAura(2479, EFFECT_INDEX_0))
         return;
 
-    if (uVictim->GetTypeId() == TYPEID_UNIT)
+    if (pVictim->GetTypeId() == TYPEID_UNIT)
     {
-        Creature* cVictim = (Creature*)uVictim;
-        if (cVictim->IsCivilian() && !IsHonorOrXPTarget(cVictim))
+        Creature* pCreature = (Creature*)pVictim;
+        if (pCreature->IsRacialLeader())
+        {
+			if (sWorld.IsPvPRealm())
+				m_honorMgr.Add(732.0, HONORABLE, pCreature);
+			else
+				m_honorMgr.Add(488.0, HONORABLE, pCreature);
+
+            return;
+        }
+    }
+    else
+    {
+        // Turtle: Give dishonorable kills for killing grey players.
+        if (!IsHonorOrXPTarget(pVictim) && !IsInMainCity())
         {
             if (!sWorld.getConfig(CONFIG_BOOL_ENABLE_DK))
                 return;
 
-            m_honorMgr.Add(HonorMgr::DishonorableKillPoints(GetLevel()), DISHONORABLE, cVictim);
-            return;
-        }
-
-        if (cVictim->IsRacialLeader())
-        {
-			if (sWorld.IsPvPRealm())
-				m_honorMgr.Add(732.0, HONORABLE, cVictim);
-			else
-				m_honorMgr.Add(488.0, HONORABLE, cVictim);			
-
+            m_honorMgr.Add(HonorMgr::DishonorableKillPoints(GetLevel()), DISHONORABLE, pVictim);
             return;
         }
     }
@@ -23304,9 +23307,10 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
     }
 }
 
-bool Player::IsInMainCity() {
+bool Player::IsInMainCity()
+{
     return GetZoneId() == 1519 || GetZoneId() == 1637 || GetZoneId() == 1497 || GetZoneId() == 1537 ||
-        GetZoneId() == 1657 || GetZoneId() == 1638 || GetInstanceId();
+           GetZoneId() == 1657 || GetZoneId() == 1638 || GetInstanceId();
 }
 
 
