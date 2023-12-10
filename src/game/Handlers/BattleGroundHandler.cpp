@@ -183,10 +183,12 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
             _player->GetSession()->SendPacket(&data);
             return;
         }
+
         // check if already in queue
         if (_player->GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES)
             //player is already in this queue
             return;
+
         // check if has free queue slots
         if (!_player->HasFreeBattleGroundQueueId())
             return;
@@ -197,13 +199,18 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
         GroupQueueInfo * ginfo = bgQueue.AddGroup(_player, nullptr, bgTypeId, bgBracketId, isPremade, instanceId, nullptr);
         uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bgBracketId);
+
         // already checked if queueSlot is valid, now just get it
         uint32 queueSlot = _player->AddBattleGroundQueueId(bgQueueTypeId);
+
         // store entry point coords
         _player->SetBattleGroundEntryPoint(_player, queuedAtBGPortal);
 
-        WorldPacket data;
+        // snapshot soul shards count
+        _player->SetSoulShardCountBeforeBgJoin(_player->GetItemCount(6265));
+
         // send status packet (in queue)
+        WorldPacket data;
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_WAIT_QUEUE, avgTime, 0);
         SendPacket(&data);
         DEBUG_LOG("Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, _player->GetGUIDLow(), _player->GetName());
@@ -257,6 +264,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
             uint32 queueSlot = member->AddBattleGroundQueueId(bgQueueTypeId);           // add to queue
             member->SetBattleGroundEntryPoint(_player, queuedAtBGPortal);               // store entry point coords
+            member->SetSoulShardCountBeforeBgJoin(member->GetItemCount(6265));          // snapshot soul shards count
 
             WorldPacket data;
             // send status packet (in queue)
