@@ -5194,6 +5194,12 @@ void Spell::TakePower()
     if (m_CastItem || m_triggeredByAuraSpell || IsChannelingVisual() || !m_casterUnit)
         return;
 
+    // Turtle: Do not consume power before bg has started
+    if (Player* pPlayer = m_casterUnit->ToPlayer())
+        if (BattleGround* bg = pPlayer->GetBattleGround())
+            if (bg->GetStatus() == STATUS_WAIT_JOIN)
+                return;
+
     // health as power used
     if (m_spellInfo->powerType == POWER_HEALTH)
     {
