@@ -161,7 +161,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (41132,13466,'Tarnished Mace',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'The initials L.B. are engraved on the hilt.',0,1);
 
 REPLACE INTO gameobject_template VALUES
-(2020074, 3, 27076, 'Arcane Crystal Package', 0, 4, 1, 43, 2020074, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2020074, 3, 27076, 'Tarnished Mace', 0, 4, 1, 43, 2020074, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values
 (2020074,41132,-100,0,1,1,0);
@@ -226,3 +226,24 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '4', '0', '0', '55', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '0', '1', NULL);
+
+-- The quest "Bubbling Baddies" reward should be a choice between Ley Orb OR Ley Staff, currently it is rewarding both.
+update quest_template set RewItemId1 = 0, RewItemId2 = 0, RewItemCount1 = 0, RewItemCount2 = 0, RewChoiceItemId1 = 7508, RewChoiceItemId2 = 9513, RewChoiceItemCount1 = 1, RewChoiceItemCount2 = 1 where entry = 41182;
+-- The quest "Right From Under My Green Nose": Quest needs to end at 'Supplymaster Maxlo' instead of 'Pumpmaster Galvax', Change display ID of 'Rusgate's Water Shipment' to display ID:8381.
+delete from creature_involvedrelation where id = 61746 and quest = 41184;
+replace into creature_involvedrelation  (id, quest) values (61730, 41184);
+update item_template set display_id = 8381;
+-- Quest 'Right From Under My Green Nose' requires the item Rustgate's Water Shipment, this item should be lootable from an object titled Stolen Water which looks like barrel01.m2.
+REPLACE INTO gameobject_template VALUES
+(2020075, 3, 24978, 'Stolen Water', 0, 4, 1, 43, 2020075, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2020075,41071,-100,0,1,1,0);
+
+-- Restored 2 Plaque Objects.
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020070, 9, 218, 'Wine', 0, 0, 1, 30151, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2020071, 9, 218, 'Gallifrey', 0, 0, 1, 30152, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30151, 'Wine was a true warlock. Beneath the dark exterior laid the most genuine person we\'ve met. Warlock chat will never be the same without him.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30152, 'It was an honor to have Gallifrey in guild, to teach her all about the game and regard her as a friend. May you ride your white wolf forever!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
