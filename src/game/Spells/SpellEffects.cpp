@@ -1716,62 +1716,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         {
                             unitTarget->CastSpell(unitTarget, 21167, true);
                         }
-                        if ((m_caster->ToPlayer()->GetQuestStatus(80606) == QUEST_STATUS_INCOMPLETE))
-                        {
-                            if (unitTarget->ToPlayer()->IsGameMaster())
-                            {
-                                CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(128);
-                                if (cInfo != nullptr)
-                                    m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                            }
-                        }
-                        // Turtle WoW Winter Veil quests:  
-                        if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
-                        {
-                            // Change this part: 
-                            #define SNOWBALL_TARGET_1 379777
-                            #define SNOWBALL_TARGET_2 369620
-                            #define SNOWBALL_TARGET_3 542109
-                            #define SNOWBALL_TARGET_4 118064
-                            
-                            int32 dummy_player{0};
-                            switch (unitTarget->GetClass())
-                            {
-                            case CLASS_WARLOCK: dummy_player = 60000; break;
-                            case CLASS_PRIEST:  dummy_player = 60001; break;
-                            case CLASS_MAGE:    dummy_player = 60002; break;
-                            case CLASS_WARRIOR: dummy_player = 60003; break;
-                            case CLASS_DRUID:   dummy_player = 60004; break;
-                            case CLASS_PALADIN: dummy_player = 60005; break;
-                            case CLASS_HUNTER:  dummy_player = 60006; break;
-                            case CLASS_SHAMAN:  dummy_player = 60007; break;
-                            default: break;
-                            }
-
-                            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
-
-                            if (cInfo != nullptr)
-                                m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                        }
-
-                        if (m_caster->ToPlayer()->GetQuestStatus(50321) == QUEST_STATUS_INCOMPLETE) // The Icy Menace
-                        {
-                            int32 dummy_player{0};
-
-                            switch (unitTarget->GetObjectGuid())
-                            {
-                                case SNOWBALL_TARGET_1: dummy_player  = 70000; break;   
-                                case SNOWBALL_TARGET_2: dummy_player  = 70001; break;   
-                                case SNOWBALL_TARGET_3: dummy_player  = 70002; break;   
-                                case SNOWBALL_TARGET_4: dummy_player  = 70003; break;   
-                                default: break;
-                            }
-
-                            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
-
-                            if (cInfo != nullptr)
-                                m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                        }
                     }
                     return;
                 }
