@@ -1514,6 +1514,37 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 pZoneScript->OnCreatureSpellHit(m_casterUnit, unit->ToCreature(), m_spellInfo);
         }
     }
+    else if (Player* pCasterPlayer = m_caster->ToPlayer())
+    {
+        if (std::vector<QuestSpellCastObjective> const* pObjectives = sObjectMgr.GetQuestCastObjectivesForSpell(m_spellInfo->Id))
+        {
+            for (auto const& itr : *pObjectives)
+            {
+                if (pCasterPlayer->GetQuestStatus(itr.questId) == QUEST_STATUS_INCOMPLETE)
+                {
+                    Player* pTargetPlayer = static_cast<Player*>(unit);
+                    if (!itr.playerClass || pTargetPlayer->GetClass() == itr.playerClass)
+                    {
+                        uint32 dummyCreditId = 0;
+                        if (itr.playerGuid <= 0)
+                        {
+                            if ((itr.playerGuid < 0) == pTargetPlayer->IsGameMaster())
+                                dummyCreditId = itr.questId + itr.idx * 10;
+                        }
+                        else if (itr.playerGuid == pTargetPlayer->GetGUIDLow())
+                        {
+                            dummyCreditId = itr.playerGuid;
+                        }
+
+                        if (dummyCreditId)
+                        {
+                            pCasterPlayer->KilledMonsterCredit(dummyCreditId);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // Tell any pets to stop attacking the target on application of breakable crowd control spells
     if ((m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE) && m_casterUnit && unit->HasAuraPetShouldAvoidBreaking(m_casterUnit))

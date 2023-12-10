@@ -1961,6 +1961,8 @@ void World::SetInitialWorldSettings()
     CharacterDatabaseCleaner::CleanDatabase();
     sLog.outString("Loading character cache data...");
     sObjectMgr.LoadPlayerCacheData();
+    sLog.outString("Loading quest spell cast objectives...");
+    sObjectMgr.LoadQuestSpellCastObjectives(); // Must be after LoadQuests and LoadPlayerCacheData
     sLog.outString("Loading the max pet number...");
     sObjectMgr.LoadPetNumber();
     sLog.outString("Loading pet level stats...");
