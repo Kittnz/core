@@ -2409,12 +2409,28 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
 
         switch (spellInfo->Id)
         {
+            // long cd spells
             case 633:   // Lay on Hands (rank 1)
             case 2800:  // Lay on Hands (rank 2)
             case 10310: // Lay on Hands (rank 3)
             case 1719:  // Recklessness
             case 13180: // Gnomish Mind Control Cap
             case 22641: // Reckless Charge (Goblin Rocket Helmet)
+            // guardian spells
+            case 5666: // Summon Timberling
+            case 6084: // Summon Ghost Saber
+            case 7278: // Summon Harvester Swarm
+            case 9515: // Summon Tracking Hound
+            case 17490: // Summon Skeleton
+            case 18307: // Death by Peasant
+            case 19363: // Summon Mechanical Yeti
+            case 23074: // Arcanite Dragonling
+            case 23075: // Mithril Mechanical Dragonling
+            case 23076: // Mechanical Dragonling
+            case 26067: // Summon Mechanical Greench
+            case 26391: // Tentacle Call
+            case 29305: // Summon Cinder Elemental
+            case 56523: // Decoy Dragonling
                 return SPELL_FAILED_ONLY_BATTLEGROUNDS;
         }
     }

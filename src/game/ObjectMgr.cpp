@@ -3560,6 +3560,87 @@ void ObjectMgr::LoadGroups()
     }
 }
 
+void ObjectMgr::LoadQuestSpellCastObjectives()
+{
+    //                                                               0        1      2           3              4               5 
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `idx`, `spell_id`, `player_guid`, `player_class`, `objective_text` FROM `quest_cast_objective`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 questId = fields[0].GetUInt32();
+        uint8 idx = fields[1].GetUInt8();
+        uint32 spellId = fields[2].GetUInt32();
+        int32 playerGuid = fields[3].GetInt32();
+        uint8 playerClass = fields[4].GetUInt8();
+
+        if (idx >= QUEST_OBJECTIVES_COUNT)
+        {
+            sLog.outErrorDb("Invalid spell cast objective index for quest %u.", questId);
+            continue;
+        }
+
+        SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellId);
+        if (!pSpellEntry)
+        {
+            sLog.outErrorDb("Spell %u used as cast objective for quest %u does not exist.", spellId, questId);
+            continue;
+        }
+
+        char const* playerName = "Any Player";
+
+        if (playerGuid > 0)
+        {
+            if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(playerGuid))
+            {
+                playerName = pData->sName.c_str();
+            }
+        }
+        else if (playerGuid < 0)
+            playerName = "a Gamemaster";
+        
+        char const* objectiveText = fields[5].GetString();
+        char objectiveTextBuffer[256] = {};
+
+        if (objectiveText && strlen(objectiveText))
+            snprintf(objectiveTextBuffer, 255, objectiveText, playerName);
+        else
+            snprintf(objectiveTextBuffer, 255, "Cast %s on %s", pSpellEntry->SpellName[0].c_str(), playerName);
+
+        auto itrQuest = m_QuestTemplatesMap.find(questId);
+        if (itrQuest == m_QuestTemplatesMap.end())
+        {
+            sLog.outErrorDb("Quest %u with defiend spell cast objectives does not exist.", questId);
+            continue;
+        }
+
+        if (!itrQuest->second->ReqCreatureOrGOId[idx])
+            itrQuest->second->m_reqCreatureOrGOcount++;
+
+        if (playerGuid > 0)
+            itrQuest->second->ReqCreatureOrGOId[idx] = playerGuid;
+        else
+            itrQuest->second->ReqCreatureOrGOId[idx] = questId + idx * 10;
+
+        itrQuest->second->ReqCreatureOrGOCount[idx] = 1;
+        itrQuest->second->ObjectiveText[idx] = objectiveTextBuffer;
+
+        QuestSpellCastObjective data;
+        data.questId = questId;
+        data.idx = idx;
+        data.playerGuid = playerGuid;
+        data.playerClass = playerClass;
+        m_questSpellCastObjectives[spellId].push_back(data);
+
+    } while (result->NextRow());
+}
+
 void ObjectMgr::LoadQuests()
 {
     // For reload case

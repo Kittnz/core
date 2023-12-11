@@ -859,6 +859,7 @@ struct BGData
     Team bgTeam = TEAM_NONE;                                ///< What side the player will be added to, saved
 
     WorldLocation joinPos;                                  ///< From where player entered BG, saved
+    uint32 soulShardCount = 0;
 
     bool m_needSave = false;                                ///< true, if saved to DB fields modified after prev. save (marked as "saved" above)
 };
@@ -2740,6 +2741,14 @@ public:
             m_bgData.bgTypeID = bgTypeId;
             m_bgData.bgQueueSlot = queueSlot;
             m_bgData.m_needSave = true;
+        }
+        void SetSoulShardCountBeforeBgJoin(uint32 count)
+        {
+            m_bgData.soulShardCount = count;
+        }
+        uint32 GetSoulShardCountBeforeBgJoin() const
+        {
+            return m_bgData.soulShardCount;
         }
         uint32 AddBattleGroundQueueId(BattleGroundQueueTypeId val)
         {
