@@ -503,24 +503,6 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
             if (BattleGround *currentBg = _player->GetBattleGround())
                 currentBg->RemovePlayerAtLeave(_player->GetObjectGuid(), false, true);
 
-            for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; i++)
-            {
-                auto playerBgQueueTypeId = _player->GetBattleGroundQueueTypeId(i);
-                if (playerBgQueueTypeId != BATTLEGROUND_QUEUE_NONE && playerBgQueueTypeId != bgQueueTypeId)
-                {
-                    BattleGroundQueue& oldBgQueue = sBattleGroundMgr.m_BattleGroundQueues[playerBgQueueTypeId];
-                    BattleGroundTypeId oldBgTypeId = BattleGroundMgr::BGTemplateId(playerBgQueueTypeId);
-                    BattleGround* oldBg = sBattleGroundMgr.GetBattleGroundTemplate(oldBgTypeId);
-                    uint32 oldQueueSlot = _player->GetBattleGroundQueueIndex(playerBgQueueTypeId);
-
-                    WorldPacket data;
-                    _player->RemoveBattleGroundQueueId(playerBgQueueTypeId);
-                    oldBgQueue.RemovePlayer(_player->GetObjectGuid(), true);
-                    sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, oldBg, oldQueueSlot, STATUS_NONE, 0, 0);
-                    _player->GetSession()->SendPacket(&data);
-                }
-            }
-
             // set the destination instance id
             _player->SetBattleGroundId(bg->GetInstanceID(), bgTypeId, queueSlot);
             // set the destination team
