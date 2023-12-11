@@ -324,6 +324,10 @@ PvP.AccurateRewards = 1
 
 PvP.DishonorableKills = 1
 
+# PvP.OpenWorldHonorMultiplier. Increased honor gained from kills in open world.
+
+PvP.OpenWorldHonorMultiplier = 1.5
+
 # Progression.ContentPhase. Controls availability of raids and events.
 
 Progression.ContentPhase = 3

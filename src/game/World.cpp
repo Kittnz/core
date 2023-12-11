@@ -1193,6 +1193,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ACCURATE_PVP_TIMELINE, "PvP.AccurateTimeline", true);
     setConfig(CONFIG_BOOL_ACCURATE_PVP_REWARDS, "PvP.AccurateRewards", true);
     setConfig(CONFIG_BOOL_ENABLE_DK, "PvP.DishonorableKills", true);
+    setConfig(CONFIG_FLOAT_OPEN_WORLD_HONOR_MULTIPLIER, "PvP.OpenWorldHonorMultiplier", 1.5f);
 
     // Progression settings
     setConfig(CONFIG_UINT32_CONTENT_PHASE, "Progression.ContentPhase", CONTENT_PHASE_4);

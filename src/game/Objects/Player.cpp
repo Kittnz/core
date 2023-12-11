@@ -22929,6 +22929,8 @@ void Player::RewardHonorOnDeath()
 
             int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             rewPoints *= rewItr->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+            if (GetMapId() <= 1)
+                rewPoints *= sWorld.getConfig(CONFIG_FLOAT_OPEN_WORLD_HONOR_MULTIPLIER);
 
             if (rewPoints > 0)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
@@ -22948,6 +22950,8 @@ void Player::RewardHonorOnDeath()
 
         int32 rewPoints = int32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * float(rewItr.second) / float(totalDamage));
         rewPoints *= rewItr.first->GetTotalAuraMultiplier(SPELL_AURA_MOD_HONOR_GAIN);
+        if (GetMapId() <= 1)
+            rewPoints *= sWorld.getConfig(CONFIG_FLOAT_OPEN_WORLD_HONOR_MULTIPLIER);
 
         if (rewPoints > 0)
         {
