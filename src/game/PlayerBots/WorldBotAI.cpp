@@ -1,5 +1,6 @@
 #include "WorldBotAI.h"
 #include "WorldBotWaypoints.h"
+#include "BattleGround.h"
 #include "Player.h"
 #include "Log.h"
 #include "MotionMaster.h"
@@ -27,6 +28,8 @@
 
 #define GO_WSG_DROPPED_SILVERWING_FLAG 179785
 #define GO_WSG_DROPPED_WARSONG_FLAG 179786
+#define GO_WSG_SILVERWING_FLAG 179830
+#define GO_WSG_WARSONG_FLAG 179831
 
 std::vector<WorldBotChatData> m_chatDataNotUnderstand;
 std::vector<WorldBotChatData> m_chatDataGrudge;
@@ -417,8 +420,21 @@ bool WorldBotAI::AttackStart(Unit* pVictim)
     return false;
 }
 
+bool WorldBotAI::ShouldIgnoreCombat() const
+{
+    if (m_battlegroundId == BATTLEGROUND_QUEUE_WS && !me->IsRooted() &&
+        (me->HasAura(AURA_SILVERWING_FLAG) || me->HasAura(AURA_WARSONG_FLAG)))
+        return true;
+    return false;
+}
+
 Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
 {
+    // Ignore attackers while carrying flag, just keep running.
+    if (ShouldIgnoreCombat())
+        return nullptr;
+
+
     // 1. Check units we are currently in combat with.
 
     std::list<Unit*> targets;
@@ -755,9 +771,6 @@ void WorldBotAI::UpdateWaypointMovement()
         return;
 
     if (!me->IsStopped())
-        return;
-
-    if (me->IsInCombat())
         return;
 
     if (me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
@@ -1470,6 +1483,12 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         return;
     }
 
+    if (ShouldIgnoreCombat())
+    {
+        UpdateWaypointMovement();
+        return;
+    }
+
     if (!pVictim || pVictim->IsDead() || pVictim->HasBreakableByDamageCrowdControlAura() || 
         !pVictim->IsWithinDist(me, VISIBILITY_DISTANCE_NORMAL))
     {
@@ -1483,7 +1502,8 @@ void WorldBotAI::UpdateAI(uint32 const diff)
            (me != me->GetVictim()->GetVictim()))
         {
             me->AttackStop(false);
-            StopMoving();
+            if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
+                StopMoving();
             return;
         }
     }
@@ -1516,10 +1536,23 @@ void WorldBotAI::UpdateBattleGroundAI()
     {
         case BATTLEGROUND_WS:
         {
+            // Pick up dropped flags.
             if (GameObject* pGo = me->FindNearestGameObject(GO_WSG_DROPPED_SILVERWING_FLAG, INTERACTION_DISTANCE))
                 pGo->Use(me);
             if (GameObject* pGo = me->FindNearestGameObject(GO_WSG_DROPPED_WARSONG_FLAG, INTERACTION_DISTANCE))
                 pGo->Use(me);
+
+            // Pick up stationary flags from bases.
+            if (me->GetTeam() == HORDE)
+            {
+                if (GameObject* pGo = me->FindNearestGameObject(GO_WSG_SILVERWING_FLAG, INTERACTION_DISTANCE))
+                    pGo->Use(me);
+            }
+            else
+            {
+                if (GameObject* pGo = me->FindNearestGameObject(GO_WSG_WARSONG_FLAG, INTERACTION_DISTANCE))
+                    pGo->Use(me);
+            }
             break;
         }
     }
