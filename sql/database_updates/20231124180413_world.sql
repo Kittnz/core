@@ -1,1 +1,0 @@
-UPDATE creature_template SET Faction = 1494 WHERE entry = 80799;
