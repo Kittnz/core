@@ -21,3 +21,6 @@ DELETE FROM creature_battleground WHERE guid=2582200;
 
 -- Changes by WOJI
 REPLACE INTO `gameobject` VALUES ( 5017491, 2020072, 0, 3337.9, -2480.62, 105.091, 0.0361054, 0, 0, 0.0180517, 0.999837, 300, 300, 100, 1, 0, 0);
+
+-- Changes by REN
+UPDATE `creature` SET `position_x` = 4310.803711, `position_y` = -3040.788574, `position_z` = 22.923267, `orientation` = 4.277101 WHERE `guid` = 2581570;
