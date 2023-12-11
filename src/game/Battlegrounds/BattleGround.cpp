@@ -903,16 +903,35 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
         m_PlayerScores.erase(itr2);
     }
 
-    Player *pPlayer = sObjectMgr.GetPlayer(guid);
+    Player* pPlayer = sObjectMgr.GetPlayer(guid);
 
-    // should remove spirit of redemption
-    if (pPlayer && pPlayer->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
-        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
-
-    if (pPlayer && !pPlayer->IsAlive())                             // resurrect on exit
+    if (pPlayer)
     {
-        pPlayer->ResurrectPlayer(1.0f);
-        pPlayer->SpawnCorpseBones();
+        // should remove spirit of redemption
+        if (pPlayer->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
+            pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
+
+        if (pPlayer->IsAlive())
+        {
+            // Turtle: reset health and mana on exit
+            pPlayer->SetHealth(pPlayer->GetMaxHealth());
+            if (pPlayer->GetPowerType() == POWER_MANA)
+                pPlayer->SetPower(POWER_MANA, pPlayer->GetMaxPower(POWER_MANA));
+        }
+        else
+        {
+            // resurrect on exit
+            pPlayer->ResurrectPlayer(1.0f);
+            pPlayer->SpawnCorpseBones();
+        }
+
+        // Turtle: restore spent Soul Shards at bg end
+        if (pPlayer->GetSoulShardCountBeforeBgJoin())
+        {
+            uint32 const currentCount = pPlayer->GetItemCount(6265);
+            if (currentCount < pPlayer->GetSoulShardCountBeforeBgJoin())
+                pPlayer->AddItem(6265, pPlayer->GetSoulShardCountBeforeBgJoin() - currentCount);
+        }
     }
 
     RemovePlayer(pPlayer, guid);                                // BG subclass specific code

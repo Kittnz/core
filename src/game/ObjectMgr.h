@@ -619,6 +619,14 @@ public:
 
 class PvPMaintenanceMaker;
 
+struct QuestSpellCastObjective
+{
+    uint32 questId = 0;
+    uint8 idx = 0;
+    int32 playerGuid = 0;
+    uint8 playerClass = 0;
+};
+
 #define SHELL_COIN_BASE_PRICE 20
 #define SHELL_COIN_MAX_COUNT ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)
 #define ITEM_SHELL_COIN 81118
@@ -893,6 +901,15 @@ class ObjectMgr
 
         void LoadGroups();
         void LoadQuests();
+        void LoadQuestSpellCastObjectives();
+        std::vector<QuestSpellCastObjective> const* GetQuestCastObjectivesForSpell(uint32 spellId)
+        {
+            auto itr = m_questSpellCastObjectives.find(spellId);
+            if (itr != m_questSpellCastObjectives.end())
+                return &itr->second;
+
+            return nullptr;
+        }
         void LoadQuestRelations()
         {
             LoadGameobjectQuestRelations();
@@ -1759,6 +1776,7 @@ class ObjectMgr
         CacheTrainerSpellMap m_CacheTrainerTemplateSpellMap;
         CacheTrainerSpellMap m_CacheTrainerSpellMap;
         robin_hood::unordered_map<uint32, ChatChannelsEntry> m_chatChannelsMap;
+        robin_hood::unordered_map<uint32 /*spell id*/, std::vector<QuestSpellCastObjective>> m_questSpellCastObjectives;
 };
 
 //#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
