@@ -1,1 +1,0 @@
-UPDATE item_template SET quality = 2 WHERE entry IN (54001, 54003, 51739, 51261, 80010, 81283, 69000);
