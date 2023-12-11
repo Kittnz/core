@@ -232,7 +232,7 @@ update quest_template set RewItemId1 = 0, RewItemId2 = 0, RewItemCount1 = 0, Rew
 -- The quest "Right From Under My Green Nose": Quest needs to end at 'Supplymaster Maxlo' instead of 'Pumpmaster Galvax', Change display ID of 'Rusgate's Water Shipment' to display ID:8381.
 delete from creature_involvedrelation where id = 61746 and quest = 41184;
 replace into creature_involvedrelation  (id, quest) values (61730, 41184);
-update item_template set display_id = 8381;
+update item_template set display_id = 8381 where entry = 41071;
 -- Quest 'Right From Under My Green Nose' requires the item Rustgate's Water Shipment, this item should be lootable from an object titled Stolen Water which looks like barrel01.m2.
 REPLACE INTO gameobject_template VALUES
 (2020075, 3, 24978, 'Stolen Water', 0, 4, 1, 43, 2020075, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
