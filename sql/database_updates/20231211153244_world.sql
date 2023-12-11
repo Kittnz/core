@@ -119,3 +119,11 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
  '0', '0', '1', NULL);
+
+-- Updated 2 Plaque Objects.
+update gameobject_template set data0 = 50684 where entry = 2020070;
+update gameobject_template set data0 = 50685 where entry = 2020071;
+delete from broadcast_text where entry in (2020070,2020071);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50684, 'Wine was a true warlock. Beneath the dark exterior laid the most genuine person we\'ve met. Warlock chat will never be the same without him.', 0),
+(50685, 'It was an honor to have Gallifrey in guild, to teach her all about the game and regard her as a friend. May you ride your white wolf forever!', 0);
