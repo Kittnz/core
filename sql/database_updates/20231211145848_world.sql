@@ -90,3 +90,8 @@ DELETE FROM creature_battleground WHERE guid=2582203;
 -- Changes by DRAGU
 UPDATE `creature_addon` SET `stand_state`=5 WHERE `guid`=2581921;
 UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2581921;
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5017494, 2020075, 1, 243.346, -7635.81, 87.1001, 5.59018, 0, 0, 0.339609, -0.940567, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017495, 2020075, 1, 306.406, -7668.27, 87.1006, 0.967336, 0, 0, 0.465029, 0.885295, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017496, 2020075, 1, 259.862, -7639.23, 87.5799, 1.10635, 0, 0, 0.525391, 0.850861, 300, 300, 100, 1, 0, 0);
