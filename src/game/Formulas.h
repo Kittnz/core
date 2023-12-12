@@ -152,7 +152,7 @@ namespace MaNGOS
                     xp_gain *= 0.5f;
 
                 if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE))
-                    xp_gain *= 1.3f;
+                    xp_gain *= 1.2f;
             }
 
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);

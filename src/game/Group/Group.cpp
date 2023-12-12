@@ -2344,7 +2344,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
                     itr_xp *= 0.5f;
 
                 if (pGroupGuy->HasChallenge(CHALLENGE_WAR_MODE))
-                    itr_xp *= 1.3f;
+                    itr_xp *= 1.2f;
             }
 
             if (pGroupGuy->GetLevel() <= not_gray_member_with_max_level->GetLevel())
