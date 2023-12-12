@@ -7,3 +7,7 @@ REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`,
 -- Fix reputation exploit:
 
 DELETE FROM `creature_onkill_reputation` WHERE `creature_id` = 10482;
+
+-- Longer Winterveil!
+
+UPDATE `game_event` SET `start_time` = '2020-12-11 12:00:00', `length` = '44640' WHERE (`entry` = '2');
