@@ -14,3 +14,11 @@ update gameobject_template set size = 0.4 where entry = 2020072;
 update creature_template set npc_flags = 135 where entry = 61831;
 -- Quest "The Wrath of the Light Fall Upon Thee" should be marked as Elite.
 update quest_template set type = 1 where entry = 41200;
+-- Apply SQLs spell and item fixes.
+-- weps
+update item_template set spellid_2 = 45076, spellid_1 = 15464, stat_value1 = 28 where entry = 41076; -- Aspect of Seradane
+update item_template set spellid_1 = 16921, spellppmrate_1 = 0.65 where entry = 40080; -- Thunderforge Lance
+-- fix text for new enchant
+update spell_template SET Description = 'Permanently enchant a two-handed melee weapon to grant +2 Intellect.' WHERE entry = 45071; 
+-- make aspect of seradane proc cooler
+update spell_template SET spellVisual1 = 3860, spellIconId = 263, name = "Wrath Volley", effectBasePoints1 = 129, description = 'Unleashes a wave of energy that blasts up to 3 targets for $s1 Nature damage.' WHERE entry = 45076; -- chain lightning
