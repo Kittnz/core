@@ -1905,6 +1905,11 @@ BattleGround.Rate.Reputation.AV = 0.85
 BattleGround.Rate.Reputation.WS = 1.15
 BattleGround.Rate.Reputation.AB = 1.15
 
+# Honor reward rates for battlegrounds
+BattleGround.Rate.Honor.AV = 0.75
+BattleGround.Rate.Honor.WS = 1.25
+BattleGround.Rate.Honor.AB = 1.25
+
 # Alterac.MinPlayersInQueue. Minimum players in queue per faction before starting a match.
 
 Alterac.MinPlayersInQueue = 0
