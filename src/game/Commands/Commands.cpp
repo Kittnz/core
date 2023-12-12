@@ -9859,6 +9859,53 @@ bool ChatHandler::HandleGameObjectSetLootStateCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGameObjectSetRespawnTimeCommand(char* args)
+{
+    // number or [name] Shift-click form |color|Hgameobject:go_id|h[name]|h|r
+    uint32 lowguid;
+    if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
+        return false;
+
+    if (!lowguid)
+        return false;
+
+    uint32 timeMin;
+    if (!ExtractUInt32(&args, timeMin))
+        return false;
+    uint32 timeMax;
+    if (!ExtractUInt32(&args, timeMax))
+        timeMax = timeMin;
+
+    GameObject* pGameObject = nullptr;
+
+    // by DB guid
+    if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+        pGameObject = GetGameObjectWithGuid(lowguid, go_data->id);
+
+    if (!pGameObject)
+    {
+        PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, lowguid);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    GameObjectData* pData = const_cast<GameObjectData*>(pGameObject->GetGOData());
+    if (!pData)
+    {
+        SendSysMessage("This gameobject is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pData->spawntimesecsmin = timeMin;
+    pData->spawntimesecsmax = timeMax;
+    pGameObject->SetRespawnDelay((timeMin + timeMax) / 2);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `gameobject` SET `spawntimesecsmin`=%u, `spawntimesecsmax`=%u WHERE `guid`=%u", timeMin, timeMax, pGameObject->GetDBTableGUIDLow());
+    PSendSysMessage("Respawn time for guid %u updated to %u-%u.", pGameObject->GetDBTableGUIDLow(), timeMin, timeMax);
+    return true;
+}
+
 void ChatHandler::ShowFactionListHelper(FactionEntry const* factionEntry, LocaleConstant loc, FactionState const* repState /*= nullptr*/, Player* target /*= nullptr */)
 {
     std::string name = factionEntry->name[loc];
