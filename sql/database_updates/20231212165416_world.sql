@@ -23,3 +23,10 @@ DELETE FROM creature_battleground WHERE guid=2573972;
 
 -- Changes by WOJI
 REPLACE INTO `gameobject` VALUES ( 5017497, 3000222, 0, 4395.05, -2833.55, 7.09877, 1.21765, 0, 0, 0.571906, 0.820319, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017497';
+DELETE FROM game_event_gameobject WHERE guid = '5017497';
+DELETE FROM gameobject_battleground WHERE guid = '5017497';
+REPLACE INTO `gameobject` VALUES ( 5017498, 2010878, 0, 4420.86, -2939.98, 7.18686, 4.79122, 0, 0, 0.678694, -0.734421, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017498';
+DELETE FROM game_event_gameobject WHERE guid = '5017498';
+DELETE FROM gameobject_battleground WHERE guid = '5017498';
