@@ -89,3 +89,4 @@ DELETE FROM creature_battleground WHERE guid=2582203;
 
 -- Changes by DRAGU
 UPDATE `creature_addon` SET `stand_state`=5 WHERE `guid`=2581921;
+UPDATE `creature_addon` SET `stand_state`=1 WHERE `guid`=2581921;
