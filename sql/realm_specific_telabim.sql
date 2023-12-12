@@ -15793,3 +15793,15 @@ UPDATE `battleground_template` SET `min_players_per_team` = 15, `max_players_per
 UPDATE `battleground_template` SET `min_players_per_team` = 5, `max_players_per_team` = 15, `min_level` = 0, `max_level` = 60, `alliance_win_spell` = 24953, `alliance_lose_spell` = 24952, `horde_win_spell` = 24953, `horde_lose_spell` = 24952, `alliance_start_location` = 890, `horde_start_location` = 889, `player_loot_id` = 0 WHERE `id` = 3;
 UPDATE `battleground_template` SET `min_players_per_team` = 3, `max_players_per_team` = 3, `min_level` = 0, `max_level` = 60, `alliance_win_spell` = 29129, `alliance_lose_spell` = 29128, `horde_win_spell` = 29129, `horde_lose_spell` = 29128, `alliance_start_location` = 9000, `horde_start_location` = 9001, `player_loot_id` = 0 WHERE `id` = 4;
 UPDATE `battleground_template` SET `min_players_per_team` = 7, `max_players_per_team` = 20, `min_level` = 51, `max_level` = 60, `alliance_win_spell` = 0, `alliance_lose_spell` = 0, `horde_win_spell` = 0, `horde_lose_spell` = 0, `alliance_start_location` = 700, `horde_start_location` = 701, `player_loot_id` = 0 WHERE `id` = 5;
+
+-- Winterveil quests:	
+
+UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 13023, `player_class` = 0, `objective_text` = 'Throw snowball at Grilek' WHERE `entry` = 50321 AND `idx` = 0;
+UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 11530, `player_class` = 0, `objective_text` = 'Throw snowball at Hanni' WHERE `entry` = 50321 AND `idx` = 1;
+UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 7365, `player_class` = 0, `objective_text` = 'Throw snowball at Japseijones' WHERE `entry` = 50321 AND `idx` = 2;
+UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 18474, `player_class` = 0, `objective_text` = 'Throw snowball at Thalia' WHERE `entry` = 50321 AND `idx` = 3;
+
+-- 13023	Grilek
+-- 11530	Hanni
+-- 7365	    Japseijones
+-- 18474	Thalia
