@@ -15814,3 +15814,7 @@ REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`,
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (2582215, 50661, 0, 0, 0, 1, 9950.14, 2498.66, 1317.82, 4.66285, 120, 120, 0, 100, 100, 0, 0, 0);
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (2582216, 50661, 0, 0, 0, 1, -1289.47, 116.286, 131.085, 5.53296, 120, 120, 0, 100, 100, 0, 0, 0);
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (2582217, 50661, 0, 0, 0, 0, 1557.14, 240.612, -43.1026, 0.0535726, 120, 120, 0, 100, 100, 0, 0, 0);
+
+-- Autobroadcast:
+
+UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 1st! Happy Holidays!' WHERE `entry` = 50001;
