@@ -4075,6 +4075,10 @@ void Aura::HandleAuraModSilence(bool apply, bool Real)
     }
     else
     {
+        // Draconic Eruption Rune
+        if (GetId() == 44030)
+            target->CastSpell(target, 44029, true);
+
         // Real remove called after current aura remove from lists, check if other similar auras active
         if (target->HasAuraType(SPELL_AURA_MOD_SILENCE))
             return;
