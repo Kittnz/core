@@ -1821,6 +1821,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 3000;
                         break;
                     }
+                    case 44025: // Inactive Tracker
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        break;
+                    }
                     case 46433: // Tied Up (Horde) (Custom AV Quest)
                     case 46432: // Tied Up (Alliance) (Custom AV Quest)
                     {
@@ -6843,6 +6849,39 @@ void Aura::PeriodicDummyTick()
                     if (ribbonCount > 1)
                         target->CastSpell(GetCaster(), 29175, true); // Midsummer Pole Buff
 
+                    return;
+                }
+                case 44025: // Inactive Tracker
+                {
+                    Player* pPlayer = target->ToPlayer();
+                    if (!pPlayer)
+                        return;
+
+                    if (pPlayer->IsInCombat())
+                    {
+                        pPlayer->RemoveAurasDueToSpell(44024);
+                        GetModifier()->m_amount = 300;
+                        return;
+                    }
+
+                    GetModifier()->m_amount -= (m_modifier.periodictime / IN_MILLISECONDS);
+                    if (GetModifier()->m_amount > 0)
+                        return;
+                    else
+                        GetModifier()->m_amount = 300;
+
+                    pPlayer->CastSpell(pPlayer, 44024, true);
+
+                    if (SpellAuraHolder* pAura = GetTarget()->GetSpellAuraHolder(44024))
+                    {
+                        if (pAura->GetStackAmount() == 3)
+                        {
+                            pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]()
+                            {
+                                pPlayer->ToggleAFK();
+                            }, 1);
+                        }
+                    }
                     return;
                 }
                 case 46433: // Tied Up (Horde) (Custom AV Quest)
