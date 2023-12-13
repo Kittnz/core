@@ -33,7 +33,7 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (1,   1, 50000, 'Token: Character Name Change', '代币：角色名称变更', 160),
 (2,   1, 80499, 'Token: Guild Name Change', '代币：公会名称变更', 300),
 (3,   1, 80699, 'Token: Appearance Change', '代币：外观变更', 160),
-(17,  2, 51920, 'Demon [Undead, male]', '猩红 [人类，仅限女性]', 160),
+(17,  2, 51920, 'Touch of Darkness [Undead, male]', '猩红 [人类，仅限女性]', 160),
 (18,  2, 51921, 'Blood Widow [Undead, female]', '猩红 [人类，仅限女性]', 160),
 (20,  2, 50105, 'Scarlet [Human, female only]', '猩红 [人类，仅限女性]', 160),
 (21,  2, 50106, 'Necromancer I [Human]', '死灵法师 I [人类]', 160),
