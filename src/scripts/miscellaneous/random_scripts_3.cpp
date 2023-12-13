@@ -7196,9 +7196,193 @@ bool GossipSelect_npc_gazzik(Player* pPlayer, Creature* pCreature, uint32 uiSend
     return true;
 }
 
+bool QuestRewarded_npc_rine(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 41232) // To Find the Heart
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->MonsterSay(30153);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay(30154);
+            }, 3000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                pQuestGiver->MonsterSay(30155);
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 6000);
+
+    }
+
+    return false;
+}
+
+bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 41240) // An Audience With the Prince
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30156);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->SummonCreature(61847, 4313.0f, -3074.0f, 147.0f, 1.7F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 56 * IN_MILLISECONDS);
+
+                    pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+                }, 5000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->HandleEmote(EMOTE_STATE_KNEEL);
+                }, 8000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_IMAGE_OF_KAELTHAS = pQuestGiver->FindNearestCreature(61847, 40.0F);
+
+                    if (!NPC_IMAGE_OF_KAELTHAS)
+                        return;
+
+                    NPC_IMAGE_OF_KAELTHAS->MonsterSay(30157);
+                    NPC_IMAGE_OF_KAELTHAS->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 11000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30158);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 16000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_IMAGE_OF_KAELTHAS = pQuestGiver->FindNearestCreature(61847, 40.0F);
+
+                    if (!NPC_IMAGE_OF_KAELTHAS)
+                        return;
+
+                    NPC_IMAGE_OF_KAELTHAS->MonsterSay(30159);
+                    NPC_IMAGE_OF_KAELTHAS->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 21000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30160);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 26000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_IMAGE_OF_KAELTHAS = pQuestGiver->FindNearestCreature(61847, 40.0F);
+
+                    if (!NPC_IMAGE_OF_KAELTHAS)
+                        return;
+
+                    NPC_IMAGE_OF_KAELTHAS->MonsterSay(30161);
+                    NPC_IMAGE_OF_KAELTHAS->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 31000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30162);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 36000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_IMAGE_OF_KAELTHAS = pQuestGiver->FindNearestCreature(61847, 40.0F);
+
+                    if (!NPC_IMAGE_OF_KAELTHAS)
+                        return;
+
+                    NPC_IMAGE_OF_KAELTHAS->MonsterSay(30163);
+                    NPC_IMAGE_OF_KAELTHAS->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 41000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30164);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 46000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    Creature* NPC_IMAGE_OF_KAELTHAS = pQuestGiver->FindNearestCreature(61847, 40.0F);
+
+                    if (!NPC_IMAGE_OF_KAELTHAS)
+                        return;
+
+                    NPC_IMAGE_OF_KAELTHAS->MonsterSay(30165);
+                    NPC_IMAGE_OF_KAELTHAS->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 51000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay(30166);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 56000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->HandleEmote(EMOTE_STATE_STAND);
+                }, 59000);
+
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60053))
+                {
+                    player->KilledMonster(cInfo, ObjectGuid());
+
+                    if (Group* pGroup = player->GetGroup())
+                    {
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember->GetObjectGuid() != player->GetObjectGuid())
+                                    pMember->KilledMonster(cInfo, ObjectGuid());
+                            }
+                        }
+                    }
+                }
+                });
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_rommath";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_rommath;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_rine";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_rine;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_gazzik";
