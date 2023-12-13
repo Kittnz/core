@@ -26,7 +26,7 @@ replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values
 (4,  'Glyphs', '雕文', 'service'),
 (5,  'Mounts', '坐骑', 'mount'),
 (6,  'Companions', '小宠物', 'pet'),
-(7,  'Tabards', '战袍', 'tabard'),
+(7,  'Tabards & Fashion', '战袍', 'tabard'),
 (8,  'Illusions', '幻象', 'scroll');
 
 replace into shop_items (`id`, `category`, `item`, `description`, `description_loc4`, `price`) values 
@@ -83,7 +83,6 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (67,  3, 50005, 'Summon: Repair Bot', '召唤：修理机器人75B', 200),
 (68,  3, 50007, 'Summon: Bank (Mule)', '召唤：银行（骡子）', 200),
 (69,  3, 51421, 'Summon: Bank (Kodo)', '召唤：银行（科多兽）', 200),
-(70,  3, 51306, 'Large Pouch of Fashion Coins', '大袋时尚硬币', 200),
 (86,  4, 51057, 'Druid: Glyph of the Frostsaber', '德鲁伊：霜刃豹雕文', 100),
 (87,  4, 51266, 'Druid: Glyph of the Ice Bear', '德鲁伊：冰熊雕文', 100),
 (88,  4, 51431, 'Druid: Glyph of the Frostkin', '德鲁伊：寒霜枭雕文', 100),
@@ -163,6 +162,7 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (259, 6, 83300, 'Lil\' K.T', '小克', 300),
 (260, 6, 83301, 'Core Hound Pet', '熔火恶犬小宠物', 300),
 (261, 6, 83302, 'Lil\' Ragnaros', '小拉格纳罗斯', 300),
+(270, 7, 51306, 'Large Pouch of Fashion Coins', '大袋时尚硬币', 200),
 (271, 7, 81088, 'Tabard of Summer Skies', '夏日天空战袍', 180),
 (272, 7, 81087, 'Tabard of Summer Flames', '夏日烈焰战袍', 180),
 (273, 7, 23709, 'Tabard of Frost', '冰霜战袍', 200),
