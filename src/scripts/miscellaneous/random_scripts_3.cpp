@@ -7370,9 +7370,69 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
     return false;
 }
 
+bool GOHello_go_magister_translocation_orb(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020086)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 30167, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2020086, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_magister_translocation_orb(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020086)
+        {
+            static const WorldLocation m_magister(0, 4314.0F, -3089.0F, 37.0f, 0.0f);
+            pPlayer->TeleportTo(m_magister);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_council_translocation_orb(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020087)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 30167, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2020087, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_council_translocation_orb(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2020087)
+        {
+            static const WorldLocation m_council(0, 4310.0F, -3046.0F, 148.0f, 0.0f);
+            pPlayer->TeleportTo(m_council);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_council_translocation_orb";
+    newscript->pGOHello = &GOHello_go_council_translocation_orb;
+    newscript->pGOGossipSelect = &GOSelect_go_council_translocation_orb;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_magister_translocation_orb";
+    newscript->pGOHello = &GOHello_go_magister_translocation_orb;
+    newscript->pGOGossipSelect = &GOSelect_go_magister_translocation_orb;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_rommath";

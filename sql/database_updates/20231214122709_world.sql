@@ -78,3 +78,18 @@ update creature_template set npc_flags = 16, trainer_type = 2 where entry = 6188
  
 -- Change main description of quest Kingsbane to:
 update quest_template set details = 'Ah, an adventurer...$B$B<Astalor\'s face contorts with disdain.>$B$BThere is a delicate matter at hand, and I require assistance in a manner that leaves no trace leading back to me. I\'ve recently discovered that one of the distant cousins to the traitorous Prince Kael\'thas still lives and commands the forces of Felstrider Retreat.$B$BAs you can undoubtedly surmise, having a Sunstrider alive poses a considerable issue, as many may perceive his claim to the throne as legitimate. I require him eliminated. Assemble a formidable party, dispatch him, and dispose of his body in a lake.$B$BOnce the grim task is accomplished, present his signet as proof to Melathe Shadesong. Ensure that no one discovers it was I who... suggested this undertaking.' where entry = 41252;
+
+-- Create gobject using display id 218 named "Memorial Plaque" that on interactiong opens a text window:
+replace INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50693, 'To the fallen of Quel\'Thalas, whose courage faced death unflinchingly, we pledge eternal honor. May the radiant embrace of the Eternal Sun guide your journey beyond, where your valor echoes among the stars. Your legacy, woven into the fabric of time, remains an undying flame in our hearts. In twilight\'s embrace, we declare that the fallen of Quel\'Thalas shall forever be remembered for their unyielding spirit and sacrifice.', 0);
+
+replace INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020085, 9, 218, 'Memorial Plaque', 0, 0, 1, 50693, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- Create gobject using display id 29624 named "Magister Translocation Orb" that on interacting moves the player to X:4314 Y:-3089 Z:37 Eastern Kingdoms.
+replace INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2020086, 2, 29624, 'Magister Translocation Orb', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_magister_translocation_orb'),
+-- Create gobject using display id 29624 named "Council Translocation Orb" that on interacting moves the player to X:4310 Y:-3046 Z: 148 Eastern Kingdoms.
+(2020087, 2, 29624, 'Council Translocation Orb', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_council_translocation_orb');
+
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30167, 'Teleportation', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
