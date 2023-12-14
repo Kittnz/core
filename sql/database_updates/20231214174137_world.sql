@@ -37,3 +37,6 @@ REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582225, 5);
 -- Changes by VOLCA
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017676, 2020084, 0, 3781.29, -2368.01, 47.6186, 3.75025, 0, 0, 0.954048, -0.299653, 300, 300, 100, 1, 0, 0);
