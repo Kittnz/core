@@ -97,3 +97,5 @@ replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 -- Blackstone trainers: trainer types fix.
 update creature_template set trainer_type = 0 where entry in (80104, 80105, 80107, 80108, 80106);
 
+-- Change main description of quest Thalassian Goulash to:
+update quest_template set details = 'Hey there! New face, right? Pleasure\'s mine – I\'m Dalicia, but you can just call me Dal! Been part of Alah\'Thalas since its very beginnings, and let me tell you, I\'ve been putting my culinary skills to work around here. I\'m the resident cook, and if I do say so myself, the rations these refugees are getting are downright laughable. Dry meat, and Elwynn\'s rotting grain? Not exactly fit for the Quel\'dorei palate.$B$BNow, here\'s the thing: I\'m itching to whip up my famous goulash, but they\'re not letting me get my hands on the right ingredients. If you could do me a solid and gather some Forest Hawkstrider legs and Lynx steaks, we\'ll have a feast fit for our people in no time! Let\'s turn this drab menu into something worth savoring!' where entry = 41190;
