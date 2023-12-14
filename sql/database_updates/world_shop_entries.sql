@@ -68,8 +68,6 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (50,  2, 50223, 'Dreadskull II [Orc, male only]', '恐怖骷髅 II [兽人，仅限男性]', 160),
 (51,  2, 50224, 'Dreadskull III [Orc, male only]', '恐怖骷髅 III [兽人，仅限男性]', 160),
 (52,  2, 81255, 'Dreadskull [Orc, male only]', '恐怖骷髅 [兽人，仅限男性]', 160),
-(53,  2, 50210, 'Forest I [Troll]', '丛林 I [巨魔]', 160),
-(55,  2, 50225, 'Forest II [Troll]', '丛林II [巨魔]', 160),
 (56,  2, 51010, 'Dark [Troll]', '黑暗[巨魔]', 160),
 (57,  2, 51011, 'Ice [Troll]', '冰霜[巨魔]', 160),
 (58,  2, 81208, 'Zombie [Troll]', '僵尸[巨魔]', 160),
