@@ -7,3 +7,6 @@ DELETE FROM game_event_gameobject WHERE guid = '5017674';
 DELETE FROM gameobject_battleground WHERE guid = '5017674';
 REPLACE INTO `gameobject` VALUES ( 5017675, 2020086, 0, 4306.05, -3043.15, 147.844, 3.33795, 0, 0, 0.995184, -0.0980194, 300, 300, 100, 1, 0, 0);
 UPDATE `creature` SET `position_x` = 4291.625488, `position_y` = -2097.460938, `position_z` = 16.458199, `orientation` = 4.877319 WHERE `guid` = 2582220;
+
+-- Changes by VOLCA
+REPLACE INTO `creature` VALUES (2582221,521,0,0,0,1,-207.873,-920.006,20.0747,4.60933,120,120,5,100,100,1,0,0);
