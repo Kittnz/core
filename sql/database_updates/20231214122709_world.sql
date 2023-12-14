@@ -93,3 +93,7 @@ replace INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 
 replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
 (30167, 'Teleportation', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Blackstone trainers: trainer types fix.
+update creature_template set trainer_type = 0 where entry in (80104, 80105, 80107, 80108, 80106);
+
