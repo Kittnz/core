@@ -20,3 +20,20 @@ UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 REPLACE INTO `creature` VALUES (2582223,521,0,0,0,0,-11831.3,3165.75,19.42,5.5534,120,120,5,100,100,1,0,0);
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+
+-- Changes by DRAGU
+REPLACE INTO `creature` VALUES (2582224,80208,0,0,0,0,3177.39,-2405.08,121.373,5.79176,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582224, 3);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582224, 5);
+REPLACE INTO `creature` VALUES (2582225,80209,0,0,0,0,3180.35,-2406.57,121.369,2.70513,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582225, 5);
+UPDATE `creature` SET `position_x` = 3180.220947, `position_y` = -2406.519531, `position_z` = 121.368713, `orientation` = 2.701098 WHERE `guid` = 2582225;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582225, 5);
+UPDATE `creature` SET `position_x` = 3180.118408, `position_y` = -2406.430908, `position_z` = 121.368523, `orientation` = 2.679895 WHERE `guid` = 2582225;
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2582225, 5);
+
+-- Changes by VOLCA
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
