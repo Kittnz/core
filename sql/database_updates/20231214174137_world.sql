@@ -40,3 +40,7 @@ UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 
 -- Changes by WOJI
 REPLACE INTO `gameobject` VALUES ( 5017676, 2020084, 0, 3781.29, -2368.01, 47.6186, 3.75025, 0, 0, 0.954048, -0.299653, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5017677, 2020084, 0, 3915.58, -2373.82, 10.8502, 5.16789, 0, 0, 0.529191, -0.848503, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017677';
+DELETE FROM game_event_gameobject WHERE guid = '5017677';
+DELETE FROM gameobject_battleground WHERE guid = '5017677';
