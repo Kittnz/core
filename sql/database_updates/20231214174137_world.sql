@@ -44,3 +44,6 @@ REPLACE INTO `gameobject` VALUES ( 5017677, 2020084, 0, 3915.58, -2373.82, 10.85
 DELETE FROM gameobject WHERE guid = '5017677';
 DELETE FROM game_event_gameobject WHERE guid = '5017677';
 DELETE FROM gameobject_battleground WHERE guid = '5017677';
+
+-- Changes by DRAGU
+REPLACE INTO `gameobject` VALUES ( 5017678, 2000468, 0, -3697.1, -3356.44, 267.147, 5.02015, 0, 0, 0.590371, -0.807132, 300, 300, 100, 1, 0, 0);
