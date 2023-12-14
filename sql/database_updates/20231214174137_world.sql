@@ -19,3 +19,4 @@ UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
 UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+REPLACE INTO `creature` VALUES (2582223,521,0,0,0,0,-11831.3,3165.75,19.42,5.5534,120,120,5,100,100,1,0,0);
