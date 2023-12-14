@@ -10,3 +10,12 @@ UPDATE `creature` SET `position_x` = 4291.625488, `position_y` = -2097.460938, `
 
 -- Changes by VOLCA
 REPLACE INTO `creature` VALUES (2582221,521,0,0,0,1,-207.873,-920.006,20.0747,4.60933,120,120,5,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2582222,1131,0,0,0,1,-207.935,-922.841,19.4685,1.48133,120,120,5,100,100,1,0,0);
+UPDATE `creature_template` set `scale` = 0.500000 where entry = 521;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.800000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
+UPDATE `creature_template` set `scale` = 0.700000 where entry = 521;
