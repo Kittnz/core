@@ -74,3 +74,4 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 (69165, 4, 1, 'Silver Orphne Slippers', '', 67873, 1, 0, 1, 5, 1, 8, 2047, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
 UPDATE `item_template` SET item_level = 1, armor = 0, max_durability = 5, bonding = 1 , required_level = 1 WHERE `entry` BETWEEN 69100 and 69165;
+UPDATE `item_template` SET inventory_type = 5 WHERE inventory_type = 0 AND `entry` BETWEEN 69100 and 69165;
