@@ -1909,8 +1909,6 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
     uint32 guid = fields[0].GetUInt32();
     uint8 pRace = fields[2].GetUInt8();
     uint8 pClass = fields[3].GetUInt8();
-    uint8 gender = fields[4].GetUInt8();
-    uint64 logoutTime = fields[23].GetUInt64();
 
     PlayerInfo const *info = sObjectMgr.GetPlayerInfo(pRace, pClass);
     if (!info)
@@ -1923,36 +1921,13 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
     *p_data << fields[1].GetString();                       // name
     *p_data << uint8(pRace);                                // race
     *p_data << uint8(pClass);                               // class
-    *p_data << uint8(gender);                               // gender
+    *p_data << uint8(fields[4].GetUInt8());                 // gender
 
-    union
-    {
-        struct
-        {
-            uint8 skin;
-            uint8 face;
-            uint8 hairStyle;
-            uint8 hairColor;
-        };
-        uint32 raw;
-    } playerBytes;
-    playerBytes.raw = fields[5].GetUInt32();
-
-    // High elf skins were shifted in patch 1.17.1, released on Decemeber 20.
-    if (pRace == RACE_HIGH_ELF && logoutTime < 1703109601)
-    {
-        if (gender == GENDER_MALE && playerBytes.skin == 16 ||
-            gender == GENDER_FEMALE && playerBytes.skin == 15)
-        {
-            ++playerBytes.skin;
-            CharacterDatabase.PExecute("UPDATE `characters` SET `playerBytes`=%u WHERE `guid`=%u", playerBytes.raw, guid);
-        }
-    }
-
-    *p_data << uint8(playerBytes.skin);                     // skin
-    *p_data << uint8(playerBytes.face);                     // face
-    *p_data << uint8(playerBytes.hairStyle);                // hair style
-    *p_data << uint8(playerBytes.hairColor);                // hair color
+    uint32 playerBytes = fields[5].GetUInt32();
+    *p_data << uint8(playerBytes);                          // skin
+    *p_data << uint8(playerBytes >> 8);                     // face
+    *p_data << uint8(playerBytes >> 16);                    // hair style
+    *p_data << uint8(playerBytes >> 24);                    // hair color
 
     uint32 playerBytes2 = fields[6].GetUInt32();
     *p_data << uint8(playerBytes2 & 0xFF);                  // facial hair
