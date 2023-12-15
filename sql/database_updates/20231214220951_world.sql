@@ -75,3 +75,17 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 
 UPDATE `item_template` SET item_level = 1, armor = 0, max_durability = 5, bonding = 1 , required_level = 1 WHERE `entry` BETWEEN 69100 and 69165;
 UPDATE `item_template` SET inventory_type = 5 WHERE inventory_type = 0 AND `entry` BETWEEN 69100 and 69165;
+
+-- fix skill req
+-- helf
+update item_template set required_skill_rank = 75, quality = 2 where entry = 51286;
+update item_template set required_skill_rank = 75 where entry = 51285;
+update item_template set required_skill_rank = 75 where entry = 51277;
+-- goblin
+update item_template set required_skill_rank = 75, fire_res = 0 where entry = 51265;
+update item_template set required_skill_rank = 75 where entry = 51269;
+update item_template set required_skill_rank = 75 where entry = 51263;
+
+-- volatile concoction cd
+update item_template set spellcooldown_1 = 300000 where entry = 51262;
+update item_template set fire_res = 0 where entry = 51264; -- blast shield
