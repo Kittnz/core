@@ -2064,6 +2064,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             {
                                 m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
                                 m_caster->ToPlayer()->SetDisplayId(15435);
+
+                                if (bytes = 6 && m_caster->ToPlayer()->GetRace() == RACE_UNDEAD)
+                                {
+                                    m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES_2, 0, 0); // Remove features for the dark Undeads.
+                                }
+
                                 m_caster->ToPlayer()->m_Events.AddLambdaEventAtOffset([player = m_caster->ToPlayer()]() {player->DeMorph(); }, 250);
                                 return;
                             }
