@@ -812,3 +812,27 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Quest Thalassian Goulash:
+-- Change short objective to: Gather 6 Forest Hawkstrider Legs and 8 Lynx Steaks for Dalicia Sweetsilver in Brinthillien.
+update quest_template set objectives = 'Gather 6 Forest Hawkstrider Legs and 8 Lynx Steaks for Dalicia Sweetsilver in Brinthillien.' where entry = 41190;
+-- Change required items to 6 Forest Hawkstrider Leg and 8 Lynx Steak.
+update quest_template set ReqItemCount1 = 6, ReqItemCount2 = 8 where entry = 41190;
+-- Lynx Steak drop from Young Crimson Lynx, Crimson Lynx at 90%
+delete from creature_loot_template where entry = 61693 and item = 41120;
+delete from creature_loot_template where entry = 61691 and item = 41119;
+delete from creature_loot_template where entry = 61690 and item = 41120;
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61690, 41120, -90, 0, 1, 1, 0),
+(61693, 41120, -90, 0, 1, 1, 0);
+-- Forest Hawkstrider Legs drop from Forest Hawkstrider at 90%
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(61691, 41119, -90, 0, 1, 1, 0);
+
+-- Quest The Highland Menace:
+-- Change short objective to: Bring 10 Bright Lynx Furs to Maelor Steelguard in the Thaumarium.
+update quest_template set objectives = 'Bring 10 Bright Lynx Furs to Maelor Steelguard in the Thaumarium.' where entry = 41216;
+-- Change completion to: One, two, three... and a score of ten! Remarkable work. With such diligence, the hills will soon be secure for our laborers to resume their work without fear.
+update quest_template set offerrewardtext = 'One, two, three... and a score of ten! Remarkable work. With such diligence, the hills will soon be secure for our laborers to resume their work without fear.' where entry = 41216;
+-- Change required items to: 10 Bright Lynx Fur.
+update quest_template set ReqItemCount1 = 10 where entry = 41216;
