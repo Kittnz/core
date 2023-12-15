@@ -89,3 +89,12 @@ update item_template set required_skill_rank = 75 where entry = 51263;
 -- volatile concoction cd
 update item_template set spellcooldown_1 = 300000 where entry = 51262;
 update item_template set fire_res = 0 where entry = 51264; -- blast shield
+
+-- Area Trigger for Grim batol raid:
+-- "5337","0","-3696.12","-3359.85","267.14","6","0","0","0","0"
+
+REPLACE INTO `areatrigger_template` (`id`, `map_id`, `x`, `y`, `z`, `radius`, `box_x`, `box_y`, `box_z`, `box_orientation`) VALUES 
+(5337, 0, 3696.12, -3359.85, 267.14, 6, 0, 0, 0, 0);
+REPLACE INTO `areatrigger_teleport` (`id`, `name`, `message`, `required_level`, `required_condition`, `required_phase`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES 
+(5337, 'Grim Batol - Entrance', 'This raid is not available yet.', 61, 0, 0, 43, -158.441, 131.601, -74.2552, 5.84685);
+
