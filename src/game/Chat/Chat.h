@@ -564,6 +564,7 @@ class ChatHandler
         bool HandleNpcTemplateSetDetectionRangeCommand(char* args);
         bool HandleNpcTemplateSetCallForHelpRangeCommand(char* args);
         bool HandleNpcTemplateSetLeashRangeCommand(char* args);
+        bool HandleNpcTopTarget(char* args);
 
         bool HandleUnitSpeedInfoCommand(char* args);
 
