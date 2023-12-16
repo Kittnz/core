@@ -454,6 +454,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "speed",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
         { "textemote",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
         { "yell",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
+        { "toptarget",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcTopTarget,             "", nullptr },
         { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
         { "group",          SEC_ADMINISTRATOR, false, nullptr,                                        "", creatureGroupsCommandTable },
         { "spawn",          SEC_MODERATOR,     false, nullptr,                                        "", creatureSpawnsCommandTable },

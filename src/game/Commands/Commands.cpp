@@ -16583,6 +16583,33 @@ bool ChatHandler::HandleNpcTemplateSetLeashRangeCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcTopTarget(char* args)
+{
+	Creature* pCreature = GetSelectedCreature();
+	if (!pCreature)
+	{
+		SendSysMessage(LANG_SELECT_CREATURE);
+		SetSentErrorMessage(true);
+		return false;
+	}
+
+    if (Unit* HostileTarget = pCreature->GetThreatManager().getHostileTarget())
+    {
+        PSendSysMessage("Target name %s, pos: x:%.02f, y:%.02f, z:%.02f mapID: %u", 
+            HostileTarget->GetName(), 
+            HostileTarget->GetPositionX(),
+            HostileTarget->GetPositionY(),
+            HostileTarget->GetPositionZ(),
+            HostileTarget->GetMapId());
+    }
+    else
+    {
+        SendSysMessage("No target");
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleCharacterDiffItemsCommand(char* args)
 {
     char* nameStr = ExtractLiteralArg(&args);
