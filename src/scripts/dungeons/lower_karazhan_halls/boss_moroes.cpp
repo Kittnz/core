@@ -88,7 +88,12 @@ struct boss_moroesAI : public ScriptedAI
 
 	uint8 GetPhase()
 	{
-		return m_pInstance->GetData(DATA_MOROES_STAGE);
+		if (m_pInstance != nullptr)
+		{
+			return m_pInstance->GetData(DATA_MOROES_STAGE);
+		}
+
+		return 0;
 	}
 
 	virtual void Aggro(Unit* /*pWho*/) override
@@ -108,17 +113,17 @@ struct boss_moroesAI : public ScriptedAI
 		if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
 			m_creature->PlayDirectMusic(60418);
 	}
-
+	 
 	virtual void EnterEvadeMode() override
 	{
 		// only in combat phases
+		ScriptedAI::EnterEvadeMode();
+
 		if (GetPhase() == 1 || GetPhase() == 3)
 		{
 			m_creature->DespawnOrUnsummon(0, 15);
 			//m_creature->DestroyForNearbyPlayers();
 		}
-
-		ScriptedAI::EnterEvadeMode();
 	}
 
 	virtual void JustDied(Unit* pKiller) override
@@ -300,6 +305,24 @@ struct boss_moroesAI : public ScriptedAI
 			}
 		}
 	}
+
+	virtual void GetAIInformation(ChatHandler& Handler) override
+	{
+		ScriptedAI::GetAIInformation(Handler);
+		if (m_pInstance != nullptr)
+		{
+			Handler.PSendSysMessage("Moroes instance: %p", m_pInstance);
+			Handler.PSendSysMessage("Moroes phase: %hhu", GetPhase());
+		}
+
+		Handler.PSendSysMessage("Moroes data: InterludeTimer: %u, GlitteringDustTimer: %u, SmokeBombTimer: %u, ShuffleKickTimer: %u"
+			"ShadowBlastTimer: %u, MoroesCurseTimer: %u, ReflectionTimer: %u, SacrificeTimer: %u, TeleportTimer: %u, AfterTeleportTimer: %u",
+			m_InterludeTimer, m_GlitteringDustTimer, m_SmokeBombTimer, m_ShuffleKickTimer, m_ShadowBlastTimer, m_MoroesCurseTimer,
+			m_ReflectionTimer, m_SacrificeTimer, m_TeleportTimer, m_AfterTeleportTimer);
+
+		Handler.PSendSysMessage("Moroes data 2: Sound: %d, Intermission: %d", int32(bSound1), int32(bIntermission1));
+	}
+
 };
 
 void boss_moroesAI::TryCastSmokeBomb(const uint32 uiDiff)
