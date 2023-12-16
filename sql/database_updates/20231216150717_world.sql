@@ -25,3 +25,25 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20506; set @weapon_1 = 6256; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61838;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Add gossip NPC flag to 61771 and copy them over from NPC ID 61770.
+update creature_template set gossip_menu_id = 61770, npc_flags = 1 where entry = 61771;
+-- Remove "Trainer" word from all gossip options on these NPCs:
+-- Class text menu update:
+update gossip_menu_option set option_text = 'Warrior'	where id = 0 and menu_id = 61771;
+update gossip_menu_option set option_text = 'Paladin'	where id = 1 and menu_id = 61771;
+update gossip_menu_option set option_text = 'Hunter'	where id = 2 and menu_id = 61771;
+update gossip_menu_option set option_text = 'Rogue'		where id = 3 and menu_id = 61771;
+update gossip_menu_option set option_text = 'Priest'	where id = 4 and menu_id = 61771;
+update gossip_menu_option set option_text = 'Mage'		where id = 5 and menu_id = 61771;
+-- Profession text menu update:
+update gossip_menu_option set option_text = 'Cooking'			where id = 0 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Fishing'			where id = 1 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Enchanting'		where id = 2 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Alchemy'			where id = 3 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Leatherworking'	where id = 4 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Skinning'			where id = 5 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Tailoring'			where id = 6 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Herbalism'			where id = 7 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Engineering'		where id = 8 and menu_id = 61772;
+update gossip_menu_option set option_text = 'Mining'			where id = 9 and menu_id = 61772;	
