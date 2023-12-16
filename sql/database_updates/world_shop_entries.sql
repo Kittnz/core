@@ -203,7 +203,6 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (429, 7, 69123, 'Dalaran Archmage Robe', '', 160),
 (430, 7, 69124, 'Lordaeron Archmage Robe', '', 160),
 (431, 7, 69125, 'Theramore Archmage Robe', '', 160),
-(432, 7, 69126, 'Theramore Archmage Robe', '', 160),
 (433, 7, 69127, 'Robes of the Lotus Pond', '', 160),
 (434, 7, 69128, 'Robes of Spring', '', 160),
 (435, 7, 69129, 'Year of the Dragon Robes', '', 160),
