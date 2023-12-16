@@ -205,3 +205,5 @@ REPLACE INTO `gameobject` VALUES ( 5017592, 2020079, 0, 4076.97, -2567.68, 26.56
 REPLACE INTO `gameobject` VALUES ( 5017592, 2020079, 0, 4076.97, -2567.68, 27.5615, 6.14562, 0, 0, 0.0687264, -0.997636, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017592, 2020079, 0, 4076.97, -2567.68, 27.3615, 6.14562, 0, 0, 0.0687264, -0.997636, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017592, 2020079, 0, 4076.97, -2567.68, 27.1615, 6.14562, 0, 0, 0.0687264, -0.997636, 300, 300, 100, 1, 0, 0);
+UPDATE `creature` SET `position_x` = 4566.376465, `position_y` = -2778.389404, `position_z` = 15.507964, `orientation` = 3.509275 WHERE `guid` = 2581890;
+UPDATE `creature` SET `position_x` = 4566.187012, `position_y` = -2778.468506, `position_z` = 15.507578, `orientation` = 3.594096 WHERE `guid` = 2581890;
