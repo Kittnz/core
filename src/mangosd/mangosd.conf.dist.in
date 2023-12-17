@@ -758,7 +758,7 @@ Guild.EventLogRecordsCount = 100
 
 # MirrorTimer.Fatigue.Max. Fatigue max timer value (in secs)
 
-MirrorTimer.Fatigue.Max = 60
+MirrorTimer.Fatigue.Max = 0
 
 # MirrorTimer.Breath.Max. Waterbreathing max timer value (in secs)
 
