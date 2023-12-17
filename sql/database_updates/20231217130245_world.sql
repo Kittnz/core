@@ -357,3 +357,9 @@ replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`
 (41530, 2, 0, 'I wish to untrain my pet.', 10621, 17, 16, 0, 0, 0, 0, 0, NULL, 0, 0);
 -- Change icon of item 41164 Bucket of Grapes to 21973.
 update item_template set display_id = 21973 where entry = 41164;
+-- Item display fixes sql:
+update item_template set display_id = 40719 where entry = 41108;
+update item_template set display_id = 33467 where entry = 41164;
+update item_template set display_id = 1262 where entry = 41161;
+update item_template set display_id = 1550 where entry = 41111;
+update item_template set armor = 113 where entry = 41192;
