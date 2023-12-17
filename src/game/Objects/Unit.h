@@ -585,6 +585,7 @@ class Unit : public WorldObject
         virtual float GetNativeScale() const;
         void SetNativeScale(float scale);
         float GetCollisionHeight() const { return m_modelCollisionHeight * m_nativeScaleOverride; }
+        float GetMinSwimDepth() const { return GetCollisionHeight() * 0.75f; } // client switches to swim animation at this depth
         void UpdateModelData(); // at any changes to scale and/or displayId
         void InitPlayerDisplayIds();
         static float GetScaleForDisplayId(uint32 displayId);
@@ -661,7 +662,7 @@ class Unit : public WorldObject
         bool isPassiveToHostile() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC); }
         
         virtual bool IsInWater() const;
-        virtual bool IsUnderWater() const;
+        virtual bool IsUnderwater() const;
         bool isInAccessablePlaceFor(Creature const* c) const;
         void GetLosCheckPosition(float& x, float& y, float& z) const final;
 

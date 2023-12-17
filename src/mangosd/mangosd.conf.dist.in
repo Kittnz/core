@@ -756,29 +756,25 @@ Group.OfflineLeaderDelay = 300
 
 Guild.EventLogRecordsCount = 100
 
-# TimerBar.Fatigue.GMLevel. Disable / Enable fatigue for security level (0 - 4) or higher.
+# MirrorTimer.Fatigue.Max. Fatigue max timer value (in secs)
 
-TimerBar.Fatigue.GMLevel = 4
+MirrorTimer.Fatigue.Max = 60
 
-# TimerBar.Fatigue.Max. Fatigue max timer value.
+# MirrorTimer.Breath.Max. Waterbreathing max timer value (in secs)
 
-TimerBar.Fatigue.Max = 60
+MirrorTimer.Breath.Max = 60
 
-# TimerBar.Breath.GMLevel. Disable / Enable waterbreathing for security level (0 - 4) or higher.
+# MirrorTimer.Environmental.Max. Generic environmental (lava/slime/etc) damage delay max timer value (in secs)
 
-TimerBar.Breath.GMLevel = 4
+MirrorTimer.Environmental.Max = 1
 
-# TimerBar.Breath.Max. Waterbreathing max timer value.
+# EnvironmentalDamage.Min. Generic environmental (lava/slime/etc) damage taken on tick
 
-TimerBar.Breath.Max = 60
+EnvironmentalDamage.Min = 605
 
-# TimerBar.Fire.GMLevel. Disable / Enable lava fire damage for security level (0 - 4) or higher.
+# EnvironmentalDamage.Max. Generic environmental (lava/slime/etc) damage taken on tick
 
-TimerBar.Fire.GMLevel = 4
-
-# TimerBar.Fire.Max. Lava damage delay max timer value.
-
-TimerBar.Fire.Max = 1
+EnvironmentalDamage.Max = 610
 
 # MaxPrimaryTradeSkill. Max count that player can learn the primary trade skill. (Max 10)
 

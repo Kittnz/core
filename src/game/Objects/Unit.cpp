@@ -1176,17 +1176,15 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 else
                 {
                     //drowned maybe?
-                    if (pPlayerVictim->GetMirrorTimer(BREATH_TIMER) == 1 * IN_MILLISECONDS) // this is the end state of the drowning timer if someone died to it.
+                    if (pPlayerVictim->IsMirrorTimerActive(MirrorTimer::BREATH)) // this is the end state of the drowning timer if someone died to it.
                         deathReason << "has drowned";
-                    else if (pPlayerVictim->GetMirrorTimer(FIRE_TIMER) == 1 * IN_MILLISECONDS)
+                    else if (pPlayerVictim->IsMirrorTimerActive(MirrorTimer::ENVIRONMENTAL))
                         deathReason << "has burned to death";
-                    else if (pPlayerVictim->GetMirrorTimer(FATIGUE_TIMER) == 1 * IN_MILLISECONDS)
+                    else if (pPlayerVictim->IsMirrorTimerActive(MirrorTimer::FATIGUE))
                         deathReason << "has died from exhaustion";
                     else
                         deathReason << "died of natural causes";
                 }
-
-                
 
                 if (pPlayerVictim->IsHC60())
                 {
@@ -3175,7 +3173,7 @@ bool Unit::IsInWater() const
     return GetTerrain()->IsInWater(GetPositionX(), GetPositionY(), GetPositionZ());
 }
 
-bool Unit::IsUnderWater() const
+bool Unit::IsUnderwater() const
 {
     return GetTerrain()->IsUnderWater(GetPositionX(), GetPositionY(), GetPositionZ());
 }

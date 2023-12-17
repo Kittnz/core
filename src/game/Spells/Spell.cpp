@@ -6273,7 +6273,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 }
                 else if (m_spellInfo->Id == 46060) // Fishing Boat
                 {
-                    if (!m_casterUnit->IsInWater() || m_casterUnit->IsUnderWater())
+                    if (!m_casterUnit->IsInWater() || m_casterUnit->IsUnderwater())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("You need to be in a body of water surface!");
                         return SPELL_FAILED_DONT_REPORT;
