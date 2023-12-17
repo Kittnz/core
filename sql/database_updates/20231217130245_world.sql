@@ -348,3 +348,10 @@ update item_template set buy_price = 20000, sell_price = 5000 where entry in (69
 update item_template set buy_price = 100000, sell_price = 25000 where entry in (69133,69134,69135,69136,69137,69138,69139,69140,69141,69142,69143,69144,69145);
 -- Change the gold buy value of the items below to 1g, change the sell value to 25 silver:
 update item_template set buy_price = 10000, sell_price = 2500 where entry in (41078,41079,41080,41081,41082,41083,41084,41085,41087,41088,41089,41090,41091,41092,41093,41094,41095,41097,41098,41099,41100,41101,41102);
+
+-- Change Stormwind Pet Trainer (61629) Gossip:
+-- Pet Trainer in Stormwind Park has a "reset hunter talents" gossip instead of "reset pet training".  Please copy the behavior of other vanilla Pet Trainers onto this NPC.
+update creature_template set trainer_type = 3, unit_flags = 4608, flags_extra = 524298 where entry = 61629;
+replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `option_broadcast_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `box_broadcast_text`, `condition_id`) VALUES
+(41530, 1, 3, 'Train me in the ways of the beast.', 8408, 5, 16, 0, 0, 0, 0, 0, NULL, 0, 0),
+(41530, 2, 0, 'I wish to untrain my pet.', 10621, 17, 16, 0, 0, 0, 0, 0, NULL, 0, 0);
