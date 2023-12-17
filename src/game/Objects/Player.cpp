@@ -1403,13 +1403,16 @@ bool Player::CheckMirrorTimerActivation(MirrorTimer::Type timer) const
     switch (timer)
     {
         case MirrorTimer::FATIGUE:
-            return (IsInHighSea() && !IsTaxiFlying() && !GetTransport());
+            return sWorld.getConfig(CONFIG_UINT32_MIRRORTIMER_FATIGUE_MAX) != 0 &&
+                   (IsInHighSea() && !IsTaxiFlying() && !GetTransport());
         case MirrorTimer::BREATH:
-            return (IsUnderwater() && GetWaterBreathingInterval());
+            return sWorld.getConfig(CONFIG_UINT32_MIRRORTIMER_BREATH_MAX) != 0 &&
+                   (IsUnderwater() && GetWaterBreathingInterval());
         case MirrorTimer::FEIGNDEATH:
             return (IsFeigningDeath());
         case MirrorTimer::ENVIRONMENTAL:
-            return ((m_environmentFlags & ENVIRONMENT_MASK_LIQUID_HAZARD) && !(m_lastLiquid && m_lastLiquid->SpellId));
+            return sWorld.getConfig(CONFIG_UINT32_MIRRORTIMER_ENVIRONMENTAL_MAX) != 0 &&
+                   ((m_environmentFlags & ENVIRONMENT_MASK_LIQUID_HAZARD) && !(m_lastLiquid && m_lastLiquid->SpellId));
         default:
             return false;
     }
