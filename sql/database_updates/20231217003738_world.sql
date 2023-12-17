@@ -17,3 +17,6 @@ UPDATE gameobject SET spawntimesecsmin = 5, spawntimesecsmax = 5 WHERE id = 2020
 UPDATE gameobject SET spawntimesecsmin = 60, spawntimesecsmax = 60 WHERE id = 2020082;
 UPDATE gameobject SET spawntimesecsmin = 5, spawntimesecsmax = 5 WHERE id = 2020083;
 UPDATE gameobject SET spawntimesecsmin = 60, spawntimesecsmax = 60 WHERE id = 2020084;
+
+-- Fix typo in item description
+UPDATE item_template SET Description = '' WHERE entry = 41197;
