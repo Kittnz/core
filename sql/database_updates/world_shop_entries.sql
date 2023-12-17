@@ -215,4 +215,11 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (442, 7, 69149, 'Dusk Star Gown', '', 160),
 (443, 7, 69150, 'Dawn Star Gown', '', 160),
 (444, 7, 69151, 'Morning Star Gown', '', 160),
-(445, 7, 69152, 'Silver Star Sandals', '', 160);
+(445, 7, 69152, 'Silver Star Sandals', '', 160),
+(446, 7, 69100, 'Illidari Tattoos', '', 160),
+(447, 7, 69101, 'Blood Illidari Tattoos', '', 160),
+(448, 7, 69102, 'Void Illidari Tattoos', '', 160),
+(449, 7, 69103, 'Nether Illidari Tattoos', '', 160),
+(450, 7, 69104, 'Spectral Illidari Tattoos', '', 160),
+(450, 7, 83478, 'Romantic Red Corset Dress', '', 160),
+(450, 7, 83479, 'Romantic Pink Corset Dress', '', 160);
