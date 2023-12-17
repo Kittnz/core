@@ -376,6 +376,7 @@ bool Map::Add(Player *player)
     Cell cell(p);
     EnsureGridLoadedAtEnter(cell, player);
     player->AddToWorld();
+    player->UpdateSavedVelocityPositionToCurrentPos();
     player->LoadMapCellsAround(GetGridActivationDistance());
 
     // Order matters! Send the world first, and the player then
