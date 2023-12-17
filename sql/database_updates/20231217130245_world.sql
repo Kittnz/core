@@ -309,3 +309,31 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Display ID for creature entry 61886 Miriam Lenheim is not activated and currently does not show properly.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(20541, 0, 0, 0, 0);
+-- Npc "Blood Elf Ranger" add weapon 1 2092, weapon 3 13022:
+UPDATE `creature_equip_template` SET `equipentry1` = 2092, `equipentry3` = 13022 WHERE `entry` = 20473;
+-- Quest Ashen Pelts, change short description text 'six' to '6':
+update quest_template set objectives = 'Bring 6 Ashpaw Pelts to Pumpworker Fizzlo at The Water Hole.' where entry = 41183;
+-- Quest 'Clearing Nuisances' entry 41162 has a typo in the short description, it currently says Hazzik's Workshop and should say Gazzik's Workshop:
+update quest_template set objectives = 'Kill Ashfeather Scavengers and Blackvenom Scorpids for Fanzo Edgeline at Gazzik\'s Workshop.' where entry = 41162;
+-- Quest War on Venture Co. entry 41172, make the following item 41039 also drop from the creature Venture Co. Cartographer (entry 61677) and Venture Co. Lumber Worker (Entry 61675) with a drop chance of 50%
+replace into creature_loot_template values
+(61677,41039,-50,0,1,1,0),
+(61675,41039,-50,0,1,1,0);
+-- Quest Entry 41210 Durotar Labor Beginnings, make sure quest has no previous requirements, and set npc Galmo Tazzwrench as start and finish NPC, make sure Galmo Tazzwrench has quest flags, change racemask of the quest to 434
+update creature_template set npc_flags = 3 where entry = 61861;
+update quest_template set prevquestid = 0, requiredraces = 434 where entry = 41210;
+delete from creature_questrelation where id = 61861 and quest = 41210;
+delete from creature_involvedrelation where id = 61861 and quest = 41210;
+replace into creature_questrelation		(id, quest) values (61861, 41210);
+replace into creature_involvedrelation  (id, quest) values (61861, 41210);
+-- Quest Entry 41213 Venture Co. Expansion, make sure quest has no previous requirements, set start and finish npc as Security Officer Mort Tozzlefume, change racemask of the quest to 434
+update creature_template set npc_flags = 3 where entry = 60970;
+update quest_template set prevquestid = 0, requiredraces = 434 where entry = 41213;
+delete from creature_questrelation where id = 60970 and quest = 41213;
+delete from creature_involvedrelation where id = 60970 and quest = 41213;
+replace into creature_questrelation		(id, quest) values (60970, 41213);
+replace into creature_involvedrelation  (id, quest) values (60970, 41213);
