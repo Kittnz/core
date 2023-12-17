@@ -468,3 +468,6 @@ REPLACE INTO `creature` VALUES (2582357,61779,0,0,0,0,3296.6,-2332.2,113.557,0.6
 
 -- Changes by SHANG
 UPDATE `creature` SET `position_x` = 3894.060791, `position_y` = -2491.216064, `position_z` = 28.702541, `orientation` = 5.843107 WHERE `guid` = 2581921;
+
+-- Changes by WOJI
+REPLACE INTO `gameobject` VALUES ( 5017845, 2003230, 0, 3447.06, -2822.53, 92.9847, 1.1616, 0, 0, 0.548694, 0.836023, 300, 300, 100, 1, 0, 0);
