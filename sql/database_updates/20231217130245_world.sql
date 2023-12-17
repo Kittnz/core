@@ -1,0 +1,2 @@
+-- Quest "An Audience With the Prince" (41240) fix: objectives text, quest giver is selectable after compliting quest.
+update quest_template set objectivetext1 = 'Conversation with Kael\'thas heard' where entry = 41240;
