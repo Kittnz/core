@@ -75,18 +75,18 @@ struct AreaTriggerTeleport
 struct ShopEntry
 {
     uint32 shopId;
-	uint32 Category;
-	uint32 Item;
-	std::string Description;
+    uint32 Category;
+    uint32 Item;
+    std::string Description;
     std::string Description_loc4;
-	uint32 Price;
+    uint32 Price;
 };
 
 struct ShopCategory
 {
-	std::string Name;
-	std::string Name_loc4;
-	std::string Icon;
+    std::string Name;
+    std::string Name_loc4;
+    std::string Icon;
 };
 
 typedef robin_hood::unordered_map<uint32, ShopEntry> ShopEntriesMap;
@@ -971,7 +971,7 @@ class ObjectMgr
         void LoadAreaTemplate();
         void LoadAreaLocales();
         void LoadCartographerAreas();
-		void LoadShop();
+        void LoadShop();
 
         void LoadNPCText();
 
@@ -1348,33 +1348,33 @@ class ObjectMgr
 
         int GetOrNewIndexForLocale(LocaleConstant loc);
 
-		ShopCategory const* GetShopCategoryInfo(uint8 category) const
-		{
-			auto iter = m_ShopCategoriesMap.find(category);
-			if (iter == m_ShopCategoriesMap.end())
-				return nullptr;
+        ShopCategory const* GetShopCategoryInfo(uint8 category) const
+        {
+            auto iter = m_ShopCategoriesMap.find(category);
+            if (iter == m_ShopCategoriesMap.end())
+                return nullptr;
 
-			return &iter->second;
-		}
+            return &iter->second;
+        }
 
-		ShopEntry const* GetShopEntryInfo(uint32 id) const
-		{
-			auto iter = m_ShopEntriesMap.find(id);
-			if (iter == m_ShopEntriesMap.end())
-				return nullptr;
+        ShopEntry const* GetShopEntryInfo(uint32 id) const
+        {
+            auto iter = m_ShopEntriesMap.find(id);
+            if (iter == m_ShopEntriesMap.end())
+                return nullptr;
 
-			return &iter->second;
-		}
+            return &iter->second;
+        }
 
-		ShopEntriesMap const& GetShopEntriesList() const
-		{
-			return m_ShopEntriesMap;
-		}
+        ShopEntriesMap const& GetShopEntriesList() const
+        {
+            return m_ShopEntriesMap;
+        }
 
-		ShopCategoriesMap GetShopCategoriesList() const
-		{
-			return m_ShopCategoriesMap;
-		}
+        ShopCategoriesMap GetShopCategoriesList() const
+        {
+            return m_ShopCategoriesMap;
+        }
 
         std::vector<ShopLogEntry*>& GetShopLogEntries(uint32 accountId)
         {
@@ -1485,8 +1485,8 @@ class ObjectMgr
 
         PlayerCacheDataMap m_playerCacheData;
 
-		// Turtle specific. Should be synchronized with m_playerCacheData, since it using pointers from that map!
-		PlayerCachePerAccountMap m_accountPlayersCacheData;
+        // Turtle specific. Should be synchronized with m_playerCacheData, since it using pointers from that map!
+        PlayerCachePerAccountMap m_accountPlayersCacheData;
 
         std::map<std::string, uint32> m_playerNameToGuid;
 
@@ -1722,8 +1722,8 @@ class ObjectMgr
 
         robin_hood::unordered_map<Team, uint32> m_ActivePlayersPerFaction;
 
-		ShopCategoriesMap m_ShopCategoriesMap;
-		ShopEntriesMap m_ShopEntriesMap;
+        ShopCategoriesMap m_ShopCategoriesMap;
+        ShopEntriesMap m_ShopEntriesMap;
 
         robin_hood::unordered_map<uint32, std::vector<ShopLogEntry*>> m_shopLogs;
         robin_hood::unordered_map<uint32, ShopLogEntry*> m_shopLogsLookup;

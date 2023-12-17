@@ -117,12 +117,12 @@ LanguageDesc const* GetLanguageDescByID(uint32 lang)
 
 bool IsLanguageSkill(uint32 Skill)
 {
-	for (int i = 0; i < LANGUAGES_COUNT; ++i)
-	{
-		if (lang_description[i].skill_id == Skill)
-			return true;
-	}
-	return false;
+    for (int i = 0; i < LANGUAGES_COUNT; ++i)
+    {
+        if (lang_description[i].skill_id == Skill)
+            return true;
+    }
+    return false;
 }
 
 template<typename T>
@@ -537,11 +537,11 @@ void ObjectMgr::SetSavedVariable(uint32 index, uint32 value, bool autoSave)
             if (vSavedVariable.uiValue == value)
                 return;
 
-			vSavedVariable.uiValue = value;
+            vSavedVariable.uiValue = value;
             if (autoSave)
                 _SaveVariable(vSavedVariable);
             else
-				vSavedVariable.bSavedInDb = false;
+                vSavedVariable.bSavedInDb = false;
             return;
         }
     }
@@ -805,15 +805,15 @@ void ObjectMgr::UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _cl
 
 PlayerCacheData* ObjectMgr::InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 gender, uint32 accountId, std::string const& name, uint32 level, uint32 zoneId, uint8 hardcoreStatus)
 {
-	PlayerCacheData* data = new PlayerCacheData;
+    PlayerCacheData* data = new PlayerCacheData;
     data->uiGuid = lowGuid;
     UpdatePlayerCache(data, race, _class, gender, accountId, name, level, zoneId, hardcoreStatus);
 
     m_playerCacheData[lowGuid] = data;
     m_playerNameToGuid[name] = lowGuid;
 
-	std::set<PlayerCacheData*>& AccountChars = m_accountPlayersCacheData[accountId];
-	AccountChars.insert(data);
+    std::set<PlayerCacheData*>& AccountChars = m_accountPlayersCacheData[accountId];
+    AccountChars.insert(data);
 
     return data;
 }
@@ -823,12 +823,12 @@ void ObjectMgr::DeletePlayerFromCache(uint32 lowGuid)
     auto itr = m_playerCacheData.find(lowGuid);
     if (itr != m_playerCacheData.end())
     {
-		uint32 AccId = itr->second->uiAccount;
-		m_accountPlayersCacheData[AccId].erase(itr->second);
+        uint32 AccId = itr->second->uiAccount;
+        m_accountPlayersCacheData[AccId].erase(itr->second);
         auto itr2 = m_playerNameToGuid.find(itr->second->sName);
         if (itr2 != m_playerNameToGuid.end())
             m_playerNameToGuid.erase(itr2);
-		delete itr->second;
+        delete itr->second;
         m_playerCacheData.erase(itr);
     }
 }
@@ -853,16 +853,16 @@ void ObjectMgr::ChangePlayerNameInCache(uint32 guidLow, std::string const& oldNa
 
 void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::vector<PlayerCacheData*>& data) const
 {
-	auto AccPlayerCacheIter = m_accountPlayersCacheData.find(accountId);
-	if (AccPlayerCacheIter != m_accountPlayersCacheData.end())
-	{
-		const std::set<PlayerCacheData*>& PlayersInAcc = AccPlayerCacheIter->second;
+    auto AccPlayerCacheIter = m_accountPlayersCacheData.find(accountId);
+    if (AccPlayerCacheIter != m_accountPlayersCacheData.end())
+    {
+        const std::set<PlayerCacheData*>& PlayersInAcc = AccPlayerCacheIter->second;
 
-		for (PlayerCacheData* pPlayerCache : PlayersInAcc)
-		{
-			data.push_back(pPlayerCache);
-		}
-	}
+        for (PlayerCacheData* pPlayerCache : PlayersInAcc)
+        {
+            data.push_back(pPlayerCache);
+        }
+    }
 }
 
 void ObjectMgr::LoadActivePlayersPerFaction()
@@ -5052,7 +5052,7 @@ void ObjectMgr::LoadBattlegroundEntranceTriggers()
         Field *fields = result->Fetch();
         BattlegroundEntranceTrigger bget;
 
-        uint32 triggerId		= fields[0].GetUInt32();
+        uint32 triggerId        = fields[0].GetUInt32();
         uint32 team             = fields[1].GetUInt32();
         uint8 bgTypeId          = fields[2].GetUInt8();
 
@@ -7825,11 +7825,11 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 {
     // find max id
     uint32 new_id = 0;
-	for (const auto & itr : m_GameTeleMap)
-	{
+    for (const auto & itr : m_GameTeleMap)
+    {
         if (itr.first > new_id)
             new_id = itr.first;
-	}
+    }
 
     // use next
     ++new_id;
@@ -7872,10 +7872,10 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
     CacheTrainerSpellMap& trainerList = isTemplates ? m_CacheTrainerTemplateSpellMap : m_CacheTrainerSpellMap;
 
     // For reload case
-	for (robin_hood::pair<const uint32, TrainerSpellData>& itr : trainerList)
-	{
+    for (robin_hood::pair<const uint32, TrainerSpellData>& itr : trainerList)
+    {
         itr.second.Clear();
-	}
+    }
     trainerList.clear();
 
     std::set<uint32> skip_trainers;
@@ -9327,59 +9327,59 @@ AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
 
 void ObjectMgr::LoadShop()
 {
-	m_ShopCategoriesMap.clear();
+    m_ShopCategoriesMap.clear();
     m_shopLogs.clear();
 
-	QueryResult* result = WorldDatabase.Query("SELECT ID, Name, Name_loc4, icon FROM shop_categories");
+    QueryResult* result = WorldDatabase.Query("SELECT ID, Name, Name_loc4, icon FROM shop_categories");
 
-	if (!result)
+    if (!result)
         return;
 
-	do
-	{
-		Field* fields = result->Fetch();
+    do
+    {
+        Field* fields = result->Fetch();
 
-		uint8 id = fields[0].GetUInt8();
-		std::string name = fields[1].GetString();
+        uint8 id = fields[0].GetUInt8();
+        std::string name = fields[1].GetString();
         std::string name_loc4 = fields[2].GetString();
-		std::string icon = fields[3].GetString();
+        std::string icon = fields[3].GetString();
 
-		ShopCategory shopcategory;
-		shopcategory.Name = name;
-		shopcategory.Name_loc4 = name_loc4;
-		shopcategory.Icon = icon;
+        ShopCategory shopcategory;
+        shopcategory.Name = name;
+        shopcategory.Name_loc4 = name_loc4;
+        shopcategory.Icon = icon;
 
-		m_ShopCategoriesMap[id] = shopcategory;
+        m_ShopCategoriesMap[id] = shopcategory;
 
-	} while (result->NextRow());
+    } while (result->NextRow());
 
-	delete result;
+    delete result;
 
-	m_ShopEntriesMap.clear();
+    m_ShopEntriesMap.clear();
 
-	result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
+    result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
 
-	if (!result)
+    if (!result)
         return;
 
-	do
-	{
-		Field* fields = result->Fetch();
+    do
+    {
+        Field* fields = result->Fetch();
 
-		uint32 id = fields[0].GetUInt32();
-		uint8 category = fields[1].GetUInt8();
-		uint32 item = fields[2].GetUInt32();
-		std::string text = fields[3].GetString();
+        uint32 id = fields[0].GetUInt32();
+        uint8 category = fields[1].GetUInt8();
+        uint32 item = fields[2].GetUInt32();
+        std::string text = fields[3].GetString();
         std::string description_loc4 = fields[4].GetString();
-		uint32 price = fields[5].GetUInt32();
+        uint32 price = fields[5].GetUInt32();
 
-		ShopEntry shopentry;
+        ShopEntry shopentry;
         shopentry.shopId = id;
-		shopentry.Category = category;
-		shopentry.Item = item;
-		shopentry.Description = text;
+        shopentry.Category = category;
+        shopentry.Item = item;
+        shopentry.Description = text;
         shopentry.Description_loc4 = description_loc4;
-		shopentry.Price = price;
+        shopentry.Price = price;
 
         if (!price)
         {
@@ -9393,14 +9393,14 @@ void ObjectMgr::LoadShop()
             continue;
         }
 
-		m_ShopEntriesMap[item] = shopentry;
+        m_ShopEntriesMap[item] = shopentry;
 
-	} while (result->NextRow());
+    } while (result->NextRow());
 
-	delete result;
+    delete result;
 
     result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC",
-		realmID);
+        realmID);
 
     if (result)
     {
@@ -9623,10 +9623,10 @@ void ObjectMgr::FillPossibleTransmogs()
 
 uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, bool stupid)
 {
-	if (stupid)
-		return NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].size();
+    if (stupid)
+        return NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].size();
 
-	uint32 numItems = 0;
+    uint32 numItems = 0;
 
     if (itemClass == ITEM_CLASS_ARMOR && itemSubClass != ITEM_SUBCLASS_ARMOR_SHIELD)
     {
