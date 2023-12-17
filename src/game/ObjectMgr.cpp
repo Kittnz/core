@@ -9374,6 +9374,7 @@ void ObjectMgr::LoadShop()
 		uint32 price = fields[5].GetUInt32();
 
 		ShopEntry shopentry;
+        shopentry.shopId = id;
 		shopentry.Category = category;
 		shopentry.Item = item;
 		shopentry.Description = text;
