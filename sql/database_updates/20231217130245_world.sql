@@ -339,3 +339,5 @@ replace into creature_questrelation		(id, quest) values (60970, 41213);
 replace into creature_involvedrelation  (id, quest) values (60970, 41213);
 -- Set Strong Fishing Pole Stock to 1:
 update npc_vendor set maxcount = 1, incrtime = 7200 where item = 6365 and maxcount = 0;
+-- Change quest text of 'Torn Soul' from Miriam Lenheim to the following text:
+update quest_template set details = 'Who is there? Hello?! I cannot see you - but I know you\'re there. Please, whoever you are, help me! There is so much pain, I cannot bear it, it feels like I am being torn asunder every moment of my existence. Countless dark shadows scurry around the houses, pulling and tearing at me. It is like I am at multiple places at once, and my very being wanes at the pressure.$B$BStranger, I beg of you, find the pieces missing from me! They are moving... at different places! End my torture by all that is holy!' where entry = 41198;
