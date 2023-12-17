@@ -222,4 +222,8 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (449, 7, 69103, 'Nether Illidari Tattoos', '', 160),
 (450, 7, 69104, 'Spectral Illidari Tattoos', '', 160),
 (450, 7, 83478, 'Romantic Red Corset Dress', '', 160),
-(450, 7, 83479, 'Romantic Pink Corset Dress', '', 160);
+(451, 7, 83479, 'Romantic Pink Corset Dress', '', 160),
+(452, 7, 41091, 'Jingle Belle Frock', '', 160),
+(453, 7, 41092, 'Apparel of the Bells', '', 160),
+(454, 7, 41097, 'Candy Cane Boots', '', 160),
+(455, 7, 41098, 'Icefur Boots', '', 160);
