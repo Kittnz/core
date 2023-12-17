@@ -341,3 +341,10 @@ replace into creature_involvedrelation  (id, quest) values (60970, 41213);
 update npc_vendor set maxcount = 1, incrtime = 7200 where item = 6365 and maxcount = 0;
 -- Change quest text of 'Torn Soul' from Miriam Lenheim to the following text:
 update quest_template set details = 'Who is there? Hello?! I cannot see you - but I know you\'re there. Please, whoever you are, help me! There is so much pain, I cannot bear it, it feels like I am being torn asunder every moment of my existence. Countless dark shadows scurry around the houses, pulling and tearing at me. It is like I am at multiple places at once, and my very being wanes at the pressure.$B$BStranger, I beg of you, find the pieces missing from me! They are moving... at different places! End my torture by all that is holy!' where entry = 41198;
+
+-- Change the gold buy value of the items below to 2g, change the sell value to 50silver:
+update item_template set buy_price = 20000, sell_price = 5000 where entry in (69153,69154,69155,69156,69157,69158,69159,69160,69161,69162,69163,69164,69165);
+-- Change the gold buy value of the items below to 10g, change the sell value to 2gold 50 silver:
+update item_template set buy_price = 100000, sell_price = 25000 where entry in (69133,69134,69135,69136,69137,69138,69139,69140,69141,69142,69143,69144,69145);
+-- Change the gold buy value of the items below to 1g, change the sell value to 25 silver:
+update item_template set buy_price = 10000, sell_price = 2500 where entry in (41078,41079,41080,41081,41082,41083,41084,41085,41087,41088,41089,41090,41091,41092,41093,41094,41095,41097,41098,41099,41100,41101,41102);
