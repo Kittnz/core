@@ -363,3 +363,5 @@ update item_template set display_id = 33467 where entry = 41164;
 update item_template set display_id = 1262 where entry = 41161;
 update item_template set display_id = 1550 where entry = 41111;
 update item_template set armor = 113 where entry = 41192;
+-- NPC 61705 change name to Deepmurk Oracle, change mana to 75:
+update creature_template set name = 'Deepmurk Oracle', mana_min = 75, mana_max = 75 where entry = 61705;
