@@ -203,11 +203,11 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
 (30168, 'You do not know the powers in which you interfere!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-delete from creature_ai_scripts where entry = 2200045;
+delete from creature_ai_scripts where id = 2200045;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (2200045, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30168, 0, 0, 0, 0, 0, 0, 0, 0, 'Aeltalor Flameshard - Say on Aggro');
 
-delete from creature_ai_events where entry = 2200045;
+delete from creature_ai_events where id = 2200045;
 INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
 (2200045, 61895, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200045, 0, 0, 'Aeltalor Flameshard - Say on Aggro');
 
@@ -337,3 +337,5 @@ delete from creature_questrelation where id = 60970 and quest = 41213;
 delete from creature_involvedrelation where id = 60970 and quest = 41213;
 replace into creature_questrelation		(id, quest) values (60970, 41213);
 replace into creature_involvedrelation  (id, quest) values (60970, 41213);
+-- Set Strong Fishing Pole Stock to 1:
+update npc_vendor set maxcount = 1, incrtime = 7200 where item = 6365 and maxcount = 0;
