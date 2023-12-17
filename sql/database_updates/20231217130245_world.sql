@@ -355,3 +355,5 @@ update creature_template set trainer_type = 3, unit_flags = 4608, flags_extra = 
 replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `option_broadcast_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `box_broadcast_text`, `condition_id`) VALUES
 (41530, 1, 3, 'Train me in the ways of the beast.', 8408, 5, 16, 0, 0, 0, 0, 0, NULL, 0, 0),
 (41530, 2, 0, 'I wish to untrain my pet.', 10621, 17, 16, 0, 0, 0, 0, 0, NULL, 0, 0);
+-- Change icon of item 41164 Bucket of Grapes to 21973.
+update item_template set display_id = 21973 where entry = 41164;
