@@ -1,3 +1,16 @@
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2582350,61886,0,0,0,0,2590.25,-2715.69,200.771,5.91712,120,120,0,100,100,0,0,0);
+REPLACE INTO `gameobject` VALUES ( 5017839, 2020074, 0, 2502.48, -2955.63, 198.078, 1.89344, 0, 0, 0.811504, 0.584346, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017839';
+DELETE FROM game_event_gameobject WHERE guid = '5017839';
+DELETE FROM gameobject_battleground WHERE guid = '5017839';
+REPLACE INTO `gameobject` VALUES ( 5017840, 2020074, 0, 2504.19, -2955.63, 199.4, 2.02146, 0, 0, 0.84722, 0.531243, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017435';
+DELETE FROM game_event_gameobject WHERE guid = '5017435';
+DELETE FROM gameobject_battleground WHERE guid = '5017435';
+REPLACE INTO `gameobject` VALUES ( 5017841, 3000208, 0, 3198.75, -2515.91, 112.435, 0.27559, 0, 0, 0.137359, 0.990521, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5017841';
+DELETE FROM game_event_gameobject WHERE guid = '5017841';
+DELETE FROM gameobject_battleground WHERE guid = '5017841';
+REPLACE INTO `gameobject` VALUES ( 5017842, 3000208, 0, 3191.55, -2442.83, 112.245, 5.75287, 0, 0, 0.26206, -0.965052, 300, 300, 100, 1, 0, 0);
