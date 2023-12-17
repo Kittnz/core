@@ -1908,6 +1908,13 @@ BattleGround.GroupQueueLimit = 40
 BattleGround.Rate.Reputation.AV = 0.85
 BattleGround.Rate.Reputation.WS = 1.15
 BattleGround.Rate.Reputation.AB = 1.15
+BattleGround.Rate.Reputation.SV = 1.15
+
+# Honor reward rates for battlegrounds
+BattleGround.Rate.Honor.AV = 0.75
+BattleGround.Rate.Honor.WS = 1.25
+BattleGround.Rate.Honor.AB = 1.25
+BattleGround.Rate.Honor.SV = 1.25
 
 # Honor reward rates for battlegrounds
 BattleGround.Rate.Honor.AV = 0.75

@@ -427,6 +427,7 @@ class ChatHandler
         bool HandleGameObjectRespawnCommand(char* args);
         bool HandleGameObjectSetGoStateCommand(char* args);
         bool HandleGameObjectSetLootStateCommand(char* args);
+        bool HandleGameObjectSetRespawnTimeCommand(char* args);
         bool HandleGameObjectInfoCommand(char* args);
         bool HandleGameObjectSendCustomAnimCommand(char* args);
         GameObject* getSelectedGameObject();
@@ -563,6 +564,7 @@ class ChatHandler
         bool HandleNpcTemplateSetDetectionRangeCommand(char* args);
         bool HandleNpcTemplateSetCallForHelpRangeCommand(char* args);
         bool HandleNpcTemplateSetLeashRangeCommand(char* args);
+        bool HandleNpcTopTarget(char* args);
 
         bool HandleUnitSpeedInfoCommand(char* args);
 

@@ -764,6 +764,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
         Relocate(16201.578f, 16211.127f, 1.139f, 1.072f);
         SetMap(sMapMgr.CreateMap(1, this));
     }
+    UpdateSavedVelocityPositionToCurrentPos();
 
     uint8 powertype = cEntry->powerType;
 
@@ -2264,6 +2265,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     Map* newmap = sMapMgr.CreateMap(oldmap->GetId(), this);
     ASSERT(newmap);
     SetMap(newmap);
+    UpdateSavedVelocityPositionToCurrentPos();
 
     {
         std::shared_lock<std::shared_mutex> lock(m_visibleGUIDs_lock);

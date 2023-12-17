@@ -545,6 +545,11 @@ void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
             rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB);
             break;
         }
+        case BATTLEGROUND_SV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_SV);
+            break;
+        }
         default:
         {
             rate = 1.0f;
@@ -594,6 +599,11 @@ void BattleGround::RewardReputationToTeam(uint32 factionId, uint32 reputation, T
         case BATTLEGROUND_AB:
         {
             rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB);
+            break;
+        }
+        case BATTLEGROUND_SV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_SV);
             break;
         }
         default:

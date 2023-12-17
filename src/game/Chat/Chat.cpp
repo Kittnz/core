@@ -217,27 +217,34 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand gobjectSetCommandTable[] =
+    {
+        { "gostate",     SEC_DEVELOPER,         false, &ChatHandler::HandleGameObjectSetGoStateCommand,      "", nullptr },
+        { "lootstate",   SEC_DEVELOPER,         false, &ChatHandler::HandleGameObjectSetLootStateCommand,    "", nullptr },
+        { "respawntime", SEC_DEVELOPER,         false, &ChatHandler::HandleGameObjectSetRespawnTimeCommand,  "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                              "", nullptr }
+    };
+
     static ChatCommand gobjectCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectAddCommand,       "", nullptr },
         { "tmpadd",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectTempAddCommand,   "", nullptr },
         { "delete",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectDeleteCommand,    "", nullptr },
         { "move",           SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectMoveCommand,      "", nullptr },
-        { "rotate",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectRotateCommand,      "", nullptr },
+        { "rotate",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectRotateCommand,    "", nullptr },
         { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectNearCommand,      "", nullptr },
         { "target",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectTargetCommand,    "", nullptr },
         { "turn",           SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectTurnCommand,      "", nullptr },
-        { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectScaleCommand,      "", nullptr },
+        { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectScaleCommand,     "", nullptr },
         { "info",           SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectInfoCommand,      "", nullptr },
         { "select",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSelectCommand,    "", nullptr },
         { "despawn",        SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectDespawnCommand,   "", nullptr },
         { "toggle",         SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectToggleCommand,    "", nullptr },
         { "reset",          SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectResetCommand,     "", nullptr },
         { "respawn",        SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectRespawnCommand,   "", nullptr },
-        { "setgostate",     SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSetGoStateCommand,   "", nullptr },
-        { "setlootstate",   SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSetLootStateCommand,   "", nullptr },
+        { "set",            SEC_DEVELOPER,     false, nullptr,                                       "", gobjectSetCommandTable },
         { "customanim",     SEC_DEVELOPER,     false, &ChatHandler::HandleGameObjectSendCustomAnimCommand,"", nullptr },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { nullptr,          0,                 false, nullptr,                                       "", nullptr }
     };
 
     static ChatCommand guildCommandTable[] =
@@ -447,6 +454,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "speed",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
         { "textemote",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
         { "yell",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
+        { "toptarget",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcTopTarget,             "", nullptr },
         { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
         { "group",          SEC_ADMINISTRATOR, false, nullptr,                                        "", creatureGroupsCommandTable },
         { "spawn",          SEC_MODERATOR,     false, nullptr,                                        "", creatureSpawnsCommandTable },
