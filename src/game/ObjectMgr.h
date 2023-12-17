@@ -74,6 +74,7 @@ struct AreaTriggerTeleport
 
 struct ShopEntry
 {
+    uint32 shopId;
 	uint32 Category;
 	uint32 Item;
 	std::string Description;
@@ -1365,7 +1366,7 @@ class ObjectMgr
 			return &iter->second;
 		}
 
-		ShopEntriesMap GetShopEntriesList() const
+		ShopEntriesMap const& GetShopEntriesList() const
 		{
 			return m_ShopEntriesMap;
 		}

@@ -1195,25 +1195,38 @@ bool WorldSession::HandleTurtleAddonMessages(uint32 lang, uint32 type, std::stri
 
 				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
 
-				for (auto& itr : sObjectMgr.GetShopEntriesList())
+                // we have to order them by shop id not item id
+                // currently does not work because the UI will reorder them by item id...
+                std::vector<ShopEntry const*> shopEntries;
+                for (auto const& itr : sObjectMgr.GetShopEntriesList())
+                {
+                    if (itr.second.Category == categoryID)
+                        shopEntries.push_back(&itr.second);
+                }
+                std::sort(shopEntries.begin(), shopEntries.end(), [&](ShopEntry const* t1, ShopEntry const* t2)
+                {
+                    return t1->shopId < t2->shopId;
+                });
+
+				for (auto const& itr : shopEntries)
 				{
-					if (itr.second.Category != categoryID)
+					if (itr->Category != categoryID)
 						continue;
 
-					if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr.second.Item))
+					if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr->Item))
 					{
 						if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
 							_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-								+ itr.second.Description_loc4 + "="
-								+ std::to_string(itr.second.Price) + "="
+								+ itr->Description_loc4 + "="
+								+ std::to_string(itr->Price) + "="
 								+ pProto->Description + "="
-								+ std::to_string(itr.second.Item));
+								+ std::to_string(itr->Item));
 						else
 							_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-								+ itr.second.Description + "="
-								+ std::to_string(itr.second.Price) + "="
+								+ itr->Description + "="
+								+ std::to_string(itr->Price) + "="
 								+ pProto->Description + "="
-								+ std::to_string(itr.second.Item));
+								+ std::to_string(itr->Item));
 					}
 				}
 
