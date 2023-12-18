@@ -522,3 +522,7 @@ replace into creature_questrelation		(id, quest) values (80247, 1684);
 -- Fix item displays.
 update item_template set display_id = 36392 where entry = 41187; -- reefscale pantaloons
 update item_template set display_id = 37425 where entry = 41011; -- wooden gryphon carving
+-- Deepmurk Warrior, Deepmurk Oracle, Deepmurk Darkhunter, Highborne Soulwraith needs to do 50% less melee damage.
+update creature_template set dmg_min = 10, dmg_max = 16 where entry in (61705,61706,61707,61718);
+-- Highborne Soulwraith should cast its Banshee Curse ability every 18-20 seconds instead of every 12 seconds.
+update creature_spells set delayRepeatMin_1 = 18, delayRepeatMax_1 = 20 where entry = 180253;
