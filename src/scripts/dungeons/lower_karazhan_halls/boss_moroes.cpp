@@ -122,13 +122,15 @@ struct boss_moroesAI : public ScriptedAI
 	virtual void EnterEvadeMode() override
 	{
 		// only in combat phases
-		ScriptedAI::EnterEvadeMode();
-
-		if (GetPhase() == 1 || GetPhase() == 3)
+		if (GetPhase() == 3)
 		{
-			m_creature->DespawnOrUnsummon(0, 15);
-			//m_creature->DestroyForNearbyPlayers();
+			m_creature->CastSpell(m_creature, SPELL_TELEPORT, true);
+			float x, y, z, o;
+			m_creature->GetHomePosition(x, y, z, o);
+			m_creature->NearTeleportTo(x, y, z, o);
 		}
+
+		ScriptedAI::EnterEvadeMode();
 	}
 
 	virtual void JustDied(Unit* pKiller) override
@@ -178,14 +180,6 @@ struct boss_moroesAI : public ScriptedAI
 
 			if (GetPhase() == 0)
 			{
-				// Giperion: Due to unknown reason, GOSSIP flag may not be set, when moroes resets
-				// It's very critical for him, so I made a decision to check for it in tick function
-				// Not optimal, but it's very fast, so should'nt be a problem
-				if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
-				{
-					m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-				}
-
 				if (m_InterludeTimer)
 				{
 					if (m_InterludeTimer < uiDiff)
@@ -198,6 +192,17 @@ struct boss_moroesAI : public ScriptedAI
 					}
 					else
 						m_InterludeTimer -= uiDiff;
+				}
+				else
+				{
+					// Giperion: Due to unknown reason, GOSSIP flag may not be set, when moroes resets
+					// It's very critical for him, so I made a decision to check for it in tick function
+					// Not optimal, but it's very fast, so should'nt be a problem
+
+					if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+					{
+						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+					}
 				}
 			}
 			else if (GetPhase() == 1)
