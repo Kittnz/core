@@ -336,3 +336,17 @@ REPLACE INTO `gameobject` VALUES ( 48642, 176364, 1, 6509.15, 798.873, 8.22928, 
 REPLACE INTO `gameobject` VALUES ( 48642, 176364, 1, 6509.15, 799.073, 8.22928, 1.28282, 0, 0, 0.598325, 0.801254, 900, 900, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 48642, 176364, 1, 6509.15, 799.273, 8.22928, 1.28282, 0, 0, 0.598325, 0.801254, 900, 900, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 48642, 176364, 1, 6509.15, 799.073, 8.22928, 1.28282, 0, 0, 0.598325, 0.801254, 900, 900, 100, 1, 0, 0);
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2580491;
+DELETE FROM creature_addon WHERE guid=2580491;
+DELETE FROM creature_movement WHERE id=2580491;
+DELETE FROM game_event_creature WHERE guid=2580491;
+DELETE FROM game_event_creature_data WHERE guid=2580491;
+DELETE FROM creature_battleground WHERE guid=2580491;
+DELETE FROM creature WHERE guid=2580492;
+DELETE FROM creature_addon WHERE guid=2580492;
+DELETE FROM creature_movement WHERE id=2580492;
+DELETE FROM game_event_creature WHERE guid=2580492;
+DELETE FROM game_event_creature_data WHERE guid=2580492;
+DELETE FROM creature_battleground WHERE guid=2580492;
