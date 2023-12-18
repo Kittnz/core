@@ -515,3 +515,7 @@ update quest_template set title = 'Digging Deeper' where entry = 41212;
 update item_template set name = 'Amice of Eternal Autumn' where entry = 41151; -- robe of the eternal autumn.
 -- High Elves Quest - Kingsbane - Should be marked as (Elite).
 update quest_template set type = 1 where entry = 41252;
+-- Remove quest Lesson in Protection from npc 80247 and assign quest 1684 to npc 80247.
+delete from creature_questrelation where id = 80247 and quest = 41261;
+delete from creature_involvedrelation where id = 4088 and quest = 41261;
+replace into creature_questrelation		(id, quest) values (80247, 1684);
