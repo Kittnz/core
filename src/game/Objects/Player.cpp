@@ -19351,6 +19351,13 @@ void Player::UpdateHomebindTime(uint32 time)
     {
         if (time >= m_HomebindTimer)
         {
+            // Revive player who died inside instance.
+            if (GetDeathState() == DEAD)
+            {
+                ResurrectPlayer(0.5f);
+                SpawnCorpseBones();
+            }
+
             // teleport to homebind location
             TeleportToHomebind();
         }
