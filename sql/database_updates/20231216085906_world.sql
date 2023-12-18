@@ -1,5 +1,5 @@
 -- Remove obscene Cenarion Cricle rep from a repeatable quest, undermining Ahn'Qiraj farming
-UPDATE quest_template SET RewRepFaction1 = 0, RewRepValue1 = 0, RewXP = 0, RewMoneyMaxLevel = 0 WHERE entry = 50316;
+UPDATE quest_template SET RewRepFaction1 = 0, RewRepValue1 = 0, RewXP = 0, RewMoneyMaxLevel = 0 WHERE entry = 50318;
 
 -- Several item fixes from Dragunovi
 update item_template set bonding = 1 where entry = 51043; -- void linked satchel
