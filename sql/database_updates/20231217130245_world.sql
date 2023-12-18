@@ -365,3 +365,5 @@ update item_template set display_id = 1550 where entry = 41111;
 update item_template set armor = 113 where entry = 41192;
 -- NPC 61705 change name to Deepmurk Oracle, change mana to 75:
 update creature_template set name = 'Deepmurk Oracle', mana_min = 75, mana_max = 75 where entry = 61705;
+-- Quest 'A Flickering Flame' (40699) main text has been updated.
+update quest_template set details = 'Why hello there!$B$BWhat, shocked to see a gnome so far west? Well, you should be, there isn\'t many of my kind so far from home.$B$BOr well, what used to be home.$B$BEither way, I\'m looking to conduct experiments now that I have some time and space to myself, the first of which requires some flammable, and quite dangerous materials!$B$BFar to the west is a place called The Charred Vale, it is there that roving flame elementals can be found, from them I\'d like to acquire something called a \'Flickering Flame\'. Get it for me, and I\'ll make sure you\'re compensated.' where entry = 40699;
