@@ -3,6 +3,8 @@
 -- item 41065 - Ivory Hawkstrider 61695
 -- item 41064 - Elder Crimson Lynx 61700
 
-UPDATE `item_required_target` SET `target_entry` = 61776 WHERE `entry` = 41064;
+DELETE FROM `item_required_target` WHERE `entry` IN (41064, 41065, 41066);
+
+UPDATE `item_required_target` SET `target_entry` = 61776 WHERE `entry` = 41066;
 UPDATE `item_required_target` SET `target_entry` = 61695 WHERE `entry` = 41065;
-UPDATE `item_required_target` SET `target_entry` = 61700 WHERE `entry` = 41066;
+UPDATE `item_required_target` SET `target_entry` = 61700 WHERE `entry` = 41064;
