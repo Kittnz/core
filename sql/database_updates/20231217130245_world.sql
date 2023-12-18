@@ -508,3 +508,6 @@ replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30024, 0.5, 0, -30024, 1, 0);
 replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30037, 2.5, 0, -30037, 1, 0);
 replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30038, 0.5, 0, -30038, 1, 0);
+
+-- Quest 41212 title has been updated.
+update quest_template set title = 'Digging Deeper' where entry = 41212;
