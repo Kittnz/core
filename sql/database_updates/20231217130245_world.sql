@@ -519,3 +519,6 @@ update quest_template set type = 1 where entry = 41252;
 delete from creature_questrelation where id = 80247 and quest = 41261;
 delete from creature_involvedrelation where id = 4088 and quest = 41261;
 replace into creature_questrelation		(id, quest) values (80247, 1684);
+-- Fix item displays.
+update item_template set display_id = 36392 where entry = 41187; -- reefscale pantaloons
+update item_template set display_id = 37425 where entry = 41011; -- wooden gryphon carving
