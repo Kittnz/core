@@ -408,8 +408,103 @@ update quest_template set prevquestid = 0 where entry = 80289;
 -- Item Rommath's Orders should be readable and have the following text:
 update item_template set description = '', page_text = 50692 where entry = 41196;
 -- Unnecessary Flavour Text fix.
-update item_template set description = '' entry in (41179,41180,41181,41198,41199,41200,41201,41202,41203);
+update item_template set description = '' where entry in (41179,41180,41181,41198,41199,41200,41201,41202,41203);
 -- Change mana of Veloren Brightstar id 61787 to 50.
 update creature_template set mana_min = 50, mana_max = 50 where entry = 61787;
 -- Change mana of Reefscale Sorceress id 61709 to 135.
 update creature_template set mana_min = 135, mana_max = 135 where entry = 61709;
+-- Shadowforge Prowler id 80207 change lvl to 17-18 and all stats accordingly, copy loot table from npc 1222.
+replace INTO creature_template VALUES
+(80207, 6053, 6057, 0, 0, 0, 'Shadowforge Prowler', NULL, 0, 17, 18, 386, 417, 490, 490, 782, 16, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 80207, 424, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 20507, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (20507, 5303, 0, 0);
+
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 818, 0.16, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 856, 0.75, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 858, 1.0243, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 954, 0.46, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 955, 0.52, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 1179, 1.7926, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 1180, 0.58, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 1206, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 1210, 0.36, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2274, 1, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2407, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2409, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2450, 0.06, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2452, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2455, 0.5122, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2589, 18.822, 0, 1, 3, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2592, 19.3342, 0, 1, 2, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2657, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2700, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2770, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2835, 0.03, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 2881, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 3012, 0.34, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 4293, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 4345, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 4408, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 4409, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 4541, 3.9693, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 5574, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 5578, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 6344, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 6347, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 6348, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 6391, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 6716, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 30022, 0.5, 0, -30022, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 30024, 0.5, 0, -30024, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 30037, 2.5, 0, -30037, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80207, 30038, 0.5, 0, -30038, 1, 0);
+
+-- Shadowforge Fire Priest id 80205 change lvl to 19 and all stats accordingly, copy loot table from npc 1222.
+replace INTO creature_template VALUES
+(80205, 6055, 0, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 19, 19, 449, 449, 490, 490, 817, 16, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 29, 35, 0, 88, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 31.504, 43.318, 100, 7, 0, 80205, 424, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 180298, 0, 0, NULL, 23, 35, 'EventAI', 0, 3, 0, 0, 3, 20508, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace INTO creature_spells VALUES
+(180298, ': Shadowforge Fire Priest', 1094, 100, 1, 0, 0, 0, 8, 12, 22, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+replace INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (20508, 5303, 0, 0);
+
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 80216, -100, 1, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 818, 0.16, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 856, 0.75, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 858, 1.0243, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 954, 0.46, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 955, 0.52, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 1179, 1.7926, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 1180, 0.58, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 1206, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 1210, 0.36, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2274, 1, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2407, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2409, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2450, 0.06, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2452, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2455, 0.5122, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2589, 18.822, 0, 1, 3, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2592, 19.3342, 0, 1, 2, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2657, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2700, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2770, 0.08, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2835, 0.03, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 2881, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 3012, 0.34, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 4293, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 4345, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 4408, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 4409, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 4541, 3.9693, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 5574, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 5578, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 6344, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 6347, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 6348, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 6391, 0.04, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 6716, 0.02, 0, 1, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30022, 0.5, 0, -30022, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30024, 0.5, 0, -30024, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30037, 2.5, 0, -30037, 1, 0);
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (80205, 30038, 0.5, 0, -30038, 1, 0);
