@@ -369,3 +369,5 @@ update creature_template set name = 'Deepmurk Oracle', mana_min = 75, mana_max =
 update quest_template set details = 'Why hello there!$B$BWhat, shocked to see a gnome so far west? Well, you should be, there isn\'t many of my kind so far from home.$B$BOr well, what used to be home.$B$BEither way, I\'m looking to conduct experiments now that I have some time and space to myself, the first of which requires some flammable, and quite dangerous materials!$B$BFar to the west is a place called The Charred Vale, it is there that roving flame elementals can be found, from them I\'d like to acquire something called a \'Flickering Flame\'. Get it for me, and I\'ll make sure you\'re compensated.' where entry = 40699;
 -- Change flying machines NPC 50597, 50598 display IDs to: 18510:
 update creature_template set display_id1 = 18510 where entry in (50597, 50598);
+-- Warrior Trainer - Larane Dawnbringer - 80247: Npc flags fix.
+update creature_template set npc_flags = 19 where entry in (80247);
