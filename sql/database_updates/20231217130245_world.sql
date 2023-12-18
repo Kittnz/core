@@ -405,3 +405,7 @@ UPDATE `quest_template` SET `Title` = '[DEPRECATED] Teslinah\'s Search IV' WHERE
 UPDATE `quest_template` SET `Title` = '[DEPRECATED] Teslinah\'s Search V' WHERE `entry` = 80265;
 -- Quest 80289 should not require completion of 80256.
 update quest_template set prevquestid = 0 where entry = 80289;
+-- Item Rommath's Orders should be readable and have the following text:
+update item_template set description = '', page_text = 50692 where entry = 41196;
+-- Unnecessary Flavour Text fix.
+update item_template set description = '' entry in (41179,41180,41181,41198,41199,41200,41201,41202,41203);
