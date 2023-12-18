@@ -409,3 +409,7 @@ update quest_template set prevquestid = 0 where entry = 80289;
 update item_template set description = '', page_text = 50692 where entry = 41196;
 -- Unnecessary Flavour Text fix.
 update item_template set description = '' entry in (41179,41180,41181,41198,41199,41200,41201,41202,41203);
+-- Change mana of Veloren Brightstar id 61787 to 50.
+update creature_template set mana_min = 50, mana_max = 50 where entry = 61787;
+-- Change mana of Reefscale Sorceress id 61709 to 135.
+update creature_template set mana_min = 135, mana_max = 135 where entry = 61709;
