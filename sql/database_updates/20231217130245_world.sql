@@ -513,3 +513,5 @@ replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 update quest_template set title = 'Digging Deeper' where entry = 41212;
 -- Fix for robe name without robe.
 update item_template set name = 'Amice of Eternal Autumn' where entry = 41151; -- robe of the eternal autumn.
+-- High Elves Quest - Kingsbane - Should be marked as (Elite).
+update quest_template set type = 1 where entry = 41252;
