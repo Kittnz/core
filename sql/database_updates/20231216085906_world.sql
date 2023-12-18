@@ -14,6 +14,3 @@ REPLACE INTO creature_questrelation (id, quest) VALUES (61189, 40784);
 -- Fix incorrect "choose reward" behavior
 UPDATE quest_template SET RewItemId1 = 0, RewChoiceItemCount1 = 0, RewItemId1 = 61623, RewItemCount1 = 1 WHERE entry = 40976;
 UPDATE quest_template SET RewItemId1 = 0, RewChoiceItemCount1 = 0, RewItemId1 = 61386, RewItemCount1 = 1 WHERE entry = 40857;
-
--- Nerf wealth of Winterax Trolls in Alterac Valley
-UPDATE creature_template SET Gold_Min = 425, Gold_Max = 575 WHERE entry IN (10984, 39998, 39999);
