@@ -212,3 +212,11 @@ DELETE FROM game_event_gameobject WHERE guid = '5017676';
 DELETE FROM gameobject_battleground WHERE guid = '5017676';
 REPLACE INTO `creature` VALUES (2582249,61892,0,0,0,0,-3899.84,-3367.3,286.813,4.3907,300,300,6,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2582249,61892,0,0,0,0,-3899.84,-3367.3,286.813,4.3907,300,300,0,100,100,0,0,0);
+
+-- Changes by WOJI
+DELETE FROM creature WHERE guid=2560338;
+DELETE FROM creature_addon WHERE guid=2560338;
+DELETE FROM creature_movement WHERE id=2560338;
+DELETE FROM game_event_creature WHERE guid=2560338;
+DELETE FROM game_event_creature_data WHERE guid=2560338;
+DELETE FROM creature_battleground WHERE guid=2560338;
