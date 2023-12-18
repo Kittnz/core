@@ -1435,4 +1435,5 @@ replace into area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (5545, 0, 5225, 1443, 64, 5, 'Silver Covenant Camp', 0, 0),
 (5546, 0, 5225, 1444, 64, 5, 'The Last Runestone', 0, 0),
 (5547, 0, 139, 1445, 64, 57, 'Forlorn Summit', 0, 0),
-(5548, 1, 406, 1446, 64, 0, 'Broken Cliff Mine', 0, 0);
+(5548, 1, 406, 1446, 64, 0, 'Broken Cliff Mine', 0, 0),
+(5550, 0, 11, 1447, 64, 25, 'Ruins of Grim Batol', 0, 0);
