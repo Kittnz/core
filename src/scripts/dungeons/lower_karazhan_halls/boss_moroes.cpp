@@ -115,6 +115,8 @@ struct boss_moroesAI : public ScriptedAI
 
 		if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
 			m_creature->PlayDirectMusic(60418);
+
+		m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 	}
 	 
 	virtual void EnterEvadeMode() override
@@ -145,6 +147,7 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->MonsterYell("New guests? It has been a while since we have had those. I assume your arrival has taken -some- effort even if you were uninvited!");
 			m_creature->PlayDirectSound(60402);
 			m_InterludeTimer = 7000;
+			m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 		}
 		else
 		{
@@ -153,6 +156,8 @@ struct boss_moroesAI : public ScriptedAI
 			if (m_pInstance)
 				m_pInstance->SetData(DATA_MOROES_STAGE, 3);
 			m_InterludeTimer = 12000;
+			bIntermission1 = false;
+			m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 		}
 	}
 
@@ -173,6 +178,14 @@ struct boss_moroesAI : public ScriptedAI
 
 			if (GetPhase() == 0)
 			{
+				// Giperion: Due to unknown reason, GOSSIP flag may not be set, when moroes resets
+				// It's very critical for him, so I made a decision to check for it in tick function
+				// Not optimal, but it's very fast, so should'nt be a problem
+				if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+				{
+					m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+				}
+
 				if (m_InterludeTimer)
 				{
 					if (m_InterludeTimer < uiDiff)
@@ -253,9 +266,16 @@ struct boss_moroesAI : public ScriptedAI
 						if (m_creature->IsInCombat())
 							ResetCombat();
 						RestoreFlags();
+						bIntermission1 = true;
 					}
 					else
 						m_AfterTeleportTimer -= uiDiff;
+				}
+
+				if (bIntermission1)
+				{
+					if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+						m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 				}
 			}
 			else if (GetPhase() == 3)
