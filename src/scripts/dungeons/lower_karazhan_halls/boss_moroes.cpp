@@ -74,6 +74,9 @@ struct boss_moroesAI : public ScriptedAI
 		m_creature->RemoveAllAuras();
 		m_creature->DeleteThreatList();
 		m_creature->CombatStop(true);
+
+		m_creature->DisableSpline();
+		m_creature->GetMotionMaster()->MoveTargetedHome();
 	}
 
 	void ResetBattleTimers()
