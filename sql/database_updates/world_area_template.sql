@@ -1164,7 +1164,7 @@ replace into area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (3558, 42, 3430, 1182, 64, 7, 'Elrendar Falls', 0, 0),
 (3805, 0, 33, 1184, 64, 40, 'Zul\'Aman', 0, 0),
 (3881, 0, 5225, 1185, 64, 0, 'Silver Sun Mine', 0, 0),
-(3882, 0, 5225, 1186, 312, 0, 'Citadel of the Sun', 0, 0),
+(3882, 0, 2040, 1186, 312, 0, 'Citadel of the Sun', 0, 0),
 (3883, 0, 5225, 1187, 64, 10, 'Golden Dawn Institute', 0, 0),
 (3884, 0, 0, 1188, 64, 16, '', 0, 0),
 (4010, 1, 15, 1189, 64, 38, 'Mudsprocket', 0, 0),
