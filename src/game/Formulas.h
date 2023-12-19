@@ -136,7 +136,11 @@ namespace MaNGOS
                 else
                     xp_gain *= 2;
 
-                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE);
+
+                bool isTurtleMode = pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY);
+
+                if (!isTurtleMode)
+                    xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE);
             }
 
             if (pCreature->IsPet())
@@ -155,7 +159,12 @@ namespace MaNGOS
                     xp_gain *= 1.2f;
             }
 
-            xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+            bool isTurtleMode = pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY);
+
+
+            if (!isTurtleMode)
+                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+
 
             return std::nearbyint(xp_gain);
         }
