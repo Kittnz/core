@@ -102,3 +102,13 @@ REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (934, 
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (950, 2040, 67);
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (950, 5225, 0);
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (949, 5536, 0);
+
+-- change gossip for Farenia Roseheart 61802
+-- "Loathe though I am to do this to her, it seems that despite her best efforts Vereesa has not been able to handle her responsibilities on her own. For the good of our people we must look to someone else for leadership.$B$BSadly, some here cling to the past, hindering our progress. Perhaps the responsibility of the crown is too much for one head in these circumstances, yet reluctance is ever the companion of fear of change. We must put our people first and cast aside antiquated loyalties to usher in a new, better era."
+
+UPDATE `broadcast_text` SET `male_text` = 'Loathe though I am to do this to her, it seems that despite her best efforts Vereesa has not been able to handle her responsibilities on her own. For the good of our people we must look to someone else for leadership.$B$BSadly, some here cling to the past, hindering our progress. Perhaps the responsibility of the crown is too much for one head in these circumstances, yet reluctance is ever the companion of fear of change.$B$BWe must put our people first and cast aside antiquated loyalties to usher in a new, better era.' WHERE `male_text` like '%people we must look to someone else for leadership.%';
+
+-- change gossip for Miralin Wavesinger 61805
+-- "Hm? Oh, bal’a dash, friend. Is there something I can help you with? As you can see, we are in the midst of quite the dilemma. With the throne in play, I imagine it will be a rather dramatic debate. If nothing else, let none say that the Quel’dorei are not a passionate people. I wonder, who would you support in this clash?"
+
+UPDATE `broadcast_text` SET `male_text` = 'Hm? Oh, bal’a dash, friend. Is there something I can help you with? As you can see, we are in the midst of quite the dilemma.$B$BWith the throne in play, I imagine it will be a rather dramatic debate. If nothing else, let none say that the Quel’dorei are not a passionate people.$B$BI wonder, who would you support in this clash?' WHERE `male_text` like '%a riveting play with an ever-shifting%';
