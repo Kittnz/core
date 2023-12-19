@@ -15,3 +15,6 @@ REPLACE INTO `gameobject` VALUES ( 5017741, 2020088, 0, -3983.34, -3427.38, 287.
 REPLACE INTO `gameobject` VALUES ( 5017741, 2020088, 0, -3983.54, -3427.38, 287.218, 3.4307, 0, 0, 0.98957, -0.144051, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017741, 2020088, 0, -3983.54, -3427.18, 287.218, 3.4307, 0, 0, 0.98957, -0.144051, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5017741, 2020088, 0, -3983.54, -3427.38, 287.218, 3.4307, 0, 0, 0.98957, -0.144051, 300, 300, 100, 1, 0, 0);
+
+-- Changes by WOJI
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES (2582210,1, 3381.803711,-2819.983398,110.329361, 100);
