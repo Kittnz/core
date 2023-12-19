@@ -357,3 +357,24 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61902, 41273);
 replace into creature_involvedrelation  (id, quest) values (61904, 41273);
 update quest_template set requiredraces = 434		 where entry = 41273;
+
+-- Change gossip for Commander Anarileth 61851.
+set @gossip_menu_id = 41601; set @magic_number = 61851;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Brinthilien, young $c. May the Eternal Sun shine upon you');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Stat adjustment for npc:
+-- Reduce health of Defective Arcane Golem 61778 to 86.
+update creature_template set health_min = 86, health_max = 86 where entry = 61778;
+-- Reduce damage of Defective Arcane Golem 61778 to 4-5.
+update creature_template set dmg_min = 4, dmg_max = 5 where entry = 61778;
+-- Reduce health of Malfunctioning Arcane Golem 61777 to 86.
+update creature_template set health_min = 86, health_max = 86 where entry = 61777;
+-- Reduce damage of Malfunctioning Arcane Golem 61777 to 4-5.
+update creature_template set dmg_min = 4, dmg_max = 5 where entry = 61777;
+-- Reduce health of Arcane Pounder 61779 to 102.
+update creature_template set health_min = 102, health_max = 102 where entry = 61779;
+-- Reduce damage of Arcane Pounder 61779 to 6-7.
+update creature_template set dmg_min = 6, dmg_max = 7 where entry = 61779;
