@@ -271,7 +271,7 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
                         sLog.outErrorDb("CreatureEventAI:  Creature %u are using repeatable event(%u) with param4 < param3 (RepeatMax < RepeatMin). Event will never repeat.", temp.creature_id, i);
                     break;
                 }
-                case EVENT_T_MAP_SCRIPT_EVENT:
+                case EVENT_T_SCRIPT:
                     break;
                 case EVENT_T_GROUP_MEMBER_DIED:
                 {
