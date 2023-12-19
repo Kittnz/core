@@ -29,3 +29,24 @@ UPDATE creature_template SET level_min = @level, level_max = @level WHERE entry 
 
 SET @level = 3; SET @entry = 61691;
 UPDATE creature_template SET level_min = @level, level_max = @level + 1 WHERE entry = @entry;
+
+
+-- Rename item Formal Light blue Waistcoat to Formal Light Blue Waistcoat
+
+UPDATE item_template SET name = 'Formal Light Blue Waistcoat' WHERE name = 'Formal Light blue Waistcoat';
+
+-- Rename item Black Tie Light blue Waistcoat to Black Tie Light Blue Waistcoat
+
+UPDATE item_template SET name = 'Black Tie Light Blue Waistcoat' WHERE name = 'Black Tie Light blue Waistcoat';
+
+-- Rename item Black Tie Light blue Waistcoat to Black Tie Light Blue Waistcoat
+
+UPDATE item_template SET name = 'Black Tie Light Blue Waistcoat' WHERE name = 'Black Tie Light blue Waistcoat';
+
+-- Rename item Black Tie blue Waistcoat to Black Tie Blue Waistcoat
+
+UPDATE item_template SET name = 'Black Tie Blue Waistcoat' WHERE name = 'Black Tie blue Waistcoat';
+
+-- Rename item Black Tie blue Waistcoat to Black Tie Blue Waistcoat
+
+UPDATE item_template SET name = 'Black Tie Blue Waistcoat' WHERE name = 'Black Tie blue Waistcoat';
