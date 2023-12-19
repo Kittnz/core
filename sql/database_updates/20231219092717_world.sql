@@ -58,3 +58,5 @@ UPDATE `quest_template` SET `Title` = '[DEPRECATED] Pelts and Tusks' WHERE `entr
 DELETE FROM `creature_questrelation` WHERE `quest` = @quest;
 DELETE FROM `creature_involvedrelation` WHERE `quest` = @quest;
 
+update item_template set sheath = 0 where entry = 60003; -- remnants of an old god
+
