@@ -81,3 +81,19 @@ UPDATE `broadcast_text` SET `male_text` = 'Greetings in Elune''s light. Welcome 
 -- Remove, <Herbalist> title from npc 80249 Ralonius Sundew
 
 UPDATE creature_template SET subname = '' WHERE entry = 80249;
+
+-- dying in Alah'Thalas (the city itself) does not send you to a graveyard
+
+-- AH - 934
+-- TH - 950
+-- BS - 949
+
+REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (950, 3.07);
+
+DELETE FROM `game_graveyard_zone` WHERE `id` = 2040;
+DELETE FROM `game_graveyard_zone` WHERE `id` = 5225;
+DELETE FROM `game_graveyard_zone` WHERE `id` = 5536;
+
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (2040, 934, 469);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (5225, 950, 0);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (5536, 949, 0);
