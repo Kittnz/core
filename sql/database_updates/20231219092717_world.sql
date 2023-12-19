@@ -77,3 +77,7 @@ UPDATE item_template SET buy_price = 20000, sell_price = 5000 WHERE entry in (41
 -- Greetings in Elune's light. Welcome to Darnassus, a haven born from the grace of the Moon Goddess. This sacred place is our refuge following the Battle of Mount Hyjal, a place where our people were meant to find solace and renewal.$B$BAlas, our unity has been shattered, and no World Tree can mend this profound wound. Treachery, a malady more insidious than any foe we faced in battle, festers within the heart of our people. It spreads like a blight, and the one responsible for this affliction resides comfortably within the confines of this very city.
 
 UPDATE `broadcast_text` SET `male_text` = 'Greetings in Elune''s light. Welcome to Darnassus, a haven born from the grace of the Moon Goddess.$B$BThis sacred place is our refuge following the Battle of Mount Hyjal, a place where our people were meant to find solace and renewal.$B$BAlas, our unity has been shattered, and no World Tree can mend this profound wound.$B$BTreachery, a malady more insidious than any foe we faced in battle, festers within the heart of our people.$B$BIt spreads like a blight, and the one responsible for this affliction resides comfortably within the confines of this very city.' WHERE `entry` = 61480;
+
+-- Remove, <Herbalist> title from npc 80249 Ralonius Sundew
+
+UPDATE creature_template SET subname = '' WHERE entry = 80249;
