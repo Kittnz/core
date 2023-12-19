@@ -1275,7 +1275,7 @@ DWORD DoPatcherMainWork()
 	DeleteDeprecatedMPQ();
 	SetProgress(10);
 
-	DeleteChatCache();
+	//DeleteChatCache();
 	if (SHOULD_COPY_REALM_SETTINGS)
 	{
 		TransferSettingsToNewRealm();
