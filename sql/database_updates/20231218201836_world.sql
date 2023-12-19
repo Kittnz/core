@@ -145,3 +145,19 @@ REPLACE INTO `creature` VALUES (2582737,61890,0,0,0,0,-3686.06,-3393.9,267.147,5
 
 -- Changes by REN
 UPDATE `creature` SET `position_x` = 4587.604004, `position_y` = -2770.162109, `position_z` = 31.395123, `orientation` = 2.564639 WHERE `guid` = 2581574;
+UPDATE `creature` SET `position_x` = 4587.578125, `position_y` = -2770.252686, `position_z` = 31.394495, `orientation` = 3.306839 WHERE `guid` = 2581574;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2582738,61894,0,0,0,0,4239.98,-2565.34,111.274,1.78006,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = 4240.545898, `position_y` = -2564.366455, `position_z` = 111.292671, `orientation` = 3.164718 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.473145, `position_y` = -2564.412842, `position_z` = 111.289444, `orientation` = 3.050835 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.606934, `position_y` = -2564.271729, `position_z` = 111.292526, `orientation` = 3.215769 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.558105, `position_y` = -2564.433594, `position_z` = 111.291061, `orientation` = 3.215769 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.498047, `position_y` = -2564.353027, `position_z` = 111.291229, `orientation` = 3.227550 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.455566, `position_y` = -2564.356689, `position_z` = 111.291229, `orientation` = 3.227550 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4240.471680, `position_y` = -2564.355225, `position_z` = 111.291229, `orientation` = 3.227550 WHERE `guid` = 2582738;
+UPDATE `creature` SET `position_x` = 4495.766113, `position_y` = -2276.055420, `position_z` = 16.562128, `orientation` = 4.084219 WHERE `guid` = 2581316;
+UPDATE `creature` SET `position_x` = 4495.431641, `position_y` = -2273.741699, `position_z` = 17.081617, `orientation` = 4.280569 WHERE `guid` = 2581316;
+REPLACE INTO `creature` VALUES (2582739,61895,0,0,0,0,4509.5,-2270.64,18.2458,5.31808,120,120,0,100,100,0,0,0);
+UPDATE `creature` SET `position_x` = 4516.508301, `position_y` = -2267.566895, `position_z` = 18.000908, `orientation` = 2.441952 WHERE `guid` = 2581315;
+UPDATE `creature` SET `position_x` = 4516.567871, `position_y` = -2265.323975, `position_z` = 17.978081, `orientation` = 4.195744 WHERE `guid` = 2581317;
