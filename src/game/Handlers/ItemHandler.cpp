@@ -882,7 +882,10 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
             return;
         }
         else
+        {
             GetPlayer()->canSeeVendorList = false;
+            pCreature = creature;
+        }
     }
 
     // remove fake death
