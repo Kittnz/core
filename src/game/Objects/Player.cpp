@@ -3767,7 +3767,7 @@ void Player::GiveLevel(uint32 level)
 
     if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && !sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
-        uint32 itemEntry = 80189;
+        uint32 itemEntry = 81205;
         std::string subject = "Winds of Discovery";
         std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
         Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
