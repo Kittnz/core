@@ -280,6 +280,7 @@ events/event_wareffort.h
 events/event_dreadsteed.h
 events/quest_stormwind_rendezvous.cpp
 events/quest_stormwind_rendezvous.h
+events/quest_snow.cpp
 
 miscellaneous/areatrigger_scripts.cpp
 miscellaneous/gameobject_scripts.cpp

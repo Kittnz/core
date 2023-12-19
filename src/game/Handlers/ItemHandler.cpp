@@ -871,9 +871,18 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
             return;
         }
 
-        DEBUG_LOG("WORLD: SendListInventory - %s not found or you can't interact with him.", vendorguid.GetString().c_str());
-        _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, nullptr, ObjectGuid(), 0);
-        return;
+
+        //Some NPCs dont have the vendor flag but can send list inventory to specific players depending on condition.
+        Creature* creature = GetPlayer()->GetMap()->GetAnyTypeCreature(vendorguid);
+
+        if (!creature || !GetPlayer()->canSeeVendorList)
+        {
+            DEBUG_LOG("WORLD: SendListInventory - %s not found or you can't interact with him.", vendorguid.GetString().c_str());
+            _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, nullptr, ObjectGuid(), 0);
+            return;
+        }
+        else
+            GetPlayer()->canSeeVendorList = false;
     }
 
     // remove fake death

@@ -1150,6 +1150,7 @@ class Player final: public Unit
 
         bool hasIllusion = false;
         bool hasIllusionsDisabled = false;
+        bool canSeeVendorList = false;
 
         /*********************************************************/
         /***                    STORAGE SYSTEM                 ***/
