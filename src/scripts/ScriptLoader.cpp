@@ -319,8 +319,6 @@ void AddSC_boss_chronormu();
 
 // Misc
 void AddSC_npc_ptr();
-void AddSC_Quest_Snow();
-
 void AddScripts()
 {
     //Nostalrius
@@ -335,7 +333,6 @@ void AddScripts()
     AddSC_ubrs_trash();
     AddSC_go_scripts();
     AddSC_event_fireworks();
-    AddSC_Quest_Snow();
 
     // Event
     AddSC_elemental_invasions();
