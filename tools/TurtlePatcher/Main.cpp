@@ -60,17 +60,19 @@ bool fov_build = false;
 constexpr bool bPatcher = false;
 constexpr bool bDownloadPatchFromInternet = true;
 
-#define NEW_BUILD 7070u
-#define NEW_VISUAL_BUILD "7070"
-#define NEW_VISUAL_VERSION "1.17.0"
-#define NEW_BUILD_DATE "Oct 03 2023"
+#define NEW_BUILD 7100u
+#define NEW_VISUAL_BUILD "7100"
+#define NEW_VISUAL_VERSION "1.17.1"
+#define NEW_BUILD_DATE "Dec 20 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-4.mpq"
+#define PATCH_FILE "Data\\patch-5.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 #define MAIN_GAME_BINARY "WoW.exe"
+#define SHOULD_COPY_REALM_SETTINGS true
+#define NEW_REALM_NAME "Nordanaar"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -831,6 +833,91 @@ void DeleteLFTAddon()
 	}
 }
 
+void TransferSettingsToNewRealm()
+{
+	WriteLog(_T("TransferSettingsToNewRealm"));
+
+	fs::path currentPath = fs::current_path();
+
+	fs::path WTFPath = currentPath / "WTF";
+	if (!fs::exists(WTFPath))
+	{
+		WriteLog(_T("Skipping transfer, since WTF folder doesn't even exist"));
+		return;
+	}
+
+	fs::path AccountFolder = WTFPath / "Account";
+	if (!fs::exists(AccountFolder))
+	{
+		WriteLog(_T("Skipping transfer, since WTF/Account folder doesn't even exist"));
+		return;
+	}
+
+	for (const fs::directory_entry& AccountEntry : std::filesystem::directory_iterator{ AccountFolder })
+	{
+		if (!AccountEntry.is_directory())
+		{
+			continue;
+		}
+		fs::path AccountEntryPath = AccountEntry.path();
+
+		WriteLog(_T("Copy settings for %s"), AccountEntryPath.c_str());
+
+		fs::path AccountTurtleWoWRealmSettings = AccountEntryPath / "Turtle WoW";
+		if (!fs::exists(AccountTurtleWoWRealmSettings))
+		{
+			continue;
+		}
+
+		fs::path NewRealmFolder = AccountEntryPath / NEW_REALM_NAME;
+		if (fs::exists(NewRealmFolder))
+		{
+			WriteLog(_T("Skipping transfer, since settings for new realm already exists. We don't want to override existing settings"));
+			continue;
+		}
+
+		if (!fs::create_directory(NewRealmFolder))
+		{
+			WriteLog(_T("Error creating new directory for settings. Skipping..."));
+			continue;
+		}
+
+		// Time to copy shit
+		// STAGE 1: Only create directories. That way files can be created without checking if folder exists
+		for (const fs::directory_entry& OldElemEntry : fs::recursive_directory_iterator{AccountTurtleWoWRealmSettings})
+		{
+			if(!OldElemEntry.is_directory())
+			{
+				continue;
+			}
+
+			fs::path OldElemFolderPath = OldElemEntry.path();
+			fs::path OldElemRelativeFolderPath = fs::relative(OldElemFolderPath, AccountTurtleWoWRealmSettings);
+
+			fs::path NewElemFolderPath = NewRealmFolder / OldElemRelativeFolderPath;
+			if (!fs::exists(NewElemFolderPath))
+			{
+				fs::create_directories(NewElemFolderPath);
+			}
+		}
+
+		// STAGE 2: All folders created, just copy files without any worry
+		for (const fs::directory_entry& OldElemEntry : fs::recursive_directory_iterator{ AccountTurtleWoWRealmSettings })
+		{
+			if (!OldElemEntry.is_regular_file())
+			{
+				continue;
+			}
+
+			fs::path OldElemFilePath = OldElemEntry.path();
+			fs::path OldElemRelativeFilePath = fs::relative(OldElemFilePath, AccountTurtleWoWRealmSettings);
+
+			fs::path NewElemFilePath = NewRealmFolder / OldElemRelativeFilePath;
+			fs::copy_file(OldElemFilePath, NewElemFilePath);
+		}
+	}
+}
+
 DWORD GuardPatchMainWork();
 
 int GuardedMain(HINSTANCE hInstance, LPSTR CmdLine)
@@ -1142,6 +1229,10 @@ DWORD DoPatcherMainWork()
 	SetProgress(10);
 
 	DeleteChatCache();
+	if (SHOULD_COPY_REALM_SETTINGS)
+	{
+		TransferSettingsToNewRealm();
+	}
 	SetProgress(15);
 
 	ClearWDBCache();
