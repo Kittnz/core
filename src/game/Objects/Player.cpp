@@ -19427,9 +19427,20 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
             return false;
         }
 
-        DEBUG_LOG("WORLD: BuyItemFromVendor - %s not found or you can't interact with him.", vendorGuid.GetString().c_str());
-        SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, nullptr, item, 0);
-        return false;
+        //Some NPCs dont have the vendor flag but can send list inventory to specific players depending on condition.
+        Creature* creature = GetMap()->GetAnyTypeCreature(vendorGuid);
+
+        if (!creature || !canSeeVendorList)
+        {
+            DEBUG_LOG("WORLD: BuyItemFromVendor - %s not found or you can't interact with him.", vendorGuid.GetString().c_str());
+            SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, nullptr, item, 0);
+            return false;
+        }
+        else
+        {
+            canSeeVendorList = false;
+            pCreature = creature;
+        }
     }
 
     VendorItemData const* vItems = pCreature->GetVendorItems();
