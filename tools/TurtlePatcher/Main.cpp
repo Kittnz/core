@@ -741,6 +741,43 @@ void DeleteDeprecatedMPQ()
 	fs::path currentPath = fs::current_path();
 
 	{
+		int numerical_patches[4] = { 6, 7, 8, 9 };
+		for (int i : numerical_patches)
+		{
+			WriteLog(_T("Searching for patch-%i..."), i);
+			std::stringstream ss;
+			std::stringstream ss_r;
+			ss << "patch-" << std::to_string(i) << ".mpq";
+			ss_r << "patch-" << std::to_string(i) << ".mpq.off";
+			std::string patch_name = ss.str();
+			std::string patch_rename = ss_r.str();
+
+			fs::path patch_path = currentPath / "Data" / patch_name;
+
+			if (fs::exists(patch_path))
+			{
+				WriteLog(_T("Renaming deprecated patch-%i to %S..."), i, patch_rename.c_str());
+				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
+
+				fs::path patch_disabled = currentPath / "Data" / patch_rename;
+				if (fs::exists(patch_disabled))
+				{
+					WriteLog(_T("Deleting deprecated patch-%i..."), i);
+					fs::remove(patch_disabled);
+				}
+				else
+				{
+					WriteLog(_T("Deprecated patch-%i not found."), i);
+				}
+			}
+			else
+			{
+				WriteLog(_T("Patch-%i not found."), i);
+			}
+		}
+	}
+
+	{
 		for (char let = 'A'; let <= 'Z'; ++let)
 		{
 			std::stringstream ss_n;
