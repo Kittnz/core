@@ -695,6 +695,35 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             pVictim->SetStandState(UNIT_STAND_STATE_STAND);
     }
 
+    auto ShouldEnterCombat = [&]()
+    {
+        if (pVictim == this)
+            return false;
+
+        if (spell && spell->IsTriggeredByProc())
+            return false;
+
+        if (spellProto)
+        {
+            if (spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))
+                return false;
+
+            if (spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD))
+                return false;
+        }
+
+        if (damagetype == DOT)
+        {
+            // We need to check channeled dot here, because spells like Blizzard and Starshards have No Initial Threat attribute.
+            if (spellProto && spellProto->IsChanneledSpell())
+                return true;
+
+            return false;
+        }
+
+        return true;
+    };
+
     if (!damage)
     {
         if (cleanDamage)
@@ -723,7 +752,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                 if (pVictim->IsPlayer() && damagetype != DOT)
                     pVictim->InterruptSpellsWithInterruptFlags(SPELL_INTERRUPT_FLAG_ABORT_ON_DMG, spellProto ? spellProto->Id : 0);
             }
-            if (damagetype != DOT)
+            if (ShouldEnterCombat())
             {
                 pVictim->SetInCombatWithAggressor(this);
                 SetInCombatWithVictim(pVictim);
@@ -753,9 +782,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
 
     // Enter combat or extend leash timer.
-    if ((pVictim != this) && (damagetype != DOT || (spellProto && spellProto->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))) &&
-       (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))) &&
-       (!spell || !spell->IsTriggeredByProc()))
+    if (ShouldEnterCombat())
     {
         pVictim->SetInCombatWithAggressor(this);
         SetInCombatWithVictim(pVictim);

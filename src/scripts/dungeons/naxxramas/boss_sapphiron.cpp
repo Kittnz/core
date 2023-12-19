@@ -650,25 +650,6 @@ struct boss_sapphironAI : public ScriptedAI
     }
 };
 
-struct npc_wing_buffetAI : public ScriptedAI
-{
-    npc_wing_buffetAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-
-    }
-    
-    void Reset() override
-    {
-
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (!m_creature->HasAura(SPELL_PERIODIC_BUFFET))
-            m_creature->CastSpell(m_creature, SPELL_PERIODIC_BUFFET, true);
-    }
-};
-
 struct npc_sapphiron_blizzardAI : public ScriptedAI
 {
     npc_sapphiron_blizzardAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -796,11 +777,6 @@ CreatureAI* GetAI_boss_sapphiron(Creature* pCreature)
     return new boss_sapphironAI(pCreature);
 }
 
-CreatureAI* GetAI_npc_wing_buffet(Creature* pCreature)
-{
-    return new npc_wing_buffetAI(pCreature);
-}
-
 CreatureAI* GetAI_npc_sapphironBlizzard(Creature* pCreature)
 {
     return new npc_sapphiron_blizzardAI(pCreature);
@@ -812,11 +788,6 @@ void AddSC_boss_sapphiron()
     NewScript = new Script;
     NewScript->Name = "boss_sapphiron";
     NewScript->GetAI = &GetAI_boss_sapphiron;
-    NewScript->RegisterSelf();
-
-    NewScript = new Script;
-    NewScript->Name = "npc_sapphiron_wing_buffet";
-    NewScript->GetAI = &GetAI_npc_wing_buffet;
     NewScript->RegisterSelf();
 
     NewScript = new Script;

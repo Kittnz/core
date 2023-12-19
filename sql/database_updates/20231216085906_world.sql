@@ -1,5 +1,5 @@
 -- Remove obscene Cenarion Cricle rep from a repeatable quest, undermining Ahn'Qiraj farming
-UPDATE quest_template SET RewRepFaction1 = 0, RewRepValue1 = 0, RewXP = 0, RewMoneyMaxLevel = 0 WHERE entry = 50316;
+UPDATE quest_template SET RewRepFaction1 = 0, RewRepValue1 = 0, RewXP = 0, RewMoneyMaxLevel = 0 WHERE entry = 50318;
 
 -- Several item fixes from Dragunovi
 update item_template set bonding = 1 where entry = 51043; -- void linked satchel
@@ -14,6 +14,3 @@ REPLACE INTO creature_questrelation (id, quest) VALUES (61189, 40784);
 -- Fix incorrect "choose reward" behavior
 UPDATE quest_template SET RewItemId1 = 0, RewChoiceItemCount1 = 0, RewItemId1 = 61623, RewItemCount1 = 1 WHERE entry = 40976;
 UPDATE quest_template SET RewItemId1 = 0, RewChoiceItemCount1 = 0, RewItemId1 = 61386, RewItemCount1 = 1 WHERE entry = 40857;
-
--- Nerf wealth of Winterax Trolls in Alterac Valley
-UPDATE creature_template SET Gold_Min = 425, Gold_Max = 575 WHERE entry IN (10984, 39998, 39999);
