@@ -717,6 +717,10 @@ bool AuthSocket::_HandleLogonProof()
         char tmp[256];
 
         //snprintf(tmp, 256, "%s/%d%s.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str(), _build, _localizationName.c_str());
+        if (_build >= 7070 && _build < 7100)
+        {
+            snprintf(tmp, 256, "%s/twpatch_7100.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+        }
         if (_build >= 7050 && _build < 7070 )
         {
             snprintf(tmp, 256, "%s/twpatch_7070.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
