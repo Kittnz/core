@@ -18,6 +18,7 @@
 #include "PeUtils.h"
 #include "Downloader.h"
 #include <strsafe.h>
+#include <TlHelp32.h>
 
 #define fs std::filesystem
 
@@ -691,7 +692,7 @@ void PrintInstructions()
 
 	LocaleString(IDS_HelpStr5, HelpStr);
 	WriteLog(_T(" "));
-	WriteLog(HelpStr, PATCH_FILE, NEW_VISUAL_VERSION);
+	WriteLog(HelpStr, _T(PATCH_FILE), _T(NEW_VISUAL_VERSION));
 
 	LocaleString(IDS_HelpStr6, HelpStr);
 	WriteLog(_T(" "));
@@ -710,7 +711,7 @@ void ClearWDBCache()
 			WriteLog(_T("Searching for the client cache..."));
 			std::error_code ec;
 			fs::remove_all(wdb, ec);
-			WriteLog(_T("Deleting client cache: %S"), ec.category().message(ec.value()).c_str());
+			WriteLog(_T("Deleting client cache: %s"), ec.category().message(ec.value()).c_str());
 		}	
 	}
 }
@@ -737,44 +738,7 @@ void DeleteChatCache()
 
 void DeleteDeprecatedMPQ()
 {
-	fs::path currentPath = fs::current_path();	
-
-	{
-		int numerical_patches[5] = { 5, 6, 7, 8, 9 };
-		for (int i : numerical_patches)
-		{
-			WriteLog(_T("Searching for patch-%i..."), i);
-			std::stringstream ss;
-			std::stringstream ss_r;
-			ss << "patch-" << std::to_string(i) << ".mpq";
-			ss_r << "patch-" << std::to_string(i) << ".mpq.off";
-			std::string patch_name = ss.str();
-			std::string patch_rename = ss_r.str();
-
-			fs::path patch_path = currentPath / "Data" / patch_name;
-
-			if (fs::exists(patch_path))
-			{
-				WriteLog(_T("Renaming deprecated patch-%i to %S..."), i, patch_rename.c_str());
-				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
-
-				fs::path patch_disabled = currentPath / "Data" / patch_rename;
-				if (fs::exists(patch_disabled))
-				{
-					WriteLog(_T("Deleting deprecated patch-%i..."), i);
-					fs::remove(patch_disabled);
-				}
-				else
-				{
-					WriteLog(_T("Deprecated patch-%i not found."), i);
-				}
-			}
-			else
-			{
-				WriteLog(_T("Patch-%i not found."), i);
-			}
-		}
-	}
+	fs::path currentPath = fs::current_path();
 
 	{
 		for (char let = 'A'; let <= 'Z'; ++let)
@@ -1058,6 +1022,38 @@ int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
 	};
 }
 
+DWORD FindWoWProcess()
+{
+	PROCESSENTRY32 entry;
+	entry.dwSize = sizeof(PROCESSENTRY32);
+
+	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+	DWORD Result = 0;
+
+	std::wstring TargetProcessName = L"WoW.exe";
+	std::wstring TargetProcessName2 = L"WoWFoV.exe";
+
+	if (Process32First(snapshot, &entry) == TRUE)
+	{
+		while (Process32Next(snapshot, &entry) == TRUE)
+		{
+			std::wstring CurrentProcess = entry.szExeFile;
+			if (CurrentProcess == TargetProcessName ||
+				CurrentProcess == TargetProcessName2)
+			{
+				Result = entry.th32ProcessID;
+				break;
+			}
+		}
+	}
+
+	CloseHandle(snapshot);
+
+	return Result;
+}
+
+
 DWORD DoPatcherMainWork()
 {
 	fs::path currentPath = fs::current_path();
@@ -1069,6 +1065,20 @@ DWORD DoPatcherMainWork()
 		SetErrorState();
 		ErrorBox(IDS_Err_NotWoWFolder);
 		return 1;
+	}
+
+	DWORD WoWProcessID = FindWoWProcess();
+	if(WoWProcessID > 0)
+	{
+		WriteLog(_T("WoW process is not finished yet, waiting for exit"));
+		HANDLE hWoWExe = OpenProcess(SYNCHRONIZE, FALSE, WoWProcessID);
+		if (hWoWExe != NULL)
+		{
+			WaitForSingleObject(hWoWExe, INFINITE);
+			CloseHandle(hWoWExe);
+
+			WriteLog(_T("Waiting is over, proceeding"));
+		}
 	}
 
 	if (/*strstr(CmdLine, "-patch")*/ bPatcher)
