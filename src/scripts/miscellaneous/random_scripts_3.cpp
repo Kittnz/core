@@ -7419,7 +7419,7 @@ bool GOSelect_go_council_translocation_orb(Player* pPlayer, GameObject* pGo, uin
     return false;
 }
 
-constexpr std::array<uint32, 2> QuestsCompleted = { 1, 2 };
+constexpr std::array<uint32, 2> QuestsCompleted = { 41270, 41273 };
 
 bool GossipHello_Christmas_Entity(Player* player, Creature* creature)
 {
