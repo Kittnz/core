@@ -14322,7 +14322,13 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
 
     // Not give XP in case already completed once repeatable quest
     // Blizzlike:
-    uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+
+    bool isTurtleMode = HasChallenge(CHALLENGE_SLOW_AND_STEADY);
+    uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this));
+
+    if (!isTurtleMode)
+        XP *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST);
+
 
     if (GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         GiveXP(HasChallenge(CHALLENGE_WAR_MODE) ? XP * 1.2F : XP, nullptr);
