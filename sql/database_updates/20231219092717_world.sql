@@ -50,3 +50,11 @@ UPDATE item_template SET name = 'Black Tie Blue Waistcoat' WHERE name = 'Black T
 -- Rename item Black Tie blue Waistcoat to Black Tie Blue Waistcoat
 
 UPDATE item_template SET name = 'Black Tie Blue Waistcoat' WHERE name = 'Black Tie blue Waistcoat';
+
+-- Quest Pelts and Tusks 80217 should have its name changed to [DEPRECATED] Pelts and Tusks and Marek Ironheart should be removed as a quest start and end npc.
+
+SET @quest =  80217;
+UPDATE `quest_template` SET `Title` = '[DEPRECATED] Pelts and Tusks' WHERE `entry` = @quest;
+DELETE FROM `creature_questrelation` WHERE `quest` = @quest;
+DELETE FROM `creature_involvedrelation` WHERE `quest` = @quest;
+
