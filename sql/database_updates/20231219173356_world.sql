@@ -229,3 +229,6 @@ DELETE FROM creature_movement WHERE id=2582758;
 DELETE FROM game_event_creature WHERE guid=2582758;
 DELETE FROM game_event_creature_data WHERE guid=2582758;
 DELETE FROM creature_battleground WHERE guid=2582758;
+
+-- Changes by VORTALEX
+DELETE FROM `game_tele` WHERE `name` = 'Alahthalas';
