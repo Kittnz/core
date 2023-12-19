@@ -39,7 +39,7 @@
 #include "DiscordBot/Bot.hpp"
 #endif
 
-INSTANTIATE_SINGLETON_1(SuspiciousStatisticMgr);
+SuspiciousStatisticMgr sSuspiciousStatisticMgr;
 
 std::string FormatPlayerNameToLink(const char* InPlayerName)
 {
@@ -78,48 +78,6 @@ void SuspiciousStatisticMgr::OnNpcKilledInDungeon(Player* player, Unit* NPC)
                 {
                     RecordSuspiciousActivity(SuspiciousType::KILL_ELITE, player, NPC->GetEntry(), 0, npcCreature->GetName());
                     return;
-                }
-            }
-
-            ///BOOSTER
-            ///Killing monster by high level character with party of one player
-            if (playerLevel > (creatureLevel + 15))
-            {
-                //#TODO: Maybe I should enable detection for party then greater two?
-                if (Group* group = player->GetGroup())
-                {
-                    if (group->GetMembersCount() == 2)
-                    {
-                        //we already check inactivity before, but boosted player can be outside map or offline
-                        Player* boostedPlayer = nullptr;
-                        for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
-                        {
-                            if (itr->getSource() != player)
-                            {
-                                boostedPlayer = itr->getSource();
-                                if (boostedPlayer->FindMap() == player->FindMap() && boostedPlayer->GetLevel() < 55)
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    boostedPlayer = nullptr;
-                                }
-                            }
-                        }
-
-                        if (boostedPlayer != nullptr)
-                        {
-                            std::stringstream message;
-
-                            std::string Link = FormatPlayerNameToLink(boostedPlayer->GetName());
-                            message << "Boosted player name: "
-                                    << Link;
-                            RecordSuspiciousActivity(SuspiciousType::BOOSTING, player, boostedPlayer ? boostedPlayer->GetGUIDLow() : 0, 0, message.str().c_str());
-                        }
-
-                        return;
-                    }
                 }
             }
 
@@ -256,11 +214,18 @@ void SuspiciousStatisticMgr::RecordSuspiciousActivity(SuspiciousType::Value type
 //     sLog.out(LOG_SUSPICIOUS, "Player: '%s' (GUID: '%u'), act '%s' Param1: '%u' Param2: '%u'", 
 //         player->GetName(), player->GetGUIDLow(), SuspiciousType::ToString(type), Param1, Param2);
 
+
     //GM announce
-    std::stringstream message;
 
     if (!player || !player->GetSession())
         return;
+
+	if (WhitelistedPlayers.find(player->GetObjectGuid()) != WhitelistedPlayers.end())
+	{
+		return;
+	}
+
+	std::stringstream message;
 
     std::string PlayerLink = FormatPlayerNameToLink(player->GetName());
 

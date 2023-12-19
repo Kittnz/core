@@ -17061,6 +17061,51 @@ bool ChatHandler::HandleSuspiciousNotify(char* args)
 	return true;
 }
 
+bool ChatHandler::HandleSuspiciousWhitelist(char* args)
+{
+    if (WorldSession* session = GetSession())
+    {
+		char* nameStr = ExtractQuotedOrLiteralArg(&args);
+        if (!nameStr)
+        {
+            //PSendSysMessage("Please specify name", name.c_str());
+            PSendSysMessage("All players in list:");
+            for (ObjectGuid PlayerGuid : sSuspiciousStatisticMgr.WhitelistedPlayers)
+            {
+                std::string PlayerName;
+                if (sObjectMgr.GetPlayerNameByGUID(PlayerGuid, PlayerName))
+                {
+                    PSendSysMessage("%s", PlayerName.c_str());
+                }
+                else
+                {
+                    PSendSysMessage("Guid: %llu", PlayerGuid.GetRawValue());
+                }
+            }
+
+			return true;
+        }
+        else
+        {
+            std::string PlayerName = nameStr;
+            ObjectGuid PossiblePlayerGuid = sObjectMgr.GetPlayerGuidByName(PlayerName);
+            if (!PossiblePlayerGuid.IsEmpty())
+            {
+                PSendSysMessage("Adding player %s to whitelist", nameStr);
+                sSuspiciousStatisticMgr.WhitelistedPlayers.insert(PossiblePlayerGuid);
+            }
+            else
+            {
+                PSendSysMessage("Can't find guid for player %s", nameStr);
+                return false;
+            }
+        }
+
+    }
+    return true;
+}
+
+
 bool ChatHandler::HandleBlacklistNameCommand(char* args)
 {
     if (!*args)

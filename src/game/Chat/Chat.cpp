@@ -173,6 +173,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "movementdetectvalue",  SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousMovementDetectValue,  "", nullptr },
         { "fishingenable",        SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousFishingEnable,        "", nullptr },
         { "killednpcenabled",     SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousKilledNPC,            "", nullptr },
+        { "whitelist",            SEC_DEVELOPER,      true,  &ChatHandler::HandleSuspiciousWhitelist,            "", nullptr },
         { "notify",               SEC_MODERATOR,      true,  &ChatHandler::HandleSuspiciousNotify,               "", nullptr },
         { "fishers",              SEC_OBSERVER,       false, &ChatHandler::HandleSuspiciousFishers,              "", nullptr },
         { nullptr,                0,                      false, nullptr,                                       "", nullptr }
