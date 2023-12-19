@@ -378,3 +378,8 @@ update creature_template set dmg_min = 4, dmg_max = 5 where entry = 61777;
 update creature_template set health_min = 102, health_max = 102 where entry = 61779;
 -- Reduce damage of Arcane Pounder 61779 to 6-7.
 update creature_template set dmg_min = 6, dmg_max = 7 where entry = 61779;
+
+-- Glyph of war text fixes.
+update spell_template set description = 'You can no longer disable PvP mode but experience and honor gains from all sources are increased by 20%.' where entry = 50008;
+update broadcast_text set Male_Text = 'The armistice between the Horde and the Alliance is tenuous at best, and though mercenaries and adventurers such as yourself are able to ally with whoever you wish regardless of race of faction, there still exists bad blood between those who recall the First and Second Wars. This glyph will raise your war banner for all to see, proclaiming that you will fight for the honor of your people. You will be permanently flagged for PvP, but in return, you will gain 20% more EXP and Honor from all sources.' where entry = 52131;
+update broadcast_text set Male_Text = 'I would like to end the War Mode Challenge.' where entry = 66631;
