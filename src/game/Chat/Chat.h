@@ -770,6 +770,7 @@ class ChatHandler
 		bool HandleSuspiciousKilledNPC(char* args);
 		bool HandleSuspiciousFishers(char* args);
         bool HandleSuspiciousNotify(char* args);
+        bool HandleSuspiciousWhitelist(char* args);
 
         bool HandleStopApiServerCommand(char* args);
         bool HandleTranslateCommand(char* args);

@@ -129,6 +129,9 @@ public:
 
     void PrintAllActiveFishers(Player* receiver);
 
+	// Whitelisted
+	std::set<ObjectGuid> WhitelistedPlayers;
+
 protected:
 
     void RecordSuspiciousActivity(SuspiciousType::Value type, Player* player, uint32 Param1, uint32 Param2, const char* OptDescMessage = nullptr);
@@ -151,9 +154,6 @@ protected:
     std::vector<uint32> FishingReportedPlayers;
 
     uint32 FishingClearMaintanceTimer = 0;
-
 };
 
-#define sSuspiciousStatisticMgr MaNGOS::Singleton<SuspiciousStatisticMgr>::Instance()
-
-
+extern SuspiciousStatisticMgr sSuspiciousStatisticMgr;
