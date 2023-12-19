@@ -94,6 +94,11 @@ DELETE FROM `game_graveyard_zone` WHERE `id` = 2040;
 DELETE FROM `game_graveyard_zone` WHERE `id` = 5225;
 DELETE FROM `game_graveyard_zone` WHERE `id` = 5536;
 
-REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (2040, 934, 469);
-REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (5225, 950, 0);
-REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (5536, 949, 0);
+DELETE FROM `game_graveyard_zone` WHERE `ghost_zone` = 2040;
+DELETE FROM `game_graveyard_zone` WHERE `ghost_zone` = 5225;
+DELETE FROM `game_graveyard_zone` WHERE `ghost_zone` = 5536;
+
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (934, 2040, 469);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (950, 2040, 67);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (950, 5225, 0);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (949, 5536, 0);
