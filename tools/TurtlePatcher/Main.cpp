@@ -58,7 +58,7 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 
 bool fov_build = false;
 constexpr bool bPatcher = false;
-constexpr bool bDownloadPatchFromInternet = true;
+constexpr bool bDownloadPatchFromInternet = false;
 
 #define NEW_BUILD 7100u
 #define NEW_VISUAL_BUILD "7100"
