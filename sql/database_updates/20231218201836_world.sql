@@ -161,3 +161,35 @@ UPDATE `creature` SET `position_x` = 4495.431641, `position_y` = -2273.741699, `
 REPLACE INTO `creature` VALUES (2582739,61895,0,0,0,0,4509.5,-2270.64,18.2458,5.31808,120,120,0,100,100,0,0,0);
 UPDATE `creature` SET `position_x` = 4516.508301, `position_y` = -2267.566895, `position_z` = 18.000908, `orientation` = 2.441952 WHERE `guid` = 2581315;
 UPDATE `creature` SET `position_x` = 4516.567871, `position_y` = -2265.323975, `position_z` = 17.978081, `orientation` = 4.195744 WHERE `guid` = 2581317;
+
+-- Changes by WOJI
+UPDATE `creature` SET `position_x` = 4072.540771, `position_y` = -2660.491211, `position_z` = 32.537270, `orientation` = 0.701670 WHERE `guid` = 2580396;
+UPDATE `creature` SET `position_x` = 4041.669434, `position_y` = -2717.067871, `position_z` = 33.604073, `orientation` = 0.336464 WHERE `guid` = 2580397;
+DELETE FROM creature WHERE guid=2581316;
+DELETE FROM creature_addon WHERE guid=2581316;
+DELETE FROM creature_movement WHERE id=2581316;
+DELETE FROM game_event_creature WHERE guid=2581316;
+DELETE FROM game_event_creature_data WHERE guid=2581316;
+DELETE FROM creature_battleground WHERE guid=2581316;
+DELETE FROM creature WHERE guid=2581315;
+DELETE FROM creature_addon WHERE guid=2581315;
+DELETE FROM creature_movement WHERE id=2581315;
+DELETE FROM game_event_creature WHERE guid=2581315;
+DELETE FROM game_event_creature_data WHERE guid=2581315;
+DELETE FROM creature_battleground WHERE guid=2581315;
+DELETE FROM creature WHERE guid=2581317;
+DELETE FROM creature_addon WHERE guid=2581317;
+DELETE FROM creature_movement WHERE id=2581317;
+DELETE FROM game_event_creature WHERE guid=2581317;
+DELETE FROM game_event_creature_data WHERE guid=2581317;
+DELETE FROM creature_battleground WHERE guid=2581317;
+DELETE FROM creature WHERE guid=2580969;
+DELETE FROM creature_addon WHERE guid=2580969;
+DELETE FROM creature_movement WHERE id=2580969;
+DELETE FROM game_event_creature WHERE guid=2580969;
+DELETE FROM game_event_creature_data WHERE guid=2580969;
+DELETE FROM creature_battleground WHERE guid=2580969;
+REPLACE INTO `creature` VALUES (2582740,61786,0,0,0,0,3374.49,-2680.92,129.075,1.85461,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2582740,61786,0,0,0,0,3374.49,-2680.92,129.075,1.85461,300,300,3,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2582741,61786,0,0,0,0,3354.59,-2660.42,132.9,2.91883,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2582741,61786,0,0,0,0,3354.59,-2660.42,132.9,2.91883,300,300,3,100,100,1,0,0);
