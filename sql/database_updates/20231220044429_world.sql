@@ -59,3 +59,7 @@ REPLACE INTO `item_required_target` (`entry`, `type`, `target_entry`) VALUES (41
 
 DELETE FROM `item_required_target` WHERE `entry` = 41066;
 REPLACE INTO `item_required_target` (`entry`, `type`, `target_entry`) VALUES (41066, 1, 61776);
+
+-- Remove item from vendor:
+
+DELETE FROM npc_vendor WHERE item = 41294;
