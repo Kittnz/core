@@ -225,4 +225,4 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (451, 7, 83479, 'Romantic Pink Corset Dress', '', 250),
 (452, 7, 41091, 'Jingle Belle Frock', '', 200),
 (453, 7, 41092, 'Apparel of the Bells', '', 200);
-(454, 7, 41097, 'Candy Cane Boots [Limite Edition]', '', 200);
+(454, 7, 41097, 'Candy Cane Boots [Limited Edition]', '', 300);
