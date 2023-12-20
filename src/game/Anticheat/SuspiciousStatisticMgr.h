@@ -24,6 +24,7 @@
 
 #pragma once
 #include "Common.h"
+#include "ObjectGuid.h"
 
 #include <mutex>
 
