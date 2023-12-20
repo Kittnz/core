@@ -97,8 +97,9 @@ enum EnvironmentFlags
 
 enum CustomPlayerFlags
 {
-    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01,
-    CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE = 0x02
+    CUSTOM_PLAYER_FLAG_HC_RESTORED            = 0x01,
+    CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE = 0x02,
+    CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN          = 0x04,
 };
 
 enum BuyBankSlotResult

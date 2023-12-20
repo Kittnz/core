@@ -912,7 +912,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (Group* pGroup = pCurrChar->GetGroup())
             pGroup->SendLootStartRollsForPlayer(pCurrChar);
 
-    if (pCurrChar->GetRace() == RACE_GOBLIN && pCurrChar->m_ExtraFlags & PLAYER_EXTRA_BROKEN_GOBLIN)
+    if (pCurrChar->GetRace() == RACE_GOBLIN && pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN))
     {
         uint32 itemEntry = 80699;
         std::string subject = "Goblin's Appearance Token";
@@ -923,9 +923,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             .AddItem(ToMailItem)
             .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
-        pCurrChar->m_ExtraFlags &= ~PLAYER_EXTRA_BROKEN_GOBLIN;
-    }
-        
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN);
+    }      
         
 
     // Update warden speeds
