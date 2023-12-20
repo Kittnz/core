@@ -1330,11 +1330,6 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(creature->GetLevel()));
     SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 
-    if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->beast_family))
-        SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
-    else
-        SetName(creature->GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
-
     m_loyaltyPoints = 1000;
     if (cinfo->type == CREATURE_TYPE_BEAST)
     {
@@ -2321,6 +2316,39 @@ bool Pet::IsPermanentPetFor(Player* owner) const
     default:
         return false;
     }
+}
+
+void Pet::InitializeDefaultName()
+{
+    switch (getPetType())
+    {
+        case SUMMON_PET:
+        case HUNTER_PET:
+        {
+            if (GetOwnerGuid().IsPlayer())
+            {
+                if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(GetCreatureInfo()->beast_family))
+                {
+                    SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
+                    break;
+                }
+            }
+            // no break
+        }
+        default:
+        {
+            SetName(Creature::GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
+            break;
+        }
+    }
+}
+
+char const* Pet::GetNameForLocaleIdx(int32 locale_idx) const
+{
+    if (GetOwnerGuid().IsPlayer() && (getPetType() == SUMMON_PET || getPetType() == HUNTER_PET))
+        return GetName();
+
+    return Creature::GetNameForLocaleIdx(locale_idx);
 }
 
 bool Pet::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, uint32 pet_number)
