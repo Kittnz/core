@@ -19443,10 +19443,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
             return false;
         }
         else
-        {
-            canSeeVendorList = false;
             pCreature = creature;
-        }
     }
 
     VendorItemData const* vItems = pCreature->GetVendorItems();
