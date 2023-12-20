@@ -9,3 +9,7 @@ UPDATE `custom_character_skins` SET `skin_male` = 20, `skin_female` = 12 WHERE `
 -- Gnome Necromancer fixes: 
 
 UPDATE `custom_character_skins` SET `skin_male` = 7, `skin_female` = 6 WHERE `token_id` = 81230;
+
+-- Leper Gnome fixes:
+
+UPDATE `custom_character_skins` SET `skin_male` = 6, `skin_female` = 8 WHERE `token_id` = 50212;
