@@ -912,6 +912,22 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (Group* pGroup = pCurrChar->GetGroup())
             pGroup->SendLootStartRollsForPlayer(pCurrChar);
 
+    if (pCurrChar->GetRace() == RACE_GOBLIN && pCurrChar->m_ExtraFlags & PLAYER_EXTRA_BROKEN_GOBLIN)
+    {
+        uint32 itemEntry = 80699;
+        std::string subject = "Goblin's Appearance Token";
+        std::string message = "Greetings! Use this to improve your look!\n\nSafe travels,\nTurtle WoW Team";
+        Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
+        ToMailItem->SaveToDB();
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+
+        pCurrChar->m_ExtraFlags &= ~PLAYER_EXTRA_BROKEN_GOBLIN;
+    }
+        
+        
+
     // Update warden speeds
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
