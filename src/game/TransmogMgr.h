@@ -47,6 +47,7 @@ class TransmogMgr
         // Helpers
         bool HasTransmog(uint32 newItemId);
         void AddToCollection(uint32 itemId);
+        void RemoveFromCollection(uint32 itemId);
         bool ItemIsValidTransmogForDest(uint32 item, ItemPrototype const* destItemProto);
 
         TransmogContainer GetTransmogs() { return _transmogs; }

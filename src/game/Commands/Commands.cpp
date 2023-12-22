@@ -91,6 +91,8 @@
 #include "CommandStream.h"
 #include "DynamicVisibilityMgr.h"
 #include "CommandStream.h"
+#include "TransmogMgr.h"
+
 
 int32 GetTokenBalance(uint32 accountId)
 {
@@ -10824,7 +10826,32 @@ bool ChatHandler::HandleMinChatLevelCommand(char* args)
 bool ChatHandler::HandleCrashCommand(char* args)
 {
     int* torta = (int*)0x42;
-    *torta = 1337;
+    *torta = 9001;
+    return true;
+}
+
+
+//removes the item id from player from "discovered usable" transmog items in collection
+//syntax : <itemId> playername (or select player and no 2nd arg)
+bool ChatHandler::HandleDeleteTransmogCollectionCommand(char* args)
+{
+    uint32 itemId;
+    if (!ExtractUInt32(&args, itemId))
+        return false;
+
+
+    Player* player;
+    ObjectGuid playerGuid;
+    if (!ExtractPlayerTarget(&args, &player, &playerGuid))
+        return false;
+
+
+    if (player)
+        player->GetTransmogMgr()->RemoveFromCollection(itemId);
+
+    CharacterDatabase.PExecute("DELETE FROM character_transmogs WHERE guid = %u AND itemId = %u", playerGuid.GetCounter(), itemId);
+
+    PSendSysMessage("Deleted item %u from player's collection.", itemId);
     return true;
 }
 

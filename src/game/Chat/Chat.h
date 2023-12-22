@@ -270,6 +270,7 @@ class ChatHandler
 		bool HandleGetSkillValueCommand(char *args);
         bool HandleHCMessagesCommand(char* args);
         bool HandlePvPCommand(char* args);
+        bool HandleDeleteTransmogCollectionCommand(char* args);
         bool HandleCrashCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);

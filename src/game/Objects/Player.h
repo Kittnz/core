@@ -3008,6 +3008,8 @@ public:
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
         void FixTransmogItemAfterDurabilityUpdate(Item* pItem);
+
+        TransmogMgr* GetTransmogMgr() { return _transmogMgr; }
     private:
         TransmogMgr* _transmogMgr;
         // Tanatos Transmog End
