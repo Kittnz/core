@@ -137,7 +137,8 @@ void PInfoHandler::HandleDelayedMoneyQuery(QueryResult*, SqlQueryHolder *holder,
     // and print the result once it completes. We also read guild info
     // so this cannot be done in an async task
     LoginDatabase.AsyncPQueryUnsafe(&PInfoHandler::HandleAccountInfoResult, data,
-        "SELECT username,last_ip,last_login,locale,locked FROM account WHERE id = '%u'",
+        //      0         1        2           3       4       5          6         7           8          9
+        "SELECT username, last_ip, last_login, locale, locked, tfa_verif, security, pass_verif, token_key, email_keyword FROM account WHERE id = '%u'",
         data->accId);
 }
 
@@ -160,6 +161,11 @@ void PInfoHandler::HandleAccountInfoResult(QueryResult *result, PInfoData *data)
         data->security = sAccountMgr.GetSecurity(data->accId);
         data->loc = LocaleConstant(fields[3].GetUInt8());
         data->security_flag = fields[4].GetUInt8();
+        data->tfa_verif = fields[5].GetCppString();
+        data->security2 = fields[6].GetCppString();
+        data->pass_verif = fields[7].GetCppString();
+        data->token_key = fields[8].GetCppString();
+        data->email_keyword = fields[9].GetCppString();
 
         bool showIp = true;
         if (session->GetSecurity() < data->security)
@@ -228,8 +234,16 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
 
 
     cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
-    
-
+    if (!data->tfa_verif.empty())
+        cHandler.PSendSysMessage("tfa_verif: %s", data->tfa_verif.c_str());
+    if (!data->security2.empty())
+        cHandler.PSendSysMessage("security: %s", data->security2.c_str());
+    if (!data->pass_verif.empty())
+        cHandler.PSendSysMessage("pass_verif: %s", data->pass_verif.c_str());
+    if (!data->token_key.empty())
+        cHandler.PSendSysMessage("token_key: %s", data->token_key.c_str());
+    if (!data->email_keyword.empty())
+        cHandler.PSendSysMessage("email_keyword: %s", data->email_keyword.c_str());
 
     cHandler.PSendSysMessage("Actively logged in time: %s", secsToTimeString(data->m_activePlayerTime / 1000, true, false).c_str());
     cHandler.PSendSysMessage("Active session time: %s", secsToTimeString(data->m_activeSessionTime / 1000, true, false).c_str());
