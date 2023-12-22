@@ -275,9 +275,6 @@ struct boss_moroesAI : public ScriptedAI
 						m_AfterTeleportTimer = 0;
 						m_creature->SetMaxHealth(220388);
 						m_creature->SetHealth(220388);
-						// failsafe check test
-						if (m_creature->IsInCombat())
-							ResetCombat();
 						RestoreFlags();
 						bIntermission1 = true;
 					}
