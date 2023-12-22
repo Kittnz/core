@@ -947,6 +947,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
         { "hcchat",        SEC_PLAYER,           false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
         { "toggleillusions", SEC_DEVELOPER,         false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
+        { "tmogdelete",    SEC_DEVELOPER,        false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

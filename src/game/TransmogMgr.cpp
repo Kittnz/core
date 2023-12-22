@@ -390,6 +390,11 @@ bool TransmogMgr::HasTransmog(uint32 newItemId)
     return false;
 }
 
+void TransmogMgr::RemoveFromCollection(uint32 itemId)
+{
+	_transmogs.erase(std::remove(_transmogs.begin(), _transmogs.end(), itemId), _transmogs.end());
+}
+
 void TransmogMgr::AddToCollection(uint32 itemId)
 {
     if (HasTransmog(itemId))
