@@ -131,7 +131,11 @@ struct boss_moroesAI : public ScriptedAI
 			m_creature->NearTeleportTo(x, y, z, o);
 		}
 
-		ScriptedAI::EnterEvadeMode();
+		bool bInterludeStarted = m_InterludeTimer > 0 && GetPhase() == 2;
+		if (!bInterludeStarted)
+		{
+			ScriptedAI::EnterEvadeMode();
+		}
 	}
 
 	virtual void JustDied(Unit* pKiller) override
@@ -220,8 +224,8 @@ struct boss_moroesAI : public ScriptedAI
 					m_creature->SetHealthPercent(100.0f);
 					if (m_pInstance)
 						m_pInstance->SetData(DATA_MOROES_STAGE, 2);
-					ResetCombat();
 					m_InterludeTimer = 10000;
+					ResetCombat();
 					return;
 				}
 
