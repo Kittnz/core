@@ -1389,6 +1389,18 @@ void Group::SendTargetIconList(WorldSession *session)
     session->SendPacket(&data);
 }
 
+void Group::SendTargetIconList()
+{
+    for (const auto& itr : m_memberSlots)
+    {
+        Player* player = sObjectMgr.GetPlayer(itr.guid);
+        if (!player || !player->GetSession() || player->GetGroup() != this)
+            continue;
+
+        SendTargetIconList(player->GetSession());
+    }
+}
+
 void Group::SendUpdate()
 {
     for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
@@ -2555,17 +2567,8 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
     }
 
     // SendUpdate clears the target icons, send an icon update
-    if (!isRaidGroup()) 
-    {
-        for (const auto& itr : m_memberSlots)
-        {
-            Player* player = sObjectMgr.GetPlayer(itr.guid);
-            if (!player || !player->GetSession() || player->GetGroup() != this)
-                continue;
-
-            SendTargetIconList(player->GetSession());
-        }
-    }
+    if (!isRaidGroup())
+        SendTargetIconList();
 }
 
 bool Group::HandleHardcoreInteraction(Player * invitee)
