@@ -2047,7 +2047,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
                 case 56053: // Skin Change Tokens:
                 {
-                    if (m_caster && m_caster->IsPlayer())
+                    if (m_caster && m_CastItem && m_caster->IsPlayer())
                     {
                         uint32 item_entry = m_CastItem->GetEntry();
                         bool is_male = m_caster->ToPlayer()->GetGender() == GENDER_MALE;
