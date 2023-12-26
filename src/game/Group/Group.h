@@ -319,7 +319,6 @@ class Group
         void ResetInstances(InstanceResetMethod method, Player* SendMsgTo);
 
         void SendTargetIconList(WorldSession *session);
-        void SendTargetIconList();
         void SendUpdate();
         void UpdatePlayerOutOfRange(Player* pPlayer);
         void UpdatePlayerOnlineStatus(Player* player, bool online = true);
