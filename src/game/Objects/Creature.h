@@ -294,8 +294,8 @@ struct CreatureData
     float visibility_mod = 0.0f;
 
     // non db field
-
     uint32 instanciatedContinentInstanceId;
+
     // helper function
     ObjectGuid GetObjectGuid(uint32 lowguid) const { return ObjectGuid(CreatureInfo::GetHighGuid(), creature_id[0], lowguid); }
     uint32 GetRandomRespawnTime() const { return urand(spawntimesecsmin, spawntimesecsmax); }
@@ -312,6 +312,10 @@ struct CreatureData
             creatureId = 1;
 
         return creatureId;
+    }
+    bool HasCreatureId(uint32 id) const
+    {
+        return std::find(creature_id.begin(), creature_id.end(), id) != creature_id.end();
     }
     uint32 GetCreatureIdCount() const
     {
