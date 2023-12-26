@@ -1389,20 +1389,28 @@ void Group::SendTargetIconList(WorldSession *session)
     session->SendPacket(&data);
 }
 
-void Group::SendTargetIconList()
-{
-    for (const auto& itr : m_memberSlots)
-    {
-        Player* player = sObjectMgr.GetPlayer(itr.guid);
-        if (!player || !player->GetSession() || player->GetGroup() != this)
-            continue;
-
-        SendTargetIconList(player->GetSession());
-    }
-}
-
 void Group::SendUpdate()
 {
+    // sending full group list update clears marked targets when not in a raid, so we need to resend them
+    std::unique_ptr<WorldPacket> markedTargets;
+    if (!isRaidGroup())
+    {
+        for (int i = 0; i < TARGET_ICON_COUNT; ++i)
+        {
+            if (!m_targetIcons[i])
+                continue;
+
+            if (!markedTargets)
+            {
+                markedTargets = std::make_unique<WorldPacket>(MSG_RAID_TARGET_UPDATE, (1 + TARGET_ICON_COUNT * 9));
+                *markedTargets << uint8(1); // 1 - full icon list, 0 - delta update
+            }
+
+            *markedTargets << uint8(i);
+            *markedTargets << m_targetIcons[i];
+        }
+    }
+
     for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
     {
         Player *player = sObjectMgr.GetPlayer(citr->guid);
@@ -1435,16 +1443,16 @@ void Group::SendUpdate()
         {
             data << uint8(m_lootMethod);                    // loot method
             if (GetLootMethod() == MASTER_LOOT)
-            {
                 data << m_looterGuid;                       // looter guid
-            }
             else
-            {
-                data << ObjectGuid(uint64_t(0));
-            }
+                data <<uint64(0);
             data << uint8(m_lootThreshold);                 // loot threshold
+            data << uint8(0);                               // dungeon difficulty
         }
         player->GetSession()->SendPacket(&data);
+
+        if (markedTargets)
+            player->GetSession()->SendPacket(markedTargets.get());
     }
 }
 
@@ -2565,10 +2573,6 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
         SetLooterGuid(0);
         SendUpdate();
     }
-
-    // SendUpdate clears the target icons, send an icon update
-    if (!isRaidGroup())
-        SendTargetIconList();
 }
 
 bool Group::HandleHardcoreInteraction(Player * invitee)
