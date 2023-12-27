@@ -198,6 +198,7 @@ class ChatHandler
         bool HandleCartographerCommand(char *);
         bool HandleListAddonsCommand(char *);
         bool HandleUpdateWorldStateCommand(char *);
+        bool HandleCastCustomCommand(char* args);
         bool HandleSendSpellVisualCommand(char *);
         bool HandleSendSpellImpactCommand(char *);
         bool HandleServiceDeleteCharacters(char* args);
