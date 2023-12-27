@@ -15803,4 +15803,4 @@ UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 18474, `pl
 
 -- Autobroadcast:
 
-UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 1st! Happy Holidays!' WHERE `entry` = 50001;
+UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 6st! Happy Holidays!' WHERE `entry` = 50001;
