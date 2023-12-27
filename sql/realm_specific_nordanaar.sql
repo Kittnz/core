@@ -8,4 +8,4 @@ UPDATE `quest_template` SET `ReqCreatureOrGOId3` = 0, `ReqCreatureOrGOCount3` = 
 
 -- Autobroadcast:
 
-UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 1st! Happy Holidays!' WHERE `entry` = 50001;
+UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 6st! Happy Holidays!' WHERE `entry` = 50001;
