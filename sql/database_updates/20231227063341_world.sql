@@ -27,3 +27,9 @@ UPDATE quest_template SET NextQuestInChain = 41225 WHERE entry = 41224;
 UPDATE quest_template SET NextQuestInChain = 41247 WHERE entry = 41246;
 
 UPDATE item_template SET Name = 'Hawkstrider Boots' WHERE entry = 41191;
+
+-- If this doesn't fix the 200 Cenarion Circle Rep on the repeatable Christmas quest, I am going to fucking kill myself (RMJ)
+UPDATE quest_template SET
+RewRepFaction1 = 0, RewRepFaction2 = 0, RewRepFaction3 = 0, RewRepFaction4 = 0, RewRepFaction5 = 0,
+RewRepValue1 = 0, RewRepValue2 = 0, RewRepValue3 = 0, RewRepValue4 = 0, RewRepValue5 = 0
+WHERE entry = 50318;
