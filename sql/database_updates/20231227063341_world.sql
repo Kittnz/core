@@ -25,3 +25,5 @@ UPDATE quest_template SET NextQuestInChain = 41217 WHERE entry = 41216;
 UPDATE quest_template SET NextQuestInChain = 41222 WHERE entry = 41221;
 UPDATE quest_template SET NextQuestInChain = 41225 WHERE entry = 41224;
 UPDATE quest_template SET NextQuestInChain = 41247 WHERE entry = 41246;
+
+UPDATE item_template SET Name = 'Hawkstrider Boots' WHERE entry = 41191;
