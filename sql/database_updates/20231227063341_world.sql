@@ -33,3 +33,5 @@ UPDATE quest_template SET
 RewRepFaction1 = 0, RewRepFaction2 = 0, RewRepFaction3 = 0, RewRepFaction4 = 0, RewRepFaction5 = 0,
 RewRepValue1 = 0, RewRepValue2 = 0, RewRepValue3 = 0, RewRepValue4 = 0, RewRepValue5 = 0
 WHERE entry = 50318;
+
+UPDATE quest_template SET RewChoiceItemId1 = 0, RewChoiceItemId2 = 0, RewChoiceItemCount1 = 0, RewChoiceItemCount2 = 0 WHERE entry = 41223;
