@@ -2658,6 +2658,10 @@ uint32 Unit::CalculateDamage(WeaponAttackType attType, bool normalized, uint8 in
     if (max_damage == 0.0f)
         max_damage = 5.0f;
 
+    // if .gm option is enabled as NPC hitting player or player hitting npc then pick a standard damage value instead of randomizing.
+    if ((GetVictim() && GetVictim()->IsPlayer() && GetVictim()->ToPlayer()->HasOption(PLAYER_CHEAT_NO_DAMAGE_RNG)) || (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_NO_DAMAGE_RNG)))
+        return (min_damage + max_damage) / 2;
+
     return urand((uint32)min_damage, (uint32)max_damage);
 }
 

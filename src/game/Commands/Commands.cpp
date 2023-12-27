@@ -13650,6 +13650,52 @@ bool ChatHandler::HandleSendSpellVisualCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCastCustomCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* target = GetSelectedUnit();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // Only allow admins to cast spells in other players
+    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
+        target = GetSession()->GetPlayer();
+
+    // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
+    uint32 spell = ExtractSpellIdFromLink(&args);
+    if (!spell)
+        return false;
+
+    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell);
+    if (!spellInfo)
+        return false;
+
+    if (!SpellMgr::IsSpellValid(spellInfo, m_session->GetPlayer()))
+    {
+        PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spell);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 basepoint0, basepoint1, basepoint2;
+    if (!ExtractOptInt32(&args, basepoint0, -1) || !ExtractOptInt32(&args, basepoint1, -1) || !ExtractOptInt32(&args, basepoint2, -1))
+    {
+        PSendSysMessage("Bad syntax.");
+        return false;
+    }
+
+    m_session->GetPlayer()->CastCustomSpell(target, spell, basepoint0 == -1 ? nullptr : &basepoint0, basepoint1 == -1 ? nullptr : &basepoint1, basepoint2 == -1 ? nullptr : &basepoint2, true);
+
+    return true;
+}
+
 bool ChatHandler::HandleSendSpellImpactCommand(char* args)
 {
     Unit* pTarget = GetSelectedUnit();
@@ -13884,6 +13930,9 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
 
     if (sArgs.find("spellcr") != std::string::npos || sArgs.find("SPELLCR") != std::string::npos)
         flags |= PLAYER_CHEAT_ALWAYS_SPELL_CRIT;
+
+    if (sArgs.find("nodmgrng") != std::string::npos || sArgs.find("NODMGRNG") != std::string::npos)
+        flags |= PLAYER_CHEAT_NO_DAMAGE_RNG;
 
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
