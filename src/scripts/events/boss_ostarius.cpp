@@ -1089,7 +1089,8 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
         && dynamic_cast<npc_uldum_pedestalAI*>(pedestalNpc->AI())->IsStarted());
 
     //check if we already have an active event..
-    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
+    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE) &&
+        player->GetGroup() && player->GetGroup()->GetMembersCount() >= 20)
     {
         if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress && ((lastOstariusSummonTime + 7 * DAY) < sWorld.GetGameTime()))
             player->PrepareQuestMenu(pGo->GetObjectGuid());
