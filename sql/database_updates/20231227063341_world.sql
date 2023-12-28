@@ -35,3 +35,5 @@ RewRepValue1 = 0, RewRepValue2 = 0, RewRepValue3 = 0, RewRepValue4 = 0, RewRepVa
 WHERE entry = 50318;
 
 UPDATE quest_template SET RewChoiceItemId1 = 0, RewChoiceItemId2 = 0, RewChoiceItemCount1 = 0, RewChoiceItemCount2 = 0 WHERE entry = 41223;
+
+UPDATE spell_template SET Name = 'Tiny Snowman' WHERE entry = 26469;
