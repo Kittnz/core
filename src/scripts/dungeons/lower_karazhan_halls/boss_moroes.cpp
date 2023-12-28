@@ -13,6 +13,8 @@ enum MoroesStuff
 	SPELL_REFLECTION = 27564,
 };
 
+//#define MOROES_DIRECTORCUT
+
 struct boss_moroesAI : public ScriptedAI
 {
 	boss_moroesAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -46,18 +48,24 @@ struct boss_moroesAI : public ScriptedAI
 		m_AfterTeleportTimer = 0;
 		bSound1 = false;
 		bIntermission1 = false;
-
-		RestoreFlags();
 		ResetBattleTimers();
 
+#ifdef MOROES_DIRECTORCUT
+		RestoreFlags();
 		RestorePhaseOneHealth();
-
 		if (m_pInstance)
 		{
 			m_pInstance->SetData(DATA_MOROES_STAGE, 0);
 			if (m_pInstance->GetData(DATA_MOROES) != DONE)
 				m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
 		}
+#else
+		if (m_pInstance)
+		{
+			if (m_pInstance->GetData(DATA_MOROES) != DONE)
+				m_pInstance->SetData(DATA_MOROES, NOT_STARTED);
+		}
+#endif
 	}
 
 
@@ -123,6 +131,7 @@ struct boss_moroesAI : public ScriptedAI
 	virtual void EnterEvadeMode() override
 	{
 		// only in combat phases
+#ifdef MOROES_DIRECTORCUT
 		if (GetPhase() == 3)
 		{
 			m_creature->CastSpell(m_creature, SPELL_TELEPORT, true);
@@ -136,6 +145,9 @@ struct boss_moroesAI : public ScriptedAI
 		{
 			ScriptedAI::EnterEvadeMode();
 		}
+#else
+		ScriptedAI::EnterEvadeMode();
+#endif
 	}
 
 	virtual void JustDied(Unit* pKiller) override
@@ -151,10 +163,16 @@ struct boss_moroesAI : public ScriptedAI
 	{
 		if (!newPhase)
 		{
+#ifdef MOROES_DIRECTORCUT
 			m_creature->MonsterYell("New guests? It has been a while since we have had those. I assume your arrival has taken -some- effort even if you were uninvited!");
 			m_creature->PlayDirectSound(60402);
 			m_InterludeTimer = 7000;
 			m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+#else
+			m_creature->MonsterYell("New guests? It has been a while since we have had those. I assume your arrival has taken -some- effort even if you were uninvited!");
+			m_creature->PlayDirectSound(60402);
+			SetHostile();
+#endif
 		}
 		else
 		{
@@ -185,6 +203,7 @@ struct boss_moroesAI : public ScriptedAI
 				m_creature->AddAura(9617);
 			}
 
+#ifdef MOROES_DIRECTORCUT
 			uint8 PhaseNum = GetPhase();
 
 			if (PhaseNum == 0)
@@ -336,6 +355,66 @@ struct boss_moroesAI : public ScriptedAI
 				else
 					m_ReflectionTimer -= uiDiff;
 			}
+#else
+			
+			if (!m_creature->IsInCombat())
+			{
+				if (!m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+				{
+					m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+				}
+			}
+
+			if (!m_creature->GetVictim())
+				return;
+
+			if (m_creature->GetHealthPercent() > 50.0f)
+			{
+				TryCastGlitteringDust(uiDiff);
+				TryCastSmokeBomb(uiDiff);
+				TryCastShuffleKick(uiDiff, 7, 13);
+			}
+			else
+			{
+				if (!bSound1)
+				{
+					bSound1 = true;
+					m_creature->MonsterYell("Most impressive, it would appear your skills do match your bravery.");
+					m_creature->PlayDirectSound(60403);
+				}
+
+				TryCastGlitteringDust(uiDiff);
+				TryCastSmokeBomb(uiDiff);
+				TryCastShuffleKick(uiDiff, 9, 15);
+
+				if (m_ShadowBlastTimer < uiDiff)
+				{
+					if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
+					{
+						if (DoCastSpellIfCan(pTarget, SPELL_SHADOW_BLAST) == CAST_OK)
+							m_ShadowBlastTimer = urand(8 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
+					}
+				}
+				else
+					m_ShadowBlastTimer -= uiDiff;
+
+				if (m_MoroesCurseTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(m_creature, SPELL_MOROES_CURSE) == CAST_OK)
+						m_MoroesCurseTimer = urand(43 * IN_MILLISECONDS, 49 * IN_MILLISECONDS);;
+				}
+				else
+					m_MoroesCurseTimer -= uiDiff;
+
+				if (m_ReflectionTimer < uiDiff)
+				{
+					if (DoCastSpellIfCan(m_creature, SPELL_REFLECTION) == CAST_OK)
+						m_ReflectionTimer = urand(33 * IN_MILLISECONDS, 45 * IN_MILLISECONDS);;
+				}
+				else
+					m_ReflectionTimer -= uiDiff;
+			}
+#endif
 		}
 	}
 
