@@ -124,8 +124,13 @@ struct boss_moroesAI : public ScriptedAI
 		m_creature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
 		m_creature->SetInCombatWithZone();
 
+#ifdef MOROES_DIRECTORCUT
 		if (m_pInstance->GetData(DATA_MOROES_STAGE) == 3)
 			m_creature->PlayDirectMusic(60418);
+#else
+		// play his tune every time battle started
+		m_creature->PlayDirectMusic(60418);
+#endif
 	}
 	 
 	virtual void EnterEvadeMode() override
