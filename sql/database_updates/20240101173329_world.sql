@@ -12,3 +12,15 @@ UPDATE quest_template SET
 Details = 'Since you went to such lengths to recover this oil, I see no reason not to grant it to you for your return to Gilneas. Assuming you have a means to actually enter the place. I have heard rumors of a civil war brewing behind the great wall, so I suggest you be careful.',
 OfferRewardText = 'Relief. I can say with certainty that I now feel an emotion besides fear.$B$BI was cursed long ago to forever tend to this fire. Should the flame ever extinguish, I would vanish forever from this world. I cannot properly describe the fear I feel about what would happen should the flame go out. Whilst I am bound to this spiritual form, I dare not think what comes after; it is the unknown that I truly dread.$B$BI would give anything to suffer as I am now than to drift away forever, forgotten for all time.'
 WHERE entry = 40931;
+
+REPLACE INTO creature_onkill_reputation VALUES (8216, 471, 0, 7, 0, 25, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (8636, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (7996, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91784, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91785, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91786, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91787, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91788, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91789, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (91790, 471, 0, 7, 0, 5, 0, 0, 0, 1);
+REPLACE INTO creature_onkill_reputation VALUES (61502, 471, 0, 7, 0, 25, 0, 0, 0, 1);
