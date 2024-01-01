@@ -28,3 +28,7 @@ REPLACE INTO creature_onkill_reputation VALUES (61502, 471, 0, 7, 0, 25, 0, 0, 0
 UPDATE item_template SET Allowable_Class = 0, Flags = 2048 WHERE entry = 91762;
 
 UPDATE item_template SET Buy_Price = 15094, Sell_Price = 3018 WHERE entry = 51719;
+
+-- fix wand dps (Dragunovi)
+update item_template set dmg_min1 = 43, dmg_max1 = 81 where entry = 81290; -- Diathorus' Claw
+update item_template set dmg_min1 = 30, dmg_max1 = 55 where entry = 80829; -- Starcaller
