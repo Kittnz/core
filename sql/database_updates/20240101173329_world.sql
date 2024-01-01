@@ -24,3 +24,5 @@ REPLACE INTO creature_onkill_reputation VALUES (91788, 471, 0, 7, 0, 5, 0, 0, 0,
 REPLACE INTO creature_onkill_reputation VALUES (91789, 471, 0, 7, 0, 5, 0, 0, 0, 1);
 REPLACE INTO creature_onkill_reputation VALUES (91790, 471, 0, 7, 0, 5, 0, 0, 0, 1);
 REPLACE INTO creature_onkill_reputation VALUES (61502, 471, 0, 7, 0, 25, 0, 0, 0, 1);
+
+UPDATE item_template SET Allowable_Class = 0, Flags = 2048 WHERE entry = 91762;
