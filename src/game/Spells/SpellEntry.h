@@ -793,6 +793,8 @@ public:
         return false;
     }
 
+    bool HasAuraOrTriggersAnotherSpellWithAura(AuraType aura) const;
+
     bool IsCustomSpell() const
     {
         return Internal & SPELL_INTERNAL_CUSTOM;
