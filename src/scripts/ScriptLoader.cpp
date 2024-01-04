@@ -115,7 +115,6 @@ void AddSC_boss_herod();
 void AddSC_boss_high_inquisitor_fairbanks();
 void AddSC_boss_houndmaster_loksey();
 void AddSC_boss_interrogator_vishas();
-void AddSC_boss_mograine_and_whitemane();
 void AddSC_instance_scarlet_monastery();
 void AddSC_boss_darkmaster_gandling();               //scholomance
 void AddSC_boss_theolenkrastinov();
@@ -432,7 +431,6 @@ void AddScripts()
     AddSC_boss_high_inquisitor_fairbanks();
     AddSC_boss_houndmaster_loksey();
     AddSC_boss_interrogator_vishas();
-    AddSC_boss_mograine_and_whitemane();
     AddSC_instance_scarlet_monastery();
     AddSC_boss_darkmaster_gandling();                       //scholomance
     AddSC_boss_theolenkrastinov();

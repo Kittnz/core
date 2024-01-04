@@ -402,11 +402,11 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             }
             case SCRIPT_COMMAND_REMOVE_AURA:
             {
-                if (!sSpellMgr.GetSpellEntry(tmp.removeAura.spellId))
+                if (tmp.removeAura.spellId && !sSpellMgr.GetSpellEntry(tmp.removeAura.spellId))
                 {
                     if (!sSpellMgr.IsExistingSpellId(tmp.removeAura.spellId))
                     {
-                        sLog.outErrorDb("Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA or SCRIPT_COMMAND_CAST_SPELL for script id %u",
+                        sLog.outErrorDb("Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA for script id %u",
                             tablename, tmp.removeAura.spellId, tmp.id);
                         continue;
                     }
@@ -421,7 +421,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 {
                     if (!sSpellMgr.IsExistingSpellId(tmp.castSpell.spellId))
                     {
-                        sLog.outErrorDb("Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA or SCRIPT_COMMAND_CAST_SPELL for script id %u",
+                        sLog.outErrorDb("Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_CAST_SPELL for script id %u",
                             tablename, tmp.castSpell.spellId, tmp.id);
                         continue;
                     }
