@@ -170,7 +170,6 @@ dungeons/scarlet_monastery/boss_herod.cpp
 dungeons/scarlet_monastery/boss_high_inquisitor_fairbanks.cpp
 dungeons/scarlet_monastery/boss_houndmaster_loksey.cpp
 dungeons/scarlet_monastery/boss_interrogator_vishas.cpp
-dungeons/scarlet_monastery/boss_mograine_and_whitemane.cpp
 dungeons/scarlet_monastery/boss_scorn.cpp
 dungeons/scarlet_monastery/instance_scarlet_monastery.cpp
 dungeons/scarlet_monastery/scarlet_monastery.h
