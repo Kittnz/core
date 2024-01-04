@@ -1230,6 +1230,11 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
     if (spellInfo_1->SpellFamilyName != spellInfo_2->SpellFamilyName)
         return false;
 
+    // Why would a buff and a debuff ever be exclusive with each other?
+    // Fixes Corrupted Mind getting removed by Lightning Shield.
+    if (spellInfo_1->IsPositiveSpell() != spellInfo_2->IsPositiveSpell())
+        return false;
+
     // Nostalrius: potions fonctionnent autrement.
     if (spellInfo_1->SpellFamilyName == SPELLFAMILY_POTION)
         return false;
