@@ -26,7 +26,7 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 
-#define GUILD_BANK_SAVE_INTERVAL 2 * MINUTE * IN_MILLISECONDS
+#define GUILD_BANK_SAVE_INTERVAL 1 * MINUTE * IN_MILLISECONDS
 
 GuildMgr sGuildMgr;
 
