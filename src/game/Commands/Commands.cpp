@@ -15168,6 +15168,7 @@ bool ChatHandler::HandleCopyCommand(char* args)
             target->SaveInventoryAndGoldToDB();
             target->SetDisplayId(15435); // Invisible
             target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
+            PSendSysMessage("Appearance successfully changed to player %s. Please log out and back in.", plName.c_str());
             return true;
         }
     }
