@@ -1390,6 +1390,7 @@ class Unit : public WorldObject
                 return guid;
             return GetObjectGuid();
         }
+        Player* GetOwnerPlayerOrPlayerItself() const;
         Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
         Player* GetCharmerOrOwnerPlayer() const;
         Unit* GetCharmerOrOwner() const { return GetCharmerGuid() ? GetCharmer() : GetOwner(); }
