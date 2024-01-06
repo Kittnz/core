@@ -390,7 +390,7 @@ QueryNamedResult* Database::PQueryNamed(const char *format,...)
     return QueryNamed(szQuery);
 }
 
-bool Database::Execute(const char *sql, bool multiline)
+bool Database::Execute(const char *sql, bool multiline, std::function<void(bool)>* callback)
 {
     if (!m_pAsyncConn)
         return false;
@@ -398,6 +398,10 @@ bool Database::Execute(const char *sql, bool multiline)
     SqlTransaction * pTrans = m_TransStorage->get();
     if(pTrans)
     {
+        if (callback)
+            pTrans->SetCallback(callback);
+
+
         //add SQL request to trans queue
         pTrans->DelayExecute(multiline ? static_cast<SqlOperation*>(new SqlMultilineRequest(sql)) : new SqlPlainRequest(sql));
     }
@@ -407,14 +411,19 @@ bool Database::Execute(const char *sql, bool multiline)
         if(!m_bAllowAsyncTransactions)
             return DirectExecute(sql);
 
+        auto sqlOperation = multiline ? static_cast<SqlOperation*>(new SqlMultilineRequest(sql)) : new SqlPlainRequest(sql);
+
+        if (callback)
+            sqlOperation->SetCallback(callback);
+
         // Simple sql statement
-        AddToDelayQueue(multiline ? static_cast<SqlOperation*>(new SqlMultilineRequest(sql)) : new SqlPlainRequest(sql));
+        AddToDelayQueue(sqlOperation);
     }
 
     return true;
 }
 
-bool Database::PExecute(const char * format,...)
+bool Database::PExecute(const char * format, ...)
 {
     if (!format)
         return false;
@@ -432,6 +441,26 @@ bool Database::PExecute(const char * format,...)
     }
 
     return Execute(szQuery);
+}
+
+bool Database::PExecuteCallback(const char* format, std::function<void(bool)>* callback, ...)
+{
+    if (!format)
+        return false;
+
+    va_list ap;
+    char szQuery[MAX_QUERY_LEN];
+    va_start(ap, format);
+    int res = vsnprintf(szQuery, MAX_QUERY_LEN, format, ap);
+    va_end(ap);
+
+    if (res == -1)
+    {
+        sLog.outError("SQL Query truncated (and not execute) for format: %s", format);
+        return false;
+    }
+
+    return Execute(szQuery, false, callback);
 }
 
 bool Database::DirectPExecute(const char * format,...)

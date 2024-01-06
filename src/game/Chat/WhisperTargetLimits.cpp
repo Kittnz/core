@@ -1,10 +1,11 @@
 #include "WhisperTargetLimits.h"
 #include <algorithm>
 #include <memory>
+#include "WorldSession.h"
 #include "Database/DatabaseEnv.h"
 
-WhisperTargetLimits::WhisperTargetLimits(std::uint32_t account_id, std::uint32_t max_targets, std::uint32_t bypass_level, std::uint32_t decay)
-    : account_id_(account_id), max_targets_(max_targets), bypass_level_(bypass_level), decay_(decay)
+WhisperTargetLimits::WhisperTargetLimits(std::uint32_t account_id, std::uint32_t max_targets, std::uint32_t bypass_level, std::uint32_t decay, WorldSession* sess)
+    : account_id_(account_id), max_targets_(max_targets), bypass_level_(bypass_level), decay_(decay), _sess(sess)
 {
     load_targets();
 }
@@ -16,12 +17,22 @@ WhisperTargetLimits::~WhisperTargetLimits()
 
 void WhisperTargetLimits::save_targets()
 {
-    CharacterDatabase.PExecute("DELETE FROM `whisper_targets` WHERE `account` = %u", account_id_);
-
-    for (const auto& target : targets_)
+    std::function<void(bool)> callback = [this, sessId = _sess->GetAccountId()](bool result)
     {
-        CharacterDatabase.PExecute("INSERT INTO `whisper_targets` (`account`, `target_guid`, `time`) VALUES (%u, %u, %u)", account_id_, target.first, target.second);
-    }
+        auto sess = sWorld.FindSession(sessId);
+
+        if (sess)
+        {
+            for (const auto& target : sess->GetWhisperTargets().targets_)
+            {
+                CharacterDatabase.PExecute("INSERT INTO `whisper_targets` (`account`, `target_guid`, `time`) VALUES (%u, %u, %u)", account_id_, target.first, target.second);
+            }
+        }
+    };
+
+    CharacterDatabase.PExecuteCallback("DELETE FROM `whisper_targets` WHERE `account` = %u", &callback, account_id_);
+
+
 }
 
 void WhisperTargetLimits::load_targets()

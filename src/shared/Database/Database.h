@@ -223,8 +223,10 @@ class Database
         template<typename ParamType1>
             bool DelayQueryHolderUnsafe(void (*method)(QueryResult*, SqlQueryHolder*, ParamType1), SqlQueryHolder *holder, ParamType1 param1);
 
-        bool Execute(const char *sql, bool multiline = false);
-        bool PExecute(const char *format,...) ATTR_PRINTF(2,3);
+        bool Execute(const char *sql, bool multiline = false, std::function<void(bool)>* callback = nullptr);
+        bool PExecute(const char *format, ...) ATTR_PRINTF(2,3);
+
+        bool PExecuteCallback(const char* format, std::function<void(bool)>* callback = nullptr, ...);
 
         // Writes SQL commands to a LOG file (see mangosd.conf "LogSQL")
         bool PExecuteLog(const char *format,...) ATTR_PRINTF(2,3);
