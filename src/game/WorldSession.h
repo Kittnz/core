@@ -431,7 +431,7 @@ class WorldSession
         // Trade
         void SendTradeStatus(TradeStatus status);
         void SendUpdateTrade(bool trader_state = true);
-        void SendCancelTrade();
+        void SendCancelTrade(TradeStatus status);
 
         // Pet
         void SendPetNameQuery(ObjectGuid guid, uint32 petnumber);

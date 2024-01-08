@@ -1337,7 +1337,7 @@ class Player final: public Unit
 
         Player* GetTrader() const { return m_trade ? m_trade->GetTrader() : nullptr; }
         TradeData* GetTradeData() const { return m_trade; }
-        void TradeCancel(bool sendback);
+        void TradeCancel(bool sendback, TradeStatus status = TRADE_STATUS_TRADE_CANCELED);
 
         uint32 GetTimeLoggedIn() const { return m_timeLoggedIn; }
         void AddLoggedInTime(uint32 diff) { m_timeLoggedIn += diff; }
