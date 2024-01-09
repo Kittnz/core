@@ -159,7 +159,7 @@ struct LookupPlayerHandler
             if (fields[2].GetBool() && (fields[1].GetUInt64() == (uint64)0 || unbandate >= time(nullptr)))
                 active = true;
             bool permanent = (fields[1].GetUInt64() == (uint64)0);
-            uint32 reqGmLevel = fields[6].GetUInt8();
+            uint32 reqGmLevel = fields[7].GetUInt8();
             std::string banreason = fields[4].GetString();
             if (reqGmLevel > uint8(handler.GetAccessLevel()))
                 banreason = "<hidden>";
@@ -4397,7 +4397,7 @@ bool ChatHandler::HandleBanInfoCharacterCommand(char* args)
 bool ChatHandler::HandleBanInfoHelper(uint32 accountId, char const* accountname)
 {
     LoginDatabase.AsyncPQuery(&LookupPlayerHandler::HandleBanInfoCallback, std::make_pair(GetSession()->GetAccountId(), std::string(accountname)),
-    "SELECT FROM_UNIXTIME(bandate), unbandate-bandate, active, unbandate,banreason,bannedby,COALESCE(name, \"NoRealm\") , gmlevel "
+    "SELECT FROM_UNIXTIME(bandate), unbandate-bandate, active, unbandate,banreason,bannedby,COALESCE(name, \"NoRealm\") , gmlevel, banid "
     "FROM account_banned LEFT JOIN realmlist ON realmlist.id = realm "
     "WHERE account_banned.id = '%u' ORDER BY bandate ASC", accountId);
     return true;
