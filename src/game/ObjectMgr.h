@@ -105,6 +105,14 @@ struct ShopLogEntry
     uint32 dateUnix;
 };
 
+//Acts like bitmask.
+enum class ShopRegion : uint32
+{
+    Global = 0,
+    Europe = 1,
+    China  = 2
+};
+
 struct BattlegroundEntranceTrigger
 {
     Team   team;
