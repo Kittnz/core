@@ -166,7 +166,14 @@ struct LookupPlayerHandler
 
             std::string authorName = fields[5].GetCppString() + " (" + fields[6].GetCppString() + ")";
             std::string bantime = permanent ? handler.GetMangosString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[1].GetUInt64(), true);
-            handler.PSendSysMessage(LANG_BANINFO_HISTORYENTRY,
+            std::string banInfoHistory = handler.GetMangosString(LANG_BANINFO_HISTORYENTRY);
+
+            std::ostringstream ss;
+            ss << "ID " << fields[8].GetUInt64() << " | ";
+
+            std::string finalOutput = ss.str() + banInfoHistory;
+
+            handler.PSendSysMessage(finalOutput.c_str(),
                 fields[0].GetString(), bantime.c_str(), active ? handler.GetMangosString(LANG_BANINFO_YES) : handler.GetMangosString(LANG_BANINFO_NO), banreason.c_str(), authorName.c_str());
         } while (result->NextRow());
 
@@ -4711,6 +4718,22 @@ bool ChatHandler::HandleWarnCharacterCommand(char* args)
     }
 
     PSendSysMessage("Player %s warned.", playerData->sName.c_str());
+
+    return true;
+}
+
+
+bool ChatHandler::HandleRemoveWarnCommand(char* args)
+{
+    uint32 warningId = 0;
+    if (!ExtractUInt32(&args, warningId))
+    {
+        SendSysMessage("Give a valid Warning ID.");
+        return false;
+    }
+
+    sWorld.RemoveWarning(warningId);
+    PSendSysMessage("Removed warning with ID: %u", warningId);
 
     return true;
 }

@@ -132,6 +132,7 @@ class AccountMgr
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
         void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
         void WarnAccount(uint32 acc, std::string reason) { m_accountWarnings[acc] = reason; }
+
         char const* GetWarningText(uint32 acc) const
         {
             auto itr = m_accountWarnings.find(acc);
