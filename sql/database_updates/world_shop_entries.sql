@@ -226,4 +226,5 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (452, 7, 41091, 'Jingle Belle Frock', '', 200),
 (453, 7, 41092, 'Apparel of the Bells', '', 200),
 (454, 7, 41098, 'Icefur Boots - Limited Edition', '', 200),
-(455, 7, 41097, 'Candy Cane Boots - Limited Edition', '', 300);
+(455, 7, 41097, 'Candy Cane Boots - Limited Edition', '', 300),
+(456, 7, 68070, 'Robes of the Moonless Night', '', 200); -- CHINA ONLY!!!
