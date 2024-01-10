@@ -9332,7 +9332,7 @@ void ObjectMgr::LoadShop()
         //For now just expect EU if SEA config is 0..
         ShopRegion currentRegion = sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) ? ShopRegion::China : ShopRegion::Europe;
 
-        return currentRegion == region;
+        return currentRegion == region || region == ShopRegion::Global;
     };
 
 
