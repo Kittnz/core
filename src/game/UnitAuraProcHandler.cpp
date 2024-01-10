@@ -1479,8 +1479,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         }
         case SPELLFAMILY_DRUID:
         {
-            // Thorns Explosion Chance
+            // Thorns Explosion Chance (Talent)
             if (auraSpellInfo->Id == 21972)
+            {
+                target = pVictim;
+            }
+            // Thorns Explosion Chance (Hidden Aura on Thorns Target)
+            else if (auraSpellInfo->Id == 46431)
             {
                 if (!HasAuraType(SPELL_AURA_DAMAGE_SHIELD))
                     return SPELL_AURA_PROC_CANT_TRIGGER;
