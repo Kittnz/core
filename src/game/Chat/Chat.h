@@ -393,6 +393,7 @@ class ChatHandler
         bool HandleBanListCharacterCommand(char* args);
         bool HandleBanListIPCommand(char* args);
         bool HandleWarnCharacterCommand(char* args);
+        bool HandleRemoveWarnCommand(char* args);
 
         bool HandleCastCommand(char* args);
         bool HandleCastSelfCommand(char* args);

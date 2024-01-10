@@ -2839,6 +2839,11 @@ void World::WarnAccount(uint32 accountId, std::string from, std::string reason, 
         accountId, from.c_str(), reason.c_str(), realmID);
 }
 
+void World::RemoveWarning(uint32 warningId)
+{
+    LoginDatabase.PExecute("DELETE FROM account_banned WHERE banid = %u", warningId);
+}
+
 void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author)
 {
     LoginDatabase.escape_string(reason);
