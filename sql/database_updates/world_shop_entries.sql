@@ -15,6 +15,7 @@ create table shop_items (
   description text,
   description_loc4 text,
   price int(11) unsigned default '0',
+  region_locked TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 

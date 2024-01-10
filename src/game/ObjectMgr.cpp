@@ -9327,6 +9327,15 @@ AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
 
 void ObjectMgr::LoadShop()
 {
+    auto CheckRegionRequirements = [&](ShopRegion region)
+    {
+        //For now just expect EU if SEA config is 0..
+        ShopRegion currentRegion = sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) ? ShopRegion::China : ShopRegion::Europe;
+
+        return currentRegion == region;
+    };
+
+
     m_ShopCategoriesMap.clear();
     m_shopLogs.clear();
 
@@ -9357,7 +9366,7 @@ void ObjectMgr::LoadShop()
 
     m_ShopEntriesMap.clear();
 
-    result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
+    result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price, region_locked FROM shop_items");
 
     if (!result)
         return;
@@ -9372,6 +9381,11 @@ void ObjectMgr::LoadShop()
         std::string text = fields[3].GetString();
         std::string description_loc4 = fields[4].GetString();
         uint32 price = fields[5].GetUInt32();
+        ShopRegion region = (ShopRegion)fields[6].GetUInt8();
+
+
+        if (!CheckRegionRequirements(region))
+            continue;
 
         ShopEntry shopentry;
         shopentry.shopId = id;
