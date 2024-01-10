@@ -229,3 +229,5 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (454, 7, 41098, 'Icefur Boots - Limited Edition', '', 200),
 (455, 7, 41097, 'Candy Cane Boots - Limited Edition', '', 300),
 (456, 7, 68070, 'Robes of the Moonless Night', '', 200); -- CHINA ONLY!!!
+
+UPDATE shop_items SET region_locked = 2 WHERE id = 456;
