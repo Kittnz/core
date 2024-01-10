@@ -3,6 +3,7 @@
 #include <memory>
 #include "WorldSession.h"
 #include "Database/DatabaseEnv.h"
+#include "World.h"
 
 WhisperTargetLimits::WhisperTargetLimits(std::uint32_t account_id, std::uint32_t max_targets, std::uint32_t bypass_level, std::uint32_t decay, WorldSession* sess)
     : account_id_(account_id), max_targets_(max_targets), bypass_level_(bypass_level), decay_(decay), _sess(sess)
