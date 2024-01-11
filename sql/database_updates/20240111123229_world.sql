@@ -1,4 +1,3 @@
-
 UPDATE `locales_creature` SET `name_loc4` = '格洛克·木腿' WHERE `entry` = 61645;
 UPDATE `locales_creature` SET `name_loc4` = '舵手维克' WHERE `entry` = 61646;
 UPDATE `locales_creature` SET `name_loc4` = '约翰尼·水鬼' WHERE `entry` = 61647;
