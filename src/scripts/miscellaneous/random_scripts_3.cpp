@@ -7453,6 +7453,22 @@ bool GossipSelect_Christmas_Entity(Player* player, Creature* creature, uint32 se
     return true;
 }
 
+bool QuestAccept_npc_daily_hk_dk(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    // Forcibly send quest data to player to update player name in cache.
+    WorldPacket data(CMSG_QUEST_QUERY, 4);
+    data << uint32(pQuest->GetQuestId());
+    pPlayer->GetSession()->HandleQuestQueryOpcode(data);
+    pQuestGiver->MonsterWhisper(pQuest->GetEndText().c_str(), pPlayer);
+
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
@@ -8384,5 +8400,10 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_compact_harvest_reaper";
     newscript->GetAI = &GetAI_npc_compact_harvest_reaper;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_daily_hk_dk";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_daily_hk_dk;
     newscript->RegisterSelf();
 }

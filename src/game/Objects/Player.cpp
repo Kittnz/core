@@ -21085,6 +21085,11 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             AddItem(50015, 1);
         }
 
+        if (pVictim->GetGUIDLow() == HonorMgr::GetMostHkYesterdayPlayerGuid())
+            AreaExploredOrEventHappens(QUEST_DAILY_MOST_HK);
+        if (pVictim->GetGUIDLow() == HonorMgr::GetMostDkYesterdayPlayerGuid())
+            AreaExploredOrEventHappens(QUEST_DAILY_MOST_DK);
+
         RewardBountyHuntKill(pVictim);
     }    
 }

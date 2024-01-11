@@ -59,6 +59,96 @@ uint32 HonorMaintenancer::GetStandingPositionByGUID(uint32 guid, Team team)
     return 0;
 }
 
+uint32 HonorMgr::m_mostHkYesterdayGuid = 0;
+uint32 HonorMgr::m_mostDkYesterdayGuid = 0;
+
+void HonorMgr::LoadMostDkHkYesterdayPlayers()
+{
+    sLog.outInfo("Loading players that had the most HK and DK yesterday.");
+
+    uint32 maxDay = 0;
+    std::map<uint32 /*guid*/, uint32 /*hk*/> hkRanking;
+    std::map<uint32 /*guid*/, uint32 /*dk*/> dkRanking;
+    QueryResult* result = CharacterDatabase.Query("SELECT `guid`, `type`, `date` FROM `character_honor_cp`");
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            
+            uint32 guid = fields[0].GetUInt32();
+            uint32 type = fields[1].GetUInt32();
+            uint32 date = fields[2].GetUInt32();
+
+            if (date > maxDay)
+            {
+                maxDay = date;
+                hkRanking.clear();
+                dkRanking.clear();
+            }
+
+            if (type == HONORABLE)
+            {
+                hkRanking[guid]++;
+            }
+            else if (type == DISHONORABLE)
+            {
+                dkRanking[guid]++;
+            }
+
+        } while (result->NextRow());
+        delete result;
+    }
+
+    std::pair<uint32, uint32> mostHk;
+    for (auto const& itr : hkRanking)
+    {
+        if (itr.second > mostHk.second)
+        {
+            mostHk.first = itr.first;
+            mostHk.second = itr.second;
+        }
+    }
+    m_mostHkYesterdayGuid = mostHk.first;
+
+    std::pair<uint32, uint32> mostDk;
+    for (auto const& itr : dkRanking)
+    {
+        if (itr.second > mostDk.second)
+        {
+            mostDk.first = itr.first;
+            mostDk.second = itr.second;
+        }
+    }
+    m_mostDkYesterdayGuid = mostDk.first;
+
+    sLog.outInfo("Most HK by %u, Most DK by %u", m_mostHkYesterdayGuid, m_mostDkYesterdayGuid);
+
+    if (m_mostHkYesterdayGuid)
+    {
+        if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(m_mostHkYesterdayGuid))
+        {
+            if (Quest* pQuest = (Quest*)sObjectMgr.GetQuestTemplate(QUEST_DAILY_MOST_HK))
+            {
+                std::string txt = "End " + pData->sName + "'s life.";
+                pQuest->SetEndText(txt);
+            }
+        }
+    }
+
+    if (m_mostDkYesterdayGuid)
+    {
+        if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(m_mostDkYesterdayGuid))
+        {
+            if (Quest* pQuest = (Quest*)sObjectMgr.GetQuestTemplate(QUEST_DAILY_MOST_DK))
+            {
+                std::string txt = "End " + pData->sName + "'s life.";
+                pQuest->SetEndText(txt);
+            }
+        }
+    }
+}
+
 void HonorMaintenancer::LoadWeeklyScores()
 {
     uint32 weekBeginDay = GetWeekBeginDay();
