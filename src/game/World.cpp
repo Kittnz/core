@@ -1436,6 +1436,31 @@ void World::LoadConfigSettings(bool reload)
     // Festive things:
     setConfig(CONFIG_BOOL_HOLIDAY_EVENT, "HolidayEvent", true);
 
+    if (getConfig(CONFIG_BOOL_SEA_NETWORK))
+    {
+        sLog.outBasic("Overriding XP rates for chinese realm.");
+        switch (getConfig(CONFIG_UINT32_GAME_TYPE))
+        {
+            case REALM_TYPE_PVP:
+            case REALM_TYPE_RPPVP:
+            {
+                setConfig(CONFIG_FLOAT_RATE_XP_KILL, 1.6f);
+                setConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE, 1.6f);
+                setConfig(CONFIG_FLOAT_RATE_XP_QUEST, 1.6f);
+                setConfig(CONFIG_FLOAT_RATE_XP_EXPLORE, 1.6f);
+                break;
+            }
+            default:
+            {
+                setConfig(CONFIG_FLOAT_RATE_XP_KILL, 1.4f);
+                setConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE, 1.4f);
+                setConfig(CONFIG_FLOAT_RATE_XP_QUEST, 1.4f);
+                setConfig(CONFIG_FLOAT_RATE_XP_EXPLORE, 1.4f);
+                break;
+            }
+        }
+    }
+
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
     setConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL, "AutoPDump.MinCharLevel", 30);
     setConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS, "AutoPDump.DeleteAfterDays", 60);
