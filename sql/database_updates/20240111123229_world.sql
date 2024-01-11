@@ -105,7 +105,7 @@ UPDATE `locales_creature` SET `name_loc4` = '泵工坎扎尔' WHERE `entry` = 61
 UPDATE `locales_creature` SET `name_loc4` = '泵长加尔瓦克斯' WHERE `entry` = 61746;
 UPDATE `locales_creature` SET `name_loc4` = '暴徒耶沃' WHERE `entry` = 61747;
 UPDATE `locales_creature` SET `name_loc4` = '加兹克' WHERE `entry` = 61748;
-UPDATE `locales_creature` SET `name_loc4` = '范佐·锋线' WHERE `en
+UPDATE `locales_creature` SET `name_loc4` = '范佐·锋线' WHERE `entry` = 61759;
 UPDATE `locales_creature` SET `name_loc4` = '心烦投资者' WHERE `entry` = 52120;
 UPDATE `locales_creature` SET `name_loc4` = '非常悲伤的投资者' WHERE `entry` = 52121;
 UPDATE `locales_creature` SET `name_loc4` = '贝壳公司说客' WHERE `entry` = 52122;
