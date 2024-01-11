@@ -59,12 +59,12 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 
 bool fov_build = false;
 constexpr bool bPatcher = false;
-constexpr bool bDownloadPatchFromInternet = false;
+constexpr bool bDownloadPatchFromInternet = true;
 
 #define NEW_BUILD 7100u
 #define NEW_VISUAL_BUILD "7100"
 #define NEW_VISUAL_VERSION "1.17.1"
-#define NEW_BUILD_DATE "Dec 20 2023"
+#define NEW_BUILD_DATE "Jan 10 2024"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-5.mpq"
@@ -72,8 +72,13 @@ constexpr bool bDownloadPatchFromInternet = false;
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 #define MAIN_GAME_BINARY "WoW.exe"
-#define SHOULD_COPY_REALM_SETTINGS true
+#define SHOULD_COPY_REALM_SETTINGS false
 #define NEW_REALM_NAME "Nordanaar"
+
+#define DOWNLOAD_FILENAME "twpatch_cn_rest_7100.mpq"
+
+#define DOWNLOAD_LINK_MAIN "https://turtle-wow.b-cdn.net/cn/"
+#define DOWNLOAD_LINK_BACKUP "https://download.turtle-wow.org/cn/"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -1208,8 +1213,11 @@ DWORD DoPatcherMainWork()
 			return true;
 		};
 
-		std::string MainLinkToPatch = "https://turtle-wow.b-cdn.net/cn/wow-patch.mpq";
-		std::string BackupLinkToPatch = "https://download.turtle-wow.org/cn/wow-patch.mpq";
+		std::string MainLinkToPatch = DOWNLOAD_LINK_MAIN;
+		std::string BackupLinkToPatch = DOWNLOAD_LINK_BACKUP;
+
+		MainLinkToPatch += DOWNLOAD_FILENAME;
+		BackupLinkToPatch += DOWNLOAD_FILENAME;
 
 #if 0
 		if (FILE* DownloadLinkFile = fopen("downloadlink.txt", "rb"))
