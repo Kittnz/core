@@ -26,7 +26,7 @@ replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values
 (4,  'Glyphs', '雕文', 'service'),
 (5,  'Mounts', '坐骑', 'mount'),
 (6,  'Companions', '小宠物', 'pet'),
-(7,  'Fashion', '战袍', 'tabard'),
+(7,  'Fashion', '时尚', 'tabard'),
 (8,  'Illusions', '幻象', 'scroll');
 
 replace into shop_items (`id`, `category`, `item`, `description`, `description_loc4`, `price`) values 
