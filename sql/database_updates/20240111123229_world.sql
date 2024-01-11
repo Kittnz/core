@@ -505,3 +505,8 @@ UPDATE `locales_creature` SET `name_loc4` = '斯特拉·吉文奇' WHERE `entry`
 UPDATE `locales_creature` SET `name_loc4` = '可可·古奇' WHERE `entry` = 61902;
 UPDATE `locales_creature` SET `name_loc4` = '维拉·劳伦' WHERE `entry` = 61903;
 UPDATE `locales_creature` SET `name_loc4` = '拉尔夫·雅各布斯' WHERE `entry` = 61904;
+
+-- More fixes:
+
+UPDATE `locales_item` SET `description_loc4` = '附魔师必备的。' WHERE `entry` IN (6339, 11130, 11145, 16207);
+UPDATE `locales_creature` SET `subname_loc4` = '机器人工程师' WHERE `entry` = 61741;
