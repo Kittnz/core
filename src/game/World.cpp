@@ -1991,6 +1991,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPlayerCacheData();
     sLog.outString("Loading quest spell cast objectives...");
     sObjectMgr.LoadQuestSpellCastObjectives(); // Must be after LoadQuests and LoadPlayerCacheData
+    HonorMgr::LoadMostDkHkYesterdayPlayers();
     sLog.outString("Loading the max pet number...");
     sObjectMgr.LoadPetNumber();
     sLog.outString("Loading pet level stats...");

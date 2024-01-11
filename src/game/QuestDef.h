@@ -278,6 +278,9 @@ class Quest
         void SetQuestActiveState(bool state) { m_isActive = state; }
         bool IsActive() const { return m_isActive; }
 
+        // needed by honormgr for daily most hk/dk quests
+        void SetEndText(std::string text) { EndText = text; }
+
         // multiple values
         std::string ObjectiveText[QUEST_OBJECTIVES_COUNT];
         uint32 ReqItemId[QUEST_ITEM_OBJECTIVES_COUNT];
