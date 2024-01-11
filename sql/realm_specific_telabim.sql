@@ -15800,7 +15800,3 @@ UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 13023, `pl
 UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 11530, `player_class` = 0, `objective_text` = 'Throw snowball at Hanni' WHERE `entry` = 50321 AND `idx` = 1;
 UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 7365, `player_class` = 0, `objective_text` = 'Throw snowball at Japseijones' WHERE `entry` = 50321 AND `idx` = 2;
 UPDATE `quest_cast_objective` SET `spell_id` = 21343, `player_guid` = 18474, `player_class` = 0, `objective_text` = 'Throw snowball at Thalia' WHERE `entry` = 50321 AND `idx` = 3;
-
--- Autobroadcast:
-
-UPDATE `mangos_string` SET `content_default` = 'All donation rewards are half-price until January 6st! Happy Holidays!' WHERE `entry` = 50001;
