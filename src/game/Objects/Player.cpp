@@ -21089,8 +21089,6 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             AreaExploredOrEventHappens(QUEST_DAILY_MOST_HK);
         if (pVictim->GetGUIDLow() == HonorMgr::GetMostDkYesterdayPlayerGuid())
             AreaExploredOrEventHappens(QUEST_DAILY_MOST_DK);
-
-        RewardBountyHuntKill(pVictim);
     }    
 }
 
@@ -23595,58 +23593,10 @@ void Player::RemoveExclusiveVisibleObject(ObjectGuid guid)
     m_exclusiveVisibleObjects.remove(guid);
 }
 
-enum BountyBoards
-{
-QUEST_HORDE_PLAYER          = 50322,
-QUEST_ALLIANCE_PLAYER       = 50323,
-DUMMY_NPC_HORDE_PLAYER      = 70004,
-DUMMY_NPC_ALLIANCE_PLAYER   = 70005  
-};
-
-void Player::RewardBountyHuntKill(Unit* pVictim)
-{
-    uint32 HordePlayerGUID{ 1 };
-    uint32 AlliancePlayerGUID{ 1 };
-
-    QueryResult* result_h = CharacterDatabase.PQuery("SELECT `horde_player` FROM `bounty_quest_targets` WHERE id = 1");
-
-    if (result_h)
-    {
-        Field* fields = result_h->Fetch();
-        HordePlayerGUID = fields[0].GetUInt32();
-    }
-    delete result_h;
-
-    QueryResult* result_a = CharacterDatabase.PQuery("SELECT `alliance_player` FROM `bounty_quest_targets` WHERE id = 1");
-
-    if (result_a)
-    {
-        Field* fields = result_a->Fetch();
-        AlliancePlayerGUID = fields[0].GetUInt32();
-    }
-    delete result_a;    
-
-    if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
-    {
-        int32 dummy_player{ 0 };
-
-        if (HordePlayerGUID == pVictim->GetObjectGuid())
-            dummy_player = DUMMY_NPC_HORDE_PLAYER;
-        else if (AlliancePlayerGUID == pVictim->GetObjectGuid())
-            dummy_player = DUMMY_NPC_ALLIANCE_PLAYER;
-
-        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(dummy_player);
-
-        if (cInfo != nullptr)
-            KilledMonster(cInfo, ObjectGuid());
-    }
-}
-
 bool Player::IsInMainCity() {
     return GetZoneId() == 1519 || GetZoneId() == 1637 || GetZoneId() == 1497 || GetZoneId() == 1537 ||
         GetZoneId() == 1657 || GetZoneId() == 1638 || GetInstanceId();
 }
-
 
 void Player::SetFlying(bool flying)
 {

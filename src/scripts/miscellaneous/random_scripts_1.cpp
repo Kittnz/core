@@ -896,80 +896,6 @@ bool GOHello_go_portal_to_darnassus(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-enum BountyQuests
-{
-    QUEST_HORDE_PLAYER = 50322,
-    QUEST_ALLIANCE_PLAYER = 50323
-};
-
-bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
-{
-    std::string HordePlayerName{ "H_Empty" };
-    std::string AlliancePlayerName{ "A_Empty" };
-
-
-    QueryResult* result = CharacterDatabase.Query("SELECT horde_player, alliance_player FROM bounty_quest_targets WHERE id = 1");
-    if (result)
-    {
-        auto playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[0].GetUInt32());
-        if (playerData)
-            HordePlayerName = playerData->sName;
-
-        playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[1].GetUInt32());
-        if (playerData)
-            AlliancePlayerName = playerData->sName;
-        delete result;
-    }
-    
-
-    switch (pPlayer->GetTeam())
-    {
-    case ALLIANCE:
-        if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
-        {
-            std::stringstream WantedHordePlayerName;
-            WantedHordePlayerName << "WANTED: " << HordePlayerName;
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
-        break;
-
-    case HORDE:
-
-        if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
-        {
-            std::stringstream WantedAlliancePlayerName;
-            WantedAlliancePlayerName << "WANTED: " << AlliancePlayerName;
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedAlliancePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        }
-        break;
-    case TEAM_NONE:
-    case TEAM_CROSSFACTION:
-        break;
-    default:
-        break;
-    }
-    pPlayer->SEND_GOSSIP_MENU(90325, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1) 
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_HORDE_PLAYER);
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
-    if (action == GOSSIP_ACTION_INFO_DEF + 2) 
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 {
     int32 coin = 51600 + urand(0, 45);
@@ -7550,12 +7476,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "go_radio";
     newscript->pGOHello = &GOHello_go_radio;
     newscript->pGOGossipSelect = &GOSelect_go_radio;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_bounty";
-    newscript->pGOHello = &GOHello_go_bounty;
-    newscript->pGOGossipSelect = &GOSelect_go_bounty;
     newscript->RegisterSelf();
 
     newscript = new Script;
