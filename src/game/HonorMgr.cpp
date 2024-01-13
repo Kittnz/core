@@ -86,6 +86,8 @@ void HonorMgr::LoadMostDkHkYesterdayPlayers()
                 hkRanking.clear();
                 dkRanking.clear();
             }
+            else if (date < maxDay)
+                continue;
 
             if (type == HONORABLE)
             {
