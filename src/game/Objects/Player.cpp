@@ -3765,7 +3765,7 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
-    if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && !sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT))
     {
         uint32 itemEntry = 81205;
         std::string subject = "Winds of Discovery";
