@@ -70,6 +70,7 @@
 #include <math.h>
 #include <stdarg.h>
 #include "SuspiciousStatisticMgr.h"
+#include "PerfStats.h"
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
 {
@@ -218,6 +219,8 @@ Unit::Unit()
 
     m_isCreatureLinkingTrigger = false;
     m_isSpawningLinked = false;
+
+    ++PerfStats::g_totalUnits;
 }
 
 Unit::~Unit()
@@ -241,6 +244,8 @@ Unit::~Unit()
     MANGOS_ASSERT(m_deletedAuras.empty());
     MANGOS_ASSERT(m_deletedHolders.empty());
     MANGOS_ASSERT(!m_needUpdateVisibility);
+
+    --PerfStats::g_totalUnits;
 }
 
 void Unit::Update(uint32 update_diff, uint32 p_time)

@@ -27,6 +27,7 @@
 #include "ItemEnchantmentMgr.h"
 #include "GuildMgr.h"
 #include "miscellaneous/feature_transmog.h"
+#include "PerfStats.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -232,6 +233,13 @@ Item::Item() : loot(nullptr)
     mb_in_trade = false;
     m_lootState = ITEM_LOOT_NONE;
     generatedLoot = false;
+
+    ++PerfStats::g_totalItems;
+}
+
+Item::~Item()
+{
+    --PerfStats::g_totalItems;
 }
 
 bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)

@@ -61,7 +61,7 @@
 #include "ScriptedEscortAI.h"
 #include "GuardMgr.h"
 #include "GuidObjectScaling.h"
-
+#include "PerfStats.h"
 #include "Autoscaling/AutoScaler.hpp"
 
 // apply implementation of the singletons
@@ -229,6 +229,8 @@ Creature::Creature(CreatureSubtype subtype) :
 
     for (uint32 & spell : m_spells)
         spell = 0;
+
+    ++PerfStats::g_totalCreatures;
 }
 
 Creature::~Creature()
@@ -239,6 +241,8 @@ Creature::~Creature()
 
     delete i_AI;
     i_AI = nullptr;
+
+    --PerfStats::g_totalCreatures;
 }
 
 void Creature::AddToWorld()

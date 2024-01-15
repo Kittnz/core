@@ -86,6 +86,7 @@
 #include "events/event_naxxramas.h"
 #include "events/event_wareffort.h"
 #include "Logging/DatabaseLogger.hpp"
+#include "PerfStats.h"
 
 #include <sstream>
 
@@ -784,6 +785,8 @@ Player::Player(WorldSession *session) : Unit(),
 
     m_totalDeathCount = 0;
     m_worldBuffCheckTimer = 0;
+
+    ++PerfStats::g_totalPlayers;
 }
 
 Player::~Player()
@@ -819,6 +822,8 @@ Player::~Player()
     sMapMgr.CancelDelayedPlayerTeleport(this);
 
     ASSERT(!m_groupInvite);
+
+    --PerfStats::g_totalPlayers;
 }
 
 void Player::CleanupsBeforeDelete()

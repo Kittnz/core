@@ -59,6 +59,7 @@
 #include "CreatureGroups.h"
 #include "Autoscaling/AutoScaler.hpp"
 #include "Logging/DatabaseLogger.hpp"
+#include "PerfStats.h"
 
 Map::~Map()
 {
@@ -85,6 +86,8 @@ Map::~Map()
 
     delete m_weatherSystem;
     m_weatherSystem = nullptr;
+
+    --PerfStats::g_totalMaps;
 }
 
 void Map::LoadMapAndVMap(int gx, int gy)
@@ -146,6 +149,8 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
         m_motionThreads->start();
         m_objectThreads->start<ThreadPool::MySQL<ThreadPool::MultiQueue>>();
     }
+
+    ++PerfStats::g_totalMaps;
 }
 
 // Nostalrius
@@ -819,7 +824,7 @@ void Map::UpdatePlayers()
 
 void Map::DoUpdate(uint32 maxDiff)
 {
-    uint32 now = WorldTimer::getMSTime();
+    uint32 const now = WorldTimer::getMSTime();
     uint32 diff = WorldTimer::getMSTimeDiff(_lastMapUpdate, now);
     if (diff > maxDiff)
         diff = maxDiff;
@@ -827,6 +832,14 @@ void Map::DoUpdate(uint32 maxDiff)
     if (HavePlayers())
         _lastPlayerLeftTime = now;
     Update(diff);
+
+    // track slowest map for performance statistics
+    uint32 diff2 = WorldTimer::getMSTimeDiffToNow(now);
+    if (diff2 > PerfStats::g_slowestMapUpdateTime)
+    {
+        PerfStats::g_slowestMapId = GetId();
+        PerfStats::g_slowestMapUpdateTime = diff2;
+    }
 }
 
 void Map::Update(uint32 t_diff)
