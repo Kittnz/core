@@ -24,6 +24,7 @@ set (shared_SRCS
     LockedQueue.h
     Log.h
     httplib.h
+    PerfStats.h
     PosixDaemon.h
     revision.h
     SystemConfig.h
@@ -64,6 +65,7 @@ set (shared_SRCS
     Common.cpp
     DelayExecutor.cpp
     Log.cpp
+    PerfStats.cpp
     PosixDaemon.cpp
     ThreadPool.cpp
     BS_thread_pool.hpp

@@ -39,6 +39,7 @@ class DynamicObject : public WorldObject
     public:
         typedef std::map<ObjectGuid, uint32> AffectedMap;
         explicit DynamicObject();
+        virtual ~DynamicObject();
 
         void AddToWorld() override;
         void RemoveFromWorld() override;

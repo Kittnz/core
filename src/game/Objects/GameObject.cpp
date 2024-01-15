@@ -51,6 +51,7 @@
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>
 #include "SuspiciousStatisticMgr.h"
+#include "PerfStats.h"
 
 bool QuaternionData::isUnit() const
 {
@@ -91,6 +92,8 @@ GameObject::GameObject() : WorldObject(),
     m_playerGroupId = 0;
 	m_bTemporaryNonInteracted = false;
     m_summonTarget = ObjectGuid();
+
+    ++PerfStats::g_totalGameObjects;
 }
 
 GameObject::~GameObject()
@@ -109,6 +112,8 @@ GameObject::~GameObject()
     delete m_model;
 
     MANGOS_ASSERT(m_spellDynObjects.empty());
+
+    --PerfStats::g_totalGameObjects;
 }
 
 bool CanOnlyBeLootedByPlayersOnMapAtSpawn(uint32 entry)

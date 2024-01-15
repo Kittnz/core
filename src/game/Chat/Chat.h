@@ -276,6 +276,7 @@ class ChatHandler
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
         bool ForceJoinChannelCommand(char* args);
+        bool HandlePerfStatsCommand(char* args);
 
         bool HandleMarkSuspiciousCommand(char* args);
 

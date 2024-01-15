@@ -942,13 +942,14 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bi",             SEC_MODERATOR,       false, &ChatHandler::HandleBanInfoAccountCommand,      "", nullptr },
         { "marksuspicious", SEC_MODERATOR,       false, &ChatHandler::HandleMarkSuspiciousCommand,      "", nullptr },
         { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,          "", nullptr},
-        { "toggletrainee", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
-        { "toggleinferno", SEC_DEVELOPER,        false, &ChatHandler::HandleToggleInfernoModeCommand,   "", nullptr },
-        { "translate",     SEC_DEVELOPER,        false, &ChatHandler::HandleTranslateCommand,           "", nullptr },
-        { "stopapi",       SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
-        { "hcchat",        SEC_PLAYER,           false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
-        { "toggleillusions", SEC_DEVELOPER,         false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
-        { "tmogdelete",    SEC_DEVELOPER,        false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
+        { "toggletrainee",  SEC_DEVELOPER,       false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
+        { "toggleinferno",  SEC_DEVELOPER,       false, &ChatHandler::HandleToggleInfernoModeCommand,   "", nullptr },
+        { "translate",      SEC_DEVELOPER,       false, &ChatHandler::HandleTranslateCommand,           "", nullptr },
+        { "stopapi",        SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
+        { "hcchat",         SEC_PLAYER,          false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
+        { "toggleillusions", SEC_DEVELOPER,      false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
+        { "tmogdelete",     SEC_DEVELOPER,       false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
+        { "perfstats",      SEC_ADMINISTRATOR,   true, &ChatHandler::HandlePerfStatsCommand,            "", nullptr },
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

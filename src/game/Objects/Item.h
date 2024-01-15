@@ -243,6 +243,7 @@ class Item : public Object
         Item* CloneItem(uint32 count, Player const* player = nullptr) const;
 
         Item();
+        virtual ~Item();
 
         virtual bool Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid = ObjectGuid());
         void RemoveFromWorld() override;

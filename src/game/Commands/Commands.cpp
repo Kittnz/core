@@ -92,7 +92,7 @@
 #include "DynamicVisibilityMgr.h"
 #include "CommandStream.h"
 #include "TransmogMgr.h"
-
+#include "PerfStats.h"
 
 int32 GetTokenBalance(uint32 accountId)
 {
@@ -18174,6 +18174,25 @@ bool ChatHandler::HandleWarEffortSetStageCommand(char* args)
     sObjectMgr.SetSavedVariable(VAR_WE_STAGE_TRANSITION_TIME, time(nullptr), true);
     PSendSysMessage("War effort stage set to '%s' (%u).", WarEffortStageToString(stage), stage);
     sGameEventMgr.Update();
+
+    return true;
+}
+
+bool ChatHandler::HandlePerfStatsCommand(char* args)
+{
+    SendSysMessage("Showing performance statistics:");
+    PSendSysMessage("Total Units: %i", PerfStats::g_totalUnits);
+    PSendSysMessage("Total Creatures: %i", PerfStats::g_totalCreatures);
+    PSendSysMessage("Total Pets: %i", PerfStats::g_totalPets);
+    PSendSysMessage("Total Players: %i", PerfStats::g_totalPlayers);
+    PSendSysMessage("Total Corpses: %i", PerfStats::g_totalCorpses);
+    PSendSysMessage("Total Items: %i", PerfStats::g_totalItems);
+    PSendSysMessage("Total GameObjects: %i", PerfStats::g_totalGameObjects);
+    PSendSysMessage("Total DynamicObjects: %i", PerfStats::g_totalDynamicObjects);
+    PSendSysMessage("Total QueryResults: %i", PerfStats::g_totalQueryResults);
+    PSendSysMessage("Total Maps: %i", PerfStats::g_totalMaps);
+    PSendSysMessage("World Update Time: %i", PerfStats::g_worldUpdateTime);
+    PSendSysMessage("Slowest Map: %i (%i ms)", PerfStats::g_slowestMapId, PerfStats::g_slowestMapUpdateTime);
 
     return true;
 }

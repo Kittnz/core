@@ -29,6 +29,7 @@
 #include "CellImpl.h"
 #include "GridNotifiersImpl.h"
 #include "SpellMgr.h"
+#include "PerfStats.h"
 
 DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_INDEX_0), m_aliveDuration(0), m_radius(0), m_positive(false)
 {
@@ -37,6 +38,13 @@ DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_
     m_updateFlag = (UPDATEFLAG_ALL | UPDATEFLAG_HAS_POSITION);
 
     m_valuesCount = DYNAMICOBJECT_END;
+
+    ++PerfStats::g_totalDynamicObjects;
+}
+
+DynamicObject::~DynamicObject()
+{
+    --PerfStats::g_totalDynamicObjects;
 }
 
 void DynamicObject::AddToWorld()

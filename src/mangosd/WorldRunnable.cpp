@@ -32,7 +32,7 @@
 #include "MapManager.h"
 #include "BattleGroundMgr.h"
 #include "Master.h"
-
+#include "PerfStats.h"
 #include "Database/DatabaseEnv.h"
 
 // Target server framerate is 1000/WORLD_SLEEP_CONST
@@ -62,6 +62,7 @@ void WorldRunnable::operator()()
 
         currTime = WorldTimer::getMSTime();
         auto diff = WorldTimer::getMSTimeDiff(prevTime, currTime);
+        PerfStats::g_worldUpdateTime = diff;
 
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
             sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
