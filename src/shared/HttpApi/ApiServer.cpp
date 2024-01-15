@@ -58,6 +58,7 @@ namespace HttpApi
                 while (_running)
                 {
                     _server->listen(address, port);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 30 FPS
                 }
                 mysql_thread_end();
         });
