@@ -928,7 +928,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         
 
     //temp
-    if (pCurrChar->GetLevel() >= 20 && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasItemCount(81205, 1, true))
+    if (pCurrChar->GetLevel() >= 20 && pCurrChar->GetLevel() <= 35 && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasItemCount(81205, 1, true))
     {
         uint32 itemEntry = 81205;
         std::string subject = "Winds of Discovery";
