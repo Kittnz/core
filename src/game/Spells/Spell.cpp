@@ -4695,7 +4695,7 @@ void Spell::finish(bool ok)
         m_casterUnit->DealHeal(m_casterUnit, uint32(m_healthLeech), m_spellInfo);
 
     // Clear combo at finish state
-    if (m_caster->IsPlayer() && m_spellInfo->NeedsComboPoints())
+    if (m_caster->IsPlayer() && m_spellInfo->NeedsComboPoints() && !m_spellInfo->IsPassiveSpell())
     {
         // Not drop combopoints if negative spell and if any miss on enemy exist
         bool needDrop = true;
