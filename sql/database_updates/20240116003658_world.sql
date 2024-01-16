@@ -42,3 +42,8 @@ UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = 3512;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/5679
 
 UPDATE `broadcast_text` SET `male_text` = 'Hey, hey, heyyyyy! Wake up Booty Bay, it is time to invest!' WHERE `entry` = 47020;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4110
+
+REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (951, 3.8);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (951, 15, 67);
