@@ -38,3 +38,7 @@ UPDATE `creature_template` SET `skinning_loot_id` = 1191 WHERE `entry` = 60980;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/5298
 
 UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = 3512;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/5679
+
+UPDATE `broadcast_text` SET `male_text` = 'Hey, hey, heyyyyy! Wake up Booty Bay, it is time to invest!' WHERE `entry` = 47020;
