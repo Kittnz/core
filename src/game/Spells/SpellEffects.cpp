@@ -2022,7 +2022,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         fX += (fDist * cos(m_caster->GetOrientation()));
                         fY += (fDist * sin(m_caster->GetOrientation()));
 
-                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 120, true);
+                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
                     }
 
                     return;
