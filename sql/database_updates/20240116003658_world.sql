@@ -51,3 +51,7 @@ REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (951, 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4338
 
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (5541, 179945, 1, -3018.72, -4345.71, 6.77611, 5.36293, 0, 0, 0.444061, -0.895996, 300, 300, 100, 1, 0, 0);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/4932
+
+UPDATE `item_template` SET `sheath` = 2 WHERE `entry` = 61454;
