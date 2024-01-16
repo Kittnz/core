@@ -927,6 +927,19 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     }      
         
 
+    //temp
+    if (pCurrChar->GetLevel() >= 20 && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasItemCount(81205, 1, true))
+    {
+        uint32 itemEntry = 81205;
+        std::string subject = "Winds of Discovery";
+        std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
+        Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
+        ToMailItem->SaveToDB();
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    }
+
     // Update warden speeds
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
