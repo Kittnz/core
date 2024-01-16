@@ -34,3 +34,7 @@ REPLACE INTO `fishing_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `g
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/3960
 
 UPDATE `creature_template` SET `skinning_loot_id` = 1191 WHERE `entry` = 60980;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/5298
+
+UPDATE `quest_template` SET `RequiredRaces` = 0 WHERE `entry` = 3512;
