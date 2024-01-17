@@ -5968,14 +5968,13 @@ void Player::DurabilityPointsLoss(Item* item, int32 points)
         if (pNewDurability == 0 && pOldDurability > 0 && item->IsEquipped())
             _ApplyItemMods(item, item->GetSlot(), false);
 
-        item->SetUInt32Value(ITEM_FIELD_DURABILITY, pNewDurability);
+        UpdateItemDurability(item, pNewDurability);
 
         // modify item stats _after_ restore durability to pass _ApplyItemMods internal check
         if (pNewDurability > 0 && pOldDurability == 0 && item->IsEquipped())
             _ApplyItemMods(item, item->GetSlot(), true);
 
         item->SetState(ITEM_CHANGED, this);
-        FixTransmogItemAfterDurabilityUpdate(item);
     }
 }
 
@@ -6055,9 +6054,8 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
         }
     }
 
-    item->SetUInt32Value(ITEM_FIELD_DURABILITY, maxDurability);
+    UpdateItemDurability(item, maxDurability);
     item->SetState(ITEM_CHANGED, this);
-    FixTransmogItemAfterDurabilityUpdate(item);
 
     // reapply mods for total broken and repaired item if equipped
     if (IsEquipmentPos(pos) && !curDurability)
@@ -6065,20 +6063,22 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
     return TotalCost;
 }
 
-void Player::FixTransmogItemAfterDurabilityUpdate(Item* pItem)
+void Player::UpdateItemDurability(Item* pItem, uint32 durability)
 {
+    // This is intended to fix transmogged items reverting to their original appearance on durability change.
     if (pItem->GetTransmogrification() && pItem->IsEquipped())
     {
         uint32 index = PLAYER_VISIBLE_ITEM_1_0 + (pItem->GetSlot() * MAX_VISIBLE_ITEM_OFFSET);
-        SetUInt32Value(index, 0);
+        m_uint32Values[index] = 0;
         DirectSendPublicValueUpdate(index);
-        UpdateData data;
-        pItem->BuildValuesUpdateBlockForPlayer(&data, this);
-        data.Send(GetSession());
-        pItem->ClearUpdateMask(true);
-        SetUInt32Value(index, pItem->GetVisibleEntry());
+
+        pItem->UpdateDurability(durability, this);
+
+        m_uint32Values[index] = pItem->GetVisibleEntry();
         DirectSendPublicValueUpdate(index);
     }
+    else
+        pItem->SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
 }
 
 void Player::ScheduleRepopAtGraveyard()

@@ -3010,7 +3010,7 @@ public:
         //uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
-        void FixTransmogItemAfterDurabilityUpdate(Item* pItem);
+        void UpdateItemDurability(Item* pItem, uint32 durability);
 
         TransmogMgr* GetTransmogMgr() { return _transmogMgr; }
     private:
