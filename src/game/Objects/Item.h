@@ -358,6 +358,7 @@ class Item : public Object
         void AddToClientUpdateList() override;
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType& update_players) override;
+        void UpdateDurability(uint32 durability, Player* pPlayer);
 
         uint32 GetVisibleEntry() const
         {

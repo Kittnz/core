@@ -1135,6 +1135,15 @@ void Item::BuildUpdateData(UpdateDataMapType& update_players)
     ClearUpdateMask(false);
 }
 
+void Item::UpdateDurability(uint32 durability, Player* pPlayer)
+{
+    m_uint32Values[ITEM_FIELD_DURABILITY] = durability;
+    UpdateData data;
+    BuildValuesUpdateBlockForPlayer(&data, pPlayer);
+    data.Send(pPlayer->GetSession());
+    m_uint32Values_mirror[ITEM_FIELD_DURABILITY] = durability;
+}
+
 InventoryResult Item::CanBeMergedPartlyWith(ItemPrototype const* proto) const
 {
     // check item type
