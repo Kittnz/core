@@ -11,11 +11,7 @@ enum RaresSpells
     SPELL_THRASH     = 21919,
     SPELL_PARRY      = 5256,
     SPELL_ENRAGE     = 28131,
-    /* boss_xalvik_blackclaw */
-    SPELL_CORRUPT_SOUL = 25805,
-    SPELL_CORRUPTION   = 25311,
-    SPELL_SHADOW_BOLT  = 25307,
-    /* boss_xalvik_blackclaw */
+
     SPELL_TRANSFORM_VISUAL = 24085,
     SPELL_MOONFIRE_AOE     = 27737,
     SPELL_WRATH            = 27737,
@@ -64,9 +60,6 @@ enum RaresEvents
     EVENT_REND,
     /* boss_blademaster_kargron */
     EVENT_THRASH,
-    /* boss_xalvik_blackclaw */
-    EVENT_CORRUPTION,
-    EVENT_SHADOW_BOLT,
     /**/
     EVENT_MOONFIRE_AOE,
     EVENT_WRATH,
@@ -211,73 +204,6 @@ struct boss_blademaster_kargronAI : public ScriptedAI
                         m_events.Repeat(Seconds(30));
                     else
                         m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-struct boss_xalvic_blackclawAI : public ScriptedAI
-{
-    boss_xalvic_blackclawAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        m_creature->SetInCombatWithZone();
-
-        m_events.ScheduleEvent(EVENT_SHADOW_BOLT, Seconds(urand(2, 10)));
-        m_events.ScheduleEvent(EVENT_CORRUPTION, Seconds(urand(5, 20)));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (m_creature->GetHealthPercent() < 15.0f)
-        {
-            if (Unit* victim = m_creature->GetVictim())
-                if (!victim->HasAura(SPELL_CORRUPT_SOUL))
-                    DoCastSpellIfCan(m_creature, SPELL_CORRUPT_SOUL, CF_TRIGGERED | CF_FORCE_CAST);
-        }
-
-        m_events.Update(uiDiff);
-        while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_SHADOW_BOLT:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BOLT) == CAST_OK)
-                        m_events.Repeat(Seconds(10));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_CORRUPTION:
-                {
-                    if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, SELECT_FLAG_NO_TOTEM | SELECT_FLAG_NO_PET))
-                    {
-                        if (DoCastSpellIfCan(target, SPELL_CORRUPTION) == CAST_OK)
-                            m_events.Repeat(Seconds(20));
-                        else
-                            m_events.Repeat(100);
-                    }
 
                     break;
                 }
@@ -1008,11 +934,6 @@ CreatureAI* GetAI_boss_blademaster_kargron(Creature* pCreature)
     return new boss_blademaster_kargronAI(pCreature);
 }
 
-CreatureAI* GetAI_boss_xalvic_blackclaw(Creature* pCreature)
-{
-    return new boss_xalvic_blackclawAI(pCreature);
-}
-
 CreatureAI* GetAI_boss_mallon_the_moontouched(Creature* pCreature)
 {
     return new boss_mallon_the_moontouchedAI(pCreature);
@@ -1069,11 +990,6 @@ void AddSC_boss_rares()
     newscript = new Script;
     newscript->Name = "boss_blademaster_kargron";
     newscript->GetAI = &GetAI_boss_blademaster_kargron;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "boss_xalvic_blackclaw";
-    newscript->GetAI = &GetAI_boss_xalvic_blackclaw;
     newscript->RegisterSelf();
 
     newscript = new Script;
