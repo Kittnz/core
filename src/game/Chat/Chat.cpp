@@ -1033,7 +1033,7 @@ void ChatHandler::LoadRbacPermissions()
 
             if (m_rbacPermissionNames.find(permissionId) == m_rbacPermissionNames.end())
             {
-                sLog.outErrorDb("Unknown RBAC permission id %u assigned to command '%s'!", permissionId, command);
+                sLog.outErrorDb("Unknown RBAC permission id %u assigned to command '%s'!", permissionId, command.c_str());
                 continue;
             }
             
