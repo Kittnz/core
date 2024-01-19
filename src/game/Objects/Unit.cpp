@@ -6446,18 +6446,11 @@ void Unit::SetInCombatWithAggressor(Unit* pAggressor, bool touchOnly/* = false*/
     // PvP combat participation pulse: refresh pvp timers on pvp combat (we are the victim)
     if (pAggressor->IsPvP())
     {
-        if (Player* pThisPlayer = GetCharmerOrOwnerPlayerOrPlayerItself())
+        if (Player* pThisPlayer = GetAffectingPlayer())
         {
-            if (Player const* pAggressorPlayer = pAggressor->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (Player const* pAggressorPlayer = pAggressor->GetAffectingPlayer())
             {
-                bool valid = true;
-                if (pAggressor->IsCreature())
-                {
-                    if (pAggressor->IsCharmed())
-                        valid = false;
-                }
-
-                if (valid && pThisPlayer != pAggressorPlayer && !pThisPlayer->IsInDuelWith(pAggressorPlayer) && !(pThisPlayer->IsFFAPvP() && pAggressorPlayer->IsFFAPvP()))
+                if (pThisPlayer != pAggressorPlayer && !pThisPlayer->IsInDuelWith(pAggressorPlayer) && !(pThisPlayer->IsFFAPvP() && pAggressorPlayer->IsFFAPvP()))
                 {
                     pThisPlayer->pvpInfo.inPvPCombat = (pThisPlayer->pvpInfo.inPvPCombat || !touchOnly);
                     pThisPlayer->UpdatePvP(true);
@@ -6519,9 +6512,9 @@ void Unit::TogglePlayerPvPFlagOnAttackVictim(Unit const* pVictim, bool touchOnly
     // PvP combat participation pulse: refresh pvp timers on pvp combat (we are the aggressor)
     if (pVictim->IsPvP())
     {
-        if (Player* pThisPlayer = GetCharmerOrOwnerPlayerOrPlayerItself())
+        if (Player* pThisPlayer = GetAffectingPlayer())
         {
-            Player const* pVictimPlayer = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
+            Player const* pVictimPlayer = pVictim->GetAffectingPlayer();
 
             if (!pVictimPlayer || ((pThisPlayer != pVictimPlayer) && !pThisPlayer->IsInDuelWith(pVictimPlayer) && !(pThisPlayer->IsFFAPvP() && pVictimPlayer->IsFFAPvP())))
             {
