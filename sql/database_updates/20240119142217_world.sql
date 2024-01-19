@@ -31,4 +31,6 @@ update item_template set sheath = 2 where entry = 60787; -- Scythe of the Harves
 update item_template set sheath = 2 where entry = 19874; -- Halberd of Smiting
 update item_template set spellppmrate_1 = 0.4 where entry = 21134; -- Dark Edge of Insanity
 
-
+update quest_template set title = '[DEPRECATED] Shellcoins' where entry = 80381;
+delete from creature_involvedrelation where quest = 80381;
+delete from creature_questrelation where quest = 80381;
