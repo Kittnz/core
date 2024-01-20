@@ -92,6 +92,8 @@ struct boss_clawlord_howlfangAI : public ScriptedAI
 			m_ShadowbaneCurseTimer -= uiDiff;
 
 		DoMeleeAttackIfReady();
+
+		EnterEvadeIfOutOfCombatArea(uiDiff);
 	}
 };
 

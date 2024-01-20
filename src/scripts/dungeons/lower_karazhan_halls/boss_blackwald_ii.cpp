@@ -129,6 +129,8 @@ struct boss_blackwald_iiAI : public ScriptedAI
 			m_CallHelpTimer -= uiDiff;
 
 		DoMeleeAttackIfReady();
+
+		EnterEvadeIfOutOfCombatArea(uiDiff);
 	}
 };
 
