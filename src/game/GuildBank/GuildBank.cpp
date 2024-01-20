@@ -567,7 +567,7 @@ void GuildBank::UnlockTab(std::string msg)
 		return;
 	}
 
-	if (tab <= 1 && tab > MAX_TABS)
+	if (tab <= 1 || tab > MAX_TABS)
 	{
 		_player->SendAddonMessage(prefix, "UnlockTab:Error:ParamsOutOfRange");
 		return;
