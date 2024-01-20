@@ -373,6 +373,8 @@ struct boss_moroesAI : public ScriptedAI
 			if (!m_creature->GetVictim())
 				return;
 
+			EnterEvadeIfOutOfCombatArea(uiDiff);
+
 			if (m_creature->GetHealthPercent() > 50.0f)
 			{
 				TryCastGlitteringDust(uiDiff);
