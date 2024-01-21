@@ -4778,9 +4778,9 @@ void Unit::HandleTriggers(Unit* pVictim, uint32 procExtra, uint32 amount, int32 
  * \param location The location to teleport to.
  * \param teleportOptions The teleport flags to use.
  */
-void Unit::NearTeleportTo(const WorldLocation location, const uint32_t teleportOptions)
+bool Unit::NearTeleportTo(const WorldLocation location, const uint32_t teleportOptions)
 {
-    NearTeleportTo(location.x, location.y, location.z, location.o, teleportOptions);
+    return NearTeleportTo(location.x, location.y, location.z, location.o, teleportOptions);
 }
 
 void Unit::SendAttackStateUpdate(CalcDamageInfo *damageInfo) const
@@ -10094,30 +10094,30 @@ void Unit::RemoveAurasAtMechanicImmunity(uint32 mechMask, uint32 exceptSpellId, 
     }
 }
 
-void Unit::NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions)
+bool Unit::NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions)
 {
     DisableSpline();
 
     if (IsPlayer())
-        ((Player*)this)->TeleportTo(GetMapId(), x, y, z, orientation, teleportOptions);
-    else
-    {
-        Creature* c = (Creature*)this;
-        // Creature relocation acts like instant movement generator, so current generator expects interrupt/reset calls to react properly
-        if (!c->GetMotionMaster()->empty())
-            if (MovementGenerator *movgen = c->GetMotionMaster()->top())
-                movgen->Interrupt(*c);
+        return ((Player*)this)->TeleportTo(GetMapId(), x, y, z, orientation, teleportOptions);
 
-        MovementPacketSender::SendTeleportToObservers(this, x, y, z, orientation);
-        GetMap()->CreatureRelocation((Creature*)this, x, y, z, orientation);
-        MovementPacketSender::SendTeleportToObservers(this, x, y, z, orientation);
+    Creature* c = (Creature*)this;
+    // Creature relocation acts like instant movement generator, so current generator expects interrupt/reset calls to react properly
+    if (!c->GetMotionMaster()->empty())
+        if (MovementGenerator *movgen = c->GetMotionMaster()->top())
+            movgen->Interrupt(*c);
 
-        // finished relocation, movegen can different from top before creature relocation,
-        // but apply Reset expected to be safe in any case
-        if (!c->GetMotionMaster()->empty())
-            if (MovementGenerator *movgen = c->GetMotionMaster()->top())
-                movgen->Reset(*c);
-    }
+    MovementPacketSender::SendTeleportToObservers(this, x, y, z, orientation);
+    GetMap()->CreatureRelocation((Creature*)this, x, y, z, orientation);
+    MovementPacketSender::SendTeleportToObservers(this, x, y, z, orientation);
+
+    // finished relocation, movegen can different from top before creature relocation,
+    // but apply Reset expected to be safe in any case
+    if (!c->GetMotionMaster()->empty())
+        if (MovementGenerator *movgen = c->GetMotionMaster()->top())
+            movgen->Reset(*c);
+
+    return true;
 }
 
 void Unit::NearLandTo(float x, float y, float z, float orientation)

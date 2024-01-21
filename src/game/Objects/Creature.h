@@ -754,8 +754,8 @@ class Creature : public Unit
 
         void SendAIReaction(AiReaction reactionType);
 
-        void DoFlee();
-        void DoFleeToGetAssistance();
+        bool DoFlee();
+        bool DoFleeToGetAssistance();
         float GetFleeingSpeed() const;
         void MoveAwayFromTarget(Unit* pTarget, float distance);
         void CallForHelp(float fRadius);
