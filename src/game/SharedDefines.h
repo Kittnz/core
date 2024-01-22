@@ -1562,6 +1562,19 @@ enum ShapeshiftForm
     FORM_SPIRITOFREDEMPTION = 0x20
 };
 
+inline bool IsAttackSpeedOverridenForm(ShapeshiftForm form)
+{
+    switch (form)
+    {
+        case FORM_CAT:
+        case FORM_BEAR:
+        case FORM_DIREBEAR:
+            return true;
+    }
+
+    return false;
+}
+
 enum ShapeshiftFormFlags
 {
     SHAPESHIFT_FORM_FLAG_ALLOW_ACTIVITY     = 0x00000001,   // Form allows various player activities, which normally cause "You can't X while shapeshifted." errors (npc/go interaction, item use, etc)

@@ -8195,10 +8195,6 @@ void Player::_ApplyWeaponDependentAuraMods(Item *item, WeaponAttackType attackTy
 
 void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attackType, Aura* aura, bool apply)
 {
-    // don't apply mod if item is broken or cannot be used
-    if (item->IsBroken() || !CanUseEquippedWeapon(attackType))
-        return;
-
     // generic not weapon specific case processes in aura code
     if (aura->GetSpellProto()->EquippedItemClass == -1)
         return;
@@ -8209,6 +8205,14 @@ void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attac
 
     // auras without itemCaster not applied in offhand crit and not removing mods if has eligible weapon
     if (!aura->GetCastItemGuid() && attackType == OFF_ATTACK)
+        return;
+
+    // dont apply or unapply twice
+    if (aura->IsApplied() == apply)
+        return;
+
+    // don't apply mod if item is broken or cannot be used
+    if (apply && (item->IsBroken() || !CanUseEquippedWeapon(attackType)))
         return;
 
     BaseModGroup mod = BASEMOD_END;
@@ -8226,7 +8230,10 @@ void Player::_ApplyWeaponDependentAuraCritMod(Item *item, WeaponAttackType attac
     }
 
     if (item->IsFitToSpellRequirements(aura->GetSpellProto()))
+    {
         HandleBaseModValue(mod, FLAT_MOD, float(aura->GetModifier()->m_amount), apply);
+        aura->m_applied = apply;
+    }
 }
 
 void Player::_ApplyWeaponDependentAuraDamageMod(Item *item, WeaponAttackType attackType, Aura* aura, bool apply)

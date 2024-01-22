@@ -569,8 +569,7 @@ class Unit : public WorldObject
         bool IsShapeShifted() const; // mirrors clientside logic, moonkin form not counted as shapeshift
         bool IsInFeralForm() const
         {
-            ShapeshiftForm form = GetShapeshiftForm();
-            return form == FORM_CAT || form == FORM_BEAR || form == FORM_DIREBEAR;
+            return IsAttackSpeedOverridenForm(GetShapeshiftForm());
         }
         Aura* GetDummyAura(uint32 spell_id) const;
         bool IsInDisallowedMountForm();
