@@ -2,6 +2,7 @@
 
 #include "SharedDefines.h"
 #include "ObjectGuid.h"
+#include "Utilities/readerwriterqueue.h"
 #include <atomic>
 
 
@@ -35,8 +36,7 @@ protected:
 
 	void ThreadProc();
 
-	std::queue<ChannelMessage> MessageQueue;
-	std::mutex MessageQueueGuard;
+	moodycamel::ReaderWriterQueue<ChannelMessage> MessageQueue;
 
 	std::thread* Worker = nullptr;
 	
