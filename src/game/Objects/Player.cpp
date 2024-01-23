@@ -7378,6 +7378,17 @@ void Player::CheckAreaExploreAndOutdoor()
                 if (HasChallenge(CHALLENGE_WAR_MODE))
                     xp = xp + (xp * 0.2f);
 
+                // Fuck teleport leveling:
+                if (GetLevel() < 16) // Chinese config limitation for the world chat.
+                {
+                    if (uint32(p->AreaLevel) > 20)
+                    {
+                        xp = 0;
+                        GetSession()->SendNotification("Your level is too low to earn exploration experience in this area.");
+                        sLog.outError("PLAYER: Player %u discovered a high-level zone: %u.", GetGUIDLow(), uint32(p->Id));
+                    }
+
+                }
                 GiveXP(xp, nullptr);
             }
 
