@@ -170,7 +170,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     uint32 type;
     uint32 lang;
 
-    auto LogPerformance = [&now, type, lang](const std::string& message, bool bWasTurtleCommand)
+    auto LogPerformance = [&now, &type, &lang](const std::string& message, bool bWasTurtleCommand)
     {
         uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
