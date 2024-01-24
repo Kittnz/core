@@ -130,7 +130,7 @@ struct boss_blackwald_iiAI : public ScriptedAI
 
 		DoMeleeAttackIfReady();
 
-		EnterEvadeIfOutOfCombatArea(uiDiff);
+		//EnterEvadeIfOutOfCombatArea(uiDiff);
 	}
 };
 
