@@ -16,4 +16,4 @@ REPLACE INTO `gameobject` VALUES ( 5018086, 176587, 329, 3833.27, -3582.59, 144.
 UPDATE `gameobject` SET `spawntimesecsmin`=99999999, `spawntimesecsmax`=99999999 WHERE `guid`=5018086;
 REPLACE INTO `gameobject` VALUES ( 5018087, 176587, 329, 4091.58, -3448.69, 118.066, 5.70487, 0, 0, 0.285145, -0.958484, 300, 300, 100, 1, 0, 0);
 UPDATE `gameobject` SET `spawntimesecsmin`=99999999, `spawntimesecsmax`=99999999 WHERE `guid`=5018087;
-INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('50070','60002','0','0','0');
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('50070','60002','0','0','0');
