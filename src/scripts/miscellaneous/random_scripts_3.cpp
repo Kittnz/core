@@ -350,219 +350,246 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
     {
         switch (pCreature->GetEntry())
         {
-        case 60441: // Torble Sparksprocket
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66372);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+            case 60441: // Torble Sparksprocket
+                DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->SetVisibility(VISIBILITY_ON);
-                }
+                    npc->MonsterSay(66372);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->SetVisibility(VISIBILITY_ON);
+                    }
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x51->MonsterSay(66373);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66373);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 7 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66374);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66374);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 9 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66374);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66374);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 11 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66375);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66375);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66376);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66376);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66377);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 20 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66378);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66377);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66379);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 25 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66380);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66378);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66381);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 30 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66382);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66379);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66383);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 35 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66384);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66380);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer(67026, player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 40 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66386);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                    analyzer_x51->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }
+                    npc->MonsterSay(66381);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            break;
+                DoAfterTime(pCreature, 45 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66382);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 50 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66383);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pCreature, 55 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66384);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pCreature->GetObjectGuid()]()
+                {
+                    if (Creature* npc = player->GetMap()->GetCreature(npcGuid))
+                    {
+                        npc->MonsterSayToPlayer(67026, player);
+                        npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer]()
+                {
+                    if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66386);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
+                            player->KilledMonster(cInfo, ObjectGuid());
+                    }
+                });
+                break;
 
-        case 60443: // Kex Blowmaster
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66387);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+            case 60443: // Kex Blowmaster
+                DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->SetVisibility(VISIBILITY_ON);
-                }
+                    npc->MonsterSay(66387);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->SetVisibility(VISIBILITY_ON);
+                    }
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x48->MonsterSay(66373);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66373);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66374);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66374);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66374);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66374);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66388);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66388);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 20 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66389);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66389);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66390);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 25 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66391);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66390);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66392);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 30 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66393);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66391);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66394);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 35 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66395);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66392);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66396);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 40 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66397);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66393);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66398);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 45 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66399);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                    analyzer_x48->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }
+                    npc->MonsterSay(66394);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            break;
+                DoAfterTime(pCreature, 50 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66395);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 55 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66396);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pCreature, 60 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66397);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 65 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66398);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer]()
+                {
+                    if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66399);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
+                            player->KilledMonster(cInfo, ObjectGuid());
+                    }
+                });
+                break;
         }
     }
 
