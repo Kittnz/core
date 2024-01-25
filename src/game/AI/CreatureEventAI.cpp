@@ -429,11 +429,14 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
     if (pHolder.Event.event_chance <= rnd % 100)
         return false;
 
+    bool scriptFailed = false;
+
     //Process actions, normal case
     if (!(pHolder.Event.event_flags & EFLAG_RANDOM_ACTION))
     {
         for (const auto& action : pHolder.Event.action)
-            ProcessAction(action, pHolder.Event.event_id, pActionInvoker);
+            if (ProcessAction(action, pHolder.Event.event_id, pActionInvoker))
+                scriptFailed = true;
     }
     //Process actions, random case
     else
@@ -461,24 +464,35 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
                 }
             }
 
-            ProcessAction(pHolder.Event.action[j], pHolder.Event.event_id, pActionInvoker);
+            scriptFailed = ProcessAction(pHolder.Event.action[j], pHolder.Event.event_id, pActionInvoker);
         }
     }
+
+    if (scriptFailed && (pHolder.Event.event_flags & EFLAG_CHECK_RESULT))
+    {
+        pHolder.Enabled = true;
+        pHolder.UpdateRepeatTimer(m_creature, 0, 0);
+        return false;
+    }
+
     return true;
 }
 
-void CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker)
+bool CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker)
 {
     if (!action)
-        return;
+        return false;
 
     WorldObject* target = pActionInvoker ? pActionInvoker : m_creature->GetVictim();
     Map* map = m_creature->GetMap();
 
-    for (const auto& x : *action)
+    for (auto const& x : *action)
     {
-        map->ScriptCommandStartDirect(x.second, m_creature, target);
+        if (map->ScriptCommandStartDirect(x.second, m_creature, target))
+            return true;
     }
+
+    return false;
 }
 
 void CreatureEventAI::JustRespawned()

@@ -493,7 +493,7 @@ class Map : public GridRefManager<NGridType>
         // Adds the provided command to the queue. Will be handled by ScriptsProcess.
         void ScriptCommandStart(ScriptInfo const& script, uint32 delay, ObjectGuid sourceGuid, ObjectGuid targetGuid);
         // Immediately executes the provided command.
-        void ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target);
         // Removes all parts of script from the queue.
         void TerminateScript(const ScriptAction& step);
 
