@@ -332,20 +332,43 @@ void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
     if (abort)
         return;
 
-    UpdateData data;
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
-    buf << uint8(UPDATETYPE_VALUES);
-    buf << GetPackGUID();
-
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
     for (int i = 0; i < count; i++)
         updateMask.SetBit(index + i);
 
+    DirectSendPublicValueUpdate(updateMask);
+}
+
+void WorldObject::DirectSendPublicValueUpdate(std::initializer_list<uint32> indexes)
+{
+    UpdateMask updateMask;
+    updateMask.SetCount(m_valuesCount);
+    for (auto const& index : indexes)
+        updateMask.SetBit(index);
+
+    DirectSendPublicValueUpdate(updateMask);
+}
+
+void WorldObject::DirectSendPublicValueUpdate(UpdateMask& updateMask)
+{
+    UpdateData data;
+
+    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
+    buf << uint8(UPDATETYPE_VALUES);
+    buf << GetPackGUID();
+
     buf << (uint8)updateMask.GetBlockCount();
     buf.append(updateMask.GetMask(), updateMask.GetLength());
-    for (int i = 0; i < count; i++)
-        buf << uint32(m_uint32Values[index + i]);
+
+    for (uint16 index = 0; index < m_valuesCount; ++index)
+    {
+        if (updateMask.GetBit(index))
+        {
+            buf << uint32(m_uint32Values[index]);
+            m_uint32Values_mirror[index] = m_uint32Values[index];
+        }
+    }
 
     WorldPacket packet;
     data.BuildPacket(&packet);

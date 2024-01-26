@@ -5188,10 +5188,27 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
 
     if (!time)
     {
-        // Reset of channel values has to be done after a few delay.
-        // Else, we have some visual bugs (arcane projectile, last tick)
-        ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
-        m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
+        if (interrupted)
+        {
+            // Send update directly on interrupt to fix animation if recasting channeled spell
+            m_casterUnit->SetChannelObjectGuid(ObjectGuid());
+            m_casterUnit->SetUInt32Value(UNIT_CHANNEL_SPELL, 0);
+            m_casterUnit->DirectSendPublicValueUpdate({ UNIT_FIELD_CHANNEL_OBJECT , UNIT_FIELD_CHANNEL_OBJECT + 1 , UNIT_CHANNEL_SPELL });
+
+            if (Player* pPlayer = m_casterUnit->ToPlayer())
+            {
+                WorldPacket data(MSG_CHANNEL_UPDATE, 4);
+                data << uint32(time);
+                pPlayer->SendDirectMessage(&data);
+            }
+        }
+        else
+        {
+            // Reset of channel values has to be done after a few delay.
+            // Else, we have some visual bugs (arcane projectile, last tick)
+            ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
+            m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
+        }
     }
     else if (Player* pPlayer = m_casterUnit->ToPlayer())
     {
@@ -5248,6 +5265,33 @@ void Spell::SendChannelStart(uint32 duration)
     }
 
     m_timer = duration;
+
+    if (m_spellInfo->HasAttribute(SPELL_ATTR_EX_CHANNELED_1))
+    {
+        WorldPacket data(SMSG_SPELL_UPDATE_CHAIN_TARGETS);
+        data << m_caster->GetObjectGuid();
+        data << uint32(m_spellInfo->Id);
+        size_t count_pos = data.wpos();
+        data << uint32(0);
+        uint32 hit = 0;
+        for (TargetList::const_iterator itr = m_UniqueTargetInfo.begin(); itr != m_UniqueTargetInfo.end(); ++itr)
+        {
+            if (((itr->effectMask & (1 << EFFECT_INDEX_0)) && itr->reflectResult == SPELL_MISS_NONE &&
+                m_CastItem) || itr->targetGUID != m_caster->GetObjectGuid())
+            {
+                if (Unit* target = ObjectAccessor::GetUnit(*m_caster, itr->targetGUID))
+                {
+                    ++hit;
+                    data << target->GetObjectGuid();
+                }
+            }
+        }
+        if (hit)
+        {
+            data.put<uint32>(count_pos, hit);
+            m_caster->SendMessageToSet(&data, true);
+        }
+    }
 
     if (m_casterUnit)
     {
