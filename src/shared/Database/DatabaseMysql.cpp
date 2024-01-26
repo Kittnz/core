@@ -323,14 +323,13 @@ bool MySQLConnection::ExecuteMultiline(const char* sql)
     int status = 0;
 
     //we have to drain the results from multiline queries otherwise the server will not be able to keep up.
-    do {
+    while (mysql_more_results(mMysql))
+    {
         MYSQL_RES* result = mysql_store_result(mMysql);
         if (result)
             mysql_free_result(result);
-
-        if ((status = mysql_next_result(mMysql)) > 0)
-            return false;
-    } while (status == 0);
+        mysql_next_result(mMysql);
+    }
 
     return true;
 }
