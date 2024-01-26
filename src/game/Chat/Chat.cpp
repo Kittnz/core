@@ -915,6 +915,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "cinematic",      SEC_ADMINISTRATOR,   false, &ChatHandler::HandleTurtleCinematic,            "", nullptr },
         { "dbghard",        SEC_ADMINISTRATOR,   false, &ChatHandler::HandleFastDebugCommand,           "", nullptr },
         { "debugloot",      SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleDebugLootTableCommand,      "", nullptr },
+        { "anim",           SEC_DEVELOPER,       false, &ChatHandler::HandleDebugAnimCommand,           "", nullptr },
         { "copy",           SEC_PLAYER,          false, &ChatHandler::HandleCopyCommand,                "", nullptr },
         { "guildname",      SEC_PLAYER,          false, &ChatHandler::HandleGuildNameCommand,                "", nullptr },
         { "sendpacket",     SEC_ADMINISTRATOR,   false, &ChatHandler::HandleSendPacketCommand,          "", nullptr },

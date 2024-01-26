@@ -5613,6 +5613,16 @@ bool ChatHandler::HandleFastDebugCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleDebugAnimCommand(char* args)
+{
+    uint32 emote_id;
+    if (!ExtractUInt32(&args, emote_id))
+        return false;
+
+    m_session->GetPlayer()->HandleEmoteCommand(emote_id);
+    return true;
+}
+
 bool ChatHandler::HandleDebugLootTableCommand(char* args)
 {
     std::stringstream in(args);
