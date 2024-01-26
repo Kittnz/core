@@ -761,6 +761,7 @@ class ChatHandler
         bool HandlePlayCommand(char* args);
         bool HandleRadioCommand(char* args);
 
+        bool HandleDebugAnimCommand(char* args);
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
