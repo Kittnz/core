@@ -29,5 +29,7 @@ update item_template set spellid_1 = 57158 where entry = 60590; -- Isle Watcher'
 update item_template set spellid_1 = 57159 where entry = 60558; -- Cloudweaver Gloves
 update item_template set spellid_1 = 57159 where entry = 84032; -- Kilt of the Devoted
 
+-- Fixed Stormwind Vault graveyard attachment:
 
-
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (106, 5087, 469);
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (854, 5087, 67);
