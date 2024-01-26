@@ -72,3 +72,8 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51292, 0, 80464, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51292, 0, 80465, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51292, 0, 80466, 0, 0, 0, 0);
+
+-- fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/5153 and https://github.com/slowtorta/turtlewow-bug-tracker/issues/6041
+
+update item_template set sheath = 1 where entry = 61523; -- Crystal Sword of the Blossom
+update item_template set class = 4, subclass = 0 where entry = 18634; -- Gyrofreeze Ice Reflector
