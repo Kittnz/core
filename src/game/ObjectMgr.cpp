@@ -869,7 +869,7 @@ void ObjectMgr::LoadActivePlayersPerFaction()
 {
     m_ActivePlayersPerFaction.clear();                              // need for reload case
 
-    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `logout_time` > %u", (time(nullptr) - MONTH)));
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `level` > 10 && `logout_time` > %u", (time(nullptr) - MONTH)));
 
     if (!result)
     {
