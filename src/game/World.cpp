@@ -2249,6 +2249,12 @@ void World::SetInitialWorldSettings()
     }
 #endif
 
+    {
+        std::ofstream honorUpdateFile{ "honorupdate.txt" };
+        if (honorUpdateFile)
+            honorUpdateFile << "0";
+    }
+
     sLog.outString("Current content phase is set to %u.", GetContentPhase() + 1);
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);

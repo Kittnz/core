@@ -372,6 +372,12 @@ void HonorMaintenancer::DoMaintenance()
 
     sLog.outHonor("[MAINTENANCE] Honor maintenance starting.");
 
+    {
+        std::ofstream honorUpdateFile{ "honorupdate.txt" };
+        if (honorUpdateFile)
+            honorUpdateFile << "1";
+    }
+
     sLog.outHonor("[MAINTENANCE] Load weekly players scores.");
     LoadWeeklyScores();
     sLog.outHonor("[MAINTENANCE] Load standing lists.");
