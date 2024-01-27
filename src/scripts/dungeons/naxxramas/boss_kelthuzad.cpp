@@ -108,6 +108,8 @@ enum Events
 
 // the shiny thing in center that despawns after pull
 static constexpr float pullPortal[3] = { 3716.379883f, -5106.779785f, 132.9f };
+static constexpr float ROOM_RADIUS = 82.0f;
+static constexpr float ROOM_FLOOR_Z = 142.0f;
 
 // Center position of each alcove
 static constexpr uint32 NUM_ALCOVES = 7;
@@ -475,6 +477,19 @@ struct boss_kelthuzadAI : public ScriptedAI
             events.ScheduleEvent(EVENT_ABOMINATION, i);
         for (uint32 i : soulweaverSpawnMs)
             events.ScheduleEvent(EVENT_SOUL_WEAVER, i);
+
+        auto const& pList = m_creature->GetMap()->GetPlayers();
+        for (auto const& itr : pList)
+        {
+            if (Player* pPlayer = itr.getSource())
+            {
+                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() &&
+                    pPlayer->GetDistance3dToCenter(pullPortal[0], pullPortal[1], ROOM_FLOOR_Z) > ROOM_RADIUS)
+                {
+                    pPlayer->NearTeleportTo(pullPortal[0], pullPortal[1], ROOM_FLOOR_Z, pPlayer->GetOrientation());
+                }
+            }
+        }
 
         m_pInstance->DoUseDoorOrButton(pullPortalGuid);
 
