@@ -134,7 +134,7 @@ bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
         case NPC_HEIGAN:
         {
             // evade if brought out of room towards bat/grub/beast gauntlet
-            if (pWho->GetPositionX() > 2825.0f)
+            if (pWho->GetPositionX() > 2825.0f || pWho->GetPositionY() < -3737.0f)
             {
                 pWho->AI()->EnterEvadeMode();
                 return false;
