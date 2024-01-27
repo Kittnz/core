@@ -20,3 +20,5 @@ update creature set spawntimesecsmin = 86400, spawntimesecsmax = 172800 where id
 
 -- Item inventory type fix.
 update item_template set inventory_type = 26, allowable_class = 32767 where entry = 61019;
+update item_template set inventory_type = 26, allowable_class = 32767 where entry = 83215;
+update item_template set inventory_type = 26, allowable_class = 32767 where entry = 60427;
