@@ -17,3 +17,6 @@ replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 
 -- Give NPC ID 61498 a random respawn timer between 24 and 48 hours.
 update creature set spawntimesecsmin = 86400, spawntimesecsmax = 172800 where id = 61498;
+
+-- Item inventory type fix.
+update item_template set inventory_type = 26, allowable_class = 32767 where entry = 61019;
