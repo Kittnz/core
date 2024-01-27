@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "naxxramas.h"
+#include "Geometry.h"
 
 enum NaxxEvents
 {
@@ -107,6 +108,9 @@ uint8 instance_naxxramas::GetNumEndbossDead()
     return ret;
 }
 
+static const G3D::Vector2 DK_DOOR_A(2600.15f, -3008.61f);
+static const G3D::Vector2 DK_DOOR_B(2579.34f, -3029.44f);
+
 bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
 {
     if (pWho->IsInEvadeMode())
@@ -164,8 +168,22 @@ bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
         case NPC_MOGRAINE:
         case NPC_ZELIEK:
         case NPC_THANE:
-            dist = 115.0f;
-            break;
+        {
+            if (Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, pWho->GetPosition()))
+            {
+                if (Creature* pC = GetSingleCreatureFromStorage(NPC_BLAUMEUX))
+                    if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
+                if (Creature* pC = GetSingleCreatureFromStorage(NPC_MOGRAINE))
+                    if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
+                if (Creature* pC = GetSingleCreatureFromStorage(NPC_ZELIEK))
+                    if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
+                if (Creature* pC = GetSingleCreatureFromStorage(NPC_THANE))
+                    if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
+                return false;
+            }
+
+            return true;
+        }
         default:
             sLog.outError("instance_naxxramas::HandleEvadeOutOfHome called for unsupported creture %d", pWho->GetEntry());
             dist = 9999.0f;
@@ -174,21 +192,7 @@ bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
 
     if (pWho->GetDistance2d(pWho->GetHomePosition()) > dist)
     {
-        if (entry == NPC_BLAUMEUX || entry == NPC_MOGRAINE || entry == NPC_ZELIEK || entry == NPC_THANE)
-        {
-            if (Creature* pC = GetSingleCreatureFromStorage(NPC_BLAUMEUX))
-                if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
-            if (Creature* pC = GetSingleCreatureFromStorage(NPC_MOGRAINE))
-                if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
-            if (Creature* pC = GetSingleCreatureFromStorage(NPC_ZELIEK))
-                if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
-            if (Creature* pC = GetSingleCreatureFromStorage(NPC_THANE))
-                if (pC->IsAlive()) pC->AI()->EnterEvadeMode();
-        }
-        else
-        {
-            pWho->AI()->EnterEvadeMode();
-        }
+        pWho->AI()->EnterEvadeMode();
         return false;
     }
     return true;
