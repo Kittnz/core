@@ -20854,7 +20854,7 @@ void Player::AutoUnequipOffhandIfNeed()
     AutoUnequipItemFromSlot(EQUIPMENT_SLOT_OFFHAND);
 }
 
-void Player::AutoUnequipItemFromSlot(uint32 slot)
+void Player::AutoUnequipItemFromSlot(uint32 slot, bool sendMail)
 {
     Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
     if (!pItem)
@@ -20867,7 +20867,7 @@ void Player::AutoUnequipItemFromSlot(uint32 slot)
         RemoveItem(INVENTORY_SLOT_BAG_0, slot, true);
         StoreItem(itemDestination, pItem, true);
     }
-    else
+    else if (sendMail)
     {
         MoveItemFromInventory(INVENTORY_SLOT_BAG_0, slot, true);
         CharacterDatabase.BeginTransaction(GetGUIDLow());

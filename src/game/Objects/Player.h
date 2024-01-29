@@ -1261,7 +1261,7 @@ class Player final: public Unit
         Item* EquipItem(uint16 pos, Item* pItem, bool update);
         void AutoUnequipWeaponsIfNeed();
         void AutoUnequipOffhandIfNeed();
-        void AutoUnequipItemFromSlot(uint32 slot);
+        void AutoUnequipItemFromSlot(uint32 slot, bool sendMail = true);
         void SatisfyItemRequirements(ItemPrototype const* pItem);
         bool StoreNewItemInBestSlots(uint32 item_id, uint32 item_count, uint32 enchantId = 0);
         Item* StoreNewItemInInventorySlot(uint32 itemEntry, uint32 amount);

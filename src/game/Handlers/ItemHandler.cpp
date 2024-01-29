@@ -168,6 +168,12 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
     if (!pSrcItem)
         return;                                             // only at cheat
 
+    // Automatically unequip 2 handed weapon when clicking on off-hand item in inventory.
+    if (pSrcItem->GetProto()->IsOffHandItem())
+        if (Item* pMainHand = _player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            if (pMainHand->GetProto()->InventoryType == INVTYPE_2HWEAPON)
+                _player->AutoUnequipItemFromSlot(EQUIPMENT_SLOT_MAINHAND, false);
+
     uint16 dest;
     InventoryResult msg = _player->CanEquipItem(NULL_SLOT, dest, pSrcItem, !pSrcItem->IsBag());
     if (msg != EQUIP_ERR_OK)
