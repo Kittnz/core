@@ -249,9 +249,9 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
 
     time_t t = time(nullptr);
 
-    if (t - m_lastWhoRequest < 30)
-        return;
 
+    if (t - m_lastWhoRequest < 30 && !(GetPlayer() && GetPlayer()->HasCustomFlag(CUSTOM_PLAYER_FLAG_BYPASS_WHO_COOLDOWN)))
+        return;
 
     std::string player_name, guild_name;
 
