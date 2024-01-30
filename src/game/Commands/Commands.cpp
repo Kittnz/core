@@ -15076,25 +15076,38 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     Utf8toWStr(name_str, name_wstr);
     wstrToLower(name_wstr);
 
-    wchar_t nonLatinCharacter = 0;
-    for (wchar_t chr : name_wstr)
+    wchar_t bannedCharacter = 0;
+    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
-        if (!isBasicLatinCharacter(chr) && chr != ' ')
+        for (wchar_t chr : name_wstr)
         {
-            nonLatinCharacter = chr;
-            break;
+            if (isNumeric(chr))
+            {
+                bannedCharacter = chr;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (wchar_t chr : name_wstr)
+        {
+            if (!isBasicLatinCharacter(chr) && chr != ' ')
+            {
+                bannedCharacter = chr;
+                break;
+            }
         }
     }
 
-    if (nonLatinCharacter != 0)
+    if (bannedCharacter != 0)
     {
         std::wstring wstr;
-        wstr += nonLatinCharacter;
+        wstr += bannedCharacter;
         std::string str;
         WStrToUtf8(wstr, str);
 
-        m_session->SendNotification("Please use latin symbols only.");
-        PSendSysMessage("You used invalid symbol %s (%u).", str.c_str(), (uint32)nonLatinCharacter);
+        PSendSysMessage("You used invalid symbol %s (%u).", str.c_str(), (uint32)bannedCharacter);
         return false;
     }
 
