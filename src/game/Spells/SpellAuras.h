@@ -144,6 +144,7 @@ class SpellAuraHolder
         bool IsPassive() const { return m_isPassive; }
         void SetPassive(bool on) { m_isPassive = on; }
         bool IsDeathPersistent() const { return m_isDeathPersist; }
+        bool IsDungeonDeathPersistent() const { return m_isDungeonDeathPersist; }
         bool IsPersistent() const;
         bool IsPositive() const;
         bool IsAreaAura() const;                            // if one from auras of holder applied as area aura
@@ -266,6 +267,7 @@ class SpellAuraHolder
         bool m_permanent:1;
         bool m_isPassive:1;
         bool m_isDeathPersist:1;
+        bool m_isDungeonDeathPersist = false;
         bool m_isRemovedOnShapeLost:1;
         bool m_isSingleTarget:1;                            // true if it's a single target spell and registered at caster - can change at spell steal for example
         bool m_deleted:1;

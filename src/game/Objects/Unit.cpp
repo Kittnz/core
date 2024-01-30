@@ -4402,7 +4402,7 @@ void Unit::RemoveAllAurasOnDeath()
     // and disable the mods for the passive ones
     for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
     {
-        if (!iter->second->IsPassive() && !iter->second->IsDeathPersistent())
+        if (!iter->second->IsPassive() && !iter->second->IsDeathPersistent() && !(iter->second->IsDungeonDeathPersistent() && GetMap() && GetMap()->IsDungeon()))
         {
             RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEATH);
             iter = m_spellAuraHolders.begin();
