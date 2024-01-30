@@ -5279,6 +5279,9 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
         signature->GetSignaturePetition()->DeleteSignature(signature);
     }
 
+    if (data)
+        sObjectMgr.DecreaseActivePlayersCount(Player::TeamForRace(data->uiRace));
+
     // Delete player from cache.
     sObjectMgr.DeletePlayerFromCache(lowguid);
 
