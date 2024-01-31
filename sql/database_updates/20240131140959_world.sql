@@ -1,0 +1,1 @@
+update quest_template set RewChoiceItemId1 = 41151, RewChoiceItemId2 = 41152, RewChoiceItemCount1 = 1, RewChoiceItemCount2 = 1, RewItemId1 = 0, RewItemId2 = 0, RewItemCount1 = 0, RewItemCount2 = 0 where entry = 41215;
