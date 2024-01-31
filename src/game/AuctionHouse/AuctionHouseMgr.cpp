@@ -38,7 +38,7 @@
 
 #include "Policies/SingletonImp.h"
 
-INSTANTIATE_SINGLETON_1(AuctionHouseMgr);
+AuctionHouseMgr sAuctionMgr;
 
 bool IsPlayerHardcore(uint32 lowGuid)
 {

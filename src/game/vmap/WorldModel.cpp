@@ -90,7 +90,7 @@ namespace VMAP
     class TriBoundFunc
     {
     public:
-        TriBoundFunc(std::vector<Vector3>& vert): vertices(vert.begin()) {}
+        TriBoundFunc(turtle_vector<Vector3, Category_VMap>& vert): vertices(vert.begin()) {}
         void operator()(MeshTriangle const& tri, G3D::AABox& out) const
         {
             G3D::Vector3 lo = vertices[tri.idx0];
@@ -102,7 +102,7 @@ namespace VMAP
             out = G3D::AABox(lo, hi);
         }
     protected:
-        std::vector<Vector3>::const_iterator const vertices;
+        turtle_vector<Vector3, Category_VMap>::const_iterator const vertices;
     };
 
 // ===================== WmoLiquid ==================================

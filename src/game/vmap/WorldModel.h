@@ -98,8 +98,8 @@ namespace VMAP
             G3D::AABox iBound;
             uint32 iMogpFlags;// 0x8 outdor; 0x2000 indoor
             uint32 iGroupWMOID;
-            std::vector<Vector3> vertices;
-            std::vector<MeshTriangle> triangles;
+            turtle_vector<Vector3, Category_VMap> vertices;
+            turtle_vector<MeshTriangle, Category_VMap> triangles;
             BIH meshTree;
             WmoLiquid* iLiquid;
 

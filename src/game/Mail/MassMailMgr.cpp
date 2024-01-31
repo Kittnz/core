@@ -36,7 +36,7 @@
 #include "World.h"
 #include "ObjectMgr.h"
 
-INSTANTIATE_SINGLETON_1(MassMailMgr);
+MassMailMgr sMassMailMgr;
 
 void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender const& sender, uint32 raceMask)
 {

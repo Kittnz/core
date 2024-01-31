@@ -34,6 +34,7 @@
 #include "ThreadPool.h"
 #include "MoveMap.h"
 #include "ChannelBroadcaster.h"
+#include "PerformanceMonitor.h"
 
 typedef MaNGOS::ClassLevelLockable<MapManager, std::recursive_mutex> MapManagerLock;
 INSTANTIATE_SINGLETON_2(MapManager, MapManagerLock);
@@ -328,6 +329,7 @@ void MapManager::Update(uint32 diff)
     if (!i_timer.Passed())
         return;
 
+    XScopeStatTimer ScopeStatTimer{sPerfMonitor.MapManager};
     // Execute any teleports scheduled in the main thread prior to map update
     // eg. area triggers, world port acks
     ExecuteDelayedPlayerTeleports();
@@ -371,10 +373,6 @@ void MapManager::Update(uint32 diff)
         }
     }
 
-#ifndef TURTLE_PROFILE
-    std::thread instanceCreationThread = std::thread(&MapManager::CreateNewInstancesForPlayers, this);
-#endif
-
     i_maxContinentThread = continentsIdx;
     i_continentUpdateFinished.store(0);
 
@@ -406,12 +404,7 @@ void MapManager::Update(uint32 diff)
     SwitchPlayersInstances();
     asyncMapUpdating = false;
 
-#ifndef TURTLE_PROFILE
-	if (instanceCreationThread.joinable())
-		instanceCreationThread.join();
-#else
     CreateNewInstancesForPlayersSync();
-#endif
 
     // Execute far teleports after all map updates have finished
     ExecuteDelayedPlayerTeleports();
