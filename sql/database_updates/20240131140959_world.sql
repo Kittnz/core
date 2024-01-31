@@ -6,3 +6,5 @@ update gameobject set position_z = 33.129925 where guid = 12376;
 update item_template set flags = 2048 where entry = 70026;
 -- The NPC "Twinkie Boomstick" has an updated greeting text for non-hunters.
 UPDATE `broadcast_text` SET `male_text` = 'I got nothing for you, kid.' WHERE `entry` = 7656;
+-- Solid Chest in the Hillsbrad Foothills (75.0, 41.0) is now available for looting.
+update gameobject set position_x = -485.025, position_y = -1340.7, position_z = 53.6757, orientation = 3.95072 where guid = 62585;
