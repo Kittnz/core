@@ -1,5 +1,7 @@
 #include "PerformanceMonitor.h"
 #include "Chat.h"
+#include "World.h"
+#include "MapManager.h"
 
 PerformanceMonitor sPerfMonitor;
 
