@@ -96,12 +96,12 @@ public:
 
 	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD TargetType* address(TargetType& _Val) const noexcept
 	{
-		return _STD addressof(_Val);
+		return std::addressof(_Val);
 	}
 
 	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD const TargetType* address(const TargetType& _Val) const noexcept
 	{
-		return _STD addressof(_Val);
+		return std::addressof(_Val);
 	}
 #else
 	template <class _Other>
@@ -132,18 +132,18 @@ public:
 		{
 			gPerfMonitorInterface->ReportDealloc(CategoryName, BytesNeededToDeallocate);
 		}
-		_STD _Deallocate<_STD _New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
+		std::_Deallocate<std::_New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
 	}
 
-	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 TargetType* allocate(_CRT_GUARDOVERFLOW const size_t _Count)
+	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 TargetType* allocate(const size_t _Count)
 	{
 		static_assert(sizeof(value_type) > 0, "value_type must be complete before calling allocate.");
-		size_t BytesNeededToAllocate = _STD _Get_size_of_n<sizeof(TargetType)>(_Count);
+		size_t BytesNeededToAllocate = std::_Get_size_of_n<sizeof(TargetType)>(_Count);
 		if (gPerfMonitorInterface != nullptr)
 		{
 			gPerfMonitorInterface->ReportAlloc(CategoryName, BytesNeededToAllocate);
 		}
-		return static_cast<TargetType*>(_STD _Allocate<_STD _New_alignof<TargetType>>(BytesNeededToAllocate));
+		return static_cast<TargetType*>(std::_Allocate<std::_New_alignof<TargetType>>(BytesNeededToAllocate));
 	}
 
 #if _HAS_CXX23
@@ -164,7 +164,7 @@ public:
 	template <class _Objty, class... _Types>
 	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS void construct(_Objty* const _Ptr, _Types&&... _Args)
 	{
-		::new (const_cast<void*>(static_cast<const volatile void*>(_Ptr))) _Objty(_STD forward<_Types>(_Args)...);
+		::new (const_cast<void*>(static_cast<const volatile void*>(_Ptr))) _Objty(std::forward<_Types>(_Args)...);
 	}
 
 	template <class _Uty>
@@ -180,7 +180,7 @@ public:
 #endif // _HAS_DEPRECATED_ALLOCATOR_MEMBERS
 
 #if _HAS_CXX20
-	static constexpr size_t _Minimum_asan_allocation_alignment = _STD _Asan_granularity;
+	static constexpr size_t _Minimum_asan_allocation_alignment = std::_Asan_granularity;
 #endif
 };
 
@@ -271,7 +271,7 @@ _NODISCARD std::basic_string<_Elem, StrTraits, StrAlloc> UIntegral_to_string(con
 	static_assert(std::is_integral_v<_Ty>, "_Ty must be integral");
 	static_assert(std::is_unsigned_v<_Ty>, "_Ty must be unsigned");
 	_Elem _Buff[21]; // can hold 2^64 - 1, plus NUL
-	_Elem* const _Buff_end = _STD end(_Buff);
+	_Elem* const _Buff_end = std::end(_Buff);
 	_Elem* const _RNext = std::_UIntegral_to_buff(_Buff_end, _Val);
 	return std::basic_string<_Elem, StrTraits, StrAlloc>(_RNext, _Buff_end);
 }
@@ -283,7 +283,7 @@ _NODISCARD std::basic_string<_Elem, StrTraits, StrAlloc> Integral_to_string(cons
 	static_assert(std::is_integral_v<_Ty>, "_Ty must be integral");
 	using _UTy = std::make_unsigned_t<_Ty>;
 	_Elem _Buff[21]; // can hold -2^63 and 2^64 - 1, plus NUL
-	_Elem* const _Buff_end = _STD end(_Buff);
+	_Elem* const _Buff_end = std::end(_Buff);
 	_Elem* _RNext = _Buff_end;
 	const auto _UVal = static_cast<_UTy>(_Val);
 	if (_Val < 0) {
