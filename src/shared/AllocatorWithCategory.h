@@ -53,6 +53,10 @@ inline const char DefaultCategory[] = "Uncategorized";
 #define _CXX20_DEPRECATE_IS_ALWAYS_EQUAL
 #endif
 
+#ifndef _CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS
+#define _CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS
+#endif
+
 template <class TargetType, const char* CategoryName>
 class AllocatorWithCategory 
 {
