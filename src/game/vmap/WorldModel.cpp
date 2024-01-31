@@ -260,8 +260,11 @@ namespace VMAP
 
     void GroupModel::setMeshData(std::vector<Vector3>& vert, std::vector<MeshTriangle>& tri)
     {
-        vertices.swap(vert);
-        triangles.swap(tri);
+        vertices.resize(vert.size());
+        triangles.resize(tri.size());
+        memcpy(vertices.data(), vert.data(), vert.size() * sizeof(Vector3));
+        memcpy(triangles.data(), tri.data(), tri.size() * sizeof(MeshTriangle));
+
         TriBoundFunc bFunc(vertices);
         meshTree.build(triangles, bFunc);
     }
@@ -357,7 +360,7 @@ namespace VMAP
 
     struct GModelRayCallback
     {
-        GModelRayCallback(std::vector<MeshTriangle> const& tris, std::vector<Vector3> const& vert):
+        GModelRayCallback(turtle_vector<MeshTriangle, Category_VMap> const& tris, turtle_vector<Vector3, Category_VMap> const& vert):
                 vertices(vert.begin()), triangles(tris.begin()), hit(0) {}
         bool operator()(G3D::Ray const& ray, uint32 entry, float& distance, bool /*pStopAtFirstHit*/)
         {
@@ -633,7 +636,7 @@ namespace VMAP
 
     struct GModelRayOrientedCallback
     {
-        GModelRayOrientedCallback(std::vector<MeshTriangle> const& tris, std::vector<Vector3> const& vert, bool isM2):
+        GModelRayOrientedCallback(turtle_vector<MeshTriangle, Category_VMap> const& tris, turtle_vector<Vector3, Category_VMap> const& vert, bool isM2):
                 vertices(vert.begin()), triangles(tris.begin()), minOutDist(-1), minInDist(-1), m2(isM2) {}
         bool operator()(G3D::Ray const& ray, uint32 entry, float& unusedD, bool /*pStopAtFirstHit*/)
         {
