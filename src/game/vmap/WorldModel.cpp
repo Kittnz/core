@@ -34,7 +34,7 @@ template<> struct BoundsTrait<VMAP::GroupModel>
 
 namespace VMAP
 {
-    bool IntersectTriangle(MeshTriangle const& tri, std::vector<Vector3>::const_iterator points, G3D::Ray const& ray, float& distance)
+    bool IntersectTriangle(MeshTriangle const& tri, turtle_vector<Vector3, Category_VMap>::const_iterator points, G3D::Ray const& ray, float& distance)
     {
         static float const EPS = 1e-5f;
 
