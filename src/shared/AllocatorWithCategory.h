@@ -42,7 +42,7 @@ inline const char DefaultCategory[] = "Uncategorized";
 //#TODO: Check Torvalds platform
 
 #ifndef _CONSTEXPR20
-#define _CONSTEXPR20
+#define _CONSTEXPR20 inline
 #endif
 
 #ifndef _NODISCARD_RAW_PTR_ALLOC
@@ -94,12 +94,12 @@ public:
 		using other = AllocatorWithCategory<_Other, CategoryName>;
 	};
 
-	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD TargetType* address(TargetType& _Val) const noexcept
+	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS [[nodiscard]] TargetType* address(TargetType& _Val) const noexcept
 	{
 		return std::addressof(_Val);
 	}
 
-	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD const TargetType* address(const TargetType& _Val) const noexcept
+	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS [[nodiscard]] const TargetType* address(const TargetType& _Val) const noexcept
 	{
 		return std::addressof(_Val);
 	}
