@@ -57,6 +57,10 @@ inline const char DefaultCategory[] = "Uncategorized";
 #define _CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS
 #endif
 
+#ifndef _CRT_GUARDOVERFLOW
+#define _CRT_GUARDOVERFLOW
+#endif
+
 template <class TargetType, const char* CategoryName>
 class AllocatorWithCategory 
 {
@@ -132,18 +136,20 @@ public:
 		{
 			gPerfMonitorInterface->ReportDealloc(CategoryName, BytesNeededToDeallocate);
 		}
-		std::_Deallocate<std::_New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
+		//std::_Deallocate<std::_New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
+		operator delete(_Ptr, BytesNeededToDeallocate, std::align_val_t(std::alignment_of< TargetType >::value));
 	}
 
 	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 TargetType* allocate(const size_t _Count)
 	{
 		static_assert(sizeof(value_type) > 0, "value_type must be complete before calling allocate.");
-		size_t BytesNeededToAllocate = std::_Get_size_of_n<sizeof(TargetType)>(_Count);
+		size_t BytesNeededToAllocate = sizeof(TargetType) * _Count;
 		if (gPerfMonitorInterface != nullptr)
 		{
 			gPerfMonitorInterface->ReportAlloc(CategoryName, BytesNeededToAllocate);
 		}
-		return static_cast<TargetType*>(std::_Allocate<std::_New_alignof<TargetType>>(BytesNeededToAllocate));
+		//return static_cast<TargetType*>(std::_Allocate<std::_New_alignof<TargetType>>(BytesNeededToAllocate));
+		return (TargetType*) ::operator new(_Count, std::align_val_t(std::alignment_of< TargetType >::value));
 	}
 
 #if _HAS_CXX23
