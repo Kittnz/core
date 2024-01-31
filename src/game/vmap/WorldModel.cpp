@@ -368,8 +368,8 @@ namespace VMAP
             if (result)  ++hit;
             return hit;
         }
-        std::vector<Vector3>::const_iterator vertices;
-        std::vector<MeshTriangle>::const_iterator triangles;
+        turtle_vector<Vector3, Category_VMap>::const_iterator vertices;
+        turtle_vector<MeshTriangle, Category_VMap>::const_iterator triangles;
         uint32 hit;
     };
 
@@ -667,8 +667,8 @@ namespace VMAP
         {
             return (minOutDist < 0 && minInDist >= 0) || (0 <= minInDist && minInDist < minOutDist);
         }
-        std::vector<Vector3>::const_iterator vertices;
-        std::vector<MeshTriangle>::const_iterator triangles;
+        turtle_vector<Vector3, Category_VMap>::const_iterator vertices;
+        turtle_vector<MeshTriangle, Category_VMap>::const_iterator triangles;
         float minOutDist; // in -> out
         float minInDist;  // out-> in
         bool m2;
