@@ -61,25 +61,25 @@ inline const char DefaultCategory[] = "Uncategorized";
 #define _CRT_GUARDOVERFLOW
 #endif
 
-template<size_t alignment, std::enable_if_t<(alignment > 16), int> = 0>
+template<size_t alignment, std::enable_if_t<(alignment > __STDCPP_DEFAULT_NEW_ALIGNMENT__), int> = 0>
 void* InternalAllocateMemory(size_t Count)
 {
 	return ::operator new (Count, std::align_val_t{alignment});
 }
 
-template<size_t alignment, std::enable_if_t<(alignment <= 16), int> = 0>
+template<size_t alignment, std::enable_if_t<(alignment <= __STDCPP_DEFAULT_NEW_ALIGNMENT__), int> = 0>
 void* InternalAllocateMemory(size_t Count)
 {
 	return ::operator new (Count);
 }
 
-template<size_t alignment, std::enable_if_t<(alignment > 16), int> = 0>
+template<size_t alignment, std::enable_if_t<(alignment > __STDCPP_DEFAULT_NEW_ALIGNMENT__), int> = 0>
 void InternalDeallocateMemory(void* Ptr, size_t Bytes)
 {
 	::operator delete(Ptr, Bytes, std::align_val_t{ alignment });
 }
 
-template<size_t alignment, std::enable_if_t<(alignment <= 16), int> = 0>
+template<size_t alignment, std::enable_if_t<(alignment <= __STDCPP_DEFAULT_NEW_ALIGNMENT__), int> = 0>
 void InternalDeallocateMemory(void* Ptr, size_t Bytes)
 {
 	::operator delete(Ptr, Bytes);
