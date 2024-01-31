@@ -179,7 +179,7 @@ public:
 		_Ptr->~_Uty();
 	}
 
-	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD size_t max_size() const noexcept
+	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS [[nodiscard]] size_t max_size() const noexcept
 	{
 		return static_cast<size_t>(-1) / sizeof(TargetType);
 	}
@@ -191,7 +191,7 @@ public:
 };
 
 template <class _Ty, class _Other, const char* Category1, const char* Category2>
-_NODISCARD _CONSTEXPR20 bool operator==(const AllocatorWithCategory<_Ty, Category1>&, const AllocatorWithCategory<_Other, Category2>&) noexcept 
+[[nodiscard]] _CONSTEXPR20 bool operator==(const AllocatorWithCategory<_Ty, Category1>&, const AllocatorWithCategory<_Other, Category2>&) noexcept
 {
 	return true;
 }
