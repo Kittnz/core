@@ -135,7 +135,7 @@ public:
 		_STD _Deallocate<_STD _New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
 	}
 
-	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 __declspec(allocator) TargetType* allocate(_CRT_GUARDOVERFLOW const size_t _Count)
+	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 TargetType* allocate(_CRT_GUARDOVERFLOW const size_t _Count)
 	{
 		static_assert(sizeof(value_type) > 0, "value_type must be complete before calling allocate.");
 		size_t BytesNeededToAllocate = _STD _Get_size_of_n<sizeof(TargetType)>(_Count);
@@ -155,7 +155,7 @@ public:
 #endif // _HAS_CXX23
 
 #if _HAS_DEPRECATED_ALLOCATOR_MEMBERS
-	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD_RAW_PTR_ALLOC __declspec(allocator)TargetType* allocate(
+	_CXX17_DEPRECATE_OLD_ALLOCATOR_MEMBERS _NODISCARD_RAW_PTR_ALLOC TargetType* allocate(
 		_CRT_GUARDOVERFLOW const size_t _Count, const void*)
 	{
 		return allocate(_Count);
