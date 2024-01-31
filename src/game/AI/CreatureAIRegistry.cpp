@@ -35,8 +35,8 @@
 #include "CreatureAIRegistry.h"
 #include "WaypointMovementGenerator.h"
 
-using CreatureAIRegistry = FactoryHolder<CreatureAI>::FactoryHolderRegistry;
-INSTANTIATE_SINGLETON_1(CreatureAIRegistry);
+// using CreatureAIRegistry = FactoryHolder<CreatureAI>::FactoryHolderRegistry;
+// INSTANTIATE_SINGLETON_1(CreatureAIRegistry);
 
 namespace AIRegistry
 {
