@@ -61,6 +61,30 @@ inline const char DefaultCategory[] = "Uncategorized";
 #define _CRT_GUARDOVERFLOW
 #endif
 
+template<size_t alignment, std::enable_if_t<(alignment > 16), int> = 0>
+void* InternalAllocateMemory(size_t Count)
+{
+	return ::operator new (Count, alignment);
+}
+
+template<size_t alignment, std::enable_if_t<(alignment <= 16), int> = 0>
+void* InternalAllocateMemory(size_t Count)
+{
+	return ::operator new (Count);
+}
+
+template<size_t alignment, std::enable_if_t<(alignment > 16), int> = 0>
+void InternalDeallocateMemory(void* Ptr, size_t Bytes)
+{
+	::operator delete(Ptr, Bytes, std::align_val_t{ alignment });
+}
+
+template<size_t alignment, std::enable_if_t<(alignment <= 16), int> = 0>
+void InternalDeallocateMemory(void* Ptr, size_t Bytes)
+{
+	::operator delete(Ptr, Bytes);
+}
+
 template <class TargetType, const char* CategoryName>
 class AllocatorWithCategory 
 {
@@ -137,7 +161,8 @@ public:
 			gPerfMonitorInterface->ReportDealloc(CategoryName, BytesNeededToDeallocate);
 		}
 		//std::_Deallocate<std::_New_alignof<TargetType>>(_Ptr, BytesNeededToDeallocate);
-		operator delete(_Ptr, BytesNeededToDeallocate, std::align_val_t(std::alignment_of< TargetType >::value));
+		//operator delete(_Ptr, BytesNeededToDeallocate, std::align_val_t(std::alignment_of< TargetType >::value));
+		InternalDeallocateMemory<std::alignment_of< TargetType >::value>(_Ptr, BytesNeededToDeallocate);
 	}
 
 	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 TargetType* allocate(const size_t _Count)
@@ -149,7 +174,7 @@ public:
 			gPerfMonitorInterface->ReportAlloc(CategoryName, BytesNeededToAllocate);
 		}
 		//return static_cast<TargetType*>(std::_Allocate<std::_New_alignof<TargetType>>(BytesNeededToAllocate));
-		return (TargetType*) ::operator new(_Count, std::align_val_t(std::alignment_of< TargetType >::value));
+		return (TargetType*) InternalAllocateMemory<std::alignment_of< TargetType >::value>(BytesNeededToAllocate);
 	}
 
 #if _HAS_CXX23
