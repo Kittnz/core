@@ -25,6 +25,7 @@
 #include "BIH.h"
 
 #include "Platform/Define.h"
+#include "AllocatorWithCategory.h"
 
 namespace VMAP
 {
