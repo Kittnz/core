@@ -4,3 +4,5 @@ update quest_template set RewChoiceItemId1 = 41151, RewChoiceItemId2 = 41152, Re
 update gameobject set position_z = 33.129925 where guid = 12376;
 -- Quest item of the task "The Seeker's Demise" is now available to the whole group.
 update item_template set flags = 2048 where entry = 70026;
+-- The NPC "Twinkie Boomstick" has an updated greeting text for non-hunters.
+UPDATE `broadcast_text` SET `male_text` = 'I got nothing for you, kid.' WHERE `entry` = 7656;
