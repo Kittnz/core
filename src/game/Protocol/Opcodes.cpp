@@ -26,7 +26,7 @@
 #include "Opcodes.h"
 #include "Policies/SingletonImp.h"
 
-INSTANTIATE_SINGLETON_1(Opcodes);
+Opcodes opcodeTable;
 
 OpcodeHandler const Opcodes::emptyHandler =
 {

@@ -35,14 +35,10 @@
 
 using namespace Spells;
 
+SpellMgr sSpellMgr;
+
 SpellMgr::SpellMgr()
 {
-}
-
-SpellMgr& SpellMgr::Instance()
-{
-    static SpellMgr spellMgr;
-    return spellMgr;
 }
 
 void SpellMgr::LoadSpellTargetPositions()

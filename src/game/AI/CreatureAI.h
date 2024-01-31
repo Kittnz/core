@@ -76,8 +76,8 @@ enum class SelectTargetMethod
 template<class ArgumentType, class ResultType>
 struct unary_function
 {
-    typedef ArgumentType argument_type;
-    typedef ResultType result_type;
+    using argument_type = ArgumentType;
+    using result_type = ResultType;
 };
 
 class ObjectDistanceOrderPred
@@ -307,9 +307,11 @@ class CreatureAI
                 return nullptr;
 
             std::list<Unit*> targetList;
-            for (auto itr = threatlist.begin(); itr != threatlist.end(); ++itr)
-                if (predicate((*itr)->getTarget()))
-                    targetList.push_back((*itr)->getTarget());
+            for (auto itr : threatlist)
+            {
+				if (predicate(itr->getTarget()))
+					targetList.push_back(itr->getTarget());
+            }
 
             if (position >= targetList.size())
                 return nullptr;
@@ -390,7 +392,7 @@ class CreatureAI
         bool   m_bCombatMovement;                               // If we allow targeted movement gen (chasing target)
         uint32 m_uiCastingDelay;                                // Milliseconds elapsed since last spell list update
         uint32 m_uLastAlertTime;
-        std::vector<CreatureAISpellsEntry> m_CreatureSpells;    // Contains the currently used creature_spells template
+        turtle_vector<CreatureAISpellsEntry, Category_AI> m_CreatureSpells;    // Contains the currently used creature_spells template
 };
 
 struct SelectableAI : FactoryHolder<CreatureAI>, Permissible<Creature>
@@ -418,7 +420,7 @@ enum Permitions
     PERMIT_BASE_SPECIAL            = 800
 };
 
-typedef FactoryHolder<CreatureAI> CreatureAICreator;
-typedef FactoryHolder<CreatureAI>::FactoryHolderRegistry CreatureAIRegistry;
-typedef FactoryHolder<CreatureAI>::FactoryHolderRepository CreatureAIRepository;
+using CreatureAICreator = FactoryHolder<CreatureAI>;
+using CreatureAIRegistry = FactoryHolder<CreatureAI>::FactoryHolderRegistry;
+using CreatureAIRepository = FactoryHolder<CreatureAI>::FactoryHolderRepository;
 #endif

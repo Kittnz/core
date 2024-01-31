@@ -21,6 +21,8 @@
 #include "ObjectMgr.h"
 #include "CreatureAI.h"
 
+CreatureGroupsManager sCreatureGroupsManager;
+
 CreatureGroupMember* CreatureGroup::AddMember(ObjectGuid guid, float followDist, float followAngle, uint32 memberFlags)
 {
     if (guid == m_leaderGuid)

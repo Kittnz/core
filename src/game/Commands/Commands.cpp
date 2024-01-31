@@ -93,6 +93,7 @@
 #include "CommandStream.h"
 #include "TransmogMgr.h"
 #include "PerfStats.h"
+#include "PerformanceMonitor.h"
 
 int32 GetTokenBalance(uint32 accountId)
 {
@@ -5819,7 +5820,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(char* args)
     if (!normalizePlayerName(target))
         return false;
 
-    GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
+    GmTicket* ticket = sTicketMgr.GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
         SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
@@ -5848,7 +5849,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(char* args)
     // Assign ticket
     ticket->SetAssignedTo(targetGuid, sAccountMgr.GetSecurity(accountId) == sWorld.getConfig(CONFIG_UINT32_GMTICKETS_ADMIN_SECURITY));
     ticket->SaveToDB();
-    sTicketMgr->UpdateLastChange();
+    sTicketMgr.UpdateLastChange();
 
     std::string msg = ticket->FormatMessageString(*this, nullptr, target.c_str(), nullptr, nullptr, nullptr);
     sWorld.SendGMTicketText(msg.c_str());
@@ -5861,7 +5862,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(char* args)
         return false;
 
     uint32 ticketId = atoi(args);
-    GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
+    GmTicket* ticket = sTicketMgr.GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
         SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
@@ -5898,7 +5899,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(char* args)
     std::string assignedTo = ticket->GetAssignedToName(); // copy assignedto name because we need it after the ticket has been unnassigned
     ticket->SetUnassigned();
     ticket->SaveToDB();
-    sTicketMgr->UpdateLastChange();
+    sTicketMgr.UpdateLastChange();
 
     std::string msg = ticket->FormatMessageString(*this, nullptr, assignedTo.c_str(),
                                                   GetSession() ? GetSession()->GetPlayer()->GetName() : "Console", nullptr, nullptr);
@@ -5920,9 +5921,9 @@ bool ChatHandler::HandleGMTicketListCommand(char* args)
     auto it = categories.find(args);
 
     if (it == categories.end())
-        sTicketMgr->ShowList(*this, false);
+        sTicketMgr.ShowList(*this, false);
     else
-        sTicketMgr->ShowList(*this, false, it->second);
+        sTicketMgr.ShowList(*this, false, it->second);
 
     return true;
 }
@@ -5930,7 +5931,7 @@ bool ChatHandler::HandleGMTicketListCommand(char* args)
 
 bool ChatHandler::HandleGMTicketsOnlineListCommand(char* args)
 {
-    sTicketMgr->ShowList(*this, true);
+    sTicketMgr.ShowList(*this, true);
     return true;
 }
 
@@ -5942,7 +5943,7 @@ bool ChatHandler::ViewTicketByIdOrName(char* ticketId_c, char* name_c)
     if (ticketId_c && *ticketId_c)
     {
         uint32 ticketId = atoi(ticketId_c);
-        ticket = sTicketMgr->GetTicket(ticketId);
+        ticket = sTicketMgr.GetTicket(ticketId);
     }
 
     // By player name
@@ -5965,7 +5966,7 @@ bool ChatHandler::ViewTicketByIdOrName(char* ticketId_c, char* name_c)
             SendSysMessage(LANG_NO_PLAYERS_FOUND);
             return true;
         }
-        ticket = sTicketMgr->GetTicketByPlayer(guid);
+        ticket = sTicketMgr.GetTicketByPlayer(guid);
     }
 
     if (!ticket)
@@ -5986,7 +5987,7 @@ bool ChatHandler::ViewTicket(GmTicket* ticket)
 {
     ticket->SetViewed();
     if (Player* player = ticket->GetPlayer()) // Inform that ticket has been viewed
-        sTicketMgr->SendTicket(player->GetSession(), ticket);
+        sTicketMgr.SendTicket(player->GetSession(), ticket);
     ticket->SaveToDB();
 
     SendSysMessage(ticket->FormatMessageString(*this, true).c_str());
@@ -6005,7 +6006,7 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(char* args)
         return false;
 
     uint32 ticketId = atoi(args);
-    GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
+    GmTicket* ticket = sTicketMgr.GetTicket(ticketId);
     if (!ticket)
     {
         SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
@@ -6026,8 +6027,8 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(char* args)
         return true;
     }
 
-    sTicketMgr->CloseTicket(ticket->GetId(), player ? player->GetObjectGuid() : ObjectGuid(uint64(-1)));
-    sTicketMgr->UpdateLastChange();
+    sTicketMgr.CloseTicket(ticket->GetId(), player ? player->GetObjectGuid() : ObjectGuid(uint64(-1)));
+    sTicketMgr.UpdateLastChange();
 
     std::string msg = ticket->FormatMessageString(*this, player ? player->GetName() : "Console", nullptr, nullptr, nullptr, nullptr);
     sWorld.SendGMTicketText(msg.c_str());
@@ -7152,9 +7153,9 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
     {
         sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         if (permanent)
-            sGuidObjectScaling->AddOrEdit(target->GetGUID(), Scale);
+            sGuidObjectScaling.AddOrEdit(target->GetGUID(), Scale);
         else
-            sGuidObjectScaling->Remove(target->GetGUID());
+            sGuidObjectScaling.Remove(target->GetGUID());
     }
 
     target->SetObjectScale(Scale);
@@ -9353,7 +9354,7 @@ bool ChatHandler::HandleGameObjectScaleCommand(char* args)
 
     obj->SetObjectScale(scale);
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
-    sGuidObjectScaling->AddOrEdit(obj->GetGUID(), scale);
+    sGuidObjectScaling.AddOrEdit(obj->GetGUID(), scale);
     obj->UpdateRotationFields();
 
     map->Add(obj);
@@ -13636,7 +13637,7 @@ bool ChatHandler::HandleNpcGroupLinkCommand(char* args)
 
 bool ChatHandler::HandleReloadCreatureGroupsCommand(char* args)
 {
-    sCreatureGroupsManager->Load();
+    sCreatureGroupsManager.Load();
     SendSysMessage("DB table `creature_groups` reloaded.");
     return true;
 }
@@ -14451,7 +14452,7 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
 
                 if (pl)
                 {
-                    auto dynVis = sDynamicVisMgr->GetDynamicVisibility(pl->GetAreaId());
+                    auto dynVis = sDynamicVisMgr.GetDynamicVisibility(pl->GetAreaId());
                     if (dynVis)
                         PSendSysMessage("Current dynamic visibility for this area: %u.", dynVis.value());
                 }
@@ -14462,7 +14463,7 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
 
 bool ChatHandler::HandleReloadDynamicVisibilityCommand(char*)
 {
-    sDynamicVisMgr->LoadFromDB(true);
+    sDynamicVisMgr.LoadFromDB(true);
     SendSysMessage("Dynamic Visibility Templates Reloaded.");
     return true;
 }
@@ -14998,7 +14999,7 @@ bool ChatHandler::HandleReloadGmLevelsCommand(char* args)
 
 bool ChatHandler::HandleReloadGmTicketTemplatesCommand(char* args)
 {
-    sTicketMgr->LoadTicketTemplates();
+    sTicketMgr.LoadTicketTemplates();
     SendSysMessage("GM ticket templates reloaded.");
     return true;
 }
@@ -18217,8 +18218,56 @@ bool ChatHandler::HandlePerfStatsCommand(char* args)
     PSendSysMessage("Total DynamicObjects: %i", PerfStats::g_totalDynamicObjects);
     PSendSysMessage("Total QueryResults: %i", PerfStats::g_totalQueryResults);
     PSendSysMessage("Total Maps: %i", PerfStats::g_totalMaps);
-    PSendSysMessage("World Update Time: %i", PerfStats::g_worldUpdateTime);
     PSendSysMessage("Slowest Map: %i (%i ms)", PerfStats::g_slowestMapId, PerfStats::g_slowestMapUpdateTime);
 
     return true;
 }
+
+bool ChatHandler::HandlePerfEnable(char* Args)
+{
+	bool bEnable = true;
+	if (!ExtractOnOff(&Args, bEnable))
+    {
+        bool bIsEnabled = sWorld.getConfig(CONFIG_BOOL_PERFORMANCE_ENABLE);
+
+        PSendSysMessage("Performance stats is %s", ChatHandler::GetOnOffStr(bIsEnabled));
+        return true;
+    }
+
+    g_bEnableStatGather = bEnable;
+    sWorld.setConfig(CONFIG_BOOL_PERFORMANCE_ENABLE, bEnable);
+	PSendSysMessage("Performance stats now is %s", ChatHandler::GetOnOffStr(bEnable));
+
+    return true;
+}
+
+bool ChatHandler::HandlePerfIntervalReport(char* Args)
+{
+    uint32 NewInterval = 0;
+    if (!ExtractUInt32(&Args, NewInterval))
+    {
+        uint32 CurrentInterval = sWorld.getConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL);
+		PSendSysMessage("Performance report interval is %u", CurrentInterval);
+
+        return false;
+    }
+
+    sWorld.setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, NewInterval);
+    sPerfMonitor.SetReportInterval(NewInterval);
+    PSendSysMessage("Performance report interval now is %u", NewInterval);
+
+    return true;
+}
+
+bool ChatHandler::HandlePerfReportCPU(char* Args)
+{
+    sPerfMonitor.ReportCPU(*this);
+    return true;
+}
+
+bool ChatHandler::HandlePerfReportMemory(char* Args)
+{
+    sPerfMonitor.ReportMemory(*this);
+    return true;
+}
+

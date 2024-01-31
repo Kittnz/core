@@ -40,7 +40,7 @@
 #include <chrono>
 #include <random>
 
-INSTANTIATE_SINGLETON_1(BattleGroundMgr);
+BattleGroundMgr sBattleGroundMgr;
 
 /*********************************************************/
 /***            BATTLEGROUND QUEUE SYSTEM              ***/
