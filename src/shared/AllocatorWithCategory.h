@@ -64,7 +64,7 @@ inline const char DefaultCategory[] = "Uncategorized";
 template<size_t alignment, std::enable_if_t<(alignment > 16), int> = 0>
 void* InternalAllocateMemory(size_t Count)
 {
-	return ::operator new (Count, alignment);
+	return ::operator new (Count, std::align_val_t{alignment});
 }
 
 template<size_t alignment, std::enable_if_t<(alignment <= 16), int> = 0>
