@@ -1,0 +1,2 @@
+-- Item "Letter to Samual" 60205: grammar fix.
+UPDATE `page_text` SET `text` = 'Little brother, it has been an eternity since we have seen one another. I am currently stranded on an island called Lapidis off the coast of Stranglethorn Vale near the south seas with others in the fleet. We call this place home, and have for a while now, and are repairing our ship.\n\nWhen repairs are done, I will be stopping to see you and Karl. I look forward to this day very well, and hope you are doing well.\n\nYour Older Brother Arnold.' WHERE `entry` = 50509;
