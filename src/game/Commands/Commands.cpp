@@ -15075,18 +15075,9 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     if (!new_name)
         return false;
 
+    std::string name_str(new_name);
     std::wstring name_wstr;
-    Utf8toWStr(std::string(new_name), name_wstr);
-
-    wchar_t invalidCharacter = 0;
-    for (wchar_t chr : name_wstr)
-    {
-        if (std::iswalpha(chr) == 0 && chr != ' ')
-        {
-            invalidCharacter = chr;
-            break;
-        }
-    }
+    Utf8toWStr(name_str, name_wstr);
 
     if (name_wstr.size() == 0)
     {
@@ -15094,15 +15085,33 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
         return false;
     }
 
-    if (invalidCharacter != 0)
+    auto invalidCharacter = false;
+    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
-        std::wstring wstr;
-        wstr += invalidCharacter;
-        std::string str;
-        WStrToUtf8(wstr, str);
+        for (wchar_t chr : name_wstr)
+        {
+            if (std::iswalpha(chr) == 0 && chr != ' ')
+            {
+                invalidCharacter = true;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (unsigned const char chr : name_str)
+        {
+            if (std::isalpha(chr) == 0 && chr != ' ')
+            {
+                invalidCharacter = true;
+                break;
+            }
+        }
+    }
 
-        m_session->SendNotification("Guild name contains invalid characters.");
-        PSendSysMessage("Guild name contains invalid character %s (%u).", str.c_str(), (uint32)invalidCharacter);
+    if (invalidCharacter)
+    {
+        PSendSysMessage("Guild name contains invalid characters.");
         return false;
     }
 
@@ -15115,8 +15124,6 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
         return false;
     }
 
-    std::string name_str;
-    WStrToUtf8(name_wstr, name_str);
     if (Guild* existing = sGuildMgr.GetGuildByName(name_str))
     {
         m_session->SendNotification("A guild with the name '%s' already exists.", new_name);
