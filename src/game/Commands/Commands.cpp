@@ -75,6 +75,7 @@
 #include "revision.h"
 #include "Auth/base32.h"
 #include <cctype>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -15074,50 +15075,35 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     if (!new_name)
         return false;
 
-    std::string name_str(new_name);
-
     std::wstring name_wstr;
-    Utf8toWStr(name_str, name_wstr);
-    wstrToLower(name_wstr);
+    Utf8toWStr(std::string(new_name), name_wstr);
 
-    wchar_t bannedCharacter = 0;
-    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    wchar_t invalidCharacter = 0;
+    for (wchar_t chr : name_wstr)
     {
-        for (wchar_t chr : name_wstr)
+        if (std::iswalpha(chr) == 0 && chr != ' ')
         {
-            if (isNumeric(chr))
-            {
-                bannedCharacter = chr;
-                break;
-            }
-        }
-    }
-    else
-    {
-        for (wchar_t chr : name_wstr)
-        {
-            if (!isBasicLatinCharacter(chr) && chr != ' ')
-            {
-                bannedCharacter = chr;
-                break;
-            }
+            invalidCharacter = chr;
+            break;
         }
     }
 
-    if (bannedCharacter != 0)
+    if (name_wstr.size() == 0)
     {
-        std::wstring wstr;
-        wstr += bannedCharacter;
-        std::string str;
-        WStrToUtf8(wstr, str);
-
-        PSendSysMessage("You used invalid symbol %s (%u).", str.c_str(), (uint32)bannedCharacter);
+        PSendSysMessage("Guild name must be at least 1 character long.");
         return false;
     }
 
-    if (name_str.size() > 1)
+    if (invalidCharacter != 0)
     {
-        name_str[0] = toupper(name_str[0]);
+        std::wstring wstr;
+        wstr += invalidCharacter;
+        std::string str;
+        WStrToUtf8(wstr, str);
+
+        m_session->SendNotification("Guild name contains invalid characters.");
+        PSendSysMessage("Guild name contains invalid character %s (%u).", str.c_str(), (uint32)invalidCharacter);
+        return false;
     }
 
     Guild* guild = sGuildMgr.GetGuildById(pPlayer->GetGuildId());
@@ -15129,6 +15115,8 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
         return false;
     }
 
+    std::string name_str;
+    WStrToUtf8(name_wstr, name_str);
     if (Guild* existing = sGuildMgr.GetGuildByName(name_str))
     {
         m_session->SendNotification("A guild with the name '%s' already exists.", new_name);
@@ -15137,7 +15125,7 @@ bool ChatHandler::HandleGuildNameCommand(char* args)
     }
 
     guild->Rename(name_str);
-    PSendSysMessage("Your guild has successfully been renamed to '%s'. Players must log out and log back in to see the changes.",  name_str);
+    PSendSysMessage("Your guild has been successfully renamed. Players must log out and log back in to see the changes.");
 
     pPlayer->DestroyItemCount(80499, 1, true, false, true);
     pPlayer->SaveInventoryAndGoldToDB();
