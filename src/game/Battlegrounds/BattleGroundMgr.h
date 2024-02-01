@@ -29,14 +29,14 @@
 #include "Policies/Singleton.h"
 #include "BattleGround.h"
 
-typedef std::map<uint32, BattleGround*> BattleGroundSet;
+typedef turtle_map<uint32, BattleGround*, Category_Battleground> BattleGroundSet;
 
 //this container can't be deque, because deque doesn't like removing the last element - if you remove it, it invalidates next iterator and crash appears
-typedef std::list<BattleGround*> BGFreeSlotQueueType;
+typedef turtle_list<BattleGround*, Category_Battleground> BGFreeSlotQueueType;
 
-typedef std::unordered_map<uint32, BattleGroundTypeId> BattleMastersMap;
-typedef std::unordered_map<uint32, std::vector<BattleGroundEventIdx> > CreatureBattleEventIndexesMap;
-typedef std::unordered_map<uint32, std::vector<BattleGroundEventIdx> > GameObjectBattleEventIndexesMap;
+typedef turtle_unordered_map<uint32, BattleGroundTypeId, Category_Battleground> BattleMastersMap;
+typedef turtle_unordered_map<uint32, turtle_vector<BattleGroundEventIdx, Category_Battleground>, Category_Battleground > CreatureBattleEventIndexesMap;
+typedef turtle_unordered_map<uint32, turtle_vector<BattleGroundEventIdx, Category_Battleground>, Category_Battleground > GameObjectBattleEventIndexesMap;
 
 #define COUNT_OF_PLAYERS_TO_AVERAGE_WAIT_TIME 10
 #define OFFLINE_BG_QUEUE_TIME                 60*1000 // in ms
@@ -274,14 +274,14 @@ class BattleGroundMgr
             return m_GameObjectBattleEventIndexMap.find(-1)->second[0];
         }
         // Nostalrius: allow multiple events per creature ... Avoid when possible.
-        std::vector<BattleGroundEventIdx> const& GetCreatureEventsVector(uint32 dbTableGuidLow) const
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& GetCreatureEventsVector(uint32 dbTableGuidLow) const
         {
             CreatureBattleEventIndexesMap::const_iterator itr = m_CreatureBattleEventIndexMap.find(dbTableGuidLow);
             if(itr != m_CreatureBattleEventIndexMap.end())
                 return itr->second;
             return m_CreatureBattleEventIndexMap.find(-1)->second;
         }
-        std::vector<BattleGroundEventIdx> const& GetGameObjectEventsVector(uint32 dbTableGuidLow) const
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& GetGameObjectEventsVector(uint32 dbTableGuidLow) const
         {
             GameObjectBattleEventIndexesMap::const_iterator itr = m_GameObjectBattleEventIndexMap.find(dbTableGuidLow);
             if(itr != m_GameObjectBattleEventIndexMap.end())
@@ -316,5 +316,6 @@ class BattleGroundMgr
         std::set<uint32> m_usedRefloot;
 };
 
-#define sBattleGroundMgr MaNGOS::Singleton<BattleGroundMgr>::Instance()
+extern BattleGroundMgr sBattleGroundMgr;
+
 #endif

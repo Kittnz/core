@@ -161,6 +161,6 @@ class WeatherMgr
         WeatherZoneMap      mWeatherZoneMap;
 };
 
-#define sWeatherMgr MaNGOS::Singleton<WeatherMgr>::Instance()
+extern WeatherMgr sWeatherMgr;
 
 #endif

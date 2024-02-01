@@ -616,6 +616,10 @@ class Map : public GridRefManager<NGridType>
         void RemoveBones(Corpse* corpse);
         void ScheduleCorpseRemoval();
 
+        XStatTimer MovementPerfTimer;
+        XStatTimer SpellPerfTimer;
+        XStatTimer UpdateTimer;
+
     private:
         void LoadMapAndVMap(int gx, int gy);
 

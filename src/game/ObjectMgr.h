@@ -768,6 +768,7 @@ class ObjectMgr
         void LoadActivePlayersPerFaction();
         bool IsFactionImbalanced(Team team);
         void IncreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]++; }
+        void DecreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]--; }
 
         uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team );
         void GetTaxiPath( uint32 source, uint32 destination, uint32 &path, uint32 &cost);
@@ -1787,8 +1788,6 @@ class ObjectMgr
         robin_hood::unordered_map<uint32, ChatChannelsEntry> m_chatChannelsMap;
         robin_hood::unordered_map<uint32 /*spell id*/, std::vector<QuestSpellCastObjective>> m_questSpellCastObjectives;
 };
-
-//#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
 
 extern ObjectMgr sObjectMgr;
 

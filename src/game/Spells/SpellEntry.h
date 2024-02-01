@@ -817,6 +817,11 @@ public:
         return ((AttributesEx2 == 0x100000 && (AttributesEx & 0x200) == 0x200) || (Custom & SPELL_CUSTOM_BEHIND_TARGET));
     }
 
+    inline bool IsDeathPersistentDungeonSpell() const
+    {
+        return Custom & SPELL_CUSTOM_DEATH_DUNGEON_PERSISTENT;
+    }
+
     inline bool IsPassiveSpell() const
     {
         // Nostalrius : 0x80 -> D'autres sorts passifs, dont les enchants par exemple
