@@ -2279,7 +2279,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_CastItem)
                     {
-                        auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
+                        auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
@@ -2299,7 +2299,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_CastItem)
                     {
-                        auto spellIdOpt = sMountMgr->GetMountSpellId(m_CastItem->GetEntry());
+                        auto spellIdOpt = sMountMgr.GetMountSpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);

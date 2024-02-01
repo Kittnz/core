@@ -41,7 +41,7 @@
 #include "CreatureAI.h"
 #include "Geometry.h"
 
-INSTANTIATE_SINGLETON_1(CreatureLinkingMgr);
+CreatureLinkingMgr sCreatureLinkingMgr;
 
 #define INVALID_MAP_ID      0xFFFFFFFF
 

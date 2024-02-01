@@ -6,11 +6,6 @@
 class MountManager
 {
 public:
-	static MountManager* Instance()
-	{
-		static MountManager instance;
-		return &instance;
-	}
 
 	void LoadFromDB()
 	{
@@ -39,4 +34,4 @@ private:
 	std::unordered_map<uint32, uint32> m_MountSpells;
 };
 
-#define sMountMgr MountManager::Instance()
+extern MountManager sMountMgr;

@@ -29,7 +29,7 @@
 
 #include <limits>
 
-INSTANTIATE_SINGLETON_1(SpellModMgr);
+SpellModMgr sSpellModMgr;
 
 #define ENABLE_INSERT_NEW_SPELLS
 

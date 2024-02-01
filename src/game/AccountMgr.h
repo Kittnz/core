@@ -259,5 +259,6 @@ class AccountMgr
         mutable std::mutex m_accountMailsMutex;
 };
 
-#define sAccountMgr MaNGOS::Singleton<AccountMgr>::Instance()
+extern AccountMgr sAccountMgr;
+
 #endif

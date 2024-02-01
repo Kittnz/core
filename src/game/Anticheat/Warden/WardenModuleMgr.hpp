@@ -18,8 +18,8 @@
 class WardenModuleMgr
 {
 private:
-    std::vector<WardenModule> _winModules;
-    std::vector<WardenModule> _macModules;
+    turtle_vector<WardenModule, Category_Anticheat> _winModules;
+    turtle_vector<WardenModule, Category_Anticheat> _macModules;
 
 public:
     WardenModuleMgr();
@@ -29,6 +29,6 @@ public:
     const WardenModule *GetMacModule() const;
 };
 
-#define sWardenModuleMgr MaNGOS::Singleton<WardenModuleMgr>::Instance()
+extern WardenModuleMgr sWardenModuleMgr;
 
 #endif /* !__WARDENMODULEMGR_HPP_ */

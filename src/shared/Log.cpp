@@ -26,6 +26,7 @@
 #include "Util.h"
 #include "ByteBuffer.h"
 #include "DiscordBot/Bot.hpp"
+#include "Timer.h"
 
 #include <stdarg.h>
 #include <fstream>
@@ -33,7 +34,9 @@
 
 #include "ace/OS_NS_unistd.h"
 
-INSTANTIATE_SINGLETON_1( Log );
+typedef MaNGOS::ClassLevelLockable<Log, std::mutex> LogLock;
+INSTANTIATE_SINGLETON_2(Log, LogLock);
+INSTANTIATE_CLASS_MUTEX(Log, std::mutex);
 
 LogFilterData logFilterData[LOG_FILTER_COUNT] =
 {
@@ -260,6 +263,8 @@ void Log::SetLogFileLevel(char* level)
 
 void Log::Initialize()
 {
+    // not ideal place for that, but Log::Initialize used everywhere
+    CPU::Init();
     /// Common log files data
     m_logsDir = sConfig.GetStringDefault("LogsDir","");
     if (!m_logsDir.empty())
