@@ -830,6 +830,10 @@ void thread_name(const char* name)
     OPTICK_SETUP_THREAD(name);
 }
 
+#ifdef WIN32
+#pragma comment(lib,"Psapi.lib")
+#endif
+
 namespace Memory
 {
 	uint64 GetProcessMemory()
