@@ -119,9 +119,9 @@ private:
     uint32 _accountId;
     std::atomic_int m_loadStep = 0;
 
-    std::vector<AnalysisInfo> _loadedSamples;
-    std::unordered_set<uint32> _fingerprintSampleLookup;
-    std::unordered_map<std::string, std::pair<uint32, bool>> _ipHistory;
+    turtle_vector<AnalysisInfo, Category_Anticheat> _loadedSamples;
+    turtle_unordered_set<uint32, Category_Anticheat> _fingerprintSampleLookup;
+    turtle_unordered_map<std::string, std::pair<uint32, bool>, Category_Anticheat> _ipHistory;
 
     AnalysisInfo _currentSample;
     bool _enabled = false; // only enable if we get any data at all from client.

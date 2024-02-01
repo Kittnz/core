@@ -35,6 +35,8 @@
 #include "Player.h"
 #include "Chat.h"
 
+ShopMgr sShopMgr;
+
 static char const* shopPrefix = "TW_SHOP";
 class ShopSendBalanceTask
 
@@ -135,12 +137,6 @@ public:
     uint32 m_shopId;
     uint32 m_price;
 };
-
-ShopMgr& ShopMgr::Instance()
-{
-    static ShopMgr shopMgr;
-    return shopMgr;
-}
 
 bool ShopMgr::RequestBalance(uint32 accountId)
 {

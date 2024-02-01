@@ -6,11 +6,6 @@
 class CompanionManager
 {
 public:
-	static CompanionManager* Instance()
-	{
-		static CompanionManager instance;
-		return &instance;
-	}
 
 	void LoadFromDB()
 	{
@@ -39,4 +34,4 @@ private:
 	std::unordered_map<uint32, uint32> m_companionSpells;
 };
 
-#define sCompanionMgr CompanionManager::Instance()
+extern CompanionManager sCompanionMgr;

@@ -115,5 +115,6 @@ class PlayerBotMgr
         bool enable;
 };
 
-#define sPlayerBotMgr MaNGOS::Singleton<PlayerBotMgr>::Instance()
+extern PlayerBotMgr sPlayerBotMgr;
+
 #endif

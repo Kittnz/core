@@ -23,6 +23,8 @@
 #include "MoveMap.h"
 #include "World.h"
 
+TransportMgr sTransportMgr;
+
 TransportTemplate::~TransportTemplate()
 {
     // Collect shared pointers into a set to avoid deleting the same memory more than once
