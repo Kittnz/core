@@ -167,6 +167,8 @@ private:
     uint32 m_playerAccount;
 };
 
+//#define sGuildMgr MaNGOS::Singleton<GuildMgr>::Instance()
+
 extern GuildMgr sGuildMgr;
 
 #endif // _GUILDMGR_H

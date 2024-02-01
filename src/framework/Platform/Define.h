@@ -31,8 +31,6 @@
 
 #include "Platform/CompilerDefs.h"
 
-#include "AllocatorWithCategory.h"
-
 #define MANGOS_LITTLEENDIAN 0
 #define MANGOS_BIGENDIAN    1
 

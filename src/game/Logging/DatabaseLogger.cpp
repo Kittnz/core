@@ -1,8 +1,6 @@
 #include "DatabaseLogger.hpp"
 #include "Database/DatabaseEnv.h"
 
-DatabaseLogger sDBLogger;
-
 void DatabaseLogger::LogLoot(const LootLogEntry& log)
 {
     //For now just log to DB, we can do some pre-processing here later.

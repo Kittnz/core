@@ -11,7 +11,7 @@ namespace HttpApi
 {
     TransferController::TransferController(std::string key)
     {
-        _authorizer = std::make_unique<ApiKeyAuthorizer>(key.c_str());
+        _authorizer = std::make_unique<ApiKeyAuthorizer>(key);
     }
 
     std::string DumpReturnToString(DumpReturn dumpReturn)

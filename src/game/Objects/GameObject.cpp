@@ -228,7 +228,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
         return false;
     }
 
-    SetObjectScale(sGuidObjectScaling.GetScale(GetGUID(), goinfo->size));
+    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), goinfo->size));
 
     SetFloatValue(GAMEOBJECT_POS_X, x);
     SetFloatValue(GAMEOBJECT_POS_Y, y);

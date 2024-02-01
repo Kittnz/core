@@ -1087,7 +1087,7 @@ void Group::CountSingleLooterRoll(Roll* roll)
             sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                 player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
-            sDBLogger.LogLoot(
+            sDBLogger->LogLoot(
                 {
                     player->GetGUIDLow(),
                     player->GetName(),
@@ -1192,7 +1192,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
 
-                    sDBLogger.LogLoot(
+                    sDBLogger->LogLoot(
                         {
                             player->GetGUIDLow(),
                             player->GetName(),
@@ -1262,7 +1262,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     sLog.out(LOG_LOOTS, "%s wins greed roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
-                    sDBLogger.LogLoot(
+                    sDBLogger->LogLoot(
                         {
                             player->GetGUIDLow(),
                             player->GetName(),

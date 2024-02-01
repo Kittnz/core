@@ -114,8 +114,8 @@ class Warden
         // true if client has used click to move at any point since starting game
         mutable bool m_hasUsedClickToMove = false;
 
-        turtle_vector<std::shared_ptr<const Scan>, Category_Anticheat> _pendingScans;
-        turtle_vector<std::shared_ptr<const Scan>, Category_Anticheat> _enqueuedScans;
+        std::vector<std::shared_ptr<const Scan>> _pendingScans;
+        std::vector<std::shared_ptr<const Scan>> _enqueuedScans;
 
     public:
         virtual ~Warden() = default;

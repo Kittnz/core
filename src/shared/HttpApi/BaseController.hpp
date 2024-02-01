@@ -33,7 +33,7 @@ namespace HttpApi
 
         virtual ~BaseController() = default;
 
-        static void RegisterAll(Server* server)
+        static void RegisterAll(SSLServer* server)
         {
             _source = server;
             for (const auto& controller : _controllers)
@@ -42,7 +42,7 @@ namespace HttpApi
             }
         }
 
-        virtual void RegisterCommands(Server* server) = 0;
+        virtual void RegisterCommands(SSLServer* server) = 0;
 
         template <HttpMethod method, typename F =
             std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>
@@ -66,7 +66,7 @@ namespace HttpApi
 
     private:
         static std::vector<BaseController*> _controllers;
-        static Server* _source;
+        static SSLServer* _source;
 
         template <HttpMethod method, typename F =
             std::conditional_t<method == HttpMethod::Get, GetHandler, PostHandler>>

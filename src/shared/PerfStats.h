@@ -14,6 +14,7 @@ namespace PerfStats
     extern int g_totalQueryResults;
     extern int g_totalMaps;
 
+    extern int g_worldUpdateTime;
     extern int g_slowestMapId;
     extern int g_slowestMapUpdateTime;
 };

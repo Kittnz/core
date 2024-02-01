@@ -35,6 +35,7 @@ struct ShopRequest
 class ShopMgr
 {
     public:
+        static ShopMgr& Instance();
         bool RequestBalance(uint32 accountId);
         bool RequestPurchase(uint32 accountId, uint32 guidLow, uint32 itemId);
         void ProcessRequestsWorker();
@@ -46,6 +47,6 @@ class ShopMgr
         std::mutex m_mutex;
 };
 
-extern ShopMgr sShopMgr;
+#define sShopMgr ShopMgr::Instance()
 
 #endif

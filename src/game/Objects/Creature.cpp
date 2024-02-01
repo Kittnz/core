@@ -253,7 +253,7 @@ void Creature::AddToWorld()
     if (!IsInWorld() && GetObjectGuid().GetHigh() == HIGHGUID_UNIT)
         GetMap()->InsertObject<Creature>(GetObjectGuid(), this);
 
-    sCreatureGroupsManager.LoadCreatureGroup(this, m_creatureGroup);
+    sCreatureGroupsManager->LoadCreatureGroup(this, m_creatureGroup);
     if (m_creatureGroup)
     {
         if (m_creatureGroup->IsFormation())
@@ -370,7 +370,7 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     SetEntry(Entry);                                        // normal entry always
     m_creatureInfo = cinfo;                                 // map mode related always
 
-    SetObjectScale(sGuidObjectScaling.GetScale(GetGUID(), cinfo->scale));
+    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), cinfo->scale));
     // Reset native scale before we apply creature info multiplier, otherwise we are
     // stuck at 1 from the previous m_nativeScaleOverride if the unit's entry is
     // being changed

@@ -92,7 +92,6 @@
 #include "Shop/ShopMgr.h"
 #include "ChannelBroadcaster.h"
 #include <ace/OS_NS_dirent.h>
-#include "PerformanceMonitor.h"
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
@@ -138,10 +137,6 @@ using namespace std::literals::chrono_literals;
 void LoadGameObjectModelList();
 
 World sWorld;
-
-GuidObjectScaling sGuidObjectScaling;
-CompanionManager sCompanionMgr;
-MountManager sMountMgr;
 
 /// World constructor
 World::World():
@@ -1477,10 +1472,6 @@ void World::LoadConfigSettings(bool reload)
     m_timers[WUPDATE_TOTAL_MONEY].SetInterval(6 * HOUR * IN_MILLISECONDS);
     m_timers[WUPDATE_COMMANDS].SetInterval(1 * MINUTE * IN_MILLISECONDS);
 
-    setConfig(CONFIG_BOOL_PERFORMANCE_ENABLE, "Perf.Enable", true);
-    g_bEnableStatGather = getConfig(CONFIG_BOOL_PERFORMANCE_ENABLE);
-    setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, "Perf.ReportInterval", 600);
-
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
     auto pathString = sConfig.GetStringDefault("Database.AutoUpdate.Path", "");
@@ -1799,7 +1790,7 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Initiating auto-updater...");
     using namespace DBUpdater;
-    if (!sAutoUpdater.ProcessUpdates())
+    if (!sAutoUpdater->ProcessUpdates())
     {
         sLog.outError("DB AutoUpdater FAILED, cancelling server.");
         Log::WaitBeforeContinueIfNeed();
@@ -1887,7 +1878,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading gameobject info...");
     sObjectMgr.LoadGameobjectInfo();
     sLog.outString("Loading transport templates...");
-    sTransportMgr.LoadTransportTemplates();
+    sTransportMgr->LoadTransportTemplates();
     sLog.outString("Loading spell chains...");
     sSpellMgr.LoadSpellChains();
     sLog.outString("Loading spell elixirs...");
@@ -1937,7 +1928,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadCreatures();
     sLog.outString("Loading creature addons...");
     sObjectMgr.LoadCreatureAddons();                        // must be after LoadCreatureTemplates() and LoadCreatures()
-    sCreatureGroupsManager.Load();
+    sCreatureGroupsManager->Load();
     sLog.outString("Loading gameobjects...");
     sObjectMgr.LoadGameobjects();
     sLog.outString("Loading gameobject requirements...");
@@ -1959,7 +1950,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadTrainerGreetings();
     sGameEventMgr.LoadFromDB();
     sLog.outString("Loading scaling...");
-    sGuidObjectScaling.LoadFromDB();
+    sGuidObjectScaling->LoadFromDB();
     sLog.outString("Loading conditions...");
     sObjectMgr.LoadConditions();
     sLog.outString("Loading creature respawn timers...");
@@ -2069,11 +2060,11 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading taxi path transitions...");
     sObjectMgr.LoadTaxiPathTransitions();
     sLog.outString("Loading tickets...");
-	sTicketMgr.Initialize();
-	sTicketMgr.LoadTickets();
+	sTicketMgr->Initialize();
+	sTicketMgr->LoadTickets();
     sLog.outString("Loading surveys...");
-	sTicketMgr.LoadSurveys();
-    sTicketMgr.LoadTicketTemplates();
+	sTicketMgr->LoadSurveys();
+    sTicketMgr->LoadTicketTemplates();
     sLog.outString("Returning old mails...");
 	sObjectMgr.ReturnOrDeleteOldMails(false);
     sLog.outString("Loading quest start scripts...");
@@ -2099,16 +2090,14 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading aura removal handler...");
     sAuraRemovalMgr.LoadFromDB();
     sLog.outString("Loading daily quests handler...");
-    sDailyQuestHandler.LoadFromDB(true);
+    sDailyQuestHandler->LoadFromDB(true);
     sLog.outString("Loading companion manager...");
-    sCompanionMgr.LoadFromDB();
+    sCompanionMgr->LoadFromDB();
     sLog.outString("Loading mount manager...");
-    sMountMgr.LoadFromDB();
-	sLog.outString("Initialize Performance monitor...");
-    sPerfMonitor.Initialize();
+    sMountMgr->LoadFromDB();
 
     sLog.outString("Loading dynamic visibility templates...");
-    sDynamicVisMgr.LoadFromDB(false);
+    sDynamicVisMgr->LoadFromDB(false);
 
     sLog.outString("Loading cached Account data...");
     LoadAccountData();
@@ -2155,7 +2144,7 @@ void World::SetInitialWorldSettings()
     sLog.outString("Initiating zone scripts...");
     sZoneScriptMgr.InitZoneScripts();
     sLog.outString("Loading transport on continents...");
-	sTransportMgr.SpawnContinentTransports();
+	sTransportMgr->SpawnContinentTransports();
     sLog.outString("Deleting expired bans...");
 	LoginDatabase.Execute("DELETE FROM ip_banned WHERE unbandate<=UNIX_TIMESTAMP() AND unbandate<>bandate");
     sLog.outString("Initiating honor maintenance...");
@@ -2357,7 +2346,6 @@ void TotalMoneyCallback(QueryResult* result, uint32 money)
 /// Update the World !
 void World::Update(uint32 diff)
 {
-    XScopeStatTimer ScopeStatTimer(sPerfMonitor.WorldTick);
     ///- Update the different timers
     for (auto& timer : m_timers)
     {
@@ -2397,7 +2385,12 @@ void World::Update(uint32 diff)
     }
 
     /// <li> Handle session updates
+    uint32 updateSessionsTime = WorldTimer::getMSTime();
     UpdateSessions(diff);
+    updateSessionsTime = WorldTimer::getMSTimeDiffToNow(updateSessionsTime);
+    if (getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE) && updateSessionsTime > getConfig(CONFIG_UINT32_PERFLOG_SLOW_SESSIONS_UPDATE))
+        sLog.out(LOG_PERFORMANCE, "Update sessions: %ums", updateSessionsTime);
+
     m_canProcessAsyncPackets = true;
 
     /// <li> Update uptime table
@@ -2430,13 +2423,13 @@ void World::Update(uint32 diff)
     _asyncTasks.clear();
     lock.unlock();
 
-    sTransportMgr.Update(diff);
+    sTransportMgr->Update(diff);
     sMapMgr.Update(diff);
     sBattleGroundMgr.Update(diff);
     sLFGMgr.Update(diff);
     sGuardMgr.Update(diff);
     sZoneScriptMgr.Update(diff);
-    sDynamicVisMgr.UpdateVisibility(diff);
+    sDynamicVisMgr->UpdateVisibility(diff);
 
     ///- Update groups with offline leaders
     if (m_timers[WUPDATE_GROUPS].Passed())
@@ -2568,7 +2561,7 @@ void World::Update(uint32 diff)
     // Update liste des ban si besoin
     sAccountMgr.Update(diff);
 
-    sDailyQuestHandler.Update(diff);
+    sDailyQuestHandler->Update(diff);
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
@@ -3194,7 +3187,6 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 
 void World::UpdateSessions(uint32 diff)
 {
-    XScopeStatTimer ScopeStatTimer{sPerfMonitor.UpdateSession};
     ///- Update player limit if needed
     int32 hardPlayerLimit = getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT);
     if (hardPlayerLimit)

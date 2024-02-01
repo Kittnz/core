@@ -118,9 +118,9 @@ struct npc_escortAI : ScriptedAI
 
         const Quest* m_pQuestForEscort;                     //generally passed in Start() when regular escort script.
 
-        turtle_vector<Escort_Waypoint, Category_AI> WaypointList;
+        std::vector<Escort_Waypoint> WaypointList;
         uint32  m_currentWaypointIdx;
-        turtle_vector<Escort_Waypoint, Category_AI>::iterator CurrentWP;
+        std::vector<Escort_Waypoint>::iterator CurrentWP;
 
         bool m_bIsRunning;                                  //all creatures are walking by default (has flag SPLINEFLAG_WALKMODE)
         bool m_bCanInstantRespawn;                          //if creature should respawn instantly after escort over (if not, database respawntime are used)

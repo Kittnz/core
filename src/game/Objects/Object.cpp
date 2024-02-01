@@ -1337,7 +1337,7 @@ float WorldObject::GetVisibilityDistance() const
 {
     if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
     {
-        auto optVis = sDynamicVisMgr.GetDynamicVisibility(GetCachedAreaId());
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
         if (optVis)
             return optVis.value();
     }
@@ -1348,7 +1348,7 @@ float WorldObject::GetGridActivationDistance() const
 {
     if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
     {
-        auto optVis = sDynamicVisMgr.GetDynamicVisibility(GetCachedAreaId());
+        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
         if (optVis)
             return optVis.value();
     }

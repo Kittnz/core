@@ -413,7 +413,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     sLog.out(LOG_CHAR, "[%s:%u@%s] Create Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
-    sDBLogger.LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
+    sDBLogger->LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
     sObjectMgr.IncreaseActivePlayersCount(team);
 }
 
@@ -470,7 +470,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Delete Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
     sLog.out(LOG_CHAR, "[%s:%u@%s] Delete Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
-    sDBLogger.LogCharAction({ lowguid, GetAccountId(), LogCharAction::ActionDelete, {} });
+    sDBLogger->LogCharAction({ lowguid, GetAccountId(), LogCharAction::ActionDelete, {} });
 
     // If the character is online (ALT-F4 logout for example)
     if (Player* onlinePlayer = sObjectAccessor.FindPlayer(guid))
@@ -803,7 +803,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         GetMasterPlayer()->areaId = pCurrChar->GetCachedAreaId();
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
         if (!pCurrChar->HasGMDisabledSocials())
-            sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+            sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
 
         if (Guild* guild = sGuildMgr.GetGuildById(pCurrChar->GetGuildId()))
             guild->AddToCache(GetMasterPlayer()->GetGUIDLow());
@@ -892,7 +892,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (!alreadyOnline && !pCurrChar->IsStandingUp() && !pCurrChar->HasUnitState(UNIT_STAT_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
-    sDBLogger.LogCharAction({ pCurrChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogin, {} });
+    sDBLogger->LogCharAction({ pCurrChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogin, {} });
 
     m_playerLoading = false;
     m_clientMoverGuid = pCurrChar->GetObjectGuid();
@@ -1103,7 +1103,7 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uin
 
     sLog.out(LOG_CHAR, "[%s:%u@%s] Character:[%s] (guid:%u) Changed name to: %s", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), oldname.c_str(), guidLow, newname.c_str());
 
-    sDBLogger.LogCharAction({ guidLow, session->GetAccountId(), LogCharAction::ActionRename, CharActionRenameEntry{0, oldname, newname} });
+    sDBLogger->LogCharAction({ guidLow, session->GetAccountId(), LogCharAction::ActionRename, CharActionRenameEntry{0, oldname, newname} });
 
     WorldPacket data(SMSG_CHAR_RENAME, 1 + 8 + (newname.size() + 1));
     data << uint8(RESPONSE_SUCCESS);

@@ -87,6 +87,11 @@ class TransportMgr
         friend void LoadDBCStores(std::string const&);
 
     public:
+        static TransportMgr* instance()
+        {
+            static TransportMgr instance;
+            return &instance;
+        }
 
         void Unload();
 
@@ -108,11 +113,9 @@ class TransportMgr
 
         void Update(uint32 const diff);
 
-		TransportMgr();
-		~TransportMgr();
-
     private:
-
+        TransportMgr();
+        ~TransportMgr();
         TransportMgr(TransportMgr const&);
         TransportMgr& operator=(TransportMgr const&);
 
@@ -129,6 +132,6 @@ class TransportMgr
         std::unordered_set<Transport*> m_shipTransports;
 };
 
-extern TransportMgr sTransportMgr;
+#define sTransportMgr TransportMgr::instance()
 
 #endif // TRANSPORTMGR_H

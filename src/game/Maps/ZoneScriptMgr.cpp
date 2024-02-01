@@ -21,7 +21,7 @@
 #include "ScriptMgr.h"
 #include "Policies/SingletonImp.h"
 
-ZoneScriptMgr sZoneScriptMgr;
+INSTANTIATE_SINGLETON_1(ZoneScriptMgr);
 
 void RegisterZoneScripts();
 

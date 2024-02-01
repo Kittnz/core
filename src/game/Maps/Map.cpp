@@ -760,16 +760,7 @@ inline void Map::UpdateCells(uint32 map_diff)
 
 void Map::ProcessSessionPackets(PacketProcessing type)
 {
-    switch (type)
-    {
-    case PACKET_PROCESS_MOVEMENT:
-        MovementPerfTimer.Begin();
-        break;
-	case PACKET_PROCESS_SPELLS:
-        SpellPerfTimer.Begin();
-		break;
-    }
-
+    uint32 beginTime = WorldTimer::getMSTime();
     /// update worldsessions for existing players
     for (m_mapRefIter = m_mapRefManager.begin(); m_mapRefIter != m_mapRefManager.end(); ++m_mapRefIter)
     {
@@ -782,16 +773,9 @@ void Map::ProcessSessionPackets(PacketProcessing type)
             pSession->ProcessPackets(updater);
         }
     }
-
-	switch (type)
-	{
-	case PACKET_PROCESS_MOVEMENT:
-		MovementPerfTimer.End();
-		break;
-	case PACKET_PROCESS_SPELLS:
-		SpellPerfTimer.End();
-		break;
-	}
+    beginTime = WorldTimer::getMSTimeDiffToNow(beginTime);
+    if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS) && beginTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS))
+        sLog.out(LOG_PERFORMANCE, "Map %u inst %u: %3ums to update packets type %u", GetId(), GetInstanceId(), beginTime, (uint32)type);
 }
 
 void Map::UpdateSessionsMovementAndSpellsIfNeeded()
@@ -860,7 +844,6 @@ void Map::DoUpdate(uint32 maxDiff)
 
 void Map::Update(uint32 t_diff)
 {
-    XScopeStatTimer ScopeStatTimer{ UpdateTimer };
     uint32 updateMapTime = WorldTimer::getMSTime();
     _dynamicTree.update(t_diff);
 
@@ -3368,14 +3351,14 @@ void Map::CrashUnload()
         {
             WorldSession* session = player->GetSession();
             sLog.out(LOG_CHAR, "[%s:%u@%s] Logout Character:[%s] (guid: %u)", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
-            sDBLogger.LogCharAction({ player->GetGUIDLow(), session->GetAccountId(), LogCharAction::ActionLogout, {} });
+            sDBLogger->LogCharAction({ player->GetGUIDLow(), session->GetAccountId(), LogCharAction::ActionLogout, {} });
             session->SetPlayer(nullptr);
             player->SaveInventoryAndGoldToDB(); // Prevent possible exploits
             player->UninviteFromGroup();
 
             if (player->GetSocial())
             {
-                sSocialMgr.RemovePlayerSocial(player->GetObjectGuid());
+                sSocialMgr->RemovePlayerSocial(player->GetObjectGuid());
                 session->GetMasterPlayer()->SetSocial(nullptr);
             }
 

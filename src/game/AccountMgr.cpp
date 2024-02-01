@@ -35,7 +35,7 @@
 #include "MasterPlayer.h"
 #include "Anticheat.h"
 
-AccountMgr sAccountMgr;
+INSTANTIATE_SINGLETON_1(AccountMgr);
 
 AccountMgr::AccountMgr() : m_banlistUpdateTimer(0), m_fingerprintAutobanTimer(0), m_accountMailsResetTimer(0)
 {}

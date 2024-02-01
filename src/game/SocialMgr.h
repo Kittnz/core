@@ -134,6 +134,8 @@ class PlayerSocial
 class SocialMgr
 {
     public:
+        static SocialMgr* instance();
+
         // Misc
         void RemovePlayerSocial(ObjectGuid const& guid);
 
@@ -153,6 +155,5 @@ class SocialMgr
         std::shared_mutex _socialMapLock;
 };
 
-extern SocialMgr sSocialMgr;
-
+#define sSocialMgr SocialMgr::instance()
 #endif

@@ -17,11 +17,11 @@
 #include <random>
 #include <algorithm>
 
-WardenScanMgr sWardenScanMgr;
+INSTANTIATE_SINGLETON_1(WardenScanMgr);
 
 namespace
 {
-bool BuildRawData(const std::string &hexData, turtle_vector<uint8, Category_Anticheat> &out)
+bool BuildRawData(const std::string &hexData, std::vector<uint8> &out)
 {
     if (!!(hexData.length() % 2))
         return false;
@@ -66,12 +66,12 @@ void WardenScanMgr::loadFromDB()
     auto result = WorldDatabase.Query("SELECT id,type,str,data,address,length,result,flags,comment FROM warden_scans");
 
     // copy any non-database scans into a placeholder
-    turtle_vector<std::shared_ptr<const Scan>, Category_Anticheat > new_scans;
+    std::vector<std::shared_ptr<const Scan> > new_scans;
     new_scans.reserve(m_scans.size());
 
     for (auto const &s : m_scans)
         if (!(s->flags & ScanFlags::FromDatabase))
-            new_scans.push_back(s);
+            new_scans.push_back(std::move(s));
 
     m_scans = std::move(new_scans);
 
@@ -99,7 +99,7 @@ void WardenScanMgr::loadFromDB()
         {
             case READ_MEMORY:
             {
-                turtle_vector<uint8, Category_Anticheat> expected;
+                std::vector<uint8> expected;
 
                 if (!BuildRawData(fields[6].GetCppString(), expected) || expected.size() != length)
                 {
@@ -132,18 +132,14 @@ void WardenScanMgr::loadFromDB()
             {
                 auto const wanted = fields[6].GetBool();
 
-                turtle_vector<uint8, Category_Anticheat> pattern;
+                std::vector<uint8> pattern;
                 if (!BuildRawData(fields[3].GetCppString(), pattern))
                 {
                     sLog.outError("Failed to parse expected value in Warden scan id %u", id);
                     continue;
                 }
 
-                std::vector<uint8> simplePattern;
-                simplePattern.resize(pattern.size());
-                memcpy(simplePattern.data(), pattern.data(), pattern.size());
-
-                scan = new WindowsCodeScan(offset, simplePattern, scanType == FIND_MEM_IMAGE_CODE_BY_HASH, wanted, comment, flags);
+                scan = new WindowsCodeScan(offset, pattern, scanType == FIND_MEM_IMAGE_CODE_BY_HASH, wanted, comment, flags);
                 break;
             }
 
@@ -151,7 +147,7 @@ void WardenScanMgr::loadFromDB()
             {
                 auto const filename = fields[2].GetCppString();
 
-                turtle_vector<uint8, Category_Anticheat> expected;
+                std::vector<uint8> expected;
                 if (!BuildRawData(fields[6].GetCppString(), expected))
                 {
                     sLog.outError("Failed to parse expected value in Warden scan id %u", id);
@@ -180,7 +176,7 @@ void WardenScanMgr::loadFromDB()
                 auto const module = fields[2].GetCppString();
                 auto const proc = fields[3].GetCppString();
                 
-                turtle_vector<uint8, Category_Anticheat> hash;
+                std::vector<uint8> hash;
                 if (!BuildRawData(fields[6].GetCppString(), hash))
                 {
                     sLog.outError("Failed to parse expected value in Warden scan id %u", id);

@@ -166,7 +166,7 @@ PlayerControlledAI::PlayerControlledAI(Player* pPlayer, Unit* caster) : PlayerAI
         usableSpells.push_back(spell.first);
     }
     // Suppression des sorts dont on a deja des rangs superieurs
-    for (auto it = usableSpells.begin(); it != usableSpells.end();)
+    for (std::vector<uint32>::iterator it = usableSpells.begin(); it != usableSpells.end();)
     {
         bool foundSupRank = false;
         SpellEntry const *pCurrSpell_1 = sSpellMgr.GetSpellEntry(*(it));

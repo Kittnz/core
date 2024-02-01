@@ -1789,6 +1789,8 @@ class ObjectMgr
         robin_hood::unordered_map<uint32 /*spell id*/, std::vector<QuestSpellCastObjective>> m_questSpellCastObjectives;
 };
 
+//#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
+
 extern ObjectMgr sObjectMgr;
 
 #endif

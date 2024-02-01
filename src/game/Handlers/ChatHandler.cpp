@@ -170,6 +170,27 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     uint32 type;
     uint32 lang;
 
+    auto LogPerformance = [&now, &type, &lang](const std::string& message, bool bWasTurtleCommand)
+    {
+        uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
+        if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
+        {
+            sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_MESSAGECHAT(%s) with type %u, lang %u, message %s.", bWasTurtleCommand ? "t" : "g", type, lang, message.c_str());
+        }
+    };
+
+    struct MessageChatMonitor
+    {
+        std::string text = "NO MESSAGE";
+        std::function<void(std::string, bool)> _logger;
+        bool bWasTurtleAddonMsg = false;
+        MessageChatMonitor(std::function<void(std::string, bool)> logger) : _logger(logger) {}
+        ~MessageChatMonitor()
+        {
+            _logger(text, bWasTurtleAddonMsg);
+        }
+    } mon{ LogPerformance };
+
     recv_data >> type;
     recv_data >> lang;
 
@@ -276,6 +297,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             recv_data >> channel;
             recv_data >> msg;
+            mon.text = msg;
 
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
@@ -303,6 +325,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_HARDCORE:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
             if (msg.empty())
@@ -313,6 +336,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_DND:
         {
             recv_data >> msg;
+            mon.text = msg;
             if (!CheckChatMessageValidity(msg, lang, type))
                 return;
             break;
@@ -331,6 +355,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     if (HandleTurtleAddonMessages(lang, type, msg))
     {
         // Message was a turtle addon message, no point to process further
+        mon.bWasTurtleAddonMsg = true;
         return;
     }
 
@@ -1322,9 +1347,9 @@ bool WorldSession::HandleTurtleAddonMessages(uint32 lang, uint32 type, std::stri
             if (strstr(msg.c_str(), "GM_ADDON")) // prefix
             {
                 if (strstr(msg.c_str(), "GET_TICKETS"))
-                    sTicketMgr.SendTicketsInAddonMessage(_player);
+                    sTicketMgr->SendTicketsInAddonMessage(_player);
                 else if (strstr(msg.c_str(), "GET_TEMPLATES"))
-                    sTicketMgr.SendTicketTemplatesInAddonMessage(_player);
+                    sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
                 else if (char const* pSubString = strstr(msg.c_str(), "PLAYER_INFO:"))
                     sAccountMgr.SendPlayerInfoInAddonMessage(pSubString + strlen("PLAYER_INFO:"), _player);
                 return true;

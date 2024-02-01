@@ -17,7 +17,7 @@
 
 #define FAKE_PVP_POOL 800
 
-HonorMaintenancer sHonorMaintenancer;
+INSTANTIATE_SINGLETON_1(HonorMaintenancer);
 
 HonorStandingList& HonorMaintenancer::GetStandingListByTeam(Team team)
 {

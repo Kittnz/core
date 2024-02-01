@@ -3,6 +3,8 @@
 
 #include "Policies/SingletonImp.h"
 
+INSTANTIATE_SINGLETON_1(Anticheat::AnticheatConfig);
+
 namespace
 {
 static constexpr char *sCheatTypeNames[] =
@@ -36,12 +38,8 @@ static_assert(sizeof(sCheatTypeNames) / sizeof(sCheatTypeNames[0]) == Anticheat:
     "sCheatTypeNames has the wrong number of strings");
 }
 
-Anticheat::AnticheatConfig sAnticheatConfig;
-
 namespace Anticheat
 {
-
-
 void AnticheatConfig::setConfig(AnticheatConfigUInt32Values index, char const* fieldname, uint32 defvalue)
 {
     setConfig(index, GetIntDefault(fieldname, defvalue));

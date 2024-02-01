@@ -29,7 +29,6 @@ set (game_SRCS
     GuardMgr.cpp
     GMTicketMgr.cpp
     GossipDef.cpp
-    PerformanceMonitor.cpp
     HardcodedEvents.cpp
     HonorMgr.cpp
     ItemEnchantmentMgr.cpp
@@ -129,7 +128,6 @@ set (game_SRCS
     HttpApi/TransferController.cpp
     HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
-    Logging/DatabaseLogger.hpp
     Logging/DatabaseLogger.cpp
     Mail/Mail.cpp
     Mail/MassMailMgr.cpp
@@ -241,7 +239,6 @@ set (game_SRCS
     ObjectMgr.h
     ObjectPosSelector.h
     PlayerDump.h
-    PerformanceMonitor.h
     QuestDef.h
     ReputationMgr.h
     ScriptedGossip.h

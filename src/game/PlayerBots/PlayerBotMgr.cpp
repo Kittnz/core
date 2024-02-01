@@ -12,7 +12,8 @@
 #include "PlayerBotAI.h"
 #include "Anticheat.h"
 
-PlayerBotMgr sPlayerBotMgr;
+INSTANTIATE_SINGLETON_1(PlayerBotMgr);
+
 
 PlayerBotMgr::PlayerBotMgr()
 {

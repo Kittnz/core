@@ -1183,7 +1183,7 @@ bool ValidateEndSceneHook(const std::vector<uint8> &code)
 }
 }
 
-void WardenWin::FinalizeDataCapture(turtle_vector<uint8, Category_Anticheat>& fullBuffer)
+void WardenWin::FinalizeDataCapture(std::vector<uint8>& fullBuffer)
 {
     SetOSVersion();
     ConvertPrintData(fullBuffer);
@@ -1191,7 +1191,7 @@ void WardenWin::FinalizeDataCapture(turtle_vector<uint8, Category_Anticheat>& fu
 
 
 
-void WardenWin::ConvertPrintData(turtle_vector<uint8, Category_Anticheat>& buffer)
+void WardenWin::ConvertPrintData(std::vector<uint8>& buffer)
 {
     if (!_sharedData)
         _sharedData = std::make_unique<SharedDataCompact>();
@@ -1219,7 +1219,7 @@ constexpr uint32 ReadChunkSize = 0xEE;
 
 std::shared_ptr<WindowsScan> WardenWin::MakeDynamicDataScan(WardenWin* warden, uint32& offset,
     uint32& sizeLeft,
-    turtle_vector<uint8, Category_Anticheat>& output)
+    std::vector<uint8>& output)
 {
     Scan::CheckT callback = [&offset, &sizeLeft, &output](const Warden* warden, ByteBuffer& buff)
     {

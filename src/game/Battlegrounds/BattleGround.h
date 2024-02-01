@@ -500,7 +500,7 @@ class BattleGround
         void HandleTriggerBuff(ObjectGuid go_guid);
 
         // TODO: make this protected:
-        typedef turtle_vector<ObjectGuid, Category_Battleground> GuidVector;
+        typedef std::vector<ObjectGuid> GuidVector;
         // TODO drop m_BGObjects, WTF??
         GuidVector m_BgObjects;
         GuidVector m_BgCreatures;

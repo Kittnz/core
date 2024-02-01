@@ -15,8 +15,6 @@
 
 using namespace std::filesystem;
 
-DBUpdater::AutoUpdater sAutoUpdater;
-
 namespace DBUpdater
 {
     static constexpr const char* UpdateExtension = ".sql";

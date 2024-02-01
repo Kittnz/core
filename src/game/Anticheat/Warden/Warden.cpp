@@ -214,7 +214,7 @@ void Warden::RequestScans(std::vector<std::shared_ptr<const Scan>> &&scans)
         if (request + (*i)->requestSize > MaxRequest || reply + (*i)->replySize > MaxReply ||
             _pendingScans.size() >= sAnticheatConfig.GetWardenScanCount())
         {
-            _enqueuedScans = std::move(turtle_vector<std::shared_ptr<const Scan>, Category_Anticheat>(i, _enqueuedScans.end()));
+            _enqueuedScans = std::move(std::vector<std::shared_ptr<const Scan>>(i, _enqueuedScans.end()));
             queueUpdated = true;
             break;
         }

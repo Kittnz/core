@@ -33,15 +33,15 @@ template<class T, class Key = std::string>
 class FactoryHolder
 {
     public:
-        using FactoryHolderRegistry = ObjectRegistry<FactoryHolder<T, Key >, Key >;
-        using FactoryHolderRepository = MaNGOS::Singleton<FactoryHolderRegistry >;
+        typedef ObjectRegistry<FactoryHolder<T, Key >, Key > FactoryHolderRegistry;
+        typedef MaNGOS::Singleton<FactoryHolderRegistry > FactoryHolderRepository;
 
         FactoryHolder(Key k) : i_key(k) {}
         virtual ~FactoryHolder() {}
         inline Key key() const { return i_key; }
 
-        void RegisterSelf() { FactoryHolderRepository::Instance().InsertItem(this, i_key); }
-        void DeregisterSelf() { FactoryHolderRepository::Instance().RemoveItem(this, false); }
+        void RegisterSelf(void) { FactoryHolderRepository::Instance().InsertItem(this, i_key); }
+        void DeregisterSelf(void) { FactoryHolderRepository::Instance().RemoveItem(this, false); }
 
         /// Abstract Factory create method
         virtual T* Create(void *data = nullptr) const = 0;

@@ -34,15 +34,15 @@ void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket & /*recv_data*/)
 {
     SendQueryTimeResponse();
 
-    if (GmTicket* ticket = sTicketMgr.GetTicketByPlayer(GetPlayer()->GetGUID()))
+    if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
         if (ticket->IsCompleted())
             ticket->SendResponse(this);
         else
-            sTicketMgr.SendTicket(this, ticket);
+            sTicketMgr->SendTicket(this, ticket);
     }
     else
-        sTicketMgr.SendTicket(this, nullptr);
+        sTicketMgr->SendTicket(this, nullptr);
 }
 
 void WorldSession::HandleGMTicketUpdateTextOpcode(WorldPacket & recv_data)
@@ -52,12 +52,12 @@ void WorldSession::HandleGMTicketUpdateTextOpcode(WorldPacket & recv_data)
     recv_data >> type >> ticketText;
 
     GMTicketResponse response = GMTICKET_RESPONSE_UPDATE_ERROR;
-    if (GmTicket* ticket = sTicketMgr.GetTicketByPlayer(GetPlayer()->GetGUID()))
+    if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
         if (ticket->IsCompleted())
         {
             ChatHandler(this).SendSysMessage(LANG_GMTICKET_READONLY);
-            sTicketMgr.SendTicket(this, ticket);
+            sTicketMgr->SendTicket(this, ticket);
         }
         else
         {
@@ -77,7 +77,7 @@ void WorldSession::HandleGMTicketUpdateTextOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleGMTicketDeleteTicketOpcode(WorldPacket & /*recv_data*/)
 {
-    if (GmTicket* ticket = sTicketMgr.GetTicketByPlayer(GetPlayer()->GetGUID()))
+    if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
         WorldPacket data(SMSG_GMTICKET_DELETETICKET, 4);
         data << uint32(GMTICKET_RESPONSE_TICKET_DELETED);
@@ -85,22 +85,22 @@ void WorldSession::HandleGMTicketDeleteTicketOpcode(WorldPacket & /*recv_data*/)
 
         sWorld.SendGMTicketText(LANG_COMMAND_TICKETPLAYERABANDON, GetPlayer()->GetName(), ticket->GetId());
 
-        sTicketMgr.CloseTicket(ticket->GetId(), GetPlayer()->GetGUID());
-        sTicketMgr.SendTicket(this, nullptr);
+        sTicketMgr->CloseTicket(ticket->GetId(), GetPlayer()->GetGUID());
+        sTicketMgr->SendTicket(this, nullptr);
     }
 }
 
 void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 {
     // Don't accept tickets if the ticket queue is disabled. (Ticket UI is greyed out but not fully dependable)
-    if (sTicketMgr.GetStatus() == GMTICKET_QUEUE_STATUS_DISABLED)
+    if (sTicketMgr->GetStatus() == GMTICKET_QUEUE_STATUS_DISABLED)
         return;
 
     GMTicketResponse response = GMTICKET_RESPONSE_CREATE_ERROR;
-    GmTicket* ticket = sTicketMgr.GetTicketByPlayer(GetPlayer()->GetGUID());
+    GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID());
 
     if (ticket && ticket->IsCompleted())
-        sTicketMgr.CloseTicket(ticket->GetId(), GetPlayer()->GetGUID());
+        sTicketMgr->CloseTicket(ticket->GetId(), GetPlayer()->GetGUID());
 
     // Player must not have ticket
     if (!ticket || ticket->IsClosed())
@@ -136,8 +136,8 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
         sWorld.SendDiscordMessage(1075859522268180540, string_format("New ticket {} created by {}:{}. Message: {}", newTicketId, GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), ticketText.c_str()));
 
-        sTicketMgr.AddTicket(std::move(newTicket));
-        sTicketMgr.UpdateLastChange();
+        sTicketMgr->AddTicket(std::move(newTicket));
+        sTicketMgr->UpdateLastChange();
 
         response = GMTICKET_RESPONSE_CREATE_SUCCESS;
         ChatHandler(this).SendSysMessage("Please note that you do not have to be logged in for your ticket to be completed.");
@@ -153,13 +153,13 @@ void WorldSession::HandleGMTicketSystemStatusOpcode(WorldPacket & /*recv_data*/)
     // Note: This only disables the ticket UI at client side and is not fully reliable
     // are we sure this is a uint32? Should ask Zor
     WorldPacket data(SMSG_GMTICKET_SYSTEMSTATUS, 4);
-    data << uint32(sTicketMgr.GetStatus() ? GMTICKET_QUEUE_STATUS_ENABLED : GMTICKET_QUEUE_STATUS_DISABLED);
+    data << uint32(sTicketMgr->GetStatus() ? GMTICKET_QUEUE_STATUS_ENABLED : GMTICKET_QUEUE_STATUS_DISABLED);
     SendPacket(&data);
 }
 
 void WorldSession::HandleGMSurveySubmitOpcode(WorldPacket& recvData)
 {
-    uint32 nextSurveyID = sTicketMgr.GetNextSurveyID();
+    uint32 nextSurveyID = sTicketMgr->GetNextSurveyID();
     // just put the survey into the database
     uint32 mainSurvey; // GMSurveyCurrentSurvey.dbc, column 1 (all 9) ref to GMSurveySurveys.dbc
     recvData >> mainSurvey;

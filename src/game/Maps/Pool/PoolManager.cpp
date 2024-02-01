@@ -28,7 +28,8 @@
 #include "World.h"
 #include "Policies/SingletonImp.h"
 
-PoolManager sPoolMgr;
+INSTANTIATE_SINGLETON_1(PoolManager);
+
 
 bool PoolObject::CanBeSpawned() const
 {

@@ -385,7 +385,7 @@ extern int main(int argc, char **argv)
         if (ACE_Reactor::instance()->run_reactor_event_loop(interval) == -1)
             break;
 
-        sPatchLimiter.Update(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count());
+        sPatchLimiter->Update(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count());
 
         if( (++loopCounter) == numLoops )
         {

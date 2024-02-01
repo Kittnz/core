@@ -137,7 +137,7 @@ struct LootItem
     LootSlotType GetSlotTypeForSharedLoot(PermissionTypes permission, Player* viewer, WorldObject const* lootTarget, bool condition_ok = false) const;
 };
 
-typedef turtle_vector<LootItem, Category_Loot> LootItemList;
+typedef std::vector<LootItem> LootItemList;
 
 struct QuestItem
 {
@@ -153,10 +153,10 @@ struct QuestItem
 
 class LootTemplate;
 
-typedef turtle_vector<QuestItem, Category_Loot> QuestItemList;
-typedef turtle_map<uint32, QuestItemList *, Category_Loot> QuestItemMap;
-typedef turtle_vector<LootStoreItem, Category_Loot> LootStoreItemList;
-typedef turtle_unordered_map<uint32, LootTemplate*, Category_Loot> LootTemplateMap;
+typedef std::vector<QuestItem> QuestItemList;
+typedef std::map<uint32, QuestItemList *> QuestItemMap;
+typedef std::vector<LootStoreItem> LootStoreItemList;
+typedef std::unordered_map<uint32, LootTemplate*> LootTemplateMap;
 
 typedef std::set<uint32> LootIdSet;
 
