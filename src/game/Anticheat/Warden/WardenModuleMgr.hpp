@@ -23,6 +23,7 @@ private:
 
 public:
     WardenModuleMgr();
+    void LoadWardenModules();
 
     const WardenModule *GetWindowsModule() const;
     const WardenModule *GetMacModule() const;
