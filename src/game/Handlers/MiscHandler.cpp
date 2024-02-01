@@ -249,9 +249,9 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
 
     time_t t = time(nullptr);
 
-    if (t - m_lastWhoRequest < 30)
-        return;
 
+    if (t - m_lastWhoRequest < 30 && !(GetPlayer() && GetPlayer()->HasCustomFlag(CUSTOM_PLAYER_FLAG_BYPASS_WHO_COOLDOWN)))
+        return;
 
     std::string player_name, guild_name;
 
@@ -599,7 +599,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
         }
     }
 
-    sSocialMgr->SendFriendStatus(GetMasterPlayer(), friendResult, friendGuid, false);
+    sSocialMgr.SendFriendStatus(GetMasterPlayer(), friendResult, friendGuid, false);
 
     DEBUG_LOG("WORLD: Sent (SMSG_FRIEND_STATUS)");
 }
@@ -616,7 +616,7 @@ void WorldSession::HandleDelFriendOpcode(WorldPacket & recv_data)
 
     GetMasterPlayer()->GetSocial()->RemoveFromSocialList(friendGuid, SOCIAL_FLAG_FRIEND);
 
-    sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_REMOVED, friendGuid, false);
+    sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_REMOVED, friendGuid, false);
 
     DEBUG_LOG("WORLD: Sent motd (SMSG_FRIEND_STATUS)");
 }
@@ -661,7 +661,7 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket & recv_data)
         }
     }
 
-    sSocialMgr->SendFriendStatus(GetMasterPlayer(), ignoreResult, ignoreGuid, false);
+    sSocialMgr.SendFriendStatus(GetMasterPlayer(), ignoreResult, ignoreGuid, false);
 
     DEBUG_LOG("WORLD: Sent (SMSG_FRIEND_STATUS)");
 }
@@ -678,7 +678,7 @@ void WorldSession::HandleDelIgnoreOpcode(WorldPacket & recv_data)
 
     GetMasterPlayer()->GetSocial()->RemoveFromSocialList(ignoreGuid, SOCIAL_FLAG_IGNORED);
 
-    sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_IGNORE_REMOVED, ignoreGuid, false);
+    sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_IGNORE_REMOVED, ignoreGuid, false);
 
     DEBUG_LOG("WORLD: Sent motd (SMSG_FRIEND_STATUS)");
 }

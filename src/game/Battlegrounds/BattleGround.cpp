@@ -1291,7 +1291,7 @@ void BattleGround::DoorOpen(ObjectGuid guid)
 
 bool BattleGround::CanBeSpawned(Creature* creature) const
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1308,7 +1308,7 @@ bool BattleGround::CanBeSpawned(Creature* creature) const
 
 void BattleGround::OnObjectDBLoad(Creature* creature)
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1341,7 +1341,7 @@ ObjectGuid BattleGround::GetSingleGameObjectGuid(uint8 event1, uint8 event2)
 
 void BattleGround::OnObjectDBLoad(GameObject* obj)
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetGameObjectEventsVector(obj->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetGameObjectEventsVector(obj->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1468,7 +1468,7 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
     GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
-        std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
 
         ASSERT(eventsVector.size());
 
@@ -1501,7 +1501,7 @@ void BattleGround::SetSpawnEventMode(uint8 event1, uint8 event2, BattleGroundCre
     GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
-        std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
 
         ASSERT(eventsVector.size());
 

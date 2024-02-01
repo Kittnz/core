@@ -39,7 +39,7 @@
 
 #include <array>
 
-INSTANTIATE_SINGLETON_1(LFGQueue);
+LFGQueue sLFGMgr;
 
 std::array<ClassRoles, 3> PotentialRoles =
 {
