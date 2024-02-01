@@ -182,7 +182,7 @@ struct boss_solniusAI : public ScriptedAI
 
     void JustDied(Unit* pWho)
     {
-        m_creature->MonsterYell("I have waited so... long, the Awakening cannot be stopped, not by you... I must awaken the Dragonflight, I am the only one who can put an end to this... I cannot be... stopped...");
+        m_creature->MonsterYell(30171);
         m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_3);
 
         if (m_pInstance)
@@ -192,7 +192,7 @@ struct boss_solniusAI : public ScriptedAI
         {
             if (pErennius->IsAlive() && pErennius->IsInCombat())
             {
-                pErennius->MonsterYell("The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you adventurers, for you have saved me from madness. The awakening has been stopped, and I may be free to rest at last.");
+                pErennius->MonsterYell(30174);
                 pErennius->DeleteThreatList();
                 pErennius->CombatStop(true);
                 pErennius->SetReactState(REACT_PASSIVE);
@@ -467,7 +467,7 @@ struct boss_solniusAI : public ScriptedAI
     {
         m_creature->AttackStop();
         m_creature->RemoveAllAttackers();
-        m_creature->MonsterYell("The dream beckons us all, you shall remain here forever...");
+        m_creature->MonsterYell(30170);
         m_creature->PlayDirectSound(SOLNIUS_SAY_SOUND_2);
         m_creature->AddAura(SPELL_SLEEP_VISUAL);
         m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
@@ -567,7 +567,7 @@ bool GossipSelect_boss_solnius(Player* pPlayer, Creature* pCreature, uint32 uiSe
             if (ScriptedInstance* pInstance = (ScriptedInstance*)pCreature->GetInstanceData())
                 if (Creature* boss_solnius = pInstance->GetCreature(pInstance->GetData64(DATA_SOLNIUS)))
                 {
-                    boss_solnius->MonsterYell("You think you can interfere with my eternal duty? The awakening has been fortold long before your kind has existed mortals, you shall regret setting foot on our hallowed ground!");
+                    boss_solnius->MonsterYell(30169);
                     boss_solnius->PlayDirectSound(SOLNIUS_SAY_SOUND_1);
                     boss_solnius->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2);
                     boss_solnius->SetFactionTemplateId(14);

@@ -23,3 +23,17 @@ UPDATE `broadcast_text` SET `male_text` = 'Not many people come back here. You u
 UPDATE `broadcast_text` SET `male_text` = 'Something seems amiss within these lands, as if the ground and the earth itself cries of a great misery being done. You can feel this, can\'t you?', `female_text` = NULL WHERE `entry` = 92199;
 -- NPC "Orin Stonefury".
 UPDATE `broadcast_text` SET `male_text` = 'My family called Lordaeron home once, heh, believe it or not. Valuable money was to be made from ore and jewelcrafting that we Stonefury were once known for many years ago! Now all that\'s left of my family\'s legacy is smouldering ruins, piles of stone, and burnt wood. Not to mention the corpses!$B$BIf I\'m going to fight for anything, it may as well be here.', `female_text` = NULL WHERE `entry` = 60528;
+
+-- Solnius and Erennius. Issue: Typographical errors and inconsistency in the capitalization of "the Awakening", "the dragonflight" and "the [Emerald] Dream":
+-- Aggro (Solnius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30169, 'You think you can interfere with my eternal duty? The Awakening has been foretold long before your kind has existed, mortals. You shall regret setting foot on our hallowed ground!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Add phase (Solnius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30170, 'The Dream beckons us all. You shall remain here forever...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Death (Solnius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30171, 'I have waited so long... the Awakening cannot be stopped, not by you... I must awaken the dragonflight... I am the only one who can put an end to this... I cannot... be... stopped...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Killing a player (Erennius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30172, 'Your efforts will disturb everything... Begone!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Death (Erennius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30173, 'The shadow must not prevail... The dragonflights must stand... against it...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Hard Mode success (Erennius):
+replace INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30174, 'The shadow, it fades... I am free from the nightmare that consumed my mind. I must thank you, adventurers, for you have saved me from madness. The Awakening has been stopped, and I may be free to rest at last.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
