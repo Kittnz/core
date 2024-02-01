@@ -14,7 +14,11 @@
 
 #include <any>
 
-Antispam sAntispam;
+Antispam& Antispam::Instance()
+{
+    static Antispam antispam;
+    return antispam;
+}
 
 void AntispamAsyncWorker(Antispam *antispam)
 {
@@ -232,7 +236,7 @@ void Antispam::ProcessMessages(uint32 diff)
     else
         m_updateTimer -= diff;
 
-    turtle_vector<MessageBlock, Category_Anticheat> tempMessageQueue;
+    std::vector<MessageBlock> tempMessageQueue;
     {
         std::lock_guard<std::mutex> guard(m_messageMutex);
         std::swap(m_messageQueue, tempMessageQueue);

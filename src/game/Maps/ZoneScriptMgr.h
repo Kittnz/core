@@ -106,6 +106,5 @@ class ZoneScriptMgr
         uint32 m_UpdateTimer;
 };
 
-extern ZoneScriptMgr sZoneScriptMgr;
-
+#define sZoneScriptMgr MaNGOS::Singleton<ZoneScriptMgr>::Instance()
 #endif /*OUTDOOR_PVP_MGR_H_*/

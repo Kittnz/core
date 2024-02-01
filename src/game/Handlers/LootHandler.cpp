@@ -191,7 +191,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
         if (lguid.GetHigh() == HIGHGUID_GAMEOBJECT)
             lootType = LogLoot::TypeContainer;
 
-        sDBLogger.LogLoot(
+        sDBLogger->LogLoot(
             {
                 player->GetGUIDLow(),
                 player->GetName(),
@@ -718,7 +718,7 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
         }
 
 
-        sDBLogger.LogLoot(
+        sDBLogger->LogLoot(
             {
                 target->GetGUIDLow(),
                 target->GetName(),

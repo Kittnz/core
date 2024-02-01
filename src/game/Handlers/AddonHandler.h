@@ -35,7 +35,5 @@ class AddonHandler
                                                             //built addon packet
         bool BuildAddonPacket(WorldPacket* Source, WorldPacket* Target);
 };
-
-extern AddonHandler sAddOnHandler;
-
+#define sAddOnHandler MaNGOS::Singleton<AddonHandler>::Instance()
 #endif

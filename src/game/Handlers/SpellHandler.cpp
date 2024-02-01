@@ -285,6 +285,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
 {
+    uint32 now = WorldTimer::getMSTime();
     ObjectGuid guid;
 
     recv_data >> guid;
@@ -320,6 +321,10 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
         _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_USE);
         obj->Use(_player);
     }
+    
+    uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
+    if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
+        sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_GAMEOBJ_USE with lowGUID %u, entry %u.", obj->GetGUIDLow(), obj->GetEntry());
 }
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)

@@ -268,8 +268,8 @@ struct CreatureEventAI_Event
 };
 
 //Event_Map
-typedef turtle_vector<CreatureEventAI_Event, Category_EventAI> CreatureEventAI_Event_Vec;
-typedef turtle_unordered_map<uint32, CreatureEventAI_Event_Vec, Category_EventAI > CreatureEventAI_Event_Map;
+typedef std::vector<CreatureEventAI_Event> CreatureEventAI_Event_Vec;
+typedef std::unordered_map<uint32, CreatureEventAI_Event_Vec > CreatureEventAI_Event_Map;
 
 struct CreatureEventAIHolder
 {

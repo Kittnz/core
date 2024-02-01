@@ -29,8 +29,6 @@
 #include "World.h"
 #include "Util.h"
 
-SocialMgr sSocialMgr;
-
 PlayerSocial::PlayerSocial(): m_playerGUID(), m_masterPlayer(nullptr)
 {
 }
@@ -98,7 +96,7 @@ void PlayerSocial::SendFriendList()
         if (itr.second.Flags & SOCIAL_FLAG_FRIEND)         // if IsFriend()
         {
             FriendInfo& friendInfo = itr.second;
-            sSocialMgr.GetFriendInfo(plr, itr.first, friendInfo);
+            sSocialMgr->GetFriendInfo(plr, itr.first, friendInfo);
 
             data << itr.first;                             // player guid
             data << uint8(friendInfo.Status);              // online/offline/etc?
@@ -147,6 +145,12 @@ bool PlayerSocial::HasIgnore(ObjectGuid ignore_guid) const
     if (itr != m_playerSocialMap.end())
         return itr->second.Flags & SOCIAL_FLAG_IGNORED;
     return false;
+}
+
+SocialMgr* SocialMgr::instance()
+{
+    static SocialMgr instance;
+    return &instance;
 }
 
 void SocialMgr::GetFriendInfo(MasterPlayer* player, ObjectGuid const& friendGuid, FriendInfo &friendInfo)

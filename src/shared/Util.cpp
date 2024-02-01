@@ -37,12 +37,10 @@
 
 #include <iomanip>
 #include <sstream>
-#include "AllocatorWithCategory.h"
 
 typedef ACE_TSS<MTRand> MTRandTSS;
 static MTRandTSS mtRand;
 
-IPerfMonitor* gPerfMonitorInterface = nullptr;
 
 Tokenizer::Tokenizer(const std::string &src, const char sep, uint32 vectorReserve)
 {
@@ -752,7 +750,6 @@ std::string GetCurrentTimeString()
 #ifdef WIN32
 #include <windows.h>
 #include <VersionHelpers.h>
-#include <Psapi.h>
 
 bool Win10SupportNewThreadNameInit = false;
 
@@ -829,27 +826,3 @@ void thread_name(const char* name)
 
     OPTICK_SETUP_THREAD(name);
 }
-
-#ifdef WIN32
-#pragma comment(lib,"Psapi.lib")
-#endif
-
-namespace Memory
-{
-	uint64 GetProcessMemory()
-	{
-#ifdef WIN32
-        PROCESS_MEMORY_COUNTERS_EX MemCounters;
-        ZeroMemory(&MemCounters, sizeof(MemCounters));
-        MemCounters.cb = sizeof(MemCounters);
-        HANDLE hCurrentProcess = GetCurrentProcess();
-        GetProcessMemoryInfo(hCurrentProcess, (PPROCESS_MEMORY_COUNTERS) &MemCounters, sizeof(MemCounters));
-
-        return MemCounters.PrivateUsage;
-#else
-        return 0;
-#endif
-	}
-}
-
-

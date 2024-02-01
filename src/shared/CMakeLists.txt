@@ -31,7 +31,6 @@ set (shared_SRCS
     ThreadPool.h
     Timer.h
     Util.h
-    AllocatorWithCategory.h
     OptickIntegration.h
     WorldPacket.h
     Auth/ARC4.h
@@ -71,7 +70,6 @@ set (shared_SRCS
     ThreadPool.cpp
     BS_thread_pool.hpp
     Util.cpp
-    Timer.cpp
     Duration.h
     Auth/ARC4.cpp
     Auth/AuthCrypt.cpp

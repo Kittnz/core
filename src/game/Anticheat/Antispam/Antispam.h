@@ -49,10 +49,10 @@ enum DetectType
     DETECT_FLOOD        = 2
 };
 
-typedef turtle_unordered_map<std::wstring, std::wstring, Category_Anticheat> UnicodeMap;
-typedef turtle_unordered_map<std::string, std::string, Category_Anticheat> StringMap;
-typedef turtle_unordered_map<std::string, int32, Category_Anticheat> ScoreMap;
-typedef turtle_unordered_set<uint32, Category_Anticheat> MutedAccountsSet;
+typedef std::unordered_map<std::wstring, std::wstring> UnicodeMap;
+typedef std::unordered_map<std::string, std::string> StringMap;
+typedef std::unordered_map<std::string, int32> ScoreMap;
+typedef std::unordered_set<uint32> MutedAccountsSet;
 
 struct MessageBlock
 {
@@ -104,6 +104,8 @@ class Antispam : public AntispamInterface
                 m_worker.join();
         }
 
+        static Antispam& Instance();
+        
         void LoadFromDB();
         void LoadConfig() override;
         
@@ -170,17 +172,17 @@ class Antispam : public AntispamInterface
         bool m_banEnabled;
         bool m_mergeAllWhispers;
 
-        turtle_vector<std::unique_ptr<re2::RE2>, Category_Anticheat> m_regexBlacklist;
+        std::vector<std::unique_ptr<re2::RE2>> m_regexBlacklist;
         StringSet m_blackList;
         StringMap m_replacement;
         ScoreMap m_scores[MSG_TYPE_MAX];
         UnicodeMap m_unicode;
-        turtle_unordered_map<uint32 /*accountId*/, uint32 /*score*/, Category_Anticheat> m_detectScores;
-        turtle_unordered_map<uint32 /*accountId*/, StringSet /*mutedMessages*/, Category_Anticheat> m_mutedMessages;
+        std::unordered_map<uint32 /*accountId*/, uint32 /*score*/> m_detectScores;
+        std::unordered_map<uint32 /*accountId*/, StringSet /*mutedMessages*/> m_mutedMessages;
 
         MutedAccountsSet m_mutedAccounts;
 
-        turtle_vector<MessageBlock, Category_Anticheat> m_messageQueue;
+        std::vector<MessageBlock> m_messageQueue;
         MessageBlocks m_messageBlocks[A_CHAT_TYPE_MAX];
         MessageCounters m_messageCounters[A_CHAT_TYPE_MAX];
         MessageRepeats m_messageRepeats[A_CHAT_TYPE_MAX];
@@ -189,4 +191,4 @@ class Antispam : public AntispamInterface
         std::mutex m_messageMutex;
 };
 
-extern Antispam sAntispam;
+#define sAntispam Antispam::Instance()

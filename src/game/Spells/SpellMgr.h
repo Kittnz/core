@@ -672,6 +672,7 @@ class SpellMgr
 
     // Modifiers
     public:
+        static SpellMgr& Instance();
 
         void CheckUsedSpells(char const* table);
 
@@ -758,6 +759,5 @@ class SpellMgr
         SpellEntryMap      mSpellEntryMap;
 };
 
-extern SpellMgr sSpellMgr;
-
+#define sSpellMgr SpellMgr::Instance()
 #endif

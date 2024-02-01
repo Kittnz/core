@@ -34,7 +34,6 @@
 #include "Master.h"
 #include "PerfStats.h"
 #include "Database/DatabaseEnv.h"
-#include "PerformanceMonitor.h"
 
 // Target server framerate is 1000/WORLD_SLEEP_CONST
 #define WORLD_SLEEP_CONST 50
@@ -53,18 +52,20 @@ void WorldRunnable::operator()()
     // Aim for WORLD_SLEEP_CONST update times
     // If we update slower, update again immediately.
     // If we update faster, then slow down!
-    uint32 prevTime = WorldTimer::getMSTime();
+    auto prevTime = WorldTimer::getMSTime();
     uint32 currTime = 0u;
 
     // While we have not World::m_stopEvent, update the world
     while (!World::IsStopped())
     {
-        sPerfMonitor.FrameStart();
-        sPerfMonitor.Tick.Begin();
         ++World::m_worldLoopCounter;
 
         currTime = WorldTimer::getMSTime();
-        uint32 diff = WorldTimer::getMSTimeDiff(prevTime, currTime);
+        auto diff = WorldTimer::getMSTimeDiff(prevTime, currTime);
+        PerfStats::g_worldUpdateTime = diff;
+
+        if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
+            sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
 
         sWorld.SetLastDiff(diff);
 
@@ -87,7 +88,6 @@ void WorldRunnable::operator()()
         }
 
         sWorld.Update(diff);
-		sPerfMonitor.Tick.End();
 
         // diff is the actual time since last tick
         // updateTime is the actual time taken to update this round
@@ -98,15 +98,11 @@ void WorldRunnable::operator()()
         // account properly for the spikes which using a constant causes.
         // If a smoothing filter is desired, consider a moving average
         // or other simple filter.
-        uint32 updateTime = WorldTimer::getMSTimeDiffToNow(currTime);
+        auto updateTime = WorldTimer::getMSTimeDiffToNow(currTime);
         prevTime = currTime;
 
-        sPerfMonitor.WorldSleep.Begin();
         if (updateTime < WORLD_SLEEP_CONST)
             std::this_thread::sleep_for(std::chrono::milliseconds(WORLD_SLEEP_CONST - updateTime));
-        sPerfMonitor.WorldSleep.End();
-
-		sPerfMonitor.FrameEnd(diff);
     }
 
     sLog.outString("Shutting down world...");
@@ -122,7 +118,7 @@ void WorldRunnable::operator()()
     sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
 
     sLog.outString("Unloading all transports...");
-    sTransportMgr.Unload();
+    sTransportMgr->Unload();
 
     // End the database thread
     WorldDatabase.ThreadEnd(); // free mySQL thread resources

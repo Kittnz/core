@@ -32,7 +32,7 @@
 #include "Log.h"
 #include "Util.h"
 
-WeatherMgr sWeatherMgr;
+INSTANTIATE_SINGLETON_1(WeatherMgr);
 
 /// Weather sound defines ( only for 1.12 )
 enum WeatherSounds

@@ -70,7 +70,7 @@ class PlayerControlledAI: public PlayerAI
         ///== Fields =======================================
         ObjectGuid controllerGuid;
         uint32 uiGlobalCD;
-        turtle_vector<uint32, Category_AI> usableSpells;
+        std::vector<uint32> usableSpells;
         bool bIsMelee;
         bool isHealer;
         

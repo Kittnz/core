@@ -27,7 +27,7 @@
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
 
-WaypointManager sWaypointMgr;
+INSTANTIATE_SINGLETON_1(WaypointManager);
 
 void WaypointManager::Load()
 {

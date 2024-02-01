@@ -11,13 +11,19 @@ class DailyQuestHandler
 public:
     DailyQuestHandler() : m_nextResetTime(0), m_shouldCheckUpdate(CheckUpdateTimer) {}
 
+    static DailyQuestHandler* Instance()
+    {
+        static DailyQuestHandler instance;
+        return &instance;
+    }
+
     void LoadFromDB(bool quests);
     void Update(uint32 diff);
 
 private:
     time_t m_nextResetTime;
     uint32 m_shouldCheckUpdate;
-    turtle_vector<uint32, Category_DailyQuest> m_questIds;
+    std::vector<uint32> m_questIds;
 };
 
-extern DailyQuestHandler sDailyQuestHandler;
+#define sDailyQuestHandler DailyQuestHandler::Instance()

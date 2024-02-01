@@ -34,7 +34,7 @@ template<> struct BoundsTrait<VMAP::GroupModel>
 
 namespace VMAP
 {
-    bool IntersectTriangle(MeshTriangle const& tri, turtle_vector<Vector3, Category_VMap>::const_iterator points, G3D::Ray const& ray, float& distance)
+    bool IntersectTriangle(MeshTriangle const& tri, std::vector<Vector3>::const_iterator points, G3D::Ray const& ray, float& distance)
     {
         static float const EPS = 1e-5f;
 
@@ -90,7 +90,7 @@ namespace VMAP
     class TriBoundFunc
     {
     public:
-        TriBoundFunc(turtle_vector<Vector3, Category_VMap>& vert): vertices(vert.begin()) {}
+        TriBoundFunc(std::vector<Vector3>& vert): vertices(vert.begin()) {}
         void operator()(MeshTriangle const& tri, G3D::AABox& out) const
         {
             G3D::Vector3 lo = vertices[tri.idx0];
@@ -102,7 +102,7 @@ namespace VMAP
             out = G3D::AABox(lo, hi);
         }
     protected:
-        turtle_vector<Vector3, Category_VMap>::const_iterator const vertices;
+        std::vector<Vector3>::const_iterator const vertices;
     };
 
 // ===================== WmoLiquid ==================================
@@ -260,11 +260,8 @@ namespace VMAP
 
     void GroupModel::setMeshData(std::vector<Vector3>& vert, std::vector<MeshTriangle>& tri)
     {
-        vertices.resize(vert.size());
-        triangles.resize(tri.size());
-        memcpy(vertices.data(), vert.data(), vert.size() * sizeof(Vector3));
-        memcpy(triangles.data(), tri.data(), tri.size() * sizeof(MeshTriangle));
-
+        vertices.swap(vert);
+        triangles.swap(tri);
         TriBoundFunc bFunc(vertices);
         meshTree.build(triangles, bFunc);
     }
@@ -360,7 +357,7 @@ namespace VMAP
 
     struct GModelRayCallback
     {
-        GModelRayCallback(turtle_vector<MeshTriangle, Category_VMap> const& tris, turtle_vector<Vector3, Category_VMap> const& vert):
+        GModelRayCallback(std::vector<MeshTriangle> const& tris, std::vector<Vector3> const& vert):
                 vertices(vert.begin()), triangles(tris.begin()), hit(0) {}
         bool operator()(G3D::Ray const& ray, uint32 entry, float& distance, bool /*pStopAtFirstHit*/)
         {
@@ -368,8 +365,8 @@ namespace VMAP
             if (result)  ++hit;
             return hit;
         }
-        turtle_vector<Vector3, Category_VMap>::const_iterator vertices;
-        turtle_vector<MeshTriangle, Category_VMap>::const_iterator triangles;
+        std::vector<Vector3>::const_iterator vertices;
+        std::vector<MeshTriangle>::const_iterator triangles;
         uint32 hit;
     };
 
@@ -636,7 +633,7 @@ namespace VMAP
 
     struct GModelRayOrientedCallback
     {
-        GModelRayOrientedCallback(turtle_vector<MeshTriangle, Category_VMap> const& tris, turtle_vector<Vector3, Category_VMap> const& vert, bool isM2):
+        GModelRayOrientedCallback(std::vector<MeshTriangle> const& tris, std::vector<Vector3> const& vert, bool isM2):
                 vertices(vert.begin()), triangles(tris.begin()), minOutDist(-1), minInDist(-1), m2(isM2) {}
         bool operator()(G3D::Ray const& ray, uint32 entry, float& unusedD, bool /*pStopAtFirstHit*/)
         {
@@ -667,8 +664,8 @@ namespace VMAP
         {
             return (minOutDist < 0 && minInDist >= 0) || (0 <= minInDist && minInDist < minOutDist);
         }
-        turtle_vector<Vector3, Category_VMap>::const_iterator vertices;
-        turtle_vector<MeshTriangle, Category_VMap>::const_iterator triangles;
+        std::vector<Vector3>::const_iterator vertices;
+        std::vector<MeshTriangle>::const_iterator triangles;
         float minOutDist; // in -> out
         float minInDist;  // out-> in
         bool m2;

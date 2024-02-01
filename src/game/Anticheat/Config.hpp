@@ -162,8 +162,7 @@ class AnticheatConfig : public Config
         static const char *GetDetectorName(CheatType cheatType);
 };
 
+#define sAnticheatConfig MaNGOS::Singleton<Anticheat::AnticheatConfig>::Instance()
 }
-
-extern Anticheat::AnticheatConfig sAnticheatConfig;
 
 #endif /*!__CONFIG_HPP_*/

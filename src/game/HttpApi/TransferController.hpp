@@ -19,7 +19,7 @@ namespace HttpApi
 
         TransferController(std::string key);
 
-        void RegisterCommands(httplib::Server* server) override
+        void RegisterCommands(httplib::SSLServer* server) override
         {
             RegisterEndpoint<HttpMethod::Post>("/initiate-transfer", &InitTransferAction);
             RegisterEndpoint<HttpMethod::Post>("/proceed-transfer", &ProceedTransferAction);

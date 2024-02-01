@@ -17,7 +17,7 @@ namespace HttpApi
     {
     public:
 
-        void RegisterCommands(Server* server) override
+        void RegisterCommands(SSLServer* server) override
         {
             RegisterEndpoint<HttpMethod::Get>("/hi", &HiAction);
         }

@@ -101,7 +101,7 @@ class Opcodes
 
 };
 
-extern Opcodes opcodeTable;
+#define opcodeTable MaNGOS::Singleton<Opcodes>::Instance()
 
 /// Lookup opcode name for human understandable logging
 inline char const* LookupOpcodeName(uint16 id)

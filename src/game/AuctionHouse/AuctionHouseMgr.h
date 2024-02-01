@@ -202,6 +202,6 @@ class AuctionHouseMgr
         ItemMap             mAitems;
 };
 
-extern AuctionHouseMgr sAuctionMgr;
+#define sAuctionMgr MaNGOS::Singleton<AuctionHouseMgr>::Instance()
 
 #endif

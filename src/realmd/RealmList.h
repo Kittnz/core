@@ -63,6 +63,8 @@ class RealmList
     public:
         typedef std::map<std::string, Realm> RealmMap;
 
+        static RealmList& Instance();
+
         RealmList();
         ~RealmList() {}
 
@@ -82,7 +84,7 @@ class RealmList
         time_t   m_NextUpdateTime;
 };
 
-extern RealmList sRealmList;
+#define sRealmList RealmList::Instance()
 
 #endif
 /// @}

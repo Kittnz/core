@@ -74,7 +74,7 @@ void LoadSpellCacheData(GenericAISpell* spellToModify, SpellEntry const* spellIn
 
 struct GenericSpellMob : public ScriptedAI
 {
-	turtle_vector<GenericAISpell, Category_AI> m_uiSpells;
+	std::vector<GenericAISpell> m_uiSpells;
 	// Si 'true', le mob attaquera a distance tant qu'il aura du mana.
 	bool isDistanceCaster;
 	bool bCanFightInMelee = true;

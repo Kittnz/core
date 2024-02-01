@@ -1561,7 +1561,7 @@ class ScriptMgr
         std::atomic<int> m_scheduledScripts;
 };
 
-extern ScriptMgr sScriptMgr;
+#define sScriptMgr MaNGOS::Singleton<ScriptMgr>::Instance()
 
 uint32 GetAreaTriggerScriptId(uint32 triggerId);
 uint32 GetEventIdScriptId(uint32 eventId);

@@ -535,8 +535,8 @@ struct ItemPrototype
 
 struct ItemLocale
 {
-    turtle_vector<std::string, Category_ItemLocale> Name;
-    turtle_vector<std::string, Category_ItemLocale> Description;
+    std::vector<std::string> Name;
+    std::vector<std::string> Description;
 };
 
 #endif

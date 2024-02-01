@@ -51,7 +51,6 @@ class Master
         void clearOnlineAccounts();
 };
 
-extern Master sMaster;
-
+#define sMaster MaNGOS::Singleton<Master>::Instance()
 #endif
 /// @}

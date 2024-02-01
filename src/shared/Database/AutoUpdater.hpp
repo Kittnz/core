@@ -28,10 +28,18 @@ namespace DBUpdater
 
     class AutoUpdater final
     {
-    public:
+    private:
         AutoUpdater() = default;
+
+    public:
         AutoUpdater(const AutoUpdater&) = delete;
         AutoUpdater(AutoUpdater&&) = delete;
+
+        static AutoUpdater* Instance()
+        {
+            static AutoUpdater instance;
+            return &instance;
+        }
 
         bool ProcessUpdates();
 
@@ -44,9 +52,11 @@ namespace DBUpdater
         std::unordered_map<std::string, FileMigration> LoadFileMigrations(const std::filesystem::directory_entry& targetPath) const;
         std::unordered_map<std::string, Migration> LoadDatabaseMigrations(DatabaseType* targetDatabase) const;
 
+
         bool CalculateFileHash(const std::string& fileName, std::string& hexResult, std::optional<std::reference_wrapper<std::vector<uint8>>> fileData) const;
+
 
     };
 }
 
-extern DBUpdater::AutoUpdater sAutoUpdater;
+#define sAutoUpdater DBUpdater::AutoUpdater::Instance()

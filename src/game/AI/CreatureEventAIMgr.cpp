@@ -31,7 +31,7 @@
 #include "Conditions.h"
 #include "ScriptMgr.h"
 
-CreatureEventAIMgr sEventAIMgr;
+INSTANTIATE_SINGLETON_1(CreatureEventAIMgr);
 
 // -------------------
 void CreatureEventAIMgr::LoadCreatureEventAI_Events()

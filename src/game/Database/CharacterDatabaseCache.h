@@ -10,7 +10,7 @@ struct PetSpellCoodown
     uint64 time;
 };
 
-typedef turtle_vector<PetSpellCoodown, Category_Pet> PetSpellCDs;
+typedef std::vector<PetSpellCoodown> PetSpellCDs;
 
 // pet_spell
 struct PetSpellCache
@@ -18,7 +18,7 @@ struct PetSpellCache
     uint32 spell;
     uint8  active;
 };
-typedef turtle_vector<PetSpellCache, Category_Pet> PetSpells;
+typedef std::vector<PetSpellCache> PetSpells;
 
 // pet_aura
 struct PetAuraCache
@@ -32,7 +32,7 @@ struct PetAuraCache
     int32 basepoints[3];
     uint32 periodictime[3];
 };
-typedef turtle_vector<PetAuraCache, Category_Pet> PetAuras;
+typedef std::vector<PetAuraCache> PetAuras;
 
 
 struct CharacterPetCache
@@ -54,7 +54,7 @@ struct CharacterPetCache
     PetAuras    auras;
 };
 
-typedef turtle_vector<CharacterPetCache*, Category_Pet> CharPetVector;
+typedef std::vector<CharacterPetCache*> CharPetVector;
 typedef std::map<uint32 /*owner guid*/, CharPetVector> CharPetMap;
 typedef std::map<uint32 /*pet guid*/, CharacterPetCache*> PetGuidToPetMap;
 
@@ -64,6 +64,11 @@ class CharacterDatabaseCache
         CharacterDatabaseCache();
         ~CharacterDatabaseCache();
 
+        static CharacterDatabaseCache* instance()
+        {
+            static CharacterDatabaseCache* i = new CharacterDatabaseCache();
+            return i;
+        }
         void LoadAll(uint32 singlePetId = 0);
 
         void LoadCharacterPet(uint32 singlePetId);
@@ -89,7 +94,7 @@ class CharacterDatabaseCache
 
 };
 
-extern CharacterDatabaseCache sCharacterDatabaseCache;
+#define sCharacterDatabaseCache (*(CharacterDatabaseCache::instance()))
 
 
 #endif

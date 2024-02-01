@@ -8,8 +8,6 @@
 #include <memory>
 #include <sstream>
 
-DailyQuestHandler sDailyQuestHandler;
-
 void DailyQuestHandler::LoadFromDB(bool quests)
 {
     {

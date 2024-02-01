@@ -174,6 +174,6 @@ class WaypointManager
         WaypointPathMap m_pathSpecialMap;
 };
 
-extern WaypointManager sWaypointMgr;
+#define sWaypointMgr MaNGOS::Singleton<WaypointManager>::Instance()
 
 #endif

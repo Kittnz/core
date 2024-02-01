@@ -580,8 +580,3 @@ reversion_wrapper<T> reverse(T&& iterable) { return { iterable }; }
 */
 
 void thread_name(const char* name);
-
-namespace Memory
-{
-    uint64 GetProcessMemory();
-}

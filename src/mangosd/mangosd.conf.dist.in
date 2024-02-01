@@ -2096,9 +2096,3 @@ Suspicious.Npckilling.Enable = 1
 # For reference - walking speed is 8 units per second
 # Please note, that calculation is not precise!
 Suspicious.Movement.MovementSpeedThreshold = 100.0
-
-# performance tracking
-Perf.Enable = 1
-
-# report to logs DB. Time in seconds
-Perf.ReportInterval = 600

@@ -10,6 +10,11 @@
 class GuidObjectScaling
 {
 public:
+    static GuidObjectScaling* instance()
+    {
+        static GuidObjectScaling instance;
+        return &instance;
+    }
 
     void LoadFromDB()
     {
@@ -48,10 +53,10 @@ public:
     }
 
 
-    GuidObjectScaling() = default;
 private:
+    GuidObjectScaling() = default;
 
     std::unordered_map<uint64, float> m_guidScales;
 };
 
-extern GuidObjectScaling sGuidObjectScaling;
+#define sGuidObjectScaling GuidObjectScaling::instance()

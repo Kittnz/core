@@ -190,7 +190,8 @@ class WardenWin final : public Warden
         uint32 _dataOffset = 0;
         bool _triggerPrintSave = false;
 
-        turtle_vector<uint8, Category_Anticheat> _inDataBuffer;
+        std::vector<uint8> _inDataBuffer;
+
 
         std::unique_ptr<SharedDataCompact> _sharedData;
 
@@ -213,14 +214,14 @@ class WardenWin final : public Warden
         virtual void InitializeClient();
 
         template <typename T>
-        void Convert(T& val, turtle_vector<uint8, Category_Anticheat>& buffer, SharedDataField field)
+        void Convert(T& val, std::vector<uint8>& buffer, SharedDataField field)
         {
             val = *reinterpret_cast<T*>(&buffer[GetSharedDataFieldOffset(field)]);
         }
 
-        void ConvertPrintData(turtle_vector<uint8, Category_Anticheat>& buffer);
+        void ConvertPrintData(std::vector<uint8>& buffer);
         void SetOSVersion();
-        void FinalizeDataCapture(turtle_vector<uint8, Category_Anticheat>& fullBuffer);
+        void FinalizeDataCapture(std::vector<uint8>& fullBuffer);
         uint32 GetSharedDataFieldOffset(SharedDataField field);
 
         /* 
@@ -275,7 +276,7 @@ class WardenWin final : public Warden
 
         std::shared_ptr<WindowsScan> MakeDynamicDataScan(WardenWin* warden, uint32& offset,
             uint32& sizeLeft,
-            turtle_vector<uint8, Category_Anticheat>& output);
+            std::vector<uint8>& output);
 
     public:
         static void LoadScriptedScans();

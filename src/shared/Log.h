@@ -309,7 +309,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         std::string m_gmlog_filename_format;
 };
 
-#define sLog Log::Instance()
+#define sLog MaNGOS::Singleton<Log>::Instance()
 
 #define BASIC_LOG(...)                                  \
     do {                                                \

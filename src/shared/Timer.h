@@ -19,7 +19,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#pragma once
+#ifndef MANGOS_TIMER_H
+#define MANGOS_TIMER_H
 
 #include "Common.h"
 #include <ace/OS_NS_sys_time.h>
@@ -142,64 +143,4 @@ private:
     int32 i_expiryTime;
 };
 
-extern bool g_bEnableStatGather;
-
-namespace CPU
-{
-    extern uint64 qpc_freq;
-    extern uint32 qpc_counter;
-
-    uint64 QPC();
-    void Init();
-}
-
-class XTimer
-{
-protected:
-	uint64 qwStartTime;
-
-public:
-	constexpr XTimer() : qwStartTime(0) { }
-
-	inline void Start()
-	{
-		qwStartTime = CPU::QPC();
-	}
-
-	inline uint64		GetElapsed_ticks() const { return CPU::QPC() - qwStartTime; }
-	inline uint32		GetElapsed_ms() const { return uint32(GetElapsed_ticks() * 1000 / CPU::qpc_freq); }
-	inline float	    GetElapsed_sec() const { return float(double(GetElapsed_ticks()) / double(CPU::qpc_freq)); }
-};
-
-
-struct XStatTimer
-{
-    XTimer	T;
-    uint64	accum;
-	double	result;
-    uint32	count;
-
-    double MinResult;
-    double MaxResult;
-
-	constexpr	 XStatTimer() : result(0.0), accum(0), count(0), MinResult(0.0), MaxResult(0.0) {}
-	void		 FrameStart();
-	void		 FrameEnd();
-
-	inline void	 Begin() { if (!g_bEnableStatGather) return; count++; T.Start(); }
-	inline void	 End() { if (!g_bEnableStatGather) return; accum += T.GetElapsed_ticks(); }
-
-    // On Win32 ticks are unknown value, that should be divided to qpc_freq to get seconds
-    // On Linux ticks are nanoseconds
-	inline uint64	 GetElapsed_ticks() const { return accum; }
-
-	inline float GetElapsed_sec() const { return float(double(GetElapsed_ticks()) / double(CPU::qpc_freq)); }
-};
-
-class XScopeStatTimer
-{
-    XStatTimer& _timer;
-public:
-    XScopeStatTimer(XStatTimer& destTimer);
-	~XScopeStatTimer();
-};
+#endif

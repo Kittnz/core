@@ -22,7 +22,7 @@
 #include "Policies/SingletonImp.h"
 #include "Player.h"
 
-AuraRemovalManager sAuraRemovalMgr;
+INSTANTIATE_SINGLETON_1(AuraRemovalManager);
 
 void AuraRemovalManager::LoadFromDB()
 {

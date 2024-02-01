@@ -132,8 +132,8 @@ struct MovementGeneratorFactory : SelectableMovement
     MovementGenerator* Create(void *) const override;
 };
 
-using MovementGeneratorCreator = FactoryHolder<MovementGenerator,MovementGeneratorType>;
-using MovementGeneratorRegistry = FactoryHolder<MovementGenerator,MovementGeneratorType>::FactoryHolderRegistry;
-using MovementGeneratorRepository = FactoryHolder<MovementGenerator,MovementGeneratorType>::FactoryHolderRepository;
+typedef FactoryHolder<MovementGenerator,MovementGeneratorType> MovementGeneratorCreator;
+typedef FactoryHolder<MovementGenerator,MovementGeneratorType>::FactoryHolderRegistry MovementGeneratorRegistry;
+typedef FactoryHolder<MovementGenerator,MovementGeneratorType>::FactoryHolderRepository MovementGeneratorRepository;
 
 #endif
