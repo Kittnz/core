@@ -3,6 +3,8 @@
 #include "GuardAI.h"
 #include "PetAI.h"
 #include "Language.h"
+#include "MountManager.hpp"
+#include "CompanionManager.hpp"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -7506,8 +7508,44 @@ enum
 
 inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
 {
-    return (!pEntry->refunded && pEntry->charGuid == player->GetGUIDLow() && player->HasItemCount(pEntry->itemEntry) &&
-           (pEntry->dateUnix + sWorld.getConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW)) > time(nullptr));
+    if (!pEntry->refunded && pEntry->charGuid == player->GetGUIDLow() &&
+        (pEntry->dateUnix + sWorld.getConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW)) > time(nullptr))
+    {
+        if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry))
+        {
+            // Has the item - okay in any case
+            if (player->HasItemCount(pEntry->itemEntry))
+            {
+                return true;
+            }
+            // Skins - check if skin is applied
+            else if (pProto->Spells[0].SpellId == 56053)
+            {
+                if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(pEntry->itemEntry))
+                {
+                    uint8 skinId = player->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
+                    return skinId != 0 && player->GetByteValue(PLAYER_BYTES, 0) == skinId;
+                }
+            }
+            // Mounts - check if spell is learned
+            else if (pProto->Spells[0].SpellId == 46499)
+            {
+                if (auto spellIdOpt = sMountMgr->GetMountSpellId(pEntry->itemEntry))
+                {
+                    return player->HasSpell(spellIdOpt.value());
+                }
+            }
+            // Pets - check if spell is learned
+            else if (pProto->Spells[0].SpellId == 46498)
+            {
+                if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(pEntry->itemEntry))
+                {
+                    return player->HasSpell(spellIdOpt.value());
+                }
+            }
+        }
+    }
+    return false;
 }
 
 static std::map<uint32 /*low guid*/, uint32 /*shopId*/> g_refundGossipState;
@@ -7557,18 +7595,61 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
             {
                 if (CanRefundShopItem(pEntry, pPlayer))
                 {
-                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
-                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true);
-                    if (pPlayer->GetItemCount(pEntry->itemEntry) < countBefore)
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry);
+
+                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry, true);
+                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false, true);
+
+                    // Skins - unapply skin
+                    if (pProto->Spells[0].SpellId == 56053)
                     {
-                        pEntry->refunded = true;
-                        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", pEntry->itemPrice, pPlayer->GetSession()->GetAccountId());
-                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
-                        sLog.outString("[SHOP] Player %u refunded shop id %u for %u coins through refund npc.", pPlayer->GetGUIDLow(), shopId, pEntry->itemPrice);
-                        ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_REFUNDED, shopId);
+                        if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(pEntry->itemEntry))
+                        {
+                            uint8 skinId = pPlayer->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
+                            if (skinId != 0 && pPlayer->GetByteValue(PLAYER_BYTES, 0) == skinId)
+                            {
+                                pPlayer->SetByteValue(PLAYER_BYTES, 0, 0);
+                                pPlayer->SetDisplayId(15435);
+                                pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() {pPlayer->DeMorph(); }, 1000);
+                            }
+                        }
                     }
-                    else
+                    // Mounts - unlearn the spell
+                    else if (pProto->Spells[0].SpellId == 46499)
+                    {
+                        if (auto spellIdOpt = sMountMgr->GetMountSpellId(pEntry->itemEntry))
+                        {
+                            pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                            pPlayer->RemoveAurasDueToSpellByCancel(spellIdOpt.value());
+                        }
+                    }
+                    // Pets - unlearn the spells
+                    else if (pProto->Spells[0].SpellId == 46498)
+                    {
+                        if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(pEntry->itemEntry))
+                        {
+                            pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                            if (Pet* pPet = pPlayer->GetMiniPet())
+                                pPet->DoKillUnit();
+                        }
+                    }
+                    // Illusions - demorph
+                    else if (pProto->Spells[0].SpellId == 46003)
+                    {
+                        pPlayer->DeMorph();
+                    }
+                    else if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
+                    {
                         ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
+                        pPlayer->CLOSE_GOSSIP_MENU();
+                        return true;
+                    }
+
+                    pEntry->refunded = true;
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", pEntry->itemPrice, pPlayer->GetSession()->GetAccountId());
+                    LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+                    sLog.outString("[SHOP] Player %u refunded shop id %u for %u coins through refund npc.", pPlayer->GetGUIDLow(), shopId, pEntry->itemPrice);
+                    ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_REFUNDED, shopId);
                 }
                 else
                     ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_NOT_ELIGIBLE);
