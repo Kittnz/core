@@ -1062,6 +1062,11 @@ enum MangosStrings
     LANG_NPC_MOTION_TYPE                = 1509,
     // Room for more Level 2              1510-1599 not used
 
+    LANG_SHOP_ITEM_NOT_ELIGIBLE         = 1604,
+    LANG_SHOP_ITEM_NOT_FOUND            = 1605,
+    LANG_SHOP_ITEM_REFUNDED             = 1606,
+    LANG_SHOP_ITEM_CANT_REMOVE          = 1607,
+
     // Ticket entries
     LANG_COMMAND_TICKETPLAYERABANDON    = 2002,
     LANG_COMMAND_TICKETCLOSED           = 2003,

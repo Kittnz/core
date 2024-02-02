@@ -2090,9 +2090,11 @@ Suspicious.Movement.Enable = 1
 Suspicious.Fishing.Enable = 1
 Suspicious.Npckilling.Enable = 1
 
-
-
 # If player reach speed higher then this - it will be reported
 # For reference - walking speed is 8 units per second
 # Please note, that calculation is not precise!
 Suspicious.Movement.MovementSpeedThreshold = 100.0
+
+# Shop.RefundWindow - how long players have to request refund of shop items after buying them (in seconds)
+Shop.RefundWindow = 2592000
+
