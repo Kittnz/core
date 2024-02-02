@@ -2,6 +2,7 @@
 #include "Utilities/EventProcessor.h"
 #include "GuardAI.h"
 #include "PetAI.h"
+#include "Language.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -7497,6 +7498,99 @@ bool QuestAccept_npc_daily_hk_dk(Player* pPlayer, Creature* pQuestGiver, Quest c
     return false;
 }
 
+enum
+{
+    GOSSIP_WHICH_ITEM = 61905,
+    GOSSIP_CONFIRM_REFUND = 61906,
+};
+
+inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
+{
+    return (!pEntry->refunded && pEntry->charGuid == player->GetGUIDLow() && player->HasItemCount(pEntry->itemEntry) &&
+           (pEntry->dateUnix + sWorld.getConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW)) > time(nullptr));
+}
+
+static std::map<uint32 /*low guid*/, uint32 /*shopId*/> g_refundGossipState;
+
+bool GossipHello_ShopRefundNPC(Player* player, Creature* creature)
+{
+    auto history = sObjectMgr.GetShopLogEntries(player->GetSession()->GetAccountId());
+
+    uint32 count = 0;
+    for (auto itr : history)
+    {
+        if (CanRefundShopItem(itr, player))
+        {
+            if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr->itemEntry))
+            {
+                std::string const* name = &pProto->Name1;
+                int loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+                if (loc_idx >= 0)
+                {
+                    ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->ItemId);
+                    if (il)
+                    {
+                        if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
+                            name = &il->Name[loc_idx];
+                    }
+                }
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, name->c_str(), GOSSIP_SENDER_MAIN, itr->id);
+
+                if (++count >= GOSSIP_MAX_MENU_ITEMS)
+                    break;
+            }
+        }
+    }
+
+    player->SEND_GOSSIP_MENU(GOSSIP_WHICH_ITEM, creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    uint32& shopId = g_refundGossipState[pPlayer->GetGUIDLow()];
+    if (shopId)
+    {
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        {
+            if (ShopLogEntry* pEntry = sObjectMgr.GetShopLogEntry(shopId))
+            {
+                if (CanRefundShopItem(pEntry, pPlayer))
+                {
+                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
+                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true);
+                    if (pPlayer->GetItemCount(pEntry->itemEntry) < countBefore)
+                    {
+                        pEntry->refunded = true;
+                        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", pEntry->itemPrice, pPlayer->GetSession()->GetAccountId());
+                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+                        sLog.outString("[SHOP] Player %u refunded shop id %u for %u coins through refund npc.", pPlayer->GetGUIDLow(), shopId, pEntry->itemPrice);
+                        ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_REFUNDED, shopId);
+                    }
+                    else
+                        ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
+                }
+                else
+                    ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_NOT_ELIGIBLE);
+            }
+            else
+                ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_NOT_FOUND, shopId);
+        }
+
+        shopId = 0;
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    else
+    {
+        shopId = uiAction;
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "No", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 0);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_CONFIRM_REFUND, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -8433,4 +8527,10 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_daily_hk_dk";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_daily_hk_dk;
     newscript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_shop_refund";
+    pNewScript->pGossipHello = &GossipHello_ShopRefundNPC;
+    pNewScript->pGossipSelect = &GossipSelect_ShopRefundNPC;
+    pNewScript->RegisterSelf();
 }

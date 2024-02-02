@@ -1435,6 +1435,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_SEA_NETWORK, "NiHao", false);
     // Festive things:
     setConfig(CONFIG_BOOL_HOLIDAY_EVENT, "HolidayEvent", true);
+    // Shop:
+    setConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW, "Shop.RefundWindow", MONTH);
 
     if (getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
