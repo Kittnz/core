@@ -1,5 +1,5 @@
 -- Dispatch Commander Metz should finish Writ of Safe Passage.
-INSERT INTO `creature_involvedrelation` (`id`, `quest`) VALUES (16212, 9165);
+REPLACE INTO `creature_involvedrelation` (`id`, `quest`) VALUES (16212, 9165);
 
 -- Change Battered Viking Shield to green quality
 UPDATE item_template SET Quality = 2 WHERE entry = 9403;
