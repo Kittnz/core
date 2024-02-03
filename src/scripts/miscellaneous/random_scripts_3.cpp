@@ -7661,6 +7661,10 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                         return true;
                     }
 
+                    //Remove existing xmogs that reference refunded item if wearable, remove xmog history.
+                    pPlayer->GetTransmogMgr()->RemoveFromCollection(pEntry->itemEntry);
+
+
                     pEntry->refunded = true;
                     LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", pEntry->itemPrice, pPlayer->GetSession()->GetAccountId());
                     LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
