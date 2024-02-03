@@ -50,6 +50,8 @@ class TransmogMgr
         void RemoveFromCollection(uint32 itemId);
         bool ItemIsValidTransmogForDest(uint32 item, ItemPrototype const* destItemProto);
 
+        void RemoveTransmog(Item* item);
+
         TransmogContainer GetTransmogs() { return _transmogs; }
         
 		std::vector<uint32> GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);

@@ -370,6 +370,14 @@ std::string TransmogMgr::GetTransmogStatus()
 	return status;
 }
 
+void TransmogMgr::RemoveTransmog(Item* item)
+{
+	sObjectMgr.DeleteItemTransmogrifyTemplate(item->GetTransmogrification());
+
+    item->SetTransmogrification(0);
+    item->SetState(ITEM_CHANGED, _owner);
+}
+
 bool TransmogMgr::HasTransmog(uint32 newItemId)
 {
 
