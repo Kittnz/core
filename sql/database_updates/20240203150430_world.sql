@@ -25,3 +25,6 @@ replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `grou
 (41303, 68069, 25, 0, 1, 1, 0),
 (41303, 51217, 25, 0, 15, 15, 0),
 (41303, 81110, 25, 0, 1, 1, 0);
+
+-- Solid Chest in the Tanaris (93.8, 66.2) is now available for looting.
+update gameobject set position_x = -7994.63, position_y = -5415.51, position_z = 1.12023 where guid = 62962;
