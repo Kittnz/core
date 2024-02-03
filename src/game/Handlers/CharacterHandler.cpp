@@ -928,7 +928,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         
 
     // Chinese Lunar Festivale
-    if (/*sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && */!pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
+    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
     {
         uint32 itemEntry = 91790;
         std::string subject = "龙年新年礼物";
