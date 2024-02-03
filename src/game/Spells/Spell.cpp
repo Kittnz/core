@@ -6305,6 +6305,14 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (int32(m_casterUnit->GetHealth()) <= dmg)
                         return SPELL_FAILED_FIZZLE;
                 }
+                else if (m_spellInfo->Id == 50100) // Lunar Festival Lanters
+                {
+                    if (m_caster->ToPlayer()->InBattleGround() || m_caster->ToPlayer()->IsInCombat())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't use this item on the battleground or in combat.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
                 else if (m_spellInfo->Id == 46060) // Fishing Boat
                 {
                     if (!m_casterUnit->IsInWater() || m_casterUnit->IsUnderwater())
