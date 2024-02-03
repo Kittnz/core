@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
  * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
@@ -927,17 +927,18 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     }      
         
 
-    //temp
-    if (pCurrChar->GetLevel() >= 20 && pCurrChar->GetLevel() <= 35 && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasItemCount(81205, 1, true))
+    // Chinese Lunar Festivale
+    if (/*sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && */!pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
     {
-        uint32 itemEntry = 81205;
-        std::string subject = "Winds of Discovery";
-        std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
+        uint32 itemEntry = 91790;
+        std::string subject = "龙年新年礼物";
+        std::string message = "春节快乐！";
         Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
         ToMailItem->SaveToDB();
         MailDraft(subject, sObjectMgr.CreateItemText(message))
             .AddItem(ToMailItem)
             .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+        pCurrChar->SetCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT);
     }
 
     // Update warden speeds

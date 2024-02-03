@@ -1859,6 +1859,29 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 50100: // Lunar Lanterns
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        bool blue = 0;
+                        float dis{ 0.1F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        float  p_r, o_r;
+                        p_r = m_caster->GetOrientation();
+                        o_r = remainderf(p_r + M_PI_F, M_PI_F * 2.0f);
+                        float rot2 = sin(o_r / 2);
+                        float rot3 = cos(o_r / 2);
+
+                        blue = (0 + urand(0, 1));
+                        
+                        m_caster->SummonGameObject(blue ? 2004261 : 2004263, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 600, true);
+                        break;
+                    }
+                }
                 case 45840: // Toy Train Set
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -2114,6 +2137,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             case 50437: displayid = 4923;   break; // Naga Explorer
                             case 50438: displayid = 11263;  break; // Naga Siren 
                             case 80175: displayid = 6292;   break; // Bronze Whelpling
+                            case 91792: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
                             case 50408: displayid = bIsMale ? 150 : 876;  break; // Dryad
                             case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
                             case 80694: // Scourge
