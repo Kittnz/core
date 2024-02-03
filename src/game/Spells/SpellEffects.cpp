@@ -2062,6 +2062,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                             if (bytes > 0)
                             {
+                                // Store original skin color value for refunds of skins.
+                                m_caster->ToPlayer()->SetPlayerVariable(PlayerVariables::OriginalSkinByte, std::to_string(m_caster->GetByteValue(PLAYER_BYTES, 0)));
+                                
                                 m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
                                 m_caster->ToPlayer()->SetDisplayId(15435);
 

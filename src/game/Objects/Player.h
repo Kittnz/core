@@ -1059,7 +1059,8 @@ enum class PlayerVariables : uint32
     HardcoreMessagesEnabled = 1,
     HardcoreMessageLevel,
     UnlockedSpecTabs,
-    FreeTalentResets
+    FreeTalentResets,
+    OriginalSkinByte
 };
 
 class Player final: public Unit
