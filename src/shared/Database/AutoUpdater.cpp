@@ -250,9 +250,9 @@ namespace DBUpdater
 
             sLog.out(LOG_AUTOUPDATER, "Starting CN-only Migrations.");
 
-            directory_entry cnLogonPath { logonUpdatePath / "cn" };
-            directory_entry cnCharPath{ charUpdatePath / "cn" };
-            directory_entry cnWorldPath{ worldUpdatePath / "cn" };
+            directory_entry cnLogonPath { logonUpdatePath.path() / "cn" };
+            directory_entry cnCharPath{ charUpdatePath.path() / "cn" };
+            directory_entry cnWorldPath{ worldUpdatePath.path() / "cn" };
 
 
             if (!ProcessTargetUpdates(cnLogonPath, &LoginDatabase))
