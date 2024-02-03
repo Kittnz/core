@@ -21,7 +21,7 @@ REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc1`, `name_loc2`, `na
 
 UPDATE `item_template` SET `name` = 'Blackstone Dragon Guard', `description` = 'Dragonhawks are among the deadliest known predators. They are able to spot prey from great distances, rush in, and rend with both talon and beak.' WHERE `entry` = 81156;
 
-REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_loc8`, `description_loc0`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `description_loc7`, `description_loc8`) VALUES (81156, 'Blackstone Dragon Guard', '', '', '', '黑色祥瑞龙鹰', '', '', '', '', '', NULL, NULL, NULL, '从强大的将军德拉克萨斯那里取下的翅膀，被制成可以作为骑乘坐骑的工艺品。', NULL, NULL, NULL, NULL);
+REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_loc8`, `description_loc0`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `description_loc7`, `description_loc8`) VALUES (81156, 'Blackstone Dragon Guard', '', '', '', '红色祥瑞龙鹰', '', '', '', '', '', NULL, NULL, NULL, '从强大的将军德拉克萨斯那里取下的翅膀，被制成可以作为骑乘坐骑的工艺品。', NULL, NULL, NULL, NULL);
 
 UPDATE `creature_template` SET `scale` = 0.4 WHERE `entry` = 14756;
 
