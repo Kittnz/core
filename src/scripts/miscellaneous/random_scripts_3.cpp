@@ -7597,7 +7597,7 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                 {
                     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry);
 
-                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry, true);
+                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
                     pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false, true);
 
                     // Skins - unapply skin
@@ -7654,7 +7654,7 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                     {
                         pPlayer->DeMorph();
                     }
-                    else if (pPlayer->GetItemCount(pEntry->itemEntry, true) == countBefore)
+                    else if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
                     {
                         ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
                         pPlayer->CLOSE_GOSSIP_MENU();
