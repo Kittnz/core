@@ -7608,7 +7608,23 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                             uint8 skinId = pPlayer->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
                             if (skinId != 0 && pPlayer->GetByteValue(PLAYER_BYTES, 0) == skinId)
                             {
-                                pPlayer->SetByteValue(PLAYER_BYTES, 0, 0);
+                                uint8 originalSkinId = 0;
+
+                                auto originalSkinOpt = pPlayer->GetPlayerVariable(PlayerVariables::OriginalSkinByte);
+
+                                if (originalSkinOpt)
+                                {
+                                    int32 skin = 0;
+                                    try {
+                                        skin = std::stoi(originalSkinOpt.value());
+                                    }
+                                    catch (...) {}
+
+                                    if (skin > 0)
+                                        originalSkinId = static_cast<uint8>(skin);
+                                }
+
+                                pPlayer->SetByteValue(PLAYER_BYTES, 0, originalSkinId);
                                 pPlayer->SetDisplayId(15435);
                                 pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() {pPlayer->DeMorph(); }, 1000);
                             }
@@ -7638,7 +7654,7 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                     {
                         pPlayer->DeMorph();
                     }
-                    else if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
+                    else if (pPlayer->GetItemCount(pEntry->itemEntry, true) == countBefore)
                     {
                         ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
                         pPlayer->CLOSE_GOSSIP_MENU();
