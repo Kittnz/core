@@ -243,6 +243,28 @@ namespace DBUpdater
         if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase))
             return false;
 
+
+        
+        if (sConfig.GetBoolDefault("NiHao", false))
+        {
+
+            sLog.out(LOG_AUTOUPDATER, "Starting CN-only Migrations.");
+
+            directory_entry cnLogonPath { logonUpdatePath / "cn" };
+            directory_entry cnCharPath{ charUpdatePath / "cn" };
+            directory_entry cnWorldPath{ worldUpdatePath / "cn" };
+
+
+            if (!ProcessTargetUpdates(cnLogonPath, &LoginDatabase))
+                return false;
+
+            if (!ProcessTargetUpdates(cnCharPath, &CharacterDatabase))
+                return false;
+
+            if (!ProcessTargetUpdates(cnWorldPath, &WorldDatabase))
+                return false;
+        }
+
         return true;
 
     }
