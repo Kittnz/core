@@ -7595,6 +7595,81 @@ bool GossipHello_ShopRefundNPC(Player* player, Creature* creature)
     return true;
 }
 
+// return true if item is consumable, and its effect was removed
+// in that case there is no need to remove actual item from inventory
+// this fixes case where you've bought same consumable item twice,
+// and used it once, and refunding it ends up deleting both
+bool RemoveSpecialEffectOnRefund(uint32 itemId, uint32 spellId, Player* pPlayer)
+{
+    // Skins - unapply skin
+    if (spellId == 56053)
+    {
+        if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(itemId))
+        {
+            uint8 skinId = pPlayer->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
+            if (skinId != 0 && pPlayer->GetByteValue(PLAYER_BYTES, 0) == skinId)
+            {
+                uint8 originalSkinId = 0;
+
+                auto originalSkinOpt = pPlayer->GetPlayerVariable(PlayerVariables::OriginalSkinByte);
+
+                if (originalSkinOpt)
+                {
+                    int32 skin = 0;
+                    try {
+                        skin = std::stoi(originalSkinOpt.value());
+                    }
+                    catch (...) {}
+
+                    if (skin > 0)
+                        originalSkinId = static_cast<uint8>(skin);
+                }
+
+                pPlayer->SetByteValue(PLAYER_BYTES, 0, originalSkinId);
+                pPlayer->SetDisplayId(15435);
+                pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() {pPlayer->DeMorph(); }, 1000);
+                return false; // non consumable
+            }
+        }
+    }
+    // Mounts - unlearn the spell
+    else if (spellId == 46499)
+    {
+        if (auto spellIdOpt = sMountMgr->GetMountSpellId(itemId))
+        {
+            if (pPlayer->HasSpell(spellIdOpt.value()))
+            {
+                pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                pPlayer->RemoveAurasDueToSpellByCancel(spellIdOpt.value());
+                return true; // consumable
+            }
+        }
+    }
+    // Pets - unlearn the spells
+    else if (spellId == 46498)
+    {
+        if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(itemId))
+        {
+            if (pPlayer->HasSpell(spellIdOpt.value()))
+            {
+                pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                if (Pet* pPet = pPlayer->GetMiniPet())
+                    pPet->DoKillUnit();
+                return true; // consumable
+            }
+        }
+    }
+    // Illusions - demorph
+    else if (spellId == 46003)
+    {
+        pPlayer->DeMorph();
+        return false; // non consumable
+    }
+
+    // no special handling, make sure item is removed
+    return false;
+}
+
 bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32& shopId = g_refundGossipState[pPlayer->GetGUIDLow()];
@@ -7608,68 +7683,17 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                 {
                     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry);
 
-                    uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
-                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false);
-
-                    // Skins - unapply skin
-                    if (pProto->Spells[0].SpellId == 56053)
+                    if (!RemoveSpecialEffectOnRefund(pEntry->itemEntry, pProto->Spells[0].SpellId, pPlayer))
                     {
-                        if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(pEntry->itemEntry))
+                        uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
+                        pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false);
+
+                        if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
                         {
-                            uint8 skinId = pPlayer->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
-                            if (skinId != 0 && pPlayer->GetByteValue(PLAYER_BYTES, 0) == skinId)
-                            {
-                                uint8 originalSkinId = 0;
-
-                                auto originalSkinOpt = pPlayer->GetPlayerVariable(PlayerVariables::OriginalSkinByte);
-
-                                if (originalSkinOpt)
-                                {
-                                    int32 skin = 0;
-                                    try {
-                                        skin = std::stoi(originalSkinOpt.value());
-                                    }
-                                    catch (...) {}
-
-                                    if (skin > 0)
-                                        originalSkinId = static_cast<uint8>(skin);
-                                }
-
-                                pPlayer->SetByteValue(PLAYER_BYTES, 0, originalSkinId);
-                                pPlayer->SetDisplayId(15435);
-                                pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() {pPlayer->DeMorph(); }, 1000);
-                            }
+                            ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
+                            pPlayer->CLOSE_GOSSIP_MENU();
+                            return true;
                         }
-                    }
-                    // Mounts - unlearn the spell
-                    else if (pProto->Spells[0].SpellId == 46499)
-                    {
-                        if (auto spellIdOpt = sMountMgr->GetMountSpellId(pEntry->itemEntry))
-                        {
-                            pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
-                            pPlayer->RemoveAurasDueToSpellByCancel(spellIdOpt.value());
-                        }
-                    }
-                    // Pets - unlearn the spells
-                    else if (pProto->Spells[0].SpellId == 46498)
-                    {
-                        if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(pEntry->itemEntry))
-                        {
-                            pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
-                            if (Pet* pPet = pPlayer->GetMiniPet())
-                                pPet->DoKillUnit();
-                        }
-                    }
-                    // Illusions - demorph
-                    else if (pProto->Spells[0].SpellId == 46003)
-                    {
-                        pPlayer->DeMorph();
-                    }
-                    else if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
-                    {
-                        ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
-                        pPlayer->CLOSE_GOSSIP_MENU();
-                        return true;
                     }
 
                     //Remove existing xmogs that reference refunded item if wearable, remove xmog history.
