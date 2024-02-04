@@ -6312,6 +6312,13 @@ SpellCastResult Spell::CheckCast(bool strict)
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't use this item on the battleground or in combat.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
+
+                    float range = 20.f;
+                    if (m_caster->FindNearestGameObject(2004261, range) || m_caster->FindNearestGameObject(2004263, range))
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You can't use this close to other lanterns.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
                 }
                 else if (m_spellInfo->Id == 46060) // Fishing Boat
                 {
