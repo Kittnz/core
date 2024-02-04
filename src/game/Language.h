@@ -1066,6 +1066,8 @@ enum MangosStrings
     LANG_SHOP_ITEM_NOT_FOUND            = 1605,
     LANG_SHOP_ITEM_REFUNDED             = 1606,
     LANG_SHOP_ITEM_CANT_REMOVE          = 1607,
+    LANG_YES                            = 1608,
+    LANG_NO                             = 1609,
 
     // Ticket entries
     LANG_COMMAND_TICKETPLAYERABANDON    = 2002,
