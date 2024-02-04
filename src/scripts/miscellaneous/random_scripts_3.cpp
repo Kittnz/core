@@ -7609,7 +7609,7 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
                     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry);
 
                     uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
-                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false, true);
+                    pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false);
 
                     // Skins - unapply skin
                     if (pProto->Spells[0].SpellId == 56053)
