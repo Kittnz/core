@@ -5,7 +5,7 @@ replace into mangos_string (entry, content_default, content_loc4) values
 
 ('50000', 'Delete your WDB folder regularly. This is your game cache, and deleting it can often fix minor game glitches. Always try this before submitting a ticket.', '定期删除WDB文件夹。这是游戏缓存，删除它通常可以修复一些小的游戏故障。在提交工单之前，请务必尝试此方法。'),
 
-('50001', 'Love is in the air! To show our love, our in-game shop will be hosting a sale starting February 2nd, lasting until February 16th! There may be some limited time items... so grab them while you can!', '大家新年好，为了庆祝中国新年，我们将持续开放促销活动至2月19日，希望你们在这玩的开心'),
+('50001', 'Love is in the air! To show our love, our in-game shop will be hosting a sale starting February 2nd, lasting until February 16th! There may be some limited time items... so grab them while you can!', '大家新年好，为了庆祝中国新年，我们将持续开放促销活动至2月25日，希望你们在这玩的开心。'),
 
 ('50002', 'Keep up to date with the news and join our Discord server!', '保持与最新消息的同步，并加入我们的KOOK服务器！'),
 
