@@ -3014,6 +3014,7 @@ public:
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
         void UpdateItemDurability(Item* pItem, uint32 durability);
+        void RemoveTransmogsToItem(uint32 itemId);
 
         TransmogMgr* GetTransmogMgr() { return _transmogMgr; }
     private:
