@@ -6084,6 +6084,105 @@ void Player::UpdateItemDurability(Item* pItem, uint32 durability)
         pItem->SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
 }
 
+void Player::RemoveTransmogsToItem(uint32 itemId)
+{
+    //Remove existing xmogs that reference refunded item if wearable, remove xmog history.
+    GetTransmogMgr()->RemoveFromCollection(itemId);
+
+    for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            if (pItem->GetTransmogrification())
+            {
+                auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                if (tmogProto && tmogProto->SourceItemId == itemId)
+                    GetTransmogMgr()->RemoveTransmog(pItem);
+            }
+        }
+    }
+
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            if (pItem->GetTransmogrification())
+            {
+                auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                if (tmogProto && tmogProto->SourceItemId == itemId)
+                    GetTransmogMgr()->RemoveTransmog(pItem);
+            }
+        }
+    }
+
+
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (Item* pItem = GetItemByPos(i, j))
+                {
+                    if (pItem->GetTransmogrification())
+                    {
+                        auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                        if (tmogProto && tmogProto->SourceItemId == itemId)
+                            GetTransmogMgr()->RemoveTransmog(pItem);
+                    }
+                }
+            }
+        }
+    }
+
+    for (uint32 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            if (pItem->GetTransmogrification())
+            {
+                auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                if (tmogProto && tmogProto->SourceItemId == itemId)
+                    GetTransmogMgr()->RemoveTransmog(pItem);
+            }
+        }
+    }
+
+    // In bank bags
+    for (uint32 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+    {
+        if (Bag const* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (Item* pItem = pBag->GetItemByPos(j))
+                {
+                    if (pItem->GetTransmogrification())
+                    {
+                        auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                        if (tmogProto && tmogProto->SourceItemId == itemId)
+                            GetTransmogMgr()->RemoveTransmog(pItem);
+                    }
+                }
+            }
+        }
+    }
+
+    //buyback slots
+    for (uint32 i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
+    {
+        if (Item* pItem = GetItemFromBuyBackSlot(i))
+        {
+            if (pItem->GetTransmogrification())
+            {
+                auto tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification());
+                if (tmogProto && tmogProto->SourceItemId == itemId)
+                    GetTransmogMgr()->RemoveTransmog(pItem);
+            }
+        }
+    }
+}
+
 void Player::ScheduleRepopAtGraveyard()
 {
     if (IsInWorld() && GetSession()->IsConnected())
