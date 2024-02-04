@@ -7511,6 +7511,17 @@ inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
     if (!pEntry->refunded && pEntry->charGuid == player->GetGUIDLow() &&
         (pEntry->dateUnix + sWorld.getConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW)) > time(nullptr))
     {
+
+        auto shopEntry = sObjectMgr.GetShopEntryInfo(pEntry->itemEntry);
+        //no skins illu's or fashion in auto refund.
+        if (!shopEntry || (shopEntry->Category == 2 || shopEntry->Category == 7 || shopEntry->Category == 8))
+            return false;
+
+
+        //brainwashing device
+        if (shopEntry->Item == 51715)
+            return false;
+
         if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry))
         {
             // Has the item - okay in any case
