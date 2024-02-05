@@ -7541,7 +7541,7 @@ inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
             // Mounts - check if spell is learned
             else if (pProto->Spells[0].SpellId == 46499)
             {
-                if (auto spellIdOpt = sMountMgr->GetMountSpellId(pEntry->itemEntry))
+                if (auto spellIdOpt = sMountMgr.GetMountSpellId(pEntry->itemEntry))
                 {
                     return player->HasSpell(spellIdOpt.value());
                 }
@@ -7549,7 +7549,7 @@ inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
             // Pets - check if spell is learned
             else if (pProto->Spells[0].SpellId == 46498)
             {
-                if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(pEntry->itemEntry))
+                if (auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(pEntry->itemEntry))
                 {
                     return player->HasSpell(spellIdOpt.value());
                 }
@@ -7635,7 +7635,7 @@ bool RemoveSpecialEffectOnRefund(uint32 itemId, uint32 spellId, Player* pPlayer)
     // Mounts - unlearn the spell
     else if (spellId == 46499)
     {
-        if (auto spellIdOpt = sMountMgr->GetMountSpellId(itemId))
+        if (auto spellIdOpt = sMountMgr.GetMountSpellId(itemId))
         {
             if (pPlayer->HasSpell(spellIdOpt.value()))
             {
@@ -7648,7 +7648,7 @@ bool RemoveSpecialEffectOnRefund(uint32 itemId, uint32 spellId, Player* pPlayer)
     // Pets - unlearn the spells
     else if (spellId == 46498)
     {
-        if (auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(itemId))
+        if (auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(itemId))
         {
             if (pPlayer->HasSpell(spellIdOpt.value()))
             {
