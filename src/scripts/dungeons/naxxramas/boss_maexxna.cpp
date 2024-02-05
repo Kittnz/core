@@ -26,6 +26,8 @@ EndScriptData */
 #include <random>
 #include <algorithm>
 #include <array>
+#include "Geometry.h"
+
 enum
 {
     // from cmangos, unimplemented
@@ -146,6 +148,9 @@ struct mob_webwrapAI : public ScriptedAI
     }
 };
 
+static G3D::Vector2 const WEB_BARRIER_A(3442.64f, -3875.92f);
+static G3D::Vector2 const WEB_BARRIER_B(3458.14f, -3849.25f);
+
 struct boss_maexxnaAI : public ScriptedAI
 {
     boss_maexxnaAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -193,10 +198,23 @@ struct boss_maexxnaAI : public ScriptedAI
         wraps2.clear();
     }
 
-    void Aggro(Unit* pWho) override
+    void EnterCombat(Unit* pWho) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MAEXXNA, IN_PROGRESS);
+
+        auto const& pList = m_creature->GetMap()->GetPlayers();
+        for (auto const& itr : pList)
+        {
+            if (Player* pPlayer = itr.getSource())
+            {
+                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() &&
+                    Geometry::IsPointLeftOfLine(WEB_BARRIER_A, WEB_BARRIER_B, pPlayer->GetPosition()))
+                {
+                    pPlayer->NearTeleportTo(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), pPlayer->GetOrientation());
+                }
+            }
+        }
     }
 
     void JustDied(Unit* pKiller) override
