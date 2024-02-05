@@ -877,7 +877,7 @@ namespace Memory
         stat_stream.close();
 
         long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024; // in case x86-64 is configured to use 2MB pages
-        return rss * page_size_kb;
+        return rss * page_size_kb * 1000;
 #endif
         return 0;
 	}
