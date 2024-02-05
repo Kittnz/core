@@ -24694,7 +24694,7 @@ void Player::AwardTitle(int8 title)
         if (HasTitle(title)) {
 
             m_playerTitles.erase(title);
-            CharacterDatabase.DirectPExecute("DELETE FROM character_titles WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
+            CharacterDatabase.PExecute("DELETE FROM character_titles WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
             ChangeTitle(0);
             return;
         }
@@ -24703,7 +24703,7 @@ void Player::AwardTitle(int8 title)
 
     if (!HasTitle(title))
     {
-        CharacterDatabase.DirectPExecute("INSERT INTO character_titles (guid, title) VALUES ('%u', '%i')", GetGUIDLow(), title);
+        CharacterDatabase.PExecute("INSERT INTO character_titles (guid, title) VALUES ('%u', '%i')", GetGUIDLow(), title);
 
         std::string newTiteText = "newTitle:" + std::to_string(title);
 
@@ -24757,8 +24757,8 @@ void Player::ChangeTitle(uint8 title)
         SetByteValue(PLAYER_BYTES_3, 2, title);
         m_activeTitle = title;
 
-        CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 0 WHERE guid = '%u'", GetGUIDLow());
-        CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 1 WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
+        CharacterDatabase.PExecute("UPDATE character_titles SET active = 0 WHERE guid = '%u'", GetGUIDLow());
+        CharacterDatabase.PExecute("UPDATE character_titles SET active = 1 WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
     }
 
     SendEarnedTitles();
