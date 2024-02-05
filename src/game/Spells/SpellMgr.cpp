@@ -2502,6 +2502,13 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             }
             return SPELL_CAST_OK;
         }
+        case 46038: // Little Winter Veil Tree
+        {
+            // Don't allow summoning xmas trees in instances.
+            // Can be exploited in Naxxramas to avoid Sapphiron's frost breath. Probably other abuses too.
+            if (caster && caster->GetMapId() > 1)
+                return SPELL_FAILED_FIZZLE;
+        }
     }
 
     if (caster)
