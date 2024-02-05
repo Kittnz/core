@@ -3,7 +3,7 @@
 namespace HttpApi
 {
     std::vector<BaseController*> BaseController::_controllers;
-    SSLServer* BaseController::_source;
+    Server* BaseController::_source;
 
     BaseController::BaseController()
     {

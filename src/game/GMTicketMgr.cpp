@@ -29,6 +29,8 @@
 #include "Opcodes.h"
 #include "Database/DatabaseImpl.h"
 
+TicketMgr sTicketMgr;
+
 inline float GetAge(uint64 t) { return float(time(nullptr) - t) / DAY; }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +45,7 @@ GmTicket::GmTicket(Player* player) : _posX(0), _posY(0), _posZ(0), _mapId(0), _c
                        _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
                        _needResponse(false), _needMoreHelp(false), _securityNeeded(SEC_DEVELOPER)
 {
-    _id = sTicketMgr->GenerateTicketId();
+    _id = sTicketMgr.GenerateTicketId();
     _playerName = player->GetName();
     _playerGuid = player->GetGUID();
 }
@@ -132,11 +134,11 @@ void GmTicket::WritePacket(WorldPacket& data) const
     data << displayedMessage.str();
     data << uint8(_ticketType);
     data << GetAge(_lastModifiedTime);
-    data << GetAge(sTicketMgr->GetOldestOpenTime());
+    data << GetAge(sTicketMgr.GetOldestOpenTime());
 
 
     // I am not sure how blizzlike this is, and we don't really have a way to find out
-    data << GetAge(sTicketMgr->GetLastChange());         // Estimated wait time ?
+    data << GetAge(sTicketMgr.GetLastChange());         // Estimated wait time ?
 
     GMTicketEscalationStatus escStatus = std::min(_escalatedStatus, TICKET_IN_ESCALATION_QUEUE);
     GMTicketOpenedByGMStatus openedStatus = _viewed ? GMTICKET_OPENEDBYGM_STATUS_OPENED : GMTICKET_OPENEDBYGM_STATUS_NOT_OPENED;

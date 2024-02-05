@@ -794,6 +794,16 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
+	static ChatCommand perfCommandTable[] =
+	{
+		{ "enable",            SEC_ADMINISTRATOR,       true, &ChatHandler::HandlePerfEnable,           "", nullptr},
+		{ "intervalreport",    SEC_ADMINISTRATOR,       true, &ChatHandler::HandlePerfIntervalReport,   "", nullptr},
+		{ "resources",         SEC_DEVELOPER,           true, &ChatHandler::HandlePerfStatsCommand,     "", nullptr},
+		{ "cpu",               SEC_DEVELOPER,           true, &ChatHandler::HandlePerfReportCPU,        "", nullptr},
+		{ "memory",            SEC_DEVELOPER,           true, &ChatHandler::HandlePerfReportMemory,     "", nullptr},
+		{ nullptr,             0,                     false, nullptr,                                       "", nullptr }
+	};
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,          true,  nullptr,                                        "", accountCommandTable  },
@@ -950,7 +960,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcchat",         SEC_PLAYER,          false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
         { "toggleillusions", SEC_DEVELOPER,      false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
         { "tmogdelete",     SEC_DEVELOPER,       false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
-        { "perfstats",      SEC_ADMINISTRATOR,   true, &ChatHandler::HandlePerfStatsCommand,            "", nullptr },
+        { "perf",           SEC_ADMINISTRATOR,   true, nullptr,                                         "", perfCommandTable },
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

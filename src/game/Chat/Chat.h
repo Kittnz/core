@@ -276,7 +276,6 @@ class ChatHandler
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
         bool ForceJoinChannelCommand(char* args);
-        bool HandlePerfStatsCommand(char* args);
 
         bool HandleMarkSuspiciousCommand(char* args);
 
@@ -791,6 +790,13 @@ class ChatHandler
         bool HandleCreaturePathSetup(char* );
         bool HandleCreaturePathAddPoint(char*);
         bool HandleCreaturePathLaunch(char*);
+
+        // Performance
+        bool HandlePerfEnable(char* Args);
+        bool HandlePerfIntervalReport(char* Args);
+		bool HandlePerfStatsCommand(char* args);
+        bool HandlePerfReportCPU(char* Args);
+        bool HandlePerfReportMemory(char* Args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

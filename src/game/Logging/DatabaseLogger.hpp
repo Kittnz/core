@@ -80,12 +80,6 @@ struct CharActionLogEntry
 class DatabaseLogger
 {
 public:
-    static DatabaseLogger* instance()
-    {
-        static DatabaseLogger i;
-        return &i;
-    }
-
 
     void LogLoot(const LootLogEntry& log);
     void LogCharAction(const CharActionLogEntry& log);
@@ -93,4 +87,4 @@ public:
     uint32 _maxCharActionId = 0;
 };
 
-#define sDBLogger DatabaseLogger::instance()
+extern DatabaseLogger sDBLogger;

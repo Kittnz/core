@@ -40,13 +40,13 @@ public:
     bool Windows() const;
 
     // compressed and rc4 encrypted form of the module (as it should be sent to the client)
-    std::vector<uint8> binary;
+    turtle_vector<uint8, Category_Anticheat> binary;
 
     // rc4 key to send to client
-    std::vector<uint8> key;
+    turtle_vector<uint8, Category_Anticheat> key;
 
     // md5 hash of 'm_binary'
-    std::vector<uint8> hash;
+    turtle_vector<uint8, Category_Anticheat> hash;
 
     // offset into module of the memory reading function which is modified by some hacks
     std::uint32_t memoryRead;
@@ -61,7 +61,7 @@ public:
     uint8 scanTerminator;
 
     // pregenerated challenge, responses, and encryption keys for this module
-    std::vector<ChallengeResponseEntry> crk;
+    turtle_vector<ChallengeResponseEntry, Category_Anticheat> crk;
 };
 
 #endif /*!__WARDENMODULE_HPP_*/

@@ -46,7 +46,7 @@ ScriptMapMap sGossipScripts;
 ScriptMapMap sCreatureMovementScripts;
 ScriptMapMap sCreatureAIScripts;
 
-INSTANTIATE_SINGLETON_1(ScriptMgr);
+ScriptMgr sScriptMgr;
 
 ScriptMgr::ScriptMgr() : m_scheduledScripts(0)
 {
