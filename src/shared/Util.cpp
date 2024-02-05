@@ -877,6 +877,7 @@ namespace Memory
         vm_usage = vsize / 1024.0;
         return rss * page_size_kb;
 #endif
+        return 0;
 	}
 }
 
