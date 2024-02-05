@@ -29,6 +29,7 @@ enum
     SPELL_POISON_AURA     = 29865,
     SPELL_INEVITABLE_DOOM = 29204,
     SPELL_REMOVE_CURSE    = 30281, // He periodically removes all curses on himself
+    SPELL_FUNGAL_BLOOM    = 29232, // Cast by spores
 
     NPC_SPORE             = 16286,
 };
@@ -270,6 +271,7 @@ struct boss_loathebAI : public ScriptedAI
     uint32 stalkSpawnCooldowns[20];
     std::vector<uint8> availableEyeLocs;
     EyeStalkInfo eyeStalks[MAX_STALKS_UP];
+    ObjectGuidSet m_sporeGuids;
 
     void Reset() override
     {
@@ -301,6 +303,24 @@ struct boss_loathebAI : public ScriptedAI
             m_pInstance->SetData(TYPE_LOATHEB, FAIL);
     }
 
+    void EnterEvadeMode() override
+    {
+        // despawn all spores on wipe
+        for (auto const& guid : m_sporeGuids)
+        {
+            if (Creature* pSpore = m_creature->GetMap()->GetCreature(guid))
+                pSpore->DespawnOrUnsummon();
+        }
+        m_sporeGuids.clear();
+
+        // remove fungal bloom buff on wipe
+        std::list<Player*> players;
+        me->GetAlivePlayerListInRange(me, players, MAX_VISIBILITY_DISTANCE);
+        for (auto const& pPlayer : players)
+            pPlayer->RemoveAurasDueToSpell(SPELL_FUNGAL_BLOOM);
+
+        ScriptedAI::EnterEvadeMode();
+    }
 
     /*
     10 stalks
@@ -456,6 +476,7 @@ struct boss_loathebAI : public ScriptedAI
             case EVENT_SUMMON_SPORE:
                 if (Creature* pSpore = m_creature->SummonCreature(NPC_SPORE, SporeLoc[0], SporeLoc[1], SporeLoc[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000))
                 {
+                    m_sporeGuids.insert(pSpore->GetObjectGuid());
                     if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                         pSpore->AddThreat(pTarget);
                 }
