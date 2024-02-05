@@ -617,7 +617,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_ExtraFlags = 0;
     if (GetSession()->GetSecurity() > SEC_PLAYER)
     {
-        m_currentTicketCounter = sTicketMgr->GetLastTicketId();
+        m_currentTicketCounter = sTicketMgr.GetLastTicketId();
         SetAcceptTicket(true);
     }
 
@@ -3430,7 +3430,7 @@ void Player::SetGMSocials(bool on, bool init)
 
     // only friend status requires immediate update, rest can wait, and only if not logging in.
     if (!init)
-        sSocialMgr->SendFriendStatus(GetSession()->GetMasterPlayer(), status, GetObjectGuid(), true);
+        sSocialMgr.SendFriendStatus(GetSession()->GetMasterPlayer(), status, GetObjectGuid(), true);
 
 }
 
@@ -5423,7 +5423,7 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                     if (MasterPlayer* playerFriend = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, (*resultFriends)[0].GetUInt32())))
                     {
                         playerFriend->GetSocial()->RemoveFromSocialList(playerguid, SOCIAL_FLAG_ALL);
-                        sSocialMgr->SendFriendStatus(playerFriend, FRIEND_REMOVED, playerguid, false);
+                        sSocialMgr.SendFriendStatus(playerFriend, FRIEND_REMOVED, playerguid, false);
                     }
                 } while (resultFriends->NextRow());
                 delete resultFriends;
@@ -23193,7 +23193,7 @@ void Player::LootMoney(int32 money, Loot* loot)
         if (guid.GetHigh() == HIGHGUID_GAMEOBJECT)
             lootType = LogLoot::TypeContainer;
 
-        sDBLogger->LogLoot(
+        sDBLogger.LogLoot(
             {
                 GetGUIDLow(),
                 GetName(),

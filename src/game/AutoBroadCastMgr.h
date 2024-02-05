@@ -26,5 +26,6 @@ class AutoBroadCastMgr
         time_t _current;
 };
 
-#define sAutoBroadCastMgr MaNGOS::Singleton<AutoBroadCastMgr>::Instance()
+extern AutoBroadCastMgr sAutoBroadCastMgr;
+
 #endif

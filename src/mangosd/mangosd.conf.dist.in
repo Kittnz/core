@@ -2098,3 +2098,8 @@ Suspicious.Movement.MovementSpeedThreshold = 100.0
 # Shop.RefundWindow - how long players have to request refund of shop items after buying them (in seconds)
 Shop.RefundWindow = 2592000
 
+# performance tracking
+Perf.Enable = 1
+
+# report to logs DB. Time in seconds
+Perf.ReportInterval = 600

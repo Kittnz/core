@@ -90,11 +90,6 @@ class CreatureGroup
 class CreatureGroupsManager
 {
     public:
-        static CreatureGroupsManager* instance()
-        {
-            static CreatureGroupsManager* i = new CreatureGroupsManager();
-            return i;
-        }
         void LoadCreatureGroup(Creature* creature, CreatureGroup*& group);
         void RegisterNewGroup(CreatureGroup* group) { m_groups[group->GetOriginalLeaderGuid()] = group; }
         void Load();
@@ -103,6 +98,6 @@ class CreatureGroupsManager
         std::map<ObjectGuid, CreatureGroup*> m_groups;
 };
 
-#define sCreatureGroupsManager (CreatureGroupsManager::instance())
+extern CreatureGroupsManager sCreatureGroupsManager;
 
 #endif

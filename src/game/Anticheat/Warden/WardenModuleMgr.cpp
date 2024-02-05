@@ -19,8 +19,6 @@
 #include <string>
 #include <fstream>
 
-INSTANTIATE_SINGLETON_1(WardenModuleMgr);
-
 namespace
 {
 std::vector<std::string> GetModuleNames(const std::string &moduleDir)
@@ -52,6 +50,8 @@ std::vector<std::string> GetModuleNames(const std::string &moduleDir)
     return results;
 }
 }
+
+WardenModuleMgr sWardenModuleMgr;
 
 WardenModuleMgr::WardenModuleMgr()
 {
