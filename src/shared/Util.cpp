@@ -35,6 +35,9 @@
 #include "Auth/base32.h"
 
 
+#include <ios>
+#include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include "AllocatorWithCategory.h"
@@ -874,7 +877,6 @@ namespace Memory
         stat_stream.close();
 
         long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024; // in case x86-64 is configured to use 2MB pages
-        vm_usage = vsize / 1024.0;
         return rss * page_size_kb;
 #endif
         return 0;
