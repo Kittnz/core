@@ -3641,6 +3641,43 @@ void ObjectMgr::LoadQuestSpellCastObjectives()
     } while (result->NextRow());
 }
 
+void ObjectMgr::ResetYearlyQuests()
+{
+    std::string questListStr;
+
+    for (auto& iter : m_QuestTemplatesMap)
+    {
+       std::unique_ptr<Quest> const& pQuest = iter.second;
+       if (pQuest->HasSpecialFlag(QUEST_SPECIAL_FLAG_YEARLY_RESET))
+       {
+           if (!questListStr.empty())
+               questListStr += ",";
+           questListStr += std::to_string(pQuest->GetQuestId());
+       }
+    }
+
+    if (questListStr.empty())
+    {
+        sLog.outErrorDb("No yearly quests defined in database.");
+        return;
+    }
+
+    tm local;
+    time_t curr;
+    time(&curr);
+    local = *(localtime(&curr));
+
+    // December 31st 23:59:59
+    local.tm_year -= 1;
+    local.tm_mon = 11;
+    local.tm_mday = 31;
+    local.tm_hour = 23;
+    local.tm_min = 59;
+    local.tm_sec = 59;
+
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE (`rewarded` = 1) && (`timer` < %u) && (`quest` IN (%s))", mktime(&local), questListStr.c_str());
+}
+
 void ObjectMgr::LoadQuests()
 {
     // For reload case

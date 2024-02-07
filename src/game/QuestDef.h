@@ -173,7 +173,10 @@ enum QuestSpecialFlags
     QUEST_SPECIAL_FLAG_SPEAKTO              = 0x010,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_KILL_OR_CAST         = 0x020,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_TIMED                = 0x040,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080
+
+    // Turtle custom flags
+    QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080,
+    QUEST_SPECIAL_FLAG_YEARLY_RESET         = 0x100
 };
 
 enum QuestMethod
@@ -185,7 +188,7 @@ enum QuestMethod
     QUEST_METHOD_LIMIT                      = 0x3,          // Highest Method entry DB should have
 };
 
-#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT | QUEST_SPECIAL_FLAG_DAILY)
+#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT | QUEST_SPECIAL_FLAG_DAILY | QUEST_SPECIAL_FLAG_HARDCORE_ONLY | QUEST_SPECIAL_FLAG_YEARLY_RESET)
 
 struct QuestLocale
 {
