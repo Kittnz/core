@@ -1,0 +1,2 @@
+-- NPC Vilewing Bat, Vilewing Batling Greater Vilewing Bat The bat are tamed correctly and eats food appropriate for the pet's class. (https://github.com/slowtorta/turtlewow-bug-tracker/issues/6190)
+update creature_template set beast_family = 24 where entry in (61230,61231,61401);
