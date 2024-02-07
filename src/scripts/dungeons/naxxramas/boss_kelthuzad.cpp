@@ -378,6 +378,11 @@ struct boss_kelthuzadAI : public ScriptedAI
             m_pInstance->SetData(TYPE_KELTHUZAD, DONE);
         
         EvadeAllGuardians();
+
+        std::list<GameObject*> targets;
+        m_creature->GetGameObjectListWithEntryInGrid(targets, 180322, 100.0f);
+        for (auto const& pGo : targets)
+            pGo->AddObjectToRemoveList();
     }
 
     void MoveInLineOfSight(Unit* /*pWho*/) override {}
