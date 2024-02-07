@@ -3667,7 +3667,7 @@ void ObjectMgr::ResetYearlyQuests()
     time(&curr);
     local = *(localtime(&curr));
 
-    // December 31st 23:59:59
+    // Last Year December 31st 23:59:59
     local.tm_year -= 1;
     local.tm_mon = 11;
     local.tm_mday = 31;
