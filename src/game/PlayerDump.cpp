@@ -439,7 +439,7 @@ DumpReturn PlayerDumpWriter::ReturnDump(std::string& dump, uint32 guid)
 
 #define ROLLBACK_STR(DR) {CharacterDatabase.RollbackTransaction(); return (DR);}
 
-DumpReturn PlayerDumpReader::LoadStringDump(std::string const& data, uint32 account, std::string& name, uint32& guid)
+DumpReturn PlayerDumpReader::LoadStringDump(std::string const& data, uint32 account, std::string& name, uint32& guid, std::function<void(bool)>* callback)
 {
     uint32 charcount = sAccountMgr.GetCharactersCount(account);
     if (charcount >= 10)
@@ -706,7 +706,7 @@ DumpReturn PlayerDumpReader::LoadStringDump(std::string const& data, uint32 acco
             ROLLBACK_STR(DUMP_FILE_BROKEN);
     }
 
-    CharacterDatabase.CommitTransaction();
+    CharacterDatabase.CommitTransaction(callback);
 
 
     return DUMP_SUCCESS;
