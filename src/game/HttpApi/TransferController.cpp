@@ -148,12 +148,25 @@ namespace HttpApi
 
         uint32 guid = 0;
         std::string charName = "";
-        auto res = PlayerDumpReader().LoadStringDump(pdumpData, accountId, charName, guid);
+        
+        std::shared_ptr<uint32> guidPtr = std::make_shared<uint32>(0);
+        std::function<void(bool)> transCallback = [guidPtr, accountId](bool transSuccess)
+        {
+            if (transSuccess)
+            {
+                //only set char active if transaction for migration transfer succeeded.
+                CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", *guidPtr);
+            }
+            else
+                sLog.out(LOG_API, "FAILED to run transaction for account ID %u", accountId);
+        };
+
+        auto res = PlayerDumpReader().LoadStringDump(pdumpData, accountId, charName, guid, &transCallback);
         sLog.out(LOG_API, "Result of transfer for targetAccount:%u\nres:%s.\nnewGuid:%u\nplayername:%s", accountId, DumpReturnToString(res).c_str(), guid, charName.c_str());
 
         if (res == DumpReturn::DUMP_SUCCESS) 
         {
-            CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", guid);
+            *guidPtr = guid;
             sLog.out(LOG_API, "Sucessfully accepted transfer import. AccountId:%u, newGuid:%u,playername:%s", accountId, guid, charName.c_str());
         }
         else
