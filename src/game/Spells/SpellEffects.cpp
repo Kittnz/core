@@ -6698,6 +6698,10 @@ void Spell::EffectActivateObject(SpellEffectIndex eff_idx)
 
     GameObjectActions action = (GameObjectActions)m_spellInfo->EffectMiscValue[eff_idx];
 
+    // Can be handled by script.
+    if (gameObjTarget->AI() && gameObjTarget->AI()->OnActivateBySpell(m_caster, m_spellInfo->Id, (uint32)action))
+        return;
+
     switch (action)
     {
         case GameObjectActions::None:
