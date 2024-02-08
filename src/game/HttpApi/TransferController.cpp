@@ -149,7 +149,7 @@ namespace HttpApi
         uint32 guid = 0;
         std::string charName = "";
         auto res = PlayerDumpReader().LoadStringDump(pdumpData, accountId, charName, guid);
-        sLog.out(LOG_API, "Result of transfer for targetAccount:%u\nres:%s.\nnewGuid:%u\nplayername:%s", accountId, (uint32)res, guid, charName.c_str());
+        sLog.out(LOG_API, "Result of transfer for targetAccount:%u\nres:%s.\nnewGuid:%u\nplayername:%s", accountId, DumpReturnToString(res).c_str(), guid, charName.c_str());
 
         if (res == DumpReturn::DUMP_SUCCESS) 
         {
@@ -157,7 +157,7 @@ namespace HttpApi
             sLog.out(LOG_API, "Sucessfully accepted transfer import. AccountId:%u, newGuid:%u,playername:%s", accountId, guid, charName.c_str());
         }
         else
-            sLog.out(LOG_API, "FAILED dump import.Account:%u\nres:%s.\newGuid:%u\nplayername:%s\ndump result:%s", accountId, (uint32)res, guid, charName.c_str(), DumpReturnToString(res)
+            sLog.out(LOG_API, "FAILED dump import.Account:%u\nres:%u.\newGuid:%u\nplayername:%s\ndump result:%s", accountId, (uint32)res, guid, charName.c_str(), DumpReturnToString(res)
             .c_str());
 
         rapidjson::Document retDoc;
