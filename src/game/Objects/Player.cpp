@@ -5714,20 +5714,10 @@ void Player::KillPlayer()
                     hardcoreGuild->SetNewLeader(newLeaderSlot, oldLeaderSlot);
             }
 
-            GetSession()->SendGuildCommandResult(GUILD_QUIT_S, hardcoreGuild->GetName(), ERR_PLAYER_NO_MORE_IN_GUILD);
-
-            bool deleted = false;
             if (hardcoreGuild->DelMember(GetObjectGuid()))
             {
                 hardcoreGuild->Disband();
                 delete hardcoreGuild;
-                deleted = true;
-            }
-
-            if (!deleted)
-            {
-                hardcoreGuild->LogGuildEvent(GUILD_EVENT_LOG_LEAVE_GUILD, GetObjectGuid());
-                hardcoreGuild->BroadcastEvent(GE_LEFT, GetObjectGuid(), GetName());
             }
         }
 
@@ -23942,12 +23932,6 @@ bool Player::SetupHardcoreMode()
         return false;
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
-
-    // get previous guild and kick
-    Guild* oldGuild = sGuildMgr.GetGuildById(GetGuildId());
-
-    if (oldGuild)
-        oldGuild->DelMember(GetGUID());
 
     // Remove group and invites
     if (Group* group = GetGroup())
