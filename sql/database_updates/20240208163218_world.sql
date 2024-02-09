@@ -16,3 +16,8 @@ RewChoiceItemCount4 = 0,
 RewChoiceItemCount5 = 0,
 RewChoiceItemCount6 = 0
 WHERE entry = 40857;
+
+-- Fixed Zebra names inconcistencies:
+
+UPDATE `spell_template` SET `name` = 'Zebra' WHERE `entry` = 46446;
+
