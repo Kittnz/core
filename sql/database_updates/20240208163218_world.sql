@@ -22,3 +22,7 @@ WHERE entry = 40857;
 UPDATE `spell_template` SET `name` = 'Zebra' WHERE `entry` = 46446;
 UPDATE `item_template` SET `name` = 'Zebra' WHERE `entry` = 50426;
 
+-- Cleaning Cloth:
+
+UPDATE `skill_line_ability` SET `class_mask` = 0 WHERE `id` = 30033;
+
