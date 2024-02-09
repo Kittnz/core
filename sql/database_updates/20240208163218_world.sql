@@ -20,4 +20,5 @@ WHERE entry = 40857;
 -- Fixed Zebra names inconcistencies:
 
 UPDATE `spell_template` SET `name` = 'Zebra' WHERE `entry` = 46446;
+UPDATE `item_template` SET `name` = 'Zebra' WHERE `entry` = 50426;
 
