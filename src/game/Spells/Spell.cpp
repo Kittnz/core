@@ -3820,7 +3820,7 @@ void Spell::cancel()
         //(no break)
         case SPELL_STATE_DELAYED:
         {
-            SendInterrupted(0);
+            SendInterrupted();
             if (sendInterrupt && !GetDelayStart())
                 SendCastResult(SPELL_FAILED_INTERRUPTED);
         }
@@ -3841,7 +3841,7 @@ void Spell::cancel()
             }
 
             SendChannelUpdate(0, true);
-            SendInterrupted(0);
+            SendInterrupted();
 
             if (m_caster->IsPlayer())
             {
@@ -3902,7 +3902,7 @@ void Spell::cast(bool skipCheck)
         else
             sLog.outError("Spell %u too deep in cast chain for cast. Cast not allowed for prevent overflow stack crash.", m_spellInfo->Id);
 
-        SendInterrupted(2);
+        SendInterrupted();
         SendCastResult(SPELL_FAILED_ERROR);
         finish(false);
         SetExecutedCurrently(false);
@@ -3915,7 +3915,7 @@ void Spell::cast(bool skipCheck)
     // cancel at lost main target unit
     if (!m_targets.getUnitTarget() && m_targets.getUnitTargetGuid() && m_targets.getUnitTargetGuid() != m_caster->GetObjectGuid())
     {
-        SendInterrupted(2);
+        SendInterrupted();
         cancel();
         m_caster->DecreaseCastCounter();
         SetExecutedCurrently(false);
@@ -3944,7 +3944,7 @@ void Spell::cast(bool skipCheck)
         castResult = CheckPower();
         if (castResult != SPELL_CAST_OK)
         {
-            SendInterrupted(2);
+            SendInterrupted();
             SendCastResult(castResult);
             //restore spell mods
             if (m_caster->IsPlayer())
@@ -3959,7 +3959,7 @@ void Spell::cast(bool skipCheck)
         castResult = CheckCast(false);
         if (castResult != SPELL_CAST_OK)
         {
-            SendInterrupted(2);
+            SendInterrupted();
             SendCastResult(castResult);
             finish(false);
             m_caster->DecreaseCastCounter();
@@ -5126,7 +5126,7 @@ void Spell::SendLogExecute()
     m_caster->SendMessageToSet(&data, true);
 }
 
-void Spell::SendInterrupted(uint8 result)
+void Spell::SendInterrupted()
 {
     // Nostalrius : fix animation de cast a l'interruption d'un sort
     // Ce premier paquet ne sert apparement a rien ...
@@ -6140,14 +6140,14 @@ SpellCastResult Spell::CheckCast(bool strict)
         // Must be behind the target.
         if (m_spellInfo->IsFromBehindOnlySpell() && m_casterUnit && target->HasInArc(m_caster))
         {
-            SendInterrupted(2);
+            SendInterrupted();
             return SPELL_FAILED_NOT_BEHIND;
         }
 
         //Target must be facing you.
         if ((m_spellInfo->Attributes == 0x150010) && !target->HasInArc(m_caster))
         {
-            SendInterrupted(2);
+            SendInterrupted();
             return SPELL_FAILED_NOT_INFRONT;
         }
     }
