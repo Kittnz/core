@@ -537,6 +537,7 @@ class Spell
                                                             // no effect handled, only channel start/update is sent
 
         bool m_setCreatureTarget = false; // Set for spell casts that need to make the creature face the target
+        bool m_bIsBeingCancelled = false;
 
         uint8 m_delayAtDamageCount = 0;
         int32 GetNextDelayAtDamageMsTime() { return m_delayAtDamageCount < 5 ? 1000 - (m_delayAtDamageCount++)* 200 : 200; }
