@@ -3802,9 +3802,14 @@ void Spell::cancel()
     if (m_spellState == SPELL_STATE_FINISHED)
         return;
 
+    if (m_bIsBeingCancelled)
+    {
+        return;
+    }
     // channeled spells don't display interrupted message even if they are interrupted, possible other cases with no "Interrupted" message
     bool sendInterrupt = !(m_spellInfo->IsChanneledSpell() && m_spellState != SPELL_STATE_PREPARING);
 
+    m_bIsBeingCancelled = true;
     m_autoRepeat = false;
     switch (m_spellState)
     {
@@ -3874,6 +3879,7 @@ void Spell::cancel()
     finish(false);
     m_caster->RemoveDynObject(m_spellInfo->Id);
 
+    m_bIsBeingCancelled = false;
     if (m_casterUnit)
         m_casterUnit->RemoveGameObject(m_spellInfo->Id, true);
 }
@@ -5197,7 +5203,7 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
             if (Player* pPlayer = m_casterUnit->ToPlayer())
             {
                 WorldPacket data(MSG_CHANNEL_UPDATE, 4);
-                data << uint32(time);
+                data << uint32(0);
                 pPlayer->SendDirectMessage(&data);
             }
         }
