@@ -1188,6 +1188,45 @@ CreatureAI* GetAI_npc_arcanite_dragonling(Creature* pCreature)
 }
 
 /*######
+## mithril dragonling
+######*/
+
+struct npc_mithril_dragonlingAI : ScriptedPetAI
+{
+	explicit npc_mithril_dragonlingAI(Creature* pCreature) : ScriptedPetAI(pCreature)
+	{
+		m_creature->SetCanModifyStats(true);
+		m_creature->GetCharmInfo()->SetReactState(REACT_AGGRESSIVE);
+		npc_mithril_dragonlingAI::Reset();
+	}
+
+	uint32 m_flamebreathTimer;
+
+	void Reset() override
+	{
+		m_flamebreathTimer = urand(10000, 60000);
+	}
+
+	void UpdatePetAI(const uint32 uiDiff) override
+	{
+		if (m_flamebreathTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAME_BREATH) == CAST_OK)
+				m_flamebreathTimer = urand(10000, 60000);
+		}
+		else
+			m_flamebreathTimer -= uiDiff;
+
+		ScriptedPetAI::UpdatePetAI(uiDiff);
+	}
+};
+
+CreatureAI* GetAI_npc_mithril_dragonling(Creature* pCreature)
+{
+	return new npc_mithril_dragonlingAI(pCreature);
+}
+
+/*######
 ## Emerald Dragon Whelp
 ######*/
 
@@ -2708,6 +2747,11 @@ void AddSC_random_scripts_0()
     newscript->Name = "npc_arcanite_dragonling";
     newscript->GetAI = &GetAI_npc_arcanite_dragonling;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "npc_mithril_dragonling";
+	newscript->GetAI = &GetAI_npc_mithril_dragonling;
+	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_emerald_dragon_whelp";
