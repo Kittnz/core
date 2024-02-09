@@ -26,3 +26,6 @@ UPDATE `item_template` SET `name` = 'Zebra' WHERE `entry` = 50426;
 
 UPDATE `skill_line_ability` SET `class_mask` = 0 WHERE `id` = 30033;
 
+-- Remove Goblin barber:
+
+UPDATE `creature_template` SET `subname` = 'Barber\'s Apprentice', `npc_flags` = 0, `script_name` = '' WHERE `entry` = 81034;

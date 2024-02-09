@@ -462,120 +462,6 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetRace() == RACE_GOBLIN)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66823, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        if (pPlayer->GetGender() == GENDER_MALE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66824, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_barber_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
-    {
-        uint16 style = 0;
-        uint16 limit = 0;
-        uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
-        limit = pPlayer->GetGender() == GENDER_MALE ? 12 : 14;
-        style = (curr_style == limit) ? 0 : ++curr_style; // byte limit should match the last available option
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        uint16 feature = 0;
-        uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
-        feature = (curr_feature == 3) ? 0 : ++curr_feature;
-
-        pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    pPlayer->SaveToDB();
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetRace() == RACE_GOBLIN)
-    {
-        switch (pPlayer->GetGender())
-        {
-        case GENDER_FEMALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66825, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66826, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            break;
-        case GENDER_MALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66827, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66828, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-            break;
-        }
-    }
-    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) // goblin females | face
-    {
-        uint16 face = 0;
-        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
-        face = (curr_face == 0) ? 2 : --curr_face;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)  // goblin females | skin
-    {
-        uint16 skintone = 0;
-        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
-        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3) // goblin males | face
-    {
-        uint16 face = 0;
-        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
-        face = (curr_face == 0) ? 3 : --curr_face;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4) // goblin males | skin
-    {
-        uint16 skintone = 0;
-        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
-        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    pPlayer->SaveToDB();
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
 	if (!pPlayer) 
@@ -7237,18 +7123,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "go_soulwell";
     newscript->GOGetAI = &GetAI_soulwell_clicks;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_barber_go";
-    newscript->pGossipHello = &GossipHello_npc_barber_go;
-    newscript->pGossipSelect = &GossipSelect_npc_barber_go;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_surgeon_go";
-    newscript->pGossipHello = &GossipHello_npc_surgeon_go;
-    newscript->pGossipSelect = &GossipSelect_npc_surgeon_go;
     newscript->RegisterSelf();
 
     newscript = new Script;
