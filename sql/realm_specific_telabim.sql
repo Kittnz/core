@@ -4,6 +4,12 @@ delete from creature where id in (81030, 51547, 51541, 51545, 51546, 51544, 5154
 -- AQ stuff:
 UPDATE `game_event` SET `disabled`=0 WHERE  `entry`=83;
 
+-- Pondering my orb
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (4510, 179879, 0, -7662.91, -1218.73, 287.788, -0.436333, 0, 0, 0.21644, -0.976296, 7200, 7200, 100, 1, 0, 0);
+
+REPLACE INTO `areatrigger_teleport` (`id`, `name`, `message`, `required_level`, `required_condition`, `required_phase`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES (3726, 'Blackwing Lair - Entrance', 'You must be part of a raid group and at least 50th level to enter.', 50, 0, 1, 469, -7672.32, -1107.05, 396.651, 0.785398);
+
+
 -- Delete guild bases!
 DELETE FROM creature WHERE guid=2569062;
 DELETE FROM creature_addon WHERE guid=2569062;
