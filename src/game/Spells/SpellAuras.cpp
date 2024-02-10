@@ -1002,6 +1002,19 @@ void Aura::HandleAddModifier(bool apply, bool Real)
         m_spellmod = nullptr; // Deleted in Player::AddSpellMod.
 
     ReapplyAffectedPassiveAuras();
+
+    // Ghost Wolf Speed - recalculate modifier to update ghost wolf speed instantly
+    if (GetId() == 22801)
+    {
+        if (SpellAuraHolder* pGhostWolf = GetTarget()->GetSpellAuraHolder(2645))
+        {
+            if (Aura* pAura = pGhostWolf->GetAuraByEffectIndex(EFFECT_INDEX_1))
+            {
+                pAura->GetModifier()->m_amount = GetTarget()->CalculateSpellDamage(GetTarget(), pGhostWolf->GetSpellProto(), EFFECT_INDEX_1);
+                GetTarget()->UpdateSpeed(MOVE_RUN, false, GetTarget()->GetSpeedRatePersistance(MOVE_RUN));
+            }
+        }
+    }
 }
 
 void Aura::TriggerSpell()
