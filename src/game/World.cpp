@@ -2526,9 +2526,9 @@ void World::Update(uint32 diff)
         {
             std::string message;
             if (buyPrice > m_lastShellCoinPrice)
-                message = "Shellcoin price has increased to " + std::to_string(buyPrice) + " copper (up " + std::to_string(int32((float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f - 100.0f)) + "%).";
+                message = "Shellcoin price has increased to " + MoneyToString(buyPrice) + " (up " + std::to_string(int32((float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f - 100.0f)) + "%).";
             else if (buyPrice < m_lastShellCoinPrice)
-                message = "Shellcoin price has decreased to " + std::to_string(buyPrice) + " copper (down " + std::to_string(int32(100.0f - (float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f)) + "%).";
+                message = "Shellcoin price has decreased to " + MoneyToString(buyPrice) + " (down " + std::to_string(int32(100.0f - (float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f)) + "%).";
 
             if (!message.empty())
             {
