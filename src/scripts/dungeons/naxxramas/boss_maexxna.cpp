@@ -165,6 +165,7 @@ struct boss_maexxnaAI : public ScriptedAI
     uint32 m_uiPoisonShockTimer;
     uint32 m_uiNecroticPoisonTimer;
     uint32 m_uiSummonSpiderlingTimer;
+    uint32 m_uiCheckExploitTimer;
     bool   m_bEnraged;
     std::random_device m_randDevice;
     std::mt19937 m_random{ m_randDevice() };
@@ -193,6 +194,7 @@ struct boss_maexxnaAI : public ScriptedAI
         m_uiPoisonShockTimer = PoisonShockCooldown(true);
         m_uiNecroticPoisonTimer = NecroticPoisonCooldown(true);
         m_uiSummonSpiderlingTimer = SummonSpiderlingsCooldown(true);
+        m_uiCheckExploitTimer = 500;
         m_bEnraged = false;
         wraps.clear();
         wraps2.clear();
@@ -432,21 +434,26 @@ struct boss_maexxnaAI : public ScriptedAI
             }
         }
 
-        if (m_creature->GetDistance(m_creature->GetHomePosition()) > 30.f)
+        if (m_uiCheckExploitTimer < uiDiff)
         {
-            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+            if (m_creature->GetDistance(m_creature->GetHomePosition()) > 55.f)
+            {
+                ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
 
-            ThreatList::const_iterator it = tList.begin();
-            for (it; it != tList.end(); ++it) {
-                Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
-                if (!pPlayer) continue;
+                ThreatList::const_iterator it = tList.begin();
+                for (it; it != tList.end(); ++it) {
+                    Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
+                    if (!pPlayer) continue;
 
-                int32 dmg = 25000;
-                int32 dmg2 = 2000;
-                m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, &dmg2, &dmg, nullptr, false);
+                    int32 dmg = 25000;
+                    int32 dmg2 = 2000;
+                    m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, &dmg2, &dmg, nullptr, false);
+                }
             }
-            //EnterEvadeMode();
+            m_uiCheckExploitTimer = 500;
         }
+        else
+            m_uiCheckExploitTimer -= uiDiff;
         
         DoMeleeAttackIfReady();
     }
