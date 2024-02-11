@@ -4373,6 +4373,9 @@ int32 WorldObject::CalculateSpellDamage(Unit const* target, SpellEntry const* sp
                               ? irand(randomPoints, baseDice)
                               : irand(baseDice, randomPoints);
 
+            if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_NO_DAMAGE_RNG))
+                randvalue = 0;
+
             basePoints += randvalue;
             break;
         }
