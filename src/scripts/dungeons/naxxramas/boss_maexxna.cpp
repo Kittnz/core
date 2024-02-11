@@ -202,19 +202,6 @@ struct boss_maexxnaAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MAEXXNA, IN_PROGRESS);
-
-        auto const& pList = m_creature->GetMap()->GetPlayers();
-        for (auto const& itr : pList)
-        {
-            if (Player* pPlayer = itr.getSource())
-            {
-                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() &&
-                    Geometry::IsPointLeftOfLine(WEB_BARRIER_A, WEB_BARRIER_B, pPlayer->GetPosition()))
-                {
-                    pPlayer->NearTeleportTo(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), pPlayer->GetOrientation());
-                }
-            }
-        }
     }
 
     void JustDied(Unit* pKiller) override
@@ -443,6 +430,21 @@ struct boss_maexxnaAI : public ScriptedAI
                 m_bEnraged = true;
                 DoScriptText(EMOTE_BOSS_GENERIC_ENRAGE, m_creature);
             }
+        }
+
+        if (m_creature->GetDistance(m_creature->GetHomePosition()) > 30.f)
+        {
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+
+            ThreatList::const_iterator it = tList.begin();
+            for (it; it != tList.end(); ++it) {
+                Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
+                if (!pPlayer) continue;
+
+                int32 dmg = 25000;
+                m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, nullptr, &dmg, nullptr, false);
+            }
+            EnterEvadeMode();
         }
         
         DoMeleeAttackIfReady();
