@@ -8,6 +8,7 @@ class Creature;
 class GameObject;
 class Unit;
 class ObjectGuid;
+class WorldObject;
 
 class GameObjectAI
 {
