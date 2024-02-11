@@ -442,9 +442,10 @@ struct boss_maexxnaAI : public ScriptedAI
                 if (!pPlayer) continue;
 
                 int32 dmg = 25000;
-                m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, nullptr, &dmg, nullptr, false);
+                int32 dmg2 = 2000;
+                m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, &dmg2, &dmg, nullptr, false);
             }
-            EnterEvadeMode();
+            //EnterEvadeMode();
         }
         
         DoMeleeAttackIfReady();
