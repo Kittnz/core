@@ -24,10 +24,20 @@ if(UNIX)
   find_package(ZLIB REQUIRED)
   if(ZLIB_FOUND)
     include_directories(${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(vmapextractor libmpq bz2 ${ZLIB_LIBRARIES})
+    target_link_libraries(vmapextractor
+        libmpq 
+        bz2 
+        ${OPENSSL_LIBRARIES}
+        ${MYSQL_LIBRARY}
+        ${ZLIB_LIBRARIES})
   endif(ZLIB_FOUND)
 else()
-  target_link_libraries(vmapextractor libmpq bz2 zlib)
+  target_link_libraries(vmapextractor 
+    libmpq 
+    bz2 
+    zlib
+    ${OPENSSL_LIBRARIES}
+    ${MYSQL_LIBRARY})
 endif(UNIX)
 
 install(TARGETS vmapextractor DESTINATION ${BIN_DIR})

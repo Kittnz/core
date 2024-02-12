@@ -26,6 +26,8 @@
 
 bool gDoNotFilterDeepWater = false;
 
+std::string gMapSettingsFilename;
+
 namespace MMAP
 {
     TerrainBuilder::TerrainBuilder(bool skipLiquid, bool quick) : m_skipLiquid(skipLiquid), m_V9(nullptr), m_V8(nullptr), m_quick(quick), m_mapId(0) { }

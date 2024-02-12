@@ -311,7 +311,9 @@ namespace MMAP
         int lVertCount = meshData.liquidVerts.size() / 3;
         int* lTris = meshData.liquidTris.getCArray();
         int lTriCount = meshData.liquidTris.size() / 3;
-        uint8* lTriAreas = meshData.liquidType.getCArray();
+		uint8* lTriAreas = meshData.liquidType.getCArray();
+
+        const MapSettings* BuildSettings = MMAP::gMMapBuilderConfig.GetSettingsForMap(mapID);
 
         // these are WORLD UNIT based metrics
         // this are basic unit dimentions
@@ -335,8 +337,8 @@ namespace MMAP
         float agentHeight = 1.5f;
         float agentRadius = 0.2f; // Check here: .go xyz -4985 -861 501 0
         // Fences should not be passable
-        static const float agentMaxClimbModelTerrainTransition = 1.2f;
-        static const float agentMaxClimbTerrain = 1.8f;
+        const float agentMaxClimbModelTerrainTransition = BuildSettings != nullptr ? BuildSettings->agentMaxClimbModelTerrainTransition : 1.2f;
+        const float agentMaxClimbTerrain = BuildSettings != nullptr ? BuildSettings->agentMaxClimbTerrain : 1.8f;
 
         if (!continent)
             agentRadius = 0.3f;
@@ -347,7 +349,7 @@ namespace MMAP
         // Prevent z overflow at big heights. We need at least 0.16 to handle teldrassil.
         if (continent)
             config.ch = 0.25f;
-        config.walkableSlopeAngle = 75.0f;
+        config.walkableSlopeAngle = BuildSettings != nullptr ? BuildSettings->WalkableSlopeAngle : 75.0f;
         config.walkableHeight = (int)ceilf(agentHeight / config.ch);
         config.walkableClimb = (int)floorf(agentMaxClimbModelTerrainTransition / config.ch); // For models
         uint32 walkableClimbTerrain = (int)floorf(agentMaxClimbTerrain / config.ch);
@@ -366,6 +368,8 @@ namespace MMAP
         config.detailSampleMaxError = 0.5f; // Vertical precision
         int inWaterGround = config.walkableHeight;
         int stepForGroundInheriteWater = (int)ceilf(30.0f / config.ch);
+
+        bool bShouldIncludeWalkableLimitOnRasterize = BuildSettings != nullptr ? BuildSettings->bIncludeLimitsOnRasterizeTriangles : false;
 
         // allocate subregions : tiles
         Tile* tiles = new Tile[TILES_PER_MAP * TILES_PER_MAP];
@@ -413,7 +417,7 @@ namespace MMAP
                     printf("%s Failed building liquids heightfield!            \n", tileString);
                     continue;
                 }
-                rcRasterizeTriangles(m_rcContext, lVerts, lVertCount, lTris, lTriAreas, lTriCount, *liquidsTile.solid, 0);
+                rcRasterizeTriangles(m_rcContext, lVerts, lVertCount, lTris, lTriAreas, lTriCount, *liquidsTile.solid, bShouldIncludeWalkableLimitOnRasterize ? walkableClimbTerrain : 0);
 
                 /// 3. Mark all triangles with correct flags:
                 // Can't use rcMarkWalkableTriangles. We need something really more specific.
@@ -476,7 +480,7 @@ namespace MMAP
                     }
                 }
                 /// 4. Every triangle is correctly marked now, we can rasterize everything
-                rcRasterizeTriangles(m_rcContext, tVerts, tVertCount, tTris, areas, tTriCount, *tile.solid, 0);
+                rcRasterizeTriangles(m_rcContext, tVerts, tVertCount, tTris, areas, tTriCount, *tile.solid, bShouldIncludeWalkableLimitOnRasterize ? walkableClimbTerrain : 0);
                 delete[] areas;
 
                 /// 5. Don't walk over too high Obstacles.

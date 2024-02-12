@@ -27,8 +27,12 @@
 
 using namespace VMAP;
 
+extern std::string gMapSettingsFilename;
+
 namespace MMAP
 {
+    MapBuilderConfig gMMapBuilderConfig;
+
     MapBuilder::MapBuilder(bool skipLiquid, bool skipContinents, bool skipJunkMaps, bool skipBattlegrounds, bool debugOutput, bool bigBaseUnit, bool quick, const char* offMeshFilePath) :
         m_terrainBuilder(nullptr), m_debugOutput(debugOutput), m_offMeshFilePath(offMeshFilePath), m_skipContinents(skipContinents), m_skipJunkMaps(skipJunkMaps),
         m_skipBattlegrounds(skipBattlegrounds), m_quick(quick), m_bigBaseUnit(bigBaseUnit), m_rcContext(nullptr), m_cancel(false)
@@ -138,9 +142,6 @@ namespace MMAP
 
     void MapBuilder::buildAllMaps()
     {
-
-        printf("Using %u threads to generate mmaps\n", std::thread::hardware_concurrency());
-        m_cancel.store(false);
         for (TileList::iterator it = m_tiles.begin(); it != m_tiles.end(); ++it)
         {
             uint32 mapID = (*it).first;
@@ -148,31 +149,33 @@ namespace MMAP
                 buildMap(mapID);
         }
 
-        std::vector<TileBuilder*> workers;
-        for (unsigned int i = 0; i < std::thread::hardware_concurrency(); ++i)
-        {
-            workers.push_back(new TileBuilder(this, false, m_quick, m_bigBaseUnit, m_debugOutput));
-        }
-
-
-        while (!m_tileQueue.Empty())
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        }
-
-        m_cancel.store(true);
-
-        m_tileQueue.Cancel();
-
-
-
-        for (auto& th : workers)
-            delete th;
+        StartupAsyncBuilders();
+        WaitForAllTilesToBeBuild();
+        ShutdownAsyncBuilders();
 
         printf("Done.");
     }
 
-    /**************************************************************************/
+	void MapBuilder::WaitForAllTilesToBeBuild()
+	{
+		while (!m_tileQueue.Empty())
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		}
+	}
+
+	void MapBuilder::ShutdownAsyncBuilders()
+	{
+		m_cancel.store(true);
+		m_tileQueue.Cancel();
+		for (TileBuilder* th : workers)
+		{
+			delete th;
+		}
+        workers.clear();
+	}
+
+	/**************************************************************************/
     void MapBuilder::getGridBounds(uint32 mapID, uint32& minX, uint32& minY, uint32& maxX, uint32& maxY)
     {
         maxX = INT_MAX;
@@ -764,5 +767,74 @@ namespace MMAP
         buildGameObject("Transportship.wmo.vmo", 3015);
         buildGameObject("Transport_Zeppelin.wmo.vmo", 3031);
     }
+
+	void MapBuilder::StartupAsyncBuilders()
+	{
+		printf("Using %u threads to generate mmaps\n", std::thread::hardware_concurrency());
+		m_cancel.store(false);
+		
+		for (unsigned int i = 0; i < std::thread::hardware_concurrency(); ++i)
+		{
+			workers.push_back(new TileBuilder(this, false, m_quick, m_bigBaseUnit, m_debugOutput));
+		}
+	}
+
+	void MapBuilderConfig::LoadConfigIfExist()
+	{
+        if (!gMapSettingsFilename.empty())
+        {
+			FILE* fp = fopen(gMapSettingsFilename.c_str(), "rb");
+			if (!fp)
+			{
+				printf(" MapBuilderConfig::LoadConfigIfExist:: input file %s not found!\n", gMapSettingsFilename.c_str());
+				return;
+			}
+
+            char buf[512];
+			while (fgets(buf, 512, fp))
+			{
+                if (buf[0] == '#')
+                {
+                    continue;
+                }
+                int MapId = 0;
+                float agentMaxClimbModelTerrainTransition = 1.2f;
+                float agentMaxClimbTerrain = 1.2f;
+                float WalkableSlopeAngle = 75.0f;
+                int RawIncludeLimitsOnRasterizeTriangles = 0;
+                bool bIncludeLimitsOnRasterizeTriangles = false;
+
+                int ParamsParsed = sscanf(buf, "%d, %f, %f, %f, %d", 
+                    &MapId, 
+                    &agentMaxClimbModelTerrainTransition, 
+                    &agentMaxClimbTerrain, 
+                    &WalkableSlopeAngle,
+                    &RawIncludeLimitsOnRasterizeTriangles
+                    );
+
+                if (ParamsParsed != 5)
+                {
+                    printf(" Invalid line, when parsing \"%s\" config. Line: \"%s\"\n", gMapSettingsFilename.c_str(), buf);
+                    continue;
+                }
+                bIncludeLimitsOnRasterizeTriangles = !!RawIncludeLimitsOnRasterizeTriangles;
+                SettingCollection.insert_or_assign(MapId, MapSettings{ agentMaxClimbModelTerrainTransition , agentMaxClimbTerrain, WalkableSlopeAngle, bIncludeLimitsOnRasterizeTriangles });
+			}
+
+			fclose(fp);
+        }
+	}
+
+	const MMAP::MapSettings* MapBuilderConfig::GetSettingsForMap(int MapID) const
+	{
+        std::map<int, MapSettings>::const_iterator iter = SettingCollection.find(MapID);
+        if (iter != SettingCollection.cend())
+        {
+            const MMAP::MapSettings& MapSettingsRef = iter->second;
+            return &MapSettingsRef;
+        }
+
+        return nullptr;
+	}
 
 }

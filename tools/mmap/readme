@@ -1,3 +1,6 @@
+DEPRECATED, NOT ACTUAL FOR TURTLE VERSION.
+READ THE SOURCE CODE FOR ACTUAL SETTINGS!
+
 Generator command line args
 
 --offMeshInput      [file.*]        Path to file containing off mesh connections data.
