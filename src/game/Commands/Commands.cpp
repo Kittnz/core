@@ -15052,6 +15052,124 @@ bool ChatHandler::HandleTurtleCinematic(char* args)
     return true;
 }
 
+bool ChatHandler::HandlePetNameCommand(char* args)
+{
+    if (Player* CurrentPlayer = GetSession()->GetPlayer())
+    {
+        if (!CurrentPlayer->GetClass() == CLASS_HUNTER)
+        {
+            m_session->SendNotification("Only the Hunters can name their pets!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (!CurrentPlayer->HasItemCount(80555))
+        {
+            m_session->SendNotification("You don't have [Pet Name Change Token].");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        Pet* pet = CurrentPlayer->GetPet();
+
+        pet->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
+        m_session->SendNotification("Success! Rename your pet by right-clicking on your portrait.");
+
+        CurrentPlayer->DestroyItemCount(80555, 1, true, false, true);
+        CurrentPlayer->SaveInventoryAndGoldToDB();
+
+        return true;
+    }
+
+    // Manual way if you don't like flag solution:
+
+    //if (Player* CurrentPlayer = GetSession()->GetPlayer())
+    //{
+    //    ObjectGuid playerGuid = CurrentPlayer->GetGUID();
+
+    //    if (!CurrentPlayer->GetClass() == CLASS_HUNTER)
+    //    {
+    //        m_session->SendNotification("Only Hunters can name their pets.");
+    //        SetSentErrorMessage(true);
+    //        return false;
+    //    }
+
+    //    if (!CurrentPlayer->HasItemCount(80555))
+    //    {
+    //        m_session->SendNotification("You don't have [Pet Name Change Token].");
+    //        SetSentErrorMessage(true);
+    //        return false;
+    //    }     
+
+    //    CharPetMap const& petsMap = sCharacterDatabaseCache.GetCharPetsMap();
+    //    CharPetMap::const_iterator charPets = petsMap.find(playerGuid.GetCounter());
+    //    uint32 count = 0;
+    //    if (charPets != petsMap.end())
+    //    {
+    //        for (const auto it : charPets->second)
+    //        {
+    //            if (it->slot == PET_SAVE_AS_CURRENT)
+    //            {
+    //                uint32 petId = it->id;
+
+    //            // PSendSysMessage("DEBUG: PetID: %u.", petId);
+
+    //                if (!petId)
+    //                {
+    //                    PSendSysMessage("Please summon your pet first.");
+    //                    SetSentErrorMessage(true);
+    //                    return false;
+    //                }
+
+    //                std::string newName;
+    //                newName = args;
+
+    //                PetNameInvalidReason res = ObjectMgr::CheckPetName(newName);
+    //                if (res != PET_NAME_SUCCESS)
+    //                {
+    //                    PSendSysMessage("\"%s\" is not a valid pet name.", newName.c_str());
+    //                    SetSentErrorMessage(true);
+    //                    return false;
+    //                }
+
+    //                std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT owner, name FROM character_pet WHERE id = %u", petId));
+
+    //                if (!result)
+    //                {
+    //                    PSendSysMessage("Something went wrong, please contact a Gamemaster!", petId);
+    //                    SetSentErrorMessage(true);
+    //                    return false;
+    //                }
+
+    //                auto fields = result->Fetch();
+    //                auto pet_name = fields[1].GetString();
+
+    //                PSendSysMessage("Pet %s renamed to %s.", pet_name, newName.c_str());
+    //                CharacterDatabase.escape_string(newName);
+    //                CharacterDatabase.PExecute("UPDATE character_pet SET name = \"%s\" WHERE id = %u", newName.c_str(), petId);
+
+    //                CharacterPetCache* petData = sCharacterDatabaseCache.GetCharacterPetById(petId);
+
+    //                if (petData)
+    //                    petData->name = newName;
+
+    //                Pet* pet = CurrentPlayer->GetPet();
+    //                pet->SetName(newName);
+
+    //                CurrentPlayer->DestroyItemCount(80555, 1, true, false, true);
+    //                CurrentPlayer->SaveInventoryAndGoldToDB();
+
+    //                return true;
+
+    //            }
+    //            else
+    //                ++count;
+    //        }
+    //    }       
+    //    return false;
+    //}  
+}
+
 bool ChatHandler::HandleGuildNameCommand(char* args)
 {
     Player* pPlayer = m_session->GetPlayer();
