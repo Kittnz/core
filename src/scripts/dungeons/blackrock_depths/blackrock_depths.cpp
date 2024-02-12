@@ -159,8 +159,9 @@ struct npc_grimstoneAI : public npc_escortAI
         if (Creature* tmp = m_creature->SummonCreature(RingMob[MobSpawnId], 608.960f, -235.322f, -53.907f, 1.857f, TEMPSUMMON_DEAD_DESPAWN, 0))
         {
             RingMobGUID[MobCount] = tmp->GetGUID();
-            tmp->GetMotionMaster()->MovePoint(1, 596.285156f, -188.698944f, -54.132176f);
             tmp->SetHomePosition(596.285156f, -188.698944f, -54.132176f, 0);
+            tmp->AttackStop();
+            tmp->GetMotionMaster()->MovePoint(1, 596.285156f, -188.698944f, -54.132176f);
             tmp->SetInCombatWithZone();
 
             ++MobCount;
