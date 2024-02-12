@@ -928,6 +928,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "anim",           SEC_DEVELOPER,       false, &ChatHandler::HandleDebugAnimCommand,           "", nullptr },
         { "copy",           SEC_PLAYER,          false, &ChatHandler::HandleCopyCommand,                "", nullptr },
         { "guildname",      SEC_PLAYER,          false, &ChatHandler::HandleGuildNameCommand,                "", nullptr },
+        { "petname",        SEC_PLAYER,          false, &ChatHandler::HandlePetNameCommand,                "", nullptr },
         { "sendpacket",     SEC_ADMINISTRATOR,   false, &ChatHandler::HandleSendPacketCommand,          "", nullptr },
         { "shop",           SEC_DEVELOPER,       true,  nullptr,                                        "", shopCommandTable },
         { "path",           SEC_DEVELOPER,       true,  nullptr,                                        "", pathCommandTable },

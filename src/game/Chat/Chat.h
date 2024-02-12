@@ -755,6 +755,7 @@ class ChatHandler
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
         bool HandleGuildNameCommand(char* args);
+        bool HandlePetNameCommand(char* args);
         bool HandleSendPacketCommand(char* args);
         bool HandleXPCommand(char* args);
         bool HandlePlayCommand(char* args);
