@@ -47,6 +47,11 @@ set(SOURCES
     ./src/TerrainBuilder.cpp
     ./src/VMapExtensions.cpp
     ./src/TileBuilder.cpp
+    ./src/IntermediateValues.h
+    ./src/MapBuilder.h
+    ./src/MMapCommon.h
+    ./src/TerrainBuilder.h
+    ./src/TileBuilder.h
 )
 
 add_executable(MoveMapGen ${SOURCES})
@@ -66,6 +71,8 @@ target_link_libraries(MoveMapGen PUBLIC
                         ${ACE_LIBRARIES}
                         shared
                         framework
+                        ${OPENSSL_LIBRARIES}
+                        ${MYSQL_LIBRARY}
                         )
 
 install(TARGETS MoveMapGen DESTINATION ${BIN_DIR})

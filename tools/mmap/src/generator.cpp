@@ -25,6 +25,7 @@
 
 extern bool gForceOutput;
 extern bool gDoNotFilterDeepWater;
+extern std::string gMapSettingsFilename;
 
 using namespace MMAP;
 
@@ -247,6 +248,14 @@ bool handleArgs(int argc, char** argv,
 
             offMeshInputPath = param;
         }
+		else if (strcmp(argv[i], "--settingsInput") == 0)
+		{
+		    param = argv[++i];
+		    if (!param)
+			    return false;
+
+            gMapSettingsFilename = param;
+		}
         else if ((strcmp(argv[i], "-?") == 0) || (strcmp(argv[i], "/?") == 0) || (strcmp(argv[i], "-h") == 0))
         {
             printUsage();
@@ -313,12 +322,21 @@ int main(int argc, char** argv)
     if (!checkDirectories(debugOutput))
         return silent ? -3 : finish("Press any key to close...", -3);
 
+    MMAP::gMMapBuilderConfig.LoadConfigIfExist();
+
     MapBuilder builder(skipLiquid, skipContinents, skipJunkMaps, skipBattlegrounds, debugOutput, bigBaseUnit, quick, offMeshInputPath);
 
     if (tileX > -1 && tileY > -1 && mapnum >= 0)
+    {
         builder.buildSingleTile(mapnum, tileX, tileY);
+    }
     else if (mapnum >= 0)
+    {
         builder.buildMap(uint32(mapnum));
+		builder.StartupAsyncBuilders();
+		builder.WaitForAllTilesToBeBuild();
+		builder.ShutdownAsyncBuilders();
+    }
     else
     {
         builder.buildAllMaps();
