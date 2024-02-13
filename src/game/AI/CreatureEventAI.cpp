@@ -897,11 +897,6 @@ void CreatureEventAI::UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat)
     }
 }
 
-void CreatureEventAI::SetInvincibilityHealthLevel(uint32 hp_level, bool is_percent)
-{
-    m_creature->SetInvincibilityHpThreshold(is_percent ? m_creature->GetMaxHealth() * hp_level / 100 : hp_level);
-}
-
 //*********************************
 //*** Functions used globally ***
 
