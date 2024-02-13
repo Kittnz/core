@@ -16384,7 +16384,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
                     SetAcceptWhispers(true);
                 break;
         }
-        SetGodMode(true);
+        SetInvincibilityHpThreshold(1);
     }
 
     if (extraflags & PLAYER_EXTRA_WHISP_RESTRICTION)

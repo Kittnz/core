@@ -504,7 +504,7 @@ enum AtLoginFlags
 // Nostalrius
 enum PlayerCheatOptions
 {
-    PLAYER_CHEAT_GOD               = 0x001,
+    //PLAYER_CHEAT_GOD               = 0x001,
     PLAYER_CHEAT_NO_COOLDOWN       = 0x002,
     PLAYER_CHEAT_NO_CAST_TIME      = 0x004,
     PLAYER_CHEAT_NO_POWER          = 0x008,
@@ -1120,8 +1120,6 @@ class Player final: public Unit
         void SetGMSocials(bool on, bool init = false);
         void SetGMVisible(bool on);
         void SetPvPDeath(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_PVP_DEATH; else m_ExtraFlags &= ~PLAYER_EXTRA_PVP_DEATH; }
-        void SetGodMode(bool on) { SetOption(PLAYER_CHEAT_GOD, on); }
-        bool IsGod() const { return HasOption(PLAYER_CHEAT_GOD); }
 
         void SetShopAllowed(bool allowed) { m_shopAllowed = allowed; }
         bool IsShopAllowed() const { return m_shopAllowed; }

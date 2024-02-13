@@ -523,6 +523,7 @@ class Unit : public WorldObject
         bool m_AINotifyScheduled;
     protected:
         DeathState m_deathState;
+        uint32 m_invincibilityHpThreshold;
         uint32 m_transform;
         float m_modelCollisionHeight;
         bool m_isCreatureLinkingTrigger;
@@ -534,6 +535,8 @@ class Unit : public WorldObject
         bool HasUnitState(uint32 f) const { return m_stateFlags & f; }
         void ClearUnitState(uint32 f) { m_stateFlags &= ~f; }
         uint32 GetUnitState() const { return m_stateFlags; }
+        void SetInvincibilityHpThreshold(uint32 hp) { m_invincibilityHpThreshold = hp; }
+        uint32 GetInvincibilityHpThreshold() const { return m_invincibilityHpThreshold; }
         void UpdateControl();
         bool CanFreeMove() const { return !HasUnitState(UNIT_STAT_NO_FREE_MOVE) && !GetOwnerGuid(); }
         uint32 GetCreatureType() const;

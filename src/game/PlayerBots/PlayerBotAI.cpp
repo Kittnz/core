@@ -37,7 +37,7 @@ void PlayerBotAI::Remove()
 void PlayerBotFleeingAI::OnPlayerLogin()
 {
     me->GetMotionMaster()->MoveFleeing(me);
-    me->SetGodMode(true);
+    me->SetInvincibilityHpThreshold(1);
 }
 
 /// MageOrgrimmarAttackerAI event

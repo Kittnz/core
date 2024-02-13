@@ -13931,9 +13931,9 @@ bool ChatHandler::HandleGodCommand(char* args)
             SetSentErrorMessage(true);
             return false;
         }
-        pPlayer->SetGodMode(value);
+        pPlayer->SetInvincibilityHpThreshold(value ? 1 : 0);
     }
-    if (pPlayer->IsGod())
+    if (pPlayer->GetInvincibilityHpThreshold())
         SendSysMessage("Mode GOD : [ON]");
     else
         SendSysMessage("Mode GOD : [OFF]");
@@ -13952,8 +13952,6 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
         enable = false;
     if (sArgs.find("OFF") != std::string::npos)
         enable = false;
-    if (sArgs.find("GOD") != std::string::npos || sArgs.find("god") != std::string::npos)
-        flags |= PLAYER_CHEAT_GOD;
     if (sArgs.find("CD") != std::string::npos || sArgs.find("cd") != std::string::npos || sArgs.find("cooldown") != std::string::npos || sArgs.find("COOLDOWN") != std::string::npos)
         flags |= PLAYER_CHEAT_NO_COOLDOWN;
     if (sArgs.find("CAST") != std::string::npos || sArgs.find("cast") != std::string::npos)
@@ -13980,11 +13978,16 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
         pTarget = m_session->GetPlayer();
+
     PSendSysMessage("%s flags 0x%x for `%s`.", enable ? "Adding" : "Removing", flags, pTarget->GetName());
+
     if (enable)
         pTarget->EnableOption(flags);
     else
         pTarget->RemoveOption(flags);
+
+    if (sArgs.find("GOD") != std::string::npos || sArgs.find("god") != std::string::npos)
+        pTarget->SetInvincibilityHpThreshold(enable ? 1 : 0);
 
     if (flags & PLAYER_VIDEO_MODE)
     {

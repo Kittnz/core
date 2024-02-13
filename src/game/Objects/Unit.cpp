@@ -143,6 +143,7 @@ Unit::Unit()
 
     m_stateFlags = 0;
     m_deathState = ALIVE;
+    m_invincibilityHpThreshold = 0;
 
     //m_Aura = nullptr;
     //m_AurasCheck = 2000;
@@ -836,20 +837,14 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     else if (IsPlayer() && ToPlayer()->IsHardcore() && pVictim->IsCreature() && (pVictim->GetEntry() == 89 || GetEntry() == 14385))
         damage *= 10;
 
-
     if (HasSpell(46023) || HasSpell(46024)) // Passive : AVOIDANCE for Pets.
     {
         if (spellProto && (spellProto->IsAreaOfEffectSpell() || spellProto->HasAreaAuraEffect()))
             damage *= 0.5f;
     }
 
-    if (health <= damage)
+    if (health <= damage && pVictim->GetInvincibilityHpThreshold() == 0)
     {
-        // Can't kill gods
-        if (Player* pPlayer = pVictim->ToPlayer())
-            if (pPlayer->IsGod())
-                return 0;
-
         if (auto player = pVictim->ToPlayer(); player && player->IsHardcore() && sWorld.HitsDiffThreshold())
         {
             //don't deal damage nor kill.
@@ -873,9 +868,13 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             he->DuelComplete(DUEL_INTERRUPTED);
         }
     }
-    else                                                    // if (health <= damage)
+    else                                                    // if (health <= damage) or invincible
     {
-        pVictim->ModifyHealth(- (int32)damage);
+        if (health > pVictim->GetInvincibilityHpThreshold())
+        {
+            uint32 dmg = std::min<uint32>(health - pVictim->GetInvincibilityHpThreshold(), damage);
+            pVictim->ModifyHealth(-(int32)dmg);
+        }
 
         if (damagetype != DOT)
         {
@@ -1859,7 +1858,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
             Probability = 40.0f;
 
         if (Player* pPlayer = pVictim->ToPlayer())
-            if (pPlayer->IsGod())
+            if (pPlayer->GetInvincibilityHpThreshold())
                 Probability = 0.0f;
 
         if (roll_chance_f(Probability))
