@@ -15072,12 +15072,17 @@ bool ChatHandler::HandlePetNameCommand(char* args)
 
         Pet* pet = CurrentPlayer->GetPet();
 
+        if (!pet)
+        {
+            PSendSysMessage("Please summon your pet first.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
         pet->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
         m_session->SendNotification("Success! Rename your pet by right-clicking on your portrait.");
-
         CurrentPlayer->DestroyItemCount(80555, 1, true, false, true);
         CurrentPlayer->SaveInventoryAndGoldToDB();
-
         return true;
     }
 
