@@ -15056,7 +15056,7 @@ bool ChatHandler::HandlePetNameCommand(char* args)
 {
     if (Player* CurrentPlayer = GetSession()->GetPlayer())
     {
-        if (!CurrentPlayer->GetClass() == CLASS_HUNTER)
+        if (CurrentPlayer->GetClass() != CLASS_HUNTER)
         {
             m_session->SendNotification("Only the Hunters can name their pets!");
             SetSentErrorMessage(true);
@@ -15074,7 +15074,7 @@ bool ChatHandler::HandlePetNameCommand(char* args)
 
         if (!pet)
         {
-            PSendSysMessage("Please summon your pet first.");
+            m_session->SendNotification("Please summon your pet first.");
             SetSentErrorMessage(true);
             return false;
         }
