@@ -15079,6 +15079,13 @@ bool ChatHandler::HandlePetNameCommand(char* args)
             return false;
         }
 
+        if (pet->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME))
+        {
+            m_session->SendNotification("Pet renaming is already enabled and do so by right-clicking on your portrait.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
         pet->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
         m_session->SendNotification("Success! Rename your pet by right-clicking on your portrait.");
         CurrentPlayer->DestroyItemCount(80555, 1, true, false, true);
