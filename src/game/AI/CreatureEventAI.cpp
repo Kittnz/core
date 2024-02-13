@@ -94,7 +94,6 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
     m_AttackDistance = 0.0f;
     m_AttackAngle = 0.0f;
     m_bCanSummonGuards = c->CanSummonGuards();
-    m_InvinceabilityHpLevel = 0;
 
     //Handle Spawned Events
     c->SetAI(this);
@@ -900,7 +899,7 @@ void CreatureEventAI::UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat)
 
 void CreatureEventAI::SetInvincibilityHealthLevel(uint32 hp_level, bool is_percent)
 {
-    m_InvinceabilityHpLevel = is_percent ? m_creature->GetMaxHealth() * hp_level / 100 : hp_level;
+    m_creature->SetInvincibilityHpThreshold(is_percent ? m_creature->GetMaxHealth() * hp_level / 100 : hp_level);
 }
 
 //*********************************
@@ -920,17 +919,6 @@ void CreatureEventAI::ReceiveEmote(Player* pPlayer, uint32 text_emote)
 
             ProcessEvent(itr, pPlayer);
         }
-    }
-}
-
-void CreatureEventAI::DamageTaken(Unit* /*done_by*/, uint32& damage)
-{
-    if (m_InvinceabilityHpLevel > 0 && m_creature->GetHealth() < m_InvinceabilityHpLevel + damage)
-    {
-        if (m_creature->GetHealth() <= m_InvinceabilityHpLevel)
-            damage = 0;
-        else
-            damage = m_creature->GetHealth() - m_InvinceabilityHpLevel;
     }
 }
 

@@ -314,7 +314,6 @@ class CreatureEventAI : public CreatureAI
         void MoveInLineOfSight(Unit *who) override;
         void SpellHit(WorldObject* pUnit, const SpellEntry* pSpell) override;
         void MovementInform(uint32 type, uint32 id) override;
-        void DamageTaken(Unit* done_by, uint32& damage) override;
         void UpdateAI(const uint32 diff) override;
         void ReceiveEmote(Player* pPlayer, uint32 text_emote) override;
         void GroupMemberJustDied(Creature* unit, bool isLeader) override;
@@ -341,7 +340,6 @@ class CreatureEventAI : public CreatureAI
         CreatureEventAIList m_CreatureEventAIList;          //Holder for events (stores enabled, time, and eventid)
         float  m_AttackDistance;                            // Distance to attack from
         float  m_AttackAngle;                               // Angle of attack
-        uint32 m_InvinceabilityHpLevel;                     // Minimal health level allowed at damage apply
         bool m_bCanSummonGuards;
 
         void UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat);
