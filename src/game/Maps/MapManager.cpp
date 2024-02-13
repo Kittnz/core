@@ -232,7 +232,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
         }
         DungeonPersistentState* state = player->GetBoundInstanceSaveForSelfOrGroup(mapid);
         uint32 instanceId = state ? state->GetInstanceId() : 0;
-        if (!player->CheckInstanceCount(instanceId))
+        if (!player->CheckInstanceCount(instanceId) && !player->IsGameMaster())
         {
             DEBUG_LOG("MAP: Player '%s' can't enter instance %u on map %u. Has already entered too many instances.", player->GetName(), instanceId, mapid);
             player->SendTransferAborted(TRANSFER_ABORT_TOO_MANY_INSTANCES);
