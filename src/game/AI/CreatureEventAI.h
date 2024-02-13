@@ -326,7 +326,6 @@ class CreatureEventAI : public CreatureAI
 
         bool ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* pActionInvoker = nullptr);
         bool ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker);
-        void SetInvincibilityHealthLevel(uint32 hp_level, bool is_percent);
 
         uint8  m_Phase;                                     // Current phase, max 32 phases
 
