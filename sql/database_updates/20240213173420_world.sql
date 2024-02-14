@@ -12,3 +12,6 @@ UPDATE quest_template SET ReqCreatureOrGOId1 = 0, ReqCreatureOrGOCount = 0 WHERE
 -- If you can figure out how to make 1505 and 1818 close each other, but STILL have their follow-up quests available after doing one or the other, go ahead and write a query
 -- But I'm not going to spend 10 times as long trying to tweak ExclusiveGroups, NextQuestInChains, PrevQuestIds, NextQuestIds, etc just to replicate an arbitrary Classic behavior
 UPDATE quest_template SET ExclusiveGroup = 0, NextQuestID = 0 WHERE entry IN (1505, 1818);
+
+-- Change Smoldering Dream Essence from Quest item to Bind on Pickup
+UPDATE item_template SET Bonding = 1 WHERE entry = 61444;
