@@ -1577,6 +1577,17 @@ void Creature::SaveToDB(uint32 mapid)
     sWorld.ExecuteUpdate("%s", ss.str().c_str());
 }
 
+void Creature::CheckLootDistance(float& distance) const 
+{
+    //TODO: Move this to DB.
+    switch (GetEntry())
+    {
+    case 1853: // Darkmaster Gandling
+        distance = 120.f;
+        break;
+    }
+}
+
 void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float percentMana)
 {
     uint32 rank = IsPet() ? 0 : cinfo->rank;

@@ -1258,6 +1258,9 @@ bool WorldObject::IsWithinLootXPDist(WorldObject const * objToLoot) const
     if (objToLoot->IsCreature() && (static_cast<Creature const*>(objToLoot)->GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS))
         lootDistance += 150.0f;
 
+    if (objToLoot->IsCreature())
+        objToLoot->ToCreature()->CheckLootDistance(lootDistance);
+
     return objToLoot && IsInMap(objToLoot) && _IsWithinDist(objToLoot, lootDistance, false);
 }
 
