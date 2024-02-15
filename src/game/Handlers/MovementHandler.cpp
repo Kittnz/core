@@ -327,11 +327,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         }
     }
 
+#ifdef USE_ANTICHEAT
     if (pPlayerMover != nullptr)
     {
 		//If anticheat says ok, we still can detect suspisious activities over time
 	    sSuspiciousStatisticMgr.OnMovement(pPlayerMover, movementInfo);
     }
+#endif
 
     // This is required for proper movement extrapolation
     if (opcode == MSG_MOVE_JUMP)
@@ -888,7 +890,9 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket& recvData)
             return;
         }
 
+#ifdef USE_ANTICHEAT
         sSuspiciousStatisticMgr.OnMovement(_player, movementInfo);
+#endif
     }
 
     HandleMoverRelocation(pMover, movementInfo);

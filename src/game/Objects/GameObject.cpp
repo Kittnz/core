@@ -1688,7 +1688,9 @@ void GameObject::Use(Unit* user)
                     // 2) if skill == base_zone_skill => 5% chance
                     // 3) chance is linear dependence from (base_zone_skill-skill)
 
+#ifdef USE_ANTICHEAT
                     sSuspiciousStatisticMgr.OnFishingAttempt(player);
+#endif
 
                     uint32 zone, subzone;
                     GetZoneAndAreaId(zone, subzone);
