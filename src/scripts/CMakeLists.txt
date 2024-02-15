@@ -285,6 +285,8 @@ miscellaneous/gameobject_scripts.cpp
 miscellaneous/feature_custom_spell_test.cpp
 miscellaneous/feature_gardening.cpp
 miscellaneous/feature_transmog.h
+miscellaneous/npc_loothelper.h
+miscellaneous/npc_loothelper.cpp
 miscellaneous/ptr.cpp
 miscellaneous/random_scripts_0.cpp
 miscellaneous/random_scripts_1.cpp

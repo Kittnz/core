@@ -267,6 +267,6 @@ void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
     }
 
     const float gold_factor = static_cast<float>(playerCount) / static_cast<float>(maxCount);
-    loot->GenerateMoneyLoot(static_cast<uint32>(creature->GetCreatureInfo()->gold_min * gold_factor),
-                            static_cast<uint32>(creature->GetCreatureInfo()->gold_max * gold_factor));
+    loot->GenerateMoneyLoot(static_cast<uint32>(creature->GetGoldMin() * gold_factor),
+                            static_cast<uint32>(creature->GetGoldMax() * gold_factor));
 }

@@ -115,3 +115,4 @@ tools/libDiscord/Debug/
 tools/libDiscord/Release/
 tools/CinematicTool/Debug/
 tools/CinematicTool/Release/
+/cmake-build-release

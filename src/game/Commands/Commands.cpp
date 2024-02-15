@@ -95,6 +95,7 @@
 #include "TransmogMgr.h"
 #include "PerfStats.h"
 #include "PerformanceMonitor.h"
+#include "../scripts/miscellaneous/npc_loothelper.h"
 
 int32 GetTokenBalance(uint32 accountId)
 {
@@ -5744,6 +5745,43 @@ bool ChatHandler::HandleDebugLootTableCommand(char* args)
                 PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itr.first, proto->Name1.c_str(), chance.str().c_str());
         }
     }
+
+    return true;
+}
+
+bool ChatHandler::HandleLootHelperCommand(char* args)
+{
+    const auto activePlayer = m_session->GetPlayer();
+    if (!activePlayer)
+    {
+        return false;
+    }
+
+    uint32_t entry;
+    const auto target = GetSelectedCreature();
+    if (target)
+    {
+        entry = target->GetEntry();
+    }
+    else
+    {
+        if (!ExtractUInt32(&args, entry))
+        {
+            PSendSysMessage("Error: no creature selected and no entry provided");
+            return false;
+        }
+    }
+
+    const auto position = activePlayer->GetPosition();
+    const auto lootHelper = activePlayer->SummonCreature(1001000, position.x, position.y, position.z, position.o, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000 * 60 * 5);
+    npc_loothelperAI* loothelperAi = dynamic_cast<npc_loothelperAI*>(lootHelper->AI());
+    if (!loothelperAi)
+    {
+        PSendSysMessage("System Error: failed to create loot helper");
+        return true;
+    }
+
+    loothelperAi->SetCreatureEntry(entry);
 
     return true;
 }
@@ -15095,6 +15133,7 @@ bool ChatHandler::HandlePetNameCommand(char* args)
         CurrentPlayer->SaveInventoryAndGoldToDB();
         return true;
     }
+    return false;
 
     // Manual way if you don't like flag solution:
 

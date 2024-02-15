@@ -1162,7 +1162,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             loot->clear();
             if (!(pCreatureVictim->AI() && pCreatureVictim->AI()->FillLoot(loot, looter)))
             {
-                if (uint32 lootid = pCreatureVictim->GetCreatureInfo()->loot_id)
+                if (uint32 lootid = pCreatureVictim->GetLootId())
                 {
                     loot->SetTeam(pGroupTap ? pGroupTap->GetTeam() : looter->GetTeam());
                     loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, pCreatureVictim);
@@ -1171,7 +1171,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             if (pCreatureVictim->GetMap()->IsRaid())
                 sAutoScaler->GenerateScaledMoneyLoot(pCreatureVictim, loot);
             else
-                loot->GenerateMoneyLoot(pCreatureVictim->GetCreatureInfo()->gold_min, pCreatureVictim->GetCreatureInfo()->gold_max);
+                loot->GenerateMoneyLoot(pCreatureVictim->GetGoldMin(), pCreatureVictim->GetGoldMax());
         }
 
         if (pGroupTap)
@@ -1374,9 +1374,10 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pCreatureVictim->UpdateCombatWithZoneState(false);
 
             pCreatureVictim->DeleteThreatList();
-            if (CreatureInfo const *cinfo = pCreatureVictim->GetCreatureInfo())
-                if (cinfo->loot_id || cinfo->gold_max > 0)
-                    pCreatureVictim->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+            if (pCreatureVictim->GetLootId() || pCreatureVictim->GetGoldMax() > 0)
+            {
+                pCreatureVictim->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+            }
 
             if (pPlayerTap && (pCreatureVictim->IsGuard() || pCreatureVictim->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP)))
                 pCreatureVictim->SendZoneUnderAttackMessage(pPlayerTap);
