@@ -1145,6 +1145,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
         pPlayerTap->SendDirectMessage(&data);
 
+#ifdef USE_ANTICHEAT
         if (IsPlayer())
         {
             if (GetMap()->IsDungeon())
@@ -1152,6 +1153,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             else
                 sSuspiciousStatisticMgr.OnNpcKilledInWorld(ToPlayer(), pVictim);
         }
+#endif
 
         if (pCreatureVictim)
         {

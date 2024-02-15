@@ -15222,6 +15222,8 @@ bool ChatHandler::HandlePetNameCommand(char* args)
     //    }       
     //    return false;
     //}  
+
+    return false;
 }
 
 bool ChatHandler::HandleGuildNameCommand(char* args)
@@ -17262,6 +17264,8 @@ bool ChatHandler::HandleCharacterInactivityDataCommand(char* args)
 	return false;
 }
 
+#ifdef USE_ANTICHEAT
+
 bool ChatHandler::HandleSuspiciousEnable(char* args)
 {
 	bool bEnable = true;
@@ -17404,6 +17408,7 @@ bool ChatHandler::HandleSuspiciousWhitelist(char* args)
     return true;
 }
 
+#endif
 
 bool ChatHandler::HandleBlacklistNameCommand(char* args)
 {

@@ -2238,7 +2238,9 @@ void World::SetInitialWorldSettings()
     if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
         DeleteOldPDumps();
 
+#ifdef USE_ANTICHEAT
 	sSuspiciousStatisticMgr.Initialize();
+#endif
 
     if (getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
         m_autoCommitThread = std::thread(&autoCommitWorkerThread);
