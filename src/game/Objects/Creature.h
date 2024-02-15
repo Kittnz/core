@@ -754,6 +754,8 @@ class Creature : public Unit
 
         void SendAIReaction(AiReaction reactionType);
 
+        void CheckLootDistance(float& distance) const;
+
         bool DoFlee();
         bool DoFleeToGetAssistance();
         float GetFleeingSpeed() const;
