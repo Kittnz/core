@@ -1001,18 +1001,10 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
         r->setLoot(loot);
         r->itemSlot = itemSlot;
 
-        if (r->totalPlayersRolling == 1)                    // single looter
-        {
-            r->playerVote.begin()->second = ROLL_NEED;
-            CountSingleLooterRoll(r);
-        }
-        else
-        {
-            SendLootStartRoll(LOOT_ROLL_TIMEOUT, *r);
-            loot->items[itemSlot].is_blocked = true;
-            lootTarget->StartGroupLoot(this, LOOT_ROLL_TIMEOUT);
-            RollId.push_back(r);
-        }
+        SendLootStartRoll(LOOT_ROLL_TIMEOUT, *r);
+        loot->items[itemSlot].is_blocked = true;
+        lootTarget->StartGroupLoot(this, LOOT_ROLL_TIMEOUT);
+        RollId.push_back(r);
     }
     else                                            // no looters??
         delete r;
@@ -1075,44 +1067,8 @@ void Group::CountSingleLooterRoll(Roll* roll)
     SendLootRollWon(playerGuid, uint8(100), ROLL_NEED, *roll);
 
     LootItem *item = &(roll->getLoot()->items[roll->itemSlot]);
-    if (player && player->GetSession())
-    {
-        ItemPosCountVec dest;
-        InventoryResult msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, roll->itemid, item->count);
-        if (msg == EQUIP_ERR_OK)
-        {
-            item->is_looted = true;
-            roll->getLoot()->NotifyItemRemoved(roll->itemSlot);
-            --roll->getLoot()->unlootedCount;
-            sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
-                player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
-
-            sDBLogger.LogLoot(
-                {
-                    player->GetGUIDLow(),
-                    player->GetName(),
-                    player->GetSession()->GetAccountId(),
-                    player->GetSession()->GetRemoteAddress(),
-                    LogLoot::SourceType(roll->lootedTargetGUID),
-                    roll->lootedTargetGUID.GetCounter(),
-                    roll->lootedTargetGUID.GetEntry(),
-                    0,
-                    item->itemid,
-                    item->count,
-                    LogLoot::TypeRoll
-                });
-            
-
-            if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
-                player->OnReceivedItem(newItem);
-        }
-        else
-        {
-            item->is_blocked = false;
-            item->lootOwner = playerGuid;
-            player->SendEquipError(msg, nullptr, nullptr, roll->itemid);
-        }
-    }
+    item->lootOwner = playerGuid;
+    item->is_blocked = false;
 
     delete roll;
 }

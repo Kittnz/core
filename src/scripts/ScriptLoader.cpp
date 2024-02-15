@@ -317,6 +317,7 @@ void AddSC_boss_gerastrasz();
 void AddSC_boss_chronormu();
 
 // Misc
+void AddSC_npc_loothelper();
 void AddSC_npc_ptr();
 void AddScripts()
 {
@@ -632,5 +633,6 @@ void AddScripts()
     AddSC_boss_chronormu();
 
     // Misc
+    AddSC_npc_loothelper();
     AddSC_npc_ptr();
 }

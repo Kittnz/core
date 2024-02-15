@@ -764,6 +764,7 @@ class ChatHandler
         bool HandleDebugAnimCommand(char* args);
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
+        bool HandleLootHelperCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
 
 		///Suspicious statistic commands
