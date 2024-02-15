@@ -219,5 +219,5 @@ inline void npc_loothelperAI::SetPlayerVisibility(bool visible)
 
 inline void npc_loothelperAI::Reset()
 {
-    SetPlayerVisibility(visibleToPlayers);
+    SetPlayerVisibility(false);
 }
