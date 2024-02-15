@@ -23947,6 +23947,11 @@ bool Player::SetupHardcoreMode()
     SetMoney(0);
 
     std::unordered_set<uint32> shopItems;
+    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    {
+        auto seaItems = make_array(91790, 91794, 91793, 91791, 19054, 19026, 9318, 9315, 9313, 9312);
+        shopItems.insert(seaItems.begin(), seaItems.end());
+    }
 
     for (const auto& shopItem : sObjectMgr.GetShopEntriesList())
     {
@@ -24077,7 +24082,7 @@ bool Player::SetupHardcoreMode()
     }
     AwardTitle(TITLE_STILL_ALIVE);
     ChangeTitle(TITLE_STILL_ALIVE);
-    CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
+    CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u') AND sender != 51550", GetGUIDLow(), GetGUIDLow());
     return true;
 }
 
