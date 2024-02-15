@@ -204,7 +204,7 @@ extern int main(int argc, char** argv)
 	sLog.outInfo("Giperion 2024");
 	DETAIL_LOG("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
-	using TestAllocator = AllocatorCategory<uint8, teststr>;
+	using TestAllocator = AllocatorWithCategory<uint8, teststr>;
 	std::vector<uint8, TestAllocator> awdaVec;
 
 	HookSignals();
