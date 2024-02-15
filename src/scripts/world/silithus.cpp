@@ -292,8 +292,6 @@ struct npc_solenorAI : public ScriptedAI
         switch (m_creature->GetEntry())
         {
             case NPC_NELSON_THE_NICE:
-                m_creature->SetRespawnDelay(35*MINUTE);
-                m_creature->SetRespawnTime(35*MINUTE);
                 m_creature->SetHomePosition(-7724.21f, 1676.43f, 7.0571f, 4.80044f);
                 m_creature->NearTeleportTo(-7724.21f, 1676.43f, 7.0571f, 4.80044f);
                 if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != WAYPOINT_MOTION_TYPE)
@@ -371,23 +369,12 @@ struct npc_solenorAI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(-7724.21f, 1676.43f, 7.0571f, 4.80044f);
-        // DRSS
-        uint32 m_respawn_delay_Timer = 3*HOUR;
-        if (sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
-
-        m_creature->SetRespawnDelay(m_respawn_delay_Timer);
-        m_creature->SetRespawnTime(m_respawn_delay_Timer);
-        m_creature->SaveRespawnTime();
     }
 
     void DemonDespawn(bool triggered = true)
     {
         m_creature->RemoveGuardians();
         m_creature->SetHomePosition(-7724.21f, 1676.43f, 7.0571f, 4.80044f);
-        m_creature->SetRespawnDelay(15*MINUTE);
-        m_creature->SetRespawnTime(15*MINUTE);
-        m_creature->SaveRespawnTime();
 
         if (triggered)
         {

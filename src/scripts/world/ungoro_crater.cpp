@@ -636,31 +636,9 @@ struct npc_simone_seductressAI : public ScriptedAI
         else
             DemonDespawn();
     }
-
-    void JustDied(Unit* /*pKiller*/) override
-    {
-        if (Creature* pSimone = m_creature->GetMap()->GetCreature(m_simoneGuid))
-        {
-            // DRSS
-            uint32 m_respawn_delay_Timer = 3*HOUR;
-            if (sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-                m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
-
-            pSimone->SetRespawnDelay(m_respawn_delay_Timer);
-            pSimone->SetRespawnTime(m_respawn_delay_Timer);
-            pSimone->SaveRespawnTime();
-        }
-    }
         
     void DemonDespawn(bool triggered = true)
     {
-        if (Creature* pSimone = m_creature->GetMap()->GetCreature(m_simoneGuid))
-        {
-            pSimone->SetRespawnDelay(15*MINUTE);
-            pSimone->SetRespawnTime(15*MINUTE);
-            pSimone->SaveRespawnTime();
-        }
-        
         if (triggered)
         {
             Creature* pCleaner = m_creature->SummonCreature(NPC_THE_CLEANER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetAngle(m_creature), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 20*MINUTE*IN_MILLISECONDS);
@@ -817,9 +795,6 @@ struct npc_simone_the_inconspicuousAI : public ScriptedAI
 
     void Reset() override
     {
-        m_creature->SetRespawnDelay(35*MINUTE);
-        m_creature->SetRespawnTime(35*MINUTE);
-    
         m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetVisibility(VISIBILITY_ON);
         
