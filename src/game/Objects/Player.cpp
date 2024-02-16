@@ -9536,6 +9536,36 @@ uint32 Player::GetXPRestBonus(uint32 xp)
     return rested_bonus;
 }
 
+void Player::HandleTransferChecks()
+{
+    //This function handles FIRST LOGIN INCOMING CHARACTERS WHO HAVE BEEN TRANSFERRED TO SEA.
+    //Subject to change, but for now:
+    //Hard cap gold amount to X.
+    //Remove x% of important mats upon arrival.
+
+
+    //TODO: Correct mat item IDs.
+    auto taxedItemIds = make_array(000, 001, 002, 003, 004, 005);
+
+    for (const auto& itemId : taxedItemIds)
+    {
+        auto itemCount = GetItemCount(itemId, true);
+        if (itemCount > 2)
+        {
+            uint32 removalCount = (uint32)floor(itemCount / 2.f);
+            DestroyItemCount(itemId, removalCount, true, false, true);
+            sLog.out(LOG_CHAR, "Player %s(%u) Had %u of item %u. Removing %u.", GetName(), GetGUIDLow(), itemId, removalCount);
+        }
+    }
+
+    if (GetMoney() > (sWorld.getConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED) * GOLD))
+    {
+        int32 removeMoney = sWorld.getConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED) * GOLD - GetMoney(); // Negative.
+        LogModifyMoney(removeMoney, "TransferRemoval");
+    }
+
+}
+
 float Player::ComputeRest(time_t timePassed, bool offline /*= false*/, bool inRestPlace /*= false*/)
 {
     // Every 8h in resting zone we gain a bubble

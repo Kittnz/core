@@ -156,6 +156,7 @@ namespace HttpApi
             {
                 //only set char active if transaction for migration transfer succeeded.
                 CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", *guidPtr);
+                CharacterDatabase.PExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 0x20 WHERE `guid` = %u", *guidPtr); // add WAS_TRANSFERRED custom flag to take away items after login.
             }
             else
                 sLog.out(LOG_API, "FAILED to run transaction for account ID %u", accountId);
