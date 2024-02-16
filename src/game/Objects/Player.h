@@ -102,6 +102,7 @@ enum CustomPlayerFlags
     CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN          = 0x04,
     CUSTOM_PLAYER_FLAG_BYPASS_WHO_COOLDOWN    = 0x08,
     CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT    = 0x10,
+    CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED        = 0x20
 };
 
 enum BuyBankSlotResult
@@ -2372,6 +2373,8 @@ class Player final: public Unit
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
         /*********************************************************/
+
+        void HandleTransferChecks();
 
     private:
         uint8 m_newStandState;

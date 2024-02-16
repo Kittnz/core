@@ -942,6 +942,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->SetCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT);
     }
 
+
+    if (pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED))
+    {
+        pCurrChar->HandleTransferChecks();
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED);
+    }
     // Update warden speeds
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
