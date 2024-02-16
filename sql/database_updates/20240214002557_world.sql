@@ -553,3 +553,6 @@ REPLACE INTO `gameobject` VALUES ( 5018310, 2006594, 0, 1518.48, 198.676, -45.45
 REPLACE INTO `gameobject` VALUES ( 5018310, 2006594, 0, 1518.48, 198.476, -45.4513, 5.1351, 0, 0, 0.543031, -0.839713, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417427833983686, 1.200000);
 REPLACE INTO `gameobject` VALUES ( 5018310, 2006594, 0, 1518.48, 198.476, -45.4513, 5.1351, 0, 0, 0.543031, -0.839713, 300, 300, 100, 1, 0, 0);
+
+-- Changes by GHEOR
+UPDATE `creature` SET `position_x` = -14414.748047, `position_y` = 421.421082, `position_z` = 10.695707, `orientation` = 1.207292 WHERE `guid` = 568;
