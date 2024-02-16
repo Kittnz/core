@@ -3,3 +3,7 @@ update item_template set spellid_1 = 57158, spelltrigger_1 = 1, spellcooldown_1 
 -- Alah'Thalas Flight Master shows "Gryphon Master" subname
 
 update creature_template where subname = 'Dragonhawk Rider' where entry = 93100;
+
+-- Extend Valentine Event.
+
+UPDATE `game_event` SET `length` = 20160 WHERE `entry` = 8;
