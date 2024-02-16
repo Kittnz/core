@@ -15135,6 +15135,7 @@ bool ChatHandler::HandlePetNameCommand(char* args)
     }
     return false;
 
+    return false;
     // Manual way if you don't like flag solution:
 
     //if (Player* CurrentPlayer = GetSession()->GetPlayer())
