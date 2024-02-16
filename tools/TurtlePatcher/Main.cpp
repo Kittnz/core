@@ -63,9 +63,9 @@ bool fov_build = false;
 constexpr bool bPatcher = true;
 constexpr bool bDownloadPatchFromInternet = false;
 
-#define NEW_BUILD 7200u
-#define NEW_VISUAL_BUILD "7200"
-#define NEW_VISUAL_VERSION "1.17.2"
+#define NEW_BUILD 7100u
+#define NEW_VISUAL_BUILD "7100"
+#define NEW_VISUAL_VERSION "1.17.1"
 #define NEW_BUILD_DATE "Jan 10 2024"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
