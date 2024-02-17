@@ -1443,7 +1443,7 @@ void World::LoadConfigSettings(bool reload)
     // Shop:
     setConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW, "Shop.RefundWindow", DAY * 2);
 
-    if (getConfig(CONFIG_BOOL_SEA_NETWORK))
+    /*if (getConfig(CONFIG_BOOL_SEA_NETWORK))
     {
         sLog.outBasic("Overriding XP rates for chinese realm.");
         switch (getConfig(CONFIG_UINT32_GAME_TYPE))
@@ -1466,7 +1466,7 @@ void World::LoadConfigSettings(bool reload)
                 break;
             }
         }
-    }
+    }*/
 
     m_autoPDumpDirectory = sConfig.GetStringDefault("PDumpDir", "pdump");
     setConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL, "AutoPDump.MinCharLevel", 30);
