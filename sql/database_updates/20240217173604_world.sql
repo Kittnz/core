@@ -9,3 +9,5 @@ update reference_loot_template set groupid = 1 where entry = 30593;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/6211
 -- Item "Ironbark Branch" is off-hand now.
 update item_template set class = 4, sunclass = 0, sheath = 7 where entry = 80828;
+-- Solid Chest in the Swamp Of Sorrows (63.9, 22.3) is now available for looting.
+update gameobject set position_x = -9963.16, position_y = -3692.82, position_z = 21.8779, orientation = 1.58836 where guid = 2857;
