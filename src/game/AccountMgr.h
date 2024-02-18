@@ -77,6 +77,19 @@ protected:
     MailsSentMap m_mailsSent;
 };
 
+struct AccountData
+{
+    uint32 Id = 0;
+    std::string Username;
+    std::string Email;
+    std::string ForumName;
+    std::string LastIP;
+    std::string LastWarning;
+    std::optional<uint32> BannedUntil;
+    uint32 SentMailCount = 0;
+};
+
+
 class AccountMgr
 {
     public:
@@ -131,73 +144,69 @@ class AccountMgr
         void SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer);
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
-        void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
-        void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
-        void WarnAccount(uint32 acc, std::string reason) { m_accountWarnings[acc] = reason; }
+        void BanAccount(uint32 account, uint32 unbandate) { m_accountData[account].BannedUntil = unbandate; }
+        void UnbanAccount(uint32 acc) { m_accountData[acc].BannedUntil = std::nullopt; }
+        void WarnAccount(uint32 acc, std::string reason) { m_accountData[acc].LastWarning = reason; }
 
         char const* GetWarningText(uint32 acc) const
         {
-            auto itr = m_accountWarnings.find(acc);
-            if (itr != m_accountWarnings.end())
-                return itr->second.c_str();
-            return nullptr;
+            char const* warningText = nullptr;
+            if (auto itr = m_accountData.find(acc); itr != m_accountData.end() && !itr->second.LastWarning.empty())
+                warningText = itr->second.LastWarning.c_str();
+            return warningText;
         }
 
         std::string GetForumName(uint32 acc) const
         {
-            auto itr = m_accountForumName.find(acc);
-            if (itr != m_accountForumName.end())
-                return itr->second;
+            if (auto itr = m_accountData.find(acc); itr != m_accountData.end())
+                return itr->second.ForumName;
             return "none";
         }
 
         std::string GetAccountEmail(uint32 acc) const
         {
-            auto itr = m_accountEmail.find(acc);
-            if (itr != m_accountEmail.end())
-                return itr->second;
+            if (auto itr = m_accountData.find(acc); itr != m_accountData.end())
+                return itr->second.Email;
             return "none@none";
         }
 
         std::string GetAccountIP(uint32 acc) const
         {
-            auto itr = m_accountIp.find(acc);
-            if (itr != m_accountIp.end())
-                return itr->second;
+            if (auto itr = m_accountData.find(acc); itr != m_accountData.end())
+                return itr->second.LastIP;
             return "0.0.0.0";
         }
 
         // returns true if previous ip was different
         bool UpdateAccountIP(uint32 acc, std::string const& ip)
         {
-            auto itr = m_accountIp.find(acc);
-            if (itr != m_accountIp.end())
+            auto itr = m_accountData.find(acc);
+            if (itr != m_accountData.end())
             {
-                if (ip != itr->second)
+                if (ip != itr->second.LastIP)
                 {
-                    itr->second = ip;
+                    itr->second.LastIP = ip;
                     return true;
                 }
                 return false;
             }
-            
-            m_accountIp.insert({ acc, ip });
+
+            m_accountData[acc].LastIP = ip;
             return true;
         }
 
-        uint32 GetMailCount(uint32 accountId)
+        uint32 GetMailCount(uint32 accountId) const
         {
-            std::lock_guard<std::mutex> lock(m_accountMailsMutex);
-            auto itr = m_accountMails.find(accountId);
-            if (itr != m_accountMails.end())
-                return itr->second;
+            std::shared_lock lock(m_accountDataMutex);
+            if (auto itr = m_accountData.find(accountId); itr != m_accountData.end())
+                return itr->second.SentMailCount;
             return 0;
         }
 
         void IncreaseMailCount(uint32 accountId)
         {
-            std::lock_guard<std::mutex> lock(m_accountMailsMutex);
-            m_accountMails[accountId]++;
+            std::unique_lock lock(m_accountDataMutex);
+            m_accountData[accountId].SentMailCount++;
         }
 
         uint32 GetHighestCharLevel(uint32 accountId)
@@ -235,30 +244,25 @@ class AccountMgr
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
-        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountEmail;
-        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountForumName;
-        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountIp;
-        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountWarnings;
+
+        turtle_unordered_map<uint32, AccountData, Category_AccountStorage> m_accountData;
         turtle_unordered_map<std::string, uint32, Category_AccountStorage> m_accountNameToId;
-        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountIdNames;
         std::map<uint32, uint32> m_accountHighestCharLevel;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
         uint32 m_fingerprintAutobanTimer;
         uint32 m_accountMailsResetTimer;
-        std::map<std::string, uint32> m_ipBanned;
+        turtle_unordered_map<std::string, uint32, Category_AccountStorage> m_ipBanned;
         std::map<uint32, uint32> m_fingerprintBanned;
         std::unordered_set<uint32> m_traineeGms;
         std::unordered_set<uint32> m_donatorAccounts;
         std::set<uint32> m_fingerprintAutoban;
-        turtle_unordered_map<uint32, uint32, Category_AccountStorage> m_accountBanned;
-        turtle_unordered_map<uint32, uint32, Category_AccountStorage> m_accountMails;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
         AccountInstanceEnterTimesMap m_instanceEnterTimes;
         std::map<uint32, AccountPersistentData> m_accountPersistentData;
-        mutable std::mutex m_ipBannedMutex;
-        mutable std::mutex m_accountMailsMutex;
+        mutable std::shared_mutex m_ipBannedMutex;
+        mutable std::shared_mutex m_accountDataMutex;
 };
 
 extern AccountMgr sAccountMgr;

@@ -237,7 +237,7 @@ void AccountMgr::LoadAccountNames()
                 continue;
 
             m_accountNameToId.insert({ username, id });
-            m_accountIdNames.insert({ id, username });
+            m_accountData[id].Username = std::move(username);
 
         } while (result->NextRow());
     }
@@ -259,10 +259,10 @@ void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 
 bool AccountMgr::GetName(uint32 acc_id, std::string &name)
 {
-    auto itr = m_accountIdNames.find(acc_id);
-    if (itr != m_accountIdNames.end())
+    auto itr = m_accountData.find(acc_id);
+    if (itr != m_accountData.end())
     {
-        name = itr->second;
+        name = itr->second.Username;
         return true;
     }
     QueryResult *result = LoginDatabase.PQuery("SELECT username FROM account WHERE id = '%u'", acc_id);
@@ -369,8 +369,11 @@ void AccountMgr::Update(uint32 diff)
     if (m_accountMailsResetTimer < diff)
     {
         m_accountMailsResetTimer = 1 * HOUR * IN_MILLISECONDS;
-        std::lock_guard<std::mutex> lock(m_accountMailsMutex);
-        m_accountMails.clear();
+        std::unique_lock lock(m_accountDataMutex);
+        for (auto& itr : m_accountData)
+        {
+            itr.second.SentMailCount = 0;
+        }
     }
     else
         m_accountMailsResetTimer -= diff;
@@ -385,7 +388,7 @@ void AccountMgr::LoadIPBanList(bool silent)
         return;
     }
 
-    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
+    std::unique_lock lock(m_ipBannedMutex);
     m_ipBanned.clear();
     do
     {
@@ -409,7 +412,7 @@ void AccountMgr::LoadAccountBanList(bool silent)
         return;
     }
 
-    m_accountBanned.clear();
+    std::unique_lock lock(m_accountDataMutex);
     do
     {
         Field* fields = banresult->Fetch();
@@ -417,7 +420,7 @@ void AccountMgr::LoadAccountBanList(bool silent)
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)
             unbandate = 0xFFFFFFFF;
-        m_accountBanned[fields[0].GetUInt32()] = unbandate;
+        m_accountData[fields[0].GetUInt32()].BannedUntil = unbandate;
     } while (banresult->NextRow());
 }
 
@@ -434,11 +437,11 @@ void AccountMgr::LoadAccountWarnings(bool silent)
         return;
     }
 
-    m_accountWarnings.clear();
+    std::unique_lock lock(m_accountDataMutex);
     do
     {
         Field* fields = banresult->Fetch();
-        m_accountWarnings[fields[0].GetUInt32()] = fields[1].GetCppString().substr(5, fields[1].GetCppString().size() - 5);
+        m_accountData[fields[0].GetUInt32()].LastWarning = fields[1].GetCppString().substr(5, fields[1].GetCppString().size() - 5);
     } while (banresult->NextRow());
 }
 
@@ -452,11 +455,11 @@ void AccountMgr::LoadAccountIP()
         return;
     }
 
-    m_accountIp.clear();
+    std::unique_lock lock(m_accountDataMutex);
     do
     {
         Field* fields = banresult->Fetch();
-        m_accountIp[fields[0].GetUInt32()] = fields[1].GetCppString();
+        m_accountData[fields[0].GetUInt32()].LastIP = fields[1].GetCppString();
     } while (banresult->NextRow());
 }
 
@@ -470,11 +473,11 @@ void AccountMgr::LoadAccountForumName()
         return;
     }
 
-    m_accountForumName.clear();
+    std::unique_lock lock(m_accountDataMutex);
     do
     {
         Field* fields = banresult->Fetch();
-        m_accountForumName[fields[0].GetUInt32()] = fields[1].GetCppString();
+        m_accountData[fields[0].GetUInt32()].ForumName = fields[1].GetCppString();
     } while (banresult->NextRow());
 }
 
@@ -488,11 +491,11 @@ void AccountMgr::LoadAccountEmail()
         return;
     }
 
-    m_accountEmail.clear();
+    std::unique_lock lock(m_accountDataMutex);
     do
     {
         Field* fields = banresult->Fetch();
-        m_accountEmail[fields[0].GetUInt32()] = fields[1].GetCppString();
+        m_accountData[fields[0].GetUInt32()].Email = fields[1].GetCppString();
     } while (banresult->NextRow());
 }
 
@@ -631,15 +634,15 @@ bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
 {
-    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
-    std::map<std::string, uint32>::const_iterator it = m_ipBanned.find(ip);
+    auto it = m_ipBanned.find(ip);
     return !(it == m_ipBanned.end() || it->second < time(nullptr));
 }
 
 bool AccountMgr::IsAccountBanned(uint32 acc) const
 {
-    std::map<uint32, uint32>::const_iterator it = m_accountBanned.find(acc);
-    return !(it == m_accountBanned.end() || it->second < time(nullptr));
+    std::shared_lock lock(m_accountDataMutex);
+    auto it = m_accountData.find(acc);
+    return (it != m_accountData.end() && it->second.BannedUntil > time(nullptr));
 }
 
 bool AccountMgr::IsFingerprintBanned(uint32 fingerprint) const
