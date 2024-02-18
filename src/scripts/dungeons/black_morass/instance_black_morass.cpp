@@ -33,7 +33,18 @@ void instance_black_morass::OnPlayerEnter(Player* pPlayer)
 
 void instance_black_morass::Update(uint32 uiDiff)
 {
-
+    Map::PlayerList const& playerList = GetMap()->GetPlayers();
+    for (auto const& itr : playerList)
+    {
+        if (Player* player = itr.getSource())
+        {
+            if (!player->IsBeingTeleported() && player->GetPositionZ() < -281.f)
+            {
+                // Player fell out of bounds - teleport to entrance.
+                player->TeleportTo(269, -2002.500000f, 6575.299805f, -154.938095f, 5.700000f);
+            }
+        }
+    }
 }
 
 InstanceData* GetInstanceData_instance_black_morass(Map* pMap)
