@@ -398,3 +398,4 @@ constexpr char Category_Battleground[] = "Auction";
 constexpr char Category_DailyQuest[] = "DailyQuest";
 constexpr char Category_Pet[] = "Pet";
 constexpr char Category_VMap[] = "VMAP";
+constexpr char Category_AccountStorage[] = "AccountStorage";
