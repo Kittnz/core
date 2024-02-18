@@ -28,6 +28,8 @@
 #include <unordered_set>
 #include <mutex>
 
+#include "PerformanceMonitor.h"
+
 enum AccountOpResult
 {
     AOR_OK,
@@ -233,12 +235,12 @@ class AccountMgr
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
-        std::map<uint32, std::string> m_accountEmail;
-        std::map<uint32, std::string> m_accountForumName;
-        std::map<uint32, std::string> m_accountIp;
-        std::map<uint32, std::string> m_accountWarnings;
-        std::map<std::string, uint32> m_accountNameToId;
-        std::unordered_map<uint32, std::string> m_accountIdNames;
+        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountEmail;
+        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountForumName;
+        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountIp;
+        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountWarnings;
+        turtle_unordered_map<std::string, uint32, Category_AccountStorage> m_accountNameToId;
+        turtle_unordered_map<uint32, std::string, Category_AccountStorage> m_accountIdNames;
         std::map<uint32, uint32> m_accountHighestCharLevel;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
@@ -249,8 +251,8 @@ class AccountMgr
         std::unordered_set<uint32> m_traineeGms;
         std::unordered_set<uint32> m_donatorAccounts;
         std::set<uint32> m_fingerprintAutoban;
-        std::map<uint32, uint32> m_accountBanned;
-        std::map<uint32, uint32> m_accountMails;
+        turtle_unordered_map<uint32, uint32, Category_AccountStorage> m_accountBanned;
+        turtle_unordered_map<uint32, uint32, Category_AccountStorage> m_accountMails;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
         AccountInstanceEnterTimesMap m_instanceEnterTimes;
