@@ -60,7 +60,7 @@ SET @skill_level_required = 290; -- Required to craft.
 SET @skill_level_max = 300; -- When it'll stop giving skillups.
 
 SET @skill_required_to_train = 0; -- Fill only if it's trainer spell.
-SET @cast_time_index = 0; -- For trainers: 1, for recipes: 14.
+SET @cast_time_index = 14; -- For trainers: 1, for recipes: 14.
 SET @targets = 0; -- For trainers: 256, for recipes: 0.
 
 -- DO NOT MODIFY THIS PART:
