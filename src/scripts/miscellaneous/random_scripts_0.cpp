@@ -2327,7 +2327,6 @@ struct npc_kwee_peddlefeetAI : public ScriptedAI
         if (!sGameEventMgr.IsActiveEvent(EVENT_LOVE_IS_IN_THE_AIR))
         {
             SetVariables();
-            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
         Reset();
     }
@@ -2463,6 +2462,9 @@ bool GossipHello_npc_kwee_peddlefeet(Player* pPlayer, Creature* pCreature)
     {
         if (npc_kwee_peddlefeetAI* kweeAI = dynamic_cast<npc_kwee_peddlefeetAI*>(pCreature->AI()))
         {
+            if (pCreature->IsQuestGiver())
+                pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
             uint32 faction = kweeAI->winningFaction;
             uint32 textId = faction == VAR_KWEE_HORDE ? TEXT_ID_VICTORY_H : faction == VAR_KWEE_ALLIANCE ? TEXT_ID_VICTORY_A : TEXT_ID_TIE;
             pPlayer->PlayerTalkClass->SendGossipMenu(textId, pCreature->GetObjectGuid());
