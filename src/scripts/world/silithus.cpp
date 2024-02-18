@@ -201,7 +201,7 @@ struct go_wind_stoneAI: public GameObjectAI
         }
 
 
-        if (me->IsDeleted()) // in object delete list, will be deletec next tick, don't process any on this tick.
+        if (!me->isSpawned()) // in object delete list, will be deletec next tick, don't process any on this tick.
             return false;
 
         if (Creature* pCreature = me->SummonCreature(npcEntry, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, MINUTE * IN_MILLISECONDS, false, 7000))
