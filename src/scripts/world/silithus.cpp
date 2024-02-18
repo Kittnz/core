@@ -199,7 +199,11 @@ struct go_wind_stoneAI: public GameObjectAI
             sLog.outError("go_wind_stoneAI - Unhandled spell id %u!\n", spellId);
             return false;
         }
-        
+
+
+        if (me->IsDeleted()) // in object delete list, will be deletec next tick, don't process any on this tick.
+            return false;
+
         if (Creature* pCreature = me->SummonCreature(npcEntry, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, MINUTE * IN_MILLISECONDS, false, 7000))
         {
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature, casterGuid = caster->GetObjectGuid()]
