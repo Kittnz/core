@@ -292,6 +292,10 @@ void PlayerControlledAI::UpdateAI(const uint32 uiDiff)
         return;
     }
 
+    // Always dismount player when under charm so he can attack.
+    if (me->HasAuraType(SPELL_AURA_MOUNTED))
+        me->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+
     Unit* victim = nullptr;
     CharmInfo* charmInfo = me->GetCharmInfo();
     Unit* controller = FindController();
