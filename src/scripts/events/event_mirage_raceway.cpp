@@ -123,7 +123,7 @@ struct go_race_checkpoint : public GameObjectAI
     {
         if (g_startedRaces.empty())
         {
-            printf("Remove point %u\n", m_point);
+            // printf("Remove point %u\n", m_point);
             me->AddObjectToRemoveList();
             return;
         }
