@@ -223,7 +223,7 @@ void AccountMgr::LoadGmLevels()
 
 void AccountMgr::LoadAccountNames()
 {
-    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username` FROM `account`"));
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username`, UNIX_TIMESTAMP(joindate) FROM `account`"));
 
     if (result)
     {
@@ -238,6 +238,10 @@ void AccountMgr::LoadAccountNames()
 
             m_accountNameToId.insert({ username, id });
             m_accountData[id].Username = std::move(username);
+
+            uint64 timeCreated = fields[2].GetUInt64();
+
+            m_accountData[id].CreatedAt = timeCreated;
 
         } while (result->NextRow());
     }

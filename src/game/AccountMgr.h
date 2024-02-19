@@ -86,6 +86,7 @@ struct AccountData
     std::string LastIP;
     std::string LastWarning;
     std::optional<uint32> BannedUntil;
+    uint64      CreatedAt;
     uint32 SentMailCount = 0;
 };
 
@@ -243,6 +244,14 @@ class AccountMgr
         bool IsConsoleAccount(uint32 gmlevel);
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
+
+        AccountData* GetAccountData(uint32 accountId) 
+        {
+            if (auto itr = m_accountData.find(accountId); 
+                itr != m_accountData.end()) 
+                return &itr->second; 
+            return nullptr; 
+        }
     protected:
 
         turtle_unordered_map<uint32, AccountData, Category_AccountStorage> m_accountData;

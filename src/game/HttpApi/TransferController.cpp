@@ -4,6 +4,7 @@
 
 #include "World.h"
 #include "ObjectMgr.h"
+#include "AccountMgr.h"
 
 using namespace httplib;
 
@@ -71,7 +72,29 @@ namespace HttpApi
 
         if (!sObjectMgr.GetPlayerDataByGUID(lowGuid))
         {
+            resp.set_content("Bad Account.", "text/plain");
             sLog.out(LOG_API, "Init transfer could not find player by supplied GUID %u, aborting.", lowGuid);
+            return;
+        }
+
+        auto playerData = sObjectMgr.GetPlayerDataByGUID(lowGuid);
+
+
+        auto accountData = sAccountMgr.GetAccountData(playerData->uiAccount);
+
+        if (!accountData)
+        {
+            resp.set_content("Bad Account.", "text/plain");
+            sLog.out(LOG_API, "Init transfer could not find player account by supplied GUID %u , acc ID %u, aborting.", lowGuid, playerData->uiAccount);
+            return;
+        }
+
+        //1st of Oct, 2023 for now.
+        constexpr uint64 CreationCutoffTimestamp = 1696122966;
+
+        if (accountData->CreatedAt > CreationCutoffTimestamp)
+        {
+            resp.set_content("Account too new.", "text/plain");
             return;
         }
 
