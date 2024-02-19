@@ -5256,8 +5256,15 @@ void WorldObject::InterruptSpell(CurrentSpellTypes spellType, bool withDelayed)
 {
     MANGOS_ASSERT(spellType < CURRENT_MAX_SPELL);
 
-    if (m_currentSpells[spellType] && (withDelayed || m_currentSpells[spellType]->getState() != SPELL_STATE_DELAYED))
+    Spell* targetSpell = m_currentSpells[spellType];
+
+    if (targetSpell && (withDelayed || targetSpell->getState() != SPELL_STATE_DELAYED))
     {
+        // Remove Insignia spell is very special, and should'nt be interrupted usually
+        if (targetSpell->m_spellInfo->Id == 22027)
+        {
+            return;
+        }
         // send autorepeat cancel message for autorepeat spells
         if (spellType == CURRENT_AUTOREPEAT_SPELL)
         {
@@ -5265,14 +5272,15 @@ void WorldObject::InterruptSpell(CurrentSpellTypes spellType, bool withDelayed)
                 ((Player*)this)->SendAutoRepeatCancel();
         }
 
-        if (m_currentSpells[spellType]->getState() != SPELL_STATE_FINISHED)
-            m_currentSpells[spellType]->cancel();
+        if (targetSpell->getState() != SPELL_STATE_FINISHED)
+            targetSpell->cancel();
 
         // cancel can interrupt spell already (caster cancel ->target aura remove -> caster iterrupt)
         if (m_currentSpells[spellType])
         {
             m_currentSpells[spellType]->SetReferencedFromCurrent(false);
             m_currentSpells[spellType] = nullptr;
+            targetSpell = nullptr;
         }
     }
 }
