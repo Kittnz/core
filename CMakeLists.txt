@@ -39,6 +39,7 @@ option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
+option(USE_REALMMERGE "Compile helper tool for merging character databases" OFF)
 option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
 option(ENABLE_PROFILING "(Windows only) Enable Optick integration, which allows to profile CPU and Memory. Also disabling some async code" OFF)
 
@@ -519,6 +520,6 @@ add_subdirectory(src)
 add_subdirectory(dep)
 
 
-if (USE_EXTRACTORS)
+if (USE_EXTRACTORS OR USE_REALMMERGE)
     add_subdirectory(tools)
 endif()
