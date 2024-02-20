@@ -13,6 +13,8 @@
 #include <locale>
 #include <iostream>
 
+#include "re2/re2.h"
+
 using namespace std::filesystem;
 
 DBUpdater::AutoUpdater sAutoUpdater;
@@ -100,7 +102,7 @@ namespace DBUpdater
         return dbMigrations;
     }
 
-    bool AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const
+    bool AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase, bool region) const
     {
         auto fileMigrations = LoadFileMigrations(targetPath);
         auto dbMigrations = LoadDatabaseMigrations(targetDatabase);
@@ -126,9 +128,14 @@ namespace DBUpdater
             dbMigrations.erase(hash);
         }
 
-        for (const auto& dbMigration : dbMigrations)
+
+        if (!region)
         {
-            sLog.outInfo("[DB Auto-Updater] Migration %s with hash %s exists in DB but not as file, old migration?", dbMigration.second.Name.c_str(), dbMigration.first.c_str());
+            for (const auto& dbMigration : dbMigrations)
+            {
+                auto name = dbMigration.second.Name;
+                sLog.outInfo("[DB Auto-Updater] Migration %s with hash %s exists in DB but not as file, old migration?", dbMigration.second.Name.c_str(), dbMigration.first.c_str());
+            }
         }
 
         //sort by modified-at ascending for oldest -> newest updates
@@ -236,13 +243,13 @@ namespace DBUpdater
         directory_entry charUpdatePath{ folderPath / charUpdateFolder };
         directory_entry worldUpdatePath{ folderPath / worldUpdateFolder };
 
-        if (!ProcessTargetUpdates(logonUpdatePath, &LoginDatabase))
+        if (!ProcessTargetUpdates(logonUpdatePath, &LoginDatabase, false))
             return false;
 
-        if (!ProcessTargetUpdates(charUpdatePath, &CharacterDatabase))
+        if (!ProcessTargetUpdates(charUpdatePath, &CharacterDatabase, false))
             return false;
 
-        if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase))
+        if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase, false))
             return false;
 
 
@@ -257,13 +264,13 @@ namespace DBUpdater
             directory_entry cnWorldPath{ worldUpdatePath.path() / "cn" };
 
 
-            if (!ProcessTargetUpdates(cnLogonPath, &LoginDatabase))
+            if (!ProcessTargetUpdates(cnLogonPath, &LoginDatabase, true))
                 return false;
 
-            if (!ProcessTargetUpdates(cnCharPath, &CharacterDatabase))
+            if (!ProcessTargetUpdates(cnCharPath, &CharacterDatabase, true))
                 return false;
 
-            if (!ProcessTargetUpdates(cnWorldPath, &WorldDatabase))
+            if (!ProcessTargetUpdates(cnWorldPath, &WorldDatabase, true))
                 return false;
         }
 
