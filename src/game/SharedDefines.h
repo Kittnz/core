@@ -1053,7 +1053,8 @@ enum QuestSort
     QUEST_SORT_REPUTATION          = 367,
     QUEST_SORT_INVASION            = 368,
     QUEST_SORT_MIDSUMMER           = 369,
-    QUEST_SORT_BREWFEST            = 370
+    QUEST_SORT_BREWFEST            = 370,
+    QUEST_SORT_JEWELCRAFTING       = 371
 };
 
 inline uint8 ClassByQuestSort(int32 QuestSort)
@@ -1232,6 +1233,7 @@ inline uint32 SkillByQuestSort(int32 QuestSort)
         case QUEST_SORT_TAILORING:      return SKILL_TAILORING;
         case QUEST_SORT_COOKING:        return SKILL_COOKING;
         case QUEST_SORT_FIRST_AID:      return SKILL_FIRST_AID;
+        case QUEST_SORT_JEWELCRAFTING:  return SKILL_JEWELCRAFTING;
     }
     return 0;
 }
