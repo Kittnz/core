@@ -26,3 +26,36 @@ REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (51715, 46002);
 UPDATE `spell_template` SET `spellIconId` = 2279 WHERE `entry` = 45840;
 UPDATE `spell_template` SET `spellIconId` = 1733 WHERE `entry` = 29999;
 UPDATE `spell_template` SET `spellIconId` = 2312 WHERE `entry` = 46001;
+
+-- More toys for the collection:
+
+UPDATE `item_template` SET `spellid_1` = 46096 WHERE `entry` IN (81059, 21540, 81116, 17712, 51020, 20030, 13342, 91794);
+
+-- REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (20030, ID_MISSING); -- PET ROCK
+-- REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (91794, ID_MISSING); -- Lunar Lantern
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (81059, 45030); -- Fox Spirit Stone
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (21540, 26265); -- Elune's Lantern
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (81116, 56067); -- Picnic Basket
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (17712, 21848); -- Snowman Suit
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (51020, 26389); -- Strawberry Schnapps
+REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (13342, 17468); -- Pet Fish
+
+UPDATE `spell_template` SET `name` = 'Elune\'s Lantern' WHERE `entry` = 26265;
+UPDATE `spell_template` SET `name` = 'Strawberry Schnapps' WHERE `entry` = 26389;
+
+UPDATE `spell_template` SET `spellIconId` = 2037 WHERE `entry` = 45030; -- Fox Spirit Stone
+UPDATE `spell_template` SET `spellIconId` = 1878 WHERE `entry` = 26265; -- Elune's Lantern
+UPDATE `spell_template` SET `spellIconId` = 1911 WHERE `entry` = 56067; -- Picnic Basket
+UPDATE `spell_template` SET `spellIconId` = 2089 WHERE `entry` = 21848; -- Snowman Suit
+UPDATE `spell_template` SET `spellIconId` = 1359 WHERE `entry` =  26389; -- Strawberry Schnapps
+UPDATE `spell_template` SET `spellIconId` = 2279 WHERE `entry` = 17468; -- Pet Fish
+
+REPLACE INTO `skill_line_ability` (`id`, `skill_id`, `spell_id`, `race_mask`, `class_mask`, `req_skill_value`, `superseded_by_spell`, `learn_on_get_skill`, `max_value`, `min_value`, `req_train_points`) VALUES 
+(16005, 1008, 45030, 0, 0, 0, 0, 0, 0, 0, 0),
+(16006, 1008, 26265, 0, 0, 0, 0, 0, 0, 0, 0),
+(16007, 1008, 56067, 0, 0, 0, 0, 0, 0, 0, 0),
+(16008, 1008, 21848, 0, 0, 0, 0, 0, 0, 0, 0),
+(16009, 1008, 26389, 0, 0, 0, 0, 0, 0, 0, 0),
+(16010, 1008, 17468, 0, 0, 0, 0, 0, 0, 0, 0);
+
+UPDATE `spell_template` SET `nameSubText` = 'Toy' WHERE `entry` IN (45030, 26265, 56067, 21848, 26389, 17468,  26389);
