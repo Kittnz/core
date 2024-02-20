@@ -41,6 +41,7 @@ REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (51020, 26389); -- St
 REPLACE INTO `collection_toy` (`itemId`, `spellId`) VALUES (13342, 17468); -- Pet Fish
 
 UPDATE `spell_template` SET `name` = 'Elune\'s Lantern' WHERE `entry` = 26265;
+UPDATE `spell_template` SET `name` = 'Spectral Fox Whistle' WHERE `entry` = 45030;
 UPDATE `spell_template` SET `name` = 'Strawberry Schnapps' WHERE `entry` = 26389;
 
 UPDATE `spell_template` SET `spellIconId` = 2037 WHERE `entry` = 45030; -- Fox Spirit Stone
