@@ -948,6 +948,13 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->HandleTransferChecks();
         pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED);
     }
+
+
+    if (pCurrChar->GetSession()->GetSecurity() <= SEC_ADMINISTRATOR)
+    {
+        sWorld.SendGMText(string_format("GM {} just logged in.", pCurrChar->GetName()));
+    }
+
     // Update warden speeds
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
