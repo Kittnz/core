@@ -39,7 +39,7 @@ namespace DBUpdater
 
         bool ExecuteUpdate(const FileMigration& fileData, DatabaseType* targetDatabase) const;
 
-        bool ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const;
+        bool ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase, bool region) const;
 
         std::unordered_map<std::string, FileMigration> LoadFileMigrations(const std::filesystem::directory_entry& targetPath) const;
         std::unordered_map<std::string, Migration> LoadDatabaseMigrations(DatabaseType* targetDatabase) const;
