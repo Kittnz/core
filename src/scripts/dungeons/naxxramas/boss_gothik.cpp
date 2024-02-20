@@ -352,7 +352,7 @@ struct boss_gothikAI : public ScriptedAI
         }
     }
 
-    bool IsAllPlayersOneSide()
+    bool HasLessPlayersPerSide(uint32 count)
     {
         MapRefManager const&  lPlayers = m_pInstance->GetMap()->GetPlayers();
         uint32 num_left = 0;
@@ -376,7 +376,7 @@ struct boss_gothikAI : public ScriptedAI
         // "everyone is on the same side". That to avoid the whole raid afking on spectral
         // side, waiting for gothik to TP down, in which case they have 40 sec to kill him
         // before the gates would ordinarily open.
-        return (num_left <= 1 || num_right <= 1);
+        return (num_left <= count || num_right <= count);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -403,7 +403,7 @@ struct boss_gothikAI : public ScriptedAI
             {
                 if (m_uiSpeechTimer < uiDiff)
                 {
-                    if (IsAllPlayersOneSide())
+                    if (HasLessPlayersPerSide(10))
                     {
                         EnterEvadeMode();
                         return;
@@ -447,7 +447,7 @@ struct boss_gothikAI : public ScriptedAI
                         m_creature->SetTempPacified(TELEPORT_PACIFY_TIMER);
 
                         // opening the gates when TPing down if all players are considered on the same side
-                        if (!gatesOpened && IsAllPlayersOneSide())
+                        if (!gatesOpened && HasLessPlayersPerSide(1))
                             OpenTheGate();
 
                         if (m_creature->HasAura(SPELL_IMMUNE_ALL))
@@ -533,7 +533,7 @@ struct boss_gothikAI : public ScriptedAI
                 // We check if a side has wiped every 1 sec. If it's the case, we open the gates
                 if (!gatesOpened && m_checkAllPlayersOneSideTimer < uiDiff)
                 {
-                    if(IsAllPlayersOneSide())
+                    if(HasLessPlayersPerSide(1))
                         OpenTheGate();
                     m_checkAllPlayersOneSideTimer = 1000;
                 }
