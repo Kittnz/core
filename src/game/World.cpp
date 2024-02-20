@@ -81,6 +81,7 @@
 #include "Database/AutoUpdater.hpp"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
+#include "ToyManager.hpp"
 #include "PlayerDump.h"
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
@@ -142,6 +143,7 @@ World sWorld;
 GuidObjectScaling sGuidObjectScaling;
 CompanionManager sCompanionMgr;
 MountManager sMountMgr;
+ToyManager sToyMgr;
 
 /// World constructor
 World::World():
@@ -2109,6 +2111,8 @@ void World::SetInitialWorldSettings()
     sCompanionMgr.LoadFromDB();
     sLog.outString("Loading mount manager...");
     sMountMgr.LoadFromDB();
+    sLog.outString("Loading toy manager...");
+    sToyMgr.LoadFromDB();
 	sLog.outString("Initialize Performance monitor...");
     sPerfMonitor.Initialize();
 

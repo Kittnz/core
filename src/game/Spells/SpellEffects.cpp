@@ -57,6 +57,7 @@
 #include "Chat.h"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
+#include "ToyManager.hpp"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -2327,6 +2328,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (m_CastItem)
                     {
                         auto spellIdOpt = sMountMgr.GetMountSpellId(m_CastItem->GetEntry());
+                        if (spellIdOpt && m_caster->IsPlayer())
+                        {
+                            m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                            m_forceConsumeItem = true;
+                        }
+                    }
+                    return;
+                }
+                case 46096: // Add Toy to Collection
+                {
+                    if (m_CastItem)
+                    {
+                        auto spellIdOpt = sToyMgr.GetToySpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);

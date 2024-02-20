@@ -5,7 +5,7 @@
 #include "Language.h"
 #include "MountManager.hpp"
 #include "CompanionManager.hpp"
-
+#include "ToyManager.hpp"
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
 {
@@ -7550,6 +7550,14 @@ inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
             else if (pProto->Spells[0].SpellId == 46498)
             {
                 if (auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(pEntry->itemEntry))
+                {
+                    return player->HasSpell(spellIdOpt.value());
+                }
+            }
+            // Toys - check if spell is learned
+            else if (pProto->Spells[0].SpellId == 46096)
+            {
+                if (auto spellIdOpt = sToyMgr.GetToySpellId(pEntry->itemEntry))
                 {
                     return player->HasSpell(spellIdOpt.value());
                 }
