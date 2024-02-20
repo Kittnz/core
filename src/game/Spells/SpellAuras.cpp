@@ -7060,7 +7060,7 @@ void Aura::PeriodicDummyTick()
             {
                 case 47357: // Calming River
                 {
-                    if (target->HasAura(45527))
+                    if (target->HasAura(45527) && target->GetPower(POWER_MANA) != target->GetMaxPower(POWER_MANA))
                         target->CastSpell(target, 47358, true, nullptr, this);
                     return;
                 }
