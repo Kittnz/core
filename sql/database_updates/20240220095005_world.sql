@@ -121,7 +121,7 @@ UPDATE `spell_template` SET `effectMiscValue1` = 0 WHERE `entry` = 30224;
 UPDATE `spell_template` SET `effectMiscValue1` = 0 WHERE `entry` = 30226;
 UPDATE `spell_template` SET `effectMiscValue1` = 0 WHERE `entry` = 30228;
 
-UPDATE `spell_template` SET `effectBasePoints2` = 1 WHERE `entry` = 30220;
-UPDATE `spell_template` SET `effectBasePoints2` = 2 WHERE `entry` = 30224;
-UPDATE `spell_template` SET `effectBasePoints2` = 3 WHERE `entry` = 30226;
-UPDATE `spell_template` SET `effectBasePoints2` = 4 WHERE `entry` = 30228;
+UPDATE `spell_template` SET `effectBasePoints2` = 0 WHERE `entry` = 30220;
+UPDATE `spell_template` SET `effectBasePoints2` = 1 WHERE `entry` = 30224;
+UPDATE `spell_template` SET `effectBasePoints2` = 2 WHERE `entry` = 30226;
+UPDATE `spell_template` SET `effectBasePoints2` = 3 WHERE `entry` = 30228;
