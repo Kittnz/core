@@ -153,6 +153,14 @@ struct boss_heiganAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
+        // teleport player that goes into room without having been ported there
+        if (m_creature->IsInCombat() && portedPlayersThisPhase.empty() &&
+            (pWho->GetPositionX() > 2825.0f || pWho->GetPositionY() < -3737.0f) &&
+           !(m_creature->GetPositionX() > 2825.0f || m_creature->GetPositionY() < -3737.0f))
+        {
+            pWho->NearTeleportTo(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), pWho->GetOrientation());
+        }
+
         if (currentPhase == PHASE_DANCE)
             return;
         else

@@ -242,12 +242,12 @@ enum BMSpecs
 bool GossipHello_npc_blacksmithing_specialisations(Player* pPlayer, Creature* pCreature)
 {
     if ((pPlayer->GetQuestRewardStatus(QUEST_WEAPONSMITH_ALLIANCE) || pPlayer->GetQuestRewardStatus(QUEST_WEAPONSMITH_HORDE)) && 
-         pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_WEAPONSMITH))
+         pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_WEAPONSMITH) && !pPlayer->HasSpell(SPELL_ARMORSMITH))
 
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to become an armorsmith.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if ((pPlayer->GetQuestRewardStatus(QUEST_ARMORSMITH_ALLIANCE) || pPlayer->GetQuestRewardStatus(QUEST_ARMORSMITH_HORDE)) && 
-        pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_ARMORSMITH))
+        pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_ARMORSMITH) && !pPlayer->HasSpell(SPELL_WEAPONSMITH))
 
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to become an weaponsmith.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
@@ -275,7 +275,7 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
             if (!pItem)
                 continue;
             
-            if (pItem->RequiredSkill != 164)
+            if (pItem->RequiredSkill != SKILL_BLACKSMITHING)
                 continue;
 
             if (pItem->RequiredSpell)
@@ -300,9 +300,9 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
     {
         std::vector<uint32> recipes;
         GetKnownItemRecipes(pPlayer, recipes);
-        uint32 currentSkill = pPlayer->GetSkillValuePure(164);
-        uint32 maxSkill = pPlayer->GetSkillMaxPure(164);
-        pPlayer->SetSkill(164, 0, 0);
+        uint32 currentSkill = pPlayer->GetSkillValuePure(SKILL_BLACKSMITHING);
+        uint32 maxSkill = pPlayer->GetSkillMaxPure(SKILL_BLACKSMITHING);
+        pPlayer->SetSkill(SKILL_BLACKSMITHING, 0, 0);
         RemoveQuest(pPlayer, QUEST_WEAPONSMITH_ALLIANCE);
         RemoveQuest(pPlayer, QUEST_WEAPONSMITH_HORDE);
         pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer, currentSkill, maxSkill, recipes]()
@@ -311,7 +311,7 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
             pPlayer->LearnSpell(3100, false);
             pPlayer->LearnSpell(3538, false);
             pPlayer->LearnSpell(9785, false);
-            pPlayer->SetSkill(164, currentSkill, maxSkill);
+            pPlayer->SetSkill(SKILL_BLACKSMITHING, currentSkill, maxSkill);
             for (auto spellId : recipes)
                 pPlayer->LearnSpell(spellId, false);
         }, 1000);
@@ -321,9 +321,9 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
     {
         std::vector<uint32> recipes;
         GetKnownItemRecipes(pPlayer, recipes);
-        uint32 currentSkill = pPlayer->GetSkillValuePure(164);
-        uint32 maxSkill = pPlayer->GetSkillMaxPure(164);
-        pPlayer->SetSkill(164, 0, 0);
+        uint32 currentSkill = pPlayer->GetSkillValuePure(SKILL_BLACKSMITHING);
+        uint32 maxSkill = pPlayer->GetSkillMaxPure(SKILL_BLACKSMITHING);
+        pPlayer->SetSkill(SKILL_BLACKSMITHING, 0, 0);
         RemoveQuest(pPlayer, QUEST_ARMORSMITH_ALLIANCE);
         RemoveQuest(pPlayer, QUEST_ARMORSMITH_HORDE);
         pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer, currentSkill, maxSkill, recipes]()
@@ -332,7 +332,7 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
             pPlayer->LearnSpell(3100, false);
             pPlayer->LearnSpell(3538, false);
             pPlayer->LearnSpell(9785, false);
-            pPlayer->SetSkill(164, currentSkill, maxSkill);
+            pPlayer->SetSkill(SKILL_BLACKSMITHING, currentSkill, maxSkill);
             for (auto spellId : recipes)
                 pPlayer->LearnSpell(spellId, false);
         }, 1000);
