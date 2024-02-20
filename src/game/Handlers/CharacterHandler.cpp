@@ -949,8 +949,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED);
     }
 
-
-    if (pCurrChar->GetSession()->GetSecurity() <= SEC_ADMINISTRATOR)
+    auto security = pCurrChar->GetSession()->GetSecurity();
+    if (pCurrChar->GetSession()->GetSecurity() > SEC_PLAYER  && security <= SEC_ADMINISTRATOR)
     {
         sWorld.SendGMText(string_format("GM {} just logged in.", pCurrChar->GetName()));
     }
