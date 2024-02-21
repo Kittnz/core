@@ -22,6 +22,16 @@ UPDATE quest_template SET NextQuestInChain = 40990 WHERE entry = 40989;
 UPDATE quest_template SET NextQuestInChain = 41025 WHERE entry = 41024;
 UPDATE quest_template SET NextQuestInChain = 41026 WHERE entry = 41025;
 
+-- Add quest chaining to Suspicious Flora chain
+UPDATE quest_template SET NextQuestInChain = 41106 WHERE entry = 41088;
+UPDATE quest_template SET NextQuestInChain = 41090 WHERE entry = 41106;
+UPDATE quest_template SET NextQuestInChain = 41091 WHERE entry = 41090;
+UPDATE quest_template SET MinLevel = 59, NextQuestInChain = 41092 WHERE entry = 41091;
+UPDATE quest_template SET MinLevel = 59, NextQuestInChain = 41093 WHERE entry = 41092;
+UPDATE quest_template SET MinLevel = 59, NextQuestInChain = 41094 WHERE entry = 41093;
+UPDATE quest_template SET MinLevel = 59, NextQuestInChain = 41096 WHERE entry = 41094;
+UPDATE quest_template SET MinLevel = 59, NextQuestInChain = 41097 WHERE entry = 41096;
+
 -- Raise stack size of Bright Dream Shards to 250
 UPDATE item_template SET Stackable = 250 WHERE entry = 61199;
 
