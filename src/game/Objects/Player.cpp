@@ -18944,7 +18944,7 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
 {
     uint32 display_id = 0;
 
-    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 12> glyph_map =
+    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 13> glyph_map =
     { {
        // Move it to DB if more glyphs!
        // spell id, alliance display, horde display, default_alliance, defaut_horde 
@@ -18959,6 +18959,7 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
         { FORM_DIREBEAR,  53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
         { FORM_MOONKIN,   53014, 20408, 20409, 15374, 15375 }, // Glyph of the Dreamkin
         { FORM_CAT,       53017, 20410, 20410, 892,   8571 },  // Glyph of the Panther
+        { FORM_TRAVEL,    36521, 20611, 20611, 632,   632  },  // Glyph of the White Stag
         { FORM_MOONKIN,   53023, GetNativeDisplayId(), GetNativeDisplayId(), 15374, 15375 }, // Glyph of the Moon
     } };
 
