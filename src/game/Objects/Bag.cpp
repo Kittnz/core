@@ -202,6 +202,15 @@ uint32 Bag::GetItemCount(uint32 item, Item* eItem) const
     return count;
 }
 
+void Bag::ApplyForAllItems(std::function<void(Item*)> func, bool inBank) const
+{
+    for (uint32 i = 0; i < GetBagSize(); ++i)
+    {
+        if (m_bagslot[i])
+            func(m_bagslot[i]);
+    }
+}
+
 uint8 Bag::GetSlotByItemGUID(ObjectGuid guid) const
 {
     for (uint32 i = 0; i < GetBagSize(); ++i)
