@@ -8767,42 +8767,41 @@ public:
                 radius += unit->GetCombatReach();
 
 
-
             // we don't need to check InMap here, it's already done some lines above
             switch (i_push_type)
             {
-            case PUSH_IN_FRONT:
-                if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, 2 * M_PI_F / 3))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_IN_FRONT_90:
-                if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, M_PI_F / 2))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_IN_FRONT_15:
-                if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, M_PI_F / 12))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_IN_BACK: // 75
-                if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && !i_castingObject->HasInArc(unit, 2 * M_PI_F - 5 * M_PI_F / 12))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_SELF_CENTER:
-                if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_SRC_CENTER:
-                if (unit->IsWithinDist3d(i_spell.m_targets.m_srcX, i_spell.m_targets.m_srcY, i_spell.m_targets.m_srcZ, radius, SizeFactor::None))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_DEST_CENTER:
-                if (unit->IsWithinDist3d(i_spell.m_targets.m_srcX, i_spell.m_targets.m_srcY, i_spell.m_targets.m_srcZ, radius, SizeFactor::None))
-                    i_data->push_back(unit);
-                break;
-            case PUSH_TARGET_CENTER:
-                if (i_spell.m_targets.getUnitTarget() && i_spell.m_targets.getUnitTarget()->IsWithinDist(unit, radius, true, SizeFactor::None))
-                    i_data->push_back(unit);
-                break;
+                case PUSH_IN_FRONT:
+                    if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, 2 * M_PI_F / 3))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_IN_FRONT_90:
+                    if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, M_PI_F / 2))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_IN_FRONT_15:
+                    if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && i_castingObject->HasInArc(unit, M_PI_F / 12))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_IN_BACK: // 75
+                    if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None) && !i_castingObject->HasInArc(unit, 2 * M_PI_F - 5 * M_PI_F / 12))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_SELF_CENTER:
+                    if (i_castingObject->IsWithinDist(unit, radius, true, SizeFactor::None))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_SRC_CENTER:
+                    if (unit->IsWithinDist3d(i_spell.m_targets.m_srcX, i_spell.m_targets.m_srcY, i_spell.m_targets.m_srcZ, radius, SizeFactor::None))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_DEST_CENTER:
+                    if (unit->IsWithinDist3d(i_spell.m_targets.m_destX, i_spell.m_targets.m_destY, i_spell.m_targets.m_destZ, radius, SizeFactor::None))
+                        i_data->push_back(unit);
+                    break;
+                case PUSH_TARGET_CENTER:
+                    if (i_spell.m_targets.getUnitTarget() && i_spell.m_targets.getUnitTarget()->IsWithinDist(unit, radius, true, SizeFactor::None))
+                        i_data->push_back(unit);
+                    break;
             }
         }
     }

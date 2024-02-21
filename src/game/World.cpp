@@ -1485,6 +1485,7 @@ void World::LoadConfigSettings(bool reload)
     g_bEnableStatGather = getConfig(CONFIG_BOOL_PERFORMANCE_ENABLE);
     setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, "Perf.ReportInterval", 600);
     setConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED, "Transfer.MaxGold", 300000);
+    setConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED, "Transfer.MaxItemStack", 50);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);

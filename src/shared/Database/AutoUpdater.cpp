@@ -12,8 +12,7 @@
 #include <istream>
 #include <locale>
 #include <iostream>
-
-#include "re2/re2.h"
+#include <regex>
 
 using namespace std::filesystem;
 
@@ -172,10 +171,97 @@ namespace DBUpdater
         sLog.out(LOG_AUTOUPDATER, "[INFO] Attempting to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
         std::string sqlString{ migration.FileData.begin(), migration.FileData.end() };
 
+
+
         if (!targetDatabase->BeginTransaction())
             return false;
 
-        targetDatabase->Execute(sqlString.c_str(), true);
+      
+        
+        //Split strings into separate queries because multiline has some unfortunate side-effects. - Jamey
+
+        enum StringStatus
+        {
+            None,
+            SingleQuotes,
+            DoubleQuotes
+        };
+
+        std::vector<std::string> queries;
+        StringStatus stringScope = None;
+        std::string query = "";
+
+        for (size_t i = 0; i < sqlString.size(); ++i)
+        {
+            char ch = sqlString[i];
+
+            //If we find a ' or a " make sure to note down we're in a string and check for escape characters.
+            //However, some text queries (ab)use no usage of escape characters and instead take advantage of using ' in " strings and " in ' strings.
+            if (ch == '\'')
+            {                
+                if (stringScope == None)
+                {
+                    //Simple, just enter the string.
+                    stringScope = SingleQuotes;
+                }
+                else if (stringScope == SingleQuotes)
+                {
+                    //Check if we're dealing with an escape, if not then leave the string scope.
+                    //We can't be in SingleQuotes scope without prior characters so we can safely backtrack.
+                    //This can fail if we have things like \\' but at that point the writers need to ask questions.
+                    char prevChar = sqlString[i - 1];
+                    if (prevChar != '\\')
+                        stringScope = None;
+                }
+                else if (stringScope == DoubleQuotes)
+                {
+                    //Intentionally left empty. These types of quotes should not take us out of string scope.
+                }
+            }
+
+            if (ch == '\"')
+            {
+                //Same as ' except inverted.
+                if (stringScope == None)
+                {
+                    stringScope = DoubleQuotes;
+                }
+                else if (stringScope == DoubleQuotes)
+                {
+                    char prevChar = sqlString[i - 1];
+                    if (prevChar != '\\')
+                        stringScope = None;
+                }
+                else if (stringScope == SingleQuotes)
+                {
+                    //..
+                }
+            }
+
+            query += ch;
+
+            //Only finish this query if we're not inside a string.
+            if (ch == ';' && stringScope == None)
+            {
+                queries.emplace_back(std::move(query));
+                query = ""; // In practice all moved-from objects are valid & empty but to be standard compliant we re-init.
+            }
+        }
+
+        //Add in-buffer query only if not empty.
+        if (query.find_first_not_of("\t\r\n ") != std::string::npos)
+            queries.emplace_back(std::move(query));
+
+        if (stringScope != None) // mid-string query at the end of SQL, bad news.
+        {
+            sLog.out(LOG_AUTOUPDATER, "[FAIL] Failed to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+            return false;
+        }
+
+        for (const auto& query : queries)
+        {
+            targetDatabase->Execute(query.c_str());
+        }
 
         targetDatabase->PExecute("INSERT INTO `%s` (`Name`, `Hash`, `AppliedAt`) VALUES (\'%s\', \'%s\', NOW());", MigrationTable, migration.Name.c_str(), migration.Hash.c_str());
 
