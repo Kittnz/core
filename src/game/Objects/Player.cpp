@@ -22583,11 +22583,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     m_DbSaveDisabled = false;
     RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-	if (bChangeTeam)
-		m_honorMgr.ClearHonorCP();
-    SaveToDB();
     if (bChangeTeam)
     {
+
+        m_honorMgr.ClearHonorCP();
+
 		//Giperion Elysium: Drop current guild
 		if (GuildId != 0)
 		{
@@ -22610,6 +22610,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
         TeleportToHomebind(0, false);
     }
+    SaveToDB();
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
         data->uiRace = newRace;
     m_DbSaveDisabled = true;
