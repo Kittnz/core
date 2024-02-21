@@ -188,12 +188,32 @@ namespace DBUpdater
         };
 
         std::vector<std::string> queries;
+
         StringStatus stringScope = None;
+        bool inComment = false;
         std::string query = "";
 
         for (size_t i = 0; i < sqlString.size(); ++i)
         {
             char ch = sqlString[i];
+
+            if (ch == '\r' || ch == '\n')
+            {
+                inComment = false;
+                continue;
+            }
+
+            if (inComment)
+                continue;
+
+            if (ch == '-')
+            {
+                if (i < sqlString.size() - 1 && stringScope == None && sqlString[i + 1] == '-')
+                {
+                    inComment = true;
+                    continue;
+                }
+            }
 
             //If we find a ' or a " make sure to note down we're in a string and check for escape characters.
             //However, some text queries (ab)use no usage of escape characters and instead take advantage of using ' in " strings and " in ' strings.
