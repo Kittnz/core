@@ -1234,6 +1234,7 @@ class Player final: public Unit
         uint8 GetBankBagSlotCount() const { return GetByteValue(PLAYER_BYTES_2, 2); }
         void SetBankBagSlotCount(uint8 count) { SetByteValue(PLAYER_BYTES_2, 2, count); }
         bool HasItemCount(const uint32 item, const uint32 count = 1, const bool inBankAlso = false) const;
+        void ApplyForAllItems(std::function<void(Item*)> func, bool inBank = false) const;
         bool HasItemFitToSpellReqirements(SpellEntry const* spellInfo, Item const* ignoreItem = nullptr);
         bool HasItemWithIdEquipped(uint32 item, uint32 count = 1, uint8 except_slot = NULL_SLOT) const;
         InventoryResult CanStoreNewItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, uint32 item, uint32 count, uint32* no_space_count = nullptr) const

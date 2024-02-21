@@ -9541,13 +9541,11 @@ void Player::HandleTransferChecks()
     //This function handles FIRST LOGIN INCOMING CHARACTERS WHO HAVE BEEN TRANSFERRED TO SEA.
     //Subject to change, but for now:
     //Hard cap gold amount to X.
-    //Remove x% of important mats upon arrival.
+    //Remove x% of all items upon arrival.
 
 
-    //TODO: Correct mat item IDs.
-    auto taxedItemIds = make_array(000, 001, 002, 003, 004, 005);
 
-    for (const auto& itemId : taxedItemIds)
+   /* for (const auto& itemId : taxedItemIds)
     {
         auto itemCount = GetItemCount(itemId, true);
         if (itemCount > 2)
@@ -9557,6 +9555,37 @@ void Player::HandleTransferChecks()
             sLog.out(LOG_CHAR, "Player %s(%u) Had %u of item %u. Removing %u.", GetName(), GetGUIDLow(), itemId, removalCount);
         }
     }
+   */
+
+    std::unordered_map<uint32, uint32> itemCounts;
+
+
+    ApplyForAllItems([&itemCounts](Item* item)
+        {
+            itemCounts[item->GetEntry()] += item->GetCount();
+        }, true);
+
+
+    constexpr float ItemCut = 0.5f;
+
+    for (const auto& [itemId, count] : itemCounts)
+    {
+        auto proto = sObjectMgr.GetItemPrototype(itemId);
+        if (!proto)
+            continue;
+
+        if (proto->Bonding == BIND_WHEN_PICKED_UP || proto->SellPrice < GOLD * 5 || proto->Bonding == BIND_ACCOUNT)
+            continue;
+
+        if (count > sWorld.getConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED))
+        {
+            const uint32 amount = count - sWorld.getConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED);
+            sLog.out(LOG_CHAR, "Player %s(%u) Had %u of item %u. Removing %u.", GetName(), GetGUIDLow(), count, itemId, amount);
+            DestroyItemCount(itemId, amount, true);
+        }
+    }
+
+
 
     if (GetMoney() > (sWorld.getConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED) * GOLD))
     {
@@ -9845,43 +9874,56 @@ InventoryResult Player::CanUnequipItems(uint32 item, uint32 count) const
     return res;
 }
 
-uint32 Player::GetItemCount(uint32 item, bool inBankAlso, Item* skipItem) const
+void Player::ApplyForAllItems(std::function<void(Item*)> func, bool inBank) const
 {
-    uint32 count = 0;
     for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
     {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pItem && pItem != skipItem &&  pItem->GetEntry() == item)
-            count += pItem->GetCount();
+        Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (item)
+            func(item);
     }
     for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
     {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pItem && pItem != skipItem && pItem->GetEntry() == item)
-            count += pItem->GetCount();
-    }
-    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
-    {
-        Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pBag)
-            count += pBag->GetItemCount(item, skipItem);
+        Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (item)
+            func(item);
     }
 
-    if (inBankAlso)
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        Bag* bag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (bag)
+            bag->ApplyForAllItems(func);
+    }
+
+    if (inBank)
     {
         for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-            if (pItem && pItem != skipItem && pItem->GetEntry() == item)
-                count += pItem->GetCount();
+            Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+            if (item)
+                func(item);
         }
         for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-            if (pBag)
-                count += pBag->GetItemCount(item, skipItem);
+            Bag* bag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+            if (bag)
+                bag->ApplyForAllItems(func);
         }
     }
+}
+
+uint32 Player::GetItemCount(uint32 item, bool inBankAlso, Item* skipItem) const
+{
+    uint32 count = 0;
+
+    std::function<void(Item*)> CountItems = [&count, itemEntry = item, skipItem](Item* item)
+    {
+        if (item != skipItem && item->GetEntry() == itemEntry)
+            count += item->GetCount();
+    };
+
+    ApplyForAllItems(CountItems, inBankAlso);
 
     return count;
 }

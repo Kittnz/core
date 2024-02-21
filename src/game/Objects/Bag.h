@@ -51,6 +51,8 @@ class Bag : public Item
         Item* GetItemByEntry(uint32 item) const;
         uint32 GetItemCount(uint32 item, Item* eItem = nullptr) const;
 
+        void ApplyForAllItems(std::function<void(Item*)> func, bool inBank = false) const;
+
         uint8 GetSlotByItemGUID(ObjectGuid guid) const;
         bool IsEmpty() const;
         uint32 GetFreeSlots() const;
