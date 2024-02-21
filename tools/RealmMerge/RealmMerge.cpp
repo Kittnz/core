@@ -959,7 +959,7 @@ bool UpdateMailIds()
                 std::pair<uint32, bool> newId = mailIds.ReplaceKeyIfNeeded(id);
                 if (newId.second)
                 {
-                    sLog.outInfo("Id of instance %u is taken. Updating to %u.", id, newId.first);
+                    sLog.outInfo("Id of mail %u is taken. Updating to %u.", id, newId.first);
                     CharacterDatabase2.PExecute("UPDATE `mail` SET `id` = %u WHERE `id` = %u", newId.first, id);
                     CharacterDatabase2.PExecute("UPDATE `mail_items` SET `mail_id` = %u WHERE `mail_id` = %u", newId.first, id);
                 }
