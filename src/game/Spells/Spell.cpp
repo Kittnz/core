@@ -1357,6 +1357,8 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     combat = true;
                 }
 
+                pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
+
                 if (combat)
                 {
                     if (!m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS))
