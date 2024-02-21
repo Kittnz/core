@@ -2108,7 +2108,35 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         }
                     }
                 }
-                case 46003: // Illusions
+                // Illusions:
+                case 31960:
+                case 31961:
+                case 31962:
+                case 31963:
+                case 31964:
+                case 31965:
+                case 31966:
+                case 31967:
+                case 31968:
+                case 31969:
+                case 31970:
+                case 31971:
+                case 31972:
+                case 31973:
+                case 31974:
+                case 31975:
+                case 31976:
+                case 31977:
+                case 31978:
+                case 31979:
+                case 31980:
+                case 31981:
+                case 31982:
+                case 31983:
+                case 31984:
+                case 31985:
+                case 31986:
+                case 31987:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
@@ -2119,52 +2147,52 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             return;
                         }
 
-                        std::uint32_t displayid{};
-                        const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
+                            std::uint32_t displayid{};
+                            const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
 
-                        switch (m_CastItem->GetEntry())
-                        {
-                            case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
-                            case 51247: displayid = 10008;  break; // Chromie
-                            case 51055: displayid = 18356;  break; // Tree Form
-                            case 51065: displayid = 4629;   break; // Shadow
-                            case 51209: displayid = 2176;   break; // Rat
-                            case 81145: displayid = 18251;  break; // Pandaren
-                            case 51066: displayid = 12030;  break; // Flamewaker
-                            case 51067: displayid = 8053;   break; // Bone Serpent
-                            case 51205: displayid = 14368;  break; // Ghost
-                            case 50435: displayid = 10543;  break; // Dreadlord
-                            case 50436: displayid = 7803;   break; // Smolderthorn Berserker
-                            case 50437: displayid = 4923;   break; // Naga Explorer
-                            case 50438: displayid = 11263;  break; // Naga Siren 
-                            case 80175: displayid = 6292;   break; // Bronze Whelpling
-                            case 91792: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
-                            case 50408: displayid = bIsMale ? 150 : 876;  break; // Dryad
-                            case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
-                            case 80694: // Scourge
+                            switch (m_spellInfo->Id)
+                            {
+                            // case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
+                            case 31984: displayid = 10008;  break; // Chromie
+                            // case 51055: displayid = 18356;  break; // Tree Form
+                            case 31970: displayid = 4629;   break; // Shadow
+                            case 31974: displayid = 2176;   break; // Rat
+                            case 31979: displayid = 18251;  break; // Pandaren
+                            case 31971: displayid = 12030;  break; // Flamewaker
+                            case 31972: displayid = 8053;   break; // Bone Serpent
+                            case 31966: displayid = 14368;  break; // Ghost
+                            case 31980: displayid = 10543;  break; // Dreadlord
+                            case 31981: displayid = 7803;   break; // Smolderthorn Berserker
+                            case 31982: displayid = 4923;   break; // Naga Explorer
+                            case 31983: displayid = 11263;  break; // Naga Siren 
+                            // case 80175: displayid = 6292;   break; // Bronze Whelpling
+                            case 31987: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
+                            case 31963: displayid = bIsMale ? 150 : 876;  break; // Dryad
+                            case 31976: displayid = (15393 + urand(0, 5)); break; // Murloc
+                            case 31977: // Scourge
                             {
                                 const std::uint32_t models[] = { 158, 612, 733 };
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 51253: // Furbolg
+                            case 31973: // Furbolg
                             {
                                 const std::uint32_t models[] = { 6746, 5773, 11363 };
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 50439: // Harpy
+                            case 31962: // Harpy
                             {
                                 const std::uint32_t models[] = { 3022, 10872, 1352 };
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 51210:
+                            case 31986: // Green Dragonkin
                             {
                                 displayid = 181;
                                 break;
                             }
-                            case 51200: // Goblin
+                            case 31961: // Goblin
                             {
                                 const std::uint32_t m_male[] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
                                 const std::uint32_t m_female[] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
@@ -2173,38 +2201,38 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            case 51201: // Worgen
+                            case 31964: // Worgen
                             {
                                 const std::uint32_t models[] = { 522, 523, 524 };
                                 int modelid = rand() % 3;
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 80648: // Gnoll
+                            case 31978: // Gnoll
                             {
                                 const std::uint32_t models[] = { 487, 383, 384, 491 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 53008: // Two-headed Ogre
+                            case 31975: // Two-headed Ogre
                             {
                                 const std::uint32_t models[] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
                                 displayid = models[urand(0, 6)];
                                 break;
                             }
-                            case 51206: // Banshee
+                            case 31967: // Banshee
                             {
                                 const std::uint32_t models[] = { 8782, 10728, 10750, 10994 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 51215: // Satyr
+                            case 31985: // Satyr
                             {
                                 const std::uint32_t models[] = { 2012, 2010, 11331, 1013 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 51207: // Serpent Lord
+                            case 31968: // Serpent Lord
                             {
                                 const std::uint32_t m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
                                 const std::uint32_t m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
@@ -2213,14 +2241,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            case 51208: // Succubus
+                            case 31969: // Succubus
                             {
                                 const std::uint32_t models[] = { 10923, 10924, 10925, 10926 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 50017: // Blood Elf
-                            case 51203: // High Elf
+                            case 31960: // Blood Elf
+                            case 31965: // High Elf
                             {
                                 const std::uint32_t m_male[6] = { 10375, 4245, 6779, 14394, 11671, 6549 };
                                 const std::uint32_t m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
@@ -2229,15 +2257,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            default:
-                            {
-                                break;
+                            default: break;
                             }
-                        }
-                        m_caster->ToPlayer()->hasIllusion = true;
-                        m_caster->ToPlayer()->SetDisplayId(displayid);
+                            m_caster->ToPlayer()->hasIllusion = true;
+                            m_caster->ToPlayer()->SetDisplayId(displayid);                            
+                        
                     }
-
                     return;
                 }
                 case 46010: // Teleport to Guild House
@@ -2336,6 +2361,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46003: // Add Illusion to Collection
                 case 46096: // Add Toy to Collection
                 {
                     if (m_CastItem)

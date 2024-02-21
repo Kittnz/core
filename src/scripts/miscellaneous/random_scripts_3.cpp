@@ -7667,12 +7667,6 @@ bool RemoveSpecialEffectOnRefund(uint32 itemId, uint32 spellId, Player* pPlayer)
             }
         }
     }
-    // Illusions - demorph
-    else if (spellId == 46003)
-    {
-        pPlayer->DeMorph();
-        return false; // non consumable
-    }
 
     // no special handling, make sure item is removed
     return false;

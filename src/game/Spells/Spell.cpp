@@ -6389,11 +6389,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                         m_caster->ToPlayer()->GetSession()->SendNotification("You are no longer a City Protector.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
-                    if (m_spellInfo->Id == 46003 && m_caster->ToPlayer()->InBattleGround())
-                    {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't use this item on the battleground.");
-                        return SPELL_FAILED_DONT_REPORT;
-                    }
                 }
                 break;
             }
