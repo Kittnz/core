@@ -23,7 +23,7 @@ UPDATE quest_template SET NextQuestInChain = 41025 WHERE entry = 41024;
 UPDATE quest_template SET NextQuestInChain = 41026 WHERE entry = 41025;
 
 -- Raise stack size of Bright Dream Shards to 250
-UPDATE item_tempalte SET Stackable = 250 WHERE entry = 61199;
+UPDATE item_template SET Stackable = 250 WHERE entry = 61199;
 
 -- Change repeatables to non-accept type
 UPDATE quest_template SET RequestItemsText = Details WHERE entry IN (40813, 40814, 40815, 40816, 40894, 40973, 41007, 41018, 41019, 41021, 41055, 41068, 41069, 41128) AND Details IS NOT NULL;
