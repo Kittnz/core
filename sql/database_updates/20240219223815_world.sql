@@ -9,3 +9,6 @@ UPDATE quest_template SET NextQuestInChain = 40959 WHERE entry = 40958;
 UPDATE quest_template SET NextQuestInChain = 40960 WHERE entry = 40959;
 UPDATE quest_template SET NextQuestInChain = 40961 WHERE entry = 40960;
 UPDATE quest_template SET NextQuestInChain = 40962 WHERE entry = 40961;
+
+-- Raise stack size of Bright Dream Shards to 250
+UPDATE item_tempalte SET Stackable = 250 WHERE entry = 61199;
