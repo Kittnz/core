@@ -37,8 +37,8 @@ UPDATE item_template SET Bonding = 1 WHERE entry = 61179;
 
 -- Place profession requirements on Hyjal recipe turn-ins
 UPDATE quest_template SET RequiredSkill = 164 WHERE entry IN (40888, 40889, 40890, 41111); -- blacksmith
-UPDATE quest_template SET RequiredSkill = 165 WHERE entry IN (40875, 40897, 40898, 40899); -- leatherworking
+UPDATE quest_template SET RequiredSkill = 165 WHERE entry IN (40875, 40895, 40897, 40898, 40899); -- leatherworking
 UPDATE quest_template SET RequiredSkill = 171 WHERE entry IN (40873, 40874); -- alchemy
 UPDATE quest_template SET RequiredSkill = 186 WHERE entry = 40886; -- mining
-UPDATE quest_template SET RequiredSkill = 197 WHERE entry IN (40902, 40903, 40904); -- tailoring
+UPDATE quest_template SET RequiredSkill = 197 WHERE entry IN (40900, 40902, 40903, 40904); -- tailoring
 UPDATE quest_template SET RequiredSkill = 333 WHERE entry IN (40883, 40884); -- enchanting
