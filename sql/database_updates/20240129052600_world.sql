@@ -221,7 +221,6 @@ UPDATE quest_template SET Name = 'The Keeper''s Charge' WHERE entry = 40243;
 UPDATE quest_template SET Name = 'The Keeper''s Possession' WHERE entry = 40244;
 UPDATE spell_template SET Description = '' WHERE entry IN (47324, 47326);
 UPDATE creature_template SET Name = 'Hierophant Nerseus' WHERE entry = 61610;
-UPDATE creature_template SET Name = 'Ivory Hawkstrider' WHERE entry = 61695;
 UPDATE gameobject_template SET Name = 'Jintha''Alor Altar' WHERE entry = 142180;
 
 -- Dragunovi item bug fixes

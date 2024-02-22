@@ -52,3 +52,6 @@ UPDATE quest_template SET RequiredSkill = 171, RequiredSkillValue = 1 WHERE entr
 UPDATE quest_template SET RequiredSkill = 186, RequiredSkillValue = 1 WHERE entry = 40886; -- mining
 UPDATE quest_template SET RequiredSkill = 197, RequiredSkillValue = 1 WHERE entry IN (40900, 40902, 40903, 40904); -- tailoring
 UPDATE quest_template SET RequiredSkill = 333, RequiredSkillValue = 1 WHERE entry IN (40883, 40884); -- enchanting
+
+-- Let's try this AGAIN
+UPDATE creature_template SET Name = 'Ivory Hawkstrider' WHERE entry = 61695;
