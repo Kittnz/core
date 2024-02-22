@@ -896,6 +896,10 @@ void Spell::prepareDataForTriggerSystem()
                 if (m_spellInfo->IsFitToFamilyMask<CF_PRIEST_TOUCH_OF_WEAKNESS, CF_PRIEST_DEVOURING_PLAGUE>())
                     m_canTrigger = true;
                 break;
+            case SPELLFAMILY_WARRIOR:
+				if (m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_RETALIATION>())
+					m_canTrigger = true;
+                break;
             default:
                 break;
         }
@@ -1356,6 +1360,8 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     pRealUnitCaster->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
                     combat = true;
                 }
+
+                pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
 
                 if (combat)
                 {
