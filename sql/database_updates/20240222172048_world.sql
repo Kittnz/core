@@ -38,6 +38,8 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
 
 -- Rough Copper Ring, and Copper Bangle should require a forge, and the item Jewelers Kit (55155) to craft
 
+SET @JEWELCRAFTING = 755;
+
 -- MODIFY THIS PART:
 
 SET @learn_spell_id = 29731; -- Ensure it's unique.
