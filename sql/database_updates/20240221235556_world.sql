@@ -153,3 +153,5 @@ UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `ca
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (22220, 29733, 10, 0, 0, 5);
+
+UPDATE `spell_template` SET `effectMiscValue1` = 0 WHERE `entry` = 30220;
