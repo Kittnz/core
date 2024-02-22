@@ -50,7 +50,7 @@ Details = 'Margon the Mighty and his son Hargul the Hardy are two sea giants tha
 WHERE entry = 40151;
 
 UPDATE quest_template SET
-Details = 'Hello! My name is Smallgill. I was once among the murlocs, up until we came here, and they allied with the slithery naga! They go by the name Deeptide now, and attack any who come near. They even stole my necklaces!$B$BThose were mine, that I made, and that I gave to friends, and they stole each and every one of them! I tried to ask nicely but they attacked me, and now I want them back by any means.$B$BCould you please, oh very please get me my necklaces back? I don''t need all of them, just a few! Maybe six? I know that the other murlocs around here have them, so make sure you ask nicely.'
+Details = 'Hello! My name is Smallgill. I was once among the murlocs, up until we came here, and they allied with the slithery naga! They go by the name Deeptide now, and attack any who come near. They even stole my necklaces!$B$BThose were mine, that I made, and that I gave to friends, and they stole each and every one of them! I tried to ask nicely but they attacked me, and now I want them back by any means.$B$BCould you please, oh very please get me my necklaces back? I don''t need all of them, just a few! Maybe six? I know that the other murlocs around here have them, so make sure you ask nicely.',
 Objectives = 'Collect 6 Lovely Shell Necklaces for Smallgill in Gillijim''s Island.'
 WHERE entry = 40162;
 
@@ -115,7 +115,7 @@ Details = 'You. You can help me, us. The ogres of Dunemaul be driving us away fr
 WHERE entry = 40521;
 
 UPDATE quest_template SET
-Name = 'The Gusting Vortex',
+Title = 'The Gusting Vortex',
 Objectives = 'Bring a Harmonized Sand to Ginlo Taxxo at Steamwheedle Port in Tanaris.'
 WHERE entry = 40592;
 
@@ -172,7 +172,7 @@ Details = 'The operations of the SI:7 are secretive in nature, and this must rem
 WHERE entry = 555220;
 
 UPDATE quest_template SET
-Name = 'The Stockade Search',
+Title = 'The Stockade Search',
 Details = 'Ahh yes, I had only figured a report from Robb would eventually lead back to this man. You may know him as Harlus Ashbuckle, but in truth that is nothing more than a false identity. The man you''re gathering information on is actually Martin Corinth, who hails from Lordaeron. He escaped south to Stormwind during the Third War and was recently let free from imprisonment.$B$BSomeone from the House of Nobles delayed his execution and eventually got his release with a vow from the man to swear off his practices and be exiled from the land. I kept a close eye on him, knowing just how much potential power he had within the dark arts.$B$BI would like to tie up some loose ends before simply having the man killed for his practices, I wish to figure out who else may be behind all of this forbidden magic, and what Noble set him free.$B$BThe Stockades has recently been overrun, but it is the last location that holds information valuable to this Martin Corinth, go there and find it.'
 WHERE entry = 55221;
 
@@ -217,8 +217,8 @@ UPDATE spell_template SET Description = 'Attaches a buckle to your belt that inc
 UPDATE quest_template SET Objectives = 'Gather 10 Fine Free-Range Alterac Yeti Hides for Alix Gres.' WHERE entry = 41269;
 UPDATE quest_template SET Objectives = 'Gather 10 Fine Free-Range Alterac Yeti Hides for Coco Gucci.' WHERE entry = 41272;
 UPDATE quest_template SET ObjectiveText1 = 'Listen to Maltimor' WHERE entry = 40529;
-UPDATE quest_template SET Name = 'The Keeper''s Charge' WHERE entry = 40243;
-UPDATE quest_template SET Name = 'The Keeper''s Possession' WHERE entry = 40244;
+UPDATE quest_template SET Title = 'The Keeper''s Charge' WHERE entry = 40243;
+UPDATE quest_template SET Title = 'The Keeper''s Possession' WHERE entry = 40244;
 UPDATE spell_template SET Description = '' WHERE entry IN (47324, 47326);
 UPDATE creature_template SET Name = 'Hierophant Nerseus' WHERE entry = 61610;
 UPDATE gameobject_template SET Name = 'Jintha''Alor Altar' WHERE entry = 142180;
