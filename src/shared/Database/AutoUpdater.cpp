@@ -199,6 +199,10 @@ namespace DBUpdater
 
             if (ch == '\r' || ch == '\n')
             {
+                if (ch == '\n')
+                {
+                    query += ' ';
+                }
                 inComment = false;
                 continue;
             }
