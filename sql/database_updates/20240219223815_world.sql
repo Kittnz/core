@@ -55,3 +55,8 @@ UPDATE quest_template SET RequiredSkill = 333, RequiredSkillValue = 1 WHERE entr
 
 -- Let's try this AGAIN
 UPDATE creature_template SET Name = 'Ivory Hawkstrider' WHERE entry = 61695;
+
+-- Add linebreaks to quest 41095
+UPDATE quest_template SET
+Details = 'There be something other than demons on my mind, mon. My tribe, my own people. Lost to the madness of bad, very bad voodoo. One day the Loa be seeking our Speaker in his slumber. The Loa asked for strong mojo to be made, the Mojo of Dreams.$B$BA mojo that strong needed blessed water, blessed by the Dragons. So I be finding my way to the big green portal. There I found the demons and dirtied my hands with their blood as the Speaker ran away! When I be returning home, my own people sneered at me in hostility. Sent me away. No part of the Shadeflayers, they said.$B$BBad, bad voodoo took over their mind mon. But to fix bad voodoo, you be needing to pay blood and good mojo. Both price of blood and mojo can be paid in Zul''Hatha. Where you will find Gan''hota the Speaker with his Mojo of Dreams. Not far you be finding Warlord Hanzento, whose blood you need to spill. He be the reason for this foolishness and this be the right way to set things right!'
+WHERE entry = 4105;
