@@ -211,7 +211,8 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_TEAM:
         {
-            return (uint32(target->ToPlayer()->GetTeam()) == m_value1);
+            if (Player const* pPlayer = target->ToUnit()->GetOwnerPlayerOrPlayerItself())
+                return (pPlayer->GetTeam() == m_value1);
         }
         case CONDITION_SKILL:
         {
