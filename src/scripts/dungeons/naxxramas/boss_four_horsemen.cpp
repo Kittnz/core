@@ -339,7 +339,7 @@ struct boss_four_horsemen_shared : public ScriptedAI
 
         if (Unit* pVictim = m_creature->GetVictim())
         {
-            if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL))
+            if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL * 2))
                 m_creature->CastSpell(pVictim, SPELL_SUMMON_PLAYER, true);
         }
 
