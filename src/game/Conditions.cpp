@@ -213,6 +213,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         {
             if (Player const* pPlayer = target->ToUnit()->GetOwnerPlayerOrPlayerItself())
                 return (pPlayer->GetTeam() == m_value1);
+            return false;
         }
         case CONDITION_SKILL:
         {
