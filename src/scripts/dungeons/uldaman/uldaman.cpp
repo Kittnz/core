@@ -104,20 +104,19 @@ struct mob_stone_keeperAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-        {
-            return;
-        }
-        if (m_uiTrample_Timer < diff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRAMPLE) == CAST_OK)
-            {
-                m_uiTrample_Timer = urand(4000, 10000);
-            }
-        }
-        else m_uiTrample_Timer -= diff;
+        ScriptedAI::UpdateAI(diff);
 
-        DoMeleeAttackIfReady();
+        if (m_creature->GetVictim() != nullptr)
+        {
+			if (m_uiTrample_Timer < diff)
+			{
+				if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRAMPLE) == CAST_OK)
+				{
+					m_uiTrample_Timer = urand(4000, 10000);
+				}
+			}
+			else m_uiTrample_Timer -= diff;
+        }
     }
 };
 
