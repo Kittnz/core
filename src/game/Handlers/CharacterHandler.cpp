@@ -955,6 +955,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         sWorld.SendGMText(string_format("GM {} just logged in.", pCurrChar->GetName()));
     }
 
+
+    pCurrChar->RecallPvPGear();
+
     // Update warden speeds
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
