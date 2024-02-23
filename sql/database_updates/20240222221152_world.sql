@@ -774,3 +774,30 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (3, @learn_spell_id, @cost, @skill_id, @skill_level_required, 0);
 
 UPDATE `spell_template` SET `spelliconid` = 1727  WHERE `name` LIKE '%jewelcrafting%';
+
+-- Skilline fixes:
+
+UPDATE `skill_line_ability` SET `max_value` = 40 WHERE `id` = 17000;
+UPDATE `skill_line_ability` SET `max_value` = 40 WHERE `id` = 17001;
+UPDATE `skill_line_ability` SET `max_value` = 45 WHERE `id` = 17002;
+UPDATE `skill_line_ability` SET `max_value` = 55 WHERE `id` = 17003;
+UPDATE `skill_line_ability` SET `max_value` = 60 WHERE `id` = 17004;
+UPDATE `skill_line_ability` SET `max_value` = 65 WHERE `id` = 17005;
+UPDATE `skill_line_ability` SET `max_value` = 70 WHERE `id` = 17006;
+UPDATE `skill_line_ability` SET `max_value` = 70 WHERE `id` = 17007;
+UPDATE `skill_line_ability` SET `max_value` = 75 WHERE `id` = 17008;
+UPDATE `skill_line_ability` SET `max_value` = 80 WHERE `id` = 17009;
+UPDATE `skill_line_ability` SET `max_value` = 80 WHERE `id` = 17010;
+UPDATE `skill_line_ability` SET `max_value` = 85 WHERE `id` = 17011;
+UPDATE `skill_line_ability` SET `max_value` = 85 WHERE `id` = 17012;
+UPDATE `skill_line_ability` SET `max_value` = 85 WHERE `id` = 17013;
+UPDATE `skill_line_ability` SET `max_value` = 90 WHERE `id` = 17014;
+UPDATE `skill_line_ability` SET `max_value` = 15 WHERE `id` = 30425;
+UPDATE `skill_line_ability` SET `max_value` = 25 WHERE `id` = 30427;
+UPDATE `skill_line_ability` SET `max_value` = 30 WHERE `id` = 30428;
+UPDATE `skill_line_ability` SET `max_value` = 25 WHERE `id` = 30521;
+UPDATE `skill_line_ability` SET `max_value` = 5 WHERE `id` = 36509;
+UPDATE `skill_line_ability` SET `max_value` = 6 WHERE `id` = 36510;
+UPDATE `skill_line_ability` SET `max_value` = 5 WHERE `id` = 36522;
+UPDATE `skill_line_ability` SET `max_value` = 5 WHERE `id` = 36523;
+UPDATE `skill_line_ability` SET `max_value` = 5 WHERE `id` = 36524;
