@@ -64,4 +64,29 @@ UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `ca
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (3, @learn_spell_id, @cost, @skill_id, @skill_level_required, 0);
 
+UPDATE `skill_line_ability` SET `min_value` = 30+5, `max_value` = 40+15 WHERE `id` = 17000;
+UPDATE `skill_line_ability` SET `min_value` = 35+5, `max_value` = 40+15 WHERE `id` = 17001;
+UPDATE `skill_line_ability` SET `min_value` = 40+5, `max_value` = 45+15 WHERE `id` = 17002;
+UPDATE `skill_line_ability` SET `min_value` = 50+5, `max_value` = 55+15 WHERE `id` = 17003;
+UPDATE `skill_line_ability` SET `min_value` = 55+5, `max_value` = 60+15 WHERE `id` = 17004;
+UPDATE `skill_line_ability` SET `min_value` = 65+5, `max_value` = 65+15 WHERE `id` = 17005;
+UPDATE `skill_line_ability` SET `min_value` = 65+5, `max_value` = 70+15 WHERE `id` = 17006;
+UPDATE `skill_line_ability` SET `min_value` = 65+5, `max_value` = 70+15 WHERE `id` = 17007;
+UPDATE `skill_line_ability` SET `min_value` = 70+5, `max_value` = 75+15 WHERE `id` = 17008;
+UPDATE `skill_line_ability` SET `min_value` = 75+5, `max_value` = 80+15 WHERE `id` = 17009;
+UPDATE `skill_line_ability` SET `min_value` = 75+5, `max_value` = 80+15 WHERE `id` = 17010;
+UPDATE `skill_line_ability` SET `min_value` = 80+5, `max_value` = 85+15 WHERE `id` = 17011;
+UPDATE `skill_line_ability` SET `min_value` = 80+5, `max_value` = 85+15 WHERE `id` = 17012;
+UPDATE `skill_line_ability` SET `min_value` = 85+5, `max_value` = 85+15 WHERE `id` = 17013;
+UPDATE `skill_line_ability` SET `min_value` = 85+5, `max_value` = 85+15 WHERE `id` = 17014;
+UPDATE `skill_line_ability` SET `min_value` = 40+5, `max_value` = 50+15 WHERE `id` = 17015;
+UPDATE `skill_line_ability` SET `min_value` = 16+5, `max_value` = 15+15 WHERE `id` = 30425;
+UPDATE `skill_line_ability` SET `min_value` = 16+5, `max_value` = 25+15 WHERE `id` = 30427;
+UPDATE `skill_line_ability` SET `min_value` = 16+5, `max_value` = 30+15 WHERE `id` = 30428;
+UPDATE `skill_line_ability` SET `min_value` = 16+5, `max_value` = 25+15 WHERE `id` = 30521;
+UPDATE `skill_line_ability` SET `min_value` = 15+5, `max_value` = 5 +15 WHERE `id` = 36509;
+UPDATE `skill_line_ability` SET `min_value` = 35+5, `max_value` = 6 +15 WHERE `id` = 36510;
+UPDATE `skill_line_ability` SET `min_value` = 15+5, `max_value` = 5 +15 WHERE `id` = 36522;
+UPDATE `skill_line_ability` SET `min_value` = 15+5, `max_value` = 5 +15 WHERE `id` = 36523;
+UPDATE `skill_line_ability` SET `min_value` = 15+5, `max_value` = 5 +15 WHERE `id` = 36524;
 
