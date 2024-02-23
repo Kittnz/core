@@ -143,6 +143,14 @@ bool ConditionEntry::Meets(WorldObject const* target, Map const* map, WorldObjec
 // Actual evaluation of the condition done here.
 bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, WorldObject const* source, ConditionSource conditionSourceType) const
 {
+    if (target == nullptr)
+    {
+        sLog.outError("[CRASH]: ConditionEntry::Evaluate with target nullptr. MapID: %u", map->GetId());
+        return false;
+    }
+
+    const Unit* TargetUnit = target->ToUnit();
+    const Player* TargetPlayer = target->ToPlayer();
     switch (m_condition)
     {
         case CONDITION_NOT:
@@ -184,18 +192,33 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_AURA:
         {
+            if (TargetUnit == nullptr)
+            {
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_AURA FAILED CAST TO UNIT");
+                return false;
+            }
             if (m_value2 < EFFECT_INDEX_0)
-                return target->ToUnit()->HasAura(m_value1);
+                return TargetUnit->HasAura(m_value1);
             else
-                return target->ToUnit()->HasAura(m_value1, SpellEffectIndex(m_value2));
+                return TargetUnit->HasAura(m_value1, SpellEffectIndex(m_value2));
         }
         case CONDITION_ITEM:
         {
-            return target->ToPlayer()->HasItemCount(m_value1, m_value2);
+            if (TargetPlayer == nullptr)
+            {
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_ITEM FAILED CAST TO PLAYER");
+                return false;
+            }
+            return TargetPlayer->HasItemCount(m_value1, m_value2);
         }
         case CONDITION_ITEM_EQUIPPED:
         {
-            return target->ToPlayer()->HasItemWithIdEquipped(m_value1, 1);
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_ITEM_EQUIPPED FAILED CAST TO PLAYER");
+				return false;
+			}
+            return TargetPlayer->HasItemWithIdEquipped(m_value1, 1);
         }
         case CONDITION_AREAID:
         {
@@ -206,29 +229,58 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_REPUTATION_RANK_MIN:
         {
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_REPUTATION_RANK_MIN FAILED CAST TO PLAYER");
+				return false;
+			}
             FactionEntry const* faction = sObjectMgr.GetFactionEntry(m_value1);
-            return (target->ToPlayer()->GetReputationMgr().GetRank(faction) >= ReputationRank(m_value2));
+            return (TargetPlayer->GetReputationMgr().GetRank(faction) >= ReputationRank(m_value2));
         }
         case CONDITION_TEAM:
         {
-            return (uint32(target->ToPlayer()->GetTeam()) == m_value1);
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_TEAM FAILED CAST TO PLAYER");
+				return false;
+			}
+            return (uint32(TargetPlayer->GetTeam()) == m_value1);
         }
         case CONDITION_SKILL:
         {
-            Player const* pPlayer = target->ToPlayer();
-            return (pPlayer->HasSkill(m_value1) && pPlayer->GetSkillValueBase(m_value1) >= m_value2);
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_SKILL FAILED CAST TO PLAYER");
+				return false;
+			}
+            return (TargetPlayer->HasSkill(m_value1) && TargetPlayer->GetSkillValueBase(m_value1) >= m_value2);
         }
         case CONDITION_QUESTREWARDED:
         {
-            return target->ToPlayer()->GetQuestRewardStatus(m_value1);
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_QUESTREWARDED FAILED CAST TO PLAYER");
+				return false;
+			}
+            return TargetPlayer->GetQuestRewardStatus(m_value1);
         }
         case CONDITION_QUESTTAKEN:
         {
-            return target->ToPlayer()->IsCurrentQuest(m_value1, m_value2);
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_QUESTTAKEN FAILED CAST TO PLAYER");
+				return false;
+			}
+            return TargetPlayer->IsCurrentQuest(m_value1, m_value2);
         }
         case CONDITION_AD_COMMISSION_AURA:
         {
-            Unit::SpellAuraHolderMap const& auras = target->ToPlayer()->GetSpellAuraHolderMap();
+			if (TargetPlayer == nullptr)
+			{
+                sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_AD_COMMISSION_AURA FAILED CAST TO PLAYER");
+				return false;
+			}
+            Unit::SpellAuraHolderMap const& auras = TargetPlayer->GetSpellAuraHolderMap();
             for (const auto& aura : auras)
                 if ((aura.second->GetSpellProto()->Attributes & SPELL_ATTR_CASTABLE_WHILE_MOUNTED || aura.second->GetSpellProto()->Attributes & SPELL_ATTR_IS_ABILITY) && aura.second->GetSpellProto()->SpellVisual == 3580)
                     return true;
@@ -254,20 +306,28 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_RACE_CLASS:
         {
-            Player const* pPlayer = target->ToPlayer();
-            return (!m_value1 || (pPlayer->GetRaceMask() & m_value1)) && (!m_value2 || (pPlayer->GetClassMask() & m_value2));
+			if (TargetPlayer == nullptr)
+			{
+				sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_RACE_CLASS FAILED CAST TO PLAYER");
+				return false;
+			}
+            return (!m_value1 || (TargetPlayer->GetRaceMask() & m_value1)) && (!m_value2 || (TargetPlayer->GetClassMask() & m_value2));
         }
         case CONDITION_LEVEL:
         {
-            Unit const* pTarget = target->ToUnit();
+			if (TargetUnit == nullptr)
+			{
+				sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_LEVEL FAILED CAST TO UNIT");
+				return false;
+			}
             switch (m_value2)
             {
                 case 0:
-                    return pTarget->GetLevel() == m_value1;
+                    return TargetUnit->GetLevel() == m_value1;
                 case 1:
-                    return pTarget->GetLevel() >= m_value1;
+                    return TargetUnit->GetLevel() >= m_value1;
                 case 2:
-                    return pTarget->GetLevel() <= m_value1;
+                    return TargetUnit->GetLevel() <= m_value1;
             }
             return false;
         }
@@ -311,8 +371,13 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_QUEST_NONE:
         {
-            Player const* pPlayer = target->ToPlayer();
-            return !pPlayer->IsCurrentQuest(m_value1) && !pPlayer->GetQuestRewardStatus(m_value1);
+			if (TargetPlayer == nullptr)
+			{
+				sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_QUEST_NONE FAILED CAST TO PLAYER");
+				return false;
+			}
+
+            return !TargetPlayer->IsCurrentQuest(m_value1) && !TargetPlayer->GetQuestRewardStatus(m_value1);
         }
         case CONDITION_ITEM_WITH_BANK:
         {
@@ -321,18 +386,22 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         case CONDITION_ESCORT:
         {
             Creature const* pSource = ToCreature(source);
-            Player const* pTarget = ToPlayer(target);
+			if (TargetPlayer == nullptr)
+			{
+				sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_ESCORT FAILED CAST TO PLAYER");
+				return false;
+			}
 
             if (m_value1 & CF_ESCORT_SOURCE_DEAD)
                 if (!pSource || pSource->IsDead())
                     return true;
 
             if (m_value1 & CF_ESCORT_TARGET_DEAD)
-                if (!pTarget || pTarget->IsDead() || !pTarget->IsInWorld())
+                if (TargetPlayer->IsDead() || !TargetPlayer->IsInWorld())
                     return true;
 
             if (m_value2)
-                if (!pSource || !pTarget || !pSource->IsWithinDistInMap(pTarget, m_value2))
+                if (!pSource || !pSource->IsWithinDistInMap(TargetPlayer, m_value2))
                     return true;
 
             return false;
@@ -360,11 +429,16 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_SKILL_BELOW:
         {
-            Player const* pPlayer = target->ToPlayer();
+			if (TargetPlayer == nullptr)
+			{
+				sLog.outError("[CRASH]: ConditionEntry::Evaluate CONDITION_SKILL_BELOW FAILED CAST TO PLAYER");
+				return false;
+			}
+
             if (m_value2 == 1)
-                return !pPlayer->HasSkill(m_value1);
+                return !TargetPlayer->HasSkill(m_value1);
             else
-                return pPlayer->HasSkill(m_value1) && pPlayer->GetSkillValueBase(m_value1) < m_value2;
+                return TargetPlayer->HasSkill(m_value1) && TargetPlayer->GetSkillValueBase(m_value1) < m_value2;
         }
         case CONDITION_REPUTATION_RANK_MAX:
         {
