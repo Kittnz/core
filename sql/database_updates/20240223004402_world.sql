@@ -8,7 +8,7 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '1', NULL);
  
-UPDATE `skill_line_ability` SET `max_value` = 46 WHERE `id` = 17000; 
+UPDATE `skill_line_ability` SET `max_value` = 40, `min_value` = 20 WHERE `id` = 17000; 
 UPDATE `item_template` SET `class` = 15, `flags` = 4  WHERE `entry` = 81032;
  
 SET @JEWELCRAFTING = 755;
