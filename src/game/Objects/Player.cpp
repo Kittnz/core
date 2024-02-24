@@ -3814,17 +3814,17 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
-    if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
-    {
-        uint32 itemEntry = 81205;
-        std::string subject = "Winds of Discovery";
-        std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
-        Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
-        ToMailItem->SaveToDB();
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-    }
+    //if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    //{
+    //    uint32 itemEntry = 81205;
+    //    std::string subject = "Winds of Discovery";
+    //    std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
+    //    Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+    //    ToMailItem->SaveToDB();
+    //    MailDraft(subject, sObjectMgr.CreateItemText(message))
+    //        .AddItem(ToMailItem)
+    //        .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    //}
 
     // leave lower level bg queue on levelup
     for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
