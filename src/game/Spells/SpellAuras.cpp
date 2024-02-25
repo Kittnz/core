@@ -8517,6 +8517,10 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 14301: // Immolation Trap Effect (Rank 5)
         case 23184: // Mark of Frost
         case 25041: // Mark of Nature
+        case 8229:  // Flametongue Totem Passive (Rank 1)
+        case 8251:  // Flametongue Totem Passive (Rank 2)
+        case 10524:  // Flametongue Totem Passive (Rank 3)
+        case 16388:  // Flametongue Totem Passive (Rank 4)
             break;
         default:
             m_periodicTimer = m_modifier.periodictime;
