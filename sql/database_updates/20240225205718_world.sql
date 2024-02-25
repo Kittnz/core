@@ -16,5 +16,5 @@ INSERT INTO `quest_end_scripts` (`id`, `delay`, `priority`, `command`, `datalong
 (1708, 28, 0, 3, 0, 0, 65, 1, 0, 0, 0, 0, 0, 0, 0, 0, -4867.2, 573.87, 378.47, 2.50219, 0, 'Iron Coral: Klockmort Spannerspan - Move point 5'),
 (1708, 28, 0, 4, 147, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Iron Coral: Klockmort Spannerspan - Add Quest Giver Flag');
 
-
-
+-- Make Furen's Notes non-unique
+UPDATE item_template SET Max_Count = 0, Stackable = 1 WHERE entry = 6926;
