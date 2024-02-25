@@ -63,5 +63,5 @@ WHERE entry = 4105;
 
 -- Revert erroneously replaced quest description for 40909
 UPDATE quest_template SET
-Details = 'The Winterfall and Deadwood Tribes have already been lost to madness. Their hatred burns deep and already they have sent speakers to discuss an allegiance with the corrupt Barkskin. I have no doubt in my mind it will only be a matter of time before they conspire against us. The Timbermaw cannot stand idle whilst corruption ties hostile factions together in unison.$N$NI beseech you to travel deep into Barkskin Village to the southwest of here, near the bottom of the summit. Find and slay the Winterfall and Deadwood envoys both.'
+Details = 'The Winterfall and Deadwood Tribes have already been lost to madness. Their hatred burns deep and already they have sent speakers to discuss an allegiance with the corrupt Barkskin. I have no doubt in my mind it will only be a matter of time before they conspire against us.$B$BThe Timbermaw cannot stand idle whilst corruption ties hostile factions together in unison. I beseech you to travel deep into Barkskin Village to the southwest of here, near the bottom of the summit.$B$BFind and slay the Winterfall and Deadwood envoys both.'
 WHERE entry = 40909;
