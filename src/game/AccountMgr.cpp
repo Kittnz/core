@@ -638,6 +638,7 @@ bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
 {
+    std::shared_lock lock{ m_ipBannedMutex };
     auto it = m_ipBanned.find(ip);
     return !(it == m_ipBanned.end() || it->second < time(nullptr));
 }
