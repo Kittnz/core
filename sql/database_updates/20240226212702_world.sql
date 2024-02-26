@@ -124,7 +124,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 
 SET @spell_visual_1 = 1168; 
-SET @recipe_item = 0; 
+SET @recipe_item = 40082; 
 SET @if_required_spell_focus = 0; 
 SET @cast_time_index = 14; 
 SET @cast_time_index_craft = 33; 
@@ -170,7 +170,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 
 SET @spell_visual_1 = 1168; 
-SET @recipe_item = 0; 
+SET @recipe_item = 40083; 
 SET @if_required_spell_focus = 0; 
 SET @cast_time_index = 14; 
 SET @cast_time_index_craft = 33; 
@@ -216,7 +216,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 
 SET @spell_visual_1 = 1168; 
-SET @recipe_item = 0; 
+SET @recipe_item = 40084; 
 SET @if_required_spell_focus = 0; 
 SET @cast_time_index = 14; 
 SET @cast_time_index_craft = 33; 
@@ -232,3 +232,7 @@ REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0,
 UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 -- REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (4, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Forge!
+
+UPDATE `spell_template` SET requiresSpellFocus = 3 WHERE entry IN (41001, 41003, 41005, 41007, 41009, 41011, 41013, 41015, 41017, 41019, 41021, 41023, 41025, 41027, 41033, 41035, 41037, 41039, 41041, 41043, 41045, 41047, 41049, 41051, 41053, 41055, 41057, 41059, 41061, 41063, 41067, 41069, 41071, 41039);
