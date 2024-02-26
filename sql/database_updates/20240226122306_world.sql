@@ -1,6 +1,6 @@
 -- Make a new `gameobject` "High Quality Ammo Crate" that looks like a crate placed next to Cannon Master Willey (`creature 10997`).
 replace INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
-(2020091, 3, 4177, 'High Quality Ammo Crate', 0, 0, 1, 1085, 2020091, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2020091, 3, 335, 'High Quality Ammo Crate', 0, 0, 1, 1085, 2020091, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 -- Add 4-6 stacks of 200 count of item 13377 to its loot table, 4 at 100%, 2 at 50%.
 DELETE FROM `gameobject_loot_template` WHERE `entry` = 2020091;
 replace INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
@@ -15,7 +15,7 @@ delete from creature_loot_template where entry = 10997 and item = 13377;
 
 -- Make a new `gameobject` "High Quality Ammo Crate" that looks like a crate placed next to Shadow Hunter Vosh'gajin (`creature 9236`).
 replace INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
-(2020092, 3, 41, 'High Quality Ammo Crate', 0, 0, 1, 1085, 2020092, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2020092, 3, 335, 'High Quality Ammo Crate', 0, 0, 1, 1085, 2020092, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 -- Add 4-6 stacks of 200 count of item 12654 to its loot table, 4 at 100%, 2 at 50%.
 DELETE FROM `gameobject_loot_template` WHERE `entry` = 2020092;
 replace INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
