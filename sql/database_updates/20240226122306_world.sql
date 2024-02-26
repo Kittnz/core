@@ -36,3 +36,5 @@ update item_template set buy_price = 4000, sell_price = 1000 where entry = 55250
 update item_template set buy_price = 4000, sell_price = 1000 where entry = 55251;
 -- Item Crystal Quartz (55249) , change display ID to 2516.
 update item_template set display_id = 2516 where entry = 55249;
+-- Change display ID of Rough Thorium Ring (entry 41321) to 68074.
+update item_template set display_id = 68074 where entry = 41321;
