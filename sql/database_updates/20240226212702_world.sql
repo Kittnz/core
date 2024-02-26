@@ -108,8 +108,8 @@ SET @output_item_id = 41326;
 SET @recipe_spell_name = 'Jewelry Lens'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 750;
-SET @tool_item_1 = 6219;  -- Blacksmith Hammer
-SET @tool_item_2 = 6218;  -- Arclight Spanner
+SET @tool_item_1 = 6219;  
+SET @tool_item_2 = 5956;  
 SET @skill_level_required = 140; 
 SET @skill_level_max = 155; 
 SET @skill_trainer_required = 125;
@@ -154,8 +154,8 @@ SET @output_item_id = 41327;
 SET @recipe_spell_name = 'Jewelry Scope'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 750;
-SET @tool_item_1 = 6219;  -- Blacksmith Hammer
-SET @tool_item_2 = 6218;  -- Arclight Spanner
+SET @tool_item_1 = 6219;  
+SET @tool_item_2 = 5956;  
 SET @skill_level_required = 140; 
 SET @skill_level_max = 155; 
 SET @skill_trainer_required = 225;
@@ -200,8 +200,8 @@ SET @output_item_id = 41328;
 SET @recipe_spell_name = 'Precision Jewelry Kit'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 1100;
-SET @tool_item_1 = 6219;  -- Blacksmith Hammer
-SET @tool_item_2 = 6218;  -- Arclight Spanner
+SET @tool_item_1 = 6219;  
+SET @tool_item_2 = 5956;  
 SET @skill_level_required = 185; 
 SET @skill_level_max = 195; 
 SET @skill_trainer_required = 175;
@@ -236,3 +236,17 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 -- Forge!
 
 UPDATE `spell_template` SET requiresSpellFocus = 3 WHERE entry IN (41001, 41003, 41005, 41007, 41009, 41011, 41013, 41015, 41017, 41019, 41021, 41023, 41025, 41027, 41033, 41035, 41037, 41039, 41041, 41043, 41045, 41047, 41049, 41051, 41053, 41055, 41057, 41059, 41061, 41063, 41067, 41069, 41071, 41039);
+
+UPDATE `spell_template` SET requiresSpellFocus = 1 WHERE entry IN (41075, 41077, 41073);
+
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES 
+
+-- item 40082 add to vendors 61909, 61905, 61915
+
+-- item 40083 add to vendor 61914 
+
+(61914 , 0, 40083, 0, 0, 0, 0),
+
+(61909 , 0, 40082, 0, 0, 0, 0),
+(61905 , 0, 40082, 0, 0, 0, 0),
+(61915 , 0, 40082, 0, 0, 0, 0);
