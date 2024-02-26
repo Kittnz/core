@@ -144,8 +144,8 @@ class AccountMgr
         void LoadAccountHighestCharLevel();
         void LoadDonatorAccounts();
         void SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer);
-        void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
-        void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
+        void BanIP(std::string const& ip, uint32 unbandate) { std::unique_lock lock{ m_ipBannedMutex }; m_ipBanned[ip] = unbandate; }
+        void UnbanIP(std::string const& ip) { std::unique_lock lock{ m_ipBannedMutex };  m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountData[account].BannedUntil = unbandate; }
         void UnbanAccount(uint32 acc) { m_accountData[acc].BannedUntil = std::nullopt; }
         void WarnAccount(uint32 acc, std::string reason) { m_accountData[acc].LastWarning = reason; }

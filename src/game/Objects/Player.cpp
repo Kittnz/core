@@ -3230,6 +3230,50 @@ Creature* Player::GetNPCIfCanInteractWith(ObjectGuid guid, uint32 npcflagmask) c
     return CanInteractWithNPC(pCreature, npcflagmask) ? pCreature : nullptr;
 }
 
+void Player::RecallPvPGear()
+{
+    //Remove all ill-gotten PvP gear, warn the accounts, remove all transmogs from player, remove all collection transmogs.
+
+    auto hordeVendorList = sObjectMgr.GetNpcVendorTemplateItemList(1279202);
+    auto allianceVendorList = sObjectMgr.GetNpcVendorTemplateItemList(1277702);
+
+    const auto& vendorList = GetTeamId() == TEAM_ALLIANCE ? hordeVendorList : allianceVendorList; // Intentionally swapped.
+
+    std::vector<std::pair<uint32, uint32>> ownedItems;
+    for (const auto elem : vendorList->m_items)
+    {
+        auto count = GetItemCount(elem->item, true);
+        if (count)
+            ownedItems.push_back({ elem->item, count });
+    }
+
+    for (const auto& [itemId, count] : ownedItems)
+    {
+        DestroyItemCount(itemId, count, true);
+        GetTransmogMgr()->RemoveFromCollection(itemId);
+        RemoveTransmogsToItem(itemId);
+        sLog.out(LOG_CHAR, "[PVPREMOVAL]: Removed Item %u, count %u for player %s (%u)", itemId, count, GetName(), GetGUIDLow());
+    }
+
+    if (ownedItems.size() > 1)
+    {
+        ApplyForAllItems([this](Item* item) 
+            {
+                GetTransmogMgr()->RemoveTransmog(item);
+            });
+
+
+        std::string reason = "Bug abuse is against the ToS. Your PvP items of the opposing faction "
+            "have been removed and your Transmogrification was taken away. Depending on the severity additional punishments may be applied retroactively.";
+        MangosStrings mstring = LANG_WARN_INFORM;
+        sWorld.WarnAccount(GetSession()->GetAccountId(), "Console", reason, "WARN");
+        sAccountMgr.WarnAccount(GetSession()->GetAccountId(), reason);
+
+        ChatHandler(GetSession()).PSendSysMessage(mstring, reason);
+        GetSession()->SendNotification(mstring, reason);
+    }
+}
+
 bool Player::CanInteractWithNPC(Creature const* pCreature, uint32 npcflagmask) const
 {
     if (!pCreature)
@@ -3770,17 +3814,17 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
-    if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
-    {
-        uint32 itemEntry = 81205;
-        std::string subject = "Winds of Discovery";
-        std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
-        Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
-        ToMailItem->SaveToDB();
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-    }
+    //if (level == 20 && sWorld.getConfig(CONFIG_BOOL_HOLIDAY_EVENT) && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    //{
+    //    uint32 itemEntry = 81205;
+    //    std::string subject = "Winds of Discovery";
+    //    std::string message = "We've noticed you've been exploring the Mysteries of Azeroth and had one of our finest tailors send over a commemorative tabard to keep you fashionable on your journey!\n\nSafe travels,\nTurtle WoW Team";
+    //    Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+    //    ToMailItem->SaveToDB();
+    //    MailDraft(subject, sObjectMgr.CreateItemText(message))
+    //        .AddItem(ToMailItem)
+    //        .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    //}
 
     // leave lower level bg queue on levelup
     for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)

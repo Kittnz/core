@@ -60,3 +60,8 @@ UPDATE creature_template SET Name = 'Ivory Hawkstrider' WHERE entry = 61695;
 UPDATE quest_template SET
 Details = 'There be something other than demons on my mind, mon. My tribe, my own people. Lost to the madness of bad, very bad voodoo. One day the Loa be seeking our Speaker in his slumber. The Loa asked for strong mojo to be made, the Mojo of Dreams.$B$BA mojo that strong needed blessed water, blessed by the Dragons. So I be finding my way to the big green portal. There I found the demons and dirtied my hands with their blood as the Speaker ran away! When I be returning home, my own people sneered at me in hostility. Sent me away. No part of the Shadeflayers, they said.$B$BBad, bad voodoo took over their mind mon. But to fix bad voodoo, you be needing to pay blood and good mojo. Both price of blood and mojo can be paid in Zul''Hatha. Where you will find Gan''hota the Speaker with his Mojo of Dreams. Not far you be finding Warlord Hanzento, whose blood you need to spill. He be the reason for this foolishness and this be the right way to set things right!'
 WHERE entry = 4105;
+
+-- Revert erroneously replaced quest description for 40909
+UPDATE quest_template SET
+Details = 'The Winterfall and Deadwood Tribes have already been lost to madness. Their hatred burns deep and already they have sent speakers to discuss an allegiance with the corrupt Barkskin. I have no doubt in my mind it will only be a matter of time before they conspire against us.$B$BThe Timbermaw cannot stand idle whilst corruption ties hostile factions together in unison. I beseech you to travel deep into Barkskin Village to the southwest of here, near the bottom of the summit.$B$BFind and slay the Winterfall and Deadwood envoys both.'
+WHERE entry = 40909;

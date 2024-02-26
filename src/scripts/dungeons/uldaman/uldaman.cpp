@@ -67,66 +67,6 @@ bool ProcessEventId_event_awaken_stone_keeper(uint32 eventId, Object* source, Ob
     return true;
 }
 
-struct mob_stone_keeperAI : public ScriptedAI
-{
-    mob_stone_keeperAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        instance = (ScriptedInstance*)pCreature->GetInstanceData();
-        Reset();
-    }
-    
-    ScriptedInstance* instance;
-    
-    uint32 m_uiTrample_Timer;
-
-    void Reset() override
-    {
-        m_uiTrample_Timer = urand(4000, 9000);
-    }
-
-    void EnterEvadeMode() override
-    {
-        if (Unit* target = me->SelectNearestHostileUnitInAggroRange(true))
-        {
-            AttackStart(target);
-            return;
-        }
-        Reset();
-        if (instance)
-            instance->SetData(ULDAMAN_ENCOUNTER_STONE_KEEPERS, FAIL);
-    }
-
-    void JustDied(Unit* pWho) override
-    {
-        if (instance)
-            instance->SetData(ULDAMAN_ENCOUNTER_STONE_KEEPERS, IN_PROGRESS);
-    }
-
-    void UpdateAI(const uint32 diff) override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-        {
-            return;
-        }
-        if (m_uiTrample_Timer < diff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRAMPLE) == CAST_OK)
-            {
-                m_uiTrample_Timer = urand(4000, 10000);
-            }
-        }
-        else m_uiTrample_Timer -= diff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_mob_stone_keeper(Creature* pCreature)
-{
-    return new mob_stone_keeperAI(pCreature);
-}
-
-
 /*######
 ## mob_jadespine_basilisk
 ######*/
@@ -353,12 +293,6 @@ void AddSC_uldaman()
     newscript = new Script;
     newscript->Name = "mob_jadespine_basilisk";
     newscript->GetAI = &GetAI_mob_jadespine_basilisk;
-    newscript->RegisterSelf();
-
-
-    newscript = new Script;
-    newscript->Name = "mob_stone_keeper";
-    newscript->GetAI = &GetAI_mob_stone_keeper;
     newscript->RegisterSelf();
 
     newscript = new Script;

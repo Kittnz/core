@@ -1181,7 +1181,10 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
         else if (pPlayerTap)
             pPlayerTap->RewardSinglePlayerAtKill(pVictim);
     }
-    if (pPlayerVictim)
+
+    bool const damageFromSpiritOfRedemtionTalent = (spellProto && spellProto->Id == 27795);
+
+    if (pPlayerVictim && !damageFromSpiritOfRedemtionTalent)
     {
         if (pPlayerVictim->IsHardcore())
         {
@@ -1242,6 +1245,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             }
             pPlayerVictim->LogHCDeath();
         }
+
         pPlayerVictim->RewardHonorOnDeath();
     }
 
@@ -1250,8 +1254,6 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
         ProcDamageAndSpell(pVictim, PROC_FLAG_KILL, PROC_FLAG_HEARTBEAT, PROC_EX_NONE, 0, 0);
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageAttackStop");
-
-    bool damageFromSpiritOfRedemtionTalent = (spellProto && spellProto->Id == 27795);
 
     // if talent known but not triggered (check priest class for speedup check)
     bool spiritOfRedemtionTalentImmune = false;
