@@ -18,3 +18,6 @@ INSERT INTO `quest_end_scripts` (`id`, `delay`, `priority`, `command`, `datalong
 
 -- Make Furen's Notes non-unique
 UPDATE item_template SET Max_Count = 0, Stackable = 1 WHERE entry = 6926;
+
+-- Remove BoP from Doomshot and Miniature Cannon Balls
+UPDATE item_template SET Bonding = 0 WHERE entry IN (13377, 12654);
