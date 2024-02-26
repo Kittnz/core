@@ -27,3 +27,12 @@ replace INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 (2020092, 30605, 100, 2, -30605, 2, 0);
 -- Remove item 12654 from loot table of creature 9236.
 delete from creature_loot_template where entry = 9236 and item = 12654;
+
+-- Item Rough Bronze Ring (Entry 55174), change sell value to 50copper, and the buy value to 2s.
+update item_template set buy_price = 200, sell_price = 50 where entry = 55174;
+-- Item entry (55250) Emberstone, change sell value to 10s, and buy value to 40s.
+update item_template set buy_price = 4000, sell_price = 1000 where entry = 55250;
+-- Item entry (55251) Pure Moonstone, change sell value to 10s, and buy value to 40s.
+update item_template set buy_price = 4000, sell_price = 1000 where entry = 55251;
+-- Item Crystal Quartz (55249) , change display ID to 2516.
+update item_template set display_id = 2516 where entry = 55249;
