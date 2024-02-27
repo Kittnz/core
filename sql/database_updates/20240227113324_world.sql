@@ -188,3 +188,5 @@ update item_template set name = 'Schematic: Jewelry Lens' where entry = 40082;
 update item_template set name = 'Schematic: Jewelry Scope' where entry = 40083;
 -- Item 40084, rename to Schematic: Precision Jewelers Kit.
 update item_template set name = 'Schematic: Precision Jewelers Kit' where entry = 40084;
+-- Gobs 2020091, 2020092 - Cast timer 5 sec setted.
+update gameobject_template set data0 = 43 where entry in (2020091, 2020092);
