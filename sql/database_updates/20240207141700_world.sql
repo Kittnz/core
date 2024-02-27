@@ -9,4 +9,4 @@ update quest_template set details = 'Why hello there!$B$BWhat, shocked to see a 
 -- Solid Chest in the Tanaris (75.3, 46.1) is now available for looting. #5757
 update gameobject set position_x = -7994.63, position_y = -5415.51, position_z = 1.12023 where guid = 62962;
 -- Battered Chest in the Tanaris (71.4, 76.6) is now available for looting. #5703
-update gameobject set position_x = -9713.45, position_y = -945.268, position_z = 38.428, orientation = 2.29616 where quid = 62180;
+update gameobject set position_x = -9713.45, position_y = -945.268, position_z = 38.428, orientation = 2.29616 where guid = 62180;
