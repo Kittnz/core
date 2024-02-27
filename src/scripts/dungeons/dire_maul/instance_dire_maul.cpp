@@ -1865,7 +1865,6 @@ struct boss_alzzin_the_wildshaperAI : ScriptedAI
     explicit boss_alzzin_the_wildshaperAI(Creature* pCreature) : ScriptedAI(pCreature)    
     {
         pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        m_uiImpCount = 0;
         boss_alzzin_the_wildshaperAI::Reset();
     }
 
@@ -1889,7 +1888,6 @@ struct boss_alzzin_the_wildshaperAI : ScriptedAI
     uint32 m_uiViciousBiteTimer;
     uint32 m_uiWildRegenerationTimer;
     uint32 m_uiWitherTimer;
-    uint8 m_uiImpCount;
     
     void Reset() override
     {
@@ -1915,34 +1913,16 @@ struct boss_alzzin_the_wildshaperAI : ScriptedAI
 
     void SummonAdds()
     {
-        uint8 uiCount = 15 - m_uiImpCount;
-        for (uint8 i = 0; i < uiCount; ++i)
+        for (uint8 i = 0; i < 15; ++i)
         {
             if (Creature* pAdds = m_creature->SummonCreature(NPC_ALZZINS_MINION, 
                 m_fCoordMinions[i][0], 
                 m_fCoordMinions[i][1], 
                 m_fCoordMinions[i][2], 
-                m_fCoordMinions[i][3], TEMPSUMMON_MANUAL_DESPAWN, 20 * IN_MILLISECONDS))
+                m_fCoordMinions[i][3], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 20 * IN_MILLISECONDS))
             {
                 pAdds->AI()->AttackStart(m_creature->GetVictim());                
             }
-
-            ++m_uiImpCount;
-        }
-    }
-
-    void RemoveAdds() const
-    {
-        std::list<Creature*> m_lHelpers;
-        GetCreatureListWithEntryInGrid(m_lHelpers, m_creature, NPC_ALZZINS_MINION, 80.0f);
-        if (!m_lHelpers.empty())
-        {
-            for (const auto& pCreature : m_lHelpers)
-            {
-                if (pCreature && !pCreature->IsAlive())
-                    static_cast<TemporarySummon*>(pCreature)->UnSummon();
-            }
-            m_lHelpers.clear();
         }
     }
 
@@ -1981,30 +1961,10 @@ struct boss_alzzin_the_wildshaperAI : ScriptedAI
             m_bCastThorns = true;
     }
 
-    void JustDied(Unit* /* pKiller */) override
-    {
-        RemoveAdds();
-    }
-
-    void EnterEvadeMode() override
-    {
-        ScriptedAI::EnterEvadeMode();
-
-        RemoveAdds();
-    }
-
     void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (!m_bSummoned)
-            static_cast<TemporarySummon*>(pSummoned)->UnSummon();
-    }
-
-    void SummonedCreatureDespawn(Creature* /* pSummoned */) override
-    {
-        if (!m_uiImpCount)
-            return;
-
-        --m_uiImpCount;
+            pSummoned->DespawnOrUnsummon(1);
     }
 
     void MovementInform(uint32 movementType, uint32 pointId) override
@@ -2193,10 +2153,13 @@ struct npc_alzzins_minionAI : ScriptedAI
 
     void Reset() override
     {
-        if (Unit* pSummoner = m_creature->GetMap()->GetUnit(((TemporarySummon*)m_creature)->GetSummonerGuid()))
+        if (m_creature->IsTemporarySummon())
         {
-            if (pSummoner->IsAlive())
-                m_creature->GetMotionMaster()->MoveFollow(pSummoner, PET_FOLLOW_DIST, frand(0.0f, 6.2832f));
+            if (Unit* pSummoner = m_creature->GetMap()->GetUnit(((TemporarySummon*)m_creature)->GetSummonerGuid()))
+            {
+                if (pSummoner->IsAlive())
+                    m_creature->GetMotionMaster()->MoveFollow(pSummoner, PET_FOLLOW_DIST, frand(0.0f, 6.2832f));
+            }
         }
     }
 
@@ -2206,15 +2169,6 @@ struct npc_alzzins_minionAI : ScriptedAI
         {
             if (pWho->IsPlayer() && pWho->IsTargetable(true, false) && m_creature->IsWithinDistInMap(pWho, 30.0f) && m_creature->IsWithinLOSInMap(pWho))
                 m_creature->AttackedBy(pWho);
-        }
-    }
-
-    void JustDied(Unit* /* pKiller */) override
-    {
-        if (Unit* pSummoner = m_creature->GetMap()->GetUnit(((TemporarySummon*)m_creature)->GetSummonerGuid()))
-        {
-            if (!pSummoner->IsAlive() || !pSummoner->IsInCombat())
-                ((TemporarySummon*)m_creature)->UnSummon();
         }
     }
 };
