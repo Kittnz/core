@@ -179,3 +179,12 @@ REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `grou
 (41320,  1206,  10, 0,      1, 1, 0), -- Moss Agate - 10% 
 (41320,  1705,  10, 0,      1, 1, 0), -- Lesser Moonstone - 10%
 (41320, 55249,   6, 0,      1, 1, 0); -- Crystal Quartz - 6%
+
+-- Item 55154 (Solid Gritted Paper), rename to Dense Gritted Paper , change display ID to 7594 , change sell price to 3s, and buy price to 12s.
+update item_template set name = 'Dense Gritted Paper', display_id = 7594, buy_price = 1200, sell_price = 300 where entry = 55154;
+-- Item 40082 , rename to Schematic: Jewelry Lens.
+update item_template set name = 'Schematic: Jewelry Lens' where entry = 40082;
+-- Item 40083, rename to Schematic: Jewelry Scope.
+update item_template set name = 'Schematic: Jewelry Scope' where entry = 40083;
+-- Item 40084, rename to Schematic: Precision Jewelers Kit.
+update item_template set name = 'Schematic: Precision Jewelers Kit' where entry = 40084;
