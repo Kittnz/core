@@ -162,3 +162,20 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '1', NULL);
+
+-- Item Coarse Gemstone Cluster (Entry 41320) should be a lootable item, which contains the following items, with the following drop chances.
+update item_template set flags = 4 where entry = 41320;
+-- (One of the items from group loot 1 should always drop from Coarse Gemstone Cluster).
+DELETE FROM `item_loot_template` WHERE `entry` = 41320;
+-- Group loot 1:
+replace INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(30606, 1206 , 40, 1, 1, 1, 0), -- Moss Agate - 40% 
+(30606, 1705 , 40, 1, 1, 1, 0), -- Lesser Moonstone - 40%
+(30606, 55249, 20, 1, 1, 1, 0); -- Crystal Quartz - 20%
+
+-- Group loot 2:
+REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(41320, 30606, 100, 1, -30606, 1, 0), -- reference with 100% drop chance.
+(41320,  1206,  10, 0,      1, 1, 0), -- Moss Agate - 10% 
+(41320,  1705,  10, 0,      1, 1, 0), -- Lesser Moonstone - 10%
+(41320, 55249,   6, 0,      1, 1, 0); -- Crystal Quartz - 6%
