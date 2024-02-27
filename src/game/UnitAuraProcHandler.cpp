@@ -291,6 +291,14 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             else
                 return SPELL_PROC_TRIGGER_FAILED;
         }
+        if (spellProto->Id == 51022)
+        {
+            if (!procSpell->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_HEALING_TOUCH>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_GREATER_HEAL>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_HEALING_WAVE>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_LIGHT1, CF_PALADIN_HOLY_LIGHT2>())
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
         // Eye for an Eye
         if (spellProto->SpellIconID == 1820)
         {
@@ -713,6 +721,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 case 45422:
                 case 45423:
                 case 45424:
+                case 51001:
                 {
                     // Proc handlers are called with damage=1 by non damage spells to indicate they hit rather than missed.
                     if (damage <= 1)
@@ -1347,6 +1356,24 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                             return SPELL_AURA_PROC_FAILED;
                     }
                     break;
+                }
+                case 51022: // Loop of Infused Renewal
+                {
+                    if (!pVictim || !pVictim->IsAlive())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (procSpell->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_HEALING_TOUCH>())
+                        CastSpell(pVictim, 51018, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_GREATER_HEAL>())
+                        CastSpell(pVictim, 51019, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_HEALING_WAVE>())
+                        CastSpell(pVictim, 51020, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_LIGHT1, CF_PALADIN_HOLY_LIGHT2>())
+                        CastSpell(pVictim, 51021, true);
+                    else
+                        return SPELL_AURA_PROC_FAILED;
+
+                    return SPELL_AURA_PROC_OK;
                 }
             }
             break;

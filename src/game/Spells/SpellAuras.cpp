@@ -1882,6 +1882,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 51003: // Spell Momentum Passive
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -7022,6 +7028,19 @@ void Aura::PeriodicDummyTick()
                         if (!pPlayer->GetMiniPet())
                             pPlayer->CastSpell(pPlayer, 50009, true);
                     }
+                    return;
+                }
+                case 51003: // Spell Momentum Passive
+                {
+                    uint32 const spellId = GetSpellProto()->EffectTriggerSpell[GetEffIndex()];
+                    if (!spellId)
+                        return;
+
+                    if (target->IsMoving())
+                        target->CastSpell(target, spellId, true);
+                    else
+                        target->RemoveAurasDueToSpell(spellId);
+
                     return;
                 }
             }

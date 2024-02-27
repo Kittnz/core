@@ -546,6 +546,15 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51012: // Jewel of Wild Magics
+                {
+                    if (!unitTarget)
+                        return;
+
+                    uint32 spellId = PickRandomValue(51004, 51006, 51008, 51010);
+                    unitTarget->CastSpell(unitTarget, spellId, true);
+                    return;
+                }
                 case 46436: // Winterax Ritual Suicide
                 {
                     Player* pPlayer = m_caster->ToPlayer();
@@ -6425,7 +6434,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     if (m_casterUnit->HasAura(28853))
                         heal += 53.0f;  // Libram of Divinity
                     if (m_casterUnit->HasAura(28851))
-                        heal += 83.0f;  // Libram of Light
+                        heal += 41.0f;  // Libram of Light
                 }
 
                 int32 spellid = m_spellInfo->Id;            // send main spell id as basepoints for not used effect
