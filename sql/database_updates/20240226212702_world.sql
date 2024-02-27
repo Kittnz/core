@@ -296,3 +296,7 @@ REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0,
 UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (4, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Spell fix:
+
+UPDATE `spell_template` SET `description` = 'Your melee and ranged attacks have a chance to inject poison into your target that deals 130 Nature damage over 12 sec. Stacks up to 2 times.' WHERE `entry` = 45417;
