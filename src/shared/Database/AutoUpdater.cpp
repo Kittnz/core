@@ -187,7 +187,7 @@ namespace DBUpdater
             DoubleQuotes
         };
 
-        enum class  CommentScope
+        enum class CommentScope
         {
             None,
             Singleline,
