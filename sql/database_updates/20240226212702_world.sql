@@ -843,7 +843,7 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 SET @learn_spell_id = 41100; 
 SET @craft_spell_id = 41101; 
 SET @skill_line_entry = 17050;
-SET @output_item_id = 41330; 
+SET @output_item_id = 55273; 
 SET @recipe_spell_name = 'Crystalweft Bracers'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 8750;
