@@ -40,3 +40,10 @@ replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- Item 40084, add as a drop to to Mekgineer Thermaplugg (Entry 7800) on its own loot table with a drop % of 4%.
 replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
 (7800, 40084, 4, 0, 1, 1, 0);
+
+-- Item entry 40082, rename to Schematic: Jewelry Lens.
+update item_template set name = 'Schematic: Jewelry Lens' where entry = 40082;
+-- Item entry 40083, rename to Schematic: Jewelry Scope.
+update item_template set name = 'Schematic: Jewelry Scope' where entry = 40083;
+-- Item entry 40084, rename to Schematic: Precision Jewelers Kit.
+update item_template set name = 'Schematic: Precision Jewelers Kit' where entry = 40084;
