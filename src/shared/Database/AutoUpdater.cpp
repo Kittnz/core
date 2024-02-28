@@ -187,10 +187,17 @@ namespace DBUpdater
             DoubleQuotes
         };
 
+        enum class  CommentScope
+        {
+            None,
+            Singleline,
+            Multiline
+        };
+
         std::vector<std::string> queries;
 
         StringStatus stringScope = None;
-        bool inComment = false;
+        CommentScope commentScope = CommentScope::None;
         std::string query = "";
 
         for (size_t i = 0; i < sqlString.size(); ++i)
@@ -203,21 +210,48 @@ namespace DBUpdater
                 {
                     query += ' ';
                 }
-                inComment = false;
+
+                if (commentScope == CommentScope::Singleline)
+                    commentScope = CommentScope::None;
+
                 continue;
             }
 
-            if (inComment)
+
+            if (ch == '/')
+            {
+                //Leaving scope
+                if (commentScope == CommentScope::Multiline && i > 0 && sqlString[i - 1] == '*')
+                {
+                    commentScope = CommentScope::None;
+                    continue;
+                }
+
+
+                //Entering scope
+                if (i < sqlString.size() - 1 && stringScope == None && sqlString[i + 1] == '*')
+                {
+                    commentScope = CommentScope::Multiline;
+                    continue;
+                }
+            }
+
+
+            if (commentScope != CommentScope::None)
                 continue;
 
+
+            //Support single and multiline comments.
             if (ch == '-')
             {
                 if (i < sqlString.size() - 1 && stringScope == None && sqlString[i + 1] == '-')
                 {
-                    inComment = true;
+                    commentScope = CommentScope::Singleline;
                     continue;
                 }
             }
+
+
 
             //If we find a ' or a " make sure to note down we're in a string and check for escape characters.
             //However, some text queries (ab)use no usage of escape characters and instead take advantage of using ' in " strings and " in ' strings.
