@@ -971,3 +971,7 @@ REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0,
 UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (6, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Item Rough Copper Ring (55156) , and Rough Bronze Ring (55174), need to be labeled as Trade Goods, copy from Rough Silver Ring (41319)
+
+UPDATE `item_template` SET `class` = 7 WHERE `entry` in (55156, 55174);
