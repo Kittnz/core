@@ -850,7 +850,7 @@ SET @cost = 8750;
 SET @tool_item_1 = 41328;  -- Precision Jeweler's Kit
 SET @tool_item_2 = 42395;  -- Jewelers Scope
 SET @skill_level_required = 285; 
-SET @skill_level_max = 300; 
+SET @skill_level_max = 310; 
 SET @skill_trainer_required = 280;
 
 SET @reagent_item_1 = 12359; SET @reagent_item_count_1 = 14;
@@ -896,7 +896,7 @@ SET @cost = 9500;
 SET @tool_item_1 = 41328;  -- Precision Jeweler's Kit
 SET @tool_item_2 = 42395;  -- Jewelers Scope
 SET @skill_level_required = 285; 
-SET @skill_level_max = 300; 
+SET @skill_level_max = 310; 
 SET @skill_trainer_required = 280;
 
 SET @reagent_item_1 = 12359; SET @reagent_item_count_1 = 12;
