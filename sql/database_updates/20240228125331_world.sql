@@ -33,3 +33,10 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (1456, 40084, 3, 7200, 0, 0);
 -- Item 40083, set to limited stock of 2 on npc Gonzo Snaphands with a restock every 2 hrs (He already sells this item).
 update npc_vendor set maxcount = 2, incrtime = 7200 where entry = 61914 and item = 40083;
+
+-- Item 40083, add as a drop to Tinkerer Gizlock (Entry 13601) on its own loot table with a drop % of 8%.
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(13601, 40083, 8, 0, 1, 1, 0);
+-- Item 40084, add as a drop to to Mekgineer Thermaplugg (Entry 7800) on its own loot table with a drop % of 4%.
+replace INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(7800, 40084, 4, 0, 1, 1, 0);
