@@ -2067,11 +2067,12 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
     AuraList const& vSchoolAbsorb = GetAurasByType(SPELL_AURA_SCHOOL_ABSORB);
     for (AuraList::const_iterator i = vSchoolAbsorb.begin(); i != vSchoolAbsorb.end() && remainingDamage > 0; ++i)
     {
-        Modifier* mod = (*i)->GetModifier();
+        const auto aura = *i;
+        Modifier* mod = aura->GetModifier();
         if (!(mod->m_miscvalue & schoolMask))
             continue;
 
-        if (!(*i)->GetHolder())
+        if (!aura->GetHolder())
             continue;
 
         // Max Amount can be absorbed by this aura
@@ -2093,28 +2094,32 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
 
         // Reduce shield amount
         mod->m_amount -= currentAbsorb;
-        if ((*i)->GetHolder()->DropAuraCharge())
+        if (aura->GetHolder()->DropAuraCharge())
             mod->m_amount = 0;
         // Need remove it later
         if (mod->m_amount <= 0)
             existExpired = true;
 
         // CUSTOM priest talent Reflective Shields
-        if (GetClass() == CLASS_PRIEST && HasAura(45560) && this != pCaster && pCaster->IsUnit() &&
-            (*i)->GetSpellProto()->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>())
+        if (aura->GetSpellProto()->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>())
         {
-            // 20% of currentAbsorb
-            int32 const damage = currentAbsorb * 0.2f;
-            if (damage)
+            if (const auto caster = aura->GetCaster(); caster && caster->HasAura(45560))
             {
-                m_Events.AddLambdaEventAtOffset([this, victimGuid = pCaster->GetObjectGuid(), damage]()
+                // 20% of currentAbsorb
+                int32_t const reflect_damage = currentAbsorb * 0.2f;
+                if (reflect_damage)
                 {
-                    if (Map* pMap = FindMap())
-                    {
-                        if (Unit* pVictim = pMap->GetUnit(victimGuid))
-                            CastCustomSpell(pVictim, 45561, &damage, nullptr, nullptr, true);
-                    }
-                }, 1);
+                    m_Events.AddLambdaEventAtOffset([this, victimGuid = pCaster->GetObjectGuid(), reflect_damage]()
+                        {
+                            if (Map* map = FindMap())
+                            {
+                                if (Unit* victim = map->GetUnit(victimGuid))
+                                {
+                                    CastCustomSpell(victim, 45561, &reflect_damage, nullptr, nullptr, true);
+                                }
+                            }
+                        }, 1);
+                }
             }
         }
     }
@@ -4506,6 +4511,11 @@ bool Unit::HasAura(uint32 spellId, SpellEffectIndex effIndex) const
             return true;
 
     return false;
+}
+
+bool Unit::HasAura(uint32 spellId) const
+{
+    return m_spellAuraHolders.find(spellId) != m_spellAuraHolders.end();
 }
 
 GameObject* Unit::GetGameObject(uint32 spellId) const
