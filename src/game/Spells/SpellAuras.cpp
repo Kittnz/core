@@ -315,7 +315,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
     m_applyTime = time(nullptr);
     CalculatePeriodic(modOwner, true);
 
-    // Re-calculation du montant de degats
+    // Recalculate damage amount
     if (IsApplied() || !IsExclusive())
     {
         bool lockStats = false;
@@ -328,7 +328,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
             case SPELL_AURA_MOD_STAT:
             case SPELL_AURA_MOD_PERCENT_STAT:
             case SPELL_AURA_MOD_INCREASE_HEALTH:
-            case SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT: // Exemple : 27038
+            case SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT: // Example : 27038
                 lockStats = true;
                 break;
         }
@@ -336,7 +336,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
             target->SetCanModifyStats(false);
         //unapply with the old modifiers and reapply with the new.
         ApplyModifier(false, true, false);
-        // Refresh de quelques variables du modifier
+        // Refresh some modifier variables
         m_modifier.m_auraname = pHolderAura->GetModifier()->m_auraname;
         m_modifier.m_amount = pHolderAura->GetModifier()->m_amount;
         m_modifier.m_miscvalue = pHolderAura->GetModifier()->m_miscvalue;
@@ -8495,7 +8495,7 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         modOwner->ApplySpellMod(GetId(), SPELLMOD_ACTIVATION_TIME, m_modifier.periodictime);
     }
 
-    // Totem griffes de pierre
+    // Stoneclaw Totem
     if (GetSpellProto()->SpellVisual == 0 && GetSpellProto()->SpellIconID == 689)
         return;
 
@@ -8509,7 +8509,6 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 8515:  // Windfury Totem Passive (Rank 1)
         case 10609: // Windfury Totem Passive (Rank 2)
         case 10612: // Windfury Totem Passive (Rank 3)
-        case 12654: // Ignite
         case 13797: // Immolation Trap Effect (Rank 1)
         case 14298: // Immolation Trap Effect (Rank 2)
         case 14299: // Immolation Trap Effect (Rank 3)
@@ -8517,6 +8516,11 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 14301: // Immolation Trap Effect (Rank 5)
         case 23184: // Mark of Frost
         case 25041: // Mark of Nature
+            break;
+        case 12654: // 
+            m_periodicTimer = m_periodicTimer == 0
+                ? m_modifier.periodictime
+                : std::min(m_periodicTimer, m_modifier.periodictime);
             break;
         default:
             m_periodicTimer = m_modifier.periodictime;
