@@ -910,8 +910,8 @@ class Unit : public WorldObject
 
         bool HasAuraType(AuraType auraType) const;
         bool HasAuraTypeByCaster(AuraType auraType, ObjectGuid casterGuid) const;
+        bool HasAura(uint32 spellId) const;
         bool HasAura(uint32 spellId, SpellEffectIndex effIndex) const;
-        bool HasAura(uint32 spellId) const { return m_spellAuraHolders.find(spellId) != m_spellAuraHolders.end(); }
         bool virtual HasSpell(uint32 /*spellID*/) const { return false; }
         bool IsFeared()  const { return HasAuraType(SPELL_AURA_MOD_FEAR); }
         bool IsInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }

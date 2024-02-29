@@ -814,34 +814,24 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                         SpellAuraHolder* igniteHolder = igniteAura->GetHolder();
                         
                         int32 tickDamage = igniteModifier->m_amount;
-                        
-                        bool notAtMaxStack = igniteAura->GetStackAmount() < 5;
-                        
-                        bool reapplyIgnite = igniteAura->GetAuraTicks() >= igniteAura->GetAuraMaxTicks();
-                        
-                        if (!reapplyIgnite)
+
+                        if (igniteAura->GetStackAmount() < 5)
                         {
-                            if (notAtMaxStack)
-                            {
-                                tickDamage += basepoints[0];
-                                
-                                igniteHolder->ModStackAmount(1);
-                                
-                                // Update DOT damage
-                                igniteModifier->m_amount = tickDamage;
-                                igniteAura->ApplyModifier(true, true, false);
-                            }
-                            else
-                                igniteHolder->SetStackAmount(5);
+                            tickDamage += basepoints[0];
                             
-                            // Refresh Ignite Stack
-                            igniteHolder->Refresh(igniteAura->GetCaster(), target, igniteHolder );
+                            igniteHolder->ModStackAmount(1);
                             
-                            return SPELL_AURA_PROC_OK;
+                            // Update DOT damage
+                            igniteModifier->m_amount = tickDamage;
+                            igniteAura->ApplyModifier(true, true, false);
                         }
+                        else
+                            igniteHolder->SetStackAmount(5);
                         
-                        // All damage done, remove and continue to reapply
-                        target->RemoveAurasDueToSpell(12654);
+                        // Refresh Ignite Stack
+                        igniteHolder->Refresh(igniteAura->GetCaster(), target, igniteHolder );
+                        
+                        return SPELL_AURA_PROC_OK;
                     }
                     
                     // No Ignite found, apply Ignite Aura
