@@ -1205,6 +1205,8 @@ float TerrainInfo::GetWaterLevel(float x, float y, float z, float* pGround /*= n
     {
         // we need ground level (including grid height version) for proper return water level in point
         float ground_z = GetHeightStatic(x, y, z, true, DEFAULT_WATER_SEARCH);
+        // Hackfix: apply a tiny offset to avoid issues with water level
+        ground_z += 0.00001f;
         if (pGround)
             *pGround = ground_z;
 
