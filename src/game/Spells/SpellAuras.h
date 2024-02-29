@@ -524,7 +524,7 @@ class Aura
                     --m_in_use;
             }
         }
-        // NOSTALRIUS: Ajout de 'skipCheckExclusive'
+        
         void ApplyModifier(bool apply, bool Real = false, bool skipCheckExclusive = false);
 
         void UpdateAura(uint32 diff) { SetInUse(true); Update(diff); SetInUse(false); }
