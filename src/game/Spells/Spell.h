@@ -396,10 +396,11 @@ class Spell
         static void SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCastResult result);
         void SendCastResult(SpellCastResult result);
         void SendSpellStart();
-        void SendSpellGo(bool SendToCaster = true);
+        void SendSpellGo(bool bSendToCaster = true);
         void SendSpellCooldown();
         void SendLogExecute();
         void SendInterrupted();
+        void SendAllTargetsMiss(bool bSendToCaster = true);
         void SendChannelUpdate(uint32 time, bool interrupted = false);
         void SendChannelStart(uint32 duration);
         void SendResurrectRequest(Player* target, bool sickness);
