@@ -1361,7 +1361,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     combat = true;
                 }
 
-                pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
+               // pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
 
                 if (combat)
                 {
