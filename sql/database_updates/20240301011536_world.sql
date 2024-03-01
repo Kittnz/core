@@ -1488,7 +1488,7 @@ SET @skill_level_max = 270;
 SET @skill_trainer_required = 250;
 
 SET @reagent_item_1 = 14047; SET @reagent_item_count_1 = 5;
-SET @reagent_item_2 = 10620; SET @reagent_item_count_2 = 5;
+SET @reagent_item_2 = 12365; SET @reagent_item_count_2 = 5;
 SET @reagent_item_3 = 0; SET @reagent_item_count_3 = 0;
 SET @reagent_item_4 = 0; SET @reagent_item_count_4 = 0;
 SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0; 
@@ -2017,7 +2017,7 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 SET @learn_spell_id = 41202;
 SET @craft_spell_id = 41203;
 SET @skill_line_entry = 17101;
-SET @output_item_id = 55154;
+SET @output_item_id = 41344;
 SET @recipe_spell_name = 'Heavy Gemstone Cluster';
 SET @recipe_learn_spell_name = @recipe_spell_name;
 SET @cost = 1500;
@@ -2112,7 +2112,7 @@ SET @recipe_spell_name = 'Quartz Halo';
 SET @recipe_learn_spell_name = @recipe_spell_name;
 SET @cost = 1250;
 SET @tool_item_1 = 55155;
-SET @tool_item_2 = 0;
+SET @tool_item_2 = 41326;
 SET @skill_level_required = 175;
 SET @skill_level_max = 195;
 SET @skill_trainer_required = 155;
@@ -2127,7 +2127,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 SET @spell_visual_1 = 1168;
 SET @recipe_item = 0;
-SET @if_required_spell_focus = 0;
+SET @if_required_spell_focus = 3;
 SET @cast_time_index = 1;
 SET @cast_time_index_craft = 33;
 SET @targets = 256;
@@ -2397,7 +2397,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 SET @spell_visual_1 = 1168;
 SET @recipe_item = 0;
-SET @if_required_spell_focus = 0;
+SET @if_required_spell_focus = 3;
 SET @cast_time_index = 1;
 SET @cast_time_index_craft = 33;
 SET @targets = 256;
@@ -2622,7 +2622,7 @@ SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 SET @spell_visual_1 = 978;
 SET @recipe_item = 0;
-SET @if_required_spell_focus = 1;
+SET @if_required_spell_focus = 0;
 SET @cast_time_index = 1;
 SET @cast_time_index_craft = 33;
 SET @targets = 256;
@@ -2638,8 +2638,21 @@ UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `ca
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (5, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
 
+UPDATE `spell_template` SET requiresSpellFocus = 3 WHERE entry IN (41001, 41003, 41005, 41007, 41009, 41011, 41013, 41015, 41017, 41019, 41021, 41023, 41025, 41027, 41033, 41035, 41037, 41039, 41041, 41043, 41045, 41047, 41049, 41051, 41053, 41055, 41057, 41059, 41061, 41063, 41067, 41069, 41071, 41039);
 
+UPDATE `spell_template` SET `requiresSpellFocus` = 3 WHERE `entry` = 29730;
 
+-- Update for item 40082
+UPDATE item_template
+SET name = 'Schematic: Jewelry Lens'
+WHERE entry = 40082;
 
+-- Update for item 40083
+UPDATE item_template
+SET name = 'Schematic: Jewelry Scope'
+WHERE entry = 40083;
 
-
+-- Update for item 40084
+UPDATE item_template
+SET name = 'Schematic: Precision Jewelers Kit'
+WHERE entry = 40084;
