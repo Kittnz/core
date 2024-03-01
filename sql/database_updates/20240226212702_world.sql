@@ -987,3 +987,14 @@ WHERE `entry` = 55148;
 UPDATE `item_template` 
 SET `name` = 'Goldenshade Quartz Crown', `display_id` = 28175 
 WHERE `entry` = 55145;
+
+-- Item 40084 and item 40083, change rarity to uncommon (green)
+
+UPDATE `item_template` 
+SET `quality` = 2 
+WHERE `entry` = 40084;
+
+UPDATE `item_template` 
+SET `quality` = 2 
+WHERE `entry` = 40083;
+
