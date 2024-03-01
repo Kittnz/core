@@ -5150,6 +5150,9 @@ void Spell::SendInterrupted()
 
 void Spell::SendAllTargetsMiss(bool bSendToCaster)
 {
+    if (!m_caster->IsInWorld())
+        return;
+
     // nothing to send
     if (m_UniqueTargetInfo.empty())
         return;
