@@ -1,10 +1,8 @@
 
-
+DELETE FROM `npc_trainer_template` WHERE `entry` = 6;
 
 REPLACE `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES 
 
-(6, 33389, 900000, 0, 0, 40),
-(6, 33392, 9000000, 762, 0, 60),
 (6, 41010, 90, 755, 50, 0),
 (6, 41008, 90, 755, 40, 0),
 (6, 41006, 45, 755, 35, 0),
