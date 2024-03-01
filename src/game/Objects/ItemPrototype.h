@@ -295,7 +295,7 @@ enum ItemSubclassRecipe
     ITEM_SUBCLASS_JEWELCRAFT_PLANS = 10
 };
 
-#define MAX_ITEM_SUBCLASS_RECIPE 10
+#define MAX_ITEM_SUBCLASS_RECIPE 11
 
 enum ItemSubclassMoney
 {
