@@ -474,7 +474,7 @@ SET @output_item_id = 41323;
 SET @recipe_spell_name = 'Emberstone Studded Ring'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 6500;
-SET @tool_item_1 = 4388;  -- Precision Jewelers Kit
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 0; 
 SET @skill_level_required = 240; 
 SET @skill_level_max = 255; 
@@ -520,7 +520,7 @@ SET @output_item_id = 41321;
 SET @recipe_spell_name = 'Rough Thorium Ring'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 10000;
-SET @tool_item_1 = 4388;  -- Precision Jewelers Kit
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 42395;  -- Jewelers Scope
 SET @skill_level_required = 245; 
 SET @skill_level_max = 255; 
@@ -568,7 +568,7 @@ SET @output_item_id = 41324;
 SET @recipe_spell_name = 'Mithril Blackstone Necklace'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 6500;
-SET @tool_item_1 = 4388;  -- Precision Jewelers Kit
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 42395;  -- Jewelers Scope
 SET @skill_level_required = 265; 
 SET @skill_level_max = 285; 
@@ -975,3 +975,15 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 -- Item Rough Copper Ring (55156) , and Rough Bronze Ring (55174), need to be labeled as Trade Goods, copy from Rough Silver Ring (41319)
 
 UPDATE `item_template` SET `class` = 7 WHERE `entry` in (55156, 55174);
+
+-- Item Entry 55148 , change name to Staff of Blossomed Jade, change display ID to 15806
+
+UPDATE `item_template` 
+SET `name` = 'Staff of Blossomed Jade', `display_id` = 15806 
+WHERE `entry` = 55148;
+
+-- Item entry 55145, change name to Goldenshade Quartz Crown, change display ID to 28175
+
+UPDATE `item_template` 
+SET `name` = 'Goldenshade Quartz Crown', `display_id` = 28175 
+WHERE `entry` = 55145;
