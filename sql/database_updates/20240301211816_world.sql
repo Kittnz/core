@@ -435,7 +435,7 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 
 SET @learn_spell_id = 41244; 
 SET @craft_spell_id = 41245; 
-SET @skill_line_entry = 17120;
+SET @skill_line_entry = 17127;
 SET @output_item_id = 41345; 
 SET @recipe_spell_name = 'Royal Gemstone Staff'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
