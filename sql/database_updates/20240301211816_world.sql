@@ -349,9 +349,9 @@ SET @recipe_learn_spell_name = @recipe_spell_name;
 SET @cost = 2500;
 SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 41326;
-SET @skill_level_required = 210; 
+SET @skill_level_required = 230; 
 SET @skill_level_max = 250; 
-SET @skill_trainer_required = 200;
+SET @skill_trainer_required = 210;
 
 SET @reagent_item_1 = 41322; SET @reagent_item_count_1 = 1;
 SET @reagent_item_2 = 55251; SET @reagent_item_count_2 = 1;
@@ -433,8 +433,8 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 -- Required Materials: 41341 (1), 7067 (1), 7075 (1), 55153 (2)
 -- Requires:Precision Jewelers Kit, Jewelers Lens, Forge
 
-SET @learn_spell_id = 41240; 
-SET @craft_spell_id = 41241; 
+SET @learn_spell_id = 41244; 
+SET @craft_spell_id = 41245; 
 SET @skill_line_entry = 17120;
 SET @output_item_id = 41345; 
 SET @recipe_spell_name = 'Royal Gemstone Staff'; 
@@ -490,9 +490,9 @@ SET @cost = 5000;
 SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 41326;  -- Jewelers Lens
 SET @tool_item_3 = 0; 
-SET @skill_level_required = 220; 
+SET @skill_level_required = 240; 
 SET @skill_level_max = 260; 
-SET @skill_trainer_required = 200;
+SET @skill_trainer_required = 220;
 
 SET @reagent_item_1 = 55250; SET @reagent_item_count_1 = 5;
 SET @reagent_item_2 = 6371; SET @reagent_item_count_2 = 3;
