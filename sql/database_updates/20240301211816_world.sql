@@ -436,16 +436,16 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 SET @learn_spell_id = 41244; 
 SET @craft_spell_id = 41245; 
 SET @skill_line_entry = 17127;
-SET @output_item_id = 41345; 
+SET @output_item_id = 41347; 
 SET @recipe_spell_name = 'Runed Truesilver Ring'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
-SET @cost = 12500;
+SET @cost = 3850;
 SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 41326;  -- Jewelers Lens
 SET @tool_item_3 = 0; 
-SET @skill_level_required = 215; 
-SET @skill_level_max = 255; 
-SET @skill_trainer_required = 200;
+SET @skill_level_required = 240; 
+SET @skill_level_max = 260; 
+SET @skill_trainer_required = 220;
 
 SET @reagent_item_1 = 3860; SET @reagent_item_count_1 = 14;
 SET @reagent_item_2 = 3577; SET @reagent_item_count_2 = 4;
