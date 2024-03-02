@@ -447,11 +447,11 @@ SET @skill_level_required = 240;
 SET @skill_level_max = 260; 
 SET @skill_trainer_required = 220;
 
-SET @reagent_item_1 = 3860; SET @reagent_item_count_1 = 14;
-SET @reagent_item_2 = 3577; SET @reagent_item_count_2 = 4;
-SET @reagent_item_3 = 55251; SET @reagent_item_count_3 = 2;
-SET @reagent_item_4 = 7909; SET @reagent_item_count_4 = 2;
-SET @reagent_item_5 = 55153; SET @reagent_item_count_5 = 4;
+SET @reagent_item_1 =  41341; SET @reagent_item_count_1 = 1;
+SET @reagent_item_2 = 7067; SET @reagent_item_count_2 = 1;
+SET @reagent_item_3 = 7075; SET @reagent_item_count_3 = 1;
+SET @reagent_item_4 = 55153; SET @reagent_item_count_4 = 2;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
 SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
 SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
