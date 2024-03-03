@@ -450,7 +450,7 @@ bool Database::PExecuteCallback(const char* format, std::function<void(bool)>* c
 
     va_list ap;
     char szQuery[MAX_QUERY_LEN];
-    va_start(ap, format);
+    va_start(ap, callback);
     int res = vsnprintf(szQuery, MAX_QUERY_LEN, format, ap);
     va_end(ap);
 
