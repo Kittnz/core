@@ -852,7 +852,7 @@ struct AccountCacheData
     uint32 id;
     std::string username;
     std::string email;
-    uint64 lastExtendedFingerprint;
+    uint64 lastExtendedFingerprint = 0;
 };
 
 
