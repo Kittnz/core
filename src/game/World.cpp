@@ -3493,6 +3493,14 @@ void World::LoadAccountData()
         ++count;
     } while (result->NextRow());
 
+
+    result = decltype(result){ LoginDatabase.PQuery("SELECT account, extendedHash FROM system_fingerprint_usage GROUP BY account ORDER BY time DESC") };
+    do {
+        auto fields = result->Fetch();
+        auto accountData = GetAccountData(fields[0].GetUInt32());
+        accountData->lastExtendedFingerprint = fields[1].GetUInt64();
+    } while (result->NextRow());
+
     sLog.outString("Loaded %u cached accounts.", count);
 }
 
