@@ -152,10 +152,20 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
+
+    static ChatCommand debugFieldsCommandTable[] =
+    {
+        {"show",              SEC_DEVELOPER,     false, &ChatHandler::HandleDebugFieldsShowCommand,          "", nullptr},
+        {"modify",            SEC_DEVELOPER,     false, &ChatHandler::HandleDebugFieldsModifyCommand,        "", nullptr},
+        {}
+    };
+    
+
     static ChatCommand debugCommandTable[] =
     {
         { "condition",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
         { "instancedata",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
+        { "fields",         SEC_DEVELOPER,     false, nullptr,                                             "", debugFieldsCommandTable},
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
 

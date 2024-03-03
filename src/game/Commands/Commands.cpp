@@ -17173,6 +17173,115 @@ bool ChatHandler::HandlePDumpWriteCommand(char *args)
     return true;
 }
 
+Object* ChatHandler::GetObjectHelper(CommandStream& stream, uint32& lowGuid, uint32& index)
+{
+    std::string target;
+
+    if (!(stream >> target))
+    {
+        SendSysMessage("Wrongly formatted target. Try: player,object,creature");
+        return false;
+    }
+
+    Object* targetObject = nullptr;
+
+    if (!(stream >> lowGuid))
+    {
+        SendSysMessage("Wrongly formatted low GUID.");
+        return false;
+    }
+
+
+    if (!(stream >> index))
+    {
+        SendSysMessage("Wrong index.");
+        return false;
+    }
+
+
+    if (iequals(target, "player"))
+        targetObject = sObjectAccessor.FindPlayer(ObjectGuid(HIGHGUID_PLAYER, 0, lowGuid));
+    else if (iequals(target, "object"))
+    {
+        if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowGuid))
+            targetObject = GetGameObjectWithGuidGlobal(lowGuid, go_data);
+    }
+    else if (iequals(target, "creature"))
+    {
+        if (CreatureData const* data = sObjectMgr.GetCreatureData(lowGuid))
+            targetObject = m_session->GetPlayer()->GetMap()->GetCreature(data->GetObjectGuid(lowGuid));
+    }
+    else if (iequals(target, "item"))
+    {
+        //Not yet.
+    }
+
+
+    if (!targetObject)
+        PSendSysMessage("Couldn't find target with type :%s.", target.c_str());
+    return targetObject;
+}
+
+bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    auto sourcePlayer = GetPlayer();
+
+    if (!sourcePlayer)
+        return false;
+
+
+    uint32 lowGuid, index;
+
+
+    auto targetObject = GetObjectHelper(stream, lowGuid, index);
+
+    if (!targetObject)
+        return false;
+
+
+    PSendSysMessage("Value of index %u : %u", index, targetObject->GetUInt32Value(index));
+
+    return true;
+}
+
+
+bool ChatHandler::HandleDebugFieldsModifyCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    auto sourcePlayer = GetPlayer();
+
+    if (!sourcePlayer)
+        return false;
+
+
+    uint32 lowGuid, index;
+
+
+    auto targetObject = GetObjectHelper(stream, lowGuid, index);
+
+    if (!targetObject)
+        return false;
+
+    uint32 newValue;
+
+    if (!(stream >> newValue))
+    {
+        SendSysMessage("No good mod value given.");
+        return false;
+    }
+
+    targetObject->SetUInt32Value(index, newValue);
+
+    PSendSysMessage("Set index %u to %u.", index, newValue);
+
+
+    return true;
+}
+
+
 bool ChatHandler::HandleDebugConditionCommand(char* args)
 {
     int32 conditionId;
