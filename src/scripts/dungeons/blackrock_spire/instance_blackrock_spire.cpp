@@ -167,7 +167,6 @@ instance_blackrock_spire::instance_blackrock_spire(Map* pMap) : ScriptedInstance
     m_uiFatherFlameGUID(0),
     m_uiFatherFlame_timer(0),
     m_uiFatherFlame_WaveCount(0),
-    m_uiSolakarTriggerGUID(0),
 
     m_uiUBRSDoorGUID(0),
     m_uiBrazier01GUID(0),
@@ -366,9 +365,6 @@ void instance_blackrock_spire::OnCreatureCreate(Creature* pCreature)
         case NPC_BLACKHAND_INCANCERATOR:
             m_lIncanceratorGUIDList.push_back(pCreature->GetGUID());
             break;
-        case NPC_SOLAKAR_TRIGGER:
-            m_uiSolakarTriggerGUID = pCreature->GetGUID();
-            break;
         case NPC_FIREBRAND_GRUNT:
             // 14.26% chance to spawn Bannok Grimaxe instead of one of his 3 placeholders
             switch (pCreature->GetGUIDLow())
@@ -456,7 +452,7 @@ void instance_blackrock_spire::SetData(uint32 uiType, uint32 uiData)
             m_auiEncounter[TYPE_EVENT_DOOR_UBRS] = uiData;
             break;
         case TYPE_SOLAKAR:
-            if ((uiData == FAIL && m_uiFatherFlame_timer != 0) || uiData == SPECIAL)
+            if (uiData == FAIL && m_uiFatherFlame_timer != 0)
             {
                 //DoRespawnGameObject(m_uiFatherFlameGUID, HOUR*IN_MILLISECONDS);
                 m_uiFatherFlame_timer = 0;
@@ -745,55 +741,52 @@ void instance_blackrock_spire::Update(uint32 uiDiff)
 
     if (GetData(TYPE_SOLAKAR) == IN_PROGRESS)
     {
-        if (Creature* Crea = GetCreature(m_uiSolakarTriggerGUID))
+        if (m_uiFatherFlame_timer <= uiDiff)
         {
-            if (m_uiFatherFlame_timer <= uiDiff)
+            if (m_uiFatherFlame_WaveCount == 0) // First wave should be a Rookery Hatcher and there is a text that it has to say.
             {
-                if (m_uiFatherFlame_WaveCount == 0) // First wave should be a Rookery Hatcher and there is a text that it has to say.
+                Creature* pFirstHatcher = GetMap()->SummonCreature(NPC_ROOKERY_HATCHER, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                if (pFirstHatcher)
+                    DoScriptText(SAY_ROOKERY_EVENT_START, pFirstHatcher);
+                GetMap()->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                m_uiFatherFlame_timer = urand(30000, 40000);
+                ++m_uiFatherFlame_WaveCount;
+            }
+            else if (m_uiFatherFlame_WaveCount < 5)
+            {
+                switch (urand(0, 2))
                 {
-                    Creature* pFirstHatcher = Crea->SummonCreature(NPC_ROOKERY_HATCHER, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    if (pFirstHatcher)
-                        DoScriptText(SAY_ROOKERY_EVENT_START, pFirstHatcher);
-                    Crea->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    m_uiFatherFlame_timer = urand(30000, 40000);
-                    ++m_uiFatherFlame_WaveCount;
-                }
-                else if (m_uiFatherFlame_WaveCount < 5)
-                {
-                    switch (urand(0, 2))
+                    case 0:
                     {
-                        case 0:
-                        {
-                            Crea->SummonCreature(NPC_ROOKERY_GUARDIAN, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            Crea->SummonCreature(NPC_ROOKERY_GUARDIAN, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            break;
-                        }
-                        case 1:
-                        {
-                            Crea->SummonCreature(NPC_ROOKERY_HATCHER, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            Crea->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            break;
-                        }
-                        case 2:
-                        {
-                            Crea->SummonCreature(NPC_ROOKERY_GUARDIAN, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            Crea->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                            break;
-                        }
+                        GetMap()->SummonCreature(NPC_ROOKERY_GUARDIAN, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        GetMap()->SummonCreature(NPC_ROOKERY_GUARDIAN, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        break;
                     }
-                    m_uiFatherFlame_timer = urand(30000, 40000);
-                    ++m_uiFatherFlame_WaveCount;
+                    case 1:
+                    {
+                        GetMap()->SummonCreature(NPC_ROOKERY_HATCHER, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        GetMap()->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        break;
+                    }
+                    case 2:
+                    {
+                        GetMap()->SummonCreature(NPC_ROOKERY_GUARDIAN, 55.232342f, -265.751282f, 93.883f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        GetMap()->SummonCreature(NPC_ROOKERY_HATCHER, 60.011333f, -263.914703f, 94.022f, 5, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                        break;
+                    }
                 }
-                else
-                {
-                    Crea->SummonCreature(NPC_SOLAKAR, 43.7685f, -259.82f, 91.6483f, 0, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    SetData(TYPE_SOLAKAR, DONE);
-                    m_uiFatherFlame_timer = 0;
-                }
+                m_uiFatherFlame_timer = urand(30000, 40000);
+                ++m_uiFatherFlame_WaveCount;
             }
             else
-                m_uiFatherFlame_timer -= uiDiff;
+            {
+                GetMap()->SummonCreature(NPC_SOLAKAR, 43.7685f, -259.82f, 91.6483f, 0, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+                SetData(TYPE_SOLAKAR, DONE);
+                m_uiFatherFlame_timer = 0;
+            }
         }
+        else
+            m_uiFatherFlame_timer -= uiDiff;
     }
 }
 
@@ -975,56 +968,6 @@ GameObjectAI* GetAIgo_father_flame(GameObject *pGo)
     return new go_father_flameAI(pGo);
 }
 
-struct npc_solakar_triggerAI : public ScriptedAI
-{
-    npc_solakar_triggerAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        instance = (instance_blackrock_spire*)pCreature->GetInstanceData();
-        Reset();
-    }
-
-    ScriptedInstance* instance;
-
-    void Reset() override
-    {
-        m_creature->EnableMoveInLosEvent();
-    }
-
-    void MoveInLineOfSight(Unit* who) override
-    {
-        if (!instance)
-            return;
-
-        if (who->GetTypeId() == TYPEID_UNIT && m_creature->IsWithinDistInMap(who, 5.0f) && instance->GetData(TYPE_SOLAKAR) == IN_PROGRESS)
-        {
-            Creature* CreaGuardian = m_creature->FindNearestCreature(10258, 5.0f); // NPC_ROOKERY_GUARDIAN = 10258
-            Creature* CreaHatcher = m_creature->FindNearestCreature(10683, 5.0f); // NPC_ROOKERY_HATCHER = 10683
-            if (CreaGuardian || CreaHatcher)
-            {
-                instance->SetData(TYPE_SOLAKAR, SPECIAL);
-
-                std::list<Creature*> listHatcher;
-                GetCreatureListWithEntryInGrid(listHatcher, m_creature, 10683, 10.0f);
-                for (std::list<Creature*>::const_iterator itr = listHatcher.begin(); itr != listHatcher.end(); ++itr)
-                {
-                    if (listHatcher.empty())
-                        break;
-                    if (!(*itr)->IsAlive())
-                        continue;
-
-                    (*itr)->AI()->EnterEvadeMode();
-                }
-                listHatcher.clear();
-            }
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_solakar_trigger(Creature* pCreature)
-{
-    return new npc_solakar_triggerAI(pCreature);
-}
-
 /****************************************
 ** Rookery Hatcher npc_rookery_hatcher **
 ****************************************/
@@ -1058,11 +1001,8 @@ struct npc_rookery_hatcherAI : public ScriptedAI
 
     void JustReachedHome() override
     {
-        if (m_pInstance->GetData(TYPE_SOLAKAR) == SPECIAL)
-            HatchRookeryEgg();
-        else
-            m_pInstance->SetData(TYPE_SOLAKAR, FAIL);
-        m_creature->ForcedDespawn();
+        HatchRookeryEgg();
+        m_creature->DespawnOrUnsummon();
     }
 
     void MoveInLineOfSight(Unit* pWho) override
@@ -1077,33 +1017,23 @@ struct npc_rookery_hatcherAI : public ScriptedAI
     void HatchRookeryEgg()
     {
         uint8 uiHatchedEgg = 0;
-        uint8 uiMaxHatchedEgg = 4;
         std::list<GameObject*> listRookeryEgg;
         GetGameObjectListWithEntryInGrid(listRookeryEgg, m_creature, 175124, 50.0f);
-        for (std::list<GameObject*>::const_iterator itr = listRookeryEgg.begin(); itr != listRookeryEgg.end(); ++itr)
+        for (auto const& pEgg : listRookeryEgg)
         {
-            if (listRookeryEgg.empty())
-                break;
-            if (!(*itr)->isSpawned())
+            if (!pEgg->isSpawned())
                 continue;
 
-            if (uiHatchedEgg < uiMaxHatchedEgg)
+            if (uiHatchedEgg < 4)
             {
-                (*itr)->SetLootState(GO_JUST_DEACTIVATED);
-                if (m_pInstance->GetData(TYPE_SOLAKAR) == SPECIAL)
-                {
-                    m_creature->SummonCreature(160015, (*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000);
-                    uiMaxHatchedEgg = 24;
-                }
-                else
-                    m_creature->SummonCreature(10161, (*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000);
+                pEgg->SetLootState(GO_JUST_DEACTIVATED);
+                m_creature->SummonCreature(10161, pEgg->GetPositionX(), pEgg->GetPositionY(), pEgg->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000);
 
                 uiHatchedEgg++;
             }
             else
                 break;
         }
-        listRookeryEgg.clear();
     }
 
     void JustSummoned(Creature* pSummoned) override
@@ -1188,11 +1118,6 @@ void AddSC_instance_blackrock_spire()
     pNewScript = new Script;
     pNewScript->Name = "go_father_flame";
     pNewScript->GOGetAI = &GetAIgo_father_flame;
-    pNewScript->RegisterSelf();
-
-    pNewScript = new Script;
-    pNewScript->Name = "npc_solakar_trigger";
-    pNewScript->GetAI = &GetAI_npc_solakar_trigger;
     pNewScript->RegisterSelf();
 
     pNewScript = new Script;
