@@ -2117,7 +2117,7 @@ void World::SetInitialWorldSettings()
     sDynamicVisMgr.LoadFromDB(false);
 
     sLog.outString("Loading cached Account data...");
-    LoadAccountData();
+    //LoadAccountData();
 
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
