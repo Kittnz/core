@@ -1877,11 +1877,16 @@ std::string BattleGround::TypeToString(BattleGroundTypeId type)
         return "None";
     case BATTLEGROUND_AV:
         return "Alterac Valley";
-
-            BATTLEGROUND_WS = 2,
-            BATTLEGROUND_AB = 3,
-            BATTLEGROUND_BR = 4, // arena Blood Ring
-            BATTLEGROUND_SV
+    case BATTLEGROUND_WS:
+        return "Warsong Gulch";
+    case BATTLEGROUND_AB:
+        return "Arathi Basin";
+    case BATTLEGROUND_BR:
+        return "Blood Ring";
+    case BATTLEGROUND_SV:
+        return "Sunnyglade Valley";
+    default:
+        return "???";
     }
 }
 

@@ -1291,12 +1291,15 @@ bool ChatHandler::HandleListThreatCommand(char* /*args*/)
 
 bool ChatHandler::ListBattlegroundsCommand(char* args)
 {
-    std::function<void(const BattleGround*)> appl = [](const BattleGround*)
+    SendSysMessage("List of Active Battlegrounds:");
+    std::function<void(const BattleGround*)> appl = [this](const BattleGround* bg)
         {
-
+            std::ostringstream ss;
+            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers();
+            PSendSysMessage("%s", ss.str().c_str());
         };
 
-    sBattleGroundMgr.ApplyAllBattleGrounds()
+    sBattleGroundMgr.ApplyAllBattleGrounds(appl);
     return true;
 }
 
