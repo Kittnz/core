@@ -1008,6 +1008,7 @@ void BattleGroundMgr::DeleteAllBattleGrounds()
 
 void BattleGroundMgr::ApplyAllBattleGrounds(std::function<void(const BattleGround*)> appl)
 {
+    std::lock_guard<std::mutex> guard(m_BattleGroundsMutex);
     for (uint32 i = BATTLEGROUND_TYPE_NONE; i < MAX_BATTLEGROUND_TYPE_ID; ++i)
     {
         for (BattleGroundSet::iterator itr = m_BattleGrounds[i].begin(); itr != m_BattleGrounds[i].end(); ++itr)
