@@ -1869,6 +1869,22 @@ bool BattleGround::IsPlayerInBattleGround(ObjectGuid guid)
     return itr != m_Players.end();
 }
 
+std::string BattleGround::TypeToString(BattleGroundTypeId type)
+{
+    switch (type)
+    {
+    case BATTLEGROUND_TYPE_NONE:
+        return "None";
+    case BATTLEGROUND_AV:
+        return "Alterac Valley";
+
+            BATTLEGROUND_WS = 2,
+            BATTLEGROUND_AB = 3,
+            BATTLEGROUND_BR = 4, // arena Blood Ring
+            BATTLEGROUND_SV
+    }
+}
+
 void BattleGround::PlayerAddedToBGCheckIfBGIsRunning(Player* pPlayer)
 {
     if (GetStatus() != STATUS_WAIT_LEAVE)

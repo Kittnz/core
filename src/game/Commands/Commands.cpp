@@ -1289,6 +1289,17 @@ bool ChatHandler::HandleListThreatCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::ListBattlegroundsCommand(char* args)
+{
+    std::function<void(const BattleGround*)> appl = [](const BattleGround*)
+        {
+
+        };
+
+    sBattleGroundMgr.ApplyAllBattleGrounds()
+    return true;
+}
+
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
