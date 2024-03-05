@@ -585,3 +585,7 @@ namespace Memory
 {
     uint64 GetProcessMemory();
 }
+
+typedef char const* (*ValueToStringFunc) (uint32 value);
+
+std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc);

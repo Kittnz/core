@@ -883,4 +883,22 @@ namespace Memory
 	}
 }
 
+std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc)
+{
+    if (!flags)
+        return "None";
 
+    std::string names;
+    for (uint32 i = 0; i < 32; i++)
+    {
+        uint32 flag = 1 << i;
+        if (flags & flag)
+        {
+            if (!names.empty())
+                names += ", ";
+
+            names += getNameFunc(flag);
+        }
+    }
+    return names;
+}

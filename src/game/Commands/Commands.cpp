@@ -9443,6 +9443,10 @@ bool ChatHandler::HandleGameObjectInfoCommand(char* args)
         pGameObject->GetDisplayId(),
         pGameObject->GetGoState(),
         pGameObject->getLootState());
+    if (pGameObject->GetUInt32Value(GAMEOBJECT_FLAGS))
+        PSendSysMessage("Flags: %s", FlagsToString(pGameObject->GetUInt32Value(GAMEOBJECT_FLAGS), GameObjectFlagToString).c_str());
+    if (pGameObject->GetUInt32Value(GAMEOBJECT_DYN_FLAGS))
+        PSendSysMessage("Dynamic Flags: %s", FlagsToString(pGameObject->GetUInt32Value(GAMEOBJECT_DYN_FLAGS), GameObjectDynamicFlagToString).c_str());
     if (pGameObject->GetVisibilityModifier())
         PSendSysMessage("Visibility Modifier: %g", pGameObject->GetVisibilityModifier());
     if (pGameObject->isActiveObject())
