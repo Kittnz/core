@@ -523,6 +523,8 @@ class BattleGround
         static BattleGroundTeamIndex GetOtherTeamIndex(BattleGroundTeamIndex teamIdx){ return teamIdx == BG_TEAM_ALLIANCE ? BG_TEAM_HORDE : BG_TEAM_ALLIANCE; }
         bool IsPlayerInBattleGround(ObjectGuid guid);
 
+        static std::string TypeToString(BattleGroundTypeId type);
+
         /* virtual score-array - get's used in bg-subclasses */
         int32 m_TeamScores[BG_TEAMS_COUNT];
 
