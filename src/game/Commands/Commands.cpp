@@ -1294,8 +1294,18 @@ bool ChatHandler::ListBattlegroundsCommand(char* args)
     SendSysMessage("List of Active Battlegrounds:");
     std::function<void(const BattleGround*)> appl = [this](const BattleGround* bg)
         {
+            if (!bg->GetInstanceID())
+                return; // template BG, don't list.
+
+            auto plTargetGuid = bg->GetPlayers().size() > 0 ? bg->GetPlayers().begin()->first : ObjectGuid{};
+            auto plTarget = sObjectAccessor.FindPlayer(plTargetGuid);
+
             std::ostringstream ss;
-            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers();
+            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Duration: " <<
+                secsToTimeString(bg->GetStartTime() / 1000);
+
+            if (plTarget)
+                ss << " | TP Target : " << playerLink(plTarget->GetName());
             PSendSysMessage("%s", ss.str().c_str());
         };
 
