@@ -252,7 +252,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
 
     if (!data->online)
     {
-        auto accData = sWorld.GetAccountData(data->m_accountId);
+        auto accData = sWorld.GetAccountData(data->accId);
         cHandler.PSendSysMessage("Last known EXFP: %s", cHandler.playerLink(std::to_string(accData->lastExtendedFingerprint)).c_str());
     }
 
