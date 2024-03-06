@@ -295,7 +295,7 @@ class BattleGround
         BattleGroundBracketId GetBracketId() const { return m_BracketId; }
         // the instanceId check is also used to determine a bg-template
         // that's why the m_map hack is here..
-        uint32 GetInstanceID()              { return m_Map ? GetBgMap()->GetInstanceId() : 0; }
+        uint32 GetInstanceID()  const       { return m_Map ? GetBgMap()->GetInstanceId() : 0; }
         BattleGroundStatus GetStatus() const { return m_Status; }
         uint32 GetClientInstanceID() const  { return m_ClientInstanceID; }
         uint32 GetStartTime() const         { return m_StartTime; }
@@ -386,6 +386,12 @@ class BattleGround
             return m_Map;
         }
 
+        BattleGroundMap* GetBgMap() const
+        {
+            MANGOS_ASSERT(m_Map);
+            return m_Map;
+
+        }
         void SetTeamStartLoc(Team team, float X, float Y, float Z, float O);
         void GetTeamStartLoc(Team team, float &X, float &Y, float &Z, float &O) const
         {
@@ -522,6 +528,8 @@ class BattleGround
         static Team GetOtherTeam(Team team){ return team ? ((team == ALLIANCE) ? HORDE : ALLIANCE) : TEAM_NONE; }
         static BattleGroundTeamIndex GetOtherTeamIndex(BattleGroundTeamIndex teamIdx){ return teamIdx == BG_TEAM_ALLIANCE ? BG_TEAM_HORDE : BG_TEAM_ALLIANCE; }
         bool IsPlayerInBattleGround(ObjectGuid guid);
+
+        static std::string TypeToString(BattleGroundTypeId type);
 
         /* virtual score-array - get's used in bg-subclasses */
         int32 m_TeamScores[BG_TEAMS_COUNT];

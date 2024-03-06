@@ -1289,6 +1289,30 @@ bool ChatHandler::HandleListThreatCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::ListBattlegroundsCommand(char* args)
+{
+    SendSysMessage("List of Active Battlegrounds:");
+    std::function<void(const BattleGround*)> appl = [this](const BattleGround* bg)
+        {
+            if (!bg->GetInstanceID())
+                return; // template BG, don't list.
+
+            auto plTargetGuid = bg->GetPlayers().size() > 0 ? bg->GetPlayers().begin()->first : ObjectGuid{};
+            auto plTarget = sObjectAccessor.FindPlayer(plTargetGuid);
+
+            std::ostringstream ss;
+            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Duration: " <<
+                secsToTimeString(bg->GetStartTime() / 1000);
+
+            if (plTarget)
+                ss << " | TP Target : " << playerLink(plTarget->GetName());
+            PSendSysMessage("%s", ss.str().c_str());
+        };
+
+    sBattleGroundMgr.ApplyAllBattleGrounds(appl);
+    return true;
+}
+
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
@@ -9443,6 +9467,10 @@ bool ChatHandler::HandleGameObjectInfoCommand(char* args)
         pGameObject->GetDisplayId(),
         pGameObject->GetGoState(),
         pGameObject->getLootState());
+    if (pGameObject->GetUInt32Value(GAMEOBJECT_FLAGS))
+        PSendSysMessage("Flags: %s", FlagsToString(pGameObject->GetUInt32Value(GAMEOBJECT_FLAGS), GameObjectFlagToString).c_str());
+    if (pGameObject->GetUInt32Value(GAMEOBJECT_DYN_FLAGS))
+        PSendSysMessage("Dynamic Flags: %s", FlagsToString(pGameObject->GetUInt32Value(GAMEOBJECT_DYN_FLAGS), GameObjectDynamicFlagToString).c_str());
     if (pGameObject->GetVisibilityModifier())
         PSendSysMessage("Visibility Modifier: %g", pGameObject->GetVisibilityModifier());
     if (pGameObject->isActiveObject())
@@ -17172,6 +17200,115 @@ bool ChatHandler::HandlePDumpWriteCommand(char *args)
 
     return true;
 }
+
+Object* ChatHandler::GetObjectHelper(CommandStream& stream, uint32& lowGuid, uint32& index)
+{
+    std::string target;
+
+    if (!(stream >> target))
+    {
+        SendSysMessage("Wrongly formatted target. Try: player,object,creature");
+        return nullptr;
+    }
+
+    Object* targetObject = nullptr;
+
+    if (!(stream >> lowGuid))
+    {
+        SendSysMessage("Wrongly formatted low GUID.");
+        return nullptr;
+    }
+
+
+    if (!(stream >> index))
+    {
+        SendSysMessage("Wrong index.");
+        return nullptr;
+    }
+
+
+    if (iequals(target, "player"))
+        targetObject = sObjectAccessor.FindPlayer(ObjectGuid(HIGHGUID_PLAYER, 0, lowGuid));
+    else if (iequals(target, "object"))
+    {
+        if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowGuid))
+            targetObject = GetGameObjectWithGuidGlobal(lowGuid, go_data);
+    }
+    else if (iequals(target, "creature"))
+    {
+        if (CreatureData const* data = sObjectMgr.GetCreatureData(lowGuid))
+            targetObject = m_session->GetPlayer()->GetMap()->GetCreature(data->GetObjectGuid(lowGuid));
+    }
+    else if (iequals(target, "item"))
+    {
+        //Not yet.
+    }
+
+
+    if (!targetObject)
+        PSendSysMessage("Couldn't find target with type :%s.", target.c_str());
+    return targetObject;
+}
+
+bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    auto sourcePlayer = GetPlayer();
+
+    if (!sourcePlayer)
+        return false;
+
+
+    uint32 lowGuid, index;
+
+
+    auto targetObject = GetObjectHelper(stream, lowGuid, index);
+
+    if (!targetObject)
+        return false;
+
+
+    PSendSysMessage("Value of index %u : %u", index, targetObject->GetUInt32Value(index));
+
+    return true;
+}
+
+
+bool ChatHandler::HandleDebugFieldsModifyCommand(char* args)
+{
+    CommandStream stream{ args };
+
+    auto sourcePlayer = GetPlayer();
+
+    if (!sourcePlayer)
+        return false;
+
+
+    uint32 lowGuid, index;
+
+
+    auto targetObject = GetObjectHelper(stream, lowGuid, index);
+
+    if (!targetObject)
+        return false;
+
+    uint32 newValue;
+
+    if (!(stream >> newValue))
+    {
+        SendSysMessage("No good mod value given.");
+        return false;
+    }
+
+    targetObject->SetUInt32Value(index, newValue);
+
+    PSendSysMessage("Set index %u to %u.", index, newValue);
+
+
+    return true;
+}
+
 
 bool ChatHandler::HandleDebugConditionCommand(char* args)
 {

@@ -51,6 +51,7 @@ struct ItemPrototype;
 struct GameObjectData;
 struct TrainerSpellData;
 struct SkillLineEntry;
+class CommandStream;
 
 enum CommandFlags
 {
@@ -204,12 +205,16 @@ class ChatHandler
         bool HandleServiceDeleteCharacters(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
+        bool HandleDebugFieldsShowCommand(char* args);
+        bool HandleDebugFieldsModifyCommand(char* args);
         bool HandleDebugConditionCommand(char* args);
 		bool HandleDebugSetInstanceDataCommand(char* args);
         bool HandleWarEffortInfoCommand(char* args);
         bool HandleWarEffortSetGongTimeCommand(char* args);
         bool HandleWarEffortSetStageCommand(char* args);
 		bool HandleCharacterInactivityDataCommand(char* args);
+
+        Object* GetObjectHelper(CommandStream& stream, uint32& lowGuid, uint32& index);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
@@ -479,6 +484,7 @@ class ChatHandler
         bool HandleListDestroyedItemsCommand(char* args);
         bool HandleListBuybackItemsCommand(char* args);
         bool HandleListHostileRefsCommand(char* args);
+        bool ListBattlegroundsCommand(char* args);
         bool HandleListThreatCommand(char* args);
 
         bool HandleLearnCommand(char* args);

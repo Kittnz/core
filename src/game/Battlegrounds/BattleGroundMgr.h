@@ -236,6 +236,8 @@ class BattleGroundMgr
         void ReloadBGPlayerCounts();
         void DeleteAllBattleGrounds();
 
+        void ApplyAllBattleGrounds(std::function<void(const BattleGround*)> appl);
+
         void SendToBattleGround(Player *pl, uint32 InstanceID, BattleGroundTypeId bgTypeId);
 
         /* Battleground queues */

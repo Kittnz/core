@@ -250,6 +250,12 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     if (data->m_hasUsedClickToMove)
         cHandler.SendSysMessage("Using Click To Move!");
 
+    if (!data->online)
+    {
+        auto accData = sWorld.GetAccountData(data->m_accountId);
+        cHandler.PSendSysMessage("Last known EXFP: %s", cHandler.playerLink(std::to_string(accData->lastExtendedFingerprint)).c_str());
+    }
+
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
     uint32 money = data->money;
     uint32 mail_gold_inbox = data->mail_gold_inbox;

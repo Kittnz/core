@@ -120,13 +120,14 @@ struct mob_webwrapAI : public ScriptedAI
         {
             if (Player* pVictim = m_creature->GetMap()->GetPlayer(m_victimGuid))
             {
-                if (pVictim->IsAlive()) {
+                if (pVictim->IsAlive())
+                {
                     pVictim->RemoveAurasDueToSpell(SPELL_WEBWRAP);
                     pVictim->RemoveAurasDueToSpell(SPELL_SUMMON_WEB_WRAP);
                 }
             }
         }
-        ((TemporarySummon*)m_creature)->UnSummon();
+        m_creature->DespawnOrUnsummon(1);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -135,9 +136,9 @@ struct mob_webwrapAI : public ScriptedAI
             return;
 
         Player* pVictim = m_creature->GetMap()->GetPlayer(m_victimGuid);
-        if (!pVictim || pVictim->IsDead()) {
+        if (!pVictim || pVictim->IsDead())
+        {
             m_creature->Kill(m_creature, nullptr);
-            // ((TemporarySummon*)m_creature)->UnSummon();
             return;
         }
         // todo: can this be removed? We set MovePoint in SetVictim

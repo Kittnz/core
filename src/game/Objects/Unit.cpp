@@ -2389,9 +2389,13 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool che
         damageInfo.totalDamage += damageInfo.subDamage[i].damage;
     }
 
-    SendAttackStateUpdate(&damageInfo);
-    DealMeleeDamage(&damageInfo, true);
     ProcDamageAndSpell(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.totalDamage, damageInfo.totalDamage + damageInfo.totalAbsorb + damageInfo.totalResist, damageInfo.attackType);
+
+    // Damage is done after procs so it can trigger auras on the victim that affect the caster.
+    DealMeleeDamage(&damageInfo, true);
+
+    // In sniffs SMSG_ATTACKERSTATEUPDATE is sent after chance on hit spell casts from CastItemCombatSpell. This fixes animation for Frostbrand Attack.
+    SendAttackStateUpdate(&damageInfo);
 
     if (IsPlayer())
         DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "AttackerStateUpdate: (Player) %u attacked %u (TypeId: %u) for %u dmg, absorbed %u, blocked %u, resisted %u.",

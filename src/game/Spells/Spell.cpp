@@ -1361,7 +1361,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     combat = true;
                 }
 
-                pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
+               // pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
 
                 if (combat)
                 {
@@ -1413,7 +1413,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     // All weapon based abilities can trigger weapon procs,
     // even if they do no damage, or break on damage, like Sap.
     // https://www.youtube.com/watch?v=klMsyF_Kz5o
-    bool triggerWeaponProcs = m_casterUnit && m_casterUnit != unitTarget && m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON &&
+    bool triggerWeaponProcs = m_casterUnit && m_casterUnit != unitTarget &&
+        m_spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON &&
+        m_spellInfo->rangeIndex == SPELL_RANGE_IDX_COMBAT &&
         // Turtle: Do not proc weapon enchants if current spell is not damaging, but we have damaging weapon proc.
         // This is custom behavior. There are multiple threads on blizzard forums of people complaining about
         // Sap proccing their weapon or poisons, and thus breaking itself, so this is a blizzlike problem.
@@ -1513,7 +1515,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
         // Send log damage message to client
         pCaster->SendSpellNonMeleeDamageLog(&damageInfo);
-        pCaster->DealSpellDamage(&damageInfo, true);
 
         procEx = CreateProcExtendMask(&damageInfo, missInfo);
         procVictim |= PROC_FLAG_TAKEN_ANY_DAMAGE;
@@ -1538,6 +1539,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 m_spellInfo,
                 this);
         }
+
+        // Damage is done after procs so it can trigger auras on the victim that affect the caster.
+        pCaster->DealSpellDamage(&damageInfo, true);
 
         if (!triggerWeaponProcs && m_caster->IsPlayer())
         {
@@ -4862,7 +4866,10 @@ void Spell::SendSpellGo(bool bSendToCaster)
 {
     // not send invisible spell casting
     if (!IsNeedSendToClient())
+    {
+        SendAllTargetsMiss();
         return;
+    }
 
     uint32 castFlags = CAST_FLAG_UNKNOWN9;
     if (IsRangedSpell())
@@ -5141,6 +5148,36 @@ void Spell::SendInterrupted()
     data << m_caster->GetObjectGuid(); // Pareil que pour SMSG_SPELL_FAILURE
     data << m_spellInfo->Id;
     m_caster->SendObjectMessageToSet(&data, true);
+}
+
+void Spell::SendAllTargetsMiss(bool bSendToCaster)
+{
+    if (!m_caster->IsInWorld())
+        return;
+
+    // nothing to send
+    if (m_UniqueTargetInfo.empty())
+        return;
+
+    // we only send this packet if we have only misses
+    for (auto const& target : m_UniqueTargetInfo)
+    {
+        if (target.missCondition == SPELL_MISS_NONE)
+            return;
+    }
+
+    WorldPacket data(SMSG_SPELLLOGMISS, (4 + 8 + 1 + 4 + m_UniqueTargetInfo.size() * (8 + 1)));
+    data << uint32(m_spellInfo->Id);
+    data << m_caster->GetObjectGuid();
+    data << uint8(0);                                       // nothing shown in combat log if != 0 (calls nullsub instead)
+    data << uint32(m_UniqueTargetInfo.size());
+    for (auto const& target : m_UniqueTargetInfo)
+    {
+        data << target.targetGUID;
+        data << uint8(target.missCondition);
+        // 2 more floats if the uint8 before targets is 1
+    }
+    m_caster->SendObjectMessageToSet(&data, bSendToCaster);
 }
 
 void Spell::SendChannelUpdate(uint32 time, bool interrupted)
