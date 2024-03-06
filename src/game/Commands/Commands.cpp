@@ -17208,7 +17208,7 @@ Object* ChatHandler::GetObjectHelper(CommandStream& stream, uint32& lowGuid, uin
     if (!(stream >> target))
     {
         SendSysMessage("Wrongly formatted target. Try: player,object,creature");
-        return false;
+        return nullptr;
     }
 
     Object* targetObject = nullptr;
@@ -17216,14 +17216,14 @@ Object* ChatHandler::GetObjectHelper(CommandStream& stream, uint32& lowGuid, uin
     if (!(stream >> lowGuid))
     {
         SendSysMessage("Wrongly formatted low GUID.");
-        return false;
+        return nullptr;
     }
 
 
     if (!(stream >> index))
     {
         SendSysMessage("Wrong index.");
-        return false;
+        return nullptr;
     }
 
 
