@@ -423,6 +423,7 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         changeTargetTimer = 2000;
         pVZTimer = 1000;
         fakeVZ = nullptr;
+        pTankGuid.Clear();
     }
 
     void Aggro(Unit *who) override
