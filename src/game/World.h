@@ -579,8 +579,6 @@ enum eConfigBoolValues
     CONFIG_BOOL_SILENTLY_GM_JOIN_TO_CHANNEL,
     CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS,
     CONFIG_BOOL_CHAT_FAKE_MESSAGE_PREVENTING,
-    CONFIG_BOOL_CHAT_STRICT_LINK_CHECKING_SEVERITY,
-    CONFIG_BOOL_CHAT_STRICT_LINK_CHECKING_KICK,
     CONFIG_BOOL_ADDON_CHANNEL,
     CONFIG_BOOL_CORPSE_EMPTY_LOOT_SHOW,
     CONFIG_BOOL_DEATH_CORPSE_RECLAIM_DELAY_PVP,
@@ -983,6 +981,7 @@ class World
         void RestoreLostGOs();
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
+        void ExportConfigSettingsToDB();
 
         template<class Builder>
         class LocalizedPacketListDo
