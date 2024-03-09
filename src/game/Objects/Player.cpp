@@ -23842,6 +23842,8 @@ void Player::SetFlying(bool flying)
     else 
     {
         m_isFlying = false;
+        if (!IsInWater())
+            m_movementInfo.RemoveMovementFlag(MOVEFLAG_SWIMMING);
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
         SendHeartBeat(true);
     }

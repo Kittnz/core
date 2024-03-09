@@ -371,17 +371,31 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     }
 
-    // Turtle WoW: Prevent falling, using space
+    
     Player* exceptPlayer = _player;
-
-    if (_player->IsFlying() && !movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
+    if (_player->IsFlying())
     {
-        movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        pMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        pMover->ClearUnitState(UNIT_STAT_MOVING);
-        movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
-        pMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
-        exceptPlayer = nullptr;
+        // Turtle WoW: Prevent falling, using space
+        if (!movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
+        {
+            movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+            pMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+            pMover->ClearUnitState(UNIT_STAT_MOVING);
+            movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
+            pMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
+            exceptPlayer = nullptr;
+        }
+    }
+    else
+    {
+        // if flags still remain somehow after flying is disabled
+        if (movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING) &&
+            movementInfo.HasMovementFlag(MOVEFLAG_LEVITATING))
+        {
+            movementInfo.RemoveMovementFlag(MOVEFLAG_SWIMMING);
+            movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
+            exceptPlayer = nullptr;
+        }
     }
 
     WorldPacket data(opcode, recvData.size());
