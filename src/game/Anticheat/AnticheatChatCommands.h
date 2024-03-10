@@ -21,7 +21,8 @@ static ChatCommand anticheatHwprintCommandTable[] =
 {
     { "mark",      SEC_ADMINISTRATOR, true, &ChatHandler::HandleAnticheatHwPrintMarkCommand,      "", nullptr },
     { "list",      SEC_DEVELOPER, true, &ChatHandler::HandleAnticheatHwPrintListCommand,      "", nullptr },
-    { nullptr,   0,                  false, nullptr,                                             "", nullptr },
+    { "autoban",   SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatHwPrintAutobanCommand, "", nullptr},
+    { nullptr,   0,                  false, nullptr,                                             "", nullptr }
 };
 
 static ChatCommand anticheatCommandTable[] =

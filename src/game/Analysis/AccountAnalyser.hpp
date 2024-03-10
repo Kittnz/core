@@ -105,6 +105,7 @@ public:
     AnalysisInfo& GetCurrentSample() { return _currentSample; }
 
     void CheckExtendedPrintMark();
+    static bool IsAutoBannedPrint(uint64 extendedPrint);
 
     uint32& RescheduleTimer() { return _rescheduleTimer; }
 
@@ -113,6 +114,7 @@ public:
 
     static void CheckExtendedHashes();
     static void MarkExtendedPrint(uint64 extendedPrint);
+    static void AddAutoBanExtendedPrint(uint64 extendedPrint);
 
 private:
     WorldSession* _session;
@@ -135,4 +137,5 @@ private:
 
 
     inline static std::unordered_set<uint64> _markedExtendedPrints;
+    inline static std::unordered_set<uint64> _autoBannedPrints;
 };

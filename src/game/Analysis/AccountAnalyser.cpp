@@ -147,6 +147,25 @@ void AccountAnalyser::LoadIPHistoryCallback(QueryResult* result, uint32 SessionI
     delete result;
 }
 
+bool AccountAnalyser::IsAutoBannedPrint(uint64 extendedPrint)
+{
+    auto itr = _autoBannedPrints.find(extendedPrint);
+
+    if (itr != _autoBannedPrints.end())
+        return true;
+    return false;
+}
+
+void AccountAnalyser::AddAutoBanExtendedPrint(uint64 extendedPrint)
+{
+    if (IsAutoBannedPrint(extendedPrint))
+        return;
+
+    _autoBannedPrints.insert(extendedPrint);
+
+    LoginDatabase.PExecute("REPLACE INTO `hwprint_autobans` (`extendedPrint`) VALUES (%llu)", extendedPrint);
+}
+
 void AccountAnalyser::CheckExtendedPrintMark()
 {
     if (_markedExtendedPrints.find(_currentSample.GetHash()) != _markedExtendedPrints.end())
@@ -179,6 +198,12 @@ void AccountAnalyser::Initialize()
 
 
     CheckExtendedPrintMark();
+    if (IsAutoBannedPrint(accountData->lastExtendedFingerprint))
+    {
+        sWorld.BanAccount(accountData->id, 0xFFFFFFFF, string_format("Auto-Ban HWprint {}", accountData->lastExtendedFingerprint), "Console");
+        sWorld.SendGMText(string_format("Account {} ({}) auto-banned for HWprint {}", accountData->username, accountData->id, accountData->lastExtendedFingerprint));
+        return;
+    }
 
     if (_totalLogins < 20 || _loadedSamples.size() < 20)
         return;
@@ -449,6 +474,17 @@ void AccountAnalyser::CheckExtendedHashes()
         do {
             auto fields = result->Fetch();
             _markedExtendedPrints.insert(fields[0].GetUInt64());
+        } while (result->NextRow());
+    }
+
+    result = std::unique_ptr<QueryResult>(LoginDatabase.Query("SELECT `extendedPrint` FROM `hwprint_autobans`"));
+
+    if (result)
+    {
+
+        do {
+            auto fields = result->Fetch();
+            _autoBannedPrints.insert(fields[0].GetUInt64());
         } while (result->NextRow());
     }
 }

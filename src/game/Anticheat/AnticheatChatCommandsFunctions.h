@@ -21,3 +21,4 @@ bool HandleAnticheatFingerprintAutobanRemoveCommand(char* args);
 
 bool HandleAnticheatHwPrintMarkCommand(char* args);
 bool HandleAnticheatHwPrintListCommand(char* args);
+bool HandleAnticheatHwPrintAutobanCommand(char* args);
