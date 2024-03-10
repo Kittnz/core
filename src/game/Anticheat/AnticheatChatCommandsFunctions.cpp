@@ -160,6 +160,25 @@ bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnticheatHwPrintAutobanCommand(char* args)
+{
+    CommandStream commandStream{ args };
+    uint64 extendedPrint;
+
+    if (!(commandStream >> extendedPrint))
+    {
+        SendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+    AccountAnalyser::AddAutoBanExtendedPrint(extendedPrint);
+
+
+    PSendSysMessage("Added Extended FP autoban on %llu", extendedPrint);
+    return true;
+}
+
+
 bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
 {
     CommandStream commandStream { args };
