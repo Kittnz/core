@@ -271,7 +271,7 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 SET @learn_spell_id = 41254; 
 SET @craft_spell_id = 41255; 
 SET @skill_line_entry = 17131;
-SET @output_item_id = 55265; 
+SET @output_item_id = 55259; 
 SET @recipe_spell_name = 'Sapphire Luminescence'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 0;
