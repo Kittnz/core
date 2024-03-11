@@ -162,7 +162,6 @@ void WorldSession::HandleCharEnum(QueryResult * result)
     WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
 
     uint8 num = 0;
-
     _characterMaxLevel = 0;
 
     data << num;
@@ -183,9 +182,21 @@ void WorldSession::HandleCharEnum(QueryResult * result)
             if (!active)
                 continue;
 
+            bool hasGuildTabard = false;
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());
-            if (Player::BuildEnumData(result, &data))
+            if (Player::BuildEnumData(result, &data, hasGuildTabard))
+            {
                 ++num;
+
+                if (hasGuildTabard)
+                {
+                    if (Guild* pGuild = sGuildMgr.GetPlayerGuild(guidlow))
+                    {
+                        pGuild->Query(this);
+                    }
+                }
+            }
+                
         }
         while (result->NextRow());
 
