@@ -1503,6 +1503,35 @@ void World::LoadConfigSettings(bool reload)
     m_worldUpdatesMigration = m_worldUpdatesDirectory + "/" + fName;
 }
 
+void World::ExportConfigSettingsToDB()
+{
+    sLog.outString("Saving config settings to database.");
+
+    std::ostringstream ss;
+    ss << "REPLACE INTO `world_config` VALUES (" << realmID << ", ";
+
+    for (uint32 i = 0; i < CONFIG_UINT32_VALUE_COUNT; ++i)
+        ss << m_configUint32Values[i] << ", ";
+
+    for (uint32 i = 0; i < CONFIG_INT32_VALUE_COUNT; ++i)
+        ss << m_configInt32Values[i] << ", ";
+
+    for (uint32 i = 0; i < CONFIG_FLOAT_VALUE_COUNT; ++i)
+        ss << m_configFloatValues[i] << ", ";
+
+    for (uint32 i = 0; i < CONFIG_BOOL_VALUE_COUNT; ++i)
+    {
+        ss << m_configBoolValues[i];
+
+        if (i < (CONFIG_BOOL_VALUE_COUNT - 1))
+            ss << ", ";
+    }
+
+    ss << ")";
+
+    LoginDatabase.DirectExecute(ss.str().c_str());
+}
+
 void autoCommitWorkerThread()
 {
     time_t lastUpdateTime = time(0);
@@ -1772,7 +1801,7 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Loading config...");
     LoadConfigSettings();
-
+    ExportConfigSettingsToDB();
 
     if (sConfig.GetIntDefault("Logs.Export", 0) == 1)
     {

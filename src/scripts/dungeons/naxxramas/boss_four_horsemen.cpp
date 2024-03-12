@@ -399,13 +399,13 @@ struct boss_four_horsemen_shared : public ScriptedAI
 struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
 {
     int32 changeTargetTimer;
-    Unit* pTank;
+    ObjectGuid pTankGuid;
     Creature* fakeVZ;
     int32 pVZTimer;
     Position VZPosition;
 
     boss_lady_blaumeuxAI(Creature* pCreature)
-        : boss_four_horsemen_shared(pCreature, SPELL_MARK_OF_BLAUMEUX, SPELL_SPIRIT_OF_BLAUMEUX)
+        : boss_four_horsemen_shared(pCreature, SPELL_MARK_OF_BLAUMEUX, SPELL_SPIRIT_OF_BLAUMEUX), pTankGuid()
     {
         Reset();
     }
@@ -422,8 +422,8 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         }
         changeTargetTimer = 2000;
         pVZTimer = 1000;
-        pTank = nullptr;
         fakeVZ = nullptr;
+        pTankGuid.Clear();
     }
 
     void Aggro(Unit *who) override
@@ -484,7 +484,7 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
                 if (m_bIsSpirit)
                     break;
 
-                pTank = m_creature->GetVictim();
+                pTankGuid = m_creature->GetVictim()->GetObjectGuid();
 
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, SPELL_VOIDZONE, SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER))
                 {
@@ -547,12 +547,18 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         }
 
         if (changeTargetTimer <= 0) {
-            m_creature->SetTargetGuid(pTank->GetObjectGuid());
-            pTank = nullptr;
+            if (!pTankGuid.IsEmpty())
+            {
+                //Only reset target if target still exists.
+                if (m_creature->GetMap()->GetUnit(pTankGuid))
+                    m_creature->SetTargetGuid(pTankGuid);
+            }
+
+            pTankGuid.Clear();
             changeTargetTimer = 500;
         }
 
-        if (pTank != nullptr)
+        if (!pTankGuid.IsEmpty())
             changeTargetTimer -= uiDiff;
         
         DoMeleeAttackIfReady();

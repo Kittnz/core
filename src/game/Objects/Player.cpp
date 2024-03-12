@@ -2155,7 +2155,7 @@ void Player::AutoReSummonPet()
 }
 
 
-bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
+bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData, bool& hasGuildTabard)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -2177,30 +2177,30 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
         return false;
     }
 
-    *p_data << ObjectGuid(HIGHGUID_PLAYER, guid);
-    *p_data << fields[1].GetString();                       // name
-    *p_data << uint8(pRace);                                // race
-    *p_data << uint8(pClass);                               // class
-    *p_data << uint8(fields[4].GetUInt8());                 // gender
+    *pData << ObjectGuid(HIGHGUID_PLAYER, guid);
+    *pData << fields[1].GetString();                       // name
+    *pData << uint8(pRace);                                // race
+    *pData << uint8(pClass);                               // class
+    *pData << uint8(fields[4].GetUInt8());                 // gender
 
     uint32 playerBytes = fields[5].GetUInt32();
-    *p_data << uint8(playerBytes);                          // skin
-    *p_data << uint8(playerBytes >> 8);                     // face
-    *p_data << uint8(playerBytes >> 16);                    // hair style
-    *p_data << uint8(playerBytes >> 24);                    // hair color
+    *pData << uint8(playerBytes);                          // skin
+    *pData << uint8(playerBytes >> 8);                     // face
+    *pData << uint8(playerBytes >> 16);                    // hair style
+    *pData << uint8(playerBytes >> 24);                    // hair color
 
     uint32 playerBytes2 = fields[6].GetUInt32();
-    *p_data << uint8(playerBytes2 & 0xFF);                  // facial hair
+    *pData << uint8(playerBytes2 & 0xFF);                  // facial hair
 
-    *p_data << uint8(fields[7].GetUInt8());                 // level
-    *p_data << uint32(fields[8].GetUInt32());               // zone
-    *p_data << uint32(fields[9].GetUInt32());               // map
+    *pData << uint8(fields[7].GetUInt8());                 // level
+    *pData << uint32(fields[8].GetUInt32());               // zone
+    *pData << uint32(fields[9].GetUInt32());               // map
 
-    *p_data << fields[10].GetFloat();                       // x
-    *p_data << fields[11].GetFloat();                       // y
-    *p_data << fields[12].GetFloat();                       // z
+    *pData << fields[10].GetFloat();                       // x
+    *pData << fields[11].GetFloat();                       // y
+    *pData << fields[12].GetFloat();                       // z
 
-    *p_data << uint32(fields[13].GetUInt32());              // guild id
+    *pData << uint32(fields[13].GetUInt32());              // guild id
 
     uint32 char_flags = 0;
     uint32 playerFlags = fields[14].GetUInt32();
@@ -2219,10 +2219,10 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
     if (hardcoreStatus == 3)
         char_flags |= CHARACTER_FLAG_LOCKED_FOR_TRANSFER;
 
-    *p_data << uint32(char_flags);                          // character flags
+    *pData << uint32(char_flags);                          // character flags
 
     // First login
-    *p_data << uint8(atLoginFlags & AT_LOGIN_FIRST ? 1 : 0);
+    *pData << uint8(atLoginFlags & AT_LOGIN_FIRST ? 1 : 0);
 
     // Pets info
     {
@@ -2243,9 +2243,9 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
             }
         }
 
-        *p_data << uint32(petDisplayId);
-        *p_data << uint32(petLevel);
-        *p_data << uint32(petFamily);
+        *pData << uint32(petDisplayId);
+        *pData << uint32(petLevel);
+        *pData << uint32(petFamily);
     }
 
 
@@ -2253,17 +2253,21 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
     for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_START + 1; ++slot)
     {
         uint32 visualbase = slot * 2;                       // entry, perm ench., temp ench.
-        uint32 item_id = GetUInt32ValueFromArray(data, visualbase);
-        const ItemPrototype * proto = sObjectMgr.GetItemPrototype(item_id);
+        uint32 itemId = GetUInt32ValueFromArray(data, visualbase);
+        const ItemPrototype * proto = sObjectMgr.GetItemPrototype(itemId);
         if (!proto)
         {
-            *p_data << uint32(0);
-            *p_data << uint8(0);
+            *pData << uint32(0);
+            *pData << uint8(0);
             continue;
         }
 
-        *p_data << uint32(proto->DisplayInfoID);
-        *p_data << uint8(proto->InventoryType);
+        // Guild Tabard
+        if (itemId == 5976)
+            hasGuildTabard = true;
+
+        *pData << uint32(proto->DisplayInfoID);
+        *pData << uint8(proto->InventoryType);
     }
 
     return true;
@@ -23843,6 +23847,8 @@ void Player::SetFlying(bool flying)
     else 
     {
         m_isFlying = false;
+        if (!IsInWater())
+            m_movementInfo.RemoveMovementFlag(MOVEFLAG_SWIMMING);
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
         SendHeartBeat(true);
     }

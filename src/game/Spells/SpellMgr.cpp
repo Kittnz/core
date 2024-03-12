@@ -2423,7 +2423,8 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             case 7278: // Summon Harvester Swarm
             case 9515: // Summon Tracking Hound
             case 17490: // Summon Skeleton
-            case 18307: // Death by Peasant
+            case 18307: // Death by Peasant (Horde)
+            case 18308: // Death by Peasant (Alliance)
             case 19363: // Summon Mechanical Yeti
             case 23074: // Arcanite Dragonling
             case 23075: // Mithril Mechanical Dragonling

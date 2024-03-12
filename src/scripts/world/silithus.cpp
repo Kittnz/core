@@ -203,7 +203,36 @@ struct go_wind_stoneAI: public GameObjectAI
         if (!me->isSpawned()) // in object delete list, will be deletec next tick, don't process any on this tick.
             return true;
 
-        if (Creature* pCreature = me->SummonCreature(npcEntry, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, MINUTE * IN_MILLISECONDS, false, 7000))
+        float x, y, z, o;
+        switch (me->GetEntry())
+        {
+            case 180461: // guessed
+                x = -7927.48f;
+                y = 1935.30f;
+                z = 5.61f;
+                o = 4.76475f;
+                break;
+            case 180534: // guessed
+                x = -6998.52f;
+                y = 1223.02f;
+                z = 9.16f;
+                o = 4.76475f;
+                break;
+            case 180554: // sniffed
+                x = -6716.82f;
+                y = 1674.36f;
+                z = 8.51f;
+                o = 4.76475f;
+                break;
+            default:
+                x = me->GetPositionX();
+                y = me->GetPositionY();
+                z = me->GetPositionZ();
+                o = me->GetOrientation();
+                break;
+        }
+
+        if (Creature* pCreature = me->SummonCreature(npcEntry, x, y, z, o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, MINUTE * IN_MILLISECONDS, false, 7000))
         {
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature, casterGuid = caster->GetObjectGuid()]
             {

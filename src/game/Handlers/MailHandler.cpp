@@ -833,7 +833,15 @@ void WorldSession::HandleMailTakeMoney(WorldPacket& recv_data)
 
     SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_OK);
 
-    loadedPlayer->LogModifyMoney(m->money, "Mail", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    if (m->stationery == MAIL_STATIONERY_DEFAULT)
+        loadedPlayer->LogModifyMoney(m->money, "MailNormal", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    else if (m->stationery == MAIL_STATIONERY_GM)
+        loadedPlayer->LogModifyMoney(m->money, "MailGM", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    else if (m->stationery == MAIL_STATIONERY_AUCTION)
+        loadedPlayer->LogModifyMoney(m->money, "MailAuction", ObjectGuid(), m->sender);
+    else
+        loadedPlayer->LogModifyMoney(m->money, "MailSpecial", ObjectGuid(), m->sender);
+
     m->money = 0;
     m->state = MAIL_STATE_CHANGED;
     pl->MarkMailsUpdated();
