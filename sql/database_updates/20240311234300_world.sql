@@ -6,3 +6,6 @@ INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_ty
 DELETE FROM `creature_ai_scripts` WHERE `id`=711503;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (711503, 0, 0, 15, 1953, 1, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Jaedenar Adept - Cast Spell Blink');
+
+-- Set Alliance race requirement on New Growth quest in Thalassian Highlands
+UPDATE quest_template SET RequiredRaces = 589 WHERE entry = 41256;
