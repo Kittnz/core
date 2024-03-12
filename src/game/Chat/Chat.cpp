@@ -925,7 +925,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "repairitems",    SEC_DEVELOPER,       true,  &ChatHandler::HandleRepairitemsCommand,         "", nullptr },
         { "waterwalk",      SEC_DEVELOPER,       false, &ChatHandler::HandleWaterwalkCommand,           "", nullptr },
         { "quit",           SEC_CONSOLE,         true,  &ChatHandler::HandleQuitCommand,                "", nullptr },
-        { "freeze",         SEC_DEVELOPER,       false, &ChatHandler::HandleFreezeCommand,              "", nullptr },
+        { "freeze",         SEC_MODERATOR,       false, &ChatHandler::HandleFreezeCommand,              "", nullptr },
         { "unfreeze",       SEC_DEVELOPER,       false, &ChatHandler::HandleUnfreezeCommand,            "", nullptr },
         { "anticheat",      SEC_DEVELOPER,       false, nullptr,                                        "", anticheatCommandTable },
         { "pet",            SEC_DEVELOPER,       true,  nullptr,                                        "", petCommandTable},
