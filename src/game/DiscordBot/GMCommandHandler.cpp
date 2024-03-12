@@ -2,7 +2,6 @@
 #include "DiscordBot/Bot.hpp"
 #include "World.h"
 #include "DiscordBot/AuthManager.hpp"
-
 #include "Log.h"
 #include "Chat.h"
 
@@ -40,11 +39,6 @@ namespace DiscordBot
             MakeCommandHandler(&GMCommandHandler::LogCommand),
             "Shows logs");
 
-        Register("lookup",
-            {
-            }, MakeCommandHandler(&GMCommandHandler::LookupCommand), "Starts a character lookup")
-        );
-
         _commHandler = &registrar;
     }
 
@@ -76,24 +70,6 @@ namespace DiscordBot
 
         CliCommandHolder* cmd = new CliCommandHolder(authinfo->gameAccountId, (AccountTypes)authinfo->securityLevel, std::make_pair(this, src), commandParam.c_str(), &CommandPrint, &CommandFinished);
         sWorld.QueueCliCommand(cmd);
-    }
-
-    void GMCommandHandler::LookupCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
-    {
-        dpp::message msg;
-        msg.add_component(
-            dpp::component().add_component(
-                dpp::component()
-                .set_type(dpp::cot_selectmenu)
-                .set_placeholder("Filter on")
-                .add_select_option(dpp::select_option("Player name", "playername", "The name (or part of it) of the player"))
-                .add_select_option(dpp::select_option("Player level minimum", "playerlevelmin", "The minimum level of the player"))
-                .add_select_option(dpp::select_option("Player level maximum", "playerlevelmax", "The maximum level of the player"))
-                .set_id("filterselect")
-            )
-        );
-
-        src.message_event->reply(std::move(msg));
     }
 
     void GMCommandHandler::LogCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
