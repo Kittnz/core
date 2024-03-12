@@ -42,8 +42,7 @@ namespace DiscordBot
 
         Register("lookup",
             {
-            }, MakeCommandHandler(&GMCommandHandler::LookupCommand), "Starts a character lookup")
-        );
+            }, MakeCommandHandler(&GMCommandHandler::LookupCommand), "Starts a character lookup");
 
         _commHandler = &registrar;
     }
