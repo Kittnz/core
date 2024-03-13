@@ -182,24 +182,11 @@ void WorldSession::HandleCharEnum(QueryResult * result)
             if (!active)
                 continue;
 
-            bool hasGuildTabard = false;
             DETAIL_LOG("Build enum data for char guid %u from account %u.", guidlow, GetAccountId());
-            if (Player::BuildEnumData(result, &data, hasGuildTabard))
-            {
+            if (Player::BuildEnumData(result, &data))
                 ++num;
-
-                if (hasGuildTabard)
-                {
-                    if (Guild* pGuild = sGuildMgr.GetPlayerGuild(guidlow))
-                    {
-                        pGuild->Query(this);
-                    }
-                }
-            }
-                
         }
         while (result->NextRow());
-
         delete result;
     }
 
