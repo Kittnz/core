@@ -251,6 +251,7 @@ struct go_wind_stoneAI: public GameObjectAI
             
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature, casterGuid = caster->GetObjectGuid()]
             {
+                pCreature->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING);
                 pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                 if (Player* pPlayer = pCreature->GetMap()->GetPlayer(casterGuid))
                 {
