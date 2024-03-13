@@ -319,6 +319,8 @@ void AddSC_boss_chronormu();
 // Misc
 void AddSC_npc_loothelper();
 void AddSC_npc_ptr();
+void AddSC_jewelcrafting();
+
 void AddScripts()
 {
     //Nostalrius
@@ -635,4 +637,5 @@ void AddScripts()
     // Misc
     AddSC_npc_loothelper();
     AddSC_npc_ptr();
+    AddSC_jewelcrafting();
 }

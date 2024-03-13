@@ -293,6 +293,7 @@ miscellaneous/random_scripts_1.cpp
 miscellaneous/random_scripts_2.cpp
 miscellaneous/random_scripts_3.cpp
 miscellaneous/custom_exploration_triggers.cpp
+miscellaneous/jewelcrafting.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp

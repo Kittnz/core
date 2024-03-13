@@ -1534,3 +1534,492 @@ UPDATE skill_line_ability
 JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
 SET skill_line_ability.min_value = 240
 WHERE spell_template.name = 'Emberstone Idol';
+
+REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`, `display_id`, `quality`, `flags`, `buy_count`, `buy_price`, `sell_price`, `inventory_type`, `allowable_class`, `allowable_race`, `item_level`, `required_level`, `required_skill`, `required_skill_rank`, `required_spell`, `required_honor_rank`, `required_city_rank`, `required_reputation_faction`, `required_reputation_rank`, `max_count`, `stackable`, `container_slots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `delay`, `range_mod`, `ammo_type`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `dmg_min3`, `dmg_max3`, `dmg_type3`, `dmg_min4`, `dmg_max4`, `dmg_type4`, `dmg_min5`, `dmg_max5`, `dmg_type5`, `block`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmrate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmrate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmrate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmrate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmrate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `page_text`, `page_language`, `page_material`, `start_quest`, `lock_id`, `material`, `sheath`, `random_property`, `set_id`, `max_durability`, `area_bound`, `map_bound`, `duration`, `bag_family`, `disenchant_id`, `food_type`, `min_money_loot`, `max_money_loot`, `wrapped_gift`, `extra_flags`, `other_team_entry`, `script_name`) VALUES
+ ('56036', '4', '0', 'Golden Scepter of Authority', '', '23174', '2', '0', '1', '24192', '6048', '23', '-1', '-1', '51',
+ '46', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '5', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9417', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '0', '1', NULL);
+ 
+ -- Attempt to GPT-generate NPCs:
+ 
+REPlaCE INTO `creature_display_info_addon` (`display_id`) VALUES (20613);
+ 
+SET @entry := 73101;
+SET @display_id := 20613;
+SET @name := 'The Artificer';
+SET @subname := 'Artisan Goldsmith';
+SET @faction := 35;
+SET @level := 58;
+SET @npc_flags := 17;
+SET @speed_walk := 1.0;
+SET @speed_run := 1.14286;
+SET @detection_range := 18;
+SET @call_for_help_range := 5;
+SET @scale := 1.0;
+SET @dmg_min := 38;
+SET @dmg_max := 49;
+SET @dmg_school := 0;
+SET @attack_power := 44;
+SET @base_attack_time := 2000;
+SET @ranged_attack_time := 2000;
+SET @unit_class := 1;
+SET @ranged_dmg_min := 1;
+SET @ranged_dmg_max := 1;
+SET @ranged_attack_power := 100;
+SET @type := 7;
+SET @inhabit_type := 3;
+SET @regeneration := 3;
+SET @flags_extra := 2;
+
+-- Calculating health, mana, and armor based on level
+SET @base_health := @level * 10;
+SET @health_min := @base_health * 0.9;
+SET @health_max := @base_health * 1.1;
+SET @base_mana := @level * 5;
+SET @mana_min := @base_mana * 0.9;
+SET @mana_max := @base_mana * 1.1;
+SET @armor := @level * 2;
+
+-- Inserting or replacing the entry in the creature_template table
+REPLACE INTO `creature_template` 
+(`entry`, `display_id1`, `name`, `subname`, `faction`, `level_min`, `level_max`, `npc_flags`, `speed_walk`, `speed_run`, `detection_range`, `call_for_help_range`, `scale`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `inhabit_type`, `regeneration`, `flags_extra`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`) 
+VALUES 
+(@entry, @display_id, @name, @subname, @faction, @level, @level, @npc_flags, @speed_walk, @speed_run, @detection_range, @call_for_help_range, @scale, @dmg_min, @dmg_max, @dmg_school, @attack_power, @base_attack_time, @ranged_attack_time, @unit_class, @ranged_dmg_min, @ranged_dmg_max, @ranged_attack_power, @type, @inhabit_type, @regeneration, @flags_extra, @health_min, @health_max, @mana_min, @mana_max, @armor);
+
+SET @entry := 73102;
+SET @display_id := 6010;
+SET @name := 'Thegren';
+SET @subname := 'Artisan Gemologist';
+SET @faction := 35;
+SET @level := 58;
+SET @npc_flags := 17; -- Gossip, quest, and training flags
+SET @speed_walk := 1.0;
+SET @speed_run := 1.14286;
+SET @detection_range := 18;
+SET @call_for_help_range := 5;
+SET @scale := 1.0;
+SET @dmg_min := 0;
+SET @dmg_max := 0;
+SET @dmg_school := 0;
+SET @attack_power := 0;
+SET @base_attack_time := 2000;
+SET @ranged_attack_time := 2000;
+SET @unit_class := 1;
+SET @ranged_dmg_min := 0;
+SET @ranged_dmg_max := 0;
+SET @ranged_attack_power := 0;
+SET @type := 7; -- Humanoid type
+SET @inhabit_type := 3;
+SET @regeneration := 3;
+SET @flags_extra := 0;
+
+-- Calculating health, mana, and armor based on level
+SET @base_health := @level * 10;
+SET @health_min := @base_health * 0.9;
+SET @health_max := @base_health * 1.1;
+SET @base_mana := @level * 5;
+SET @mana_min := @base_mana * 0.9;
+SET @mana_max := @base_mana * 1.1;
+SET @armor := @level * 2;
+
+-- Inserting or replacing the entry in the creature_template table
+REPLACE INTO `creature_template` 
+(`entry`, `display_id1`, `name`, `subname`, `faction`, `level_min`, `level_max`, `npc_flags`, `speed_walk`, `speed_run`, `detection_range`, `call_for_help_range`, `scale`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `inhabit_type`, `regeneration`, `flags_extra`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`) 
+VALUES 
+(@entry, @display_id, @name, @subname, @faction, @level, @level, @npc_flags, @speed_walk, @speed_run, @detection_range, @call_for_help_range, @scale, @dmg_min, @dmg_max, @dmg_school, @attack_power, @base_attack_time, @ranged_attack_time, @unit_class, @ranged_dmg_min, @ranged_dmg_max, @ranged_attack_power, @type, @inhabit_type, @regeneration, @flags_extra, @health_min, @health_max, @mana_min, @mana_max, @armor);
+
+-- Goldsmith spell list:
+
+-- Recipe Item Name: Massive Jewel Circlet (55264)
+-- Cost:5800
+-- Recipe Learning Requirements: 300 (min 315, max 330)
+-- Required Materials: 41321 (1), 12364 (1), 55154 (3), 55247 (1)
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41302; 
+SET @craft_spell_id = 41303; 
+SET @skill_line_entry = 17201;
+SET @output_item_id = 55264; 
+SET @recipe_spell_name = 'Massive Jewel Circlet'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 5800;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41327;  -- Jewelers Scope
+SET @skill_level_required = 315; 
+SET @skill_level_max = 330; 
+SET @skill_trainer_required = 300;
+SET @reagent_item_1 = 41321; SET @reagent_item_count_1 = 1;
+SET @reagent_item_2 = 12364; SET @reagent_item_count_2 = 1;
+SET @reagent_item_3 = 55154; SET @reagent_item_count_3 = 3;
+SET @reagent_item_4 = 55247; SET @reagent_item_count_4 = 1;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Golden Scepter of Authority (56036)
+-- Cost:6800
+-- Recipe Learning Requirements: 240 (min 260, max 280)
+-- Required Materials: 3577 (8), 3860 (2), 4304 (2), 55246 (6)
+-- Requires:Precision Jewelers Kit, Jewelers Lens, Forge
+
+
+SET @learn_spell_id = 41304; 
+SET @craft_spell_id = 41305; 
+SET @skill_line_entry = 17202;
+SET @output_item_id = 56036; 
+SET @recipe_spell_name = 'Golden Scepter of Authority'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 6800;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Lens
+SET @skill_level_required = 260; 
+SET @skill_level_max = 280; 
+SET @skill_trainer_required = 240;
+SET @reagent_item_1 = 3577; SET @reagent_item_count_1 = 8;
+SET @reagent_item_2 = 3860; SET @reagent_item_count_2 = 2;
+SET @reagent_item_3 = 4304; SET @reagent_item_count_3 = 2;
+SET @reagent_item_4 = 55246; SET @reagent_item_count_4 = 6;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Gemkeeper's Folio (55243)
+-- Cost:10000
+-- Recipe Learning Requirements: 210 (min 235, max 255)
+-- Required Materials: 3860 (18), 55249 (3) 55251 (3), 3864 (3) , 55152 (6)
+-- Requires:Precision Jewelers Kit, Jewelers Lens, Forge
+
+SET @learn_spell_id = 41306; 
+SET @craft_spell_id = 41307; 
+SET @skill_line_entry = 17203;
+SET @output_item_id = 55243; 
+SET @recipe_spell_name = 'Gemkeeper\'s Folio'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 10000;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Lens
+SET @skill_level_required = 235; 
+SET @skill_level_max = 255; 
+SET @skill_trainer_required = 210;
+SET @reagent_item_1 = 3860; SET @reagent_item_count_1 = 18;
+SET @reagent_item_2 = 55249; SET @reagent_item_count_2 = 3;
+SET @reagent_item_3 = 55251; SET @reagent_item_count_3 = 3;
+SET @reagent_item_4 = 3864; SET @reagent_item_count_4 = 3;
+SET @reagent_item_5 = 55152; SET @reagent_item_count_5 = 6;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Stellar Ruby Ring (55261)
+-- Cost:6400
+-- Recipe Learning Requirements: 280 (min 300, max 320)
+-- Required Materials: 41321 (1), 7910 (5), 55154 (3), 55247 (1)
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41308; 
+SET @craft_spell_id = 41309; 
+SET @skill_line_entry = 17204;
+SET @output_item_id = 55261; 
+SET @recipe_spell_name = 'Stellar Ruby Ring'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 6400;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Scope
+SET @skill_level_required = 300; 
+SET @skill_level_max = 320; 
+SET @skill_trainer_required = 280;
+SET @reagent_item_1 = 41321; SET @reagent_item_count_1 = 1;
+SET @reagent_item_2 = 7910; SET @reagent_item_count_2 = 5;
+SET @reagent_item_3 = 55154; SET @reagent_item_count_3 = 3;
+SET @reagent_item_4 = 55247; SET @reagent_item_count_4 = 1;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Stellar Gemguards (55178)
+-- Cost:5200
+-- Recipe Learning Requirements: 245 (min 270, max 290)
+-- Required Materials: 3860 (8), 55249 (1), 55251 (1), 55250 (1), 
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41310; 
+SET @craft_spell_id = 41311; 
+SET @skill_line_entry = 17206;
+SET @output_item_id = 55178; 
+SET @recipe_spell_name = 'Stellar Gemguards'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 5200;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Scope
+SET @skill_level_required = 270; 
+SET @skill_level_max = 290; 
+SET @skill_trainer_required = 245;
+SET @reagent_item_1 = 3860; SET @reagent_item_count_1 = 8;
+SET @reagent_item_2 = 55249; SET @reagent_item_count_2 = 1;
+SET @reagent_item_3 = 55251; SET @reagent_item_count_3 = 1;
+SET @reagent_item_4 = 55250; SET @reagent_item_count_4 = 1;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Garnet Guardian Staff (55241)
+-- Cost:12400
+-- Recipe Learning Requirements: 265 (min 290, max 310)
+-- Required Materials: 12359 (24), 12800 (2), 12799 (2), 7075 (2), 55154 (4)
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41312; 
+SET @craft_spell_id = 41313; 
+SET @skill_line_entry = 17207;
+SET @output_item_id = 55241; 
+SET @recipe_spell_name = 'Garnet Guardian Staff'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 12400;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Scope
+SET @skill_level_required = 290; 
+SET @skill_level_max = 310; 
+SET @skill_trainer_required = 265;
+SET @reagent_item_1 = 12359; SET @reagent_item_count_1 = 24;
+SET @reagent_item_2 = 12800; SET @reagent_item_count_2 = 2;
+SET @reagent_item_3 = 12799; SET @reagent_item_count_3 = 2;
+SET @reagent_item_4 = 7075; SET @reagent_item_count_4 = 2;
+SET @reagent_item_5 = 55154; SET @reagent_item_count_5 = 4;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Moonlit Charm (55198)
+-- Cost:5200
+-- Recipe Learning Requirements: 255 (min 275, max 295)
+-- Required Materials: 3860 (12), 55251 (4), 55247 (1)
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41314; 
+SET @craft_spell_id = 41315; 
+SET @skill_line_entry = 17208;
+SET @output_item_id = 55198; 
+SET @recipe_spell_name = 'Moonlit Charm'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 5200;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Scope
+SET @skill_level_required = 275; 
+SET @skill_level_max = 295; 
+SET @skill_trainer_required = 255;
+SET @reagent_item_1 = 3860; SET @reagent_item_count_1 = 12;
+SET @reagent_item_2 = 55251; SET @reagent_item_count_2 = 4;
+SET @reagent_item_3 = 55247; SET @reagent_item_count_3 = 1;
+SET @reagent_item_4 = 0; SET @reagent_item_count_4 = 0;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Recipe Item Name: Twilight Opal Cascade (55263)
+-- Cost:12500
+-- Recipe Learning Requirements: 300 (min 320, max 340)
+-- Required Materials: 56033 (1), 12799 (3), 20520 (3), 55248 (2)
+-- Requires:Precision Jewelers Kit, Jewelers Scope, Forge
+
+SET @learn_spell_id = 41316; 
+SET @craft_spell_id = 41317; 
+SET @skill_line_entry = 17209;
+SET @output_item_id = 55263; 
+SET @recipe_spell_name = 'Twilight Opal Cascade'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 12500;
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelers Scope
+SET @skill_level_required = 320; 
+SET @skill_level_max = 340; 
+SET @skill_trainer_required = 300;
+SET @reagent_item_1 = 56033; SET @reagent_item_count_1 = 1;
+SET @reagent_item_2 = 12799; SET @reagent_item_count_2 = 3;
+SET @reagent_item_3 = 20520; SET @reagent_item_count_3 = 3;
+SET @reagent_item_4 = 55248; SET @reagent_item_count_4 = 2;
+SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
+SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 0; 
+SET @cast_time_index = 1; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 256; 
+SET @on_skill_get_bool = 0; 
+SET @skill_id = @JEWELCRAFTING;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- Ruby Ring of Ruin , and Encrusted Gemstone Ring
+
+UPDATE `item_template` SET `required_spell` = 57553 WHERE `entry` = 70101;
+UPDATE `item_template` SET `required_spell` = 57553 WHERE `entry` = 70102;
+UPDATE `item_template` SET `required_spell` = 57553 WHERE `entry` = 56026;
+
+UPDATE item_template
+SET display_id = 27350
+WHERE entry = 55178;
+
+UPDATE item_template
+SET display_id = 28476
+WHERE entry = 55243;
+
+-- Moonlit Charm (entry 55198)
+UPDATE item_template
+SET display_id = 9657
+WHERE entry = 55198;
+
+-- Garnet Guardian Staff (entry 55241)
+UPDATE item_template
+SET display_id = 20391
+WHERE entry = 55241;
+
+UPDATE creature_template SET script_name = 'npc_jewelcrafter', npc_flags = 19, trainer_type = 2 WHERE entry IN (73101, 73102);
+UPDATE creature_template SET trainer_id = 7 WHERE entry = 73101; -- Goldsmith
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (3875, 60305, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (60305, '<Thegren''s features stare toward you, piercing your soul.>', '', 0, 0, 0, 1, 2, 0, 0, 0, 0);
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (3876, 60306, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (60306, 'It takes a skilled hand to create works of art. Though ones skill is not fully realized, until paired with a mind of brilliance.$B$BThat is how one creates beauty.', '', 0, 0, 0, 1, 2, 0, 0, 0, 0);
