@@ -1402,3 +1402,135 @@ UPDATE skill_line_ability
 JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
 SET skill_line_ability.min_value = 320
 WHERE spell_template.name = 'Emerald Monarch\'s Glow';
+
+-- Heavy Gritted Paper (55152)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 150
+WHERE spell_template.name = 'Heavy Gritted Paper';
+
+-- Heavy Gemstone Cluster (41344)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 150
+WHERE spell_template.name = 'Heavy Gemstone Cluster';
+
+-- Goldfire Crystal Bracelet (55144)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 155
+WHERE spell_template.name = 'Goldfire Crystal Bracelet';
+
+-- Quartz Halo (5514)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 175
+WHERE spell_template.name = 'Quartz Halo';
+
+-- Staff of Blossomed Jade (55148)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 185
+WHERE spell_template.name = 'Staff of Blossomed Jade';
+
+-- Jade Harmony Circlet (55143)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 190
+WHERE spell_template.name = 'Jade Harmony Circlet';
+
+-- Goldenshade Quartz Crown (55145)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 195
+WHERE spell_template.name = 'Goldenshade Quartz Crown';
+
+-- The Golden Goblet (55146)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 195
+WHERE spell_template.name = 'The Golden Goblet';
+
+-- Powerful Citrine Pendant (55147)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 195
+WHERE spell_template.name = 'Powerful Citrine Pendant';
+
+-- Rough Mithril Ring (41322)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 175
+WHERE spell_template.name = 'Rough Mithril Ring';
+
+-- Ironsun Citrine Ring (55141)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 200
+WHERE spell_template.name = 'Ironsun Citrine Ring';
+
+-- Shimmering Gold Necklace (41340)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 205
+WHERE spell_template.name = 'Shimmering Gold Necklace';
+
+-- Ironbloom Ring (41342)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 205
+WHERE spell_template.name = 'Ironbloom Ring';
+
+-- Aquamarine Pendant (41342)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 205
+WHERE spell_template.name = 'Aquamarine Pendant';
+
+-- Ornate Mithril Scepter (41343)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 220
+WHERE spell_template.name = 'Ornate Mithril Scepter';
+
+-- Aquamarine Pendant (55196)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 215
+WHERE spell_template.name = 'Aquamarine Pendant';
+
+-- Solid Gemstone Cluster (56020)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 200
+WHERE spell_template.name = 'Solid Gemstone Cluster';
+
+-- Rough Truesilver Ring (41341)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 200
+WHERE spell_template.name = 'Rough Truesilver Ring';
+
+-- Greater Binding Signet (41346)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 230
+WHERE spell_template.name = 'Greater Binding Signet';
+
+-- Royal Gemstone Staff (41345)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 235
+WHERE spell_template.name = 'Royal Gemstone Staff';
+
+-- Runed Truesilver Ring (41347)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 240
+WHERE spell_template.name = 'Runed Truesilver Ring';
+
+-- Emberstone Idol (41349)
+UPDATE skill_line_ability
+JOIN spell_template ON skill_line_ability.spell_id = spell_template.entry
+SET skill_line_ability.min_value = 240
+WHERE spell_template.name = 'Emberstone Idol';
