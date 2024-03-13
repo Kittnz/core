@@ -57,3 +57,16 @@ update creature_loot_template set ChanceOrQuestChance = 25, groupid = 6 where en
 update creature_loot_template set ChanceOrQuestChance = 25, groupid = 6 where entry = 7361 and item = 80737;
 update creature_loot_template set ChanceOrQuestChance = 25, groupid = 6 where entry = 7361 and item = 80738;
 update creature_loot_template set ChanceOrQuestChance = 25, groupid = 6 where entry = 7361 and item = 80739;
+
+-- The items dropped by 56019 (Dense Gemstone Cluster), and 56020 (Solid Gemstone Cluster), are backwards, and need to be swapped (Example : Dense Gemstone Cluster needs to have the drops of solid gemstone cluster, and vice versa).
+delete from item_loot_template where entry in (56019,56020);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56020, 7910, 15, 0, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56020, 30608, 100, 1, -30608, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56020, 55250, 20, 0, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56020, 55251, 15, 0, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 12361, 15, 1, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 12363, 2.5, 1, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 12364, 10, 1, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 12799, 15, 1, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 12800, 5, 1, 1, 1, 0);
+replace INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (56019, 30609, 100, 1, -30609, 1, 0);
