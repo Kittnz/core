@@ -2155,7 +2155,7 @@ void Player::AutoReSummonPet()
 }
 
 
-bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData, bool& hasGuildTabard)
+bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -2261,10 +2261,6 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData, bool& hasG
             *pData << uint8(0);
             continue;
         }
-
-        // Guild Tabard
-        if (itemId == 5976)
-            hasGuildTabard = true;
 
         *pData << uint32(proto->DisplayInfoID);
         *pData << uint8(proto->InventoryType);
