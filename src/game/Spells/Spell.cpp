@@ -3333,7 +3333,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 // For some reason all the creature Blink spells use this target type instead of the player one.
                 // Prevent them from teleporting to places that they can't normally walk to like under the map.
                 if (m_spellInfo->Effect[effIndex] == SPELL_EFFECT_LEAP)
-                    if (!m_caster->GetMap()->GetWalkHitPosition(m_caster->GetTransport(), x, y, z, x, y, z, NAV_GROUND | NAV_WATER, 1.0f, false) || (abs(m_caster->GetPositionZ() - z) > 5.0f))
+                    if (!m_caster->GetMap()->GetWalkHitPosition(m_caster->GetTransport(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), x, y, z, NAV_GROUND | NAV_WATER, 1.0f, false) || (abs(m_caster->GetPositionZ() - z) > radius))
                         m_caster->GetPosition(x, y, z);
 
                 m_targets.setDestination(x, y, z);
