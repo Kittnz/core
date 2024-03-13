@@ -5862,6 +5862,15 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_casterUnit->HasAuraType(SPELL_AURA_MOUNTED))
                     return SPELL_FAILED_ONLY_MOUNTED;
                 break;
+
+            case 27433:
+            {
+                uint32 areaId = m_casterUnit->GetAreaId();
+
+                if (areaId == 1519 || areaId == 1637)
+                    return SPELL_FAILED_NOT_HERE;
+
+            } break;
             case 25720: // Place Loot / Quest 8606 Decoy!
             {
                 if (Player* pPlayer = ToPlayer(GetAffectiveCaster()))
