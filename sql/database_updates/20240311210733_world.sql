@@ -1768,6 +1768,7 @@ UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `ca
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (7, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (4, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+DELETE FROM `npc_trainer_template` WHERE `entry` = 4 AND `spell` = @learn_spell_id;
 
 -- Recipe Item Name: Stellar Ruby Ring (55261)
 -- Cost:6400
@@ -2024,3 +2025,5 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (3876, 60306, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (60306, 'It takes a skilled hand to create works of art. Though ones skill is not fully realized, until paired with a mind of brilliance.$B$BThat is how one creates beauty.', '', 0, 0, 0, 1, 2, 0, 0, 0, 0);
+
+delete from npc_trainer_template where entry = 5 and spell = 30227;
