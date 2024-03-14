@@ -981,6 +981,9 @@ class World
         void RestoreLostGOs();
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
+        bool LoadConfigSettingsFromDB(bool reload = false);
+        void LoadConfigSettingsFromFile(bool reload = false);
+        void LoadConfigSettingsCommonPart(bool reload = false);
         void ExportConfigSettingsToDB();
 
         template<class Builder>
