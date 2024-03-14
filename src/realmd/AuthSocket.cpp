@@ -524,6 +524,16 @@ bool AuthSocket::_HandleLogonChallenge()
                 return true;
             }*/
 
+            uint32 account_id = fields[1].GetUInt32();
+
+            // Block login to account with negative coins balance. Requested by Bowser.
+            if (QueryResult* coinsResult = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u && `coins` < 0", account_id))
+            {
+                delete coinsResult;
+                pkt << (uint8)WOW_FAIL_NO_TIME;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }
 
             if (lockFlags & IP_LOCK)
             {
@@ -552,7 +562,6 @@ bool AuthSocket::_HandleLogonChallenge()
 
             if (!locked || (locked && (lockFlags & FIXED_PIN || lockFlags & TOTP)))
             {
-                uint32 account_id = fields[1].GetUInt32();
                 ///- If the account is banned, reject the logon attempt
                 std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT bandate,unbandate FROM account_banned WHERE "
                     "id = %u AND active = 1 AND (unbandate > UNIX_TIMESTAMP() OR unbandate = bandate) LIMIT 1", account_id));
