@@ -861,7 +861,13 @@ bool World::LoadConfigSettingsFromDB(bool reload)
 {
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT * FROM `world_config` WHERE `realm_id`=%u", realmID));
     if (!result)
+    {
+#ifdef WIN32
+        sLog.outError("No data in `world_config` table! Press enter to load from file.");
+        getchar();
+#endif
         return false;
+    }
 
     if (result->GetFieldCount() != (1 + CONFIG_UINT32_VALUE_COUNT + CONFIG_INT32_VALUE_COUNT + CONFIG_FLOAT_VALUE_COUNT + CONFIG_BOOL_VALUE_COUNT))
     {
