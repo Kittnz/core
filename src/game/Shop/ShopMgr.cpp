@@ -225,7 +225,7 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
     if (coins > 0)
     {
-        int64 newBalance = coins - price;
+        int64 newBalance = int64(coins) - price;
 
         if (newBalance >= 0 && newBalance < INT_MAX)
         {
