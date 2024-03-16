@@ -2474,7 +2474,7 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             return SPELL_CAST_OK;
         }
         // Disable big mounts in cities.
-        //case 46211: // Immortal Champion's Drake
+        case 46211: // Immortal Champion's Drake
         case 46212: // Riding Bronze Drake
         case 46504: // Red Goblin Shredder
         case 46505: // Green Goblin Shredder
