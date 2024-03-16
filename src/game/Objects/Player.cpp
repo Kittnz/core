@@ -1639,9 +1639,12 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             QuestStatusData& q_status = mQuestStatus[*iter];
             if (q_status.m_timer <= update_diff)
             {
-                uint32 quest_id  = *iter;
+                uint32 questId = *iter;
                 ++iter;                                     // current iter will be removed in FailQuest
-                FailQuest(quest_id);
+
+                // Do not fail timed quests with special objective once they are completed.
+                if (!(sObjectMgr.GetQuestTemplate(questId)->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && q_status.m_status == QUEST_STATUS_COMPLETE))
+                    FailQuest(questId);
             }
             else
             {
@@ -14085,7 +14088,9 @@ bool Player::CanCompleteQuest(uint32 quest_id) const
     if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && !q_status.m_explored)
         return false;
 
-    if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED) && q_status.m_timer == 0)
+    // Do not fail timed quests with special objective once they are completed.
+    if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED) && q_status.m_timer == 0 &&
+      !(qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && q_status.m_status == QUEST_STATUS_COMPLETE))
         return false;
 
     if (qInfo->GetRewOrReqMoney() < 0)
