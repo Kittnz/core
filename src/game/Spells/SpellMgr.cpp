@@ -2474,18 +2474,18 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             return SPELL_CAST_OK;
         }
         // Disable big mounts in cities.
-        case 46211:
-        case 46212:
-        case 46504:
-        case 46505:
-        case 46506:
-        case 46507:
-        case 46508:
-        case 46509:
-        case 46510:
-        case 46511:
-        case 46512:
-        case 46513:
+        case 46211: // Immortal Champion's Drake
+        case 46212: // Riding Bronze Drake
+        case 46504: // Red Goblin Shredder
+        case 46505: // Green Goblin Shredder
+        case 46506: // Red Spidertank
+        case 46507: // Black Spidertank
+        case 46508: // Blue Spidertank
+        case 46509: // Green Spidertank
+        case 46510: // Black Pounder
+        case 46511: // Blue Pounder
+        case 46512: // Green Pounder
+        case 46513: // Red Pounder
         {
             switch (player->GetCachedAreaId())
             {
