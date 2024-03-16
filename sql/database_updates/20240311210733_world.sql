@@ -2779,7 +2779,7 @@ SET @item_buy_price = 2400;
 SET @item_sell_price = 600;
 SET @item_skill_requirement = 755; -- Assuming 755 is the correct skill ID
 SET @item_skill_level = 170;
-SET @recipe_item_spell_id = 41330;
+SET @recipe_item_spell_id = 41332;
 SET @recipe_item_level = 39;
 SET @recipe_item_quality = 2; -- Uncommon quality
 
@@ -2792,7 +2792,7 @@ SET @item_buy_price = 2400;
 SET @item_sell_price = 600;
 SET @item_skill_requirement = 755; -- Assuming 755 is the correct skill ID
 SET @item_skill_level = 160;
-SET @recipe_item_spell_id = 41332;
+SET @recipe_item_spell_id = 41330;
 SET @recipe_item_level = 37;
 SET @recipe_item_quality = 2; -- Uncommon quality
 
