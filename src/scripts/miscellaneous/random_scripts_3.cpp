@@ -7376,8 +7376,13 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
                     pQuestGiver->HandleEmote(EMOTE_STATE_STAND);
                 }, 59000);
 
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }, 60000);
+
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer]()
+            {
                 if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60053))
                 {
                     player->KilledMonster(cInfo, ObjectGuid());
@@ -7394,7 +7399,7 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
                         }
                     }
                 }
-                });
+            });
         }
     }
 
