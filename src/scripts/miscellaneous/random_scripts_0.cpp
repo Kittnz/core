@@ -1355,13 +1355,26 @@ struct npc_the_cleanerAI : public ScriptedAI
         if (m_uiDespawnTimer < uiDiff)
         {
             if (m_creature->GetThreatManager().getThreatList().empty())
+            {
                 m_creature->ForcedDespawn();
+                return;
+            }
         }
         else
             m_uiDespawnTimer -= uiDiff;
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+        {
+            if (pPlayer->IsHardcore())
+            {
+                m_creature->GetThreatManager().modifyThreatPercent(pPlayer, -101);
+                pPlayer->TeleportToHomebind();
+                return;
+            }
+        }
 
         DoMeleeAttackIfReady();
     }
