@@ -1099,6 +1099,7 @@ void BattleGround::AddOrSetPlayerToCorrectBgGroup(Player *pPlayer, ObjectGuid pl
         group = new Group;
         SetBgRaid(team, group);
         group->Create(plr_guid, pPlayer->GetName());
+        group->SetLootMethod(FREE_FOR_ALL);
     }
 }
 
