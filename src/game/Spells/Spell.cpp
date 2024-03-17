@@ -5939,6 +5939,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                          m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN) &&
                         (m_spellInfo->IsHealSpell() ||
                          m_spellInfo->IsDispel() || // don't really care if the target is non-friendly, there's nothing to purge on Loatheb
+                         m_spellInfo->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_SHOCK>() || // prevent holy shock cast
                          m_spellInfo->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_HOLY_NOVA1>() || // prevent holy nova cast (casted spell is damage part, heal is triggered)
                          m_spellInfo->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>())) // prevent PW:Shield cast
                     {
