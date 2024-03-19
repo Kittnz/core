@@ -209,7 +209,6 @@ class ChatHandler
         bool HandleDebugFieldsModifyCommand(char* args);
         bool HandleDebugConditionCommand(char* args);
 		bool HandleDebugSetInstanceDataCommand(char* args);
-        bool HandleDebugBuffLimitCommand(char* args);
         bool HandleWarEffortInfoCommand(char* args);
         bool HandleWarEffortSetGongTimeCommand(char* args);
         bool HandleWarEffortSetStageCommand(char* args);
