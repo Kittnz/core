@@ -3333,7 +3333,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 // For some reason all the creature Blink spells use this target type instead of the player one.
                 // Prevent them from teleporting to places that they can't normally walk to like under the map.
                 if (m_spellInfo->Effect[effIndex] == SPELL_EFFECT_LEAP)
-                    if (!m_caster->GetMap()->GetWalkHitPosition(m_caster->GetTransport(), x, y, z, x, y, z, NAV_GROUND | NAV_WATER, 1.0f, false) || (abs(m_caster->GetPositionZ() - z) > 5.0f))
+                    if (!m_caster->GetMap()->GetWalkHitPosition(m_caster->GetTransport(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), x, y, z, NAV_GROUND | NAV_WATER, 1.0f, false) || (abs(m_caster->GetPositionZ() - z) > radius))
                         m_caster->GetPosition(x, y, z);
 
                 m_targets.setDestination(x, y, z);
@@ -5862,6 +5862,15 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_casterUnit->HasAuraType(SPELL_AURA_MOUNTED))
                     return SPELL_FAILED_ONLY_MOUNTED;
                 break;
+
+            case 27433:
+            {
+                uint32 areaId = m_casterUnit->GetAreaId();
+
+                if (areaId == 1519 || areaId == 1637)
+                    return SPELL_FAILED_NOT_HERE;
+
+            } break;
             case 25720: // Place Loot / Quest 8606 Decoy!
             {
                 if (Player* pPlayer = ToPlayer(GetAffectiveCaster()))
@@ -5930,6 +5939,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                          m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN) &&
                         (m_spellInfo->IsHealSpell() ||
                          m_spellInfo->IsDispel() || // don't really care if the target is non-friendly, there's nothing to purge on Loatheb
+                         m_spellInfo->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_SHOCK>() || // prevent holy shock cast
                          m_spellInfo->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_HOLY_NOVA1>() || // prevent holy nova cast (casted spell is damage part, heal is triggered)
                          m_spellInfo->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>())) // prevent PW:Shield cast
                     {

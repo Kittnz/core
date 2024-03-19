@@ -1639,9 +1639,12 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             QuestStatusData& q_status = mQuestStatus[*iter];
             if (q_status.m_timer <= update_diff)
             {
-                uint32 quest_id  = *iter;
+                uint32 questId = *iter;
                 ++iter;                                     // current iter will be removed in FailQuest
-                FailQuest(quest_id);
+
+                // Do not fail timed quests with special objective once they are completed.
+                if (!(sObjectMgr.GetQuestTemplate(questId)->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && q_status.m_status == QUEST_STATUS_COMPLETE))
+                    FailQuest(questId);
             }
             else
             {
@@ -2155,7 +2158,7 @@ void Player::AutoReSummonPet()
 }
 
 
-bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData, bool& hasGuildTabard)
+bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData)
 {
     //             0               1                2                3                 4                  5                       6                        7
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.playerBytes, characters.playerBytes2, characters.level, "
@@ -2261,10 +2264,6 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * pData, bool& hasG
             *pData << uint8(0);
             continue;
         }
-
-        // Guild Tabard
-        if (itemId == 5976)
-            hasGuildTabard = true;
 
         *pData << uint32(proto->DisplayInfoID);
         *pData << uint8(proto->InventoryType);
@@ -14089,7 +14088,9 @@ bool Player::CanCompleteQuest(uint32 quest_id) const
     if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && !q_status.m_explored)
         return false;
 
-    if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED) && q_status.m_timer == 0)
+    // Do not fail timed quests with special objective once they are completed.
+    if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED) && q_status.m_timer == 0 &&
+      !(qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT) && q_status.m_status == QUEST_STATUS_COMPLETE))
         return false;
 
     if (qInfo->GetRewOrReqMoney() < 0)

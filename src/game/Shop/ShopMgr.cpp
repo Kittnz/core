@@ -53,7 +53,10 @@ public:
             if (!player || !player->IsInWorld())
                 return;
 
-            player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+            if (m_balance < 0)
+                player->GetSession()->KickPlayer();
+            else
+                player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
         }
     }
     uint32 m_accountId;
@@ -191,12 +194,11 @@ int32 ShopMgr::GetBalance(uint32 accountId)
 {
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId));
 
-
     int32 balance = 0;
     if (result)
     {
         Field* fields = result->Fetch();
-        balance = std::max(0, fields[0].GetInt32());
+        balance = fields[0].GetInt32();
     }
     else
     {
@@ -223,7 +225,7 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
     if (coins > 0)
     {
-        int64 newBalance = coins - price;
+        int64 newBalance = int64(coins) - price;
 
         if (newBalance >= 0 && newBalance < INT_MAX)
         {
