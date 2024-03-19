@@ -426,6 +426,9 @@ void BattleGround::Update(uint32 diff)
                 // do not change any battleground's private variables
             }
         }
+
+        delete this;
+        return;
     }
 
     //update start time
