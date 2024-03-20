@@ -379,7 +379,67 @@ FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFla
             logfn += m_logsTimestamp;
     }
 
-    return fopen((m_logsDir+logfn).c_str(), mode);
+#ifndef WIN32
+    if (FILE* pFile = fopen((m_logsDir + logfn).c_str(), mode))
+    {
+        enum
+        {
+            KB = 1000,
+            MB = KB * 1000,
+            GB = MB * 1000
+
+        };
+
+        if (ftell(pFile) > 50 * GB && !(configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag, false)))
+        {
+            fclose(pFile);
+            std::string cmd = "split -b 50G -d  \"" + (m_logsDir + logfn) + "\" \"" + (m_logsDir + logfn) + "\"";
+            system(cmd.c_str());
+
+            pFile = fopen((m_logsDir + logfn + "00").c_str(), "rb");
+            if (!pFile)
+            {
+                printf("failed to split log file %s!\n", configFileName);
+                return fopen((m_logsDir + logfn).c_str(), mode);
+            }
+
+            fclose(pFile);
+
+            pFile = fopen((m_logsDir + logfn + "01").c_str(), "rb");
+            if (!pFile)
+            {
+                printf("failed to split log file %s!\n", configFileName);
+                return fopen((m_logsDir + logfn).c_str(), mode);
+            }
+
+            fclose(pFile);
+
+            cmd = "rm " + (m_logsDir + logfn);
+            system(cmd.c_str());
+
+            std::string name = logfn;
+            {
+                size_t dot_pos = name.find_last_of('.');
+                if (dot_pos != name.npos)
+                    name.insert(dot_pos, m_logsTimestamp);
+                else
+                    name += m_logsTimestamp;
+            }
+
+            cmd = "mv \"" + (m_logsDir + logfn + "00") + "\" \"" + (m_logsDir + name) + "\"";
+            system(cmd.c_str());
+
+            cmd = "mv \"" + (m_logsDir + logfn + "01") + "\" \"" + (m_logsDir + logfn) + "\"";
+            system(cmd.c_str());
+
+            pFile = fopen((m_logsDir + logfn).c_str(), mode);
+        }
+
+        return pFile;
+    }
+#endif
+
+    return fopen((m_logsDir + logfn).c_str(), mode);
 }
 
 FILE* Log::openGmlogPerAccount(uint32 account)
