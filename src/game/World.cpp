@@ -2565,7 +2565,7 @@ void World::Update(uint32 diff)
 
     sDailyQuestHandler.Update(diff);
 
-    m_dynamicRespawnRatio = float(sWorld.getConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP) / float(sWorld.GetActiveSessionCount());
+    m_dynamicRespawnRatio = float(sWorld.getConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP) / float(sWorld.GetActiveSessionCount()));
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
