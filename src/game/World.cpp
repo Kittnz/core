@@ -1455,6 +1455,7 @@ void World::LoadConfigSettingsFromFile(bool reload)
     setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, "Perf.ReportInterval", 600);
     setConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED, "Transfer.MaxGold", 300000);
     setConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED, "Transfer.MaxItemStack", 50);
+    setConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP, "DynamicScaling.PopulationStart", BLIZZLIKE_REALM_POPULATION);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -2564,6 +2565,8 @@ void World::Update(uint32 diff)
     sAccountMgr.Update(diff);
 
     sDailyQuestHandler.Update(diff);
+
+    m_dynamicRespawnRatio = float(sWorld.getConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP) / float(sWorld.GetActiveSessionCount());
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();

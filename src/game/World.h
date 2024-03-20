@@ -418,6 +418,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL,
     CONFIG_UINT32_MAX_GOLD_TRANSFERRED,
     CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED,
+    CONFIG_UINT32_DYNAMIC_SCALING_POP,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -903,6 +904,8 @@ class World
         /// Get the maximum number of parallel sessions on the server since last reboot
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
+
+        float m_dynamicRespawnRatio = 1.0f;
 
         uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
 

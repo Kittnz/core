@@ -425,10 +425,9 @@ void BattleGround::Update(uint32 diff)
                 RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
                 // do not change any battleground's private variables
             }
+            delete this;
+            return;
         }
-
-        delete this;
-        return;
     }
 
     //update start time
