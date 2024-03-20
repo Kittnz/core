@@ -400,6 +400,7 @@ FILE* Log::openLogFile(char const* configFileName, char const* configTimeStampFl
 
             };
 
+            fseek(pFile, 0L, SEEK_END);
             if (ftell(pFile) > 50 * GB && !(configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag, false)))
             {
                 printf("splitting log file %s\n", configFileName);
