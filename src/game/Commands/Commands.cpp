@@ -6234,6 +6234,7 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
+        PSendSysMessage("Current dynamic respawn rate: %f", sWorld.m_dynamicRespawnRatio);
 
         if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
             PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
