@@ -3,3 +3,6 @@ UPDATE `item_template` SET `sheath` = 3 WHERE `entry` = 21392;
 
 -- https://turtle-wow.org/bug-report?id=6588
 UPDATE `creature` SET `spawntimesecsmin` = 300, `spawntimesecsmax` = 300 WHERE `id` = 454;
+
+-- https://turtle-wow.org/bug-report?id=6673
+UPDATE `quest_template` SET `Objectives` = 'Find four Echoes of Medivh. They might be found in places of great significance for the mage. Then return to Dolvan with the key.' WHERE `entry` = 40826;
