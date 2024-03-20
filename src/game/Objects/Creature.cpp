@@ -1977,7 +1977,7 @@ void Creature::SetDeathState(DeathState s)
             if (data->spawn_flags & SPAWN_FLAG_RANDOM_RESPAWN_TIME)
                 respawnDelay *= float(urand(90, 110)) / 100.0f;
             if (data->spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-                respawnDelay *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+                respawnDelay *= sWorld.m_dynamicRespawnRatio;
         }
         m_respawnTime = time(nullptr) + respawnDelay;        // respawn delay (spawntimesecs)
 
