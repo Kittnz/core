@@ -4654,16 +4654,25 @@ bool World::IsCharacterLocked(uint32 guidLow)
     return m_lockedCharacterGuids.find(guidLow) != m_lockedCharacterGuids.end();
 }
 
-bool World::IsCharacterPDumped(uint32 guidLow)
+bool World::IsCharacterPDumpedRecently(uint32 guidLow, time_t timestamp)
 {
     std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
-    return m_dumpedCharGuids.find(guidLow) != m_dumpedCharGuids.end();
+
+    auto itr = m_autoPDumpCharTimes.find(guidLow);
+    if (itr == m_autoPDumpCharTimes.end())
+        return false;
+
+    for (auto const& timestamp2 : itr->second)
+        if (abs(timestamp2 - timestamp) < WEEK)
+            return true;
+
+    return false;
 }
 
-void World::AddPDumpedCharacterToList(uint32 guidLow)
+void World::AddPDumpedCharacterToList(uint32 guidLow, time_t timestamp)
 {
     std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
-    m_dumpedCharGuids.insert(guidLow);
+    m_autoPDumpCharTimes[guidLow].insert(timestamp);
 }
 
 void World::AutoPDumpWorker()
@@ -4694,7 +4703,7 @@ void World::AutoPDumpWorker()
                     break;
             }
             UnlockCharacter(guid);
-            AddPDumpedCharacterToList(guid);
+            AddPDumpedCharacterToList(guid, GetGameTime());
         }
     }
     CharacterDatabase.ThreadEnd();
@@ -4719,13 +4728,13 @@ void World::DeleteOldPDumps()
                         time_t timestamp = strtol(pDash + 1, &pDot, 10);
                         
                         if ((sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) && ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr)))
-                            || IsCharacterPDumped(guidLow)) // dont keep duplicates
+                            || IsCharacterPDumpedRecently(guidLow, timestamp)) // dont keep duplicates
                         {
                             std::string fullPath = sWorld.GetPDumpDirectory() + "/" + dp->d_name;
                             filesToDelete.insert(fullPath);
                         }
                         else
-                            AddPDumpedCharacterToList(guidLow);
+                            AddPDumpedCharacterToList(guidLow, timestamp);
                     }
                 }
             }
