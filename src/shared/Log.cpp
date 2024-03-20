@@ -392,6 +392,8 @@ FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFla
 
         if (ftell(pFile) > 50 * GB && !(configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag, false)))
         {
+            printf("splitting log file %s\n", configFileName);
+
             fclose(pFile);
             std::string cmd = "split -b 50G -d  \"" + (m_logsDir + logfn) + "\" \"" + (m_logsDir + logfn) + "\"";
             system(cmd.c_str());
