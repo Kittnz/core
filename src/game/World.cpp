@@ -2224,8 +2224,7 @@ void World::SetInitialWorldSettings()
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
     m_shopThread = std::thread(&ShopMgr::ProcessRequestsWorker, &sShopMgr);
 
-    if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
-        DeleteOldPDumps();
+    DeleteOldPDumps();
 
 #ifdef USE_ANTICHEAT
 	sSuspiciousStatisticMgr.Initialize();
@@ -4645,6 +4644,18 @@ bool World::IsCharacterLocked(uint32 guidLow)
     return m_lockedCharacterGuids.find(guidLow) != m_lockedCharacterGuids.end();
 }
 
+bool World::IsCharacterPDumped(uint32 guidLow)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    return m_dumpedCharGuids.find(guidLow) != m_dumpedCharGuids.end();
+}
+
+void World::AddPDumpedCharacterToList(uint32 guidLow)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    m_dumpedCharGuids.insert(guidLow);
+}
+
 void World::AutoPDumpWorker()
 {
     CharacterDatabase.ThreadStart();
@@ -4673,6 +4684,7 @@ void World::AutoPDumpWorker()
                     break;
             }
             UnlockCharacter(guid);
+            AddPDumpedCharacterToList(guid);
         }
     }
     CharacterDatabase.ThreadEnd();
@@ -4693,13 +4705,17 @@ void World::DeleteOldPDumps()
                 {
                     if (char* pDot = strstr(dp->d_name, ".bak"))
                     {
+                        uint32 guidLow = strtol(dp->d_name + 4, &pDash, 10);
                         time_t timestamp = strtol(pDash + 1, &pDot, 10);
                         
-                        if ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr))
+                        if ((sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) && ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr)))
+                            || IsCharacterPDumped(guidLow)) // dont keep duplicates
                         {
                             std::string fullPath = sWorld.GetPDumpDirectory() + "/" + dp->d_name;
                             filesToDelete.insert(fullPath);
                         }
+                        else
+                            AddPDumpedCharacterToList(guidLow);
                     }
                 }
             }
