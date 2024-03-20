@@ -296,6 +296,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         bool m_wardenDebug;
         Color m_colors[LOG_TYPE_MAX];
         uint32 m_logFilter;
+        time_t m_lastLogSplitTime;
 
         // cache values for after initilization use (like gm log per account case)
         std::string m_logsDir;
