@@ -346,47 +346,46 @@ void Log::Initialize()
     logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a+");
     logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a+");
     logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
-    logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
-    logFiles[LOG_API] = openLogFile("ApiLogFile", nullptr, "a+");
+logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
+logFiles[LOG_API] = openLogFile("ApiLogFile", nullptr, "a+");
 
-    timestampPrefix[LOG_DBERRFIX] = false;
+timestampPrefix[LOG_DBERRFIX] = false;
 
-    // Main log file settings
-    m_wardenDebug = sConfig.GetBoolDefault("Warden.DebugLog", false);
-    m_includeTime = sConfig.GetBoolDefault("LogTime", false);
-    m_logLevel = LogLevel(sConfig.GetIntDefault("LogLevel", 0));
-    m_logFileLevel = LogLevel(sConfig.GetIntDefault("LogFileLevel", 0));
-    InitColors(sConfig.GetStringDefault("LogColors", ""));
+// Main log file settings
+m_wardenDebug = sConfig.GetBoolDefault("Warden.DebugLog", false);
+m_includeTime = sConfig.GetBoolDefault("LogTime", false);
+m_logLevel = LogLevel(sConfig.GetIntDefault("LogLevel", 0));
+m_logFileLevel = LogLevel(sConfig.GetIntDefault("LogFileLevel", 0));
+InitColors(sConfig.GetStringDefault("LogColors", ""));
 
-    // Smartlog data
-    InitSmartlogEntries(sConfig.GetStringDefault("Smartlog.ExtraEntries", ""));
-    InitSmartlogGuids(sConfig.GetStringDefault("Smartlog.ExtraGuids", ""));
+// Smartlog data
+InitSmartlogEntries(sConfig.GetStringDefault("Smartlog.ExtraEntries", ""));
+InitSmartlogGuids(sConfig.GetStringDefault("Smartlog.ExtraGuids", ""));
 
-    m_logFilter = 0;
-    for(int i = 0; i < LOG_FILTER_COUNT; ++i)
-        if (*logFilterData[i].name)
-            if (sConfig.GetBoolDefault(logFilterData[i].configName, logFilterData[i].defaultState))
-                m_logFilter |= (1 << i);
+m_logFilter = 0;
+for (int i = 0; i < LOG_FILTER_COUNT; ++i)
+    if (*logFilterData[i].name)
+        if (sConfig.GetBoolDefault(logFilterData[i].configName, logFilterData[i].defaultState))
+            m_logFilter |= (1 << i);
 
-    // Char log settings
-    m_charLog_Dump = sConfig.GetBoolDefault("CharLogDump", false);
+// Char log settings
+m_charLog_Dump = sConfig.GetBoolDefault("CharLogDump", false);
 }
 
-FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFlag, char const* mode)
+FILE* Log::openLogFile(char const* configFileName, char const* configTimeStampFlag, char const* mode)
 {
-    std::string logfn=sConfig.GetStringDefault(configFileName, "");
+    std::string logfn = sConfig.GetStringDefault(configFileName, "");
     if (logfn.empty())
         return nullptr;
 
-    if (configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag,false))
+    if (configTimeStampFlag && sConfig.GetBoolDefault(configTimeStampFlag, false))
     {
         size_t dot_pos = logfn.find_last_of('.');
-        if (dot_pos!=logfn.npos)
-            logfn.insert(dot_pos,m_logsTimestamp);
+        if (dot_pos != logfn.npos)
+            logfn.insert(dot_pos, m_logsTimestamp);
         else
             logfn += m_logsTimestamp;
     }
-
 
 #ifndef WIN32
     if (sConfig.GetBoolDefault("SplitLogs", false) && ((m_lastLogSplitTime + MONTH) < time(nullptr)))
@@ -416,41 +415,58 @@ FILE* Log::openLogFile(char const* configFileName,char const* configTimeStampFla
                 std::string cmd = "split -b 50G -d  \"" + (m_logsDir + logfn) + "\" \"" + (m_logsDir + logfn) + "\"";
                 system(cmd.c_str());
 
-                pFile = fopen((m_logsDir + logfn + "00").c_str(), "rb");
-                if (!pFile)
+                uint32 i = 0;
+                do
                 {
-                    printf("failed to split log file %s!\n", configFileName);
-                    return fopen((m_logsDir + logfn).c_str(), mode);
-                }
+                    std::string num = std::to_string(i);
+                    if (num.size() == 1)
+                        num = "0" + num;
 
-                fclose(pFile);
+                    pFile = fopen((m_logsDir + logfn + num).c_str(), "rb");
+                    if (!pFile)
+                    {
+                        printf("error, %s does not exist\n", (m_logsDir + logfn + num).c_str());
+                        break;
+                    }
+                    fclose(pFile);
 
-                pFile = fopen((m_logsDir + logfn + "01").c_str(), "rb");
-                if (!pFile)
-                {
-                    printf("failed to split log file %s!\n", configFileName);
-                    return fopen((m_logsDir + logfn).c_str(), mode);
-                }
+                    std::string num2 = std::to_string(i + 1);
+                    if (num2.size() == 1)
+                        num2 = "0" + num2;
 
-                fclose(pFile);
+                    // check if there is a next file
+                    // last one we rename to default name
+                    if (FILE* pNextFile = fopen((m_logsDir + logfn + num2).c_str(), "rb"))
+                    {
+                        fclose(pNextFile);
 
-                cmd = "rm " + (m_logsDir + logfn);
-                system(cmd.c_str());
+                        std::string name = logfn;
+                        {
+                            size_t dot_pos = name.find_last_of('.');
+                            if (dot_pos != name.npos)
+                                name.insert(dot_pos, "_split_" + m_logsTimestamp + num);
+                            else
+                                name += "_split_" + m_logsTimestamp + num;
+                        }
 
-                std::string name = logfn;
-                {
-                    size_t dot_pos = name.find_last_of('.');
-                    if (dot_pos != name.npos)
-                        name.insert(dot_pos, m_logsTimestamp);
+                        cmd = "mv \"" + (m_logsDir + logfn + num) + "\" \"" + (m_logsDir + name) + "\"";
+                        system(cmd.c_str());
+                    }
                     else
-                        name += m_logsTimestamp;
-                }
+                    {
+                        // this is the last file, rename it to default name and continue using it
 
-                cmd = "mv \"" + (m_logsDir + logfn + "00") + "\" \"" + (m_logsDir + name) + "\"";
-                system(cmd.c_str());
+                        cmd = "rm " + (m_logsDir + logfn);
+                        system(cmd.c_str());
 
-                cmd = "mv \"" + (m_logsDir + logfn + "01") + "\" \"" + (m_logsDir + logfn) + "\"";
-                system(cmd.c_str());
+                        cmd = "mv \"" + (m_logsDir + logfn + num) + "\" \"" + (m_logsDir + logfn) + "\"";
+                        system(cmd.c_str());
+
+                        break;
+                    }
+
+                    ++i;
+                } while (true);
 
                 pFile = fopen((m_logsDir + logfn).c_str(), mode);
             }
