@@ -9,3 +9,6 @@ UPDATE `quest_template` SET `Objectives` = 'Find four Echoes of Medivh. They mig
 
 -- https://turtle-wow.org/bug-report?id=6462
 UPDATE `item_template` SET `class` = 4, `disenchant_id` = 10 WHERE `entry` = 61530;
+
+-- https://turtle-wow.org/bug-report?id=6113
+UPDATE `custom_character_skins` SET `skin_male` = 13 WHERE `token_id` = 61106;
