@@ -1313,6 +1313,34 @@ bool ChatHandler::ListBattlegroundsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleListMapsCommand(char* args)
+{
+    const auto& allMaps = sMapMgr.Maps();
+
+    uint32 continentMaps = 0, instanceMaps = 0, battlegroundMaps = 0;
+
+    PSendSysMessage("All maps currently active:");
+    for (const auto& [mapId, map] : allMaps)
+    {
+        auto mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId.nMapId);
+        if (mapEntry)
+        {
+            PSendSysMessage("(ID %u, instance %u) %s", mapId.nMapId, mapId.nInstanceId, mapEntry->name);
+
+            if (mapEntry->IsBattleGround())
+                ++battlegroundMaps;
+            else if (mapEntry->IsRaid() || mapEntry->IsDungeon())
+                ++instanceMaps;
+            else
+                ++continentMaps;
+        }
+    }
+
+    PSendSysMessage("Continent maps: %u, battleground maps: %u, instance maps: %u", continentMaps, battlegroundMaps, instanceMaps);
+
+    return true;
+}
+
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
