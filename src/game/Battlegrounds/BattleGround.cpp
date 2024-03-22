@@ -261,6 +261,34 @@ BattleGround::~BattleGround()
 
 void BattleGround::Update(uint32 diff)
 {
+
+    /*********************************************************/
+/***           BATTLEGROUND ENDING SYSTEM              ***/
+/*********************************************************/
+
+    if (GetStatus() == STATUS_WAIT_LEAVE)
+    {
+        // remove all players from battleground after 2 minutes
+        m_EndTime -= diff;
+        if (m_EndTime <= 0)
+        {
+            m_EndTime = 0;
+            BattleGroundPlayerMap::iterator itr, next;
+            for (itr = m_Players.begin(); itr != m_Players.end(); itr = next)
+            {
+                next = itr;
+                ++next;
+                //itr is erased here!
+                RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
+                // do not change any battleground's private variables
+            }
+            delete this;
+            return;
+        }
+    }
+
+
+
     if (!GetPlayersSize())
     {
         // BG is empty
@@ -403,31 +431,6 @@ void BattleGround::Update(uint32 diff)
     {
         StartingEventDespawnDoors();
         m_Events |= BG_DOORS_DESPAWNED;
-    }
-
-    /*********************************************************/
-    /***           BATTLEGROUND ENDING SYSTEM              ***/
-    /*********************************************************/
-
-    if (GetStatus() == STATUS_WAIT_LEAVE)
-    {
-        // remove all players from battleground after 2 minutes
-        m_EndTime -= diff;
-        if (m_EndTime <= 0)
-        {
-            m_EndTime = 0;
-            BattleGroundPlayerMap::iterator itr, next;
-            for (itr = m_Players.begin(); itr != m_Players.end(); itr = next)
-            {
-                next = itr;
-                ++next;
-                //itr is erased here!
-                RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
-                // do not change any battleground's private variables
-            }
-            delete this;
-            return;
-        }
     }
 
     //update start time
