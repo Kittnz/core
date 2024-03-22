@@ -159,6 +159,9 @@ enum NaxxAreaTriggers : uint32
 static const WorldLocation toFrostwyrmTPPos(533, 3498.13f, -5349.6f, 144.967f, 1.48353f);
 static const WorldLocation entranceHubTPPos(533, 3023.52f, -3434.31f, 296.1f, 0.0f);
 
+static const G3D::Vector2 DK_DOOR_A(2600.15f, -3008.61f);
+static const G3D::Vector2 DK_DOOR_B(2579.34f, -3029.44f);
+
 enum NaxxGOs : uint32
 {
     // Arachnid Quarter
