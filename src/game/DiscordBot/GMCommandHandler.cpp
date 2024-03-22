@@ -92,7 +92,7 @@ namespace DiscordBot
             )
         );
 
-        src.message_event->reply(std::move(msg));
+        _commHandler->reply(std::move(msg), src);
     }
 
     void GMCommandHandler::LogCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
