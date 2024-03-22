@@ -25,3 +25,16 @@ replace into item_template (entry, name, description, class, subclass, material,
 -- cloak
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (55016, 'Test Cloak 1', '', 4, 1, 7, 1, 68089, 1, 0, 0, -1, -1, 4, 1, 16, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 50, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (55017, 'Test Cloak 2', '', 4, 1, 7, 1, 68090, 1, 0, 0, -1, -1, 4, 1, 16, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 50, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- help rmj
+update item_template set subclass = 3, required_reputation_rank = 4 where entry = 55019; -- Enforcer Guard Belt
+update item_template set display_id = 9836 where entry = 55020; -- Faithful Loop
+update item_template set display_id = 1399 where entry = 55022; -- Bishop Miranda's Rosary
+update item_template set display_id = 7268 where entry = 41326; -- Jewelry Lens
+update item_template set display_id = 22923 where entry = 55268; -- Quicksilver Whirl
+update item_template set display_id = 68099 where entry = 55267; -- Ethereal Frostspark Crown
+update item_template set display_id = 68100 where entry = 55266; -- Sunburst Tiara
+update item_template set display_id = 28733, stat_value1 = 12, spellid_1 = 45421, spelltrigger_1 = 1 where entry = 55263; -- Twilight Opal Cascade
+update item_template set stat_value2 = 8, spellid_1 = 9415, spelltrigger_1 = 1 where entry = 55265; -- Emerald Monarch's Glow
+update item_template set stat_value2 = 0, stat_value1 = 12, stat_type1 = 7, spellid_1 = 12310, spelltrigger_1 = 1 where entry = 55261; -- Stellar Ruby Ring
+update item_template set stat_value2 = 8 where entry = 55259; -- Sapphire Luminesce
