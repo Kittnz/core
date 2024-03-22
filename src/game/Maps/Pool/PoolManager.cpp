@@ -34,15 +34,15 @@ bool PoolObject::CanBeSpawned() const
 {
     if (exclude)
         return false;
-    if (spawnFlags & FLAG_SPAWN_ENABLE_IF_WORLD_POP_OVER_BLIZZLIKE && sWorld.GetActiveSessionCount() <= BLIZZLIKE_REALM_POPULATION)
+    if (spawnFlags & FLAG_SPAWN_ENABLE_IF_WORLD_POP_OVER_BLIZZLIKE && sWorld.GetActiveSessionCount() <= sWorld.m_dynamicRespawnRatio)
         return false;
     return true;
 }
 
 uint32 PoolTemplateData::GetSpawnCount() const
 {
-    if (PoolFlags & POOL_FLAG_MAXLIMIT_SCALING_LINEAR && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-        return uint32(MaxLimit * float(sWorld.GetActiveSessionCount() / float(BLIZZLIKE_REALM_POPULATION)));
+    if (PoolFlags & POOL_FLAG_MAXLIMIT_SCALING_LINEAR && sWorld.GetActiveSessionCount() > sWorld.m_dynamicRespawnRatio)
+        return uint32(MaxLimit * float(sWorld.GetActiveSessionCount() / float(sWorld.m_dynamicRespawnRatio)));
 
     return MaxLimit;
 }
