@@ -108,9 +108,6 @@ uint8 instance_naxxramas::GetNumEndbossDead()
     return ret;
 }
 
-static const G3D::Vector2 DK_DOOR_A(2600.15f, -3008.61f);
-static const G3D::Vector2 DK_DOOR_B(2579.34f, -3029.44f);
-
 bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
 {
     if (pWho->IsInEvadeMode())
