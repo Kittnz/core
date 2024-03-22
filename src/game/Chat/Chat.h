@@ -484,6 +484,7 @@ class ChatHandler
         bool HandleListDestroyedItemsCommand(char* args);
         bool HandleListBuybackItemsCommand(char* args);
         bool HandleListHostileRefsCommand(char* args);
+        bool HandleListMapsCommand(char* args);
         bool ListBattlegroundsCommand(char* args);
         bool HandleListThreatCommand(char* args);
 
