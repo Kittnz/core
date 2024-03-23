@@ -1655,5 +1655,7 @@ SET effectItemType1 = 56055
 WHERE name = 'Draenethyst Baton';
 
 UPDATE `spell_template` SET `totem1` = 55155 WHERE `entry` = 41231;
-UPDATE `spell_template` SET `requiresSpellFocus` = 3 WHERE `name` IN ('Encrusted Gemstone Ring', 'Ruby Ring of Ruin', 'Twilight Opal Cascade', 'Stormcloud Sigil', 'Stellar Ruby Ring', 'Starry Thorium Band', 'Ocean''s Gaze') and `description` = '';
+UPDATE `spell_template` SET `requiresSpellFocus` = 3 WHERE `name` IN ('Encrusted Gemstone Ring', 'Ruby Ring of Ruin', 'Twilight Opal Cascade', 'Stormcloud Sigil', 'Stellar Ruby Ring', 'Starry Thorium Band', 'Ocean''s Gaze', 'Minor Trollblood Ring', 'Starforge Amulet', 'Sunburst Tiara', 'Staff of Blossomed Jade') and `description` = '';
 
+UPDATE `spell_template` SET `totem2` = 41326 WHERE `entry` = 41209;
+UPDATE `spell_template` SET `totem2` = 41326 WHERE `entry` = 41581;
