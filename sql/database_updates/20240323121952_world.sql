@@ -348,7 +348,7 @@ SET @output_item_id = 56055;
 SET @recipe_spell_name = 'Draenethyst Baton'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 0;
-SET @tool_item_1 = 55155;  -- Jewelers Kit
+SET @tool_item_1 = 41328;  -- Jewelers Kit
 SET @tool_item_2 = 41326;  -- Jewelry Lens
 SET @skill_level_required = 225; 
 SET @skill_level_max = 245; 
@@ -720,7 +720,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 -- Required Materials:  41332 (1), 
 -- Requires:Jewelers Kit, Jewelry Lens, Forge
 
--- 3577 (3), 11135 (1), 55152 (1)
+-- 41332 (1), 3577 (2), 11135 (1), 55152 (1)
 
 SET @learn_spell_id = 41590; 
 SET @craft_spell_id = 41591; 
@@ -733,10 +733,10 @@ SET @tool_item_2 = 41326;  -- Jewelry Lens
 SET @skill_level_required = 200; 
 SET @skill_level_max = 220; 
 SET @skill_trainer_required = 180;
-SET @reagent_item_1 = 3577; SET @reagent_item_count_1 = 1;
+SET @reagent_item_1 = 3577; SET @reagent_item_count_1 = 2;
 SET @reagent_item_2 = 11135; SET @reagent_item_count_2 = 1;
 SET @reagent_item_3 = 55152; SET @reagent_item_count_3 = 1;
-SET @reagent_item_4 = 0; SET @reagent_item_count_4 = 0;
+SET @reagent_item_4 = 41332; SET @reagent_item_count_4 = 1;
 SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
 SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
 SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
@@ -893,7 +893,7 @@ SET @recipe_spell_name = 'Farraki Ceremony Totem';
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 0;
 SET @tool_item_1 = 55155;  -- Jewelers Kit
-SET @tool_item_2 = 41328;  -- Forge
+SET @tool_item_2 = 41326;  -- Forge
 SET @skill_level_required = 160; 
 SET @skill_level_max = 180; 
 SET @skill_trainer_required = 140;
@@ -1653,3 +1653,7 @@ WHERE name = 'Delicate Mithril Amulet';
 UPDATE spell_template
 SET effectItemType1 = 56055
 WHERE name = 'Draenethyst Baton';
+
+UPDATE `spell_template` SET `totem1` = 55155 WHERE `entry` = 41231;
+UPDATE `spell_template` SET `requiresSpellFocus` = 3 WHERE `name` IN ('Encrusted Gemstone Ring', 'Ruby Ring of Ruin', 'Twilight Opal Cascade', 'Stormcloud Sigil', 'Stellar Ruby Ring', 'Starry Thorium Band', 'Ocean''s Gaze') and `description` = '';
+
