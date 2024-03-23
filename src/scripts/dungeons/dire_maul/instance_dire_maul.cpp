@@ -2385,10 +2385,7 @@ struct go_warpwood_pod : public GameObjectAI
 {
     go_warpwood_pod(GameObject* gobj) : GameObjectAI(gobj)
     {
-        pInstance = (instance_dire_maul*)gobj->GetInstanceData();
     }
-
-    instance_dire_maul* pInstance;
 
     bool OnUse(Unit* pUser) override
     {
