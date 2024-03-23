@@ -1003,3 +1003,8 @@ UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `ca
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 
 UPDATE `item_template` SET `class` = 12, `inventory_type` = 0 WHERE `entry` = 80175;
+
+UPDATE `spell_template` SET `name` = 'Expert Jewelcrafter', `description` = '' WHERE `entry` = 30225;
+UPDATE `spell_template` SET `name` = 'Artisan Jewelcrafter', `description` = '' WHERE `entry` = 30227;
+UPDATE `spell_template` SET `name` = 'Apprentice Jewelcrafter', `description` = '' WHERE `entry` = 30219;
+UPDATE `spell_template` SET `name` = 'Journeyman Jewelcrafter', `description` = '' WHERE `entry` = 30223;
