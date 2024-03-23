@@ -36,7 +36,7 @@ SET item_level = 55,
     sell_price = 1100,
     buy_price = 5400,
     Required_Skill = 755,
-    Required_Skill_Rank = 260,
+    Required_Skill_Rank = 210,
     name = 'Plans: Skyfire Jewel',
     Quality = 2,
     spellid_1 = 41353
@@ -53,5 +53,8 @@ SET item_level = 58,
     spellid_1 = 41355
 WHERE name = 'Plans: Gemstone Compendium';
 
+UPDATE item_template
+SET Quality = 3 -- Rare quality
+WHERE entry = 70129;
 
-
+UPDATE `spell_template` SET `effectItemType1` = 55255 WHERE `entry` = 41354;
