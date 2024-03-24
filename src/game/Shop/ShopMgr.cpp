@@ -53,10 +53,7 @@ public:
             if (!player || !player->IsInWorld())
                 return;
 
-            if (m_balance < 0)
-                player->GetSession()->KickPlayer();
-            else
-                player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+            player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
         }
     }
     uint32 m_accountId;
@@ -221,11 +218,11 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
     uint32 price = shopEntry->Price;
     int32 count = 1;
-    int32 coins = GetBalance(accountId);
+    int64 coins = GetBalance(accountId);
 
     if (coins > 0)
     {
-        int64 newBalance = int64(coins) - price;
+        int64 newBalance = coins - price;
 
         if (newBalance >= 0 && newBalance < INT_MAX)
         {
@@ -241,6 +238,12 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
             bool success = LoginDatabase.CommitTransactionDirect();
 
             if (!success)
+            {
+                sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "dberrorcantprocess") });
+                return;
+            }
+
+            if (GetBalance(accountId) != newBalance)
             {
                 sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "dberrorcantprocess") });
                 return;
