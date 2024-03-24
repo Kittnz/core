@@ -1659,3 +1659,4 @@ UPDATE `spell_template` SET `requiresSpellFocus` = 3 WHERE `name` IN ('Encrusted
 
 UPDATE `spell_template` SET `totem2` = 41326 WHERE `entry` = 41209;
 UPDATE `spell_template` SET `totem2` = 0 WHERE `entry` = 41581;
+UPDATE `item_template` SET `required_skill_rank` = 210 WHERE `entry` = 70127;
