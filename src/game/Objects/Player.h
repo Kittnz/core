@@ -1896,7 +1896,6 @@ class Player final: public Unit
         // Current teleport data
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
-        std::function<void()> m_teleportRecover;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
