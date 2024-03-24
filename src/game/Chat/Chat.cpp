@@ -166,7 +166,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "condition",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
         { "instancedata",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
         { "fields",         SEC_DEVELOPER,     false, nullptr,                                             "", debugFieldsCommandTable},
-        { "bufflimit",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugBuffLimitCommand,           "", nullptr },
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
 
@@ -315,7 +314,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "destroyeditems", SEC_OBSERVER,   true,  &ChatHandler::HandleListDestroyedItemsCommand,  "", nullptr },
         { "hostilerefs",    SEC_OBSERVER,   false, &ChatHandler::HandleListHostileRefsCommand,     "", nullptr },
         { "threat",         SEC_OBSERVER,   false, &ChatHandler::HandleListThreatCommand,          "", nullptr },
-        { "battlegrounds",  SEC_DEVELOPER,  false, &ChatHandler::ListBattlegroundsCommand,         "", nullptr },
+        { "battlegrounds",  SEC_DEVELOPER,  true, &ChatHandler::ListBattlegroundsCommand,         "", nullptr },
+        { "maps",           SEC_DEVELOPER,  true, &ChatHandler::HandleListMapsCommand,            "", nullptr },
         { nullptr,          0,              false, nullptr,                                        "", nullptr }
     };
 

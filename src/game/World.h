@@ -418,6 +418,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL,
     CONFIG_UINT32_MAX_GOLD_TRANSFERRED,
     CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED,
+    CONFIG_UINT32_DYNAMIC_SCALING_POP,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -904,6 +905,8 @@ class World
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
 
+        float m_dynamicRespawnRatio = 1.0f;
+
         uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
 
         void SetLastDiff(uint32 diff);
@@ -1189,6 +1192,8 @@ class World
         void DeleteOldPDumps();
         void UnlockCharacter(uint32 guidLow);
         bool IsCharacterLocked(uint32 guidLow);
+        bool IsCharacterPDumpedRecently(uint32 guidLow, time_t timestamp);
+        void AddPDumpedCharacterToList(uint32 guidLow, time_t timestamp);
 
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
@@ -1350,6 +1355,7 @@ class World
         std::thread m_autoPDumpThread;
         std::mutex m_autoPDumpMutex;
         std::set<uint32> m_autoPDumpPendingGuids;
+        std::unordered_map<uint32, std::unordered_set<time_t>> m_autoPDumpCharTimes;
         std::set<uint32> m_lockedCharacterGuids;
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;

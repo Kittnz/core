@@ -1457,6 +1457,7 @@ void World::LoadConfigSettingsFromFile(bool reload)
     setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, "Perf.ReportInterval", 600);
     setConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED, "Transfer.MaxGold", 300000);
     setConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED, "Transfer.MaxItemStack", 50);
+    setConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP, "DynamicScaling.PopulationStart", BLIZZLIKE_REALM_POPULATION);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -2228,8 +2229,7 @@ void World::SetInitialWorldSettings()
     m_asyncPacketsThread = std::thread(&World::ProcessAsyncPackets, this);
     m_shopThread = std::thread(&ShopMgr::ProcessRequestsWorker, &sShopMgr);
 
-    if (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS))
-        DeleteOldPDumps();
+    DeleteOldPDumps();
 
 #ifdef USE_ANTICHEAT
 	sSuspiciousStatisticMgr.Initialize();
@@ -2568,6 +2568,15 @@ void World::Update(uint32 diff)
     sAccountMgr.Update(diff);
 
     sDailyQuestHandler.Update(diff);
+
+    uint32 popCount = sWorld.GetActiveSessionCount();
+    if (!popCount)
+        popCount = 1;
+
+    if (popCount > sWorld.getConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP))
+        m_dynamicRespawnRatio = float(sWorld.getConfig(CONFIG_UINT32_DYNAMIC_SCALING_POP) / float(popCount));
+    else
+        m_dynamicRespawnRatio = 1.f;
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
@@ -4649,6 +4658,27 @@ bool World::IsCharacterLocked(uint32 guidLow)
     return m_lockedCharacterGuids.find(guidLow) != m_lockedCharacterGuids.end();
 }
 
+bool World::IsCharacterPDumpedRecently(uint32 guidLow, time_t timestamp)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+
+    auto itr = m_autoPDumpCharTimes.find(guidLow);
+    if (itr == m_autoPDumpCharTimes.end())
+        return false;
+
+    for (auto const& timestamp2 : itr->second)
+        if (abs(timestamp2 - timestamp) < WEEK)
+            return true;
+
+    return false;
+}
+
+void World::AddPDumpedCharacterToList(uint32 guidLow, time_t timestamp)
+{
+    std::lock_guard<std::mutex> lock(m_autoPDumpMutex);
+    m_autoPDumpCharTimes[guidLow].insert(timestamp);
+}
+
 void World::AutoPDumpWorker()
 {
     CharacterDatabase.ThreadStart();
@@ -4677,6 +4707,7 @@ void World::AutoPDumpWorker()
                     break;
             }
             UnlockCharacter(guid);
+            AddPDumpedCharacterToList(guid, GetGameTime());
         }
     }
     CharacterDatabase.ThreadEnd();
@@ -4697,13 +4728,17 @@ void World::DeleteOldPDumps()
                 {
                     if (char* pDot = strstr(dp->d_name, ".bak"))
                     {
+                        uint32 guidLow = strtol(dp->d_name + 4, &pDash, 10);
                         time_t timestamp = strtol(pDash + 1, &pDot, 10);
                         
-                        if ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr))
+                        if ((sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) && ((timestamp + (sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS) * DAY)) < time(nullptr)))
+                            || IsCharacterPDumpedRecently(guidLow, timestamp)) // dont keep duplicates
                         {
                             std::string fullPath = sWorld.GetPDumpDirectory() + "/" + dp->d_name;
                             filesToDelete.insert(fullPath);
                         }
+                        else
+                            AddPDumpedCharacterToList(guidLow, timestamp);
                     }
                 }
             }

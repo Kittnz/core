@@ -295,7 +295,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(req->receiver.GetCounter()))
             hardcoreStatus = pCache->uiHardcoreStatus;
 
-        bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+        bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60);
         if (!GetPlayer()->IsHardcore() && receiverIsHardcore)
         {
             if (req->money || req->COD || req->itemGuid)

@@ -707,8 +707,8 @@ uint32 GameObjectData::ComputeRespawnDelay(uint32 respawnDelay) const
 {
     if (spawn_flags & SPAWN_FLAG_RANDOM_RESPAWN_TIME)
         respawnDelay = uint32(float(respawnDelay * urand(90, 110)) / 100.f);
-    if (spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-        respawnDelay = uint32(float(respawnDelay * BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount()));
+    if (spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > sWorld.m_dynamicRespawnRatio)
+        respawnDelay *= sWorld.m_dynamicRespawnRatio;
     return respawnDelay;
 }
 

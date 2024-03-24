@@ -522,6 +522,20 @@ struct ItemPrototype
     bool IsRangedWeapon() const { return IsWeapon() && (InventoryType == INVTYPE_RANGED || InventoryType == INVTYPE_THROWN || InventoryType == INVTYPE_RANGEDRIGHT); }
     bool IsOffHandItem() const { return (InventoryType == INVTYPE_SHIELD || InventoryType == INVTYPE_WEAPONOFFHAND || InventoryType == INVTYPE_HOLDABLE); }
     bool HasSignature() const { return GetMaxStackSize() == 1 && Class != ITEM_CLASS_CONSUMABLE && Class != ITEM_CLASS_QUEST && (Flags & ITEM_FLAG_NO_CREATOR) == 0 && ItemId != 6948; /*Hearthstone*/ }
+    int32 GetRecoveryTimeForSpell(uint32 spellId) const
+    {
+        for (auto const& itr : Spells)
+            if (itr.SpellId == spellId)
+                return itr.SpellCooldown;
+        return 0;
+    }
+    int32 GetCategoryRecoveryTimeForSpell(uint32 spellId) const
+    {
+        for (auto const& itr : Spells)
+            if (itr.SpellId == spellId)
+                return itr.SpellCategoryCooldown;
+        return 0;
+    }
 
     uint32 GetProficiencySkill() const;
     uint32 GetProficiencySpell() const;

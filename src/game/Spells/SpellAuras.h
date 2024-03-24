@@ -128,14 +128,12 @@ class SpellAuraHolder
         HeartBeatData* _pveHeartBeatData;
 
         // Debuff limit
-        void CalculateForBuffLimit();
         void CalculateForDebuffLimit();
-        bool IsAffectedByVisibleSlotLimit() const { return m_visibleSlotLimitAffected; }
-        void SetAffectedByVisibleSlotLimit(bool isAffectedByVisibleSlotLimit);
-        bool IsMoreImportantVisualAuraThan(SpellAuraHolder* other) const;
-        bool m_visibleSlotLimitAffected;
-        uint32 m_visibleSlotLimitScore; // + higher => + important
-
+        bool IsAffectedByDebuffLimit() const { return m_debuffLimitAffected; }
+        void SetAffectedByDebuffLimit(bool isAffectedByDebuffLimit);
+        bool IsMoreImportantDebuffThan(SpellAuraHolder* other) const;
+        bool m_debuffLimitAffected;
+        uint32 m_debuffLimitScore; // + haut => + important
         // Refresh de buff
         void Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithAura);
         bool CanBeRefreshedBy(SpellAuraHolder* other) const;

@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "naxxramas.h"
+#include "Geometry.h"
 
 enum
 {
@@ -341,8 +342,27 @@ struct boss_four_horsemen_shared : public ScriptedAI
         {
             if (Unit* pVictim = m_creature->GetVictim())
             {
-                if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL * 2))
+                if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL * 2) ||
+                    Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, pVictim->GetPosition()) &&
+                   !Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, m_creature->GetPosition()))
                     m_creature->CastSpell(pVictim, SPELL_SUMMON_PLAYER, true);
+
+                if (m_pInstance)
+                {
+                    static uint32 horsemen[4] = { NPC_BLAUMEUX , NPC_MOGRAINE , NPC_ZELIEK , NPC_THANE };
+                    
+                    for (auto const& creatureId : horsemen)
+                    {
+                        if (creatureId == m_creature->GetEntry())
+                            continue;
+
+                        Creature* pOther = m_pInstance->GetSingleCreatureFromStorage(creatureId);
+                        if (pOther->IsDead() || pOther->IsInCombat())
+                            continue;
+
+                        pOther->AI()->AttackStart(pVictim);
+                    }
+                }
             }
         }
 

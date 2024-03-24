@@ -1313,6 +1313,34 @@ bool ChatHandler::ListBattlegroundsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleListMapsCommand(char* args)
+{
+    const auto& allMaps = sMapMgr.Maps();
+
+    uint32 continentMaps = 0, instanceMaps = 0, battlegroundMaps = 0;
+
+    PSendSysMessage("All maps currently active:");
+    for (const auto& [mapId, map] : allMaps)
+    {
+        auto mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId.nMapId);
+        if (mapEntry)
+        {
+            PSendSysMessage("(ID %u, instance %u) %s", mapId.nMapId, mapId.nInstanceId, mapEntry->name);
+
+            if (mapEntry->IsBattleGround())
+                ++battlegroundMaps;
+            else if (mapEntry->IsRaid() || mapEntry->IsDungeon())
+                ++instanceMaps;
+            else
+                ++continentMaps;
+        }
+    }
+
+    PSendSysMessage("Continent maps: %u, battleground maps: %u, instance maps: %u", continentMaps, battlegroundMaps, instanceMaps);
+
+    return true;
+}
+
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
@@ -6234,6 +6262,7 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Last server diff: %u ms", sWorld.GetLastDiff());
         PSendSysMessage("Average server diff: %u ms", sWorld.GetAverageDiff());
         PSendSysMessage("Remaining HC Threshold hits: %u", sWorld.GetThresholdFlags());
+        PSendSysMessage("Current dynamic respawn rate: %f", sWorld.m_dynamicRespawnRatio);
 
         if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
             PSendSysMessage("Queued region one : %u, region two : %u", queuedRegionOnePlayers, queuedRegionTwoPlayers);
@@ -17327,75 +17356,6 @@ bool ChatHandler::HandleDebugConditionCommand(char* args)
         else
             SendSysMessage("Condition is not satisfied.");
     }
-
-    return true;
-}
-
-bool ChatHandler::HandleDebugBuffLimitCommand(char* args)
-{
-    Player* pPlayer = GetSelectedPlayer();
-    if (!pPlayer)
-        return false;
-
-    auto HasFreeSlot = [](Player* pPlayer) -> bool
-    {
-        for (uint32 i = UNIT_FIELD_AURA; i < (UNIT_FIELD_AURA + MAX_POSITIVE_AURAS - 1); ++i)
-        {
-            if (!pPlayer->GetUInt32Value(i))
-                return true;
-        }
-        return false;
-    };
-
-    for (uint32 i = 0; i < sSpellMgr.GetMaxSpellId(); ++i)
-    {
-        SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(i);
-        if (!pSpellEntry)
-            continue;
-
-        if (!pSpellEntry->IsSpellAppliesAura())
-            continue;
-
-        if (!pSpellEntry->IsPositiveSpell())
-            continue;
-
-        if (pSpellEntry->HasAttribute(SPELL_ATTR_PASSIVE) ||
-            pSpellEntry->HasAttribute(SPELL_ATTR_HIDDEN_CLIENTSIDE))
-            continue;
-
-        if (pSpellEntry->DurationIndex == 21 ||
-            pSpellEntry->DurationIndex == 36 ||
-            pSpellEntry->DurationIndex == 37 ||
-            pSpellEntry->DurationIndex == 39 ||
-            pSpellEntry->DurationIndex == 65 ||
-            pSpellEntry->DurationIndex == 186 ||
-            pSpellEntry->DurationIndex == 187 ||
-            pSpellEntry->DurationIndex == 285 ||
-            pSpellEntry->DurationIndex == 327 ||
-            pSpellEntry->DurationIndex == 328 ||
-            pSpellEntry->DurationIndex == 407 ||
-            pSpellEntry->DurationIndex == 447 ||
-            pSpellEntry->DurationIndex == 487 || 
-            pSpellEntry->DurationIndex == 507 || 
-            pSpellEntry->DurationIndex == 508)
-            continue;
-
-        if (pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT_CASTER &&
-            pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT_FRIEND &&
-            pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT &&
-            pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT_PARTY &&
-            pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT_RAID &&
-            pSpellEntry->EffectImplicitTargetA[0] != TARGET_UNIT_RAID_AND_CLASS)
-            continue;
-
-        pPlayer->CastSpell(pPlayer, pSpellEntry, true);
-
-        if (!HasFreeSlot(pPlayer))
-            break;
-    }
-
-    if (HasFreeSlot(pPlayer))
-        SendSysMessage("Failed to add enough visible buffs.");
 
     return true;
 }

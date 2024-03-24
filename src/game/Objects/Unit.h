@@ -842,7 +842,8 @@ class Unit : public WorldObject
         void RemoveAuraTypeOnDeath(AuraType auraType);
         void RemoveAllAurasOnDeath();
         void RemoveArenaAuras(bool onleave, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
-        bool RemoveAuraDueToVisibleSlotLimit(SpellAuraHolder* currentAura); // Returns true if we remove 'currentAura'
+        bool RemoveAuraDueToDebuffLimit(SpellAuraHolder* currentAura); // Returns true if we remove 'currentAura'
+        uint32 GetNegativeAurasCount(); // Limit debuffs to 16
         std::multimap<uint32, SpellAuraHolder*>* GetCustomDebuffs();
 
         // removing specific aura FROM stack by diff reasons and selections
