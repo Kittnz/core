@@ -1798,7 +1798,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     SendUpdateToOutOfRangeGroupMembers();
 
     if (IsHasDelayedTeleport())
-        TeleportTo(m_teleport_dest, m_teleport_options, m_teleportRecoverDelayed);
+        TeleportTo(m_teleport_dest, m_teleport_options);
     // Movement extrapolation & cheat computation - only if not already kicked!
     if (!GetSession()->IsConnected())
         return;
@@ -2546,7 +2546,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     return true;
 }
 
-bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options, std::function<void()> recover, std::function<void()> OnTeleportFinished)
+bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options)
 {
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
@@ -2606,8 +2606,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             //lets save teleport destination for player
             m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
             m_teleport_options = options;
-            m_teleportRecoverDelayed = recover;
-            m_teleportFinishedDelayed = OnTeleportFinished;
             return true;
         }
 
@@ -2639,21 +2637,10 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         // near teleport, triggering send MSG_MOVE_TELEPORT_ACK from client at landing
         if (!GetSession()->PlayerLogout())
         {
-            const auto wps = [this](){
-                MovementPacketSender::SendTeleportToController(this, m_teleport_dest.x, 
-                                                                     m_teleport_dest.y, 
-                                                                     m_teleport_dest.z, 
-                                                                     m_teleport_dest.o);
-            };
-            if (recover)
-                m_teleportRecover = recover;
-            else
-                m_teleportRecover = wps;
-            wps();
-            if (OnTeleportFinished)
-            {
-                OnTeleportFinished();
-            }
+			MovementPacketSender::SendTeleportToController(this, m_teleport_dest.x,
+				m_teleport_dest.y,
+				m_teleport_dest.z,
+				m_teleport_dest.o);
         }
         m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For extrapolation
     }
@@ -2691,7 +2678,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         // Far teleport to another map. We can't do this right now since it means
         // we need to remove from this map mid-update. Instead, schedule it for
         // after updates are complete
-        ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options, recover, OnTeleportFinished);
+        ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options);
 
         sMapMgr.ScheduleFarTeleport(this, data);
     }
@@ -2803,20 +2790,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
 
         if (!GetSession()->PlayerLogout())
         {
-            if (data->recover)
-                m_teleportRecover = data->recover;
-            else
-                m_teleportRecover = std::bind(&Player::SendNewWorld, this);
-
             // No need to send or schedule anything on logout
-            if (!GetSession()->PlayerLogout())
-                sMapMgr.ScheduleNewWorldOnFarTeleport(this);
+            sMapMgr.ScheduleNewWorldOnFarTeleport(this);
         }
 
-        if (data->OnTeleportFinished)
-        {
-            data->OnTeleportFinished();
-        }
         return true;
     }
 
@@ -2861,12 +2838,6 @@ void Player::HandleReturnOnTeleportFail(WorldLocation const& oldLoc)
     }
 }
 
-void Player::RestorePendingTeleport()
-{
-    if (m_teleportRecover)
-        m_teleportRecover();
-}
-
 bool Player::TeleportToBGEntryPoint()
 {
     if (m_bgData.joinPos.x == 0.0f && m_bgData.joinPos.y == 0.0f && m_bgData.joinPos.z == 0.0f)
@@ -2883,13 +2854,6 @@ void Player::ProcessDelayedOperations()
 {
     if (m_DelayedOperations == 0)
         return;
-
-    for (const auto& operation : m_delayedCustomOps)
-    {
-        operation(this);
-    }
-
-    m_delayedCustomOps.clear();
 
     if (m_DelayedOperations & DELAYED_RESURRECT_PLAYER)
     {
@@ -6250,13 +6214,11 @@ void Player::RepopAtGraveyard()
     WorldSafeLocsEntry const *ClosestGrave = nullptr;
 
     // Special handle for battleground maps
-    std::function<void()> recover;
+    uint32 TeleOptions = TELE_TO_NOT_UNSUMMON_PET;
     if (BattleGround *bg = GetBattleGround())
     {
         ClosestGrave = bg->GetClosestGraveYard(this);
-        recover = [this](){
-            RepopAtGraveyard();
-        };
+        //TeleOptions |= TELE_TO_REPOP_ON_GRAVEYARD;
     }
     else
         ClosestGrave = sObjectMgr.GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
@@ -6270,7 +6232,9 @@ void Player::RepopAtGraveyard()
     if (IsAlive())
     {
         if (ClosestGrave)
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+        {
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TeleOptions);
+        }
     }
     else
     { 
@@ -6285,9 +6249,9 @@ void Player::RepopAtGraveyard()
                 ResurrectPlayer(1.0f);
             }
             if (GetAreaId() == 4011 && GetRace() == RACE_GOBLIN) // Venture Camp, temporary hackfix.
-                TeleportTo(1, 1788.58, 1335.74, 144.35, 4.0, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+                TeleportTo(1, 1788.58, 1335.74, 144.35, 4.0, TeleOptions);
             else
-                TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+                TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TeleOptions);
         }
 
         // Fix invisible spirit healer if you die close to graveyard.
@@ -20716,21 +20680,11 @@ void Player::LearnGameMasterSpells()
 void Player::SetSemaphoreTeleportNear(bool semphsetting)
 {
     mSemaphoreTeleport_Near = semphsetting;
-    if (!IsBeingTeleported())
-    {
-        m_teleportRecover = std::function<void()>();
-        m_teleportRecoverDelayed = std::function<void()>();
-    }
 }
 
 void Player::SetSemaphoreTeleportFar(bool semphsetting)
 {
     mSemaphoreTeleport_Far = semphsetting;
-    if (!IsBeingTeleported())
-    {
-        m_teleportRecover = std::function<void()>();
-        m_teleportRecoverDelayed = std::function<void()>();
-    }
 }
 
 BattleGround* Player::GetBattleGround() const

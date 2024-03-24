@@ -902,7 +902,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (pCurrChar->GetDeathState() == CORPSE)
             pCurrChar->KillPlayer();
     }
-    pCurrChar->RestorePendingTeleport();
 
     sObjectMgr.UpdatePlayerCachedPosition(pCurrChar);
 
