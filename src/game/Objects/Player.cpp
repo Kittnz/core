@@ -4748,10 +4748,23 @@ void Player::_LoadSpellCooldowns(QueryResult *result)
             if (db_time <= curTime)
                 continue;
 
+            ItemPrototype const* proto = item_id ? sObjectMgr.GetItemPrototype(item_id) : nullptr;
+
+            // add check for cooldown length in case wrong (corrupted) data in db
+            time_t const duration = db_time - curTime;
+            if (std::max(spell->RecoveryTime, spell->CategoryRecoveryTime) < duration * IN_MILLISECONDS)
+            {
+                if (!proto || std::max(proto->GetRecoveryTimeForSpell(spell_id), proto->GetCategoryRecoveryTimeForSpell(spell_id)) < duration * IN_MILLISECONDS)
+                {
+                    sLog.outError("Character %u has wrong too long cooldown %u for spell %u.", GetGUIDLow(), duration, spell_id);
+                    continue;
+                }
+            }
+
             uint32 category = spell->Category;
             if (item_id && !category)
             {
-                if (ItemPrototype const* proto = sObjectMgr.GetItemPrototype(item_id))
+                if (proto)
                 {
                     for (const auto& itr : proto->Spells)
                     {
