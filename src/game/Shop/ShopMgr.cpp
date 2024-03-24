@@ -53,7 +53,11 @@ public:
             if (!player || !player->IsInWorld())
                 return;
 
-            player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+            if (m_balance < 0)
+                player->GetSession()->KickPlayer();
+            else
+                player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+
         }
     }
     uint32 m_accountId;

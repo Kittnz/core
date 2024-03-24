@@ -526,6 +526,15 @@ bool AuthSocket::_HandleLogonChallenge()
 
             uint32 account_id = fields[1].GetUInt32();
 
+            // Block login to account with negative coins balance. Requested by Bowser.
+            if (QueryResult* coinsResult = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u && `coins` < 0", account_id))
+            {
+                delete coinsResult;
+                pkt << (uint8)WOW_FAIL_NO_TIME;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }
+
             if (lockFlags & IP_LOCK)
             {
                 DEBUG_LOG("[AuthChallenge] Account '%s' is locked to IP - '%s'", _login.c_str(), _lastIP.c_str());
