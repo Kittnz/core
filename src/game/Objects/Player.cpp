@@ -2576,8 +2576,8 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     // The player was ported to another map and looses the duel immediately.
     // We have to perform this check before the teleport, otherwise the
     // ObjectAccessor won't find the flag.
-    if (m_duel && GetMapId() != mapid)
-        if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
+    if (m_duel && GetMapId() != mapid && FindMap())
+        if (GameObject* obj = FindMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
 
     // reset movement flags at teleport, because player will continue move with these flags after teleport
@@ -2588,9 +2588,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     // Always interrupt channeled spell on teleport.
     // Fixes pet spells being lost on teleport if channeling Eye of Kilrog.
     InterruptSpell(CURRENT_CHANNELED_SPELL, true);
-
-    // preparing unsummon pet if lost (we must get pet before teleportation or will not find it later)
-    Pet* pet = GetPet();
 
     // Near teleport, let it happen immediately since we remain in the same map
     if (FindMap() && (GetMapId() == mapid) && (!m_transport) && !(options & TELE_TO_FORCE_MAP_CHANGE))
@@ -2611,6 +2608,9 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 
         if (!(options & TELE_TO_NOT_UNSUMMON_PET))
         {
+            // preparing unsummon pet if lost (we must get pet before teleportation or will not find it later)
+            Pet* pet = GetPet();
+
             //same map, only remove pet if out of range for new position
             if (pet && !pet->IsWithinDist3d(x, y, z, GetGridActivationDistance()))
                 UnsummonPetTemporaryIfAny();
