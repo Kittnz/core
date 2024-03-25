@@ -2609,10 +2609,16 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             return true;
         }
 
+        uint32 distance = DEFAULT_VISIBILITY_DISTANCE;
+
+        if (FindMap())
+            distance = GetMap()->GetVisibilityDistance();
+
+
         if (!(options & TELE_TO_NOT_UNSUMMON_PET))
         {
             //same map, only remove pet if out of range for new position
-            if (pet && !pet->IsWithinDist3d(x, y, z, GetGridActivationDistance()))
+            if (pet && !pet->IsWithinDist3d(x, y, z, distance))
                 UnsummonPetTemporaryIfAny();
         }
 
@@ -2622,7 +2628,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             CombatStop();
         }
 
-        if (!IsWithinDist3d(x, y, z, GetVisibilityDistance()))
+        if (!IsWithinDist3d(x, y, z, distance))
             RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TELEPORTED);
 
         // this will be used instead of the current location in SaveToDB
