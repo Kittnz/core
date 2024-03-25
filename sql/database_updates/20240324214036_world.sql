@@ -136,7 +136,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41606; 
 SET @craft_spell_id = 41607; 
-SET @skill_line_entry = 17266;
+SET @skill_line_entry = 17290;
 
 SET @output_item_id = 56003; 
 SET @recipe_spell_name = 'Shimmering Aqua Gemstone'; 
@@ -180,7 +180,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41608; 
 SET @craft_spell_id = 41609; 
-SET @skill_line_entry = 17266;
+SET @skill_line_entry = 17291;
 
 SET @output_item_id = 56015; 
 SET @recipe_spell_name = 'Azerothian Ruby Gemstone'; 
@@ -268,7 +268,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41612; 
 SET @craft_spell_id = 41613; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17292;
 
 SET @output_item_id = 56013; 
 SET @recipe_spell_name = 'Flawless Black Gemstone'; 
@@ -312,7 +312,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41614; 
 SET @craft_spell_id = 41615; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17293;
 
 SET @output_item_id = 56016; 
 SET @recipe_spell_name = 'Arcane Emerald Gemstone'; 
@@ -356,7 +356,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41616; 
 SET @craft_spell_id = 41617; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17294;
 
 SET @output_item_id = 56017; 
 SET @recipe_spell_name = 'Tempered Azerothian Gemstone'; 
@@ -400,7 +400,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41618; 
 SET @craft_spell_id = 41619; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17296;
 
 SET @output_item_id = 56014; 
 SET @recipe_spell_name = 'Stunning Imperial Gemstone'; 
@@ -444,7 +444,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41620; 
 SET @craft_spell_id = 41621; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17297;
 
 SET @output_item_id = 56018; 
 SET @recipe_spell_name = 'Enchanted Emerald Gemstone'; 
@@ -488,7 +488,7 @@ UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @
 
 SET @learn_spell_id = 41622; 
 SET @craft_spell_id = 41623; 
-SET @skill_line_entry = 17267;
+SET @skill_line_entry = 17299;
 
 SET @output_item_id = 56058; 
 SET @recipe_spell_name = 'Pure Shining Moonstone'; 
@@ -851,7 +851,7 @@ REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, 
 -- Recipe Learning Requirements: 200 (min 205, max 205)
 -- Required Materials: 55251 (1), 55153 (4), 55247 (1)
 -- Requires:Precision Jewelers Kit, Jewelry Lens
-
+-- remove solid gritted paper, add item 11082 (1) and add 55152 (1)
 SET @learn_spell_id = 41630; 
 SET @craft_spell_id = 41631; 
 SET @skill_line_entry = 17272;
@@ -865,9 +865,9 @@ SET @skill_level_required = 205;
 SET @skill_level_max = 205; 
 SET @skill_trainer_required = 200;
 SET @reagent_item_1 = 55251; SET @reagent_item_count_1 = 1;
-SET @reagent_item_2 = 55153; SET @reagent_item_count_2 = 4;
+SET @reagent_item_2 = 11082; SET @reagent_item_count_2 = 1;
 SET @reagent_item_3 = 55247; SET @reagent_item_count_3 = 1;
-SET @reagent_item_4 = 0; SET @reagent_item_count_4 = 0;
+SET @reagent_item_4 = 55152; SET @reagent_item_count_4 = 1;
 SET @reagent_item_5 = 0; SET @reagent_item_count_5 = 0;
 SET @reagent_item_6 = 0; SET @reagent_item_count_6 = 0;
 SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
