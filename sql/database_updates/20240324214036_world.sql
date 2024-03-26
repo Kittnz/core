@@ -2132,7 +2132,7 @@ REPLACE `item_template` (`entry`, `class`, `subclass`, `name`, `description`, `d
 
 -- Plans: Opalstone Circlet
 SET @recipe_item_entry = 70176;
-SET @recipe_item_name = 'Plans: Opalstone Circlet';
+SET @recipe_item_name = 'Plans: Opalstone Circle';
 SET @item_buy_price = 22000;
 SET @item_sell_price = 5500;
 SET @item_skill_requirement = 755;
