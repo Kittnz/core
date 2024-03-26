@@ -932,6 +932,9 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             pPlayer->SetHealth(pPlayer->GetMaxHealth());
             if (pPlayer->GetPowerType() == POWER_MANA)
                 pPlayer->SetPower(POWER_MANA, pPlayer->GetMaxPower(POWER_MANA));
+
+            // Turtle: always dismount on leaving
+            pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
         }
         else
         {
