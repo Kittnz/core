@@ -247,11 +247,13 @@ bool GOHello_go_resonite_cask(Player* pPlayer, GameObject* pGO)
         {
             if (Creature* pCreature = pPlayer->FindNearestCreature(11920, 30.0f))
             {
+                pCreature->AI()->AttackStart(pPlayer);
                 return false;
             }
             else
             {
-                pGO->SummonCreature(11920, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+                if (Creature* pCreature = pGO->SummonCreature(11920, 2.49f, 426.78f, 103.66f, 4.55f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000))
+                    pCreature->AI()->AttackStart(pPlayer);
             }
         }
     }
