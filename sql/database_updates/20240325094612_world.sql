@@ -3,3 +3,5 @@ update quest_template set details = 'Hello, young hunter. You look to me like yo
 -- The quest should also now end at Mayten Boomrifle, 80105.
 delete from creature_involvedrelation where quest = 80330 and id = 80903;
 replace INTO `creature_involvedrelation` (`id`, `quest`) VALUES (80105, 80330);
+-- Item "Ocean's Wrath" (55319), change to finger slot item.
+update item_template set inventory_type = 11 where entry = 55319;
