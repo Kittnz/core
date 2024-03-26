@@ -2345,3 +2345,4 @@ UPDATE `item_template` SET `spellid_1` = 41717  WHERE name = 'Plans: Ornate Mith
 UPDATE `item_template` SET `spellid_1` = 41719  WHERE name = 'Plans: Regal Twilight Staff';
 UPDATE `item_template` SET `spellid_1` = 41721  WHERE name = 'Plans: Pendant of Instability';
 UPDATE `item_template` SET `spellid_1` = 41723  WHERE name = 'Plans: Ornament of Restraint';
+UPDATE `item_template` SET `spellid_1` = 41707  WHERE name = 'Plans: Opalstone Circle';
