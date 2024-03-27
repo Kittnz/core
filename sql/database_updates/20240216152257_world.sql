@@ -4,7 +4,7 @@ UPDATE `spell_template` SET `attributesEx3` = '67108864' WHERE (`entry` = '18073
 UPDATE `spell_template` SET `attributesEx3` = '67108864' WHERE (`entry` = '18096');
 
 -- Deprecate Ashbringer quest chain
-UPDATE quest_template SET Name = '[DEPRECATED] Orb of Pure Light' WHERE entry = 20000;
-UPDATE quest_template SET Name = '[DEPRECATED] Seek Help Elsewhere' WHERE entry = 20001;
-UPDATE quest_template SET Name = '[DEPRECATED] To Wake the Ashbringer' WHERE entry = 20002;
-UPDATE quest_template SET Name = '[DEPRECATED] Spirit of the Ashbringer' WHERE entry = 20003;
+UPDATE quest_template SET Title = '[DEPRECATED] Orb of Pure Light' WHERE entry = 20000;
+UPDATE quest_template SET Title = '[DEPRECATED] Seek Help Elsewhere' WHERE entry = 20001;
+UPDATE quest_template SET Title = '[DEPRECATED] To Wake the Ashbringer' WHERE entry = 20002;
+UPDATE quest_template SET Title = '[DEPRECATED] Spirit of the Ashbringer' WHERE entry = 20003;

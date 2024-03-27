@@ -6,7 +6,7 @@ update item_template set spellid_1 = 15464, stat_value1 = 22, stat_value2 = 10, 
 
 -- Fix chaining on Captain Grayson vs Cookie quest, and remove redundant quest objectives
 UPDATE quest_template SET NextQuestInChain = 40396 WHERE entry = 40395;
-UPDATE quest_template SET ReqCreatureOrGOId1 = 0, ReqCreatureOrGOCount = 0 WHERE entry = 40396;
+UPDATE quest_template SET ReqCreatureOrGOId1 = 0, ReqCreatureOrGOCount1 = 0 WHERE entry = 40396;
 
 -- Fix Horde level 10 Warrior quest locking
 -- If you can figure out how to make 1505 and 1818 close each other, but STILL have their follow-up quests available after doing one or the other, go ahead and write a query
