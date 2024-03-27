@@ -207,12 +207,12 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "list",           SEC_DEVELOPER,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
         { "ingame",         SEC_MODERATOR,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
-        { "visible",        SEC_DEVELOPER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
+        { "visible",        SEC_MODERATOR, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
         { "socials",        SEC_MODERATOR,    false, &ChatHandler::HandleGMSocialsCommand,                "", nullptr},
         { "setview",        SEC_DEVELOPER, false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
         { "chat",           SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetGMChatCommand,          "", nullptr},
-        { "",               SEC_DEVELOPER, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
+        { "",               SEC_MODERATOR, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -753,12 +753,12 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand ticketCommandTable[] =
     {
-        { "assign",        SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketAssignToCommand,         "", nullptr },
-        { "unassign",      SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketUnAssignCommand,         "", nullptr },
-        { "close",         SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },
-        { "list",          SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketListCommand,             "", nullptr },
-        { "onlinelist",    SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketsOnlineListCommand,      "", nullptr},
-        { "",              SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketGetByIdOrNameCommand,    "", nullptr },
+        { "assign",        SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketAssignToCommand,         "", nullptr },
+        { "unassign",      SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketUnAssignCommand,         "", nullptr },
+        { "close",         SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },
+        { "list",          SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketListCommand,             "", nullptr },
+        { "onlinelist",    SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketsOnlineListCommand,      "", nullptr},
+        { "",              SEC_MODERATOR,  true,  &ChatHandler::HandleGMTicketGetByIdOrNameCommand,    "", nullptr },
         { nullptr,         0,                   false, nullptr,                                             "", nullptr }
     };
     
@@ -905,7 +905,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "additemset",     SEC_DEVELOPER,       false, &ChatHandler::HandleAddItemSetCommand,          "", nullptr },
         { "bank",           SEC_DEVELOPER,       false, &ChatHandler::HandleBankCommand,                "", nullptr },
         { "wchange",        SEC_DEVELOPER,       false, &ChatHandler::HandleChangeWeatherCommand,       "", nullptr },
-        { "ticket",         SEC_DEVELOPER,       true,  nullptr,                                        "",ticketCommandTable },
+        { "ticket",         SEC_MODERATOR,       true,  nullptr,                                        "",ticketCommandTable },
         { "maxskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleMaxSkillCommand,            "", nullptr },
         { "setskill",       SEC_DEVELOPER,       false, &ChatHandler::HandleSetSkillCommand,            "", nullptr },
         { "whispers",       SEC_MODERATOR,       false, &ChatHandler::HandleWhispersCommand,            "", nullptr },
