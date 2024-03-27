@@ -165,6 +165,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "condition",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
         { "instancedata",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
+        { "packetstats",    SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugPacketStatsCommand,         "", nullptr },
         { "fields",         SEC_DEVELOPER,     false, nullptr,                                             "", debugFieldsCommandTable},
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
