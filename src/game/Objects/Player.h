@@ -1040,9 +1040,9 @@ struct ScheduledTeleportData
 {
     ScheduledTeleportData() = default;
     ScheduledTeleportData(uint32 mapid, float x, float y, float z, float o,
-        uint32 options, std::function<void()> recover, std::function<void()> InOnTeleportFinished)
+        uint32 options)
         : targetMapId(mapid), x(x), y(y), z(z),
-          orientation(o), options(options), recover(recover), OnTeleportFinished(InOnTeleportFinished){};
+          orientation(o), options(options){};
 
     uint32 targetMapId = 0;
     float x = 0.0f;
@@ -1051,9 +1051,6 @@ struct ScheduledTeleportData
     float orientation = 0.0f;
 
     uint32 options = 0;
-
-    std::function<void()> recover = std::function<void()>();
-    std::function<void()> OnTeleportFinished = std::function<void()>();
 };
 
 enum class PlayerVariables : uint32
@@ -1899,14 +1896,9 @@ class Player final: public Unit
         // Current teleport data
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
-        std::function<void()> m_teleportRecover;
-        std::function<void()> m_teleportRecoverDelayed;
-        std::function<void()> m_teleportFinishedDelayed;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
-
-        std::vector<std::function<void(Player* player)>> m_delayedCustomOps;
 
         uint32 m_DelayedOperations;
         bool m_bCanDelayTeleport;
@@ -1998,11 +1990,11 @@ class Player final: public Unit
         * Should be called in a thread-safe environment (not in map update for example !)
         */
         bool SwitchInstance(uint32 newInstanceId);
-        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>());
+        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0);
         template <class T>
-        bool TeleportTo(T const& loc, uint32 options = 0, std::function<void()> recover = std::function<void()>())
+        bool TeleportTo(T const& loc, uint32 options = 0)
         {
-            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options, recover);
+            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options);
         }
 
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we
@@ -2015,13 +2007,6 @@ class Player final: public Unit
         bool IsAllowedToQueueBGDueToTabard() { return m_BGQueueAllowed; };
 
         bool TeleportToBGEntryPoint();
-        void RestorePendingTeleport();
-
-        template <typename T, typename = std::enable_if_t<std::is_invocable_v<T, Player*>>>
-        void AddDelayedOperation(T operation)
-        {
-            m_delayedCustomOps.emplace_back(operation);
-        }
 
         void UpdateZone(uint32 newZone,uint32 newArea);
         void UpdateArea(uint32 newArea);

@@ -7265,7 +7265,7 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
         {
             Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
 
-            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            //pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -7376,10 +7376,10 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
                     pQuestGiver->HandleEmote(EMOTE_STATE_STAND);
                 }, 59000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
-                {
-                    pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }, 60000);
+            //pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            //    {
+            //        pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            //    }, 60000);
 
             DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer]()
             {
