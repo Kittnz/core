@@ -86,8 +86,8 @@ REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `grou
 (92010, 81234, 1.7, 1, 1, 1, 0),	-- Brewfest Ram
 (92010, 81235, 1.7, 1, 1, 1, 0),	-- Armored Vermilion Deathcharger
 (92010, 81236, 1.7, 1, 1, 1, 0),	-- Armored Grey Steed
-(92010, 81239, 1.7, 1, 1, 1, 0),	-- Happy Whimsyshire Cloud
-(92010, 81240, 1.7, 1, 1, 1, 0),	-- Sad Whimsyshire Cloud
+-- (92010, 81239, 1.7, 1, 1, 1, 0),	-- Happy Whimsyshire Cloud
+-- (92010, 81240, 1.7, 1, 1, 1, 0),	-- Sad Whimsyshire Cloud
 (92010, 81258, 1.7, 1, 1, 1, 0),	-- Spectral Cub
 (92010, 83150, 1.7, 1, 1, 1, 0),	-- Big Turtle WoW Bear
 (92010, 83300, 1.7, 1, 1, 1, 0),	-- Lil' K.T.
