@@ -23,11 +23,19 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc4`) VALUES 
 (92017, 'White Riding Talbuk', '白色骑乘塔布羊'),
 (92018, 'Dark Riding Talbuk', '黑色骑乘塔布羊'),
-(92016, 'Spotted Rabbit', '斑点兔');
+(92016, 'Spotted Rabbit', '斑点兔'),
 
+(92011, 'Lavender Spring Shirt', '紫色春季衬衫'),
+(92012, 'Mint Spring Shirt', '薄荷绿春季衬衫'),
+(92013, 'Pink Spring Shirt', '粉色春季衬衫'),
+(92014, 'Spring Chemise', '春季连衣裙'),
+(92019, 'Green Spring Shirt ', '绿色春季衬衫');
 
 UPDATE spell_template SET description = 'Agile and quick, it hops around with a whimsical grace that captivates the hearts of adventurers across Azeroth.' WHERE entry = 10712;
 UPDATE spell_template SET description = 'If you go chasing snowshoe rabbits, you know you''re going to fall.' WHERE entry = 10711;
+
+UPDATE `locales_item` SET `name_loc4` = '悲伤的云朵' WHERE `entry` = 81240;
+UPDATE `locales_item` SET `name_loc4` = '开心的云朵' WHERE `entry` = 81239;
 
 DELETE FROM `item_loot_template` WHERE `entry` = 92010;
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
