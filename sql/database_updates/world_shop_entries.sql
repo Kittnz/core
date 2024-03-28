@@ -35,6 +35,7 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (3,   1, 80699, 'Token: Appearance Change', '代币：外观变更', 160),
 (4,   1, 80555, 'Token: Pet Rename', '代币:宠物重命名', 100),
 (5,   1, 92010, 'Limited: Noblegarden Egg', '复活节彩蛋', 198),
+(6,   1, 92010, 'Limited: Noblegarden Egg', '复活节彩蛋', 200),
 (17,  2, 51920, 'Touch of Darkness - Undead, male', '猩红 - 人类，仅限女性', 160),
 (18,  2, 51921, 'Blood Widow - Undead, female', '猩红 - 人类，仅限女性', 160),
 (20,  2, 50105, 'Scarlet - Human, female only', '猩红 - 人类，仅限女性', 160),
@@ -251,3 +252,4 @@ replace into shop_items (`id`, `category`, `item`, `description`, `description_l
 (456, 7, 68070, 'Robes of the Moonless Night', '', 200); -- CHINA ONLY!!!
 
 UPDATE shop_items SET region_locked = 2 WHERE id = 456;
+UPDATE shop_items SET region_locked = 2 WHERE id = 5;
