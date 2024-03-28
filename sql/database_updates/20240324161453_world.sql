@@ -9,8 +9,9 @@ UPDATE item_template SET max_count = 0 WHERE entry = 92010;
 
 REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description`, `display_id`, `quality`, `flags`, `buy_count`, `buy_price`, `sell_price`, `inventory_type`, `allowable_class`, `allowable_race`, `item_level`, `required_level`, `required_skill`, `required_skill_rank`, `required_spell`, `required_honor_rank`, `required_city_rank`, `required_reputation_faction`, `required_reputation_rank`, `max_count`, `stackable`, `container_slots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `delay`, `range_mod`, `ammo_type`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `dmg_min3`, `dmg_max3`, `dmg_type3`, `dmg_min4`, `dmg_max4`, `dmg_type4`, `dmg_min5`, `dmg_max5`, `dmg_type5`, `block`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmrate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmrate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmrate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmrate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmrate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `page_text`, `page_language`, `page_material`, `start_quest`, `lock_id`, `material`, `sheath`, `random_property`, `set_id`, `max_durability`, `area_bound`, `map_bound`, `duration`, `bag_family`, `disenchant_id`, `food_type`, `min_money_loot`, `max_money_loot`, `wrapped_gift`, `extra_flags`, `other_team_entry`, `script_name`) VALUES 
 
-(92011, 4, 0, 'Lavender Spring Shirt', '', 68006, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
-(92012, 4, 0, 'Blue Spring Shirt', '', 68011, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(92011, 4, 0, 'Lavender Spring Shirt', '', 68017, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(92012, 4, 0, 'Mint Spring Shirt', '', 68018, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(92019, 4, 0, 'Green Spring Shirt ', '', 68024, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (92013, 4, 0, 'Pink Spring Shirt', '', 68019, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (92014, 4, 0, 'Cerulean Spring Shirt', '', 40160, 3, 0, 1, 0, 0, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (92014, 4, 1, 'Spring Chemise', '', 67875, 2, 0, 1, 0, 0, 5, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
@@ -29,61 +30,67 @@ UPDATE spell_template SET description = 'Agile and quick, it hops around with a 
 UPDATE spell_template SET description = 'If you go chasing snowshoe rabbits, you know you''re going to fall.' WHERE entry = 10711;
 
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
-(92010, 92017, 0.5, 1, 1, 1, 0), -- Mount
-(92010, 92018, 0.5, 1, 1, 1, 0), -- Mount
-(92010, 81153, 1.8, 1, 1, 1, 0),
-(92010, 81155, 1.8, 1, 1, 1, 0),
-(92010, 81158, 1.8, 1, 1, 1, 0),
-(92010, 81091, 1.8, 1, 1, 1, 0),
-(92010, 81232, 1.8, 1, 1, 1, 0),
-(92010, 18768, 1.8, 1, 1, 1, 0),
-(92010, 80430, 1.8, 1, 1, 1, 0),
-(92010, 12303, 1.8, 1, 1, 1, 0),
-(92010, 81231, 1.8, 1, 1, 1, 0),
-(92010, 50399, 1.8, 1, 1, 1, 0),
-(92010, 80449, 1.8, 1, 1, 1, 0),
-(92010, 81236, 1.8, 1, 1, 1, 0),
-(92010, 23193, 1.8, 1, 1, 1, 0),
-(92010, 81235, 1.8, 1, 1, 1, 0),
-(92010, 50407, 1.8, 1, 1, 1, 0),
-(92010, 50400, 1.8, 1, 1, 1, 0),
-(92010, 81234, 1.8, 1, 1, 1, 0),
-(92010, 81102, 1.8, 1, 1, 1, 0),
-(92010, 83150, 1.8, 1, 1, 1, 0),
-(92010, 81207, 1.8, 1, 1, 1, 0),
-(92010, 81258, 1.8, 1, 1, 1, 0),
-(92010, 69004, 1.8, 1, 1, 1, 0),
-(92010, 69006, 1.8, 1, 1, 1, 0),
-(92010, 83300, 1.8, 1, 1, 1, 0),
-(92010, 83301, 1.8, 1, 1, 1, 0),
-(92010, 83302, 1.8, 1, 1, 1, 0),
-(92010, 60982, 1.8, 1, 1, 1, 0), -- Programmer Socks
-(92010, 92011, 1.8, 1, 1, 1, 0),
-(92010, 92012, 1.8, 1, 1, 1, 0),
-(92010, 92013, 1.8, 1, 1, 1, 0),
-(92010, 92014, 1.8, 1, 1, 1, 0),
-(92010, 50081, 1.8, 1, 1, 1, 0),
-(92010, 92016, 2.7, 1, 1, 1, 0),
-(92010, 13584, 2.7, 1, 1, 1, 0), 
-(92010, 51891, 2.7, 1, 1, 1, 0), -- Fortune Teller
-(92010, 69001, 2.7, 1, 1, 1, 0), -- Warp Stalker
-(92010, 13582, 1.8, 1, 1, 1, 0), 
-(92010, 81152, 1.8, 1, 1, 1, 0),  
-(92010, 69002, 1.8, 1, 1, 1, 0),  
-(92010, 81081, 1.8, 1, 1, 1, 0),  
-(92010, 23705, 1.8, 1, 1, 1, 0),  
-(92010, 81082, 1.8, 1, 1, 1, 0),  
-(92010, 81085, 1.8, 1, 1, 1, 0),  
-(92010, 51700, 1.8, 1, 1, 1, 0),
-(92010, 50003, 1.8, 1, 1, 1, 0),
-(92010, 50004, 1.8, 1, 1, 1, 0),
-(92010, 50011, 1.8, 1, 1, 1, 0),
-(92010, 51715, 1.8, 1, 1, 1, 0),
-(92010, 50602, 1.8, 1, 1, 1, 0),
-(92010, 50009, 1.8, 1, 1, 1, 0),
-(92010, 50005, 1.8, 1, 1, 1, 0),
-(92010, 50007, 1.8, 1, 1, 1, 0),
-(92010, 51421, 1.8, 1, 1, 1, 0);
+
+(92010, 12303, 1.8, 1, 1, 1, 0),	-- Black Zulian Panther
+(92010, 13582, 1.8, 1, 1, 1, 0),	-- Zergling Leash
+(92010, 13584, 1.8, 1, 1, 1, 0),	-- Diablo Stone
+(92010, 18768, 1.8, 1, 1, 1, 0),	-- Armored Dawnsaber
+(92010, 23193, 1.8, 1, 1, 1, 0),	-- Armored Black Deathcharger
+(92010, 23705, 1.8, 1, 1, 1, 0),	-- Tabard of Flame
+(92010, 50003, 1.8, 1, 1, 1, 0),	-- Loremaster's Backpack
+(92010, 50004, 1.8, 1, 1, 1, 0),	-- Portable Pocket Dimension
+(92010, 50005, 1.8, 1, 1, 1, 0),	-- Field Repair Bot 75B
+(92010, 50007, 1.8, 1, 1, 1, 0),	-- Forworn Mule
+(92010, 50009, 1.8, 1, 1, 1, 0),	-- Mechanical Auctioneer
+(92010, 50011, 1.8, 1, 1, 1, 0),	-- MOLL-E, Remote Mail Terminal
+(92010, 50081, 1.8, 1, 1, 1, 0),	-- Cottontail Rabbit
+(92010, 50399, 1.8, 1, 1, 1, 0),	-- Ancient Quel'dorei Steed
+(92010, 50400, 1.8, 1, 1, 1, 0),	-- Riding Zhevra
+(92010, 50407, 1.8, 1, 1, 1, 0),	-- Nightmare Dreamrunner
+(92010, 50602, 1.8, 1, 1, 1, 0),	-- Summon: Auctioneer
+(92010, 51421, 1.8, 1, 1, 1, 0),	-- Caravan Kodo
+(92010, 51700, 1.8, 1, 1, 1, 0),	-- Cracked Raptor Egg
+(92010, 51715, 1.8, 1, 1, 1, 0),	-- Goblin Brainwashing Device
+(92010, 51891, 1.8, 1, 1, 1, 0),	-- Mysterious Fortune Teller
+(92010, 60982, 1.7, 1, 1, 1, 0),	-- Programmer Socks
+(92010, 69001, 1.7, 1, 1, 1, 0),	-- Tiny Warp Stalker
+(92010, 69002, 1.7, 1, 1, 1, 0),	-- Scotty
+(92010, 69004, 1.7, 1, 1, 1, 0),	-- Pengu
+(92010, 69006, 1.7, 1, 1, 1, 0),	-- Glitterwing
+(92010, 80430, 0.1, 1, 1, 1, 0),	-- Armored Spectral Tiger
+(92010, 80449, 1.7, 1, 1, 1, 0),	-- Armored Alliance Steed
+(92010, 81081, 1.7, 1, 1, 1, 0),	-- Tabard of Fury
+(92010, 81082, 1.8, 1, 1, 1, 0),	-- Tabard of Brilliance
+(92010, 81085, 1.8, 1, 1, 1, 0),	-- Tabard of Nature
+(92010, 81091, 1.7, 1, 1, 1, 0),	-- Big Blizzard Bear
+(92010, 81102, 1.7, 1, 1, 1, 0),	-- Darkmoon Dancing Bear
+(92010, 81152, 1.7, 1, 1, 1, 0),	-- Tiny Pterodactyl
+(92010, 81153, 1.7, 1, 1, 1, 0),	-- Armored Purple Bear
+(92010, 81155, 1.7, 1, 1, 1, 0),	-- Armored Red Bear
+(92010, 81158, 1.7, 1, 1, 1, 0),	-- Armored Frostmane Bear
+(92010, 81207, 1.7, 1, 1, 1, 0),	-- Dalaran Cloud Familiar
+(92010, 81231, 1.7, 1, 1, 1, 0),	-- Tamed Rak'Shiri
+(92010, 81232, 1.7, 1, 1, 1, 0),	-- Azure Frostsaber
+(92010, 81234, 1.7, 1, 1, 1, 0),	-- Brewfest Ram
+(92010, 81235, 1.7, 1, 1, 1, 0),	-- Armored Vermilion Deathcharger
+(92010, 81236, 1.7, 1, 1, 1, 0),	-- Armored Grey Steed
+(92010, 81239, 1.7, 1, 1, 1, 0),	-- Happy Whimsyshire Cloud
+(92010, 81240, 1.7, 1, 1, 1, 0),	-- Sad Whimsyshire Cloud
+(92010, 81258, 1.7, 1, 1, 1, 0),	-- Spectral Cub
+(92010, 83150, 1.7, 1, 1, 1, 0),	-- Big Turtle WoW Bear
+(92010, 83300, 1.7, 1, 1, 1, 0),	-- Lil' K.T.
+(92010, 83301, 1.7, 1, 1, 1, 0),	-- Core Hound Pup
+(92010, 83302, 1.7, 1, 1, 1, 0),	-- Lil' Ragnaros
+(92010, 92011, 1.7, 1, 1, 1, 0),	-- Lavender Spring Shirt
+(92010, 92012, 1.8, 1, 1, 1, 0),	-- Mint Spring Shirt
+(92010, 92013, 1.8, 1, 1, 1, 0),	-- Pink Spring Shirt
+(92010, 92014, 1.8, 1, 1, 1, 0),	-- Spring Chemise
+(92010, 92016, 1.8, 1, 1, 1, 0),	-- Spotted Rabbit
+(92010, 92017, 1.8, 1, 1, 1, 0),	-- White Riding Talbuk
+(92010, 92018, 1.8, 1, 1, 1, 0),	-- Dark Riding Talbuk
+(92010, 92019, 1.8, 1, 1, 1, 0);	-- Green Spring Shirt 
+
+
 
 REPLACE INTO `collection_pet` (`itemId`, `spellId`) VALUES (92016, 10712);
 
