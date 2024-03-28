@@ -174,6 +174,12 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         return;
     }
 
+    if (sWorld.m_collectPacketStats)
+    {
+        ++sWorld.m_packetsCount[packet->GetOpcode()];
+        sWorld.m_packetsSize[packet->GetOpcode()] += packet->size();
+    }
+
 #ifdef _DEBUG
 
     // Code for network use statistic

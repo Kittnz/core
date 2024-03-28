@@ -239,6 +239,7 @@ using socket_t = int;
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <optional>
 
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
 #ifdef _WIN32
@@ -596,9 +597,9 @@ public:
 
 class ThreadPool : public TaskQueue {
 public:
-  explicit ThreadPool(size_t n) : shutdown_(false) {
+  explicit ThreadPool(size_t n, std::optional<std::function<void()>> init, std::optional<std::function<void()>> destroy) : shutdown_(false) {
     while (n) {
-      threads_.emplace_back(worker(*this));
+      threads_.emplace_back(worker(*this, init, destroy));
       n--;
     }
   }
@@ -632,9 +633,13 @@ public:
 
 private:
   struct worker {
-    explicit worker(ThreadPool &pool) : pool_(pool) {}
+    explicit worker(ThreadPool &pool, std::optional<std::function<void()>> initFunc, std::optional<std::function<void()>> destroyFunc) : pool_(pool),
+    _initFunc(initFunc), _destroyFunc(destroyFunc) {}
 
     void operator()() {
+        if (_initFunc)
+            (*_initFunc)();
+
       for (;;) {
         std::function<void()> fn;
         {
@@ -652,9 +657,14 @@ private:
         assert(true == static_cast<bool>(fn));
         fn();
       }
+
+      if (_destroyFunc)
+          (*_destroyFunc)();
     }
 
     ThreadPool &pool_;
+    std::optional<std::function<void()>> _initFunc;
+    std::optional<std::function<void()>> _destroyFunc;
   };
   friend struct worker;
 
@@ -824,6 +834,17 @@ public:
 
   Server &set_payload_max_length(size_t length);
 
+  static void SetInitThreadCallback(std::function<void()> callback)
+  {
+      _initThreadCallback = callback;
+  }
+
+
+  static void SetDestroyThreadCallback(std::function<void()> callback)
+  {
+      _destroyThreadCallback = callback;
+  }
+
   bool bind_to_port(const std::string &host, int port, int socket_flags = 0);
   int bind_to_any_port(const std::string &host, int socket_flags = 0);
   bool listen_after_bind();
@@ -835,6 +856,8 @@ public:
   void stop();
 
   std::function<TaskQueue *(void)> new_task_queue;
+  static std::optional<std::function<void()>> _initThreadCallback;
+  static std::optional<std::function<void()>> _destroyThreadCallback;
 
 protected:
   bool process_request(Stream &strm, bool close_connection,
@@ -5494,7 +5517,7 @@ inline bool RegexMatcher::match(Request &request) const {
 // HTTP server implementation
 inline Server::Server()
     : new_task_queue(
-          [] { return new ThreadPool(CPPHTTPLIB_THREAD_POOL_COUNT); }) {
+          [cbInit = _initThreadCallback, cbDestroy = _destroyThreadCallback] { return new ThreadPool(CPPHTTPLIB_THREAD_POOL_COUNT, cbInit, cbDestroy); }) {
 #ifndef _WIN32
   signal(SIGPIPE, SIG_IGN);
 #endif

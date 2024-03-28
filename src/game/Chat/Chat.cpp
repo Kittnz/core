@@ -165,6 +165,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "condition",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
         { "instancedata",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetInstanceDataCommand,     "", nullptr },
+        { "packetstats",    SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugPacketStatsCommand,         "", nullptr },
         { "fields",         SEC_DEVELOPER,     false, nullptr,                                             "", debugFieldsCommandTable},
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
@@ -639,7 +640,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand sendCommandTable[] =
     {
         { "items",          SEC_DEVELOPER,  true,  &ChatHandler::HandleSendItemsCommand,           "", nullptr },
-        { "mail",           SEC_DEVELOPER,      true,  &ChatHandler::HandleSendMailCommand,            "", nullptr },
+        { "mail",           SEC_MODERATOR,      true,  &ChatHandler::HandleSendMailCommand,            "", nullptr },
         { "message",        SEC_DEVELOPER,  true,  &ChatHandler::HandleSendMessageCommand,         "", nullptr },
         { "money",          SEC_DEVELOPER,  true,  &ChatHandler::HandleSendMoneyCommand,           "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }

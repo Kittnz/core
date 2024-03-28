@@ -34,6 +34,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Opcodes.h"
 #include "Utilities/robin_hood.h"
 
 //#include "Creature.h"
@@ -1242,6 +1243,11 @@ class World
         void SetWorldUpdateTimer(WorldTimers timer, uint32 current);
         time_t GetWorldUpdateTimer(WorldTimers timer);
         time_t GetWorldUpdateTimerInterval(WorldTimers timer);
+
+        // packet statistics
+        bool m_collectPacketStats = false;
+        std::atomic_uint64_t m_packetsCount[NUM_MSG_TYPES] = {};
+        std::atomic_uint64_t m_packetsSize[NUM_MSG_TYPES] = {};
 
     protected:
         void _UpdateGameTime();

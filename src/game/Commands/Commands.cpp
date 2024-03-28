@@ -18615,3 +18615,90 @@ bool ChatHandler::HandlePerfReportMemory(char* Args)
     return true;
 }
 
+bool ChatHandler::HandleDebugPacketStatsCommand(char* args)
+{
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (sWorld.m_collectPacketStats == value)
+    {
+        PSendSysMessage("Packet statistics collecting is already %s.", value ? "on" : "off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        for (uint32 i = 0; i < NUM_MSG_TYPES; ++i)
+        {
+            sWorld.m_packetsCount[i] = 0;
+            sWorld.m_packetsSize[i] = 0;
+        }
+        SendSysMessage("Beginning collection of packet statistics.");
+    }
+
+    sWorld.m_collectPacketStats = value;
+
+    std::vector<std::pair<uint64 /*count*/, uint64 /*opcode*/>> opcodesByCount;
+    std::vector<std::pair<uint64 /*size*/, uint64 /*opcode*/>> opcodesBySize;
+
+    if (!value)
+    {
+        for (uint32 i = 0; i < NUM_MSG_TYPES; ++i)
+        {
+            opcodesByCount.push_back(std::make_pair<uint64, uint64>((uint64)sWorld.m_packetsCount[i], (uint64)i));
+            opcodesBySize.push_back(std::make_pair<uint64, uint64>((uint64)sWorld.m_packetsSize[i], (uint64)i));
+        }
+
+        std::sort(opcodesByCount.begin(),
+            opcodesByCount.end(),
+            [](std::pair<uint64, uint64> a, std::pair<uint64, uint64> b)
+            {return a.first > b.first; });
+
+        std::sort(opcodesBySize.begin(),
+            opcodesBySize.end(),
+            [](std::pair<uint64, uint64> a, std::pair<uint64, uint64> b)
+            {return a.first > b.first; });
+
+        SendSysMessage("Top 5 by count:");
+        for (uint32 i = 0; i < 5; ++i)
+        {
+            PSendSysMessage("%u. %s - %u", i + 1, LookupOpcodeName(opcodesByCount[i].second), opcodesByCount[i].first);
+        }
+
+        SendSysMessage("Top 5 by size:");
+        for (uint32 i = 0; i < 5; ++i)
+        {
+            PSendSysMessage("%u. %s - %u", i + 1, LookupOpcodeName(opcodesBySize[i].second), opcodesBySize[i].first);
+        }
+
+        if (FILE* pFile = fopen("packetstats.txt", "w"))
+        {
+            SendSysMessage("Writing full statistics to file packetstats.txt");
+
+            fprintf(pFile, "Packets by count:\n");
+            for (auto const& itr : opcodesByCount)
+            {
+                if (itr.first != 0)
+                    fprintf(pFile, "%s - %llu\n", LookupOpcodeName(itr.second), itr.first);
+            }
+
+            fprintf(pFile, "\nPackets by size:\n");
+            for (auto const& itr : opcodesBySize)
+            {
+                if (itr.first != 0)
+                    fprintf(pFile, "%s - %llu\n", LookupOpcodeName(itr.second), itr.first);
+            }
+
+            fclose(pFile);
+        }
+    }
+
+    return true;
+}
+
