@@ -29,6 +29,7 @@ REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc4`) VALUES
 UPDATE spell_template SET description = 'Agile and quick, it hops around with a whimsical grace that captivates the hearts of adventurers across Azeroth.' WHERE entry = 10712;
 UPDATE spell_template SET description = 'If you go chasing snowshoe rabbits, you know you''re going to fall.' WHERE entry = 10711;
 
+DELETE FROM `item_loot_template` WHERE `entry` = 92010;
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
 
 (92010, 12303, 1.8, 1, 1, 1, 0),	-- Black Zulian Panther
