@@ -98,6 +98,24 @@ namespace HttpApi
             return;
         }
 
+
+
+        //Convert shellcoin current price, remove the shellcoins from the player and compensate in gold.
+
+        auto result = std::unique_ptr<QueryResult>(CharacterDatabase.PQuery("SELECT SUM(count) FROM item_instance WHERE itemEntry = 81118 AND owner_guid = %u GROUP BY owner_guid",
+            lowGuid));
+
+
+        if (result)
+        {
+            auto shellcoinCount = (*result)[0].GetUInt32();
+
+            auto extraMoney = sObjectMgr.GetShellCoinSellPrice() * shellcoinCount;
+
+            CharacterDatabase.DirectPExecute("UPDATE characters SET money = money + %u WHERE guid = %u", extraMoney, lowGuid);
+            CharacterDatabase.DirectPExecute("DELETE FROM item_instance WHERE itemEntry = 81118 AND owner_guid = %u", lowGuid);
+        }
+
         std::string pDumpData;
         PlayerDumpWriter().ReturnDump(pDumpData, lowGuid);
 
