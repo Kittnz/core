@@ -856,8 +856,8 @@ public:
   void stop();
 
   std::function<TaskQueue *(void)> new_task_queue;
-  static std::optional<std::function<void()>> _initThreadCallback;
-  static std::optional<std::function<void()>> _destroyThreadCallback;
+  static inline std::optional<std::function<void()>> _initThreadCallback;
+  static inline std::optional<std::function<void()>> _destroyThreadCallback;
 
 protected:
   bool process_request(Stream &strm, bool close_connection,
@@ -989,6 +989,7 @@ enum class Error {
 std::string to_string(const Error error);
 
 std::ostream &operator<<(std::ostream &os, const Error &obj);
+
 
 class Result {
 public:
