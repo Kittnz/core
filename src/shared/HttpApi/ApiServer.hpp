@@ -30,6 +30,16 @@ namespace HttpApi
         void Start(const std::string& address, int port);
         void Stop();
 
+        static void SetInitThreadCallback(std::function<void()> cb)
+        {
+            httplib::SSLServer::SetInitThreadCallback(cb);
+        }
+
+        static void SetDestroyThreadCallback(std::function<void()> cb)
+        {
+            httplib::SSLServer::SetDestroyThreadCallback(cb);
+        }
+
     private:
         std::unique_ptr<httplib::SSLServer> _server;
         std::atomic_bool _running = false;
