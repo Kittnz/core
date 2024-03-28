@@ -1748,6 +1748,10 @@ void World::StopHttpApiServer()
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
+    //Have to do it like this to get proper thread handling in the threadpool of the HTTPS api backend to allow querying on any post or get handlers.
+    HttpApi::ApiServer::SetInitThreadCallback([]() { mysql_thread_init(); });
+    HttpApi::ApiServer::SetDestroyThreadCallback([]() { mysql_thread_end(); });
+
     _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
     HttpApi::RegisterControllers();
     _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
