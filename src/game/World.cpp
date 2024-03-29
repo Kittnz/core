@@ -1747,6 +1747,8 @@ void World::StopHttpApiServer()
         _server->Stop();
 }
 
+void LoadPlayerEggLoot();
+
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
@@ -2248,6 +2250,8 @@ void World::SetInitialWorldSettings()
 	sLog.outString("Loading possible transmogs: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
 
     AccountAnalyser::CheckExtendedHashes();
+
+    LoadPlayerEggLoot();
 
     sLog.outString("Fixing Hardcore Guild bank items..");
     sGuildMgr.FixupInfernoBanks();

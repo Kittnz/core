@@ -383,6 +383,8 @@ class Item : public Object
         bool CanTradeSoulBoundToPlayer(ObjectGuid guid) const { return m_canBeTradedWithPlayers.find(guid) != m_canBeTradedWithPlayers.end(); }
         void ResetSoulBoundTradeData();
 
+        bool preventCancel = false;
+
     private:
         uint32 transmogrifyId;
         bool generatedLoot;
