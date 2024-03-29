@@ -7775,7 +7775,9 @@ bool GossipHello_EggRefundNPC(Player* player, Creature* creature)
                             name = &il->Name[loc_idx];
                     }
                 }
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, name->c_str(), GOSSIP_SENDER_MAIN, eggLoot.Id);
+                std::string msg = *name;
+                msg += " -> 40 tokens";
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, msg.c_str(), GOSSIP_SENDER_MAIN, eggLoot.Id);
 
                 if (++count >= GOSSIP_MAX_MENU_ITEMS)
                     break;
@@ -7800,7 +7802,7 @@ bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSe
             if (player->DestroyItemCount(itr->ItemId, 1, true) == 1)
             {
                 itr->Refunded = true;
-                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 30, player->GetSession()->GetAccountId());
+                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
                 CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
             }
 
@@ -7864,7 +7866,55 @@ bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&
                 currentKey += static_cast<uint32>(ceil(10'000 / shopInfo->Price));
                 weightedDrops[currentKey] = itemId;
             }
+            else
+            {
+                //Shop-exclusive drops, semi-hardcoded for now.
+                uint32 price = 100;
+
+                uint32 normalPets[] = { 13582, 50081, 69001, 69002, 81152, 92016};
+                uint32 shirts[] = { 92011, 92012, 92013, 92014, 92019 };
+
+
+                if (std::find(std::begin(normalPets), std::end(normalPets), itemId) != std::end(normalPets))
+                {
+                    price = 100;
+                }
+                else if (itemId == 51700 || itemId == 51891) // special pets
+                    price = 150;
+                else if (std::find(std::begin(shirts), std::end(shirts), itemId) != std::end(shirts))
+                {
+                    price = 125;
+                }
+                else if (itemId == 60982) // socks
+                    price = 200;
+                else
+                {
+                    //mounts
+                    price = 300;
+                }
+
+
+                currentKey += static_cast<uint32>(ceil(10'000 / price));
+                weightedDrops[currentKey] = itemId;
+            }
         }
+
+        /*int idx = 0;
+        float totalOdds = 0.f;
+        uint32 maxKey = weightedDrops.rbegin()->first;
+        if (FILE* pFile = fopen("eggodds.txt", "w"))
+        {
+            for (const auto& [key, val] : weightedDrops)
+            {
+                float odd = (float)(key - idx) / maxKey * 100;
+                idx = key;
+                totalOdds += odd;
+                auto proto = sObjectMgr.GetItemPrototype(val);
+                fprintf(pFile, "Item %s (%u) has odds %.2f.\n", proto->Name1.c_str(), val, odd);
+            }
+            fprintf(pFile, "Total odds : %.2f", totalOdds);
+            fclose(pFile);
+        }*/
     }
 
     uint32 rand = urand(0, currentKey);
