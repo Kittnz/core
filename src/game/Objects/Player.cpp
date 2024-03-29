@@ -12132,7 +12132,7 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
     }
 }
 
-void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check, const bool check_bank)
+uint32 Player::DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check, const bool check_bank)
 {
     DEBUG_LOG("STORAGE: DestroyItemCount item = %u, count = %u", item, count);
     uint32 remcount = 0;
@@ -12150,8 +12150,9 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                     remcount += pItem->GetCount();
                     DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 
+
                     if (remcount >= count)
-                        return;
+                        return remcount;
                 }
                 else
                 {
@@ -12162,7 +12163,9 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                         pItem->SendCreateUpdateToPlayer(this);
 
                     pItem->SetState(ITEM_CHANGED, this);
-                    return;
+
+                    remcount = count;
+                    return remcount;
                 }
             }
         }
@@ -12181,7 +12184,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                     DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 
                     if (remcount >= count)
-                        return;
+                        return remcount;
                 }
                 else
                 {
@@ -12192,7 +12195,9 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                         pItem->SendCreateUpdateToPlayer(this);
 
                     pItem->SetState(ITEM_CHANGED, this);
-                    return;
+
+                    remcount = count;
+                    return remcount;
                 }
             }
         }
@@ -12216,7 +12221,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                             DestroyItem(i, j, update);
 
                             if (remcount >= count)
-                                return;
+                                return remcount;
                         }
                         else
                         {
@@ -12227,7 +12232,9 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                                 pItem->SendCreateUpdateToPlayer(this);
 
                             pItem->SetState(ITEM_CHANGED, this);
-                            return;
+
+                            remcount = count;
+                            return remcount;
                         }
                     }
                 }
@@ -12256,7 +12263,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                         DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 
                         if (remcount >= count)
-                            return;
+                            return remcount;
                     }
                 }
                 else
@@ -12268,7 +12275,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                         pItem->SendCreateUpdateToPlayer(this);
 
                     pItem->SetState(ITEM_CHANGED, this);
-                    return;
+                    return remcount;
                 }
             }
         }
@@ -12289,7 +12296,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                         DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 
                         if (remcount >= count)
-                            return;
+                            return remcount;
                     }
                     else
                     {
@@ -12299,7 +12306,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                             pItem->SendCreateUpdateToPlayer(this);
 
                         pItem->SetState(ITEM_CHANGED, this);
-                        return;
+                        return remcount;
                     }
                 }
             }
@@ -12322,7 +12329,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                                 DestroyItem(i, j, update);
 
                                 if (remcount >= count)
-                                    return;
+                                    return remcount ;
                             }
                             else
                             {
@@ -12332,7 +12339,7 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
                                     pItem->SendCreateUpdateToPlayer(this);
 
                                 pItem->SetState(ITEM_CHANGED, this);
-                                return;
+                                return remcount;
                             }
                         }
                     }
@@ -23243,9 +23250,15 @@ void Player::InterruptSpellsWithCastItem(Item* item)
         if (Spell *spell = GetCurrentSpell(CurrentSpellTypes(i)))
             if (spell->m_CastItem == item)
             {
-                spell->ClearCastItem();
-                if (i != CURRENT_CHANNELED_SPELL)
-                    InterruptSpell(CurrentSpellTypes(i), true);
+                if (item)
+                {
+                    spell->ClearCastItem();
+                    if (!item->preventCancel)
+                    {
+                        if (i != CURRENT_CHANNELED_SPELL)
+                            InterruptSpell(CurrentSpellTypes(i), true);
+                    }
+                }
             }
 
     // Interrupt eventually delayed spells
@@ -23254,9 +23267,15 @@ void Player::InterruptSpellsWithCastItem(Item* item)
         if (SpellEvent* event = dynamic_cast<SpellEvent*>(i_Events->second))
             if (event && event->GetSpell()->m_CastItem == item)
             {
-                event->GetSpell()->ClearCastItem();
-                if (event->GetSpell()->getState() != SPELL_STATE_FINISHED)
-                    event->GetSpell()->cancel();
+                if (item)
+                {
+                    event->GetSpell()->ClearCastItem();
+                    if (!item->preventCancel)
+                    {
+                        if (event->GetSpell()->getState() != SPELL_STATE_FINISHED)
+                            event->GetSpell()->cancel();
+                    }
+                }
             }
 }
 
