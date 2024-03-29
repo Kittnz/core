@@ -7782,7 +7782,7 @@ bool GossipHello_EggRefundNPC(Player* player, Creature* creature)
             }
         }
     }
-    player->SEND_GOSSIP_MENU(907, creature->GetGUID());
+    player->SEND_GOSSIP_MENU(GOSSIP_REFUND_EGG_ITEMS, creature->GetGUID());
 
     return true;
 }
@@ -7800,7 +7800,7 @@ bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSe
             if (player->DestroyItemCount(itr->ItemId, 1, true) == 1)
             {
                 itr->Refunded = true;
-                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", (uint32)ceil(shopInfo->Price / 3), player->GetSession()->GetAccountId());
+                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 30, player->GetSession()->GetAccountId());
                 CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
             }
 
