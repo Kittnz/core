@@ -229,7 +229,10 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
         auto session = sWorld.FindSession(accountId);
 
         if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
+        {
             session->SendNotification("You can't buy this item at level 1.");
+            return;
+        }
     }
 
     if (coins > 0)
