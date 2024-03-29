@@ -7796,7 +7796,10 @@ bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSe
     {
         if (auto shopInfo = sObjectMgr.GetShopEntryInfo(itr->ItemId))
         {
-            if (player->DestroyItemCount(itr->ItemId, 1, true) == 1)
+            auto amount = player->GetItemCount(itr->ItemId);
+            player->DestroyItemCount(itr->ItemId, 1, true);
+            auto newAmount = player->GetItemCount(itr->ItemId);
+            if (newAmount < amount)
             {
                 itr->Refunded = true;
                 LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
