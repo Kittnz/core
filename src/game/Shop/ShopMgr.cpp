@@ -224,6 +224,14 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
     int32 count = 1;
     int64 coins = GetBalance(accountId);
 
+    if (itemId == 92010) // egg can't be bought by level 1
+    {
+        auto session = sWorld.FindSession(accountId);
+
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
+            session->SendNotification("You can't buy this item at level 1.");
+    }
+
     if (coins > 0)
     {
         int64 newBalance = coins - price;
