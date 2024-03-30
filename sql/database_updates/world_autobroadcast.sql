@@ -13,7 +13,7 @@ replace into mangos_string (entry, content_default) values
 replace into autobroadcast (string_Id) values (50000),(50001),(50002),(50003),(50004),(50005);
 
 UPDATE `mangos_string` SET `content_loc4` = '定期删除WDB文件夹。这是游戏缓存，删除它通常可以修复一些小的游戏故障。在提交工单之前，请务必尝试此方法。' WHERE `entry` = 50000;
-UPDATE `mangos_string` SET `content_loc4` = '如果您想鼓励我们的项目，请查看我们的商店以获取捐赠奖励！请在我们网站的捐赠页面上了解更多信息。' WHERE `entry` = 50001;
+UPDATE `mangos_string` SET `content_loc4` = '4月10日前，所有捐赠物品价格均为半价!复活节快乐!' WHERE `entry` = 50001;
 UPDATE `mangos_string` SET `content_loc4` = '保持与最新消息的同步，并加入我们的KOOK服务器！' WHERE `entry` = 50002;
 UPDATE `mangos_string` SET `content_loc4` = '我们鼓励每个人定期更改密码。如果您认为您曾在其他私人服务器上使用过乌龟魔兽的密码，请尽快更改密码。' WHERE `entry` = 50003;
 UPDATE `mangos_string` SET `content_loc4` = '所有金币交易都受到严格监控。任何形式的RMT交易将对所有涉及方采取严厉行动。请不要支持那些正在损害我们服务器的个人。' WHERE `entry` = 50004;
