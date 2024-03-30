@@ -7760,7 +7760,17 @@ bool GossipHello_EggRefundNPC(Player* player, Creature* creature)
     uint32 count = 0;
     for (const auto& eggLoot : eggItems)
     {
-        if (!eggLoot.Refunded && player->HasItemCount(eggLoot.ItemId))
+        Item* targetItem = nullptr;
+        player->ApplyForAllItems([&targetItem, itemGuid = eggLoot.ItemGuid](Item* item)
+            {
+                if (targetItem)
+                    return;
+
+                if (item->GetGUIDLow() == itemGuid && !item->IsEquipped())
+                    targetItem = item;
+            });
+
+        if (!eggLoot.Refunded && targetItem)
         {
             if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(eggLoot.ItemId))
             {
@@ -7795,22 +7805,28 @@ bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSe
     auto& eggLoot = playerEggLoot[player->GetGUIDLow()];
 
     auto itr = std::find_if(eggLoot.begin(), eggLoot.end(), [action](PlayerEggLoot& loot) { return action == loot.Id; });
-    if (itr != eggLoot.end() && !itr->Refunded && player->HasItemCount(itr->ItemId))
+    if (itr != eggLoot.end())
     {
-        if (auto shopInfo = sObjectMgr.GetShopEntryInfo(itr->ItemId))
-        {
-            auto amount = player->GetItemCount(itr->ItemId);
-            player->DestroyItemCount(itr->ItemId, 1, true);
-            auto newAmount = player->GetItemCount(itr->ItemId);
-            if (newAmount < amount)
-            {
-                itr->Refunded = true;
-                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
-                CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
-            }
 
+        Item* targetItem = nullptr;
+        player->ApplyForAllItems([&targetItem, itemGuid = itr->ItemGuid](Item* item)
+            {
+                if (targetItem)
+                    return;
+
+                if (item->GetGUIDLow() == itemGuid && !item->IsEquipped())
+                    targetItem = item;
+            });
+
+        if (!itr->Refunded && targetItem)
+        {
+            player->DestroyItem(targetItem->GetBagSlot(), targetItem->GetSlot(), true);
+            itr->Refunded = true;
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
+            CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
         }
     }
+
     player->CLOSE_GOSSIP_MENU();
 
     return true;
@@ -7886,10 +7902,10 @@ bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&
                     price = 150;
                 else if (std::find(std::begin(shirts), std::end(shirts), itemId) != std::end(shirts))
                 {
-                    price = 125;
+                    price = 250;
                 }
                 else if (itemId == 60982) // socks
-                    price = 200;
+                    price = 300;
                 else
                 {
                     //mounts
