@@ -53,6 +53,7 @@
 #include "ZoneScript.h"
 #include "Unit.h"
 #include "MountManager.hpp"
+#include "CompanionManager.hpp"
 
 using namespace Spells;
 
@@ -5879,7 +5880,19 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_TARGET_AURASTATE;
                 break;
             }
-
+            
+            case 46498:
+            {
+                if (m_CastItem)
+                {
+                    auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(m_CastItem->GetEntry());
+                    if (spellIdOpt && m_caster->IsPlayer() && m_caster->ToPlayer()->HasSpell(spellIdOpt.value()))
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You already know this companion.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
+            }break;
             case 46499:
             {
                 if (m_CastItem)
@@ -5887,7 +5900,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     auto spellIdOpt = sMountMgr.GetMountSpellId(m_CastItem->GetEntry());
                     if (spellIdOpt && m_caster->IsPlayer() && m_caster->ToPlayer()->HasSpell(spellIdOpt.value()))
                     {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("You already know this mount or companion.");
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You already know this mount.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
