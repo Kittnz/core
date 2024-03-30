@@ -1297,7 +1297,7 @@ class Player final: public Unit
         // in trade, auction, guild bank, mail....
         Item* MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
         void DestroyItem(uint8 bag, uint8 slot, bool update);
-        uint32 DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check = false, const bool check_bank = false);
+        void DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check = false, const bool check_bank = false);
         void DestroyItemCount(Item* item, uint32& count, bool update);
         /**
          * @brief Destroys equipped item $itemId and updates the Player
