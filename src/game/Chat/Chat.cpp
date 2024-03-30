@@ -980,6 +980,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "toggleillusions", SEC_DEVELOPER,      false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
         { "tmogdelete",     SEC_DEVELOPER,       false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
         { "perf",           SEC_ADMINISTRATOR,   true, nullptr,                                         "", perfCommandTable },
+        { "blockegg",       SEC_DEVELOPER,       false, &ChatHandler::HandleBlockEggsCommand,           "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 
