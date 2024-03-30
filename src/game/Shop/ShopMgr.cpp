@@ -239,6 +239,12 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
             session->SendNotification("You can't buy this item below level 10 if you are a Hardcore player.");
             return;
         }
+
+        if (session && session->GetPlayer() && session->GetPlayer()->HasItemCount(50745, 1, false))
+        {
+            session->SendNotification("You can't buy this item because of your glyph.");
+            return;
+        }
     }
 
     if (coins > 0)
