@@ -500,7 +500,7 @@ struct SavedVariable
     uint32 uiValue;
     bool bSavedInDb;
 };
-typedef std::vector<SavedVariable> SavedVariablesVector;
+typedef std::unordered_map<uint32, SavedVariable> SavedVariablesMap;
 
 struct PlayerCacheData
 {
@@ -1477,7 +1477,7 @@ class ObjectMgr
 
         void LoadSavedVariable();
         void SaveVariables();
-        SavedVariablesVector m_SavedVariables;
+        SavedVariablesMap m_SavedVariables;
 
         // Caching Player Data
         void LoadPlayerCacheData(uint32 lowGuid = 0);
