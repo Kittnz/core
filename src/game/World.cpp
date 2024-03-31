@@ -415,6 +415,10 @@ uint32 World::GetConnectionCountByIp(uint32 ip) const
     return 0;
 }
 
+bool World::IsAprilFools() const
+{
+    return sObjectMgr.GetSavedVariable(VAR_APRIL_FOOLS_ENABLED, 0); 
+}
 
 void World::AddQueuedSession(WorldSession* sess)
 {
