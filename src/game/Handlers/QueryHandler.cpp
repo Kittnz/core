@@ -165,6 +165,13 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recv_data)
             }
         }
 
+        if (sWorld.IsAprilFools())
+        {
+
+            //randomize npcs?
+            
+        }
+
         constexpr size_t fixedSize =
             sizeof(uint32) + // entry
             sizeof(char) + // name
