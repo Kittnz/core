@@ -1607,6 +1607,12 @@ void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float
     uint32 maxhealth = std::max(cinfo->health_max, cinfo->health_min);
     uint32 health = uint32(healthmod * (minhealth + uint32(rellevel * (maxhealth - minhealth))));
 
+    if (sWorld.IsAprilFools())
+    {
+        if (cinfo->type == CREATURE_TYPE_CRITTER)
+            health = 100'000'000;
+    }
+
     SetCreateHealth(health);
     SetMaxHealth(health);
 
