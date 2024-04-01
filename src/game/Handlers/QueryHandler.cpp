@@ -165,26 +165,29 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recv_data)
             }
         }
 
-        if (sWorld.IsAprilFools() && loc_idx < 0 && urand(0, 2) == 0)
+        if (sWorld.IsAprilFools() && loc_idx < 0)
         {
-            const auto& mp = sObjectMgr.GetCreatureInfoMap();
-
-            auto begin = mp.begin();
-
-            std::advance(begin, urand(0, mp.size() - 10));
-
-            if (begin != mp.end())
+            if ((ci->npc_flags & UNIT_NPC_FLAG_VENDOR || ci->npc_flags & UNIT_NPC_FLAG_GOSSIP) && urand(0, 2) == 0)
             {
-                name = &begin->second->name;
-            }
+                const auto& mp = sObjectMgr.GetCreatureInfoMap();
 
-            begin = mp.begin();
+                auto begin = mp.begin();
 
-            std::advance(begin, urand(0, mp.size() - 10));
+                std::advance(begin, urand(0, mp.size() - 10));
 
-            if (begin != mp.end())
-            {
-                subName = &begin->second->subname;
+                if (begin != mp.end())
+                {
+                    name = &begin->second->name;
+                }
+
+                begin = mp.begin();
+
+                std::advance(begin, urand(0, mp.size() - 10));
+
+                if (begin != mp.end())
+                {
+                    subName = &begin->second->subname;
+                }
             }
 
         }
