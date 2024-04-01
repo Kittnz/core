@@ -923,6 +923,20 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
     size_t count_pos = data.wpos();
     data << uint8(count);
 
+    if (sWorld.IsAprilFools() && urand(0, 10) == 0)
+    {
+        ++count;
+
+        auto proto = sObjectMgr.GetItemPrototype(19019);
+        data << uint32(count);
+        data << uint32(19019);
+        data << uint32(proto->DisplayInfoID);
+        data << uint32(0xFFFFFFFF);
+        data << uint32(100);
+        data << uint32(1);
+        data << uint32(1);
+    }
+
     float discountMod = _player->GetReputationPriceDiscount(pCreature);
 
     for (int i = 0; i < numitems; ++i)
