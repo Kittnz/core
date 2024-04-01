@@ -6236,12 +6236,6 @@ float Unit::GetPPMProcChance(uint32 WeaponSpeed, float PPM) const
 
 UnitMountResult Unit::Mount(uint32 mount, uint32 spellId)
 {
-    if (sWorld.IsAprilFools())
-    {
-        uint32 displayIds[] = { 18524, 18523 };
-        mount = displayIds[urand(0, 1)];
-    }
-
     if (!mount || !sCreatureDisplayInfoStore.LookupEntry(mount))
     {
         sLog.outError("Attempt by %s to mount invalid display id %u.", this->GetName(), mount);
