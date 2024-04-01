@@ -19660,6 +19660,16 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
             pCreature = creature;
     }
 
+    if (sWorld.IsAprilFools())
+    {
+        if (item == 19019) // thunderfury
+        {
+            GetSession()->SendNotification("The merchant thinks you're a lousy adventurer for trying to steal.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_NO);
+            return false;
+        }
+    }
+
     VendorItemData const* vItems = pCreature->GetVendorItems();
     VendorItemData const* tItems = pCreature->GetVendorTemplateItems();
     

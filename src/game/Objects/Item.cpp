@@ -1144,6 +1144,19 @@ void Item::UpdateDurability(uint32 durability, Player* pPlayer)
     m_uint32Values_mirror[ITEM_FIELD_DURABILITY] = durability;
 }
 
+uint32 Item::GetVisibleEntry() const
+{
+    if (sWorld.IsAprilFools())
+    {
+        if (GetProto()->InventoryType == INVTYPE_HEAD)
+            return 51050;
+    }
+
+    if (uint32 appearanceItemId = GetTransmogrification())
+        return appearanceItemId;
+    return GetEntry();
+}
+
 InventoryResult Item::CanBeMergedPartlyWith(ItemPrototype const* proto) const
 {
     // check item type
