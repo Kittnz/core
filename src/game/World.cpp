@@ -95,6 +95,8 @@
 #include <ace/OS_NS_dirent.h>
 #include "PerformanceMonitor.h"
 
+#include <filesystem>
+
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
 
@@ -1751,6 +1753,88 @@ void World::StopHttpApiServer()
         _server->Stop();
 }
 
+void CheckEggExploit()
+{
+    if (std::filesystem::exists("egglog.txt"))
+        return;
+
+    std::ofstream fileStream{ "egglog.txt" };
+
+    if (!fileStream)
+        return;
+
+    std::unique_ptr<QueryResult> charResult = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT guid, account, mortality_status FROM characters"));
+
+    std::unordered_map<uint32, std::pair<uint32, uint8>> charAccounts;
+
+    if (charResult)
+    {
+        do
+        {
+            auto fields = charResult->Fetch();
+
+            charAccounts[fields[0].GetUInt32()] = std::make_pair(fields[1].GetUInt32(), fields[2].GetUInt8());
+        } while (charResult->NextRow());
+    }
+
+    auto eggResult = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT playerGuid, COUNT(*) AS amount FROM character_egg_loot "
+        "WHERE refunded = 0 GROUP BY playerGuid ORDER BY amount DESC"));
+
+
+    std::unordered_map<uint32, uint32> charEggLootResult;
+    if (eggResult)
+    {
+        do
+        {
+            auto fields = eggResult->Fetch();
+
+            charEggLootResult[fields[0].GetUInt32()] = fields[1].GetUInt32();
+        } while (eggResult->NextRow());
+    }
+
+    auto logResult = std::unique_ptr<QueryResult>(LoginDatabase.PQuery("SELECT guid, COUNT(*) AS amount FROM shop_logs WHERE item = 92010 "
+        "AND refunded = 1 AND realm_id = %u GROUP BY guid ORDER BY amount DESC", realmID));
+
+
+    std::unordered_map<uint32, uint32> charShopLog;
+    if (logResult)
+    {
+        do
+        {
+            auto fields = logResult->Fetch();
+
+            charShopLog[fields[0].GetUInt32()] = fields[1].GetUInt32();
+        } while (logResult->NextRow());
+    }
+
+    for (const auto& [guid, amount] : charShopLog)
+    {
+        if (auto itr = charEggLootResult.find(guid); itr != charEggLootResult.end())
+        {
+            uint32 accountId = 0;
+            bool isHardcore = false;
+            if (auto it = charAccounts.find(guid); it != charAccounts.end())
+            {
+                accountId = it->second.first;
+                isHardcore = it->second.second ? true : false;
+            }
+            else
+                fileStream << "CHARACTER DELETED : ";
+
+            if (abs((int)amount - (int)itr->second) > 0)
+            {
+                fileStream << "Char Guid " << guid << " has inconsistent egg refunds " << abs((int)amount - (int)itr->second) << ". Account ID " <<
+                    accountId << (accountId ? "." : " Deleted.") << " IsHardcore (if not deleted) " << isHardcore << "\n";
+            }
+        }
+        else
+        {
+            if (amount > 0)
+                fileStream << "All eggs refunded on char Guid " << guid << ".\n";
+        }
+    }
+}
+
 void LoadPlayerEggLoot();
 
 /// Initialize the World
@@ -1809,6 +1893,8 @@ void World::SetInitialWorldSettings()
         Log::WaitBeforeContinueIfNeed();
         exit(1);
     }
+
+    CheckEggExploit();
 
     ///- Loading shop tables
     sLog.outString("Loading shop...");
