@@ -163,19 +163,19 @@ bool ShopMgr::RequestPurchase(uint32 accountId, uint32 guidLow, uint32 itemId)
         if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
         {
             session->SendNotification("You can't buy this item at level 1.");
-            return;
+            return true;
         }
 
         if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() < 10 && session->GetPlayer()->IsHardcore())
         {
             session->SendNotification("You can't buy this item if you are a Hardcore player under level 10.");
-            return;
+            return true;
         }
 
         if (session && session->GetPlayer() && session->GetPlayer()->HasItemCount(50745, 1, false))
         {
             session->SendNotification("You can't buy this item because of your glyph.");
-            return;
+            return true;
         }
     }
 
