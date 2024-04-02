@@ -156,6 +156,29 @@ bool ShopMgr::RequestBalance(uint32 accountId)
 
 bool ShopMgr::RequestPurchase(uint32 accountId, uint32 guidLow, uint32 itemId)
 {
+    if (itemId == 92010) // egg can't be bought by level 1
+    {
+        auto session = sWorld.FindSession(accountId);
+
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
+        {
+            session->SendNotification("You can't buy this item at level 1.");
+            return;
+        }
+
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() < 10 && session->GetPlayer()->IsHardcore())
+        {
+            session->SendNotification("You can't buy this item if you are a Hardcore player under level 10.");
+            return;
+        }
+
+        if (session && session->GetPlayer() && session->GetPlayer()->HasItemCount(50745, 1, false))
+        {
+            session->SendNotification("You can't buy this item because of your glyph.");
+            return;
+        }
+    }
+
     std::lock_guard<std::mutex> lock(m_mutex);
     for (auto const& itr : m_pendingRequests)
     {
@@ -223,29 +246,6 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
     uint32 price = shopEntry->Price;
     int32 count = 1;
     int64 coins = GetBalance(accountId);
-
-    if (itemId == 92010) // egg can't be bought by level 1
-    {
-        auto session = sWorld.FindSession(accountId);
-
-        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
-        {
-            session->SendNotification("You can't buy this item at level 1.");
-            return;
-        }
-
-        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() < 10 && session->GetPlayer()->IsHardcore())
-        {
-            session->SendNotification("You can't buy this item if you are a Hardcore player under level 10.");
-            return;
-        }
-
-        if (session && session->GetPlayer() && session->GetPlayer()->HasItemCount(50745, 1, false))
-        {
-            session->SendNotification("You can't buy this item because of your glyph.");
-            return;
-        }
-    }
 
     if (coins > 0)
     {
