@@ -7,3 +7,9 @@ WHERE entry = 80330;
 UPDATE quest_tempalte SET Title = '[DEPRECATED] Taming the Beast' WHERE entry BETWEEN 80331 AND 80334; -- LOOK BROTALNIA, I REMEMBERED TO USE TITLE INSTEAD OF NAME, OKAY???
 DELETE FROM creature_involvedrelation WHERE id = 80903 AND quest = 80330;
 REPLACE INTO creature_involvedrelation VALUES (80105, 80330);
+UPDATE quest_template SET NextQuestInChain = 0 WHERE entry IN (80330, 80366, 6071, 6072, 6073, 6074, 6075, 6076, 6721, 6722, 80339, 6065, 6066, 6067, 6068, 6069, 6070, 40261);
+UPDATE quest_template SET PrevQuestId = 0 WHERE entry IN (6061, 6062, 6063, 6064, 40248, 41131, 41177, 60160, 80340);
+UPDATE quest_template SET NextQuestInChain = 41178 WHERE entry = 41177;
+UPDATE quest_template SET NextQuestInChain = 41179 WHERE entry = 41178;
+UPDATE quest_template SET NextQuestInChain = 41180 WHERE entry = 41179;
+UPDATE quest_template SET RequiredRaces = 512 WHERE entry IN (6064, 6084, 6085, 6086);
