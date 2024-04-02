@@ -4,7 +4,7 @@ Details = 'Hello, young hunter. You look to me like you are skilled enough to ha
 OfferRewardText = 'There you are! I was wondering where you''d run off to. You didn''t think I''d notice you go missing?$B$BWell at least you''re here now, so let''s get down to business.'
 WHERE entry = 80330;
 
-UPDATE quest_tempalte SET Title = '[DEPRECATED] Taming the Beast' WHERE entry BETWEEN 80331 AND 80334; -- LOOK BROTALNIA, I REMEMBERED TO USE TITLE INSTEAD OF NAME, OKAY???
+UPDATE quest_template SET Title = '[DEPRECATED] Taming the Beast' WHERE entry BETWEEN 80331 AND 80334; -- LOOK BROTALNIA, I REMEMBERED TO USE TITLE INSTEAD OF NAME, OKAY???
 DELETE FROM creature_involvedrelation WHERE id = 80903 AND quest = 80330;
 REPLACE INTO creature_involvedrelation VALUES (80105, 80330);
 UPDATE quest_template SET NextQuestInChain = 0 WHERE entry IN (80330, 80366, 6071, 6072, 6073, 6074, 6075, 6076, 6721, 6722, 80339, 6065, 6066, 6067, 6068, 6069, 6070, 40261);
