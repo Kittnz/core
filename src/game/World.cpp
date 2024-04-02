@@ -1819,15 +1819,17 @@ void CheckEggExploit()
             else
                 fileStream << "CHARACTER DELETED : ";
 
-            if (abs((int)amount - (int)itr->second) > 0)
+            if (abs((int)amount - (int)itr->second) > 1)
             {
                 fileStream << "Char Guid " << guid << " has inconsistent egg refunds " << abs((int)amount - (int)itr->second) << ". Account ID " <<
                     accountId << (accountId ? "." : " Deleted.") << " IsHardcore (if not deleted) " << isHardcore << "\n";
             }
+            else
+                fileStream << "\n";
         }
         else
         {
-            if (amount > 0)
+            if (amount > 1)
                 fileStream << "All eggs refunded on char Guid " << guid << ".\n";
         }
     }
