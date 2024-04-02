@@ -1434,6 +1434,25 @@ bool ChatHandler::HandleAddItemCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCleanInventoryCommand(char* args)
+{
+    auto player = GetPlayer();
+
+    if (player)
+    {
+        player->ApplyForAllItems([player](Item* item)
+            {
+                if (item->IsBag())
+                    return;
+
+                if (item->IsEquipped())
+                    return;
+                player->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+            });
+    }
+    return true;
+}
+
 bool ChatHandler::HandleDeleteItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");
