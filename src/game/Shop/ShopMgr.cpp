@@ -234,9 +234,9 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
             return;
         }
 
-        if (session && session->GetPlayer() && session->GetPlayer()->IsHardcore())
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() < 10 && session->GetPlayer()->IsHardcore())
         {
-            session->SendNotification("You can't buy this item if you are a Hardcore player.");
+            session->SendNotification("You can't buy this item if you are a Hardcore player under level 10.");
             return;
         }
 

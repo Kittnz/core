@@ -5294,6 +5294,8 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
     if (Group* group = sObjectMgr.GetGroupByMember(playerguid))
         RemoveFromGroup(group, playerguid);
 
+    extern std::unordered_map<uint32, std::vector<PlayerEggLoot>> playerEggLoot;
+
     // remove from guild
     if (Guild* guild = sGuildMgr.GetPlayerGuild(playerguid))
     {
@@ -5331,9 +5333,55 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
             {
                 int64 totalRefund = 0;
                 auto shopEntries = sObjectMgr.GetShopLogEntries(accountId);
+                auto eggEntries = playerEggLoot.find(lowguid);
+
+                uint32 eggCount = 0;
+                uint32 refundedEggs = 0;
+
+                if (eggEntries != playerEggLoot.end())
+                {
+                    eggCount = eggEntries->second.size();
+                    for (const auto& eggInfo : eggEntries->second)
+                    {
+                        if (eggInfo.Refunded)
+                            refundedEggs++;
+                    }
+                }
+
                 LoginDatabase.BeginTransaction();
                 for (auto& elem : shopEntries)
                 {
+                    if (elem->charGuid == lowguid && elem->itemEntry == 92010 && !elem->refunded) // Egg
+                    {
+                        //eggEntries contains how many eggs this character has opened, we should:
+                        //refund normal shop price for the difference of amount of rows in shop_logs vs eggEntries, these are eggs that were unopened.
+                        //refund 40 tokens for eggs that were opened but not refunded to the egg-refund vendor NPC.
+                        //refund nothing if the egg was bought, opened & refunded to the egg-refund vendor NPC.
+
+                        if (refundedEggs && eggCount)
+                        {
+                            //part of eggs that were refunded, don't give any tokens back.
+                            --refundedEggs;
+                            --eggCount;
+                        }
+                        else if (eggCount)
+                        {
+                            //part of eggs that were opened but not refunded, give 40 tokens back.
+                            totalRefund += 40;
+                            --eggCount;
+                        }
+                        else
+                        {
+                            //no more refunded eggs nor opened eggs, this must be an egg that was not used, refund full.
+                            totalRefund += elem->itemPrice;
+                        }
+
+                        //regardless, set refunded.
+                        elem->refunded = true;
+                        LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem->id);
+                        continue;
+                    }
+
                     if (elem->charGuid == lowguid && !elem->refunded)
                     {
                         totalRefund += elem->itemPrice;
@@ -5343,7 +5391,10 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                 }
 
                 if (totalRefund > 0 && totalRefund < INT_MAX)
+                {
                     LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, accountId);
+                    sLog.out(LOG_HARDCORE_MODE, "Player %s (%u) Account %u just got %u coins back for deleting character.", data ? data->sName.c_str() : "", lowguid, accountId, totalRefund);
+                }
                 LoginDatabase.CommitTransaction();
             }
 
@@ -5760,10 +5811,28 @@ void Player::KillPlayer()
         SpawnHardcoreGravestone();
         BuildPlayerRepop();
 
+        extern std::unordered_map<uint32, std::vector<PlayerEggLoot>> playerEggLoot;
+
         m_hardcoreKickTimer = 300 * IN_MILLISECONDS;
 
 
         auto& logEntries = sObjectMgr.GetShopLogEntries(GetSession()->GetAccountId());
+
+        auto eggEntries = playerEggLoot.find(GetGUIDLow());
+
+        uint32 eggCount = 0;
+        uint32 refundedEggs = 0;
+
+        if (eggEntries != playerEggLoot.end())
+        {
+            eggCount = eggEntries->second.size();
+            for (const auto& eggInfo : eggEntries->second)
+            {
+                if (eggInfo.Refunded)
+                    refundedEggs++;
+            }
+        }
+
 
         LoginDatabase.BeginTransaction();
 
@@ -5773,6 +5842,37 @@ void Player::KillPlayer()
         const uint32 guidLow = GetGUIDLow();
         for (auto& elem : logEntries)
         {
+            if (elem->charGuid == guidLow && elem->itemEntry == 92010 && !elem->refunded) // Egg
+            {
+                //eggEntries contains how many eggs this character has opened, we should:
+                //refund normal shop price for the difference of amount of rows in shop_logs vs eggEntries, these are eggs that were unopened.
+                //refund 40 tokens for eggs that were opened but not refunded to the egg-refund vendor NPC.
+                //refund nothing if the egg was bought, opened & refunded to the egg-refund vendor NPC.
+
+                if (refundedEggs && eggCount)
+                {
+                    //part of eggs that were refunded, don't give any tokens back.
+                    --refundedEggs;
+                    --eggCount;
+                }
+                else if (eggCount)
+                {
+                    //part of eggs that were opened but not refunded, give 40 tokens back.
+                    totalRefund += 40;
+                    --eggCount;
+                }
+                else
+                {
+                    //no more refunded eggs nor opened eggs, this must be an egg that was not used, refund full.
+                    totalRefund += elem->itemPrice;
+                }
+
+                //regardless, set refunded.
+                refundableItems.push_back(std::ref(elem));
+                LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", elem->id);
+                continue;
+            }
+
             if (elem->charGuid == guidLow && !elem->refunded)
             {
                 totalRefund += elem->itemPrice;
@@ -5782,7 +5882,10 @@ void Player::KillPlayer()
         }
 
         if (totalRefund > 0 && totalRefund < INT_MAX)
+        {
             LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", totalRefund, GetSession()->GetAccountId());
+            sLog.out(LOG_HARDCORE_MODE, "Player %s (%u) Account %u just got %u coins back for dying.", GetName(), GetGUIDLow(), GetSession()->GetAccountId(), totalRefund);
+        }
 
         bool successTransaction = LoginDatabase.CommitTransaction();
 
