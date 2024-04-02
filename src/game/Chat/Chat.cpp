@@ -981,6 +981,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "tmogdelete",     SEC_DEVELOPER,       false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
         { "perf",           SEC_ADMINISTRATOR,   true, nullptr,                                         "", perfCommandTable },
         { "blockegg",       SEC_DEVELOPER,       false, &ChatHandler::HandleBlockEggsCommand,           "", nullptr},
+        { "cleaninventory", SEC_DEVELOPER,       false, &ChatHandler::HandleCleanInventoryCommand,      "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 
