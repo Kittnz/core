@@ -24284,6 +24284,10 @@ bool Player::SetupHardcoreMode()
                 auctionHouse->RemoveAllAuctions(this);
         }
     }
+
+    if (GetSession())
+        sLog.out(LOG_HARDCORE_MODE, "Player %s (%u) account ID %u just turned on Hardcore mode.", GetName(), GetGUIDLow(), GetSession()->GetAccountId());
+
     AwardTitle(TITLE_STILL_ALIVE);
     ChangeTitle(TITLE_STILL_ALIVE);
     CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u') AND sender != 51550", GetGUIDLow(), GetGUIDLow());
