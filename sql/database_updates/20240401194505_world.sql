@@ -339,3 +339,19 @@ REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0,
 UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
 UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
 REPLACE INTO `npc_trainer_template` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (6, @learn_spell_id, @cost, @skill_id, @skill_trainer_required, 0);
+
+-- NPC Frabus Barleymantle (entry 61910), copy his template to the following npcs : Asoran (Entry 61918), Gelpan Rizspark (entry 61925), Edgar Tullson (Entry 61921)
+
+UPDATE `creature_template` SET `trainer_id` = 3 WHERE `entry` = 61918;
+UPDATE `creature_template` SET `trainer_id` = 3 WHERE `entry` = 61925;
+UPDATE `creature_template` SET `trainer_id` = 3 WHERE `entry` = 61921;
+
+-- NPC Torvag Thunderhand (entry 61911), copy his template to the following npcs : Mayvelle Tonberg (Entry 61923), Kalnag (Entry 61919), Tacknazz Copperfire (Entry 61927)
+
+UPDATE `creature_template` SET `trainer_id` = 4 WHERE `entry` = 61923;
+UPDATE `creature_template` SET `trainer_id` = 4 WHERE `entry` = 61919;
+UPDATE `creature_template` SET `trainer_id` = 4 WHERE `entry` = 61927;
+
+-- NPC Mayva Togview (Entry 61912) , copy their template to the following npcs : Gulmire Fartower (entry 61924)
+
+UPDATE `creature_template` SET `trainer_id` = 5 WHERE `entry` = 61924;
