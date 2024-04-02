@@ -7737,14 +7737,6 @@ enum
     GOSSIP_REFUND_EGG_ITEMS = 64000
 };
 
-struct PlayerEggLoot
-{
-    uint32 Id;
-    uint32 PlayerGuid;
-    uint32 ItemId;
-    uint32 ItemGuid;
-    bool Refunded;
-};
 
 std::unordered_map<uint32, std::vector<PlayerEggLoot>> playerEggLoot;
 
@@ -7822,6 +7814,7 @@ bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSe
             LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
             CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
         }
+        player->SaveInventoryAndGoldToDB();
     }
 
     player->CLOSE_GOSSIP_MENU();
@@ -7947,6 +7940,7 @@ bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&
             playerEggLoot[player->GetGUIDLow()].push_back(PlayerEggLoot{ eggId, player->GetGUIDLow(), lootedItem->GetEntry(), lootedItem->GetGUIDLow(), false });
             CharacterDatabase.PExecute("INSERT INTO character_egg_loot VALUES (%u, %u, %u, %u, 0)",
                 eggId, player->GetGUIDLow(), lootedItem->GetEntry(), lootedItem->GetGUIDLow());
+            player->SaveInventoryAndGoldToDB();
         }
         else
             ChatHandler(player).SendSysMessage("Try again!");
