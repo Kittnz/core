@@ -501,7 +501,7 @@ SavedVariable& ObjectMgr::_InsertVariable(uint32 index, uint32 value, bool saved
     tmp.bSavedInDb   = saved;
 
     m_SavedVariables[index] = tmp;
-    return m_SavedVariables[m_SavedVariables.size()-1];
+    return m_SavedVariables[index];
 }
 
 void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
