@@ -7733,11 +7733,44 @@ bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*u
     return true;
 }
 
+bool QuestAccept_npc_thegren(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+    bool third_item_added = false;
+
+    if (pQuest->GetQuestId() == 41282) // The Final Cut
+    {
+        if (pPlayer->AddItem(56078)) first_item_added = true;
+        if (pPlayer->AddItem(56079)) second_item_added = true;
+        if (pPlayer->AddItem(56080)) third_item_added = true;
+
+        if (!first_item_added || !second_item_added || !third_item_added)
+        {
+            pPlayer->RemoveQuest(41282);
+            pPlayer->SetQuestStatus(41282, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            pPlayer->DestroyItemCount(56078, 1, true);
+            pPlayer->DestroyItemCount(56079, 1, true);
+            pPlayer->DestroyItemCount(56080, 1, true);
+            return false;
+        }
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_thegren";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_thegren;
+    newscript->RegisterSelf();
 
     pNewScript = new Script;
     pNewScript->Name = "npc_snow_vendor";
