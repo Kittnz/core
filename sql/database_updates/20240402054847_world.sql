@@ -13,7 +13,6 @@ UPDATE quest_template SET NextQuestInChain = 41178 WHERE entry = 41177;
 UPDATE quest_template SET NextQuestInChain = 41179 WHERE entry = 41178;
 UPDATE quest_template SET NextQuestInChain = 41180 WHERE entry = 41179;
 UPDATE quest_template SET RequiredRaces = 4 WHERE entry IN (6074, 6075, 6076, 6064, 6084, 6085, 6086);
-UPDATE quest_template SET RequiredRaces = 4 WHERE entry IN (6064, 6084, 6085, 6086);
 UPDATE creature_involvedrelation SET id = 3171 WHERE id = 3038 AND quest = 6070;
 
 UPDATE creature_involvedrelation SET id = 80245 WHERE id = 1231 AND quest = 80366;
