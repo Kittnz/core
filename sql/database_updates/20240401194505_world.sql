@@ -414,3 +414,5 @@ UPDATE `spell_template` SET `reagent5` = 3466, `reagentCount5` = 2 WHERE `entry`
 -- add the following item requirements : 5635 (6), 3390 (1)
 UPDATE `spell_template` SET `reagent6` = 5635, `reagentCount6` = 8 WHERE `entry` = 41734;
 UPDATE `spell_template` SET `reagent5` = 3390, `reagentCount5` = 1 WHERE `entry` = 41734;
+
+UPDATE `spell_template` SET `reagent2` = 12363, `reagentCount2` = 1 WHERE `entry` = 41768;
