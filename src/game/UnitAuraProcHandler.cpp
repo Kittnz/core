@@ -245,109 +245,96 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
 
     /// [TODO]
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
-    if (procSpell)
+    if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
-        if (!(procExtra & PROC_EX_CAST_END))
+        // Wrath of Cenarius
+        if (spellProto->Id == 25906)
         {
-            // Wrath of Cenarius
-            if (spellProto->Id == 25906)
-            {
-                // Make all damaging paladin spells able to proc Wrath of Cenarius.
-                if (procSpell->SpellFamilyName == SPELLFAMILY_PALADIN)
-                    if (procSpell->IsDirectDamageSpell() || procSpell->HasDamagingAura())
-                        return roll_chance_u(spellProto->procChance) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
-            }
-            // Vial of Potent Venoms
-            if (spellProto->Id == 45417)
-            {
-                if (procSpell->IsAreaOfEffectSpell())
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // Lightning Speed
-            if (spellProto->Id == 45850)
-            {
-                if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_BOLT>())
-                    return roll_chance_u(10) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
-                if (procSpell->SpellIconID == 2210)
-                    return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
-                return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // Bonus Healing
-            if (spellProto->Id == 45842)
-            {
-                if (pVictim && pVictim->GetHealthPercent() > 50.0f)
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // Conviction (Custom Paladin Spell) should proc seals
-            if (procSpell->Id == 45619 || procSpell->Id == 45620)
-            {
-                if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_SEAL_OF_THE_CRUSADER, CF_PALADIN_SEAL_OF_WISDOM_LIGHT, CF_PALADIN_SEAL_OF_COMMAND, CF_PALADIN_SEALS>())
-                    return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
-            }
-            // Sanctified Command (Custom Paladin Talent)
-            if (spellProto->Id == 45954 || spellProto->Id == 45955)
-            {
-                // Judgement of Command
-                if (procSpell->SpellIconID == 561 && procSpell->DmgClass == 2 && procSpell->SpellVisual == 0)
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // Eye for an Eye
-            if (spellProto->SpellIconID == 1820)
-            {
-                if (!((procFlag & PROC_FLAG_TAKE_HARMFUL_SPELL) && (procExtra & PROC_EX_CRITICAL_HIT)))
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // Improved Lay on Hands
-            if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PALADIN)
-            {
-                if (procSpell->SpellFamilyName == SPELLFAMILY_PALADIN && procSpell->SpellIconID == 79 && procSpell->Category == 56 && !isVictim)
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // PRIEST
-            // Inspiration
-            if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST)
-            {
-                if (procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_PRAYER_OF_HEALING, CF_PRIEST_HEAL,
-                    CF_PRIEST_FLASH_HEAL, CF_PRIEST_GREATER_HEAL>() &&
-                    procExtra & PROC_EX_CRITICAL_HIT && procFlag & PROC_FLAG_DEAL_HELPFUL_SPELL)
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_FAILED;
-            }
-            // SPELL_AURA_ADD_TARGET_PROC
-            // Chance of proc calculated after.
-            if (spellProto->EffectApplyAuraName[0] == SPELL_AURA_ADD_TARGET_TRIGGER)
-            {
-                // All spells that proc on the victim
-                // Then the others
-                if (isVictim)
-                    return SPELL_PROC_TRIGGER_FAILED;
-
-                switch (spellProto->Id)
-                {
-                    // Frosty Zap
-                    case 24392:
-                        if (SpellCanTrigger(spellProto, procSpell))
-                            return SPELL_PROC_TRIGGER_OK;
-                        break;
-                }
-
-                return SPELL_PROC_TRIGGER_FAILED;
-            }
+            // Make all damaging paladin spells able to proc Wrath of Cenarius.
+            if (procSpell->SpellFamilyName == SPELLFAMILY_PALADIN)
+                if (procSpell->IsDirectDamageSpell() || procSpell->HasDamagingAura())
+                    return roll_chance_u(spellProto->procChance) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
         }
-        else // on cast end only
+        // Vial of Potent Venoms
+        if (spellProto->Id == 45417)
         {
-            // The Eye of the Dead
-            if (spellProto->Id == 28780)
+            if (procSpell->IsAreaOfEffectSpell())
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Lightning Speed
+        if (spellProto->Id == 45850)
+        {
+            if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_LIGHTNING_BOLT>())
+                return roll_chance_u(10) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+            if (procSpell->SpellIconID == 2210)
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+            return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Bonus Healing
+        if (spellProto->Id == 45842)
+        {
+            if (pVictim && pVictim->GetHealthPercent() > 50.0f)
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Conviction (Custom Paladin Spell) should proc seals
+        if (procSpell->Id == 45619 || procSpell->Id == 45620)
+        {
+            if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_SEAL_OF_THE_CRUSADER, CF_PALADIN_SEAL_OF_WISDOM_LIGHT, CF_PALADIN_SEAL_OF_COMMAND, CF_PALADIN_SEALS>())
+                return roll_chance_u(50) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
+        // Sanctified Command (Custom Paladin Talent)
+        if (spellProto->Id == 45954 || spellProto->Id == 45955)
+        {
+            // Judgement of Command
+            if (procSpell->SpellIconID == 561 && procSpell->DmgClass == 2 && procSpell->SpellVisual == 0)
+                return SPELL_PROC_TRIGGER_OK;
+            else
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Eye for an Eye
+        if (spellProto->SpellIconID == 1820)
+        {
+            if (!((procFlag & PROC_FLAG_TAKE_HARMFUL_SPELL) && (procExtra & PROC_EX_CRITICAL_HIT)))
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // Improved Lay on Hands
+        if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PALADIN)
+        {
+            if (procSpell->SpellFamilyName == SPELLFAMILY_PALADIN && procSpell->SpellIconID == 79 && procSpell->Category == 56 && !isVictim)
+                return SPELL_PROC_TRIGGER_OK;
+            else
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // PRIEST
+        // Inspiration
+        if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST)
+        {
+            if (procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_PRAYER_OF_HEALING, CF_PRIEST_HEAL,
+                CF_PRIEST_FLASH_HEAL, CF_PRIEST_GREATER_HEAL>() &&
+                procExtra & PROC_EX_CRITICAL_HIT && procFlag & PROC_FLAG_DEAL_HELPFUL_SPELL)
+                return SPELL_PROC_TRIGGER_OK;
+            else
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
+        // SPELL_AURA_ADD_TARGET_PROC
+        // Chance of proc calculated after.
+        if (spellProto->EffectApplyAuraName[0] == SPELL_AURA_ADD_TARGET_TRIGGER)
+        {
+            // All spells that proc on the victim
+            // Then the others
+            if (isVictim)
+                return SPELL_PROC_TRIGGER_FAILED;
+
+            switch (spellProto->Id)
             {
-                // do not consume 2 charges from Flash of Light
-                if (procSpell->Effect[0] == SPELL_EFFECT_SCRIPT_EFFECT)
-                    return SPELL_PROC_TRIGGER_FAILED;
+                // Frosty Zap
+                case 24392:
+                    if (SpellCanTrigger(spellProto, procSpell))
+                        return SPELL_PROC_TRIGGER_OK;
+                    break;
             }
+
+            return SPELL_PROC_TRIGGER_FAILED;
         }
     }
 
