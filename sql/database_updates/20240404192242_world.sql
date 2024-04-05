@@ -78,3 +78,23 @@ REPLACE INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`
  UPDATE item_template SET spellid_1 = 20639, spellcharges_1 = -1, max_count = 1 where entry = 56083;
  UPDATE item_template SET spellid_1 = 20639, spellcharges_1 = -1, max_count = 1 where entry = 56085;
  UPDATE item_template SET spellid_1 = 20639, spellcharges_1 = -1, max_count = 1 where entry = 56084;
+
+SET @pet_npc_entry = 80179;
+SET @pet_item_entry = 92020;
+SET @pet_spell_entry = 29900;
+SET @pet_skilline_entry = 36499;
+
+SET @pet_name = 'Spawn of Cla''ckora';
+SET @pet_desc = 'The spawn of the mighty Cla''ckora!';
+SET @pet_scale = 0.3;
+SET @pet_model = 1818;
+SET @pet_item_icon = 1144;
+SET @pet_spell_icon = 271;
+
+REPLACE INTO `creature_display_info_addon` (`display_id`) VALUES (@pet_model);
+REPLACE INTO `collection_pet` (`itemId`, `spellId`) VALUES (@pet_item_entry, @pet_spell_entry);
+REPLACE INTO `item_template` VALUES (@pet_item_entry, 15, 2, @pet_name, @pet_desc, @pet_item_icon, 1, 0, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46498, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `creature_template` VALUES (@pet_npc_entry, @pet_model, 0, 0, 0, 0, @pet_name, NULL, 0, 1, 1, 64, 64, 0, 0, 20, 35, 0, 1, 1.14286, @pet_scale, 18, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 2, 0, '');
+REPLACE INTO `spell_template` VALUES (@pet_spell_entry, 0, 0, 0, 0, 0, 272, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 31, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 97, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 1000, 1000, 0, 0, 0, 0, 0, 0, @pet_npc_entry, 0, 0, 0, 0, 0, 0, 0, 0, 353, 0, @pet_spell_icon, 0, 0, @pet_name, 16712190, '', 16712190, @pet_desc, 16712190, '', 16712190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+REPLACE INTO `skill_line_ability` VALUES (@pet_skilline_entry, 1005, @pet_spell_entry, 0, 0, 0, 0, 0, 0, 0, 0);
+
