@@ -99,3 +99,5 @@ REPLACE INTO `spell_template` VALUES (@pet_spell_entry, 0, 0, 0, 0, 0, 272, 0, 0
 REPLACE INTO `skill_line_ability` VALUES (@pet_skilline_entry, 1005, @pet_spell_entry, 0, 0, 0, 0, 0, 0, 0, 0);
 
 UPDATE `item_template` SET `quality` = 3,`bonding` = 0 WHERE `entry` = @pet_item_entry;
+
+UPDATE `creature_template` SET `script_name` = 'npc_jewelcrafter' WHERE `entry` = 73102;
