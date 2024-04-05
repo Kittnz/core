@@ -886,6 +886,8 @@ bool ChatHandler::HandleLearnCommand(char* args)
     if (!allRanks && *args)                                 // can be fail also at syntax error
         return false;
 
+    bool force = ExtractLiteralArg(&args, "force") != nullptr;
+
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell);
     if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player))
     {
@@ -893,6 +895,9 @@ bool ChatHandler::HandleLearnCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+
+    bool learn = (spellInfo->Effect[EFFECT_INDEX_0] == SPELL_EFFECT_LEARN_SPELL);
 
     if (!allRanks && targetPlayer->HasSpell(spell))
     {
@@ -902,6 +907,12 @@ bool ChatHandler::HandleLearnCommand(char* args)
             PSendSysMessage(LANG_TARGET_KNOWN_SPELL, targetPlayer->GetName());
         SetSentErrorMessage(true);
         return false;
+    }
+
+    if (player != targetPlayer && !force && learn)
+    {
+        SendSysMessage("Can't .learn a learn-type spell to a player. Use .learn <spellid> force if you want to override this behavior.");
+        return true;
     }
 
     if (allRanks)
