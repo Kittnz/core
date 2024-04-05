@@ -263,3 +263,10 @@ replace into creature_involvedrelation  (id, quest) values ( 6826, 41302);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text, material) values
 (41364,4056,'Lightweight Money Bag',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'It doesn\'t feel heavy.',0,3);
+
+-- Change scale of entry 2020095 (Gemstone Deposit) to 0.7.
+update gameobject_template set size = 0.7 where entry = 2020095;
+-- Item 'Glowing Arctic Grayling' (entry 56086) needs to be openable/lootable and should loot item 56083.
+update item_template set class = 15, flags = 4 where entry = 56086;
+REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+(56086, 56083, 100, 0, 1, 1, 0);
