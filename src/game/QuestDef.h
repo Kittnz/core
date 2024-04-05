@@ -176,7 +176,8 @@ enum QuestSpecialFlags
 
     // Turtle custom flags
     QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080,
-    QUEST_SPECIAL_FLAG_YEARLY_RESET         = 0x100
+    QUEST_SPECIAL_FLAG_YEARLY_RESET         = 0x100,
+    QUEST_SPECIAL_FLAG_CAN_SWAP_REWARDS     = 0x200
 };
 
 enum QuestMethod
