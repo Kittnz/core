@@ -9713,7 +9713,7 @@ void Player::HandleTransferChecks()
         if (!proto)
             continue;
 
-        if (proto->Bonding == BIND_WHEN_PICKED_UP || proto->SellPrice < GOLD * 5 || proto->Bonding == BIND_ACCOUNT)
+        if (proto->Bonding == BIND_WHEN_PICKED_UP || proto->Bonding == BIND_ACCOUNT)
             continue;
 
         if (count > sWorld.getConfig(CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED))
