@@ -468,8 +468,8 @@ SET @mount_model = 20629;
 SET @mount_item_id = 69170;
 SET @mount_spell_id = 45993;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 878;
+SET @mount_item_icon = 68101;
+SET @mount_spell_icon = 2317;
 
 SET @mount_creature_id = 52140;
 SET @skill_line_id = 17370;
@@ -496,8 +496,8 @@ SET @mount_spell_id = 45994;
 SET @mount_creature_id = 52141;
 SET @skill_line_id = 17371;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 878;
+SET @mount_item_icon = 68101;
+SET @mount_spell_icon = 2317;
 SET @sound = 1703;
 SET @quality = 3;
 
@@ -521,8 +521,8 @@ SET @mount_spell_id = 45995;
 SET @mount_creature_id = 52142;
 SET @skill_line_id = 17372;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 878;
+SET @mount_item_icon = 68101;
+SET @mount_spell_icon = 2317;
 SET @sound = 1703;
 SET @quality = 4;
 
@@ -547,8 +547,8 @@ SET @mount_spell_id = 45996;
 SET @mount_creature_id = 52143;
 SET @skill_line_id = 17373;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 878;
+SET @mount_item_icon = 68101;
+SET @mount_spell_icon = 2317;
 SET @sound = 1703;
 SET @quality = 3;
 
