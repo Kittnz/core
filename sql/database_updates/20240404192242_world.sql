@@ -357,7 +357,7 @@ SET @reagent_item_2 = 12655; SET @reagent_item_count_2 = 6;
 SET @reagent_item_3 = 7082; SET @reagent_item_count_3 = 3;
 SET @reagent_item_4 = 7081; SET @reagent_item_count_4 = 6;
 SET @reagent_item_5 = 55154; SET @reagent_item_count_5 = 4;
-SET @reagent_item_6 = 5547; SET @reagent_item_count_6 = 4;
+SET @reagent_item_6 = 55247; SET @reagent_item_count_6 = 4;
 SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
 SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
 SET @spell_visual_1 = 1168; 
