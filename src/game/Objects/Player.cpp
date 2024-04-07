@@ -3582,6 +3582,9 @@ void Player::GiveXP(uint32 xp, Unit* victim)
 
     uint32 level = GetLevel();
 
+    if (HasChallenge(CHALLENGE_BOARING_MODE) && victim->ToCreature()->GetCreatureInfo()->beast_family != CREATURE_FAMILY_BOAR)
+        return;
+
     // XP to money conversion processed in Player::RewardQuest
     // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
     if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled())
@@ -3733,6 +3736,15 @@ void Player::GiveLevel(uint32 level)
         {
             AwardTitle(TITLE_THE_WANDERER);
             MailVagrantModeRewards(level);
+        }
+    }
+
+    if (HasChallenge(CHALLENGE_BOARING_MODE))
+    {
+        if (level == PLAYER_MAX_LEVEL)
+        {
+            AwardTitle(TITLE_SWINE_SLAYER);
+            // Todo: mail some swine mount.
         }
     }
 
@@ -24744,6 +24756,12 @@ bool Player::HasEarnedTitle(uint8 titleId)
     case TITLE_THE_WANDERER:
     {
         if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_VAGRANT_MODE))
+            return true;
+        break;
+    }
+    case TITLE_SWINE_SLAYER:
+    {
+        if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_BOARING_MODE))
             return true;
         break;
     }
