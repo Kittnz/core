@@ -547,8 +547,8 @@ SET @mount_spell_id = 45996;
 SET @mount_creature_id = 52143;
 SET @skill_line_id = 17373;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 317;
+SET @mount_item_icon = 68102;
+SET @mount_spell_icon = 2318;
 SET @sound = 1703;
 SET @quality = 3;
 
