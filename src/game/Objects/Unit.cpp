@@ -10884,7 +10884,7 @@ CreatureAI* Unit::AI() const
     return IsCreature() ? ((Creature*)this)->AI() : nullptr;
 }
 
-SpellAuraHolder* Unit::AddAura(uint32 spellId, uint32 addAuraFlags, Unit* pCaster)
+SpellAuraHolder* Unit::AddAura(uint32 spellId, uint32 addAuraFlags, Unit* pCaster, int32* bp0, int32* bp1, int32* bp2)
 {
     if (IsDeleted() || (pCaster && pCaster->IsDeleted()))
         return nullptr;
@@ -10919,7 +10919,24 @@ SpellAuraHolder* Unit::AddAura(uint32 spellId, uint32 addAuraFlags, Unit* pCaste
 
         if (Spells::IsAreaAuraEffect(eff) || eff == SPELL_EFFECT_APPLY_AURA || eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
         {
-            Aura *aur = CreateAura(spellInfo, SpellEffectIndex(i), nullptr, holder, this, pCaster);
+            int32* basePoints;
+            switch (i)
+            {
+                case 0:
+                    basePoints = bp0;
+                    break;
+                case 1:
+                    basePoints = bp1;
+                    break;
+                case 2:
+                    basePoints = bp2;
+                    break;
+                default:
+                    basePoints = nullptr;
+                    break;
+            }
+
+            Aura *aur = CreateAura(spellInfo, SpellEffectIndex(i), basePoints, holder, this, pCaster);
             if (addAuraFlags & ADD_AURA_POSITIVE)
                 aur->SetPositive(true);
             else if (addAuraFlags & ADD_AURA_NEGATIVE)
