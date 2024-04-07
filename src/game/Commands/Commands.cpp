@@ -17531,39 +17531,6 @@ bool ChatHandler::HandleSuspiciousFishers(char* args)
 	return true;
 }
 
-bool ChatHandler::HandleBlockEggsCommand(char* args)
-{
-    std::string accountName;
-    uint32 accountId = ExtractAccountId(&args, &accountName, nullptr, false);
-    if (!accountId)
-        return false;
-
-    auto data = sAccountMgr.GetAccountData(accountId);
-
-    auto session = sWorld.FindSession(accountId);
-
-    if (session)
-    {
-        if ((session->GetAccountFlags() & ACCOUNT_FLAG_BLOCK_EGG_PURCHASES) == ACCOUNT_FLAG_BLOCK_EGG_PURCHASES)
-        {
-            session->_accountFlags &= ~ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
-            SendSysMessage("Removed Egg block.");
-        }
-        else
-        {
-            session->_accountFlags |= ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
-            SendSysMessage("Added Egg block.");
-        }
-    }
-    else
-    {
-        LoginDatabase.PExecute("UPDATE account SET flags = flags | %u WHERE id = %u", ACCOUNT_FLAG_BLOCK_EGG_PURCHASES, accountId);
-        SendSysMessage("Added Egg block. (offline)");
-    }
-    
-    return true;
-}
-
 bool ChatHandler::HandleSuspiciousNotify(char* args)
 {
 	if (WorldSession* session = GetSession())
@@ -17639,6 +17606,39 @@ bool ChatHandler::HandleSuspiciousWhitelist(char* args)
 }
 
 #endif
+
+bool ChatHandler::HandleBlockEggsCommand(char* args)
+{
+    std::string accountName;
+    uint32 accountId = ExtractAccountId(&args, &accountName, nullptr, false);
+    if (!accountId)
+        return false;
+
+    auto data = sAccountMgr.GetAccountData(accountId);
+
+    auto session = sWorld.FindSession(accountId);
+
+    if (session)
+    {
+        if ((session->GetAccountFlags() & ACCOUNT_FLAG_BLOCK_EGG_PURCHASES) == ACCOUNT_FLAG_BLOCK_EGG_PURCHASES)
+        {
+            session->_accountFlags &= ~ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
+            SendSysMessage("Removed Egg block.");
+        }
+        else
+        {
+            session->_accountFlags |= ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
+            SendSysMessage("Added Egg block.");
+        }
+    }
+    else
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags | %u WHERE id = %u", ACCOUNT_FLAG_BLOCK_EGG_PURCHASES, accountId);
+        SendSysMessage("Added Egg block. (offline)");
+    }
+
+    return true;
+}
 
 bool ChatHandler::HandleBlacklistNameCommand(char* args)
 {
