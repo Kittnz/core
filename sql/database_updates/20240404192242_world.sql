@@ -468,8 +468,8 @@ SET @mount_model = 20629;
 SET @mount_item_id = 69170;
 SET @mount_spell_id = 45993;
 
-SET @mount_item_icon = 8802;
-SET @mount_spell_icon = 317;
+SET @mount_item_icon = 34379;
+SET @mount_spell_icon = 1578;
 
 SET @mount_creature_id = 52140;
 SET @skill_line_id = 17370;
