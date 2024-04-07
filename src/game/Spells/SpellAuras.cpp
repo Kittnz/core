@@ -2688,11 +2688,36 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         switch (form)
         {
             case FORM_CAT:
-                target->RemoveAurasDueToSpellByCancel(45709); // remove bear form berserk version if exists.
+                // swap Berserk from Bear to Cat
+                if (SpellAuraHolder* pOldBerserk = target->GetSpellAuraHolder(45709))
+                {
+                    target->m_Events.AddLambdaEventAtOffset([target, duration = pOldBerserk->GetAuraDuration()]()
+                    {
+                        if (SpellAuraHolder* pNewBerserk = target->AddAura(45710, ADD_AURA_POSITIVE))
+                        {
+                            pNewBerserk->SetAuraDuration(duration);
+                            pNewBerserk->UpdateAuraDuration();
+                        }
+                    }, 1);
+                    target->RemoveAurasDueToSpellByCancel(45709);
+                }
                 break;
             case FORM_BEAR:
             case FORM_DIREBEAR:
-                target->RemoveAurasDueToSpellByCancel(45710); // remove cat form berserk version.
+                // swap Berserk from Cat to Bear
+                if (SpellAuraHolder* pOldBerserk = target->GetSpellAuraHolder(45710))
+                {
+                    target->m_Events.AddLambdaEventAtOffset([target, duration = pOldBerserk->GetAuraDuration()]()
+                    {
+                        int32 healthModSpellBasePoints0 = int32(target->GetMaxHealth() * 0.2);
+                        if (SpellAuraHolder* pNewBerserk = target->AddAura(45709, ADD_AURA_POSITIVE, nullptr, &healthModSpellBasePoints0))
+                        {
+                            pNewBerserk->SetAuraDuration(duration);
+                            pNewBerserk->UpdateAuraDuration();
+                        }
+                    }, 1);
+                    target->RemoveAurasDueToSpellByCancel(45710);
+                }
                 break;
         }
 

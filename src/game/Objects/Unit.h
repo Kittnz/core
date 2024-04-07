@@ -789,7 +789,7 @@ class Unit : public WorldObject
         void SendSpellGo(Unit* target, uint32 spellId) const;
         void SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo, AuraType auraTypeOverride = SPELL_AURA_NONE) const;
 
-        SpellAuraHolder* AddAura(uint32 spellId, uint32 addAuraFlags = 0, Unit* pCaster = nullptr);
+        SpellAuraHolder* AddAura(uint32 spellId, uint32 addAuraFlags = 0, Unit* pCaster = nullptr, int32* bp0 = nullptr, int32* bp1 = nullptr, int32* bp2 = nullptr);
         SpellAuraHolder* RefreshAura(uint32 spellId, int32 duration);
         bool AddSpellAuraHolder(SpellAuraHolder *holder);
         void AddAuraToModList(Aura *aura);
