@@ -138,6 +138,8 @@ namespace HttpApi
         resp.set_content(buffer.GetString(), "application/json");
     }
 
+    std::unordered_map<std::string, time_t> transferredNames;
+
 
     //This is part 2 of the transfer procedure. This will IMPORT the pdump data and call the necessary import functions.
     //This should be done on the world thread on the OTHER server where extractions take place to do a successful transfer.
@@ -209,6 +211,19 @@ namespace HttpApi
         if (res == DumpReturn::DUMP_SUCCESS) 
         {
             *guidPtr = guid;
+
+            if (!charName.empty() && transferredNames.find(charName) != transferredNames.end())
+            {
+                auto now = time(nullptr);
+                if (now - transferredNames[charName] < 60)
+                {
+                    sLog.out(LOG_API, "ALREADY IMPORTED CHAR. Aborting. AccountId:%u, newGuid:%u,playername:%s", accountId, guid, charName.c_str());
+                    CharacterDatabase.PExecute("UPDATE `characters` SET `account` = 0 WHERE `guid` = %u", guid);
+                }
+            }
+            else
+                transferredNames[charName] = time(nullptr);
+
             sLog.out(LOG_API, "Sucessfully accepted transfer import. AccountId:%u, newGuid:%u,playername:%s", accountId, guid, charName.c_str());
         }
         else
