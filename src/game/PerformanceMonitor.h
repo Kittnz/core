@@ -40,7 +40,6 @@ protected:
 
 	using MemBytesMap = std::unordered_map<const char*, int64>;
 	MemBytesMap MemBytes;
-	MemBytesMap MemAllocsDeallocs;
 	std::mutex MemBytesGuard;
 };
 

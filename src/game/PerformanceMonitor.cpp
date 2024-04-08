@@ -143,17 +143,11 @@ void PerformanceMonitor::ReportMemory(ChatHandler& Handler)
 	std::lock_guard guard{ MemBytesGuard };
 
 	std::unordered_map<std::string, int64> FixedMap;
-	std::unordered_map<std::string, int64> FixedMap2;
 
 	for (auto& [key, value] : MemBytes)
 	{
 		FixedMap[key] += value;
 		AllTrackedBytes += value;
-	}
-
-	for (auto& [key, value] : MemAllocsDeallocs)
-	{
-		FixedMap2[key] += value;
 	}
 
 	auto GetValueAsMbLambda = [](int64 InValue) -> double
@@ -170,7 +164,7 @@ void PerformanceMonitor::ReportMemory(ChatHandler& Handler)
 
 	for (auto& [key, value] : FixedMap)
 	{
-		Handler.PSendSysMessage("-> %s - %.2fMb, %i allocs/deallocs", key.c_str(), GetValueAsMbLambda(value), FixedMap2[key]);
+		Handler.PSendSysMessage("-> %s - %.2fMb", key.c_str(), GetValueAsMbLambda(value));
 	}
 }
 
@@ -179,18 +173,14 @@ void PerformanceMonitor::ReportPerformanceToDB()
 
 }
 
-static int counter = 0;
 void PerformanceMonitor::ReportAlloc(const char* Category, size_t Bytes)
-{;
+{
 	std::lock_guard guard{ MemBytesGuard };
 	MemBytes[Category] += Bytes;
-	MemAllocsDeallocs[Category] += 1;
 }
 
 void PerformanceMonitor::ReportDealloc(const char* Category, size_t Bytes)
 {
 	std::lock_guard guard{ MemBytesGuard };
 	MemBytes[Category] -= Bytes;
-	MemAllocsDeallocs[Category] += 1;
-
 }
