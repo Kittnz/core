@@ -63,6 +63,7 @@ static DumpTable dumpTables[] =
     { "item_instance",                    DTT_ITEM       }, //                  <- item guids
     { "item_loot",                        DTT_ITEM_LOOT  }, //                  <- item guids
     { "item_text",                        DTT_ITEM_TEXT  },
+    { "character_transmogs",              DTT_TRANSMOG_COLLECTION },
     { NULL,                               DTT_CHAR_TABLE }, // end marker
 };
 
@@ -305,6 +306,9 @@ void PlayerDumpWriter::DumpTableContent(std::string& dump, uint32 guid, char con
         case DTT_ITEM_TEXT:
             fieldname = "id";
             guids = &texts;
+            break;
+        case DTT_TRANSMOG_COLLECTION:
+            fieldname = "guid";
             break;
         default:
             fieldname = "guid";
@@ -550,6 +554,11 @@ DumpReturn PlayerDumpReader::LoadStringDump(std::string const& data, uint32 acco
         {
         case DTT_CHAR_TABLE:
             if (!changenth(line, 1, newguid))           // character_*.guid update
+                ROLLBACK_STR(DUMP_FILE_BROKEN);
+            break;
+
+        case DTT_TRANSMOG_COLLECTION:
+            if (!changenth(line, 1, newguid))
                 ROLLBACK_STR(DUMP_FILE_BROKEN);
             break;
 

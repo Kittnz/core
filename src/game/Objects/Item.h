@@ -260,7 +260,7 @@ class Item : public Object
         bool IsAccountBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA); }
         bool IsBindedNotWith(Player const* player) const;
         bool IsBoundByEnchant() const;
-        virtual void SaveToDB();
+        virtual void SaveToDB(bool direct = false);
         virtual bool LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry);
         virtual void DeleteFromDB();
         void DeleteFromInventoryDB();
