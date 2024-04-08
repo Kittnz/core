@@ -336,10 +336,10 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             switch (spellProto->Id)
             {
                 // Frosty Zap
-                case 24392:
-                    if (SpellCanTrigger(spellProto, procSpell))
-                        return SPELL_PROC_TRIGGER_OK;
-                    break;
+            case 24392:
+                if (SpellCanTrigger(spellProto, procSpell))
+                    return SPELL_PROC_TRIGGER_OK;
+                break;
             }
 
             return SPELL_PROC_TRIGGER_FAILED;
@@ -1312,7 +1312,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 }
                 case 28200:                                 // Talisman of Ascendance
                 {
-                    if (procSpell && procSpell->IsAreaOfEffectSpell())
+                    if (procSpell && (procSpell->IsAreaOfEffectSpell() || procSpell->Effect[0] == SPELL_EFFECT_SCRIPT_EFFECT))
                         return SPELL_AURA_PROC_FAILED;
                     break;
                 }

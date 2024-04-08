@@ -500,7 +500,7 @@ struct SavedVariable
     uint32 uiValue;
     bool bSavedInDb;
 };
-typedef std::vector<SavedVariable> SavedVariablesVector;
+typedef std::unordered_map<uint32, SavedVariable> SavedVariablesMap;
 
 struct PlayerCacheData
 {
@@ -612,6 +612,8 @@ enum PermVariables
     VAR_WE_GONG_BANG_TIMES          = 30053,    // Track how many times the gong has been rung
     VAR_WE_AUTOCOMPLETE_TIME        = 30054,    // The last time the progress auto complete was performed
     VAR_WE_HIVE_REWARD              = 30055,    // A mask of slain colossus events to start
+
+    VAR_APRIL_FOOLS_ENABLED         = 42000
 };
 
 class GameObjectUseRequirement
@@ -1475,7 +1477,7 @@ class ObjectMgr
 
         void LoadSavedVariable();
         void SaveVariables();
-        SavedVariablesVector m_SavedVariables;
+        SavedVariablesMap m_SavedVariables;
 
         // Caching Player Data
         void LoadPlayerCacheData(uint32 lowGuid = 0);

@@ -1065,6 +1065,15 @@ enum class PlayerVariables : uint32
     OriginalSkinByte
 };
 
+struct PlayerEggLoot
+{
+    uint32 Id;
+    uint32 PlayerGuid;
+    uint32 ItemId;
+    uint32 ItemGuid;
+    bool Refunded;
+};
+
 class Player final: public Unit
 {
     friend class WorldSession;

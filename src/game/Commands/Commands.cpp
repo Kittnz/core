@@ -886,6 +886,8 @@ bool ChatHandler::HandleLearnCommand(char* args)
     if (!allRanks && *args)                                 // can be fail also at syntax error
         return false;
 
+    bool force = ExtractLiteralArg(&args, "force") != nullptr;
+
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell);
     if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player))
     {
@@ -893,6 +895,9 @@ bool ChatHandler::HandleLearnCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+
+    bool learn = (spellInfo->Effect[EFFECT_INDEX_0] == SPELL_EFFECT_LEARN_SPELL);
 
     if (!allRanks && targetPlayer->HasSpell(spell))
     {
@@ -902,6 +907,12 @@ bool ChatHandler::HandleLearnCommand(char* args)
             PSendSysMessage(LANG_TARGET_KNOWN_SPELL, targetPlayer->GetName());
         SetSentErrorMessage(true);
         return false;
+    }
+
+    if (player != targetPlayer && !force && learn)
+    {
+        SendSysMessage("Can't .learn a learn-type spell to a player. Use .learn <spellid> force if you want to override this behavior.");
+        return true;
     }
 
     if (allRanks)
@@ -1431,6 +1442,25 @@ bool ChatHandler::HandleAddItemCommand(char* args)
     if (noSpaceForCount > 0)
         PSendSysMessage(LANG_ITEM_CANNOT_CREATE, itemId, noSpaceForCount);
 
+    return true;
+}
+
+bool ChatHandler::HandleCleanInventoryCommand(char* args)
+{
+    auto player = GetPlayer();
+
+    if (player)
+    {
+        player->ApplyForAllItems([player](Item* item)
+            {
+                if (item->IsBag())
+                    return;
+
+                if (item->IsEquipped())
+                    return;
+                player->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+            });
+    }
     return true;
 }
 
@@ -17576,6 +17606,39 @@ bool ChatHandler::HandleSuspiciousWhitelist(char* args)
 }
 
 #endif
+
+bool ChatHandler::HandleBlockEggsCommand(char* args)
+{
+    std::string accountName;
+    uint32 accountId = ExtractAccountId(&args, &accountName, nullptr, false);
+    if (!accountId)
+        return false;
+
+    auto data = sAccountMgr.GetAccountData(accountId);
+
+    auto session = sWorld.FindSession(accountId);
+
+    if (session)
+    {
+        if ((session->GetAccountFlags() & ACCOUNT_FLAG_BLOCK_EGG_PURCHASES) == ACCOUNT_FLAG_BLOCK_EGG_PURCHASES)
+        {
+            session->_accountFlags &= ~ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
+            SendSysMessage("Removed Egg block.");
+        }
+        else
+        {
+            session->_accountFlags |= ACCOUNT_FLAG_BLOCK_EGG_PURCHASES;
+            SendSysMessage("Added Egg block.");
+        }
+    }
+    else
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags | %u WHERE id = %u", ACCOUNT_FLAG_BLOCK_EGG_PURCHASES, accountId);
+        SendSysMessage("Added Egg block. (offline)");
+    }
+
+    return true;
+}
 
 bool ChatHandler::HandleBlacklistNameCommand(char* args)
 {

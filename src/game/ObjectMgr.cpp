@@ -478,19 +478,19 @@ void ObjectMgr::SetPlayerWorldMask(const uint64 guid, uint32 newWorldMask)
 
 uint32 ObjectMgr::GetSavedVariable(uint32 index, uint32 defaultValue, bool *exist)
 {
-    SavedVariablesVector::iterator it;
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
+    auto itr = m_SavedVariables.find(index);
+
+    if (itr == m_SavedVariables.end())
     {
-        if (it->uiIndex == index)
-        {
-            if (exist)
-                (*exist) = true;
-            return it->uiValue;
-        }
+        if (exist)
+            *exist = false;
+        return defaultValue;
     }
+
     if (exist)
-        (*exist) = false;
-    return defaultValue;
+        *exist = true;
+
+    return itr->second.uiValue;
 }
 
 SavedVariable& ObjectMgr::_InsertVariable(uint32 index, uint32 value, bool saved)
@@ -500,8 +500,8 @@ SavedVariable& ObjectMgr::_InsertVariable(uint32 index, uint32 value, bool saved
     tmp.uiValue      = value;
     tmp.bSavedInDb   = saved;
 
-    m_SavedVariables.push_back(tmp);
-    return m_SavedVariables[m_SavedVariables.size()-1];
+    m_SavedVariables[index] = tmp;
+    return m_SavedVariables[index];
 }
 
 void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
@@ -516,11 +516,10 @@ void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
 
 void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
 {
-    SavedVariablesVector::iterator it;
-    // Already registered?
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
-        if (it->uiIndex == index)
-            return;
+    auto itr = m_SavedVariables.find(index);
+
+    if (itr != m_SavedVariables.end())
+        return;
     
     // If we are there, it means that the variable does not exist.
     SavedVariable& variable = _InsertVariable(index, value, true);
@@ -529,22 +528,22 @@ void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
 
 void ObjectMgr::SetSavedVariable(uint32 index, uint32 value, bool autoSave)
 {
-    for (SavedVariable& vSavedVariable : m_SavedVariables)
-    {
-        if (vSavedVariable.uiIndex == index)
-        {
-            // If the value has not changed.
-            if (vSavedVariable.uiValue == value)
-                return;
+    auto itr = m_SavedVariables.find(index);
 
-            vSavedVariable.uiValue = value;
-            if (autoSave)
-                _SaveVariable(vSavedVariable);
-            else
-                vSavedVariable.bSavedInDb = false;
+    if (itr != m_SavedVariables.end())
+    {
+        // If the value has not changed.
+        if (itr->second.uiValue == value)
             return;
-        }
+
+        itr->second.uiValue = value;
+        if (autoSave)
+            _SaveVariable(itr->second);
+        else
+            itr->second.bSavedInDb = false;
+        return;
     }
+
     // If we are here, it means that the variable does not exist.
     SavedVariable& variable = _InsertVariable(index, value, autoSave);
     if (autoSave)
@@ -567,11 +566,10 @@ void ObjectMgr::LoadVariable(uint32 index, uint32* variable, uint32 defaultValue
 }
 void ObjectMgr::SaveVariables()
 {
-    SavedVariablesVector::iterator it;
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
+    for (auto it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
     {
-        if (!it->bSavedInDb)
-            _SaveVariable(*it);
+        if (!it->second.bSavedInDb)
+            _SaveVariable(it->second);
     }
 }
 

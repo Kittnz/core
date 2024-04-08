@@ -149,6 +149,33 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
+        // Turtle:: Make raid looted items not appear soul bound.
+        // Restrict to non-stackable and non party-loot.
+
+        if (_player->GetMap()->IsRaid() && lguid.IsGameObject())
+        {
+            if (auto itemProto = newitem->GetProto())
+            {
+                if (!item->freeforall && itemProto->Stackable <= 1)
+                {
+                    if (Group* pGroup = (Group*)_player->GetGroup())
+                    {
+                        newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, _player->GetMapId());
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember->GetMapId() == _player->GetMapId() && pMember->GetInstanceId() == _player->GetInstanceId())
+                                    newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                            }
+                        }
+                    }
+                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                    newitem->SendCreateUpdateToPlayer(_player);
+                }
+            }
+        }
+
         if (qitem)
         {
             qitem->is_looted = true;
@@ -693,8 +720,7 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
 
         if (_player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
         {
-            auto itemProto = newitem->GetProto();
-            if (itemProto)
+            if (auto itemProto = newitem->GetProto())
             {
                 if (!item.freeforall && itemProto->Stackable <= 1)
                 {
@@ -716,7 +742,6 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
                 }
             }
         }
-
 
         sDBLogger.LogLoot(
             {

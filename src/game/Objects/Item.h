@@ -360,12 +360,7 @@ class Item : public Object
         void BuildUpdateData(UpdateDataMapType& update_players) override;
         void UpdateDurability(uint32 durability, Player* pPlayer);
 
-        uint32 GetVisibleEntry() const
-        {
-            if (uint32 appearanceItemId = GetTransmogrification())
-                return appearanceItemId;
-            return GetEntry();
-        }
+        uint32 GetVisibleEntry() const;
 
         void SetGeneratedLoot(bool value) { generatedLoot = value; }
         bool HasGeneratedLootSecondary() {  return generatedLoot; } // todo, remove and add condition to HasGeneratedLoot
@@ -382,6 +377,8 @@ class Item : public Object
         void AddPlayerToAllowedTradeList(ObjectGuid guid) { m_canBeTradedWithPlayers.insert(guid); }
         bool CanTradeSoulBoundToPlayer(ObjectGuid guid) const { return m_canBeTradedWithPlayers.find(guid) != m_canBeTradedWithPlayers.end(); }
         void ResetSoulBoundTradeData();
+
+        bool preventCancel = false;
 
     private:
         uint32 transmogrifyId;

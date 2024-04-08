@@ -706,6 +706,8 @@ class ChatHandler
         bool HandleDeleteItemCommand(char* args);
         bool HandleAddItemSetCommand(char* args);
 
+        bool HandleCleanInventoryCommand(char* args);
+
         bool HandleDiscBotStopCommand(char* args);
         bool HandleBlacklistNameCommand(char* args);
 
@@ -775,6 +777,7 @@ class ChatHandler
         bool HandleLootHelperCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
 
+        bool HandleBlockEggsCommand(char* args);
 		///Suspicious statistic commands
 
 		bool HandleSuspiciousEnable(char* args);

@@ -23,11 +23,22 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 REPLACE INTO `locales_item` (`entry`, `name_loc0`, `name_loc4`) VALUES 
 (92017, 'White Riding Talbuk', '白色骑乘塔布羊'),
 (92018, 'Dark Riding Talbuk', '黑色骑乘塔布羊'),
-(92016, 'Spotted Rabbit', '斑点兔');
+(92016, 'Spotted Rabbit', '斑点兔'),
 
+(92011, 'Lavender Spring Shirt', '紫色春季衬衫'),
+(92012, 'Mint Spring Shirt', '薄荷绿春季衬衫'),
+(92013, 'Pink Spring Shirt', '粉色春季衬衫'),
+(92014, 'Spring Chemise', '春季连衣裙'),
+(92019, 'Green Spring Shirt ', '绿色春季衬衫');
 
 UPDATE spell_template SET description = 'Agile and quick, it hops around with a whimsical grace that captivates the hearts of adventurers across Azeroth.' WHERE entry = 10712;
 UPDATE spell_template SET description = 'If you go chasing snowshoe rabbits, you know you''re going to fall.' WHERE entry = 10711;
+
+UPDATE `locales_item` SET `name_loc4` = '悲伤的云朵' WHERE `entry` = 81240;
+UPDATE `locales_item` SET `name_loc4` = '开心的云朵' WHERE `entry` = 81239;
+
+REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `mount_display_id`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `spawn_spell_id`, `auras`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `immunity_flags`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (60150, 7131, 0, 0, 0, 0, 'Gizbert Eggwell', 'Egg-hunting Expert', 0, 42, 42, 2000, 3000, 0, 0, 4391, 35, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
 
 DELETE FROM `item_loot_template` WHERE `entry` = 92010;
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
@@ -75,8 +86,8 @@ REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `grou
 (92010, 81234, 1.7, 1, 1, 1, 0),	-- Brewfest Ram
 (92010, 81235, 1.7, 1, 1, 1, 0),	-- Armored Vermilion Deathcharger
 (92010, 81236, 1.7, 1, 1, 1, 0),	-- Armored Grey Steed
-(92010, 81239, 1.7, 1, 1, 1, 0),	-- Happy Whimsyshire Cloud
-(92010, 81240, 1.7, 1, 1, 1, 0),	-- Sad Whimsyshire Cloud
+-- (92010, 81239, 1.7, 1, 1, 1, 0),	-- Happy Whimsyshire Cloud
+-- (92010, 81240, 1.7, 1, 1, 1, 0),	-- Sad Whimsyshire Cloud
 (92010, 81258, 1.7, 1, 1, 1, 0),	-- Spectral Cub
 (92010, 83150, 1.7, 1, 1, 1, 0),	-- Big Turtle WoW Bear
 (92010, 83300, 1.7, 1, 1, 1, 0),	-- Lil' K.T.

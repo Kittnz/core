@@ -882,7 +882,17 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
     if (!em)
         return;
 
+
     uint32 emoteId = em->textid;
+
+    if (sWorld.IsAprilFools())
+    {
+        if (textEmote == TEXTEMOTE_PURR)
+        {
+            uint32 cats[] = { 5585, 9989, 18628 };
+            GetPlayer()->SetDisplayId(cats[urand(0, 2)]);
+        }
+    }
 
     switch (emoteId)
     {

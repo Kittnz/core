@@ -946,6 +946,8 @@ class World
 
         uint32 GetContentPhase() const { return getConfig(CONFIG_UINT32_CONTENT_PHASE); }
 
+        bool IsAprilFools() const;
+
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
         /// Get the path where data (dbc, maps) are stored on disk
