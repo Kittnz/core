@@ -4,6 +4,7 @@
 
 #include "World.h"
 #include "ObjectMgr.h"
+#include "Mail.h"
 #include "AccountMgr.h"
 
 using namespace httplib;
@@ -114,6 +115,31 @@ namespace HttpApi
 
             CharacterDatabase.DirectPExecute("UPDATE characters SET money = money + %u WHERE guid = %u", extraMoney, lowGuid);
             CharacterDatabase.DirectPExecute("DELETE FROM item_instance WHERE itemEntry = 81118 AND owner_guid = %u", lowGuid);
+        }
+
+        //Add fashion coins because transferred chars lose their xmog on transfer.
+
+        result = std::unique_ptr<QueryResult>(CharacterDatabase.PQuery("SELECT COUNT(*) FROM item_instance WHERE transmogrifyId != 0 AND owner_guid = %u", lowGuid));
+
+        if (result)
+        {
+            uint32 count = result->Fetch()[0].GetUInt32();
+            if (count > 0)
+            {
+                MailDraft draft;
+
+                draft.SetSubjectAndBody("Fashion coins", "Fashion coins");
+
+                if (Item* item = Item::CreateItem(51217, count, 0))
+                {
+                    item->SaveToDB(true);
+                    draft.AddItem(item);
+                }
+
+                MailSender sender(MAIL_NORMAL, (uint32)0, MAIL_STATIONERY_GM);
+
+                draft.SendMailTo(MailReceiver(nullptr, lowGuid), sender, MAIL_CHECK_MASK_NONE, 0, 0, true);
+            }
         }
 
         std::string pDumpData;
