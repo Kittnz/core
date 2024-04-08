@@ -7483,7 +7483,7 @@ void Player::CheckAreaExploreAndOutdoor()
             //GetCheatData()->OnExplore(p);
             uint32 area = p->Id;
             uint32 xp = 0;
-            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()))
+            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()) || HasChallenge(CHALLENGE_BOARING_MODE))
             {
                 // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
                 int32 diff = int32(GetLevel()) - p->AreaLevel;
