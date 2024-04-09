@@ -1373,3 +1373,44 @@ update item_template set spellid_1 = 21629 where entry = 56095;
 
 UPDATE `spell_template` SET `name` = 'Netherbane Rod' WHERE `entry` = 41735;
 UPDATE `spell_template` SET `name` = 'Netherbane Rod' WHERE `entry` = 41736;
+
+-- 41788 Blazefury Circlet
+-- 41790 Ring of Unleashed Potential
+-- 41792 Empowered Domination Rod
+-- 41794 Orb of Clairvoyance
+-- 41796 Grail of Forgotten Memories
+-- 41798 Shard of Aman'zasi
+-- 41800 Rudeus' Focusing Cane
+-- 41802 Spire of Channeled Power
+-- 41804 Bindings of Luminance
+-- 41806 Crown of the Illustrious Queen
+
+-- Blazefury Circlet, change min to 320, max to 340
+UPDATE skill_line_ability SET min_value = 320, max_value = 340 WHERE spell_id = 41788;
+
+-- Ring of Unleashed Potential, change min to 320 and max to 340
+UPDATE skill_line_ability SET min_value = 320, max_value = 340 WHERE spell_id = 41790;
+
+-- Empowered Domination Rod, change min to 330, and max to 350
+UPDATE skill_line_ability SET min_value = 330, max_value = 350 WHERE spell_id = 41792;
+
+-- Orb of Clairvoyance, change min to 320 and max to 340
+UPDATE skill_line_ability SET min_value = 320, max_value = 340 WHERE spell_id = 41794;
+
+-- Grail of Forgotten Memories, change min to 330, and max to 350
+UPDATE skill_line_ability SET min_value = 330, max_value = 350 WHERE spell_id = 41796;
+
+-- Shard of Aman'zasi, change min to 320, max to 330
+UPDATE skill_line_ability SET min_value = 320, max_value = 330 WHERE spell_id = 41798;
+
+-- Rudeus' Focusing Cane, change min to 330, max to 350
+UPDATE skill_line_ability SET min_value = 330, max_value = 350 WHERE spell_id = 41800;
+
+-- Spire of Channeled Power, change min to 325, max to 345
+UPDATE skill_line_ability SET min_value = 325, max_value = 345 WHERE spell_id = 41802;
+
+-- Bindings of Luminance, change min to 320, max to 340
+UPDATE skill_line_ability SET min_value = 320, max_value = 340 WHERE spell_id = 41804;
+
+-- Crown of the Illustrious Queen, change min to 320, max to 340
+UPDATE skill_line_ability SET min_value = 320, max_value = 340 WHERE spell_id = 41806;
