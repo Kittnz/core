@@ -9687,9 +9687,15 @@ void Player::HandleTransferChecks()
     std::unordered_map<uint32, uint32> itemCounts;
 
 
-    ApplyForAllItems([&itemCounts](Item* item)
+    ApplyForAllItems([&itemCounts, this](Item* item)
         {
             itemCounts[item->GetEntry()] += item->GetCount();
+
+            if (item->GetTransmogrification())
+            {
+                item->SetTransmogrification(0);
+                item->SetState(ITEM_CHANGED, this);
+            }
         }, true);
 
 
