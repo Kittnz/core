@@ -391,8 +391,8 @@ void BattleGroundSV::EndBattleGround(Team winner)
     // rewards
     bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
     RewardReputationToTeam(1007, isBGWeekend ? 150 : 75, winner);
-    RewardHonorToTeam(isBGWeekend ? 1200 : 600, winner);
-    RewardHonorToTeam(isBGWeekend ? 600 : 300, loser);
+    RewardHonorToTeam(isBGWeekend ? 1500 : 750, winner);
+    RewardHonorToTeam(isBGWeekend ? 800 : 400, loser);
 
     BattleGround::EndBattleGround(winner);
 }
