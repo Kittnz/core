@@ -221,8 +221,8 @@ void BattleGroundSV::RemovePlayer(Player* plr, ObjectGuid /*guid*/)
 {
     if (plr)
     {
-        uint32 sparkCount = plr->GetItemCount(81390);
-        plr->DestroyItemCount(81390, sparkCount, true, false, true);
+        uint32 sparkCount = plr->GetItemCount(ITEM_FLICKERING_TIME_SPARK);
+        plr->DestroyItemCount(ITEM_FLICKERING_TIME_SPARK, sparkCount, true, false, true);
 
         plr->SetRooted(false);
     }
@@ -406,13 +406,35 @@ void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
 
     player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 
-    // remove sparks from victim
-    uint32 sparkCount = player->GetItemCount(81390);
-    if (sparkCount)
-        player->DestroyItemCount(81390, sparkCount, true);
+    auto TransferItem = [player, killer](uint32 itemId, uint32 minCount)
+    {
+        // remove item from victim
+        uint32 itemCount = player->GetItemCount(itemId);
+        if (itemCount)
+            player->DestroyItemCount(itemId, itemCount, true);
 
-    // add sparks to killer
-    killer->AddItem(81390, sparkCount ? sparkCount : 1);
+        // add item to killer
+        if (itemCount || minCount)
+        {
+            if (ItemPrototype const* pItem = sObjectMgr.GetItemPrototype(itemId))
+            {
+                uint32 color = ItemQualityColors[pItem->Quality];
+                std::ostringstream itemStr;
+                itemStr << "%%s steals ";
+                itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pItem->ItemId) << ":0:0:0:0:0:0:0|h[" << pItem->Name1 << "]|h|r";
+                itemStr << " from $n.";
+                killer->PMonsterEmote(itemStr.str().c_str(), player);
+            }
+            killer->AddItem(itemId, itemCount ? itemCount : minCount);
+        }
+    };
+
+    TransferItem(ITEM_FLICKERING_TIME_SPARK, 1);
+    TransferItem(ITEM_VAMPIRE_HEART, 0);
+    TransferItem(ITEM_CRYSTAL_OF_VENGEANCE, 0);
+    TransferItem(ITEM_CONCENTRATED_POWER_OF_WILL, 0);
+    TransferItem(ITEM_SUPERCONDUCTING_MAGNET, 0);
+    TransferItem(ITEM_BLACK_WIDOW_EGGS, 0);
 }
 
 void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*target_obj*/)
