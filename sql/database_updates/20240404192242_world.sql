@@ -1430,12 +1430,12 @@ SET @learn_spell_id = 41807;
 SET @craft_spell_id = 41808; 
 SET @skill_line_entry = 17369;
 SET @output_item_id = 56096; 
-SET @recipe_spell_name = 'Mastercrafted Diamond Bangle'; 
+SET @recipe_spell_name = 'Mastercrafted Diamond Bangles'; 
 SET @recipe_learn_spell_name = @recipe_spell_name; 
 SET @cost = 0;  -- Replace with the correct cost
 SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
 SET @tool_item_2 = 41326;  -- Jewelry Scope
-SET @skill_level_required = 300; 
+SET @skill_level_required = 325; 
 SET @skill_level_max = 340; 
 SET @skill_trainer_required = 300; 
 SET @reagent_item_1 = 12360; SET @reagent_item_count_1 = 6;
