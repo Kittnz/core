@@ -1352,3 +1352,18 @@ REPLACE `item_template` (`entry`, `class`, `subclass`, `name`, `description`, `d
 
 UPDATE `spell_template` SET `interruptFlags` = 15, `castingTimeIndex` = 14 WHERE `entry` IN (41230, 41246, 41248, 41254, 41258, 41260, 41262, 41264, 41266, 41268, 41272, 41274, 41276, 41278, 41280, 41284, 41286, 41320, 41322, 41324, 41326, 41328, 41332, 41330, 41334, 41336, 41338, 41340, 41347, 41349, 41351, 41353, 41355, 41540, 41588, 41545, 41547, 41549, 41551, 41553, 41555, 41557, 41559, 41561, 41563, 41565, 41567, 41569, 41571, 41573, 41590, 41576, 41578, 41580, 41582, 41584, 41586, 41600, 41602, 41604, 41606, 41608, 41610, 41612, 41614, 41616, 41618, 41620, 41622, 41624, 41695, 41697, 41699, 41701, 41703, 41705, 41707, 41709, 41711, 41713, 41715, 41717, 41719, 41721, 41723, 41725, 41727, 41729, 41731, 41733, 41735, 41737, 41739, 41741, 41749, 41751, 41753, 41755, 41759, 41761, 41763, 41767, 41743, 41745, 41747, 41785, 41773, 41775, 41777, 41779, 41781, 41783, 41787, 41789, 41791, 41793, 41795, 41797, 41799, 41801, 41803, 41805);
 
+-- jc set bonuses
+update item_template set set_id = 631 where entry = 56090;
+update item_template set set_id = 631 where entry = 55271;
+update item_template set set_id = 632 where entry = 56089;
+update item_template set set_id = 632 where entry = 56070;
+update item_template set set_id = 633 where entry = 56091;
+update item_template set set_id = 633 where entry = 41312;
+update item_template set set_id = 634 where entry = 56035;
+update item_template set set_id = 634 where entry = 56092;
+update item_template set set_id = 634 where entry = 56093;
+update item_template set set_id = 635 where entry = 56050;
+update item_template set set_id = 635 where entry = 41340;
+update item_template set set_id = 635 where entry = 56053;
+update item_template set set_id = 636 where entry = 56048;
+update item_template set set_id = 636 where entry = 55196;
