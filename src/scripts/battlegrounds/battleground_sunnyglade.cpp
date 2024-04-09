@@ -245,6 +245,7 @@ struct SV_human_leaderAI : public ScriptedAI
             m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
             m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
         }
+        m_creature->GetMap()->PlayDirectSoundToMap(8174);
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -427,6 +428,7 @@ struct SV_orc_leaderAI : public ScriptedAI
             m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
             m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
         }
+        m_creature->GetMap()->PlayDirectSoundToMap(8212);
     }
 
     void UpdateAI(uint32 const uiDiff)  override
