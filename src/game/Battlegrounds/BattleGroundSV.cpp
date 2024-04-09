@@ -536,7 +536,8 @@ static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 ene
 {
     int32 health = pGeneral->GetCreatureInfo()->health_max;
     health = health + (health / 3) * ourSparks - (health / 6) * enemySparks;
-    if (health <= 0)
+
+    if (health <= pGeneral->GetCreatureInfo()->health_max)
         health = pGeneral->GetCreatureInfo()->health_max;
 
     pGeneral->SetMaxHealth(health);
