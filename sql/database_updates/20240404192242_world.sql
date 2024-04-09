@@ -1348,10 +1348,6 @@ SET @recipe_item_level = 60;
 
 REPLACE `item_template` (`entry`, `class`, `subclass`, `name`, `description`, `display_id`, `quality`, `flags`, `buy_count`, `buy_price`, `sell_price`, `inventory_type`, `allowable_class`, `allowable_race`, `item_level`, `required_level`, `required_skill`, `required_skill_rank`, `required_spell`, `required_honor_rank`, `required_city_rank`, `required_reputation_faction`, `required_reputation_rank`, `max_count`, `stackable`, `container_slots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `delay`, `range_mod`, `ammo_type`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `dmg_min3`, `dmg_max3`, `dmg_type3`, `dmg_min4`, `dmg_max4`, `dmg_type4`, `dmg_min5`, `dmg_max5`, `dmg_type5`, `block`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmrate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmrate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmrate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmrate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmrate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `page_text`, `page_language`, `page_material`, `start_quest`, `lock_id`, `material`, `sheath`, `random_property`, `set_id`, `max_durability`, `area_bound`, `map_bound`, `duration`, `bag_family`, `disenchant_id`, `food_type`, `min_money_loot`, `max_money_loot`, `wrapped_gift`, `extra_flags`, `other_team_entry`, `script_name`) VALUES (@recipe_item_entry, 9, 10, @recipe_item_name, '', 7798, @recipe_item_quality, 0, 1, @item_buy_price, @item_sell_price, 0, -1, -1, @recipe_item_level, 0, @item_skill_requirement, @item_skill_level, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_item_spell_id, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
--- 41230, 41246, 41248, 41254, 41258, 41260, 41262, 41264, 41266, 41268, 41272, 41274, 41276, 41278, 41280, 41284, 41286, 41320, 41322, 41324, 41326, 41328, 41332, 41330, 41334, 41336, 41338, 41340, 41347, 41349, 41351, 41353, 41355, 41540, 41588, 41545, 41547, 41549, 41551, 41553, 41555, 41557, 41559, 41561, 41563, 41565, 41567, 41569, 41571, 41573, 41590, 41576, 41578, 41580, 41582, 41584, 41586, 41600, 41602, 41604, 41606, 41608, 41610, 41612, 41614, 41616, 41618, 41620, 41622, 41624, 41695, 41697, 41699, 41701, 41703, 41705, 41707, 41709, 41711, 41713, 41715, 41717, 41719, 41721, 41723, 41725, 41727, 41729, 41731, 41733, 41735, 41737, 41739, 41741, 41749, 41751, 41753, 41755, 41759, 41761, 41763, 41767, 41743, 41745, 41747, 41785, 41773, 41775, 41777, 41779, 41781, 41783
-
-UPDATE `spell_template` SET `interruptFlags` = 15, `castingTimeIndex` = 14, `spellVisual1` = 108 WHERE `entry` IN (41230, 41246, 41248, 41254, 41258, 41260, 41262, 41264, 41266, 41268, 41272, 41274, 41276, 41278, 41280, 41284, 41286, 41320, 41322, 41324, 41326, 41328, 41332, 41330, 41334, 41336, 41338, 41340, 41347, 41349, 41351, 41353, 41355, 41540, 41588, 41545, 41547, 41549, 41551, 41553, 41555, 41557, 41559, 41561, 41563, 41565, 41567, 41569, 41571, 41573, 41590, 41576, 41578, 41580, 41582, 41584, 41586, 41600, 41602, 41604, 41606, 41608, 41610, 41612, 41614, 41616, 41618, 41620, 41622, 41624, 41695, 41697, 41699, 41701, 41703, 41705, 41707, 41709, 41711, 41713, 41715, 41717, 41719, 41721, 41723, 41725, 41727, 41729, 41731, 41733, 41735, 41737, 41739, 41741, 41749, 41751, 41753, 41755, 41759, 41761, 41763, 41767, 41743, 41745, 41747, 41785, 41773, 41775, 41777, 41779, 41781, 41783, 41787, 41789, 41791, 41793, 41795, 41797, 41799, 41801, 41803, 41805);
-
 -- jc set bonuses
 update item_template set set_id = 631 where entry = 56090;
 update item_template set set_id = 631 where entry = 55271;
@@ -1424,3 +1420,80 @@ REPLACE INTO item_template (`entry`, `class`, `subclass`, `name`, `description`,
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '35', '0', '0', '0', '0', '65', '0', '0', '0',
  '0', '0', '1', NULL);
+ 
+-- Recipe Item Name: Mastercrafted Diamond Bangle (56096)
+-- Recipe Learning Requirements: 300 (min 320, max 340)
+-- Required Materials: 12360 (6), 6037 (6), 12800 (8), 61673 (4), 55154 (6), 55248 (4)
+-- Requires: Precision Jewelers Kit, Jewelry Scope, Forge 
+
+SET @learn_spell_id = 41807; 
+SET @craft_spell_id = 41808; 
+SET @skill_line_entry = 17369;
+SET @output_item_id = 56096; 
+SET @recipe_spell_name = 'Mastercrafted Diamond Bangle'; 
+SET @recipe_learn_spell_name = @recipe_spell_name; 
+SET @cost = 0;  -- Replace with the correct cost
+SET @tool_item_1 = 41328;  -- Precision Jewelers Kit
+SET @tool_item_2 = 41326;  -- Jewelry Scope
+SET @skill_level_required = 300; 
+SET @skill_level_max = 340; 
+SET @skill_trainer_required = 300; 
+SET @reagent_item_1 = 12360; SET @reagent_item_count_1 = 6;
+SET @reagent_item_2 = 6037; SET @reagent_item_count_2 = 6;
+SET @reagent_item_3 = 12800; SET @reagent_item_count_3 = 8;
+SET @reagent_item_4 = 61673; SET @reagent_item_count_4 = 4;
+SET @reagent_item_5 = 55154; SET @reagent_item_count_5 = 6;
+SET @reagent_item_6 = 55248; SET @reagent_item_count_6 = 4;
+SET @reagent_item_7 = 0; SET @reagent_item_count_7 = 0;
+SET @reagent_item_8 = 0; SET @reagent_item_count_8 = 0;
+SET @spell_visual_1 = 1168; 
+SET @recipe_item = 0; 
+SET @if_required_spell_focus = 3;  -- Forge
+SET @cast_time_index = 14; 
+SET @cast_time_index_craft = 33; 
+SET @targets = 0;
+SET @skill_id = 755;
+SET @on_skill_get_bool = 0;
+
+SET @recipe_learn_spell_desc = CONCAT('Teaches you how to craft a ', @recipe_spell_name, '.');
+REPLACE INTO `skill_line_ability` VALUES (@skill_line_entry, @skill_id, @craft_spell_id, 0, 0, 1, 0, @on_skill_get_bool, @skill_level_max, @skill_level_required , 0);
+UPDATE `item_template` SET `spellid_1` = @learn_spell_id, `name` = @recipe_learn_spell_name WHERE `entry` = @recipe_item;
+REPLACE INTO `spell_template` VALUES (@learn_spell_id, 0, 0, 0, 0, 0, 262400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @craft_spell_id, 0, 0, 0, 0, 0, 107, 0, 1, 0, 0, @recipe_learn_spell_name, 4128894, '', 4128876, @recipe_learn_spell_desc, 4128894, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 1, 1, 0, 0, 0, 0),
+(@craft_spell_id, 0, 0, 0, 0, 0, 65568, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 15, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, @reagent_item_1, @reagent_item_2, @reagent_item_3, @reagent_item_4, @reagent_item_5, @reagent_item_6, @reagent_item_7, @reagent_item_8, @reagent_item_count_1, @reagent_item_count_2, @reagent_item_count_3, @reagent_item_count_4, @reagent_item_count_5, @reagent_item_count_6, @reagent_item_count_7, @reagent_item_count_8, -1, 0, 0, 24, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @output_item_id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1168, 0, 1, 0, 0, @recipe_spell_name, 4128894, '', 4128876, '', 4128876, '', 4128876, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
+UPDATE `spell_template` SET `requiresSpellFocus` = @if_required_spell_focus, `castingTimeIndex` = @cast_time_index_craft, `totem1` = @tool_item_1, `totem2` = @tool_item_2, `spellVisual1` = @spell_visual_1 WHERE `entry` = @craft_spell_id;
+UPDATE `spell_template` SET `castingTimeIndex` = @cast_time_index, `targets` = @targets, `effectImplicitTargetA1` = 0, `interruptFlags` = 0, `dmgClass` = 0 WHERE `entry` = @learn_spell_id;
+
+-- Plans: Mastercrafted Diamond Bangles
+-- Jewelcrafting 300
+-- itemlevel 60
+-- sell value 8500
+-- buy value 34000
+-- spell - 41807
+-- quality epic
+
+-- Plans: Mastercrafted Diamond Bangles
+SET @recipe_item_entry = 70223;
+SET @recipe_item_name = 'Plans: Mastercrafted Diamond Bangles';
+SET @item_buy_price = 34000;
+SET @item_sell_price = 8500;
+SET @item_skill_requirement = 755;
+SET @item_skill_level = 300;
+SET @recipe_item_spell_id = 41807;
+SET @recipe_item_quality = 4;
+SET @recipe_item_level = 60;
+
+REPLACE `item_template` (`entry`, `class`, `subclass`, `name`, `description`, `display_id`, `quality`, `flags`, `buy_count`, `buy_price`, `sell_price`, `inventory_type`, `allowable_class`, `allowable_race`, `item_level`, `required_level`, `required_skill`, `required_skill_rank`, `required_spell`, `required_honor_rank`, `required_city_rank`, `required_reputation_faction`, `required_reputation_rank`, `max_count`, `stackable`, `container_slots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `delay`, `range_mod`, `ammo_type`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `dmg_min3`, `dmg_max3`, `dmg_type3`, `dmg_min4`, `dmg_max4`, `dmg_type4`, `dmg_min5`, `dmg_max5`, `dmg_type5`, `block`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmrate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmrate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmrate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmrate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmrate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `page_text`, `page_language`, `page_material`, `start_quest`, `lock_id`, `material`, `sheath`, `random_property`, `set_id`, `max_durability`, `area_bound`, `map_bound`, `duration`, `bag_family`, `disenchant_id`, `food_type`, `min_money_loot`, `max_money_loot`, `wrapped_gift`, `extra_flags`, `other_team_entry`, `script_name`) VALUES (@recipe_item_entry, 9, 10, @recipe_item_name, '', 7798, @recipe_item_quality, 0, 1, @item_buy_price, @item_sell_price, 0, -1, -1, @recipe_item_level, 0, @item_skill_requirement, @item_skill_level, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @recipe_item_spell_id, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+UPDATE `spell_template` SET `reagentCount2` = 4, `reagentCount3` = 4 WHERE `entry` = 41574;
+
+UPDATE `spell_template` SET `reagent1` = 41332, `reagent4` = 3577, `reagentCount1` = 1, `reagentCount4` = 2 WHERE `entry` = 41591;
+
+UPDATE `spell_template` SET `name` = 'Specter\'s Shade Ring' WHERE `entry` = 41590;
+UPDATE `spell_template` SET `name` = 'Specter\'s Shade Ring' WHERE `entry` = 41591;
+UPDATE `spell_template` SET `name` = 'Specter\'s Shade Ring' WHERE `entry` = 41575;
+UPDATE `spell_template` SET `description` = 'Teaches you how to craft a Specter\'s Shade Ring.' WHERE `entry` = 41590;
+UPDATE `spell_template` SET `description` = 'Teaches you how to craft a Specter\'s Shade Ring.' WHERE `entry` = 41575;
+
+-- 41230, 41246, 41248, 41254, 41258, 41260, 41262, 41264, 41266, 41268, 41272, 41274, 41276, 41278, 41280, 41284, 41286, 41320, 41322, 41324, 41326, 41328, 41332, 41330, 41334, 41336, 41338, 41340, 41347, 41349, 41351, 41353, 41355, 41540, 41588, 41545, 41547, 41549, 41551, 41553, 41555, 41557, 41559, 41561, 41563, 41565, 41567, 41569, 41571, 41573, 41590, 41576, 41578, 41580, 41582, 41584, 41586, 41600, 41602, 41604, 41606, 41608, 41610, 41612, 41614, 41616, 41618, 41620, 41622, 41624, 41695, 41697, 41699, 41701, 41703, 41705, 41707, 41709, 41711, 41713, 41715, 41717, 41719, 41721, 41723, 41725, 41727, 41729, 41731, 41733, 41735, 41737, 41739, 41741, 41749, 41751, 41753, 41755, 41759, 41761, 41763, 41767, 41743, 41745, 41747, 41785, 41773, 41775, 41777, 41779, 41781, 41783
+
+UPDATE `spell_template` SET `interruptFlags` = 15, `castingTimeIndex` = 14, `spellVisual1` = 108 WHERE `entry` IN (41230, 41246, 41248, 41254, 41258, 41260, 41262, 41264, 41266, 41268, 41272, 41274, 41276, 41278, 41280, 41284, 41286, 41320, 41322, 41324, 41326, 41328, 41332, 41330, 41334, 41336, 41338, 41340, 41347, 41349, 41351, 41353, 41355, 41540, 41588, 41545, 41547, 41549, 41551, 41553, 41555, 41557, 41559, 41561, 41563, 41565, 41567, 41569, 41571, 41573, 41590, 41576, 41578, 41580, 41582, 41584, 41586, 41600, 41602, 41604, 41606, 41608, 41610, 41612, 41614, 41616, 41618, 41620, 41622, 41624, 41695, 41697, 41699, 41701, 41703, 41705, 41707, 41709, 41711, 41713, 41715, 41717, 41719, 41721, 41723, 41725, 41727, 41729, 41731, 41733, 41735, 41737, 41739, 41741, 41749, 41751, 41753, 41755, 41759, 41761, 41763, 41767, 41743, 41745, 41747, 41785, 41773, 41775, 41777, 41779, 41781, 41783, 41787, 41789, 41791, 41793, 41795, 41797, 41799, 41801, 41803, 41805, 41807);
