@@ -204,6 +204,17 @@ void BattleGroundSV::AddPlayer(Player *plr)
 
     if (GetStatus() != STATUS_IN_PROGRESS)
         plr->SetRooted(true);
+
+    auto RemoveQuestFromPlayer = [](Player* player, uint32 entry)
+    {
+        player->RemoveQuest(entry);
+        player->SetQuestStatus(entry, QUEST_STATUS_NONE);
+        player->getQuestStatusMap()[entry].m_rewarded = false;
+    };
+
+    // reset quests to kill mini bosses
+    RemoveQuestFromPlayer(plr, 1140820);
+    RemoveQuestFromPlayer(plr, 140821);
 }
 
 void BattleGroundSV::RemovePlayer(Player* plr, ObjectGuid /*guid*/)
