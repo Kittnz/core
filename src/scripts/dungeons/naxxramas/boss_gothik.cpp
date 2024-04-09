@@ -403,7 +403,6 @@ struct boss_gothikAI : public ScriptedAI
             {
                 if (m_uiSpeechTimer < uiDiff)
                 {
-                    // abort entering phase 1 if not enough players per side
                     if (HasLessPlayersPerSide(10))
                     {
                         EnterEvadeMode();
@@ -438,13 +437,6 @@ struct boss_gothikAI : public ScriptedAI
             {
                 if (m_uiSummonTimer < uiDiff)
                 {
-                    // abort entering phase 2 if not enough players per side
-                    if (HasLessPlayersPerSide(10))
-                    {
-                        EnterEvadeMode();
-                        return;
-                    }
-
                     if (m_uiSummonCount >= MAX_WAVES)
                     {
                         DoScriptText(SAY_TELEPORT, m_creature);
@@ -453,6 +445,10 @@ struct boss_gothikAI : public ScriptedAI
 
                         m_bJustTeleported = true;
                         m_creature->SetTempPacified(TELEPORT_PACIFY_TIMER);
+
+                        // opening the gates when TPing down if all players are considered on the same side
+                        if (!gatesOpened && HasLessPlayersPerSide(1))
+                            OpenTheGate();
 
                         if (m_creature->HasAura(SPELL_IMMUNE_ALL))
                             m_creature->RemoveAurasDueToSpell(SPELL_IMMUNE_ALL);
