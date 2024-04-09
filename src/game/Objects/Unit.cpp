@@ -5641,7 +5641,7 @@ uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spell
     takenFlatMod = SpellBonusWithCoeffs(spellProto, effectIndex, 0, takenFlatMod, 0, damagetype, false, pCaster, spell) * int32(stack);
 
     if ((takenFlatMod < 0) && (-takenFlatMod > (pdamage / 2)))
-        takenFlatMod = -(pdamage / 2);
+        takenFlatMod = -float(pdamage / 2);
 
     // use float as more appropriate for negative values and percent applying
     float tmpDamage = (pdamage + takenFlatMod) * takenTotalMod;
