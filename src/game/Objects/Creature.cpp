@@ -1875,6 +1875,45 @@ bool Creature::HasInvolvedQuest(uint32 quest_id) const
 }
 
 
+void Creature::SwitchInstance(uint32 NewInstanceID)
+{
+    if (!IsInWorld())
+    {
+		return;
+    }
+
+    if (GetInstanceId() == NewInstanceID)
+    {
+        return;
+    }
+
+    Map* oldmap = GetMap();
+
+    CombatStop();
+    RemoveAllDynObjects();
+
+	// stop spellcasting
+    // not attempt interrupt teleportation spell at caster teleport
+	if (IsNonMeleeSpellCasted(true))
+		InterruptNonMeleeSpells(true);
+
+	//remove auras before removing from map...
+	RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING);
+	RemoveCharmAuras();
+
+	// Clear hostile refs so that we have no cross-map (and thread) references being maintained
+	GetHostileRefManager().deleteReferences();
+
+	// remove from old map now
+	oldmap->Remove(this, false);
+
+    SetLocationInstanceId(NewInstanceID);
+	Map* newmap = sMapMgr.CreateMap(oldmap->GetId(), this);
+	ASSERT(newmap);
+	SetMap(newmap);
+    newmap->Add(this);
+}
+
 struct CreatureRespawnDeleteWorker
 {
     explicit CreatureRespawnDeleteWorker(uint32 guid) : i_guid(guid) {}

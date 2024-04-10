@@ -53,11 +53,17 @@ struct zebrian_the_madAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
+        ScriptedAI::UpdateAI(diff);
 
-        DoMeleeAttackIfReady();
+        Map* MyMap = me->GetMap();
+
+        bool bIsTransition = false;
+        uint16 newInstanceId = sMapMgr.GetContinentInstanceId(MyMap->GetId(), me->GetPositionX(), me->GetPositionY(), &bIsTransition);
+
+        if (me->GetInstanceId() != newInstanceId)
+        {
+            me->SwitchInstance(newInstanceId);
+        }
     }
 
 };

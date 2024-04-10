@@ -910,6 +910,8 @@ class Creature : public Unit
         void SetDefaultGossipMenuId(uint32 menuId) { m_gossipMenuId = menuId; }
         uint32 GetDefaultGossipMenuId() const override { return m_gossipMenuId; }
 
+        void SwitchInstance(uint32 NewInstanceID);
+
         GridReference<Creature> &GetGridRef() { return m_gridRef; }
         bool IsRegeneratingHealth() const { return HasCreatureState(CSTATE_REGEN_HEALTH); }
         bool IsRegeneratingMana() const { return HasCreatureState(CSTATE_REGEN_MANA); }
