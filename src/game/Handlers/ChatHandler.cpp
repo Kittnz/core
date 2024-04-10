@@ -330,26 +330,22 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     if (type == CHAT_MSG_CHANNEL)
     {
-        if (auto playerPointer = GetPlayerPointer(); playerPointer && sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
         {
-            auto lowGuid = playerPointer->GetObjectGuid().GetCounter();
+            static uint64 lastAnnounce = 0;
 
             //CN network has an addon using the channel Twb that's spamming and causing a lot of server stress.
             //Temp throttle until this is fixed by the author.
-            if (channel == "Twb")
-            {
-                static std::unordered_map<uint32, uint64> lastTwbMessage;
 
+            std::string chnLower = channel;
+            std::transform(chnLower.begin(), chnLower.end(), chnLower.begin(), ::tolower);
+            if (channel.find_first_of("twb") != std::string::npos)
+            {
                 auto timeNow = time(nullptr);
-                if (auto itr = lastTwbMessage.find(lowGuid); itr != lastTwbMessage.end())
-                {
-                    if ((timeNow - itr->second) < 10)
-                        return;
-                    else
-                        itr->second = timeNow;
-                }
-                else
-                    lastTwbMessage[lowGuid] = timeNow;
+
+                if ((timeNow - lastAnnounce) < 10)
+                    return;
+                lastAnnounce = timeNow;
             }
         }
     }
