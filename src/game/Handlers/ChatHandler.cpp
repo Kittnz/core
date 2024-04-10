@@ -339,7 +339,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             std::string chnLower = channel;
             std::transform(chnLower.begin(), chnLower.end(), chnLower.begin(), ::tolower);
-            if (chnLower.find_first_of("twb") != std::string::npos)
+            if (chnLower.find("twb") != std::string::npos)
             {
                 auto timeNow = time(nullptr);
 
