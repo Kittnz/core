@@ -35,3 +35,5 @@ REPLACE INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`
 
  UPDATE item_template SET spellid_1 = 27949, spellcharges_1 = -1, max_count = 1 where entry = 56097;
  UPDATE item_template SET spellid_1 = 27949, spellcharges_1 = -1, max_count = 1 where entry = 56098;
+ 
+REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `time_offset`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES (814, 0, 2, 3457, 40, 5, 0, 0, -11104.3, -1999.42, 'Karazhan (Upper)', '');
