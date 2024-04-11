@@ -14736,7 +14736,7 @@ bool ChatHandler::HandleSendMailsCommand(char* args)
 
 bool ChatHandler::HandleBalanceCommand(char* args)
 {
-    char* c_account_name = ExtractArg(&args);
+    char* c_account_name = ExtractQuotedOrLiteralArg(&args);
 
     if (!c_account_name)
         return false;
@@ -14752,7 +14752,8 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 
     uint32 account_id;
     account_id = ExtractAccountId(&c_account_name, &account_name, nullptr, false);
-    int32 coinsArg = (int32)atoi(args);
+    int32 coinsArg = 0;
+    ExtractInt32(&args, coinsArg);
 
     if (!account_id)
         return false;
