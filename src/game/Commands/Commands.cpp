@@ -1312,7 +1312,7 @@ bool ChatHandler::ListBattlegroundsCommand(char* args)
             auto plTarget = sObjectAccessor.FindPlayer(plTargetGuid);
 
             std::ostringstream ss;
-            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Duration: " <<
+            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Status: " << bg->GetStatus() << " | Duration: " <<
                 secsToTimeString(bg->GetStartTime() / 1000);
 
             if (plTarget)
