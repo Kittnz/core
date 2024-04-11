@@ -207,12 +207,12 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                                   //   8                9               10                     11                     12                     13                    14
                                   "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guildid, characters.playerFlags, "
                                   //  15                    16                   17                     18                   19                                20
-                                  "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, characters.mortality_status, characters.total_deaths, characters.active "
-                                  "FROM characters LEFT JOIN character_pet ON characters.guid=character_pet.owner AND character_pet.slot='%u' "
+                                  "characters.at_login,     0,                   0,                     0, characters.equipmentCache, characters.mortality_status, characters.total_deaths, characters.active "
+                                  "FROM characters "
                                   "LEFT JOIN guild_member ON characters.guid = guild_member.guid "
                                   "WHERE characters.account = '%u' ORDER BY characters.guid "
                                   "LIMIT 0,10",
-                                  PET_SAVE_AS_CURRENT, GetAccountId());
+                                   GetAccountId());
 }
 
 void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
