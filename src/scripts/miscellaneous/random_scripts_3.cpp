@@ -7952,11 +7952,38 @@ bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&
     return true;
 }
 
+bool GossipHello_npc_suspicious_goblin(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(41304) == QUEST_STATUS_INCOMPLETE) // A Friend Of A Friend?
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30176, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(61973, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_suspicious_goblin(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer(30177, pPlayer);
+        pCreature->SetFactionTemporary(16, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_suspicious_goblin";
+    newscript->pGossipHello = &GossipHello_npc_suspicious_goblin;
+    newscript->pGossipSelect = &GossipSelect_npc_suspicious_goblin;
+    newscript->RegisterSelf();
 
     pNewScript = new Script;
     pNewScript->Name = "npc_snow_vendor";
