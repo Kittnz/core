@@ -907,6 +907,12 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
                     ROLLBACK(DUMP_FILE_BROKEN);             // character_gifts.item_guid update
                 break;
             }
+
+            case DTT_TRANSMOG_COLLECTION:
+                if (!changenth(line, 1, newguid))
+                    ROLLBACK_STR(DUMP_FILE_BROKEN);
+                break;
+
             case DTT_ITEM_LOOT:
             {
                 // item, owner
