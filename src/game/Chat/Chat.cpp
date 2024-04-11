@@ -497,7 +497,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "add",            SEC_DEVELOPER, false, &ChatHandler::HandleQuestAddCommand,            "", nullptr },
         { "complete",       SEC_DEVELOPER, false, &ChatHandler::HandleQuestCompleteCommand,       "", nullptr },
-        { "status",         SEC_DEVELOPER,  false, &ChatHandler::HandleQuestStatusCommand,         "", nullptr },
+        { "status",         SEC_MODERATOR,  false, &ChatHandler::HandleQuestStatusCommand,         "", nullptr },
         { "remove",         SEC_DEVELOPER,  false, &ChatHandler::HandleQuestRemoveCommand,         "", nullptr },
         { "test",           SEC_DEVELOPER,  false, &ChatHandler::HandleQuestTestCommand,           "", nullptr },
         { nullptr,          0,               false, nullptr,                                        "", nullptr }
@@ -922,7 +922,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "cometome",       SEC_DEVELOPER,       false, &ChatHandler::HandleComeToMeCommand,            "", nullptr },
         { "aoedamage",      SEC_DEVELOPER,       false, &ChatHandler::HandleAoEDamageCommand,              "", nullptr },
         { "damage",         SEC_DEVELOPER,       false, &ChatHandler::HandleDamageCommand,              "", nullptr },
-        { "combatstop",     SEC_DEVELOPER,       false, &ChatHandler::HandleCombatStopCommand,          "", nullptr },
+        { "combatstop",     SEC_MODERATOR,       false, &ChatHandler::HandleCombatStopCommand,          "", nullptr },
         { "repairitems",    SEC_DEVELOPER,       true,  &ChatHandler::HandleRepairitemsCommand,         "", nullptr },
         { "waterwalk",      SEC_DEVELOPER,       false, &ChatHandler::HandleWaterwalkCommand,           "", nullptr },
         { "quit",           SEC_CONSOLE,         true,  &ChatHandler::HandleQuitCommand,                "", nullptr },
@@ -3467,6 +3467,8 @@ uint32 ChatHandler::ExtractAccountId(char** args, std::string* accountName /*= n
 
     if (!account_str)
     {
+
+
         if (!targetIfNullArg)
             return 0;
 
