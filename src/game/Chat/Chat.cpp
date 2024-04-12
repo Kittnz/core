@@ -371,6 +371,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "spirit",         SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifySpiritCommand,        "", nullptr },
         { "ap",             SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyMeleeApCommand,       "", nullptr },
         { "spellpower",     SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifySpellPowerCommand,    "", nullptr },
+        { "parry",          SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyParryCommand,         "", nullptr },
         { "honor",          SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyHonorCommand,         "", nullptr },
         { "xp",             SEC_DEVELOPER,     false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
         { "hairstyle",      SEC_DEVELOPER,     false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },

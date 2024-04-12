@@ -530,6 +530,7 @@ class ChatHandler
         bool HandleModifySpiritCommand(char* args);
         bool HandleModifyMeleeApCommand(char* args);
         bool HandleModifySpellPowerCommand(char* args);
+        bool HandleModifyParryCommand(char* args);
         bool HandleModifyHonorCommand(char* args);
 
         //-----------------------Npc Commands-----------------------

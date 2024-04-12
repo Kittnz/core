@@ -3021,7 +3021,11 @@ bool ChatHandler::HandleAuraHelper(uint32 spellId, int32 duration, Unit* unit)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
     if (!spellInfo)
+    {
+        PSendSysMessage("Spell %u does not exist.", spellId);
+        SetSentErrorMessage(true);
         return false;
+    }
 
     if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
         !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
@@ -7770,6 +7774,41 @@ bool ChatHandler::HandleModifySpellPowerCommand(char* args)
 
     if (needReportToTarget(pTarget->ToPlayer()))
         ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_SP_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyParryCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* player = GetSelectedPlayer();
+
+    if (!player)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float amount;
+    if (!ExtractFloat(&args, amount))
+        return false;
+
+    if (amount < 0 || amount > 100)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    player->SetStatFloatValue(PLAYER_PARRY_PERCENTAGE, amount);
+
+    PSendSysMessage(LANG_YOU_CHANGE_PARRY, player->GetName(), amount);
+
+    if (needReportToTarget(player))
+        ChatHandler(player).PSendSysMessage(LANG_YOURS_PARRY_CHANGED, GetNameLink().c_str(), amount);
 
     return true;
 }
