@@ -519,7 +519,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     if (procSpell && procSpell->Id == 1680)
                         radius = 8.0f;
 
-                    target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true);
+                    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+                    // - Sweeping Strikes will now ignore dead targets, and will ignore PvP
+                    //   enabled targets if you are not PvP enabled.
+                    target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true, true);
                     if (!target)
                         return SPELL_AURA_PROC_FAILED;
 
