@@ -513,6 +513,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 // Sweeping Strikes
                 case 12292:
                 case 18765:
+                // Hunter's Sweep
+                case 51068:
                 {
                     if (!pVictim || !pVictim->IsAlive())
                         return SPELL_AURA_PROC_FAILED;
