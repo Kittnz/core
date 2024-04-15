@@ -940,7 +940,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bgtest",         SEC_ADMINISTRATOR,   false, &ChatHandler::HandleBgTestCommand,              "", nullptr },
         { "cinematic",      SEC_ADMINISTRATOR,   false, &ChatHandler::HandleTurtleCinematic,            "", nullptr },
         { "dbghard",        SEC_ADMINISTRATOR,   false, &ChatHandler::HandleFastDebugCommand,           "", nullptr },
-        { "debugloot",      SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleDebugLootTableCommand,      "", nullptr },
+        { "debugloot",      SEC_DEVELOPER,       true,  &ChatHandler::HandleDebugLootTableCommand,      "", nullptr },
         { "loothelper",     SEC_DEVELOPER,       false, &ChatHandler::HandleLootHelperCommand,          "", nullptr },
         { "anim",           SEC_DEVELOPER,       false, &ChatHandler::HandleDebugAnimCommand,           "", nullptr },
         { "copy",           SEC_PLAYER,          false, &ChatHandler::HandleCopyCommand,                "", nullptr },
