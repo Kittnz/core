@@ -314,10 +314,21 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
 bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
 {
     ///- Get the command line arguments
-    std::string account_name;
-    uint32 targetAccountId = ExtractAccountId(&args, &account_name);
-    if (!targetAccountId)
+    char* szAccountName = ExtractQuotedOrLiteralArg(&args);
+    if (!szAccountName)
+    {
+        SendSysMessage("Expected an account name.");
+        SetSentErrorMessage(true);
         return false;
+    }
+
+    uint32 targetAccountId = sAccountMgr.GetId(szAccountName);
+    if (!targetAccountId)
+    {
+        PSendSysMessage("Cannot find account named '%s'.", szAccountName);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     // allow or quoted string with possible spaces or literal without spaces
     char *szPassword1 = ExtractQuotedOrLiteralArg(&args);
@@ -345,7 +356,7 @@ bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
             SendSysMessage(LANG_COMMAND_PASSWORD);
             break;
         case AOR_NAME_NOT_EXIST:
-            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, szAccountName);
             SetSentErrorMessage(true);
             return false;
         case AOR_PASS_TOO_LONG:
