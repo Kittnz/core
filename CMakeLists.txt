@@ -17,6 +17,7 @@
 
 
 project(TurtleWoW)
+include(FetchContent)
 
 # CMake policies
 cmake_minimum_required(VERSION 3.1...3.20)
@@ -38,6 +39,7 @@ option(USE_ANTICHEAT "Use anticheat" ON)
 option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
+option(USE_TRACY "Use Tracy Profiling" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
 option(USE_REALMMERGE "Compile helper tool for merging character databases" OFF)
 option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
@@ -60,6 +62,17 @@ if(PCHSupport_FOUND AND (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16"))
     endif()
 else()
   unset(USE_PCH_OLD CACHE)
+endif()
+
+if(USE_TRACY)
+  FetchContent_Declare(
+  tracy
+  GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+  )
+  FetchContent_MakeAvailable(tracy)
 endif()
 
 if(USE_LIBCURL)

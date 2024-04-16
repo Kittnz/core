@@ -119,3 +119,7 @@ SET_TARGET_PROPERTIES (framework PROPERTIES FOLDER "Game Libs")
 target_link_libraries(framework
   ${TBB_LIBRARIES}
 )
+
+if(USE_TRACY)
+  target_link_libraries(framework PUBLIC TracyClient)
+endif()
