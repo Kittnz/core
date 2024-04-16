@@ -3448,6 +3448,11 @@ bool Map::ShouldUpdateMap(uint32 now, uint32 inactiveTimeLimit)
 {
     auto update = true;
 
+
+    //For now just always update and let Battlegroud::Update kill its own Map.
+    if (IsBattleGround())
+        return true;
+
     if (!HavePlayers() && inactiveTimeLimit)
     {
         if (WorldTimer::getMSTimeDiff(_lastPlayerLeftTime, now) > inactiveTimeLimit)
