@@ -20900,7 +20900,7 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
         }
     }
 
-    if (bracketId > MAX_BATTLEGROUND_BRACKETS)
+    if (bracketId >= MAX_BATTLEGROUND_BRACKETS)
         return BG_BRACKET_ID_LAST;
 
     return BattleGroundBracketId(bracketId);
