@@ -36,7 +36,7 @@ UPDATE spell_template SET Description = 'Instantly overpower the enemy, causing 
 UPDATE spell_template SET Description = 'A vicious strike that deals melee damage plus $s2 and wounds the target, reducing the effectiveness of any healing by $s1% for $d.' WHERE entry IN (12294, 21551, 21552, 21553, 27580);
 
 -- Slam
-UPDATE spell_template SET Description = 'Slams the opponent, causing melee damage plus $s1.' WHERE entry IN (1464, 8820, 11604, 11605, 45961, );
+UPDATE spell_template SET Description = 'Slams the opponent, causing melee damage plus $s1.' WHERE entry IN (1464, 8820, 11604, 11605, 45961 );
 
 -- Decisive Strike
 UPDATE spell_template SET Description = 'Decisively strikes the opponent with the power of Slam (Rank 4), causing melee damage plus $11605s1.' WHERE entry = 45599;
