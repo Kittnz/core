@@ -1509,23 +1509,29 @@ void BattleGroundMgr::BuildBattleGroundListPacket(WorldPacket *data, ObjectGuid 
 
     uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeId);
 
+    auto bracket = plr->GetBattleGroundBracketIdFromLevel(bgTypeId);
+
+
     data->Initialize(SMSG_BATTLEFIELD_LIST);
     *data << guid;                                          // battlemaster guid
     *data << uint32(mapId);
-    *data << uint8(plr->GetBattleGroundBracketIdFromLevel(bgTypeId));
+    *data << uint8(bracket == BG_BRACKET_ID_NONE ? 0 : bracket);
 
     size_t countPos = data->wpos();
     uint32 count = 0;
     *data << uint32(0); // number of bg instances
 
-    uint32 bracketId = plr->GetBattleGroundBracketIdFromLevel(bgTypeId);
-    ClientBattleGroundIdSet const& ids = m_ClientBattleGroundIds[bgTypeId][bracketId];
-    for (const auto id : ids)
+    if (bracket != BG_BRACKET_ID_NONE)
     {
-        *data << uint32(id);
-        ++count;
+        uint32 bracketId = bracket;
+        ClientBattleGroundIdSet const& ids = m_ClientBattleGroundIds[bgTypeId][bracketId];
+        for (const auto id : ids)
+        {
+            *data << uint32(id);
+            ++count;
+        }
+        data->put<uint32>(countPos, count);
     }
-    data->put<uint32>(countPos, count);
 }
 
 void BattleGroundMgr::SendToBattleGround(Player *pl, uint32 instanceId, BattleGroundTypeId bgTypeId)
