@@ -1948,33 +1948,48 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 56066: // Music tapes:
+                case 57531:
+                case 57532:
+                case 57533:
+                case 57534:
+                case 57535:
+                case 57536:
+                case 57537:
+                case 57538:
+                case 57539:
+                case 57540:
+                case 57541:
+                case 57542:
+                case 57543:
+                case 57544:
+                case 57545:
+                case 57546:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        std::array<std::pair<uint32, uint32>, 16> items_and_sounds =
+                        std::array<std::pair<uint32, uint32>, 16> spells_and_sounds =
                         { {
-                            { 70043, 30218 }, // Winds of Kamio
-                            { 70080, 30220 }, // Emerald Dream
-                            { 70081, 30297 }, // Bells of the Dawn
-                            { 70082, 30245 }, // Hourglass of Eternity
-                            { 70083, 15000 }, // Hyjal Summit
-                            { 70084, 30243 }, // Jaguero Isle
-                            { 70085, 30226 }, // Stratholme's Best Days
-                            { 70086, 30299 }, // Titanic Mystery
-                            { 70087, 30298 }, // Aerie Peak
-                            { 70088, 30296 }, // Hateforge Quarry
-                            { 70090, 30295 }, // Bastion
-                            { 70091, 30294 }, // Ιntraworld Ιmmortality
-                            { 70092, 30292 }, // Sparkwater Port
-                            { 70093, 30275 }, // Stormwind Vault
-                            { 70094, 30241 }, // Dun Argath        
-                            { 70095, 30311 }  // Snowing in the Vale 
+                             { 57531, 30311, }, // Jukebox: Winds of Kamio
+                             { 57532, 30241, }, // Jukebox: Emerald Dream
+                             { 57533, 30275, }, // Jukebox: Bells of the Dawn
+                             { 57534, 30292, }, // Jukebox: Hourglass of Eternity
+                             { 57535, 30294, }, // Jukebox: Hyjal Summit
+                             { 57536, 30295, }, // Jukebox: Jaguero Isle
+                             { 57537, 30296, }, // Jukebox: Stratholme's Best Days
+                             { 57538, 30298, }, // Jukebox: Titanic Mystery
+                             { 57539, 30299, }, // Jukebox: Aerie Peak
+                             { 57540, 30226, }, // Jukebox: Hateforge Quarry
+                             { 57541, 30243, }, // Jukebox: Bastion
+                             { 57542, 15000, }, // Jukebox: Ιntraworld Ιmmortality
+                             { 57543, 30245, }, // Jukebox: Sparkwater Port
+                             { 57544, 30297, }, // Jukebox: Stormwind Vault
+                             { 57545, 30220, }, // Jukebox: Dun Argath
+                             { 57546, 30218, }, // Jukebox: Snowing in the Vale      
                         } };
 
-                        for (auto const& data : items_and_sounds)
+                        for (auto const& data : spells_and_sounds)
                         {
-                            if (m_CastItem->GetEntry() == data.first)
+                            if (m_spellInfo->Id == data.first)
                                 m_caster->PlayDirectMusic(data.second, m_caster->ToPlayer());
                         }
                         return;
