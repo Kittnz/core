@@ -437,6 +437,7 @@ bool QuestAccept_npc_dashel_stonefist(Player* pPlayer, Creature* pCreature, cons
             // Dashel says: Now you're gonna get it good, "PlayerName".
             DoScriptText(SAY_PROGRESS_1_DAS, pCreature, pPlayer);
 
+            pCreature->SetPvP(false);
             pCreature->SetFactionTemplateId(FACTION_NEUTRAL);
             pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
