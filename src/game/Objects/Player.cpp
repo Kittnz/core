@@ -3582,8 +3582,11 @@ void Player::GiveXP(uint32 xp, Unit* victim)
 
     uint32 level = GetLevel();
 
-    if (HasChallenge(CHALLENGE_BOARING_MODE) && victim->ToCreature()->GetCreatureInfo()->beast_family != CREATURE_FAMILY_BOAR)
-        return;
+    if (HasChallenge(CHALLENGE_BOARING_MODE))
+    {
+        if (victim && victim->ToCreature()->GetCreatureInfo()->beast_family != CREATURE_FAMILY_BOAR)
+            return;
+    }
 
     // XP to money conversion processed in Player::RewardQuest
     // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
