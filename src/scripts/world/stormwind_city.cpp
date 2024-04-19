@@ -839,7 +839,11 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                         if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
                             DoScriptText(SAY_TYRION_2, pTyrion);
                         if (Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon))
+                        {
+                            pMarzon->SetPvP(false);
                             pMarzon->SetFactionTemplateId(FACTION_ENEMYY);
+                        }
+                        m_creature->SetPvP(false);
                         m_creature->SetFactionTemplateId(FACTION_ENEMYY);
                         m_uiEventTimer = 5000;
                         ++m_uiEventPhase;
