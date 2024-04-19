@@ -1083,6 +1083,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
     void Reset() override
     {
         bloodTapTimer = 18000; // from classic logs
+        m_creature->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING);
     }
     void JustReachedHome() override
     {
