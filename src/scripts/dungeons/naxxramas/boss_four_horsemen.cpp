@@ -342,6 +342,18 @@ struct boss_four_horsemen_shared : public ScriptedAI
         {
             if (Unit* pVictim = m_creature->GetVictim())
             {
+                // Attack the owner if pulled by pet.
+                if (Unit* pOwner = pVictim->GetOwner())
+                {
+                    if (m_creature->IsValidAttackTarget(pOwner))
+                    {
+                        m_creature->GetThreatManager().modifyThreatPercent(pVictim, -100);
+                        m_creature->GetThreatManager().addThreat(pOwner, 100);
+                        AttackStart(pVictim);
+                        pVictim = pOwner;
+                    }
+                }
+
                 if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL * 2) ||
                     Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, pVictim->GetPosition()) &&
                    !Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, m_creature->GetPosition()))
