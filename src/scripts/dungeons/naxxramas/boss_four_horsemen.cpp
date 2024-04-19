@@ -349,7 +349,7 @@ struct boss_four_horsemen_shared : public ScriptedAI
                     {
                         m_creature->GetThreatManager().modifyThreatPercent(pVictim, -100);
                         m_creature->GetThreatManager().addThreat(pOwner, 100);
-                        AttackStart(pVictim);
+                        AttackStart(pOwner);
                         pVictim = pOwner;
                     }
                 }
