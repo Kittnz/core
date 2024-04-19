@@ -166,7 +166,7 @@ struct boss_patchwerkAI : public ScriptedAI
             if (pTempTarget->IsImmuneToSpell(pHatefulStrike, false))
                 continue;
 
-			lExtraThreatTargets.push_back(pTempTarget);
+            lExtraThreatTargets.push_back(pTempTarget);
 
             // Skipping maintank, only using him if there is no other viable target
             // todo: not sure if this is correct. Should we target the MT over the offtanks, if the offtanks have less hp?
@@ -194,9 +194,9 @@ struct boss_patchwerkAI : public ScriptedAI
             previousTarget = pTarget->GetObjectGuid();
         }
 
-		if (DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED) == CAST_OK)
-			for (auto &soakerOrMT : lExtraThreatTargets)
-				m_creature->GetThreatManager().addThreatDirectly(soakerOrMT, 500);
+        if (DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED) == CAST_OK)
+            for (auto &soakerOrMT : lExtraThreatTargets)
+                m_creature->GetThreatManager().addThreatDirectly(soakerOrMT, 500);
     }
 
     bool CustomGetTarget()
