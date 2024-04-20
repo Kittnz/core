@@ -1,7 +1,7 @@
 -- NPC IDs 61969 and 61970 should have ghost visuals.
 update creature_template set auras = '9617' where entry in (61969,61970);
 -- DisplayIDs between 20614 and 20628, skip any that are already enabled.
-INSERT INTO `world`.`creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+replace INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
 (20616, 0, 0, 0, 0),
 (20617, 0, 0, 0, 0),
 (20618, 0, 0, 0, 0),
