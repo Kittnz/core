@@ -651,3 +651,6 @@ DELETE FROM creature_movement WHERE id=2583089;
 DELETE FROM game_event_creature WHERE guid=2583089;
 DELETE FROM game_event_creature_data WHERE guid=2583089;
 DELETE FROM creature_battleground WHERE guid=2583089;
+
+-- Changes by DRAGU
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (928,-11145.285156,-1889.476562,165.765564,0.642509,814,'keeper_gnarlmoon');
