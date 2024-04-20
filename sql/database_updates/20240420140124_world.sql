@@ -15,3 +15,7 @@ INSERT INTO `world`.`creature_display_info_addon` (`display_id`, `bounding_radiu
 (20626, 0, 0, 0, 0),
 (20627, 0, 0, 0, 0),
 (20628, 0, 0, 0, 0);
+-- Change NPC ID 61961's displayID to 20628.
+update creature_template set display_id1 = 20628 where entry = 61961;
+-- Change NPC ID 61960's displayID to 20624.
+update creature_template set display_id1 = 20628 where entry = 61961;
