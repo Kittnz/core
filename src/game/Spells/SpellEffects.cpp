@@ -546,6 +546,69 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51087: // Owl Gaze
+                {
+                    if (!m_casterUnit || !unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(51080))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51080);
+                        unitTarget->AddAura(51081);
+                    }
+                    else if (unitTarget->HasAura(51081))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51081);
+                        unitTarget->AddAura(51080);
+                    }
+
+                    return;
+                }
+                case 51086: // Lunar Shift
+                {
+                    if (!m_casterUnit || !unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(51080))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51080);
+                        unitTarget->AddAura(51081);
+                        m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
+                        m_casterUnit->CastSpell(m_casterUnit, 51085, true);
+                    }
+                    else if (unitTarget->HasAura(51081))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51081);
+                        unitTarget->AddAura(51080);
+                        m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
+                        m_casterUnit->CastSpell(m_casterUnit, 51085, true);
+                    }
+
+                    return;
+                }
+                case 51083: // Flock of Ravens
+                {
+                    if (!m_casterUnit)
+                        return;
+
+                    int32 count = m_spellInfo->EffectBasePoints[eff_idx];
+
+                    std::list<Player*> players;
+                    m_casterUnit->GetAlivePlayerListInRange(m_casterUnit, players, 100.0f);
+                    for (Player* pPlayer : players)
+                    {
+                        if (count-- < 0)
+                            break;
+
+                        float x, y, z;
+                        pPlayer->GetPosition(x, y, z);
+                        pPlayer->GetRandomPoint(x, y, z, 5.0f, x, y, z);
+                        if (Creature* pRaven = m_casterUnit->SummonCreature(m_spellInfo->EffectMiscValue[eff_idx], x, y, z, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000))
+                            pRaven->AI()->AttackStart(pPlayer);
+                    }
+
+                    return;
+                }
                 case 51012: // Jewel of Wild Magics
                 {
                     if (!unitTarget)
