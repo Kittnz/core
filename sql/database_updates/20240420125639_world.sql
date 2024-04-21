@@ -654,3 +654,10 @@ DELETE FROM creature_battleground WHERE guid=2583089;
 
 -- Changes by DRAGU
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (928,-11145.285156,-1889.476562,165.765564,0.642509,814,'keeper_gnarlmoon');
+REPLACE INTO `creature` VALUES (2583090,61946,0,0,0,814,-11334.2,-1782.57,179.734,3.66393,120,120,0,100,100,0,1,200);
+REPLACE INTO `creature` VALUES (2583091,61939,0,0,0,814,-11145.2,-1889.39,165.766,0.642509,120,120,0,100,100,0,1,200);
+REPLACE INTO `creature` VALUES (2583092,61951,0,0,0,814,-11318.7,-1898.1,240.47,5.44207,120,120,0,100,100,0,1,200);
+REPLACE INTO `creature` VALUES (2583093,61958,0,0,0,814,-11106.8,-1602.01,279.949,3.82427,120,120,0,100,100,0,1,200);
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (929,-11108.942383,-1603.509766,279.949677,3.862183,814,'echo_medivh');
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (930,-11313.150391,-1905.298950,240.469910,5.417272,814,'anomalus');
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (931,-11340.753906,-1787.068359,179.734344,0.618490,814,'ley_watcher');
