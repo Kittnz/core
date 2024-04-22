@@ -582,3 +582,4 @@ REPLACE INTO `creature` VALUES (2583230,3855,0,0,0,33,-249.284,2396.23,96.8227,4
 REPLACE INTO `creature` VALUES (2583231,3855,0,0,0,33,-248.518,2394.53,96.8226,3.82747,120,120,5,100,100,1,0,0);
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (932,220.839569,-347.696930,18.533037,4.729568,189,'sm_lib_edit');
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (933,1850.447998,-370.420502,18.678852,1.491642,189,'sm_armory_edit');
+REPLACE INTO `creature` VALUES (2582939,61970,0,0,0,33,-236.98,2360.84,97.4642,1.29056,300,300,0,100,100,0,0,0);
