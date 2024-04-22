@@ -314,10 +314,21 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
 bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
 {
     ///- Get the command line arguments
-    std::string account_name;
-    uint32 targetAccountId = ExtractAccountId(&args, &account_name);
-    if (!targetAccountId)
+    char* szAccountName = ExtractQuotedOrLiteralArg(&args);
+    if (!szAccountName)
+    {
+        SendSysMessage("Expected an account name.");
+        SetSentErrorMessage(true);
         return false;
+    }
+
+    uint32 targetAccountId = sAccountMgr.GetId(szAccountName);
+    if (!targetAccountId)
+    {
+        PSendSysMessage("Cannot find account named '%s'.", szAccountName);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     // allow or quoted string with possible spaces or literal without spaces
     char *szPassword1 = ExtractQuotedOrLiteralArg(&args);
@@ -345,7 +356,7 @@ bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
             SendSysMessage(LANG_COMMAND_PASSWORD);
             break;
         case AOR_NAME_NOT_EXIST:
-            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+            PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, szAccountName);
             SetSentErrorMessage(true);
             return false;
         case AOR_PASS_TOO_LONG:
@@ -1312,7 +1323,7 @@ bool ChatHandler::ListBattlegroundsCommand(char* args)
             auto plTarget = sObjectAccessor.FindPlayer(plTargetGuid);
 
             std::ostringstream ss;
-            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Duration: " <<
+            ss << BattleGround::TypeToString(bg->GetTypeID()) << " | " << bg->GetPlayers().size() << " / " << bg->GetMaxPlayers() << " | Status: " << bg->GetStatus() << " | Duration: " <<
                 secsToTimeString(bg->GetStartTime() / 1000);
 
             if (plTarget)
@@ -14775,7 +14786,7 @@ bool ChatHandler::HandleSendMailsCommand(char* args)
 
 bool ChatHandler::HandleBalanceCommand(char* args)
 {
-    char* c_account_name = ExtractArg(&args);
+    char* c_account_name = ExtractQuotedOrLiteralArg(&args);
 
     if (!c_account_name)
         return false;
@@ -14791,7 +14802,8 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 
     uint32 account_id;
     account_id = ExtractAccountId(&c_account_name, &account_name, nullptr, false);
-    int32 coinsArg = (int32)atoi(args);
+    int32 coinsArg = 0;
+    ExtractInt32(&args, coinsArg);
 
     if (!account_id)
         return false;

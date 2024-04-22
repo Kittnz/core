@@ -304,7 +304,7 @@ void Item::UpdateDuration(Player* owner, uint32 diff)
     SetState(ITEM_CHANGED, owner);                          // save new time in database
 }
 
-void Item::SaveToDB()
+void Item::SaveToDB(bool direct)
 {
     uint32 guid = GetGUIDLow();
     switch (uState)
@@ -357,7 +357,10 @@ void Item::SaveToDB()
             stmt.addUInt32(GetUInt32Value(ITEM_FIELD_ITEM_TEXT_ID));
             stmt.addUInt8(generatedLoot); // can't use bool, SQL ERROR: Using unsupported buffer type: 16  (parameter: 13), todo, maybe.
             stmt.addUInt32(guid);
-            stmt.Execute();
+            if (!direct)
+                stmt.Execute();
+            else
+                stmt.DirectExecute();
         }
         break;
         case ITEM_REMOVED:

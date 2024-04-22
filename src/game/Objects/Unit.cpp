@@ -5641,8 +5641,7 @@ uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spell
     takenFlatMod = SpellBonusWithCoeffs(spellProto, effectIndex, 0, takenFlatMod, 0, damagetype, false, pCaster, spell) * int32(stack);
 
     if ((takenFlatMod < 0) && (-takenFlatMod > (pdamage / 2)))
-        takenFlatMod = -(pdamage / 2);
-
+        takenFlatMod = -float(pdamage / 2);
     // use float as more appropriate for negative values and percent applying
     float tmpDamage = (pdamage + takenFlatMod) * takenTotalMod;
     return tmpDamage > 0 ? uint32(roundf(tmpDamage)) : 0;
@@ -9771,7 +9770,7 @@ uint8 Unit::GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const
     return targets.size();
 }
 
-Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radius /*= ATTACK_DISTANCE*/, bool inFront /*= false*/, bool isValidAttackTarget /*= false*/) const
+Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radius /*= ATTACK_DISTANCE*/, bool inFront /*= false*/, bool isValidAttackTarget /*= false*/, bool notPvpEnabling /*= false*/) const
 {
     std::list<Unit*> targets;
 
@@ -9786,7 +9785,10 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
     // remove not LoS targets
     for (std::list<Unit*>::iterator tIter = targets.begin(); tIter != targets.end();)
     {
-        if ((!IsWithinLOSInMap(*tIter)) || (inFront && !this->HasInArc(*tIter, M_PI_F / 2)) || (isValidAttackTarget && !IsValidAttackTarget(*tIter)))
+        if ((!IsWithinLOSInMap(*tIter)) || 
+           (inFront && !this->HasInArc(*tIter, M_PI_F / 2)) ||
+           (isValidAttackTarget && !IsValidAttackTarget(*tIter)) ||
+           (notPvpEnabling && !CanAttackWithoutEnablingPvP(*tIter)))
         {
             std::list<Unit*>::iterator tIter2 = tIter;
             ++tIter;

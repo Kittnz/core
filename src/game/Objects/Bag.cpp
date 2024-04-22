@@ -91,9 +91,9 @@ bool Bag::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
     return true;
 }
 
-void Bag::SaveToDB()
+void Bag::SaveToDB(bool direct)
 {
-    Item::SaveToDB();
+    Item::SaveToDB(direct);
 }
 
 bool Bag::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry)

@@ -328,6 +328,28 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     if (msg.find("MR:") != std::string::npos || msg.find("TR:") != std::string::npos)
         lang = LANG_ADDON;
 
+    if (type == CHAT_MSG_CHANNEL)
+    {
+        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+        {
+            static uint64 lastAnnounce = 0;
+
+            //CN network has an addon using the channel Twb that's spamming and causing a lot of server stress.
+            //Temp throttle until this is fixed by the author.
+
+            std::string chnLower = channel;
+            std::transform(chnLower.begin(), chnLower.end(), chnLower.begin(), ::tolower);
+            if (chnLower.find("twb") != std::string::npos)
+            {
+                auto timeNow = time(nullptr);
+
+                if ((timeNow - lastAnnounce) < 10)
+                    return;
+                lastAnnounce = timeNow;
+            }
+        }
+    }
+
     if (HandleTurtleAddonMessages(lang, type, msg))
     {
         // Message was a turtle addon message, no point to process further

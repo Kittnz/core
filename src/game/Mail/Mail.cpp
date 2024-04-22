@@ -283,7 +283,7 @@ void MailDraft::SendReturnToSender(uint32 sender_acc, ObjectGuid sender_guid, Ob
  * @param checked              The mask used to specify the mail.
  * @param deliver_delay        The delay after which the mail is delivered in seconds
  */
-void MailDraft::SendMailTo(MailReceiver const& receiver, MailSender const& sender, MailCheckMask checked, uint32 deliver_delay, uint32 expire_delay)
+void MailDraft::SendMailTo(MailReceiver const& receiver, MailSender const& sender, MailCheckMask checked, uint32 deliver_delay, uint32 expire_delay, bool direct)
 {
     Player* pReceiver = receiver.GetPlayer();               // can be nullptr
     MasterPlayer* masterReceiver = sObjectAccessor.FindMasterPlayer(receiver.GetPlayerGuid());
@@ -330,7 +330,10 @@ void MailDraft::SendMailTo(MailReceiver const& receiver, MailSender const& sende
                                    mailId, item->GetGUIDLow(), item->GetEntry(), receiver.GetPlayerGuid().GetCounter());
     }
 
-    CharacterDatabase.CommitTransaction();
+    if (direct)
+        CharacterDatabase.CommitTransactionDirect();
+    else
+        CharacterDatabase.CommitTransaction();
 
     // For online receiver update in game mail status and data
     if (masterReceiver)

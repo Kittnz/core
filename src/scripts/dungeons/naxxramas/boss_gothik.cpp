@@ -363,7 +363,7 @@ struct boss_gothikAI : public ScriptedAI
             {
                 // Don't count dead players, including those that are feigned
                 // Otherwise we could have a bunch of feigned players sitting on one side
-                if (p->IsDead())
+                if (p->IsDead() || p->IsFeigningDeathSuccessfully())
                     continue;
 
                 if(m_pInstance->IsInRightSideGothArea(p))
