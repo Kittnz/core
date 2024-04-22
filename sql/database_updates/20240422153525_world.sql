@@ -664,3 +664,41 @@ delete from creature_loot_template where entry = 91719 and item in (3014, 7906);
 replace into `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (5761, 5339, -80, 0, 1, 1, 0);
 -- NPC ID 61218 reduce damage to 35-35 and change scale to 0.4
 UPDATE `creature_template` SET `scale` = 0.4, `dmg_min` = 35, `dmg_max` = 35 WHERE `entry` = 61218;
+-- NPC ID 91829 should have Spell ID 26188 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 9050 where entry = 91829;
+-- NPC ID 91966 and 61095 should be tamable by hunters as a Wind Serpent hunter pet, should have Spell ID 25011 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set beast_family = 27, type_flags = 1, pet_spell_list_id = 8909 where entry in (61095,91966);
+-- NPC ID 91833, 92147, 91832 and 92146 should have Spell ID 3010 instead of Spell ID 16832 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5807 where entry IN (91833,92147,91832,92146);
+-- NPC ID 91962 should have Spell ID 17260 instead of Spell ID 17259 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5857 where entry = 91962;
+-- NPC ID 61076 should have Spell ID 3010 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5807 where entry = 61076;
+-- NPC ID 61075 should have Spell ID 3009 when tamed by a hunter and should display this ability on Beast Lore when used on it. Also change this NPCs level range from 55-57 to 56-57.
+update creature_template set level_min = 56, pet_spell_list_id = 5811 where entry = 61075;
+-- NPC ID 61227 and 61228 should have Spell ID 17259 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5854 where entry in (61227,61228);
+-- NPC ID 61220 should have Spell ID 1756 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5788 where entry = 61220;
+-- NPC ID 61776, 61774 and 61775 should have Spell ID 24844 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 9479 where entry in (61774,61775,61776);
+-- NPC ID 61699 and 61659 should have Spell ID 17255 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5847 where entry IN (61659,61699);
+-- NPC ID 61696 should have Spell ID 7371 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 9065 where entry = 61696;
+-- NPC ID 61691 should have Spell ID 17253 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5800 where entry = 61691;
+-- NPC ID 61693 and 61681 should have Spell ID 16827 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5835 where entry IN (61681,61693);
+-- NPC ID 61680 should have Spell ID 16828 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 5836 where entry = 61680;
+-- NPC ID 61662 should have Spell ID 24640 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+update creature_template set pet_spell_list_id = 8848 where entry = 61662;
+-- NPC ID 61975 should display its tamed pet ability on Beast Lore when used on it.
+REPLACE INTO pet_spell_data (`entry`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`) VALUES (9480, 26179, 0, 0, 0);
+update creature_template set pet_spell_list_id = 9480 where entry = 61975;
+-- NPC ID 61337 and 61336 should be tamable by hunters as an Owl hunter pet, should have Spell ID 24582 when tamed by a hunter and should display this ability on Beast Lore when used on it.
+REPLACE INTO pet_spell_data (`entry`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`) VALUES (9481, 24582, 0, 0, 0);
+update creature_template set beast_family = 26, type_flags = 1, pet_spell_list_id = 9481 where entry in (61336,61337);
+-- NPC ID 91964, 91963 and 60501 should not be tamable by hunters.
+update creature_template set type_flags = 0, pet_spell_list_id = 0 where entry in (60501,91963,91964);
