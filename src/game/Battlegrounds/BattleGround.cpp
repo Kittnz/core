@@ -415,7 +415,7 @@ void BattleGround::Update(uint32 diff)
             PlaySoundToAll(SOUND_BG_START);
 
             // Announce BG starting
-            if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
+            if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START) && GetTypeID() != BATTLEGROUND_BR)
             {
                 static time_t lastAnnounceTime = 0;
                 if (sWorld.GetGameTime() > (lastAnnounceTime + MINUTE * 2))
