@@ -702,3 +702,5 @@ REPLACE INTO pet_spell_data (`entry`, `spell_id1`, `spell_id2`, `spell_id3`, `sp
 update creature_template set beast_family = 26, type_flags = 1, pet_spell_list_id = 9481 where entry in (61336,61337);
 -- NPC ID 91964, 91963 and 60501 should not be tamable by hunters.
 update creature_template set type_flags = 0, pet_spell_list_id = 0 where entry in (60501,91963,91964);
+-- NPC ID 61090 change displayID to 14557 and change scale to 1.1
+update creature_template set display_id1 = 14557, scale = 1.1 where entry = 61090;
