@@ -478,3 +478,4 @@ DELETE FROM gameobject WHERE guid = '5018551';
 DELETE FROM game_event_gameobject WHERE guid = '5018551';
 DELETE FROM gameobject_battleground WHERE guid = '5018551';
 REPLACE INTO `gameobject` VALUES ( 5018552, 2010382, 43, -392.352, -217.672, -63.8395, 1.8231, 0, 0, 0.790453, 0.612523, 300, 300, 100, 1, 0, 0);
+UPDATE `gameobject` SET `spawntimesecsmin`=9999999, `spawntimesecsmax`=9999999 WHERE `guid`=5018533;
