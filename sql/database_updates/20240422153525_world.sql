@@ -662,3 +662,5 @@ replace into `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 delete from creature_loot_template where entry = 91719 and item in (3014, 7906);
 -- NPC ID 5761 add item ID 5339 to a new loottable with a 80% drop chance for 1 item, this item is a quest drop.
 replace into `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (5761, 5339, -80, 0, 1, 1, 0);
+-- NPC ID 61218 reduce damage to 35-35 and change scale to 0.4
+UPDATE `creature_template` SET `scale` = 0.4, `dmg_min` = 35, `dmg_max` = 35 WHERE `entry` = 61218;
