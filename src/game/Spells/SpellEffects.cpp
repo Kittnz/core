@@ -546,24 +546,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
-                case 51087: // Owl Gaze
-                {
-                    if (!m_casterUnit || !unitTarget)
-                        return;
-
-                    if (unitTarget->HasAura(51080))
-                    {
-                        unitTarget->RemoveAurasDueToSpell(51080);
-                        unitTarget->AddAura(51081);
-                    }
-                    else if (unitTarget->HasAura(51081))
-                    {
-                        unitTarget->RemoveAurasDueToSpell(51081);
-                        unitTarget->AddAura(51080);
-                    }
-
-                    return;
-                }
                 case 51086: // Lunar Shift
                 {
                     if (!m_casterUnit || !unitTarget)
@@ -572,14 +554,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (unitTarget->HasAura(51080))
                     {
                         unitTarget->RemoveAurasDueToSpell(51080);
-                        unitTarget->AddAura(51081);
+                        unitTarget->AddAura(51081, 0, m_casterUnit);
                         m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
                         m_casterUnit->CastSpell(m_casterUnit, 51085, true);
                     }
                     else if (unitTarget->HasAura(51081))
                     {
                         unitTarget->RemoveAurasDueToSpell(51081);
-                        unitTarget->AddAura(51080);
+                        unitTarget->AddAura(51080, 0, m_casterUnit);
                         m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
                         m_casterUnit->CastSpell(m_casterUnit, 51085, true);
                     }

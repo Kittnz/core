@@ -2208,6 +2208,28 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 break;
             }
+            case 51087: // Owl Gaze
+            {
+                if (m_removeMode != AURA_REMOVE_BY_EXPIRE)
+                    return;
+
+                Unit* caster = GetCaster();
+                if (!caster)
+                    return;
+
+                if (target->HasAura(51080))
+                {
+                    target->RemoveAurasDueToSpell(51080);
+                    target->AddAura(51081, 0, caster);
+                }
+                else if (target->HasAura(51081))
+                {
+                    target->RemoveAurasDueToSpell(51081);
+                    target->AddAura(51080, 0, caster);
+                }
+
+                return;
+            }
         }
 
         if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
