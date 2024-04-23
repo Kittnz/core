@@ -19,3 +19,9 @@ DELETE FROM creature_battleground WHERE guid=2583253;
 
 -- Changes by WOJI
 REPLACE INTO `creature` VALUES (2583254,61939,0,0,0,532,-11132,-1881.76,165.765,0.715902,120,120,0,100,100,0,1,200);
+DELETE FROM creature WHERE guid=2583254;
+DELETE FROM creature_addon WHERE guid=2583254;
+DELETE FROM creature_movement WHERE id=2583254;
+DELETE FROM game_event_creature WHERE guid=2583254;
+DELETE FROM game_event_creature_data WHERE guid=2583254;
+DELETE FROM creature_battleground WHERE guid=2583254;
