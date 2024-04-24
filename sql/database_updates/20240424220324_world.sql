@@ -102,3 +102,18 @@ update item_template set armor = 80 where entry = 61187; -- Intricate Gyroscope 
 update item_template set armor = 291 where entry = 60429; -- Arcanite Shackles
 
 
+-- attach new spells
+update item_template set description = 'The fragments of the once powerful gem seem to be attracted to eachother.', spellid_1 = 51023, spellcooldown_1 = 600000 where entry = 55275; -- Slivers of Nullification
+update item_template set display_id = 68183, description = '' where entry = 55274; -- Cloak of the Forgotten Dawn
+update item_template set display_id = 68184, description = '' where entry = 55276; -- Forgotten Raven's Mallet
+update item_template set display_id = 68106, description = '' where entry = 55277; -- The End of All Ambitions
+update item_template set display_id = 68182, description = '' where entry = 55278; -- Ques' Gauntlets of Precision
+update item_template set display_id = 68185, description = '' where entry = 55278; -- Branch of Resolute Defense
+update item_template set display_id = 68175, description = '' where entry = 55280; -- Boots of Elemental Fury
+update item_template set display_id = 68176, description = '' where entry = 55281; -- Gauntlets of Elemental Fury
+update item_template set display_id = 68169, description = '' where entry = 55282; -- Boots of the Grand Crusader
+update item_template set display_id = 68170, description = '' where entry = 55283; -- Gauntlets of the Grand Crusader
+update item_template set display_id = 68186, description = '' where entry = 55284; -- Dragunovi's Sash of Dominance
+update item_template set display_id = 18853, description = '' where entry = 55285; -- Crite's Holy Hands
+update item_template set display_id = 24569, description = '' where entry = 55286; -- Ring of Holy Light
+update item_template set spellid_1 = 51000 where entry = 23001; -- Eye of Diminution
