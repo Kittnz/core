@@ -20,3 +20,6 @@ replace INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 replace INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (10856, 0, 70216, 0, 0, 0, 7175);
 replace INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (10857, 0, 70216, 0, 0, 0, 7175);
 replace INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (11536, 0, 70216, 0, 0, 0, 7175);
+
+-- NPC IDs 61965, 61968, 61961, 61963, 61969 remove all immunities.
+update creature_template set mechanic_immune_mask = 0, immunity_flags = 0 where entry in (61965, 61968, 61961, 61963, 61969);
