@@ -45,3 +45,6 @@ DELETE FROM game_event_creature WHERE guid=2583253;
 DELETE FROM game_event_creature_data WHERE guid=2583253;
 DELETE FROM creature_battleground WHERE guid=2583253;
 UPDATE `creature_addon` SET `stand_state`=8 WHERE `guid`=2583097;
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5018569, 2001825, 0, -10629.1, -735.524, 52.3446, 1.06693, 0, 0, 0.50852, 0.86105, 300, 300, 100, 1, 0, 0);
