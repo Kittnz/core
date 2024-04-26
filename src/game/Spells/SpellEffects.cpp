@@ -423,6 +423,14 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         m_caster->CastSpell(unitTarget, 27766, true);
                         break;
                     }
+                    case 51099: // Arcane Bomb
+                    {
+                        if (m_casterUnit == unitTarget)
+                            damage = 0;
+                        else
+                            damage += std::max(0.0f, std::min(7000.0f, InterpolateValueAtIndex(1, 7000, 100, 1, m_caster->GetDistance3dToCenter(unitTarget))));
+                        break;
+                    }
                 }
                 break;
             }

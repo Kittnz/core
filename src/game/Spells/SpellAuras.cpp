@@ -4177,6 +4177,14 @@ void Aura::HandleModThreat(bool apply, bool Real)
             level_diff = target->GetLevel() - 60;
             multiplier = 1;
             break;
+        // Arcane Overload
+        case 51100:
+            if (!apply)
+            {
+                target->CastSpell(target, 51101, true);
+                target->CastSpell(target, 51099, true, nullptr, nullptr, GetCasterGuid(), GetSpellProto());
+            }
+            break;
     }
 
     if (level_diff > 0)
