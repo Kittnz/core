@@ -6830,10 +6830,13 @@ void Aura::PeriodicDummyTick()
                 }
                 case 16336:                                 // Haunting Phantoms
                 {
-                    if (urand(0,1))
-                        target->CastSpell(target, 16334, true); // Summon Spiteful Phantom
-                    else
-                        target->CastSpell(target, 16335, true); // Summon Wrath Phantom
+                    if (target->GetMap()->IsDungeon())
+                    {
+                        if (urand(0, 1))
+                            target->CastSpell(target, 16334, true); // Summon Spiteful Phantom
+                        else
+                            target->CastSpell(target, 16335, true); // Summon Wrath Phantom
+                    }
                     return;
                 }
                 case 21827:                                 // Frostwolf Aura DND
