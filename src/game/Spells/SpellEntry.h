@@ -980,6 +980,17 @@ public:
         return false;
     }
 
+    inline bool UsesSpellPower() const
+    {
+        for (float coeff : EffectBonusCoefficient)
+        {
+            if (coeff > 0)
+                return true;
+        }
+
+        return false;
+    }
+
     inline bool CanCrit() const
     {
         for (uint32 i : Effect)
