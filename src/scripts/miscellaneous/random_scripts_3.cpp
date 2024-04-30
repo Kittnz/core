@@ -6199,6 +6199,24 @@ bool QuestAccept_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool QuestRewarded_npc_dolvan_bracewind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 41312) // Restoration
+    {
+        pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+    }
+
+    pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+        {
+            pQuestGiver->MonsterSay(30178);
+            pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+        }, 2000);
+
+    return false;
+}
+
 bool GossipHello_npc_shizuru_yamada(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->IsQuestGiver())
@@ -8181,6 +8199,7 @@ void AddSC_random_scripts_3()
     newscript->pGossipHello = &GossipHello_npc_dolvan_bracewind;
     newscript->pGossipSelect = &GossipSelect_npc_dolvan_bracewind;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_dolvan_bracewind;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_dolvan_bracewind;
     newscript->RegisterSelf();
 
     newscript = new Script;
