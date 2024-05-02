@@ -4511,6 +4511,25 @@ void Aura::HandleAuraProcTriggerSpell(bool apply, bool Real)
                 GetTarget()->CastSpell(GetTarget(), 33006, true);
             break;
         }
+        // Drain Soul
+        case 1120: // Rank 1
+        case 8288: // Rank 2
+        case 8289: // Rank 3
+        case 11675: // Rank 4
+            if (apply)
+            {
+                // Fix talent Improved Drain Soul not triggering if target dies from last tick of Drain Soul damage.
+                GetHolder()->SetAuraDuration(GetHolder()->GetAuraMaxDuration() + 400);
+
+                // Fix drain soul aura remaining on caster upon resist.
+                GetTarget()->m_Events.AddLambdaEventAtOffset([spellId = GetId(), target = GetTarget()]()
+                {
+                    if (!target->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
+                        target->RemoveAurasDueToSpell(spellId);
+                }, 400);
+            }
+            break;
+            
         default:
             break;
     }
@@ -6256,7 +6275,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
 
             if (pdamage)
                 procVictim |= PROC_FLAG_TAKEN_ANY_DAMAGE;
-
+            
             pCaster->ProcDamageAndSpell(target, procAttacker, procVictim, PROC_EX_NORMAL_HIT, pdamage, originalDamage, BASE_ATTACK, spellProto);
 
             cleanDamage.absorb = absorb;
