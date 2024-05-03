@@ -7991,11 +7991,72 @@ bool GossipSelect_npc_suspicious_goblin(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+bool GossipHello_npc_tharessa(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(41314) == QUEST_STATUS_INCOMPLETE) // A Cause Of Concern
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30179, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(61979, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_tharessa(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer(30180, pPlayer);
+        pCreature->SetFactionTemporary(16, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GOHello_go_resonating_pedestal(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020099)
+    {
+        if (pPlayer->GetQuestStatus(41315) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(41377, 1) && !pPlayer->FindNearestCreature(61980, 100.0F) && !pPlayer->FindNearestCreature(61981, 100.0F))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 30182, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30181, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_resonating_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+
+        if (pGo->GetEntry() == 2020099)
+        {
+            Creature* amplified_arcane_monstrosity = pGo->SummonCreature(61980, 3925.58F, -4733.38F, 266.56F, 1.60F, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 15 * IN_MILLISECONDS);
+            Creature* volatile_arcane_monstrosity = pGo->SummonCreature(61981, 3941.27F, -4719.79F, 266.57F, 4.36F, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 15 * IN_MILLISECONDS);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "go_resonating_pedestal";
+    newscript->pGOHello = &GOHello_go_resonating_pedestal;
+    newscript->pGOGossipSelect = &GOSelect_go_resonating_pedestal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_tharessa";
+    newscript->pGossipHello = &GossipHello_npc_tharessa;
+    newscript->pGossipSelect = &GossipSelect_npc_tharessa;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_suspicious_goblin";
