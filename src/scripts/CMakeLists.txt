@@ -285,6 +285,7 @@ miscellaneous/gameobject_scripts.cpp
 miscellaneous/feature_custom_spell_test.cpp
 miscellaneous/feature_gardening.cpp
 miscellaneous/feature_transmog.h
+miscellaneous/item_orb_of_draconic_energy.cpp
 miscellaneous/npc_loothelper.h
 miscellaneous/npc_loothelper.cpp
 miscellaneous/ptr.cpp
