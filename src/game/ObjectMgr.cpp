@@ -9401,7 +9401,7 @@ void ObjectMgr::LoadShop()
 
     m_ShopEntriesMap.clear();
 
-    result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price, region_locked FROM shop_items");
+    result = WorldDatabase.Query("SELECT ID, category, item, model_id, item_id, description, description_loc4, price, region_locked FROM shop_items");
 
     if (!result)
         return;
@@ -9413,10 +9413,12 @@ void ObjectMgr::LoadShop()
         uint32 id = fields[0].GetUInt32();
         uint8 category = fields[1].GetUInt8();
         uint32 item = fields[2].GetUInt32();
-        std::string text = fields[3].GetString();
-        std::string description_loc4 = fields[4].GetString();
-        uint32 price = fields[5].GetUInt32();
-        ShopRegion region = (ShopRegion)fields[6].GetUInt8();
+        uint32 ModelID = fields[3].GetUInt32();
+        uint32 ItemID = fields[4].GetUInt32();
+        std::string text = fields[5].GetString();
+        std::string description_loc4 = fields[6].GetString();
+        uint32 price = fields[7].GetUInt32();
+        ShopRegion region = (ShopRegion)fields[8].GetUInt8();
 
 
         if (!CheckRegionRequirements(region))
@@ -9426,6 +9428,8 @@ void ObjectMgr::LoadShop()
         shopentry.shopId = id;
         shopentry.Category = category;
         shopentry.Item = item;
+        shopentry.ModelID = ModelID;
+        shopentry.ItemDisplayID = ItemID;
         shopentry.Description = text;
         shopentry.Description_loc4 = description_loc4;
         shopentry.Price = price;
@@ -9442,11 +9446,77 @@ void ObjectMgr::LoadShop()
             continue;
         }
 
+        ShopCategoriesMap::iterator CategoryIter = m_ShopCategoriesMap.find(shopentry.Category);
+        if (CategoryIter != m_ShopCategoriesMap.end())
+        {
+            CategoryIter->second.Items.push_back(shopentry);
+        }
+        else
+        {
+			sLog.outErrorDb("ERROR for item Id %u, category %u doesn't defined in category list!", id, shopentry.Category);
+			continue;
+        }
+
         m_ShopEntriesMap[item] = shopentry;
 
     } while (result->NextRow());
 
     delete result;
+
+    // Sort items in categories
+    for (auto& CategoryPair : m_ShopCategoriesMap)
+    {
+        ShopCategory& ShopCat = CategoryPair.second;
+		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [&](ShopEntry const& t1, ShopEntry const& t2)
+			{
+				return t1.shopId < t2.shopId;
+			});
+
+        ShopCat.CachedItemEntries.resize(ShopCat.Items.size());
+        for (uint32 i = 0; i < ShopCat.Items.size(); i++)
+        {
+            std::string& CachedEntry = ShopCat.CachedItemEntries[i];
+            ShopEntry& Entry = ShopCat.Items[i];
+
+            ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(Entry.Item);
+
+            if (pProto == nullptr)
+            {
+                sLog.outErrorDb("ERROR for item Id %u, item_template missed info!", Entry.Item);
+                continue;
+            }
+
+			std::string ItemName;
+			if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+			{
+				ItemName = Entry.Description_loc4;
+			}
+			else
+			{
+				ItemName = Entry.Description;
+			}
+
+            CachedEntry.resize(1024);
+			int32 FormatResult = std::snprintf(CachedEntry.data(), 1024, "Entries:%u=%s=%u=%s=%u=%u=%u",
+                Entry.Category,
+				ItemName.c_str(),
+                Entry.Price,
+				pProto->Description.c_str(),
+                Entry.Item,
+                Entry.ModelID,
+                Entry.ItemDisplayID);
+
+            MANGOS_ASSERT(FormatResult > 0);
+            if (FormatResult > 1022)
+            {
+                sLog.outErrorDb("ERROR for item Id %u, entry size overflow buffer (size of buffer 1024)!", Entry.Item);
+            }
+
+            size_t StringRealLen = std::strlen(CachedEntry.c_str());
+            CachedEntry.resize(StringRealLen + 1);
+        }
+    }
+
 
     result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC",
         realmID);

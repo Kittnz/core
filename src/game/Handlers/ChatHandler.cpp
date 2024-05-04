@@ -1202,38 +1202,15 @@ bool WorldSession::HandleTurtleAddonMessages(uint32 lang, uint32 type, std::stri
 
                 _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
 
-                // we have to order them by shop id not item id
-                // currently does not work because the UI will reorder them by item id...
-                std::vector<ShopEntry const*> shopEntries;
-                for (auto const& itr : sObjectMgr.GetShopEntriesList())
+                const ShopCategoriesMap& ShopCategories = sObjectMgr.GetShopCategoriesList();
+                ShopCategoriesMap::const_iterator ShopIter = ShopCategories.find(categoryID);
+                if (ShopIter != ShopCategories.cend())
                 {
-                    if (itr.second.Category == categoryID)
-                        shopEntries.push_back(&itr.second);
-                }
-                std::sort(shopEntries.begin(), shopEntries.end(), [&](ShopEntry const* t1, ShopEntry const* t2)
-                {
-                    return t1->shopId < t2->shopId;
-                });
+                    const ShopCategory& ShopCat = ShopIter->second;
 
-                for (auto const& itr : shopEntries)
-                {
-                    if (itr->Category != categoryID)
-                        continue;
-
-                    if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr->Item))
+                    for (const std::string& EntryStr : ShopCat.CachedItemEntries)
                     {
-                        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
-                            _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-                                + itr->Description_loc4 + "="
-                                + std::to_string(itr->Price) + "="
-                                + pProto->Description + "="
-                                + std::to_string(itr->Item));
-                        else
-                            _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-                                + itr->Description + "="
-                                + std::to_string(itr->Price) + "="
-                                + pProto->Description + "="
-                                + std::to_string(itr->Item));
+                        _player->SendAddonMessage(prefix, EntryStr);
                     }
                 }
 
