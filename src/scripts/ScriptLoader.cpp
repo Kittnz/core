@@ -20,6 +20,9 @@ void AddSC_event_fireworks();
 // Event
 void AddSC_elemental_invasions();
 
+// Items
+void AddSC_item_orb_of_draconic_energy();
+
 // HT
 void AddSC_instance_dire_maul();
 void AddSC_boss_immol_thar();
@@ -336,6 +339,9 @@ void AddScripts()
 
     // Event
     AddSC_elemental_invasions();
+
+    // Items
+    AddSC_item_orb_of_draconic_energy();
 
     // HT
     AddSC_instance_dire_maul();

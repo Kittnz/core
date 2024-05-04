@@ -2014,7 +2014,7 @@ bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
     return pTempScript->pGOHello(pPlayer, pGameObject);
 }
 
-bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
+bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets& targets)
 {
     Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
 
