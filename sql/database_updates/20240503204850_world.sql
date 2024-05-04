@@ -12,3 +12,6 @@ REPLACE INTO `gameobject` VALUES ( 5018611, 2020099, 1, 3951.96, -4755.01, 266.5
 
 -- Changes by ZORIZAR
 REPLACE INTO `gameobject` VALUES ( 5018612, 2007256, 1, 1569.87, -2853.37, 191.06, 1.12073, 0, 0, 0.531497, 0.84706, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5018612';
+DELETE FROM game_event_gameobject WHERE guid = '5018612';
+DELETE FROM gameobject_battleground WHERE guid = '5018612';
