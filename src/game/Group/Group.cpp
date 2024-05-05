@@ -1086,25 +1086,22 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
     // Turtle:: Make raid looted items not appear soul bound.
     const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem, Creature* creature)
     {
-        if (player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
+        auto itemProto = newitem->GetProto();
+        if (player->GetMap()->IsRaid() && creature && itemProto && (creature->IsWorldBoss() || itemProto->Quality >= ITEM_QUALITY_RARE))
         {
-            auto itemProto = newitem->GetProto();
-            if (itemProto)
+            if (!lootItem.freeforall && itemProto->Stackable <= 1)
             {
-                if (!lootItem.freeforall && itemProto->Stackable <= 1)
+                newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
                 {
-                    newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
-                    for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
+                    if (Player* pMember = itr->getSource())
                     {
-                        if (Player* pMember = itr->getSource())
-                        {
-                            if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
-                                newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
-                        }
+                        if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
+                            newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
                     }
-                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
-                    newitem->SendCreateUpdateToPlayer(player);
                 }
+                //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                newitem->SendCreateUpdateToPlayer(player);
             }
         }
     };
