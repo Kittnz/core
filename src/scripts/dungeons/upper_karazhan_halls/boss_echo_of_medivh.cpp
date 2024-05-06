@@ -62,6 +62,17 @@ struct npc_echo_of_medivhAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (m_creature->HasAura(SPELL_SHADOWFORM))
+        {
+            if (m_summonShadeOfMedivhTimer <= diff)
+            {
+                m_creature->SummonCreature(NPC_SHADE_OF_MEDIVH, 0, 0, 0, 0, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 30000);
+                m_summonShadeOfMedivhTimer = 10000;
+            }
+            else
+                m_summonShadeOfMedivhTimer -= diff;
+        }
+
         if (m_creature->IsNonMeleeSpellCasted())
             return;
 
@@ -98,17 +109,6 @@ struct npc_echo_of_medivhAI : public ScriptedAI
             m_creature->CastSpell(m_creature, SPELL_MEDIVHS_FURY, true);
             m_creature->SummonCreature(NPC_UNSTOPPABLE_INFERNAL, 0, 0, 0, 0, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 30000);
             return;
-        }
-
-        if (m_creature->HasAura(SPELL_SHADOWFORM))
-        {
-            if (m_summonShadeOfMedivhTimer <= diff)
-            {
-                m_creature->SummonCreature(NPC_SHADE_OF_MEDIVH, 0, 0, 0, 0, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 30000);
-                m_summonShadeOfMedivhTimer = 10000;
-            }
-            else
-                m_summonShadeOfMedivhTimer -= diff;
         }
 
         std::vector<uint32> availableSpells = { SPELL_PYROBLAST, SPELL_FLAMESTRIKE, SPELL_FROST_NOVA, SPELL_ARCANE_BLAST, SPELL_FROSTBOLT, SPELL_ARCANE_MISSILES };
