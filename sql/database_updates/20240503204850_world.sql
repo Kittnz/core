@@ -15,3 +15,6 @@ REPLACE INTO `gameobject` VALUES ( 5018612, 2007256, 1, 1569.87, -2853.37, 191.0
 DELETE FROM gameobject WHERE guid = '5018612';
 DELETE FROM game_event_gameobject WHERE guid = '5018612';
 DELETE FROM gameobject_battleground WHERE guid = '5018612';
+
+-- Changes by DRAGU
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581862, 7);
