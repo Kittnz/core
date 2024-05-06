@@ -18,3 +18,4 @@ DELETE FROM gameobject_battleground WHERE guid = '5018612';
 
 -- Changes by DRAGU
 REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581862, 7);
+REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (2581862, 1);
