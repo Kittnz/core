@@ -6947,7 +6947,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_NOT_HERE;
                 }
 
-                if (m_casterUnit->GetClass() == CLASS_MAGE && m_casterUnit->IsPlayer())
+                if (m_casterUnit->GetClass() == CLASS_MAGE && m_casterUnit->IsPlayer() && m_spellInfo->Id != 45407)
                 {
                     if (m_casterUnit->ToPlayer()->InBattleGround())
                         return SPELL_FAILED_NOT_HERE;

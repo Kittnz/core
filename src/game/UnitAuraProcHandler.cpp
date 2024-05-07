@@ -575,7 +575,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 {
                     // Need to remove one 24659 aura
                     // Holy Nova both heals and damages, so check needed to avoid consuming 2 charges
-                    if (!procSpell->IsFitToFamilyMask<CF_PRIEST_HOLY_NOVA1>())
+                    if (!procSpell->IsFitToFamilyMask<CF_PRIEST_HOLY_NOVA1>() && procSpell->UsesSpellPower())
                         RemoveAuraHolderFromStack(24659);
                     return SPELL_AURA_PROC_OK;
                 }

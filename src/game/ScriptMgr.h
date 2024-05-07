@@ -1405,7 +1405,7 @@ struct Script
     bool (*pItemQuestAccept         )(Player*, Item*, const Quest*);
     bool (*pGOQuestAccept           )(Player*, GameObject*, const Quest*);
 //    bool (*pGOChooseReward          )(Player*, GameObject*, const Quest*, uint32);
-    bool (*pItemUse                 )(Player*, Item*, SpellCastTargets const&);
+    bool (*pItemUse                 )(Player*, Item*, SpellCastTargets&);
     bool (*pItemUseSpell            )(Player*, Item*, SpellCastTargets const&);
     bool (*pEffectDummyCreature     )(WorldObject*, uint32, SpellEffectIndex, Creature*);
     bool (*pEffectDummyGameObj      )(WorldObject*, uint32, SpellEffectIndex, GameObject*);
@@ -1515,7 +1515,7 @@ class ScriptMgr
         uint32 GetDialogStatus(Player* pPlayer, GameObject* pGameObject);
         bool OnGameObjectUse(Player* pPlayer, GameObject* pGameObject);
         bool OnGameObjectOpen(Player* pPlayer, GameObject* pGameObject);
-        bool OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& targets);
+        bool OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets& targets);
         bool OnItemUseSpell(Player* pPlayer, Item* pItem, SpellCastTargets const& targets);
         bool OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry);
         bool OnProcessEvent(uint32 eventId, Object* pSource, Object* pTarget, bool isStart);

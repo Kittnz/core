@@ -4726,7 +4726,23 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91296))
+        {
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        if (pMember == pPlayer)
+                            continue;
+
+                        pMember->KilledMonster(cInfo, ObjectGuid());
+                    }
+                }
+            }
+        }
 
         pCreature->MonsterSay(66188);
         pPlayer->RemoveAurasDueToSpell(50060);

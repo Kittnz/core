@@ -77,19 +77,27 @@ struct ShopEntry
     uint32 shopId;
     uint32 Category;
     uint32 Item;
+    uint32 ModelID;
+    uint32 ItemDisplayID;
     std::string Description;
     std::string Description_loc4;
     uint32 Price;
 };
 
-struct ShopCategory
-{
-    std::string Name;
-    std::string Name_loc4;
-    std::string Icon;
-};
 
 typedef robin_hood::unordered_map<uint32, ShopEntry> ShopEntriesMap;
+
+struct ShopCategory
+{
+	std::string Name;
+	std::string Name_loc4;
+	std::string Icon;
+
+    std::vector< ShopEntry > Items;
+
+    std::vector< std::string > CachedItemEntries;
+};
+
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 
@@ -1383,7 +1391,7 @@ class ObjectMgr
             return m_ShopEntriesMap;
         }
 
-        ShopCategoriesMap GetShopCategoriesList() const
+        const ShopCategoriesMap& GetShopCategoriesList() const
         {
             return m_ShopCategoriesMap;
         }

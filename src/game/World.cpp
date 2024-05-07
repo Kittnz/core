@@ -1898,10 +1898,6 @@ void World::SetInitialWorldSettings()
 
     CheckEggExploit();
 
-    ///- Loading shop tables
-    sLog.outString("Loading shop...");
-    sObjectMgr.LoadShop();
-
     ///- Loads existing IDs in the database.
     sLog.outString("Loading existing IDs in the database...");
     sObjectMgr.LoadAllIdentifiers();
@@ -2200,6 +2196,9 @@ void World::SetInitialWorldSettings()
     sMountMgr.LoadFromDB();
     sLog.outString("Loading toy manager...");
     sToyMgr.LoadFromDB();
+	///- Loading shop tables
+	sLog.outString("Loading shop...");
+	sObjectMgr.LoadShop();
 	sLog.outString("Initialize Performance monitor...");
     sPerfMonitor.Initialize();
 
