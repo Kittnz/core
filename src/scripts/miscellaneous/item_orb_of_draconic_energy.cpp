@@ -1,3 +1,4 @@
+#include "Spell.h"
 #include "ScriptMgr.h"
 
 bool ItemUse_item_orb_of_draconic_energy(Player* player, Item* item, SpellCastTargets& targets)
