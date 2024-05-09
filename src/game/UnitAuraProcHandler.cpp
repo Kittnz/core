@@ -227,6 +227,13 @@ pAuraProcHandler AuraProcHandler[TOTAL_AURAS] =
     &Unit::HandleNULLProc,                                  //189 SPELL_AURA_MOD_RATING
     &Unit::HandleNULLProc,                                  //190 SPELL_AURA_MOD_FACTION_REPUTATION_GAIN
     &Unit::HandleNULLProc,                                  //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
+    &Unit::HandleNULLProc,                                  //192 SPELL_AURA_AURA_SPELL
+    &Unit::HandleNULLProc,                                  //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT
+    &Unit::HandleNULLProc,                                  //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN
+    &Unit::HandleNULLProc,                                  //195 SPELL_AURA_MOD_HONOR_GAIN
+    &Unit::HandleNULLProc,                                  //196 SPELL_AURA_ENABLE_FLYING
+    &Unit::HandleNULLProc,                                  //197 SPELL_AURA_MOD_PERIODIC_DAMAGE_PERCENT_TAKEN
+    &Unit::HandleNULLProc,                                  //198 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_TAKEN
 };
 
 // Fonctions Nostalrius

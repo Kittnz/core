@@ -1623,7 +1623,8 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo *da
             uint32 creatureTypeMask = damageInfo->target->GetCreatureTypeMask();
 
             int32 mod = GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, creatureTypeMask);
-
+            mod *= pVictim->GetTotalAuraMultiplier(SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_TAKEN);
+            
             damageInfo->totalDamage = uint32((damageInfo->totalDamage) * float((200.0f + mod) / 100.0f));
 
             for (uint8 i = 0; i < m_weaponDamageCount[damageInfo->attackType]; i++)
@@ -5633,6 +5634,8 @@ uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spell
     takenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
     if (spellProto->IsAreaOfEffectSpell())
         takenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
+    if (damagetype == DOT)
+        takenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_PERIODIC_DAMAGE_PERCENT_TAKEN);
 
     // Taken fixed damage bonus auras
     float takenFlatMod = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
@@ -6151,6 +6154,8 @@ uint32 Unit::MeleeDamageBonusTaken(WorldObject* pCaster, uint32 pdamage, WeaponA
     TakenPercent *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
     if (spellProto && spellProto->IsAreaOfEffectSpell())
         TakenPercent *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
+    if (spellProto && damagetype == DOT)
+        TakenPercent *= GetTotalAuraMultiplier(SPELL_AURA_MOD_PERIODIC_DAMAGE_PERCENT_TAKEN);
 
     // ..taken pct (melee/ranged)
     if (attType == RANGED_ATTACK)

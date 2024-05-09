@@ -333,7 +333,9 @@ enum AuraType
     SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN = 194, // Needed for Pet Avoidance.
     SPELL_AURA_MOD_HONOR_GAIN = 195, // From WotLK.
     SPELL_AURA_ENABLE_FLYING = 196, // For flying mounts.
-    TOTAL_AURAS=197
+    SPELL_AURA_MOD_PERIODIC_DAMAGE_PERCENT_TAKEN = 197, // Modifies periodic damage taken.
+    SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_TAKEN = 198, // Modifies critical damage taken.
+    TOTAL_AURAS=199
 };
 
 enum AreaAuraType

@@ -4164,6 +4164,7 @@ uint32 WorldObject::SpellCriticalDamageBonus(SpellEntry const *spellProto, uint3
     uint32 creatureTypeMask = pVictim->GetCreatureTypeMask();
 
     float critPctDamageMod = pUnit ? pUnit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, creatureTypeMask) : 1;
+    critPctDamageMod *= pVictim->GetTotalAuraMultiplier(SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_TAKEN);
 
     damage = (damage + crit_bonus) * critPctDamageMod;
 
