@@ -311,7 +311,7 @@ enum ClassFlag
     CF_PALADIN_FLASH_OF_LIGHT2              = 30,   // CM0 40000000
     CF_PALADIN_HOLY_LIGHT2                  = 31,   // CM0 80000000
 
-    CF_PALADIN_UNK32                        = 32,   // CM1 00000001
+    CF_PALADIN_HOLY_STRIKE                  = 32,   // CM1 00000001
     CF_PALADIN_PURIFY_CLEANSE               = 33,   // CM1 00000002 Purify & Cleanse
     CF_PALADIN_JUDGEMENT_OF_COMMAND         = 34,   // CM1 00000004
 
