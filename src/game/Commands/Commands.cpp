@@ -1172,6 +1172,8 @@ bool ChatHandler::HandleListObjectCommand(char* args)
 bool ChatHandler::HandleListDestroyedItemsCommand(char* args)
 {
     std::string name = args;
+
+    normalizePlayerName(name);
     ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
     if (guid.IsEmpty())
     {
@@ -1224,7 +1226,13 @@ bool ChatHandler::HandleListDestroyedItemsCommand(char* args)
 bool ChatHandler::HandleListBuybackItemsCommand(char* args)
 {
     std::string name = args;
-    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
+    Player* target;
+    ObjectGuid guid;
+    std::string target_name;
+
+    if (!ExtractPlayerTarget(&args, &target, &guid, &target_name, true))
+        return false;
+
     if (guid.IsEmpty())
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -5960,6 +5968,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(char* args)
     }
 
     ObjectGuid targetGuid = sObjectMgr.GetPlayerGuidByName(target);
+
     uint32 accountId = sObjectMgr.GetPlayerAccountIdByGUID(targetGuid);
 
     // If already assigned, leave
