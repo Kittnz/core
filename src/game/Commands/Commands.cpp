@@ -18786,3 +18786,42 @@ bool ChatHandler::HandleDebugPacketStatsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCharacterGetNameCommand(char* args)
+{
+    uint32 guidLow;
+    if (!ExtractUInt32(&args, guidLow))
+        return false;
+
+    ObjectGuid guid(HIGHGUID_PLAYER, guidLow);
+
+    std::string name;
+    if (!sObjectMgr.GetPlayerNameByGUID(guid, name))
+    {
+        SendSysMessage("Player not found.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Guid %u is named '%s'.", guidLow, name.c_str());
+
+    return true;
+}
+
+bool ChatHandler::HandleAccountGetNameCommand(char* args)
+{
+    uint32 accountId;
+    if (!ExtractUInt32(&args, accountId))
+        return false;
+
+    AccountData* pData = sAccountMgr.GetAccountData(accountId);
+    if (!pData)
+    {
+        SendSysMessage("Account not found.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Account %u is named '%s'.", accountId, pData->Username.c_str());
+
+    return true;
+}
