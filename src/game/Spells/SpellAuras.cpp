@@ -8747,6 +8747,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
         case 18264: // Charge du maitre (baton epique scholo)
         case 12022: // Chapeau pirate
         case 22817: // PA HT Nord
+        case 56521: // Hateforge Aura
         // Aura de precision (hunt)
         case 19506:
         case 20905:
