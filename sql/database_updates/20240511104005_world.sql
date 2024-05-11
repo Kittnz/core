@@ -10,45 +10,45 @@ replace into item_template (entry, name, description, class, subclass, material,
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (55476, 'Treads of Renewal', '', 4, 1, 7, 3, 14645, 1, 36, 1, -1, -1, 18415, 3683, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 40, 41, 0, 0, 41, 0, 45, 0, 0, 0, 0, 0, 0, 5, 7, 6, 11, 9406, 1, 0, 0, -1, 0, -1, 0, 0, 0);
 
 -- NPC ID 61961 should drop the following Item IDs in the same loottable with the following drop chances: 55375 (25%), 55376 (25%), 55377 (50%)
-delete from creature_loot_template where entry = 61961;
+delete from creature_loot_template where entry = 61961 and item in (55375,55376,55377);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61961, 55375, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61961, 55376, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61961, 55377, 50, 10, 1, 1, 0);
 -- NPC ID 61963 should drop the following Item IDs in the same loottable with the following drop chances: 55378 (25%), 55379 (25%), 55380 (50%)
-delete from creature_loot_template where entry = 61963;
+delete from creature_loot_template where entry = 61963 and item in (55378,55379,55380);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61963, 55378, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61963, 55379, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61963, 55380, 50, 10, 1, 1, 0);
 -- NPC ID 61968 should drop the following Item IDs in the same loottable with the following drop chances: 55369 (25%), 55370 (25%), 55371 (50%)
-delete from creature_loot_template where entry = 61968;
+delete from creature_loot_template where entry = 61968 and item in (55369,55370,55371);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61968, 55369, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61968, 55370, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61968, 55371, 50, 10, 1, 1, 0);
 -- NPC ID 61965 should drop the following Item IDs in the same loottable with the following drop chances: 55372 (25%), 55373 (25%), 55374 (50%)
-delete from creature_loot_template where entry = 61965;
+delete from creature_loot_template where entry = 61965 and item in (55372,55373,55374);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61965, 55372, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61965, 55373, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61965, 55374, 50, 10, 1, 1, 0);
 -- NPC ID 61969 should drop the following Item IDs in the same loottable with the following drop chances: 55382 (25%), 55383 (25%), 55384 (25%), 55385 (25%)
-delete from creature_loot_template where entry = 61969;
+delete from creature_loot_template where entry = 61969 and item in (55382,55383,55384,55385);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61969, 55382, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61969, 55383, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61969, 55384, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61969, 55385, 25, 10, 1, 1, 0);
 -- NPC ID 61972 should drop the following Item IDs in the same loottable with the following drop chances: 55386 (25%), 55387 (25%), 55388 (25%), 55389 (25%)
-delete from creature_loot_template where entry = 61972;
+delete from creature_loot_template where entry = 61972 and item in (55386,55387,55388,55389);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61972, 55386, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61972, 55387, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61972, 55388, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61972, 55389, 25, 10, 1, 1, 0);
 -- NPC ID 61982 should drop the following Item IDs in the same loottable with the following drop chances: 55474 (25%), 55475 (25%), 55476 (25%), 55477 (25%)
-delete from creature_loot_template where entry = 61982;
+delete from creature_loot_template where entry = 61982 and item in (55474,55475,55476,55477);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61982, 55474, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61982, 55475, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61982, 55476, 25, 10, 1, 1, 0);
-REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61982, 55476, 25, 10, 1, 1, 0);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61982, 55477, 25, 10, 1, 1, 0);
 -- NPC ID 61983 should drop the following Item IDs in the same loottable with the following drop chances: 55470 (25%), 55471 (25%), 55472 (25%), 55473 (25%)
-delete from creature_loot_template where entry = 61983;
+delete from creature_loot_template where entry = 61983 and item in (55470,55471,55472,55473);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61983, 55470, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61983, 55471, 25, 10, 1, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61983, 55472, 25, 10, 1, 1, 0);
