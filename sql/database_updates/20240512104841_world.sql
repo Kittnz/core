@@ -13,3 +13,5 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 -- Fixed casting and interrupt flags:
 
 UPDATE `spell_template` SET `interruptFlags` = 15, `castingTimeIndex` = 14, `spellVisual1` = 1703 WHERE `entry` IN (36600, 45840, 46002, 46001, 29999);
+
+UPDATE `spell_template` SET `spellIconId` = 658 WHERE `entry` = 46002;
