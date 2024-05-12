@@ -382,6 +382,7 @@ class ChatHandler
         bool HandleAccountCreateCommand(char* args);
         bool HandleAccountDeleteCommand(char* args);
         bool HandleAccountEmailCommand(char* args);
+        bool HandleAccountGetNameCommand(char* args);
         bool HandleAccountPasswordCommand(char* args);
         bool HandleAccountSetGmLevelCommand(char* args);
         bool HandleAccountSetPasswordCommand(char* args);
@@ -409,6 +410,7 @@ class ChatHandler
         bool HandleCharacterDeletedListNameCommand(char* args);
         bool HandleCharacterDeletedRestoreCommand(char* args);
         bool HandleCharacterEraseCommand(char* args);
+        bool HandleCharacterGetNameCommand(char* args);
         bool HandleCharacterDiffItemsCommand(char* args);
         bool HandleCharacterRenameCommand(char* args);
         bool HandleCharacterReputationCommand(char* args);
