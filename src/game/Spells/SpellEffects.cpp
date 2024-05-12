@@ -5406,19 +5406,28 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
-    // Legion Strike - Warlock Felguard Pet
-    if (m_spellInfo->Id == 47350 && bonus > 0)
+    // effects that split damage among targets
+    if (bonus > 0)
     {
-        uint32 count = 0;
-        for (const auto& ihit : m_UniqueTargetInfo)
-            if (ihit.effectMask & (1 << eff_idx))
-                ++count;
+        switch (m_spellInfo->Id)
+        {
+            case 47350: // Legion Strike - Warlock Felguard Pet
+            case 51164: // Remorseless Strikes - Kruul
+            {
+                uint32 count = 0;
+                for (const auto& ihit : m_UniqueTargetInfo)
+                    if (ihit.effectMask & (1 << eff_idx))
+                        ++count;
 
-        if (count)
-            bonus /= count;                    // divide to all targets
+                if (count)
+                    bonus /= count;                    // divide to all targets
 
-        if (!bonus)
-            bonus = 1;
+                if (!bonus)
+                    bonus = 1;
+
+                break;
+            }
+        }
     }
 
     // prevent negative damage
@@ -8081,6 +8090,14 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
         // Add mana regen
         pSummon->SetStat(STAT_SPIRIT, pSummon->GetLevel() * 3);
         pSummon->UpdateManaRegen();
+    }
+    else if (m_spellInfo->EffectMiscValue[eff_idx] == 59990) // Kruul Infernal
+    {
+        // Short root spell on infernal
+        pSummon->CastSpell(pSummon, 22707, true);
+
+        // Inferno effect
+        pSummon->CastSpell(pSummon, 51167, true);
     }
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)

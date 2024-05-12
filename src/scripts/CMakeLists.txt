@@ -92,6 +92,7 @@ dungeons/lower_karazhan_halls/lower_karazhan_halls.h
 dungeons/upper_karazhan_halls/boss_anomalus.cpp
 dungeons/upper_karazhan_halls/boss_echo_of_medivh.cpp
 dungeons/upper_karazhan_halls/boss_keeper_gnarlmoon.cpp
+dungeons/upper_karazhan_halls/boss_kruul.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
 dungeons/gilneas_city/instance_gilneas_city.h
 dungeons/gilneas_city/instance_gilneas_city.cpp

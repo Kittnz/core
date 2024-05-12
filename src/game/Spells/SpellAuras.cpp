@@ -6612,6 +6612,14 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     GetHolder()->SetAuraDuration(0);
                 }
             }
+            else
+            {
+                if (spellProto->Id == 51166) // Mark of the Highlord
+                {
+                    // Cast Shadow Nova
+                    target->CastSpell(target, 51165, true, nullptr, nullptr, GetCasterGuid());
+                }
+            }
 
             // Improved Drain Mana (soul siphon now)
             auto improvedManaDrain1 = pCaster->GetAura(45913, EFFECT_INDEX_0); // CUSTOM replaced 17864 for soul siphon

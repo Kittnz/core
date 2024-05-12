@@ -282,6 +282,7 @@ void AddSC_boss_moroes();
 void AddSC_boss_anomalus();
 void AddSC_boss_echo_of_medivh();
 void AddSC_boss_keeper_gnarlmoon();
+void AddSC_boss_kruul();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
@@ -613,6 +614,7 @@ void AddScripts()
     AddSC_boss_anomalus();
     AddSC_boss_echo_of_medivh();
     AddSC_boss_keeper_gnarlmoon();
+    AddSC_boss_kruul();
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
 
