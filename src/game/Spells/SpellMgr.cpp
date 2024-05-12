@@ -973,6 +973,17 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                             (spellInfo_2->Id == 8326 && spellInfo_1->Id == 20584))
                         return false;
 
+                    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+                    // - Demon Armor - The armor increase will now stack together with
+                    //   Scrolls of Protection.
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
+                    if ((spellInfo_1->SpellVisual == 130 && spellInfo_1->SpellIconID == 89 &&
+                        spellInfo_2->SpellVisual == 196 && spellInfo_2->SpellIconID == 276) ||
+                        (spellInfo_2->SpellVisual == 130 && spellInfo_2->SpellIconID == 89 &&
+                        spellInfo_1->SpellVisual == 196 && spellInfo_1->SpellIconID == 276))
+                        return true;
+#endif
+
                     break;
                 }
                 case SPELLFAMILY_MAGE:
@@ -1268,6 +1279,11 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
         return false;
 
     if (spellInfo_1->SpellFamilyName != spellInfo_2->SpellFamilyName)
+        return false;
+
+    // Why would a buff and a debuff ever be exclusive with each other?
+    // Fixes Corrupted Mind getting removed by Lightning Shield.
+    if (spellInfo_1->IsPositiveSpell() != spellInfo_2->IsPositiveSpell())
         return false;
 
     // potions work differently
@@ -2137,7 +2153,7 @@ void SpellMgr::LoadSpellScriptTarget()
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `spell_script_target`: target entry == 0 for not GO target type (%u).", type);
                     continue;
                 }
-                if (CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(targetEntry))
+                if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(targetEntry))
                 {
                     if (spellId == 30427 && !cInfo->skinning_loot_id)
                     {

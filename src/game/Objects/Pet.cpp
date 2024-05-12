@@ -176,7 +176,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petNumber, bool c
         return false;
     }
 
-    CreatureInfo const* creatureInfo = ObjectMgr::GetCreatureTemplate(petEntry);
+    CreatureInfo const* creatureInfo = sObjectMgr.GetCreatureTemplate(petEntry);
     if (!creatureInfo)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Pet entry %u does not exist but used at pet load (owner: %s).", petEntry, owner->GetGuidStr().c_str());
@@ -202,7 +202,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petNumber, bool c
     PetType pet_type = PetType(m_pTmpCache->petType);
     if (pet_type == HUNTER_PET)
     {
-        if (!creatureInfo->isTameable())
+        if (!creatureInfo->IsTameable())
         {
             m_pTmpCache = nullptr;
             m_loading = false;
@@ -1280,6 +1280,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
         setPetType(MINI_PET);
         return true;
     }
+
     SetDisplayId(creature->GetDisplayId());
     SetNativeDisplayId(creature->GetNativeDisplayId());
     SetMaxPower(POWER_HAPPINESS, GetCreatePowers(POWER_HAPPINESS));
@@ -1289,11 +1290,6 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, 0);
     SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(creature->GetLevel()));
     SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
-
-    if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->pet_family))
-        SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
-    else
-        SetName(creature->GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
 
     m_loyaltyPoints = 1000;
     if (cinfo->type == CREATURE_TYPE_BEAST)
@@ -1316,7 +1312,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     return true;
 }
 
-bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
+bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
 {
     CreatureInfo const* cinfo = GetCreatureInfo();
     MANGOS_ASSERT(cinfo);
@@ -1491,7 +1487,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, 0);
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, 1000);
 
-            SetUInt32Value(UNIT_FIELD_FLAGS, cinfo->unit_flags);
+            ToggleUnitFlagsFromStaticFlags();
 
             CreatureClassLevelStats const* pCLS = GetClassLevelStats();
             SetCreateHealth(pCLS->health * cinfo->health_multiplier * healthMod);
@@ -2236,25 +2232,58 @@ void Pet::ToggleAutocast(uint32 spellid, bool apply)
     }
 }
 
-bool Pet::IsPermanentPetFor(Player* owner) const
+bool Pet::IsPermanentPetFor(Player const* owner) const
 {
     switch (getPetType())
     {
-    case SUMMON_PET:
-        switch (owner->GetClass())
-        {
-            // oddly enough, Mage's Water Elemental is still treated as temporary pet with Glyph of Eternal Water
-            // i.e. does not unsummon at mounting, gets dismissed at teleport etc.
-            case CLASS_WARLOCK:
-                return GetCreatureInfo()->type == CREATURE_TYPE_DEMON;
-            default:
-                return false;
-        }
-    case HUNTER_PET:
-        return true;
-    default:
-        return false;
+        case SUMMON_PET:
+            switch (owner->GetClass())
+            {
+                // oddly enough, Mage's Water Elemental is still treated as temporary pet with Glyph of Eternal Water
+                // i.e. does not unsummon at mounting, gets dismissed at teleport etc.
+                case CLASS_WARLOCK:
+                    return GetCreatureInfo()->type == CREATURE_TYPE_DEMON;
+                default:
+                    return false;
+            }
+        case HUNTER_PET:
+            return true;
+        default:
+            return false;
     }
+}
+
+void Pet::InitializeDefaultName()
+{
+    switch (getPetType())
+    {
+        case SUMMON_PET:
+        case HUNTER_PET:
+        {
+            if (GetOwnerGuid().IsPlayer())
+            {
+                if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(GetCreatureInfo()->pet_family))
+                {
+                    SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
+                    break;
+                }
+            }
+            // no break
+        }
+        default:
+        {
+            SetName(Creature::GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
+            break;
+        }
+    }
+}
+
+char const* Pet::GetNameForLocaleIdx(int32 locale_idx) const
+{
+    if (GetOwnerGuid().IsPlayer() && (getPetType() == SUMMON_PET || getPetType() == HUNTER_PET))
+        return GetName();
+
+    return Creature::GetNameForLocaleIdx(locale_idx);
 }
 
 bool Pet::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, uint32 pet_number)

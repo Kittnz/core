@@ -792,6 +792,8 @@ class SpellEntry
             return hasAura;
         }
 
+        bool HasAuraOrTriggersAnotherSpellWithAura(AuraType aura) const;
+
         bool IsCustomSpell() const
         {
             return Internal & SPELL_INTERNAL_CUSTOM;
@@ -838,6 +840,12 @@ class SpellEntry
         bool IsPassiveSpellStackableWithRanks() const
         {
             return Internal & SPELL_INTERNAL_PASSIVE_STACK_WITH_RANKS;
+        }
+
+        bool IsIgnoringCasterAndTargetRestrictions() const
+        {
+            return HasAttribute(SPELL_ATTR_EX_IGNORE_CASTER_AND_TARGET_RESTRICTIONS) ||
+                   HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_AND_TARGET_RESTRICTIONS);
         }
 
         bool IsDeathOnlySpell() const

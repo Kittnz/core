@@ -307,7 +307,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
             }
             case SCRIPT_COMMAND_KILL_CREDIT:
             {
-                if (!ObjectMgr::GetCreatureTemplate(tmp.killCredit.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.killCredit.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.killCredit.creatureEntry))
                     {
@@ -364,7 +364,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                     continue;
                 }
 
-                if (!ObjectMgr::GetCreatureTemplate(tmp.summonCreature.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.summonCreature.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.summonCreature.creatureEntry))
                     {
@@ -414,11 +414,11 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
             }
             case SCRIPT_COMMAND_REMOVE_AURA:
             {
-                if (!sSpellMgr.GetSpellEntry(tmp.removeAura.spellId))
+                if (tmp.removeAura.spellId && !sSpellMgr.GetSpellEntry(tmp.removeAura.spellId))
                 {
                     if (!sSpellMgr.IsExistingSpellId(tmp.removeAura.spellId))
                     {
-                        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA or SCRIPT_COMMAND_CAST_SPELL for script id %u",
+                        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA for script id %u",
                             tablename, tmp.removeAura.spellId, tmp.id);
                         continue;
                     }
@@ -433,7 +433,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                 {
                     if (!sSpellMgr.IsExistingSpellId(tmp.castSpell.spellId))
                     {
-                        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_REMOVE_AURA or SCRIPT_COMMAND_CAST_SPELL for script id %u",
+                        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` using nonexistent spell (id: %u) in SCRIPT_COMMAND_CAST_SPELL for script id %u",
                             tablename, tmp.castSpell.spellId, tmp.id);
                         continue;
                     }
@@ -582,7 +582,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                 }
                 else
                 {
-                    if (tmp.morph.creatureOrModelEntry && !ObjectMgr::GetCreatureTemplate(tmp.morph.creatureOrModelEntry))
+                    if (tmp.morph.creatureOrModelEntry && !sObjectMgr.GetCreatureTemplate(tmp.morph.creatureOrModelEntry))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.morph.creatureOrModelEntry))
                         {
@@ -608,7 +608,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                 }
                 else
                 {
-                    if (tmp.mount.creatureOrModelEntry && !ObjectMgr::GetCreatureTemplate(tmp.mount.creatureOrModelEntry))
+                    if (tmp.mount.creatureOrModelEntry && !sObjectMgr.GetCreatureTemplate(tmp.mount.creatureOrModelEntry))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.mount.creatureOrModelEntry))
                         {
@@ -632,7 +632,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
             }
             case SCRIPT_COMMAND_UPDATE_ENTRY:
             {
-                if (!ObjectMgr::GetCreatureTemplate(tmp.updateEntry.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.updateEntry.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.updateEntry.creatureEntry))
                     {
@@ -674,7 +674,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
             }
             case SCRIPT_COMMAND_TERMINATE_SCRIPT:
             {
-                if (tmp.terminateScript.creatureEntry && !ObjectMgr::GetCreatureTemplate(tmp.terminateScript.creatureEntry))
+                if (tmp.terminateScript.creatureEntry && !sObjectMgr.GetCreatureTemplate(tmp.terminateScript.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.terminateScript.creatureEntry))
                     {
@@ -925,7 +925,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
             {
                 if (tmp.removeGuardian.creatureId)
                 {
-                    if (!ObjectMgr::GetCreatureTemplate(tmp.removeGuardian.creatureId))
+                    if (!sObjectMgr.GetCreatureTemplate(tmp.removeGuardian.creatureId))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.removeGuardian.creatureId))
                         {
@@ -1031,7 +1031,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, char const* tablename)
                     {
                         if (tmp.startScriptForAll.objectEntry)
                         {
-                            if (!ObjectMgr::GetCreatureTemplate(tmp.startScriptForAll.objectEntry))
+                            if (!sObjectMgr.GetCreatureTemplate(tmp.startScriptForAll.objectEntry))
                             {
                                 if (!sObjectMgr.IsExistingCreatureId(tmp.startScriptForAll.objectEntry))
                                 {
@@ -1275,7 +1275,7 @@ bool ScriptMgr::CheckScriptTargets(uint32 targetType, uint32 targetParam1, uint3
         case TARGET_T_NEAREST_CREATURE_WITH_ENTRY:
         case TARGET_T_RANDOM_CREATURE_WITH_ENTRY:
         {
-            if (!ObjectMgr::GetCreatureTemplate(targetParam1))
+            if (!sObjectMgr.GetCreatureTemplate(targetParam1))
             {
                 if (!sObjectMgr.IsExistingCreatureId(targetParam1))
                     sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `%s` has target_param1 = %u for id %u, but this creature_template does not exist.", tableName, targetParam1, tableEntry);
@@ -1419,11 +1419,23 @@ void ScriptMgr::LoadQuestEndScripts()
 {
     LoadScripts(sQuestEndScripts, "quest_end_scripts");
 
+    std::set<uint32> usedQuestCompleteScripts;
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT DISTINCT `CompleteScript` FROM `quest_template`"));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 scriptId = fields[0].GetUInt32();
+            usedQuestCompleteScripts.insert(scriptId);
+        } while (result->NextRow());
+    }
+
     // check ids
     for (const auto& itr : sQuestEndScripts)
     {
-        if (!sObjectMgr.GetQuestTemplate(itr.first) && !sObjectMgr.IsExistingQuestId(itr.first))
-            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `quest_end_scripts` has not existing quest (Id: %u) as script id", itr.first);
+        if (usedQuestCompleteScripts.find(itr.first) == usedQuestCompleteScripts.end())
+            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `quest_end_scripts` has script (Id: %u) not referenced from anywhere", itr.first);
     }
 }
 
@@ -1431,11 +1443,23 @@ void ScriptMgr::LoadQuestStartScripts()
 {
     LoadScripts(sQuestStartScripts, "quest_start_scripts");
 
+    std::set<uint32> usedQuestStartScripts;
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT DISTINCT `StartScript` FROM `quest_template`"));
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 scriptId = fields[0].GetUInt32();
+            usedQuestStartScripts.insert(scriptId);
+        } while (result->NextRow());
+    }
+
     // check ids
     for (const auto& itr : sQuestStartScripts)
     {
-        if (!sObjectMgr.GetQuestTemplate(itr.first) && !sObjectMgr.IsExistingQuestId(itr.first))
-            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `quest_start_scripts` has not existing quest (Id: %u) as script id", itr.first);
+        if (usedQuestStartScripts.find(itr.first) == usedQuestStartScripts.end())
+            sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Table `quest_start_scripts` has script (Id: %u) not referenced from anywhere", itr.first);
     }
 }
 

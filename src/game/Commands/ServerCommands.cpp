@@ -1038,7 +1038,7 @@ bool ChatHandler::HandleReloadAreaTriggerTeleportCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadCommandCommand(char* /*args*/)
 {
-    load_command_table = true;
+    m_loadCommandTable = true;
     SendSysMessage("DB table `command` will be reloaded at next chat command use.");
     return true;
 }
@@ -1064,6 +1064,23 @@ bool ChatHandler::HandleReloadCreatureQuestInvRelationsCommand(char* /*args*/)
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Quests Relations... (`creature_involvedrelation`)");
     sObjectMgr.LoadCreatureInvolvedRelations();
     SendSysMessage("DB table `creature_involvedrelation` (creature quest takers) reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadCreatureTemplatesCommand(char* args)
+{
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Re-Loading `creature_template` Table!");
+    uint32 entry;
+    if (ExtractUInt32(&args, entry))
+    {
+        sObjectMgr.LoadCreatureTemplate(entry);
+        PSendSysMessage("Creature template %u reloaded.", entry);
+    }
+    else
+    {
+        sObjectMgr.LoadCreatureTemplates();
+        SendSysMessage("DB table `creature_template` reloaded.");
+    }
     return true;
 }
 
@@ -1991,7 +2008,7 @@ bool ChatHandler::HandleWarEffortSetGongTimeCommand(char* args)
         return false;
 
     sObjectMgr.SetSavedVariable(VAR_WE_GONG_TIME, gongTime, true);
-    PSendSysMessage("War effort gong ring time set to '%s' (%u).", TimeToTimestampStr(gongTime), gongTime);
+    PSendSysMessage("War effort gong ring time set to '%s' (%u).", TimeToTimestampStr(gongTime).c_str(), gongTime);
     sGameEventMgr.Update();
 
     return true;
