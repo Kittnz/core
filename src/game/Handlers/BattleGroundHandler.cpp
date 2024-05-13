@@ -460,7 +460,16 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
                           _player->GetName(), _player->GetGUIDLow(), _player->GetLevel(), bg->GetMaxLevel(), bg->GetTypeID());
             action = 0;
         }
+
+        // do not allow entering bg which is already over
+        if (bg->GetStatus() == STATUS_WAIT_LEAVE)
+        {
+            sLog.outError("Battleground: Player %s (%u) is attempting to enter battleground (%u) which has already ended!",
+                _player->GetName(), _player->GetGUIDLow(), bg->GetTypeID());
+            action = 0;
+        }
     }
+
     uint32 queueSlot = _player->GetBattleGroundQueueIndex(bgQueueTypeId);
     WorldPacket data;
     switch (action)
