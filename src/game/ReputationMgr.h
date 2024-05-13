@@ -95,9 +95,9 @@ class ReputationMgr
         {
             return SetReputation(factionEntry, standing, false);
         }
-        bool SetSingleReputation(FactionEntry const* factionEntry, int32 standing)
+        bool SetSingleReputation(FactionEntry const* factionEntry, int32 standing, bool noBase = false)
         {
-            return SetReputation(factionEntry, standing, false, true);
+            return SetReputation(factionEntry, standing, false, true, noBase);
         }
         bool ModifyReputation(FactionEntry const* factionEntry, int32 standing, bool noSpillover = false)
         {
@@ -121,8 +121,8 @@ class ReputationMgr
     private:                                                // internal helper functions
         void Initialize();
         uint32 GetDefaultStateFlags(const FactionEntry *factionEntry) const;
-        bool SetReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noSpillover = false);
-        bool SetOneFactionReputation(FactionEntry const* factionEntry, int32 standing, bool incremental);
+        bool SetReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noSpillover = false, bool noBase = false);
+        bool SetOneFactionReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noBase = false);
         void SetVisible(FactionState* faction);
         bool SetAtWar(FactionState* faction, bool atWar);
         void SetInactive(FactionState* faction, bool inactive);
