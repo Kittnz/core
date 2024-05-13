@@ -9467,7 +9467,7 @@ void ObjectMgr::LoadShop()
     for (auto& CategoryPair : m_ShopCategoriesMap)
     {
         ShopCategory& ShopCat = CategoryPair.second;
-		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [&](ShopEntry const& t1, ShopEntry const& t2)
+		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [](ShopEntry const& t1, ShopEntry const& t2)
 			{
 				return t1.shopId < t2.shopId;
 			});
