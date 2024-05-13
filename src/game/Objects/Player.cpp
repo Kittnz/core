@@ -2680,6 +2680,8 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         // after updates are complete
         ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options);
 
+        m_teleport_dest = WorldLocation(mapid, data->x, data->y, data->z, data->orientation);
+
         sMapMgr.ScheduleFarTeleport(this, data);
     }
 
@@ -2773,7 +2775,6 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
         if (oldmap)
             oldmap->Remove(this, false);
 
-        m_teleport_dest = WorldLocation(mapid, data->x, data->y, data->z, data->orientation);
         DisableSpline();
         SetFallInformation(0, data->z);
         ScheduleDelayedOperation(DELAYED_CAST_HONORLESS_TARGET);
@@ -22611,6 +22612,22 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         return false;
     }
 
+    if (!ChangeReputationsForRace(oldRace, newRace))
+    {
+        CHANGERACE_ERR("Impossible due reputation.");
+        return false;
+    }
+    if (!ChangeQuestsForRace(oldRace, newRace))
+    {
+        CHANGERACE_ERR("Impossible due quests.");
+        return false;
+    }
+    if (!ChangeItemsForRace(oldRace, newRace))
+    {
+        CHANGERACE_ERR("Impossible due items.");
+        return false;
+    }
+
     SetByteValue(UNIT_FIELD_BYTES_0, 0, newRace);
 
     if (newGender != 255)
@@ -22677,22 +22694,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     SetFactionForRace(newRace);
 
-    if (!ChangeReputationsForRace(oldRace, newRace))
-    {
-        CHANGERACE_ERR("Impossible due reputation.");
-        return false;
-    }
-    if (!ChangeQuestsForRace(oldRace, newRace))
-    {
-        CHANGERACE_ERR("Impossible due quests.");
-        return false;
-    }
-    if (!ChangeItemsForRace(oldRace, newRace))
-    {
-        CHANGERACE_ERR("Impossible due items.");
-        return false;
-    }
-
 	for (auto const& pair : baseFactions)
 	{
 		FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(pair.first);
@@ -22707,6 +22708,10 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 		if (newBase == pair.second)
 			continue;
 
+
+        CHANGERACE_LOG("MODIFYING BASE reputation to %s (%i) Value: (%i) ",
+            factionEntry->name[0].c_str(), factionEntry->ID, pair.second - newBase);
+
 		GetReputationMgr().ModifyReputation(factionEntry, pair.second - newBase, true);
 	}
 
@@ -22716,23 +22721,16 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     m_DbSaveDisabled = false;
     RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
     if (bChangeTeam)
-    {
-
         m_honorMgr.ClearHonorCP();
 
-		//Giperion Elysium: Drop current guild
-		if (GuildId != 0)
-		{
-			if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
-			{
-				guild->DelMember(GetObjectGuid());
-			}
-		}
-
+    
+    if (bChangeTeam)
+    {
         if (TeamForRace(newRace) == ALLIANCE)
         {
             SavePositionInDB(GetObjectGuid(), 0, -8867.68f, 673.373f, 97.9034f, 0.0f, 1519);
             SetHomebindToLocation(WorldLocation(0, -8867.68f, 673.373f, 97.9034f, 0.0f), 1519);
+
         }
         else
         {
@@ -22740,9 +22738,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
             SetHomebindToLocation(WorldLocation(1, 1633.33f, -4439.11f, 15.7588f, 0.0f), 1637);
         }
 
-        TeleportToHomebind(0, false);
+        TeleportToHomebind();
     }
+
     SaveToDB();
+
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
         data->uiRace = newRace;
     m_DbSaveDisabled = true;
@@ -23071,12 +23071,12 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
     // Les autres de maniere generique
     for (FactionStateList::const_iterator it = stateList.begin(); it != stateList.end(); ++it)
     {
-        // Deja fait plus haut.
+        // Already done above.
 #if 0
         if (it->second.ID == oldCapitalFaction->ID || it->second.ID == newCapitalFaction->ID)
             continue;
 #endif
-        // Ou gere plus tard avec sObjectMgr
+        // Or manage it later with sObjectMgr
         bool found = false;
         for (std::map<uint32, uint32>::const_iterator it2 = sObjectMgr.factionchange_reputations.begin(); it2 != sObjectMgr.factionchange_reputations.end(); ++it2)
         {
@@ -23102,7 +23102,7 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         // De signe different et non nulles.
         if (newBaseRep * oldBaseRep < 0)
         {
-            CHANGERACE_LOG("Set reputation for %s (%u) to standing (%i)", pFactionEntry->name[0], it->second.ID, pState->Standing);
+            CHANGERACE_LOG("Set reputation for %s (%u) to standing (%i)", pFactionEntry->name[0].c_str(), it->second.ID, pState->Standing);
             pState->Standing = -pState->Standing;
             GetReputationMgr().SendState(pState);
             pState->needSave = true;
@@ -23114,7 +23114,7 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
 
     Team newTeam = TeamForRace(newRace);
 #define SWAP_TYPE(type, val1, val2) { type tmp; tmp = val1; val1 = val2; val2 = tmp; }
-    // Certaines reputs a inverser
+    // Inverse some reputations
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_reputations.begin(); it != sObjectMgr.factionchange_reputations.end(); ++it)
     {
         FactionEntry const* my_new_reputation = sObjectMgr.GetFactionEntry(newTeam == ALLIANCE ? it->first : it->second);
@@ -23127,9 +23127,7 @@ bool Player::ChangeReputationsForRace(uint8 oldRace, uint8 newRace)
         if (!pNew || !pOld)
             continue;
 
-		CHANGERACE_LOG("Changing reputation to %s (%u) Value: (%i) from %s (%u) Value: (%i)",
-			my_new_reputation->name[0], my_new_reputation->ID, pNew->Standing,
-			my_old_reputation->name[0], my_old_reputation->ID, pOld->Standing);
+
         SWAP_TYPE(uint32, pNew->Flags, pOld->Flags);
         SWAP_TYPE(int32, pNew->Standing, pOld->Standing);
         pOld->needSave = true;
