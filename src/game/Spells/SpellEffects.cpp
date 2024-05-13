@@ -1961,6 +1961,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 
+                        GameObject* other_object = m_caster->ToPlayer()->FindNearestGameObject(2000388, 50.0F);
+                        if (other_object) other_object->SetRespawnTime(1);
+
                         m_caster->SummonGameObject(2000388, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 600, true);
                     }
                     return;
@@ -2111,7 +2114,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                // Functional summonable toys:
+
+                case 36600: // Blazing Forge Kit
                 case 46002: // Goblin Brainwashing Device
+                case 46001: // Portable Mailbox
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
@@ -2123,26 +2130,28 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         fX += (fDist * cos(m_caster->GetOrientation()));
                         fY += (fDist * sin(m_caster->GetOrientation()));
 
-                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
-                    }
+                        uint32 object = 0;
 
-                    return;
-                }
-                case 46001: // Portable Mailbox
-                {
-                    if (m_caster && m_caster->IsPlayer())
-                    {
-                        GameObject* other_mailbox = m_caster->ToPlayer()->FindNearestGameObject(144112, 50.0F);
-                        if (other_mailbox) other_mailbox->SetRespawnTime(1);
+                        switch (m_spellInfo->Id)
+                        {
+                            case 36600: object = 3000684; break; // Blazing Forge Kit
+                            case 46002: object = 1000333; break; // Goblin Brainwashing Device
+                            case 46001: object = 144112; break; // Portable Mailbox
+                            default: break;
+                        }
 
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
-                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
+                        GameObject* other_object = m_caster->ToPlayer()->FindNearestGameObject(object, 50.0F);
+                        if (other_object) other_object->SetRespawnTime(1);
 
-                        m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-                        m_caster->ToPlayer()->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        m_caster->SummonGameObject(object, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
+
+                        if (object == 3000684) // Forge + Anvil
+                        {
+                            GameObject* other_object_rel = m_caster->ToPlayer()->FindNearestGameObject(3000685, 50.0F);
+                            if (other_object_rel) other_object_rel->SetRespawnTime(1);
+
+                            m_caster->SummonGameObject(3000685, fX + 1.5, fY + 1.5, fZ, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        }
                     }
                     return;
                 }
@@ -5397,19 +5406,28 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
-    // Legion Strike - Warlock Felguard Pet
-    if (m_spellInfo->Id == 47350 && bonus > 0)
+    // effects that split damage among targets
+    if (bonus > 0)
     {
-        uint32 count = 0;
-        for (const auto& ihit : m_UniqueTargetInfo)
-            if (ihit.effectMask & (1 << eff_idx))
-                ++count;
+        switch (m_spellInfo->Id)
+        {
+            case 47350: // Legion Strike - Warlock Felguard Pet
+            case 51164: // Remorseless Strikes - Kruul
+            {
+                uint32 count = 0;
+                for (const auto& ihit : m_UniqueTargetInfo)
+                    if (ihit.effectMask & (1 << eff_idx))
+                        ++count;
 
-        if (count)
-            bonus /= count;                    // divide to all targets
+                if (count)
+                    bonus /= count;                    // divide to all targets
 
-        if (!bonus)
-            bonus = 1;
+                if (!bonus)
+                    bonus = 1;
+
+                break;
+            }
+        }
     }
 
     // prevent negative damage
@@ -8072,6 +8090,14 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
         // Add mana regen
         pSummon->SetStat(STAT_SPIRIT, pSummon->GetLevel() * 3);
         pSummon->UpdateManaRegen();
+    }
+    else if (m_spellInfo->EffectMiscValue[eff_idx] == 59990) // Kruul Infernal
+    {
+        // Short root spell on infernal
+        pSummon->CastSpell(pSummon, 22707, true);
+
+        // Inferno effect
+        pSummon->CastSpell(pSummon, 51167, true);
     }
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)

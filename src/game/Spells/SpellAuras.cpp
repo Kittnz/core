@@ -6612,6 +6612,14 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     GetHolder()->SetAuraDuration(0);
                 }
             }
+            else
+            {
+                if (spellProto->Id == 51166) // Mark of the Highlord
+                {
+                    // Cast Shadow Nova
+                    target->CastSpell(target, 51165, true, nullptr, nullptr, GetCasterGuid());
+                }
+            }
 
             // Improved Drain Mana (soul siphon now)
             auto improvedManaDrain1 = pCaster->GetAura(45913, EFFECT_INDEX_0); // CUSTOM replaced 17864 for soul siphon
@@ -8747,6 +8755,7 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
         case 18264: // Charge du maitre (baton epique scholo)
         case 12022: // Chapeau pirate
         case 22817: // PA HT Nord
+        case 56521: // Hateforge Aura
         // Aura de precision (hunt)
         case 19506:
         case 20905:
