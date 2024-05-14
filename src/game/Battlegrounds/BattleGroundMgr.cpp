@@ -707,17 +707,50 @@ should be called from BattleGround::RemovePlayer function in some cases
 void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketId bracket_id)
 {
     //ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_Lock);
-    // First, remove old offline players
+
+    // First, remove players who shouldn't be in queue anymore
     QueuedPlayersMap::iterator itrOffline = m_QueuedPlayers.begin();
     while (itrOffline != m_QueuedPlayers.end())
     {
+        // remove offline players
         if (!itrOffline->second.online && WorldTimer::getMSTimeDiffToNow(itrOffline->second.LastOnlineTime) > OFFLINE_BG_QUEUE_TIME)
         {
             RemovePlayer(itrOffline->first, true);
             itrOffline = m_QueuedPlayers.begin();
+            continue;
         }
-        else
-            ++itrOffline;
+
+        // remove players who are in queue for bg that has ended
+        GroupQueueInfo* group = itrOffline->second.GroupInfo;
+        if (group->IsInvitedToBGInstanceGUID)
+        {
+            BattleGround* bg;
+            if ((bg = sBattleGroundMgr.GetBattleGround(group->IsInvitedToBGInstanceGUID, group->BgTypeId)) && bg->GetStatus() == STATUS_WAIT_LEAVE)
+            {
+                if (itrOffline->second.online)
+                {
+                    if (Player* player = ObjectAccessor::FindPlayerNotInWorld(itrOffline->first))
+                    {
+                        BattleGroundQueueTypeId queueTypeId = BattleGroundMgr::BGQueueTypeId(group->BgTypeId);
+                        uint32 queueSlot = player->GetBattleGroundQueueIndex(queueTypeId);
+                        if (queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES)
+                        {
+                            player->RemoveBattleGroundQueueId(queueTypeId);
+
+                            WorldPacket data;
+                            sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_NONE, 0, 0);
+                            player->GetSession()->SendPacket(&data);
+                        }
+                    }
+                }
+
+                RemovePlayer(itrOffline->first, true);
+                itrOffline = m_QueuedPlayers.begin();
+                continue;
+            }
+        }
+
+        ++itrOffline;
     }
 
     // if no players in queue - do nothing
@@ -1806,23 +1839,25 @@ void BattleGroundMgr::PlayerLoggedIn(Player* player)
             player->GetSession()->SendPacket(&data);
 
             if (groupInfo.IsInvitedToBGInstanceGUID)
+            {
                 player->SetInviteForBattleGroundQueueType(BattleGroundQueueTypeId(i), groupInfo.IsInvitedToBGInstanceGUID);
+
+                // create automatic remove events
+                BGQueueRemoveEvent* removeEvent = new BGQueueRemoveEvent(player->GetObjectGuid(), groupInfo.IsInvitedToBGInstanceGUID, bg->GetTypeID(), BattleGroundQueueTypeId(i), groupInfo.RemoveInviteTime);
+                uint32 offset = (WorldTimer::getMSTime() > groupInfo.RemoveInviteTime) ? 1 : WorldTimer::getMSTimeDiff(WorldTimer::getMSTime(), groupInfo.RemoveInviteTime);
+                player->m_Events.AddEvent(removeEvent, player->m_Events.CalculateTime(offset));
+            }
         }
 }
 
 void BattleGroundMgr::PlayerLoggedOut(Player* player)
 {
-    for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
+    for (int i = 1; i <= PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
     {
-        BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(queueSlot);
-        if (bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
+        if (BattleGroundQueueTypeId bgQueueTypeId = player->GetBattleGroundQueueTypeId(i - 1))
         {
-            player->RemoveBattleGroundQueueId(bgQueueTypeId);  // must be called this way, because if you move this call to queue->removeplayer, it causes bugs
-            m_BattleGroundQueues[bgQueueTypeId].RemovePlayer(player->GetObjectGuid(), true);
-
-            // player left queue, we should update it
-            BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
-            sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, player->GetBattleGroundBracketIdFromLevel(bgTypeId, player->GetLevel()));
+            player->RemoveBattleGroundQueueId(bgQueueTypeId);
+            m_BattleGroundQueues[bgQueueTypeId].PlayerLoggedOut(player->GetObjectGuid());
         }
     }
 }

@@ -8040,11 +8040,59 @@ bool GOSelect_go_resonating_pedestal(Player* pPlayer, GameObject* pGo, uint32 se
     return false;
 }
 
+bool GossipHello_npc_dissipating_spectre(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(41339) == QUEST_STATUS_INCOMPLETE) // Shadowed Spectre
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30220, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pPlayer->GetQuestStatus(41342) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(41390, 1, 1)) // The White Stag
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30224, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61988, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_dissipating_spectre(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30222, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30221, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60054))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30223, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->MonsterYell(30225);
+        pCreature->SetFactionTemporary(16, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_dissipating_spectre";
+    newscript->pGossipHello = &GossipHello_npc_dissipating_spectre;
+    newscript->pGossipSelect = &GossipSelect_npc_dissipating_spectre;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_resonating_pedestal";

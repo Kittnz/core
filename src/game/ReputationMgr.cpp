@@ -281,7 +281,7 @@ void ReputationMgr::Initialize()
     }
 }
 
-bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noSpillover)
+bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noSpillover, bool noBase)
 {
     if (!factionEntry)
         return false;
@@ -300,7 +300,7 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
                     {
                         // bonuses are already given, so just modify standing by rate
                         int32 spilloverRep = standing * repTemplate->faction_rate[i];
-                        SetOneFactionReputation(factionEntry, spilloverRep, incremental);
+                        SetOneFactionReputation(factionEntry, spilloverRep, incremental, noBase);
 
                         // report spillover rep to client
                         FactionStateList::iterator faction = m_factions.find(RepListID(factionEntry->reputationListID));
@@ -317,7 +317,7 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
     FactionStateList::iterator faction = m_factions.find(RepListID(factionEntry->reputationListID));
     if (faction != m_factions.end())
     {
-        res = SetOneFactionReputation(factionEntry, standing, incremental);
+        res = SetOneFactionReputation(factionEntry, standing, incremental, noBase);
         SendState(&faction->second);
     }
         
@@ -328,7 +328,7 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
     return res;
 }
 
-bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, int32 standing, bool incremental)
+bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noBase)
 {
     if (!factionEntry)
         return false;
@@ -350,7 +350,11 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
         ReputationRank rankOld = ReputationToRank(faction.Standing + BaseRep);
         ReputationRank rankNew = ReputationToRank(standing);
 
-        faction.Standing = standing - BaseRep;
+        if (noBase)
+            faction.Standing = standing;
+        else
+            faction.Standing = standing - BaseRep;
+
         faction.needSend = true;
         faction.needSave = true;
 

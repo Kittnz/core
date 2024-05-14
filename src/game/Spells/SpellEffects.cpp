@@ -4917,6 +4917,10 @@ void Spell::EffectEnchantItemPerm(SpellEffectIndex eff_idx)
 
     // add new enchanting if equipped
     item_owner->ApplyEnchantment(itemTarget, PERM_ENCHANTMENT_SLOT, true);
+
+    // do not allow trading raid items after enchanting them
+    if (itemTarget->CanBeTradedEvenIfSoulBound())
+        itemTarget->ResetSoulBoundTradeData();
 }
 
 void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
@@ -4968,6 +4972,10 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
 
     // add new enchanting if equipped
     item_owner->ApplyEnchantment(itemTarget, TEMP_ENCHANTMENT_SLOT, true);
+
+    // do not allow trading raid items after enchanting them
+    if (itemTarget->CanBeTradedEvenIfSoulBound())
+        itemTarget->ResetSoulBoundTradeData();
 }
 
 void Spell::EffectTameCreature(SpellEffectIndex /*eff_idx*/)
@@ -7145,6 +7153,10 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex eff_idx)
         // Apply the temporary enchantment
         item->SetEnchantment(slot, enchant_id, duration, charges);
         item_owner->ApplyEnchantment(item, slot, true);
+
+        // do not allow trading raid items after enchanting them
+        if (item->CanBeTradedEvenIfSoulBound())
+            item->ResetSoulBoundTradeData();
     }
 }
 

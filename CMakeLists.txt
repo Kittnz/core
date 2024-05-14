@@ -44,6 +44,7 @@ option(USE_LIBCURL "Compile with libcurl for email support" OFF)
 option(USE_REALMMERGE "Compile helper tool for merging character databases" OFF)
 option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
 option(ENABLE_PROFILING "(Windows only) Enable Optick integration, which allows to profile CPU and Memory. Also disabling some async code" OFF)
+option(ENABLE_LSAN "Enables Leak Sanitizer" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -114,6 +115,7 @@ if(USE_ADDRESS_SANITIZER)
 	endif(MSVC)
 
 endif()
+
 
 #Giperion: Profiling part
 if (ENABLE_PROFILING)
@@ -393,6 +395,13 @@ if(UNIX)
     set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -g")
   else()
     message(STATUS "Debug symbols         : Disabled")
+  endif()
+
+
+  if(ENABLE_LSAN)
+    set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fsanitize=leak")
+    set(DEFINITIONS ${DEFINITIONS} ENABLE_LSAN)
+    message(STATUS "Compiling with LSAN ENABLED")
   endif()
   
   if(GCC_SANITIZE)

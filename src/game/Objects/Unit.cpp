@@ -1200,14 +1200,14 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 std::ostringstream deathReason;
 
                 if (pPlayerVictim->IsHC60())
-                    deathReason << "A tragedy has occured. Inferno character " << pPlayerVictim->GetName() << " ";
+                    deathReason << "A tragedy has occured. Inferno character " << pPlayerVictim->GetName() << " (level " << pPlayerVictim->GetLevel() << ") ";
 
                 if (attacker && attacker != pVictim)
                 {
+                    deathReason << "has fallen ";
                     if (attacker->IsPlayer())
-                        deathReason << "has fallen in PvP to " << attacker->GetName();
-                    else if (attacker->IsCreature())
-                        deathReason << "has fallen to " << attacker->GetName() << " (level " << attacker->GetLevel() << ")";
+                        deathReason << "in PvP ";
+                    deathReason << "to " << attacker->GetName() << " (level " << attacker->GetLevel() << ")";
                 }
                 else
                 {
@@ -1222,9 +1222,12 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                         deathReason << "died of natural causes";
                 }
 
+                if (AreaEntry const* pArea = sAreaStorage.LookupEntry<AreaEntry>(pPlayerVictim->GetCachedAreaId()))
+                    deathReason << " in " << pArea->Name;
+
                 if (pPlayerVictim->IsHC60())
                 {
-                    deathReason << " at level " << pVictim->GetLevel() << ". They laughed in the face of death, but have learnt that death always has the last laugh.";
+                    deathReason << ". They laughed in the face of death, but have learnt that death always has the last laugh.";
                     sWorld.SendGMText(deathReason.str(), 0);
                 }
                 else
@@ -1240,7 +1243,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                             return true;
 
                         return false;
-                    }, pVictim->GetName(), deathReason.str().c_str(), pVictim->GetLevel());
+                    }, pVictim->GetName(), pVictim->GetLevel(), deathReason.str().c_str());
                 }
             }
             pPlayerVictim->LogHCDeath();

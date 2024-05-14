@@ -1457,6 +1457,19 @@ CreatureAI* GetAI_boss_eranikus(Creature* pCreature)
     return new boss_eranikusAI(pCreature);
 }
 
+bool QuestRewarded_npc_keeper_remulos(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 41342) // The White Stag
+    {
+        pQuestGiver->MonsterYell(30226);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_moonglade()
 {
     Script *pNewScript;
@@ -1471,6 +1484,7 @@ void AddSC_moonglade()
     pNewScript->Name = "npc_keeper_remulos";
     pNewScript->GetAI = &GetAI_npc_keeper_remulos;
     pNewScript->pQuestAcceptNPC = &QuestAccept_npc_keeper_remulos;
+    pNewScript->pQuestRewardedNPC = &QuestRewarded_npc_keeper_remulos;
     pNewScript->pEffectDummyCreature = &EffectDummyCreature_conjure_rift;
     pNewScript->RegisterSelf();
 
