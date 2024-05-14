@@ -76,3 +76,5 @@ void operator delete[](void* ptr, const std::nothrow_t&) throw()
 }
 
 #endif
+
+#include "tracy/Tracy.hpp"
