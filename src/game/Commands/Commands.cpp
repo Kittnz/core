@@ -97,6 +97,11 @@
 #include "PerformanceMonitor.h"
 #include "../scripts/miscellaneous/npc_loothelper.h"
 
+
+#ifdef ENABLE_LSAN
+#include <sanitizer/lsan_interface.h>
+#endif
+
 int32 GetTokenBalance(uint32 accountId)
 {
     QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId);
@@ -18698,6 +18703,24 @@ bool ChatHandler::HandlePerfReportMemory(char* Args)
     sPerfMonitor.ReportMemory(*this);
     return true;
 }
+
+
+bool ChatHandler::HandleDebugLeakReportCommand(char* args)
+{
+#ifndef ENABLE_LSAN
+    SendSysMessage("Can't generate leak report, core is not built with LSAN.");
+    return true;
+#endif
+
+    SendSysMessage("Now snapshotting leaks, this might cause lag.");
+    uint32 now = WorldTimer::getMSTime();
+#ifdef ENABLE_LSAN
+    __lsan_do_recoverable_leak_check();
+#endif
+    PSendSysMessage("Snapshot completed in %u ms. Check %s for data.", WorldTimer::getMSTimeDiffToNow(now), lsan_output_path);
+    return true;
+}
+
 
 bool ChatHandler::HandleDebugPacketStatsCommand(char* args)
 {
