@@ -399,7 +399,7 @@ if(UNIX)
 
 
   if(ENABLE_LSAN)
-		add_compile_options(-fsanitize=leak)
+	  add_compile_options(-fsanitize=leak)
     add_compile_definitions(ENABLE_LSAN)
     message(STATUS "Compiling with LSAN ENABLED")
   endif()
