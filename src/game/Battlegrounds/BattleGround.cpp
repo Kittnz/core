@@ -287,8 +287,6 @@ void BattleGround::Update(uint32 diff)
         }
     }
 
-
-
     if (!GetPlayersSize())
     {
         // BG is empty
@@ -303,6 +301,9 @@ void BattleGround::Update(uint32 diff)
         // BattleGround Template instance cannot be updated, because it would be deleted
         if (!GetInvitedCount(HORDE) && !GetInvitedCount(ALLIANCE))
             delete this;
+        // update queue to avoid bg remaining indefinitely until player logs back in if he logs out after it pops
+        else if (GetStatus() <= STATUS_WAIT_JOIN && (GetBgMap()->GetCreateTime() + 2 * MINUTE) < time(nullptr))
+            sBattleGroundMgr.ScheduleQueueUpdate(BattleGroundMgr::BGQueueTypeId(GetTypeID()), GetTypeID(), GetBracketId());
 
         return;
     }
@@ -777,6 +778,10 @@ void BattleGround::EndBattleGround(Team winner)
 
     if (winmsg_id)
         SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+
+    // remove any invited players from the queue when bg ends
+    if (GetInvitedCount(HORDE) || GetInvitedCount(ALLIANCE))
+        sBattleGroundMgr.ScheduleQueueUpdate(BattleGroundMgr::BGQueueTypeId(GetTypeID()), GetTypeID(), GetBracketId());
 }
 
 uint32 BattleGround::GetBonusHonorFromKill(uint32 kills) const

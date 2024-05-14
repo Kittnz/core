@@ -2282,12 +2282,13 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                !m_casterUnit->GetTargetGuid().IsEmpty())
             {
                 targetMode = TARGET_UNIT_FRIEND;
-                auto playerTarget = m_casterUnit->GetMap()->GetPlayer(m_casterUnit->GetTargetGuid());
-                if (playerTarget &&
-                    !playerTarget->IsHostileTo(m_casterUnit) &&
-                    m_spellInfo->MinTargetLevel <= playerTarget->GetLevel() &&
-                    !(!m_casterUnit->IsPvP() && playerTarget->IsPvP()))
-                    m_targets.setUnitTarget(playerTarget);
+                auto friendlyTarget = m_casterUnit->GetMap()->GetUnit(m_casterUnit->GetTargetGuid());
+                if (friendlyTarget &&
+                    friendlyTarget->IsFriendlyTo(m_casterUnit) &&
+                    friendlyTarget->IsCharmerOrOwnerPlayerOrPlayerItself() &&
+                    m_spellInfo->MinTargetLevel <= friendlyTarget->GetLevel() &&
+                    !(!m_casterUnit->IsPvP() && friendlyTarget->IsPvP()))
+                    m_targets.setUnitTarget(friendlyTarget);
             }
             break;
         }
