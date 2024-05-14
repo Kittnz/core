@@ -4893,26 +4893,6 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     return true;
 }
 
-
-struct npc_lazokoAI : public ScriptedAI
-{
-    npc_lazokoAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() {}
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!m_creature->IsInCombat())
-        {
-                m_creature->CastSpell((Unit*)nullptr, 13236, true);
-        }
-        DoMeleeAttackIfReady();
-    }
-    void JustRespawned() {}
-};
-
-CreatureAI* GetAI_npc_lazoko(Creature* _Creature) { return new npc_lazokoAI(_Creature); }
-
 bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -6692,11 +6672,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_ardaen_evermoon";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_ardaen_evermoon;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_lazoko";
-    newscript->GetAI = &GetAI_npc_lazoko;
     newscript->RegisterSelf();
 
     newscript = new Script;
