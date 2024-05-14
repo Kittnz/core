@@ -33,6 +33,8 @@
 #include "fmt/core.h"
 #include "Utilities/robin_hood.h"
 
+extern const char* lsan_output_path;
+
 template <typename T, typename std::enable_if<std::is_enum_v<T>>::type>
 auto format_as(T enumx)
 {
