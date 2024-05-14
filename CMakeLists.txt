@@ -399,7 +399,7 @@ if(UNIX)
 
 
   if(ENABLE_LSAN)
-	  add_compile_options(-fsanitize=leak)
+    set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fsanitize=leak")
     set(DEFINITIONS ${DEFINITIONS} ENABLE_LSAN)
     message(STATUS "Compiling with LSAN ENABLED")
   endif()
