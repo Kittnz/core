@@ -905,6 +905,8 @@ std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc)
 
 
 
+const char* lsan_output_path = "log_path=leaks.txt";
+
 //override LSAN options if found.
 #ifdef ENABLE_LSAN
 #ifdef __cplusplus
@@ -912,6 +914,6 @@ extern "C"
 #endif
 const char* __lsan_default_options() 
 {
-    return "log_path=leaks.txt";
+    return lsan_output_path;
 }
 #endif
