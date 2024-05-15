@@ -216,6 +216,9 @@ bool UpdateCharacterGuids()
         CharacterDatabase2.PExecute("UPDATE `character_destroyed_items` SET `player_guid` = (`player_guid` + %u)", maxCharGuid);
         sLog.outInfo("- Updated `character_destroyed_items` table");
 
+        CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `playerGuid` = (`playerGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_egg_loot` table");
+
         CharacterDatabase2.PExecute("UPDATE `character_forgotten_skills` SET `guid` = (`guid` + %u)", maxCharGuid);
         sLog.outInfo("- Updated `character_forgotten_skills` table");
 
@@ -379,6 +382,7 @@ bool UpdateCharacterGuids()
                 CharacterDatabase2.PExecute("UPDATE `character_bgqueue` SET `PlayerGUID` = %u WHERE `PlayerGUID` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_deleted_items` SET `player_guid` = %u WHERE `player_guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_destroyed_items` SET `player_guid` = %u WHERE `player_guid` = %u", newGuid.first, guid);
+                CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `playerGuid` = %u WHERE `playerGuid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_forgotten_skills` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_homebind` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
@@ -484,6 +488,7 @@ void UpdateAutoIncrementFields()
     UpdateAutoIncrementField("id", "bugreports");
     UpdateAutoIncrementField("Id", "characters_total_money");
     UpdateAutoIncrementField("id", "character_deleted_items");
+    UpdateAutoIncrementField("Id", "character_egg_loot");
     UpdateAutoIncrementField("id", "character_item_logs");
     UpdateAutoIncrementField("ticket_id", "character_ticket");
     UpdateAutoIncrementField("log_id", "guild_bank_log");
@@ -552,6 +557,9 @@ bool UpdateItemGuids()
             CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid);
             sLog.outInfo("- Updated `character_aura_suspended` table");
 
+            CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `itemGuid` = (`itemGuid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `character_egg_loot` table");
+
             CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `item_guid` = (`item_guid` + %u)", maxItemGuid);
             sLog.outInfo("- Updated `character_gifts` table");
 
@@ -589,6 +597,7 @@ bool UpdateItemGuids()
                     CharacterDatabase2.PExecute("UPDATE `auction` SET `itemguid` = %u WHERE `itemguid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_aura` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
+                    CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `itemGuid` = %u WHERE `itemGuid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `item` = %u WHERE `item` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `bag` = %u WHERE `bag` = %u", newGuid.first, guid);
