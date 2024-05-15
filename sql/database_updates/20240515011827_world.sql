@@ -1,0 +1,4 @@
+
+-- Changes by REN
+REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (17370417429092274744, 1.000000);
+REPLACE INTO `gameobject` VALUES ( 5018168, 2006669, 0, 1552.43, 165.64, -45.4642, 4.25155, 0, 0, 0.849912, -0.526925, 300, 300, 100, 1, 0, 0);
