@@ -1425,7 +1425,6 @@ void DeleteNonCharacterData()
     CharacterDatabase2.Execute("TRUNCATE `instance_reset`");
     CharacterDatabase2.Execute("TRUNCATE `logs_anticheat`");
     CharacterDatabase2.Execute("TRUNCATE `logs_shellcoin`");
-    CharacterDatabase2.Execute("TRUNCATE `logs_spamdetect`");
     CharacterDatabase2.Execute("TRUNCATE `migrations`");
     CharacterDatabase2.Execute("TRUNCATE `saved_variables`");
     CharacterDatabase2.Execute("TRUNCATE `variables`");
