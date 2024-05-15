@@ -350,6 +350,21 @@ void UpdateAutoIncrementField(char const* fieldName, char const* tableName)
 
         } while (result->NextRow());
 
+        result.reset(CharacterDatabase2.PQuery("SELECT MAX(`%s`) FROM `%s`", fieldName, tableName));
+        if (result)
+        {
+            do
+            {
+                Field* fields = result->Fetch();
+
+                uint32 db2Max = fields[0].GetUInt32();
+
+                if (db2Max > maxId)
+                    maxId = db2Max;
+
+            } while (result->NextRow());
+        }
+
         CharacterDatabase2.PExecute("UPDATE `%s` SET `%s` = `%s` + %u", tableName, fieldName, fieldName, maxId);
     }
 }
@@ -365,7 +380,7 @@ void UpdateAutoIncrementFields()
     UpdateAutoIncrementField("ticket_id", "character_ticket");
     UpdateAutoIncrementField("log_id", "guild_bank_log");
     UpdateAutoIncrementField("id", "guild_bank_tabs");
-    UpdateAutoIncrementField("LogGuid", "guild_eventlog");
+    //UpdateAutoIncrementField("LogGuid", "guild_eventlog");
     UpdateAutoIncrementField("entry", "logs_warden");
     UpdateAutoIncrementField("transaction", "store_racechange");
 }
@@ -712,11 +727,13 @@ bool UpdateGroupIds()
     {
         int64 const maxGroupId1 = *groupIds.existingKeys1.rbegin();
         int64 const maxGroupId2 = *groupIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxGroupId1 + maxGroupId2))
+        int64 const maxGroupId = maxGroupId1 + maxGroupId2;
+
+        if (INT32_MAX > maxGroupId)
         {
             sLog.outInfo("Updating group ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `groups` SET `groupId` = (`groupId` + %u)", maxGroupId1);
-            CharacterDatabase2.PExecute("UPDATE `group_member` SET `groupId` = (`groupId` + %u)", maxGroupId1);
+            CharacterDatabase2.PExecute("UPDATE `groups` SET `groupId` = (`groupId` + %u)", maxGroupId);
+            CharacterDatabase2.PExecute("UPDATE `group_member` SET `groupId` = (`groupId` + %u)", maxGroupId);
         }
         else
         {
@@ -864,17 +881,19 @@ bool UpdateInstanceIds()
     {
         int64 const maxInstanceId1 = *instanceIds.existingKeys1.rbegin();
         int64 const maxInstanceId2 = *instanceIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxInstanceId1 + maxInstanceId2))
+        int64 const maxInstanceId = maxInstanceId1 + maxInstanceId2;
+
+        if (INT32_MAX > maxInstanceId)
         {
             sLog.outInfo("Updating instance ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `bugreports` SET `playerInstanceId` = (`playerInstanceId` + %u) WHERE `playerInstanceId` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `instance_id` = (`instance_id` + %u) WHERE `instance_id` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `character_instance` SET `instance` = (`instance` + %u)", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `corpse` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `creature_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `gameobject_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `group_instance` SET `instance` = (`instance` + %u)", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `instance` SET `id` = (`id` + %u)", maxInstanceId1);
+            CharacterDatabase2.PExecute("UPDATE `bugreports` SET `playerInstanceId` = (`playerInstanceId` + %u) WHERE `playerInstanceId` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `instance_id` = (`instance_id` + %u) WHERE `instance_id` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `character_instance` SET `instance` = (`instance` + %u)", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `corpse` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `creature_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `gameobject_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `group_instance` SET `instance` = (`instance` + %u)", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `instance` SET `id` = (`id` + %u)", maxInstanceId);
         }
         else
         {
@@ -1248,6 +1267,23 @@ bool UpdateTicketIds()
     return true;
 }
 
+void DeleteNonCharacterData()
+{
+    sLog.outInfo("Deleting non character data from db 2...");
+    CharacterDatabase2.PExecute("DELETE FROM `creature_respawn` WHERE `map` IN (0,1)");
+    CharacterDatabase2.PExecute("DELETE FROM `gameobject_respawn` WHERE `map` IN (0,1)");
+    CharacterDatabase2.Execute("TRUNCATE `game_event_status`");
+    CharacterDatabase2.Execute("TRUNCATE `instance_reset`");
+    CharacterDatabase2.Execute("TRUNCATE `logs_anticheat`");
+    CharacterDatabase2.Execute("TRUNCATE `logs_shellcoin`");
+    CharacterDatabase2.Execute("TRUNCATE `logs_spamdetect`");
+    CharacterDatabase2.Execute("TRUNCATE `migrations`");
+    CharacterDatabase2.Execute("TRUNCATE `saved_variables`");
+    CharacterDatabase2.Execute("TRUNCATE `variables`");
+    CharacterDatabase2.Execute("TRUNCATE `world`");
+    CharacterDatabase2.Execute("TRUNCATE `worldstates`");
+}
+
 char const* g_mainLogFileName = "RealmMerge.log";
 
 //=======================================================
@@ -1378,6 +1414,7 @@ int main(int argc, char* argv[])
     }
 
     UpdateAutoIncrementFields();
+    DeleteNonCharacterData();
 
     sLog.outInfo("Work done in %u seconds.", (time(nullptr) - startTime));
 
