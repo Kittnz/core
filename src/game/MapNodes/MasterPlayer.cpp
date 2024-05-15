@@ -176,14 +176,17 @@ void MasterPlayer::SaveMails()
     m_mailsUpdated = false;
 }
 
-void MasterPlayer::RemoveMail(uint32 id)
+void MasterPlayer::RemoveMail(uint32 id, bool remove)
 {
     for (PlayerMails::iterator itr = m_mail.begin(); itr != m_mail.end(); ++itr)
     {
         if ((*itr)->messageID == id)
         {
-            //do not delete item, because Player::removeMail() is called when returning mail to sender.
+            //do not delete item, because Player::removeMail() is called when returning mail to sender. DEFAULT CASE
             m_mail.erase(itr);
+
+            if (remove)
+                delete (*itr);
             return;
         }
     }
