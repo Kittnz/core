@@ -930,7 +930,7 @@ class ObjectMgr
 
             return nullptr;
         }
-        void ResetYearlyQuests();
+        // void ResetYearlyQuests();
         void LoadQuestRelations()
         {
             LoadGameobjectQuestRelations();
