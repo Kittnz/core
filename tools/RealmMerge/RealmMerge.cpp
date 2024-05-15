@@ -903,10 +903,12 @@ bool UpdateGroupIds()
 
 bool UpdateGuildIds()
 {
+    std::set<std::string> guildNames1;
+    std::map<uint32, std::string> guildNames2;
     UniqueKeyData guildIds;
 
     sLog.outInfo("Loading %s.guild...", g_db1Name.c_str());
-    std::unique_ptr<QueryResult> result(CharacterDatabase1.Query("SELECT `guildid` FROM `guild`"));
+    std::unique_ptr<QueryResult> result(CharacterDatabase1.Query("SELECT `guildid`, `name` FROM `guild`"));
 
     if (result)
     {
@@ -915,13 +917,16 @@ bool UpdateGuildIds()
             Field* fields = result->Fetch();
 
             uint32 guildId = fields[0].GetUInt32();
+            std::string name = fields[1].GetCppString();
+
             guildIds.existingKeys1.insert(guildId);
+            guildNames1.insert(name);
 
         } while (result->NextRow());
     }
 
     sLog.outInfo("Loading %s.guild...", g_db2Name.c_str());
-    result.reset(CharacterDatabase2.Query("SELECT `guildid` FROM `guild`"));
+    result.reset(CharacterDatabase2.Query("SELECT `guildid`, `name` FROM `guild`"));
 
     if (result)
     {
@@ -930,7 +935,10 @@ bool UpdateGuildIds()
             Field* fields = result->Fetch();
 
             uint32 guildId = fields[0].GetUInt32();
+            std::string name = fields[1].GetCppString();
+
             guildIds.existingKeys2.insert(guildId);
+            guildNames2.insert({ guildId, name });
 
         } while (result->NextRow());
     }
@@ -939,6 +947,16 @@ bool UpdateGuildIds()
     {
         sLog.outError("Databases cannot be merged because number of guilds exceeds max value of int32.");
         return false;
+    }
+
+    sLog.outInfo("Updating guild names...");
+    for (auto const& itr : guildNames2)
+    {
+        if (!itr.second.empty() && guildNames1.find(itr.second) != guildNames1.end())
+        {
+            sLog.outInfo("Name of guild %s (%u) is taken. Marking for rename.", itr.second.c_str(), itr.first);
+            CharacterDatabase2.PExecute("UPDATE `guild` SET `name` = `guildid` WHERE `guildid` = %u", itr.first);
+        }
     }
 
     if (!guildIds.existingKeys1.empty() && !guildIds.existingKeys2.empty())
