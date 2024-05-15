@@ -2186,8 +2186,8 @@ void World::SetInitialWorldSettings()
     sAuraRemovalMgr.LoadFromDB();
     sLog.outString("Loading daily quests handler...");
     sDailyQuestHandler.LoadFromDB(true);
-    sLog.outString("Resetting yearly quests...");
-    sObjectMgr.ResetYearlyQuests();
+    // sLog.outString("Resetting yearly quests...");
+    // sObjectMgr.ResetYearlyQuests();
     sLog.outString("Loading companion manager...");
     sCompanionMgr.LoadFromDB();
     sLog.outString("Loading mount manager...");
