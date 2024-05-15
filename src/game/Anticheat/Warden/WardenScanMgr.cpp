@@ -216,6 +216,8 @@ void WardenScanMgr::loadFromDB()
         m_scans.emplace_back(std::shared_ptr<const Scan>(scan));
     } while (result->NextRow());
 
+    delete result;
+
     sLog.outBasic("%u Warden scans loaded from world database.", m_scans.size());
 }
 
