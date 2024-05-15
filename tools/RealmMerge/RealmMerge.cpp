@@ -482,6 +482,7 @@ void UpdateAutoIncrementFields()
     UpdateAutoIncrementField("id", "bounty_quest_targets");
     UpdateAutoIncrementField("id", "bugreport");
     UpdateAutoIncrementField("id", "bugreports");
+    UpdateAutoIncrementField("Id", "characters_total_money");
     UpdateAutoIncrementField("id", "character_deleted_items");
     UpdateAutoIncrementField("id", "character_item_logs");
     UpdateAutoIncrementField("ticket_id", "character_ticket");
