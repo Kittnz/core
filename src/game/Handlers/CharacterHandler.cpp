@@ -924,19 +924,19 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         
 
     // Chinese Lunar Festivale
-    if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
-    {
-        uint32 itemEntry = 91790;
-        
-        std::string subject = sObjectMgr.GetMangosString(50306, 4);
-        std::string message = sObjectMgr.GetMangosString(50307, 4);
-        Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
-        ToMailItem->SaveToDB();
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-        pCurrChar->SetCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT);
-    }
+    //if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
+    //{
+    //    uint32 itemEntry = 91790;
+    //    
+    //    std::string subject = sObjectMgr.GetMangosString(50306, 4);
+    //    std::string message = sObjectMgr.GetMangosString(50307, 4);
+    //    Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
+    //    ToMailItem->SaveToDB();
+    //    MailDraft(subject, sObjectMgr.CreateItemText(message))
+    //        .AddItem(ToMailItem)
+    //        .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    //    pCurrChar->SetCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT);
+    //}
 
 
     if (pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED))

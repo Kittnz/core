@@ -9,7 +9,6 @@ REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `pos
 
 REPLACE INTO `areatrigger_teleport` (`id`, `name`, `message`, `required_level`, `required_condition`, `required_phase`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES (3726, 'Blackwing Lair - Entrance', 'You must be part of a raid group and at least 50th level to enter.', 50, 0, 1, 469, -7672.32, -1107.05, 396.651, 0.785398);
 
-
 -- Delete guild bases!
 DELETE FROM creature WHERE guid=2569062;
 DELETE FROM creature_addon WHERE guid=2569062;

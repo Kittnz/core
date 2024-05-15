@@ -177,78 +177,188 @@ bool UpdateCharacterGuids()
 
     int64 const maxCharGuid1 = *characterGuids.existingKeys1.rbegin();
     int64 const maxCharGuid2 = *characterGuids.existingKeys2.rbegin();
+    int64 const maxCharGuid = std::max(maxCharGuid1, maxCharGuid2);
 
-    if (INT32_MAX > int64(maxCharGuid1 + maxCharGuid2))
+    if (INT32_MAX > int64(maxCharGuid + maxCharGuid2))
     {
         sLog.outInfo("Updating character guids (fast method)...");
-        CharacterDatabase2.PExecute("UPDATE `auction` SET `itemowner` = (`itemowner` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `auction` SET `buyguid` = (`buyguid` + %u) WHERE `buyguid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `characters` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_action` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_armory_stats` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_aura` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_aura` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid1, maxCharGuid2);
-        CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid1, maxCharGuid2);
-        CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_bgqueue` SET `PlayerGUID` = (`PlayerGUID` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_deleted_items` SET `player_guid` = (`player_guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_destroyed_items` SET `player_guid` = (`player_guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_forgotten_skills` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_homebind` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_honor_cp` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_instance` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_item_logs` SET `playerLowGuid` = (`playerLowGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_pet` SET `owner` = (`owner` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_queststatus` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_reputation` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_skills` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_social` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_social` SET `friend` = (`friend` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_spell` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_spell_cooldown` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_spell_dual_spec` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_stats` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_ticket` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_titles` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_transmogs` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_variables` SET `lowGuid` = (`lowGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `character_xp_from_log` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `corpse` SET `player` = (`player` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `closedBy` = (`closedBy` + %u) WHERE `closedBy` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `assignedTo` = (`assignedTo` + %u) WHERE `assignedTo` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `groups` SET `leaderGuid` = (`leaderGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `groups` SET `mainTank` = (`mainTank` + %u) WHERE `mainTank` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `groups` SET `mainAssistant` = (`mainAssistant` + %u) WHERE `mainAssistant` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `groups` SET `looterGuid` = (`looterGuid` + %u) WHERE `looterGuid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `group_instance` SET `leaderGuid` = (`leaderGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `group_member` SET `memberGuid` = (`memberGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild` SET `leaderguid` = (`leaderguid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `creatorGuid` = (`creatorGuid` + %u) WHERE `creatorGuid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `giftCreatorGuid` = (`giftCreatorGuid` + %u) WHERE `giftCreatorGuid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_bank_log` SET `player` = (`player` + %u) WHERE `player` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `PlayerGuid1` = (`PlayerGuid1` + %u) WHERE `PlayerGuid1` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `PlayerGuid2` = (`PlayerGuid2` + %u) WHERE `PlayerGuid2` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `guild_member` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `hardcore_deaths` SET `lowGuid` = (`lowGuid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `owner_guid` = (`owner_guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `creatorGuid` = (`creatorGuid` + %u) WHERE `creatorGuid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `giftCreatorGuid` = (`giftCreatorGuid` + %u) WHERE `giftCreatorGuid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `item_loot` SET `owner_guid` = (`owner_guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `logs_movement` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `logs_warden` SET `guid` = (`guid` + %u) WHERE `guid` != 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `mail` SET `sender` = (`sender` + %u) WHERE `mailTemplateId` = 0", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `mail` SET `receiver` = (`receiver` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `mail_items` SET `receiver` = (`receiver` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `petition` SET `ownerguid` = (`ownerguid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `ownerguid` = (`ownerguid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `playerguid` = (`playerguid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid1, maxCharGuid2);
-        CharacterDatabase2.PExecute("UPDATE `store_racechange` SET `guid` = (`guid` + %u)", maxCharGuid1);
-        CharacterDatabase2.PExecute("UPDATE `whisper_targets` SET `target_guid` = (`target_guid` + %u)", maxCharGuid1);
+
+        CharacterDatabase2.PExecute("UPDATE `auction` SET `itemowner` = (`itemowner` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `auction` SET `buyguid` = (`buyguid` + %u) WHERE `buyguid` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `auction` table");
+
+        CharacterDatabase2.PExecute("UPDATE `characters` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `characters` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_action` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_action` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_armory_stats` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_armory_stats` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_aura` SET `guid` = (`guid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `character_aura` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid, maxCharGuid2);
+        sLog.outInfo("- Updated `character_aura` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `guid` = (`guid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid, maxCharGuid2);
+        sLog.outInfo("- Updated `character_aura_suspended` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_battleground_data` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_bgqueue` SET `PlayerGUID` = (`PlayerGUID` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_bgqueue` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_deleted_items` SET `player_guid` = (`player_guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_deleted_items` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_destroyed_items` SET `player_guid` = (`player_guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_destroyed_items` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `playerGuid` = (`playerGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_egg_loot` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_forgotten_skills` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_forgotten_skills` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_gifts` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_homebind` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_homebind` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_honor_cp` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_honor_cp` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_instance` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_instance` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_inventory` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_item_logs` SET `playerLowGuid` = (`playerLowGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_item_logs` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_pet` SET `owner` = (`owner` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_pet` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_queststatus` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_queststatus` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_reputation` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_reputation` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_skills` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_skills` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_social` SET `guid` = (`guid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `character_social` SET `friend` = (`friend` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_social` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_spell` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_spell` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_spell_cooldown` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_spell_cooldown` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_spell_dual_spec` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_spell_dual_spec` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_stats` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_stats` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_ticket` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_ticket` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_titles` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_titles` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_transmogs` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_transmogs` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_variables` SET `lowGuid` = (`lowGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_variables` table");
+
+        CharacterDatabase2.PExecute("UPDATE `character_xp_from_log` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `character_xp_from_log` table");
+
+        CharacterDatabase2.PExecute("UPDATE `corpse` SET `player` = (`player` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `corpse` table");
+
+        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `guid` = (`guid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `closedBy` = (`closedBy` + %u) WHERE `closedBy` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `assignedTo` = (`assignedTo` + %u) WHERE `assignedTo` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `gm_tickets` table");
+
+        CharacterDatabase2.PExecute("UPDATE `groups` SET `leaderGuid` = (`leaderGuid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `groups` SET `mainTank` = (`mainTank` + %u) WHERE `mainTank` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `groups` SET `mainAssistant` = (`mainAssistant` + %u) WHERE `mainAssistant` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `groups` SET `looterGuid` = (`looterGuid` + %u) WHERE `looterGuid` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `groups` table");
+
+        CharacterDatabase2.PExecute("UPDATE `group_instance` SET `leaderGuid` = (`leaderGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `group_instance` table");
+
+        CharacterDatabase2.PExecute("UPDATE `group_member` SET `memberGuid` = (`memberGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `group_member` table");
+
+        CharacterDatabase2.PExecute("UPDATE `guild` SET `leaderguid` = (`leaderguid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `guild` table");
+
+        CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `creatorGuid` = (`creatorGuid` + %u) WHERE `creatorGuid` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `giftCreatorGuid` = (`giftCreatorGuid` + %u) WHERE `giftCreatorGuid` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `guild_bank` table");
+
+        CharacterDatabase2.PExecute("UPDATE `guild_bank_log` SET `player` = (`player` + %u) WHERE `player` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `guild_bank_log` table");
+
+        CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `PlayerGuid1` = (`PlayerGuid1` + %u) WHERE `PlayerGuid1` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `PlayerGuid2` = (`PlayerGuid2` + %u) WHERE `PlayerGuid2` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `guild_eventlog` table");
+
+        CharacterDatabase2.PExecute("UPDATE `guild_member` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `guild_member` table");
+
+        CharacterDatabase2.PExecute("UPDATE `hardcore_deaths` SET `lowGuid` = (`lowGuid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `hardcore_deaths` table");
+
+        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `owner_guid` = (`owner_guid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `creatorGuid` = (`creatorGuid` + %u) WHERE `creatorGuid` != 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `item_instance` SET `giftCreatorGuid` = (`giftCreatorGuid` + %u) WHERE `giftCreatorGuid` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `item_instance` table");
+
+        CharacterDatabase2.PExecute("UPDATE `item_loot` SET `owner_guid` = (`owner_guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `item_loot` table");
+
+        CharacterDatabase2.PExecute("UPDATE `logs_movement` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `logs_movement` table");
+
+        CharacterDatabase2.PExecute("UPDATE `logs_warden` SET `guid` = (`guid` + %u) WHERE `guid` != 0", maxCharGuid);
+        sLog.outInfo("- Updated `logs_warden` table");
+
+        CharacterDatabase2.PExecute("UPDATE `mail` SET `sender` = (`sender` + %u) WHERE `mailTemplateId` = 0", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `mail` SET `receiver` = (`receiver` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `mail` table");
+
+        CharacterDatabase2.PExecute("UPDATE `mail_items` SET `receiver` = (`receiver` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `mail_items` table");
+
+        CharacterDatabase2.PExecute("UPDATE `petition` SET `ownerguid` = (`ownerguid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `petition` table");
+
+        CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `ownerguid` = (`ownerguid` + %u)", maxCharGuid);
+        CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `playerguid` = (`playerguid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `petition_sign` table");
+
+        CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `caster_guid` = (`caster_guid` + %u) WHERE `caster_guid` <= %u", maxCharGuid, maxCharGuid2);
+        sLog.outInfo("- Updated `pet_aura` table");
+
+        CharacterDatabase2.PExecute("UPDATE `store_racechange` SET `guid` = (`guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `store_racechange` table");
+
+        CharacterDatabase2.PExecute("UPDATE `whisper_targets` SET `target_guid` = (`target_guid` + %u)", maxCharGuid);
+        sLog.outInfo("- Updated `whisper_targets` table");
     }
     else
     {
@@ -272,6 +382,7 @@ bool UpdateCharacterGuids()
                 CharacterDatabase2.PExecute("UPDATE `character_bgqueue` SET `PlayerGUID` = %u WHERE `PlayerGUID` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_deleted_items` SET `player_guid` = %u WHERE `player_guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_destroyed_items` SET `player_guid` = %u WHERE `player_guid` = %u", newGuid.first, guid);
+                CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `playerGuid` = %u WHERE `playerGuid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_forgotten_skills` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
                 CharacterDatabase2.PExecute("UPDATE `character_homebind` SET `guid` = %u WHERE `guid` = %u", newGuid.first, guid);
@@ -350,6 +461,21 @@ void UpdateAutoIncrementField(char const* fieldName, char const* tableName)
 
         } while (result->NextRow());
 
+        result.reset(CharacterDatabase2.PQuery("SELECT MAX(`%s`) FROM `%s`", fieldName, tableName));
+        if (result)
+        {
+            do
+            {
+                Field* fields = result->Fetch();
+
+                uint32 db2Max = fields[0].GetUInt32();
+
+                if (db2Max > maxId)
+                    maxId = db2Max;
+
+            } while (result->NextRow());
+        }
+
         CharacterDatabase2.PExecute("UPDATE `%s` SET `%s` = `%s` + %u", tableName, fieldName, fieldName, maxId);
     }
 }
@@ -360,12 +486,14 @@ void UpdateAutoIncrementFields()
     UpdateAutoIncrementField("id", "bounty_quest_targets");
     UpdateAutoIncrementField("id", "bugreport");
     UpdateAutoIncrementField("id", "bugreports");
+    UpdateAutoIncrementField("Id", "characters_total_money");
     UpdateAutoIncrementField("id", "character_deleted_items");
+    UpdateAutoIncrementField("Id", "character_egg_loot");
     UpdateAutoIncrementField("id", "character_item_logs");
     UpdateAutoIncrementField("ticket_id", "character_ticket");
     UpdateAutoIncrementField("log_id", "guild_bank_log");
     UpdateAutoIncrementField("id", "guild_bank_tabs");
-    UpdateAutoIncrementField("LogGuid", "guild_eventlog");
+    //UpdateAutoIncrementField("LogGuid", "guild_eventlog");
     UpdateAutoIncrementField("entry", "logs_warden");
     UpdateAutoIncrementField("transaction", "store_racechange");
 }
@@ -414,21 +542,48 @@ bool UpdateItemGuids()
     {
         int64 const maxItemGuid1 = *itemGuids.existingKeys1.rbegin();
         int64 const maxItemGuid2 = *itemGuids.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxItemGuid1 + maxItemGuid2))
+        int64 const maxItemGuid = std::max(maxItemGuid1, maxItemGuid2);
+
+        if (INT32_MAX > int64(maxItemGuid + maxItemGuid2))
         {
             sLog.outInfo("Updating item guids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `auction` SET `itemguid` = (`itemguid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_aura` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `item_guid` = (`item_guid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `item` = (`item` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `bag` = (`bag` + %u) WHERE `bag` != 0", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `character_item_logs` SET `itemLowGuid` = (`itemLowGuid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `guid` = (`guid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `item_loot` SET `guid` = (`guid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `mail_items` SET `item_guid` = (`item_guid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `petition` SET `charterguid` = (`charterguid` + %u)", maxItemGuid1);
-            CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid1);
+
+            CharacterDatabase2.PExecute("UPDATE `auction` SET `itemguid` = (`itemguid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `auction` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_aura` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid);
+            sLog.outInfo("- Updated `character_aura` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid);
+            sLog.outInfo("- Updated `character_aura_suspended` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `itemGuid` = (`itemGuid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `character_egg_loot` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `item_guid` = (`item_guid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `character_gifts` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `item` = (`item` + %u)", maxItemGuid);
+            CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `bag` = (`bag` + %u) WHERE `bag` != 0", maxItemGuid);
+            sLog.outInfo("- Updated `character_inventory` table");
+
+            CharacterDatabase2.PExecute("UPDATE `character_item_logs` SET `itemLowGuid` = (`itemLowGuid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `character_item_logs` table");
+
+            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `guid` = (`guid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `item_instance` table");
+
+            CharacterDatabase2.PExecute("UPDATE `item_loot` SET `guid` = (`guid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `item_loot` table");
+
+            CharacterDatabase2.PExecute("UPDATE `mail_items` SET `item_guid` = (`item_guid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `mail_items` table");
+
+            CharacterDatabase2.PExecute("UPDATE `petition` SET `charterguid` = (`charterguid` + %u)", maxItemGuid);
+            sLog.outInfo("- Updated `petition` table");
+
+            CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `item_guid` = (`item_guid` + %u) WHERE `item_guid` != 0", maxItemGuid);
+            sLog.outInfo("- Updated `pet_aura` table");
         }
         else
         {
@@ -442,6 +597,7 @@ bool UpdateItemGuids()
                     CharacterDatabase2.PExecute("UPDATE `auction` SET `itemguid` = %u WHERE `itemguid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_aura` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_aura_suspended` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
+                    CharacterDatabase2.PExecute("UPDATE `character_egg_loot` SET `itemGuid` = %u WHERE `itemGuid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_gifts` SET `item_guid` = %u WHERE `item_guid` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `item` = %u WHERE `item` = %u", newGuid.first, guid);
                     CharacterDatabase2.PExecute("UPDATE `character_inventory` SET `bag` = %u WHERE `bag` = %u", newGuid.first, guid);
@@ -503,11 +659,13 @@ bool UpdatePetitionGuids()
     {
         int64 const maxPetitionGuid1 = *petitionGuids.existingKeys1.rbegin();
         int64 const maxPetitionGuid2 = *petitionGuids.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxPetitionGuid1 + maxPetitionGuid2))
+        int64 const maxPetitionGuid = std::max(maxPetitionGuid1, maxPetitionGuid2);
+
+        if (INT32_MAX > int64(maxPetitionGuid + maxPetitionGuid2))
         {
             sLog.outInfo("Updating petition guids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `petition` SET `petitionguid` = (`petitionguid` + %u)", maxPetitionGuid1);
-            CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `petitionguid` = (`petitionguid` + %u)", maxPetitionGuid1);
+            CharacterDatabase2.PExecute("UPDATE `petition` SET `petitionguid` = (`petitionguid` + %u)", maxPetitionGuid);
+            CharacterDatabase2.PExecute("UPDATE `petition_sign` SET `petitionguid` = (`petitionguid` + %u)", maxPetitionGuid);
         }
         else
         {
@@ -572,13 +730,15 @@ bool UpdatePetGuids()
     {
         int64 const maxPetGuid1 = *petGuids.existingKeys1.rbegin();
         int64 const maxPetGuid2 = *petGuids.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxPetGuid1 + maxPetGuid2))
+        int64 const maxPetGuid = std::max(maxPetGuid1, maxPetGuid2);
+
+        if (INT32_MAX > int64(maxPetGuid + maxPetGuid2))
         {
             sLog.outInfo("Updating pet guids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `character_pet` SET `id` = (`id` + %u)", maxPetGuid1);
-            CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `guid` = (`guid` + %u)", maxPetGuid1);
-            CharacterDatabase2.PExecute("UPDATE `pet_spell` SET `guid` = (`guid` + %u)", maxPetGuid1);
-            CharacterDatabase2.PExecute("UPDATE `pet_spell_cooldown` SET `guid` = (`guid` + %u)", maxPetGuid1);
+            CharacterDatabase2.PExecute("UPDATE `character_pet` SET `id` = (`id` + %u)", maxPetGuid);
+            CharacterDatabase2.PExecute("UPDATE `pet_aura` SET `guid` = (`guid` + %u)", maxPetGuid);
+            CharacterDatabase2.PExecute("UPDATE `pet_spell` SET `guid` = (`guid` + %u)", maxPetGuid);
+            CharacterDatabase2.PExecute("UPDATE `pet_spell_cooldown` SET `guid` = (`guid` + %u)", maxPetGuid);
         }
         else
         {
@@ -645,10 +805,12 @@ bool UpdateCorpseGuids()
     {
         int64 const maxCorpseGuid1 = *corpseGuids.existingKeys1.rbegin();
         int64 const maxCorpseGuid2 = *corpseGuids.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxCorpseGuid1 + maxCorpseGuid2))
+        int64 const maxCorpseGuid = std::max(maxCorpseGuid1, maxCorpseGuid2);
+
+        if (INT32_MAX > int64(maxCorpseGuid + maxCorpseGuid2))
         {
             sLog.outInfo("Updating corpse guids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `corpse` SET `guid` = (`guid` + %u)", maxCorpseGuid1);
+            CharacterDatabase2.PExecute("UPDATE `corpse` SET `guid` = (`guid` + %u)", maxCorpseGuid);
         }
         else
         {
@@ -712,11 +874,13 @@ bool UpdateGroupIds()
     {
         int64 const maxGroupId1 = *groupIds.existingKeys1.rbegin();
         int64 const maxGroupId2 = *groupIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxGroupId1 + maxGroupId2))
+        int64 const maxGroupId = std::max(maxGroupId1, maxGroupId2);
+
+        if (INT32_MAX > (maxGroupId + maxGroupId2))
         {
             sLog.outInfo("Updating group ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `groups` SET `groupId` = (`groupId` + %u)", maxGroupId1);
-            CharacterDatabase2.PExecute("UPDATE `group_member` SET `groupId` = (`groupId` + %u)", maxGroupId1);
+            CharacterDatabase2.PExecute("UPDATE `groups` SET `groupId` = (`groupId` + %u)", maxGroupId);
+            CharacterDatabase2.PExecute("UPDATE `group_member` SET `groupId` = (`groupId` + %u)", maxGroupId);
         }
         else
         {
@@ -739,10 +903,12 @@ bool UpdateGroupIds()
 
 bool UpdateGuildIds()
 {
+    std::set<std::string> guildNames1;
+    std::map<uint32, std::string> guildNames2;
     UniqueKeyData guildIds;
 
     sLog.outInfo("Loading %s.guild...", g_db1Name.c_str());
-    std::unique_ptr<QueryResult> result(CharacterDatabase1.Query("SELECT `guildid` FROM `guild`"));
+    std::unique_ptr<QueryResult> result(CharacterDatabase1.Query("SELECT `guildid`, `name` FROM `guild`"));
 
     if (result)
     {
@@ -751,13 +917,16 @@ bool UpdateGuildIds()
             Field* fields = result->Fetch();
 
             uint32 guildId = fields[0].GetUInt32();
+            std::string name = fields[1].GetCppString();
+
             guildIds.existingKeys1.insert(guildId);
+            guildNames1.insert(name);
 
         } while (result->NextRow());
     }
 
     sLog.outInfo("Loading %s.guild...", g_db2Name.c_str());
-    result.reset(CharacterDatabase2.Query("SELECT `guildid` FROM `guild`"));
+    result.reset(CharacterDatabase2.Query("SELECT `guildid`, `name` FROM `guild`"));
 
     if (result)
     {
@@ -766,7 +935,10 @@ bool UpdateGuildIds()
             Field* fields = result->Fetch();
 
             uint32 guildId = fields[0].GetUInt32();
+            std::string name = fields[1].GetCppString();
+
             guildIds.existingKeys2.insert(guildId);
+            guildNames2.insert({ guildId, name });
 
         } while (result->NextRow());
     }
@@ -777,22 +949,63 @@ bool UpdateGuildIds()
         return false;
     }
 
+    auto GenerateGuildName = [&]() -> std::string
+    {
+        for (char chr1 = 'a'; chr1 < 'z'; chr1++)
+        {
+            for (char chr2 = 'a'; chr2 < 'z'; chr2++)
+            {
+                for (char chr3 = 'a'; chr3 < 'z'; chr3++)
+                {
+                    for (char chr4 = 'a'; chr4 < 'z'; chr4++)
+                    {
+                        std::string name2 = "PH ";
+                        name2 += chr1;
+                        name2 += chr2;
+                        name2 += chr3;
+                        name2 += chr4;
+
+                        if (guildNames1.find(name2) == guildNames1.end())
+                        {
+                            guildNames1.insert(name2);
+                            return name2;
+                        }
+                    }
+                }
+            }
+        }
+
+        return "DUPLICATE";
+    };
+    
+    sLog.outInfo("Updating guild names...");
+    for (auto const& itr : guildNames2)
+    {
+        if (!itr.second.empty() && guildNames1.find(itr.second) != guildNames1.end())
+        {
+            sLog.outInfo("Name of guild %s (%u) is taken. Marking for rename.", itr.second.c_str(), itr.first);
+            CharacterDatabase2.PExecute("UPDATE `guild` SET `name` = '%s' WHERE `guildid` = %u", GenerateGuildName().c_str(), itr.first);
+        }
+    }
+
     if (!guildIds.existingKeys1.empty() && !guildIds.existingKeys2.empty())
     {
         int64 const maxGuildId1 = *guildIds.existingKeys1.rbegin();
         int64 const maxGuildId2 = *guildIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxGuildId1 + maxGuildId2))
+        int64 const maxGuildId = std::max(maxGuildId1, maxGuildId2);
+
+        if (INT32_MAX > int64(maxGuildId + maxGuildId2))
         {
             sLog.outInfo("Updating guild ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `guild` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_bank_log` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_bank_money` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_bank_tabs` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_house` SET `guild_id` = (`guild_id` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_member` SET `guildid` = (`guildid` + %u)", maxGuildId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_rank` SET `guildid` = (`guildid` + %u)", maxGuildId1);
+            CharacterDatabase2.PExecute("UPDATE `guild` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank_log` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank_money` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank_tabs` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_eventlog` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_house` SET `guild_id` = (`guild_id` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_member` SET `guildid` = (`guildid` + %u)", maxGuildId);
+            CharacterDatabase2.PExecute("UPDATE `guild_rank` SET `guildid` = (`guildid` + %u)", maxGuildId);
         }
         else
         {
@@ -864,17 +1077,19 @@ bool UpdateInstanceIds()
     {
         int64 const maxInstanceId1 = *instanceIds.existingKeys1.rbegin();
         int64 const maxInstanceId2 = *instanceIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxInstanceId1 + maxInstanceId2))
+        int64 const maxInstanceId = std::max(maxInstanceId1, maxInstanceId2);
+
+        if (INT32_MAX > (maxInstanceId + maxInstanceId2))
         {
             sLog.outInfo("Updating instance ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `bugreports` SET `playerInstanceId` = (`playerInstanceId` + %u) WHERE `playerInstanceId` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `instance_id` = (`instance_id` + %u) WHERE `instance_id` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `character_instance` SET `instance` = (`instance` + %u)", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `corpse` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `creature_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `gameobject_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `group_instance` SET `instance` = (`instance` + %u)", maxInstanceId1);
-            CharacterDatabase2.PExecute("UPDATE `instance` SET `id` = (`id` + %u)", maxInstanceId1);
+            CharacterDatabase2.PExecute("UPDATE `bugreports` SET `playerInstanceId` = (`playerInstanceId` + %u) WHERE `playerInstanceId` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `character_battleground_data` SET `instance_id` = (`instance_id` + %u) WHERE `instance_id` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `character_instance` SET `instance` = (`instance` + %u)", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `corpse` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `creature_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `gameobject_respawn` SET `instance` = (`instance` + %u) WHERE `instance` != 0", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `group_instance` SET `instance` = (`instance` + %u)", maxInstanceId);
+            CharacterDatabase2.PExecute("UPDATE `instance` SET `id` = (`id` + %u)", maxInstanceId);
         }
         else
         {
@@ -945,11 +1160,13 @@ bool UpdateMailIds()
     {
         int64 const maxMailId1 = *mailIds.existingKeys1.rbegin();
         int64 const maxMailid2 = *mailIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxMailId1 + maxMailid2))
+        int64 const maxMailid = std::max(maxMailId1, maxMailid2);
+
+        if (INT32_MAX > int64(maxMailid + maxMailid2))
         {
             sLog.outInfo("Updating mail ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `mail` SET `id` = (`id` + %u)", maxMailId1);
-            CharacterDatabase2.PExecute("UPDATE `mail_items` SET `mail_id` = (`mail_id` + %u)", maxMailId1);
+            CharacterDatabase2.PExecute("UPDATE `mail` SET `id` = (`id` + %u)", maxMailid);
+            CharacterDatabase2.PExecute("UPDATE `mail_items` SET `mail_id` = (`mail_id` + %u)", maxMailid);
         }
         else
         {
@@ -1014,13 +1231,15 @@ bool UpdateItemTextIds()
     {
         int64 const maxItemTextId1 = *itemTextIds.existingKeys1.rbegin();
         int64 const maxItemTextId2 = *itemTextIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxItemTextId1 + maxItemTextId2))
+        int64 const maxItemTextId = std::max(maxItemTextId1, maxItemTextId2);
+
+        if (INT32_MAX > int64(maxItemTextId + maxItemTextId2))
         {
             sLog.outInfo("Updating item text ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `text` = (`text` + %u) WHERE `text` != 0", maxItemTextId1);
-            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `text` = (`text` + %u) WHERE `text` != 0", maxItemTextId1);
-            CharacterDatabase2.PExecute("UPDATE `item_text` SET `id` = (`id` + %u)", maxItemTextId1);
-            CharacterDatabase2.PExecute("UPDATE `mail` SET `itemTextId` = (`itemTextId` + %u) WHERE `itemTextId` != 0", maxItemTextId1);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `text` = (`text` + %u) WHERE `text` != 0", maxItemTextId);
+            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `text` = (`text` + %u) WHERE `text` != 0", maxItemTextId);
+            CharacterDatabase2.PExecute("UPDATE `item_text` SET `id` = (`id` + %u)", maxItemTextId);
+            CharacterDatabase2.PExecute("UPDATE `mail` SET `itemTextId` = (`itemTextId` + %u) WHERE `itemTextId` != 0", maxItemTextId);
         }
         else
         {
@@ -1087,12 +1306,14 @@ bool UpdateTransmogIds()
     {
         int64 const maxTransmogId1 = *transmogIds.existingKeys1.rbegin();
         int64 const maxTransmogId2 = *transmogIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxTransmogId1 + maxTransmogId2))
+        int64 const maxTransmogId = std::max(maxTransmogId1, maxTransmogId2);
+
+        if (INT32_MAX > int64(maxTransmogId + maxTransmogId2))
         {
             sLog.outInfo("Updating transmog ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `item_transmogs` SET `ID` = (`ID` + %u)", maxTransmogId1);
-            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `transmogrifyId` = (`transmogrifyId` + %u) WHERE `transmogrifyId` != 0", maxTransmogId1);
-            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `transmogrifyId` = (`transmogrifyId` + %u) WHERE `transmogrifyId` != 0", maxTransmogId1);
+            CharacterDatabase2.PExecute("UPDATE `item_transmogs` SET `ID` = (`ID` + %u)", maxTransmogId);
+            CharacterDatabase2.PExecute("UPDATE `item_instance` SET `transmogrifyId` = (`transmogrifyId` + %u) WHERE `transmogrifyId` != 0", maxTransmogId);
+            CharacterDatabase2.PExecute("UPDATE `guild_bank` SET `transmogrifyId` = (`transmogrifyId` + %u) WHERE `transmogrifyId` != 0", maxTransmogId);
         }
         else
         {
@@ -1158,10 +1379,12 @@ bool UpdateAuctionIds()
     {
         int64 const maxAuctionId1 = *auctionIds.existingKeys1.rbegin();
         int64 const maxAuctionId2 = *auctionIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxAuctionId1 + maxAuctionId2))
+        int64 const maxAuctionId = std::max(maxAuctionId1, maxAuctionId2);
+
+        if (INT32_MAX > int64(maxAuctionId + maxAuctionId2))
         {
             sLog.outInfo("Updating auction ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `auction` SET `id` = (`id` + %u)", maxAuctionId1);
+            CharacterDatabase2.PExecute("UPDATE `auction` SET `id` = (`id` + %u)", maxAuctionId);
         }
         else
         {
@@ -1225,10 +1448,12 @@ bool UpdateTicketIds()
     {
         int64 const maxTicketId1 = *ticketIds.existingKeys1.rbegin();
         int64 const maxTicketId2 = *ticketIds.existingKeys2.rbegin();
-        if (INT32_MAX > int64(maxTicketId1 + maxTicketId2))
+        int64 const maxTicketId = std::max(maxTicketId1, maxTicketId2);
+
+        if (INT32_MAX > int64(maxTicketId + maxTicketId2))
         {
             sLog.outInfo("Updating ticket ids (fast method)...");
-            CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `ticketId` = (`ticketId` + %u)", maxTicketId1);
+            CharacterDatabase2.PExecute("UPDATE `gm_tickets` SET `ticketId` = (`ticketId` + %u)", maxTicketId);
         }
         else
         {
@@ -1246,6 +1471,22 @@ bool UpdateTicketIds()
     }
 
     return true;
+}
+
+void DeleteNonCharacterData()
+{
+    sLog.outInfo("Deleting non character data from db 2...");
+    CharacterDatabase2.PExecute("DELETE FROM `creature_respawn` WHERE `map` IN (0,1)");
+    CharacterDatabase2.PExecute("DELETE FROM `gameobject_respawn` WHERE `map` IN (0,1)");
+    CharacterDatabase2.Execute("TRUNCATE `game_event_status`");
+    CharacterDatabase2.Execute("TRUNCATE `instance_reset`");
+    CharacterDatabase2.Execute("TRUNCATE `logs_anticheat`");
+    CharacterDatabase2.Execute("TRUNCATE `logs_shellcoin`");
+    CharacterDatabase2.Execute("TRUNCATE `migrations`");
+    CharacterDatabase2.Execute("TRUNCATE `saved_variables`");
+    CharacterDatabase2.Execute("TRUNCATE `variables`");
+    CharacterDatabase2.Execute("TRUNCATE `world`");
+    CharacterDatabase2.Execute("TRUNCATE `worldstates`");
 }
 
 char const* g_mainLogFileName = "RealmMerge.log";
@@ -1378,6 +1619,7 @@ int main(int argc, char* argv[])
     }
 
     UpdateAutoIncrementFields();
+    DeleteNonCharacterData();
 
     sLog.outInfo("Work done in %u seconds.", (time(nullptr) - startTime));
 

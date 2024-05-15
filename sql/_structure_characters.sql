@@ -1733,4 +1733,23 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
+ALTER TABLE `character_titles`
+	ADD PRIMARY KEY (`guid`, `title`);
+
+
+CREATE TABLE `character_egg_loot` (
+	`Id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`playerGuid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`itemEntry` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`itemGuid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`refunded` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`Id`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+
+
+
 
