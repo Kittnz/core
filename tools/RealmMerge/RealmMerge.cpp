@@ -949,13 +949,42 @@ bool UpdateGuildIds()
         return false;
     }
 
+    auto GenerateGuildName = [&]() -> std::string
+    {
+        for (char chr1 = 'a'; chr1 < 'z'; chr1++)
+        {
+            for (char chr2 = 'a'; chr2 < 'z'; chr2++)
+            {
+                for (char chr3 = 'a'; chr3 < 'z'; chr3++)
+                {
+                    for (char chr4 = 'a'; chr4 < 'z'; chr4++)
+                    {
+                        std::string name2 = "PH ";
+                        name2 += chr1;
+                        name2 += chr2;
+                        name2 += chr3;
+                        name2 += chr4;
+
+                        if (guildNames1.find(name2) == guildNames1.end())
+                        {
+                            guildNames1.insert(name2);
+                            return name2;
+                        }
+                    }
+                }
+            }
+        }
+
+        return "DUPLICATE";
+    };
+    
     sLog.outInfo("Updating guild names...");
     for (auto const& itr : guildNames2)
     {
         if (!itr.second.empty() && guildNames1.find(itr.second) != guildNames1.end())
         {
             sLog.outInfo("Name of guild %s (%u) is taken. Marking for rename.", itr.second.c_str(), itr.first);
-            CharacterDatabase2.PExecute("UPDATE `guild` SET `name` = `guildid` WHERE `guildid` = %u", itr.first);
+            CharacterDatabase2.PExecute("UPDATE `guild` SET `name` = '%s' WHERE `guildid` = %u", GenerateGuildName().c_str(), itr.first);
         }
     }
 
