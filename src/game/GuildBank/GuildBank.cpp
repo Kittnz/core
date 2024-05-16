@@ -2456,7 +2456,9 @@ void GuildBank::DeleteItem(BankItem* pItem)
 	for (std::vector<BankItem*>::const_iterator itr = b_items.begin(); itr != b_items.end(); ++itr)
 		if (*itr == pItem)
 		{
+			auto bankItem = *itr;
 			b_items.erase(itr);
+			delete bankItem;
 			return;
 		}
 }
