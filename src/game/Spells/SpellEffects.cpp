@@ -554,6 +554,33 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51185: // Ley-Line Disturbance
+                {
+                    if (Creature* pCaster = ToCreature(m_caster))
+                    {
+                        Position const& home = pCaster->GetHomePosition();
+                        static uint32 affinities[] = { 59987 , 59986 , 59985 , 59984 , 59983 , 59982 };
+                        if (Creature* pAffinity = m_caster->SummonCreature(affinities[urand(0, 5)], home.x, home.y, home.z, M_PI_F, TEMPSUMMON_DEAD_DESPAWN, 30000))
+                        {
+                            pAffinity->m_Events.AddLambdaEventAtOffset([pAffinity, guid = pCaster->GetObjectGuid()]()
+                            {
+                                if (!pAffinity->IsAlive())
+                                    return;
+
+                                if (Creature* pSummoner = pAffinity->GetMap()->GetCreature(guid))
+                                {
+                                    pSummoner->CastSpell(pSummoner, 26662, true); // Berserk
+                                    pSummoner->PMonsterEmote(2384, pSummoner); // %s becomes enraged!
+                                }
+
+                                pAffinity->SendSpellGo(pAffinity, 1449); // Arcane Explosion
+                                pAffinity->DoKillUnit();
+                            }, 15000);
+                        }
+                    }
+                    
+                    return;
+                }
                 case 51086: // Lunar Shift
                 {
                     if (!m_casterUnit || !unitTarget)
