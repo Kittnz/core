@@ -90,7 +90,7 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (87, 4, 51266, 19168, 0, 'Druid: Glyph of the Ice Bear', '德鲁伊：冰熊雕文', 100, 0),
 (88, 4, 51431, 12237, 0, 'Druid: Glyph of the Frostkin', '德鲁伊：寒霜枭雕文', 100, 0),
 (89, 4, 51830, 4591, 0, 'Druid: Glyph of the Orca', '德鲁伊：虎鲸雕文', 100, 0),
-(90, 4, 51432, 0, 0, 'Druid: Glyph of the Moon', '德鲁伊：星辰雕文', 100, 0),
+(90, 4, 51432, 5745, 0, 'Druid: Glyph of the Moon', '德鲁伊：星辰雕文', 100, 0),
 (94, 4, 51056, 1992, 0, 'Druid: Glyph of the Stag', '德鲁伊：雄鹿雕文', 100, 0),
 (95, 4, 51070, 18031, 0, 'Druid: Glyph of the Arcane Treant', 'PLACEHOLDER', 100, 0),
 (101, 5, 50071, 4807, 0, 'Ivory Tallstrider', '象牙陆行鸟', 100, 0),
@@ -246,3 +246,21 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (452, 7, 41091, 0, 41091, 'Jingle Belle Frock', '冬幕节连衣裙', 200, 0),
 (453, 7, 41092, 0, 41092, 'Apparel of the Bells', '冬幕节正装', 200, 0),
 (456, 7, 68070, 0, 68070, 'Robes of the Moonless Night', '', 200, 2);
+
+UPDATE shop_items SET model_id = 19106 WHERE item = 36500;
+UPDATE shop_items SET model_id = 19127 WHERE item = 36501;
+UPDATE shop_items SET model_id = 19128 WHERE item = 36502;
+UPDATE shop_items SET model_id = 19130 WHERE item = 36503;
+UPDATE shop_items SET model_id = 19131 WHERE item = 36504;
+UPDATE shop_items SET model_id = 20369 WHERE item = 36505;
+UPDATE shop_items SET model_id = 20370 WHERE item = 36506;
+UPDATE shop_items SET model_id = 20371 WHERE item = 36507;
+UPDATE shop_items SET model_id = 20372 WHERE item = 36508;
+UPDATE shop_items SET model_id = 20374 WHERE item = 36509;
+UPDATE shop_items SET model_id = 20377 WHERE item = 36510;
+UPDATE shop_items SET model_id = 20376 WHERE item = 36511;
+UPDATE shop_items SET model_id = 20379 WHERE item = 36512;
+UPDATE shop_items SET model_id = 20380 WHERE item = 36513;
+UPDATE shop_items SET model_id = 20382 WHERE item = 36514;
+UPDATE shop_items SET model_id = 20383 WHERE item = 36515;
+UPDATE shop_items SET model_id = 20506 WHERE item = 36516;
