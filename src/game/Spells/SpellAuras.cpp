@@ -2567,13 +2567,6 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
             display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
-    case FORM_BEAR:
-    case FORM_DIREBEAR:
-        if (target->IsPlayer())
-            display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
-        else
-            display_id = 2281;
-        break;
     case FORM_GHOUL:
         if (Player::TeamForRace(target->GetRace()) == ALLIANCE)
             display_id = 10045;
@@ -2581,15 +2574,15 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_CREATUREBEAR:
         display_id = 902;
         break;
-    case FORM_NEW_TREE:
-        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;        
-       break;
     case FORM_GHOSTWOLF:
         if (target->IsPlayer())
             display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         mod = 0.80f;
         break;
     case FORM_MOONKIN:
+    case FORM_NEW_TREE:
+    case FORM_BEAR:
+    case FORM_DIREBEAR:
         if (target->IsPlayer())
             display_id = target->ToPlayer()->GetShapeshiftDisplay(form);
         else

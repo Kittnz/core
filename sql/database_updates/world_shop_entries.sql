@@ -90,6 +90,7 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (89, 4, 51830, 0, 0, 'Druid: Glyph of the Orca', '德鲁伊：虎鲸雕文', 100, 0),
 (90, 4, 51432, 0, 0, 'Druid: Glyph of the Moon', '德鲁伊：星辰雕文', 100, 0),
 (94, 4, 51056, 0, 0, 'Druid: Glyph of the Stag', '德鲁伊：雄鹿雕文', 100, 0),
+(95, 4, 51070, 0, 0, 'Druid: Glyph of the Arcane Treant', 'PLACEHOLDER', 100, 0),
 (101, 5, 50071, 0, 0, 'Ivory Tallstrider', '象牙陆行鸟', 100, 0),
 (102, 5, 50072, 0, 0, 'Brown Tallstrider', '棕色陆行鸟', 100, 0),
 (103, 5, 50073, 0, 0, 'Gray Tallstrider', '灰色陆行鸟', 100, 0),
