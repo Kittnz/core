@@ -194,7 +194,7 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (299, 8, 80694, 158, 0, 'Illusion: Scourge', '幻象：天灾军团', 120, 0),
 (300, 8, 51215, 2012, 0, 'Illusion: Satyr', '幻象：萨特', 120, 0),
 (301, 8, 53008, 18065, 0, 'Illusion: Ogre', '幻象：食人魔', 120, 0),
-(400, 7, 51306, 0, 51306, 'Large Pouch of Fashion Coins', '大袋时尚硬币', 200, 0),
+(400, 7, 51306, 0, 0, 'Large Pouch of Fashion Coins', '大袋时尚硬币', 200, 0),
 (401, 7, 81088, 0, 81088, 'Tabard of Summer Skies', '夏日天空战袍', 180, 0),
 (402, 7, 81087, 0, 81087, 'Tabard of Summer Flames', '夏日烈焰战袍', 180, 0),
 (403, 7, 23709, 0, 23709, 'Tabard of Frost', '冰霜战袍', 200, 0),
