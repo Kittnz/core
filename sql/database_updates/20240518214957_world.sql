@@ -14,5 +14,5 @@ update spell_template SET EffectBasePoints1 = 835, EffectDieSides1 = 385 WHERE e
 update spell_template SET description = '' WHERE entry = 51088; -- Blue Owl Aura
 update spell_template SET description = 'Your melee attacks have a 20% chance to strike an additional nearby opponent. This effect is disabled while shapeshifted.' WHERE entry = 51068; -- Hunter's Sweep
 
-
+UPDATE spell_template SET spelliconid = 2316 where name like '%Decisive Strike%';
 
