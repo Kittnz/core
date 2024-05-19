@@ -65,13 +65,13 @@ bool fov_build = false;
 constexpr bool bPatcher = true;
 constexpr bool bDownloadPatchFromInternet = false;
 
-#define NEW_BUILD 7100u
-#define NEW_VISUAL_BUILD "7100"
-#define NEW_VISUAL_VERSION "1.17.1"
-#define NEW_BUILD_DATE "Jan 10 2024"
+#define NEW_BUILD 7199u // Dev build. Change to 200 in the actual release.
+#define NEW_VISUAL_BUILD "7199"
+#define NEW_VISUAL_VERSION "1.17.2"
+#define NEW_BUILD_DATE "May 20 2024"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-5.mpq"
+#define PATCH_FILE "Data\\patch-6.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
