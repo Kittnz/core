@@ -488,6 +488,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand unitCommandTable[] =
     {
         { "speedinfo",      SEC_DEVELOPER,     false, &ChatHandler::HandleUnitSpeedInfoCommand,       "", nullptr },
+        { "statinfo",       SEC_DEVELOPER,     false, &ChatHandler::HandleUnitStatInfoCommand,        "", nullptr},
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
