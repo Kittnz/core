@@ -1425,7 +1425,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
     // All calculated do it!
     // Do healing and triggers
-    if (m_healing)
+    if (m_healing && unitTarget->IsAlive())
     {
         bool crit = target->isCrit;
         uint32 addhealth = m_healing;
