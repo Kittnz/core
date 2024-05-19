@@ -58,7 +58,7 @@ OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section
 OFFSET_BLUE_CHILD_MOON                        = 0x003E5B83, // Azeroth has two moons: The larger, bright and silver moon is known as The White Lady. The smaller cool, blue-green moon is known as the The Blue Child.
 OFFSET_BLUE_CHILD_MOON_TIMER                  = 0x002D2095, // Normally Blue Child comes up once in two nights, but we make it daily.
 OFFSET_SETUNIT_CODECAVE1                      = 0x00105E19,
-OFFSET_SETUNIT_MAIN                           = 0x00906060,
+OFFSET_SETUNIT_MAIN                           = 0x0048E060,
 };
 
 bool fov_build = false;
