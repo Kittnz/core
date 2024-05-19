@@ -170,6 +170,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "packetstats",    SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugPacketStatsCommand,         "", nullptr },
         { "fields",         SEC_DEVELOPER,     false, nullptr,                                             "", debugFieldsCommandTable},
         { "leakreport",     SEC_ADMINISTRATOR, true,  &ChatHandler::HandleDebugLeakReportCommand,          "", nullptr},
+        { "coeffs",         SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugCoeffsCommand,              "", nullptr},
         { nullptr,          0,                 false, nullptr,                                             "", nullptr }
     };
 
