@@ -18760,6 +18760,53 @@ bool ChatHandler::HandleDebugLeakReportCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleDebugCoeffsCommand(char* args)
+{
+
+    CommandStream stream{ args };
+
+    uint32 spellId = 0;
+    stream >> spellId;
+
+    std::string damageHeal = "";
+
+    auto spellProto = sSpellMgr.GetSpellEntry(spellId);
+
+    if (!spellProto)
+    {
+        PSendSysMessage("Spell %u does not exist.", spellId);
+        return false;
+    }
+
+    stream >> damageHeal;
+
+    auto type = DIRECT_DAMAGE;
+
+    if (damageHeal == "heal")
+        type = HEAL;
+
+
+
+    for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+    {
+        float coeff;
+
+        // Check for table values
+        if (spellProto->EffectBonusCoefficient[i] >= 0.0f)
+            coeff = spellProto->EffectBonusCoefficient[i];
+        // Calculate default coefficient
+        else
+            coeff = spellProto->CalculateDefaultCoefficient(type);
+
+        // Calculate custom coefficient
+        coeff = spellProto->CalculateCustomCoefficient(GetPlayer(), type, coeff, nullptr, true);
+
+        PSendSysMessage("Coeff for spellIndex %u : %f", i, coeff);
+    }
+
+    return true;
+}
+
 
 bool ChatHandler::HandleDebugPacketStatsCommand(char* args)
 {
