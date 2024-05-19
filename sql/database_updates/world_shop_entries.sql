@@ -167,23 +167,24 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (259, 6, 83300, 18925, 0, 'Lil\' K.T', '小克', 300, 0),
 (260, 6, 83301, 18928, 0, 'Core Hound Pet', '熔火恶犬小宠物', 300, 0),
 (261, 6, 83302, 18927, 0, 'Lil\' Ragnaros', '小拉格纳罗斯', 300, 0),
-(262, 6, 36500, 0, 0, 'Sunfire Fox', 'PLACEHOLDER', 150, 0),
-(263, 6, 36501, 0, 0, 'Tangerine Wind Serpent', 'PLACEHOLDER', 150, 0),
-(264, 6, 36502, 0, 0, 'Dark Wind Serpent', 'PLACEHOLDER', 150, 0),
-(265, 6, 36503, 0, 0, 'Emerald Wind Serpent', 'PLACEHOLDER', 150, 0),
-(266, 6, 36504, 0, 0, 'Azure Wind Serpent', 'PLACEHOLDER', 150, 0),
-(267, 6, 36505, 0, 0, 'Crimson Sabercat Cub', 'PLACEHOLDER', 150, 0),
-(268, 6, 36506, 0, 0, 'Alliance Lion Cub', 'PLACEHOLDER', 150, 0),
-(269, 6, 36507, 0, 0, 'Spot', 'PLACEHOLDER', 150, 0),
-(270, 6, 36508, 0, 0, 'Twilight Paws', 'PLACEHOLDER', 150, 0),
-(271, 6, 36509, 0, 0, 'Black Panther Cub', 'PLACEHOLDER', 150, 0),
-(272, 6, 36510, 0, 0, 'Tawny', 'PLACEHOLDER', 150, 0),
-(273, 6, 36511, 0, 0, 'Nightsaber Cub', 'PLACEHOLDER', 150, 0),
-(274, 6, 36512, 0, 0, 'Snow Cub', 'PLACEHOLDER', 150, 0),
-(275, 6, 36513, 0, 0, 'Stangletorn Tiger Cub', 'PLACEHOLDER', 150, 0),
-(276, 6, 36514, 0, 0, 'Frostsaber Cub', 'PLACEHOLDER', 150, 0),
-(277, 6, 36515, 0, 0, 'Cheetah Cub', 'PLACEHOLDER', 150, 0),
-(278, 6, 36516, 0, 0, 'Chestnut', 'PLACEHOLDER', 150, 0),
+(262, 6, 36500, 19106, 0, 'Sunfire Fox', 'PLACEHOLDER', 150, 0),
+(263, 6, 36501, 19127, 0, 'Tangerine Wind Serpent', 'PLACEHOLDER', 150, 0),
+(264, 6, 36502, 19128, 0, 'Dark Wind Serpent', 'PLACEHOLDER', 150, 0),
+(265, 6, 36503, 19130, 0, 'Emerald Wind Serpent', 'PLACEHOLDER', 150, 0),
+(266, 6, 36504, 19131, 0, 'Azure Wind Serpent', 'PLACEHOLDER', 150, 0),
+(267, 6, 36505, 20369, 0, 'Crimson Sabercat Cub', 'PLACEHOLDER', 150, 0),
+(268, 6, 36506, 20370, 0, 'Alliance Lion Cub', 'PLACEHOLDER', 150, 0),
+(269, 6, 36507, 20371, 0, 'Spot', 'PLACEHOLDER', 150, 0),
+(270, 6, 36508, 20372, 0, 'Twilight Paws', 'PLACEHOLDER', 150, 0),
+(271, 6, 36509, 20374, 0, 'Black Panther Cub', 'PLACEHOLDER', 150, 0),
+(272, 6, 36510, 20377, 0, 'Tawny', 'PLACEHOLDER', 150, 0),
+(273, 6, 36511, 20376, 0, 'Nightsaber Cub', 'PLACEHOLDER', 150, 0),
+(274, 6, 36512, 20379, 0, 'Snow Cub', 'PLACEHOLDER', 150, 0),
+(275, 6, 36513, 20380, 0, 'Stangletorn Tiger Cub', 'PLACEHOLDER', 150, 0),
+(276, 6, 36514, 20382, 0, 'Frostsaber Cub', 'PLACEHOLDER', 150, 0),
+(277, 6, 36515, 20383, 0, 'Cheetah Cub', 'PLACEHOLDER', 150, 0),
+(278, 6, 36516, 20506, 0, 'Chestnut', 'PLACEHOLDER', 150, 0),
+
 (291, 8, 51201, 522, 0, 'Illusion: Worgen', '幻象：狼人', 120, 0),
 (292, 8, 51205, 14368, 0, 'Illusion: Ghost', '幻象：幽灵', 120, 0),
 (293, 8, 51206, 8782, 0, 'Illusion: Banshee', '幻象：女妖', 120, 0),
@@ -195,6 +196,20 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (299, 8, 80694, 158, 0, 'Illusion: Scourge', '幻象：天灾军团', 120, 0),
 (300, 8, 51215, 2012, 0, 'Illusion: Satyr', '幻象：萨特', 120, 0),
 (301, 8, 53008, 18065, 0, 'Illusion: Ogre', '幻象：食人魔', 120, 0),
+(302, 8, 92030, 7970, 0, 'Illusion: Felguard', 'PLACEHOLDER', 120, 0),
+(303, 8, 92031, 18121, 0, 'Illusion: Prismatic Dragonkin', 'PLACEHOLDER', 120, 0),
+(304, 8, 92032, 18122, 0, 'Illusion: Chromatic Dragonkin', 'PLACEHOLDER', 120, 0),
+(305, 8, 92033, 18042, 0, 'Illusion: Infinite Dragonkin', 'PLACEHOLDER', 120, 0),
+(306, 8, 92034, 18120, 0, 'Illusion: Bronze Dragonkin', 'PLACEHOLDER', 120, 0),
+(307, 8, 92035, 20490, 0, 'Illusion: Blue Dragonkin', 'PLACEHOLDER', 120, 0),
+(308, 8, 92036, 20498, 0, 'Illusion: Murloc', 'PLACEHOLDER', 120, 0),
+(309, 8, 92037, 20494, 0, 'Illusion: Gilnean Worgen', 'PLACEHOLDER', 120, 0),
+(309, 8, 92038, 1201, 0, 'Illusion: Zombie', 'PLACEHOLDER', 120, 0),
+(310, 8, 92039, 1065, 0, 'Illusion: Ghoul', 'PLACEHOLDER', 120, 0),
+(311, 8, 92040, 11396, 0, 'Illusion: Scourge Mage', 'PLACEHOLDER', 120, 0),
+(312, 8, 50408, 12350, 0, 'Illusion: Dryad', 'PLACEHOLDER', 120, 0),
+(313, 8, 92041, 18778, 0, 'Illusion: Incubus', 'PLACEHOLDER', 120, 0),
+
 (401, 7, 81088, 0, 81088, 'Tabard of Summer Skies', '夏日天空战袍', 180, 0),
 (402, 7, 81087, 0, 81087, 'Tabard of Summer Flames', '夏日烈焰战袍', 180, 0),
 (403, 7, 23709, 0, 23709, 'Tabard of Frost', '冰霜战袍', 200, 0),
@@ -246,21 +261,3 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (452, 7, 41091, 0, 41091, 'Jingle Belle Frock', '冬幕节连衣裙', 200, 0),
 (453, 7, 41092, 0, 41092, 'Apparel of the Bells', '冬幕节正装', 200, 0),
 (456, 7, 68070, 0, 68070, 'Robes of the Moonless Night', '', 200, 2);
-
-UPDATE shop_items SET model_id = 19106 WHERE item = 36500;
-UPDATE shop_items SET model_id = 19127 WHERE item = 36501;
-UPDATE shop_items SET model_id = 19128 WHERE item = 36502;
-UPDATE shop_items SET model_id = 19130 WHERE item = 36503;
-UPDATE shop_items SET model_id = 19131 WHERE item = 36504;
-UPDATE shop_items SET model_id = 20369 WHERE item = 36505;
-UPDATE shop_items SET model_id = 20370 WHERE item = 36506;
-UPDATE shop_items SET model_id = 20371 WHERE item = 36507;
-UPDATE shop_items SET model_id = 20372 WHERE item = 36508;
-UPDATE shop_items SET model_id = 20374 WHERE item = 36509;
-UPDATE shop_items SET model_id = 20377 WHERE item = 36510;
-UPDATE shop_items SET model_id = 20376 WHERE item = 36511;
-UPDATE shop_items SET model_id = 20379 WHERE item = 36512;
-UPDATE shop_items SET model_id = 20380 WHERE item = 36513;
-UPDATE shop_items SET model_id = 20382 WHERE item = 36514;
-UPDATE shop_items SET model_id = 20383 WHERE item = 36515;
-UPDATE shop_items SET model_id = 20506 WHERE item = 36516;

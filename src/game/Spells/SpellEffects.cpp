@@ -2222,34 +2222,10 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                 }
                 // Illusions:
-                case 31960:
-                case 31961:
-                case 31962:
-                case 31963:
-                case 31964:
-                case 31965:
-                case 31966:
-                case 31967:
-                case 31968:
-                case 31969:
-                case 31970:
-                case 31971:
-                case 31972:
-                case 31973:
-                case 31974:
-                case 31975:
-                case 31976:
-                case 31977:
-                case 31978:
-                case 31979:
-                case 31980:
-                case 31981:
-                case 31982:
-                case 31983:
-                case 31984:
-                case 31985:
-                case 31986:
-                case 31987:
+                case 31960: case 31961: case 31962: case 31963: case 31964: case 31965: case 31966: case 31967: case 31968: case 31969: 
+                case 31970: case 31971: case 31972: case 31973: case 31974: case 31975: case 31976: case 31977: case 31978: case 31979: 
+                case 31980: case 31981: case 31982: case 31983: case 31984: case 31985: case 31986: case 31987: case 50910: case 50911:
+                case 50912: case 50913: case 50914: case 50915: case 50916: case 50917: case 50918: case 50919: case 50920: case 50921:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
@@ -2265,33 +2241,39 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                             switch (m_spellInfo->Id)
                             {
-                            // case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
                             case 31984: displayid = 10008;  break; // Chromie
-                            // case 51055: displayid = 18356;  break; // Tree Form
-                            case 31970: displayid = 4629;   break; // Shadow
                             case 31974: displayid = 2176;   break; // Rat
                             case 31979: displayid = 18251;  break; // Pandaren
                             case 31971: displayid = 12030;  break; // Flamewaker
                             case 31972: displayid = 8053;   break; // Bone Serpent
-                            case 31966: displayid = 14368;  break; // Ghost
                             case 31980: displayid = 10543;  break; // Dreadlord
                             case 31981: displayid = 7803;   break; // Smolderthorn Berserker
                             case 31982: displayid = 4923;   break; // Naga Explorer
                             case 31983: displayid = 11263;  break; // Naga Siren 
-                            // case 80175: displayid = 6292;   break; // Bronze Whelpling
                             case 31987: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
-                            case 31963: displayid = bIsMale ? 150 : 876;  break; // Dryad
-                            case 31976: displayid = (15393 + urand(0, 5)); break; // Murloc
-                            case 31977: // Scourge
+                            case 31976: displayid = (15393 + urand(0, 5)); break; // Tiny Murloc
+                            case 31966: // Ghost
                             {
-                                const std::uint32_t models[] = { 158, 612, 733 };
-                                displayid = models[urand(0, 2)];
+                                const std::uint32_t models[] = { 14368, 14592, 14594, 14695 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 31977: // Scourge Warrior
+                            {
+                                const std::uint32_t models[] = { 158, 612, 733, 18117 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 31970: // Wraith
+                            {
+                                const std::uint32_t models[] = { 4761, 16162 };
+                                displayid = models[urand(0, 1)];
                                 break;
                             }
                             case 31973: // Furbolg
                             {
-                                const std::uint32_t models[] = { 6746, 5773, 11363 };
-                                displayid = models[urand(0, 2)];
+                                const std::uint32_t models[] = { 18731, 18735, 18738, 18741, 18733, 18734, 18148, };
+                                displayid = models[urand(0, 6)];
                                 break;
                             }
                             case 31962: // Harpy
@@ -2370,6 +2352,78 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
+                            case 50910: // Felguard
+                            {
+                                const std::uint32_t models[] = { 18157, 18158, 7970, 5049, 9017 };
+                                displayid = models[urand(0, 4)];
+                                break;
+                            }
+                            case 50911: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18121, 182, 18077 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50912: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 10116, 10094, 18122 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50913: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18040, 18041, 18042, 18592 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50914: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18120, 18123, 177 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50915: // Blue Dragonkin
+                            {
+                                const std::uint32_t models[] = { 6762, 6761, 6760, 20490, 20491 };
+                                displayid = models[urand(0, 4)];
+                                break;
+                            }
+                            case 50916: // Murloc
+                            {
+                                const std::uint32_t models[] = { 20497, 20498, 20499, 20500, 20501, 20502 };
+                                displayid = models[urand(0, 5)];
+                                break;
+                            }
+                            case 50917: // Gilnean Worgen
+                            {
+                                const std::uint32_t models[] = { 20492, 20493, 20494, 20495 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50918: // Zombie
+                            {
+                                const std::uint32_t models[] = { 1196, 1197, 1198, 1200, 1201, 1202 };
+                                displayid = models[urand(0, 5)];
+                                break;
+                            }
+                            case 50919: // Ghoul
+                            {
+                                const std::uint32_t models[] = { 828, 987, 1065, 18114 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50920: displayid = 11396;  break; // Scourge Mage
+                            //case 31963: displayid = bIsMale ? 150 : 876;  break; // Dryad
+                            case 31963: // Dryad (new)
+                            {
+                                const std::uint32_t m_male[3] = { 2725, 2432, 12350 };
+                                const std::uint32_t m_female[3] = { 2721, 2722, 20505 };
+                                const std::uint32_t modelid{ urand(0, 2) };
+
+                                displayid = bIsMale ? m_male[modelid] : m_female[modelid];
+                                break;
+                            }
+                            case 50921: displayid = 18778;  break; // Incubus
                             default: break;
                             }
                             m_caster->ToPlayer()->hasIllusion = true;
