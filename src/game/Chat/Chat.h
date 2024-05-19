@@ -216,6 +216,7 @@ class ChatHandler
         bool HandleWarEffortSetGongTimeCommand(char* args);
         bool HandleWarEffortSetStageCommand(char* args);
 		bool HandleCharacterInactivityDataCommand(char* args);
+        bool HandleUnitStatInfoCommand(char* args);
 
         Object* GetObjectHelper(CommandStream& stream, uint32& lowGuid, uint32& index);
 
