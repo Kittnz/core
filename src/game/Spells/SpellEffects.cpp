@@ -554,6 +554,49 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51205: // Rift Feedback
+                {
+                    if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(51196))
+                        return;
+
+                    unitTarget->DealDamage(unitTarget, 12000, nullptr, DOT, SPELL_SCHOOL_MASK_ARCANE, m_spellInfo, false, nullptr, false, false);
+
+                    return;
+                }
+                case 51203: // Overflowing Hatred Effect
+                {
+                    if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
+                        return;
+
+                    if (unitTarget->GetEntry() == 59974)
+                        return;
+
+                    unitTarget->DealDamage(unitTarget, 6000, nullptr, DOT, SPELL_SCHOOL_MASK_FIRE, m_spellInfo, false, nullptr, false, false);
+
+                    return;
+                }
+                case 51199: // Form Rift Elemental
+                {
+                    if (!m_casterUnit)
+                        return;
+                    if (!unitTarget)
+                        return;
+
+                    m_casterUnit->SummonCreature(59974, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+                    unitTarget->DoKillUnit();
+                    m_casterUnit->DoKillUnit();
+
+                    return;
+                }
                 case 51185: // Ley-Line Disturbance
                 {
                     if (Creature* pCaster = ToCreature(m_caster))
