@@ -37,6 +37,18 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (3, 1, 80699, 0, 0, 'Token: Appearance Change', '代币：外观变更', 160, 0),
 (4, 1, 80555, 0, 0, 'Token: Pet Rename', '代币:宠物重命名', 100, 0),
 (5, 1, 51306, 0, 0, 'Pouch of Fashion Coins', '大袋时尚硬币', 200, 0),
+
+(6,  1, 50603, 0, 0, 'Change Race: Human', 'Placeholder', 350, 0),
+(7,  1, 50604, 0, 0, 'Change Race: Gnome', 'Placeholder', 350, 0),
+(8,  1, 50605, 0, 0, 'Change Race: Dwarf', 'Placeholder', 350, 0),
+(9,  1, 50606, 0, 0, 'Change Race: Night Elf', 'Placeholder', 35, 0),
+(10, 1, 50607, 0, 0, 'Change Race: Orc', 'Placeholder', 350, 0),
+(11, 1, 50608, 0, 0, 'Change Race: Troll', 'Placeholder', 350, 0),
+(12, 1, 50609, 0, 0, 'Change Race: Tauren', 'Placeholder', 350, 0),
+(13, 1, 50610, 0, 0, 'Change Race: Undead', 'Placeholder', 350, 0),
+(14, 1, 50613, 0, 0, 'Change Race: Goblin', 'Placeholder', 350, 0),
+(15, 1, 50612, 0, 0, 'Change Race: High Elf', 'Placeholder', 350, 0),
+
 (17, 2, 51920, 0, 0, 'Touch of Darkness - Undead, male', '猩红 - 人类，仅限女性', 160, 0),
 (18, 2, 51921, 0, 0, 'Blood Widow - Undead, female', '猩红 - 人类，仅限女性', 160, 0),
 (20, 2, 50105, 0, 0, 'Scarlet - Human, female only', '猩红 - 人类，仅限女性', 160, 0),
