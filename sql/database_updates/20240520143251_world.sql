@@ -1,7 +1,7 @@
 
 UPDATE `item_template` SET `display_id` = 68213 WHERE `entry` = 50000; -- 'Token: Character Name Change', '代币：角色名称变更', 160, 0),
 UPDATE `item_template` SET `display_id` = 68214 WHERE `entry` = 80499; -- 'Token: Guild Name Change', '代币：公会名称变更', 300, 0),
-UPDATE `item_template` SET `display_id` = 68212 WHERE `entry` = 80699; -- 'Token: Appearance Change', '代币：外观变更', 160, 0),
+UPDATE `item_template` SET `display_id` = 68227 WHERE `entry` = 80699; -- 'Token: Appearance Change', '代币：外观变更', 160, 0),
 UPDATE `item_template` SET `display_id` = 68215 WHERE `entry` = 80555; -- 'Token: Pet Rename', '代币:宠物重命名', 100, 0),
 
 UPDATE `item_template` SET `display_id` = 68220 WHERE `entry` = 50603; --	Race Change Token: Human
