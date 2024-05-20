@@ -88,6 +88,13 @@ enum PlayerChatTag
     CHAT_TAG_GM                 = 3,
 };
 
+enum class ChatAlphabet
+{
+    Latin,
+    Cyrillic,
+    Hanzi
+};
+
 class ChatHandler
 {
     public:
@@ -153,7 +160,7 @@ class ChatHandler
         * \param char const* channelName       : Required only for CHAT_MSG_CHANNEL
         * \param uint8 playerRank              : Used only for Defensive Channels (Value over 0 will show rank name before character name in channel)
         **/
-        static void BuildChatPacket(
+        static ChatAlphabet BuildChatPacket(
             WorldPacket& data, ChatMsg msgtype, const std::string& message, Language language = LANG_UNIVERSAL, uint32 chatTag = CHAT_TAG_NONE,
             ObjectGuid const& senderGuid = ObjectGuid(), char const* senderName = nullptr,
             ObjectGuid const& targetGuid = ObjectGuid(), char const* targetName = nullptr,
