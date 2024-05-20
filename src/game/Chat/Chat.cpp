@@ -2199,7 +2199,7 @@ bool ChatHandler::isValidChatMessage(const char* message)
     return validSequence == validSequenceIterator;
 }
 
-void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std::string& message, Language language /*= LANG_UNIVERSAL*/, uint32 chatTag /*= CHAT_TAG_NONE*/,
+ChatAlphabet ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std::string& message, Language language /*= LANG_UNIVERSAL*/, uint32 chatTag /*= CHAT_TAG_NONE*/,
                                   ObjectGuid const& senderGuid /*= ObjectGuid()*/, char const* senderName /*= nullptr*/,
                                   ObjectGuid const& targetGuid /*= ObjectGuid()*/, char const* targetName /*= nullptr*/,
                                   char const* channelName /*= nullptr*/, uint8 playerRank /*= 0*/)
@@ -2257,11 +2257,27 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std:
     }
 
     if (messageFinal.empty())
-        return;
+        return ChatAlphabet::Latin;
 
     data << uint32(messageFinal.length() + 1);
     data << messageFinal;
     data << uint8(chatTag);
+
+    {
+        std::wstring wMessage;
+        if (!Utf8toWStr(message, wMessage))
+            return ChatAlphabet::Latin;
+
+
+        if (isCyrillicString(wMessage, true))
+            return ChatAlphabet::Cyrillic;
+
+        if (isEastAsianString(wMessage, true))
+            return ChatAlphabet::Hanzi;
+    }
+
+    return ChatAlphabet::Latin;
+
 }
 
 Player * ChatHandler::GetSelectedPlayer()

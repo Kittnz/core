@@ -35,6 +35,8 @@
 #include "CreatureAI.h"
 #include "Conditions.h"
 
+#include <functional>
+
 class Player;
 //class Map;
 
@@ -104,6 +106,23 @@ namespace MaNGOS
             : i_player(pl), i_message(msg), i_toSelf(to_self), i_ownTeamOnly(ownTeamOnly), i_dist(dist) {}
         void Visit(CameraMapType &m);
         template<class SKIP> void Visit(GridRefManager<SKIP> &) {}
+    };
+
+    struct MessageDistDelivererPred
+    {
+        Player const& i_player;
+        WorldPacket* i_message;
+        bool i_toSelf;
+        bool i_ownTeamOnly;
+        float i_dist;
+
+        std::function<bool(const Player*, Player*)> i_pred;
+
+        MessageDistDelivererPred(Player const& pl, WorldPacket* msg, float dist, bool to_self, bool ownTeamOnly, std::function<bool(const Player*, Player*)> pred)
+            : i_player(pl), i_message(msg), i_toSelf(to_self), i_ownTeamOnly(ownTeamOnly), i_dist(dist), i_pred(pred) {}
+
+        void Visit(CameraMapType& m);
+        template<class SKIP> void Visit(GridRefManager<SKIP>&) {}
     };
 
     struct ObjectMessageDistDeliverer
