@@ -478,7 +478,6 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
     return true;
 }
 
-//utf8:: shows quite good performance, around 15 millis per 100k.
 bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr)
 {
     wstr.clear();

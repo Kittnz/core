@@ -194,26 +194,6 @@ MessageDistDeliverer::Visit(CameraMapType &m)
     }
 }
 
-void 
-MessageDistDelivererPred::Visit(CameraMapType& m)
-{
-    for (const auto& iter : m)
-    {
-        Player* owner = iter.getSource()->GetOwner();
-
-        if ((i_toSelf || owner != &i_player) &&
-            (!i_ownTeamOnly || owner->GetTeam() == i_player.GetTeam()) &&
-            (!i_dist || iter.getSource()->GetBody()->IsWithinDist(&i_player, i_dist)))
-        {
-            if (i_pred(&i_player, owner))
-            {
-                if (WorldSession* session = owner->GetSession())
-                    session->SendPacket(i_message);
-            }
-        }
-    }
-}
-
 void
 ObjectMessageDistDeliverer::Visit(CameraMapType &m)
 {
