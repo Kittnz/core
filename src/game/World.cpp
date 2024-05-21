@@ -1457,7 +1457,6 @@ void World::LoadConfigSettingsFromFile(bool reload)
     setConfig(CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS, "AutoPDump.DeleteAfterDays", 60);
 
     setConfig(CONFIG_BOOL_PERFORMANCE_ENABLE, "Perf.Enable", true);
-    setConfig(CONFIG_BOOL_BLOCK_CROSS_ALPHABET, "Chat.BlockCrossAlphabet", true);
 
     setConfig(CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL, "Perf.ReportInterval", 600);
     setConfig(CONFIG_UINT32_MAX_GOLD_TRANSFERRED, "Transfer.MaxGold", 300000);

@@ -372,10 +372,6 @@ class Map : public GridRefManager<NGridType>
         void MessageBroadcast(Player const*, WorldPacket*, bool to_self);
         void MessageBroadcast(WorldObject const*, WorldPacket*);
         void MessageDistBroadcast(Player const*, WorldPacket*, float dist, bool to_self, bool own_team_only = false);
-
-        //Exists for vtable dispatch speed vs branch
-        void MessageDistBroadcast(Player const* player, WorldPacket* msg, float dist, bool to_self, std::function<bool(const Player*, Player*)> pred);
-
         void MessageDistBroadcast(WorldObject const*, WorldPacket*, float dist);
 
         float GetVisibilityDistance() const 

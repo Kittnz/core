@@ -7466,15 +7466,6 @@ void Player::SendMessageToSetInRange(WorldPacket *data, float dist, bool self, b
         GetSession()->SendPacket(data);
 }
 
-void Player::SendMessageToSetInRange(WorldPacket* data, float dist, bool self, std::function<bool(const Player*, Player*)> pred) const
-{
-    if (IsInWorld())
-        GetMap()->MessageDistBroadcast(this, data, dist, false, pred);
-
-    if (self)
-        GetSession()->SendPacket(data);
-}
-
 void Player::SendDirectMessage(WorldPacket *data) const
 {
     GetSession()->SendPacket(data);
@@ -18674,28 +18665,14 @@ Pet* Player::GetMiniPet() const
 void Player::Say(std::string const& text, const uint32 language) const
 {
     WorldPacket data;
-    auto alphabet = ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
-
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
 
     if (GetSession()->IsFingerprintBanned())
         GetSession()->SendPacket(&data);
     else
     {
         float range = std::min(sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY), GetYellRange());
-
-        if (alphabet != ChatAlphabet::Latin && sWorld.getConfig(CONFIG_BOOL_BLOCK_CROSS_ALPHABET))
-        {
-            auto pred = [alphabet](const Player* source, Player* target)
-                {
-                    if (alphabet == ChatAlphabet::Hanzi && target->GetSession()->GetSessionDbcLocale() != DB_LOCALE_zhCN)
-                        return false;
-                    return true;
-                };
-
-            SendMessageToSetInRange(&data, range, true, pred);
-        }
-        else
-            SendMessageToSetInRange(&data, range, true);
+        SendMessageToSetInRange(&data, range, true);
     }
 }
 
