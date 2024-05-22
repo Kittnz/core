@@ -68,11 +68,11 @@ struct boss_golemaggAI : public ScriptedAI
             m_pInstance->SetData(TYPE_GOLEMAGG, NOT_STARTED);
 
 
-        std::list<Creature*> ChiensListe;
-        GetCreatureListWithEntryInGrid(ChiensListe, m_creature, 11672, 150.0f);
-        if (!ChiensListe.empty())
+        std::list<Creature*> core_hounds;
+        GetCreatureListWithEntryInGrid(core_hounds, m_creature, 11672, 150.0f);
+        if (!core_hounds.empty())
         {
-            for (const auto& itr : ChiensListe)
+            for (const auto& itr : core_hounds)
             {
                 if (itr->GetDeathState() == ALIVE)
                     itr->DealDamage(itr, itr->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
@@ -159,15 +159,39 @@ struct mob_core_ragerAI : public ScriptedAI
         m_uiMangleTimer = 7 * IN_MILLISECONDS;               // These times are probably wrong
     }
 
+    /**
+     * \brief Attempts to locate Golemagg within the instance
+     * \return A pointer to Golemagg if found, otherwise nullptr
+     */
+    Creature* GetGolemagg() const
+    {
+        return m_pInstance
+            ? m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_GOLEMAGG))
+            : nullptr;
+    }
+
     void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (m_pInstance)
         {
-            if (Creature* pGolemagg = m_pInstance->instance->GetCreature(m_pInstance->GetData64(DATA_GOLEMAGG)))
+            if (const auto golemagg = GetGolemagg())
             {
-                if (pGolemagg->IsAlive())
+                if (golemagg->IsAlive())
                 {
+                    auto should_revive = false;
+                    // Only allow damage to take us to 1hp
+                    if (m_creature->GetHealth() < uiDamage)
+                    {
+                        uiDamage = m_creature->GetHealth() - 1;
+                        should_revive = true;
+                    }
+
                     if (m_creature->GetHealthPercent() < 50.0f)
+                    {
+                        should_revive = true;
+                    }
+
+                    if (should_revive)
                     {
                         DoScriptText(EMOTE_LOWHP, m_creature);
                         m_creature->SetHealth(m_creature->GetMaxHealth());
@@ -181,6 +205,13 @@ struct mob_core_ragerAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        const auto golemagg = GetGolemagg();
+        if (m_creature->IsAlive() && golemagg && golemagg->IsDead())
+        {
+            m_creature->Suicide();
+            return;
+        }
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -191,7 +222,9 @@ struct mob_core_ragerAI : public ScriptedAI
                 m_uiMangleTimer = 10 * IN_MILLISECONDS;
         }
         else
+        {
             m_uiMangleTimer -= uiDiff;
+        }
 
         if (TickTimer < uiDiff)
         {
