@@ -344,7 +344,7 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
 
 bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
     {
         pPlayer->GetSession()->SendNotification("Can't change race at this moment!");
         return false;
