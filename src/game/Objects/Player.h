@@ -1674,7 +1674,7 @@ class Player final: public Unit
         void SendSpellRemoved(uint32 spell_id) const;
 
         void LearnSpell(uint32 spell_id, bool dependent, bool talent = false);
-        void RemoveSpell(uint32 spell_id, bool disabled = false, bool learn_low_rank = true);
+        void RemoveSpell(uint32 spell_id, bool disabled = false, bool learn_low_rank = true, bool hardReset = false);
         void ResetSpells();
         void LearnDefaultSpells();
         void LearnQuestRewardedSpells();
@@ -1854,7 +1854,7 @@ class Player final: public Unit
     private:
         void InitPrimaryProfessions();
         void UpdateSkillTrainedSpells(uint16 id, uint16 currVal);                                   // learns/unlearns spells dependent on a skill
-        void UpdateSpellTrainedSkills(uint32 spellId, bool apply);                                  // learns/unlearns skills dependent on a spell
+        void UpdateSpellTrainedSkills(uint32 spellId, bool apply, bool hardReset = false);                                  // learns/unlearns skills dependent on a spell
         void UpdateOldRidingSkillToNew(bool has_epic_mount);
         void UpdateSkillsForLevel();
         SkillStatusMap mSkillStatus;

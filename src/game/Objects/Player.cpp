@@ -4494,7 +4494,7 @@ void Player::LearnSpell(uint32 spell_id, bool dependent, bool talent)
     }
 }
 
-void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
+void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank, bool hardReset)
 {
     PlayerSpellMap::iterator itr = m_spells.find(spell_id);
     if (itr == m_spells.end())
@@ -4574,7 +4574,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     }
 
     // remove dependent skills
-    UpdateSpellTrainedSkills(spell_id, false);
+    UpdateSpellTrainedSkills(spell_id, false, hardReset);
 
     // activate lesser rank in spellbook/action bar, and cast it if need
     bool prev_activate = false;
@@ -7224,7 +7224,7 @@ void Player::UpdateSkillTrainedSpells(uint16 id, uint16 currVal)
     }
 }
 
-void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
+void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply, bool hardReset)
 {
     if (SpellLearnSkillNode const* skillLearnInfo = sSpellMgr.GetSpellLearnSkill(spellId))
     {
@@ -7328,7 +7328,7 @@ void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
                     ((pSkill->id == SKILL_POISONS || pSkill->id == SKILL_LOCKPICKING) && skillAbility->max_value == 0))
                 {
                     // not reset skills for professions and racial abilities
-                    if ((pSkill->categoryId == SKILL_CATEGORY_SECONDARY || pSkill->categoryId == SKILL_CATEGORY_PROFESSION) &&
+                    if (!hardReset && (pSkill->categoryId == SKILL_CATEGORY_SECONDARY || pSkill->categoryId == SKILL_CATEGORY_PROFESSION) &&
                         (IsProfessionSkill(pSkill->id) || skillAbility->racemask != 0))
                         continue;
 
@@ -18044,6 +18044,17 @@ bool Player::SaveAura(SpellAuraHolder* holder, AuraSaveStruct& saveStruct)
 
         for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
         {
+            // don't save some types of auras
+            switch (holder->GetSpellProto()->EffectApplyAuraName[i])
+            {
+                case SPELL_AURA_BIND_SIGHT:
+                case SPELL_AURA_MOD_POSSESS:
+                case SPELL_AURA_MOD_CHARM:
+                case SPELL_AURA_FAR_SIGHT:
+                case SPELL_AURA_AOE_CHARM:
+                    return false;
+            }
+
             saveStruct.damage[i] = 0;
             saveStruct.periodicTime[i] = 0;
 
@@ -18071,8 +18082,10 @@ bool Player::SaveAura(SpellAuraHolder* holder, AuraSaveStruct& saveStruct)
         saveStruct.maxduration = holder->GetAuraMaxDuration();
         for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
             saveStruct.remaincharges = holder->GetAuraCharges();
+
         return true;
     }
+
     return false;
 }
 
@@ -22782,6 +22795,17 @@ uint32 GetPriestSpellForRace(uint8 race)
     }
 }
 
+uint32 GetShamanSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+        case RACE_TAUREN: return 45500;
+        case RACE_TROLL: return 45504;
+        case RACE_ORC: return 45505;
+        default: return 0;
+    }
+}
+
 uint32 GetCapitalReputationForRace(uint8 race)
 {
     switch (race)
@@ -22818,7 +22842,7 @@ bool Player::ConvertSpell(uint32 oldSpellId, uint32 newSpellId)
     if (mySpells_itr != m_spells.end() && mySpells_itr->second.state != PLAYERSPELL_REMOVED)
     {
         CHANGERACE_LOG("Change spell %u -> %u", oldSpellId, newSpellId);
-        RemoveSpell(oldSpellId, false, false);
+        RemoveSpell(oldSpellId, false, false, true);
         if (newSpellId > 0)
             LearnSpell(newSpellId, false);
     }
@@ -22838,6 +22862,14 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
             uint32 uiRemoveSpell = GetPriestSpellForRace(oldRace);
             uint32 newSpell = GetPriestSpellForRace(newRace);
             ConvertSpell(uiRemoveSpell, newSpell);
+            break;
+        }
+
+        case CLASS_SHAMAN:
+        {
+            uint32 removeSpell = GetShamanSpellForRace(oldRace);
+            uint32 newSpell = GetShamanSpellForRace(newRace);
+            ConvertSpell(removeSpell, newSpell);
             break;
         }
     }
@@ -22923,20 +22955,8 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
-    // collect destroyed items for trash collector gaston
-    std::set<uint32> destroyedItems;
-    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT DISTINCT `item_entry` FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow()));
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
 
-            uint32 itemId = fields[0].GetUInt32();
-            destroyedItems.insert(itemId);
-
-        } while (result->NextRow());
-    }
+    CharacterDatabase.PExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow());
 
     // 2 - Items to reverse
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_items.begin(); it != sObjectMgr.factionchange_items.end(); ++it)
@@ -22946,10 +22966,6 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
             continue;
 
         uint32 removeItemId = newTeam == ALLIANCE ? it->second : it->first;
-
-        // update destroyed items in db
-        if (destroyedItems.find(removeItemId) != destroyedItems.end())
-            CharacterDatabase.PExecute("UPDATE `character_destroyed_items` SET `item_entry`=%u WHERE `item_entry`=%u && `player_guid`=%u", pNewItemProto->ItemId, removeItemId, GetGUIDLow());
 
         // update current items in inventory
         auto ChangeItem = [&](Item* item)
@@ -23003,7 +23019,7 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
                 if ((it2->first == pItem->GetEntry()) || (pItem->GetEntry() == it2->second))
                 {
                     previouslyHandled = true;
-                    CHANGERACE_LOG("Item %u is already running.", pItem->GetEntry());
+                   // CHANGERACE_LOG("Item %u is already running.", pItem->GetEntry());
                     break;
                 }
             }

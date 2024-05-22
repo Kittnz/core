@@ -2547,7 +2547,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
                 level = pCache->uiLevel;
             }
 
-            bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+            bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60);
 
             if (memberIsHardcore)
             {
