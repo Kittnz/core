@@ -7716,16 +7716,6 @@ void Unit::SetFly(bool enable)
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_FLYING | MOVEFLAG_CAN_FLY);
 }
 
-void Unit::Suicide()
-{
-    if (IsDead())
-    {
-        return;
-    }
-
-    DealDamage(this, GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-}
-
 void Unit::SetDeathState(DeathState s)
 {
     if (s != ALIVE && s != JUST_ALIVED)

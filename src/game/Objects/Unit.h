@@ -548,11 +548,6 @@ class Unit : public WorldObject
         bool IsAlive() const { return (m_deathState == ALIVE); }
         bool IsDead() const { return ((m_deathState == DEAD) || (m_deathState == CORPSE)); }
 
-        /**
-         * \brief Forces the Unit to kill itself by dealing damage equal to its current health.
-         */
-        void Suicide();
-
         DeathState GetDeathState() const { return m_deathState; }
         virtual void SetDeathState(DeathState s);           // overwritten in Creature/Player/Pet
         uint32 GetLevel() const final { return GetUInt32Value(UNIT_FIELD_LEVEL); }
