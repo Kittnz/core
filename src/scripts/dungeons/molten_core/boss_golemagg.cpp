@@ -178,20 +178,20 @@ struct mob_core_ragerAI : public ScriptedAI
             {
                 if (golemagg->IsAlive())
                 {
-                    auto should_revive = false;
+                    auto shouldRevive = false;
                     // Only allow damage to take us to 1hp
                     if (m_creature->GetHealth() < uiDamage)
                     {
                         uiDamage = m_creature->GetHealth() - 1;
-                        should_revive = true;
+                        shouldRevive = true;
                     }
 
                     if (m_creature->GetHealthPercent() < 50.0f)
                     {
-                        should_revive = true;
+                        shouldRevive = true;
                     }
 
-                    if (should_revive)
+                    if (shouldRevive)
                     {
                         DoScriptText(EMOTE_LOWHP, m_creature);
                         m_creature->SetHealth(m_creature->GetMaxHealth());
@@ -208,7 +208,7 @@ struct mob_core_ragerAI : public ScriptedAI
         const auto golemagg = GetGolemagg();
         if (m_creature->IsAlive() && golemagg && golemagg->IsDead())
         {
-            m_creature->Suicide();
+            m_creature->DoKillUnit(m_creature);
             return;
         }
 
