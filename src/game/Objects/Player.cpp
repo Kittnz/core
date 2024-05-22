@@ -22935,20 +22935,8 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
-    // collect destroyed items for trash collector gaston
-    std::set<uint32> destroyedItems;
-    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT DISTINCT `item_entry` FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow()));
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
 
-            uint32 itemId = fields[0].GetUInt32();
-            destroyedItems.insert(itemId);
-
-        } while (result->NextRow());
-    }
+    CharacterDatabase.PExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u", GetGUIDLow());
 
     // 2 - Items to reverse
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_items.begin(); it != sObjectMgr.factionchange_items.end(); ++it)
@@ -22958,10 +22946,6 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
             continue;
 
         uint32 removeItemId = newTeam == ALLIANCE ? it->second : it->first;
-
-        // update destroyed items in db
-        if (destroyedItems.find(removeItemId) != destroyedItems.end())
-            CharacterDatabase.PExecute("UPDATE `character_destroyed_items` SET `item_entry`=%u WHERE `item_entry`=%u && `player_guid`=%u", pNewItemProto->ItemId, removeItemId, GetGUIDLow());
 
         // update current items in inventory
         auto ChangeItem = [&](Item* item)
@@ -23015,7 +22999,7 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
                 if ((it2->first == pItem->GetEntry()) || (pItem->GetEntry() == it2->second))
                 {
                     previouslyHandled = true;
-                    CHANGERACE_LOG("Item %u is already running.", pItem->GetEntry());
+                   // CHANGERACE_LOG("Item %u is already running.", pItem->GetEntry());
                     break;
                 }
             }
