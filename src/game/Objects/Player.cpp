@@ -4479,7 +4479,7 @@ void Player::LearnSpell(uint32 spell_id, bool dependent, bool talent)
     }
 }
 
-void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
+void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank, bool hardReset)
 {
     PlayerSpellMap::iterator itr = m_spells.find(spell_id);
     if (itr == m_spells.end())
@@ -4559,7 +4559,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     }
 
     // remove dependent skills
-    UpdateSpellTrainedSkills(spell_id, false);
+    UpdateSpellTrainedSkills(spell_id, false, hardReset);
 
     // activate lesser rank in spellbook/action bar, and cast it if need
     bool prev_activate = false;
@@ -7209,7 +7209,7 @@ void Player::UpdateSkillTrainedSpells(uint16 id, uint16 currVal)
     }
 }
 
-void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
+void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply, bool hardReset)
 {
     if (SpellLearnSkillNode const* skillLearnInfo = sSpellMgr.GetSpellLearnSkill(spellId))
     {
@@ -7313,7 +7313,7 @@ void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
                     ((pSkill->id == SKILL_POISONS || pSkill->id == SKILL_LOCKPICKING) && skillAbility->max_value == 0))
                 {
                     // not reset skills for professions and racial abilities
-                    if ((pSkill->categoryId == SKILL_CATEGORY_SECONDARY || pSkill->categoryId == SKILL_CATEGORY_PROFESSION) &&
+                    if (!hardReset && (pSkill->categoryId == SKILL_CATEGORY_SECONDARY || pSkill->categoryId == SKILL_CATEGORY_PROFESSION) &&
                         (IsProfessionSkill(pSkill->id) || skillAbility->racemask != 0))
                         continue;
 
@@ -22811,7 +22811,7 @@ bool Player::ConvertSpell(uint32 oldSpellId, uint32 newSpellId)
     if (mySpells_itr != m_spells.end() && mySpells_itr->second.state != PLAYERSPELL_REMOVED)
     {
         CHANGERACE_LOG("Change spell %u -> %u", oldSpellId, newSpellId);
-        RemoveSpell(oldSpellId, false, false);
+        RemoveSpell(oldSpellId, false, false, true);
         if (newSpellId > 0)
             LearnSpell(newSpellId, false);
     }
