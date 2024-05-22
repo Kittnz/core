@@ -22775,6 +22775,17 @@ uint32 GetPriestSpellForRace(uint8 race)
     }
 }
 
+uint32 GetShamanSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+        case RACE_TAUREN: return 45500;
+        case RACE_TROLL: return 45504;
+        case RACE_ORC: return 45505;
+        default: return 0;
+    }
+}
+
 uint32 GetCapitalReputationForRace(uint8 race)
 {
     switch (race)
@@ -22831,6 +22842,14 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
             uint32 uiRemoveSpell = GetPriestSpellForRace(oldRace);
             uint32 newSpell = GetPriestSpellForRace(newRace);
             ConvertSpell(uiRemoveSpell, newSpell);
+            break;
+        }
+
+        case CLASS_SHAMAN:
+        {
+            uint32 removeSpell = GetShamanSpellForRace(oldRace);
+            uint32 newSpell = GetShamanSpellForRace(newRace);
+            ConvertSpell(removeSpell, newSpell);
             break;
         }
     }
