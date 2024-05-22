@@ -556,6 +556,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
             {
                 case 51205: // Rift Feedback
                 {
+                    if (!m_casterUnit)
+                        return;
+
                     if (!unitTarget)
                         return;
 
@@ -571,6 +574,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
                 case 51203: // Overflowing Hatred Effect
                 {
+                    if (!m_casterUnit)
+                        return;
+
                     if (!unitTarget)
                         return;
 
@@ -588,7 +594,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (!m_casterUnit)
                         return;
+
                     if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
                         return;
 
                     m_casterUnit->SummonCreature(59974, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);

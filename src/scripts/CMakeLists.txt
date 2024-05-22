@@ -94,6 +94,7 @@ dungeons/upper_karazhan_halls/boss_echo_of_medivh.cpp
 dungeons/upper_karazhan_halls/boss_incantagos.cpp
 dungeons/upper_karazhan_halls/boss_keeper_gnarlmoon.cpp
 dungeons/upper_karazhan_halls/boss_kruul.cpp
+dungeons/upper_karazhan_halls/boss_sanv_tasdal.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
 dungeons/gilneas_city/instance_gilneas_city.h
 dungeons/gilneas_city/instance_gilneas_city.cpp
