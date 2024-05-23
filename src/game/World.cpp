@@ -854,10 +854,10 @@ void World::LoadConfigSettings(bool reload)
         }
     }
 
-    //if (!LoadConfigSettingsFromDB(reload))
+    if (!LoadConfigSettingsFromDB(reload))
     {
         LoadConfigSettingsFromFile();
-        //ExportConfigSettingsToDB();
+        ExportConfigSettingsToDB();
     }
 
     LoadConfigSettingsCommonPart(reload);
