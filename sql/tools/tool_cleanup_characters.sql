@@ -1,12 +1,14 @@
+/* Should include account ID as well */
 CREATE TABLE `character_temp_deletion_guids` (
 	`guid` INT(10) UNSIGNED NOT NULL,
+	`account` INT(11) UNSIGNED NOT NULL,
 	PRIMARY KEY (`guid`) USING BTREE
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
-INSERT INTO character_temp_deletion_guids SELECT guid
+INSERT INTO character_temp_deletion_guids SELECT guid, account
 FROM nd_char.characters
 JOIN tw_logon_backup.account ON nd_char.characters.account = tw_logon_backup.account.id
 WHERE tw_logon_backup.account.last_login < '2023-05-30 00:00:00'
@@ -36,3 +38,17 @@ DELETE character_social FROM character_social INNER JOIN character_temp_deletion
 DELETE character_social FROM character_social INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_social.friend;
 DELETE guild_member FROM guild_member INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = guild_member.guid;
 DELETE item_instance FROM item_instance INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = item_instance.owner_guid;
+
+/* Extra commands added by Bowser run after first cleanup* */
+
+DELETE character_item_logs FROM character_item_logs INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_item_logs.playerLowGuid;
+DELETE character_transmogs FROM character_transmogs INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_transmogs.guid;
+DELETE character_account_data FROM character_account_data INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_account_data.guid;
+DELETE guild_bank_log FROM guild_bank_log INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = guild_bank_log.player;
+DELETE character_pet FROM character_pet INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_pet.owner;
+DELETE character_spell_dual_spec FROM character_spell_dual_spec INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.guid = character_spell_dual_spec.guid;
+
+/* Requires the command column for the character_temp_deletion_guids table */
+DELETE character_tutorial FROM character_tutorial INNER JOIN character_temp_deletion_guids ON character_temp_deletion_guids.account = character_tutorial.account;
+
+/* Many smaller tables such as pet_spell, pet_aura and other small tables are still not being cleaned */
