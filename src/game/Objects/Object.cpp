@@ -4957,7 +4957,7 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
 void WorldObject::DealDamageMods(Unit *victim, uint32 &damage, uint32* absorb)
 {
     Unit* pUnit = ToUnit();
-    // [Nostalrius] Pas de degats sous esprit de redemption
+    // Don't allow Spirit of Redemption to take damage
     if (!victim->IsAlive() ||
         victim->IsTaxiFlying() ||
         (victim->IsCreature() && static_cast<Creature*>(victim)->IsInEvadeMode()) ||

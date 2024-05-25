@@ -87,6 +87,7 @@
 #include "events/event_wareffort.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "PerfStats.h"
+#include "PlayerDump.h"
 
 #include <sstream>
 
@@ -22603,6 +22604,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
 	//Leave current group
 	RemoveFromGroup();
+
+    std::string pdumpName = "racechange_" + std::to_string(GetGUIDLow());
+
+    //write a pdump backup in case things go south.
+    PlayerDumpWriter().WriteDump(sWorld.GetPDumpDirectory() + "/" + pdumpName, GetGUIDLow());
 
     //Key - SkillId, Value - Skill value
     std::unordered_map<uint32, uint16> SkillValues;

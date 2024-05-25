@@ -2885,6 +2885,11 @@ bool ChatHandler::HandleDamageCommand(char* args)
     Unit* target = GetSelectedUnit();
     Player* player = m_session->GetPlayer();
 
+    if (!player)
+    {
+        return true;
+    }
+
     if (!target || !player->GetSelectionGuid())
     {
         SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
@@ -2909,6 +2914,15 @@ bool ChatHandler::HandleDamageCommand(char* args)
         SendSysMessage("Cannot damage a Hardcore Character.");
         SetSentErrorMessage(true);
         return false;
+    }
+
+    // Apply creature scripting if required
+    if (Creature* target_creature = target->ToCreature())
+    {
+        if (target_creature->AI())
+        {
+            target_creature->AI()->DamageTaken(player, damage);
+        }
     }
 
     // flat melee damage without resistence/etc reduction

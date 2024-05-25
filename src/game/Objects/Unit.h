@@ -547,6 +547,7 @@ class Unit : public WorldObject
         }
         bool IsAlive() const { return (m_deathState == ALIVE); }
         bool IsDead() const { return ((m_deathState == DEAD) || (m_deathState == CORPSE)); }
+
         DeathState GetDeathState() const { return m_deathState; }
         virtual void SetDeathState(DeathState s);           // overwritten in Creature/Player/Pet
         uint32 GetLevel() const final { return GetUInt32Value(UNIT_FIELD_LEVEL); }
