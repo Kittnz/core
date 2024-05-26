@@ -872,6 +872,12 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
             i.is_underthreshold = 1;
     }
 
+
+    auto creatureMap = creature->GetMap();
+
+    if (!creatureMap)
+        return;
+
     uint32 playerCount = 0;
 
     WorldPacket data(SMSG_LOOT_MASTER_LIST, 330);
@@ -884,7 +890,7 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
             continue;
 
         //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if(looter->IsWithinLootXPDist(creature) && creature->WasPlayerPresentAtDeath(looter))
+        if(looter->IsWithinLootXPDist(creature) && (!creatureMap->IsRaid() || creature->WasPlayerPresentAtDeath(looter)))
         {
             data << looter->GetObjectGuid();
             ++playerCount;
