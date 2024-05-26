@@ -28,3 +28,6 @@ DELETE FROM creature_movement WHERE id=2583529;
 DELETE FROM game_event_creature WHERE guid=2583529;
 DELETE FROM game_event_creature_data WHERE guid=2583529;
 DELETE FROM creature_battleground WHERE guid=2583529;
+
+-- Changes by AKALIX
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (936,-9562.703125,-3419.312012,194.413864,0.594889,0,'AKTowerRedridge');
