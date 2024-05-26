@@ -31,3 +31,5 @@ DELETE FROM creature_battleground WHERE guid=2583529;
 
 -- Changes by AKALIX
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (936,-9562.703125,-3419.312012,194.413864,0.594889,0,'AKTowerRedridge');
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (937,-3678.321533,-2158.094971,94.065086,0.633254,1,'AKTowerBarrens');
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (938,-330.990570,-691.546814,56.038486,4.196951,0,'AKTowerHillsbrad');
