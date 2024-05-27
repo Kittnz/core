@@ -454,3 +454,6 @@ DELETE FROM creature_movement WHERE id=2583528;
 DELETE FROM game_event_creature WHERE guid=2583528;
 DELETE FROM game_event_creature_data WHERE guid=2583528;
 DELETE FROM creature_battleground WHERE guid=2583528;
+
+-- Changes by GHEOR
+DELETE FROM `game_tele` WHERE `name` = 'gheorblue';
