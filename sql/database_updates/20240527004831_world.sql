@@ -359,3 +359,6 @@ REPLACE INTO `gameobject` VALUES ( 5019421, 2004771, 0, 1825.73, 336.662, 72.470
 DELETE FROM gameobject WHERE guid = '5019155';
 DELETE FROM game_event_gameobject WHERE guid = '5019155';
 DELETE FROM gameobject_battleground WHERE guid = '5019155';
+
+-- Changes by MORIENA
+REPLACE INTO `creature` VALUES (2583526,61991,0,0,0,0,-8294.43,1115.78,19.052,1.44625,120,120,0,100,100,0,0,0);
