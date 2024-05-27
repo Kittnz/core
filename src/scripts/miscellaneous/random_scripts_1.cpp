@@ -825,6 +825,13 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
 	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
+
+        if (pPlayer->IsInCombat())
+        {
+            pPlayer->GetSession()->SendNotification("You're in combat.");
+            return false;
+        }
+
         uint32 tabs = GetTabAmount(pPlayer);
 
         std::string activateText{};
