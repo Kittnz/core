@@ -829,7 +829,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
         if (pPlayer->IsInCombat())
         {
             pPlayer->GetSession()->SendNotification("You're in combat.");
-            return;
+            return false;
         }
 
         uint32 tabs = GetTabAmount(pPlayer);
