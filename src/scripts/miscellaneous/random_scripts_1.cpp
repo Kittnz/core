@@ -823,7 +823,7 @@ uint32 GetTabAmount(Player* player)
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+	if (pPlayer->GetLevel() >= 10 && pPlayer->HasSpell(46002))
 	{
 
         if (pPlayer->IsInCombat())
