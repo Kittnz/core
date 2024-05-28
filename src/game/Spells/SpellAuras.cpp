@@ -5763,9 +5763,14 @@ void Aura::HandleModDamagePercentDone(bool apply, bool Real)
     // apply item specific bonuses for already equipped weapon
     if (Real && target->GetTypeId() == TYPEID_PLAYER)
     {
-        for (int i = 0; i < MAX_ATTACK; ++i)
-            if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
-                ((Player*)target)->_ApplyWeaponDependentAuraDamageMod(pItem, WeaponAttackType(i), this, apply);
+        //Have to check this explicitly instead of using GetWeaponForAttack(i, true, true) because it checks feral form.
+        //We shouldn't apply item specific bonuses for already equipped weapons when disarmed because HandleAuraModDisarm re-applies bonuses on debuff fade.
+        if (!target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED))
+        {
+            for (int i = 0; i < MAX_ATTACK; ++i)
+                if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
+                    ((Player*)target)->_ApplyWeaponDependentAuraDamageMod(pItem, WeaponAttackType(i), this, apply);
+        }
     }
 
     // m_modifier.m_miscvalue is bitmask of spell schools
