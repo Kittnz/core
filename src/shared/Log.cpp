@@ -348,6 +348,7 @@ void Log::Initialize()
     logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
 logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
 logFiles[LOG_API] = openLogFile("ApiLogFile", nullptr, "a+");
+logFiles[LOG_RACE_CHANGE] = fopen((m_logsDir + "racechange.log").c_str(), "a+");
 
 timestampPrefix[LOG_DBERRFIX] = false;
 
