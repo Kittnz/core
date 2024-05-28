@@ -115,6 +115,7 @@ enum LogFile
     LOG_ANTICHEAT_DEBUG,
     LOG_DISCORD,
     LOG_API,
+    LOG_RACE_CHANGE,
     LOG_MAX_FILES
 };
 
