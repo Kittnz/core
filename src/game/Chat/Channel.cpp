@@ -86,7 +86,7 @@ Channel::Channel(std::string const& name, Team InTeam)
             m_flags |= CHANNEL_FLAG_CUSTOM;
             m_levelRestricted = false;
         }
-        if (m_name == u8"World")
+        if (m_name == u8"World" || m_name == u8"English")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
             m_flags &= ~CHANNEL_FLAG_CUSTOM;
