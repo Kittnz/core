@@ -22571,8 +22571,8 @@ void Player::SetControlledBy(Unit* pWho)
     i_AI = new PlayerControlledAI(this, pWho->ToCreature());
 }
 
-#define CHANGERACE_LOG(format, ...) sLog.outString("[RaceChanger/Log] " format, ##__VA_ARGS__)
-#define CHANGERACE_ERR(format, ...) sLog.outError("[RaceChanger/Err] " format, ##__VA_ARGS__)
+#define CHANGERACE_LOG(format, ...) sLog.out(LOG_RACE_CHANGE, "[RaceChanger/Log] " format, ##__VA_ARGS__)
+#define CHANGERACE_ERR(format, ...) sLog.out(LOG_RACE_CHANGE,"[RaceChanger/Err] " format, ##__VA_ARGS__)
 
 bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint32 playerbyte2)
 {
@@ -22983,6 +22983,14 @@ bool Player::ChangeItemsForRace(uint8 oldRace, uint8 newRace)
                 {
                     CHANGERACE_ERR("Cannot change %u to %u.", removeItemId, pNewItemProto->ItemId);
                     return;
+                }
+                else
+                {
+                    //Remove old mogs with old item id.
+                    //Remove old item id from xmog collection.
+                    //Add new item id to collection.
+                    RemoveTransmogsToItem(removeItemId);
+                    GetTransmogMgr()->AddToCollection(pNewItemProto->ItemId);
                 }
             }
         };
