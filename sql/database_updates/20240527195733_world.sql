@@ -1309,3 +1309,6 @@ DELETE FROM gameobject_battleground WHERE guid = '5019580';
 DELETE FROM gameobject WHERE guid = '5019572';
 DELETE FROM game_event_gameobject WHERE guid = '5019572';
 DELETE FROM gameobject_battleground WHERE guid = '5019572';
+
+-- Changes by JAMEYPTR
+REPLACE INTO `creature` VALUES (2583528,1423,0,0,0,1,16220.2,16252.8,12.6616,0.247332,120,120,0,100,100,0,0,0);
