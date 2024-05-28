@@ -1524,9 +1524,7 @@ void charactersDatabaseWorkerThread()
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
     {
-        std::this_thread::sleep_for(5s);
-        if (CharacterDatabase.HasAsyncQuery())
-            continue;
+        std::this_thread::sleep_for(2s);
 
         uint32 diff = WorldTimer::getMSTimeDiffToNow(currentMs);
         currentMs = WorldTimer::getMSTime();
@@ -1536,6 +1534,9 @@ void charactersDatabaseWorkerThread()
             returnDelay -= diff;
             continue;
         }
+
+        if (CharacterDatabase.HasAsyncQuery())
+            continue;
 
         Player::DeleteOldCharacters();
         sObjectMgr.ReturnOrDeleteOldMails(true);
