@@ -324,6 +324,13 @@ world/orgrimmar.cpp
 world/redridge_mountains.cpp
 world/searing_gorge.cpp
 world/silithus.cpp
+world/silithus/field_duty_horde/defines.h
+world/silithus/field_duty_horde/npc_hiveregal_hunterkiller.h
+world/silithus/field_duty_horde/npc_krug_skullsplit.h
+world/silithus/field_duty_horde/npc_merok_longstride.h
+world/silithus/field_duty_horde/npc_orgrimmar_legion_grunt.h
+world/silithus/field_duty_horde/npc_shadow_priestess_shai.h
+world/silithus/silithus.h
 world/silverpine_forest.cpp
 world/stonetalon_mountains.cpp
 world/stranglethorn_vale.cpp

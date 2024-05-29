@@ -509,6 +509,12 @@ void MotionMaster::MoveFeared(Unit* enemy, uint32 time)
     }
 }
 
+void MotionMaster::MovePoint(uint32 id, const Movement::Location& location, uint32 options, float speed,
+    float finalOrientation)
+{
+    MovePoint(id, location.x, location.y, location.z, options, speed, finalOrientation);
+}
+
 void MotionMaster::MoveWaypointAsDefault(uint32 startPoint /*=0*/, uint32 source /*=0==PATH_NO_PATH*/, uint32 initialDelay /*=0*/, uint32 overwriteGuid /*=0*/, uint32 overwriteEntry /*=0*/, bool repeat /*=true*/)
 {
     if (m_owner->IsCreature())
