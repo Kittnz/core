@@ -675,7 +675,10 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
             return;
 
         auto creatureMap = creature->GetMap();
-        if (!_player->IsAtGroupRewardDistance(creature) || (creatureMap->IsRaid() && !creature->WasPlayerPresentAtDeath(target)))
+
+       // bool unable = creatureMap->IsRaid() && creature->IsWorldBoss() && !creature->WasPlayerPresentAtDeath(target);
+        bool unable = false;
+        if (!_player->IsAtGroupRewardDistance(creature) || unable)
             return;
 
         pLoot = &creature->loot;

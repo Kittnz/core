@@ -890,8 +890,11 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
             continue;
 
         //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if(looter->IsWithinLootXPDist(creature) && (!creatureMap->IsRaid() || creature->WasPlayerPresentAtDeath(looter)))
+        if(looter->IsWithinLootXPDist(creature))
         {
+            //if (creatureMap->IsRaid() && creature->IsWorldBoss() && !creature->WasPlayerPresentAtDeath(looter))
+               // continue;
+               
             data << looter->GetObjectGuid();
             ++playerCount;
         }
