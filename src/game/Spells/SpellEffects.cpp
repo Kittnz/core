@@ -1184,6 +1184,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
                 }
                 case 8593:                                  // Symbol of life (restore creature to life)
+                case 51216:                                 // Redemption (Upper Karazhan Halls - King's Council - Bishop)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;

@@ -1890,6 +1890,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 51210: // Pawn’s Advance
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -7138,6 +7144,21 @@ void Aura::PeriodicDummyTick()
                     else
                         target->RemoveAurasDueToSpell(spellId);
 
+                    return;
+                }
+                case 51210: // Pawn’s Advance
+                {
+                    if (Creature* pCreature = target->ToCreature())
+                    {
+                        std::list<Creature*> list;
+                        pCreature->GetCreatureListWithEntryInGrid(list, pCreature->GetEntry(), 100.0f);
+                        
+                        float multiplier = list.size() < 2 ? 1.0f : (list.size() - 1) * 1.3f;
+                        CreatureInfo const* cInfo = pCreature->GetCreatureInfo();
+                        pCreature->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, cInfo->dmg_min * multiplier);
+                        pCreature->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, cInfo->dmg_max * multiplier);
+                        pCreature->UpdateDamagePhysical(BASE_ATTACK);
+                    }
                     return;
                 }
             }
