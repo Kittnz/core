@@ -710,6 +710,8 @@ class ChatHandler
         bool HandleDeleteItemCommand(char* args);
         bool HandleAddItemSetCommand(char* args);
 
+        bool HandleShowBordersCommand(char* args);
+
         bool HandleCleanInventoryCommand(char* args);
 
         bool HandleDiscBotStopCommand(char* args);
