@@ -9047,6 +9047,15 @@ void Player::SendLootRelease(ObjectGuid guid) const
     SendDirectMessage(&data);
 }
 
+void Player::SendLootError(ObjectGuid guid, LootError error) const
+{
+    WorldPacket data(SMSG_LOOT_RESPONSE, 10);
+    data << uint64(guid);
+    data << uint8(0);
+    data << uint8(error);
+    SendDirectMessage(&data);
+}
+
 void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
 {
     // Nostalrius : desactivation des loots / map
@@ -9334,9 +9343,6 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                             case NEED_BEFORE_GREED:
                                 group->NeedBeforeGreed(creature, loot);
                                 break;
-                            case MASTER_LOOT:
-                                group->MasterLoot(creature, loot);
-                                break;
                             default:
                                 break;
                         }
@@ -9376,6 +9382,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                             switch (group->GetLootMethod())
                             {
                                 case MASTER_LOOT:
+                                    group->MasterLoot(creature, loot, this);
                                     permission = MASTER_PERMISSION;
                                     break;
                                 case FREE_FOR_ALL:
@@ -22587,7 +22594,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 	uint32 GuildId = GetGuildId();
 
 	//Giperion Elysium: early check for guild leader
-    if (bChangeTeam)
+    if (bChangeTeam && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD))
     {
 		if (GuildId != 0)
 		{
@@ -22596,6 +22603,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 				if (guild->GetLeaderGuid() == GetObjectGuid())
 				{
 					CHANGERACE_ERR("Impossible because target is a guild leader.");
+                    GetSession()->SendNotification("You cannot change your faction if you are a guild leader.");
 					return false;
 				}
 			}
@@ -22789,15 +22797,17 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     return true;
 }
 
-uint32 GetPriestSpellForRace(uint8 race)
+auto GetPriestSpellForRace(uint8 race)
 {
     switch (race)
     {
-        case RACE_HUMAN:  return 19243;
-        case RACE_UNDEAD: return 19280; 
-        case RACE_DWARF:  return 6346; 
-        case RACE_NIGHTELF: return 2651; 
-        default: return 0;
+        case RACE_HUMAN:  return make_array(13908u, 13896u);
+        case RACE_UNDEAD: return make_array(2652u, 2944u);
+        case RACE_DWARF:  return make_array(13908u, 6346u);
+        case RACE_NIGHTELF: return make_array(10797u, 2651u);
+        case RACE_TROLL: return make_array(9035u, 18137u);
+        case RACE_HIGH_ELF: return make_array(46042u, 46043u);
+        default: return make_array(0u, 0u);
     }
 }
 
@@ -22865,9 +22875,16 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
     {
         case CLASS_PRIEST:
         {
-            uint32 uiRemoveSpell = GetPriestSpellForRace(oldRace);
-            uint32 newSpell = GetPriestSpellForRace(newRace);
-            ConvertSpell(uiRemoveSpell, newSpell);
+            auto removeSpells = GetPriestSpellForRace(oldRace);
+            auto newSpells = GetPriestSpellForRace(newRace);
+
+            if (removeSpells.size() == newSpells.size())
+            {
+                for (int i = 0; i < removeSpells.size(); ++i)
+                {
+                    ConvertSpell(removeSpells[i], newSpells[i]);
+                }
+            }
             break;
         }
 
@@ -22884,7 +22901,25 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
     ASSERT(info);
     for (const uint32 spell : info->spell)
     {
-        ConvertSpell(spell, 0);
+        //Skip weapon skills from being unlearned.
+        bool skip = false;
+        SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(spell);
+        for (auto itr = bounds.first; itr != bounds.second; ++itr)
+        {
+            SkillLineAbilityEntry const* skillAbility = itr->second;
+            SkillLineEntry const* skill = sSkillLineStore.LookupEntry(skillAbility->skillId);
+            if (!skill)
+                continue;
+
+            if (skill->categoryId == SKILL_CATEGORY_WEAPON || skill->categoryId == SKILL_CATEGORY_ARMOR)
+            {
+                skip = true;
+                break;
+            }
+        }
+
+        if (!skip)
+            ConvertSpell(spell, 0);
     }
     // Spell conversion
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_spells.begin(); it != sObjectMgr.factionchange_spells.end(); ++it)

@@ -436,7 +436,7 @@ Position const* ObjectMgr::GetCinematicInitialPosition(uint32 cinematicId)
         }
     }
     // Not found
-    sLog.outError("Can not find the starting point of cinematic %u", cinematicId);
+    //sLog.outError("Can not find the starting point of cinematic %u", cinematicId);
     return nullptr;
 }
 

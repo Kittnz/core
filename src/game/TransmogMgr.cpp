@@ -401,6 +401,7 @@ bool TransmogMgr::HasTransmog(uint32 newItemId)
 void TransmogMgr::RemoveFromCollection(uint32 itemId)
 {
 	_transmogs.erase(itemId);
+	CharacterDatabase.PExecute("DELETE FROM character_transmogs WHERE guid = %u AND itemId = %u", _owner->GetGUIDLow(), itemId);
 }
 
 void TransmogMgr::AddToCollection(uint32 itemId)

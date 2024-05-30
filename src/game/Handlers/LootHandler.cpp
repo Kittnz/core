@@ -641,61 +641,97 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
 void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
 {
     uint8 slotid;
-    ObjectGuid lootguid;
-    ObjectGuid target_playerguid;
+    ObjectGuid lootGuid;
+    ObjectGuid playerGuid;
 
-    recv_data >> lootguid >> slotid >> target_playerguid;
+    recv_data >> lootGuid >> slotid >> playerGuid;
 
     if (!_player->GetGroup() || _player->GetGroup()->GetLootMethod() != MASTER_LOOT || _player->GetGroup()->GetLooterGuid() != _player->GetObjectGuid())
     {
-        _player->SendLootRelease(GetPlayer()->GetLootGuid());
+        _player->SendLootError(lootGuid, LOOT_ERROR_DIDNT_KILL);
         return;
     }
 
-    Player *target = ObjectAccessor::FindPlayer(target_playerguid);
+    Player *target = ObjectAccessor::FindPlayer(playerGuid);
     if (!target || !target->IsInWorld())
+    {
+        _player->SendLootError(lootGuid, LOOT_ERROR_PLAYER_NOT_FOUND);
         return;
+    }
 
     // Pas de loots pour un joueur sur une autre map, ou pas dans le raid.
     if (!_player->IsInRaidWith(target) || !_player->IsInMap(target))
+    {
+        _player->SendLootError(lootGuid, LOOT_ERROR_MASTER_OTHER);
         return;
+    }
 
-    DEBUG_LOG("WorldSession::HandleLootMasterGiveOpcode (CMSG_LOOT_MASTER_GIVE, 0x02A3) Target = %s [%s].", target_playerguid.GetString().c_str(), target->GetName());
+    DEBUG_LOG("WorldSession::HandleLootMasterGiveOpcode (CMSG_LOOT_MASTER_GIVE, 0x02A3) Target = %s [%s].", playerGuid.GetString().c_str(), target->GetName());
 
-    if (_player->GetLootGuid() != lootguid)
+    if (_player->GetLootGuid() != lootGuid)
+    {
+        _player->SendLootError(lootGuid, LOOT_ERROR_DIDNT_KILL);
         return;
+    }
 
     Loot *pLoot = nullptr;
     Creature* creature = nullptr;
 
-    if (lootguid.IsCreature())
+    if (lootGuid.IsCreature())
     {
-        creature = GetPlayer()->GetMap()->GetCreature(lootguid);
+        creature = GetPlayer()->GetMap()->GetCreature(lootGuid);
         if (!creature)
+        {
+            _player->SendLootError(lootGuid, LOOT_ERROR_DIDNT_KILL);
             return;
+        }
 
         auto creatureMap = creature->GetMap();
-        if (!_player->IsAtGroupRewardDistance(creature) || (creatureMap->IsRaid() && !creature->WasPlayerPresentAtDeath(target)))
+
+       // bool unable = creatureMap->IsRaid() && creature->IsWorldBoss() && !creature->WasPlayerPresentAtDeath(target);
+        bool unable = false;
+        if (!_player->IsAtGroupRewardDistance(creature) || unable)
+        {
+            _player->SendLootError(lootGuid, LOOT_ERROR_TOO_FAR);
             return;
+        }
 
         pLoot = &creature->loot;
     }
-    else if (lootguid.IsGameObject())
+    else if (lootGuid.IsGameObject())
     {
-        GameObject *go = GetPlayer()->GetMap()->GetGameObject(lootguid);
+        GameObject *go = GetPlayer()->GetMap()->GetGameObject(lootGuid);
         if (!go)
+        {
+            _player->SendLootError(lootGuid, LOOT_ERROR_DIDNT_KILL);
             return;
+        }
+
         if (!_player->IsAtGroupRewardDistance(go))
+        {
+            _player->SendLootError(lootGuid, LOOT_ERROR_TOO_FAR);
             return;
+        }
 
         pLoot = &go->loot;
     }
     else
+    {
+        _player->SendLootError(lootGuid, LOOT_ERROR_DIDNT_KILL);
         return;
+    }
 
     if (slotid >= pLoot->items.size())
     {
+        _player->SendLootRelease(lootGuid);
+        _player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, nullptr, nullptr);
         DEBUG_LOG("AutoLootItem: Player %s might be using a hack! (slot %d, size %lu)", GetPlayer()->GetName(), slotid, (unsigned long)pLoot->items.size());
+        return;
+    }
+
+    if (!pLoot->IsAllowedLooter(playerGuid, false))
+    {
+        _player->SendLootError(lootGuid, LOOT_ERROR_MASTER_OTHER);
         return;
     }
 
@@ -708,14 +744,19 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
         target->SendEquipError(msg, nullptr, nullptr, item.itemid);
 
         // send duplicate of error massage to master looter
-        _player->SendEquipError(msg, nullptr, nullptr, item.itemid);
+        if (msg == EQUIP_ERR_BAG_FULL || msg == EQUIP_ERR_INVENTORY_FULL)
+            _player->SendLootError(lootGuid, LOOT_ERROR_MASTER_INV_FULL);
+        else if (msg == EQUIP_ERR_CANT_CARRY_MORE_OF_THIS)
+            _player->SendLootError(lootGuid, LOOT_ERROR_MASTER_UNIQUE_ITEM);
+        else
+            _player->SendLootError(lootGuid, LOOT_ERROR_MASTER_OTHER);
         return;
     }
 
     // now move item from loot to target inventory
     if (Item* newitem = target->StoreNewItem(dest, item.itemid, true, item.randomPropertyId))
     {
-        sLog.out(LOG_LOOTS, "Master loot %s gives %ux%u to %s [loot from %s]", _player->GetShortDescription().c_str(), item.count, item.itemid, target->GetShortDescription().c_str(), lootguid.GetString().c_str());
+        sLog.out(LOG_LOOTS, "Master loot %s gives %ux%u to %s [loot from %s]", _player->GetShortDescription().c_str(), item.count, item.itemid, target->GetShortDescription().c_str(), lootGuid.GetString().c_str());
 
         // Turtle:: Make raid looted items not appear soul bound.
         // Restrict to non-stackable and non party-loot.
@@ -749,9 +790,9 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
                 target->GetName(),
                 target->GetSession()->GetAccountId(),
                 target->GetSession()->GetRemoteAddress(),
-                LogLoot::SourceType(lootguid),
-                lootguid.GetCounter(),
-                lootguid.GetEntry(),
+                LogLoot::SourceType(lootGuid),
+                lootGuid.GetCounter(),
+                lootGuid.GetEntry(),
                 0,
                 item.itemid,
                 item.count,
