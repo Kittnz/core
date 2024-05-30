@@ -982,16 +982,13 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
         if (!playerToRoll || !playerToRoll->GetSession() || !playerToRoll->IsInWorld())
             continue;
 
-        if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) && lootItem.AllowedForPlayer(playerToRoll, lootTarget))
+        if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) &&
+            lootItem.AllowedForPlayer(playerToRoll, lootTarget) &&
+            loot->IsAllowedLooter(playerToRoll->GetObjectGuid(), false) &&
+            playerToRoll->IsWithinLootXPDist(lootTarget))
         {
-            if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) &&
-                lootItem.AllowedForPlayer(playerToRoll, lootTarget) &&
-                loot->IsAllowedLooter(playerToRoll->GetObjectGuid(), false) &&
-                playerToRoll->IsWithinLootXPDist(lootTarget))
-            {
-                r->playerVote[playerToRoll->GetObjectGuid()] = ROLL_NOT_EMITED_YET;
-                ++r->totalPlayersRolling;
-            }
+            r->playerVote[playerToRoll->GetObjectGuid()] = ROLL_NOT_EMITED_YET;
+            ++r->totalPlayersRolling;
         }
     }
 
