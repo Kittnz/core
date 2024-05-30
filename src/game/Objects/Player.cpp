@@ -22776,15 +22776,17 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     return true;
 }
 
-uint32 GetPriestSpellForRace(uint8 race)
+auto GetPriestSpellForRace(uint8 race)
 {
     switch (race)
     {
-        case RACE_HUMAN:  return 19243;
-        case RACE_UNDEAD: return 19280; 
-        case RACE_DWARF:  return 6346; 
-        case RACE_NIGHTELF: return 2651; 
-        default: return 0;
+        case RACE_HUMAN:  return make_array(13908u, 13896u);
+        case RACE_UNDEAD: return make_array(2652u, 2944u);
+        case RACE_DWARF:  return make_array(13908u, 6346u);
+        case RACE_NIGHTELF: return make_array(10797u, 2651u);
+        case RACE_TROLL: return make_array(9035u, 18137u);
+        case RACE_HIGH_ELF: return make_array(46042u, 46043u);
+        default: return make_array(0u, 0u);
     }
 }
 
@@ -22852,9 +22854,16 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
     {
         case CLASS_PRIEST:
         {
-            uint32 uiRemoveSpell = GetPriestSpellForRace(oldRace);
-            uint32 newSpell = GetPriestSpellForRace(newRace);
-            ConvertSpell(uiRemoveSpell, newSpell);
+            auto removeSpells = GetPriestSpellForRace(oldRace);
+            auto newSpells = GetPriestSpellForRace(newRace);
+
+            if (removeSpells.size() == newSpells.size())
+            {
+                for (int i = 0; i < removeSpells.size(); ++i)
+                {
+                    ConvertSpell(removeSpells[i], newSpells[i]);
+                }
+            }
             break;
         }
 
