@@ -22574,7 +22574,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 	uint32 GuildId = GetGuildId();
 
 	//Giperion Elysium: early check for guild leader
-    if (bChangeTeam)
+    if (bChangeTeam && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD))
     {
 		if (GuildId != 0)
 		{
@@ -22583,6 +22583,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 				if (guild->GetLeaderGuid() == GetObjectGuid())
 				{
 					CHANGERACE_ERR("Impossible because target is a guild leader.");
+                    GetSession()->SendNotification("You cannot change your faction if you are a guild leader.");
 					return false;
 				}
 			}
@@ -22880,7 +22881,25 @@ bool Player::ChangeSpellsForRace(uint8 oldRace, uint8 newRace)
     ASSERT(info);
     for (const uint32 spell : info->spell)
     {
-        ConvertSpell(spell, 0);
+        //Skip weapon skills from being unlearned.
+        bool skip = false;
+        SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(spell);
+        for (auto itr = bounds.first; itr != bounds.second; ++itr)
+        {
+            SkillLineAbilityEntry const* skillAbility = itr->second;
+            SkillLineEntry const* skill = sSkillLineStore.LookupEntry(skillAbility->skillId);
+            if (!skill)
+                continue;
+
+            if (skill->categoryId == SKILL_CATEGORY_WEAPON || skill->categoryId == SKILL_CATEGORY_ARMOR)
+            {
+                skip = true;
+                break;
+            }
+        }
+
+        if (!skip)
+            ConvertSpell(spell, 0);
     }
     // Spell conversion
     for (std::map<uint32, uint32>::const_iterator it = sObjectMgr.factionchange_spells.begin(); it != sObjectMgr.factionchange_spells.end(); ++it)
