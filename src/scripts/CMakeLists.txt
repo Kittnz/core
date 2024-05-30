@@ -93,6 +93,7 @@ dungeons/upper_karazhan_halls/boss_anomalus.cpp
 dungeons/upper_karazhan_halls/boss_echo_of_medivh.cpp
 dungeons/upper_karazhan_halls/boss_incantagos.cpp
 dungeons/upper_karazhan_halls/boss_keeper_gnarlmoon.cpp
+dungeons/upper_karazhan_halls/boss_kings_council.cpp
 dungeons/upper_karazhan_halls/boss_kruul.cpp
 dungeons/upper_karazhan_halls/boss_sanv_tasdal.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp

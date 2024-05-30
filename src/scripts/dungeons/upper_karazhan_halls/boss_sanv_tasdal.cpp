@@ -281,7 +281,7 @@ CreatureAI* GetAI_rift_portal(Creature* pCreature)
     return new npc_rift_portalAI(pCreature);
 }
 
-void AddSC_boss_kruul()
+void AddSC_boss_sanv_tasdal()
 {
     Script* newscript;
 

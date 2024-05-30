@@ -283,7 +283,9 @@ void AddSC_boss_anomalus();
 void AddSC_boss_echo_of_medivh();
 void AddSC_boss_incantagos();
 void AddSC_boss_keeper_gnarlmoon();
+void AddSC_boss_kings_council();
 void AddSC_boss_kruul();
+void AddSC_boss_sanv_tasdal();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
@@ -616,7 +618,9 @@ void AddScripts()
     AddSC_boss_echo_of_medivh();
     AddSC_boss_incantagos();
     AddSC_boss_keeper_gnarlmoon();
+    AddSC_boss_kings_council();
     AddSC_boss_kruul();
+    AddSC_boss_sanv_tasdal();
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
 
