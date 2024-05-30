@@ -815,7 +815,7 @@ void Group::SendLootAllPassed(Roll const& r)
     }
 }
 
-void Group::GroupLoot(Creature *creature, Loot *loot)
+void Group::GroupLoot(Creature *creature, Loot* loot)
 {
     for (uint8 itemSlot = 0; itemSlot < loot->items.size(); ++itemSlot)
     {
@@ -838,7 +838,7 @@ void Group::GroupLoot(Creature *creature, Loot *loot)
     }
 }
 
-void Group::NeedBeforeGreed(Creature *creature, Loot *loot)
+void Group::NeedBeforeGreed(Creature *creature, Loot* loot)
 {
     for (uint8 itemSlot = 0; itemSlot < loot->items.size(); ++itemSlot)
     {
@@ -861,7 +861,7 @@ void Group::NeedBeforeGreed(Creature *creature, Loot *loot)
     }
 }
 
-void Group::MasterLoot(Creature* creature, Loot* loot)
+void Group::MasterLoot(Creature* creature, Loot* loot, Player* player)
 {
     for (auto& i : loot->items)
     {
@@ -889,12 +889,8 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
         if (!looter->IsInWorld())
             continue;
 
-        //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if(looter->IsWithinLootXPDist(creature))
+        if (looter->IsWithinLootXPDist(creature) && loot->IsAllowedLooter(looter->GetObjectGuid(), false))
         {
-            //if (creatureMap->IsRaid() && creature->IsWorldBoss() && !creature->WasPlayerPresentAtDeath(looter))
-               // continue;
-               
             data << looter->GetObjectGuid();
             ++playerCount;
         }
@@ -902,15 +898,7 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
 
     data.put<uint8>(0, playerCount);
 
-    for (GroupReference *itr = GetFirstMember(); itr != nullptr; itr = itr->next())
-    {
-        Player *looter = itr->getSource();
-        if (!looter->IsInWorld())
-            continue;
-        //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if (looter->IsWithinLootXPDist(creature))
-            looter->GetSession()->SendPacket(&data);
-    }
+    player->GetSession()->SendPacket(&data);
 }
 
 bool Group::CountRollVote(Player* player, ObjectGuid const& lootedTarget, uint32 itemSlot, RollVote vote)
@@ -996,8 +984,10 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
 
         if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) && lootItem.AllowedForPlayer(playerToRoll, lootTarget))
         {
-            //if (playerToRoll->IsWithinDistInMap(lootTarget, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-            if (playerToRoll->IsWithinLootXPDist(lootTarget))
+            if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) &&
+                lootItem.AllowedForPlayer(playerToRoll, lootTarget) &&
+                loot->IsAllowedLooter(playerToRoll->GetObjectGuid(), false) &&
+                playerToRoll->IsWithinLootXPDist(lootTarget))
             {
                 r->playerVote[playerToRoll->GetObjectGuid()] = ROLL_NOT_EMITED_YET;
                 ++r->totalPlayersRolling;
