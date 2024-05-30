@@ -9032,6 +9032,15 @@ void Player::SendLootRelease(ObjectGuid guid) const
     SendDirectMessage(&data);
 }
 
+void Player::SendLootError(ObjectGuid guid, LootError error) const
+{
+    WorldPacket data(SMSG_LOOT_RESPONSE, 10);
+    data << uint64(guid);
+    data << uint8(0);
+    data << uint8(error);
+    SendDirectMessage(&data);
+}
+
 void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
 {
     // Nostalrius : desactivation des loots / map
@@ -9319,9 +9328,6 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                             case NEED_BEFORE_GREED:
                                 group->NeedBeforeGreed(creature, loot);
                                 break;
-                            case MASTER_LOOT:
-                                group->MasterLoot(creature, loot);
-                                break;
                             default:
                                 break;
                         }
@@ -9361,6 +9367,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                             switch (group->GetLootMethod())
                             {
                                 case MASTER_LOOT:
+                                    group->MasterLoot(creature, loot, this);
                                     permission = MASTER_PERMISSION;
                                     break;
                                 case FREE_FOR_ALL:
