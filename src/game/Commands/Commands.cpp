@@ -1488,6 +1488,37 @@ bool ChatHandler::HandleCleanInventoryCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleShowBordersCommand(char* args)
+{
+    auto player = GetPlayer();
+    uint32 mapId = player->GetMapId();
+    auto map = player->GetMap();
+    auto points = sMapMgr.GetBorderPoints(mapId);
+
+    std::sort(points.begin(), points.end(), [pl = GetPlayer()](const auto& pt1, const auto& pt2)
+        {
+            return pl->GetDistance2d(Position(pt1.first, pt1.second, 0, 0)) < pl->GetDistance2d(Position(pt2.first, pt2.second, 0, 0));
+        });
+
+    //find 2 closest ones and draw a border between them.
+    auto pt1 = points[0];
+    auto pt2 = points[1];
+
+    player->SummonCreature(1, pt1.first, pt1.second, map->GetHeight(pt1.first, pt1.second, MAX_HEIGHT), 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
+    player->SummonCreature(1, pt2.first, pt2.second, map->GetHeight(pt2.first, pt2.second, MAX_HEIGHT), 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
+
+    auto coords = pt1;
+    for (int i = 0; i < 20; ++i)
+    {
+        coords.first += (pt2.first - pt1.first) / 20;
+        coords.second += (pt2.second - pt1.second) / 20;
+        player->SummonCreature(1, coords.first, coords.second, map->GetHeight(coords.first, coords.second, MAX_HEIGHT), 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
+    }
+
+    PSendSysMessage("Closest border point : X: %f, Y: %f", pt1.first, pt1.second);
+    return true;
+}
+
 bool ChatHandler::HandleDeleteItemCommand(char* args)
 {
     char* cId = ExtractKeyFromLink(&args, "Hitem");

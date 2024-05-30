@@ -105,6 +105,8 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         void Initialize(void);
         void Update(uint32);
 
+        std::vector<std::pair<float, float>> GetBorderPoints(uint32 mapId);
+
         void SetGridCleanUpDelay(uint32 t)
         {
             if( t < MIN_GRID_DELAY )
