@@ -5570,6 +5570,18 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
 
                 break;
             }
+            case 51233: // Crustaceous Claws - Cla'ckora boss
+            {
+                uint32 count = 0;
+                for (const auto& ihit : m_UniqueTargetInfo)
+                    if (ihit.effectMask & (1 << eff_idx))
+                        ++count;
+
+                if (count > 1)
+                    bonus += (count - 1) * 500;
+
+                break;
+            }
         }
     }
 
