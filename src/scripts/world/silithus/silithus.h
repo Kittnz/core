@@ -1,6 +1,7 @@
 #pragma once
 
 #include "field_duty_alliance/npc_captain_blackanvil.h"
+#include "field_duty_alliance/npc_janela_stouthammer.h"
 #include "field_duty_alliance/trigger_field_duty_alliance.h"
 #include "field_duty_horde/npc_hiveregal_hunterkiller.h"
 #include "field_duty_horde/npc_krug_skullsplit.h"
@@ -12,6 +13,7 @@ inline void RegisterScripts_Silithus()
 {
     // Field Duty - Alliance
     npc_captain_blackanvil::register_script();
+    npc_janela_stouthammer::register_script();
     trigger_field_duty_alliance::register_script();
 
     // Field Duty - Horde

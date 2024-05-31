@@ -21,6 +21,10 @@ namespace silithus
         const Movement::Location SPAWN_CAPTAIN_BLACKANVIL = { -7165.353516f, 1381.246460f, 2.919770f, 4.331480f };
         const Movement::Location SPAWN_JANELA_STOUTHAMMER = { -7178.58f,1392.09f, 2.8017f, 2.25148f };
     }
+    namespace quests
+    {
+        const uint32_t QUEST_FIELD_DUTY = 8507;
+    }
     namespace event_state
     {
         enum EventState
