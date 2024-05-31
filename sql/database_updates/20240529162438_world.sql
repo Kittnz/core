@@ -134,3 +134,27 @@ UPDATE `creature`
 SET `position_x` = -7169.549805, `position_y` = 1393.961304, 
     `position_z` = 2.706470, `orientation` = 3.019884 
 WHERE `guid` = 42749;
+
+-- Assign script to Captain Blackanvil
+UPDATE `creature_template` 
+SET `script_name` = 'npc_captain_blackanvil' 
+WHERE `entry` = 15440;
+
+-- Assign gossip to Captain Blackanvil
+REPLACE INTO `npc_gossip` (`npc_guid`, `textid`) 
+VALUES (166513, 2593000);
+REPLACE INTO `npc_text` (
+    `ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, 
+    `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, 
+    `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, 
+    `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`
+) VALUES (
+    2593000, 2593000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+REPLACE INTO `broadcast_text` (
+    `entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, 
+    `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`
+) VALUES (
+    2593000, 'Eh, what do ye want? Can\'t ye see I\'m busy? Go talk to Lieutenant Stouthammer if ye need somethin\'.', 
+    NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
+);
