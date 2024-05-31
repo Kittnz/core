@@ -1,10 +1,10 @@
 -- Warsong Gulch
 
-INSERT INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22672, 22651, 'Outriders Plate Legguards');
-INSERT INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22748, 22673, 'Outriders Chain Legguards');
-INSERT INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22750, 22741, 'Outriders Lizardhide Pants');
-INSERT INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22749, 22740, 'Outriders Leather Pants');
-INSERT INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22752, 22747, 'Outriders Silk Leggings');
+REPLACE INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22672, 22651, 'Outriders Plate Legguards');
+REPLACE INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22748, 22673, 'Outriders Chain Legguards');
+REPLACE INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22750, 22741, 'Outriders Lizardhide Pants');
+REPLACE INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22749, 22740, 'Outriders Leather Pants');
+REPLACE INTO `player_factionchange_items` (`alliance_id`, `horde_id`, `comment`) VALUES (22752, 22747, 'Outriders Silk Leggings');
 
 -- Alterac Valley
 
