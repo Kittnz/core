@@ -84,7 +84,7 @@ public:
         {
             return false;
         }
-        player->PlayerTalkClass->SendGossipMenu(player->GetGossipTextId(creature), creature->GetGUID());
+        player->PlayerTalkClass->SendGossipMenu(Player::GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
 
