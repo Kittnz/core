@@ -13,22 +13,25 @@ private:
     // How long the quest will remain completable after the event is finished
     AbilityTimer m_eventCompleteTimer = AbilityTimer(0, 180000, 180000, 0);
 
-    Creature* find_hivezora_abomination() const
+    [[nodiscard]] Creature* find_hivezora_abomination() const
     {
-        return me->FindNearestCreature(silithus::creatures::ENTRY_HIVEZORA_ABOMINATION, 200.0f);
+        const auto abomination = me->FindNearestCreature(silithus::creatures::ENTRY_HIVEZORA_ABOMINATION, 200.0f, true);
+        return abomination
+            ? abomination
+            : me->FindNearestCreature(silithus::creatures::ENTRY_HIVEZORA_ABOMINATION, 200.0f, false);
     }
 
-    Creature* find_captain_blackanvil() const
+    [[nodiscard]] Creature* find_captain_blackanvil() const
     {
         return me->FindNearestCreature(silithus::creatures::ENTRY_CAPTAIN_BLACKANVIL, 200.0f);
     }
 
-    Creature* find_arcanist_nozzlespring() const
+    [[nodiscard]] Creature* find_arcanist_nozzlespring() const
     {
         return me->FindNearestCreature(silithus::creatures::ENTRY_ARCANIST_NOZZLESPRING, 200.0f);
     }
 
-    Creature* find_janela_stouthammer() const
+    [[nodiscard]] Creature* find_janela_stouthammer() const
     {
         return me->FindNearestCreature(silithus::creatures::ENTRY_JANELA_STOUTHAMMER, 200.0f);
     }
@@ -36,7 +39,7 @@ private:
     void set_event_state_waiting_for_start()
     {
         m_eventState = silithus::event_state::WAITING_FOR_START;
-        m_eventCompleteTimer.Reset();
+        m_eventCompleteTimer.reset();
         if (auto const abomination = find_hivezora_abomination())
         {
             abomination->DisappearAndDie();
@@ -87,6 +90,11 @@ public:
     {
     }
 
+    silithus::event_state::EventState event_state() const
+    {
+        return m_eventState;
+    }
+
     void on_event_start()
     {
         set_event_state_dialog_in_progress();
@@ -94,13 +102,13 @@ public:
 
     void UpdateAI(const uint32 delta) override
     {
-        m_pulseTimer.Update(delta);
-        if (!m_pulseTimer.IsReady())
+        m_pulseTimer.update(delta);
+        if (!m_pulseTimer.is_ready())
         {
             return;
         }
 
-        m_pulseTimer.Reset();
+        m_pulseTimer.reset();
 
         update_event_state(delta);
     }
