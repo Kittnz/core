@@ -3238,7 +3238,7 @@ void Creature::DisappearAndDie()
 {
     if (!IsInWorld())
     {
-        sLog.outInfo("[CRASH][%s]DisappearAndDie: le mob n'est pas InWorld.", GetName());
+        sLog.outInfo("[CRASH][%s]DisappearAndDie: Creature is not InWorld.", GetName());
         return;
     }
 
