@@ -1949,8 +1949,7 @@ class Player final: public Unit
         GridReference<Player> m_gridRef;
         MapReference m_mapRef;
 
-        uint32 m_lastFallTime;
-        float  m_lastFallZ;
+        float m_fallStartZ;
         uint32 m_bNextRelocationsIgnored;
 
         // Recall position
@@ -2039,13 +2038,12 @@ class Player final: public Unit
 
         bool HasMovementFlag(MovementFlags f) const;        // for script access to m_movementInfo.HasMovementFlag
         void UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode);
-        void SetFallInformation(uint32 time, float z)
+        void SetFallInformation(float fallStartZ)
         {
-            m_lastFallTime = time;
-            m_lastFallZ = z;
+            m_fallStartZ = fallStartZ;
         }
         void HandleFall(MovementInfo const& movementInfo);
-        bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
+        bool IsFalling() const { return m_fallStartZ != 0; }
         uint32 m_lastTransportTime; // Turtle: used to prevent fall damage from stepping off transport
 
         bool IsControlledByOwnClient() const { return m_session->GetClientMoverGuid() == GetObjectGuid(); }
