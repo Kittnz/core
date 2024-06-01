@@ -352,8 +352,6 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         pMover->HandleEmoteState(0);
     }
 
-    HandleMoverRelocation(pMover, movementInfo);
-
     // fall damage generation (ignore in flight case that can be triggered also at lags in moment teleportation to another map).
     if (opcode == MSG_MOVE_FALL_LAND && pPlayerMover && !pPlayerMover->IsTaxiFlying())
         pPlayerMover->HandleFall(movementInfo);
@@ -371,6 +369,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     }
 
+    HandleMoverRelocation(pMover, movementInfo);
     
     Player* exceptPlayer = _player;
     if (_player->IsFlying())
@@ -500,10 +499,11 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -607,10 +607,11 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -703,10 +704,11 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -771,6 +773,8 @@ void WorldSession::HandleMoveKnockBackAck(WorldPacket& recvData)
             m_moveRejectTime = WorldTimer::getMSTime();
             return;
         }
+
+        pPlayerMover->SetFallInformation(0);
     }
 
     HandleMoverRelocation(pMover, movementInfo);

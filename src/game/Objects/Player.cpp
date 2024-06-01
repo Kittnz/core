@@ -741,8 +741,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_summon_y = 0.0f;
     m_summon_z = 0.0f;
 
-    m_lastFallTime = 0;
-    m_lastFallZ = 0;
+    m_fallStartZ = 0;
 
     watching_cinematic_entry = 0;
 
@@ -2629,7 +2628,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         // this will be used instead of the current location in SaveToDB
         m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
         DisableSpline();
-        SetFallInformation(0, z);
+        SetFallInformation(0);
 
         // code for finish transfer called in WorldSession::HandleMovementOpcodes()
         // at client packet MSG_MOVE_TELEPORT_ACK
@@ -2777,7 +2776,7 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
             oldmap->Remove(this, false);
 
         DisableSpline();
-        SetFallInformation(0, data->z);
+        SetFallInformation(0);
         ScheduleDelayedOperation(DELAYED_CAST_HONORLESS_TARGET);
 
         // Clear hostile refs so that we have no cross-map (and thread) references being maintained
@@ -16506,7 +16505,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     }
 
     // has to be called after last Relocate() in Player::LoadFromDB
-    SetFallInformation(0, GetPositionZ());
+    SetFallInformation(0);
 
     _LoadPlayerSavedSpecs(holder->GetResult(PLAYER_LOGIN_QUERY_SAVED_SPECS));
 
@@ -19558,7 +19557,7 @@ void Player::ContinueTaxiFlight()
 void Player::CleanupFlagsOnTaxiPathFinished()
 {
     // Reset fall information to prevent fall dmg at arrive
-    SetFallInformation(0, GetPositionZ());
+    SetFallInformation(0);
 
     // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
     ClearUnitState(UNIT_STAT_TAXI_FLIGHT);
@@ -22133,13 +22132,34 @@ InventoryResult Player::CanEquipUniqueItem(ItemPrototype const* itemProto, uint8
 
 void Player::HandleFall(MovementInfo const& movementInfo)
 {
+    if (!m_fallStartZ)
+        return;
+
+    if (!m_movementInfo.HasMovementFlag(MOVEFLAG_FALLINGFAR))
+        return;
+    
+    if (m_movementInfo.t_guid != movementInfo.t_guid)
+        return;
+
+    if (m_movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) != movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
+        return;
+
+    // the normal fall time from height of 14.57 yards
+    if (movementInfo.fallTime < 1229)
+        return;
+
+    Position const& currentPos = (movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) ? movementInfo.GetTransportPos() : movementInfo.GetPos());
+
+    if (m_fallStartZ < currentPos.z)
+        return;
+
     // calculate total z distance of the fall
-    float z_diff = m_lastFallZ - movementInfo.GetPos().z;
-    DEBUG_LOG("zDiff = %f", z_diff);
+    float z_diff = m_fallStartZ - currentPos.z;
+    //printf("zDiff = %f\n", z_diff);
     
     // Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
     // 14.57 can be calculated by resolving damageperc formula below to 0
-    if (z_diff >= 14.57f && !IsDead() && !IsGameMaster() &&
+    if (z_diff >= 14.57f && IsAlive() && !IsGameMaster() &&
         !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
         !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL) && (m_lastTransportTime + 3000 < WorldTimer::getMSTime()))
     {
@@ -22155,8 +22175,8 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
             uint32 damage = (uint32)(damageperc * GetMaxHealth() * sWorld.getConfig(CONFIG_FLOAT_RATE_DAMAGE_FALL) * TakenTotalMod);
 
-            float height = movementInfo.GetPos().z;
-            UpdateAllowedPositionZ(movementInfo.GetPos().x, movementInfo.GetPos().y, height);
+            float height = currentPos.z;
+            UpdateAllowedPositionZ(currentPos.x, currentPos.y, height);
 
             if (damage > 0)
             {
@@ -22167,17 +22187,71 @@ void Player::HandleFall(MovementInfo const& movementInfo)
                 // handle hardcore potential fall damage
                 if (IsHardcore())
                 {
-                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos().x, movementInfo.GetPos().y, movementInfo.GetPos().z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), currentPos.x, currentPos.y, currentPos.z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
                     damage /= 10;
                 }
                 
                 EnvironmentalDamage(DAMAGE_FALL, damage);
             }
-
-            //Z given by moveinfo, LastZ, FallTime, WaterZ, MapZ, Damage, Safefall reduction
-            DEBUG_LOG("FALLDAMAGE z=%f sz=%f pZ=%f FallTime=%d mZ=%f damage=%d SF=%d" , movementInfo.GetPos().z, height, GetPositionZ(), movementInfo.GetFallTime(), height, damage, safe_fall);
         }
     }
+}
+
+void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)
+{
+    if (opcode == MSG_MOVE_FALL_LAND || opcode == MSG_MOVE_START_SWIM || minfo.HasMovementFlag(MOVEFLAG_HOVER | MOVEFLAG_SAFE_FALL))
+    {
+        if (IsFalling())
+            SetFallInformation(0);
+        return;
+    }
+
+    if (minfo.HasMovementFlag(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR))
+    {
+        float currentZ = minfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) ? minfo.t_pos.z : minfo.pos.z;
+
+        if (!m_fallStartZ || m_fallStartZ < currentZ || m_movementInfo.t_guid != minfo.t_guid)
+            SetFallInformation(currentZ);
+
+        return;
+    }
+
+    if (IsFalling())
+        SetFallInformation(0);
+}
+
+/**
+ * FallMode = 0 implies that the player is dying, or already dead, and the proper death state will be set.
+ *          = 1 simply causes the player to plummet towards the ground, and not suffer any damage.
+ *          = 2 causes the player to plummet towards the ground, and causes falling damage, regardless
+ *              of any auras that might of prevented fall damage.
+ */
+bool Player::FallGround(uint8 FallMode)
+{
+    // Let's abort after we called this function one time
+    if (GetDeathState() == CORPSE_FALLING && FallMode == 0)
+        return false;
+
+    float x, y, z;
+    GetPosition(x, y, z);
+    float ground_Z = GetMap()->GetHeight(x, y, true);
+    if (ground_Z > INVALID_HEIGHT)
+        ground_Z = z;
+
+    float z_diff = 0.0f;
+    if ((z_diff = fabs(ground_Z - z)) < 0.1f)
+        return false;
+
+
+    // Below formula for falling damage is from Player::HandleFall
+    if (FallMode == 2 && z_diff >= 14.57f)
+    {
+        uint32 damage = std::min(GetMaxHealth(), (uint32)((0.018f * z_diff - 0.2426f) * GetMaxHealth()));
+        if (damage > 0) EnvironmentalDamage(DAMAGE_FALL, damage);
+    }
+    else if (FallMode == 0)
+        Unit::SetDeathState(CORPSE_FALLING);
+    return true;
 }
 
 void Player::LearnTalent(uint32 talentId, uint32 talentRank)
@@ -22292,46 +22366,6 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
     // learn! (other talent ranks will unlearned at learning)
     LearnSpell(spellid, false, true);
     DETAIL_LOG("TalentID: %u Rank: %u Spell: %u\n", talentId, talentRank, spellid);
-}
-
-void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)
-{
-    if (m_lastFallTime >= minfo.GetFallTime() || m_lastFallZ <= minfo.GetPos().z || opcode == MSG_MOVE_FALL_LAND)
-        SetFallInformation(minfo.GetFallTime(), minfo.GetPos().z);
-}
-
-/**
- * FallMode = 0 implies that the player is dying, or already dead, and the proper death state will be set.
- *          = 1 simply causes the player to plummet towards the ground, and not suffer any damage.
- *          = 2 causes the player to plummet towards the ground, and causes falling damage, regardless
- *              of any auras that might of prevented fall damage.
- */
-bool Player::FallGround(uint8 FallMode)
-{
-    // Let's abort after we called this function one time
-    if (GetDeathState() == CORPSE_FALLING && FallMode == 0)
-        return false;
-
-    float x, y, z;
-    GetPosition(x, y, z);
-    float ground_Z = GetMap()->GetHeight(x, y, true);
-    if (ground_Z > INVALID_HEIGHT)
-        ground_Z = z;
-
-    float z_diff = 0.0f;
-    if ((z_diff = fabs(ground_Z - z)) < 0.1f)
-        return false;
-
-
-    // Below formula for falling damage is from Player::HandleFall
-    if (FallMode == 2 && z_diff >= 14.57f)
-    {
-        uint32 damage = std::min(GetMaxHealth(), (uint32)((0.018f * z_diff - 0.2426f) * GetMaxHealth()));
-        if (damage > 0) EnvironmentalDamage(DAMAGE_FALL, damage);
-    }
-    else if (FallMode == 0)
-        Unit::SetDeathState(CORPSE_FALLING);
-    return true;
 }
 
 void Player::UnsummonPetTemporaryIfAny()
