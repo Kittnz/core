@@ -24,18 +24,3 @@ update item_template set armor = 5 where entry = 55374; -- Enraging Waistwraps
 update item_template set armor = 17 where entry = 55377; -- Chemist's Shawl
 update item_template set spellid_1 = 51152, spelltrigger_1 = 1, display_id = 18858 where entry = 55378;
 
-
-
-
-
-
-
-/*Royal Seal of Eldre'thalas Changes:
-Mage: Now grants 23 Spellpower instead of 8 MP5.
-Priest: Now grants 18 Spellpower, 15 Healing Power and 4 MP5.
-Druid and Shaman: Now grants 23 Spellpower and 22 Healing Power.
-Hunter: Now grants 38 Attack Power and 10 Ranged Attack Power.
-Warrior: Now grants 30 Attack Power and 8 Defense.
-Paladin: Now grants 18 Spellpower, 15 Healing Power and 8 Defense.
-Warlock and Rogue are unchanged.
-*/
