@@ -10613,6 +10613,63 @@ bool ChatHandler::HandleNpcFlagCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcFollowCommand(char* /*args*/)
+{
+    Player* player = m_session->GetPlayer();
+    Creature* creature = GetSelectedCreature();
+
+    if (!creature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // Follow player - Using pet's default dist and angle
+    creature->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+
+    PSendSysMessage(LANG_CREATURE_FOLLOW_YOU_NOW, creature->GetName());
+    return true;
+}
+
+bool ChatHandler::HandleNpcUnfollowCommand(char* /*args*/)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    Creature* pCreature = GetSelectedCreature();
+
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    MotionMaster* creatureMotion = pCreature->GetMotionMaster();
+    if (creatureMotion->empty() ||
+        creatureMotion->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
+    {
+        PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU, pCreature->GetName());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    FollowMovementGenerator<Creature> const* mgen
+        = static_cast<FollowMovementGenerator<Creature> const*>((creatureMotion->top()));
+
+    if (mgen->GetTarget() != pPlayer)
+    {
+        PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU, pCreature->GetName());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // reset movement
+    creatureMotion->MovementExpired(true);
+
+    PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU_NOW, pCreature->GetName());
+    return true;
+}
+
 bool ChatHandler::HandleNpcDeleteCommand(char* args)
 {
     Creature* unit = nullptr;

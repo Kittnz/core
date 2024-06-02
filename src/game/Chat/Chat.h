@@ -550,6 +550,8 @@ class ChatHandler
         bool HandleNpcEvadeCommand(char* args);
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
+        bool HandleNpcFollowCommand(char* args);
+        bool HandleNpcUnfollowCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
         bool HandleNpcSpawnInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
