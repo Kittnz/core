@@ -554,6 +554,15 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51238: // Harrowing Nets
+                {
+                    if (!unitTarget)
+                        return;
+
+                    unitTarget->DoResetThreat();
+
+                    return;
+                }
                 case 51205: // Rift Feedback
                 {
                     if (!m_casterUnit)
