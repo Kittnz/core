@@ -8087,9 +8087,9 @@ bool QuestRewarded_go_altar_of_clackora(Player* pPlayer, GameObject* pGo, Quest 
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 41345 && !pGo->FindNearestCreature(61993, 50.0F))
+    if (pQuest->GetQuestId() == 41345 && !pGo->FindNearestCreature(59963, 50.0F))
     {
-        pGo->SummonCreature(61993, pPlayer->GetPositionX() + 2.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ() + 1.0F, 0.0F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600 * IN_MILLISECONDS);
+        pGo->SummonCreature(59963, pPlayer->GetPositionX() + 2.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ() + 1.0F, 0.0F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 600 * IN_MILLISECONDS);
     }
 
     return false;
