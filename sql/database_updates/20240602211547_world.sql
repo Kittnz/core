@@ -1,0 +1,1 @@
+update creature_template set name = 'Prince' where entry = 62004;
