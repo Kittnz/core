@@ -469,6 +469,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "evade",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcEvadeCommand,            "", nullptr },
         { "factionid",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcFactionIdCommand,        "", nullptr },
         { "flag",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcFlagCommand,             "", nullptr },
+        { "follow",         SEC_DEVELOPER,     false, &ChatHandler::HandleNpcFollowCommand,           "", nullptr },
+        { "unfollow",       SEC_DEVELOPER,     false, &ChatHandler::HandleNpcUnfollowCommand,         "", nullptr },
         { "info",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
         { "move",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
         { "playemote",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
@@ -988,6 +990,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "perf",           SEC_ADMINISTRATOR,   true, nullptr,                                         "", perfCommandTable },
         { "blockegg",       SEC_DEVELOPER,       false, &ChatHandler::HandleBlockEggsCommand,           "", nullptr},
         { "cleaninventory", SEC_DEVELOPER,       false, &ChatHandler::HandleCleanInventoryCommand,      "", nullptr},
+        { "showborders", SEC_DEVELOPER,          false, &ChatHandler::HandleShowBordersCommand,         "", nullptr },
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

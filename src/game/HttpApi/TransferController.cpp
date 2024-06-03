@@ -202,7 +202,7 @@ namespace HttpApi
             return;
         }
 
-        if (!d.HasMember("data") || !d.HasMember("targetAccountId"))
+        if (!d.HasMember("data") || !d.HasMember("targetAccountId") || !d.HasMember("source_guid"))
         {
             resp.set_content("Bad JSON.", "text/plain");
             sLog.out(LOG_API, "Bad JSON for Proceed Transfer.\nData:%s\nIP:%s", body.c_str(), req.remote_addr.c_str());
@@ -211,6 +211,7 @@ namespace HttpApi
 
         std::string pdumpData = d["data"].GetString();
         uint32 accountId = d["targetAccountId"].GetUint();
+        uint32 oldGuidLow = d["source_guid"].GetUint();
 
 
         sLog.out(LOG_API, "Accepting transfer for targetAccount:%u\nData:%s", accountId, body.c_str());
@@ -219,13 +220,17 @@ namespace HttpApi
         std::string charName = "";
         
         std::shared_ptr<uint32> guidPtr = std::make_shared<uint32>(0);
-        std::function<void(bool)> transCallback = [guidPtr, accountId](bool transSuccess)
+        std::function<void(bool)> transCallback = [guidPtr, accountId, oldGuidLow](bool transSuccess)
         {
             if (transSuccess)
             {
                 //only set char active if transaction for migration transfer succeeded.
                 CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", *guidPtr);
-                CharacterDatabase.PExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 0x20 WHERE `guid` = %u", *guidPtr); // add WAS_TRANSFERRED custom flag to take away items after login.
+                CharacterDatabase.PExecute("UPDATE `characters` SET `customFlags` = `customFlags` | x20 WHERE `guid` = %u", *guidPtr); // add WAS_TRANSFERRED custom flag to take away items after login.
+
+                //Set all purchase logs to new char guid to fix HC not getting proper refunds.
+                if (*guidPtr && oldGuidLow)               
+                    LoginDatabase.PExecute("UPDATE shop_logs SET guid = %u WHERE guid = %u", *guidPtr, oldGuidLow);
             }
             else
                 sLog.out(LOG_API, "FAILED to run transaction for account ID %u", accountId);

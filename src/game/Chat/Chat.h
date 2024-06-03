@@ -552,6 +552,8 @@ class ChatHandler
         bool HandleNpcEvadeCommand(char* args);
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
+        bool HandleNpcFollowCommand(char* args);
+        bool HandleNpcUnfollowCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
         bool HandleNpcSpawnInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
@@ -711,6 +713,8 @@ class ChatHandler
         bool HandleAddItemCommand(char* args);
         bool HandleDeleteItemCommand(char* args);
         bool HandleAddItemSetCommand(char* args);
+
+        bool HandleShowBordersCommand(char* args);
 
         bool HandleCleanInventoryCommand(char* args);
 

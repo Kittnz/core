@@ -697,6 +697,9 @@ void GuildBank::UpdateTab(std::string msg)
 		return;
 	}
 
+	CharacterDatabase.escape_string(name);
+	CharacterDatabase.escape_string(icon);
+
 	if (name == "" || name.empty() || name.length() > 30)
 	{
 		_player->SendAddonMessage(prefix, "UpdateTab:Error:WrongName");

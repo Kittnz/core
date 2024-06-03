@@ -11101,7 +11101,7 @@ void Unit::SetWalk(bool enable, bool asDefault)
 void Unit::DisableSpline()
 {
     if (Player* me = ToPlayer())
-        me->SetFallInformation(0, me->GetPositionZ());
+        me->SetFallInformation(0);
 
     m_movementInfo.RemoveMovementFlag(MOVEFLAG_SPLINE_ENABLED | MOVEFLAG_FORWARD);
     movespline->_Interrupt();
