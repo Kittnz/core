@@ -17609,7 +17609,7 @@ bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
     if (!(stream >> index))
     {
         SendSysMessage("Wrong index.");
-        return nullptr;
+        return false;
     }
 
     std::string type;
