@@ -1,4 +1,4 @@
-﻿#include "GameObjectAI.h"
+#include "GameObjectAI.h"
 #include "AccountMgr.h"
 #include "Anticheat.h"
 #include "AsyncCommandHandlers.h"
@@ -17446,12 +17446,6 @@ Object* ChatHandler::GetObjectHelper(CommandStream& stream, uint32& lowGuid, uin
     }
 
 
-    if (!(stream >> index))
-    {
-        SendSysMessage("Wrong index.");
-        return nullptr;
-    }
-
 
     if (iequals(target, "player"))
         targetObject = sObjectAccessor.FindPlayer(ObjectGuid(HIGHGUID_PLAYER, 0, lowGuid));
@@ -17535,10 +17529,17 @@ bool ChatHandler::HandleUnitStatInfoCommand(char* args)
     PSendSysMessage("Total shadow resist: %i", pTarget->GetResistance(SPELL_SCHOOL_SHADOW));
     PSendSysMessage("Total arcane resist: %i", pTarget->GetResistance(SPELL_SCHOOL_ARCANE));
     PSendSysMessage("Attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_ATTACK_POWER));
+<<<<<<< HEAD
     PSendSysMessage("Attack power mods: %u", pTarget->GetUInt32Value(UNIT_FIELD_ATTACK_POWER_MODS));
     PSendSysMessage("Attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Ranged attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER));
     PSendSysMessage("Ranged attack power mods: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS));
+=======
+    PSendSysMessage("Attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS));
+    PSendSysMessage("Attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
+    PSendSysMessage("Ranged attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER));
+    PSendSysMessage("Ranged attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS));
+>>>>>>> patch_1171
     PSendSysMessage("Ranged attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Min ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE));
     PSendSysMessage("Max ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE));
@@ -17624,6 +17625,10 @@ bool ChatHandler::HandleUnitStatInfoCommand(char* args)
     return true;
 }
 
+
+
+
+
 bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
 {
     CommandStream stream{ args };
@@ -17636,8 +17641,14 @@ bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
 
     uint32 lowGuid, index;
 
-
     Object* targetObject = GetSelectedUnit();
+
+<<<<<<< HEAD
+    Object* targetObject = GetSelectedUnit();
+=======
+    if (!targetObject)
+        targetObject = GetSelectedCreature();
+>>>>>>> patch_1171
 
     if (!targetObject)
         targetObject = GetObjectHelper(stream, lowGuid, index);
@@ -17645,8 +17656,28 @@ bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
     if (!targetObject)
         return false;
 
+    if (!(stream >> index))
+    {
+        SendSysMessage("Wrong index.");
+        return false;
+    }
 
-    PSendSysMessage("Value of index %u : %u", index, targetObject->GetUInt32Value(index));
+    std::string type;
+
+    if (!(stream >> type))
+    {
+        SendSysMessage("Bad type. Try: float,uint,int");
+        return false;
+    }
+
+    strToLower(type);
+
+    if (type == "float")
+        SendSysMessage(string_format("Value of index {} : {}", index, targetObject->GetFloatValue(index)).c_str());
+    else if (type == "int")
+        SendSysMessage(string_format("Value of index {} : {}", index, targetObject->GetInt32Value(index)).c_str());
+    else
+        SendSysMessage(string_format("Value of index {} : {}", index, targetObject->GetUInt32Value(index)).c_str());
 
     return true;
 }
@@ -17665,6 +17696,9 @@ bool ChatHandler::HandleDebugFieldsModifyCommand(char* args)
     uint32 lowGuid, index;
 
     Object* targetObject = GetSelectedUnit();
+
+    if (!targetObject)
+      targetObject = GetSelectedCreature();
 
     if (!targetObject)
         targetObject = GetObjectHelper(stream, lowGuid, index);
