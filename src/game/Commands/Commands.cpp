@@ -17496,10 +17496,10 @@ bool ChatHandler::HandleUnitStatInfoCommand(char* args)
     PSendSysMessage("Total shadow resist: %i", pTarget->GetResistance(SPELL_SCHOOL_SHADOW));
     PSendSysMessage("Total arcane resist: %i", pTarget->GetResistance(SPELL_SCHOOL_ARCANE));
     PSendSysMessage("Attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_ATTACK_POWER));
-    PSendSysMessage("Attack power mods: %u", pTarget->GetUInt32Value(UNIT_FIELD_ATTACK_POWER_MODS));
+    PSendSysMessage("Attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS));
     PSendSysMessage("Attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Ranged attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER));
-    PSendSysMessage("Ranged attack power mods: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS));
+    PSendSysMessage("Ranged attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS));
     PSendSysMessage("Ranged attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Min ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE));
     PSendSysMessage("Max ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE));
