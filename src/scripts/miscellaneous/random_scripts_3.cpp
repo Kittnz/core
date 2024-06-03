@@ -8093,6 +8093,8 @@ bool QuestRewarded_go_altar_of_clackora(Player* pPlayer, GameObject* pGo, Quest 
     }
 
     return false;
+}
+
 struct npc_froggerAI : public ScriptedPetAI
 {
     npc_froggerAI(Creature* pCreature) : ScriptedPetAI(pCreature) { Reset(); }
