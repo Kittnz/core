@@ -21,3 +21,6 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 delete from creature where id = 62004;
 INSERT INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
 (62004, 0, 0, 0, 1, 1935.21, -1106.34, 92.8667, 0.873329, 86400, 86400, 0, 100, 100, 0, 0, 0);
+
+update creature_template set script_name = 'npc_frogger' where entry = 62004;
+update spell_template set name = 'Frogged', description = 'Transform yourself into a frog.  Lasts $d.', auradescription = 'Ribit!' where entry = 25199;

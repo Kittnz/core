@@ -7949,11 +7949,49 @@ bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&
     return true;
 }
 
+struct npc_froggerAI : public ScriptedPetAI
+{
+    npc_froggerAI(Creature* pCreature) : ScriptedPetAI(pCreature) { Reset(); }
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override { }
+    void EnterCombat() { }
+
+    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
+    {
+        if (m_creature && m_creature->IsAlive())
+        {
+            if (uiEmote == TEXTEMOTE_KISS && !pPlayer->HasAura(25199))
+            {
+                m_creature->MonsterSay(66707);
+                pPlayer->CastSpell(pPlayer, 25199, false);
+            }
+        }
+    }
+
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_frogger(Creature* pCreature)
+{
+    return new npc_froggerAI(pCreature);
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_frogger";
+    newscript->GetAI = &GetAI_npc_frogger;
+    newscript->RegisterSelf();
 
     pNewScript = new Script;
     pNewScript->Name = "npc_snow_vendor";
