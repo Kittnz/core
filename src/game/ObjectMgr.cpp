@@ -5137,7 +5137,7 @@ void ObjectMgr::LoadBattlegroundEntranceTriggers()
     while (result->NextRow());
 }
 
-uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Team team)
+uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Team team, std::optional<std::function<bool(const TaxiNodesEntry*)>> pred)
 {
     bool found = false;
     float dist = 0.0f;
@@ -5157,6 +5157,9 @@ uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Te
 
         // skip not taxi network nodes
         if ((sTaxiNodesMask[field] & submask) == 0)
+            continue;
+
+        if (pred && !(*pred)(node))
             continue;
 
         float dist2 = (node->x - x) * (node->x - x) + (node->y - y) * (node->y - y) + (node->z - z) * (node->z - z);

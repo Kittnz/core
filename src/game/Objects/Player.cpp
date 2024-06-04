@@ -22746,31 +22746,53 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");*/
 
 
+
+        //If we swap factions we have to find a suitable counter xfac flight node. These flight paths may be close to each other or they might be far away.
+    //Whatever the conditions, they should have the same Zone so that we don't unlock far away paths.
     std::vector<uint32> learnableNodes;
 
-    for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
+    if (bChangeTeam)
     {
-        TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
-        if (!node || node->map_id != mapId)
-            continue;
+        for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
+        {
+            TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
+            if (!node)
+                continue;
 
-        if (!m_taxi.IsTaximaskNodeKnown(node->ID))
-            continue;
+            if (!m_taxi.IsTaximaskNodeKnown(node->ID))
+                continue;
 
-        //taxi is known, find nearest path for opposite faction and learn that instead.
-        if (uint32 newNode = sObjectMgr.GetNearestTaxiNode(node->x, node->y, node->z, node->map_id, newTeam))
-            learnableNodes.push_back(newNode);
+            auto map = sMapMgr.FindMap(node->map_id, sMapMgr.GetContinentInstanceId(node->map_id, node->x, node->y));
+
+            if (!map)
+                continue;
+
+            uint32 zoneId = map->GetTerrain()->GetZoneId(node->x, node->y, node->z);
+
+            auto pred = [testNode = node, map, zoneId](const TaxiNodesEntry* targetNode) {
+                //The faction should already match the new faction here and it should also be on the same map ID, don't have to check.
+
+                if (map->GetTerrain()->GetZoneId(targetNode->x, targetNode->y, targetNode->z) != zoneId)
+                    return false;
+                return true;
+            };
+
+
+            //taxi is known, find nearest path for opposite faction and learn that instead.
+            if (uint32 newNode = sObjectMgr.GetNearestTaxiNode(node->x, node->y, node->z, node->map_id, newTeam, std::move(pred)))
+                learnableNodes.push_back(newNode);
+        }
     }
 
-    // reset taxi state and learn all learnableNodes.   
-    if (newTeam == ALLIANCE)
-        GetTaxi().LoadTaxiMask("2 0 0 0 0 0 0 0 ");
-    else
-        GetTaxi().LoadTaxiMask("32 0 0 0 0 0 0 0 ");
-
-    for (uint32 node : learnableNodes)
+    //Reset to init new-race state if changing factions.
+    if (bChangeTeam)
     {
-        GetTaxi().SetTaximaskNode(node);
+        InitTaxiNodes();
+
+        for (uint32 node : learnableNodes)
+        {
+            GetTaxi().SetTaximaskNode(node);
+        }
     }
 
     SetFactionForRace(newRace);
