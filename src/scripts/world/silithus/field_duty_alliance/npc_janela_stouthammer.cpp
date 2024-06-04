@@ -87,7 +87,7 @@ void npc_janela_stouthammer::EventReset()
         return;
     }
 
-    m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER);
+    m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER.orientation);
     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     m_creature->CombatStop(true);
     m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_FLAG_SPAWNING);

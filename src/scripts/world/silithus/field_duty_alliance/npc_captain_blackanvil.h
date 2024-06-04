@@ -55,16 +55,6 @@ public:
         {
             return;
         }
-
-        const auto event_state = trigger->EventState();
-        if (event_state == Silithus::EventState::FINISHED)
-        {
-            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-        }
-        else
-        {
-            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-        }
     }
 
     static CreatureAI* GetAI(Creature* pCreature)
