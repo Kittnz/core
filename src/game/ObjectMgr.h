@@ -780,7 +780,7 @@ class ObjectMgr
         void IncreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]++; }
         void DecreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]--; }
 
-        uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team );
+        uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team, std::optional<std::function<bool(const TaxiNodesEntry*)>> pred = std::nullopt);
         void GetTaxiPath( uint32 source, uint32 destination, uint32 &path, uint32 &cost);
         uint32 GetTaxiMountDisplayId( uint32 id, Team team, bool allowed_alt_team = false);
 
