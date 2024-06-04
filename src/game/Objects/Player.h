@@ -868,6 +868,15 @@ class PlayerTaxi
             else
                 return false;
         }
+
+        void SetTaximaskNodeMasked(uint8 field, uint32 submask)
+        {
+            if (field >= m_taximask.size())
+                return;
+
+            m_taximask[field] |= submask;
+        }
+
         void AppendTaximaskTo(ByteBuffer& data, bool all);
 
         // Destinations
