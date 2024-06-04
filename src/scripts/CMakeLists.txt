@@ -325,8 +325,14 @@ world/redridge_mountains.cpp
 world/searing_gorge.cpp
 world/silithus.cpp
 world/silithus/field_duty_alliance/defines.h
+world/silithus/field_duty_alliance/npc_arcanist_nozzlespring.cpp
+world/silithus/field_duty_alliance/npc_arcanist_nozzlespring.h
 world/silithus/field_duty_alliance/npc_captain_blackanvil.h
+world/silithus/field_duty_alliance/npc_hivezora_abomination.cpp
+world/silithus/field_duty_alliance/npc_hivezora_abomination.h
+world/silithus/field_duty_alliance/npc_janela_stouthammer.cpp
 world/silithus/field_duty_alliance/npc_janela_stouthammer.h
+world/silithus/field_duty_alliance/trigger_field_duty_alliance.cpp
 world/silithus/field_duty_alliance/trigger_field_duty_alliance.h
 world/silithus/field_duty_horde/defines.h
 world/silithus/field_duty_horde/npc_hiveregal_hunterkiller.h

@@ -18,9 +18,9 @@ public:
 
     void Reset() override
     {
-        m_gcdTimer.reset();
-        m_healingWaveTimer.reset();
-        m_lightningShieldTimer.reset();
+        m_gcdTimer.Reset();
+        m_healingWaveTimer.Reset();
+        m_lightningShieldTimer.Reset();
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -80,26 +80,26 @@ public:
             return;
         }
 
-        m_gcdTimer.update(uiDiff);
-        m_flameShockTimer.update(uiDiff);
-        m_healingWaveTimer.update(uiDiff);
+        m_gcdTimer.Update(uiDiff);
+        m_flameShockTimer.Update(uiDiff);
+        m_healingWaveTimer.Update(uiDiff);
 
         // Only tick Lightning Shield timer if the aura is not present
         const auto lightningShieldAura = m_creature->GetAura(m_lightningShieldTimer.spell_id(), EFFECT_INDEX_0);
         if (!lightningShieldAura)
         {
-            m_lightningShieldTimer.update(uiDiff);
+            m_lightningShieldTimer.Update(uiDiff);
         }
 
         // Heal ourselves if required
         if (m_creature->GetHealthPercent() < 80)
         {
-            if (m_healingWaveTimer.is_ready() && m_gcdTimer.is_ready())
+            if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
             {
                 if (DoCastSpellIfCan(m_creature, m_healingWaveTimer.spell_id()) == CAST_OK)
                 {
-                    m_gcdTimer.reset();
-                    m_healingWaveTimer.reset();
+                    m_gcdTimer.Reset();
+                    m_healingWaveTimer.Reset();
                     m_creature->ResetAttackTimer();
                 }
             }
@@ -110,12 +110,12 @@ public:
         {
             if (krugSkullsplit->GetHealthPercent() < 80)
             {
-                if (m_healingWaveTimer.is_ready() && m_gcdTimer.is_ready())
+                if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
                     if (DoCastSpellIfCan(krugSkullsplit, m_healingWaveTimer.spell_id()) == CAST_OK)
                     {
-                        m_gcdTimer.reset();
-                        m_healingWaveTimer.reset();
+                        m_gcdTimer.Reset();
+                        m_healingWaveTimer.Reset();
                         m_creature->ResetAttackTimer();
                     }
                 }
@@ -127,12 +127,12 @@ public:
         {
             if (shadowPriestessShai->GetHealthPercent() < 80)
             {
-                if (m_healingWaveTimer.is_ready() && m_gcdTimer.is_ready())
+                if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
                     if (DoCastSpellIfCan(shadowPriestessShai, m_healingWaveTimer.spell_id()) == CAST_OK)
                     {
-                        m_gcdTimer.reset();
-                        m_healingWaveTimer.reset();
+                        m_gcdTimer.Reset();
+                        m_healingWaveTimer.Reset();
                         m_creature->ResetAttackTimer();
                     }
                 }
@@ -140,23 +140,23 @@ public:
         }
 
         // Rebuff Lightning Shield if it's not present
-        if (m_lightningShieldTimer.is_ready() && m_gcdTimer.is_ready())
+        if (m_lightningShieldTimer.IsReady() && m_gcdTimer.IsReady())
         {
             if (DoCastSpellIfCan(m_creature, m_lightningShieldTimer.spell_id()) == CAST_OK)
             {
-                m_lightningShieldTimer.reset();
-                m_gcdTimer.reset();
+                m_lightningShieldTimer.Reset();
+                m_gcdTimer.Reset();
                 m_creature->ResetAttackTimer();
             }
         }
 
         // Flame Shock if it's ready
-        if (m_flameShockTimer.is_ready() && m_gcdTimer.is_ready())
+        if (m_flameShockTimer.IsReady() && m_gcdTimer.IsReady())
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), m_flameShockTimer.spell_id()) == CAST_OK)
             {
-                m_flameShockTimer.reset();
-                m_gcdTimer.reset();
+                m_flameShockTimer.Reset();
+                m_gcdTimer.Reset();
                 m_creature->ResetAttackTimer();
             }
         }
@@ -166,12 +166,12 @@ public:
         {
             if (damagedUnit->GetHealthPercent() < 80)
             {
-                if (m_healingWaveTimer.is_ready() && m_gcdTimer.is_ready())
+                if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
                     if (DoCastSpellIfCan(damagedUnit, m_healingWaveTimer.spell_id()) == CAST_OK)
                     {
-                        m_gcdTimer.reset();
-                        m_healingWaveTimer.reset();
+                        m_gcdTimer.Reset();
+                        m_healingWaveTimer.Reset();
                         m_creature->ResetAttackTimer();
                     }
                 }

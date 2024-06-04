@@ -36,7 +36,7 @@ public:
             if (!hiveRegalHunterKiller)
             {
                 m_eventState = STATE_WAITING_FOR_HIVEKILLER;
-                m_yellTimer.reset();
+                m_yellTimer.Reset();
             }
             else if (m_eventState == STATE_FIGHTING_HIVEKILLER)
             {
@@ -48,12 +48,12 @@ public:
             }
             else if (m_eventState == STATE_HIVEKILLER_DEAD)
             {
-                m_yellTimer.update(uiDiff);
-                if (m_yellTimer.is_ready())
+                m_yellTimer.Update(uiDiff);
+                if (m_yellTimer.IsReady())
                 {
                     // Yells "FOR THE HORDE!"
                     m_creature->MonsterYell(VOICELINE_FOR_THE_HORDE, LANG_ORCISH);
-                    m_yellTimer.reset();
+                    m_yellTimer.Reset();
                     m_eventState = STATE_WAITING_FOR_HIVEKILLER;
                 }
             }

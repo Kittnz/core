@@ -18,7 +18,7 @@ public:
 
     void Reset() override
     {
-        m_gcdTimer.reset();
+        m_gcdTimer.Reset();
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -51,30 +51,30 @@ public:
             return;
         }
 
-        m_gcdTimer.update(uiDiff);
-        m_mindBlastTimer.update(uiDiff);
+        m_gcdTimer.Update(uiDiff);
+        m_mindBlastTimer.Update(uiDiff);
 
         // Only tick SW:P if target doesn't have it
         if (!myTarget->HasAura(m_shadowWordPainTimer.spell_id()))
         {
-            m_shadowWordPainTimer.update(uiDiff);
-            if (m_shadowWordPainTimer.is_ready() && m_gcdTimer.is_ready())
+            m_shadowWordPainTimer.Update(uiDiff);
+            if (m_shadowWordPainTimer.IsReady() && m_gcdTimer.IsReady())
             {
                 if (DoCastSpellIfCan(myTarget, m_shadowWordPainTimer.spell_id()) == CAST_OK)
                 {
-                    m_shadowWordPainTimer.reset();
-                    m_gcdTimer.reset();
+                    m_shadowWordPainTimer.Reset();
+                    m_gcdTimer.Reset();
                     m_creature->ResetAttackTimer();
                 }
             }
         }
 
-        if (m_mindBlastTimer.is_ready() && m_gcdTimer.is_ready())
+        if (m_mindBlastTimer.IsReady() && m_gcdTimer.IsReady())
         {
             if (DoCastSpellIfCan(myTarget, m_mindBlastTimer.spell_id()) == CAST_OK)
             {
-                m_mindBlastTimer.reset();
-                m_gcdTimer.reset();
+                m_mindBlastTimer.Reset();
+                m_gcdTimer.Reset();
                 m_creature->ResetAttackTimer();
             }
         }
