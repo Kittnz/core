@@ -1,1 +1,1 @@
-update creature_template set name = 'Prince' where entry = 62004;
+update creature_template set name = 'Lord Rygel', subname = 'Frog Royalty' where entry = 62004;
