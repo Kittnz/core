@@ -459,6 +459,12 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
 		//pPlayer->GetSession()->LogoutPlayer(false);
 		return true;
 	}
+    else
+    {
+        pPlayer->GetSession()->SendNotification("Race change failed. You will be disconnected.");
+        //have to disconnect to restore proper state back.
+        pPlayer->GetSession()->LogoutPlayer(false);
+    }
     return false;
 }
 
