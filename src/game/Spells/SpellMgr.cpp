@@ -872,6 +872,11 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             {
                 case SPELLFAMILY_GENERIC:                   // same family case
                 {
+                    // Dream Herald don't stack with Thunderfury
+                    if (spellInfo_1->Id == 48004 && (spellInfo_2->Id == 21992 || spellInfo_2->Id == 27648) ||
+                        spellInfo_2->Id == 48004 && (spellInfo_1->Id == 21992 || spellInfo_1->Id == 27648))
+                        return true;
+
                     // Thunderfury
                     if ((spellInfo_1->Id == 21992 && spellInfo_2->Id == 27648) ||
                             (spellInfo_2->Id == 21992 && spellInfo_1->Id == 27648))

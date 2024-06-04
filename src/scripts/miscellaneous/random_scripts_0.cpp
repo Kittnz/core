@@ -2161,7 +2161,8 @@ CreatureAI* GetAI_npc_sickly_critter(Creature* pCreature)
 
 enum
 {
-    SPELL_EXPLOSION         = 13259,
+    SPELL_EXPLOSION_STRONG  = 13259,
+    SPELL_EXPLOSION_WEAK    = 51243,
     SPELL_PET_BOMB_PASSIVE  = 13260,
     SPELL_MALFUNCTION_EXPL  = 13261,
     SPELL_QUIET_SUICIDE     = 3617
@@ -2208,7 +2209,7 @@ struct npc_goblin_bomb_dispenserAI : ScriptedPetAI
         {
             if (m_uiAliveTimer <= uiDiff)
             {
-                m_creature->CastSpell(m_creature, SPELL_EXPLOSION, true);
+                m_creature->CastSpell(m_creature, (m_creature->GetEntry() == 59962 ? SPELL_EXPLOSION_WEAK : SPELL_EXPLOSION_STRONG), true);
                 m_bExploded = true;
             }
             else

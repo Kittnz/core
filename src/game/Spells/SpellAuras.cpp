@@ -8818,7 +8818,10 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
 
         case 17538: // Le +crit du buff de l'Elixir de la Mangouste 17538, devrait se stack avec TOUT.
             return (eff == EFFECT_INDEX_0);
+        case 48004: // Dream's Herald
+            return true;
     }
+
     switch (spellproto->SpellFamilyName)
     {
         case SPELLFAMILY_WARLOCK:
