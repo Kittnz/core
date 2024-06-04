@@ -22746,13 +22746,25 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");*/
 
 
-
-        //If we swap factions we have to find a suitable counter xfac flight node. These flight paths may be close to each other or they might be far away.
+     //If we swap factions we have to find a suitable counter xfac flight node. These flight paths may be close to each other or they might be far away.
     //Whatever the conditions, they should have the same Zone so that we don't unlock far away paths.
+    //This won't unlock capital cities, we give them those by checking all standard 
     std::vector<uint32> learnableNodes;
+    std::vector<uint32> learnableNodeMasks;
 
     if (bChangeTeam)
     {
+
+        for (uint32 race = 1; race < sChrRacesStore.GetNumRows(); ++race)
+        {
+            ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(race);
+            if (!raceEntry)
+                continue;
+
+            if (TeamForRace(raceEntry->RaceID) == newTeam) // Unlock their default paths for the new faction race.
+                learnableNodeMasks.push_back(raceEntry->startingTaxiMask);
+        }
+
         for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
         {
             TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
@@ -22792,6 +22804,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         for (uint32 node : learnableNodes)
         {
             GetTaxi().SetTaximaskNode(node);
+        }
+
+        for (uint32 mask : learnableNodeMasks)
+        {
+            GetTaxi().SetTaximaskNodeMasked(0, mask);
         }
     }
 
