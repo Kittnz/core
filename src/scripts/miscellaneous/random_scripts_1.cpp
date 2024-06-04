@@ -450,6 +450,32 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         break;
     }
 
+    uint32 freeSpots = 0;
+
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (!pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            ++freeSpots;
+    }
+
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (!pPlayer->GetItemByPos(i, j))
+                    ++freeSpots;
+            }
+        }
+    }
+
+    if (freeSpots < 5)
+    {
+        pPlayer->GetSession()->SendNotification("You need at least 5 free bag slots.");
+        return false;
+    }
+
     bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
 	if (pPlayer->ChangeRace(race, player_gender, bytes, bytes2))
 	{
