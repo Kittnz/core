@@ -36,49 +36,6 @@ REPLACE INTO `creature` (
     120, 120, 0, 100, 100, 0, 0, 0
 );
 
--- Move Captain Blackanvil to the front of the war table
--- UPDATE `creature` 
--- SET `position_x` = -7165.353516, `position_y` = 1381.246460, 
---     `position_z` = 2.919770, `orientation` = 4.331480 
--- WHERE `guid` = 166513;
-
--- Move Ironforge Brigade Riflemen to a line next to the fire
--- UPDATE `creature` 
--- SET `position_x` = -7177.499023, `position_y` = 1385.545288, 
---     `position_z` = 2.919770, `orientation` = 2.285518 
--- WHERE `guid` = 42910;
-
--- UPDATE `creature` 
--- SET `position_x` = -7175.782715, `position_y` = 1387.070435, 
---     `position_z` = 2.919770, `orientation` = 2.285518 
--- WHERE `guid` = 42907;
-
--- UPDATE `creature` 
--- SET `position_x` = -7173.817383, `position_y` = 1388.816772, 
---     `position_z` = 2.917540, `orientation` = 2.285518 
--- WHERE `guid` = 42909;
-
--- UPDATE `creature` 
--- SET `position_x` = -7171.614258, `position_y` = 1390.774292, 
---     `position_z` = 2.881454, `orientation` = 2.285518 
--- WHERE `guid` = 42908;
-
--- Move Ironforge Brigade Riflemen to a line behind the above riflemen
--- UPDATE `creature` 
--- SET `position_x` = -7175.584473, `position_y` = 1383.584717, 
---     `position_z` = 2.919770, `orientation` = 2.285518 
--- WHERE `guid` = 42905;
-
--- UPDATE `creature` 
--- SET `position_x` = -7173.808594, `position_y` = 1385.200684, 
---     `position_z` = 2.919770, `orientation` = 2.285518 
--- WHERE `guid` = 42906;
-
--- UPDATE `creature` 
--- SET `position_x` = -7172.032227, `position_y` = 1386.816528, 
---     `position_z` = 2.919770, `orientation` = 2.285518 
--- WHERE `guid` = 42904;
-
 -- Add missing rifleman
 REPLACE INTO `creature` (
     `guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, 
@@ -90,22 +47,6 @@ REPLACE INTO `creature` (
     120, 120, 0, 100, 100, 0, 0, 0
 );
 
--- Move Ironforge Brigade Footmen in front of the riflemen
--- UPDATE `creature` 
--- SET `position_x` = -7179.231445, `position_y` = 1387.700317, 
---     `position_z` = 2.918770, `orientation` = 2.28552 
--- WHERE `guid` = 42912;
-
--- UPDATE `creature` 
--- SET `position_x` = -7177.375000, `position_y` = 1389.222656, 
---     `position_z` = 2.918175, `orientation` = 2.28552 
--- WHERE `guid` = 42913;
-
--- UPDATE `creature` 
--- SET `position_x` = -7175.549805, `position_y` = 1390.849243, 
---     `position_z` = 2.858345, `orientation` = 2.28552 
--- WHERE `guid` = 42911;
-
 -- Add missing Ironforge Brigade Footman
 REPLACE INTO `creature` (
     `guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, 
@@ -116,24 +57,6 @@ REPLACE INTO `creature` (
     2582817, 15442, 0, 0, 0, 1, -7173.26, 1392.86, 2.6812, 2.29339, 
     120, 120, 0, 100, 100, 0, 0, 0
 );
-
--- Move Janela Stouthammer to the front of the battalion
--- UPDATE `creature` 
--- SET `position_x` = -7178.992676, `position_y` = 1391.631470, 
---     `position_z` = 2.871707, `orientation` = 2.28552
--- WHERE `guid` = 42914;
-
--- Move Arcanist Nozzlespring to the front of the battalion
--- UPDATE `creature` 
--- SET `position_x` = -7177.598633, `position_y` = 1393.167969, 
---     `position_z` = 2.645966, `orientation` = 2.28552 
--- WHERE `guid` = 42915;
-
--- Move Sergeant Carnes to the side of the middle of the battalion
--- UPDATE `creature` 
--- SET `position_x` = -7169.549805, `position_y` = 1393.961304, 
---     `position_z` = 2.706470, `orientation` = 3.019884 
--- WHERE `guid` = 42749;
 
 -- Assign script to Captain Blackanvil
 UPDATE `creature_template` 
@@ -158,6 +81,11 @@ REPLACE INTO `broadcast_text` (
     2593000, "Eh, what do ye want? Can't ye see I'm busy? Go talk to Lieutenant Stouthammer if ye need somethin'.", 
     NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
 );
+
+-- Assign script to Arcanist Nozzlespring
+UPDATE `creature_template` 
+SET `script_name` = "npc_arcanist_nozzlespring" 
+WHERE `entry` = 15444;
 
 -- Assign script to Janela Stouthammer
 UPDATE `creature_template` 
@@ -212,3 +140,162 @@ REPLACE INTO `broadcast_text` (
     2593003, "I'm ready. (Start Event)",
     NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
 );
+
+-- Add script texts
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250900, "Wait! It appears our lookout has spotted something.", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250901, "Soldier, call Captain Blackanvil at once!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250902, "Look alive, lads! The enemy has been sighted! Form ranks immediately!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250903, "Captain! Lieutenant Stouthammer requests your presence! The enemy is approaching, sir!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250904, "This better be important!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250905, "Looks like it's going to be one of those days.", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250906, "Aye, lads! Things are about to get quite ugly.", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250907, "Stand ready!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250908, "Open fire!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+REPLACE INTO `script_texts` (
+    `entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, 
+    `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, 
+    `sound`, `type`, `language`, `emote`, `comment`
+) 
+VALUES (
+    -1250909, "Footmen, make a line!", NULL, NULL, 
+    NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 7, 0, 
+    "Silithus Field Duty Event (Alliance)"
+);
+
+-- Assign script to Hive'Zora Abomination
+UPDATE `creature_template` 
+SET `script_name` = "npc_hivezora_abomination" 
+WHERE `entry` = 15449;
+
+-- Clear creature groups
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42914;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42910;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42912;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42906;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42907;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42911;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42904;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42913;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42909;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42908;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42915;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42905;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 42749;
+
+DELETE FROM `creature_groups` 
+WHERE `member_guid` = 166513;

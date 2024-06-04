@@ -50,9 +50,9 @@ public:
 
     void Reset() override
     {
-        m_gcdTimer.set_cooldown(0u);
-        m_mortalStrikeTimer.reset();
-        m_thunderClapTimer.reset();
+        m_gcdTimer.SetCooldown(0u);
+        m_mortalStrikeTimer.Reset();
+        m_thunderClapTimer.Reset();
     }
 
     FieldDutyPaperEventStatus GetEventStatus()
@@ -269,25 +269,25 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        m_gcdTimer.update(uiDiff);
-        m_mortalStrikeTimer.update(uiDiff);
-        m_thunderClapTimer.update(uiDiff);
+        m_gcdTimer.Update(uiDiff);
+        m_mortalStrikeTimer.Update(uiDiff);
+        m_thunderClapTimer.Update(uiDiff);
 
-        if (m_mortalStrikeTimer.is_ready() && m_gcdTimer.is_ready())
+        if (m_mortalStrikeTimer.IsReady() && m_gcdTimer.IsReady())
         {
             if (DoCastSpellIfCan(m_creature, m_mortalStrikeTimer.spell_id()) == CAST_OK)
             {
-                m_gcdTimer.reset();
-                m_mortalStrikeTimer.reset();
+                m_gcdTimer.Reset();
+                m_mortalStrikeTimer.Reset();
             }
         }
 
-        if (m_thunderClapTimer.is_ready() && m_gcdTimer.is_ready())
+        if (m_thunderClapTimer.IsReady() && m_gcdTimer.IsReady())
         {
             if (DoCastSpellIfCan(m_creature, m_thunderClapTimer.spell_id()) == CAST_OK)
             {
-                m_gcdTimer.reset();
-                m_thunderClapTimer.reset();
+                m_gcdTimer.Reset();
+                m_thunderClapTimer.Reset();
             }
         }
 

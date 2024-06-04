@@ -13,7 +13,7 @@ AbilityTimer::AbilityTimer(uint32_t abilityId, uint32_t minimumCooldownMs, uint3
     m_currentCooldownMs = initialDelayMs;
 }
 
-bool AbilityTimer::is_ready() const
+bool AbilityTimer::IsReady() const
 {
     return m_currentCooldownMs == 0;
 }
@@ -23,17 +23,17 @@ uint32_t AbilityTimer::spell_id() const
     return m_abilityId;
 }
 
-void AbilityTimer::reset()
+void AbilityTimer::Reset()
 {
     m_currentCooldownMs = urand(m_minimumCooldownMs, m_maximumCooldownMs);
 }
 
-void AbilityTimer::set_cooldown(uint32_t cooldownMs)
+void AbilityTimer::SetCooldown(uint32_t cooldownMs)
 {
     m_currentCooldownMs = cooldownMs;
 }
 
-void AbilityTimer::update(uint32_t delta)
+void AbilityTimer::Update(uint32_t delta)
 {
     if (m_currentCooldownMs > 0)
     {

@@ -1061,6 +1061,9 @@ class Creature : public Unit
             m_goldMaxOverride = max;
         }
 
+        bool CallsForHelp() const;
+        void SetCallsForHelp(bool callsForHelp);
+
     protected:
         bool MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const;
 
@@ -1126,6 +1129,7 @@ class Creature : public Unit
         
         uint32 m_callForHelpTimer;
         float m_callForHelpDist;
+        bool m_callsForHelp;
         float m_leashDistance;
         float m_detectionDistance;
 

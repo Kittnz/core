@@ -9,7 +9,7 @@ private:
     AbilityTimer m_pulseTimer = AbilityTimer(0, 800, 800, 0);
     [[nodiscard]] trigger_field_duty_alliance* find_trigger_ai() const
     {
-        const auto trigger = m_creature->FindNearestCreature(silithus::creatures::ENTRY_TRIGGER_FIELD_DUTY_ALLIANCE, 200.f);
+        const auto trigger = m_creature->FindNearestCreature(Silithus::Creatures::ENTRY_TRIGGER_FIELD_DUTY_ALLIANCE, 200.f);
         if (!trigger)
         {
             return nullptr;
@@ -24,7 +24,7 @@ private:
             return nullptr;
         }
 
-        if (creature->GetEntry() != silithus::creatures::ENTRY_CAPTAIN_BLACKANVIL)
+        if (creature->GetEntry() != Silithus::Creatures::ENTRY_CAPTAIN_BLACKANVIL)
         {
             return nullptr;
         }
@@ -43,12 +43,12 @@ public:
 
     void UpdateAI(const uint32 delta) override
     {
-        m_pulseTimer.update(delta);
-        if (!m_pulseTimer.is_ready())
+        m_pulseTimer.Update(delta);
+        if (!m_pulseTimer.IsReady())
         {
             return;
         }
-        m_pulseTimer.reset();
+        m_pulseTimer.Reset();
 
         const auto trigger = find_trigger_ai();
         if (!trigger)
@@ -56,8 +56,8 @@ public:
             return;
         }
 
-        const auto event_state = trigger->event_state();
-        if (event_state == silithus::event_state::FINISHED)
+        const auto event_state = trigger->EventState();
+        if (event_state == Silithus::EventState::FINISHED)
         {
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
@@ -93,7 +93,7 @@ public:
         return false;
     }
 
-    static void register_script()
+    static void RegisterScript()
     {
         const auto script = new Script();
         script->Name = "npc_captain_blackanvil";
