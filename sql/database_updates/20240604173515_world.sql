@@ -24,3 +24,6 @@ DELETE FROM gameobject_battleground WHERE guid = '5001437';
 DELETE FROM gameobject WHERE guid = '5001434';
 DELETE FROM game_event_gameobject WHERE guid = '5001434';
 DELETE FROM gameobject_battleground WHERE guid = '5001434';
+
+-- Changes by DRAGU
+DELETE FROM `npc_vendor` WHERE `entry`='91959' AND `item`='9260';
