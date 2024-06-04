@@ -26,6 +26,12 @@ private:
         DialogBlackanvilEngage,
         DialogAllEngage,
         DialogDone,
+        CombatActive,
+        CombatDone,
+        FinishedReturnToSpawnPositions,
+        FinishedBlackanvilJoinsCircle,
+        FinishedBlackanvilBecomesQuestgiver,
+        FinishedDone,
     };
     Silithus::EventState::EventState m_eventState = Silithus::EventState::WAITING_FOR_START;
     EventStages m_eventStage = Waiting1Idle;

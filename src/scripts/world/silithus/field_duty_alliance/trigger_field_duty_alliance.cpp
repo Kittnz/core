@@ -126,7 +126,7 @@ void trigger_field_duty_alliance::SetEventStateWaitingForStart()
     {
         if (arcanistNozzlespring->m_creature->IsAlive())
         {
-            arcanistNozzlespring->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_ARCANIST_NOZZLESPRING);
+            arcanistNozzlespring->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_ARCANIST_NOZZLESPRING, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_ARCANIST_NOZZLESPRING.orientation);
         }
     }
     if (auto const sergeantCarnes = FindSergeantCarnes())
@@ -134,7 +134,7 @@ void trigger_field_duty_alliance::SetEventStateWaitingForStart()
         if (sergeantCarnes->IsAlive())
         {
             const auto pos = sergeantCarnes->GetCreatureData()->position;
-            sergeantCarnes->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN, 0, pos.o);
+            sergeantCarnes->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
         }
     }
     if (auto const janelaStouthammer = FindJanelaStouthammer())
@@ -148,7 +148,7 @@ void trigger_field_duty_alliance::SetEventStateWaitingForStart()
         if (footman->IsAlive())
         {
             const auto pos = footman->GetCreatureData()->position;
-            footman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN, 0, pos.o);
+            footman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
             footman->SetCallsForHelp(true);
             footman->SetNoCallAssistance(false);
         }
@@ -160,7 +160,7 @@ void trigger_field_duty_alliance::SetEventStateWaitingForStart()
         if (rifleman->IsAlive())
         {
             const auto pos = rifleman->GetCreatureData()->position;
-            rifleman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN, 0, pos.o);
+            rifleman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
         }
     }
 }
@@ -187,6 +187,8 @@ Creature* trigger_field_duty_alliance::SpawnCaptainBlackanvil()
         TEMPSUMMON_DEAD_DESPAWN,
         0);
     m_cachedBlackanvilGuid = blackanvil->GetGUID();
+    blackanvil->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+    blackanvil->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     blackanvil->SetCallsForHelp(false);
     blackanvil->SetNoCallAssistance(true);
     return blackanvil;
@@ -230,7 +232,7 @@ void trigger_field_duty_alliance::StartEvent()
     SetEventStateDialogInProgress();
 }
 
-void trigger_field_duty_alliance::UpdateAI(const uint32 delta)
+void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
 {
     m_eventPulseTimer.Update(delta);
 
@@ -247,6 +249,124 @@ void trigger_field_duty_alliance::UpdateAI(const uint32 delta)
         SetEventStateWaitingForStart();
     }
 
+    if (m_eventState == Silithus::EventState::FINISHED)
+    {
+        if (m_eventStage == FinishedReturnToSpawnPositions && m_eventPulseTimer.IsReady())
+        {
+            m_eventForceResetTimer.Reset();
+            m_eventPulseTimer.SetCooldown(4000);
+            m_eventStage = FinishedBlackanvilJoinsCircle;
+            if (auto const arcanistNozzlespring = FindArcanistNozzlespring())
+            {
+                if (arcanistNozzlespring->m_creature->IsAlive())
+                {
+                    arcanistNozzlespring->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_ARCANIST_NOZZLESPRING, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_ARCANIST_NOZZLESPRING.orientation);
+                    arcanistNozzlespring->m_creature->CombatStop(true);
+                }
+            }
+            if (auto const sergeantCarnes = FindSergeantCarnes())
+            {
+                if (sergeantCarnes->IsAlive())
+                {
+                    const auto pos = sergeantCarnes->GetCreatureData()->position;
+                    sergeantCarnes->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
+                    sergeantCarnes->CombatStop(true);
+                }
+            }
+            if (auto const janelaStouthammer = FindJanelaStouthammer())
+            {
+                janelaStouthammer->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER.orientation);
+                janelaStouthammer->m_creature->CombatStop(true);
+                janelaStouthammer->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            }
+
+            std::list<Creature*> footmen;
+            GetCreatureListWithEntryInGrid(footmen, m_creature, Silithus::Creatures::ENTRY_IRONFORGE_BRIGADE_FOOTMAN, 150.0f);
+            for (auto const footman : footmen)
+            {
+                if (footman->IsAlive())
+                {
+                    const auto pos = footman->GetCreatureData()->position;
+                    footman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
+                    footman->SetCallsForHelp(true);
+                    footman->SetNoCallAssistance(false);
+                    footman->CombatStop(true);
+                }
+            }
+            std::list<Creature*> riflemen;
+            GetCreatureListWithEntryInGrid(riflemen, m_creature, Silithus::Creatures::ENTRY_IRONFORGE_BRIGADE_RIFLEMAN, 150.0f);
+            for (auto const rifleman : riflemen)
+            {
+                if (rifleman->IsAlive())
+                {
+                    const auto pos = rifleman->GetCreatureData()->position;
+                    rifleman->GetMotionMaster()->MovePoint(0, pos.x, pos.y, pos.z, MOVE_RUN_MODE, 0, pos.o);
+                    rifleman->CombatStop(true);
+                }
+            }
+        }
+        else if (m_eventStage == FinishedBlackanvilJoinsCircle && m_eventPulseTimer.IsReady())
+        {
+            const auto blackanvil = FindCaptainBlackanvil();
+            if (blackanvil)
+            {
+                m_eventForceResetTimer.Reset();
+                m_eventPulseTimer.SetCooldown(10000);
+                m_eventStage = FinishedBlackanvilBecomesQuestgiver;
+                blackanvil->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::DESTINATION_CAPTAIN_BLACKANVIL_CIRCLE, MOVE_WALK_MODE, 0, Silithus::Locations::DESTINATION_CAPTAIN_BLACKANVIL_CIRCLE.orientation);
+            }
+        }
+        else if (m_eventStage == FinishedBlackanvilBecomesQuestgiver && m_eventPulseTimer.IsReady())
+        {
+            const auto blackanvil = FindCaptainBlackanvil();
+            if (blackanvil)
+            {
+                m_eventForceResetTimer.Reset();
+                // m_eventPulseTimer.SetCooldown(180000);
+                m_eventPulseTimer.SetCooldown(15000);
+                m_eventStage = FinishedDone;
+                blackanvil->m_creature->CombatStop(true);
+                blackanvil->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                blackanvil->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            }
+        }
+        else if (m_eventStage == FinishedDone)
+        {
+            /*
+             * We split the checks here because we're expecting m_eventPulseTimer to be longer than 1 minute,
+             * and we don't want to reset the event if it's not ready yet.
+             */
+            m_eventForceResetTimer.Reset();
+            if (m_eventPulseTimer.IsReady())
+            {
+                SetEventStateWaitingForStart();
+            }
+        }
+    }
+
+    if (m_eventState == Silithus::EventState::FIGHT_IN_PROGRESS)
+    {
+        if (m_eventStage == CombatActive && m_eventPulseTimer.IsReady())
+        {
+            if (auto const abomination = FindHiveZoraAbomination())
+            {
+                m_eventForceResetTimer.Reset();
+            }
+            else
+            {
+                // If we can't find an alive abomination, we killed it, or we need to let the event reset.
+                m_eventPulseTimer.SetCooldown(3000);
+                m_eventStage = CombatDone;
+            }
+        }
+        else if (m_eventStage == CombatDone && m_eventPulseTimer.IsReady())
+        {
+            m_eventForceResetTimer.Reset();
+            m_eventStage = FinishedReturnToSpawnPositions;
+            m_eventState = Silithus::EventState::FINISHED;
+        }
+    }
+
     if (m_eventState == Silithus::EventState::DIALOG_IN_PROGRESS)
     {
         if (m_eventStage == Waiting1Idle && m_eventPulseTimer.IsReady())
@@ -256,7 +376,7 @@ void trigger_field_duty_alliance::UpdateAI(const uint32 delta)
             const auto janelaStouthammer = FindJanelaStouthammer();
             if (abomination && janelaStouthammer)
             {
-                janelaStouthammer->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_FLAG_SPAWNING);
+                janelaStouthammer->m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 abomination->BecomeImmune();
                 m_eventPulseTimer.SetCooldown(3000);
                 m_eventForceResetTimer.Reset();
@@ -527,7 +647,9 @@ void trigger_field_duty_alliance::UpdateAI(const uint32 delta)
         }
         else if (m_eventStage == DialogDone && m_eventPulseTimer.IsReady())
         {
-            SetEventStateWaitingForStart();
+            m_eventState = Silithus::EventState::FIGHT_IN_PROGRESS;
+            m_eventStage = CombatActive;
+            m_eventForceResetTimer.Reset();
         }
     }
 }
