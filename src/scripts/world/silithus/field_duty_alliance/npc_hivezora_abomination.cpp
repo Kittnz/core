@@ -41,12 +41,16 @@ void npc_hivezora_abomination::BecomeAttackable() const
 {
     m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_FLAG_IMMUNE);
     m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_FLAG_SPAWNING);
+    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE);
+    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
 void npc_hivezora_abomination::BecomeImmune() const
 {
     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_FLAG_IMMUNE);
     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_FLAG_SPAWNING);
+    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE);
+    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
 void npc_hivezora_abomination::BeginPathing()
