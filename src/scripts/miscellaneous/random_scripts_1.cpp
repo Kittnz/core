@@ -359,7 +359,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     switch (pItem->GetEntry())
     {
     case 50603: // Human
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_HUNTER || pPlayer->GetClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -404,7 +404,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         race = RACE_ORC;
         break;
     case 50608: // Troll
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
