@@ -27,7 +27,7 @@ DELETE FROM gameobject_battleground WHERE guid = '5001434';
 
 -- Changes by DRAGU
 DELETE FROM `npc_vendor` WHERE `entry`='91959' AND `item`='9260';
-INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('91959','4595','0','0','0');
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('91959','4595','0','0','0');
 UPDATE `creature` SET `position_x` = -14005.245117, `position_y` = 2282.107422, `position_z` = 59.547104, `orientation` = 6.035007 WHERE `guid` = 2567326;
 UPDATE `creature` SET `position_x` = -13998.135742, `position_y` = 2272.729004, `position_z` = 60.405087, `orientation` = 6.208764 WHERE `guid` = 2567327;
 UPDATE `creature` SET `position_x` = -13997.411133, `position_y` = 2282.439209, `position_z` = 59.784691, `orientation` = 6.208764 WHERE `guid` = 2567326;
