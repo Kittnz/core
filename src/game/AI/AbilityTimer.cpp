@@ -18,7 +18,7 @@ bool AbilityTimer::IsReady() const
     return m_currentCooldownMs == 0;
 }
 
-uint32_t AbilityTimer::spell_id() const
+uint32_t AbilityTimer::SpellID() const
 {
     return m_abilityId;
 }

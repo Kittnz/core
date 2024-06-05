@@ -1,9 +1,17 @@
 #pragma once
+#include <AI/AbilityTimer.h>
 
 struct npc_hivezora_abomination : public ScriptedAI
 {
     uint32_t m_currentWaypoint;
     std::vector <Movement::Location> m_waypoints;
+
+    AbilityTimer m_gcdTimer = AbilityTimer(0, 1500, 1500, 0);
+    AbilityTimer m_abominationSpitTimer = AbilityTimer(25262, 10000, 20000);
+    AbilityTimer m_envelopingWindsTimer = AbilityTimer(23103, 10000, 20000);
+    AbilityTimer m_poisonCloudTimer = AbilityTimer(25198, 10000, 20000);
+    AbilityTimer m_wingsOfDespairTimer = AbilityTimer(25260, 30000, 45000);
+
 public:
     npc_hivezora_abomination(Creature* pCreature);
 

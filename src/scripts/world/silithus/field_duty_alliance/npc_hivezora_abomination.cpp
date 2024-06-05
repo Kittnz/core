@@ -35,6 +35,70 @@ void npc_hivezora_abomination::Reset()
 
 void npc_hivezora_abomination::UpdateAI(const uint32 delta)
 {
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+    {
+        return;
+    }
+
+    m_gcdTimer.Update(delta);
+    m_abominationSpitTimer.Update(delta);
+    m_envelopingWindsTimer.Update(delta);
+    m_poisonCloudTimer.Update(delta);
+    m_wingsOfDespairTimer.Update(delta);
+
+    if (m_creature->IsNonMeleeSpellCasted(false))
+    {
+        return;
+    }
+
+    if (m_abominationSpitTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_abominationSpitTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_abominationSpitTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    if (m_envelopingWindsTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        if (const auto target = m_creature->SelectRandomUnfriendlyTarget(m_creature->GetVictim(), 30.f, false, true))
+        {
+            const auto result = m_creature->CastSpell(target, m_envelopingWindsTimer.SpellID(), false);
+            if (result == SPELL_CAST_OK)
+            {
+                m_creature->ResetAttackTimer();
+                m_envelopingWindsTimer.Reset();
+                m_gcdTimer.Reset();
+            }
+        }
+    }
+
+    if (m_poisonCloudTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_poisonCloudTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_poisonCloudTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    if (m_wingsOfDespairTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_wingsOfDespairTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_wingsOfDespairTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    DoMeleeAttackIfReady();
 }
 
 void npc_hivezora_abomination::BecomeAttackable() const
