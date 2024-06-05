@@ -12,11 +12,15 @@ struct npc_hivezora_abomination : public ScriptedAI
     AbilityTimer m_poisonCloudTimer = AbilityTimer(25198, 10000, 20000);
     AbilityTimer m_wingsOfDespairTimer = AbilityTimer(25260, 30000, 45000);
 
+    bool m_combatStopping = false;
+
 public:
     npc_hivezora_abomination(Creature* pCreature);
 
+    void EnterEvadeMode() override;
     void MovementInform(uint32_t movementType, uint32_t pointId) override;
     void Reset() override;
+    void OnCombatStop() override;
     void UpdateAI(const uint32 delta) override;
 
     void BecomeAttackable() const;

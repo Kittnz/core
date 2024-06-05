@@ -333,3 +333,38 @@ WHERE `member_guid` = 42749;
 
 DELETE FROM `creature_groups` 
 WHERE `member_guid` = 166513;
+
+-- Update spawn time for Janela Stouthammer
+UPDATE `creature` 
+SET `spawntimesecsmin` = 180, `spawntimesecsmax` = 180 
+WHERE `guid` = 42914;
+
+-- Update spawn time for Arcanist Nozzlespring
+UPDATE `creature`
+SET `spawntimesecsmin` = 180, `spawntimesecsmax` = 180
+WHERE `guid` = 42915;
+
+-- Update spawn time for Sergeant Carnes
+UPDATE `creature`
+SET `spawntimesecsmin` = 180, `spawntimesecsmax` = 180
+WHERE `guid` = 42749;
+
+-- Reduce attack speed of Janela Stouthammer
+UPDATE `creature_template` 
+SET `base_attack_time` = 2400 
+WHERE `entry` = 15443;
+
+-- Reduce attack speed of Captain Blackanvil
+UPDATE `creature_template` 
+SET `base_attack_time` = 2500 
+WHERE `entry` = 15440;
+
+-- Reduce attack speed of Arcanist Nozzlespring
+UPDATE `creature_template` 
+SET `base_attack_time` = 2500 
+WHERE `entry` = 15444;
+
+-- Reduce attack speed of Sergeant Carnes
+UPDATE `creature_template` 
+SET `base_attack_time` = 2600 
+WHERE `entry` = 15903;

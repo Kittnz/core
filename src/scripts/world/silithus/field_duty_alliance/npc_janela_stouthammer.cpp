@@ -1,5 +1,7 @@
 #include "npc_janela_stouthammer.h"
 
+#include "npc_captain_blackanvil.h"
+
 trigger_field_duty_alliance* npc_janela_stouthammer::FindTriggerAI()
 {
     Creature* trigger = nullptr;
@@ -64,20 +66,88 @@ void npc_janela_stouthammer::Reset()
 
 void npc_janela_stouthammer::UpdateAI(const uint32 delta)
 {
-    m_pulseTimer.Update(delta);
-    if (!m_pulseTimer.IsReady())
-    {
-        return;
-    }
-    m_pulseTimer.Reset();
-
-    const auto trigger = FindTriggerAI();
-    if (!trigger)
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
     {
         return;
     }
 
-    const auto event_state = trigger->EventState();
+    m_gcdTimer.Update(delta);
+    m_crusaderStrikeTimer.Update(delta);
+    m_divineShieldTimer.Update(delta);
+    m_holyLightTimer.Update(delta);
+
+    if (m_creature->IsNonMeleeSpellCasted(false))
+    {
+        return;
+    }
+
+    if (m_divineShieldTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        if (m_creature->GetHealthPercent() <= 15)
+        {
+            const auto result = m_creature->CastSpell(m_creature, m_divineShieldTimer.SpellID(), false);
+            if (result == SPELL_CAST_OK)
+            {
+                m_creature->ResetAttackTimer();
+                m_divineShieldTimer.Reset();
+                m_gcdTimer.Reset();
+            }
+        }
+    }
+
+    if (m_holyLightTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        Unit* target = nullptr;
+        if (m_creature->GetHealthPercent() <= 50)
+        {
+            target = m_creature;
+        }
+
+        if (!target)
+        {
+            const auto trigger = FindTriggerAI();
+            if (trigger)
+            {
+                const auto blackanvil = trigger->FindCaptainBlackanvil();
+                if (blackanvil)
+                {
+                    if (blackanvil->m_creature->GetHealthPercent() <= 50)
+                    {
+                        target = blackanvil->m_creature;
+                    }
+                }
+            }
+        }
+
+        if (!target)
+        {
+            target = m_creature->FindLowestHpFriendlyUnit(40.f, 50, true);
+        }
+
+        if (target)
+        {
+            const auto result = m_creature->CastSpell(target, m_holyLightTimer.SpellID(), false);
+            if (result == SPELL_CAST_OK)
+            {
+                m_creature->ResetAttackTimer();
+                m_holyLightTimer.Reset();
+                m_gcdTimer.Reset();
+            }
+        }
+    }
+
+    if (m_crusaderStrikeTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_crusaderStrikeTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_crusaderStrikeTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    DoMeleeAttackIfReady();
 }
 
 void npc_janela_stouthammer::EventReset()

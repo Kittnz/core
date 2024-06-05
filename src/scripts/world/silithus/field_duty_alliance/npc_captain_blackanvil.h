@@ -6,7 +6,10 @@
 struct npc_captain_blackanvil : public ScriptedAI
 {
 private:
-    AbilityTimer m_pulseTimer = AbilityTimer(0, 800, 800, 0);
+    AbilityTimer m_gcdTimer = AbilityTimer(0, 1500, 1500, 0);
+    AbilityTimer m_mortalStrikeTimer = AbilityTimer(16856, 4000, 10000);
+    AbilityTimer m_thunderClapTimer = AbilityTimer(15548, 10000, 15000);
+
     constexpr static uint32_t GOSSIP_TEXT_NOT_IMPRESSED_EVENT_COMPLETE = 2593004;
 
     [[nodiscard]] trigger_field_duty_alliance* FindTriggerAI() const;

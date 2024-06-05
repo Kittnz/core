@@ -25,7 +25,7 @@ npc_captain_blackanvil* npc_captain_blackanvil::GetBlackanvilAI(Creature* creatu
     return dynamic_cast<npc_captain_blackanvil*>(creature->AI());
 }
 
-npc_captain_blackanvil::npc_captain_blackanvil(Creature* pCreature): ScriptedAI(pCreature)
+npc_captain_blackanvil::npc_captain_blackanvil(Creature* pCreature) : ScriptedAI(pCreature)
 {
     npc_captain_blackanvil::Reset();
 }
@@ -36,18 +36,43 @@ void npc_captain_blackanvil::Reset()
 
 void npc_captain_blackanvil::UpdateAI(const uint32 delta)
 {
-    m_pulseTimer.Update(delta);
-    if (!m_pulseTimer.IsReady())
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
     {
         return;
     }
-    m_pulseTimer.Reset();
 
-    const auto trigger = FindTriggerAI();
-    if (!trigger)
+    m_gcdTimer.Update(delta);
+    m_mortalStrikeTimer.Update(delta);
+    m_thunderClapTimer.Update(delta);
+
+    if (m_creature->IsNonMeleeSpellCasted(false))
     {
         return;
     }
+
+    if (m_mortalStrikeTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_mortalStrikeTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_mortalStrikeTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    if (m_thunderClapTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_thunderClapTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_thunderClapTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    DoMeleeAttackIfReady();
 }
 
 CreatureAI* npc_captain_blackanvil::GetAI(Creature* pCreature)

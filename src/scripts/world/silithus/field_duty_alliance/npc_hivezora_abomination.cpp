@@ -14,6 +14,12 @@ m_waypoints{
     npc_hivezora_abomination::Reset();
 }
 
+void npc_hivezora_abomination::EnterEvadeMode()
+{
+    ScriptedAI::EnterEvadeMode();
+    m_creature->DisappearAndDie();
+}
+
 void npc_hivezora_abomination::MovementInform(uint32_t movementType, uint32_t pointId)
 {
     ScriptedAI::MovementInform(movementType, pointId);
@@ -31,6 +37,20 @@ void npc_hivezora_abomination::MovementInform(uint32_t movementType, uint32_t po
 
 void npc_hivezora_abomination::Reset()
 {
+}
+
+void npc_hivezora_abomination::OnCombatStop()
+{
+    // Required to avoid stack overflow
+    if (m_combatStopping)
+    {
+        return;
+    }
+
+    m_combatStopping = true;
+    ScriptedAI::OnCombatStop();
+    m_creature->DisappearAndDie();
+    m_combatStopping = false;
 }
 
 void npc_hivezora_abomination::UpdateAI(const uint32 delta)

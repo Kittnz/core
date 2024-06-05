@@ -11,6 +11,31 @@ void npc_arcanist_nozzlespring::Reset()
 
 void npc_arcanist_nozzlespring::UpdateAI(const uint32 delta)
 {
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+    {
+        return;
+    }
+
+    m_gcdTimer.Update(delta);
+    m_fireballTimer.Update(delta);
+
+    if (m_creature->IsNonMeleeSpellCasted(false))
+    {
+        return;
+    }
+
+    if (m_fireballTimer.IsReady() && m_gcdTimer.IsReady())
+    {
+        const auto result = m_creature->CastSpell(m_creature->GetVictim(), m_fireballTimer.SpellID(), false);
+        if (result == SPELL_CAST_OK)
+        {
+            m_creature->ResetAttackTimer();
+            m_fireballTimer.Reset();
+            m_gcdTimer.Reset();
+        }
+    }
+
+    DoMeleeAttackIfReady();
 }
 
 CreatureAI* npc_arcanist_nozzlespring::GetAI(Creature* pCreature)
