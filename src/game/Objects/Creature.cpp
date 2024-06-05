@@ -221,7 +221,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), m_creatureGroup(nullptr),
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     m_lastLeashExtensionTime(nullptr), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
-    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
+    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_callsForHelp(true), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
     m_reputationId(-1), m_gossipMenuId(0), m_castingTargetGuid(0)
 {
     m_regenTimer = 200;
@@ -922,7 +922,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
 
                         float x, y, z;
                         GetRespawnCoord(x, y, z, nullptr, nullptr);
-                        if (GetDistance(x, y, z) > 10.0f)
+                        if (CallsForHelp() && GetDistance(x, y, z) > 10.0f)
                             CallForHelp(m_callForHelpDist);
                     }
                     else
@@ -2731,6 +2731,16 @@ void Creature::SetInCombatWithZone(bool initialPulse)
 }
 
 
+bool Creature::CallsForHelp() const
+{
+    return m_callsForHelp;
+}
+
+void Creature::SetCallsForHelp(bool callsForHelp)
+{
+    m_callsForHelp = callsForHelp;
+}
+
 bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const
 {
     if (selectFlags)
@@ -3238,7 +3248,7 @@ void Creature::DisappearAndDie()
 {
     if (!IsInWorld())
     {
-        sLog.outInfo("[CRASH][%s]DisappearAndDie: le mob n'est pas InWorld.", GetName());
+        sLog.outInfo("[CRASH][%s]DisappearAndDie: Creature is not InWorld.", GetName());
         return;
     }
 
