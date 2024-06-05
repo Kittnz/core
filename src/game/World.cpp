@@ -879,7 +879,7 @@ bool World::LoadConfigSettingsFromDB(bool reload)
     {
 #ifdef WIN32
         sLog.outError("Wrong structure of `world_config` table! Press enter to load from file.");
-        // getchar();
+        getchar();
 #endif
         return false;
     }

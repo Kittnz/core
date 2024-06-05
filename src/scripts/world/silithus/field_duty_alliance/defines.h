@@ -13,11 +13,6 @@ namespace Silithus
         constexpr uint32_t ENTRY_SERGEANT_CARNES = 15903;
         constexpr uint32_t ENTRY_TRIGGER_FIELD_DUTY_ALLIANCE = 2509000;
     }
-    namespace Factions
-    {
-        constexpr uint32_t FACTION_ABOMINATION_FRIENDLY = 35;
-        constexpr uint32_t FACTION_ABOMINATION_HOSTILE = 14;
-    }
     namespace Locations
     {
         const Movement::Location ABOMINATION_WAYPOINT_1 = { -7234.162598f, 1470.889160f, -3.571612f, 4.986561f };
