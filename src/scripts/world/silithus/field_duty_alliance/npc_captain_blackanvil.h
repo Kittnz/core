@@ -1,7 +1,5 @@
 #pragma once
 #include <AI/AbilityTimer.h>
-#include "defines.h"
-#include "trigger_field_duty_alliance.h"
 
 struct npc_captain_blackanvil : public ScriptedAI
 {
@@ -12,7 +10,6 @@ private:
 
     constexpr static uint32_t GOSSIP_TEXT_NOT_IMPRESSED_EVENT_COMPLETE = 2593004;
 
-    [[nodiscard]] trigger_field_duty_alliance* FindTriggerAI() const;
     static npc_captain_blackanvil* GetBlackanvilAI(Creature* creature);
 public:
     explicit npc_captain_blackanvil(Creature* pCreature);

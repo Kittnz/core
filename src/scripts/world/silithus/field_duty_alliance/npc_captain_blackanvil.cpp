@@ -1,14 +1,5 @@
 #include "npc_captain_blackanvil.h"
-
-trigger_field_duty_alliance* npc_captain_blackanvil::FindTriggerAI() const
-{
-    const auto trigger = m_creature->FindNearestCreature(Silithus::Creatures::ENTRY_TRIGGER_FIELD_DUTY_ALLIANCE, 200.f);
-    if (!trigger)
-    {
-        return nullptr;
-    }
-    return dynamic_cast<trigger_field_duty_alliance*>(trigger->AI());
-}
+#include "defines.h"
 
 npc_captain_blackanvil* npc_captain_blackanvil::GetBlackanvilAI(Creature* creature)
 {
