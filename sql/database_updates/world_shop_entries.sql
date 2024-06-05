@@ -36,17 +36,16 @@ replace into shop_categories (id, name, name_loc4, icon) values
 (7,  'Fashion', '时尚', 'tabard'),
 (8,  'Illusions', '幻象', 'scroll');
 
-
 replace into shop_items (id, category, item, model_id, item_id, description, description_loc4, price, region_locked, position_x, position_y, position_z, rotation, scale) values 
-(1, 1, 50000, 0, 0, 'Token: Character Name Change', '代币：角色名称变更', 160, 0, 0, 0, 0, 0, 1),
-(2, 1, 80499, 0, 0, 'Token: Guild Name Change', '代币：公会名称变更', 300, 0, 0, 0, 0, 0, 1),
-(3, 1, 80699, 0, 0, 'Token: Appearance Change', '代币：外观变更', 160, 0, 0, 0, 0, 0, 1),
-(4, 1, 80555, 0, 0, 'Token: Pet Rename', '代币:宠物重命名', 100, 0, 0, 0, 0, 0, 1),
-(5, 1, 51306, 0, 0, 'Pouch of Fashion Coins', '大袋时尚硬币', 200, 0, 0, 0, 0, 0, 1),
-(6, 1, 50603, 0, 0, 'Change Race: Human', '种族转换：人类', 300, 0, 0, 0, 0, 0, 1),
-(7, 1, 50604, 0, 0, 'Change Race: Gnome', '种族转换：侏儒', 300, 0, 0, 0, 0, 0, 1),
-(8, 1, 50605, 0, 0, 'Change Race: Dwarf', '种族转换：矮人', 300, 0, 0, 0, 0, 0, 1),
-(9, 1, 50606, 0, 0, 'Change Race: Night Elf', '种族转换：暗夜精灵', 0, 0, 0, 0, 0, 1),
+(1,  1, 50000, 0, 0, 'Token: Character Name Change', '代币：角色名称变更', 160, 0, 0, 0, 0, 0, 1),
+(2,  1, 80499, 0, 0, 'Token: Guild Name Change', '代币：公会名称变更', 300, 0, 0, 0, 0, 0, 1),
+(3,  1, 80699, 0, 0, 'Token: Appearance Change', '代币：外观变更', 160, 0, 0, 0, 0, 0, 1),
+(4,  1, 80555, 0, 0, 'Token: Pet Rename', '代币:宠物重命名', 100, 0, 0, 0, 0, 0, 1),
+(5,  1, 51306, 0, 0, 'Pouch of Fashion Coins', '大袋时尚硬币', 200, 0, 0, 0, 0, 0, 1),
+(6,  1, 50603, 0, 0, 'Change Race: Human', '种族转换：人类', 300, 0, 0, 0, 0, 0, 1),
+(7,  1, 50604, 0, 0, 'Change Race: Gnome', '种族转换：侏儒', 300, 0, 0, 0, 0, 0, 1),
+(8,  1, 50605, 0, 0, 'Change Race: Dwarf', '种族转换：矮人', 300, 0, 0, 0, 0, 0, 1),
+(9,  1, 50606, 0, 0, 'Change Race: Night Elf', '种族转换：暗夜精灵', 300, 0, 0, 0, 0, 0, 1),
 (10, 1, 50607, 0, 0, 'Change Race: Orc', '种族转换：兽人', 300, 0, 0, 0, 0, 0, 1),
 (11, 1, 50608, 0, 0, 'Change Race: Troll', '种族转换：巨魔', 300, 0, 0, 0, 0, 0, 1),
 (12, 1, 50609, 0, 0, 'Change Race: Tauren', '种族转换：牛头人', 300, 0, 0, 0, 0, 0, 1),
