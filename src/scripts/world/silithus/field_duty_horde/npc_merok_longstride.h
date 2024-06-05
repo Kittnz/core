@@ -85,7 +85,7 @@ public:
         m_healingWaveTimer.Update(uiDiff);
 
         // Only tick Lightning Shield timer if the aura is not present
-        const auto lightningShieldAura = m_creature->GetAura(m_lightningShieldTimer.spell_id(), EFFECT_INDEX_0);
+        const auto lightningShieldAura = m_creature->GetAura(m_lightningShieldTimer.SpellID(), EFFECT_INDEX_0);
         if (!lightningShieldAura)
         {
             m_lightningShieldTimer.Update(uiDiff);
@@ -96,7 +96,7 @@ public:
         {
             if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
             {
-                if (DoCastSpellIfCan(m_creature, m_healingWaveTimer.spell_id()) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature, m_healingWaveTimer.SpellID()) == CAST_OK)
                 {
                     m_gcdTimer.Reset();
                     m_healingWaveTimer.Reset();
@@ -112,7 +112,7 @@ public:
             {
                 if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
-                    if (DoCastSpellIfCan(krugSkullsplit, m_healingWaveTimer.spell_id()) == CAST_OK)
+                    if (DoCastSpellIfCan(krugSkullsplit, m_healingWaveTimer.SpellID()) == CAST_OK)
                     {
                         m_gcdTimer.Reset();
                         m_healingWaveTimer.Reset();
@@ -129,7 +129,7 @@ public:
             {
                 if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
-                    if (DoCastSpellIfCan(shadowPriestessShai, m_healingWaveTimer.spell_id()) == CAST_OK)
+                    if (DoCastSpellIfCan(shadowPriestessShai, m_healingWaveTimer.SpellID()) == CAST_OK)
                     {
                         m_gcdTimer.Reset();
                         m_healingWaveTimer.Reset();
@@ -142,7 +142,7 @@ public:
         // Rebuff Lightning Shield if it's not present
         if (m_lightningShieldTimer.IsReady() && m_gcdTimer.IsReady())
         {
-            if (DoCastSpellIfCan(m_creature, m_lightningShieldTimer.spell_id()) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature, m_lightningShieldTimer.SpellID()) == CAST_OK)
             {
                 m_lightningShieldTimer.Reset();
                 m_gcdTimer.Reset();
@@ -153,7 +153,7 @@ public:
         // Flame Shock if it's ready
         if (m_flameShockTimer.IsReady() && m_gcdTimer.IsReady())
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), m_flameShockTimer.spell_id()) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), m_flameShockTimer.SpellID()) == CAST_OK)
             {
                 m_flameShockTimer.Reset();
                 m_gcdTimer.Reset();
@@ -168,7 +168,7 @@ public:
             {
                 if (m_healingWaveTimer.IsReady() && m_gcdTimer.IsReady())
                 {
-                    if (DoCastSpellIfCan(damagedUnit, m_healingWaveTimer.spell_id()) == CAST_OK)
+                    if (DoCastSpellIfCan(damagedUnit, m_healingWaveTimer.SpellID()) == CAST_OK)
                     {
                         m_gcdTimer.Reset();
                         m_healingWaveTimer.Reset();

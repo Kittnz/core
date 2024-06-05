@@ -275,7 +275,7 @@ public:
 
         if (m_mortalStrikeTimer.IsReady() && m_gcdTimer.IsReady())
         {
-            if (DoCastSpellIfCan(m_creature, m_mortalStrikeTimer.spell_id()) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature, m_mortalStrikeTimer.SpellID()) == CAST_OK)
             {
                 m_gcdTimer.Reset();
                 m_mortalStrikeTimer.Reset();
@@ -284,7 +284,7 @@ public:
 
         if (m_thunderClapTimer.IsReady() && m_gcdTimer.IsReady())
         {
-            if (DoCastSpellIfCan(m_creature, m_thunderClapTimer.spell_id()) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature, m_thunderClapTimer.SpellID()) == CAST_OK)
             {
                 m_gcdTimer.Reset();
                 m_thunderClapTimer.Reset();

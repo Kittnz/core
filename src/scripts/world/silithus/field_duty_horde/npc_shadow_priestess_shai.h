@@ -55,12 +55,12 @@ public:
         m_mindBlastTimer.Update(uiDiff);
 
         // Only tick SW:P if target doesn't have it
-        if (!myTarget->HasAura(m_shadowWordPainTimer.spell_id()))
+        if (!myTarget->HasAura(m_shadowWordPainTimer.SpellID()))
         {
             m_shadowWordPainTimer.Update(uiDiff);
             if (m_shadowWordPainTimer.IsReady() && m_gcdTimer.IsReady())
             {
-                if (DoCastSpellIfCan(myTarget, m_shadowWordPainTimer.spell_id()) == CAST_OK)
+                if (DoCastSpellIfCan(myTarget, m_shadowWordPainTimer.SpellID()) == CAST_OK)
                 {
                     m_shadowWordPainTimer.Reset();
                     m_gcdTimer.Reset();
@@ -71,7 +71,7 @@ public:
 
         if (m_mindBlastTimer.IsReady() && m_gcdTimer.IsReady())
         {
-            if (DoCastSpellIfCan(myTarget, m_mindBlastTimer.spell_id()) == CAST_OK)
+            if (DoCastSpellIfCan(myTarget, m_mindBlastTimer.SpellID()) == CAST_OK)
             {
                 m_mindBlastTimer.Reset();
                 m_gcdTimer.Reset();
