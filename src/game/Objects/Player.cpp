@@ -9238,9 +9238,16 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
             Creature *creature = GetMap()->GetCreature(guid);
 
             // must be in range and creature must be alive for pickpocket and must be dead for another loot
-            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING) || !creature->IsWithinDistInMap(this, GetMaxLootDistance(creature), true, SizeFactor::None))
+            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING))
             {
-                SendLootRelease(guid);
+                SendLootError(guid, LOOT_ERROR_DIDNT_KILL);
+                return;
+            }
+
+            // skinning range already checked during spell cast
+            if (loot_type != LOOT_SKINNING && !creature->IsWithinDistInMap(this, GetMaxLootDistance(creature), true, SizeFactor::None))
+            {
+                SendLootError(guid, LOOT_ERROR_TOO_FAR);
                 return;
             }
 
@@ -16805,7 +16812,7 @@ bool Player::IsAllowedToLoot(Creature const* creature)
 
 float Player::GetMaxLootDistance(Unit const* pUnit) const
 {
-    float distance = GetCombatReach() + 1.333333373069763f + pUnit->GetCombatReach();
+    float distance = std::max(1.5f, GetCombatReach()) + 1.333333373069763f + std::max(1.5f, pUnit->GetCombatReach());
     return std::max(INTERACTION_DISTANCE, distance);
 }
 
