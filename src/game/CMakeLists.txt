@@ -50,6 +50,7 @@ set (game_SRCS
     Weather.cpp
     World.cpp
     WorldSession.cpp
+    AI/AbilityTimer.cpp
     AI/AggressorAI.cpp
     AI/CreatureAI.cpp
     AI/CreatureAIRegistry.cpp
@@ -254,6 +255,7 @@ set (game_SRCS
     World.h
     WorldSession.h
 	Analysis/AccountAnalyser.hpp
+    AI/AbilityTimer.h
     AI/AggressorAI.h
     AI/CreatureAI.h
     AI/CreatureAIImpl.h
