@@ -44,7 +44,7 @@ private:
     ObjectGuid m_commandedSoldier = 0;
 
     // Throttles updates so we're not constantly scanning for NPCs
-    AbilityTimer m_pulseTimer = AbilityTimer(0, 800, 800, 0);
+    AbilityTimer m_updateThrottleTimer = AbilityTimer(0, 400, 400, 0);
 
     // How long the quest will remain completable after the event is finished
     AbilityTimer m_eventCompleteTimer = AbilityTimer(0, 180000, 180000, 0);

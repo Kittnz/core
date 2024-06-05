@@ -234,7 +234,15 @@ void trigger_field_duty_alliance::StartEvent()
 
 void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
 {
+    m_updateThrottleTimer.Update(delta);
     m_eventPulseTimer.Update(delta);
+
+    if (!m_updateThrottleTimer.IsReady())
+    {
+        return;
+    }
+
+    m_updateThrottleTimer.Reset();
 
     // Nothing to do while idling.
     if (m_eventState == Silithus::EventState::WAITING_FOR_START)
@@ -277,7 +285,6 @@ void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
             {
                 janelaStouthammer->m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER.orientation);
                 janelaStouthammer->m_creature->CombatStop(true);
-                janelaStouthammer->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             }
 
             std::list<Creature*> footmen;
@@ -322,8 +329,7 @@ void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
             if (blackanvil)
             {
                 m_eventForceResetTimer.Reset();
-                // m_eventPulseTimer.SetCooldown(180000);
-                m_eventPulseTimer.SetCooldown(15000);
+                m_eventPulseTimer.SetCooldown(180000);
                 m_eventStage = FinishedDone;
                 blackanvil->m_creature->CombatStop(true);
                 blackanvil->m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -346,11 +352,55 @@ void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
 
     if (m_eventState == Silithus::EventState::FIGHT_IN_PROGRESS)
     {
+        const auto abomination = FindHiveZoraAbomination();
         if (m_eventStage == CombatActive && m_eventPulseTimer.IsReady())
         {
-            if (auto const abomination = FindHiveZoraAbomination())
+            const auto blackanvil = FindCaptainBlackanvil();
+            if (abomination && blackanvil)
             {
                 m_eventForceResetTimer.Reset();
+
+                // If anyone respawns mid-fight, force them to re-engage the abomination
+                if (const auto janela = FindJanelaStouthammer())
+                {
+                    if (janela->m_creature->GetVictim() == nullptr)
+                    {
+                        janela->m_creature->EnterCombatWithTarget(abomination->m_creature);
+                    }
+                }
+                if (const auto sergeant = FindSergeantCarnes())
+                {
+                    if (sergeant->GetVictim() == nullptr)
+                    {
+                        sergeant->EnterCombatWithTarget(abomination->m_creature);
+                    }
+                }
+                if (const auto arcanist = FindArcanistNozzlespring())
+                {
+                    if (arcanist->m_creature->GetVictim() == nullptr)
+                    {
+                        arcanist->m_creature->EnterCombatWithTarget(abomination->m_creature);
+                    }
+                }
+
+                std::list<Creature*> footmen;
+                GetCreatureListWithEntryInGrid(footmen, m_creature, Silithus::Creatures::ENTRY_IRONFORGE_BRIGADE_FOOTMAN, 50.f);
+                for (auto const footman : footmen)
+                {
+                    if (footman->IsAlive() && footman->GetVictim() == nullptr)
+                    {
+                        footman->EnterCombatWithTarget(abomination->m_creature);
+                    }
+                }
+                std::list<Creature*> riflemen;
+                GetCreatureListWithEntryInGrid(riflemen, m_creature, Silithus::Creatures::ENTRY_IRONFORGE_BRIGADE_RIFLEMAN, 50.f);
+                for (auto const rifleman : riflemen)
+                {
+                    if (rifleman->IsAlive() && rifleman->GetVictim() == nullptr)
+                    {
+                        rifleman->EnterCombatWithTarget(abomination->m_creature);
+                    }
+                }
             }
             else
             {
@@ -361,6 +411,11 @@ void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
         }
         else if (m_eventStage == CombatDone && m_eventPulseTimer.IsReady())
         {
+            // If we got here because Blackanvil died, clean up the abomination.
+            if (abomination)
+            {
+                abomination->m_creature->DisappearAndDie();
+            }
             m_eventForceResetTimer.Reset();
             m_eventStage = FinishedReturnToSpawnPositions;
             m_eventState = Silithus::EventState::FINISHED;
