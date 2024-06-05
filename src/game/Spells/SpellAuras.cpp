@@ -5117,7 +5117,7 @@ void Aura::HandleModHealingDone(bool apply, bool /*Real*/)
     if (apply)
     {
         // Tree of Life Aura
-        if (GetId() == 45707)
+        if (GetId() == 45707 && GetHolder()->IsAddedBySpell())
         {
             if (Unit* pCaster = GetCaster())
                 m_modifier.m_amount = pCaster->GetStat(STAT_SPIRIT) * (float(m_modifier.m_amount) / 100.0f);

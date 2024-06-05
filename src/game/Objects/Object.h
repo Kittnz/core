@@ -38,6 +38,8 @@
 #include <string>
 #include <array>
 
+#include "MoveSpline.h"
+
 #define CONTACT_DISTANCE 0.5f
 #define INTERACTION_DISTANCE 5.0f
 #define ATTACK_DISTANCE 5.0f
@@ -1063,6 +1065,7 @@ class WorldObject : public Object
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType &) override;
 
+        Creature* SummonCreature(uint32_t id, const Movement::Location& location, TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN, uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr, bool attach = true);
         Creature* SummonCreature(uint32 id, float x, float y, float z, float ang,TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN,uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr, bool attach = true);
         GameObject* SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang, const float rotation0 = 0.0f, const float rotation1 = 0.0f, const float rotation2 = 0.0f, const float rotation3 = 0.0f, const uint32 respawnTime = 25000, const bool attach = true);
 

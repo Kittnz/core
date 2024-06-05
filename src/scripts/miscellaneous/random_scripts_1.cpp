@@ -359,7 +359,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     switch (pItem->GetEntry())
     {
     case 50603: // Human
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_HUNTER || pPlayer->GetClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -404,7 +404,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         race = RACE_ORC;
         break;
     case 50608: // Troll
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -448,6 +448,32 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->GetGender() == GENDER_MALE ? 16843522 : 2;
         race = RACE_GOBLIN;
         break;
+    }
+
+    uint32 freeSpots = 0;
+
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (!pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            ++freeSpots;
+    }
+
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (!pPlayer->GetItemByPos(i, j))
+                    ++freeSpots;
+            }
+        }
+    }
+
+    if (freeSpots < 5)
+    {
+        pPlayer->GetSession()->SendNotification("You need at least 5 free bag slots.");
+        return false;
     }
 
     bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);

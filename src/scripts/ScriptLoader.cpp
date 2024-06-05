@@ -3,6 +3,7 @@
 * Please see the included DOCS/LICENSE.TXT for more information */
 
 #include "scriptPCH.h"
+#include "world/silithus/silithus.h"
 
 // AI system
 void AddSC_generic_spell_ai();
@@ -573,6 +574,7 @@ void AddScripts()
     AddSC_mulgore();
     AddSC_orgrimmar();
     AddSC_silithus();
+    RegisterScripts_Silithus();
     AddSC_stonetalon_mountains();
     AddSC_tanaris();
     AddSC_teldrassil();

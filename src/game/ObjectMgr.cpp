@@ -9431,6 +9431,11 @@ void ObjectMgr::LoadShop()
         if (!CheckRegionRequirements(region))
             continue;
 
+        auto raceChangeItems = make_array(50603, 50604, 50605, 50606, 50607, 50608, 50609, 50610, 50613, 50612);
+
+        if (std::find(raceChangeItems.begin(), raceChangeItems.end(), item) != raceChangeItems.end() && sWorld.IsPvPRealm())
+            continue;
+
         ShopEntry shopentry;
         shopentry.shopId = id;
         shopentry.Category = category;

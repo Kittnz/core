@@ -2647,6 +2647,12 @@ void WorldObject::BuildUpdateData(UpdateDataMapType & update_players)
     ClearUpdateMask(false);
 }
 
+Creature* WorldObject::SummonCreature(uint32_t id, const Movement::Location& location, TempSummonType spwtype,
+    uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, bool attach)
+{
+    return SummonCreature(id, location.x, location.y, location.z, location.orientation, spwtype, despwtime, asActiveObject, pacifiedTimer, pFuncAiSetter, attach);
+}
+
 bool WorldObject::IsControlledByPlayer() const
 {
     switch (GetTypeId())
