@@ -56,15 +56,15 @@ namespace Silithus
     }
     namespace ScriptTexts
     {
+        constexpr int SCRIPT_TEXT_JANELA_LOOK_ALIVE = -1250902;
         constexpr int SCRIPT_TEXT_JANELA_LOOKOUT_SPOTTED = -1250900;
         constexpr int SCRIPT_TEXT_JANELA_SEND_SOLDIER = -1250901;
-        constexpr int SCRIPT_TEXT_JANELA_LOOK_ALIVE = -1250902;
-        constexpr int SCRIPT_TEXT_SOLDIER_ANNOUNCE_PROBLEM = -1250903;
         constexpr int SCRIPT_TEXT_BLACKANVIL_BETTER_BE_IMPORTANT = -1250904;
         constexpr int SCRIPT_TEXT_BLACKANVIL_COMPLAINS_ABOUT_DAY = -1250905;
-        constexpr int SCRIPT_TEXT_BLACKANVIL_STAND_READY = -1250907;
-        constexpr int SCRIPT_TEXT_BLACKANVIL_OPEN_FIRE = -1250908;
         constexpr int SCRIPT_TEXT_BLACKANVIL_FORM_A_LINE = -1250909;
+        constexpr int SCRIPT_TEXT_BLACKANVIL_OPEN_FIRE = -1250908;
+        constexpr int SCRIPT_TEXT_BLACKANVIL_STAND_READY = -1250907;
+        constexpr int SCRIPT_TEXT_SOLDIER_ANNOUNCE_PROBLEM = -1250903;
     }
     namespace EventState
     {

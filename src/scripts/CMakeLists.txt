@@ -327,6 +327,7 @@ world/silithus.cpp
 world/silithus/field_duty_alliance/defines.h
 world/silithus/field_duty_alliance/npc_arcanist_nozzlespring.cpp
 world/silithus/field_duty_alliance/npc_arcanist_nozzlespring.h
+world/silithus/field_duty_alliance/npc_captain_blackanvil.cpp
 world/silithus/field_duty_alliance/npc_captain_blackanvil.h
 world/silithus/field_duty_alliance/npc_hivezora_abomination.cpp
 world/silithus/field_duty_alliance/npc_hivezora_abomination.h

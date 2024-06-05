@@ -7,89 +7,18 @@ struct npc_captain_blackanvil : public ScriptedAI
 {
 private:
     AbilityTimer m_pulseTimer = AbilityTimer(0, 800, 800, 0);
-    [[nodiscard]] trigger_field_duty_alliance* find_trigger_ai() const
-    {
-        const auto trigger = m_creature->FindNearestCreature(Silithus::Creatures::ENTRY_TRIGGER_FIELD_DUTY_ALLIANCE, 200.f);
-        if (!trigger)
-        {
-            return nullptr;
-        }
-        return dynamic_cast<trigger_field_duty_alliance*>(trigger->AI());
-    }
+    constexpr static uint32_t GOSSIP_TEXT_NOT_IMPRESSED_EVENT_COMPLETE = 2593004;
 
-    static npc_captain_blackanvil* get_blackanvil_ai(Creature* creature)
-    {
-        if (!creature)
-        {
-            return nullptr;
-        }
-
-        if (creature->GetEntry() != Silithus::Creatures::ENTRY_CAPTAIN_BLACKANVIL)
-        {
-            return nullptr;
-        }
-
-        return dynamic_cast<npc_captain_blackanvil*>(creature->AI());
-    }
+    [[nodiscard]] trigger_field_duty_alliance* FindTriggerAI() const;
+    static npc_captain_blackanvil* GetBlackanvilAI(Creature* creature);
 public:
-    npc_captain_blackanvil(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_captain_blackanvil::Reset();
-    }
+    explicit npc_captain_blackanvil(Creature* pCreature);
 
-    void Reset() override
-    {
-    }
+    void Reset() override;
+    void UpdateAI(const uint32 delta) override;
+    static bool GossipHello(Player* player, Creature* creature);
+    static bool GossipSelect(Player* player, Creature* creature, uint32_t sender, uint32_t action);
 
-    void UpdateAI(const uint32 delta) override
-    {
-        m_pulseTimer.Update(delta);
-        if (!m_pulseTimer.IsReady())
-        {
-            return;
-        }
-        m_pulseTimer.Reset();
-
-        const auto trigger = find_trigger_ai();
-        if (!trigger)
-        {
-            return;
-        }
-    }
-
-    static CreatureAI* GetAI(Creature* pCreature)
-    {
-        return new npc_captain_blackanvil(pCreature);
-    }
-
-    static bool GossipHello(Player* player, Creature* creature)
-    {
-        const auto blackanvil = get_blackanvil_ai(creature);
-        if (!blackanvil)
-        {
-            return false;
-        }
-        const auto trigger = blackanvil->find_trigger_ai();
-        if (!trigger)
-        {
-            return false;
-        }
-        player->PlayerTalkClass->SendGossipMenu(Player::GetGossipTextId(creature), creature->GetGUID());
-        return true;
-    }
-
-    static bool GossipSelect(Player* player, Creature* creature, uint32_t sender, uint32_t action)
-    {
-        return false;
-    }
-
-    static void RegisterScript()
-    {
-        const auto script = new Script();
-        script->Name = "npc_captain_blackanvil";
-        script->GetAI = &npc_captain_blackanvil::GetAI;
-        script->pGossipHello = &npc_captain_blackanvil::GossipHello;
-        script->pGossipSelect = &npc_captain_blackanvil::GossipSelect;
-        script->RegisterSelf();
-    }
+    static CreatureAI* GetAI(Creature* pCreature);
+    static void RegisterScript();
 };

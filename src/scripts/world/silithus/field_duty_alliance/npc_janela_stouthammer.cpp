@@ -111,12 +111,19 @@ bool npc_janela_stouthammer::GossipHello(Player* player, Creature* creature)
         return false;
     }
 
+    if (trigger->EventState() == Silithus::EventState::FINISHED)
+    {
+        player->PlayerTalkClass->SendGossipMenu(GOSSIP_TEXT_THANKS_FOR_ASSIST, creature->GetGUID());
+        return true;
+    }
+
     if (player->GetQuestStatus(Silithus::Quests::QUEST_FIELD_DUTY))
     {
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(GOSSIP_ICON_CHAT, GossipTextReportingForFieldDuty, GOSSIP_SENDER_MAIN, GossipActionReportingForFieldDuty);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(GOSSIP_ICON_CHAT, GOSSIP_TEXT_REPORTING_FOR_FIELD_DUTY, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_REPORTING_FOR_FIELD_DUTY);
         player->PlayerTalkClass->SendGossipMenu(Player::GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
+
     player->PlayerTalkClass->SendGossipMenu(Player::GetGossipTextId(creature), creature->GetGUID());
     return true;
 }
@@ -134,14 +141,14 @@ bool npc_janela_stouthammer::GossipSelect(Player* player, Creature* creature, ui
         return false;
     }
 
-    if (action == GossipActionReportingForFieldDuty)
+    if (action == GOSSIP_ACTION_REPORTING_FOR_FIELD_DUTY)
     {
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, GossipTextImReadyStartEvent, GOSSIP_SENDER_MAIN, GossipActionStartEvent);
-        player->PlayerTalkClass->SendGossipMenu(GossipTextWereExpectingAnAttack, creature->GetGUID());
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, GOSSIP_TEXT_IM_READY_START_EVENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_START_EVENT);
+        player->PlayerTalkClass->SendGossipMenu(GOSSIP_TEXT_WERE_EXPECTING_AN_ATTACK, creature->GetGUID());
         return true;
     }
 
-    if (action == GossipActionStartEvent)
+    if (action == GOSSIP_ACTION_START_EVENT)
     {
         trigger->StartEvent();
         player->PlayerTalkClass->CloseGossip();

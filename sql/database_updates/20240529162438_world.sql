@@ -82,6 +82,24 @@ REPLACE INTO `broadcast_text` (
     NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
 );
 
+REPLACE INTO `npc_gossip` (`npc_guid`, `textid`) 
+VALUES (166513, 2593004);
+REPLACE INTO `npc_text` (
+    `ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, 
+    `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, 
+    `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, 
+    `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`
+) VALUES (
+    2593004, 2593004, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+REPLACE INTO `broadcast_text` (
+    `entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, 
+    `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`
+) VALUES (
+    2593004, "So ye helped us fend off that attack, eh? Don't think I'm impressed.",
+    NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
+);
+
 -- Assign script to Arcanist Nozzlespring
 UPDATE `creature_template` 
 SET `script_name` = "npc_arcanist_nozzlespring" 
@@ -138,6 +156,22 @@ REPLACE INTO `broadcast_text` (
     `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`
 ) VALUES (
     2593003, "I'm ready. (Start Event)",
+    NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
+);
+
+REPLACE INTO `npc_text` (
+    `ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, 
+    `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, 
+    `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, 
+    `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`
+) VALUES (
+    2593005, 2593005, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+REPLACE INTO `broadcast_text` (
+    `entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, 
+    `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`
+) VALUES (
+    2593005, "Thanks for the assist. Unfortunately, we see attacks like this all the time. It's just another day in Silithus.",
     NULL, 0, 0, 7, 0, 0, 0, 0, 0, 0
 );
 
