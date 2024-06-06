@@ -1808,77 +1808,80 @@ enum DressingBoxes
 
 bool GossipHello_rented_mount(Player* player, Creature* mount)
 {    
+    if (player->GetMountID())
+        return false;
+
     switch (mount->GetEntry())
     {
-    case 51560:
-    case 51561:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66850, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
-        return true;
-    case 51580:
-    case 51581:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66851, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
-        return true;
-    case 51588:
-    case 51589:
-    case 51587:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66852, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
-        return true;
-    case 4779:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66853, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
-        return true;
-    case 4710:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66854, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
-        return true;
-    case 12354:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66855, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
-        return true;
-    case 12355:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66856, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
-        return true;
-    default:
-        break;
+        case 51560:
+        case 51561:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66850, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
+            return true;
+        case 51580:
+        case 51581:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66851, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
+            return true;
+        case 51588:
+        case 51589:
+        case 51587:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66852, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
+            return true;
+        case 4779:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66853, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
+            return true;
+        case 4710:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66854, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
+            return true;
+        case 12354:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66855, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
+            return true;
+        case 12355:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66856, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
+            return true;
+        default:
+            break;
     }
     return true;
 }
 
-bool GossipSelect_rented_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+bool GossipSelect_rented_mount(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 spell{ 0 };
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1 && !pPlayer->GetMountID())
     {
-        if (p_Player->GetMoney() >= 50)
+        if (pPlayer->GetMoney() >= 50)
         {
-            switch (p_Creature->GetEntry())
+            switch (pCreature->GetEntry())
             {
-            case 51560: spell = 468;    break; // White Stallion
-            case 51561: spell = 471;    break; // Palomino
-            case 51580: spell = 6653;   break; // Dire Riding Wolf
-            case 51581: spell = 580;    break; // Timber Riding Wolf
-            case 51588: spell = 17462;  break; // Red Skeletal Horse
-            case 51589: spell = 17463;  break; // Blue Skeletal Horse
-            case 51587: spell = 17464;  break; // Brown Skeletal Horse
-            case 4779:  spell = 6899;   break; // Brown Riding Ram
-            case 4710:  spell = 6777;   break; // Gray Riding Ram
-            case 12354: spell = 18990;  break; // Brown Riding Kodo
-            case 12355: spell = 18989;  break; // Gray Riding Kodo
-            default:
-                break;
+                case 51560: spell = 468;    break; // White Stallion
+                case 51561: spell = 471;    break; // Palomino
+                case 51580: spell = 6653;   break; // Dire Riding Wolf
+                case 51581: spell = 580;    break; // Timber Riding Wolf
+                case 51588: spell = 17462;  break; // Red Skeletal Horse
+                case 51589: spell = 17463;  break; // Blue Skeletal Horse
+                case 51587: spell = 17464;  break; // Brown Skeletal Horse
+                case 4779:  spell = 6899;   break; // Brown Riding Ram
+                case 4710:  spell = 6777;   break; // Gray Riding Ram
+                case 12354: spell = 18990;  break; // Brown Riding Kodo
+                case 12355: spell = 18989;  break; // Gray Riding Kodo
+                default:
+                    break;
             }
-            p_Player->CastSpell(p_Player, spell, true);
-            p_Player->ModifyMoney(-50);
+            pPlayer->CastSpell(pPlayer, spell, true);
+            pPlayer->ModifyMoney(-50);
         }
         else
-            p_Player->GetSession()->SendNotification("You don't have enough money!");
+            pPlayer->GetSession()->SendNotification("You don't have enough money!");
     }
-    p_Player->CLOSE_GOSSIP_MENU();
+    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
