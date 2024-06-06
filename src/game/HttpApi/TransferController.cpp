@@ -226,7 +226,7 @@ namespace HttpApi
             {
                 //only set char active if transaction for migration transfer succeeded.
                 CharacterDatabase.PExecute("UPDATE `characters` SET `active` = 1 WHERE `guid` = %u", *guidPtr);
-                CharacterDatabase.PExecute("UPDATE `characters` SET `customFlags` = `customFlags` | x20 WHERE `guid` = %u", *guidPtr); // add WAS_TRANSFERRED custom flag to take away items after login.
+                CharacterDatabase.PExecute("UPDATE `characters` SET `customFlags` = `customFlags` | 0x20 WHERE `guid` = %u", *guidPtr); // add WAS_TRANSFERRED custom flag to take away items after login.
 
                 //Set all purchase logs to new char guid to fix HC not getting proper refunds.
                 if (*guidPtr && oldGuidLow)               
