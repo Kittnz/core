@@ -448,6 +448,26 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     return SPELL_PROC_TRIGGER_ROLL_FAILED;
 }
 
+SpellAuraProcResult Unit::HandleNULLProc(Unit* /*pVictim*/, uint32 /*damage*/, int32 /*originalAmount*/, Aura* triggeredByAura, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 cooldown)
+{
+    if (cooldown)
+    {
+        // We need a way to store cooldown for procs which dont trigger another spell.
+        // Since spell ids are limited to uint16 in db, lets use unique fake id above that.
+        // Eye of the Dead needs this to not proc on each hit, but we can't add and check
+        // cooldown for its spell id, because the spell has an on use cooldown already.
+        uint32 const spellId = triggeredByAura->GetId() + UINT16_MAX;
+
+        if (HasSpellCooldown(spellId))
+            return SPELL_AURA_PROC_FAILED;
+
+        AddSpellCooldown(spellId, 0, time(nullptr) + cooldown);
+    }
+
+    // no proc handler for this aura type
+    return SPELL_AURA_PROC_OK;
+}
+
 SpellAuraProcResult Unit::HandleHasteAuraProc(Unit *pVictim, uint32 damage, int32 /*originalAmount*/, Aura* triggeredByAura, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 procEx, uint32 cooldown)
 {
     // Flurry: last charge crit will reapply the buff, don't remove any charges
