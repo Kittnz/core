@@ -9881,6 +9881,8 @@ void Player::HandleRaceChangeFixup()
             RemoveQuest(quest_id);
             SetQuestStatus(quest_id, QUEST_STATUS_NONE);
             getQuestStatusMap()[quest_id].m_rewarded = false;
+            getQuestStatusMap()[quest_id].uState = QUEST_DELETED;
+            ++itr;
         }
         SaveToDB();
     }
