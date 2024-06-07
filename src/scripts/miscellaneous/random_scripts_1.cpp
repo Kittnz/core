@@ -481,6 +481,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
 	{
 		uint32 Count = 1;
 		pPlayer->DestroyItemCount(pItem, Count, false);
+        pPlayer->AddItem(80699, 1); // add appearance token. This should always work because we just removed a race change token from inventory.
 		pPlayer->SaveInventoryAndGoldToDB();
 		//pPlayer->GetSession()->LogoutPlayer(false);
 		return true;

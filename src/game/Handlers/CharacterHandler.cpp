@@ -945,6 +945,13 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED);
     }
 
+    if (pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK))
+    {
+        pCurrChar->HandleRaceChangeFixup();
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK);
+    }
+
+
     auto security = pCurrChar->GetSession()->GetSecurity();
     if (pCurrChar->GetSession()->GetSecurity() > SEC_PLAYER  && security <= SEC_ADMINISTRATOR)
     {

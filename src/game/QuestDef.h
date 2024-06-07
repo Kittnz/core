@@ -282,6 +282,19 @@ class Quest
         void SetQuestActiveState(bool state) { m_isActive = state; }
         bool IsActive() const { return m_isActive; }
 
+        bool SatisfiesRaceRequirements(uint32 raceMask) const
+        {
+            uint32 reqraces = GetRequiredRaces();
+
+            if (reqraces == 0)
+                return true;
+
+            if ((reqraces & raceMask) == 0)
+                return false;
+
+            return true;
+        }
+
         // needed by honormgr for daily most hk/dk quests
         void SetEndText(std::string text) { EndText = text; }
 
