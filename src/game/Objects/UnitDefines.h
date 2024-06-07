@@ -59,7 +59,7 @@ enum MovementChangeType
 #define NO_FACING_CHECKS_DISTANCE 1.4f
 
 // Delay time next attack to prevent client attack animation problems
-#define ATTACK_DISPLAY_DELAY 200
+#define ATTACK_DISPLAY_DELAY 1
 
 // For this time difference is computed regen value
 #define REGEN_TIME_FULL 2000
