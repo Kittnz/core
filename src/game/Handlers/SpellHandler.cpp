@@ -441,6 +441,12 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
     if (spellInfo->Attributes & SPELL_ATTR_CANT_CANCEL)
         return;
 
+    if (spellInfo->Attributes & SPELL_ATTR_HIDDEN_CLIENTSIDE)
+        return;
+
+    if (spellInfo->AttributesEx & SPELL_ATTR_EX_DONT_DISPLAY_IN_AURA_BAR)
+        return;
+
     if (spellInfo->IsPassiveSpell())
         return;
 
