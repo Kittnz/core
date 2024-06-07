@@ -9744,6 +9744,31 @@ void Player::HandleTransferChecks()
 
 }
 
+auto GetPriestSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+    case RACE_HUMAN:  return make_array(13908u, 13896u);
+    case RACE_UNDEAD: return make_array(2652u, 2944u);
+    case RACE_DWARF:  return make_array(13908u, 6346u);
+    case RACE_NIGHTELF: return make_array(10797u, 2651u);
+    case RACE_TROLL: return make_array(9035u, 18137u);
+    case RACE_HIGH_ELF: return make_array(46042u, 46043u);
+    default: return make_array(0u, 0u);
+    }
+}
+
+uint32 GetShamanSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+    case RACE_TAUREN: return 45500;
+    case RACE_TROLL: return 45504;
+    case RACE_ORC: return 45505;
+    default: return 0;
+    }
+}
+
 void Player::HandleRaceChangeFixup()
 {
     //Players should get an appearance change token mailed to them if they didnt get one yet.
@@ -9857,6 +9882,7 @@ void Player::HandleRaceChangeFixup()
             SetQuestStatus(quest_id, QUEST_STATUS_NONE);
             getQuestStatusMap()[quest_id].m_rewarded = false;
         }
+        SaveToDB();
     }
 }
 
@@ -22966,30 +22992,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     return true;
 }
 
-auto GetPriestSpellForRace(uint8 race)
-{
-    switch (race)
-    {
-        case RACE_HUMAN:  return make_array(13908u, 13896u);
-        case RACE_UNDEAD: return make_array(2652u, 2944u);
-        case RACE_DWARF:  return make_array(13908u, 6346u);
-        case RACE_NIGHTELF: return make_array(10797u, 2651u);
-        case RACE_TROLL: return make_array(9035u, 18137u);
-        case RACE_HIGH_ELF: return make_array(46042u, 46043u);
-        default: return make_array(0u, 0u);
-    }
-}
 
-uint32 GetShamanSpellForRace(uint8 race)
-{
-    switch (race)
-    {
-        case RACE_TAUREN: return 45500;
-        case RACE_TROLL: return 45504;
-        case RACE_ORC: return 45505;
-        default: return 0;
-    }
-}
 
 uint32 GetCapitalReputationForRace(uint8 race)
 {
