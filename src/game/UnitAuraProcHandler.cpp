@@ -874,6 +874,47 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     CastSpell(this, 28682, true, castItem, triggeredByAura);
                     return (procEx & PROC_EX_CRITICAL_HIT) ? SPELL_AURA_PROC_OK : SPELL_AURA_PROC_FAILED; // charge update only at crit hits, no hidden cooldowns
                 }
+                // Resonance Cascade
+                case 51262:
+                {
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (!procSpell)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (!pVictim || !pVictim->IsAlive())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    int32 dmg = int32(damage * (float(triggerAmount) / 100.0f));
+                    if (!dmg)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    struct ConsecutiveProcsData
+                    {
+                        uint32 count;
+                        time_t lastProc;
+                    };
+
+                    static std::map<ObjectGuid, ConsecutiveProcsData> consecutiveProcsMap;
+
+                    ConsecutiveProcsData& procData = consecutiveProcsMap[GetObjectGuid()];
+
+                    if ((procData.lastProc + 3) < sWorld.GetGameTime())
+                        procData.count = 0;
+
+                    constexpr uint32 maxDuplications = 6;
+
+                    if (procData.count >= maxDuplications)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    procData.lastProc = sWorld.GetGameTime();
+                    ++procData.count;
+
+                    CastCustomSpell(pVictim, procSpell, &dmg, nullptr, nullptr, true);
+
+                    return SPELL_AURA_PROC_OK;
+                }
             }
             break;
         }
