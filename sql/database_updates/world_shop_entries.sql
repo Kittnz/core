@@ -21,6 +21,12 @@ create table shop_items  (
   primary key (id) using btree
 ) engine = innodb auto_increment = 457 character set = utf8mb3 collate = utf8mb3_general_ci row_format = dynamic;
 
+-- === SALE % === --
+
+SET @discount = 0.5;
+
+-- ============ --
+
 replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values 
 (1,  'Miscellaneous', '杂项', 'default'),
 (2,  'Skins', '外观', 'ticket'),
@@ -155,9 +161,8 @@ replace into shop_items (`id`, `category`, `item`, `model_id`, `item_id`, `descr
 (229, 5, 83155,0, 0, 'Scarlet Charger', '猩红战马', 360),
 (230, 5, 83158,0, 0, 'Brown Zhevra', '棕色斑马', 360),
 (231, 5, 50536,0, 0, 'Twilight', '恐怖图腾科多兽', 1000),
--- (232, 5, 83475,0, 0, 'Lovely Pink Pony', '粉红可爱小马', 300),
--- (233, 5, 83476,0, 0, 'Lovely Pink Furline', '粉红可爱绒猫', 300),
--- (234, 5, 83477,0, 0, 'Lovely Pink Talbuk', '粉红可爱塔布克羊', 500),
+(232, 5, 81239,0, 0, 'Happy Dalaran Cloud', '开心的云朵', 300),
+(233, 5, 81238,0, 0, 'Turbo-Charged Flying Machine', '涡轮增压飞行器', 500),
 (241, 6, 13584,0, 0, 'Diablo Stone', '破坏神之石', 80),
 (242, 6, 13583,0, 0, 'Panda Cub', '熊猫项圈', 80),
 (243, 6, 20371,0, 0, 'Murky', '奔波尔霸', 80),
@@ -245,3 +250,9 @@ replace into shop_items (`id`, `category`, `item`, `model_id`, `item_id`, `descr
 (456, 7, 68070,0, 0, 'Robes of the Moonless Night', '', 200); -- CHINA ONLY!!!
 
 UPDATE shop_items SET region_locked = 2 WHERE id = 456;
+
+UPDATE shop_items SET price = price * @discount;
+
+-- Exclude Spectral Tigers:
+
+UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152);
