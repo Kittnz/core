@@ -14845,40 +14845,6 @@ bool ChatHandler::HandleMailboxCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleSaleCommand(char* args)
-{
-    if (!*args)
-    {
-        SendSysMessage("Syntax: .sale on / off");
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    bool value;
-
-    if (!ExtractOnOff(&args, value))
-    {
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (value)
-    {
-        WorldDatabase.PExecute("UPDATE shop_items SET price = price / 2;");
-        SendSysMessage("Shop sale is ON.");
-    }
-    else
-    {
-        WorldDatabase.PExecute("UPDATE shop_items SET price = price * 2;");
-        SendSysMessage("Shop sale is OFF.");
-    }
-    // Static price for Spectral Tiger:
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152);");
-
-    SendSysMessage("Use this command to update prices: |cff0ccaec.reload shop|r");
-    return true;
-}
-
 bool ChatHandler::HandleSendMailsCommand(char* args)
 {
     Player* receiver;

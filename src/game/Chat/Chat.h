@@ -758,7 +758,6 @@ class ChatHandler
         bool HandleSendMailsCommand(char* args);
         bool HandleBalanceCommand(char* args);
         bool HandleMailboxCommand(char* args);
-        bool HandleSaleCommand(char* args);
         bool HandleReloadBgAmounts(char* args);
         bool HandleReloadGmLevelsCommand(char* args);
         bool HandleReloadGmTicketTemplatesCommand(char* args);
