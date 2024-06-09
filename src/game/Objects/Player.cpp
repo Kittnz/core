@@ -88,6 +88,7 @@
 #include "Logging/DatabaseLogger.hpp"
 #include "PerfStats.h"
 #include "PlayerDump.h"
+#include "Shop/ShopMgr.h"
 
 #include <sstream>
 
@@ -9758,6 +9759,150 @@ void Player::HandleTransferChecks()
 
 }
 
+auto GetPriestSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+    case RACE_HUMAN:  return make_array(13908u, 13896u);
+    case RACE_UNDEAD: return make_array(2652u, 2944u);
+    case RACE_DWARF:  return make_array(13908u, 6346u);
+    case RACE_NIGHTELF: return make_array(10797u, 2651u);
+    case RACE_TROLL: return make_array(9035u, 18137u);
+    case RACE_HIGH_ELF: return make_array(46042u, 46043u);
+    default: return make_array(0u, 0u);
+    }
+}
+
+uint32 GetShamanSpellForRace(uint8 race)
+{
+    switch (race)
+    {
+    case RACE_TAUREN: return 45500;
+    case RACE_TROLL: return 45504;
+    case RACE_ORC: return 45505;
+    default: return 0;
+    }
+}
+
+void Player::HandleRaceChangeFixup()
+{
+    //Players should get an appearance change token mailed to them if they didnt get one yet.
+    //Players who bought one right after a race change should get some tokens refunded.
+    //We use an extra flag for this as this should really only happen once.
+
+    //Players who have quests that don't fit their race should auto-abandon them.
+    //Players who now have spells that don't fit their race anymore such as Priest / Shaman racials should get them unlearned.
+
+    const auto& shopLogs = sObjectMgr.GetShopLogEntries(GetSession()->GetAccountId());
+    if (shopLogs.empty())
+        return;
+
+    constexpr uint64 DateCheckStart = 1717206715; // 1st of June 2024 to be sure to not include very old race changes.
+
+    constexpr auto RaceChangeItems = make_array(50603, 50604, 50605, 50606, 50607, 50608, 50609, 50610, 50613, 50612);
+    constexpr auto AppearanceTokenEntry = 80699;
+
+    const auto playerGuid = GetGUIDLow();
+
+    bool shouldCheck = false;
+    bool shouldRefundAppearance = false;
+
+    for (const auto& shopLogEntry : shopLogs)
+    {
+        if (shopLogEntry->charGuid != playerGuid)
+            continue;
+
+        if (shopLogEntry->dateUnix < DateCheckStart)
+            continue;
+
+        if (shopLogEntry->refunded)
+            continue;
+
+        if (std::find(RaceChangeItems.begin(), RaceChangeItems.end(), shopLogEntry->itemEntry) != RaceChangeItems.end())
+            shouldCheck = true;
+
+        if (shopLogEntry->itemEntry == AppearanceTokenEntry)
+            shouldRefundAppearance = true;
+    }
+
+    //If race change was used, check if also appearance token. If so, refund tokens. If not, mail appearance token.
+    if (shouldCheck)
+    {
+        if (!HasCustomFlag(CUSTOM_PLAYER_FLAG_GOT_RACE_REFUND))
+        {
+            SetCustomFlag(CUSTOM_PLAYER_FLAG_GOT_RACE_REFUND);
+            if (shouldRefundAppearance)
+                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %i WHERE `id` = %u", 160, GetSession()->GetAccountId());
+            else
+            {
+                MailSender sender(MAIL_NORMAL, 0u, MAIL_STATIONERY_GM);
+
+                if (Item* item = Item::CreateItem(AppearanceTokenEntry, 1))
+                {
+                    item->SaveToDB();
+
+                    MailDraft("Race Change - Missed Items").AddItem(item).SendMailTo(MailReceiver(this, GetGUIDLow()), sender);
+                }
+            }
+        }
+
+
+        //Now checks that we can do at any time..
+
+        //Make sure Priests only have their own-race racial abilities & Shamans too.
+        if (GetClass() == CLASS_PRIEST || GetClass() == CLASS_SHAMAN)
+        {
+            for (int i = RACE_HUMAN; i <= RACE_NIGHTELF; ++i)
+            {
+                if (i == GetRace())
+                    continue;
+
+                const auto& priestRacials = GetPriestSpellForRace(i);
+                if (priestRacials[0])
+                {
+                    //Looped over race with actual priest racials.
+                    //This race is not the current race of the player so if they have a spell, unlearn.
+                    if (HasSpell(priestRacials[0]))
+                        RemoveSpell(priestRacials[0]);
+
+                    if (HasSpell(priestRacials[1]))
+                        RemoveSpell(priestRacials[1]);
+                }
+
+                uint32 shamanRacial = GetShamanSpellForRace(i);
+
+                if (shamanRacial && HasSpell(shamanRacial))
+                    RemoveSpell(shamanRacial);
+            }
+        }
+
+        //remove all active quests that were race-restricted that didn't get cleared before.
+        auto itr = mQuestStatus.begin();
+        while (itr != mQuestStatus.end())
+        {
+            uint32 quest_id = itr->first;
+            Quest const* pQuest = sObjectMgr.GetQuestTemplate(quest_id);
+            if (!pQuest || !pQuest->IsActive() || itr->second.uState == QUEST_DELETED)
+            {
+                ++itr;
+                continue;
+            }
+            if (SatisfyQuestSkill(pQuest, false) && pQuest->SatisfiesRaceRequirements(GetRaceMask()) && SatisfyQuestReputation(pQuest, false) && SatisfyQuestClass(pQuest, false))
+            {
+                ++itr;
+                continue;
+            }
+
+            RemoveQuest(quest_id);
+            SetQuestStatus(quest_id, QUEST_STATUS_NONE);
+            getQuestStatusMap()[quest_id].m_rewarded = false;
+            getQuestStatusMap()[quest_id].uState = QUEST_DELETED;
+            ++itr;
+        }
+        SaveToDB();
+    }
+}
+
 float Player::ComputeRest(time_t timePassed, bool offline /*= false*/, bool inRestPlace /*= false*/)
 {
     // Every 8h in resting zone we gain a bubble
@@ -15030,20 +15175,12 @@ bool Player::SatisfyQuestClass(Quest const* qInfo, bool msg) const
 
 bool Player::SatisfyQuestRace(Quest const* qInfo, bool msg) const
 {
-    uint32 reqraces = qInfo->GetRequiredRaces();
+    bool satisfies = qInfo->SatisfiesRaceRequirements(GetRaceMask());
 
-    if (reqraces == 0)
-        return true;
+    if (!satisfies && msg)
+        SendCanTakeQuestResponse(INVALIDREASON_QUEST_FAILED_WRONG_RACE);
 
-    if ((reqraces & GetRaceMask()) == 0)
-    {
-        if (msg)
-            SendCanTakeQuestResponse(INVALIDREASON_QUEST_FAILED_WRONG_RACE);
-
-        return false;
-    }
-
-    return true;
+    return satisfies;
 }
 
 bool Player::SatisfyQuestReputation(Quest const* qInfo, bool msg) const
@@ -22877,30 +23014,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     return true;
 }
 
-auto GetPriestSpellForRace(uint8 race)
-{
-    switch (race)
-    {
-        case RACE_HUMAN:  return make_array(13908u, 13896u);
-        case RACE_UNDEAD: return make_array(2652u, 2944u);
-        case RACE_DWARF:  return make_array(13908u, 6346u);
-        case RACE_NIGHTELF: return make_array(10797u, 2651u);
-        case RACE_TROLL: return make_array(9035u, 18137u);
-        case RACE_HIGH_ELF: return make_array(46042u, 46043u);
-        default: return make_array(0u, 0u);
-    }
-}
 
-uint32 GetShamanSpellForRace(uint8 race)
-{
-    switch (race)
-    {
-        case RACE_TAUREN: return 45500;
-        case RACE_TROLL: return 45504;
-        case RACE_ORC: return 45505;
-        default: return 0;
-    }
-}
 
 uint32 GetCapitalReputationForRace(uint8 race)
 {
@@ -23366,6 +23480,8 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
         }
     }
 
+    uint32 raceMask = 1 << (newRace - 1);
+
     // 2 - Remove unaccessable quests.
     QuestStatusMap::iterator itr = mQuestStatus.begin();
     while (itr != mQuestStatus.end())
@@ -23378,7 +23494,7 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
             ++itr;
             continue;
         }
-        if (SatisfyQuestSkill(pQuest, false) && SatisfyQuestRace(pQuest, false) && SatisfyQuestReputation(pQuest, false) && SatisfyQuestClass(pQuest, false))
+        if (SatisfyQuestSkill(pQuest, false) && pQuest->SatisfiesRaceRequirements(raceMask) && SatisfyQuestReputation(pQuest, false) && SatisfyQuestClass(pQuest, false))
         {
             ++itr;
             continue; // Pas besoin de toucher a cette quete

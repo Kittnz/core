@@ -102,7 +102,9 @@ enum CustomPlayerFlags
     CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN          = 0x04,
     CUSTOM_PLAYER_FLAG_BYPASS_WHO_COOLDOWN    = 0x08,
     CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT    = 0x10,
-    CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED        = 0x20
+    CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED        = 0x20,
+    CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK      = 0x40,
+    CUSTOM_PLAYER_FLAG_GOT_RACE_REFUND        = 0x80
 };
 
 enum BuyBankSlotResult
@@ -2381,6 +2383,8 @@ class Player final: public Unit
         /*********************************************************/
 
         void HandleTransferChecks();
+
+        void HandleRaceChangeFixup();
 
     private:
         uint8 m_newStandState;

@@ -26,7 +26,14 @@ create table shop_items  (
   primary key (id) using btree
 ) engine = innodb auto_increment = 457 character set = utf8mb3 collate = utf8mb3_general_ci row_format = dynamic;
 
+-- === SALE % === --
+
+SET @discount = 0.5;
+
+-- ============ --
+
 replace into shop_categories (id, name, name_loc4, icon) values 
+
 (1,  'Miscellaneous', '杂项', 'default'),
 (2,  'Skins', '外观', 'ticket'),
 (3,  'Gameplay', '玩法玩具', 'toys'),
@@ -201,6 +208,8 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (276, 6, 36514, 20382, 0, 'Frostsaber Cub', 'PLACEHOLDER', 150, 0, 0, 0, 0, 0, 1),
 (277, 6, 36515, 20383, 0, 'Cheetah Cub', 'PLACEHOLDER', 150, 0, 0, 0, 0, 0, 1),
 (278, 6, 36516, 20506, 0, 'Chestnut', 'PLACEHOLDER', 150, 0, 0, 0, 0, 0, 1),
+(279, 5, 81239, 0, 0, 'Happy Dalaran Cloud', '开心的云朵', 300),
+(280, 5, 81238, 0, 0, 'Turbo-Charged Flying Machine', '涡轮增压飞行器', 500),
 (291, 8, 51201, 522, 0, 'Illusion: Worgen', '幻象：狼人', 160, 0, 0, 0, 0, 0, 1),
 (292, 8, 51205, 14368, 0, 'Illusion: Ghost', '幻象：幽灵', 160, 0, 0, 0, 0, 0, 1),
 (293, 8, 51206, 8782, 0, 'Illusion: Banshee', '幻象：女妖', 160, 0, 0, 0, 0, 0, 1),
@@ -276,4 +285,10 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (452, 7, 41091, 0, 41091, 'Jingle Belle Frock', '冬幕节连衣裙', 200, 0, 0, 0, 0, 0, 1),
 (453, 7, 41092, 0, 41092, 'Apparel of the Bells', '冬幕节正装', 200, 0, 0, 0, 0, 0, 1),
 (456, 7, 68070, 0, 68070, 'Robes of the Moonless Night', '', 200, 2, 0, 0, 0, 0, 1);
+
+UPDATE shop_items SET price = price * @discount;
+
+-- Exclude Spectral Tigers:
+
+UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152);
 

@@ -52,6 +52,7 @@
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
 #include "miscellaneous/feature_transmog.h"
+#include "Geometry.h"
 
 #include <limits>
 
@@ -5552,17 +5553,20 @@ AreaTriggerTeleport const* ObjectMgr::GetGoBackTrigger(uint32 map_id) const
     if (!mapEntry || !mapEntry->IsDungeon())
         return nullptr;
 
+    AreaTriggerTeleport const* pClosestTrigger = nullptr;
+
     for (const auto& itr : m_AreaTriggerTeleportMap)
     {
         if (itr.second.destination.mapId == uint32(mapEntry->ghostEntranceMap))
         {
             AreaTriggerEntry const* atEntry = GetAreaTrigger(itr.first);
-            if (atEntry && atEntry->mapid == map_id)
-                return &itr.second;
+            if (atEntry && atEntry->mapid == map_id &&
+               (!pClosestTrigger || Geometry::GetDistance2D(itr.second.destination.x, itr.second.destination.y, mapEntry->ghostEntranceX, mapEntry->ghostEntranceY) < Geometry::GetDistance2D(pClosestTrigger->destination.x, pClosestTrigger->destination.y, mapEntry->ghostEntranceX, mapEntry->ghostEntranceY)))
+                pClosestTrigger = &itr.second;
         }
     }
 
-    return nullptr;
+    return pClosestTrigger;
 }
 
 /**
