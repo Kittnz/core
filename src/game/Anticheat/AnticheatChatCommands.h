@@ -2,8 +2,8 @@
 
 static ChatCommand anticheatFingerprintAutobanCommandTable[] =
 {
-    { "add",      SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
-    { "remove",   SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,   "", nullptr },
+    { "add",      SEC_SIGMACHAD, false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
+    { "remove",   SEC_SIGMACHAD, false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,   "", nullptr },
     { nullptr,   0,                  false, nullptr,                                             "", nullptr },
 };
 
