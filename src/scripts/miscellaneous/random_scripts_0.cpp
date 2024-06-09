@@ -2161,11 +2161,12 @@ CreatureAI* GetAI_npc_sickly_critter(Creature* pCreature)
 
 enum
 {
-    SPELL_EXPLOSION_STRONG  = 13259,
-    SPELL_EXPLOSION_WEAK    = 51243,
-    SPELL_PET_BOMB_PASSIVE  = 13260,
-    SPELL_MALFUNCTION_EXPL  = 13261,
-    SPELL_QUIET_SUICIDE     = 3617
+    SPELL_EXPLOSION_STRONG        = 13259,
+    SPELL_EXPLOSION_WEAK          = 51243,
+    SPELL_PET_BOMB_PASSIVE_STRONG = 13260,
+    SPELL_PET_BOMB_PASSIVE_WEAK   = 51263,
+    SPELL_MALFUNCTION_EXPLOSION   = 13261,
+    SPELL_QUIET_SUICIDE           = 3617
 };
 
 struct npc_goblin_bomb_dispenserAI : ScriptedPetAI
@@ -2193,8 +2194,6 @@ struct npc_goblin_bomb_dispenserAI : ScriptedPetAI
     {
         m_bExploded = false;
         m_uiAliveTimer = MINUTE * IN_MILLISECONDS;
-
-        m_creature->CastSpell(m_creature, SPELL_PET_BOMB_PASSIVE, true);
     }
 
     void JustDied(Unit* /*pKiller*/) override
@@ -2203,13 +2202,25 @@ struct npc_goblin_bomb_dispenserAI : ScriptedPetAI
             pPet->DelayedUnsummon(5000, PET_SAVE_AS_DELETED);
     }
 
+    uint32 GetExplosionSpell() const
+    {
+        switch (m_creature->GetEntry())
+        {
+            case 8937:
+                return SPELL_EXPLOSION_STRONG;
+            case 59962:
+                return SPELL_EXPLOSION_WEAK;
+        }
+        return SPELL_QUIET_SUICIDE;
+    }
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_bExploded)
         {
             if (m_uiAliveTimer <= uiDiff)
             {
-                m_creature->CastSpell(m_creature, (m_creature->GetEntry() == 59962 ? SPELL_EXPLOSION_WEAK : SPELL_EXPLOSION_STRONG), true);
+                m_creature->CastSpell(m_creature, GetExplosionSpell(), true);
                 m_bExploded = true;
             }
             else
