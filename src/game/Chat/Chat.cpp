@@ -941,7 +941,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "gold",           SEC_DEVELOPER,       true,  nullptr,                                        "", goldCommandTable },
         { "balance",        SEC_DEVELOPER,       true,  &ChatHandler::HandleBalanceCommand,             "", nullptr },
         { "mailbox",        SEC_DEVELOPER,       false, &ChatHandler::HandleMailboxCommand,             "", nullptr },
-        { "sale",           SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleSaleCommand,                "", nullptr },
         { "mount",          SEC_DEVELOPER,       false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { "transfer",       SEC_DEVELOPER,       false, &ChatHandler::HandleTransferCommand,            "", nullptr },
         { "bgtest",         SEC_ADMINISTRATOR,   false, &ChatHandler::HandleBgTestCommand,              "", nullptr },
