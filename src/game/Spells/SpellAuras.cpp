@@ -1896,6 +1896,34 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 1000;
                         break;
                     }
+                    case 51271: // Wisdom of the Mak'aru
+                    {
+                        if (GetStackAmount() >= 10)
+                        {
+                            target->CastSpell(target, GetSpellProto()->EffectTriggerSpell[GetEffIndex()], true);
+                            target->m_Events.AddLambdaEventAtOffset([target, spellId = GetId()]()
+                            {
+                                target->RemoveAurasDueToSpellByCancel(spellId);
+                            }, 1);
+                        }
+                        break;
+                    }
+                    case 51280: // Frostfire
+                    {
+                        if (GetStackAmount() >= 10)
+                        {
+                            if (Unit* pCaster = GetCaster())
+                            {
+                                pCaster->CastSpell(target, 51278, true);
+                                pCaster->CastSpell(target, 51279, true);
+                            }
+                            target->m_Events.AddLambdaEventAtOffset([target, spellId = GetId()]()
+                            {
+                                target->RemoveAurasDueToSpellByCancel(spellId);
+                            }, 1);
+                        }
+                        break;
+                    }
                 }
                 break;
             }

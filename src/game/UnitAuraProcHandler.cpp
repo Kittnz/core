@@ -254,6 +254,12 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Freezing Cold Passive
+        if (spellProto->Id == 51276)
+        {
+            if (procFlag & PROC_FLAG_DEAL_HARMFUL_SPELL)
+                return roll_chance_u(10) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Wrath of Cenarius
         if (spellProto->Id == 25906)
         {
