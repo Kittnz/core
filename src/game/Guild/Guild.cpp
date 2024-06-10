@@ -230,6 +230,10 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(lowguid);
         if (!data)
             return GuildAddStatus::UNKNOWN_PLAYER;
+
+        if (data->sName.empty())
+            return GuildAddStatus::UNKNOWN_PLAYER;
+
         newmember.Name   = data->sName;
         newmember.Level  = data->uiLevel;
         newmember.Class  = data->uiClass;
@@ -478,6 +482,12 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
         if (!((1 << (newmember.Class - 1)) & CLASSMASK_ALL_PLAYABLE)) // can be at broken `class` field
         {
             sLog.outError("%s has a broken data in field `characters`.`class`, deleting him from guild!", newmember.guid.GetString().c_str());
+            CharacterDatabase.PExecute("DELETE FROM guild_member WHERE guid = '%u'", lowguid);
+            continue;
+        }
+        if (newmember.Name.empty()) // no deleted characters
+        {
+            sLog.outError("%s has no name, deleting him from guild!", newmember.guid.GetString().c_str());
             CharacterDatabase.PExecute("DELETE FROM guild_member WHERE guid = '%u'", lowguid);
             continue;
         }
@@ -1170,6 +1180,11 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     for (const auto& member : offlineMemberCache)
     {
         if (member.Member && !member.Member->HasGMDisabledSocials())
+            continue;
+
+        // skip deleted characters with no name
+        // they should be removed from guild but somehow it happens on live
+        if (member.Slot->Name.empty())
             continue;
 
         if (writeMemberData(data, member))
