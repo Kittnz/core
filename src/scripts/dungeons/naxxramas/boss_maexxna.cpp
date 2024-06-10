@@ -254,10 +254,16 @@ struct boss_maexxnaAI : public ScriptedAI
 
         std::list<Player*> candidates;
         ThreatList::const_iterator it = tList.begin();
-        ++it;
+
+        ObjectGuid currentVictimGuid = m_creature->GetThreatManager().getCurrentVictim() ? m_creature->GetThreatManager().getCurrentVictim()->getUnitGuid() : ObjectGuid{};
+
+
         for (it; it != tList.end(); ++it) {
             Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
             if (!pPlayer) continue;
+
+            if ((*it)->getUnitGuid() == currentVictimGuid)
+                continue; // skip tank / main victim
 
             // todo: verify that IsWithinLOSInMap does not screw anyting up. Afaik there should be nowhere
             // to los in maexxnas room, so would only stop us from selecting players outside the room, which is good.
