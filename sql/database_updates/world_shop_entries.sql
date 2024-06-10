@@ -176,6 +176,7 @@ replace into shop_items (id, category, item, model_id, item_id, description, des
 (233, 5, 81238, 0, 0, 'Turbo-Charged Flying Machine', '涡轮增压飞行器', 500, 0, 0, 0, 0, 0, 1),
 (234, 5, 92050, 0, 0, 'Celestial Steed', 'PH', 500, 0, 0, 0, 0, 0, 1),
 (235, 5, 92051, 0, 0, 'Invincible', 'PH', 500, 0, 0, 0, 0, 0, 1),
+(236, 5, 92052, 20418, 0, 'Red Spectral Tiger', 'PH', 2000, 0, 0.304, 1.969, 1.75, -0.301, 1.1),
 (241, 6, 13584, 10992, 0, 'Diablo Stone', '破坏神之石', 80, 0, 0, 0, 0, 0, 1),
 (242, 6, 13583, 10990, 0, 'Panda Cub', '熊猫项圈', 80, 0, 0, 0, 0, 0, 1),
 (243, 6, 20371, 15369, 0, 'Murky', '奔波尔霸', 80, 0, 0, 0, 0, 0, 1),
@@ -292,5 +293,5 @@ UPDATE shop_items SET price = price * @discount;
 
 -- Exclude Spectral Tigers:
 
-UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152);
+UPDATE shop_items SET price = 2000 where item in (80430, 83151, 83152, 92052);
 
