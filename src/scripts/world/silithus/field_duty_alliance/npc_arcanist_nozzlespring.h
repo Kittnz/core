@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
+#include <AI/ScriptedAI.h>
 #include <AI/AbilityTimer.h>
+#include <Common.h>
 
 class Creature;
 class CreatureAI;
