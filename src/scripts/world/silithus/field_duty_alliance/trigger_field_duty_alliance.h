@@ -2,6 +2,8 @@
 #include <AI/AbilityTimer.h>
 #include "defines.h"
 
+#include "scriptPCH.h"
+
 struct npc_hivezora_abomination;
 struct npc_arcanist_nozzlespring;
 struct npc_captain_blackanvil;

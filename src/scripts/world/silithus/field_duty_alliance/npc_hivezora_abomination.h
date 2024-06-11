@@ -3,6 +3,8 @@
 #include <vector>
 #include <AI/AbilityTimer.h>
 
+#include "scriptPCH.h"
+
 class Creature;
 class CreatureAI;
 
