@@ -1,5 +1,10 @@
 #pragma once
+#include <cstdint>
+#include <vector>
 #include <AI/AbilityTimer.h>
+
+class Creature;
+class CreatureAI;
 
 struct npc_hivezora_abomination : public ScriptedAI
 {
@@ -21,7 +26,7 @@ public:
     void MovementInform(uint32_t movementType, uint32_t pointId) override;
     void Reset() override;
     void OnCombatStop() override;
-    void UpdateAI(const uint32 delta) override;
+    void UpdateAI(const uint32_t delta) override;
 
     void BecomeAttackable() const;
     void BecomeImmune() const;
