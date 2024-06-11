@@ -20404,7 +20404,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, WorldObject* targe
     bool inVisibleList = IsInVisibleList(target);
     if (inVisibleList)
     {
-        if (!target->FindMap() || !target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) || !target->IsVisibleForInState(this, viewPoint, true))
+        if (!target->IsInMap(this) || !target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) || !target->IsVisibleForInState(this, viewPoint, true))
         {
             ObjectGuid t_guid = target->GetObjectGuid();
 
@@ -20422,7 +20422,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, WorldObject* targe
     }
     else
     {
-        if (target->FindMap() && target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) && target->IsVisibleForInState(this, viewPoint, false))
+        if (target->IsInMap(this) && target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) && target->IsVisibleForInState(this, viewPoint, false))
         {
             target->SendCreateUpdateToPlayer(this);
             if (target->GetTypeId() != TYPEID_GAMEOBJECT || !((GameObject*)target)->IsTransport())
@@ -20488,7 +20488,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateD
     bool inVisibleList = IsInVisibleList(target);
     if (inVisibleList)
     {
-        if (!target->FindMap() || !target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) || !target->IsVisibleForInState(this, viewPoint, true))
+        if (!target->IsInMap(this) || !target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) || !target->IsVisibleForInState(this, viewPoint, true))
         {
             ObjectGuid t_guid = target->GetObjectGuid();
 
@@ -20507,7 +20507,7 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateD
     }
     else
     {
-        if (target->FindMap() && target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) && target->IsVisibleForInState(this, viewPoint, false))
+        if (target->IsInMap(this) && target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) && target->IsVisibleForInState(this, viewPoint, false))
         {
             visibleNow.insert(target);
             target->BuildCreateUpdateBlockForPlayer(&data, this);
@@ -22363,25 +22363,19 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)
 {
-    if (opcode == MSG_MOVE_FALL_LAND || opcode == MSG_MOVE_START_SWIM || minfo.HasMovementFlag(MOVEFLAG_HOVER | MOVEFLAG_SAFE_FALL))
+    if (opcode == MSG_MOVE_FALL_LAND || opcode == MSG_MOVE_START_SWIM ||
+        minfo.HasMovementFlag(MOVEFLAG_HOVER | MOVEFLAG_SAFE_FALL) ||
+       !minfo.HasMovementFlag(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR))
     {
         if (IsFalling())
             SetFallInformation(0);
         return;
     }
 
-    if (minfo.HasMovementFlag(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR))
-    {
-        float currentZ = minfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) ? minfo.t_pos.z : minfo.pos.z;
+    float currentZ = minfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) ? minfo.t_pos.z : minfo.pos.z;
 
-        if (!m_fallStartZ || m_fallStartZ < currentZ || m_movementInfo.t_guid != minfo.t_guid)
-            SetFallInformation(currentZ);
-
-        return;
-    }
-
-    if (IsFalling())
-        SetFallInformation(0);
+    if (!m_fallStartZ || m_fallStartZ < currentZ || m_movementInfo.t_guid != minfo.t_guid)
+        SetFallInformation(currentZ);
 }
 
 /**

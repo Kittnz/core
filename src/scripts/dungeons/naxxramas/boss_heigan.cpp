@@ -350,11 +350,16 @@ struct boss_heiganAI : public ScriptedAI
     void EventPortPlayer()
     {
         const ThreatList& tl = m_creature->GetThreatManager().getThreatList();
+
+        ObjectGuid currentVictimGuid = m_creature->GetThreatManager().getCurrentVictim() ? m_creature->GetThreatManager().getCurrentVictim()->getUnitGuid() : ObjectGuid{};
+
         std::vector<Unit*> candidates;
         auto it = tl.begin();
-        ++it; // skip the tank
         for (it; it != tl.end(); it++)
         {
+            if ((*it)->getUnitGuid() == currentVictimGuid)
+                continue; // Skip tank / current target.
+
             if (Unit* pUnit = m_creature->GetMap()->GetUnit((*it)->getUnitGuid()))
             {
                 // Candidates are only alive players who have not yet been ported during this phase rotation

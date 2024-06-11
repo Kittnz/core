@@ -497,7 +497,7 @@ void trigger_field_duty_alliance::UpdateAI(const uint32_t delta)
         {
             const auto abomination = FindHiveZoraAbomination();
             const auto janelaStouthammer = FindJanelaStouthammer();
-            if (janelaStouthammer)
+            if (abomination && janelaStouthammer)
             {
                 abomination->BeginPathing();
                 DoScriptText(Silithus::ScriptTexts::SCRIPT_TEXT_JANELA_LOOK_ALIVE, janelaStouthammer->m_creature);

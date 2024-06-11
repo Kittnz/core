@@ -159,7 +159,7 @@ public:
 
     void modifyThreatPercent(Unit *pVictim, int32 percent);
 
-    HostileReference* selectNextVictim(Creature* pAttacker, HostileReference* pCurrentVictim);
+    HostileReference* selectNextVictim(Creature* pAttacker, HostileReference* pCurrentVictim) const;
 
     void setDirty(bool pDirty) { iDirty = pDirty; }
 
