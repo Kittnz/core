@@ -1,5 +1,9 @@
 #pragma once
+#include <cstdint>
 #include <AI/AbilityTimer.h>
+
+class Creature;
+class CreatureAI;
 
 struct npc_arcanist_nozzlespring : public ScriptedAI
 {
@@ -10,7 +14,7 @@ public:
 
     void Reset() override;
 
-    void UpdateAI(const uint32 delta) override;
+    void UpdateAI(const uint32_t delta) override;
 
     static CreatureAI* GetAI(Creature* pCreature);
 
