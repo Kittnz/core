@@ -1,6 +1,7 @@
 #pragma once
 #include <AI/AbilityTimer.h>
 
+#include "defines.h"
 #include "scriptPCH.h"
 
 struct npc_shadow_priestess_shai : ScriptedAI

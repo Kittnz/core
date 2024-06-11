@@ -1,6 +1,6 @@
 #pragma once
 #include <AI/AbilityTimer.h>
-
+#include "defines.h"
 
 #include "scriptPCH.h"
 

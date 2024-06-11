@@ -1,7 +1,7 @@
 #pragma once
 #include <AI/AbilityTimer.h>
 
-
+#include "defines.h"
 #include "scriptPCH.h"
 
 struct npc_merok_longstride : public ScriptedAI
