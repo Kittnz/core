@@ -25,7 +25,7 @@ create table shop_items  (
 
 SET @discount = 0.5;
 
--- ============ --
+-- ============== --
 
 replace into shop_categories (`id`, `name`, `name_loc4`, `icon`) values 
 (1,  'Miscellaneous', '杂项', 'default'),
