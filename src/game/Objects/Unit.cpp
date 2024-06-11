@@ -8169,6 +8169,11 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
         return false;
     }
 
+    if (unitMod == UNIT_MOD_ATTACK_POWER && IsCreature() && !sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && sWorld.IsPvPRealm())
+    {
+        sLog.outString("[AURADEBUG]:[%u]: HandleStatModifier: apply: %s, CanModifyStats() : %s", GetGUIDLow(), apply ? "yes" : "no", CanModifyStats() ? "yes" : "no");
+    }
+
     float val = 1.0f;
 
     switch (modifierType)
