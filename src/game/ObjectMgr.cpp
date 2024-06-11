@@ -9508,13 +9508,17 @@ void ObjectMgr::LoadShop()
             }
 
 			std::string ItemName;
+
+
 			if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
 			{
-				ItemName = Entry.Description_loc4;
+				//ItemName = Entry.Description_loc4;
+                ItemName = sObjectMgr.GetItemLocaleName(Entry.Item, LOCALE_zhCN);
 			}
 			else
 			{
-				ItemName = Entry.Description;
+				//ItemName = Entry.Description;
+                ItemName = pProto->Name1;
 			}
 
             CachedEntry.resize(1024);
