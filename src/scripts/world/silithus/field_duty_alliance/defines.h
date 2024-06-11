@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scriptPCH.h"
+
 namespace Silithus
 {
     namespace Creatures

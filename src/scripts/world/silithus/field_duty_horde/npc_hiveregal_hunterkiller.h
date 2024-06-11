@@ -1,6 +1,8 @@
 #pragma once
 #include "defines.h"
 
+#include "scriptPCH.h"
+
 struct npc_hiveregal_hunterkiller : ScriptedAI
 {
 private:
