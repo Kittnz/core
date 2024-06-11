@@ -1,6 +1,8 @@
 #pragma once
 #include <AI/AbilityTimer.h>
 
+#include "scriptPCH.h"
+
 struct npc_orgrimmar_legion_grunt : ScriptedAI
 {
 private:

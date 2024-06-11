@@ -2,7 +2,8 @@
 #include <cstdint>
 #include <AI/ScriptedAI.h>
 #include <AI/AbilityTimer.h>
-#include <Common.h>
+
+#include "scriptPCH.h"
 
 class Creature;
 class CreatureAI;

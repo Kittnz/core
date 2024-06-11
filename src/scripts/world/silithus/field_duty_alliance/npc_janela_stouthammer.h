@@ -2,6 +2,8 @@
 #include <AI/AbilityTimer.h>
 #include "trigger_field_duty_alliance.h"
 
+#include "scriptPCH.h"
+
 struct npc_janela_stouthammer : public ScriptedAI
 {
 private:

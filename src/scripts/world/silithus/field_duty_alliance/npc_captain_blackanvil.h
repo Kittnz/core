@@ -1,6 +1,8 @@
 #pragma once
 #include <AI/AbilityTimer.h>
 
+#include "scriptPCH.h"
+
 struct npc_captain_blackanvil : public ScriptedAI
 {
 private:
