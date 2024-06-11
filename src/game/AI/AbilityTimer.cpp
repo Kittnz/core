@@ -1,4 +1,5 @@
 #include "AbilityTimer.h"
+#include <Util.h>
 
 AbilityTimer::AbilityTimer(uint32_t abilityId, uint32_t minimumCooldownMs, uint32_t maximumCooldownMs)
     : AbilityTimer(abilityId, minimumCooldownMs, maximumCooldownMs, urand(minimumCooldownMs, maximumCooldownMs))
