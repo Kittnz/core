@@ -220,14 +220,18 @@ void GuildBank::SaveToDB()
 	// Save Tabs
 	if (b_tabs_changed)
 	{
-		CharacterDatabase.PExecute("UPDATE guild_bank_tabs "
-			"SET tabs = '%u', "
-			"name1 = '%s', name2 = '%s', name3 = '%s', name4 = '%s', name5 = '%s', "
-			"icon1 = '%s', icon2 = '%s', icon3 = '%s', icon4 = '%s', icon5 = '%s', "
-			"withdrawal1 = '%u', withdrawal2 = '%u', withdrawal3 = '%u', withdrawal4 = '%u', withdrawal5 = '%u', "
-			"minrank1 = '%u', minrank2 = '%u', minrank3 = '%u', minrank4 = '%u', minrank5 = '%u' "
-			"WHERE guildid = '%u' AND isInferno = '%u'",
-			b_tabs,
+		static SqlStatementID guildBankTabUpdate;
+
+		auto stmt = CharacterDatabase.CreateStatement(guildBankTabUpdate,
+			"UPDATE guild_bank_tabs "
+			"SET tabs = ?, "
+			"name1 = ?, name2 = ?, name3 = ?, name4 = ?, name5 = ?, "
+			"icon1 = ?, icon2 = ?, icon3 = ?, icon4 = ?, icon5 = ?, "
+			"withdrawal1 = ?, withdrawal2 = ?, withdrawal3 = ?, withdrawal4 = ?, withdrawal5 = ?, "
+			"minrank1 = ?, minrank2 = ?, minrank3 = ?, minrank4 = ?, minrank5 = ? "
+			"WHERE guildid = ? AND isInferno = ?");
+
+		stmt.PExecute(b_tabs,
 			b_tabInfo[1].name.c_str(), b_tabInfo[2].name.c_str(), b_tabInfo[3].name.c_str(), b_tabInfo[4].name.c_str(), b_tabInfo[5].name.c_str(),
 			b_tabInfo[1].icon.c_str(), b_tabInfo[2].icon.c_str(), b_tabInfo[3].icon.c_str(), b_tabInfo[4].icon.c_str(), b_tabInfo[5].icon.c_str(),
 			b_tabInfo[1].withdrawals, b_tabInfo[2].withdrawals, b_tabInfo[3].withdrawals, b_tabInfo[4].withdrawals, b_tabInfo[5].withdrawals,
@@ -697,8 +701,6 @@ void GuildBank::UpdateTab(std::string msg)
 		return;
 	}
 
-	CharacterDatabase.escape_string(name);
-	CharacterDatabase.escape_string(icon);
 
 	if (name == "" || name.empty() || name.length() > 30)
 	{
@@ -724,7 +726,6 @@ void GuildBank::UpdateTab(std::string msg)
 		return;
 	}
 
-	CharacterDatabase.escape_string(name);
 
 	b_tabInfo[tab].name        = name;
 	b_tabInfo[tab].icon        = icon;

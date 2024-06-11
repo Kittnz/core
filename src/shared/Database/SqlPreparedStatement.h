@@ -253,6 +253,15 @@ class SqlStatement
             return Execute();
         }
 
+
+        template<typename... Params>
+        bool PExecute(Params... params)
+        {
+            (arg(params), ...);
+            return Execute();
+        }
+
+
         //bind parameters with specified type
         void addBool(bool var) { arg(var); }
         void addUInt8(uint8 var) { arg(var); }
