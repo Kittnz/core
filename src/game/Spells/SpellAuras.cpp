@@ -5584,6 +5584,11 @@ void CheckRangedOverrides(Unit* target, Aura* aura, bool apply, int32 amount)
 
 void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
 {
+    if (GetTarget()->IsCreature() && !sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && sWorld.IsPvPRealm())
+    {
+        sLog.outString("[AURADEBUG]:[%u]: mod attack power, apply: %s. amount: %i", GetTarget()->GetGUIDLow(), apply ? "yes" : "no", m_modifier.m_amount);
+    }
+
     if (apply)
     {
         if (Unit* caster = GetCaster())
