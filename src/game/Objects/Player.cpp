@@ -24375,7 +24375,13 @@ void HandleHardcoreMailQuery(QueryResult* result, ObjectGuid guid)
             CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
             if (MasterPlayer* pl = player->GetSession()->GetMasterPlayer())
-                pl->RemoveMail(mail_id, true);
+            {
+                pl->MarkMailsUpdated();
+
+                if (Mail* m = pl->GetMail(mail_id))
+                    m->state = MAIL_STATE_DELETED;
+            }
+
         } while (result->NextRow());
 
         delete result;
