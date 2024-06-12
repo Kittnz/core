@@ -24178,6 +24178,8 @@ void Player::SetFlying(bool flying)
         m_isFlying = true;
         m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
         m_movementInfo.AddMovementFlag(MOVEFLAG_LEVITATING);
+        m_movementInfo.RemoveMovementFlag(MOVEFLAG_JUMPING);
+        m_movementInfo.RemoveMovementFlag(MOVEFLAG_FALLINGFAR);
         SendHeartBeat(true);
     }
     else 
