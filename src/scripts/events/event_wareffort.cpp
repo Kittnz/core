@@ -580,9 +580,10 @@ bool GossipHello_npc_AQwar_collector(Player* pPlayer, Creature* pCreature)
         objectiveReached = collectorAI->ObjectiveReached();
         if (objectiveReached)
             collectorAI->RemoveQuestGiverFlag();
+        else
+            collectorAI->SendWorldStateUpdateToPlayer(pPlayer);
 
         questItemId = collectorAI->resourceItemId;
-        collectorAI->SendWorldStateUpdateToPlayer(pPlayer);
     }
 
     uint32 gossipTextId = GetWarEffortGossipTextId(questItemId, pPlayer->GetTeamId(), objectiveReached);
