@@ -303,6 +303,7 @@ struct npc_AQwar_collectorAI : CreatureAI
             case 11:
             case 875:
             case 79:
+            case 80:
                 team = TEAM_ALLIANCE;
                 break;
             default:
@@ -539,6 +540,35 @@ struct npc_AQwar_collectorAI : CreatureAI
     {
         return GetActiveTransportEvent() == EVENT_WAR_EFFORT_TERMINATOR;
     }
+
+    void SendWorldStateUpdateToPlayer(Player* pPlayer)
+    {
+        for (uint8 i = 0; i < NUM_SHARED_OBJECTIVES; ++i)
+        {
+            if (resourceItemId == SharedObjectives[i].itemId)
+            {
+                uint32 stock = GetTeamStock(resourceItemId, team);
+                pPlayer->SendUpdateWorldState(team == TEAM_ALLIANCE ? SharedObjectives[i].wsAllianceCurrent : SharedObjectives[i].wsHordeCurrent, stock);
+                break;
+            }
+        }
+
+        for (uint8 i = 0; i < NUM_FACTION_OBJECTIVES; ++i)
+        {
+            if (resourceItemId == AllianceObjectives[i].itemId)
+            {
+                uint32 stock = sObjectMgr.GetSavedVariable(AllianceObjectives[i].currentVar, 0);
+                pPlayer->SendUpdateWorldState(AllianceObjectives[i].wsCurrent, stock);
+                break;
+            }
+            else if (resourceItemId == HordeObjectives[i].itemId)
+            {
+                uint32 stock = sObjectMgr.GetSavedVariable(HordeObjectives[i].currentVar, 0);
+                pPlayer->SendUpdateWorldState(HordeObjectives[i].wsCurrent, stock);
+                break;
+            }
+        }
+    }
 };
 
 bool GossipHello_npc_AQwar_collector(Player* pPlayer, Creature* pCreature)
@@ -553,6 +583,7 @@ bool GossipHello_npc_AQwar_collector(Player* pPlayer, Creature* pCreature)
             collectorAI->RemoveQuestGiverFlag();
 
         questItemId = collectorAI->resourceItemId;
+        collectorAI->SendWorldStateUpdateToPlayer(pPlayer);
     }
 
     uint32 gossipTextId = GetWarEffortGossipTextId(questItemId, pPlayer->GetTeamId(), objectiveReached);
