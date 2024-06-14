@@ -8128,11 +8128,92 @@ CreatureAI* GetAI_npc_frogger(Creature* pCreature)
     return new npc_froggerAI(pCreature);
 }
 
+bool GossipHello_npc_anelace_the_clairvoyant(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41372) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30229, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61996, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_anelace_the_clairvoyant(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 22 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30230);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30231);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 6000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30232);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 11000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30233);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 16000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay(30234);
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 21000);
+
+            DoAfterTime(pPlayer, 22 * IN_MILLISECONDS, [player = pPlayer]()
+                {
+                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60055))
+                    {
+                        player->KilledMonster(cInfo, ObjectGuid());
+
+                        if (Group* pGroup = player->GetGroup())
+                        {
+                            for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                if (Player* pMember = itr->getSource())
+                                {
+                                    if (pMember->GetObjectGuid() != player->GetObjectGuid())
+                                        pMember->KilledMonster(cInfo, ObjectGuid());
+                                }
+                            }
+                        }
+                    }
+                });
+        }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_anelace_the_clairvoyant";
+    newscript->pGossipHello = &GossipHello_npc_anelace_the_clairvoyant;
+    newscript->pGossipSelect = &GossipSelect_npc_anelace_the_clairvoyant;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_frogger";
