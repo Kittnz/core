@@ -8152,31 +8152,28 @@ bool GossipSelect_npc_anelace_the_clairvoyant(Player* pPlayer, Creature* pCreatu
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30230);
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                    pCreature->CastSpell(pCreature, 8734, false);
                 }, 1000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30231);
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 6000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30232);
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 11000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30233);
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 16000);
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
                     pCreature->MonsterSay(30234);
-                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                    pCreature->CastSpell(pCreature, 1449, false);
                 }, 21000);
 
             DoAfterTime(pPlayer, 22 * IN_MILLISECONDS, [player = pPlayer]()
