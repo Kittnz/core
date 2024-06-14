@@ -60,8 +60,8 @@ class PetAI : public CreatureAI
         static int Permissible(Creature const*);
 
     private:
-        bool _needToStop() const;
-        void _stopAttack();
+        bool NeedToStopAttacking() const;
+        void StopAttacking();
 
         std::pair<Unit*, ePetSelectTargetReason> SelectNextTarget() const;
         void HandleReturnMovement();
