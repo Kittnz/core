@@ -445,7 +445,11 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
         return;
 
     if (spellInfo->AttributesEx & SPELL_ATTR_EX_DONT_DISPLAY_IN_AURA_BAR)
+    {
+        //TODO: Somehow make this work for Druid glyphs.
+
         return;
+    }
 
     if (spellInfo->IsPassiveSpell())
         return;
