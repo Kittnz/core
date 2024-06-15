@@ -9861,6 +9861,50 @@ void Player::HandleRaceChangeFixup()
             }
         }
 
+        if (GetClass() == CLASS_MAGE)
+        {
+            //Fix custom portals / teleports.
+
+
+            constexpr uint32 TheramorePortalSpell = 49366;
+            constexpr uint32 StonardPortalSpell = 49362;
+
+            constexpr uint32 TheramoreTeleportSpell = 49361;
+            constexpr uint32 StonardTeleportSpell = 49358;
+
+            
+            if (GetTeamId() == TEAM_ALLIANCE)
+            {
+                //Ally shouldn't have Stonard.
+                if (HasSpell(StonardPortalSpell))
+                {
+                    LearnSpell(TheramorePortalSpell, false);
+                    RemoveSpell(StonardPortalSpell);
+                }
+
+                if (HasSpell(StonardTeleportSpell))
+                {
+                    LearnSpell(TheramoreTeleportSpell, false);
+                    RemoveSpell(StonardTeleportSpell);
+                }
+            }
+            else
+            {
+                //..And Horde shouldn't have Theramore
+                if (HasSpell(TheramorePortalSpell))
+                {
+                    LearnSpell(StonardPortalSpell, false);
+                    RemoveSpell(TheramorePortalSpell);
+                }
+
+                if (HasSpell(TheramoreTeleportSpell))
+                {
+                    LearnSpell(StonardTeleportSpell, false);
+                    RemoveSpell(TheramoreTeleportSpell);
+                }
+            }
+        }
+
         //remove all active quests that were race-restricted that didn't get cleared before.
         auto itr = mQuestStatus.begin();
         while (itr != mQuestStatus.end())
