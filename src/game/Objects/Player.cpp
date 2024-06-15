@@ -602,7 +602,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
+    m_currentTicketCounter(0), m_repopAtGraveyardPending(false),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -1173,6 +1173,10 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
     if (!IsAlive() || IsGameMaster())
         return 0;
 
+    // Turtle: no environmental damage on transport and shortly after
+    if (GetTransport() || HasHCImmunity())
+        return 0;
+
     // Absorb, resist some environmental damage type
     uint32 absorb = 0;
     int32 resist = 0;
@@ -1410,10 +1414,10 @@ bool Player::CheckMirrorTimerActivation(MirrorTimer::Type timer) const
     {
         case MirrorTimer::FATIGUE:
             return sWorld.getConfig(CONFIG_UINT32_MIRRORTIMER_FATIGUE_MAX) != 0 &&
-                   (IsInHighSea() && !IsTaxiFlying() && !GetTransport());
+                   (IsInHighSea() && !IsTaxiFlying() && !GetTransport() && !HasHCImmunity());
         case MirrorTimer::BREATH:
             return sWorld.getConfig(CONFIG_UINT32_MIRRORTIMER_BREATH_MAX) != 0 &&
-                   (IsUnderwater() && GetWaterBreathingInterval());
+                   (IsUnderwater() && GetWaterBreathingInterval() && !GetTransport() && !HasHCImmunity());
         case MirrorTimer::FEIGNDEATH:
             return (IsFeigningDeath());
         case MirrorTimer::ENVIRONMENTAL:
@@ -1686,14 +1690,6 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             m_weaponChangeTimer -= update_diff;
     }
 
-    if (noAggroTimer > 0)
-    {
-        if (noAggroTimer >= update_diff)
-            noAggroTimer -= update_diff;
-        else
-            noAggroTimer = 0;
-    }
-
     if (m_zoneUpdateTimer > 0)
     {
         if (update_diff >= m_zoneUpdateTimer)
@@ -1934,6 +1930,9 @@ void Player::OnDisconnected()
 
         if (watching_cinematic_entry != 0)
             CinematicEnd();
+
+        if (IsHardcore())
+            SetHCImmunityTimer(20);
     }
 
      // If in active arena, immediately leave battleground.
@@ -22325,18 +22324,18 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
     if (!m_movementInfo.HasMovementFlag(MOVEFLAG_FALLINGFAR))
         return;
-    
-    if (m_movementInfo.t_guid != movementInfo.t_guid)
-        return;
-
-    if (m_movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) != movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
-        return;
 
     // the normal fall time from height of 14.57 yards
     if (movementInfo.fallTime < 1229)
         return;
 
-    Position const& currentPos = (movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) ? movementInfo.GetTransportPos() : movementInfo.GetPos());
+    if (m_movementInfo.t_guid || movementInfo.t_guid)
+        return;
+
+    if (m_movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT) || movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
+        return;
+
+    Position const& currentPos = movementInfo.GetPos();
 
     if (m_fallStartZ < currentPos.z)
         return;
@@ -22349,7 +22348,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
     // 14.57 can be calculated by resolving damageperc formula below to 0
     if (z_diff >= 14.57f && IsAlive() && !IsGameMaster() &&
         !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
-        !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL) && (m_lastTransportTime + 3000 < WorldTimer::getMSTime()))
+        !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
     {
         //Safe fall, fall height reduction
         int32 safe_fall = GetTotalAuraModifier(SPELL_AURA_SAFE_FALL);
