@@ -357,6 +357,9 @@ bool Transport::TeleportTransport(uint32 newMapid, float x, float y, float z, fl
                 if (!player->IsAlive())
                     player->ResurrectPlayer(1.0f);
 
+                if (player->IsHardcore())
+                    player->SetHCImmunityTimer(20);
+
                 player->RemoveSpellsCausingAura(SPELL_AURA_MOD_CONFUSE);
                 player->RemoveSpellsCausingAura(SPELL_AURA_MOD_FEAR);
                 player->CombatStopWithPets(true);
