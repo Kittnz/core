@@ -359,17 +359,28 @@ struct boss_gothikAI : public ScriptedAI
         uint32 num_right = 0;
         for (auto& playerRef : lPlayers)
         {
-            if (const Player* p = playerRef.getSource())
+            if (Player const* p = playerRef.getSource())
             {
                 // Don't count dead players, including those that are feigned
                 // Otherwise we could have a bunch of feigned players sitting on one side
                 if (p->IsDead() || p->IsFeigningDeathSuccessfully())
                     continue;
 
-                if(m_pInstance->IsInRightSideGothArea(p))
-                    ++num_right;
-                else
-                    ++num_left;
+                if (GameObject* pCombatGate = m_pInstance->GetSingleGameObjectFromStorage(GO_MILI_GOTH_COMBAT_GATE))
+                {
+                    // Do not count players outside the room.
+                    if (!pCombatGate->IsWithinDist(p, 100))
+                        continue;
+
+                    // Do not count players stacked inside the gate.
+                    if (std::abs(p->GetPositionY() - pCombatGate->GetPositionY()) < 2.0f)
+                        continue;
+
+                    if (pCombatGate->GetPositionY() >= p->GetPositionY())
+                        ++num_right;
+                    else
+                        ++num_left;
+                }
             }
         }
         // if there are less than 10 people on one of the sides we consider it as
