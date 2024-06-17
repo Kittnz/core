@@ -45,7 +45,7 @@ PetAI::PetAI(Creature* c) : CreatureAI(c)
     m_bMeleeAttack = (c->GetEntry() != 416);
 }
 
-bool PetAI::_needToStop() const
+bool PetAI::NeedToStopAttacking() const
 {
     // This is needed for charmed creatures, as once their target was reset other effects can trigger threat
     if (m_creature->IsCharmed() && m_creature->GetVictim() == m_creature->GetCharmer())
@@ -82,7 +82,7 @@ bool PetAI::_needToStop() const
     return !m_creature->IsValidAttackTarget(m_creature->GetVictim());
 }
 
-void PetAI::_stopAttack()
+void PetAI::StopAttacking()
 {
     if (!m_creature->IsAlive())
     {
@@ -93,9 +93,17 @@ void PetAI::_stopAttack()
         return;
     }
 
-    m_creature->AttackStop();
-    m_creature->InterruptNonMeleeSpells(false);
-    //m_creature->SendMeleeAttackStop(); // Should stop pet's attack button from flashing
+    if (m_creature->GetCharmerOrOwnerGuid().IsCreature())
+    {
+        m_creature->DeleteThreatList();
+        m_creature->CombatStop(true);
+    }
+    else
+    {
+        m_creature->AttackStop();
+        m_creature->InterruptNonMeleeSpells(false);
+    }
+
     m_creature->GetCharmInfo()->SetIsCommandAttack(false);
     ClearCharmInfoFlags();
     HandleReturnMovement();
@@ -155,9 +163,9 @@ void PetAI::UpdateAI(uint32 const diff)
 
     if (m_creature->GetVictim() && m_creature->GetVictim()->IsAlive())
     {
-        if (_needToStop())
+        if (NeedToStopAttacking())
         {
-            _stopAttack();
+            StopAttacking();
             return;
         }
 
@@ -383,7 +391,7 @@ void PetAI::KilledUnit(Unit* victim)
 
     // Clear target just in case. May help problem where health / focus / mana
     // regen gets stuck. Also resets attack command.
-    // Can't use _stopAttack() because that activates movement handlers and ignores
+    // Can't use StopAttacking() because that activates movement handlers and ignores
     // next target selection
     m_creature->AttackStop();
     m_creature->InterruptNonMeleeSpells(false);

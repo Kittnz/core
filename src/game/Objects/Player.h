@@ -2058,7 +2058,6 @@ class Player final: public Unit
         }
         void HandleFall(MovementInfo const& movementInfo);
         bool IsFalling() const { return m_fallStartZ != 0; }
-        uint32 m_lastTransportTime; // Turtle: used to prevent fall damage from stepping off transport
 
         bool IsControlledByOwnClient() const { return m_session->GetClientMoverGuid() == GetObjectGuid(); }
         void SetClientControl(Unit* target, uint8 allowMove);
@@ -2433,9 +2432,24 @@ class Player final: public Unit
         }
 
 
-        //Little safeguard for HC characters after a server start.
-        uint32 noAggroTimer = 0;
-        bool HasHCImmunity() const override { return noAggroTimer != 0; }
+        // Prevents environmental damage and aggro for hardcore chars shortly after login, disconnect, and riding transport.
+        mutable time_t m_hardcoreImmunityTime = 0;
+        bool HasHCImmunity() const final
+        {
+            if (m_hardcoreImmunityTime)
+            {
+                if (m_hardcoreImmunityTime >= time(nullptr))
+                    return true;
+                else
+                    m_hardcoreImmunityTime = 0;
+            }
+
+            return false;
+        }
+        void SetHCImmunityTimer(uint32 secs)
+        {
+            m_hardcoreImmunityTime = time(nullptr) + secs;
+        }
 
         void ScheduleStandStateChange(uint8 state);
         void ClearScheduledStandState() { m_newStandState = MAX_UNIT_STAND_STATE; m_standStateTimer = 0; }

@@ -12523,15 +12523,50 @@ bool ChatHandler::HandleWpExportCommand(char* args)
 bool ChatHandler::HandleCharacterRenameCommand(char* args)
 {
     Player* target;
-    ObjectGuid target_guid;
-    std::string target_name;
-    if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name))
+    ObjectGuid targetGuid;
+    std::string targetName;
+    if (!ExtractPlayerTarget(&args, &target, &targetGuid, &targetName))
         return false;
 
-    std::string extraArgs = args;
-    bool cancel = extraArgs.find("cancel") != std::string::npos;
+    char* secondArg = ExtractLiteralArg(&args);
+    bool cancel = secondArg && strstr(secondArg, "cancel");
 
-    if (!cancel)
+    if (cancel)
+    {
+        if (target)
+        {
+            if (target->HasAtLoginFlag(AT_LOGIN_RENAME))
+            {
+                target->RemoveAtLoginFlag(AT_LOGIN_RENAME, true);
+                SendSysMessage("At login rename removed in DB and memory.");
+            }
+            else
+                SendSysMessage("Player doens't have rename flag.");
+        }
+    }
+    else if (secondArg)
+    {
+        std::string name = secondArg;
+        CharacterDatabase.escape_string(name);
+
+        if (QueryResult* pResult = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE `name`='%s'", name.c_str()))
+        {
+            PSendSysMessage("Cannot rename player to '%s' because that name is already taken.", secondArg);
+            delete pResult;
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (target)
+            target->SetName(secondArg);
+
+        CharacterDatabase.PExecute("UPDATE `characters` SET `name` = '%s' WHERE guid = '%u'", name.c_str(), targetGuid.GetCounter());
+        sObjectMgr.ChangePlayerNameInCache(targetGuid.GetCounter(), targetName, secondArg);
+        sWorld.InvalidatePlayerDataToAllClients(targetGuid);
+
+        PSendSysMessage("Renamed player '%s' to '%s'.", targetName.c_str(), secondArg);
+    }
+    else
     {
         if (target)
         {
@@ -12548,29 +12583,17 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
         else
         {
             // check offline security
-            if (HasLowerSecurity(nullptr, target_guid))
+            if (HasLowerSecurity(nullptr, targetGuid))
                 return false;
 
-            std::string oldNameLink = playerLink(target_name);
+            std::string oldNameLink = playerLink(targetName);
 
-            PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
+            PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), targetGuid.GetCounter());
             // If the player is offline, also forcefully set the current name to be just the character's guid.
-            CharacterDatabase.PExecute("UPDATE characters SET name = guid, at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
+            CharacterDatabase.PExecute("UPDATE characters SET name = guid, at_login = at_login | '1' WHERE guid = '%u'", targetGuid.GetCounter());
         }
     }
-    else
-    {
-        if (target)
-        {
-            if (target->HasAtLoginFlag(AT_LOGIN_RENAME))
-            {
-                target->RemoveAtLoginFlag(AT_LOGIN_RENAME, true);
-                SendSysMessage("At login rename removed in DB and memory.");
-            }
-            else
-                SendSysMessage("Player doens't have rename flag.");
-        }
-    }
+    
 
     return true;
 }
