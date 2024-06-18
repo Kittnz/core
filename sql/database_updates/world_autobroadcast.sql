@@ -17,4 +17,5 @@ UPDATE `mangos_string` SET `content_loc4` = 'Join /english to connect with Engli
 UPDATE `mangos_string` SET `content_loc4` = '保持与最新消息的同步，并加入我们的KOOK服务器！' WHERE `entry` = 50002;
 UPDATE `mangos_string` SET `content_loc4` = '我们鼓励每个人定期更改密码。如果您认为您曾在其他私人服务器上使用过乌龟魔兽的密码，请尽快更改密码。' WHERE `entry` = 50003;
 UPDATE `mangos_string` SET `content_loc4` = '所有金币交易都受到严格监控。任何形式的RMT交易将对所有涉及方采取严厉行动。请不要支持那些正在损害我们服务器的个人。' WHERE `entry` = 50004;
-UPDATE `mangos_string` SET `content_loc4` = '收听永望广播公司收音机，深入了解艾泽拉斯丰富的故事，欣赏最美妙的旋律，并及时了解你以前不知道需要的产品！' WHERE `entry` = 50005;
+-- UPDATE `mangos_string` SET `content_loc4` = '收听永望广播公司收音机，深入了解艾泽拉斯丰富的故事，欣赏最美妙的旋律，并及时了解你以前不知道需要的产品！' WHERE `entry` = 50005;
+UPDATE `mangos_string` SET `content_loc4` = '最终促销 - 截至7月2日，所有捐赠奖励半价出售。这是最后一次以50%折扣购买物品的机会，未来我们将采取更小规模的促销活动并增加代币奖励。我们主要提供公平游戏的装饰性内容，当前在财政上面临一些挑战，但所有捐赠都将用于开发和服务器维护。' WHERE `entry` = 50005;
