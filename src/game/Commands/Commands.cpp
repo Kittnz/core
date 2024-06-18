@@ -18818,6 +18818,8 @@ bool ChatHandler::HandleAccountEmailCommand(char* args)
     return true;
 }
 
+#include "events/event_wareffort.h"
+
 bool ChatHandler::HandleWarEffortInfoCommand(char* args)
 {
     sGameEventMgr.Update();
@@ -18840,6 +18842,64 @@ bool ChatHandler::HandleWarEffortInfoCommand(char* args)
 
             uint32 nextAutoCompleteIn = sWorld.getConfig(CONFIG_UINT32_WAR_EFFORT_AUTOCOMPLETE_PERIOD) - (time(nullptr) - lastAutoCompleteTime);
             PSendSysMessage("Next Auto Complete In: %s", secsToTimeString(nextAutoCompleteIn).c_str());
+
+            uint32 remainingResources = 0;
+
+            // Check all totals. If we're at the limit, start the moving.
+            for (int i = 0; i < NUM_SHARED_OBJECTIVES; ++i)
+            {
+                WarEffortStockInfo info;
+                if (GetWarEffortStockInfo(SharedObjectives[i].itemId, info, TEAM_ALLIANCE))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(SharedObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Alliance %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+
+                if (GetWarEffortStockInfo(SharedObjectives[i].itemId, info, TEAM_HORDE))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(SharedObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Horde %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+            }
+
+            for (int i = 0; i < NUM_FACTION_OBJECTIVES; ++i)
+            {
+                WarEffortStockInfo info;
+                if (GetWarEffortStockInfo(AllianceObjectives[i].itemId, info))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(AllianceObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Alliance %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+
+                if (GetWarEffortStockInfo(HordeObjectives[i].itemId, info))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(HordeObjectives[i].itemId);
+                    
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Horde %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+            }
+
+            PSendSysMessage("Total Remaining Resources: %u", remainingResources);
+
             break;
         }
         case WAR_EFFORT_STAGE_MOVE_1:
