@@ -2454,12 +2454,6 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
 
     MeleeHitOutcome result = RollMeleeOutcomeAgainst(pVictim, attType, int32(crit_chance * 100), int32(miss_chance * 100), int32(dodge_chance * 100), int32(parry_chance * 100), int32(block_chance * 100), false);
     
-    // Turtle: hack fix so rogues cant solo bosses
-    if ((result == MELEE_HIT_DODGE || result == MELEE_HIT_PARRY) &&
-        pVictim->IsPlayer() && pVictim->GetClass() == CLASS_ROGUE &&
-        IsCreature() && static_cast<Creature const*>(this)->IsWorldBoss() &&
-        GetThreatManager().getThreatList().size() < 10)
-        return MELEE_HIT_NORMAL;
 
     return result;
 }
