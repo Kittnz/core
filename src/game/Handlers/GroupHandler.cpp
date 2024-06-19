@@ -199,6 +199,13 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket & /*recv_data*/)
         return;
     }
 
+    if (!group->HandleHardcoreInteraction(GetPlayer()))
+    {
+        GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn�t higher than 5.");
+        return;
+    }
+
+
     Player* leader = sObjectMgr.GetPlayer(group->GetLeaderGuid());
 
     // forming a new group, create it
