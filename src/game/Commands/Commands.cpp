@@ -18772,6 +18772,31 @@ bool ChatHandler::HandleReloadPetitions(char*)
     return true;
 }
 
+bool ChatHandler::HandleQuestStatusesCommand(char* args)
+{
+    auto player = GetPlayer();
+
+    const uint32 MaxMessageSize = 2000;
+    const uint32 ReserveSize = 2048;
+
+    std::string msg;
+    msg.reserve(ReserveSize);
+    for (const auto& elem : player->getQuestStatusMap())
+    {
+        if (elem.second.m_rewarded && elem.second.m_status != QUEST_STATUS_NONE)
+            msg += std::to_string(elem.first);
+
+        if (msg.length() >= MaxMessageSize)
+        {
+            player->SendAddonMessage("TWQUEST", std::move(msg));
+            msg.clear();
+        }
+    }
+    player->SendAddonMessage("TWQUEST", std::move(msg));
+
+    return true;
+}
+
 bool ChatHandler::HandleAccountEmailCommand(char* args)
 {
     char* oldEmail = ExtractLiteralArg(&args);

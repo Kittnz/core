@@ -989,7 +989,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "perf",           SEC_ADMINISTRATOR,   true, nullptr,                                         "", perfCommandTable },
         { "blockegg",       SEC_DEVELOPER,       false, &ChatHandler::HandleBlockEggsCommand,           "", nullptr},
         { "cleaninventory", SEC_DEVELOPER,       false, &ChatHandler::HandleCleanInventoryCommand,      "", nullptr},
-        { "showborders", SEC_DEVELOPER,          false, &ChatHandler::HandleShowBordersCommand,         "", nullptr },
+        { "showborders",    SEC_DEVELOPER,       false, &ChatHandler::HandleShowBordersCommand,         "", nullptr },
+        { "queststatuses",  SEC_PLAYER,           false, &ChatHandler::HandleQuestStatusesCommand,       "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 
