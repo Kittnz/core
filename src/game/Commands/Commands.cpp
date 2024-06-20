@@ -18784,7 +18784,7 @@ bool ChatHandler::HandleQuestStatusesCommand(char* args)
     for (const auto& elem : player->getQuestStatusMap())
     {
         if (elem.second.m_rewarded && elem.second.m_status != QUEST_STATUS_NONE)
-            msg += std::to_string(elem.first);
+            msg += std::to_string(elem.first) + " ";
 
         if (msg.length() >= MaxMessageSize)
         {
