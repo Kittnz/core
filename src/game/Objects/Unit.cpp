@@ -3920,7 +3920,8 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
         if (!is_spellSpecPerTarget && firstInChain && firstInChain == sSpellMgr.GetFirstSpellInChain(i_spellId))
             is_spellSpecPerTarget = true;
 
-        if (is_spellSpecPerTarget || (is_spellSpecPerTargetPerCaster && holder->GetCasterGuid() == (*i).second->GetCasterGuid()))
+        if ((is_spellSpecPerTarget || (is_spellSpecPerTargetPerCaster && holder->GetCasterGuid() == (*i).second->GetCasterGuid())) &&
+            !(spellProto->Custom & SPELL_CUSTOM_STACK_WITH_SPELL_SPECIFIC))
         {
             // cannot remove stronger snare / haste debuff
             if (spellId_spec == SPELL_SNARE || spellId_spec == SPELL_NEGATIVE_HASTE)
@@ -3944,7 +3945,7 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
             if (m_spellAuraHolders.empty())
                 break;
             else
-                next =  m_spellAuraHolders.begin();
+                next = m_spellAuraHolders.begin();
 
             continue;
         }
