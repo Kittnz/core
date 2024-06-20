@@ -3231,14 +3231,14 @@ void Player::RecallPvPGear()
             });
 
 
-        std::string reason = "Bug abuse is against the ToS. Your PvP items of the opposing faction "
+       /* std::string reason = "Bug abuse is against the ToS. Your PvP items of the opposing faction "
             "have been removed and your Transmogrification was taken away. Depending on the severity additional punishments may be applied retroactively.";
         MangosStrings mstring = LANG_WARN_INFORM;
         sWorld.WarnAccount(GetSession()->GetAccountId(), "Console", reason, "WARN");
         sAccountMgr.WarnAccount(GetSession()->GetAccountId(), reason);
 
         ChatHandler(GetSession()).PSendSysMessage(mstring, reason);
-        GetSession()->SendNotification(mstring, reason);
+        GetSession()->SendNotification(mstring, reason);*/
     }
 }
 
