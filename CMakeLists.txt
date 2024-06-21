@@ -16,11 +16,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
+# CMake policies
+cmake_minimum_required(VERSION 3.1...3.29)
+
 project(TurtleWoW)
 include(FetchContent)
-
-# CMake policies
-cmake_minimum_required(VERSION 3.1...3.20)
 
 # Allow -DACE_ROOT, -DTBB_ROOT, etc.
 if(${CMAKE_VERSION} VERSION_GREATER "3.11")
