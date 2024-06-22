@@ -1095,8 +1095,8 @@ WorldSession::PacketAllowResult WorldSession::AllowPacket(uint16 opcode, uint64 
         case CMSG_PET_NAME_QUERY:
         case CMSG_GUILD_QUERY:
         {
-            //If last packet was 5 seconds ago then just let it go through anyway
-            if (time - m_requeuePacketCount[opcode].first > 5)
+            //If last packet was 4 seconds ago then just let it go through anyway
+            if (time - m_requeuePacketCount[opcode].first > 3)
             {
                 m_requeuePacketCount[opcode].first = time;
                 m_requeuePacketCount[opcode].second = 0;
@@ -1105,7 +1105,7 @@ WorldSession::PacketAllowResult WorldSession::AllowPacket(uint16 opcode, uint64 
 
             uint32& count = m_requeuePacketCount[opcode].second;
             ++count;
-            if (count > 500)
+            if (count > 1000)
             {
                 sLog.outInfo("Account %u is over requeue limit for packet opcode %u. Count %u.", GetAccountId(), opcode, count);
                 return PacketAllowResult::Requeue;
