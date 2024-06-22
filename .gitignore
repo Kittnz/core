@@ -116,3 +116,6 @@ tools/libDiscord/Release/
 tools/CinematicTool/Debug/
 tools/CinematicTool/Release/
 /cmake-build-release
+
+# Exclude CLion directories
+cmake-build-debug-visual-studio/
