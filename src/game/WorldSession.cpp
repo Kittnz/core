@@ -426,8 +426,13 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
 
     std::vector<WorldPacket*> requeuePackets;
 
+    constexpr uint32 MaxPacketsPerUpdate = 200;
+    uint32 totalPackets = 0;
+
     while (CanProcessPackets() && _recvQueue[updater.PacketProcessType()].next(packet, updater))
     {
+        ++totalPackets;
+
         _receivedPacketType[updater.PacketProcessType()] = true;
         auto packetAllowed = AllowPacket(packet->GetOpcode(), timeNow);
         if (packetAllowed == PacketAllowResult::Denied)
@@ -539,6 +544,9 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
         }
 
         delete packet;
+
+        if (totalPackets > MaxPacketsPerUpdate)
+            break;
     }
 
     for (const auto& elem : requeuePackets)
@@ -1107,7 +1115,7 @@ WorldSession::PacketAllowResult WorldSession::AllowPacket(uint16 opcode, uint64 
             ++count;
             if (count > 1000)
             {
-                sLog.outInfo("Account %u is over requeue limit for packet opcode %u. Count %u.", GetAccountId(), opcode, count);
+                //sLog.outInfo("Account %u is over requeue limit for packet opcode %u. Count %u.", GetAccountId(), opcode, count);
                 return PacketAllowResult::Requeue;
             }
 
