@@ -1160,6 +1160,16 @@ struct npc_duke_dreadmooreAI : public ScriptedAI
     {
         m_creature->SetHealthPercent(20.1f);
     }
+
+    void EnterCombat(Unit* pVictim) override
+    {
+        DoScriptText(30237, m_creature);
+    }
+
+    void JustDied(Unit* pKiller) override
+    {
+        DoScriptText(30238, m_creature);
+    }
 };
 
 CreatureAI* GetAI_npc_duke_dreadmoore(Creature* pCreature)
