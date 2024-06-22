@@ -1105,7 +1105,7 @@ WorldSession::PacketAllowResult WorldSession::AllowPacket(uint16 opcode, uint64 
 
             uint32& count = m_requeuePacketCount[opcode].second;
             ++count;
-            if (count > 100)
+            if (count > 500)
             {
                 sLog.outInfo("Account %u is over requeue limit for packet opcode %u. Count %u.", GetAccountId(), opcode, count);
                 return PacketAllowResult::Requeue;
