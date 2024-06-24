@@ -874,7 +874,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         }
 
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage: victim just died");
-        Kill(pVictim, spellProto, durabilityLoss); // Function too long, we cut
+        Kill(pVictim, spellProto, durabilityLoss);
+
         // last damage from non m_duel opponent or opponent controlled creature
         if (duel_hasEnded)
         {
@@ -1204,9 +1205,10 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pPlayerTap->RewardSinglePlayerAtKill(pVictim);
     }
 
-    bool const damageFromSpiritOfRedemtionTalent = (spellProto && spellProto->Id == 27795);
+    bool const damageFromSpiritOfRedemptionTalent = (spellProto && spellProto->Id == 27965);
+    bool const spiritOfRedemptionTalentImmune = pVictim->GetClass() == CLASS_PRIEST && !damageFromSpiritOfRedemptionTalent && pVictim->HasAura(20711);
 
-    if (pPlayerVictim && !damageFromSpiritOfRedemtionTalent)
+    if (pPlayerVictim && !damageFromSpiritOfRedemptionTalent)
     {
         if (pPlayerVictim->IsHardcore())
         {
@@ -1280,45 +1282,36 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageAttackStop");
 
-    // if talent known but not triggered (check priest class for speedup check)
-    bool spiritOfRedemtionTalentImmune = false;
-    if (pPlayerVictim && pVictim->GetClass() == CLASS_PRIEST)
+    // handle spirit of redemption talent
+    if (spiritOfRedemptionTalentImmune)
     {
-        if (!damageFromSpiritOfRedemtionTalent)           // not called from SPELL_AURA_SPIRIT_OF_REDEMPTION
-        {
-            AuraList const& vDummyAuras = pVictim->GetAurasByType(SPELL_AURA_DUMMY);
-            for (const auto& itr : vDummyAuras)
-            {
-                if (itr->GetSpellProto()->SpellIconID == 1654)
-                {
-                    spiritOfRedemtionTalentImmune = true;
-                    break;
-                }
-            }
-        }
+        pVictim->InterruptNonMeleeSpells(false);
 
-        // Already applied spirit of redemption. Fix stuck in ANGEL form.
-        if (!spiritOfRedemtionTalentImmune && HasAura(27827))
-            return;
+        // save value before aura remove
+        uint32 ressSpellId = pVictim->GetUInt32Value(PLAYER_SELF_RES_SPELL);
+        if (!ressSpellId)
+            ressSpellId = ((Player*)pVictim)->GetResurrectionSpellId();
+
+        // remove all expected to remove at death auras (most important negative case like DoT or periodic triggers)
+        pVictim->RemoveAllAurasOnDeath();
+
+        // restore for use at real death
+        pVictim->SetUInt32Value(PLAYER_SELF_RES_SPELL, ressSpellId);
+
+        int32 heal = pVictim->GetMaxHealth();
+        pVictim->CastCustomSpell(pVictim, 27827, &heal, nullptr, nullptr, true);
     }
-
-    if (!spiritOfRedemtionTalentImmune)
+    else
     {
         pVictim->SetHealth(0);
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "SET JUST_DIED");
         pVictim->SetDeathState(JUST_DIED);
-        // Nostalrius: Instantly send values update for health
+
         if (pPlayerVictim && pVictim->GetUInt32Value(PLAYER_SELF_RES_SPELL))
             pVictim->DirectSendPublicValueUpdate(PLAYER_SELF_RES_SPELL);
-        pVictim->DirectSendPublicValueUpdate(UNIT_FIELD_HEALTH);
-    }
-    else
-    {
-        // Before the stop of combat, the auras of type MC are removed. We must be able to redirect the mobs to the caster.
-        pVictim->RemoveCharmAuras(AURA_REMOVE_BY_DEATH);
 
-        // stop combat
-        pVictim->CombatStop();
+        // Nostalrius: Instantly send values update for health
+        pVictim->DirectSendPublicValueUpdate(UNIT_FIELD_HEALTH);
     }
 
     pVictim->GetHostileRefManager().deleteReferences();
@@ -1332,27 +1325,9 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageHealth1");
 
-    if (spiritOfRedemtionTalentImmune)
-    {
-        // save value before aura remove
-        uint32 ressSpellId = pVictim->GetUInt32Value(PLAYER_SELF_RES_SPELL);
-        if (!ressSpellId)
-            ressSpellId = ((Player*)pVictim)->GetResurrectionSpellId();
-
-        //Remove all expected to remove at death auras (most important negative case like DoT or periodic triggers)
-        pVictim->RemoveAllAurasOnDeath();
-
-        // restore for use at real death
-        pVictim->SetUInt32Value(PLAYER_SELF_RES_SPELL, ressSpellId);
-
-        // FORM_SPIRITOFREDEMPTION and related auras
-        pVictim->AddAura(27827, ADD_AURA_NO_OPTION, pVictim);
-        pVictim->InterruptNonMeleeSpells(false);
-    }
-
     // remember victim PvP death for corpse type and corpse reclaim delay
     // at original death (not at SpiritOfRedemtionTalent timeout)
-    if (pPlayerVictim && !damageFromSpiritOfRedemtionTalent)
+    if (pPlayerVictim && !damageFromSpiritOfRedemptionTalent)
         pPlayerVictim->SetPvPDeath(pPlayerTap != nullptr);
 
     // Call KilledUnit for creatures
