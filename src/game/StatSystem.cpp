@@ -759,10 +759,6 @@ void Creature::UpdateAttackPowerAndDamage(bool ranged)
     float attPowerMod = GetModifierValue(unitMod, TOTAL_VALUE);
     float attPowerMultiplier = GetModifierValue(unitMod, TOTAL_PCT) - 1.0f;
 
-    if (!ranged && IsCreature() && !sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && sWorld.IsPvPRealm())
-    {
-        sLog.outString("[AURADEBUG]:[%u]: UpdateAttackPowerAndDamage: base_attpower: %f, attmod: %f, attmulti : %f", GetGUIDLow(), base_attPower, attPowerMod, attPowerMultiplier);
-    }
 
     SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
     SetInt32Value(index_mod, (int32)attPowerMod);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field
