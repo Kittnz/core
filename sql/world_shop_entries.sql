@@ -542,3 +542,21 @@ UPDATE `shop_items` SET `position_x` = -0.08, `position_y` = 1.09, `position_z` 
 UPDATE `shop_items` SET `position_x` = -1.597, `position_y` = 0.537, `position_z` = 0.1, `rotation` = 0.564, `scale` = 0.699 WHERE `id` = 147;
 UPDATE `shop_items` SET `position_x` = -0.111, `position_y` = -0.885, `position_z` = 0, `rotation` = -0.335, `scale` = 1.4 WHERE `id` = 101;
 UPDATE `shop_items` SET `position_x` = 0.142, `position_y` = 1.343, `position_z` = 0, `rotation` = -0.31, `scale` = 0.499 WHERE `id` = 184;
+
+UPDATE `shop_items` SET `position_x` = 0.031, `position_y` = 0.489, `position_z` = 0, `rotation` = -0.356, `scale` = 1.1 WHERE `id` = 121;
+UPDATE `shop_items` SET `position_x` = 0.015, `position_y` = 0.505, `position_z` = 0, `rotation` = -0.356, `scale` = 1.1 WHERE `id` = 122;
+UPDATE `shop_items` SET `position_x` = 0.158, `position_y` = -0.159, `position_z` = 0, `rotation` = -0.231, `scale` = 1.4 WHERE `id` = 107;
+UPDATE `shop_items` SET `position_x` = -0.095, `position_y` = -0.396, `position_z` = 0, `rotation` = -0.168, `scale` = 1.1 WHERE `id` = 110;
+UPDATE `shop_items` SET `position_x` = -0.522, `position_y` = 1.232, `position_z` = 0, `rotation` = -0.189, `scale` = 0.699 WHERE `id` = 149;
+UPDATE `shop_items` SET `position_x` = -0.095, `position_y` = 0.126, `position_z` = 0, `rotation` = -0.272, `scale` = 0.899 WHERE `id` = 165;
+UPDATE `shop_items` SET `position_x` = -0.095, `position_y` = 0.284, `position_z` = 0.3, `rotation` = -0.189, `scale` = 0.899 WHERE `id` = 163;
+UPDATE `shop_items` SET `position_x` = -0.016, `position_y` = 1.153, `position_z` = -0.201, `rotation` = -0.231, `scale` = 0.399 WHERE `id` = 162;
+UPDATE `shop_items` SET `position_x` = -0.143, `position_y` = -0.854, `position_z` = 0, `rotation` = -0.314, `scale` = 1.5 WHERE `id` = 101;
+UPDATE `shop_items` SET `position_x` = -0.143, `position_y` = -0.806, `position_z` = 0, `rotation` = -0.272, `scale` = 1.5 WHERE `id` = 103;
+UPDATE `shop_items` SET `position_x` = 0.173, `position_y` = -0.048, `position_z` = 0, `rotation` = -0.377, `scale` = 0.899 WHERE `id` = 145;
+UPDATE `shop_items` SET `position_x` = 0.015, `position_y` = 0.505, `position_z` = 0, `rotation` = -0.356, `scale` = 1.1 WHERE `id` = 126;
+UPDATE `shop_items` SET `position_x` = 0.221, `position_y` = -0.08, `position_z` = 0, `rotation` = -0.398, `scale` = 1.4 WHERE `id` = 108;
+UPDATE `shop_items` SET `position_x` = -1.739, `position_y` = 0.505, `position_z` = 0, `rotation` = 0.543, `scale` = 0.799 WHERE `id` = 147;
+UPDATE `shop_items` SET `position_x` = 0.173, `position_y` = 1.232, `position_z` = -0.201, `rotation` = -0.419, `scale` = 0.599 WHERE `id` = 182;
+UPDATE `shop_items` SET `position_x` = 0.158, `position_y` = 1.28, `position_z` = -0.201, `rotation` = -0.335, `scale` = 0.599 WHERE `id` = 184;
+
