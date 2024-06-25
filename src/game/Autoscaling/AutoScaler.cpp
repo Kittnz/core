@@ -236,7 +236,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
         auto tup = std::make_tuple(
                 std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
                 std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
-                creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));
+                creature->GetInt32Value(UNIT_FIELD_ATTACK_POWER));
         baseDamages[creature->GetEntry()] = std::move(tup);
     }
 
@@ -251,7 +251,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     creature->SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).first) * specificDmgFactor);
     creature->SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).second) * specificDmgFactor);
 
-    creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleDamage(std::get<2>(tup)) * specificDmgFactor);
+    creature->SetInt32Value(UNIT_FIELD_ATTACK_POWER, ScaleDamage(std::get<2>(tup)) * specificDmgFactor);
 }
 
 void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
