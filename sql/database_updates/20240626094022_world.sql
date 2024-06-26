@@ -78,3 +78,8 @@ DELETE FROM gameobject_battleground WHERE guid = '5019625';
 DELETE FROM gameobject WHERE guid = '5019623';
 DELETE FROM game_event_gameobject WHERE guid = '5019623';
 DELETE FROM gameobject_battleground WHERE guid = '5019623';
+
+-- Changes by DRAGU
+DELETE FROM gameobject WHERE guid = '4007138';
+DELETE FROM game_event_gameobject WHERE guid = '4007138';
+DELETE FROM gameobject_battleground WHERE guid = '4007138';
