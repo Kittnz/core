@@ -61,3 +61,20 @@ DELETE FROM game_event_creature WHERE guid=2583660;
 DELETE FROM game_event_creature_data WHERE guid=2583660;
 DELETE FROM creature_battleground WHERE guid=2583660;
 REPLACE INTO `creature` VALUES (2583661,50514,0,0,0,1,16271.4,16318.1,14.0603,3.09074,120,120,0,100,100,0,0,0);
+
+-- Changes by MEFLOR
+DELETE FROM creature WHERE guid=2583548;
+DELETE FROM creature_addon WHERE guid=2583548;
+DELETE FROM creature_movement WHERE id=2583548;
+DELETE FROM game_event_creature WHERE guid=2583548;
+DELETE FROM game_event_creature_data WHERE guid=2583548;
+DELETE FROM creature_battleground WHERE guid=2583548;
+DELETE FROM gameobject WHERE guid = '5019624';
+DELETE FROM game_event_gameobject WHERE guid = '5019624';
+DELETE FROM gameobject_battleground WHERE guid = '5019624';
+DELETE FROM gameobject WHERE guid = '5019625';
+DELETE FROM game_event_gameobject WHERE guid = '5019625';
+DELETE FROM gameobject_battleground WHERE guid = '5019625';
+DELETE FROM gameobject WHERE guid = '5019623';
+DELETE FROM game_event_gameobject WHERE guid = '5019623';
+DELETE FROM gameobject_battleground WHERE guid = '5019623';
