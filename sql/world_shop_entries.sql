@@ -23,7 +23,7 @@ create table shop_items  (
 
 -- === SALE % === --
 
-SET @discount = 0.5;
+SET @discount = 1;
 
 -- ============== --
 
@@ -161,7 +161,7 @@ replace into shop_items (`id`, `category`, `item`, `model_id`, `item_id`, `descr
 (229, 5, 83155,0, 0, 'Scarlet Charger', '猩红战马', 360),
 (230, 5, 83158,0, 0, 'Brown Zhevra', '棕色斑马', 360),
 (231, 5, 50536,0, 0, 'Twilight', '恐怖图腾科多兽', 1000),
-(232, 5, 81239,0, 0, 'Happy Dalaran Cloud', '开心的云朵', 300),
+-- (232, 5, 81239,0, 0, 'Happy Dalaran Cloud', '开心的云朵', 300),
 (233, 5, 81238,0, 0, 'Turbo-Charged Flying Machine', '涡轮增压飞行器', 500),
 (241, 6, 13584,0, 0, 'Diablo Stone', '破坏神之石', 80),
 (242, 6, 13583,0, 0, 'Panda Cub', '熊猫项圈', 80),
