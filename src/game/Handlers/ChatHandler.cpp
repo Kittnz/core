@@ -239,26 +239,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (!ModLangAuras.empty())
                 lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
         }
-
-        if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
-        {
-            time_t currTime = time(nullptr);
-
-            if (!_player->CanSpeak()) // Muted
-            {
-                std::string timeStr = "";
-
-                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-                    timeStr = secsToTimeString(m_muteTime / 1000);
-                else
-                    timeStr = secsToTimeString(m_muteTime - currTime);
-
-                SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
-                return;
-            }
-            if (lang != LANG_ADDON && GetMasterPlayer())
-                GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
-        }
     }
 
     if (type != CHAT_MSG_AFK &&
@@ -321,6 +301,40 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             sLog.outError("CHAT: unknown message type %u, lang: %u", type, lang);
             return;
+        }
+    }
+
+
+    //Move muted here to check if whispers are whispering a GM, let those pass.
+    if (lang != LANG_ADDON)
+    {
+        if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+        {
+            time_t currTime = time(nullptr);
+
+            bool skipMute = false;
+
+            if (type == CHAT_MSG_WHISPER)
+            {
+                MasterPlayer* player = ObjectAccessor::FindMasterPlayer(to.c_str());
+                if (player && player->GetSession()->GetSecurity() > SEC_PLAYER)
+                    skipMute = true; // skip mute when whispering to GMs but allow GM to still .whisp off later on.
+            }
+
+            if (!_player->CanSpeak() && !skipMute) // Muted
+            {
+                std::string timeStr = "";
+
+                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+                    timeStr = secsToTimeString(m_muteTime / 1000);
+                else
+                    timeStr = secsToTimeString(m_muteTime - currTime);
+
+                SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+                return;
+            }
+            if (lang != LANG_ADDON && GetMasterPlayer())
+                GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
         }
     }
 
