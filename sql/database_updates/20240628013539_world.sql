@@ -1,0 +1,3 @@
+SET NAMES utf8;
+REPLACE INTO `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (700, 'You can\'t do that until you verify your email.', '이메일을 확인하기 전에는 해당 작업을 수행할 수 없습니다.', 'Vous ne pouvez pas le faire tant que vous n\'avez pas vérifié votre adresse e-mail.', 'Dies ist erst möglich, wenn Sie Ihre E-Mail bestätigt haben.', '在您验证电子邮件之前，您无法执行此操作。', '在驗證您的電子郵件之前，您無法執行此操作。', 'No puedes hacer eso hasta que verifiques tu correo electrónico.', 'No puedes hacer eso hasta que verifiques tu correo electrónico.', 'Вы не сможете сделать это, пока не подтвердите свой адрес электронной почты.');
+

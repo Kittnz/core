@@ -321,18 +321,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     skipMute = true; // skip mute when whispering to GMs but allow GM to still .whisp off later on.
             }
 
-            if (!_player->CanSpeak() && !skipMute) // Muted
-            {
-                std::string timeStr = "";
-
-                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-                    timeStr = secsToTimeString(m_muteTime / 1000);
-                else
-                    timeStr = secsToTimeString(m_muteTime - currTime);
-
-                SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+            if (!skipMute && !GetPlayer()->CanSpeak(true))
                 return;
-            }
+
             if (lang != LANG_ADDON && GetMasterPlayer())
                 GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
         }
@@ -833,19 +824,8 @@ void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
     if (!GetPlayer()->IsAlive() || GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         return;
 
-    if (!GetPlayer()->CanSpeak())
-    {
-
-
-        std::string timeStr = "";
-
-        if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-            timeStr = secsToTimeString(m_muteTime / 1000);
-        else
-            timeStr = secsToTimeString(m_muteTime - time(nullptr));
-        SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+    if (!GetPlayer()->CanSpeak(true))
         return;
-    }
 
     uint32 emote;
     recv_data >> emote;
@@ -894,18 +874,8 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
     if (!GetPlayer()->IsAlive())
         return;
 
-    if (!GetPlayer()->CanSpeak())
-    {
-        std::string timeStr = "";
-
-        if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-            timeStr = secsToTimeString(m_muteTime / 1000);
-        else
-            timeStr = secsToTimeString(m_muteTime - time(nullptr));
-
-        SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+    if (!GetPlayer()->CanSpeak(true))
         return;
-    }
 
     uint32 textEmote, emoteNum;
     ObjectGuid guid;
