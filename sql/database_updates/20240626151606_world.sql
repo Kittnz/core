@@ -54,3 +54,47 @@ REPLACE INTO `creature` VALUES (2583662,7105,0,0,0,0,-11790.9,-2432.57,-15.557,1
 
 -- Changes by DRAGU
 UPDATE `creature_addon` SET `emote_state`=0 WHERE `guid`=2577599;
+
+-- Changes by QA_NONNO
+REPLACE INTO `creature` VALUES (2583663,7105,0,0,0,1,5407.53,-3445.65,1560.58,0.211672,120,120,5,100,100,1,0,0);
+REPLACE INTO `creature` VALUES (2583664,17252,0,0,0,1,5427.27,-3449.23,1559.48,0.660827,120,120,5,100,100,1,0,0);
+DELETE FROM creature WHERE guid=2583663;
+DELETE FROM creature_addon WHERE guid=2583663;
+DELETE FROM creature_movement WHERE id=2583663;
+DELETE FROM game_event_creature WHERE guid=2583663;
+DELETE FROM game_event_creature_data WHERE guid=2583663;
+DELETE FROM creature_battleground WHERE guid=2583663;
+DELETE FROM creature WHERE guid=2583664;
+DELETE FROM creature_addon WHERE guid=2583664;
+DELETE FROM creature_movement WHERE id=2583664;
+DELETE FROM game_event_creature WHERE guid=2583664;
+DELETE FROM game_event_creature_data WHERE guid=2583664;
+DELETE FROM creature_battleground WHERE guid=2583664;
+DELETE FROM creature WHERE guid=2583662;
+DELETE FROM creature_addon WHERE guid=2583662;
+DELETE FROM creature_movement WHERE id=2583662;
+DELETE FROM game_event_creature WHERE guid=2583662;
+DELETE FROM game_event_creature_data WHERE guid=2583662;
+DELETE FROM creature_battleground WHERE guid=2583662;
+REPLACE INTO `creature` VALUES (2583665,8680,0,0,0,1,1280.28,-4989.54,2.28959,3.37952,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2583665;
+DELETE FROM creature_addon WHERE guid=2583665;
+DELETE FROM creature_movement WHERE id=2583665;
+DELETE FROM game_event_creature WHERE guid=2583665;
+DELETE FROM game_event_creature_data WHERE guid=2583665;
+DELETE FROM creature_battleground WHERE guid=2583665;
+REPLACE INTO `creature` VALUES (2583666,11437,0,0,0,1,1289.93,-4987.28,2.30562,3.46592,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2583666;
+DELETE FROM creature_addon WHERE guid=2583666;
+DELETE FROM creature_movement WHERE id=2583666;
+DELETE FROM game_event_creature WHERE guid=2583666;
+DELETE FROM game_event_creature_data WHERE guid=2583666;
+DELETE FROM creature_battleground WHERE guid=2583666;
+REPLACE INTO `creature` VALUES (2583667,14668,0,0,0,1,1291.96,-4986.48,2.32038,3.51697,120,120,5,100,100,1,0,0);
+DELETE FROM creature WHERE guid=2583667;
+DELETE FROM creature_addon WHERE guid=2583667;
+DELETE FROM creature_movement WHERE id=2583667;
+DELETE FROM game_event_creature WHERE guid=2583667;
+DELETE FROM game_event_creature_data WHERE guid=2583667;
+DELETE FROM creature_battleground WHERE guid=2583667;
+REPLACE INTO `creature` VALUES (2583668,17252,0,0,0,1,1303.18,-5002.98,0.650191,0.470416,120,120,5,100,100,1,0,0);
