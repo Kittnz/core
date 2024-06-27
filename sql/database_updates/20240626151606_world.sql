@@ -51,3 +51,6 @@ REPLACE INTO `gameobject` VALUES ( 5019640, 181598, 1, 16259.7, 16242.8, 27.4457
 
 -- Changes by QA_NONNO
 REPLACE INTO `creature` VALUES (2583662,7105,0,0,0,0,-11790.9,-2432.57,-15.557,1.00393,120,120,5,100,100,1,0,0);
+
+-- Changes by DRAGU
+UPDATE `creature_addon` SET `emote_state`=0 WHERE `guid`=2577599;
