@@ -15719,7 +15719,10 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
             continue;
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = mQuestStatus[questid];
-        if (q_status.m_status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
+
+        bool isRaidDenied = !qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup();
+
+        if (q_status.m_status == QUEST_STATUS_INCOMPLETE)
         {
             if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_KILL_OR_CAST))
             {
@@ -15737,6 +15740,22 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
 
                     if (reqkill == entry)
                     {
+                        if (isRaidDenied)
+                        {
+                            auto locId = GetSession()->GetSessionDbLocaleIndex();
+
+                            std::string title = "";
+
+                            if (QuestLocale const* il = locId >= 0 ? sObjectMgr.GetQuestLocale(qInfo->GetQuestId()) : nullptr)
+                                title = il->Title[locId];
+
+                            if (title.empty())
+                                title = qInfo->GetTitle();
+
+                            GetSession()->SendNotification("You did not get quest progress for %s because you are in a Raid.", title.c_str());
+                            continue;
+                        }
+
                         uint32 reqkillcount = qInfo->ReqCreatureOrGOCount[j];
                         uint32 curkillcount = q_status.m_creatureOrGOcount[j];
                         if (curkillcount < reqkillcount)
