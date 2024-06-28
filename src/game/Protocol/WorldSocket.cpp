@@ -170,10 +170,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-    //                                                   0     1       2             3          4         5    6    7           8         9     10          11       12       13                         14           15
 	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate), a.queue_skip, "
-        //  16                                                            17
-		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate, a.email_verif FROM account a "
+		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
     // Stop if the account is not found
@@ -257,7 +255,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 joinTimestamp = fields[14].GetUInt32();
     bool canQueueSkip = fields[15].GetBool();
     bool isBanned = fields[16].GetBool();
-    bool verifiedEmail = fields[17].GetBool();
     delete result;
 
     
@@ -347,7 +344,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetJoinTimeStamp(joinTimestamp);
     m_Session->SetUsername(account);
     m_Session->SetEmail(email);
-    m_Session->SetVerifiedEmail(verifiedEmail || email.empty()); // if no email treat it as verified (created from console)
     m_Session->SetGameBuild(BuiltNumberClient);
     m_Session->SetAccountFlags(accFlags);
     m_Session->SetOS(clientOs);

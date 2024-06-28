@@ -32,7 +32,6 @@
 #include "Mail.h"
 #include "Util.h"
 #include "Chat.h"
-#include "Language.h"
 #include "Anticheat.h"
 
 extern bool IsPlayerHardcore(uint32 lowGuid);
@@ -308,13 +307,6 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
 
     if (!sWorld.getConfig(CONFIG_BOOL_GM_ALLOW_TRADES) && GetSecurity() > SEC_PLAYER)
         return;
-
-    if (!HasVerifiedEmail())
-    {
-        ChatHandler(this).SendSysMessage(LANG_MUST_VERIFY_EMAIL);
-        SendAuctionCommandResult(nullptr, AUCTION_STARTED, AUCTION_ERR_INVENTORY, EQUIP_ERR_CANT_DO_RIGHT_NOW);
-        return;
-    }
 
     Player *pl = GetPlayer();
 
