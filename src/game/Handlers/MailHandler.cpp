@@ -246,23 +246,13 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
 
     req->receiverPtr = sObjectMgr.GetPlayer(req->receiver);
 
-    if (req->money || req->COD || req->itemGuid)
+    // hardcore players interaction (common check)
+    if (GetPlayer()->IsHardcore() && (req->money || req->COD || req->itemGuid))
     {
-        // hardcore players interaction (common check)
-        if (GetPlayer()->IsHardcore())
-        {
-            SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
-            ChatHandler(this).SendSysMessage("Hardcore characters can use mail, but with no attachments.");
-            delete req;
-            return;
-        }
-        else if (!HasVerifiedEmail())
-        {
-            SendMailResult(0, MAIL_SEND, MAIL_ERR_EQUIP_ERROR, EQUIP_ERR_CANT_DO_RIGHT_NOW);
-            ChatHandler(this).SendSysMessage(LANG_MUST_VERIFY_EMAIL);
-            delete req;
-            return;
-        }
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
+        GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
+        delete req;
+        return;
     }
 
     // try to prevent addon scam https://github.com/EinBaum/WoW-Scams

@@ -18626,42 +18626,9 @@ void Player::outDebugStatsValues() const
 /***               FLOOD FILTER SYSTEM                 ***/
 /*********************************************************/
 
-bool Player::CanSpeak(bool sendError) const
+bool Player::CanSpeak() const
 {
-    if (GetLevel() < 20 && !GetSession()->HasVerifiedEmail())
-    {
-        if (sendError)
-            GetSession()->SendNotification(GetSession()->GetMangosString(LANG_MUST_VERIFY_EMAIL));
-        return false;
-    }
-
-    if ((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-    {
-        if (GetSession()->m_muteTime != 0)
-        {
-            if (sendError)
-            {
-                std::string timeStr = secsToTimeString(GetSession()->m_muteTime / 1000);
-                GetSession()->SendNotification(GetSession()->GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
-            }
-            return false;
-        }
-        
-    }
-    else
-    {
-        if (GetSession()->m_muteTime > time(nullptr))
-        {
-            if (sendError)
-            {
-                std::string timeStr = secsToTimeString(GetSession()->m_muteTime - time(nullptr));
-                GetSession()->SendNotification(GetSession()->GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
-            }
-            return false;
-        }
-    }
-
-    return true;
+    return  (GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING ? GetSession()->m_muteTime == 0 : GetSession()->m_muteTime <= time(nullptr);
 }
 
 /*********************************************************/
