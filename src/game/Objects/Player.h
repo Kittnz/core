@@ -2902,7 +2902,7 @@ public:
 // Anticheat system:
 
     public:
-        bool CanSpeak() const;
+        bool CanSpeak(bool sendError = false) const;
         bool FallGround(uint8 fallMode);
         void OnDisconnected();
         void RelocateToLastClientPosition();
