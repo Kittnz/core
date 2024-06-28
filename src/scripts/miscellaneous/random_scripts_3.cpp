@@ -6904,6 +6904,58 @@ bool QuestAccept_npc_parnabus(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool GossipHello_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer)
+        pCreature->SetFacingToObject(pPlayer);
+
+    if (pPlayer->GetQuestStatus(41383) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30251, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61512, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30252, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30253, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30254, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66813, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30255, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60056))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
 bool QuestRewarded_npc_arch_druid_dreamwind(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -8200,11 +8252,56 @@ bool GossipSelect_npc_anelace_the_clairvoyant(Player* pPlayer, Creature* pCreatu
     return true;
 }
 
+bool GOHello_go_beacon_of_power(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2020114)
+    {
+        if (pPlayer->GetQuestStatus(41386) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(41424, 1) && !pPlayer->FindNearestCreature(62059, 100.0F) && !pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 30249, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30250, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_beacon_of_power(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+
+        if (pGo->GetEntry() == 2020114)
+        {
+            pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 9 * IN_MILLISECONDS); // invisible multi spawn controller
+
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, pPlayer]()
+                {
+                    pPlayer->GetSession()->SendNotification("The Beacon of Power begins to react with the Orb of Vorgendor. A foul energy can be felt.");
+                }, 3000);
+
+            pGo->m_Events.AddLambdaEventAtOffset([pGo]()
+                {
+                    if (Creature* NPC_FATHER_LYCAN = pGo->SummonCreature(62059, pGo->GetPositionX() + 2.0F, pGo->GetPositionY() + 2.0F, pGo->GetPositionZ() + 1.0F, 0.0F, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 3 * MINUTE * IN_MILLISECONDS))
+                        if (Player* pPlayer = NPC_FATHER_LYCAN->FindNearestHostilePlayer(50.0f))
+                            NPC_FATHER_LYCAN->AI()->AttackStart(pPlayer);
+                }, 8000);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "go_beacon_of_power";
+    newscript->pGOHello = &GOHello_go_beacon_of_power;
+    newscript->pGOGossipSelect = &GOSelect_go_beacon_of_power;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_anelace_the_clairvoyant";
@@ -8326,6 +8423,8 @@ void AddSC_random_scripts_3()
 
     newscript = new Script;
     newscript->Name = "npc_arch_druid_dreamwind";
+    newscript->pGossipHello = &GossipHello_npc_arch_druid_dreamwind;
+    newscript->pGossipSelect = &GossipSelect_npc_arch_druid_dreamwind;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_arch_druid_dreamwind;
     newscript->RegisterSelf();
 
