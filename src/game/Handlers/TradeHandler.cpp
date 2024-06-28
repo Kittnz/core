@@ -640,6 +640,13 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
+    if (!HasVerifiedEmail())
+    {
+        SendNotification(LANG_MUST_VERIFY_EMAIL);
+        SendTradeStatus(TRADE_STATUS_TRADE_REJECTED);
+        return;
+    }
+
     Player* pOther = GetPlayer()->GetMap()->GetPlayer(otherGuid);
 
     if (!pOther)
@@ -690,10 +697,16 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
+    if (!pOther->GetSession()->HasVerifiedEmail())
+    {
+        SendTradeStatus(TRADE_STATUS_TRADE_REJECTED);
+        return;
+    }
+
     // Only non MM or MM players can trade between them
     if (auto hardcoreResult = _player->HandleHardcoreInteraction(pOther, true); hardcoreResult != Player::HardcoreInteractionResult::Allowed)
     {
-        _player->GetSession()->SendNotification(Player::HardcoreResultToString(hardcoreResult).c_str());
+        SendNotification(Player::HardcoreResultToString(hardcoreResult).c_str());
         SendTradeStatus(TRADE_STATUS_TRIAL_ACCOUNT);
         return;
     }

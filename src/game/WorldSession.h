@@ -340,6 +340,8 @@ class WorldSession
 
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
+        bool HasVerifiedEmail() const { return m_verifiedEmail; }
+        void SetVerifiedEmail(bool verified) { m_verifiedEmail = verified; }
         bool HasChineseEmail() const;
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
@@ -1026,6 +1028,7 @@ class WorldSession
 
         uint32 m_joinTimestamp = 0;
         std::string m_username, m_email;
+        bool m_verifiedEmail = false;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
 
         std::unordered_map<uint32, std::pair<uint32, uint32>> m_requeuePacketCount; 
