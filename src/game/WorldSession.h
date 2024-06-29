@@ -558,7 +558,14 @@ class WorldSession
 
         void InitAntiCheatSession(BigNumber * K);
 
-        bool AllowPacket(uint16 opcode);
+        enum class PacketAllowResult
+        {
+            Allowed,
+            Denied,
+            Requeue
+        };
+
+        PacketAllowResult AllowPacket(uint16 opcode, uint64 time);
         void ProcessAnticheatAction(const char* detector, const char* reason, uint32 action, uint32 banTime = 0 /* Perm ban */);
         uint32 GetLastReceivedPacketTime() const { return m_lastReceivedPacketTime; }
         void AddClientIdentifier(uint32 i, std::string str);
@@ -1020,6 +1027,8 @@ class WorldSession
         uint32 m_joinTimestamp = 0;
         std::string m_username, m_email;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
+
+        std::unordered_map<uint32, std::pair<uint32, uint32>> m_requeuePacketCount; 
         PlayerBotEntry* m_bot;
         uint32 m_lastReceivedPacketTime;
         ClientIdentifiersMap _clientIdentifiers;

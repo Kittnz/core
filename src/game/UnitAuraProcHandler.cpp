@@ -556,6 +556,14 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     if (procSpell && (procSpell->Id == 26654 || procSpell->Id == 12723))
                         return SPELL_AURA_PROC_FAILED;
 
+                    // Don't proc on rend
+                    if (procSpell && !procSpell->IsDirectDamageSpell())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // Don't proc on absorb
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
                     // Fix range for target selection when proccing SS with whirlwind. Whirlwind doesn't
                     // have a radius set on its prototype, but it is 8 yards.
                     float radius = ATTACK_DISTANCE;
@@ -567,7 +575,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     //   enabled targets if you are not PvP enabled.
                     target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true, true);
                     if (!target)
-                        return SPELL_AURA_PROC_FAILED;
+                        return SPELL_AURA_PROC_OK; // eat charge even if no target
 
                     // Case for Execute. This will only run when procced by Execute
                     if (procSpell && procSpell->Id == 20647)

@@ -1293,22 +1293,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     uint32 procAttacker = m_procAttacker;
     uint32 procVictim   = m_procVictim;
     uint32 procEx       = PROC_EX_NONE;
-    
-    // Drop some attacker proc flags if this is a secondary target. Do not need to change
-    // the victim proc flags.
-    if (m_targetNum > 1) 
-    {
-        // If this is a melee spell hit, strip the flag and apply a spell hit flag instead.
-        // This is required to proc things like Deep Wounds on the victim when hitting 
-        // multiple targets, but not proc additional melee-only beneficial auras on the 
-        // attacker like Sweeping Strikes. Leave the victim proc flags responding to a melee
-        // spell.
-        if (procAttacker & PROC_FLAG_DEAL_MELEE_ABILITY)
-        {
-            procAttacker &= ~(PROC_FLAG_DEAL_MELEE_ABILITY);
-            procAttacker |= PROC_FLAG_DEAL_HARMFUL_SPELL;
-        }
-    }
 
     // drop proc flags in case target not affected negative effects in negative spell
     // for example caster bonus or animation,

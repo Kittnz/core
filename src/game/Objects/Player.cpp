@@ -3231,14 +3231,14 @@ void Player::RecallPvPGear()
             });
 
 
-        std::string reason = "Bug abuse is against the ToS. Your PvP items of the opposing faction "
+       /* std::string reason = "Bug abuse is against the ToS. Your PvP items of the opposing faction "
             "have been removed and your Transmogrification was taken away. Depending on the severity additional punishments may be applied retroactively.";
         MangosStrings mstring = LANG_WARN_INFORM;
         sWorld.WarnAccount(GetSession()->GetAccountId(), "Console", reason, "WARN");
         sAccountMgr.WarnAccount(GetSession()->GetAccountId(), reason);
 
         ChatHandler(GetSession()).PSendSysMessage(mstring, reason);
-        GetSession()->SendNotification(mstring, reason);
+        GetSession()->SendNotification(mstring, reason);*/
     }
 }
 
@@ -4001,10 +4001,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
     SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, 0.0f);
 
     SetInt32Value(UNIT_FIELD_ATTACK_POWER,            0);
-    SetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS,       0);
+    SetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 0, 0);
+    SetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 1, 0);
     SetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER, 0.0f);
     SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER,     0);
-    SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0);
+    SetInt16Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0, 0);
+    SetInt16Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 1, 0);
     SetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER, 0.0f);
 
     // Base crit values (will be recalculated in UpdateAllStats() at loading and in _ApplyAllStatBonuses() at reset
@@ -15732,7 +15734,10 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
             continue;
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = mQuestStatus[questid];
-        if (q_status.m_status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid()))
+
+        bool isRaidDenied = !qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup();
+
+        if (q_status.m_status == QUEST_STATUS_INCOMPLETE)
         {
             if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAG_KILL_OR_CAST))
             {
@@ -15750,6 +15755,22 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
 
                     if (reqkill == entry)
                     {
+                        if (isRaidDenied)
+                        {
+                            auto locId = GetSession()->GetSessionDbLocaleIndex();
+
+                            std::string title = "";
+
+                            if (QuestLocale const* il = locId >= 0 ? sObjectMgr.GetQuestLocale(qInfo->GetQuestId()) : nullptr)
+                                title = il->Title[locId];
+
+                            if (title.empty())
+                                title = qInfo->GetTitle();
+
+                            GetSession()->SendNotification("You did not get quest progress for %s because you are in a Raid.", title.c_str());
+                            continue;
+                        }
+
                         uint32 reqkillcount = qInfo->ReqCreatureOrGOCount[j];
                         uint32 curkillcount = q_status.m_creatureOrGOcount[j];
                         if (curkillcount < reqkillcount)

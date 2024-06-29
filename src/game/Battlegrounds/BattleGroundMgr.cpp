@@ -373,13 +373,6 @@ void BattleGroundQueue::RemovePlayer(ObjectGuid guid, bool decreaseInvitedCount)
             }
         }
     }
-    //player can't be in queue without group, but just in case
-    if (bracket_id == -1)
-    {
-        sLog.outError("BattleGroundQueue: ERROR Cannot find groupinfo for %s", guid.GetString().c_str());
-        return;
-    }
-    DEBUG_LOG("BattleGroundQueue: Removing %s, from bracket_id %u", guid.GetString().c_str(), (uint32)bracket_id);
 
     // ALL variables are correctly set
     // We can ignore leveling up in queue - it should not cause crash
@@ -401,6 +394,14 @@ void BattleGroundQueue::RemovePlayer(ObjectGuid guid, bool decreaseInvitedCount)
 
     // remove player queue info
     m_QueuedPlayers.erase(itr);
+
+    //player can't be in queue without group, but just in case
+    if (bracket_id == -1)
+    {
+        sLog.outError("BattleGroundQueue: ERROR Cannot find groupinfo for %s", guid.GetString().c_str());
+        return;
+    }
+    DEBUG_LOG("BattleGroundQueue: Removing %s, from bracket_id %u", guid.GetString().c_str(), (uint32)bracket_id);
 
     // remove group queue info if needed
     if (group->Players.empty())

@@ -17518,12 +17518,10 @@ bool ChatHandler::HandleUnitStatInfoCommand(char* args)
     PSendSysMessage("Total shadow resist: %i", pTarget->GetResistance(SPELL_SCHOOL_SHADOW));
     PSendSysMessage("Total arcane resist: %i", pTarget->GetResistance(SPELL_SCHOOL_ARCANE));
     PSendSysMessage("Attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_ATTACK_POWER));
-
-    PSendSysMessage("Attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS));
+    PSendSysMessage("Attack power mods: %i / %i", pTarget->GetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 0), pTarget->GetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 1));
     PSendSysMessage("Attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Ranged attack power: %u", pTarget->GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER));
-    PSendSysMessage("Ranged attack power mods: %i", pTarget->GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS));
-
+    PSendSysMessage("Ranged attack power mods: %i / %i", pTarget->GetInt16Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0), pTarget->GetInt16Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 1));
     PSendSysMessage("Ranged attack power multiplier: %u", pTarget->GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
     PSendSysMessage("Min ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE));
     PSendSysMessage("Max ranged damage: %g", pTarget->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE));
@@ -18817,6 +18815,31 @@ bool ChatHandler::HandleReloadPetitions(char*)
     return true;
 }
 
+bool ChatHandler::HandleQuestStatusesCommand(char* args)
+{
+    auto player = GetPlayer();
+
+    const uint32 MaxMessageSize = 2000;
+    const uint32 ReserveSize = 2048;
+
+    std::string msg;
+    msg.reserve(ReserveSize);
+    for (const auto& elem : player->getQuestStatusMap())
+    {
+        if (elem.second.m_rewarded && elem.second.m_status != QUEST_STATUS_NONE)
+            msg += std::to_string(elem.first) + " ";
+
+        if (msg.length() >= MaxMessageSize)
+        {
+            player->SendAddonMessage("TWQUEST", std::move(msg));
+            msg.clear();
+        }
+    }
+    player->SendAddonMessage("TWQUEST", std::move(msg));
+
+    return true;
+}
+
 bool ChatHandler::HandleAccountEmailCommand(char* args)
 {
     char* oldEmail = ExtractLiteralArg(&args);
@@ -18863,6 +18886,8 @@ bool ChatHandler::HandleAccountEmailCommand(char* args)
     return true;
 }
 
+#include "events/event_wareffort.h"
+
 bool ChatHandler::HandleWarEffortInfoCommand(char* args)
 {
     sGameEventMgr.Update();
@@ -18885,6 +18910,64 @@ bool ChatHandler::HandleWarEffortInfoCommand(char* args)
 
             uint32 nextAutoCompleteIn = sWorld.getConfig(CONFIG_UINT32_WAR_EFFORT_AUTOCOMPLETE_PERIOD) - (time(nullptr) - lastAutoCompleteTime);
             PSendSysMessage("Next Auto Complete In: %s", secsToTimeString(nextAutoCompleteIn).c_str());
+
+            uint32 remainingResources = 0;
+
+            // Check all totals. If we're at the limit, start the moving.
+            for (int i = 0; i < NUM_SHARED_OBJECTIVES; ++i)
+            {
+                WarEffortStockInfo info;
+                if (GetWarEffortStockInfo(SharedObjectives[i].itemId, info, TEAM_ALLIANCE))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(SharedObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Alliance %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+
+                if (GetWarEffortStockInfo(SharedObjectives[i].itemId, info, TEAM_HORDE))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(SharedObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Horde %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+            }
+
+            for (int i = 0; i < NUM_FACTION_OBJECTIVES; ++i)
+            {
+                WarEffortStockInfo info;
+                if (GetWarEffortStockInfo(AllianceObjectives[i].itemId, info))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(AllianceObjectives[i].itemId);
+
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Alliance %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+
+                if (GetWarEffortStockInfo(HordeObjectives[i].itemId, info))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(HordeObjectives[i].itemId);
+                    
+                    if (info.count < info.required)
+                    {
+                        ++remainingResources;
+                        PSendSysMessage("Horde %s: %u / %u", GetItemLink(pProto).c_str(), info.count, info.required);
+                    }
+                }
+            }
+
+            PSendSysMessage("Total Remaining Resources: %u", remainingResources);
+
             break;
         }
         case WAR_EFFORT_STAGE_MOVE_1:

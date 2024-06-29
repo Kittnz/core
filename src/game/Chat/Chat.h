@@ -426,6 +426,8 @@ class ChatHandler
         bool HandleEventDisableCommand(char* args);
         bool HandleEventInfoCommand(char* args);
 
+        bool HandleQuestStatusesCommand(char* args);
+
         bool HandleGameObjectAddCommand(char* args);
         bool HandleGameObjectDeleteCommand(char* args);
         bool HandleGameObjectMoveCommand(char* args);
