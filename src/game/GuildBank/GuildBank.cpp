@@ -201,8 +201,11 @@ void GuildBank::SaveToDB()
 		return;
 	}
 
-	uint32 numQuerries = 0;
-	//uint32 uSaveStartTime = WorldTimer::getMSTime();
+
+	if (!b_moneyLog_changed && !b_tabs_changed && !b_money_changed && !b_log_changed && b_itemUpdateQueue.empty())
+		return; // nothing to do, no reason to start transaction.
+
+
 	b_saveLock = true;
 
 	CharacterDatabase.BeginTransaction();
@@ -214,7 +217,6 @@ void GuildBank::SaveToDB()
 		b_money, guildid, b_infernoBank);
 
 		b_money_changed = false;
-		numQuerries++;
 	}
 	
 	// Save Tabs
@@ -236,10 +238,9 @@ void GuildBank::SaveToDB()
 			b_tabInfo[1].icon.c_str(), b_tabInfo[2].icon.c_str(), b_tabInfo[3].icon.c_str(), b_tabInfo[4].icon.c_str(), b_tabInfo[5].icon.c_str(),
 			b_tabInfo[1].withdrawals, b_tabInfo[2].withdrawals, b_tabInfo[3].withdrawals, b_tabInfo[4].withdrawals, b_tabInfo[5].withdrawals,
 			b_tabInfo[1].minrank, b_tabInfo[2].minrank, b_tabInfo[3].minrank, b_tabInfo[4].minrank, b_tabInfo[5].minrank,
-			guildid, b_infernoBank);
+			guildid, b_infernoBank ? (uint8)1 : (uint8)0);
 
 		b_tabs_changed = false;
-		numQuerries++;
 	}
 	
 	// Save Money Log
@@ -255,7 +256,6 @@ void GuildBank::SaveToDB()
 					b_moneyLog[i].money, b_moneyLog[i].stamp);
 
 				b_moneyLog[i].state = ITEM_UNCHANGED;
-				numQuerries++;
 			}
 
 		b_moneyLog_changed = false;
@@ -276,7 +276,6 @@ void GuildBank::SaveToDB()
 						b_log[i][j].count, b_log[i][j].stamp);
 
 					b_log[i][j].state = ITEM_UNCHANGED;
-					numQuerries++;
 				}
 		
 		b_log_changed = false;
@@ -287,33 +286,21 @@ void GuildBank::SaveToDB()
 	{
 		for (auto item : b_itemUpdateQueue)
 		{
-			// debug stuff
-			/*if (item.state == ITEM_NEW)
-				sLog.outInfo("add %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
-			if (item.state == ITEM_CHANGED)
-				sLog.outInfo("update %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
-			if (item.state == ITEM_REMOVED)
-				sLog.outInfo("delete %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());*/
-			// end debug stuff
-
 			switch (item.state)
 			{
 			case ITEM_NEW:
 			{
 				item.AddToDB();
-				numQuerries++;
 			}
 			break;
 			case ITEM_CHANGED:
 			{
 				item.SaveToDB();
-				numQuerries++;
 			}
 			break;
 			case ITEM_REMOVED:
 			{
 				item.DeleteFromDB();
-				numQuerries++;
 			}
 			break;
 			case ITEM_UNCHANGED:
@@ -329,13 +316,6 @@ void GuildBank::SaveToDB()
 
 	CharacterDatabase.CommitTransaction();
 
-	//uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
-	/*sLog.outInfo("Save finished for %s, in %i minutes %i seconds (%u ms), %u querries.", 
-		_guild->GetName().c_str(), 
-		uSaveDuration / 60000, 
-		(uSaveDuration % 60000) / 1000, 
-		uSaveDuration,
-		numQuerries);*/
 	b_saveLock = false;
 }
 
@@ -623,6 +603,7 @@ void GuildBank::UnlockTab(std::string msg)
 	LogAction(action, TAB_MONEY, tab, cost, nullptr); // guild tab unlocked
 
 	b_tabs_changed = true;
+	SaveToDB();
 }
 
 // Sends tab cost to client
@@ -735,6 +716,7 @@ void GuildBank::UpdateTab(std::string msg)
 	SendGuildMessage("GUpdateTab:" + std::to_string(tab) + ":" + name + ":" + icon + ":" + std::to_string(withdrawals) + ":" + std::to_string(minrank));
 
 	b_tabs_changed = true;
+	SaveToDB();
 }
 
 /* money */
@@ -801,6 +783,7 @@ void GuildBank::DepositMoney(std::string msg)
 	SendGuildMessage("GMoney:" + std::to_string(b_money)); // update UI money
 
 	b_money_changed = true;
+	SaveToDB();
 }
 
 // Withdraws money from the guild bank, limited to guil rank index 0 and 1
@@ -843,6 +826,7 @@ void GuildBank::WithdrawMoney(std::string msg)
 	SendGuildMessage("GMoney:" + std::to_string(b_money)); // update UI money
 
 	b_money_changed = true;
+	SaveToDB();
 }
 
 
@@ -1276,6 +1260,7 @@ void GuildBank::DepositItemInSlot(uint32 bankTab, uint32 bankSlot, Item* pItem, 
 
 	// Log this deposit action
 	LogAction(ACTION_DEPOSIT_ITEM, bItem->tab, bItem->item_template, count, bItem);
+	SaveToDB();
 }
 
 // Withdraws a bank item to player inventory
@@ -1524,6 +1509,7 @@ void GuildBank::WithdrawItem(uint32 bankTab, uint32 bankSlot, uint32 count, uint
 		}
 	}
 
+	SaveToDB();
 }
 
 // Swaps a player bag item with a guild bank item
@@ -1762,6 +1748,8 @@ void GuildBank::MoveItem(BankItem* sItem, BankItem* dItem, uint8 bankTab, uint8 
 		);
 
 	}
+
+	SaveToDB();
 }
 
 // Splits a bank item
@@ -1957,6 +1945,8 @@ void GuildBank::SplitItem(std::string msg)
 		}
 
 	}
+
+	SaveToDB();
 
 }
 // Deletes a bank item
