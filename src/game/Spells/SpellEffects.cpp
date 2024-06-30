@@ -554,6 +554,23 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51289: // Throw Boulder
+                case 51296: // Throw Rock
+                {
+                    float x, y, z;
+                    if (unitTarget)
+                        unitTarget->GetPosition(x, y, z);
+                    else
+                    {
+                        x = m_targets.m_destX;
+                        y = m_targets.m_destY;
+                        z = m_targets.m_destZ;
+                    }
+
+                    m_caster->SummonCreature(m_spellInfo->EffectMiscValue[eff_idx], x, y, z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+
+                    return;
+                }
                 case 51238: // Harrowing Nets
                 {
                     if (!unitTarget)
