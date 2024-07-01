@@ -8291,11 +8291,172 @@ bool GOSelect_go_beacon_of_power(Player* pPlayer, GameObject* pGo, uint32 sender
     return false;
 }
 
+bool GossipHello_npc_mathias_brightheart(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41388) == QUEST_STATUS_INCOMPLETE) // Wisdom From Failure
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30256, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(62031, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_mathias_brightheart(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30258, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30259, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30260, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30257, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30262, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30263, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30264, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30261, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30266, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30267, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30268, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30265, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60057))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30269, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30270, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_sakgoth(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41388) == QUEST_STATUS_INCOMPLETE) // Wisdom From Failure
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30271, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(62032, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_sakgoth(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60058))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30272, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_klannoc_macleod(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41388) == QUEST_STATUS_INCOMPLETE) // Wisdom From Failure
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30271, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(30277, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_klannoc_macleod(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30274, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30273, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60059))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30275, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_kafai(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(41388) == QUEST_STATUS_INCOMPLETE) // Wisdom From Failure
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 30271, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(62063, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_kafai(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60060))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30276, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_kafai";
+    newscript->pGossipHello = &GossipHello_npc_kafai;
+    newscript->pGossipSelect = &GossipSelect_npc_kafai;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_klannoc_macleod";
+    newscript->pGossipHello = &GossipHello_npc_klannoc_macleod;
+    newscript->pGossipSelect = &GossipSelect_npc_klannoc_macleod;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_sakgoth";
+    newscript->pGossipHello = &GossipHello_npc_sakgoth;
+    newscript->pGossipSelect = &GossipSelect_npc_sakgoth;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_mathias_brightheart";
+    newscript->pGossipHello = &GossipHello_npc_mathias_brightheart;
+    newscript->pGossipSelect = &GossipSelect_npc_mathias_brightheart;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_beacon_of_power";
