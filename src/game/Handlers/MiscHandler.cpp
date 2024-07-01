@@ -231,7 +231,7 @@ public:
                 break;
         }
 
-        uint32 count = m.size();
+        uint32 count = sWorld.GetAllSessions().size();
         data.put(0, clientcount);                               // insert right count, listed count
         data.put(4, count > 49 ? count : clientcount);          // insert right count, online count
 
