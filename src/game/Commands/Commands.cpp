@@ -2406,6 +2406,43 @@ bool ChatHandler::HandleLookupObjectCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildCleanupCommand(char* args)
+{
+    uint32 guildId;
+    if (!ExtractUInt32(&args, guildId))
+        return false;
+
+    Guild* pGuild = sGuildMgr.GetGuildById(guildId);
+    if (!pGuild)
+    {
+        SendSysMessage(LANG_GUILD_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::unique_ptr<QueryResult> pResult(CharacterDatabase.PQuery("SELECT t1.guid FROM guild_member t1 CROSS JOIN characters t2 ON t1.guid = t2.guid WHERE (t1.guildid = %u) && ((t2.`logout_time` + %u) < %u)", guildId, YEAR, time(nullptr)));
+    if (!pResult)
+    {
+        SendSysMessage("No inactive characters in guild.");
+        return true;
+    }
+
+    do
+    {
+        Field* fields = pResult->Fetch();
+        
+        uint32 guidLow = fields[0].GetUInt32();
+        if (guidLow != pGuild->GetLeaderGuid().GetCounter())
+        {
+            PSendSysMessage("Removing player %u from guild %u.", guidLow, guildId);
+            pGuild->DelMember(ObjectGuid(HIGHGUID_PLAYER, guidLow));
+        }
+
+    } while (pResult->NextRow());
+
+    return true;
+}
+
 /** \brief GM command level 3 - Create a guild.
  *
  * This command allows a GM (level 3) to create a guild.

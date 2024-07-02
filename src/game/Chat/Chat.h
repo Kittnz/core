@@ -463,6 +463,7 @@ class ChatHandler
         bool HandleGoXYZCommand(char* args);
         bool HandleGoCorpseCommand(char*);
 
+        bool HandleGuildCleanupCommand(char* args);
         bool HandleGuildCreateCommand(char* args);
         bool HandleGuildInviteCommand(char* args);
         bool HandleGuildUninviteCommand(char* args);

@@ -268,6 +268,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand guildCommandTable[] =
     {
+        { "cleanup",        SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCleanupCommand,        "", nullptr },
         { "create",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCreateCommand,         "", nullptr },
         { "delete",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildDeleteCommand,         "", nullptr },
         { "invite",         SEC_MODERATOR,     true,  &ChatHandler::HandleGuildInviteCommand,         "", nullptr },
