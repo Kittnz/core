@@ -15720,7 +15720,7 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = mQuestStatus[questid];
 
-        bool isRaidDenied = !qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup();
+        bool isRaidDenied = (!qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup() && !IsGameMaster());
 
         if (q_status.m_status == QUEST_STATUS_INCOMPLETE)
         {
