@@ -5820,9 +5820,8 @@ bool ChatHandler::HandleDebugLootTableCommand(char* args)
     std::string tableName;
     int32 lootid = 0;
     int32 checkItem = 0;
-    uint32 simCount = 0;
-    in >> tableName >> lootid >> simCount >> checkItem;
-    simCount = simCount ? simCount : 10000;
+    uint32 simCount = 10000;
+    in >> tableName >> lootid >> checkItem;
     SetSentErrorMessage(true);
 
     LootStore const* store = nullptr;
