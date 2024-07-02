@@ -253,6 +253,13 @@ struct SV_human_leaderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (m_creature->GetHealth() == 0)
+        {
+            sLog.outError("Sunnyglade general is alive but has no health, how is this possible?");
+            m_creature->SetDeathState(JUST_DIED);
+            return;
+        }
+
         if (!m_blackDragon && m_creature->GetHealthPercent() < 30.0f)
         {
             m_blackDragon = true;
@@ -435,6 +442,13 @@ struct SV_orc_leaderAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_creature->GetHealth() == 0)
+        {
+            sLog.outError("Sunnyglade general is alive but has no health, how is this possible?");
+            m_creature->SetDeathState(JUST_DIED);
+            return;
+        }
 
         if (!m_blackDragon && m_creature->GetHealthPercent() < 30.0f)
         {
