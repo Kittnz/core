@@ -158,7 +158,7 @@ void npc_janela_stouthammer::EventReset()
     }
 
     m_creature->GetMotionMaster()->MovePoint(0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER, MOVE_RUN_MODE, 0, Silithus::Locations::SPAWN_JANELA_STOUTHAMMER.orientation);
-    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
     m_creature->CombatStop(true);
     m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_FLAG_SPAWNING);
 }
@@ -180,6 +180,9 @@ bool npc_janela_stouthammer::GossipHello(Player* player, Creature* creature)
     {
         return false;
     }
+
+    if (creature->IsQuestGiver())
+        player->PrepareQuestMenu(creature->GetGUID());
 
     if (trigger->EventState() == Silithus::EventState::FINISHED)
     {
