@@ -118,3 +118,6 @@ DELETE FROM gameobject_battleground WHERE guid = '5019640';
 DELETE FROM gameobject WHERE guid = '4007922';
 DELETE FROM game_event_gameobject WHERE guid = '4007922';
 DELETE FROM gameobject_battleground WHERE guid = '4007922';
+
+-- Changes by MEFLOR
+REPLACE INTO `gameobject` VALUES ( 5019643, 1731, 1, 2856.86, 2537.06, 166.568, 2.12842, 0, 0, 0.874405, 0.485197, 300, 300, 100, 1, 0, 0);
