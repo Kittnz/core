@@ -948,6 +948,10 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             pPlayer->SpawnCorpseBones();
         }
 
+        // Turtle: unflag players after bg ends
+        if (!pPlayer->HasChallenge(CHALLENGE_WAR_MODE))
+            pPlayer->UpdatePvP(false, true);
+
         // Turtle: restore spent Soul Shards at bg end
         if (pPlayer->GetSoulShardCountBeforeBgJoin())
         {
