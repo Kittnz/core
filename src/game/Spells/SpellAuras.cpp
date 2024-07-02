@@ -8746,6 +8746,8 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
         case 24427: // Diamond Flask
         case 17528: // Mighty Rage Potion
         case 23697: // Alterac Spring Water
+
+        case 28777: // Slayer's crest
         // Love is in the Air buffs
         case 27664:
         case 27665:
