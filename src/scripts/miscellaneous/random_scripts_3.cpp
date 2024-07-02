@@ -2041,21 +2041,25 @@ bool QuestAccept_npc_korgan(Player* pPlayer, Creature* pQuestGiver, Quest const*
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS, [npc = pQuestGiver]()
+        {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 1449, false);
-            });
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        });
+        DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]()
+        {
+            if (Player* player = npc->GetMap()->GetPlayer(playerGuid))
             {
                 npc->MonsterSayToPlayer(66689, player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (CreatureInfo const* dummy_bunny = sObjectMgr.GetCreatureTemplate(60344))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                return true;
             }
-            });
+
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+            return true;
+        });
     }
 
     return false;
