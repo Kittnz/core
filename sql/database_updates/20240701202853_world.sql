@@ -113,3 +113,8 @@ DELETE FROM creature_battleground WHERE guid=2583680;
 DELETE FROM gameobject WHERE guid = '5019640';
 DELETE FROM game_event_gameobject WHERE guid = '5019640';
 DELETE FROM gameobject_battleground WHERE guid = '5019640';
+
+-- Changes by ZAAS
+DELETE FROM gameobject WHERE guid = '4007922';
+DELETE FROM game_event_gameobject WHERE guid = '4007922';
+DELETE FROM gameobject_battleground WHERE guid = '4007922';
