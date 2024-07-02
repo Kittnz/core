@@ -6,3 +6,6 @@ REPLACE INTO `creature` VALUES (2583663,62064,0,0,0,0,-11074.9,516.329,25.7713,1
 -- Changes by WOJI
 UPDATE `creature` SET `position_x` = -6287.586914, `position_y` = -2775.137207, `position_z` = 375.592957, `orientation` = 3.313793 WHERE `guid` = 2582884;
 UPDATE `creature` SET `position_x` = -6286.374512, `position_y` = -2775.062256, `position_z` = 375.709686, `orientation` = 3.408040 WHERE `guid` = 2582884;
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2583664,62020,0,0,0,814,-6248.02,-2758.44,9.4576,0.62738,120,120,0,100,100,0,0,0);
