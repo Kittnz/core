@@ -91,3 +91,19 @@ INSERT INTO `worldbot_chat` (`guid`, `type`, `chat`) VALUES
 	(87, 5, 'yes???'),
 	(88, 5, 'uh... what'),
 	(89, 5, 'you talkin to me %s?');
+
+
+
+-- Dumping structure for table sniffs_new_test.player_chat
+DROP TABLE IF EXISTS `player_chat`;
+CREATE TABLE IF NOT EXISTS `player_chat` (
+  `unixtimems` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `guid` int(10) unsigned NOT NULL DEFAULT '0',
+  `sender_name` varchar(12) NOT NULL DEFAULT '',
+  `text` longtext,
+  `chat_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `channel_name` varchar(255) DEFAULT '',
+  PRIMARY KEY (`guid`,`sender_name`,`unixtimems`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='player chat packets';
+
+-- Data exporting was unselected.
