@@ -454,7 +454,7 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
                         return pTarget;
                 }
                 else
-                {
+                {   
                     if (pTarget->HasAura(AURA_SILVERWING_FLAG))
                         return pTarget;
                 }
@@ -793,7 +793,7 @@ void WorldBotAI::UpdateWaypointMovement()
     }
 
     // in battlebot mode
-    if (m_isBattleBot)
+    /*if (m_isBattleBot)
         if (BattleGround* bg = me->GetBattleGround())
             if (bg->GetStatus() == STATUS_WAIT_JOIN)
                 return;
@@ -801,18 +801,21 @@ void WorldBotAI::UpdateWaypointMovement()
     if (m_isBattleBot)
         if (BGStartNewPathToObjective())
             return;
+    */
 
     // Handle task explore
-    if (currentTaskID == TASK_EXPLORE)
+    /*if (currentTaskID == TASK_EXPLORE)
     {
         if (TaskDestination())
             return;
-    }
+    }*/
 
-    if (StartNewPathFromBeginning())
+    /*if (StartNewPathFromBeginning())
         return;
 
-    StartNewPathFromAnywhere();
+    StartNewPathFromAnywhere();*/
+
+
 }
 
 void WorldBotAI::OnJustDied()

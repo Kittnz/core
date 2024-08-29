@@ -159,7 +159,9 @@ void PlayerBotMgr::Load()
         WorldBotAI* ai = nullptr;
 
         // Load paths
-        ai->LoadDBWaypoints();
+        //ai->LoadDBWaypoints();
+
+
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
@@ -170,7 +172,7 @@ void PlayerBotMgr::Load()
         }
 
         // Load Area POI's
-        WorldBotLoadAreaPOI();
+        //WorldBotLoadAreaPOI();
 
         // Load chat
         ai->LoadBotChat();
@@ -2368,6 +2370,7 @@ void PlayerBotMgr::WorldBotBalancer()
 
 }
 
+/*
 void PlayerBotMgr::WorldBotLoadAreaPOI()
 {
     sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBot POI] Loading poi's from db...");
@@ -2408,3 +2411,4 @@ void PlayerBotMgr::WorldBotLoadAreaPOI()
         delete result;
     }
 }
+*/

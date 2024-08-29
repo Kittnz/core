@@ -195,6 +195,7 @@ set (game_SRCS
     PlayerBots/WorldBotAI.cpp
     PlayerBots/WorldBotCombatAI.cpp
     PlayerBots/WorldBotWaypoints.cpp
+    PlayerBots/WorldBotTravelSystem.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
@@ -395,6 +396,7 @@ set (game_SRCS
     PlayerBots/BattleBotWaypoints.h
     PlayerBots/WorldBotAI.h
     PlayerBots/WorldBotWaypoints.h
+    PlayerBots/WorldBotTravelSystem.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h

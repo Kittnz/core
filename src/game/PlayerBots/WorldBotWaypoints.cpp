@@ -541,6 +541,7 @@ std::vector<WorldBotPath*> vPaths_Map_Kalimdor;
 std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 extern std::vector<WorldBotPath*> vPaths_Grind;
 
+/*
 void WorldBotAI::LoadGrindingDBWaypoints()
 {
     float x, y, z = 0.f;
@@ -573,6 +574,7 @@ void WorldBotAI::LoadGrindingDBWaypoints()
                 std::cout << token << std::endl;
                 hotspots.erase(0, pos + delimiter.length());
             }
+            */
 
             /*Waypoints wpoint;
             wpoint.guid = guid;
@@ -590,6 +592,8 @@ void WorldBotAI::LoadGrindingDBWaypoints()
             wpoint.minlevel = 0;
             wpoint.comment = "comment";
             myWaypoints.push_back(wpoint);*/
+            
+            /*
 
         } while (result->NextRow());
     }
@@ -600,7 +604,7 @@ void WorldBotAI::LoadGrindingDBWaypoints()
     }
 
     delete result;
-
+    */
     /*uint32 lastGuid = -1;
     for (auto v : myWaypoints)
     {
@@ -741,10 +745,10 @@ void WorldBotAI::LoadGrindingDBWaypoints()
                 vPaths_NoReverseAllowed.push_back(path);
             }
         }
-    }*/
-}
+    }
+}*/
 
-void WorldBotAI::LoadDBWaypoints()
+/*void WorldBotAI::LoadDBWaypoints()
 {
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, chance, minlevel, faction, lastGuidPoint = 0;
@@ -941,7 +945,7 @@ void WorldBotAI::LoadDBWaypoints()
             }
         }
     }
-}
+}*/
 
 void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 {
@@ -1500,6 +1504,7 @@ bool WorldBotAI::BGStartNewPathToObjective()
     return false;
 }
 
+/*
 bool WorldBotAI::StartNewPathToObjectiveForTask(uint8 currentTaskID)
 {
     if (m_currentPath)
@@ -1508,7 +1513,7 @@ bool WorldBotAI::StartNewPathToObjectiveForTask(uint8 currentTaskID)
 
 
     return false;
-}
+}*/
 
 void WorldBotAI::ClearPath()
 {
