@@ -507,6 +507,7 @@ enum PlayerCheatOptions : uint16
     PLAYER_CHEAT_TRIGGER_PASS      = 0x100,
     PLAYER_CHEAT_IGNORE_TRIGGERS   = 0x200,
     PLAYER_CHEAT_DEBUG_TARGET_INFO = 0x400,
+    PLAYER_CHEAT_FIXED_Z           = 0x800,
 };
 
 typedef std::map<uint32, QuestStatusData> QuestStatusMap;
@@ -737,8 +738,9 @@ enum ReputationSource
 };
 
 // Player summoning auto-decline time (in secs)
-#define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
-#define MAX_MONEY_AMOUNT                       (0x7FFFFFFF-1)
+#define MAX_PLAYER_SUMMON_DELAY (2*MINUTE)
+#define MAX_MONEY_AMOUNT (0x7FFFFFFF-1)
+#define MAX_TRIAL_MONEY_AMOUNT 100000
 
 struct InstancePlayerBind
 {
@@ -973,7 +975,7 @@ class Player final: public Unit
         // Initializes a new Player object that was not loaded from the database.
         bool Create(uint32 guidlow, std::string const& name, uint8 race, uint8 class_, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair);
         void Update(uint32 update_diff, uint32 time) override;
-        static bool BuildEnumData(QueryResult const* result,  WorldPacket* pData);
+        static bool BuildEnumData(const std::unique_ptr<QueryResult>& result,  WorldPacket* pData);
 
         /**
          * @brief Can only be called from Master server (or ASSERT will fail)
@@ -1020,6 +1022,7 @@ class Player final: public Unit
         void SetGMVisible(bool on, bool notify = false);
         
         void SetCheatFly(bool on, bool notify = false);
+        void SetCheatFixedZ(bool on, bool notify = false);
         void SetCheatGod(bool on, bool notify = false);
         void SetCheatNoCooldown(bool on, bool notify = false);
         void SetCheatInstantCast(bool on, bool notify = false);
@@ -1109,6 +1112,7 @@ class Player final: public Unit
         static uint32 GetAttackBySlot(uint8 slot);        // MAX_ATTACK if not weapon slot
         uint32 GetHighestKnownArmorProficiency() const;
         std::vector<Item*>& GetItemUpdateQueue() { return m_itemUpdateQueue; }
+        static bool IsMainHandPos(uint16 pos) { return uint8(pos >> 8) == INVENTORY_SLOT_BAG_0 && uint8(pos & 255) == EQUIPMENT_SLOT_MAINHAND; }
         static bool IsInventoryPos(uint16 pos) { return IsInventoryPos(pos >> 8, pos & 255); }
         static bool IsInventoryPos(uint8 bag, uint8 slot);
         static bool IsEquipmentPos(uint16 pos) { return IsEquipmentPos(pos >> 8, pos & 255); }
@@ -1219,12 +1223,13 @@ class Player final: public Unit
 
         uint32 GetMoney() const { return GetUInt32Value(PLAYER_FIELD_COINAGE); }
         void LogModifyMoney(int32 d, char const* type, ObjectGuid fromGuid = ObjectGuid(), uint32 data = 0);
+        uint32 GetMaxMoney() const;
         void ModifyMoney(int32 d)
         {
             if (d < 0)
                 SetMoney(GetMoney() > uint32(-d) ? GetMoney() + d : 0);
             else
-                SetMoney(GetMoney() < uint32(MAX_MONEY_AMOUNT - d) ? GetMoney() + d : MAX_MONEY_AMOUNT);
+                SetMoney((uint32)std::min<uint64>(uint64(GetMoney()) + uint64(d), GetMaxMoney()));
         }
         void LootMoney(int32 g, Loot* loot);
         std::string GetShortDescription() const; // "player:guid [username:accountId@IP]"
@@ -1243,6 +1248,7 @@ class Player final: public Unit
         void SendLootError(ObjectGuid guid, LootError error) const;
         void SendNotifyLootItemRemoved(uint8 lootSlot) const;
         void SendNotifyLootMoneyRemoved() const;
+        void SendLootMoneyNotify(uint32 amount) const;
         bool IsAllowedToLoot(Creature const* creature);
         float GetMaxLootDistance(Unit const* pUnit) const;
 
@@ -1409,22 +1415,22 @@ class Player final: public Unit
     private:
         void LoadAura(AuraSaveStruct& saveStruct, uint32 timediff);
         bool SaveAura(SpellAuraHolder const* holder, AuraSaveStruct& saveStruct);
-        void _LoadAuras(QueryResult* result, uint32 timediff);
-        void _LoadBoundInstances(QueryResult* result);
-        bool _LoadInventory(QueryResult* result, uint32 timediff, bool& hasEpicMount);
-        void _LoadItemLoot(QueryResult* result);
-        void _LoadQuestStatus(QueryResult* result);
-        void _LoadGroup(QueryResult* result);
-        void _LoadSkills(QueryResult* result);
+        void _LoadAuras(std::unique_ptr<QueryResult> result, uint32 timediff);
+        void _LoadBoundInstances(std::unique_ptr<QueryResult> result);
+        bool _LoadInventory(std::unique_ptr<QueryResult> result, uint32 timediff, bool& hasEpicMount);
+        void _LoadItemLoot(std::unique_ptr<QueryResult> result);
+        void _LoadQuestStatus(std::unique_ptr<QueryResult> result);
+        void _LoadGroup(std::unique_ptr<QueryResult> result);
+        void _LoadSkills(std::unique_ptr<QueryResult> result);
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
-        void _LoadForgottenSkills(QueryResult* result);
+        void _LoadForgottenSkills(std::unique_ptr<QueryResult> result);
 #endif
         void LoadSkillsFromFields();
-        void _LoadSpells(QueryResult* result);
-        bool _LoadHomeBind(QueryResult* result);
-        void _LoadBGData(QueryResult* result);
+        void _LoadSpells(std::unique_ptr<QueryResult> result);
+        bool _LoadHomeBind(std::unique_ptr<QueryResult> result);
+        void _LoadBGData(std::unique_ptr<QueryResult> result);
         void _LoadIntoDataField(char const* data, uint32 startOffset, uint32 count);
-        void _LoadGuild(QueryResult* result);
+        void _LoadGuild(std::unique_ptr<QueryResult> result);
         uint32 m_atLoginFlags;
     public:
         bool LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder);
@@ -1576,7 +1582,7 @@ class Player final: public Unit
         void SendClearCooldown(uint32 spellId, Unit const* target) const;
         void SendClearAllCooldowns(Unit const* target) const;
         void SendSpellCooldown(uint32 spellId, uint32 cooldown, ObjectGuid target) const;
-        void _LoadSpellCooldowns(QueryResult* result);
+        void _LoadSpellCooldowns(std::unique_ptr<QueryResult> result);
         void _SaveSpellCooldowns();
 
         template <typename F>
@@ -1836,8 +1842,8 @@ class Player final: public Unit
         GridReference<Player> m_gridRef;
         MapReference m_mapRef;
 
-        uint32 m_lastFallTime;
-        float  m_lastFallZ;
+        // highest position we started falling from
+        float m_fallStartZ;
 
         // Recall position
         uint32 m_recallMap;
@@ -1922,13 +1928,13 @@ class Player final: public Unit
 
         bool HasMovementFlag(MovementFlags f) const;        // for script access to m_movementInfo.HasMovementFlag
         void UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode);
-        void SetFallInformation(uint32 time, float z)
+        void SetFallInformation(float fallStartZ)
         {
-            m_lastFallTime = time;
-            m_lastFallZ = z;
+            m_fallStartZ = fallStartZ;
+
         }
         void HandleFall(MovementInfo const& movementInfo);
-        bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
+        bool IsFalling() const { return m_fallStartZ != 0; }
 
         bool IsControlledByOwnClient() const { return m_session->GetClientMoverGuid() == GetObjectGuid(); }
         void SetClientControl(Unit const* target, uint8 allowMove);
