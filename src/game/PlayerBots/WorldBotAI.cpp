@@ -740,8 +740,8 @@ void WorldBotAI::OnPlayerLogin()
 void WorldBotAI::UpdateWaypointMovement()
 {
     // We already have a path
-    if (!m_currentPath.empty())
-        return;
+    /*if (!m_currentPath.empty())
+        return;*/
 
     if (me->IsMoving())
         return;

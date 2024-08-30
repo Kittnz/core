@@ -155,13 +155,11 @@ void PlayerBotMgr::Load()
     if (worldBotEnabled)
     {
         WorldBotAI* ai = nullptr;
-        WorldBotTravelSystem* travelSystem = nullptr;
 
         // Load paths
-        //ai->LoadDBWaypoints();
-        travelSystem->LoadTravelNodes();
-        travelSystem->LoadTravelNodeLinks();
-        travelSystem->LoadTravelPaths();
+        sWorldBotTravelSystem.LoadTravelNodes();
+        sWorldBotTravelSystem.LoadTravelNodeLinks();
+        sWorldBotTravelSystem.LoadTravelPaths();
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);

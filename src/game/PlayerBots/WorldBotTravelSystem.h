@@ -70,10 +70,10 @@ public:
     uint32 GetNearestNodeId(float x, float y, float z, uint32 mapId) const;
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
     std::vector<uint32> FindPath(uint32 startNodeId, uint32 endNodeId) const;
-    uint32 GetRandomNodeId(uint32 mapId) const;
+    uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId) const;
     TravelNode const& GetNode(uint32 nodeId) const { return m_travelNodes.at(nodeId); }
     std::pair<std::multimap<uint32, TravelNodeLink>::const_iterator, std::multimap<uint32, TravelNodeLink>::const_iterator>
-        GetNodeLinks(uint32 nodeId) const { return m_travelNodeLinks.equal_range(nodeId); }
+    GetNodeLinks(uint32 nodeId) const { return m_travelNodeLinks.equal_range(nodeId); }
 
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)
@@ -86,11 +86,12 @@ public:
     }
 
 private:
-    WorldBotTravelSystem() {}
+    WorldBotTravelSystem() {} // Private constructor
     ~WorldBotTravelSystem() {}
 
-    WorldBotTravelSystem(WorldBotTravelSystem const&) = delete;
-    WorldBotTravelSystem& operator=(WorldBotTravelSystem const&) = delete;
+    // Prevent copying
+    WorldBotTravelSystem(const WorldBotTravelSystem&) = delete;
+    WorldBotTravelSystem& operator=(const WorldBotTravelSystem&) = delete;
 
     std::map<uint32, TravelNode> m_travelNodes;
     std::multimap<uint32, TravelNodeLink> m_travelNodeLinks;
@@ -110,7 +111,8 @@ private:
     };
 };
 
-#define sWorldBotTravelSystem WorldBotTravelSystem::instance()
+// Define a convenient macro
+#define sWorldBotTravelSystem (*WorldBotTravelSystem::instance())
 
 #endif
 

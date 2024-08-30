@@ -149,7 +149,7 @@ bool WorldBotTravelSystem::CanReachByWalking(uint32 startNodeId, uint32 endNodeI
     std::vector<uint32> path = FindPath(startNodeId, endNodeId);
     for (uint32 nodeId : path)
     {
-        if (m_travelNodes.at(nodeId).pathType != TravelNodePathType::Walk)
+        if (m_travelNodes.at(nodeId).pathType != TravelNodePathType::Walk) // only paths which we can walk / run on for now until we implement actions
             return false;
     }
     return true;
@@ -207,17 +207,24 @@ std::vector<uint32> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 en
     return path;
 }
 
-uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId) const
+uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId, uint32 startNodeId) const
 {
-    std::vector<uint32> nodeIds;
+    std::vector<uint32> reachableNodeIds;
     for (const auto& pair : m_travelNodes)
     {
-        if (pair.second.mapId == mapId)
-            nodeIds.push_back(pair.first);
+        if (pair.second.mapId == mapId && pair.first != startNodeId)
+        {
+            if (CanReachByWalking(startNodeId, pair.first))
+            {
+                reachableNodeIds.push_back(pair.first);
+            }
+        }
     }
-    if (nodeIds.empty())
+
+    if (reachableNodeIds.empty())
         return 0;
-    return nodeIds[urand(0, nodeIds.size() - 1)];
+
+    return reachableNodeIds[urand(0, reachableNodeIds.size() - 1)];
 }
 
 void WorldBotAI::StartNewPathToNode()
@@ -227,7 +234,7 @@ void WorldBotAI::StartNewPathToNode()
     m_currentPathIndex = 0;
 
     // Find the nearest node
-    TravelNode const* nearestNode = sWorldBotTravelSystem->GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
+    TravelNode const* nearestNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
 
     if (!nearestNode)
     {
@@ -236,7 +243,7 @@ void WorldBotAI::StartNewPathToNode()
     }
 
     // Get a random destination node
-    uint32 destNodeId = sWorldBotTravelSystem->GetRandomNodeId(me->GetMapId());
+    uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId());
 
     if (destNodeId == 0)
     {
@@ -245,7 +252,7 @@ void WorldBotAI::StartNewPathToNode()
     }
 
     // Find a path between the nearest node and the destination node
-    std::vector<uint32> nodePath = sWorldBotTravelSystem->FindPath(nearestNode->id, destNodeId);
+    std::vector<uint32> nodePath = sWorldBotTravelSystem.FindPath(nearestNode->id, destNodeId);
 
     if (nodePath.empty())
     {
@@ -260,7 +267,7 @@ void WorldBotAI::StartNewPathToNode()
         uint32 toNodeId = nodePath[i + 1];
 
         // Check if there's a valid link between these nodes
-        auto linkRange = sWorldBotTravelSystem->GetNodeLinks(fromNodeId);
+        auto linkRange = sWorldBotTravelSystem.GetNodeLinks(fromNodeId);
         bool validLink = false;
         for (auto it = linkRange.first; it != linkRange.second; ++it)
         {
@@ -277,7 +284,7 @@ void WorldBotAI::StartNewPathToNode()
             continue;
         }
 
-        std::vector<TravelPath> detailedPath = sWorldBotTravelSystem->GetPathBetweenNodes(fromNodeId, toNodeId);
+        std::vector<TravelPath> detailedPath = sWorldBotTravelSystem.GetPathBetweenNodes(fromNodeId, toNodeId);
         m_currentPath.insert(m_currentPath.end(), detailedPath.begin(), detailedPath.end());
     }
 

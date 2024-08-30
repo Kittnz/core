@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `account` (
   `nostalrius_email` text,
   `nostalrius_reason` text,
   `geolock_pin` int(11) DEFAULT '0',
+  `platform` varchar(50) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_gmlevel` (`gmlevel`)
