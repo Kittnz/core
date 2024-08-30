@@ -1,5 +1,4 @@
 #include "WorldBotAI.h"
-#include "WorldBotWaypoints.h"
 #include "BattleGround.h"
 #include "Player.h"
 #include "Log.h"

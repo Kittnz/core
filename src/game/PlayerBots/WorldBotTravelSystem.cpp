@@ -1,10 +1,13 @@
+#include "WorldBotAI.h"
 #include "WorldBotTravelSystem.h"
+#include "Player.h"
+#include "MotionMaster.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 
 void WorldBotTravelSystem::LoadTravelNodes()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT id, name, map_id, x, y, z, linked FROM ai_playerbot_travelnode");
+    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT id, name, map_id, x, y, z, linked FROM ai_playerbot_travelnode");
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: Unable to load travel nodes.");
@@ -26,13 +29,12 @@ void WorldBotTravelSystem::LoadTravelNodes()
         m_travelNodes[node.id] = node;
     } while (result->NextRow());
 
-    delete result;
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel nodes", (uint32)m_travelNodes.size());
 }
 
 void WorldBotTravelSystem::LoadTravelNodeLinks()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT node_id, to_node_id, type, object, distance, swim_distance, extra_cost, calculated, max_creature_0, max_creature_1, max_creature_2 FROM ai_playerbot_travelnode_link");
+    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT node_id, to_node_id, type, object, distance, swim_distance, extra_cost, calculated, max_creature_0, max_creature_1, max_creature_2 FROM ai_playerbot_travelnode_link");
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: Unable to load travel node links.");
@@ -58,13 +60,12 @@ void WorldBotTravelSystem::LoadTravelNodeLinks()
         m_travelNodeLinks.insert(std::make_pair(link.nodeId, link));
     } while (result->NextRow());
 
-    delete result;
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel node links", (uint32)m_travelNodeLinks.size());
 }
 
 void WorldBotTravelSystem::LoadTravelPaths()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT node_id, to_node_id, nr, map_id, x, y, z FROM ai_playerbot_travelnode_path");
+    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT node_id, to_node_id, nr, map_id, x, y, z FROM ai_playerbot_travelnode_path");
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: Unable to load travel paths.");
@@ -86,7 +87,6 @@ void WorldBotTravelSystem::LoadTravelPaths()
         m_travelPaths.insert(std::make_pair(std::make_pair(path.nodeId, path.toNodeId), path));
     } while (result->NextRow());
 
-    delete result;
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel path points", (uint32)m_travelPaths.size());
 }
 
@@ -218,4 +218,68 @@ uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId) const
     if (nodeIds.empty())
         return 0;
     return nodeIds[urand(0, nodeIds.size() - 1)];
+}
+
+void WorldBotAI::StartNewPathToNode()
+{
+    // Clear any existing path
+    m_currentPath.clear();
+    m_currentPathIndex = 0;
+
+    // Find the nearest node
+    TravelNode const* nearestNode = sWorldBotTravelSystem->GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
+
+    if (!nearestNode)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find nearest node for bot %s", me->GetName());
+        return;
+    }
+
+    // Get a random destination node
+    uint32 destNodeId = sWorldBotTravelSystem->GetRandomNodeId(me->GetMapId());
+
+    if (destNodeId == 0)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find destination node for bot %s", me->GetName());
+        return;
+    }
+
+    // Find a path between the nearest node and the destination node
+    m_currentPath = sWorldBotTravelSystem->FindPath(nearestNode->id, destNodeId);
+
+    if (m_currentPath.empty())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
+        return;
+    }
+
+    // Start moving to the first node in the path
+    MoveToNextPoint();
+}
+
+void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
+{
+    if (movementType == POINT_MOTION_TYPE)
+    {
+        if (!m_currentPath.empty())
+            MoveToNextPoint();
+
+        ActivateNearbyAreaTrigger();
+    }
+}
+
+void WorldBotAI::MoveToNextPoint()
+{
+    if (m_currentPathIndex >= m_currentPath.size())
+    {
+        // We've reached the end of the path
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has reached the end of its path", me->GetName());
+        return;
+    }
+
+    uint32 nodeId = m_currentPath[m_currentPathIndex];
+    TravelNode const& node = sWorldBotTravelSystem->GetNode(nodeId);
+
+    me->GetMotionMaster()->MovePoint(nodeId, node.x + frand(-2, 2), node.y + frand(-2, 2), node.z, MOVE_PATHFINDING);
+    m_currentPathIndex++;
 }

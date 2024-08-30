@@ -15,7 +15,7 @@
 #include "BattleBotWaypoints.h"
 #include "BattleGroundMgr.h"
 #include "WorldBotAI.h"
-#include "WorldBotWaypoints.h"
+#include "WorldBotTravelSystem.h"
 #include "Language.h"
 #include "Spell.h"
 
@@ -155,11 +155,13 @@ void PlayerBotMgr::Load()
     if (worldBotEnabled)
     {
         WorldBotAI* ai = nullptr;
+        WorldBotTravelSystem* travelSystem = nullptr;
 
         // Load paths
         //ai->LoadDBWaypoints();
-
-
+        travelSystem->LoadTravelNodes();
+        travelSystem->LoadTravelNodeLinks();
+        travelSystem->LoadTravelPaths();
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
@@ -2095,7 +2097,7 @@ bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
     SetSentErrorMessage(true);
     return false;
 }
-
+/*
 void ShowWorldBotPathHelper(Map* pMap, WorldBotPath* pPath, uint32 id)
 {
     for (const auto& point : *pPath)
@@ -2205,12 +2207,12 @@ bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
     PSendSysMessage("Reverse: %u and comment: %s", reverse, comment);
 
     return true;
-}
+}*/
 
 void PlayerBotMgr::WorldBotLoader()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBotLoader] Loading Bots from character db...");
-    QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444");
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "[WorldBotLoader] Loading Bots from character db...");
+    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444"); // Mograine // WHERE is_worldbot = 1 and virtual_player_realm = 721682444
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `character` is empty.");
@@ -2269,8 +2271,6 @@ void PlayerBotMgr::WorldBotLoader()
             }
 
         } while (result->NextRow());
-
-        delete result;
     }
 }
 
@@ -2288,7 +2288,7 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotHordeCount++;
     }
 
@@ -2299,11 +2299,11 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotAllianceCount++;
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
 bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)

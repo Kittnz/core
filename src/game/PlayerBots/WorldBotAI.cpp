@@ -1,5 +1,5 @@
 #include "WorldBotAI.h"
-#include "WorldBotWaypoints.h"
+#include "WorldBotTravelSystem.h"
 #include "BattleGround.h"
 #include "Player.h"
 #include "Log.h"
@@ -589,42 +589,18 @@ Unit* WorldBotAI::SelectFollowTarget() const
     return pHealerFollowTarget;
 }
 
-void WorldBotAI::DoGraveyardJump()
-{
-    if (!me->GetBattleGround() ||
-        me->GetBattleGround()->GetTypeID() != BATTLEGROUND_WS)
-        return;
-
-    m_doingGraveyardJump = true;
-    uint32 timeOffset = 0;
-    std::vector<RecordedMovementPacket>* pPath = me->GetTeam() == HORDE ? &vHordeGraveyardJumpPath_ : &vAllianceGraveyardJumpPath_;
-    for (uint32 i = 0; i < (*pPath).size(); i++)
-    {
-        RecordedMovementPacket* point = &((*pPath)[i]);
-        Player* pBot = me;
-        WorldBotAI* pAI = this;
-        bool isLast = i == (*pPath).size() - 1;
-        timeOffset += point->timeDiff;
-        me->m_Events.AddLambdaEventAtOffset([pBot, pAI, point, isLast]
-        {
-            if (!pBot->HasUnitState(UNIT_STAT_NO_FREE_MOVE))
-            {
-                pBot->SetUnitMovementFlags(point->moveFlags);
-                pBot->Relocate(point->position.x, point->position.y, point->position.z, point->position.o);
-                pBot->SendMovementPacket(point->opcode, false);
-            }
-
-            if (isLast)
-                pAI->m_doingGraveyardJump = false;
-        }, timeOffset);
-    }
-}
-
 void WorldBotAI::StopMoving()
 {
     me->StopMoving();
     me->GetMotionMaster()->Clear();
     me->GetMotionMaster()->MoveIdle();
+}
+
+void WorldBotAI::ClearPath()
+{
+    //m_currentPath = nullptr;
+    m_currentNodeId = 0;
+    m_movingInReverse = false;
 }
 
 // not used
@@ -764,7 +740,7 @@ void WorldBotAI::OnPlayerLogin()
 void WorldBotAI::UpdateWaypointMovement()
 {
     // We already have a path
-    if (m_currentPath)
+    if (!m_currentPath.empty())
         return;
 
     if (me->IsMoving())
@@ -793,29 +769,16 @@ void WorldBotAI::UpdateWaypointMovement()
     }
 
     // in battlebot mode
-    /*if (m_isBattleBot)
+    if (m_isBattleBot)
         if (BattleGround* bg = me->GetBattleGround())
             if (bg->GetStatus() == STATUS_WAIT_JOIN)
                 return;
 
-    if (m_isBattleBot)
-        if (BGStartNewPathToObjective())
-            return;
-    */
-
-    // Handle task explore
-    /*if (currentTaskID == TASK_EXPLORE)
+    if (m_currentPath.empty())
     {
-        if (TaskDestination())
-            return;
-    }*/
-
-    /*if (StartNewPathFromBeginning())
-        return;
-
-    StartNewPathFromAnywhere();*/
-
-
+        // Start a new path if we're not already on one
+        StartNewPathToNode();
+    }
 }
 
 void WorldBotAI::OnJustDied()
@@ -828,8 +791,8 @@ void WorldBotAI::OnJustDied()
 void WorldBotAI::OnJustRevived()
 {
     SummonPetIfNeeded();
-    if (!me->SelectRandomUnfriendlyTarget(nullptr, 30.0f))
-        DoGraveyardJump();
+    /*if (!me->SelectRandomUnfriendlyTarget(nullptr, 30.0f))
+        DoGraveyardJump();*/
 }
 
 void WorldBotAI::OnEnterBattleGround()
@@ -1023,7 +986,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         m_updateChatTimer.Reset(2000);
     }
 
-    if (!me->IsInWorld() || me->IsBeingTeleported() || m_doingGraveyardJump)
+    if (!me->IsInWorld() || me->IsBeingTeleported())
         return;
 
     if (!m_initialized)
@@ -1563,7 +1526,7 @@ void WorldBotAI::UpdateBattleGroundAI()
 
 void WorldBotAI::LoadBotChat()
 {
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, type, chat FROM worldbot_chat ORDER BY guid, type ASC;");
+    std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT guid, type, chat FROM worldbot_chat ORDER BY guid, type ASC;");
 
     if (result)
     {
@@ -1623,8 +1586,6 @@ void WorldBotAI::LoadBotChat()
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: unable to load chat.");
         return;
     }
-
-    delete result;
 }
 
 void WorldBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName)
@@ -2308,7 +2269,7 @@ bool WorldBotAI::TaskDestination()
         hasPoiDestination = true;
             
         // debug
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
 
         succes = true;
     }

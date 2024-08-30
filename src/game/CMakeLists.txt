@@ -194,7 +194,6 @@ set (game_SRCS
     PlayerBots/BattleBotWaypoints.cpp
     PlayerBots/WorldBotAI.cpp
     PlayerBots/WorldBotCombatAI.cpp
-    PlayerBots/WorldBotWaypoints.cpp
     PlayerBots/WorldBotTravelSystem.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
@@ -396,7 +395,6 @@ set (game_SRCS
     PlayerBots/BattleBotAI.h
     PlayerBots/BattleBotWaypoints.h
     PlayerBots/WorldBotAI.h
-    PlayerBots/WorldBotWaypoints.h
     PlayerBots/WorldBotTravelSystem.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h

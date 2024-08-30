@@ -5,6 +5,7 @@
 #include <map>
 #include <cmath>
 #include "SharedDefines.h"
+#include "Platform/Define.h"
 
 enum class TravelNodePathType : uint8
 {
@@ -53,10 +54,10 @@ struct TravelPath
 class WorldBotTravelSystem
 {
 public:
-    static WorldBotTravelSystem& Instance()
+    static WorldBotTravelSystem* instance()
     {
         static WorldBotTravelSystem instance;
-        return instance;
+        return &instance;
     }
 
     void LoadTravelNodes();
@@ -72,7 +73,6 @@ public:
     uint32 GetRandomNodeId(uint32 mapId) const;
     TravelNode const& GetNode(uint32 nodeId) const { return m_travelNodes.at(nodeId); }
 
-
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)
     {
@@ -85,8 +85,10 @@ public:
 
 private:
     WorldBotTravelSystem() {}
+    ~WorldBotTravelSystem() {}
+
     WorldBotTravelSystem(WorldBotTravelSystem const&) = delete;
-    void operator=(WorldBotTravelSystem const&) = delete;
+    WorldBotTravelSystem& operator=(WorldBotTravelSystem const&) = delete;
 
     std::map<uint32, TravelNode> m_travelNodes;
     std::multimap<uint32, TravelNodeLink> m_travelNodeLinks;
@@ -106,6 +108,7 @@ private:
     };
 };
 
-#define sTravelSystem WorldBotTravelSystem::Instance()
+#define sWorldBotTravelSystem WorldBotTravelSystem::instance()
 
 #endif
+

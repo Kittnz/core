@@ -2,7 +2,7 @@
 #define MANGOS_WorldBotAI_H
 
 #include "CombatBotBaseAI.h"
-#include "WorldBotWaypoints.h"
+#include "WorldBotTravelSystem.h"
 #include "BattleBotAI.h"
 #include "PartyBotAI.h"
 #include "PlayerBotMgr.h"
@@ -233,24 +233,25 @@ public:
     bool m_isDualBotInProgress = false;
 
     // Movement System
-    void LoadDBWaypoints();
-    void LoadGrindingDBWaypoints();
+    /*void LoadDBWaypoints();
+    void LoadGrindingDBWaypoints();*/
+    //void StartNewGrindPath();
+
     void UpdateWaypointMovement();
-    void DoGraveyardJump();
     void MoveToNextPoint();
-    void StartNewGrindPath();
-    bool StartNewPathFromBeginning();
-    void StartNewPathFromAnywhere();
-    bool BGStartNewPathToObjective();
-    bool StartNewPathToObjectiveForTask(uint8 currentTaskID);
-    bool StartNewPathToPosition(Position const& position, std::vector<WorldBotPath*> const& vPaths);
     void ClearPath();
     void StopMoving();
-    bool m_doingGraveyardJump = false;
+
     bool m_movingInReverse = false;
-    uint32 m_currentPoint = 0;
-    WorldBotPath* m_currentPath = nullptr;
+
+    uint32 m_currentNodeId;
+    std::vector<uint32> m_currentPath;
+    size_t m_currentPathIndex;
+
+    void StartNewPathToNode();
+
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
+
 
     // Chat System
     std::vector<BotChatRespondsQueue> m_chatGeneralRespondsQueue;
@@ -281,7 +282,7 @@ public:
     bool TaskDestination();
     void SetExploreDestination();
 
-    std::vector<WorldBotPath*> vPaths_Grind;
+    //std::vector<WorldBotPath*> vPaths_Grind;
 };
 
 #endif
