@@ -740,8 +740,21 @@ void WorldBotAI::OnPlayerLogin()
 void WorldBotAI::UpdateWaypointMovement()
 {
     // We already have a path
-    /*if (!m_currentPath.empty())
-        return;*/
+    if (!m_currentPath.empty())
+    {
+        if (!sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
+        {
+            // If we couldn't resume the path, clear it and start a new one
+            m_currentPath.clear();
+            m_currentPathIndex = 0;
+        }
+        else
+        {
+            // Successfully resumed the path, move to the next point
+            MoveToNextPoint();
+            return;
+        }
+    }
 
     if (me->IsMoving())
         return;
@@ -752,8 +765,8 @@ void WorldBotAI::UpdateWaypointMovement()
     if (me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
         return;
 
-    if (hasPoiDestination)
-        return;
+    /*if (hasPoiDestination)
+        return;*/
 
     if (m_wasDead)
         return;
@@ -774,6 +787,7 @@ void WorldBotAI::UpdateWaypointMovement()
             if (bg->GetStatus() == STATUS_WAIT_JOIN)
                 return;
 
+    // Start new path to node
     if (m_currentPath.empty())
     {
         // Start a new path if we're not already on one

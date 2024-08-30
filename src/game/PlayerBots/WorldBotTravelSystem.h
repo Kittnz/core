@@ -74,6 +74,7 @@ public:
     TravelNode const& GetNode(uint32 nodeId) const { return m_travelNodes.at(nodeId); }
     std::pair<std::multimap<uint32, TravelNodeLink>::const_iterator, std::multimap<uint32, TravelNodeLink>::const_iterator>
     GetNodeLinks(uint32 nodeId) const { return m_travelNodeLinks.equal_range(nodeId); }
+    bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex);
 
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)

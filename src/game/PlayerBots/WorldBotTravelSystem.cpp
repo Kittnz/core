@@ -4,6 +4,8 @@
 #include "MotionMaster.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
+#include <algorithm>
+#include <random>
 
 void WorldBotTravelSystem::LoadTravelNodes()
 {
@@ -209,22 +211,31 @@ std::vector<uint32> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 en
 
 uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId, uint32 startNodeId) const
 {
-    std::vector<uint32> reachableNodeIds;
+    std::vector<uint32> allNodeIds;
     for (const auto& pair : m_travelNodes)
     {
         if (pair.second.mapId == mapId && pair.first != startNodeId)
         {
-            if (CanReachByWalking(startNodeId, pair.first))
-            {
-                reachableNodeIds.push_back(pair.first);
-            }
+            allNodeIds.push_back(pair.first);
         }
     }
 
-    if (reachableNodeIds.empty())
+    if (allNodeIds.empty())
         return 0;
 
-    return reachableNodeIds[urand(0, reachableNodeIds.size() - 1)];
+    // Shuffle the node IDs to ensure randomness
+    std::random_shuffle(allNodeIds.begin(), allNodeIds.end());
+
+    for (uint32 nodeId : allNodeIds)
+    {
+        if (CanReachByWalking(startNodeId, nodeId))
+        {
+            return nodeId;
+        }
+    }
+
+    // If no reachable node is found, return 0 or startNodeId
+    return startNodeId; // or return 0 if you prefer
 }
 
 void WorldBotAI::StartNewPathToNode()
@@ -243,7 +254,7 @@ void WorldBotAI::StartNewPathToNode()
     }
 
     // Get a random destination node
-    uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId());
+    uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId(), nearestNode->id);
 
     if (destNodeId == 0)
     {
@@ -290,6 +301,39 @@ void WorldBotAI::StartNewPathToNode()
 
     // Start moving to the first point in the path
     MoveToNextPoint();
+}
+
+bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex)
+{
+    if (currentPath.empty() || currentPathIndex >= currentPath.size())
+    {
+        return false; // No path to resume
+    }
+
+    // Find the nearest point on the path
+    float shortestDistance = std::numeric_limits<float>::max();
+    size_t nearestIndex = currentPathIndex;
+
+    for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
+    {
+        float distance = player->GetDistance(currentPath[i].x, currentPath[i].y, currentPath[i].z);
+        if (distance < shortestDistance)
+        {
+            shortestDistance = distance;
+            nearestIndex = i;
+        }
+    }
+
+    // If we're too far from the path, return false to allow for a new path to be created
+    if (shortestDistance > 200.0f) // You can adjust this threshold as needed
+    {
+        return false;
+    }
+
+    // Set the current index to the nearest point
+    currentPathIndex = nearestIndex;
+
+    return true;
 }
 
 void WorldBotAI::MoveToNextPoint()
