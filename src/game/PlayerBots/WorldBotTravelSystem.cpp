@@ -245,27 +245,44 @@ void WorldBotAI::StartNewPathToNode()
     }
 
     // Find a path between the nearest node and the destination node
-    m_currentPath = sWorldBotTravelSystem->FindPath(nearestNode->id, destNodeId);
+    std::vector<uint32> nodePath = sWorldBotTravelSystem->FindPath(nearestNode->id, destNodeId);
 
-    if (m_currentPath.empty())
+    if (nodePath.empty())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
         return;
     }
 
-    // Start moving to the first node in the path
-    MoveToNextPoint();
-}
-
-void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
-{
-    if (movementType == POINT_MOTION_TYPE)
+    // Get detailed path between each pair of nodes
+    for (size_t i = 0; i < nodePath.size() - 1; ++i)
     {
-        if (!m_currentPath.empty())
-            MoveToNextPoint();
+        uint32 fromNodeId = nodePath[i];
+        uint32 toNodeId = nodePath[i + 1];
 
-        ActivateNearbyAreaTrigger();
+        // Check if there's a valid link between these nodes
+        auto linkRange = sWorldBotTravelSystem->GetNodeLinks(fromNodeId);
+        bool validLink = false;
+        for (auto it = linkRange.first; it != linkRange.second; ++it)
+        {
+            if (it->second.toNodeId == toNodeId)
+            {
+                validLink = true;
+                break;
+            }
+        }
+
+        if (!validLink)
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Invalid link between nodes %u and %u for bot %s", fromNodeId, toNodeId, me->GetName());
+            continue;
+        }
+
+        std::vector<TravelPath> detailedPath = sWorldBotTravelSystem->GetPathBetweenNodes(fromNodeId, toNodeId);
+        m_currentPath.insert(m_currentPath.end(), detailedPath.begin(), detailedPath.end());
     }
+
+    // Start moving to the first point in the path
+    MoveToNextPoint();
 }
 
 void WorldBotAI::MoveToNextPoint()
@@ -277,9 +294,19 @@ void WorldBotAI::MoveToNextPoint()
         return;
     }
 
-    uint32 nodeId = m_currentPath[m_currentPathIndex];
-    TravelNode const& node = sWorldBotTravelSystem->GetNode(nodeId);
+    const TravelPath& pathPoint = m_currentPath[m_currentPathIndex];
 
-    me->GetMotionMaster()->MovePoint(nodeId, node.x + frand(-2, 2), node.y + frand(-2, 2), node.z, MOVE_PATHFINDING);
+    me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x + frand(-2, 2), pathPoint.y + frand(-2, 2), pathPoint.z, MOVE_PATHFINDING);
     m_currentPathIndex++;
+}
+
+void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
+{
+    if (movementType == POINT_MOTION_TYPE)
+    {
+        if (!m_currentPath.empty())
+            MoveToNextPoint();
+
+        ActivateNearbyAreaTrigger();
+    }
 }

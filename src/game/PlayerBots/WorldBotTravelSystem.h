@@ -72,6 +72,8 @@ public:
     std::vector<uint32> FindPath(uint32 startNodeId, uint32 endNodeId) const;
     uint32 GetRandomNodeId(uint32 mapId) const;
     TravelNode const& GetNode(uint32 nodeId) const { return m_travelNodes.at(nodeId); }
+    std::pair<std::multimap<uint32, TravelNodeLink>::const_iterator, std::multimap<uint32, TravelNodeLink>::const_iterator>
+        GetNodeLinks(uint32 nodeId) const { return m_travelNodeLinks.equal_range(nodeId); }
 
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)

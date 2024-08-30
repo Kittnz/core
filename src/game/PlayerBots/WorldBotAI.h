@@ -245,7 +245,7 @@ public:
     bool m_movingInReverse = false;
 
     uint32 m_currentNodeId;
-    std::vector<uint32> m_currentPath;
+    std::vector<TravelPath> m_currentPath;
     size_t m_currentPathIndex;
 
     void StartNewPathToNode();
