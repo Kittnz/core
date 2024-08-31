@@ -598,9 +598,8 @@ void WorldBotAI::StopMoving()
 
 void WorldBotAI::ClearPath()
 {
-    //m_currentPath = nullptr;
-    m_currentNodeId = 0;
-    m_movingInReverse = false;
+    m_currentPath.clear();  // Clear all elements from the path
+    m_currentPathIndex = 0; // Reset the current position in the path
 }
 
 // not used
@@ -737,25 +736,13 @@ void WorldBotAI::OnPlayerLogin()
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
+void WorldBotAI::ShowCurrentPath()
+{
+    sWorldBotTravelSystem.ShowCurrentPath(me, m_currentPath, m_currentPathIndex, m_currentNodeId);
+}
+
 void WorldBotAI::UpdateWaypointMovement()
 {
-    // We already have a path
-    if (!m_currentPath.empty())
-    {
-        if (!sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
-        {
-            // If we couldn't resume the path, clear it and start a new one
-            m_currentPath.clear();
-            m_currentPathIndex = 0;
-        }
-        else
-        {
-            // Successfully resumed the path, move to the next point
-            MoveToNextPoint();
-            return;
-        }
-    }
-
     if (me->IsMoving())
         return;
 
@@ -786,6 +773,23 @@ void WorldBotAI::UpdateWaypointMovement()
         if (BattleGround* bg = me->GetBattleGround())
             if (bg->GetStatus() == STATUS_WAIT_JOIN)
                 return;
+
+    // We already have a path
+    if (!m_currentPath.empty())
+    {
+        if (!sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
+        {
+            // If we couldn't resume the path, clear it and start a new one
+            m_currentPath.clear();
+            m_currentPathIndex = 0;
+        }
+        else
+        {
+            // Successfully resumed the path, move to the next point
+            MoveToNextPoint();
+            return;
+        }
+    }
 
     // Start new path to node
     if (m_currentPath.empty())
@@ -1207,6 +1211,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     me->GetMotionMaster()->MoveIdle();*/
 
                 //if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+
                 me->GetMotionMaster()->MovePoint(0, me->GetCorpse()->GetPositionX(), me->GetCorpse()->GetPositionY(), me->GetCorpse()->GetPositionZ(), MOVE_PATHFINDING);
 
                 if (m_resurrect)
@@ -1221,29 +1226,6 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     m_resurrect = false;
                 }
             }
-
-            /*if (me->GetDeathState() == CORPSE)
-            {
-                me->BuildPlayerRepop();
-                me->RepopAtGraveyard();
-
-                if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
-                    me->GetMotionMaster()->MoveIdle();
-
-
-
-                if (m_resurrect)
-                {
-                    if (Corpse* corpse = me->GetCorpse())
-                    {
-                        me->TeleportPositionRelocation(corpse->GetPosition());
-                        me->ResurrectPlayer(0.5f);
-                        me->SpawnCorpseBones();
-                        me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
-                    }
-                    m_resurrect = false;
-                }
-            }*/
 
             if (me->GetDeathState() == DEAD)
             {

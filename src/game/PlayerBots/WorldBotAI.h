@@ -233,22 +233,22 @@ public:
     bool m_isDualBotInProgress = false;
 
     // Movement System
-    /*void LoadDBWaypoints();
-    void LoadGrindingDBWaypoints();*/
-    //void StartNewGrindPath();
-
     void UpdateWaypointMovement();
     void MoveToNextPoint();
     void ClearPath();
     void StopMoving();
 
-    bool m_movingInReverse = false;
+    //void LoadGrindingDBWaypoints();
+//void StartNewGrindPath();
 
     uint32 m_currentNodeId;
     std::vector<TravelPath> m_currentPath;
     size_t m_currentPathIndex;
 
     void StartNewPathToNode();
+
+    void ShowCurrentPath();
+
 
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 

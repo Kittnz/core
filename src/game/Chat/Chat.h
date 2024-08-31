@@ -303,9 +303,9 @@ class ChatHandler
         bool HandleWorldBotAddEasternKingdomsCommand(char* args);
         bool HandleWorldBotAddKalimdorCommand(char* args);
         bool HandleWorldBotRemoveCommand(char* args);
-        bool HandleWorldBotShowPathCommand(char* args);
+        bool HandleWorldBotShowCurrentPathCommand(char* args);
         bool HandleWorldBotShowAllPathsCommand(char* args);
-        bool HandleWorldBotPathPointAddCommand(char* args);
+        bool HandleWorldBotClearPathVisualsCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);

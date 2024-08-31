@@ -2095,24 +2095,8 @@ bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
     SetSentErrorMessage(true);
     return false;
 }
-/*
-void ShowWorldBotPathHelper(Map* pMap, WorldBotPath* pPath, uint32 id)
-{
-    for (const auto& point : *pPath)
-    {
-        if (Creature* pWaypoint = pMap->SummonCreature(VISUAL_WAYPOINT, point.x, point.y, point.z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 120000, true))
-        {
-            // Show path id as level to distinguish individual paths.
-            pWaypoint->SetUInt32Value(UNIT_FIELD_LEVEL, id);
 
-            // Mark points that have script attached.
-            if (point.pFunc)
-                pWaypoint->CastSpell(pWaypoint, SPELL_RED_GLOW, true);
-        }
-    }
-}
-
-bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
+bool ChatHandler::HandleWorldBotShowCurrentPathCommand(char* args)
 {
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
@@ -2126,16 +2110,12 @@ bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
     {
         if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
         {
-            if (pAI->m_currentPath)
-                ShowWorldBotPathHelper(pTarget->GetMap(), pAI->m_currentPath, 1);
-            else
-                SendSysMessage("Target is not following a path.");
-
+            pAI->ShowCurrentPath();
             return true;
         }
     }
 
-    SendSysMessage("Target is not a map bot.");
+    SendSysMessage("Target is not a world bot.");
     SetSentErrorMessage(true);
     return false;
 }
@@ -2143,69 +2123,17 @@ bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
 bool ChatHandler::HandleWorldBotShowAllPathsCommand(char* args)
 {
     Player* pPlayer = m_session->GetPlayer();
-    std::vector<WorldBotPath*> const* pPaths;
-
-    switch (pPlayer->GetMapId())
-    {
-    case MAP_EASTERN_KINGDOMS:
-    {
-        pPaths = &vPaths_Map_Eastern_Kingdoms;
-        break;
-    }
-    case MAP_KALIMDOR:
-    {
-        pPaths = &vPaths_Map_Kalimdor;
-        break;
-    }
-    case MAP_AB:
-    {
-        pPaths = &vPaths_Map_Arathi_Basin;
-        break;
-    }
-    case MAP_AV:
-    {
-        pPaths = &vPaths_Map_Alterac_Valley;
-        break;
-    }
-    case MAP_WS:
-    {
-        pPaths = &vPaths_Map_Warsong_Gulch;
-        break;
-    }
-    default:
-        break;
-    }
-
-    uint32 id = 1;
-    for (const auto& path : *pPaths)
-    {
-        ShowWorldBotPathHelper(pPlayer->GetMap(), path, id++);
-    }
-
-    PSendSysMessage("Showing %u paths.", id);
+    sWorldBotTravelSystem.ShowAllPathsAndNodes(pPlayer);
     return true;
 }
 
-bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
+bool ChatHandler::HandleWorldBotClearPathVisualsCommand(char* args)
 {
-    uint32 guid, id, reverse = 0;
-    char comment[100];
-
-    sscanf(args, "%u %u %u %s", &guid, &id, &reverse, comment);
-
-    Player* me = m_session->GetPlayer();
-    WorldDatabase.PExecute(
-        "INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES "
-        "(%u, %u, %f, %f, %f, %u, %u, %u, %u, '%s')",
-        guid, id, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetAreaId(), me->GetZoneId(), me->GetMapId(), reverse, comment);
-
-    PSendSysMessage("Added new waypoint with guid: %u and id: %u", guid, id);
-    PSendSysMessage("XYZ: %f %f %f", me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
-    PSendSysMessage("AreaID: %u  ZoneID: %u  Map: %u", me->GetAreaId(), me->GetZoneId(), me->GetMapId());
-    PSendSysMessage("Reverse: %u and comment: %s", reverse, comment);
-
+    Player* pPlayer = m_session->GetPlayer();
+    sWorldBotTravelSystem.ClearPathVisuals(pPlayer);
+    SendSysMessage("Cleared all path visuals.");
     return true;
-}*/
+}
 
 void PlayerBotMgr::WorldBotLoader()
 {

@@ -129,11 +129,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleBattleBotShowAllPathsCommand, "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
-    /*static ChatCommand worldBotPathCommandTable[] =
-    {
-        { "add",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotPathPointAddCommand,    "", nullptr },
-        { nullptr,        0,                    false, nullptr,                                          "", nullptr },
-    };*/
     static ChatCommand worldBotAddCommandTable[] =
     {
         { "alterac",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddAlteracCommand, "", nullptr },
@@ -147,9 +142,9 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "add",          SEC_ADMINISTRATOR,    false, nullptr,                             "Add a new bot", worldBotAddCommandTable },
         { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,        "", nullptr },
-        /*{"showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowPathCommand,      "", nullptr},
-        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand,  "", nullptr },
-        { "path",         SEC_ADMINISTRATOR,    false, nullptr,                                 "Add a path", worldBotPathCommandTable },*/
+        { "path show",     SEC_GAMEMASTER,     false, &ChatHandler::HandleWorldBotShowCurrentPathCommand,     "", nullptr },
+        { "paths show",    SEC_GAMEMASTER,     false, &ChatHandler::HandleWorldBotShowAllPathsCommand,        "", nullptr },
+        { "paths clear",   SEC_GAMEMASTER,     false, &ChatHandler::HandleWorldBotClearPathVisualsCommand,    "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand accountSetCommandTable[] =

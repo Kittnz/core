@@ -60,10 +60,12 @@ public:
         return &instance;
     }
 
+    // Loaders
     void LoadTravelNodes();
     void LoadTravelNodeLinks();
     void LoadTravelPaths();
 
+    // Functions
     TravelNode const* GetNearestNode(float x, float y, float z, uint32 mapId) const;
     std::vector<TravelPath> GetPathBetweenNodes(uint32 startNodeId, uint32 endNodeId) const;
     std::vector<uint32> GetPathToPosition(float x, float y, float z, uint32 mapId) const;
@@ -71,10 +73,32 @@ public:
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
     std::vector<uint32> FindPath(uint32 startNodeId, uint32 endNodeId) const;
     uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId) const;
-    TravelNode const& GetNode(uint32 nodeId) const { return m_travelNodes.at(nodeId); }
+
+    const TravelNode* GetNode(uint32 nodeId) const
+    {
+        auto it = m_travelNodes.find(nodeId);
+        return it != m_travelNodes.end() ? &it->second : nullptr;
+    }
+
     std::pair<std::multimap<uint32, TravelNodeLink>::const_iterator, std::multimap<uint32, TravelNodeLink>::const_iterator>
-    GetNodeLinks(uint32 nodeId) const { return m_travelNodeLinks.equal_range(nodeId); }
+
+    GetNodeLinks(uint32 nodeId) const
+    {
+        return m_travelNodeLinks.equal_range(nodeId);
+    }
+
     bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex);
+    const std::map<uint32, TravelNode>& GetAllNodes() const
+    {
+        return m_travelNodes;
+    }
+    std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator> GetAllPathsFromNode(uint32 nodeId) const;
+
+    // Path and Node visuals
+    void ShowCurrentPath(Player* bot, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId);
+    void ShowAllPathsAndNodes(Player* player);
+    void ClearPathVisuals(Player* bot);
+
 
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)
@@ -110,6 +134,9 @@ private:
             return distance > other.distance;
         }
     };
+
+    // Path and Node visuals
+    std::map<ObjectGuid, std::vector<ObjectGuid>> m_pathVisuals;
 };
 
 // Define a convenient macro
