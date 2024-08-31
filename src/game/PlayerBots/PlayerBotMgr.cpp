@@ -2255,15 +2255,30 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
         return false;
     }
 
-    WorldBotAI* ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+    // Check if the bot is already in the loading state
+    if (iter != m_bots.end() && iter->second->state == PB_STATE_LOADING)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Bot with GUID %u is already in loading state.", guid);
+        return false;
+    }
+
+    WorldBotAI* ai = nullptr;
+
+    try
+    {
+        ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+    }
+    catch (const std::exception& e)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to create WorldBotAI for bot GUID %u: %s", guid, e.what());
+        return false;
+    }
 
     std::shared_ptr<PlayerBotEntry> e;
     if (iter != m_bots.end())
     {
-        if (ai) // new AI
-            e->ai.reset(ai);
-
         e = iter->second;
+        e->ai.reset(ai); // Reset AI only after we've assigned e
     }
     else
     {
@@ -2273,21 +2288,11 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
         e->chance = 100;
         e->accountId = accountId;
         e->isChatBot = false;
-        ai->botEntry = e.get();
-        
-        if (ai)
-        {
-            e->ai.reset(ai);
-        }
-        else
-        {
-            e->ai.reset(new PlayerBotAI(nullptr));
-        }
-
-        m_bots.insert({ guid , e });
+        e->ai.reset(ai);
+        m_bots[guid] = e; // Insert the new entry into m_bots
     }
 
-    e->ai->botEntry = e.get();
+    ai->botEntry = e.get();
     e->state = PB_STATE_LOADING;
     WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
     session->SetBot(e);
@@ -2378,13 +2383,28 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
             {
                 WorldBotsCollection bot = myHordeBots.front();
                 myHordeBots.erase(myHordeBots.begin());
+
+                // Check if the bot is already in the system and its state
+                auto existingBot = m_bots.find(bot.guid);
+                if (existingBot != m_bots.end() && existingBot->second->state != PB_STATE_OFFLINE)
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotBalancer: Bot %s (GUID: %u) is already in state %d. Skipping.",
+                        bot.name.c_str(), bot.guid, existingBot->second->state);
+                    continue;
+                }
+
                 if (WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map))
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Added Horde bot %s", bot.name.c_str());
                 }
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotBalancer: Failed to add Horde bot %s", bot.name.c_str());
+                }
             }
         }
 
+        // Repeat the same process for Alliance bots
         if (currentAllianceBots < desiredAllianceBots)
         {
             uint32 botsToAdd = desiredAllianceBots - currentAllianceBots;
@@ -2392,9 +2412,23 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
             {
                 WorldBotsCollection bot = myAllianceBots.front();
                 myAllianceBots.erase(myAllianceBots.begin());
+
+                // Check if the bot is already in the system and its state
+                auto existingBot = m_bots.find(bot.guid);
+                if (existingBot != m_bots.end() && existingBot->second->state != PB_STATE_OFFLINE)
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotBalancer: Bot %s (GUID: %u) is already in state %d. Skipping.",
+                        bot.name.c_str(), bot.guid, existingBot->second->state);
+                    continue;
+                }
+
                 if (WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map))
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Added Alliance bot %s", bot.name.c_str());
+                }
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotBalancer: Failed to add Alliance bot %s", bot.name.c_str());
                 }
             }
         }
@@ -2405,16 +2439,6 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
         // Log total available bots
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Total available bots - Horde: %zu, Alliance: %zu",
             myHordeBots.size(), myAllianceBots.size());
-
-        // Notify if running low on available bots
-        if (myHordeBots.size() < desiredHordeBots)
-        {
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Running low on available Horde bots. Only %zu left in the pool.", myHordeBots.size());
-        }
-        if (myAllianceBots.size() < desiredAllianceBots)
-        {
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Running low on available Alliance bots. Only %zu left in the pool.", myAllianceBots.size());
-        }
     }
 }
 

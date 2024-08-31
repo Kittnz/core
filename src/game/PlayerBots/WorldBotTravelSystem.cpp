@@ -6,6 +6,19 @@
 #include "Log.h"
 #include <algorithm>
 #include <random>
+#include <limits>
+#include <queue>
+
+WorldBotTravelSystem::WorldBotTravelSystem()
+    : m_randomGenerator(std::random_device{}())
+{
+    // Other initialization...
+}
+
+WorldBotTravelSystem::~WorldBotTravelSystem()
+{
+    // Cleanup if needed...
+}
 
 void WorldBotTravelSystem::LoadTravelNodes()
 {
@@ -30,6 +43,11 @@ void WorldBotTravelSystem::LoadTravelNodes()
 
         m_travelNodes[node.id] = node;
     } while (result->NextRow());
+
+    for (const auto& pair : m_travelNodes)
+    {
+        m_mapNodeIds[pair.second.mapId].push_back(pair.first);
+    }
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel nodes", (uint32)m_travelNodes.size());
 }
@@ -89,48 +107,46 @@ void WorldBotTravelSystem::LoadTravelPaths()
         m_travelPaths.insert(std::make_pair(std::make_pair(path.nodeId, path.toNodeId), path));
     } while (result->NextRow());
 
+    for (const auto& pair : m_travelPaths)
+    {
+        const TravelPath& path = pair.second;
+        m_nodeConnections[path.nodeId].push_back(path.toNodeId);
+    }
+
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel path points", (uint32)m_travelPaths.size());
 }
 
-TravelNode const* WorldBotTravelSystem::GetNearestNode(float x, float y, float z, uint32 mapId) const
+const TravelNode* WorldBotTravelSystem::GetNearestNode(float x, float y, float z, uint32 mapId) const
 {
-    TravelNode const* nearestNode = nullptr;
-    float nearestDistance = std::numeric_limits<float>::max();
+    const TravelNode* nearestNode = nullptr;
+    float nearestDistanceSq = std::numeric_limits<float>::max();
 
-    struct Position
+    const auto& nodeIds = m_mapNodeIds.find(mapId);
+    if (nodeIds != m_mapNodeIds.end())
     {
-        float x, y, z;
-    };
-
-    Position pos = { x, y, z };
-
-    for (const auto& pair : m_travelNodes)
-    {
-        const TravelNode& node = pair.second;
-        if (node.mapId != mapId)
-            continue;
-
-        float distance = GetDistance3D(pos, node);
-        if (distance < nearestDistance)
+        for (uint32 nodeId : nodeIds->second)
         {
-            nearestDistance = distance;
-            nearestNode = &node;
+            const TravelNode& node = m_travelNodes.at(nodeId);
+            float distanceSq = (node.x - x) * (node.x - x) + (node.y - y) * (node.y - y) + (node.z - z) * (node.z - z);
+            if (distanceSq < nearestDistanceSq)
+            {
+                nearestDistanceSq = distanceSq;
+                nearestNode = &node;
+            }
         }
     }
 
     return nearestNode;
 }
 
-std::vector<TravelPath> WorldBotTravelSystem::GetPathBetweenNodes(uint32 startNodeId, uint32 endNodeId) const
+const TravelPath* WorldBotTravelSystem::GetPathBetweenNodes(uint32 fromNodeId, uint32 toNodeId) const
 {
-    std::vector<TravelPath> path;
-    auto range = m_travelPaths.equal_range(std::make_pair(startNodeId, endNodeId));
-    for (auto it = range.first; it != range.second; ++it)
-    {
-        path.push_back(it->second);
-    }
-    std::sort(path.begin(), path.end(), [](const TravelPath& a, const TravelPath& b) { return a.nr < b.nr; });
-    return path;
+    auto it = std::find_if(m_travelPaths.begin(), m_travelPaths.end(),
+        [fromNodeId, toNodeId](const auto& pair) {
+            return pair.second.nodeId == fromNodeId && pair.second.toNodeId == toNodeId;
+        });
+
+    return it != m_travelPaths.end() ? &(it->second) : nullptr;
 }
 
 std::vector<uint32> WorldBotTravelSystem::GetPathToPosition(float x, float y, float z, uint32 mapId) const
@@ -164,122 +180,85 @@ std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, 
 
 std::vector<uint32> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 endNodeId) const
 {
-    std::unordered_map<uint32, float> distances;
-    std::unordered_map<uint32, uint32> previousNodes;
-    std::priority_queue<NodeDistance, std::vector<NodeDistance>, std::greater<NodeDistance>> pq;
+    // Implement a pathfinding algorithm here, e.g., A* or Dijkstra's
+    // This is a simplified breadth-first search for demonstration
+    std::queue<uint32> queue;
+    std::unordered_map<uint32, uint32> cameFrom;
+    queue.push(startNodeId);
+    cameFrom[startNodeId] = startNodeId;
 
-    // Initialize distances
-    for (const auto& pair : m_travelNodes)
+    while (!queue.empty())
     {
-        distances[pair.first] = std::numeric_limits<float>::max();
-    }
-    distances[startNodeId] = 0;
+        uint32 current = queue.front();
+        queue.pop();
 
-    pq.push(NodeDistance(startNodeId, 0));
-
-    while (!pq.empty())
-    {
-        uint32 currentNodeId = pq.top().nodeId;
-        pq.pop();
-
-        if (currentNodeId == endNodeId)
+        if (current == endNodeId)
             break;
 
-        auto linkRange = m_travelNodeLinks.equal_range(currentNodeId);
-        for (auto it = linkRange.first; it != linkRange.second; ++it)
+        const auto& connections = m_nodeConnections.find(current);
+        if (connections != m_nodeConnections.end())
         {
-            const TravelNodeLink& link = it->second;
-            float newDistance = distances[currentNodeId] + link.distance;
-
-            if (newDistance < distances[link.toNodeId])
+            for (uint32 next : connections->second)
             {
-                distances[link.toNodeId] = newDistance;
-                previousNodes[link.toNodeId] = currentNodeId;
-                pq.push(NodeDistance(link.toNodeId, newDistance));
+                if (cameFrom.find(next) == cameFrom.end())
+                {
+                    queue.push(next);
+                    cameFrom[next] = current;
+                }
             }
         }
     }
 
-    // Reconstruct path
     std::vector<uint32> path;
-    uint32 currentNodeId = endNodeId;
-    while (currentNodeId != startNodeId)
+    if (cameFrom.find(endNodeId) != cameFrom.end())
     {
-        path.push_back(currentNodeId);
-        currentNodeId = previousNodes[currentNodeId];
+        uint32 current = endNodeId;
+        while (current != startNodeId)
+        {
+            path.push_back(current);
+            current = cameFrom[current];
+        }
+        path.push_back(startNodeId);
+        std::reverse(path.begin(), path.end());
     }
-    path.push_back(startNodeId);
 
-    std::reverse(path.begin(), path.end());
     return path;
 }
 
-uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId, uint32 startNodeId) const
+uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId, uint32 startNodeId)
 {
-    std::vector<uint32> allNodeIds;
-    for (const auto& pair : m_travelNodes)
+    const auto& connections = m_nodeConnections.find(startNodeId);
+    if (connections != m_nodeConnections.end() && !connections->second.empty())
     {
-        if (pair.second.mapId == mapId && pair.first != startNodeId)
-        {
-            allNodeIds.push_back(pair.first);
-        }
+        std::uniform_int_distribution<> dis(0, connections->second.size() - 1);
+        return connections->second[dis(m_randomGenerator)];
     }
 
-    if (allNodeIds.empty())
-        return 0;
-
-    // Shuffle the node IDs to ensure randomness
-    std::random_shuffle(allNodeIds.begin(), allNodeIds.end());
-
-    for (uint32 nodeId : allNodeIds)
+    // Fallback to random node on the map if no connections
+    const auto& nodeIds = m_mapNodeIds.find(mapId);
+    if (nodeIds != m_mapNodeIds.end() && !nodeIds->second.empty())
     {
-        if (CanReachByWalking(startNodeId, nodeId))
-        {
-            return nodeId;
-        }
+        std::uniform_int_distribution<> dis(0, nodeIds->second.size() - 1);
+        return nodeIds->second[dis(m_randomGenerator)];
     }
 
-    // If no reachable node is found, return 0 or startNodeId
-    return startNodeId; // or return 0 if you prefer
+    return 0;
 }
 
 void WorldBotAI::StartNewPathToNode()
 {
-    // Clear any existing path
     m_currentPath.clear();
     m_currentPathIndex = 0;
 
-    // Find the closest point on any path
-    TravelPath closestPoint;
-    float shortestDistance = std::numeric_limits<float>::max();
-    uint32 closestNodeId = 0;
+    const TravelNode* nearestNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
 
-    for (const auto& pair : sWorldBotTravelSystem.GetAllNodes())
+    if (!nearestNode)
     {
-        const TravelNode& node = pair.second;
-        auto pathRange = sWorldBotTravelSystem.GetAllPathsFromNode(node.id);
-        
-        for (auto it = pathRange.first; it != pathRange.second; ++it)
-        {
-            const TravelPath& path = it->second;
-            float distance = me->GetDistance(path.x, path.y, path.z);
-            if (distance < shortestDistance)
-            {
-                shortestDistance = distance;
-                closestPoint = path;
-                closestNodeId = path.nodeId;
-            }
-        }
-    }
-
-    if (closestNodeId == 0)
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find closest point for bot %s", me->GetName());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find nearest node for bot %s", me->GetName());
         return;
     }
 
-    // Get a random destination node
-    uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId(), closestNodeId);
+    uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId(), nearestNode->id);
 
     if (destNodeId == 0)
     {
@@ -287,17 +266,7 @@ void WorldBotAI::StartNewPathToNode()
         return;
     }
 
-    // First, create a path from the bot's current position to the closest point
-    TravelPath startPath;
-    startPath.x = me->GetPositionX();
-    startPath.y = me->GetPositionY();
-    startPath.z = me->GetPositionZ();
-    startPath.mapId = me->GetMapId();
-    m_currentPath.push_back(startPath);
-    m_currentPath.push_back(closestPoint);
-
-    // Then, find a path from the closest node to the destination node
-    std::vector<uint32> nodePath = sWorldBotTravelSystem.FindPath(closestNodeId, destNodeId);
+    std::vector<uint32> nodePath = sWorldBotTravelSystem.FindPath(nearestNode->id, destNodeId);
 
     if (nodePath.empty())
     {
@@ -305,14 +274,22 @@ void WorldBotAI::StartNewPathToNode()
         return;
     }
 
-    // Get detailed path between each pair of nodes
+    // Convert node path to TravelPath
     for (size_t i = 0; i < nodePath.size() - 1; ++i)
     {
         uint32 fromNodeId = nodePath[i];
         uint32 toNodeId = nodePath[i + 1];
 
-        std::vector<TravelPath> detailedPath = sWorldBotTravelSystem.GetPathBetweenNodes(fromNodeId, toNodeId);
-        m_currentPath.insert(m_currentPath.end(), detailedPath.begin(), detailedPath.end());
+        const TravelPath* path = sWorldBotTravelSystem.GetPathBetweenNodes(fromNodeId, toNodeId);
+
+        if (path)
+        {
+            m_currentPath.push_back(*path);
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path between nodes %u and %u for bot %s", fromNodeId, toNodeId, me->GetName());
+        }
     }
 
     // Start moving to the first point in the path
@@ -360,7 +337,6 @@ void WorldBotAI::MoveToNextPoint()
     if (m_currentPathIndex >= m_currentPath.size())
     {
         // We've reached the end of the path
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has reached the end of its path", me->GetName());
         return;
     }
 

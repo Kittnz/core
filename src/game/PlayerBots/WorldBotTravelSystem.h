@@ -4,6 +4,10 @@
 #include <vector>
 #include <map>
 #include <cmath>
+#include <unordered_map>
+#include <vector>
+#include <random>
+#include <algorithm>
 #include "SharedDefines.h"
 #include "Platform/Define.h"
 
@@ -67,12 +71,12 @@ public:
 
     // Functions
     TravelNode const* GetNearestNode(float x, float y, float z, uint32 mapId) const;
-    std::vector<TravelPath> GetPathBetweenNodes(uint32 startNodeId, uint32 endNodeId) const;
+    const TravelPath* GetPathBetweenNodes(uint32 fromNodeId, uint32 toNodeId) const;
     std::vector<uint32> GetPathToPosition(float x, float y, float z, uint32 mapId) const;
     uint32 GetNearestNodeId(float x, float y, float z, uint32 mapId) const;
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
     std::vector<uint32> FindPath(uint32 startNodeId, uint32 endNodeId) const;
-    uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId) const;
+    uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId);
 
     const TravelNode* GetNode(uint32 nodeId) const
     {
@@ -111,8 +115,8 @@ public:
     }
 
 private:
-    WorldBotTravelSystem() {} // Private constructor
-    ~WorldBotTravelSystem() {}
+    WorldBotTravelSystem(); // Declaration only
+    ~WorldBotTravelSystem();
 
     // Prevent copying
     WorldBotTravelSystem(const WorldBotTravelSystem&) = delete;
@@ -121,6 +125,10 @@ private:
     std::map<uint32, TravelNode> m_travelNodes;
     std::multimap<uint32, TravelNodeLink> m_travelNodeLinks;
     std::multimap<std::pair<uint32, uint32>, TravelPath> m_travelPaths;
+
+    std::unordered_map<uint32, std::vector<uint32>> m_mapNodeIds;
+    std::unordered_map<uint32, std::vector<uint32>> m_nodeConnections;
+    mutable std::mt19937 m_randomGenerator;
 
     struct NodeDistance
     {

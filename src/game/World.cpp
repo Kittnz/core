@@ -820,8 +820,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_WORLDBOT_USECHAT,           "WorldBot.UseChat", true);
     setConfig(CONFIG_BOOL_LFG_MATCHMAKING, "LFG.Matchmaking", false);
 
-    setConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX,       "WorldBot.MaxHordeBots", 1250);
-    setConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX,    "WorldBot.MaxAllianceBots", 1250);
+    setConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX,       "WorldBot.MaxHordeBots", 250);
+    setConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX,    "WorldBot.MaxAllianceBots", 250);
 
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
     m_relocation_ai_notify_delay = sConfig.GetIntDefault("Visibility.AIRelocationNotifyDelay", 1000u);
