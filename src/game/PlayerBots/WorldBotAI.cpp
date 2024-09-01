@@ -780,21 +780,17 @@ void WorldBotAI::UpdateWaypointMovement()
         if (!sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
         {
             // If we couldn't resume the path, clear it and start a new one
-            m_currentPath.clear();
-            m_currentPathIndex = 0;
+            StartNewPathToNode();
         }
         else
         {
             // Successfully resumed the path, move to the next point
             MoveToNextPoint();
-            return;
         }
     }
-
-    // Start new path to node
-    if (m_currentPath.empty())
+    else
     {
-        // Start a new path if we're not already on one
+        // Start a new path if we don't have one
         StartNewPathToNode();
     }
 }

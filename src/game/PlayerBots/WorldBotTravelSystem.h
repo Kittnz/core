@@ -53,6 +53,7 @@ struct TravelPath
     uint32 nr;
     uint32 mapId;
     float x, y, z;
+    TravelNodePathType pathType;
 };
 
 class WorldBotTravelSystem
@@ -75,7 +76,7 @@ public:
     std::vector<uint32> GetPathToPosition(float x, float y, float z, uint32 mapId) const;
     uint32 GetNearestNodeId(float x, float y, float z, uint32 mapId) const;
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
-    std::vector<uint32> FindPath(uint32 startNodeId, uint32 endNodeId) const;
+    std::vector<TravelPath> FindPath(uint32 startNodeId, uint32 endNodeId) const;
     uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId);
 
     const TravelNode* GetNode(uint32 nodeId) const
