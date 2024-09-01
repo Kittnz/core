@@ -777,22 +777,21 @@ void WorldBotAI::UpdateWaypointMovement()
     // We already have a path
     if (!m_currentPath.empty())
     {
-        if (!sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
+        // Always try to resume the current path
+        if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
         {
-            // If we couldn't resume the path, clear it and start a new one
-            StartNewPathToNode();
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s resuming current path", me->GetName());
+            MoveToNextPoint();
+            return;
         }
         else
         {
-            // Successfully resumed the path, move to the next point
-            MoveToNextPoint();
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s unable to resume current path", me->GetName());
         }
     }
-    else
-    {
-        // Start a new path if we don't have one
-        StartNewPathToNode();
-    }
+
+    // If we couldn't resume the path or don't have one, start a new path
+    StartNewPathToNode();
 }
 
 void WorldBotAI::OnJustDied()

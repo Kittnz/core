@@ -239,17 +239,16 @@ public:
     void StopMoving();
 
     //void LoadGrindingDBWaypoints();
-//void StartNewGrindPath();
+    //void StartNewGrindPath();
 
     uint32 m_currentNodeId;
     std::vector<TravelPath> m_currentPath;
     size_t m_currentPathIndex;
 
     void StartNewPathToNode();
-
     void ShowCurrentPath();
 
-
+    // BG Movement
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
 

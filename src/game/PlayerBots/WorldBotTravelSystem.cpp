@@ -113,11 +113,11 @@ void WorldBotTravelSystem::LoadTravelPaths()
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel path points", (uint32)m_travelPaths.size());
 
     // Debug output
-    for (const auto& pair : m_nodeConnections)
+    /*for (const auto& pair : m_nodeConnections)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has %zu connections",
             pair.first, pair.second.size());
-    }
+    }*/
 }
 
 const TravelNode* WorldBotTravelSystem::GetNearestNode(float x, float y, float z, uint32 mapId) const
@@ -213,7 +213,7 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         uint32 current = queue.front();
         queue.pop();
 
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Examining node %u", current);
+        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Examining node %u", current);
 
         if (current == endNodeId)
         {
@@ -224,7 +224,7 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         const auto& connections = m_nodeConnections.find(current);
         if (connections != m_nodeConnections.end())
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has %zu connections", current, connections->second.size());
+            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has %zu connections", current, connections->second.size());
             for (uint32 next : connections->second)
             {
                 if (cameFrom.find(next) == cameFrom.end())
@@ -241,9 +241,10 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         }
     }
 
-    std::vector<uint32> nodePath;
+    std::vector<TravelPath> fullPath;
     if (cameFrom.find(endNodeId) != cameFrom.end())
     {
+        std::vector<uint32> nodePath;
         uint32 current = endNodeId;
         while (current != startNodeId)
         {
@@ -252,27 +253,21 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         }
         nodePath.push_back(startNodeId);
         std::reverse(nodePath.begin(), nodePath.end());
-    }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu nodes",
-        startNodeId, endNodeId, nodePath.size());
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu nodes",
+            startNodeId, endNodeId, nodePath.size());
 
-    // Convert node path to full TravelPath
-    std::vector<TravelPath> fullPath;
-    if (cameFrom.find(endNodeId) != cameFrom.end())
-    {
-        uint32 current = endNodeId;
-        while (current != startNodeId)
+        // Convert node path to full TravelPath
+        for (size_t i = 0; i < nodePath.size() - 1; ++i)
         {
-            uint32 previous = cameFrom[current];
-            auto pathRange = m_travelPaths.equal_range(std::make_pair(previous, current));
+            uint32 fromNodeId = nodePath[i];
+            uint32 toNodeId = nodePath[i + 1];
+            auto pathRange = m_travelPaths.equal_range(std::make_pair(fromNodeId, toNodeId));
             for (auto it = pathRange.first; it != pathRange.second; ++it)
             {
                 fullPath.push_back(it->second);
             }
-            current = previous;
         }
-        std::reverse(fullPath.begin(), fullPath.end());
     }
 
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu points",
@@ -313,6 +308,8 @@ void WorldBotAI::StartNewPathToNode()
 {
     m_currentPath.clear();
     m_currentPathIndex = 0;
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path", me->GetName());
 
     const TravelNode* nearestNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
 
@@ -355,16 +352,16 @@ void WorldBotAI::StartNewPathToNode()
 
 bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex)
 {
-    if (currentPath.empty() || currentPathIndex >= currentPath.size())
+    if (currentPath.empty())
     {
         return false; // No path to resume
     }
 
     // Find the nearest point on the path
     float shortestDistance = std::numeric_limits<float>::max();
-    size_t nearestIndex = currentPathIndex;
+    size_t nearestIndex = 0;
 
-    for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
+    for (size_t i = 0; i < currentPath.size(); ++i)
     {
         float distance = player->GetDistance(currentPath[i].x, currentPath[i].y, currentPath[i].z);
         if (distance < shortestDistance)
@@ -375,13 +372,19 @@ bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& c
     }
 
     // If we're too far from the path, return false to allow for a new path to be created
-    if (shortestDistance > 200.0f) // You can adjust this threshold as needed
+    float maxResumeDistance = 200.0f; // Adjust this value as needed
+    if (shortestDistance > maxResumeDistance)
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume",
+            player->GetName(), shortestDistance, maxResumeDistance);
         return false;
     }
 
     // Set the current index to the nearest point
     currentPathIndex = nearestIndex;
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming path at index %zu, distance %.2f",
+        player->GetName(), currentPathIndex, shortestDistance);
 
     return true;
 }
@@ -400,11 +403,9 @@ void WorldBotAI::MoveToNextPoint()
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s moving to point %u/%zu: %.2f, %.2f, %.2f",
         me->GetName(), m_currentPathIndex + 1, m_currentPath.size(), pathPoint.x, pathPoint.y, pathPoint.z);
 
-    me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x + frand(-2, 2), pathPoint.y + frand(-2, 2), pathPoint.z, MOVE_PATHFINDING);
+    me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x/* + frand(-2, 2)*/, pathPoint.y/* + frand(-2, 2)*/, pathPoint.z, MOVE_PATHFINDING);
     m_currentPathIndex++;
 }
-
-
 
 void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 {
