@@ -185,13 +185,37 @@ uint32 WorldBotTravelSystem::GetNearestNodeId(float x, float y, float z, uint32 
 
 bool WorldBotTravelSystem::CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const
 {
-    std::vector<TravelPath> path = FindPath(startNodeId, endNodeId);
-    for (const TravelPath& segment : path)
+    std::vector<uint32> nodesToCheck;
+    std::unordered_set<uint32> visitedNodes;
+    nodesToCheck.push_back(startNodeId);
+    visitedNodes.insert(startNodeId);
+
+    while (!nodesToCheck.empty())
     {
-        if (segment.pathType != TravelNodePathType::Walk) // only paths which we can walk / run on for now until we implement actions
-            return false;
+        uint32 currentNodeId = nodesToCheck.back();
+        nodesToCheck.pop_back();
+
+        if (currentNodeId == endNodeId)
+        {
+            return true;
+        }
+
+        auto linkRange = m_travelNodeLinks.equal_range(currentNodeId);
+        for (auto it = linkRange.first; it != linkRange.second; ++it)
+        {
+            const TravelNodeLink& link = it->second;
+            if (link.type == static_cast<uint32>(TravelNodePathType::Walk))
+            {
+                if (visitedNodes.find(link.toNodeId) == visitedNodes.end())
+                {
+                    nodesToCheck.push_back(link.toNodeId);
+                    visitedNodes.insert(link.toNodeId);
+                }
+            }
+        }
     }
-    return true;
+
+    return false;
 }
 
 std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator> WorldBotTravelSystem::GetAllPathsFromNode(uint32 nodeId) const

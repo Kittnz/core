@@ -29,7 +29,6 @@ struct TravelNode
     uint32 mapId;
     float x, y, z;
     bool linked;
-    TravelNodePathType pathType = TravelNodePathType::None;
     uint32 objectId = 0; // For storing portal/area trigger IDs
 };
 
@@ -53,7 +52,6 @@ struct TravelPath
     uint32 nr;
     uint32 mapId;
     float x, y, z;
-    TravelNodePathType pathType;
 };
 
 class WorldBotTravelSystem

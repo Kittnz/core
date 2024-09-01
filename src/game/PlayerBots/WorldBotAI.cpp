@@ -356,7 +356,7 @@ bool WorldBotAI::DrinkAndEat()
     {
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         {
-            ClearPath();
+            //ClearPath();
             StopMoving();
         }
         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_FOOD))
@@ -371,7 +371,7 @@ bool WorldBotAI::DrinkAndEat()
     {
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         {
-            ClearPath();
+            //ClearPath();
             StopMoving();
         }
         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_DRINK))
@@ -403,7 +403,8 @@ bool WorldBotAI::AttackStart(Unit* pVictim)
 
     if (me->Attack(pVictim, true))
     {
-        ClearPath();
+        //ClearPath();
+        StopMoving();
 
         if ((m_role == ROLE_RANGE_DPS || m_role == ROLE_HEALER) &&
             IsRangedDamageClass(me->GetClass()) &&
@@ -743,20 +744,11 @@ void WorldBotAI::ShowCurrentPath()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    if (me->IsMoving())
-        return;
-
-    if (!me->IsStopped())
-        return;
-
-    if (me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
+    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || m_wasDead)
         return;
 
     /*if (hasPoiDestination)
         return;*/
-
-    if (m_wasDead)
-        return;
 
     switch (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
     {
@@ -769,10 +761,8 @@ void WorldBotAI::UpdateWaypointMovement()
     }
 
     // in battlebot mode
-    if (m_isBattleBot)
-        if (BattleGround* bg = me->GetBattleGround())
-            if (bg->GetStatus() == STATUS_WAIT_JOIN)
-                return;
+    if (m_isBattleBot && me->GetBattleGround() && me->GetBattleGround()->GetStatus() == STATUS_WAIT_JOIN)
+        return;
 
     // We already have a path
     if (!m_currentPath.empty())
@@ -1431,12 +1421,15 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                             me->GetMotionMaster()->MoveChase(pVictim);
                     }
                 }
+                return;
             }
-            else
+            /*else
             {
                 UpdateWaypointMovement();
-            }
+            }*/
         }
+
+        UpdateWaypointMovement();
         return;
     }
 
