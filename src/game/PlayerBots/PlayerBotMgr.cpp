@@ -389,7 +389,7 @@ void PlayerBotMgr::Update(uint32 diff)
         }
     }
 
-    if (m_confEnableRandomBots)
+    /*if (m_confEnableRandomBots)
     {
         uint32 updatesCount = (m_elapsedTime - m_lastBotsRefresh) / m_confRandomBotsRefresh;
         for (uint32 i = 0; i < updatesCount; ++i)
@@ -397,7 +397,7 @@ void PlayerBotMgr::Update(uint32 diff)
             AddOrRemoveBot();
             m_lastBotsRefresh += m_confRandomBotsRefresh;
         }
-    }
+    }*/
 
     // World Bot Balancer
     if (sWorld.getConfig(CONFIG_BOOL_WORLDBOT))
