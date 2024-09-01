@@ -356,7 +356,7 @@ bool WorldBotAI::DrinkAndEat()
     {
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         {
-            //ClearPath();
+            ClearPath();
             StopMoving();
         }
         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_FOOD))
@@ -371,7 +371,7 @@ bool WorldBotAI::DrinkAndEat()
     {
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         {
-            //ClearPath();
+            ClearPath();
             StopMoving();
         }
         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_DRINK))
@@ -1423,10 +1423,10 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                 }
                 return;
             }
-            /*else
+            else
             {
                 UpdateWaypointMovement();
-            }*/
+            }
         }
 
         UpdateWaypointMovement();
