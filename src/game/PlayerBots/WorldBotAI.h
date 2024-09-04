@@ -143,6 +143,7 @@ public:
         m_updateResurrectTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
         BotLastChatTime = sWorld.GetGameTime();
+        m_isSpecificDestinationPath = false;
     }
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
@@ -182,6 +183,7 @@ public:
 
     void OnJustRevived();
     void OnJustDied();
+    void TeleportResurrect();
     void OnEnterBattleGround();
     void OnLeaveBattleGround();
 
@@ -237,20 +239,22 @@ public:
     void MoveToNextPoint();
     void ClearPath();
     void StopMoving();
-
-    //void LoadGrindingDBWaypoints();
-    //void StartNewGrindPath();
+    void StartNewPathToNode();
+    bool StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun);
+    void ShowCurrentPath();
+    void OnPathComplete();
 
     uint32 m_currentNodeId;
     std::vector<TravelPath> m_currentPath;
     size_t m_currentPathIndex;
+    bool m_isSpecificDestinationPath;
+    bool m_isRunningToCorpse;
 
-    void StartNewPathToNode();
-    void ShowCurrentPath();
+    //void LoadGrindingDBWaypoints();
+    //void StartNewGrindPath();
 
     // BG Movement
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
-
 
     // Chat System
     std::vector<BotChatRespondsQueue> m_chatGeneralRespondsQueue;

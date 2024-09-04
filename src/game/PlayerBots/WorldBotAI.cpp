@@ -241,7 +241,7 @@ bool WorldBotAI::UseMount()
 
     uint32 spellId = GetMountSpellId();
     if (!spellId)
-        return false;
+        return false; 
 
     if (me->CastSpell(me, spellId, false) == SPELL_CAST_OK)
         return true;
@@ -744,31 +744,22 @@ void WorldBotAI::ShowCurrentPath()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || m_wasDead)
+    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
         return;
 
-    /*if (hasPoiDestination)
-        return;*/
-
-    switch (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
-    {
-    case IDLE_MOTION_TYPE:
-    case CHASE_MOTION_TYPE:
-    case POINT_MOTION_TYPE:
-        break;
-    default:
-        return;
-    }
-
-    // in battlebot mode
-    if (m_isBattleBot && me->GetBattleGround() && me->GetBattleGround()->GetStatus() == STATUS_WAIT_JOIN)
-        return;
-
-    // We already have a path
     if (!m_currentPath.empty())
     {
-        // Always try to resume the current path
-        if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex))
+        const TravelPath& lastPoint = m_currentPath.back();
+        float distanceToDestination = sWorldBotTravelSystem.GetDistance3D(*me, lastPoint);
+
+        if (distanceToDestination <= 5.0f)  // 5.0f is an arbitrary small distance
+        {
+            // Bot has reached its destination
+            OnPathComplete();
+            return;
+        }
+
+        if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex, m_isSpecificDestinationPath, m_isRunningToCorpse))
         {
             sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s resuming current path", me->GetName());
             MoveToNextPoint();
@@ -780,8 +771,28 @@ void WorldBotAI::UpdateWaypointMovement()
         }
     }
 
-    // If we couldn't resume the path or don't have one, start a new path
-    StartNewPathToNode();
+    if (m_isRunningToCorpse)
+    {
+        if (Corpse* corpse = me->GetCorpse())
+        {
+            StartNewPathToSpecificDestination(corpse->GetPositionX(), corpse->GetPositionY(), corpse->GetPositionZ(), corpse->GetMapId(), true);
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s is running to corpse but corpse not found", me->GetName());
+            m_isRunningToCorpse = false;
+        }
+    }
+    else if (m_isSpecificDestinationPath)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s lost specific destination path and cannot resume", me->GetName());
+        m_isSpecificDestinationPath = false;
+    }
+
+    if (!m_isRunningToCorpse && !m_isSpecificDestinationPath)
+    {
+        StartNewPathToNode();
+    }
 }
 
 void WorldBotAI::OnJustDied()
@@ -796,6 +807,20 @@ void WorldBotAI::OnJustRevived()
     SummonPetIfNeeded();
     /*if (!me->SelectRandomUnfriendlyTarget(nullptr, 30.0f))
         DoGraveyardJump();*/
+}
+
+void WorldBotAI::TeleportResurrect()
+{
+    Corpse* corpse = me->GetCorpse();
+    if (corpse)
+    {
+        me->TeleportPositionRelocation(corpse->GetPosition());
+        me->ResurrectPlayer(0.5f);
+        me->SpawnCorpseBones();
+        me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+        m_isRunningToCorpse = false;
+        //m_wasDead = false;
+    }
 }
 
 void WorldBotAI::OnEnterBattleGround()
@@ -1186,42 +1211,32 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         {
             if (me->GetDeathState() == CORPSE)
             {
+                // Release spirit if we haven't already
                 me->BuildPlayerRepop();
                 me->RepopAtGraveyard();
-
-                ClearPath();
-                StopMoving();
-
-                /*if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
-                    me->GetMotionMaster()->MoveIdle();*/
-
-                //if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
-
-                me->GetMotionMaster()->MovePoint(0, me->GetCorpse()->GetPositionX(), me->GetCorpse()->GetPositionY(), me->GetCorpse()->GetPositionZ(), MOVE_PATHFINDING);
-
-                if (m_resurrect)
-                {
-                    if (Corpse* corpse = me->GetCorpse())
-                    {
-                        me->TeleportPositionRelocation(corpse->GetPosition());
-                        me->ResurrectPlayer(0.5f);
-                        me->SpawnCorpseBones();
-                        me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
-                    }
-                    m_resurrect = false;
-                }
+                return;
             }
 
             if (me->GetDeathState() == DEAD)
             {
-                me->ResurrectPlayer(0.5f);
-                me->SpawnCorpseBones();
-
-                if (pGroup && pLeader)
-                    me->SendCreateUpdateToPlayer(pLeader);
+                if (!m_isRunningToCorpse)
+                {
+                    if (Corpse* corpse = me->GetCorpse())
+                    {
+                        if (StartNewPathToSpecificDestination(corpse->GetPositionX(), corpse->GetPositionY(), corpse->GetPositionZ(), corpse->GetMapId(), true))
+                        {
+                            m_isRunningToCorpse = true;
+                        }
+                        else
+                        {
+                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for a corpse run for bot %s, teleporting instead and resurrect.", me->GetName());
+                            TeleportResurrect();
+                        }
+                    }
+                }
+                UpdateWaypointMovement();
             }
         }
-        
         return;
     }
     else
@@ -1229,6 +1244,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         if (m_wasDead)
         {
             m_wasDead = false;
+            m_isRunningToCorpse = false;
             OnJustRevived();
             return;
         }
@@ -1329,7 +1345,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     if (m_isBattleBot)
         UpdateBattleGroundAI();
 
-    if (!me->IsInCombat() && me->GetLevel() != 1)
+    if (!me->IsInCombat()/* && me->GetLevel() != 1*/)
     {
         if (pGroup && pLeader && !me->InBattleGround() && !m_isDualBot)
         {

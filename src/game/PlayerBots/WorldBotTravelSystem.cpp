@@ -330,6 +330,7 @@ uint32 WorldBotTravelSystem::GetRandomNodeId(uint32 mapId, uint32 startNodeId)
 
 void WorldBotAI::StartNewPathToNode()
 {
+    m_isSpecificDestinationPath = false;
     m_currentPath.clear();
     m_currentPathIndex = 0;
 
@@ -374,41 +375,137 @@ void WorldBotAI::StartNewPathToNode()
     ShowCurrentPath();
 }
 
-bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex)
+bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun)
+{
+    m_currentPath.clear();
+    m_currentPathIndex = 0;
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path to specific destination (%.2f, %.2f, %.2f)%s", 
+        me->GetName(), x, y, z, isCorpseRun ? " (Corpse Run)" : "");
+
+    const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
+    const TravelNode* endNode = sWorldBotTravelSystem.GetNearestNode(x, y, z, mapId);
+
+    if (!startNode || !endNode)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find start or end node for bot %s", me->GetName());
+        return false;
+    }
+
+    if (startNode->id == endNode->id)
+    {
+        // Start and end nodes are the same, create a single-point path
+        TravelPath singlePoint;
+        singlePoint.nodeId = startNode->id;
+        singlePoint.toNodeId = endNode->id;
+        singlePoint.nr = 0;
+        singlePoint.mapId = mapId;
+        singlePoint.x = x;
+        singlePoint.y = y;
+        singlePoint.z = z;
+        m_currentPath.push_back(singlePoint);
+    }
+    else
+    {
+        m_currentPath = sWorldBotTravelSystem.FindPath(startNode->id, endNode->id);
+    }
+
+    if (m_currentPath.empty())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
+        return false;
+    }
+
+    // Add the final destination point if it's not exactly at the last node
+    if (x != endNode->x || y != endNode->y || z != endNode->z)
+    {
+        TravelPath finalPoint;
+        finalPoint.nodeId = endNode->id;
+        finalPoint.toNodeId = 0;
+        finalPoint.nr = m_currentPath.back().nr + 1;
+        finalPoint.mapId = mapId;
+        finalPoint.x = x;
+        finalPoint.y = y;
+        finalPoint.z = z;
+        m_currentPath.push_back(finalPoint);
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: New path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
+
+    m_isSpecificDestinationPath = true;
+    m_isRunningToCorpse = isCorpseRun;
+
+    // Start moving to the first point in the path
+    MoveToNextPoint();
+
+    // Show the new path
+    ShowCurrentPath();
+
+    return true;
+}
+
+bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun)
 {
     if (currentPath.empty())
     {
         return false; // No path to resume
     }
 
-    // Find the nearest point on the path
+    // Find the nearest point on the path that is ahead of the current index
     float shortestDistance = std::numeric_limits<float>::max();
-    size_t nearestIndex = 0;
+    size_t nearestIndex = currentPathIndex;
+    bool foundNearerPoint = false;
 
-    for (size_t i = 0; i < currentPath.size(); ++i)
+    for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
     {
-        float distance = player->GetDistance(currentPath[i].x, currentPath[i].y, currentPath[i].z);
+        const TravelPath& pathPoint = currentPath[i];
+        float distance = GetDistance3D(*player, pathPoint);
         if (distance < shortestDistance)
         {
             shortestDistance = distance;
             nearestIndex = i;
+            foundNearerPoint = true;
         }
     }
 
-    // If we're too far from the path, return false to allow for a new path to be created
-    float maxResumeDistance = 200.0f; // Adjust this value as needed
+    // Determine the maximum resume distance based on the path type
+    float maxResumeDistance;
+    if (isCorpseRun)
+    {
+        maxResumeDistance = 200.0f;  // Allow a larger distance for corpse runs
+    }
+    else if (isSpecificDestinationPath)
+    {
+        maxResumeDistance = 100.0f;
+    }
+    else
+    {
+        maxResumeDistance = 50.0f;
+    }
+
     if (shortestDistance > maxResumeDistance)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume",
-            player->GetName(), shortestDistance, maxResumeDistance);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s",
+            player->GetName(), shortestDistance, maxResumeDistance,
+            isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"));
         return false;
     }
 
-    // Set the current index to the nearest point
-    currentPathIndex = nearestIndex;
-
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming path at index %zu, distance %.2f",
-        player->GetName(), currentPathIndex, shortestDistance);
+    // Only update the current index if we found a nearer point ahead on the path
+    if (foundNearerPoint)
+    {
+        currentPathIndex = nearestIndex;
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming %s at index %zu, distance %.2f",
+            player->GetName(),
+            isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"),
+            currentPathIndex, shortestDistance);
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s continuing on current %s at index %zu",
+            player->GetName(),
+            isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"),
+            currentPathIndex);
+    }
 
     return true;
 }
@@ -417,8 +514,8 @@ void WorldBotAI::MoveToNextPoint()
 {
     if (m_currentPathIndex >= m_currentPath.size())
     {
-        // We've reached the end of the path
-        StartNewPathToNode();
+        // End of path reached
+        OnPathComplete();
         return;
     }
 
@@ -427,7 +524,8 @@ void WorldBotAI::MoveToNextPoint()
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s moving to point %u/%zu: %.2f, %.2f, %.2f",
         me->GetName(), m_currentPathIndex + 1, m_currentPath.size(), pathPoint.x, pathPoint.y, pathPoint.z);
 
-    me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x/* + frand(-2, 2)*/, pathPoint.y/* + frand(-2, 2)*/, pathPoint.z, MOVE_PATHFINDING);
+    me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x, pathPoint.y, pathPoint.z, MOVE_PATHFINDING);
+
     m_currentPathIndex++;
 }
 
@@ -435,11 +533,52 @@ void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 {
     if (movementType == POINT_MOTION_TYPE)
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached point with data %u", me->GetName(), data);
+
         if (!m_currentPath.empty())
-            MoveToNextPoint();
+        {
+            if (data == m_currentPath[m_currentPathIndex - 1].nr)
+            {
+                MoveToNextPoint();
+            }
+            else
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unexpected movement point reached for bot %s", me->GetName());
+            }
+        }
 
         ActivateNearbyAreaTrigger();
     }
+}
+
+void WorldBotAI::OnPathComplete()
+{
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has completed its path", me->GetName());
+
+    m_currentPath.clear();
+    m_currentPathIndex = 0;
+
+    if (m_isRunningToCorpse)
+    {
+        m_isRunningToCorpse = false;
+        if (me->GetDeathState() == DEAD)
+        {
+            me->ResurrectPlayer(0.5f);
+            me->SpawnCorpseBones();
+            me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+        }
+    }
+    else if (m_isSpecificDestinationPath)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached its specific destination", me->GetName());
+        // Perform any actions specific to reaching a designated destination
+    }
+    else
+    {
+        StartNewPathToNode();
+    }
+
+    m_isSpecificDestinationPath = false;
 }
 
 #define SPELL_RED_GLOW 20370

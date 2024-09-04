@@ -8,8 +8,10 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <type_traits>
 #include "SharedDefines.h"
 #include "Platform/Define.h"
+#include "Player.h"
 
 enum class TravelNodePathType : uint8
 {
@@ -90,7 +92,7 @@ public:
         return m_travelNodeLinks.equal_range(nodeId);
     }
 
-    bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex);
+    bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun);
     const std::map<uint32, TravelNode>& GetAllNodes() const
     {
         return m_travelNodes;
@@ -102,13 +104,34 @@ public:
     void ShowAllPathsAndNodes(Player* player);
     void ClearPathVisuals(Player* bot);
 
-
+    // Primary template for GetDistance3D
     template<class A, class B>
     static float GetDistance3D(A const& from, B const& to)
     {
         float dx = from.x - to.x;
         float dy = from.y - to.y;
         float dz = from.z - to.z;
+        float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
+        return (dist > 0 ? dist : 0);
+    }
+
+    // Specialization for Player
+    template<class B>
+    static float GetDistance3D(Player const& from, B const& to)
+    {
+        float dx = from.GetPositionX() - to.x;
+        float dy = from.GetPositionY() - to.y;
+        float dz = from.GetPositionZ() - to.z;
+        float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
+        return (dist > 0 ? dist : 0);
+    }
+
+    // Specialization for when both are Players
+    static float GetDistance3D(Player const& from, Player const& to)
+    {
+        float dx = from.GetPositionX() - to.GetPositionX();
+        float dy = from.GetPositionY() - to.GetPositionY();
+        float dz = from.GetPositionZ() - to.GetPositionZ();
         float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
         return (dist > 0 ? dist : 0);
     }
