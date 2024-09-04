@@ -2104,7 +2104,6 @@ bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
     return false;
 }
 
-// In PlayerBotMgr.cpp
 bool ChatHandler::HandleWorldBotShowCurrentPathCommand(char* args)
 {
     Player* pTarget = GetSelectedPlayer();

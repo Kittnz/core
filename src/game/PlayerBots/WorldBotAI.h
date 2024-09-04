@@ -255,7 +255,7 @@ public:
     // Corpse Running
     bool m_isRunningToCorpse;
     ShortTimeTracker m_corpseRunTimer;
-    static const int32 CORPSE_RUN_TIMEOUT = 120000; // 2 minutes in milliseconds
+    static const int32 CORPSE_RUN_TIMEOUT = 600000; // 10 minutes in milliseconds
 
     // Node Actions
     bool ExecuteNodeAction(uint32 nodeId);

@@ -86,7 +86,6 @@ public:
     }
 
     std::pair<std::multimap<uint32, TravelNodeLink>::const_iterator, std::multimap<uint32, TravelNodeLink>::const_iterator>
-
     GetNodeLinks(uint32 nodeId) const
     {
         return m_travelNodeLinks.equal_range(nodeId);

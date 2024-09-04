@@ -820,6 +820,9 @@ void WorldBotAI::TeleportResurrect()
         m_isRunningToCorpse = false;
         //m_wasDead = false;
     }
+
+    if (me->GetDeathState() == ALIVE)
+        m_isRunningToCorpse = false;
 }
 
 void WorldBotAI::OnEnterBattleGround()
