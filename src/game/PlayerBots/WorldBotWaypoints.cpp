@@ -748,7 +748,7 @@ void WorldBotAI::LoadGrindingDBWaypoints()
     }
 }*/
 
-/*void WorldBotAI::LoadDBWaypoints()
+void WorldBotAI::LoadDBWaypoints()
 {
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, chance, minlevel, faction, lastGuidPoint = 0;
@@ -945,7 +945,7 @@ void WorldBotAI::LoadGrindingDBWaypoints()
             }
         }
     }
-}*/
+}
 
 void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 {

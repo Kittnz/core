@@ -2104,6 +2104,7 @@ bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
     return false;
 }
 
+// In PlayerBotMgr.cpp
 bool ChatHandler::HandleWorldBotShowCurrentPathCommand(char* args)
 {
     Player* pTarget = GetSelectedPlayer();
@@ -2118,7 +2119,17 @@ bool ChatHandler::HandleWorldBotShowCurrentPathCommand(char* args)
     {
         if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
         {
-            pAI->ShowCurrentPath();
+            pAI->m_showPath = !pAI->m_showPath;
+            if (pAI->m_showPath)
+            {
+                pAI->ShowCurrentPath();
+                PSendSysMessage("Path visualization enabled for %s.", pTarget->GetName());
+            }
+            else
+            {
+                sWorldBotTravelSystem.ClearPathVisuals(pTarget);
+                PSendSysMessage("Path visualization disabled for %s.", pTarget->GetName());
+            }
             return true;
         }
     }

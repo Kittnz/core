@@ -136,7 +136,7 @@ class WorldBotAI : public CombatBotBaseAI
 public:
 
     WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
-        : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o), m_isBattleBot(isBattleBot), m_battlegroundId(bgId)
+        : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o), m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false)
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
@@ -241,14 +241,24 @@ public:
     void StopMoving();
     void StartNewPathToNode();
     bool StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun);
-    void ShowCurrentPath();
     void OnPathComplete();
+
+    // Visual path and nodes
+    void ShowCurrentPath();
+    bool m_showPath = false;
 
     uint32 m_currentNodeId;
     std::vector<TravelPath> m_currentPath;
     size_t m_currentPathIndex;
     bool m_isSpecificDestinationPath;
+
+    // Corpse Running
     bool m_isRunningToCorpse;
+    ShortTimeTracker m_corpseRunTimer;
+    static const int32 CORPSE_RUN_TIMEOUT = 120000; // 2 minutes in milliseconds
+
+    // Node Actions
+    bool ExecuteNodeAction(uint32 nodeId);
 
     //void LoadGrindingDBWaypoints();
     //void StartNewGrindPath();

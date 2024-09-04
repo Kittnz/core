@@ -20,11 +20,11 @@
 #include <regex>
 #include <random>
 
-#define MB_UPDATE_INTERVAL 1000
-#define MB_MIN_FOLLOW_DIST 3.0f
-#define MB_MAX_FOLLOW_DIST 6.0f
-#define MB_MIN_FOLLOW_ANGLE 0.0f
-#define MB_MAX_FOLLOW_ANGLE 6.0f
+#define WB_UPDATE_INTERVAL 1000
+#define WB_MIN_FOLLOW_DIST 3.0f
+#define WB_MAX_FOLLOW_DIST 6.0f
+#define WB_MIN_FOLLOW_ANGLE 0.0f
+#define WB_MAX_FOLLOW_ANGLE 6.0f
 
 #define GO_WSG_DROPPED_SILVERWING_FLAG 179785
 #define GO_WSG_DROPPED_WARSONG_FLAG 179786
@@ -403,7 +403,7 @@ bool WorldBotAI::AttackStart(Unit* pVictim)
 
     if (me->Attack(pVictim, true))
     {
-        //ClearPath();
+        ClearPath();
         StopMoving();
 
         if ((m_role == ROLE_RANGE_DPS || m_role == ROLE_HEALER) &&
@@ -435,9 +435,7 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
     if (ShouldIgnoreCombat())
         return nullptr;
 
-
     // 1. Check units we are currently in combat with.
-
     std::list<Unit*> targets;
     HostileReference* pReference = me->GetHostileRefManager().getFirst();
 
@@ -477,7 +475,6 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
     }
 
     // 2. Find enemy player in range.
-
     std::list<Player*> players;
     me->GetAlivePlayerListInRange(me, players, VISIBILITY_DISTANCE_NORMAL);
     float const maxAggroDistance = GetMaxAggroDistanceForMap();
@@ -514,7 +511,6 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
     }
 
     // 3. Check party attackers.
-
     if (Group* pGroup = me->GetGroup())
     {
         for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
@@ -739,7 +735,10 @@ void WorldBotAI::OnPlayerLogin()
 
 void WorldBotAI::ShowCurrentPath()
 {
-    sWorldBotTravelSystem.ShowCurrentPath(me, m_currentPath, m_currentPathIndex, m_currentNodeId);
+    if (m_showPath)
+    {
+        sWorldBotTravelSystem.ShowCurrentPath(me, m_currentPath, m_currentPathIndex, m_currentPath[m_currentPathIndex].nodeId);
+    }
 }
 
 void WorldBotAI::UpdateWaypointMovement()
@@ -916,7 +915,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     // General AI timer
     m_updateTimer.Update(diff);
     if (m_updateTimer.Passed())
-        m_updateTimer.Reset(MB_UPDATE_INTERVAL);
+        m_updateTimer.Reset(WB_UPDATE_INTERVAL);
     else
         return;
 
@@ -1079,6 +1078,18 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         ResetSpellData();
         PopulateSpellData();
         m_resetSpellData = false;
+    }
+
+    // Corpse Running
+    if (m_isRunningToCorpse)
+    {
+        m_corpseRunTimer.Update(diff);
+        if (m_corpseRunTimer.Passed())
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s corpse run timed out, teleporting to resurrect", me->GetName());
+            TeleportResurrect();
+            return;
+        }
     }
 
     // dual bot
@@ -1422,7 +1433,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     if (!pVictim)
                     {
                         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
-                            me->GetMotionMaster()->MoveFollow(pLeader, urand(MB_MIN_FOLLOW_DIST, MB_MAX_FOLLOW_DIST), frand(MB_MIN_FOLLOW_ANGLE, MB_MAX_FOLLOW_ANGLE));
+                            me->GetMotionMaster()->MoveFollow(pLeader, urand(WB_MIN_FOLLOW_DIST, WB_MAX_FOLLOW_DIST), frand(WB_MIN_FOLLOW_ANGLE, WB_MAX_FOLLOW_ANGLE));
                         return;
                     }
                     else

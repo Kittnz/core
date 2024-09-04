@@ -372,7 +372,7 @@ void WorldBotAI::StartNewPathToNode()
     MoveToNextPoint();
 
     // Show the new path
-    ShowCurrentPath();
+    //ShowCurrentPath();
 }
 
 bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun)
@@ -432,13 +432,17 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: New path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
 
     m_isSpecificDestinationPath = true;
+
+    // Corpse running
     m_isRunningToCorpse = isCorpseRun;
+    if (isCorpseRun)
+        m_corpseRunTimer.Reset(CORPSE_RUN_TIMEOUT);
 
     // Start moving to the first point in the path
     MoveToNextPoint();
 
     // Show the new path
-    ShowCurrentPath();
+    //ShowCurrentPath();
 
     return true;
 }
@@ -527,6 +531,8 @@ void WorldBotAI::MoveToNextPoint()
     me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x, pathPoint.y, pathPoint.z, MOVE_PATHFINDING);
 
     m_currentPathIndex++;
+
+    ShowCurrentPath();
 }
 
 void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
@@ -539,15 +545,23 @@ void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
         {
             if (data == m_currentPath[m_currentPathIndex - 1].nr)
             {
-                MoveToNextPoint();
+                uint32 currentNodeId = m_currentPath[m_currentPathIndex - 1].nodeId;
+                if (ExecuteNodeAction(currentNodeId))
+                {
+                    MoveToNextPoint();
+                }
+                else
+                {
+                    // Handle the case where the node action couldn't be executed
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Failed to execute action for node %u", currentNodeId);
+                    // You might want to implement some fallback behavior here
+                }
             }
             else
             {
                 sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unexpected movement point reached for bot %s", me->GetName());
             }
         }
-
-        ActivateNearbyAreaTrigger();
     }
 }
 
@@ -563,9 +577,17 @@ void WorldBotAI::OnPathComplete()
         m_isRunningToCorpse = false;
         if (me->GetDeathState() == DEAD)
         {
-            me->ResurrectPlayer(0.5f);
-            me->SpawnCorpseBones();
-            me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+            if (me->GetCorpse() && me->IsWithinDistInMap(me->GetCorpse(), INTERACTION_DISTANCE))
+            {
+                me->ResurrectPlayer(0.5f);
+                me->SpawnCorpseBones();
+                me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+            }
+            else
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s reached end of corpse run path but corpse not found, teleporting to resurrect", me->GetName());
+                TeleportResurrect();
+            }
         }
     }
     else if (m_isSpecificDestinationPath)
@@ -581,7 +603,118 @@ void WorldBotAI::OnPathComplete()
     m_isSpecificDestinationPath = false;
 }
 
+uint32 GetRandomTaxiNode(uint32 mapid, Team team)
+{
+    std::vector<uint32> nodeIds;
+    for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
+    {
+        TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
+        if (node)
+        {
+            if (node->map_id == mapid)
+            {
+                if (node->MountCreatureID[team == ALLIANCE ? 1 : 0])
+                    nodeIds.push_back(node->ID);
+            }
+        }
+    }
+
+    uint32 id = 0;
+    id = SelectRandomContainerElement(nodeIds);
+    return id;
+}
+
+bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
+{
+    auto linkRange = sWorldBotTravelSystem.GetNodeLinks(nodeId);
+    for (auto it = linkRange.first; it != linkRange.second; ++it)
+    {
+        const TravelNodeLink& link = it->second;
+        TravelNodePathType linkType = static_cast<TravelNodePathType>(link.type);
+        uint32 linkObject = link.object;
+
+        switch (linkType)
+        {
+        case TravelNodePathType::Walk:
+            // No special action needed for walking
+            return true;
+
+        case TravelNodePathType::AreaTrigger:
+            ActivateNearbyAreaTrigger();
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: AreaTrigger action triggered for node %u", nodeId);
+            return true;
+
+        case TravelNodePathType::Transport:
+            // Placeholder for Transport action
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Transport action not implemented for node %u", nodeId);
+            return false;
+
+        case TravelNodePathType::FlightPath:
+        {
+            me->StopMoving();
+            ClearPath();
+
+            // Make sure we have enough money
+            if (me->GetMoney() < 10000000)
+                me->SetMoney(10000000);
+
+            std::vector<uint32> nodes;
+            uint32 node_local = sObjectMgr.GetNearestTaxiNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
+            uint32 node_destination = 0;
+
+            if (linkObject != 0)
+                node_destination = linkObject; // Use linkObject as the destination node
+            else
+                node_destination = GetRandomTaxiNode(me->GetMapId(), me->GetTeam()); // Use random taxi node if linkObject is 0
+
+            TaxiNodesEntry const* node_local_info = sObjectMgr.GetTaxiNodeEntry(node_local);
+            TaxiNodesEntry const* node_destination_info = sObjectMgr.GetTaxiNodeEntry(node_destination);
+
+            if (node_destination != node_local)
+            {
+                nodes.push_back(node_local);
+                nodes.push_back(node_destination);
+                if (me->ActivateTaxiPathTo(nodes, nullptr, true))
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s activated flight path from node %u (%s) to node %u (%s)", me->GetName(), node_local, node_local_info->name, node_destination, node_destination_info->name);
+                    return true;
+                }
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to activate flight path from node %u to node %u", me->GetName(), node_local, node_destination);
+                    return false;
+                }
+            }
+            else
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s attempted to fly to the same node %u", me->GetName(), node_local);
+                return false;
+            }
+            return false;
+        }
+        case TravelNodePathType::TeleportSpell:
+            // Placeholder for TeleportSpell action
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: TeleportSpell action not implemented for node %u", nodeId);
+            return false;
+
+        case TravelNodePathType::StaticPortal:
+            // Placeholder for StaticPortal action
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: StaticPortal action not implemented for node %u", nodeId);
+            return false;
+
+        case TravelNodePathType::None:
+        default:
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unknown or None type for node %u", nodeId);
+            return false;
+        }
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid links found for node %u", nodeId);
+    return false;
+}
+
 #define SPELL_RED_GLOW 20370
+#define NPC_SPAWN_POINT 2
 
 void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId)
 {
@@ -614,9 +747,9 @@ void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<Travel
     // Show the current node and destination node
     if (const TravelNode* currentNode = GetNode(currentNodeId))
     {
-        if (Creature* pNode = bot->SummonCreature(VISUAL_WAYPOINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (Creature* pNode = bot->SummonCreature(NPC_SPAWN_POINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
-            pNode->SetObjectScale(1.0f);
+            pNode->SetObjectScale(5.0f);
             pNode->CastSpell(pNode, SPELL_RED_GLOW, true);
             visuals.push_back(pNode->GetObjectGuid());
         }
