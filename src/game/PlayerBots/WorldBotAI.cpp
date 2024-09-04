@@ -760,7 +760,7 @@ void WorldBotAI::UpdateWaypointMovement()
 
         if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex, m_isSpecificDestinationPath, m_isRunningToCorpse))
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s resuming current path", me->GetName());
+            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s resuming current path", me->GetName());
             MoveToNextPoint();
             return;
         }
