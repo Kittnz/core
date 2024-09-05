@@ -140,7 +140,6 @@ public:
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
-        m_updateResurrectTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
         BotLastChatTime = sWorld.GetGameTime();
         m_isSpecificDestinationPath = false;
@@ -212,9 +211,7 @@ public:
     uint8 m_battlegroundId = 0;
     ShortTimeTracker m_updateTimer;
     ShortTimeTracker m_updateMoveTimer;
-    ShortTimeTracker m_updateResurrectTimer;
     bool m_allowedToMove = true;
-    bool m_resurrect = false;
     ObjectGuid m_leaderGuid;
     uint8 m_race = 0;
     uint8 m_class = 0;

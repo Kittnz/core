@@ -195,6 +195,7 @@ set (game_SRCS
     PlayerBots/WorldBotAI.cpp
     PlayerBots/WorldBotCombatAI.cpp
     PlayerBots/WorldBotTravelSystem.cpp
+    PlayerBots/WorldBotChat.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
