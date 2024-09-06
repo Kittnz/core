@@ -731,7 +731,13 @@ void WorldBotAI::ShowCurrentPath()
 {
     if (m_showPath)
     {
-        sWorldBotTravelSystem.ShowCurrentPath(me, m_currentPath, m_currentPathIndex, m_currentPath[m_currentPathIndex].nodeId);
+        uint32 currentNodeId = 0;
+        if (!m_currentPath.empty() && m_currentPathIndex < m_currentPath.size())
+        {
+            currentNodeId = m_currentPath[m_currentPathIndex].nodeId;
+        }
+
+        sWorldBotTravelSystem.ShowCurrentPath(me, m_currentPath, m_currentPathIndex, currentNodeId);
     }
 }
 

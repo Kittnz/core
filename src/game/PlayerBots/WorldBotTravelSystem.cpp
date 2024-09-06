@@ -525,8 +525,6 @@ void WorldBotAI::MoveToNextPoint()
     me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x, pathPoint.y, pathPoint.z, MOVE_PATHFINDING);
 
     m_currentPathIndex++;
-
-    //ShowCurrentPath();
 }
 
 void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
@@ -710,7 +708,8 @@ void WorldBotTravelSystem::ShowCurrentPath(Player * me, const std::vector<Travel
 
     std::vector<ObjectGuid>& visuals = m_pathVisuals[me->GetObjectGuid()];
 
-    for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
+    size_t startIndex = std::min(currentPathIndex, currentPath.size() - 1);
+    for (size_t i = startIndex; i < currentPath.size(); ++i)
     {
         const TravelPath& pathPoint = currentPath[i];
         if (Creature* pWaypoint = me->SummonCreature(VISUAL_WAYPOINT, pathPoint.x, pathPoint.y, pathPoint.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
@@ -751,13 +750,16 @@ void WorldBotTravelSystem::ShowCurrentPath(Player * me, const std::vector<Travel
     }
 
     // Show the current node (start node)
-    if (const TravelNode* currentNode = GetNode(currentNodeId))
+    if (currentNodeId != 0)
     {
-        if (Creature* pStartNode = me->SummonCreature(NPC_SPAWN_POINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (const TravelNode* currentNode = GetNode(currentNodeId))
         {
-            pStartNode->SetObjectScale(5.0f);
-            pStartNode->CastSpell(pStartNode, SPELL_RED_GLOW, true);
-            visuals.push_back(pStartNode->GetObjectGuid());
+            if (Creature* pStartNode = me->SummonCreature(NPC_SPAWN_POINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+            {
+                pStartNode->SetObjectScale(5.0f);
+                pStartNode->CastSpell(pStartNode, SPELL_RED_GLOW, true);
+                visuals.push_back(pStartNode->GetObjectGuid());
+            }
         }
     }
 
@@ -790,7 +792,7 @@ void WorldBotTravelSystem::ShowAllPathsAndNodes(Player* me)
         const TravelNode& node = nodePair.second;
         if (Creature* pNode = me->SummonCreature(VISUAL_WAYPOINT, node.x, node.y, node.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
-            pNode->SetObjectScale(1.0f);
+            pNode->SetObjectScale(5.0f);
             pNode->CastSpell(pNode, SPELL_RED_GLOW, true);
             visuals.push_back(pNode->GetObjectGuid());
         }
