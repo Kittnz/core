@@ -372,6 +372,7 @@ void WorldBotAI::StartNewPathToNode()
     ShowCurrentPath();
 }
 
+#define SPELL_UNDYING_SOUL 20939
 bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun)
 {
     m_currentPath.clear();
@@ -409,6 +410,17 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     if (m_currentPath.empty())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
+
+        if (me->IsAlive())
+            me->CastSpell(me, SPELL_UNDYING_SOUL, false);
+
+        // Teleporting bot to nearest graveyard
+        WorldSafeLocsEntry const* ClosestGrave = sObjectMgr.GetClosestGraveYard(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
+        if (!ClosestGrave) // No nearby graveyards (stuck in void?). Send ally to Westfall, Horde to Barrens.
+            ClosestGrave = me->GetTeamId() ? sWorldSafeLocsStore.LookupEntry(10) : sWorldSafeLocsStore.LookupEntry(4);
+        if (ClosestGrave)
+            me->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID), 0);
+
         return false;
     }
 
@@ -444,7 +456,7 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     return true;
 }
 
-bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun)
+bool WorldBotTravelSystem::ResumePath(Player* me, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun)
 {
     if (currentPath.empty())
     {
@@ -459,7 +471,7 @@ bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& c
     for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
     {
         const TravelPath& pathPoint = currentPath[i];
-        float distance = GetDistance3D(*player, pathPoint);
+        float distance = GetDistance3D(*me, pathPoint);
         if (distance < shortestDistance)
         {
             shortestDistance = distance;
@@ -486,7 +498,7 @@ bool WorldBotTravelSystem::ResumePath(Player* player, std::vector<TravelPath>& c
     if (shortestDistance > maxResumeDistance)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s",
-            player->GetName(), shortestDistance, maxResumeDistance,
+            me->GetName(), shortestDistance, maxResumeDistance,
             isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"));
         return false;
     }
@@ -641,7 +653,7 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 
         case TravelNodePathType::FlightPath:
         {
-            me->StopMoving();
+            StopMoving();
             ClearPath();
 
             // Make sure we have enough money
@@ -712,31 +724,25 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 #define SPELL_RED_SKULLS 20368
 #define NPC_SPAWN_POINT 2
 
-void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId)
+void WorldBotTravelSystem::ShowCurrentPath(Player* me, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId)
 {
-    ClearPathVisuals(bot);
+    ClearPathVisuals(me);
 
     if (currentPath.empty())
     {
-        bot->GetSession()->SendNotification("No current path to display.");
+        me->GetSession()->SendNotification("No current path to display.");
         return;
     }
 
-    std::vector<ObjectGuid>& visuals = m_pathVisuals[bot->GetObjectGuid()];
+    std::vector<ObjectGuid>& visuals = m_pathVisuals[me->GetObjectGuid()];
 
     for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
     {
         const TravelPath& pathPoint = currentPath[i];
-        if (Creature* pWaypoint = bot->SummonCreature(VISUAL_WAYPOINT, pathPoint.x, pathPoint.y, pathPoint.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (Creature* pWaypoint = me->SummonCreature(VISUAL_WAYPOINT, pathPoint.x, pathPoint.y, pathPoint.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
             pWaypoint->SetObjectScale(0.5f);
             visuals.push_back(pWaypoint->GetObjectGuid());
-
-            /*if (i == currentPathIndex)
-            {
-                // Highlight the next point in the path
-                pWaypoint->CastSpell(pWaypoint, SPELL_RED_GLOW, true);
-            }*/
 
             // Color the waypoint based on its type
             uint32 glowSpell = SPELL_RED_GLOW;
@@ -773,7 +779,7 @@ void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<Travel
     // Show the current node (start node)
     if (const TravelNode* currentNode = GetNode(currentNodeId))
     {
-        if (Creature* pStartNode = bot->SummonCreature(NPC_SPAWN_POINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (Creature* pStartNode = me->SummonCreature(NPC_SPAWN_POINT, currentNode->x, currentNode->y, currentNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
             pStartNode->SetObjectScale(5.0f);
             pStartNode->CastSpell(pStartNode, SPELL_RED_GLOW, true);
@@ -787,7 +793,7 @@ void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<Travel
         const TravelPath& lastPathPoint = currentPath.back();
         if (const TravelNode* endNode = GetNode(lastPathPoint.toNodeId))
         {
-            if (Creature* pEndNode = bot->SummonCreature(NPC_SPAWN_POINT, endNode->x, endNode->y, endNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+            if (Creature* pEndNode = me->SummonCreature(NPC_SPAWN_POINT, endNode->x, endNode->y, endNode->z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
             {
                 pEndNode->SetObjectScale(5.0f);
                 pEndNode->CastSpell(pEndNode, SPELL_ARROW, true);
@@ -796,19 +802,19 @@ void WorldBotTravelSystem::ShowCurrentPath(Player* bot, const std::vector<Travel
         }
     }
 
-    bot->GetSession()->SendNotification("Showing current path with colored nodes based on type.");
+    me->GetSession()->SendNotification("Showing current path with colored nodes based on type.");
 }
 
-void WorldBotTravelSystem::ShowAllPathsAndNodes(Player* player)
+void WorldBotTravelSystem::ShowAllPathsAndNodes(Player* me)
 {
-    ClearPathVisuals(player);
+    ClearPathVisuals(me);
 
-    std::vector<ObjectGuid>& visuals = m_pathVisuals[player->GetObjectGuid()];
+    std::vector<ObjectGuid>& visuals = m_pathVisuals[me->GetObjectGuid()];
 
     for (const auto& nodePair : m_travelNodes)
     {
         const TravelNode& node = nodePair.second;
-        if (Creature* pNode = player->SummonCreature(VISUAL_WAYPOINT, node.x, node.y, node.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (Creature* pNode = me->SummonCreature(VISUAL_WAYPOINT, node.x, node.y, node.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
             pNode->SetObjectScale(1.0f);
             pNode->CastSpell(pNode, SPELL_RED_GLOW, true);
@@ -819,24 +825,24 @@ void WorldBotTravelSystem::ShowAllPathsAndNodes(Player* player)
     for (const auto& pathPair : m_travelPaths)
     {
         const TravelPath& path = pathPair.second;
-        if (Creature* pWaypoint = player->SummonCreature(VISUAL_WAYPOINT, path.x, path.y, path.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
+        if (Creature* pWaypoint = me->SummonCreature(VISUAL_WAYPOINT, path.x, path.y, path.z, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true))
         {
             pWaypoint->SetObjectScale(0.5f);
             visuals.push_back(pWaypoint->GetObjectGuid());
         }
     }
 
-    player->GetSession()->SendNotification("Showing all paths and nodes.");
+    me->GetSession()->SendNotification("Showing all paths and nodes.");
 }
 
-void WorldBotTravelSystem::ClearPathVisuals(Player* bot)
+void WorldBotTravelSystem::ClearPathVisuals(Player* me)
 {
-    auto it = m_pathVisuals.find(bot->GetObjectGuid());
+    auto it = m_pathVisuals.find(me->GetObjectGuid());
     if (it != m_pathVisuals.end())
     {
         for (const auto& guid : it->second)
         {
-            if (Creature* visual = bot->GetMap()->GetCreature(guid))
+            if (Creature* visual = me->GetMap()->GetCreature(guid))
             {
                 visual->RemoveFromWorld();
                 visual->AddObjectToRemoveList();
