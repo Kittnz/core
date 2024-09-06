@@ -129,19 +129,26 @@ enum WorldBotTasks
     TASK_LAST = TASK_PROTECTOR, // Last task
 };
 
-typedef std::vector<std::string> Speech;
+struct ChatData {
+    uint64 unixtimems;
+    uint32 guid;
+    std::string senderName;
+    std::string text;
+    uint32 chatType;
+    std::string channelName;
+};
 
 class WorldBotAI : public CombatBotBaseAI
 {
 public:
 
     WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
-        : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o), m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false)
+        : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o),
+        m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false), m_currentNodeId(0), m_currentPathIndex(0), m_isRunningToCorpse(false)
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
-        BotLastChatTime = sWorld.GetGameTime();
         m_isSpecificDestinationPath = false;
     }
 
@@ -263,24 +270,6 @@ public:
     // BG Movement
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
-    // Chat System
-    std::vector<BotChatRespondsQueue> m_chatGeneralRespondsQueue;
-    std::vector<BotChatRespondsQueue> m_chatTradeRespondsQueue;
-    std::vector<BotChatRespondsQueue> m_chatLFGRespondsQueue;
-    std::vector<BotChatRespondsQueue> m_chatWorldRespondsQueue;
-    std::vector<BotChatRespondsQueue> m_chatWhisperPlayerRespondsQueue;
-    std::vector<BotChatRespondsQueue> m_chatSayYellPlayerRespondsQueue;
-    void LoadBotChat();
-    void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName);
-    void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    void HandleGeneralChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    void HandleTradeChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    void HandleLFGChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    void HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    ShortTimeTracker m_updateChatTimer;
-    //uint8 m_BotChatCount = 0;
-    time_t BotLastChatTime;
-
     // Task System
     uint8 currentTaskID = 0;
     std::string DestName = "";
@@ -293,6 +282,9 @@ public:
     void SetExploreDestination();
 
     //std::vector<WorldBotPath*> vPaths_Grind;
+
+private:
+    ShortTimeTracker m_updateChatTimer;
 };
 
 #endif

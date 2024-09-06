@@ -1,5 +1,6 @@
 #include "WorldBotAI.h"
 #include "WorldBotTravelSystem.h"
+#include "WorldBotChat.h"
 #include "BattleGround.h"
 #include "Player.h"
 #include "Log.h"
@@ -681,17 +682,17 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
                     packet >> guid1;
                     packet >> guid2;
                     packet >> textLen >> message >> chatTag;
-                    BotChatAddToQueue(me, msgtype, guid1, guid2, message, chanName);
+                    sWorldBotChat.HandleChatMessage(me, msgtype, guid1, message, "");
                     break;
                 case CHAT_MSG_WHISPER:
                     packet >> guid1;
                     packet >> textLen >> message >> chatTag;
-                    BotChatAddToQueue(me, msgtype, guid1, guid2, message, chanName);
+                    sWorldBotChat.HandleChatMessage(me, msgtype, guid1, message, "");
                     break;
                 case CHAT_MSG_CHANNEL:
                     packet >> chanName >> unused >> guid1 >> unused;
                     packet >> message;
-                    BotChatAddToQueue(me, msgtype, guid1, 0, message, chanName);
+                    sWorldBotChat.HandleChatMessage(me, msgtype, guid1, message, chanName);
                     break;
                 default:
                     break;
@@ -930,18 +931,18 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     }
 
     // Chat timer
-    m_updateChatTimer.Update(diff);
+    /*m_updateChatTimer.Update(diff);
     if (m_updateChatTimer.Passed())
     {
         // say / yell chat
-        /*if (!m_chatSayYellPlayerRespondsQueue.empty())
+        if (!m_chatSayYellPlayerRespondsQueue.empty())
         {
             for (auto& itr : m_chatSayYellPlayerRespondsQueue)
             {
                 HandleChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
             }
             m_chatSayYellPlayerRespondsQueue.clear();
-        }*/
+        }
 
         // whisper chat
         if (!m_chatWhisperPlayerRespondsQueue.empty())
@@ -994,6 +995,13 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
 
         m_updateChatTimer.Reset(2000);
+    }*/
+
+    m_updateChatTimer.Update(diff);
+    if (m_updateChatTimer.Passed())
+    {
+        m_updateChatTimer.Reset(urand(30000, 120000)); // Random time between 30 seconds and 2 minutes
+        sWorldBotChat.SendChatMessage(me);
     }
 
     if (!me->IsInWorld() || me->IsBeingTeleported())

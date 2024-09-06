@@ -397,6 +397,7 @@ set (game_SRCS
     PlayerBots/BattleBotWaypoints.h
     PlayerBots/WorldBotAI.h
     PlayerBots/WorldBotTravelSystem.h
+    PlayerBots/WorldBotChat.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h

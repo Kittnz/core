@@ -16,6 +16,7 @@
 #include "BattleGroundMgr.h"
 #include "WorldBotAI.h"
 #include "WorldBotTravelSystem.h"
+#include "WorldBotChat.h"
 #include "Language.h"
 #include "Spell.h"
 
@@ -155,12 +156,11 @@ void PlayerBotMgr::Load()
     bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
     if (worldBotEnabled)
     {
-        WorldBotAI* ai = nullptr;
-
         // Load paths
         sWorldBotTravelSystem.LoadTravelNodes();
         sWorldBotTravelSystem.LoadTravelNodeLinks();
         sWorldBotTravelSystem.LoadTravelPaths();
+        sWorldBotChat.LoadPlayerChat();
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
@@ -173,9 +173,6 @@ void PlayerBotMgr::Load()
 
         // Load Area POI's
         //WorldBotLoadAreaPOI();
-
-        // Load chat
-        ai->LoadBotChat();
     }
 }
 
