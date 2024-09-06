@@ -547,7 +547,7 @@ void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
                 else
                 {
                     // Handle the case where the node action couldn't be executed
-                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Failed to execute action for node %u", currentNodeId);
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Failed to execute action for node %u", currentNodeId);
                     // You might want to implement some fallback behavior here
                 }
             }
@@ -652,43 +652,18 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
             if (me->GetMoney() < 10000000)
                 me->SetMoney(10000000);
 
-            //std::vector<uint32> nodes;
-            //uint32 node_local = sObjectMgr.GetNearestTaxiNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
-            //uint32 node_destination = 0;
-
             TaxiPathEntry const* tEntry = sTaxiPathStore.LookupEntry(linkObject);
             if (tEntry)
             {
-                //if (me->m_taxi.IsTaximaskNodeKnown(tEntry->from))
+                if(me->ActivateTaxiPathTo({ tEntry->from, tEntry->to }, nullptr, true))
                 {
-                    //node_destination = GetRandomTaxiNode(me->GetMapId(), me->GetTeam()); // Use random taxi node if linkObject is 0
-
-                    //TaxiNodesEntry const* node_local_info = sObjectMgr.GetTaxiNodeEntry(node_local);
-                    //TaxiNodesEntry const* node_destination_info = sObjectMgr.GetTaxiNodeEntry(tEntry->to);
-
-                    //if (node_destination != node_local)
-                    {
-                        //nodes.push_back(node_local);
-                        //nodes.push_back(node_destination);
-                        //if (me->ActivateTaxiPathTo(nodes, nullptr, true))
-                        if(me->ActivateTaxiPathTo({ tEntry->from, tEntry->to }, nullptr, true))
-                        {
-                            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s activated flight path from node %u (%s) to node %u (%s)", me->GetName(), node_local, node_local_info->name, node_destination, node_destination_info->name);
-                            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s activated flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
-                            return true;
-                        }
-                        else
-                        {
-                            //sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to activate flight path from node %u (%s) to node %u (%s)", me->GetName(), node_local, node_local_info->name, node_destination, node_destination_info->name);
-                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to activate flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
-                            return false;
-                        }
-                    }
-                    /*else
-                    {
-                        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s attempted to fly to the same node", me->GetName());
-                        return false;
-                    }*/
+                    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s activated flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
+                    return true;
+                }
+                else
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s failed to activate flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
+                    return false;
                 }
             }
             else
