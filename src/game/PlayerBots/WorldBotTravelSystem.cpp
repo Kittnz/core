@@ -108,13 +108,6 @@ void WorldBotTravelSystem::LoadTravelPaths()
     } while (result->NextRow());
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u travel path points", (uint32)m_travelPaths.size());
-
-    // Debug output
-    /*for (const auto& pair : m_nodeConnections)
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has %zu connections",
-            pair.first, pair.second.size());
-    }*/
 }
 
 const TravelNode* WorldBotTravelSystem::GetNearestNode(float x, float y, float z, uint32 mapId) const
@@ -222,7 +215,7 @@ std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, 
 
 std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 endNodeId) const
 {
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Finding path from node %u to node %u", startNodeId, endNodeId);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Finding path from node %u to node %u", startNodeId, endNodeId);
 
     std::queue<uint32> queue;
     std::unordered_map<uint32, uint32> cameFrom;
@@ -234,31 +227,31 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         uint32 current = queue.front();
         queue.pop();
 
-        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Examining node %u", current);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Examining node %u", current);
 
         if (current == endNodeId)
         {
-            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Reached end node %u", endNodeId);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Reached end node %u", endNodeId);
             break;
         }
 
         const auto& connections = m_nodeConnections.find(current);
         if (connections != m_nodeConnections.end())
         {
-            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has %zu connections", current, connections->second.size());
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Node %u has %zu connections", current, connections->second.size());
             for (uint32 next : connections->second)
             {
                 if (cameFrom.find(next) == cameFrom.end())
                 {
                     queue.push(next);
                     cameFrom[next] = current;
-                    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Added node %u to queue", next);
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Added node %u to queue", next);
                 }
             }
         }
         else
         {
-            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Node %u has no connections", current);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Node %u has no connections", current);
         }
     }
 
@@ -275,7 +268,7 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         nodePath.push_back(startNodeId);
         std::reverse(nodePath.begin(), nodePath.end());
 
-        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu nodes", startNodeId, endNodeId, nodePath.size());
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu nodes", startNodeId, endNodeId, nodePath.size());
 
         // Convert node path to full TravelPath
         for (size_t i = 0; i < nodePath.size() - 1; ++i)
@@ -290,13 +283,13 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         }
     }
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu points", startNodeId, endNodeId, fullPath.size());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu points", startNodeId, endNodeId, fullPath.size());
 
     // Log details of each point in the path
     for (size_t i = 0; i < fullPath.size(); ++i)
     {
         const TravelPath& point = fullPath[i];
-        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Path point %zu: Node %u to %u, Map %u, Coords (%.2f, %.2f, %.2f)", i, point.nodeId, point.toNodeId, point.mapId, point.x, point.y, point.z);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Path point %zu: Node %u to %u, Map %u, Coords (%.2f, %.2f, %.2f)", i, point.nodeId, point.toNodeId, point.mapId, point.x, point.y, point.z);
     }
 
     return fullPath;
@@ -328,7 +321,7 @@ void WorldBotAI::StartNewPathToNode()
     m_currentPath.clear();
     m_currentPathIndex = 0;
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path", me->GetName());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s starting new path", me->GetName());
 
     const TravelNode* nearestNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
 
@@ -338,7 +331,7 @@ void WorldBotAI::StartNewPathToNode()
         return;
     }
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Nearest node for bot %s is %u at (%.2f, %.2f, %.2f)", me->GetName(), nearestNode->id, nearestNode->x, nearestNode->y, nearestNode->z);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Nearest node for bot %s is %u at (%.2f, %.2f, %.2f)", me->GetName(), nearestNode->id, nearestNode->x, nearestNode->y, nearestNode->z);
 
     uint32 destNodeId = sWorldBotTravelSystem.GetRandomNodeId(me->GetMapId(), nearestNode->id);
 
@@ -348,11 +341,11 @@ void WorldBotAI::StartNewPathToNode()
         return;
     }
 
-   // sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Destination node for bot %s is %u", me->GetName(), destNodeId);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Destination node for bot %s is %u", me->GetName(), destNodeId);
 
     m_currentPath = sWorldBotTravelSystem.FindPath(nearestNode->id, destNodeId);
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: FindPath returned %zu points for bot %s", m_currentPath.size(), me->GetName());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: FindPath returned %zu points for bot %s", m_currentPath.size(), me->GetName());
 
     if (m_currentPath.empty())
     {
@@ -360,7 +353,7 @@ void WorldBotAI::StartNewPathToNode()
         return;
     }
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: New path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: New path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
 
     // Start moving to the first point in the path
     MoveToNextPoint();
@@ -374,7 +367,7 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
 {
     m_currentPath.clear();
     m_currentPathIndex = 0;
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path to specific destination (%.2f, %.2f, %.2f)%s", 
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path to specific destination (%.2f, %.2f, %.2f)%s",
         me->GetName(), x, y, z, isCorpseRun ? " (Corpse Run)" : "");
 
     const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
@@ -407,35 +400,37 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     if (m_currentPath.empty())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
-
-        if (me->IsAlive())
-            me->CastSpell(me, SPELL_UNDYING_SOUL, false);
-
-        // Teleporting bot to nearest graveyard
-        WorldSafeLocsEntry const* ClosestGrave = sObjectMgr.GetClosestGraveYard(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
-        if (!ClosestGrave) // No nearby graveyards (stuck in void?). Send ally to Westfall, Horde to Barrens.
-            ClosestGrave = me->GetTeamId() ? sWorldSafeLocsStore.LookupEntry(10) : sWorldSafeLocsStore.LookupEntry(4);
-        if (ClosestGrave)
-            me->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID), 0);
-
         return false;
     }
 
-    // Add the final destination point if it's not exactly at the last node
-    if (x != endNode->x || y != endNode->y || z != endNode->z)
+    // Find the closest point on the path to the specific destination
+    float shortestDistance = std::numeric_limits<float>::max();
+    size_t closestIndex = 0;
+    for (size_t i = 0; i < m_currentPath.size(); ++i)
     {
-        TravelPath finalPoint;
-        finalPoint.nodeId = endNode->id;
-        finalPoint.toNodeId = 0;
-        finalPoint.nr = m_currentPath.back().nr + 1;
-        finalPoint.mapId = mapId;
-        finalPoint.x = x;
-        finalPoint.y = y;
-        finalPoint.z = z;
-        m_currentPath.push_back(finalPoint);
+        float distance = sWorldBotTravelSystem.GetDistance3D(x, y, z, m_currentPath[i]);
+        if (distance < shortestDistance)
+        {
+            shortestDistance = distance;
+            closestIndex = i;
+        }
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: New path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
+    // Truncate the path at the closest point
+    m_currentPath.resize(closestIndex + 1);
+
+    // Add the final destination point
+    TravelPath finalPoint;
+    finalPoint.nodeId = m_currentPath.back().toNodeId;
+    finalPoint.toNodeId = 0;
+    finalPoint.nr = m_currentPath.back().nr + 1;
+    finalPoint.mapId = mapId;
+    finalPoint.x = x;
+    finalPoint.y = y;
+    finalPoint.z = z;
+    m_currentPath.push_back(finalPoint);
+
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: New optimized path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
 
     m_isSpecificDestinationPath = true;
 
@@ -494,8 +489,7 @@ bool WorldBotTravelSystem::ResumePath(Player* me, std::vector<TravelPath>& curre
 
     if (shortestDistance > maxResumeDistance)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s",
-            me->GetName(), shortestDistance, maxResumeDistance,
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s", me->GetName(), shortestDistance, maxResumeDistance,
             isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"));
         return false;
     }
@@ -504,11 +498,11 @@ bool WorldBotTravelSystem::ResumePath(Player* me, std::vector<TravelPath>& curre
     if (foundNearerPoint)
     {
         currentPathIndex = nearestIndex;
-        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming %s at index %zu, distance %.2f", player->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex, shortestDistance);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s resuming %s at index %zu, distance %.2f", me->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex, shortestDistance);
     }
     else
     {
-        //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s continuing on current %s at index %zu", player->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s continuing on current %s at index %zu", me->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex);
     }
 
     return true;
@@ -526,7 +520,7 @@ void WorldBotAI::MoveToNextPoint()
 
     const TravelPath& pathPoint = m_currentPath[m_currentPathIndex];
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s moving to point %u/%zu: %.2f, %.2f, %.2f", me->GetName(), m_currentPathIndex + 1, m_currentPath.size(), pathPoint.x, pathPoint.y, pathPoint.z);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s moving to point %u/%zu: %.2f, %.2f, %.2f", me->GetName(), m_currentPathIndex + 1, m_currentPath.size(), pathPoint.x, pathPoint.y, pathPoint.z);
 
     me->GetMotionMaster()->MovePoint(pathPoint.nr, pathPoint.x, pathPoint.y, pathPoint.z, MOVE_PATHFINDING);
 
@@ -567,7 +561,7 @@ void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 
 void WorldBotAI::OnPathComplete()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has completed its path", me->GetName());
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has completed its path", me->GetName());
 
     m_currentPath.clear();
     m_currentPathIndex = 0;
@@ -641,12 +635,12 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 
         case TravelNodePathType::AreaTrigger:
             //ActivateNearbyAreaTrigger();
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: AreaTrigger action triggered for node %u", nodeId);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: AreaTrigger action triggered for node %u", nodeId);
             return true;
 
         case TravelNodePathType::Transport:
             // Placeholder for Transport action
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Transport action not implemented for node %u", nodeId);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Transport action not implemented for node %u", nodeId);
             return false;
 
         case TravelNodePathType::FlightPath:
@@ -702,12 +696,12 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
         }
         case TravelNodePathType::TeleportSpell:
             // Placeholder for TeleportSpell action
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: TeleportSpell action not implemented for node %u", nodeId);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: TeleportSpell action not implemented for node %u", nodeId);
             return false;
 
         case TravelNodePathType::StaticPortal:
             // Placeholder for StaticPortal action
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: StaticPortal action not implemented for node %u", nodeId);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: StaticPortal action not implemented for node %u", nodeId);
             return false;
 
         case TravelNodePathType::None:

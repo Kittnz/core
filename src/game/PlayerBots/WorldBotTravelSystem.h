@@ -135,6 +135,14 @@ public:
         return (dist > 0 ? dist : 0);
     }
 
+    float GetDistance3D(float x1, float y1, float z1, const TravelPath& point)
+    {
+        float dx = x1 - point.x;
+        float dy = y1 - point.y;
+        float dz = z1 - point.z;
+        return std::sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
 private:
     WorldBotTravelSystem(); // Declaration only
     ~WorldBotTravelSystem();
