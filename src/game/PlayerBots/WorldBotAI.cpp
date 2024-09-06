@@ -737,7 +737,7 @@ void WorldBotAI::ShowCurrentPath()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
+    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || me->IsTaxiFlying())
         return;
 
     if (!m_currentPath.empty())
@@ -931,76 +931,10 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     }
 
     // Chat timer
-    /*m_updateChatTimer.Update(diff);
-    if (m_updateChatTimer.Passed())
-    {
-        // say / yell chat
-        if (!m_chatSayYellPlayerRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatSayYellPlayerRespondsQueue)
-            {
-                HandleChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatSayYellPlayerRespondsQueue.clear();
-        }
-
-        // whisper chat
-        if (!m_chatWhisperPlayerRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatWhisperPlayerRespondsQueue)
-            {
-                HandleChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatWhisperPlayerRespondsQueue.clear();
-        }
-
-        // general chat
-        if (!m_chatGeneralRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatGeneralRespondsQueue)
-            {
-                HandleGeneralChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatGeneralRespondsQueue.clear();
-        }
-
-        // trade chat
-        if (!m_chatTradeRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatTradeRespondsQueue)
-            {
-                HandleTradeChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatTradeRespondsQueue.clear();
-        }
-
-        // lfg
-        if (!m_chatLFGRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatLFGRespondsQueue)
-            {
-                HandleLFGChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatLFGRespondsQueue.clear();
-        }
-
-        // world chat
-        if (!m_chatWorldRespondsQueue.empty())
-        {
-            for (auto& itr : m_chatWorldRespondsQueue)
-            {
-                HandleWorldChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
-            }
-            m_chatWorldRespondsQueue.clear();
-        }
-
-        m_updateChatTimer.Reset(2000);
-    }*/
-
     m_updateChatTimer.Update(diff);
     if (m_updateChatTimer.Passed())
     {
-        m_updateChatTimer.Reset(urand(30000, 120000)); // Random time between 30 seconds and 2 minutes
+        m_updateChatTimer.Reset(urand(5000, 10000)); // Random time between 30 seconds and 2 minutes
         sWorldBotChat.SendChatMessage(me);
     }
 
@@ -1090,7 +1024,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         {
             ClearPath();
             if (!me->IsStopped())
-                me->StopMoving();
+                StopMoving();
 
             DrinkAndEat();
 

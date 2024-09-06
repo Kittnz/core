@@ -99,9 +99,9 @@ public:
     std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator> GetAllPathsFromNode(uint32 nodeId) const;
 
     // Path and Node visuals
-    void ShowCurrentPath(Player* bot, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId);
-    void ShowAllPathsAndNodes(Player* player);
-    void ClearPathVisuals(Player* bot);
+    void ShowCurrentPath(Player* me, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId);
+    void ShowAllPathsAndNodes(Player* me);
+    void ClearPathVisuals(Player* me);
 
     // Primary template for GetDistance3D
     template<class A, class B>
