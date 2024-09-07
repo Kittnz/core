@@ -82,6 +82,9 @@ struct ShopEntry
     std::string Description;
     std::string Description_loc4;
     uint32 Price;
+    G3D::Vector3 Position;
+    float Rotation;
+    float Scale;
 };
 
 

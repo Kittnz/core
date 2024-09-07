@@ -280,6 +280,13 @@ void AddSC_boss_blackwald_ii();
 void AddSC_boss_clawlord_howlfang();
 void AddSC_boss_grizikil();
 void AddSC_boss_moroes();
+void AddSC_boss_anomalus();
+void AddSC_boss_echo_of_medivh();
+void AddSC_boss_incantagos();
+void AddSC_boss_keeper_gnarlmoon();
+void AddSC_boss_kings_council();
+void AddSC_boss_kruul();
+void AddSC_boss_sanv_tasdal();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
@@ -323,6 +330,8 @@ void AddSC_boss_chronormu();
 // Misc
 void AddSC_npc_loothelper();
 void AddSC_npc_ptr();
+void AddSC_jewelcrafting();
+
 void AddScripts()
 {
     //Nostalrius
@@ -607,7 +616,13 @@ void AddScripts()
     AddSC_boss_clawlord_howlfang();
     AddSC_boss_grizikil();
     AddSC_boss_moroes();
-
+    AddSC_boss_anomalus();
+    AddSC_boss_echo_of_medivh();
+    AddSC_boss_incantagos();
+    AddSC_boss_keeper_gnarlmoon();
+    AddSC_boss_kings_council();
+    AddSC_boss_kruul();
+    AddSC_boss_sanv_tasdal();
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
 
@@ -643,4 +658,5 @@ void AddScripts()
     // Misc
     AddSC_npc_loothelper();
     AddSC_npc_ptr();
+    AddSC_jewelcrafting();
 }

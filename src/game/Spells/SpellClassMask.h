@@ -63,7 +63,7 @@ enum ClassFlag
     CF_WARRIOR_OVERPOWER                    = 2,    // CM0 00000004
     CF_WARRIOR_PUMMEL                       = 3,    // CM0 00000008
     CF_WARRIOR_RECKLESSNESS                 = 4,    // CM0 00000010
-    CF_WARRIOR_REND                         = 5,    // CM0 00000020
+    CF_WARRIOR_REND                         = 5,    // CM0 00000020 (also deep wound)
     CF_WARRIOR_HEROIC_STRIKE                = 6,    // CM0 00000040
     CF_WARRIOR_THUNDER_CLAP                 = 7,    // CM0 00000080
     CF_WARRIOR_BLOODRAGE                    = 8,    // CM0 00000100
@@ -180,7 +180,7 @@ enum ClassFlag
     CF_DRUID_ENTANGLING_ROOTS               = 9,    // CM0 00000200
     CF_DRUID_FAERIE_FIRE                    = 10,   // CM0 00000400
     CF_DRUID_MAUL_SWIPE                     = 11,   // CM0 00000800
-    CF_DRUID_RAKE_CLAW                      = 12,   // CM0 00001000
+    CF_DRUID_RAKE_CLAW                      = 12,   // CM0 00001000 (also pounce bleed)
     CF_DRUID_BASH                           = 13,   // CM0 00002000
     CF_DRUID_PROWL                          = 14,   // CM0 00004000
     CF_DRUID_SHRED                          = 15,   // CM0 00008000
@@ -311,9 +311,10 @@ enum ClassFlag
     CF_PALADIN_FLASH_OF_LIGHT2              = 30,   // CM0 40000000
     CF_PALADIN_HOLY_LIGHT2                  = 31,   // CM0 80000000
 
-    CF_PALADIN_UNK32                        = 32,   // CM1 00000001
+    CF_PALADIN_HOLY_STRIKE                  = 32,   // CM1 00000001
     CF_PALADIN_PURIFY_CLEANSE               = 33,   // CM1 00000002 Purify & Cleanse
     CF_PALADIN_JUDGEMENT_OF_COMMAND         = 34,   // CM1 00000004
+    CF_PALADIN_CRUSADER_STRIKE              = 35,   // CM1 00000008
 
     // -- Shaman (11)
     CF_SHAMAN_LIGHTNING_BOLT                = 0,    // CM0 00000001

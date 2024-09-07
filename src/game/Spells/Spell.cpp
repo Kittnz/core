@@ -1293,22 +1293,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     uint32 procAttacker = m_procAttacker;
     uint32 procVictim   = m_procVictim;
     uint32 procEx       = PROC_EX_NONE;
-    
-    // Drop some attacker proc flags if this is a secondary target. Do not need to change
-    // the victim proc flags.
-    if (m_targetNum > 1) 
-    {
-        // If this is a melee spell hit, strip the flag and apply a spell hit flag instead.
-        // This is required to proc things like Deep Wounds on the victim when hitting 
-        // multiple targets, but not proc additional melee-only beneficial auras on the 
-        // attacker like Sweeping Strikes. Leave the victim proc flags responding to a melee
-        // spell.
-        if (procAttacker & PROC_FLAG_DEAL_MELEE_ABILITY)
-        {
-            procAttacker &= ~(PROC_FLAG_DEAL_MELEE_ABILITY);
-            procAttacker |= PROC_FLAG_DEAL_HARMFUL_SPELL;
-        }
-    }
 
     // drop proc flags in case target not affected negative effects in negative spell
     // for example caster bonus or animation,
@@ -6468,11 +6452,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (m_spellInfo->Id == 46035 && !m_caster->ToPlayer()->IsCityProtector())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("You are no longer a City Protector.");
-                        return SPELL_FAILED_DONT_REPORT;
-                    }
-                    if (m_spellInfo->Id == 46003 && m_caster->ToPlayer()->InBattleGround())
-                    {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't use this item on the battleground.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }

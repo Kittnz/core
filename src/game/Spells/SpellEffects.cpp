@@ -57,6 +57,7 @@
 #include "Chat.h"
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
+#include "ToyManager.hpp"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -422,6 +423,14 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         m_caster->CastSpell(unitTarget, 27766, true);
                         break;
                     }
+                    case 51099: // Arcane Bomb
+                    {
+                        if (m_casterUnit == unitTarget)
+                            damage = 0;
+                        else
+                            damage += std::max(0.0f, std::min(7000.0f, InterpolateValueAtIndex(1, 7000, 100, 1, m_caster->GetDistance3dToCenter(unitTarget))));
+                        break;
+                    }
                 }
                 break;
             }
@@ -545,6 +554,166 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 51289: // Throw Boulder
+                case 51296: // Throw Rock
+                {
+                    float x, y, z;
+                    if (unitTarget)
+                        unitTarget->GetPosition(x, y, z);
+                    else
+                    {
+                        x = m_targets.m_destX;
+                        y = m_targets.m_destY;
+                        z = m_targets.m_destZ;
+                    }
+
+                    m_caster->SummonCreature(m_spellInfo->EffectMiscValue[eff_idx], x, y, z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+
+                    return;
+                }
+                case 51238: // Harrowing Nets
+                {
+                    if (!unitTarget)
+                        return;
+
+                    unitTarget->DoResetThreat();
+
+                    return;
+                }
+                case 51205: // Rift Feedback
+                {
+                    if (!m_casterUnit)
+                        return;
+
+                    if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(51196))
+                        return;
+
+                    unitTarget->DealDamage(unitTarget, 12000, nullptr, DOT, SPELL_SCHOOL_MASK_ARCANE, m_spellInfo, false, nullptr, false, false);
+
+                    return;
+                }
+                case 51203: // Overflowing Hatred Effect
+                {
+                    if (!m_casterUnit)
+                        return;
+
+                    if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
+                        return;
+
+                    if (unitTarget->GetEntry() == 59974)
+                        return;
+
+                    unitTarget->DealDamage(unitTarget, 6000, nullptr, DOT, SPELL_SCHOOL_MASK_FIRE, m_spellInfo, false, nullptr, false, false);
+
+                    return;
+                }
+                case 51199: // Form Rift Elemental
+                {
+                    if (!m_casterUnit)
+                        return;
+
+                    if (!unitTarget)
+                        return;
+
+                    if (m_casterUnit == unitTarget)
+                        return;
+
+                    m_casterUnit->SummonCreature(59974, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+                    unitTarget->DoKillUnit();
+                    m_casterUnit->DoKillUnit();
+
+                    return;
+                }
+                case 51185: // Ley-Line Disturbance
+                {
+                    if (Creature* pCaster = ToCreature(m_caster))
+                    {
+                        Position const& home = pCaster->GetHomePosition();
+                        static uint32 affinities[] = { 59987 , 59986 , 59985 , 59984 , 59983 , 59982 };
+                        if (Creature* pAffinity = m_caster->SummonCreature(affinities[urand(0, 5)], home.x, home.y, home.z, M_PI_F, TEMPSUMMON_DEAD_DESPAWN, 30000))
+                        {
+                            pAffinity->m_Events.AddLambdaEventAtOffset([pAffinity, guid = pCaster->GetObjectGuid()]()
+                            {
+                                if (!pAffinity->IsAlive())
+                                    return;
+
+                                if (Creature* pSummoner = pAffinity->GetMap()->GetCreature(guid))
+                                {
+                                    pSummoner->CastSpell(pSummoner, 26662, true); // Berserk
+                                    pSummoner->PMonsterEmote(2384, pSummoner); // %s becomes enraged!
+                                }
+
+                                pAffinity->SendSpellGo(pAffinity, 1449); // Arcane Explosion
+                                pAffinity->DoKillUnit();
+                            }, 15000);
+                        }
+                    }
+                    
+                    return;
+                }
+                case 51086: // Lunar Shift
+                {
+                    if (!m_casterUnit || !unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(51080))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51080);
+                        unitTarget->AddAura(51081, 0, m_casterUnit);
+                        m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
+                        m_casterUnit->CastSpell(m_casterUnit, 51085, true);
+                    }
+                    else if (unitTarget->HasAura(51081))
+                    {
+                        unitTarget->RemoveAurasDueToSpell(51081);
+                        unitTarget->AddAura(51080, 0, m_casterUnit);
+                        m_casterUnit->GetThreatManager().modifyThreatPercent(unitTarget, -100);
+                        m_casterUnit->CastSpell(m_casterUnit, 51085, true);
+                    }
+
+                    return;
+                }
+                case 51083: // Flock of Ravens
+                {
+                    if (!m_casterUnit)
+                        return;
+
+                    int32 count = m_spellInfo->EffectBasePoints[eff_idx];
+
+                    std::list<Player*> players;
+                    m_casterUnit->GetAlivePlayerListInRange(m_casterUnit, players, 100.0f);
+                    for (Player* pPlayer : players)
+                    {
+                        if (count-- < 0)
+                            break;
+
+                        float x, y, z;
+                        pPlayer->GetPosition(x, y, z);
+                        pPlayer->GetRandomPoint(x, y, z, 5.0f, x, y, z);
+                        if (Creature* pRaven = m_casterUnit->SummonCreature(m_spellInfo->EffectMiscValue[eff_idx], x, y, z, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000))
+                            pRaven->AI()->AttackStart(pPlayer);
+                    }
+
+                    return;
+                }
+                case 51012: // Jewel of Wild Magics
+                {
+                    if (!unitTarget)
+                        return;
+
+                    uint32 spellId = PickRandomValue(51004, 51006, 51008, 51010);
+                    unitTarget->CastSpell(unitTarget, spellId, true);
+                    return;
+                }
                 case 46436: // Winterax Ritual Suicide
                 {
                     Player* pPlayer = m_caster->ToPlayer();
@@ -1041,6 +1210,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
                 }
                 case 8593:                                  // Symbol of life (restore creature to life)
+                case 51216:                                 // Redemption (Upper Karazhan Halls - King's Council - Bishop)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
                         return;
@@ -1898,6 +2068,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 
+                        GameObject* other_object = m_caster->ToPlayer()->FindNearestGameObject(2000388, 50.0F);
+                        if (other_object) other_object->SetRespawnTime(1);
+
                         m_caster->SummonGameObject(2000388, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 600, true);
                     }
                     return;
@@ -1938,33 +2111,48 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 56066: // Music tapes:
+                case 57531:
+                case 57532:
+                case 57533:
+                case 57534:
+                case 57535:
+                case 57536:
+                case 57537:
+                case 57538:
+                case 57539:
+                case 57540:
+                case 57541:
+                case 57542:
+                case 57543:
+                case 57544:
+                case 57545:
+                case 57546:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        std::array<std::pair<uint32, uint32>, 16> items_and_sounds =
+                        std::array<std::pair<uint32, uint32>, 16> spells_and_sounds =
                         { {
-                            { 70043, 30218 }, // Winds of Kamio
-                            { 70080, 30220 }, // Emerald Dream
-                            { 70081, 30297 }, // Bells of the Dawn
-                            { 70082, 30245 }, // Hourglass of Eternity
-                            { 70083, 15000 }, // Hyjal Summit
-                            { 70084, 30243 }, // Jaguero Isle
-                            { 70085, 30226 }, // Stratholme's Best Days
-                            { 70086, 30299 }, // Titanic Mystery
-                            { 70087, 30298 }, // Aerie Peak
-                            { 70088, 30296 }, // Hateforge Quarry
-                            { 70090, 30295 }, // Bastion
-                            { 70091, 30294 }, // Ιntraworld Ιmmortality
-                            { 70092, 30292 }, // Sparkwater Port
-                            { 70093, 30275 }, // Stormwind Vault
-                            { 70094, 30241 }, // Dun Argath        
-                            { 70095, 30311 }  // Snowing in the Vale 
+                             { 57531, 30311, }, // Jukebox: Winds of Kamio
+                             { 57532, 30241, }, // Jukebox: Emerald Dream
+                             { 57533, 30275, }, // Jukebox: Bells of the Dawn
+                             { 57534, 30292, }, // Jukebox: Hourglass of Eternity
+                             { 57535, 30294, }, // Jukebox: Hyjal Summit
+                             { 57536, 30295, }, // Jukebox: Jaguero Isle
+                             { 57537, 30296, }, // Jukebox: Stratholme's Best Days
+                             { 57538, 30298, }, // Jukebox: Titanic Mystery
+                             { 57539, 30299, }, // Jukebox: Aerie Peak
+                             { 57540, 30226, }, // Jukebox: Hateforge Quarry
+                             { 57541, 30243, }, // Jukebox: Bastion
+                             { 57542, 15000, }, // Jukebox: Ιntraworld Ιmmortality
+                             { 57543, 30245, }, // Jukebox: Sparkwater Port
+                             { 57544, 30297, }, // Jukebox: Stormwind Vault
+                             { 57545, 30220, }, // Jukebox: Dun Argath
+                             { 57546, 30218, }, // Jukebox: Snowing in the Vale      
                         } };
 
-                        for (auto const& data : items_and_sounds)
+                        for (auto const& data : spells_and_sounds)
                         {
-                            if (m_CastItem->GetEntry() == data.first)
+                            if (m_spellInfo->Id == data.first)
                                 m_caster->PlayDirectMusic(data.second, m_caster->ToPlayer());
                         }
                         return;
@@ -2033,7 +2221,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                // Functional summonable toys:
+
+                case 36600: // Blazing Forge Kit
                 case 46002: // Goblin Brainwashing Device
+                case 46001: // Portable Mailbox
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
@@ -2045,26 +2237,28 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         fX += (fDist * cos(m_caster->GetOrientation()));
                         fY += (fDist * sin(m_caster->GetOrientation()));
 
-                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
-                    }
+                        uint32 object = 0;
 
-                    return;
-                }
-                case 46001: // Portable Mailbox
-                {
-                    if (m_caster && m_caster->IsPlayer())
-                    {
-                        GameObject* other_mailbox = m_caster->ToPlayer()->FindNearestGameObject(144112, 50.0F);
-                        if (other_mailbox) other_mailbox->SetRespawnTime(1);
+                        switch (m_spellInfo->Id)
+                        {
+                            case 36600: object = 3000684; break; // Blazing Forge Kit
+                            case 46002: object = 1000333; break; // Goblin Brainwashing Device
+                            case 46001: object = 144112; break; // Portable Mailbox
+                            default: break;
+                        }
 
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
-                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
+                        GameObject* other_object = m_caster->ToPlayer()->FindNearestGameObject(object, 50.0F);
+                        if (other_object) other_object->SetRespawnTime(1);
 
-                        m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-                        m_caster->ToPlayer()->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        m_caster->SummonGameObject(object, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
+
+                        if (object == 3000684) // Forge + Anvil
+                        {
+                            GameObject* other_object_rel = m_caster->ToPlayer()->FindNearestGameObject(3000685, 50.0F);
+                            if (other_object_rel) other_object_rel->SetRespawnTime(1);
+
+                            m_caster->SummonGameObject(3000685, fX + 1.5, fY + 1.5, fZ, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        }
                     }
                     return;
                 }
@@ -2107,7 +2301,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         }
                     }
                 }
-                case 46003: // Illusions
+                // Illusions:
+                case 31960: case 31961: case 31962: case 31963: case 31964: case 31965: case 31966: case 31967: case 31968: case 31969: 
+                case 31970: case 31971: case 31972: case 31973: case 31974: case 31975: case 31976: case 31977: case 31978: case 31979: 
+                case 31980: case 31981: case 31982: case 31983: case 31984: case 31985: case 31986: case 31987: case 50910: case 50911:
+                case 50912: case 50913: case 50914: case 50915: case 50916: case 50917: case 50918: case 50919: case 50920: case 50921:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
@@ -2118,52 +2316,58 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             return;
                         }
 
-                        std::uint32_t displayid{};
-                        const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
+                            std::uint32_t displayid{};
+                            const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
 
-                        switch (m_CastItem->GetEntry())
-                        {
-                            case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
-                            case 51247: displayid = 10008;  break; // Chromie
-                            case 51055: displayid = 18356;  break; // Tree Form
-                            case 51065: displayid = 4629;   break; // Shadow
-                            case 51209: displayid = 2176;   break; // Rat
-                            case 81145: displayid = 18251;  break; // Pandaren
-                            case 51066: displayid = 12030;  break; // Flamewaker
-                            case 51067: displayid = 8053;   break; // Bone Serpent
-                            case 51205: displayid = 14368;  break; // Ghost
-                            case 50435: displayid = 10543;  break; // Dreadlord
-                            case 50436: displayid = 7803;   break; // Smolderthorn Berserker
-                            case 50437: displayid = 4923;   break; // Naga Explorer
-                            case 50438: displayid = 11263;  break; // Naga Siren 
-                            case 80175: displayid = 6292;   break; // Bronze Whelpling
-                            case 91792: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
-                            case 50408: displayid = bIsMale ? 150 : 876;  break; // Dryad
-                            case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
-                            case 80694: // Scourge
+                            switch (m_spellInfo->Id)
                             {
-                                const std::uint32_t models[] = { 158, 612, 733 };
-                                displayid = models[urand(0, 2)];
+                            case 31984: displayid = 10008;  break; // Chromie
+                            case 31974: displayid = 2176;   break; // Rat
+                            case 31979: displayid = 18251;  break; // Pandaren
+                            case 31971: displayid = 12030;  break; // Flamewaker
+                            case 31972: displayid = 8053;   break; // Bone Serpent
+                            case 31980: displayid = 10543;  break; // Dreadlord
+                            case 31981: displayid = 7803;   break; // Smolderthorn Berserker
+                            case 31982: displayid = 4923;   break; // Naga Explorer
+                            case 31983: displayid = 11263;  break; // Naga Siren 
+                            case 31987: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
+                            case 31976: displayid = (15393 + urand(0, 5)); break; // Tiny Murloc
+                            case 31966: // Ghost
+                            {
+                                const std::uint32_t models[] = { 14368, 14592, 14594, 14695 };
+                                displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 51253: // Furbolg
+                            case 31977: // Scourge Warrior
                             {
-                                const std::uint32_t models[] = { 6746, 5773, 11363 };
-                                displayid = models[urand(0, 2)];
+                                const std::uint32_t models[] = { 158, 612, 733, 18117 };
+                                displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 50439: // Harpy
+                            case 31970: // Wraith
+                            {
+                                const std::uint32_t models[] = { 4761, 16162 };
+                                displayid = models[urand(0, 1)];
+                                break;
+                            }
+                            case 31973: // Furbolg
+                            {
+                                const std::uint32_t models[] = { 18731, 18735, 18738, 18741, 18733, 18734, 18148, };
+                                displayid = models[urand(0, 6)];
+                                break;
+                            }
+                            case 31962: // Harpy
                             {
                                 const std::uint32_t models[] = { 3022, 10872, 1352 };
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 51210:
+                            case 31986: // Green Dragonkin
                             {
                                 displayid = 181;
                                 break;
                             }
-                            case 51200: // Goblin
+                            case 31961: // Goblin
                             {
                                 const std::uint32_t m_male[] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
                                 const std::uint32_t m_female[] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
@@ -2172,38 +2376,38 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            case 51201: // Worgen
+                            case 31964: // Worgen
                             {
                                 const std::uint32_t models[] = { 522, 523, 524 };
                                 int modelid = rand() % 3;
                                 displayid = models[urand(0, 2)];
                                 break;
                             }
-                            case 80648: // Gnoll
+                            case 31978: // Gnoll
                             {
                                 const std::uint32_t models[] = { 487, 383, 384, 491 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 53008: // Two-headed Ogre
+                            case 31975: // Two-headed Ogre
                             {
                                 const std::uint32_t models[] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
                                 displayid = models[urand(0, 6)];
                                 break;
                             }
-                            case 51206: // Banshee
+                            case 31967: // Banshee
                             {
                                 const std::uint32_t models[] = { 8782, 10728, 10750, 10994 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 51215: // Satyr
+                            case 31985: // Satyr
                             {
                                 const std::uint32_t models[] = { 2012, 2010, 11331, 1013 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 51207: // Serpent Lord
+                            case 31968: // Serpent Lord
                             {
                                 const std::uint32_t m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
                                 const std::uint32_t m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
@@ -2212,14 +2416,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            case 51208: // Succubus
+                            case 31969: // Succubus
                             {
                                 const std::uint32_t models[] = { 10923, 10924, 10925, 10926 };
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
-                            case 50017: // Blood Elf
-                            case 51203: // High Elf
+                            case 31960: // Blood Elf
+                            case 31965: // High Elf
                             {
                                 const std::uint32_t m_male[6] = { 10375, 4245, 6779, 14394, 11671, 6549 };
                                 const std::uint32_t m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
@@ -2228,15 +2432,84 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = bIsMale ? m_male[modelid] : m_female[modelid];
                                 break;
                             }
-                            default:
+                            case 50910: // Felguard
                             {
+                                const std::uint32_t models[] = { 18157, 18158, 7970, 5049, 9017 };
+                                displayid = models[urand(0, 4)];
                                 break;
                             }
-                        }
-                        m_caster->ToPlayer()->hasIllusion = true;
-                        m_caster->ToPlayer()->SetDisplayId(displayid);
-                    }
+                            case 50911: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18121, 182, 18077 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50912: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 10116, 10094, 18122 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50913: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18040, 18041, 18042, 18592 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50914: // Prismatic Dragonkin
+                            {
+                                const std::uint32_t models[] = { 18120, 18123, 177 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50915: // Blue Dragonkin
+                            {
+                                const std::uint32_t models[] = { 6762, 6761, 6760, 20490, 20491 };
+                                displayid = models[urand(0, 4)];
+                                break;
+                            }
+                            case 50916: // Murloc
+                            {
+                                const std::uint32_t models[] = { 20497, 20498, 20499, 20500, 20501, 20502 };
+                                displayid = models[urand(0, 5)];
+                                break;
+                            }
+                            case 50917: // Gilnean Worgen
+                            {
+                                const std::uint32_t models[] = { 20492, 20493, 20494, 20495 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50918: // Zombie
+                            {
+                                const std::uint32_t models[] = { 1196, 1197, 1198, 1200, 1201, 1202 };
+                                displayid = models[urand(0, 5)];
+                                break;
+                            }
+                            case 50919: // Ghoul
+                            {
+                                const std::uint32_t models[] = { 828, 987, 1065, 18114 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50920: displayid = 11396;  break; // Scourge Mage
+                            //case 31963: displayid = bIsMale ? 150 : 876;  break; // Dryad
+                            case 31963: // Dryad (new)
+                            {
+                                const std::uint32_t m_male[3] = { 2725, 2432, 12350 };
+                                const std::uint32_t m_female[3] = { 2721, 2722, 20505 };
+                                const std::uint32_t modelid{ urand(0, 2) };
 
+                                displayid = bIsMale ? m_male[modelid] : m_female[modelid];
+                                break;
+                            }
+                            case 50921: displayid = 18778;  break; // Incubus
+                            default: break;
+                            }
+                            m_caster->ToPlayer()->hasIllusion = true;
+                            m_caster->ToPlayer()->SetDisplayId(displayid);                            
+                        
+                    }
                     return;
                 }
                 case 46010: // Teleport to Guild House
@@ -2327,6 +2600,20 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (m_CastItem)
                     {
                         auto spellIdOpt = sMountMgr.GetMountSpellId(m_CastItem->GetEntry());
+                        if (spellIdOpt && m_caster->IsPlayer())
+                        {
+                            m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                            m_forceConsumeItem = true;
+                        }
+                    }
+                    return;
+                }
+                case 46003: // Add Illusion to Collection
+                case 46096: // Add Toy to Collection
+                {
+                    if (m_CastItem)
+                    {
+                        auto spellIdOpt = sToyMgr.GetToySpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
@@ -5288,19 +5575,40 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
-    // Legion Strike - Warlock Felguard Pet
-    if (m_spellInfo->Id == 47350 && bonus > 0)
+    // effects that split damage among targets
+    if (bonus > 0)
     {
-        uint32 count = 0;
-        for (const auto& ihit : m_UniqueTargetInfo)
-            if (ihit.effectMask & (1 << eff_idx))
-                ++count;
+        switch (m_spellInfo->Id)
+        {
+            case 47350: // Legion Strike - Warlock Felguard Pet
+            case 51164: // Remorseless Strikes - Kruul
+            {
+                uint32 count = 0;
+                for (const auto& ihit : m_UniqueTargetInfo)
+                    if (ihit.effectMask & (1 << eff_idx))
+                        ++count;
 
-        if (count)
-            bonus /= count;                    // divide to all targets
+                if (count)
+                    bonus /= count;                    // divide to all targets
 
-        if (!bonus)
-            bonus = 1;
+                if (!bonus)
+                    bonus = 1;
+
+                break;
+            }
+            case 51233: // Crustaceous Claws - Cla'ckora boss
+            {
+                uint32 count = 0;
+                for (const auto& ihit : m_UniqueTargetInfo)
+                    if (ihit.effectMask & (1 << eff_idx))
+                        ++count;
+
+                if (count > 1)
+                    bonus += (count - 1) * 500;
+
+                break;
+            }
+        }
     }
 
     // prevent negative damage
@@ -6393,7 +6701,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     if (m_casterUnit->HasAura(28853))
                         heal += 53.0f;  // Libram of Divinity
                     if (m_casterUnit->HasAura(28851))
-                        heal += 83.0f;  // Libram of Light
+                        heal += 41.0f;  // Libram of Light
                 }
 
                 int32 spellid = m_spellInfo->Id;            // send main spell id as basepoints for not used effect
@@ -7967,6 +8275,14 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
         // Add mana regen
         pSummon->SetStat(STAT_SPIRIT, pSummon->GetLevel() * 3);
         pSummon->UpdateManaRegen();
+    }
+    else if (m_spellInfo->EffectMiscValue[eff_idx] == 59990) // Kruul Infernal
+    {
+        // Short root spell on infernal
+        pSummon->CastSpell(pSummon, 22707, true);
+
+        // Inferno effect
+        pSummon->CastSpell(pSummon, 51167, true);
     }
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)

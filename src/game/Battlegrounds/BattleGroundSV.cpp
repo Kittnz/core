@@ -556,11 +556,6 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
 
 static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 enemySparks)
 {
-    if (!pGeneral->IsAlive())
-        return;
-
-    float pct = std::max(1.0f, pGeneral->GetHealthPercent());
-
     int32 health = pGeneral->GetCreatureInfo()->health_max;
     health = health + (health / 3) * ourSparks - (health / 6) * enemySparks;
 
@@ -568,7 +563,6 @@ static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 ene
         health = pGeneral->GetCreatureInfo()->health_max;
 
     pGeneral->SetMaxHealth(health);
-    pGeneral->SetHealthPercent(pct);
 }
 
 void BattleGroundSV::AddTeamSparks(TeamId team, uint32 count)

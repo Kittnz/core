@@ -856,7 +856,7 @@ uint32 GetTabAmount(Player* player)
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+	if (pPlayer->GetLevel() >= 10 && pPlayer->HasSpell(46002))
 	{
 
         if (pPlayer->IsInCombat())
@@ -5165,6 +5165,9 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     if (pPlayer->HasSpell(SPELL_VARGANT_MODE) && (pPlayer->GetLevel() < 60))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67035, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
 
+    if (pPlayer->HasSpell(SPELL_BOARING_MODE) && (pPlayer->GetLevel() < 60))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 67037, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+
     // info about glyphs
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66632, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, 66633, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
@@ -5205,6 +5208,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     {
         if (pPlayer->HasChallenge(CHALLENGE_VAGRANT_MODE))
             pPlayer->RemoveSpell(SPELL_VARGANT_MODE, false, false);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
+    {
+        if (pPlayer->HasChallenge(CHALLENGE_BOARING_MODE))
+            pPlayer->RemoveSpell(SPELL_BOARING_MODE, false, false);
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)

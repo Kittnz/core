@@ -138,6 +138,7 @@ enum Challenges
     CHALLENGE_WAR_MODE = 2,
     CHALLENGE_HARDCORE = 3,
     CHALLENGE_VAGRANT_MODE = 4,
+    CHALLENGE_BOARING_MODE = 5,
 };
 
 enum ChallengeSpells
@@ -147,6 +148,7 @@ enum ChallengeSpells
     SPELL_WAR_MODE = 50008,
     SPELL_HARDCORE = 50001,
     SPELL_VARGANT_MODE = 50014,
+    SPELL_BOARING_MODE = 50071,
 };
 
 constexpr uint32 LoreKeeperQuestRequirement = 1700;
@@ -799,6 +801,7 @@ enum PlayerTitles : uint8
     TITLE_CONQUEROR_OF_THE_DRAGONS = 21,
     TITLE_CONQUEROR_OF_THE_QIRAJI = 22,
     TITLE_CONQUEROR_OF_THE_SCOURGE = 23,
+    TITLE_SWINE_SLAYER = 40,
     TITLE_SEEKER_OF_KNOWLEDGE = 42,
     TITLE_GRAND_FROGUS = 43,
     TITLE_THE_WANDERER = 44,
@@ -812,7 +815,7 @@ enum PlayerTitles : uint8
     TITLE_IMMORTAL = 52,
     TITLE_LOREKEEPER = 63,
     TITLE_DIPLOMAT = 64,
-    TITLE_MAX_LIMIT = 65
+    TITLE_MAX_LIMIT = 64
 };
 
 // Player summoning auto-decline time (in secs)
@@ -2545,6 +2548,7 @@ public:
             {CHALLENGE_WAR_MODE,        SPELL_WAR_MODE},
             {CHALLENGE_HARDCORE,        SPELL_HARDCORE},
             {CHALLENGE_VAGRANT_MODE,    SPELL_VARGANT_MODE},
+            {CHALLENGE_BOARING_MODE,    SPELL_BOARING_MODE},
         };
 
         auto itr = challenge_spells.find(challenge);

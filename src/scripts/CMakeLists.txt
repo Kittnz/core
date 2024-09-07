@@ -89,6 +89,13 @@ dungeons/lower_karazhan_halls/boss_grizikil.cpp
 dungeons/lower_karazhan_halls/boss_moroes.cpp
 dungeons/lower_karazhan_halls/instance_lower_karazhan_halls.cpp
 dungeons/lower_karazhan_halls/lower_karazhan_halls.h
+dungeons/upper_karazhan_halls/boss_anomalus.cpp
+dungeons/upper_karazhan_halls/boss_echo_of_medivh.cpp
+dungeons/upper_karazhan_halls/boss_incantagos.cpp
+dungeons/upper_karazhan_halls/boss_keeper_gnarlmoon.cpp
+dungeons/upper_karazhan_halls/boss_kings_council.cpp
+dungeons/upper_karazhan_halls/boss_kruul.cpp
+dungeons/upper_karazhan_halls/boss_sanv_tasdal.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
 dungeons/gilneas_city/instance_gilneas_city.h
 dungeons/gilneas_city/instance_gilneas_city.cpp
@@ -294,6 +301,7 @@ miscellaneous/random_scripts_1.cpp
 miscellaneous/random_scripts_2.cpp
 miscellaneous/random_scripts_3.cpp
 miscellaneous/custom_exploration_triggers.cpp
+miscellaneous/jewelcrafting.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp

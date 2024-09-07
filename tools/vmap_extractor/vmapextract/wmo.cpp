@@ -540,7 +540,7 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE* output, WMORoot* rootWMO, bool pPrecis
         uint32 liquidEntry;
         if (rootWMO->liquidType & 4)
             liquidEntry = liquidType;
-        else if (liquidType == 15)
+        if (liquidType == 15)
             liquidEntry = 0;
         else
             liquidEntry = liquidType + 1;

@@ -227,6 +227,13 @@ pAuraProcHandler AuraProcHandler[TOTAL_AURAS] =
     &Unit::HandleNULLProc,                                  //189 SPELL_AURA_MOD_RATING
     &Unit::HandleNULLProc,                                  //190 SPELL_AURA_MOD_FACTION_REPUTATION_GAIN
     &Unit::HandleNULLProc,                                  //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
+    &Unit::HandleNULLProc,                                  //192 SPELL_AURA_AURA_SPELL
+    &Unit::HandleNULLProc,                                  //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT
+    &Unit::HandleNULLProc,                                  //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN
+    &Unit::HandleNULLProc,                                  //195 SPELL_AURA_MOD_HONOR_GAIN
+    &Unit::HandleNULLProc,                                  //196 SPELL_AURA_ENABLE_FLYING
+    &Unit::HandleNULLProc,                                  //197 SPELL_AURA_MOD_PERIODIC_DAMAGE_PERCENT_TAKEN
+    &Unit::HandleNULLProc,                                  //198 SPELL_AURA_MOD_CRIT_DAMAGE_BONUS_TAKEN
 };
 
 // Fonctions Nostalrius
@@ -247,6 +254,12 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Freezing Cold Passive
+        if (spellProto->Id == 51276)
+        {
+            if (procFlag & PROC_FLAG_DEAL_HARMFUL_SPELL)
+                return roll_chance_u(10) ? SPELL_PROC_TRIGGER_OK : SPELL_PROC_TRIGGER_ROLL_FAILED;
+        }
         // Wrath of Cenarius
         if (spellProto->Id == 25906)
         {
@@ -291,6 +304,14 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             else
                 return SPELL_PROC_TRIGGER_FAILED;
         }
+        if (spellProto->Id == 51022)
+        {
+            if (!procSpell->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_HEALING_TOUCH>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_GREATER_HEAL>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_HEALING_WAVE>() &&
+                !procSpell->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_LIGHT1, CF_PALADIN_HOLY_LIGHT2>())
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
         // Eye for an Eye
         if (spellProto->SpellIconID == 1820)
         {
@@ -328,10 +349,10 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             switch (spellProto->Id)
             {
                 // Frosty Zap
-                case 24392:
-                    if (SpellCanTrigger(spellProto, procSpell))
-                        return SPELL_PROC_TRIGGER_OK;
-                    break;
+            case 24392:
+                if (SpellCanTrigger(spellProto, procSpell))
+                    return SPELL_PROC_TRIGGER_OK;
+                break;
             }
 
             return SPELL_PROC_TRIGGER_FAILED;
@@ -525,12 +546,22 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 // Sweeping Strikes
                 case 12292:
                 case 18765:
+                // Hunter's Sweep
+                case 51068:
                 {
                     if (!pVictim || !pVictim->IsAlive())
                         return SPELL_AURA_PROC_FAILED;
 
                     // Prevent chain of triggered spell from same triggered spell
                     if (procSpell && (procSpell->Id == 26654 || procSpell->Id == 12723))
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // Don't proc on rend
+                    if (procSpell && !procSpell->IsDirectDamageSpell())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    // Don't proc on absorb
+                    if (!damage)
                         return SPELL_AURA_PROC_FAILED;
 
                     // Fix range for target selection when proccing SS with whirlwind. Whirlwind doesn't
@@ -544,7 +575,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     //   enabled targets if you are not PvP enabled.
                     target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true, true);
                     if (!target)
-                        return SPELL_AURA_PROC_FAILED;
+                        return SPELL_AURA_PROC_OK; // eat charge even if no target
 
                     // Case for Execute. This will only run when procced by Execute
                     if (procSpell && procSpell->Id == 20647)
@@ -736,6 +767,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 case 45422:
                 case 45423:
                 case 45424:
+                case 51001:
                 {
                     // Proc handlers are called with damage=1 by non damage spells to indicate they hit rather than missed.
                     if (damage <= 1)
@@ -875,6 +907,47 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
 
                     CastSpell(this, 28682, true, castItem, triggeredByAura);
                     return (procEx & PROC_EX_CRITICAL_HIT) ? SPELL_AURA_PROC_OK : SPELL_AURA_PROC_FAILED; // charge update only at crit hits, no hidden cooldowns
+                }
+                // Resonance Cascade
+                case 51262:
+                {
+                    if (!damage)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (!procSpell)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (!pVictim || !pVictim->IsAlive())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    int32 dmg = int32(damage * (float(triggerAmount) / 100.0f));
+                    if (!dmg)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    struct ConsecutiveProcsData
+                    {
+                        uint32 count;
+                        time_t lastProc;
+                    };
+
+                    static std::map<ObjectGuid, ConsecutiveProcsData> consecutiveProcsMap;
+
+                    ConsecutiveProcsData& procData = consecutiveProcsMap[GetObjectGuid()];
+
+                    if ((procData.lastProc + 3) < sWorld.GetGameTime())
+                        procData.count = 0;
+
+                    constexpr uint32 maxDuplications = 6;
+
+                    if (procData.count >= maxDuplications)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    procData.lastProc = sWorld.GetGameTime();
+                    ++procData.count;
+
+                    CastCustomSpell(pVictim, procSpell, &dmg, nullptr, nullptr, true);
+
+                    return SPELL_AURA_PROC_OK;
                 }
             }
             break;
@@ -1367,6 +1440,24 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                             return SPELL_AURA_PROC_FAILED;
                     }
                     break;
+                }
+                case 51022: // Loop of Infused Renewal
+                {
+                    if (!pVictim || !pVictim->IsAlive())
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (procSpell->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_HEALING_TOUCH>())
+                        CastSpell(pVictim, 51018, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_GREATER_HEAL>())
+                        CastSpell(pVictim, 51019, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_SHAMAN, CF_SHAMAN_HEALING_WAVE>())
+                        CastSpell(pVictim, 51020, true);
+                    else if (procSpell->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_HOLY_LIGHT1, CF_PALADIN_HOLY_LIGHT2>())
+                        CastSpell(pVictim, 51021, true);
+                    else
+                        return SPELL_AURA_PROC_FAILED;
+
+                    return SPELL_AURA_PROC_OK;
                 }
             }
             break;

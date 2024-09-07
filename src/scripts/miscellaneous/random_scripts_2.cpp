@@ -1149,9 +1149,42 @@ bool GossipSelect_QuestRewardSwap(Player* pPlayer, Creature* pCreature, uint32 /
     return true;
 }
 
+struct npc_duke_dreadmooreAI : public ScriptedAI
+{
+    npc_duke_dreadmooreAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    void Reset() override
+    {
+        m_creature->SetHealthPercent(20.1f);
+    }
+
+    void EnterCombat(Unit* pVictim) override
+    {
+        DoScriptText(30237, m_creature);
+    }
+
+    void JustDied(Unit* pKiller) override
+    {
+        DoScriptText(30238, m_creature);
+    }
+};
+
+CreatureAI* GetAI_npc_duke_dreadmoore(Creature* pCreature)
+{
+    return new npc_duke_dreadmooreAI(pCreature);
+}
+
 void AddSC_random_scripts_2()
 {
 	Script* newscript;	
+
+    newscript = new Script;
+    newscript->Name = "npc_duke_dreadmoore";
+    newscript->GetAI = &GetAI_npc_duke_dreadmoore;
+    newscript->RegisterSelf();
 	
     newscript = new Script;
     newscript->Name = "npc_j_eevee";

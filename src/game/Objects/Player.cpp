@@ -3583,6 +3583,12 @@ void Player::GiveXP(uint32 xp, Unit* victim)
 
     uint32 level = GetLevel();
 
+    if (HasChallenge(CHALLENGE_BOARING_MODE))
+    {
+        if (victim && victim->ToCreature()->GetCreatureInfo()->beast_family != CREATURE_FAMILY_BOAR)
+            return;
+    }
+
     // XP to money conversion processed in Player::RewardQuest
     // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
     if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled())
@@ -3734,6 +3740,15 @@ void Player::GiveLevel(uint32 level)
         {
             AwardTitle(TITLE_THE_WANDERER);
             MailVagrantModeRewards(level);
+        }
+    }
+
+    if (HasChallenge(CHALLENGE_BOARING_MODE))
+    {
+        if (level == PLAYER_MAX_LEVEL)
+        {
+            AwardTitle(TITLE_SWINE_SLAYER);
+            // Todo: mail some swine mount.
         }
     }
 
@@ -7577,7 +7592,7 @@ void Player::CheckAreaExploreAndOutdoor()
             //GetCheatData()->OnExplore(p);
             uint32 area = p->Id;
             uint32 xp = 0;
-            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()))
+            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()) || HasChallenge(CHALLENGE_BOARING_MODE))
             {
                 // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
                 int32 diff = int32(GetLevel()) - p->AreaLevel;
@@ -15720,7 +15735,7 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid)
         // just if !ingroup || !noraidgroup || raidgroup
         QuestStatusData& q_status = mQuestStatus[questid];
 
-        bool isRaidDenied = (!qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup() && !IsGameMaster());
+        bool isRaidDenied = !qInfo->IsAllowedInRaid() && GetGroup() && GetGroup()->isRaidGroup();
 
         if (q_status.m_status == QUEST_STATUS_INCOMPLETE)
         {
@@ -19316,7 +19331,7 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
 {
     uint32 display_id = 0;
 
-    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 12> glyph_map =
+    std::array<std::tuple<ShapeshiftForm, uint32, uint32, uint32, uint32, uint32>, 17> glyph_map =
     { {
        // Move it to DB if more glyphs!
        // spell id, alliance display, horde display, default_alliance, defaut_horde 
@@ -19331,6 +19346,11 @@ unsigned int Player::GetShapeshiftDisplay(ShapeshiftForm form)
         { FORM_DIREBEAR,  53011, 20405, 20406, 2281,  2289 },  // Glyph of the Emerald Bear
         { FORM_MOONKIN,   53014, 20408, 20409, 15374, 15375 }, // Glyph of the Dreamkin
         { FORM_CAT,       53017, 20410, 20410, 892,   8571 },  // Glyph of the Panther
+        { FORM_TRAVEL,    36521, 20611, 20611, 632,   632  },  // Glyph of the White Stag
+        { FORM_NEW_TREE,  57571, 18031, 18031, 2451,  864  },  // Glyph of the Arcane Treant
+        { FORM_NEW_TREE,  50923, 18030, 18030, 2451,  864  },  // Glyph of the Autumn Treant
+        { FORM_NEW_TREE,  50926, 18029, 18029, 2451,  864  },  // Glyph of the Golden Treant
+        { FORM_NEW_TREE,  50929, 6351, 6351, 2451,    864  },  // Glyph of the Withered Treant
         { FORM_MOONKIN,   53023, GetNativeDisplayId(), GetNativeDisplayId(), 15374, 15375 }, // Glyph of the Moon
     } };
 
@@ -25188,6 +25208,12 @@ bool Player::HasEarnedTitle(uint8 titleId)
     case TITLE_THE_WANDERER:
     {
         if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_VAGRANT_MODE))
+            return true;
+        break;
+    }
+    case TITLE_SWINE_SLAYER:
+    {
+        if (GetLevel() == PLAYER_MAX_LEVEL && HasChallenge(CHALLENGE_BOARING_MODE))
             return true;
         break;
     }

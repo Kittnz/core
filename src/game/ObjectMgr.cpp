@@ -9408,7 +9408,7 @@ void ObjectMgr::LoadShop()
 
     m_ShopEntriesMap.clear();
 
-    result = WorldDatabase.Query("SELECT ID, category, item, model_id, item_id, description, description_loc4, price, region_locked FROM shop_items");
+    result = WorldDatabase.Query("SELECT ID, category, item, model_id, item_id, description, description_loc4, price, region_locked, position_x, position_y, position_z, rotation, scale FROM shop_items");
 
     if (!result)
         return;
@@ -9426,7 +9426,11 @@ void ObjectMgr::LoadShop()
         std::string description_loc4 = fields[6].GetString();
         uint32 price = fields[7].GetUInt32();
         ShopRegion region = (ShopRegion)fields[8].GetUInt8();
-
+        float PosX = fields[9].GetFloat();
+        float PosY = fields[10].GetFloat();
+        float PosZ = fields[11].GetFloat();
+        float Rotation = fields[12].GetFloat();
+        float Scale = fields[13].GetFloat();
 
         if (!CheckRegionRequirements(region))
             continue;
@@ -9445,6 +9449,11 @@ void ObjectMgr::LoadShop()
         shopentry.Description = text;
         shopentry.Description_loc4 = description_loc4;
         shopentry.Price = price;
+        shopentry.Position.x = PosX;
+        shopentry.Position.y = PosY;
+        shopentry.Position.z = PosZ;
+        shopentry.Rotation = Rotation;
+        shopentry.Scale = Scale;
 
         if (!price)
         {
@@ -9479,7 +9488,7 @@ void ObjectMgr::LoadShop()
     for (auto& CategoryPair : m_ShopCategoriesMap)
     {
         ShopCategory& ShopCat = CategoryPair.second;
-		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [&](ShopEntry const& t1, ShopEntry const& t2)
+		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [](ShopEntry const& t1, ShopEntry const& t2)
 			{
 				return t1.shopId < t2.shopId;
 			});
@@ -9499,24 +9508,33 @@ void ObjectMgr::LoadShop()
             }
 
 			std::string ItemName;
+
+
 			if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
 			{
-				ItemName = Entry.Description_loc4;
+				//ItemName = Entry.Description_loc4;
+                ItemName = sObjectMgr.GetItemLocaleName(Entry.Item, LOCALE_zhCN);
 			}
 			else
 			{
-				ItemName = Entry.Description;
+				//ItemName = Entry.Description;
+                ItemName = pProto->Name1;
 			}
 
             CachedEntry.resize(1024);
-			int32 FormatResult = std::snprintf(CachedEntry.data(), 1024, "Entries:%u=%s=%u=%s=%u=%u=%u",
+			int32 FormatResult = std::snprintf(CachedEntry.data(), 1024, "Entries:%u=%s=%u=%s=%u=%u=%u=%.02f=%.02f=%.02f=%.02f=%.02f",
                 Entry.Category,
 				ItemName.c_str(),
                 Entry.Price,
 				pProto->Description.c_str(),
                 Entry.Item,
                 Entry.ModelID,
-                Entry.ItemDisplayID);
+                Entry.ItemDisplayID,
+                Entry.Position.x,
+                Entry.Position.y,
+                Entry.Position.z,
+                Entry.Rotation,
+                Entry.Scale);
 
             MANGOS_ASSERT(FormatResult > 0);
             if (FormatResult > 1022)

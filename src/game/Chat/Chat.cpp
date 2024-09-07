@@ -268,7 +268,6 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand guildCommandTable[] =
     {
-        { "cleanup",        SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCleanupCommand,        "", nullptr },
         { "create",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCreateCommand,         "", nullptr },
         { "delete",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildDeleteCommand,         "", nullptr },
         { "invite",         SEC_MODERATOR,     true,  &ChatHandler::HandleGuildInviteCommand,         "", nullptr },
@@ -376,6 +375,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "spirit",         SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifySpiritCommand,        "", nullptr },
         { "ap",             SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyMeleeApCommand,       "", nullptr },
         { "spellpower",     SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifySpellPowerCommand,    "", nullptr },
+        { "parry",          SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyParryCommand,         "", nullptr },
         { "honor",          SEC_ADMINISTRATOR, false, &ChatHandler::HandleModifyHonorCommand,         "", nullptr },
         { "xp",             SEC_DEVELOPER,     false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
         { "hairstyle",      SEC_DEVELOPER,     false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
@@ -947,7 +947,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "bgtest",         SEC_ADMINISTRATOR,   false, &ChatHandler::HandleBgTestCommand,              "", nullptr },
         { "cinematic",      SEC_ADMINISTRATOR,   false, &ChatHandler::HandleTurtleCinematic,            "", nullptr },
         { "dbghard",        SEC_ADMINISTRATOR,   false, &ChatHandler::HandleFastDebugCommand,           "", nullptr },
-        { "debugloot",      SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleDebugLootTableCommand,      "", nullptr },
+        { "debugloot",      SEC_DEVELOPER,       true,  &ChatHandler::HandleDebugLootTableCommand,      "", nullptr },
         { "loothelper",     SEC_DEVELOPER,       false, &ChatHandler::HandleLootHelperCommand,          "", nullptr },
         { "anim",           SEC_DEVELOPER,       false, &ChatHandler::HandleDebugAnimCommand,           "", nullptr },
         { "copy",           SEC_PLAYER,          false, &ChatHandler::HandleCopyCommand,                "", nullptr },

@@ -252,6 +252,9 @@ enum ConditionType
                                                             // Requirement: Map
                                                             // Value1: event1
                                                             // Value2: event2
+    CONDITION_STAND_STATE           = 60,                   // Checks the stand state of the target Unit.
+                                                            // Requirement: Unit Target
+                                                            // Value1: stand_state
 };
 
 enum ConditionFlags

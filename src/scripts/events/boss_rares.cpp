@@ -979,9 +979,78 @@ CreatureAI* GetAI_boss_explorer_ashbeard(Creature* pCreature)
     return new boss_explorer_ashbeardAI(pCreature);
 }
 
+namespace nsMobMollyWinterveil {
+    static constexpr uint32 SPELL_1 = 11976;
+    static constexpr uint32 SPELL_2 = 46266;
+}
+
+class mob_molly_winterveilAI : public ScriptedAI {
+public:
+    explicit mob_molly_winterveilAI(Creature* pCreature) : ScriptedAI(pCreature) {
+        Reset();
+    }
+
+private:
+    uint32 m_spell1Timer = 0; // Timer for SPELL_1 cast
+    uint32 m_spell2Timer = 3000; // Timer for first cast of SPELL_2 (3 seconds)
+    bool m_spell2FirstCast = true;
+
+public:
+    void Reset() override {
+        m_spell1Timer = 0;
+        m_spell2Timer = 3000;
+        m_spell2FirstCast = true;
+    }
+
+    void UpdateAI(const uint32 diff) override {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        // Cast SPELL_1 every 8 seconds
+        if (m_spell1Timer < diff) {
+            DoCastSpellIfCan(m_creature->GetVictim(), nsMobMollyWinterveil::SPELL_1);
+            m_spell1Timer = 8000; // Reset the timer
+        }
+        else {
+            m_spell1Timer -= diff; // Decrement the timer
+        }
+
+        // Cast SPELL_2 first 3 seconds into the encounter, then every 24 seconds
+        if (m_spell2FirstCast) {
+            if (m_spell2Timer < diff) {
+                DoCastSpellIfCan(m_creature->GetVictim(), nsMobMollyWinterveil::SPELL_2);
+                m_spell2FirstCast = false; // Set to false after the first cast
+            }
+            else {
+                m_spell2Timer -= diff; // Decrement the timer
+            }
+        }
+        else {
+            if (m_spell2Timer < diff) {
+                DoCastSpellIfCan(m_creature->GetVictim(), nsMobMollyWinterveil::SPELL_2);
+                m_spell2Timer = 24000; // Reset the timer
+            }
+            else {
+                m_spell2Timer -= diff; // Decrement the timer
+            }
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_mob_molly_winterveilAI(Creature* pCreature) {
+    return new mob_molly_winterveilAI(pCreature);
+}
+
 void AddSC_boss_rares()
 {
     Script* newscript;
+    newscript = new Script;
+    newscript->Name = "mob_molly_winterveil";
+    newscript->GetAI = &GetAI_mob_molly_winterveilAI;
+    newscript->RegisterSelf();
+
     newscript = new Script;
     newscript->Name = "boss_tarangos";
     newscript->GetAI = &GetAI_boss_tarangos;

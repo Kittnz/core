@@ -111,6 +111,7 @@ uint8 const ConditionTargetsInternal[] =
         CONDITION_REQ_SOURCE_CREATURE,    //  57
         CONDITION_REQ_SOURCE_CREATURE,    //  58
         CONDITION_REQ_MAP_OR_WORLDOBJECT, //  59
+        CONDITION_REQ_TARGET_UNIT,        //  60
 };
 
 // Starts from 4th element so that -3 will return first element.
@@ -662,6 +663,10 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
                 return false;
 
             return ((BattleGroundMap*)map)->GetBG()->IsActiveEvent(m_value1, m_value2);
+        }
+        case CONDITION_STAND_STATE:
+        {
+            return target->ToUnit()->GetStandState() == m_value1;
         }
     }
     return false;
@@ -1287,6 +1292,15 @@ bool ConditionEntry::IsValid()
             if (m_value2 >= 255)
             {
                 sLog.outErrorDb("CONDITION_BG_EVENT_ACTIVE (entry %u, type %u) has invalid value2 %u, skipped", m_entry, m_condition, m_value2);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_STAND_STATE:
+        {
+            if (m_value1 >= MAX_UNIT_STAND_STATE)
+            {
+                sLog.outErrorDb("CONDITION_STAND_STATE (entry %u, type %u) has invalid value1 %u, skipped", m_entry, m_condition, m_value1);
                 return false;
             }
             break;

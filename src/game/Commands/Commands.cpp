@@ -1,4 +1,4 @@
-﻿#include "GameObjectAI.h"
+#include "GameObjectAI.h"
 #include "AccountMgr.h"
 #include "Anticheat.h"
 #include "AsyncCommandHandlers.h"
@@ -2406,43 +2406,6 @@ bool ChatHandler::HandleLookupObjectCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleGuildCleanupCommand(char* args)
-{
-    uint32 guildId;
-    if (!ExtractUInt32(&args, guildId))
-        return false;
-
-    Guild* pGuild = sGuildMgr.GetGuildById(guildId);
-    if (!pGuild)
-    {
-        SendSysMessage(LANG_GUILD_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    std::unique_ptr<QueryResult> pResult(CharacterDatabase.PQuery("SELECT t1.guid FROM guild_member t1 CROSS JOIN characters t2 ON t1.guid = t2.guid WHERE (t1.guildid = %u) && ((t2.`logout_time` + %u) < %u)", guildId, YEAR, time(nullptr)));
-    if (!pResult)
-    {
-        SendSysMessage("No inactive characters in guild.");
-        return true;
-    }
-
-    do
-    {
-        Field* fields = pResult->Fetch();
-        
-        uint32 guidLow = fields[0].GetUInt32();
-        if (guidLow != pGuild->GetLeaderGuid().GetCounter())
-        {
-            PSendSysMessage("Removing player %u from guild %u.", guidLow, guildId);
-            pGuild->DelMember(ObjectGuid(HIGHGUID_PLAYER, guidLow));
-        }
-
-    } while (pResult->NextRow());
-
-    return true;
-}
-
 /** \brief GM command level 3 - Create a guild.
  *
  * This command allows a GM (level 3) to create a guild.
@@ -3127,7 +3090,11 @@ bool ChatHandler::HandleAuraHelper(uint32 spellId, int32 duration, Unit* unit)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
     if (!spellInfo)
+    {
+        PSendSysMessage("Spell %u does not exist.", spellId);
+        SetSentErrorMessage(true);
         return false;
+    }
 
     if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
         !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
@@ -5820,8 +5787,9 @@ bool ChatHandler::HandleDebugLootTableCommand(char* args)
     std::string tableName;
     int32 lootid = 0;
     int32 checkItem = 0;
-    uint32 simCount = 10000;
-    in >> tableName >> lootid >> checkItem;
+    uint32 simCount = 0;
+    in >> tableName >> lootid >> simCount >> checkItem;
+    simCount = simCount ? simCount : 10000;
     SetSentErrorMessage(true);
 
     LootStore const* store = nullptr;
@@ -7876,6 +7844,41 @@ bool ChatHandler::HandleModifySpellPowerCommand(char* args)
 
     if (needReportToTarget(pTarget->ToPlayer()))
         ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_SP_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyParryCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* player = GetSelectedPlayer();
+
+    if (!player)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float amount;
+    if (!ExtractFloat(&args, amount))
+        return false;
+
+    if (amount < 0 || amount > 100)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    player->SetStatFloatValue(PLAYER_PARRY_PERCENTAGE, amount);
+
+    PSendSysMessage(LANG_YOU_CHANGE_PARRY, player->GetName(), amount);
+
+    if (needReportToTarget(player))
+        ChatHandler(player).PSendSysMessage(LANG_YOURS_PARRY_CHANGED, GetNameLink().c_str(), amount);
 
     return true;
 }
@@ -17620,6 +17623,7 @@ bool ChatHandler::HandleDebugFieldsShowCommand(char* args)
 
     uint32 lowGuid, index;
 
+
     Object* targetObject = GetSelectedUnit();
 
     if (!targetObject)
@@ -17671,6 +17675,9 @@ bool ChatHandler::HandleDebugFieldsModifyCommand(char* args)
     uint32 lowGuid, index;
 
     Object* targetObject = GetSelectedUnit();
+
+    if (!targetObject)
+      targetObject = GetSelectedCreature();
 
     if (!targetObject)
         targetObject = GetObjectHelper(stream, lowGuid, index);
