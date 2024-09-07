@@ -92,6 +92,17 @@ namespace Classic
     };
 }
 
+class WorldBotChatData
+{
+public:
+    WorldBotChatData(uint32 guid, uint32 type, const std::string& chat)
+        : m_guid(guid), m_type(type), m_chat(chat) {}
+
+    uint32 m_guid;
+    uint32 m_type;
+    std::string m_chat;
+};
+
 class WorldBotChat
 {
 public:
@@ -104,6 +115,7 @@ public:
 
     // Loader
     void LoadPlayerChat();
+    void LoadBotChat();
 
     // Sending random chats in World channel
     void SendChatMessage(Player* me);
@@ -121,9 +133,30 @@ private:
     // Recieving chat
     void ProcessWhisper(Player* me, ObjectGuid senderGuid, const std::string& message);
     void ProcessChannelMessage(Player* me, const std::string& message, const std::string& chanName);
-    const char* GenerateResponse(const std::string& message);
     bool ShouldReactToChannelMessage(const std::string& message);
     void PerformChannelReaction(Player* me, const std::string& message);
+    const char* GenerateResponse(const std::string& message, const std::string& botName);
+    std::string SelectRandomResponse(const std::vector<std::string>& responses);
+
+    std::vector<WorldBotChatData> m_chatDataNotUnderstand;
+    std::vector<WorldBotChatData> m_chatDataGrudge;
+    std::vector<WorldBotChatData> m_chatDataVictim;
+    std::vector<WorldBotChatData> m_chatDataAttacker;
+    std::vector<WorldBotChatData> m_chatDataHelloRespond;
+    std::vector<WorldBotChatData> m_chatDataNameRespond;
+    std::vector<WorldBotChatData> m_chatDataAdminAbuse;
+
+    // Enum for chat data types
+    enum WorldBotChatDataType
+    {
+        NOT_UNDERSTAND = 0,
+        GRUDGE = 1,
+        VICTIM = 2,
+        ATTACKER = 3,
+        HELLO_RESPOND = 4,
+        NAME_RESPOND = 5,
+        ADMIN_ABUSE = 6
+    };
 
     // Genenral
     std::vector<ChatData> m_chatData;

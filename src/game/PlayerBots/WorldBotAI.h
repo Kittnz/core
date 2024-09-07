@@ -67,35 +67,6 @@ enum WorldBotSpells
     WB_ITEM_BULLET = 2516,
 };
 
-struct WorldBotChatData
-{
-    WorldBotChatData(uint32 guid, uint32 type, std::string chat) : m_guid(guid), m_type(type), m_chat(chat) {}
-    uint32 m_type, m_guid = 0;
-    std::string m_chat = "";
-};
-
-struct BotChatRespondsQueue
-{
-    BotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName) {}
-    ObjectGuid m_originguid;
-    uint32 m_type;
-    uint32 m_guid1;
-    uint32 m_guid2;
-    std::string m_msg;
-    std::string m_chanName;
-};
-
-enum WorldBotChatDataType
-{
-    NOT_UNDERSTAND,
-    GRUDGE,
-    VICTIM,
-    ATTACKER,
-    HELLO_RESPOND,
-    NAME_RESPOND,
-    ADMIN_ABUSE
-};
-
 enum WorldBotMapId
 {
     MAP_EASTERN_KINGDOMS = 0,
