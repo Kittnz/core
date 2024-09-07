@@ -21,7 +21,6 @@
 
 #include "AccountMgr.h"
 #include "Database/DatabaseEnv.h"
-#include "Database/DatabaseImpl.h"
 #include "ObjectAccessor.h"
 #include "ObjectGuid.h"
 #include "Player.h"
@@ -29,10 +28,11 @@
 #include "Util.h"
 #include "Auth/Sha1.h"
 #include "World.h"
+#include "Chat.h"
 #include "WorldSession.h"
+#include "Chat.h"
 #include "MasterPlayer.h"
 #include "Anticheat.h"
-#include "SRP6/SRP6.h"
 
 INSTANTIATE_SINGLETON_1(AccountMgr);
 
@@ -55,39 +55,27 @@ AccountOpResult AccountMgr::CreateAccount(std::string username, std::string pass
         return AOR_NAME_ALREDY_EXIST;                       // username does already exist
     }
 
-    SRP6 srp;
-    srp.CalculateVerifier(CalculateShaPassHash(username, password));
-    const char* s_hex = srp.GetSalt().AsHexStr();
-    const char* v_hex = srp.GetVerifier().AsHexStr();
-
-    bool update_sv = LoginDatabase.PExecute(
-        "INSERT INTO account(`username`, `v`, `s`, `joindate`) VALUES('%s','%s','%s',NOW())",
-        username.c_str(), v_hex, s_hex);
-
-    OPENSSL_free((void*)s_hex);
-    OPENSSL_free((void*)v_hex);
-
-    if (!update_sv)
+    if (!LoginDatabase.PExecute("INSERT INTO account(username,sha_pass_hash,joindate) VALUES('%s','%s',NOW())", username.c_str(), CalculateShaPassHash(username, password).c_str()))
         return AOR_DB_INTERNAL_ERROR;                       // unexpected error
-
-    LoginDatabase.Execute("REPLACE INTO `realmcharacters` (`realmid`, `acctid`, `numchars`) SELECT `realmlist`.`id`, `account`.`id`, 0 FROM `realmlist`,`account` LEFT JOIN `realmcharacters` ON `acctid`=`account`.`id` WHERE `acctid` IS NULL");
+    LoginDatabase.Execute("INSERT INTO realmcharacters (realmid, acctid, numchars) SELECT realmlist.id, account.id, 0 FROM realmlist,account LEFT JOIN realmcharacters ON acctid=account.id WHERE acctid IS NULL");
 
     return AOR_OK;                                          // everything's fine
 }
 
 AccountOpResult AccountMgr::DeleteAccount(uint32 accid)
 {
-    std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT 1 FROM `account` WHERE `id`='%u'", accid);
+    QueryResult *result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%u'", accid);
     if (!result)
         return AOR_NAME_NOT_EXIST;                          // account doesn't exist
+    delete result;
 
     // existing characters list
-    result = CharacterDatabase.PQuery("SELECT `guid` FROM `characters` WHERE `account`='%u'", accid);
+    result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE account='%u'", accid);
     if (result)
     {
         do
         {
-            Field* fields = result->Fetch();
+            Field *fields = result->Fetch();
             uint32 guidlo = fields[0].GetUInt32();
             ObjectGuid guid = ObjectGuid(HIGHGUID_PLAYER, guidlo);
 
@@ -96,16 +84,18 @@ AccountOpResult AccountMgr::DeleteAccount(uint32 accid)
             Player::DeleteFromDB(guid, accid, false);       // no need to update realm characters
         }
         while (result->NextRow());
+
+        delete result;
     }
 
     // table realm specific but common for all characters of account for realm
-    CharacterDatabase.PExecute("DELETE FROM `character_tutorial` WHERE `account` = '%u'", accid);
+    CharacterDatabase.PExecute("DELETE FROM character_tutorial WHERE account = '%u'", accid);
 
     LoginDatabase.BeginTransaction();
 
     bool res =
-        LoginDatabase.PExecute("DELETE FROM `account` WHERE `id`='%u'", accid) &&
-        LoginDatabase.PExecute("DELETE FROM `realmcharacters` WHERE `acctid`='%u'", accid);
+        LoginDatabase.PExecute("DELETE FROM account WHERE id='%u'", accid) &&
+        LoginDatabase.PExecute("DELETE FROM realmcharacters WHERE acctid='%u'", accid);
 
     LoginDatabase.CommitTransaction();
 
@@ -118,9 +108,10 @@ AccountOpResult AccountMgr::DeleteAccount(uint32 accid)
 //#DEPRECATED: Not used anywhere, should we delete?
 AccountOpResult AccountMgr::ChangeUsername(uint32 accid, std::string new_uname, std::string new_passwd)
 {
-    std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT 1 FROM `account` WHERE `id`='%u'", accid);
+    QueryResult *result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%u'", accid);
     if (!result)
         return AOR_NAME_NOT_EXIST;                          // account doesn't exist
+    delete result;
 
     if (utf8length(new_uname) > MAX_ACCOUNT_STR)
         return AOR_NAME_TOO_LONG;
@@ -131,27 +122,12 @@ AccountOpResult AccountMgr::ChangeUsername(uint32 accid, std::string new_uname, 
     normalizeString(new_uname);
     normalizeString(new_passwd);
 
-    SRP6 srp;
-
-    srp.CalculateVerifier(CalculateShaPassHash(new_uname, new_passwd));
-
     std::string safe_new_uname = new_uname;
     LoginDatabase.escape_string(safe_new_uname);
 
-    const char* s_hex = srp.GetSalt().AsHexStr();
-    const char* v_hex = srp.GetVerifier().AsHexStr();
-
-    bool update_sv = LoginDatabase.PExecute(
-        "UPDATE `account` SET `v`='%s', `s`='%s', `username`='%s' WHERE `id`='%u'",
-        v_hex, s_hex, safe_new_uname.c_str(), accid);
-
-    OPENSSL_free((void*)s_hex);
-    OPENSSL_free((void*)v_hex);
-
-    if (!update_sv)
+    if (!LoginDatabase.PExecute("UPDATE account SET v='0',s='0',username='%s',sha_pass_hash='%s' WHERE id='%u'", safe_new_uname.c_str(),
+                                CalculateShaPassHash(new_uname, new_passwd).c_str(), accid))
         return AOR_DB_INTERNAL_ERROR;                       // unexpected error
-
-    GetAccountPersistentData(accid).m_username = new_uname;
 
     return AOR_OK;
 }
@@ -171,22 +147,9 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd,
 
     normalizeString(new_passwd);
 
-    SRP6 srp;
-
-    srp.CalculateVerifier(CalculateShaPassHash(username, new_passwd));
-
-    const char* s_hex = srp.GetSalt().AsHexStr();
-    const char* v_hex = srp.GetVerifier().AsHexStr();
-
-    bool update_sv = LoginDatabase.PExecute(
-        "UPDATE `account` SET `v`='%s', `s`='%s' WHERE `id`='%u'",
-        v_hex, s_hex, accid);
-
-    OPENSSL_free((void*)s_hex);
-    OPENSSL_free((void*)v_hex);
-
     // also reset s and v to force update at next realmd login
-    if (!update_sv)
+    if (!LoginDatabase.PExecute("UPDATE account SET v='0', s='0', sha_pass_hash='%s' WHERE id='%u'",
+                                CalculateShaPassHash(username, new_passwd).c_str(), accid))
         return AOR_DB_INTERNAL_ERROR;                       // unexpected error
 
     return AOR_OK;
@@ -195,62 +158,75 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd,
 uint32 AccountMgr::GetId(std::string username)
 {
     LoginDatabase.escape_string(username);
-    std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT `id` FROM `account` WHERE `username` = '%s'", username.c_str());
+    QueryResult *result = LoginDatabase.PQuery("SELECT id FROM account WHERE username = '%s'", username.c_str());
     if (!result)
         return 0;
     else
     {
         uint32 id = (*result)[0].GetUInt32();
+        delete result;
         return id;
     }
 }
 
 void AccountMgr::Load()
 {
-    LoadAccountData();
-    LoadAccountBanList();
-    LoadIPBanList(std::move(LoginDatabase.Query(LOAD_IP_BANS_QUERY)));
-    LoadAccountWarnings();
-}
+    m_accountSecurity.clear();
 
-AccountTypes AccountMgr::GetSecurity(uint32 accountId)
-{
-    return GetAccountPersistentData(accountId).m_security;
-}
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account`"));
 
-void AccountMgr::SetSecurity(uint32 accountId, AccountTypes security)
-{
-    GetAccountPersistentData(accountId).m_security = security;
-    LoginDatabase.PExecute("REPLACE INTO `account_access` (`id`, `gmlevel`, `RealmID`) VALUES (%u, %u, %u)", accountId, security, realmID);
-}
-
-bool AccountMgr::HasTrialRestrictions(uint32 accountId)
-{
-    if (sWorld.getConfig(CONFIG_BOOL_RESTRICT_UNVERIFIED_ACCOUNTS))
+    if (!result)
     {
-        AccountPersistentData const& data = GetAccountPersistentData(accountId);
-        return !data.m_verifiedEmail && data.m_security <= SEC_PLAYER;
+        return;
     }
 
-    return false;
-}
-
-bool AccountMgr::GetName(uint32 accountId, std::string &name)
-{
+    Field *fields = nullptr;
+    do
     {
-        std::shared_lock<std::shared_timed_mutex> guard(m_accountPersistentDataMutex);
-        auto itr = m_accountPersistentData.find(accountId);
-        if (itr != m_accountPersistentData.end() && !itr->second.m_email.empty())
+        fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+        AccountTypes secu = AccountTypes(fields[1].GetUInt32());
+        switch (secu)
         {
-            name = itr->second.m_email;
-            return true;
+        case SEC_PLAYER:
+            break;
+        case SEC_OBSERVER:
+        case SEC_MODERATOR:
+        case SEC_DEVELOPER:
+        case SEC_ADMINISTRATOR:
+            if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
+                m_accountSecurity[accountId] < secu)
+                m_accountSecurity[accountId] = secu;
+            break;
         }
-    }
+    } while (result->NextRow());
 
-    std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT `username` FROM `account` WHERE `id` = '%u'", accountId);
+    LoadAccountBanList();
+    LoadIPBanList();
+    LoadFingerprintBanList();
+}
+
+AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
+{
+    std::map<uint32, AccountTypes>::const_iterator it = m_accountSecurity.find(acc_id);
+    if (it == m_accountSecurity.end())
+        return SEC_PLAYER;
+    return it->second;
+}
+
+void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
+{
+    m_accountSecurity[accId] = sec;
+    LoginDatabase.PExecute("UPDATE `account` SET `rank` = '%u' WHERE (`id` = '%u')", sec, accId);
+}
+
+bool AccountMgr::GetName(uint32 acc_id, std::string &name)
+{
+    QueryResult *result = LoginDatabase.PQuery("SELECT username FROM account WHERE id = '%u'", acc_id);
     if (result)
     {
         name = (*result)[0].GetCppString();
+        delete result;
         if (normalizeString(name))
             return true;
     }
@@ -261,11 +237,12 @@ bool AccountMgr::GetName(uint32 accountId, std::string &name)
 uint32 AccountMgr::GetCharactersCount(uint32 acc_id)
 {
     // check character count
-    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT COUNT(`guid`) FROM `characters` WHERE `account` = '%u'", acc_id);
+    QueryResult *result = CharacterDatabase.PQuery("SELECT COUNT(guid) FROM characters WHERE account = '%u'", acc_id);
     if (result)
     {
-        Field* fields = result->Fetch();
+        Field *fields = result->Fetch();
         uint32 charcount = fields[0].GetUInt32();
+        delete result;
         return charcount;
     }
     else
@@ -284,18 +261,11 @@ bool AccountMgr::CheckPassword(uint32 accid, std::string passwd, std::string use
 
     normalizeString(passwd);
 
-    std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT `s`, `v` FROM `account` WHERE `id`='%u'", accid);
+    QueryResult *result = LoginDatabase.PQuery("SELECT 1 FROM account WHERE id='%u' AND sha_pass_hash='%s'", accid, CalculateShaPassHash(username, passwd).c_str());
     if (result)
     {
-        Field* fields = result->Fetch();
-        SRP6 srp;
-
-        bool calcv = srp.CalculateVerifier(CalculateShaPassHash(username, passwd), fields[0].GetCppString().c_str());
-
-        if (calcv && srp.ProofVerifier(fields[1].GetCppString()))
-        {
-            return true;
-        }
+        delete result;
+        return true;
     }
 
     return false;
@@ -335,81 +305,48 @@ void AccountMgr::Update(uint32 diff)
     if (m_banlistUpdateTimer < diff)
     {
         m_banlistUpdateTimer = sWorld.getConfig(CONFIG_UINT32_BANLIST_RELOAD_TIMER) * 1000;
-        LoginDatabase.AsyncQuery(this, &AccountMgr::LoadIPBanList, true, LOAD_IP_BANS_QUERY);
-        //LoadAccountBanList(true);
+        LoadIPBanList(true);
     }
     else
         m_banlistUpdateTimer -= diff;
 }
 
-void AccountMgr::LoadIPBanList(std::unique_ptr<QueryResult> result, bool silent)
+void AccountMgr::LoadIPBanList(bool silent)
 {
-    if (!silent)
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading ip_banned ...");
-
-    if (!result)
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `ip`, `unbandate`, `bandate` FROM `ip_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+    
+    if (!banresult)
     {
-        if (!silent)
-        {
-            BarGoLink bar(1);
-            bar.step();
-
-            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 ip bans");
-        }
         return;
     }
 
-    std::map<std::string, uint32> ipBanned;
-    std::unique_ptr<BarGoLink> bar = silent ? nullptr : std::make_unique<BarGoLink>(result->GetRowCount());
+    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
+    m_ipBanned.clear();
     do
     {
-        if (bar)
-            bar->step();
-        Field* fields = result->Fetch();
+        Field* fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)
             unbandate = 0xFFFFFFFF;
-        ipBanned.emplace(std::make_pair(fields[0].GetString(), unbandate));
-    } while (result->NextRow());
 
-    std::lock_guard<std::shared_timed_mutex> lock(m_ipBannedMutex);
-    std::swap(ipBanned, m_ipBanned);
+        m_ipBanned[fields[0].GetString()] = unbandate;
+    } while (banresult->NextRow());
 
-    if (!silent)
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u ip bans", m_ipBanned.size());
-    }
 }
 
 void AccountMgr::LoadAccountBanList(bool silent)
 {
-    if (!silent)
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading account_banned ...");
-
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `unbandate`, `bandate` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
     
     if (!banresult)
     {
-        if (!silent)
-        {
-            BarGoLink bar(1);
-            bar.step();
-
-            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 account bans");
-        }
         return;
     }
 
     m_accountBanned.clear();
-    std::unique_ptr<BarGoLink> bar = silent ? nullptr : std::make_unique<BarGoLink>(banresult->GetRowCount());
     do
     {
-        if (bar)
-            bar->step();
         Field* fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();
@@ -417,17 +354,32 @@ void AccountMgr::LoadAccountBanList(bool silent)
             unbandate = 0xFFFFFFFF;
         m_accountBanned[fields[0].GetUInt32()] = unbandate;
     } while (banresult->NextRow());
+}
 
-    if (!silent)
+void AccountMgr::LoadFingerprintBanList(bool silent)
+{
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `fingerprint`, `unbandate`, `bandate` FROM `fingerprint_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    if (!banresult)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u account bans", m_accountBanned.size());
+        return;
     }
+
+    m_fingerprintBanned.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        uint32 unbandate = fields[1].GetUInt32();
+        uint32 bandate = fields[2].GetUInt32();
+        if (unbandate == bandate)
+            unbandate = 0xFFFFFFFF;
+        m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
+    } while (banresult->NextRow());
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
 {
-    std::shared_lock<std::shared_timed_mutex> lock(m_ipBannedMutex);
+    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
     std::map<std::string, uint32>::const_iterator it = m_ipBanned.find(ip);
     return !(it == m_ipBanned.end() || it->second < time(nullptr));
 }
@@ -438,20 +390,10 @@ bool AccountMgr::IsAccountBanned(uint32 acc) const
     return !(it == m_accountBanned.end() || it->second < time(nullptr));
 }
 
-void AccountMgr::LoadAccountWarnings()
+bool AccountMgr::IsFingerprintBanned(uint32 fingerprint) const
 {
-    std::unique_ptr<QueryResult> result(LoginDatabase.Query("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 && (`banreason` LIKE \"WARN:%\") ORDER BY `bandate`"));
-
-    if (!result)
-        return;
-
-    m_accountWarnings.clear();
-    do
-    {
-        Field* fields = result->Fetch();
-        std::string warning = fields[1].GetCppString();
-        m_accountWarnings[fields[0].GetUInt32()] = warning.substr(5, warning.size() - 5);
-    } while (result->NextRow());
+    std::map<uint32, uint32>::const_iterator it = m_fingerprintBanned.find(fingerprint);
+    return !(it == m_fingerprintBanned.end() || it->second < time(nullptr));
 }
 
 bool AccountMgr::CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount)
@@ -459,19 +401,27 @@ bool AccountMgr::CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 
     AccountInstanceEnterTimesMap::iterator it = m_instanceEnterTimes.find(accountId);
     if (it == m_instanceEnterTimes.end())
         return true;
+
     InstanceEnterTimesMap& enterTimes = it->second;
     InstanceEnterTimesMap::iterator it2 = enterTimes.find(instanceId);
+
     if (it2 != enterTimes.end())
         return true;
+
     if (enterTimes.size() < maxCount)
         return true;
+
     time_t now = time(nullptr);
+
     for (it2 = enterTimes.begin(); it2 != enterTimes.end(); ++it2)
+    {
         if (it2->second + 3600 < now)
         {
             enterTimes.erase(it2);
             return true;
         }
+    }
+
     return false;
 }
 
@@ -485,7 +435,40 @@ void AccountMgr::AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_
         m_instanceEnterTimes[accountId] = resetTimes;
         return;
     }
+
     it->second[instanceId] = enterTime;
+}
+
+uint32 AccountMgr::GetFlags(uint32 accountId)
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT flags FROM account WHERE id='%u'", accountId);
+    if (result)
+    {
+        uint32 val = result->Fetch()[0].GetUInt32();
+        delete result;
+        return val;
+    }
+    return 0;
+}
+
+bool AccountMgr::IsPlayerAccount(uint32 gmlevel)
+{
+    return gmlevel == SEC_PLAYER;
+}
+
+bool AccountMgr::IsGMAccount(uint32 gmlevel)
+{
+    return gmlevel >= SEC_OBSERVER && gmlevel <= SEC_CONSOLE;
+}
+
+bool AccountMgr::IsAdminAccount(uint32 gmlevel)
+{
+    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE;
+}
+
+bool AccountMgr::IsConsoleAccount(uint32 gmlevel)
+{
+    return gmlevel == SEC_CONSOLE;
 }
 
 // Anticheat
@@ -503,12 +486,14 @@ uint32 AccountPersistentData::CountWhispersTo(MasterPlayer* from, MasterPlayer* 
     ++data.whispers_count;
     if (data.whispers_count == 1)
         data.score = GetWhisperScore(from, player);
+
     return data.whispers_count-1;
 }
 
 bool AccountPersistentData::CanWhisper(MasterPlayer* player) const
 {
-    return sAnticheatMgr->CanWhisper(*this, player);
+    return true;
+   // return sAnticheatLib->CanWhisper(*this, player);
 }
 
 uint32 AccountPersistentData::GetWhisperScore(MasterPlayer* from, MasterPlayer* target) const
@@ -541,57 +526,7 @@ bool AccountPersistentData::CanMail(uint32 targetAccount)
     for (const auto& it : m_mailsSent)
         if (it.second >= lastNonExpired)
             totalScore++;
+
     uint32 allowedScore = sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS);
     return totalScore < allowedScore;
-}
-
-AccountPersistentData& AccountMgr::GetAccountPersistentData(uint32 accountId)
-{
-    {
-        std::shared_lock<std::shared_timed_mutex> guard(m_accountPersistentDataMutex);
-        auto itr = m_accountPersistentData.find(accountId);
-        if (itr != m_accountPersistentData.end())
-            return itr->second;
-    }
-    
-    {
-        std::lock_guard<std::shared_timed_mutex> guard(m_accountPersistentDataMutex);
-        return m_accountPersistentData[accountId];
-    }
-}
-
-void AccountMgr::LoadAccountData()
-{
-    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT a.`id`, a.`username`, a.`email`, a.`email_verif`, aa.`gmlevel` FROM `account` a LEFT JOIN `account_access` aa ON a.`id` = aa.`id` AND aa.`RealmID` IN (-1, %u)", realmID));
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-        uint32 id = fields[0].GetUInt32();
-        AccountPersistentData& data = m_accountPersistentData[id];
-        data.m_username = fields[1].GetCppString();
-        data.m_email = fields[2].GetCppString();
-        data.m_verifiedEmail = fields[3].GetBool() || data.m_email.empty(); // treat no email as verified (created from console)
-
-        // gmlevel can be null
-        if (fields[4].GetString())
-        {
-            AccountTypes security = AccountTypes(fields[4].GetUInt32());
-            if (data.m_security < security)
-                data.m_security = security;
-        }
-
-    } while (result->NextRow());
-}
-
-void AccountMgr::UpdateAccountData(uint32 accountId, std::string const& username, std::string const& email, bool verifiedEmail, AccountTypes security)
-{
-    AccountPersistentData& data = m_accountPersistentData[accountId];
-    data.m_username = username;
-    data.m_email = email;
-    data.m_verifiedEmail = verifiedEmail;
-    data.m_security = security;
 }

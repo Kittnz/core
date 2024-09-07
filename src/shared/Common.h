@@ -64,14 +64,14 @@
 
 #include "Platform/CompilerDefs.h"
 #include "Platform/Define.h"
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <cmath>
-#include <cerrno>
-#include <csignal>
-#include <cassert>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+#include <errno.h>
+#include <signal.h>
+#include <assert.h>
 
 #if defined(__sun__)
 #include <ieeefp.h> // finite() on Solaris
@@ -85,10 +85,7 @@
 #include <queue>
 #include <sstream>
 #include <algorithm>
-#include <chrono>
-
-typedef std::chrono::system_clock Clock;
-typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> TimePoint;
+#include <array>
 
 #include "Errors.h"
 #include "LockedQueue.h"
@@ -127,6 +124,7 @@ typedef off_t ACE_OFF_T;
 #  define I64FMT "%016I64X"
 //#  define snprintf _snprintf
 #  define vsnprintf _vsnprintf
+#  define finite(X) _finite(X)
 
 #else
 
@@ -150,9 +148,9 @@ typedef off_t ACE_OFF_T;
 
 #define SIZEFMTD ACE_SIZE_T_FORMAT_SPECIFIER
 
-inline float finiteAlways(float f) { return std::isfinite(f) ? f : 0.0f; }
+inline float finiteAlways(float f) { return finite(f) ? f : 0.0f; }
 
-#define atol(a) strtoul(a, nullptr, 10)
+#define atol(a) strtoul( a, nullptr, 10)
 
 #define STRINGIZE(a) #a
 
@@ -165,7 +163,12 @@ inline float finiteAlways(float f) { return std::isfinite(f) ? f : 0.0f; }
 #define PAIR32_HIPART(x)   (uint16)((uint32(x) >> 16) & 0x0000FFFF)
 #define PAIR32_LOPART(x)   (uint16)(uint32(x)         & 0x0000FFFF)
 
-#include "Progression.h"
+enum MoneyConstants
+{
+    COPPER = 1,
+    SILVER = COPPER*100,
+    GOLD   = SILVER*100
+};
 
 enum TimeConstants
 {
@@ -181,13 +184,11 @@ enum TimeConstants
 enum AccountTypes
 {
     SEC_PLAYER         = 0,
-    SEC_MODERATOR      = 1,
-    SEC_TICKETMASTER   = 2,
-    SEC_GAMEMASTER     = 3,
-    SEC_BASIC_ADMIN    = 4,
-    SEC_DEVELOPER      = 5,
-    SEC_ADMINISTRATOR  = 6,
-    SEC_CONSOLE        = 7                                  // must be always last in list, accounts must have less security level always also
+    SEC_OBSERVER       = 1,
+    SEC_MODERATOR      = 2,
+    SEC_DEVELOPER      = 3,
+    SEC_ADMINISTRATOR  = 4,
+    SEC_CONSOLE        = 5,                               
 };
 
 // Used in mangosd/realmd
@@ -207,18 +208,15 @@ enum RealmFlags
 // Index returned by GetSessionDbcLocale.
 enum LocaleConstant
 {
-    LOCALE_enUS = 0, // also enGB
+    LOCALE_enUS = 0,   // also enGB
     LOCALE_koKR = 1,
     LOCALE_frFR = 2,
     LOCALE_deDE = 3,
     LOCALE_zhCN = 4,
     LOCALE_zhTW = 5,
     LOCALE_esES = 6,
-
-    // no official vanilla clients for these exist
-    // the locale strings first appear in the binary in 2.2.0
-    LOCALE_esMX = 7, // unused text column exists for this index in dbc files
-    LOCALE_ruRU = 8  // did not exist in any way, but has fan made client now (english texts replaced with russian)
+    LOCALE_esMX = 7,
+    LOCALE_ruRU = 8    // not in vanilla                             
 };
 
 // Index returned by GetSessionDbLocaleIndex.
@@ -235,10 +233,10 @@ enum DBLocaleConstant : int
     DB_LOCALE_ruRU = 7
 };
 
-#define MAX_DBC_LOCALE 8
-#define MAX_LOCALE 9
+constexpr uint32 MAX_DBC_LOCALE = 8;
+constexpr uint32 MAX_LOCALE = 9;
 
-LocaleConstant GetLocaleByName(std::string const& name);
+LocaleConstant GetLocaleByName(const std::string& name);
 LocaleConstant GetDbcLocaleFromDbLocale(DBLocaleConstant localeIndex);
 
 extern char const* localeNames[MAX_LOCALE];
@@ -253,11 +251,23 @@ struct LocaleNameStr
 extern LocaleNameStr const fullLocaleNameList[];
 
 //operator new[] based version of strdup() function! Release memory by using operator delete[] !
-inline char* mangos_strdup(char const* source)
+inline char * mangos_strdup(const char * source)
 {
-    char* dest = new char[strlen(source) + 1];
+    char * dest = new char[strlen(source) + 1];
     strcpy(dest, source);
     return dest;
+}
+
+template <typename... T>
+constexpr auto make_array(T&&... values) ->
+std::array<
+    typename std::decay<
+    typename std::common_type<T...>::type>::type,
+    sizeof...(T)> {
+    return std::array<
+        typename std::decay<
+        typename std::common_type<T...>::type>::type,
+        sizeof...(T)>{std::forward<T>(values)...};
 }
 
 // we always use stdlibc++ std::max/std::min, undefine some not C++ standard defines (Win API and some pother platforms)

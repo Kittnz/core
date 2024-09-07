@@ -23,25 +23,32 @@
 #include "DBCStores.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "ObjectMgr.h"
 #include "SpellMgr.h"
 #include "Log.h"
 #include "Opcodes.h"
 #include "Spell.h"
+#include "ScriptMgr.h"
+#include "Totem.h"
 #include "SpellAuras.h"
-#include "GameObject.h"
-#include "Map.h"
 
 using namespace Spells;
 
 void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
 {
     uint8 bagIndex, slot;
-    uint8 spellSlot; // the position of the spell id on the item template
+    uint8 spell_count;                                      // number of spells at item, not used
 
-    recvPacket >> bagIndex >> slot >> spellSlot;
+    recvPacket >> bagIndex >> slot >> spell_count;
 
     // TODO: add targets.read() check
     Player* pUser = _player;
+
+    if (!pUser->IsAlive())
+    {
+        pUser->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, nullptr, nullptr);
+        return;
+    }
 
     // ignore for remote control state
     if (!pUser->IsSelfMover())
@@ -58,17 +65,10 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    ItemPrototype const* proto = pItem->GetProto();
-    if (!proto)
-    {
-        recvPacket.rpos(recvPacket.wpos());                 // prevent spam at not read packet tail
-        pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, nullptr);
-        return;
-    }
+    DETAIL_LOG("WORLD: CMSG_USE_ITEM packet, bagIndex: %u, slot: %u, spell_count: %u , Item: %u, data length = %i", bagIndex, slot, spell_count, pItem->GetEntry(), (uint32)recvPacket.size());
 
-    if (spellSlot >= MAX_ITEM_PROTO_SPELLS ||
-        proto->Spells[spellSlot].SpellId == 0 ||
-        proto->Spells[spellSlot].SpellTrigger != ITEM_SPELLTRIGGER_ON_USE)
+    ItemPrototype const *proto = pItem->GetProto();
+    if (!proto)
     {
         recvPacket.rpos(recvPacket.wpos());                 // prevent spam at not read packet tail
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, nullptr);
@@ -115,6 +115,10 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
         }
     }
 
+    // Remove invisibility except Gnomish Cloaking Device, since evidence suggests
+    // it remains until cast finish
+    _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ON_CAST_SPELL, 4079);
+
     // check also  BIND_WHEN_PICKED_UP and BIND_QUEST_ITEM for .additem or .additemset case by GM (not binded at adding to inventory)
     if (pItem->GetProto()->Bonding == BIND_WHEN_USE || pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM)
     {
@@ -133,36 +137,53 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
 
     SpellCastResult itemCastCheckResult = SPELL_CAST_OK;
     if (!pItem->IsTargetValidForItemUse(targets.getUnitTarget()))
+    {
         itemCastCheckResult = SPELL_FAILED_BAD_TARGETS;
+    }
     else if (pUser->IsShapeShifted())
     {
-        // World of Warcraft Client Patch 1.10.0 (2006-03-28)
-        // - All shapeshift forms can now use equipped items.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
         if (!(bagIndex == INVENTORY_SLOT_BAG_0 && slot < EQUIPMENT_SLOT_END))
-#endif
-        itemCastCheckResult = SPELL_FAILED_NO_ITEMS_WHILE_SHAPESHIFTED;
+        {
+            itemCastCheckResult = SPELL_FAILED_NO_ITEMS_WHILE_SHAPESHIFTED;
+        }
     }
-
+    
     if (itemCastCheckResult != SPELL_CAST_OK)
     {
         // free gray item after use fail
         pUser->SendEquipError(EQUIP_ERR_NONE, pItem, nullptr);
 
+        // search spell for spell error
+        uint32 spellid = 0;
+        for (const auto& itr : proto->Spells)
+        {
+            if (itr.SpellTrigger == ITEM_SPELLTRIGGER_ON_USE || itr.SpellTrigger == ITEM_SPELLTRIGGER_ON_NO_DELAY_USE)
+            {
+                spellid = itr.SpellId;
+                break;
+            }
+        }
+
         // send spell error
-        uint32 spellid = proto->Spells[spellSlot].SpellId;
         if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellid))
             Spell::SendCastResult(_player, spellInfo, itemCastCheckResult);
+
         return;
     }
 
-    pUser->CastItemUseSpell(pItem, targets);
+    if (!sScriptMgr.OnItemUse(pUser, pItem, targets))
+        pUser->CastItemUseSpell(pItem, targets);
 }
 
 void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 {
+    DETAIL_LOG("WORLD: CMSG_OPEN_ITEM packet, data length = %i", (uint32)recvPacket.size());
+
     uint8 bagIndex, slot;
+
     recvPacket >> bagIndex >> slot;
+
+    DETAIL_LOG("bagIndex: %u, slot: %u", bagIndex, slot);
 
     Player* pUser = _player;
 
@@ -177,7 +198,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    ItemPrototype const* proto = pItem->GetProto();
+    ItemPrototype const *proto = pItem->GetProto();
     if (!proto)
     {
         pUser->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, pItem, nullptr);
@@ -200,12 +221,12 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     uint32 lockId = proto->LockID;
     if (lockId && !pItem->HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_UNLOCKED))
     {
-        LockEntry const* lockInfo = sLockStore.LookupEntry(lockId);
+        LockEntry const *lockInfo = sLockStore.LookupEntry(lockId);
 
         if (!lockInfo)
         {
             pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, pItem, nullptr);
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", pItem->GetGUIDLow() , lockId);
+            sLog.outError("WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", pItem->GetGUIDLow() , lockId);
             return;
         }
 
@@ -222,10 +243,10 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
     if (pItem->HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_WRAPPED))// wrapped?
     {
-        std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT `item_id`, `flags` FROM `character_gifts` WHERE `item_guid` = '%u'", pItem->GetGUIDLow());
+        QueryResult *result = CharacterDatabase.PQuery("SELECT entry, flags FROM character_gifts WHERE item_guid = '%u'", pItem->GetGUIDLow());
         if (result)
         {
-            Field* fields = result->Fetch();
+            Field *fields = result->Fetch();
             uint32 entry = fields[0].GetUInt32();
             uint32 flags = fields[1].GetUInt32();
 
@@ -233,33 +254,48 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
             pItem->SetEntry(entry);
             pItem->SetUInt32Value(ITEM_FIELD_FLAGS, flags);
             pItem->SetState(ITEM_CHANGED, pUser);
+            delete result;
         }
         else
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Wrapped item %u don't have record in character_gifts table and will deleted", pItem->GetGUIDLow());
+            sLog.outError("Wrapped item %u don't have record in character_gifts table and will deleted", pItem->GetGUIDLow());
             pUser->DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
             return;
         }
 
         static SqlStatementID delGifts ;
 
-        SqlStatement stmt = CharacterDatabase.CreateStatement(delGifts, "DELETE FROM `character_gifts` WHERE `item_guid` = ?");
+        SqlStatement stmt = CharacterDatabase.CreateStatement(delGifts, "DELETE FROM character_gifts WHERE item_guid = ?");
         stmt.PExecute(pItem->GetGUIDLow());
     }
     else
+    {
+        // Opening item should properly interrupt looting
+        if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING))
+        {
+            if (ObjectGuid lootGuid{ GetPlayer()->GetLootGuid() })
+            {
+                DoLootRelease(lootGuid);
+            }
+        }
+
         pUser->SendLoot(pItem->GetObjectGuid(), LOOT_CORPSE);
+    }
 }
 
-void WorldSession::HandleGameObjectUseOpcode(WorldPacket& recv_data)
+void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
 {
     ObjectGuid guid;
+
     recv_data >> guid;
+
+    DEBUG_LOG("WORLD: Recvd CMSG_GAMEOBJ_USE Message guid: %s", guid.GetString().c_str());
 
     // ignore for remote control state
     if (!_player->IsSelfMover())
         return;
 
-    GameObject* obj = GetPlayer()->GetMap()->GetGameObject(guid);
+    GameObject *obj = GetPlayer()->GetMap()->GetGameObject(guid);
     if (!obj || obj->IsDeleted())
         return;
 
@@ -278,9 +314,10 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket& recv_data)
     if (!obj->IsAtInteractDistance(_player))
         return;
 
+    // Nostalrius
     if (obj->PlayerCanUse(_player))
     {
-        _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_LOOTING_CANCELS);
+        _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_USE);
         obj->Use(_player);
     }
 }
@@ -290,7 +327,10 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     uint32 spellId;
     recvPacket >> spellId;
 
-    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+    DEBUG_LOG("WORLD: got cast spell packet, spellId - %u, data length = %i",
+              spellId, (uint32)recvPacket.size());
+
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
 
     if (!spellInfo)
     {
@@ -298,13 +338,26 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    // not have spell in spellbook or spell passive and not casted by client
-    if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
+    if (_player->GetTypeId() == TYPEID_PLAYER)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
-        //cheater? kick? ban?
-        recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
-        return;
+        // not have spell in spellbook or spell passive and not casted by client
+        if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
+        {
+            sLog.outError("World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
+            //cheater? kick? ban?
+            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
+            return;
+        }
+    }
+    else if (_player->GetTypeId() == TYPEID_UNIT)
+    {
+        // not have spell in spellbook or spell passive and not casted by client
+        if (!_player->HasSpell(spellId) || spellInfo->IsPassiveSpell())
+        {
+            //cheater? kick? ban?
+            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
+            return;
+        }
     }
 
     // client provided targets
@@ -330,7 +383,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         }
 
         // if rank not found then function return nullptr but in explicit cast case original spell can be casted and later failed with appropriate error message
-        if (SpellEntry const* actualSpellInfo = sSpellMgr.SelectAuraRankForLevel(spellInfo, target->GetLevel()))
+        if (SpellEntry const *actualSpellInfo = sSpellMgr.SelectAuraRankForLevel(spellInfo, target->GetLevel()))
             spellInfo = actualSpellInfo;
     }
 
@@ -339,6 +392,20 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     {
         if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
             DoLootRelease(lootGuid);
+    }
+
+    // World of Warcraft Client Patch 1.10.0 (2006-03-28)
+    // - Stealth and Invisibility effects will now be canceled at the
+    //   beginning of an action(spellcast, ability use etc...), rather than
+    //   at the completion of the action.
+    // Remove invisibility except Gnomish Cloaking Device, since evidence suggests
+    // it remains until cast finish
+    _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ON_CAST_SPELL, 4079);
+
+    if (_player->GetRace() == RACE_TAUREN && _player->HasAura(PLAINSRUNNING_SPELL) && !spellInfo->HasAttribute(SPELL_ATTR_CASTABLE_WHILE_MOUNTED))
+    {
+        _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
+        _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
     }
 
     Spell* spell = new Spell(_player, spellInfo, false, ObjectGuid(), nullptr, targets.getUnitTarget());
@@ -350,6 +417,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // Nostalrius : Ivina
     spell->SetClientStarted(true);
     spell->prepare(std::move(targets));
+    ALL_SESSION_SCRIPTS(this, OnSpellCasted(spellId));
 }
 
 void WorldSession::HandleCancelCastOpcode(WorldPacket& recvPacket)
@@ -374,19 +442,15 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
     uint32 spellId;
     recvPacket >> spellId;
 
-    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+    // Buff MJ '.gm visible off'.
+    if (spellId == 16380 && !_player->IsGMVisible())
+        return;
+
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
     if (!spellInfo)
         return;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-    if (spellInfo->HasAttribute(SPELL_ATTR_NO_AURA_CANCEL))
-        return;
-#endif
-
-    if (spellInfo->HasAttribute(SPELL_ATTR_DO_NOT_DISPLAY))
-        return;
-    
-    if (spellInfo->HasAttribute(SPELL_ATTR_EX_NO_AURA_ICON) && !spellInfo->activeIconID)
+    if (spellInfo->Attributes & SPELL_ATTR_CANT_CANCEL)
         return;
 
     if (spellInfo->IsPassiveSpell())
@@ -401,8 +465,7 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
             bool allow = false;
             for (uint32 k : spellInfo->EffectApplyAuraName)
             {
-                if (k == SPELL_AURA_MOD_POSSESS ||
-                    k == SPELL_AURA_MOD_POSSESS_PET)
+                if (k == SPELL_AURA_MOD_POSSESS || k == SPELL_AURA_MOD_POSSESS_PET)
                 {
                     allow = true;
                     break;
@@ -417,15 +480,17 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
             return;
     }
 
-    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
-    // - Druids should now be able to shapeshift back into caster form while Feared.
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-    if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING | UNIT_FLAG_POSSESSED))
-#else
-    // confirmed you cant remove buffs while mind controlled on wotlk ptr
-    if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED))
-#endif
-        return;
+    // prevent last relocation opcode handling: CancelAura is handled before Mover is changed
+    // thus the last movement data is written into pMover, that should not happen
+    for (uint32 i : spellInfo->Effect)
+    {
+        // Eye of Kilrogg case
+        if (i == SPELL_EFFECT_SUMMON_POSSESSED)
+        {
+            _player->SetNextRelocationsIgnoredCount(1);
+            break;
+        }
+    }
 
     // channeled spell case (it currently casted then)
     if (spellInfo->IsChanneledSpell())
@@ -436,7 +501,7 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    SpellAuraHolder* holder = _player->GetSpellAuraHolder(spellId);
+    SpellAuraHolder *holder = _player->GetSpellAuraHolder(spellId);
 
     // not own area auras can't be cancelled (note: maybe need to check for aura on holder and not general on spell)
     if (holder && holder->GetCasterGuid() != _player->GetObjectGuid() && holder->GetSpellProto()->HasAreaAuraEffect())
@@ -458,7 +523,7 @@ void WorldSession::HandlePetCancelAuraOpcode(WorldPacket& recvPacket)
     if (!_player->IsSelfMover())
         return;
 
-    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
     if (!spellInfo)
         return;
 
@@ -491,7 +556,7 @@ void WorldSession::HandleCancelAutoRepeatSpellOpcode(WorldPacket& /*recvPacket*/
     _player->GetMover()->InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
 }
 
-void WorldSession::HandleCancelChanneling(WorldPacket& recv_data)
+void WorldSession::HandleCancelChanneling(WorldPacket & recv_data)
 {
     recv_data.read_skip<uint32>();                          // spellid, not used
 
@@ -508,28 +573,16 @@ void WorldSession::HandleCancelChanneling(WorldPacket& recv_data)
     }
 }
 
-void WorldSession::HandleSelfResOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandleSelfResOpcode(WorldPacket & /*recv_data*/)
 {
-// World of Warcraft Client Patch 1.6.0 (2005-07-12)
-// - Self-resurrection spells show their name on the button in the release spirit dialog.
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
+    DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "WORLD: CMSG_SELF_RES");                  // empty opcode
+
     if (_player->GetUInt32Value(PLAYER_SELF_RES_SPELL))
     {
-        SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(_player->GetUInt32Value(PLAYER_SELF_RES_SPELL));
+        SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(_player->GetUInt32Value(PLAYER_SELF_RES_SPELL));
         if (spellInfo)
             _player->CastSpell(_player, spellInfo, false);
 
         _player->SetUInt32Value(PLAYER_SELF_RES_SPELL, 0);
     }
-#else
-    if (_player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CAN_SELF_RESURRECT))
-    {
-        SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(_player->GetResurrectionSpellId());
-        if (spellInfo)
-            _player->CastSpell(_player, spellInfo, false);
-
-        _player->SetResurrectionSpellId(0);
-        _player->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_CAN_SELF_RESURRECT);
-    }
-#endif
 }

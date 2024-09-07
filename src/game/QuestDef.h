@@ -23,12 +23,13 @@
 #define MANGOSSERVER_QUEST_H
 
 #include "Platform/Define.h"
+#include "Database/DatabaseEnv.h"
 
 #include <string>
 #include <vector>
 
-class Field;
 class Player;
+
 class ObjectMgr;
 
 #define MAX_QUEST_LOG_SIZE 20
@@ -165,13 +166,13 @@ enum QuestSpecialFlags
     // Mangos flags for set SpecialFlags in DB if required but used only at server
     QUEST_SPECIAL_FLAG_REPEATABLE           = 0x001,        // |1 in SpecialFlags from DB
     QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT = 0x002,        // |2 in SpecialFlags from DB (if required area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script DLL)
-    // reserved for future versions           0x004,        // |4 in SpecialFlags.
+    QUEST_SPECIAL_FLAG_DAILY                = 0x004,        // |4 in SpecialFlags | Internal flag for daily quests
 
     // Mangos flags for internal use only
     QUEST_SPECIAL_FLAG_DELIVER              = 0x008,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_SPEAKTO              = 0x010,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_KILL_OR_CAST         = 0x020,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_TIMED                = 0x040,        // Internal flag computed only
+    QUEST_SPECIAL_FLAG_TIMED                = 0x040         // Internal flag computed only
 };
 
 enum QuestMethod
@@ -183,7 +184,7 @@ enum QuestMethod
     QUEST_METHOD_LIMIT                      = 0x3,          // Highest Method entry DB should have
 };
 
-#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT)
+#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT | QUEST_SPECIAL_FLAG_DAILY)
 
 struct QuestLocale
 {
@@ -205,8 +206,8 @@ class Quest
 {
     friend class ObjectMgr;
     public:
-        Quest(Field* questRecord);
-        uint32 XPValue(Player* pPlayer) const;
+        Quest(Field * questRecord);
+        uint32 XPValue( Player *pPlayer ) const;
 
         uint32 GetQuestFlags() const { return m_QuestFlags; }
         bool HasQuestFlag(QuestFlags flag) const { return (m_QuestFlags & flag) != 0; }
@@ -225,7 +226,6 @@ class Quest
         uint32 GetRequiredRaces() const { return RequiredRaces; }
         uint32 GetRequiredSkill() const { return RequiredSkill; }
         uint32 GetRequiredSkillValue() const { return RequiredSkillValue; }
-        uint32 GetRequiredCondition() const { return RequiredCondition; }
         uint32 GetRepObjectiveFaction() const { return RepObjectiveFaction; }
         int32  GetRepObjectiveValue() const { return RepObjectiveValue; }
         uint32 GetRequiredMinRepFaction() const { return RequiredMinRepFaction; }
@@ -237,23 +237,23 @@ class Quest
         int32  GetPrevQuestId() const { return PrevQuestId; }
         int32  GetNextQuestId() const { return NextQuestId; }
         int32  GetExclusiveGroup() const { return ExclusiveGroup; }
-        uint32 GetBreadcrumbForQuestId() const { return BreadcrumbForQuestId; }
         uint32 GetNextQuestInChain() const { return NextQuestInChain; }
         // [-ZERO] not exist
         uint32 GetSrcItemId() const { return SrcItemId; }
         uint32 GetSrcItemCount() const { return SrcItemCount; }
         uint32 GetSrcSpell() const { return SrcSpell; }
-        std::string const& GetTitle() const { return Title; }
-        std::string const& GetDetails() const { return Details; }
-        std::string const& GetObjectives() const { return Objectives; }
-        std::string const& GetOfferRewardText() const { return OfferRewardText; }
-        std::string const& GetRequestItemsText() const { return RequestItemsText; }
-        std::string const& GetEndText() const { return EndText; }
+        std::string GetTitle() const { return Title; }
+        std::string GetDetails() const { return Details; }
+        std::string GetObjectives() const { return Objectives; }
+        std::string GetOfferRewardText() const { return OfferRewardText; }
+        std::string GetRequestItemsText() const { return RequestItemsText; }
+        std::string GetEndText() const { return EndText; }
         int32  GetRewOrReqMoney() const;
         uint32 GetRewMoneyMaxLevel() const { return RewMoneyMaxLevel; }
         int32 GetRewMoneyMaxLevelAtComplete() const;
         uint32 GetRewXP() const { return RewXP; }
-                                                            // use in XP calculation at client
+
+        // Use in XP calculation at client
         uint32 GetRewSpell() const { return RewSpell; }
         uint32 GetRewSpellCast() const { return RewSpellCast; }
         int32 GetRewMailTemplateId() const { return RewMailTemplateId; }
@@ -305,7 +305,6 @@ class Quest
         PrevQuests prevQuests;
         typedef std::vector<uint32> PrevChainQuests;
         PrevChainQuests prevChainQuests;
-        std::vector<uint32> DependentBreadcrumbQuests;
 
         // cached data
     private:
@@ -329,7 +328,6 @@ class Quest
         uint32 RequiredRaces;
         uint32 RequiredSkill;
         uint32 RequiredSkillValue;
-        uint32 RequiredCondition;
         uint32 RepObjectiveFaction;
         int32  RepObjectiveValue;
         uint32 RequiredMinRepFaction;
@@ -343,7 +341,6 @@ class Quest
         int32  PrevQuestId;
         int32  NextQuestId;
         int32  ExclusiveGroup;
-        uint32 BreadcrumbForQuestId;
         uint32 NextQuestInChain;
         uint32 SrcItemId;
         uint32 SrcItemCount;

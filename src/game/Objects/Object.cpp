@@ -27,15 +27,17 @@
 #include "World.h"
 #include "Creature.h"
 #include "Player.h"
-#include "GameObjectAI.h"
+#include "Totem.h"
 #include "ObjectMgr.h"
 #include "ObjectGuid.h"
 #include "UpdateData.h"
 #include "UpdateMask.h"
 #include "Util.h"
 #include "MapManager.h"
+#include "Log.h"
 #include "Transport.h"
-#include "MotionMaster.h"
+#include "TargetedMovementGenerator.h"
+#include "WaypointMovementGenerator.h"
 #include "VMapFactory.h"
 #include "CellImpl.h"
 #include "GridNotifiers.h"
@@ -43,18 +45,18 @@
 #include "Language.h"
 #include "Geometry.h"
 #include "ObjectPosSelector.h"
-#include "MoveMapSharedDefines.h"
-#include "PathFinder.h"
+
 #include "TemporarySummon.h"
 #include "ZoneScriptMgr.h"
 #include "InstanceData.h"
 #include "Chat.h"
-#include "MonsterChatBuilder.h"
 #include "Anticheat.h"
 
 #include "packet_builder.h"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
+
+#include "Autoscaling/AutoScaler.hpp"
 
 ////////////////////////////////////////////////////////////
 // Methods of class MovementInfo
@@ -103,7 +105,7 @@ void MovementInfo::Read(ByteBuffer &data)
     }
 }
 
-void MovementInfo::CorrectData()
+void MovementInfo::CorrectData(Unit* mover)
 {
     // Nostalrius: remove incompatible flags, causing client freezes for example
 #define REMOVE_VIOLATING_FLAGS(check, maskToRemove) \
@@ -198,23 +200,23 @@ Object::~Object()
 {
     if (IsInWorld())
     {
-        // Do NOT call RemoveFromWorld here, if the object is a player it will crash
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::~Object (GUID: %u TypeId: %u) deleted but still in world!!", GetGUIDLow(), GetTypeId());
+        ///- Do NOT call RemoveFromWorld here, if the object is a player it will crash
+        sLog.outError("Object::~Object (GUID: %u TypeId: %u) deleted but still in world!!", GetGUIDLow(), GetTypeId());
         MANGOS_ASSERT(false);
     }
 
     if (m_objectUpdated)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::~Object (GUID: %u TypeId: %u) deleted but still have updated status!!", GetGUIDLow(), GetTypeId());
+        sLog.outError("Object::~Object (GUID: %u TypeId: %u) deleted but still have updated status!!", GetGUIDLow(), GetTypeId());
         MANGOS_ASSERT(false);
     }
 
     if (m_uint32Values)
     {
-        //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Object desctr 1 check (%p)",(void*)this);
+        //DEBUG_LOG("Object desctr 1 check (%p)",(void*)this);
         delete [] m_uint32Values;
         delete [] m_uint32Values_mirror;
-        //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Object desctr 2 check (%p)",(void*)this);
+        //DEBUG_LOG("Object desctr 2 check (%p)",(void*)this);
     }
 }
 
@@ -259,25 +261,27 @@ void Object::SendForcedObjectUpdate()
         itr.second.Send(itr.first->GetSession());
 }
 
-void Object::BuildMovementUpdateBlock(UpdateData& data, uint8 flags) const
+void Object::BuildMovementUpdateBlock(UpdateData * data, uint8 flags) const
 {
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
+    ByteBuffer buf(500);
 
     buf << uint8(UPDATETYPE_MOVEMENT);
     buf << GetObjectGuid();
 
     BuildMovementUpdate(&buf, flags);
+
+    data->AddUpdateBlock(buf);
 }
 
-void Object::BuildCreateUpdateBlockForPlayer(UpdateData& data, Player* target) const
+void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) const
 {
     if (!target)
         return;
 
-    uint8 updatetype   = UPDATETYPE_CREATE_OBJECT;
-    uint8 updateFlags  = m_updateFlag;
+    uint8 updatetype = UPDATETYPE_CREATE_OBJECT;
+    uint8 updateFlags = m_updateFlag;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+    /** lower flag1 **/
     if (target == this)                                     // building packet for yourself
         updateFlags |= UPDATEFLAG_SELF;
 
@@ -286,49 +290,24 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData& data, Player* target) c
 
     if (m_isNewObject)
         updatetype = UPDATETYPE_CREATE_OBJECT2;
-#else
-    if (target->GetMover() == this)
-        updateFlags |= UPDATEFLAG_SELF;
-#endif
 
-    //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BuildCreateUpdate: update-type: %u, object-type: %u got updateFlags: %X", updatetype, m_objectTypeId, updateFlags);
+    if (isType(TYPEMASK_GAMEOBJECT) && static_cast<GameObject const*>(this)->GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
+        updateFlags |= UPDATEFLAG_TRANSPORT;
 
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
+    //DEBUG_LOG("BuildCreateUpdate: update-type: %u, object-type: %u got updateFlags: %X", updatetype, m_objectTypeId, updateFlags);
+
+    ByteBuffer buf(500);
     buf << (uint8)updatetype;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     buf << GetPackGUID();
-#else
-    buf << GetGUID();
-#endif
     buf << uint8(m_objectTypeId);
     
     BuildMovementUpdate(&buf, updateFlags);
 
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-    buf << uint32(updateFlags); // Flags
-    buf << uint32(1); // AttackCycle (always 1 in sniffs)
-    buf << uint32(0); // TimerId
-
-    // VictimGuid
-    if (IsUnit() && static_cast<Unit const*>(this)->HasUnitState(UNIT_STAT_MELEE_ATTACKING) && static_cast<Unit const*>(this)->GetVictim())
-        buf << uint64(static_cast<Unit const*>(this)->GetVictim()->GetGUID());
-    else
-        buf << uint64(0);
-
-    if (updateFlags & UPDATEFLAG_TRANSPORT)
-    {
-        GameObject const* go = ToGameObject();
-        if (go && go->IsTransport())
-            buf << uint32(static_cast<GenericTransport const*>(go)->GetPathProgress());
-        else
-            buf << uint32(sWorld.GetCurrentMSTime());
-    }
-#endif
-
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
-    _SetCreateBits(updateMask, target);
+    _SetCreateBits(&updateMask, target);
     BuildValuesUpdate(updatetype, &buf, &updateMask, target);
+    data->AddUpdateBlock(buf);
 }
 
 void Object::SendCreateUpdateToPlayer(Player* player)
@@ -336,121 +315,66 @@ void Object::SendCreateUpdateToPlayer(Player* player)
     // send create update to player
     UpdateData upd;
 
-    BuildCreateUpdateBlockForPlayer(upd, player);
+    BuildCreateUpdateBlockForPlayer(&upd, player);
     upd.Send(player->GetSession());
 }
 
-void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
+void WorldObject::DirectSendPublicValueUpdate(uint32 index)
 {
     // Do we need an update ?
-    bool abort = true;
-    for (uint32 i = 0; i < count; i++)
-    {
-        if (m_uint32Values_mirror[index + i] != m_uint32Values[index + i])
-        {
-            abort = false;
-            m_uint32Values_mirror[index + i] = m_uint32Values[index + i];
-        }
-    }
-
-    if (abort)
+    if (m_uint32Values_mirror[index] == m_uint32Values[index])
         return;
-
-    UpdateMask updateMask;
-    updateMask.SetCount(m_valuesCount);
-    for (uint32 i = 0; i < count; i++)
-        updateMask.SetBit(index + i);
-
-    DirectSendPublicValueUpdate(updateMask);
-}
-
-void WorldObject::DirectSendPublicValueUpdate(std::initializer_list<uint32> indexes)
-{
-    UpdateMask updateMask;
-    updateMask.SetCount(m_valuesCount);
-    for (auto const& index : indexes)
-        updateMask.SetBit(index);
-
-    DirectSendPublicValueUpdate(updateMask);
-}
-
-void WorldObject::DirectSendPublicValueUpdate(UpdateMask& updateMask)
-{
+    m_uint32Values_mirror[index] = m_uint32Values[index];
     UpdateData data;
-
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
+    ByteBuffer buf(50);
     buf << uint8(UPDATETYPE_VALUES);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     buf << GetPackGUID();
-#else
-    buf << GetGUID();
-#endif
+
+    UpdateMask updateMask;
+    updateMask.SetCount(m_valuesCount);
+    updateMask.SetBit(index);
 
     buf << (uint8)updateMask.GetBlockCount();
     buf.append(updateMask.GetMask(), updateMask.GetLength());
+    buf << uint32(m_uint32Values[index]);
 
-    for (uint16 index = 0; index < m_valuesCount; ++index)
-    {
-        if (updateMask.GetBit(index))
-        {
-            buf << uint32(m_uint32Values[index]);
-            m_uint32Values_mirror[index] = m_uint32Values[index];
-        }
-    }
-
+    data.AddUpdateBlock(buf);
     WorldPacket packet;
     data.BuildPacket(&packet);
     SendObjectMessageToSet(&packet, true);
 }
 
-void Object::BuildValuesUpdateBlockForPlayer(UpdateData& data, Player* target) const
+void Object::BuildValuesUpdateBlockForPlayer(UpdateData *data, Player *target) const
 {
+    ByteBuffer buf(500);
+
+    buf << uint8(UPDATETYPE_VALUES);
+    buf << GetPackGUID();
+
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
 
-    _SetUpdateBits(updateMask, target);
-    if (updateMask.HasData())
-        BuildValuesUpdateBlockForPlayer(data, updateMask, target);
-}
-
-void Object::BuildValuesUpdateBlockForPlayerWithFlags(UpdateData& data, Player* target, UpdateFieldFlags flags, bool includingEmpty) const
-{
-    UpdateMask updateMask;
-    updateMask.SetCount(GetValuesCount());
-    MarkUpdateFieldsWithFlagForUpdate(updateMask, (uint16)flags, includingEmpty);
-    if (updateMask.HasData())
-        BuildValuesUpdateBlockForPlayer(data, updateMask, target);
-}
-
-void Object::BuildValuesUpdateBlockForPlayer(UpdateData& data, UpdateMask& updateMask, Player* target) const
-{
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
-
-    buf << uint8(UPDATETYPE_VALUES);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-    buf << GetPackGUID();
-#else
-    buf << GetGUID();
-#endif
-
+    _SetUpdateBits(&updateMask, target);
     BuildValuesUpdate(UPDATETYPE_VALUES, &buf, &updateMask, target);
+
+    data->AddUpdateBlock(buf);
 }
 
-void Object::BuildOutOfRangeUpdateBlock(UpdateData& data) const
+void Object::BuildOutOfRangeUpdateBlock(UpdateData * data) const
 {
-    data.AddOutOfRangeGUID(GetObjectGuid());
+    data->AddOutOfRangeGUID(GetObjectGuid());
 }
 
-void Object::SendOutOfRangeUpdateToPlayer(Player const* player)
+void Object::SendOutOfRangeUpdateToPlayer(Player* player)
 {
     UpdateData data;
-    BuildOutOfRangeUpdateBlock(data);
+    BuildOutOfRangeUpdateBlock(&data);
     WorldPacket packet;
     data.BuildPacket(&packet);
     player->SendDirectMessage(&packet);
 }
 
-void Object::DestroyForPlayer(Player const* target) const
+void Object::DestroyForPlayer(Player *target) const
 {
     MANGOS_ASSERT(target);
 
@@ -459,9 +383,8 @@ void Object::DestroyForPlayer(Player const* target) const
     target->GetSession()->SendPacket(&data);
 }
 
-void Object::BuildMovementUpdate(ByteBuffer* data, uint8 updateFlags) const
+void Object::BuildMovementUpdate(ByteBuffer * data, uint8 updateFlags) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     *data << uint8(updateFlags);                            // update flags
 
     if (updateFlags & UPDATEFLAG_LIVING)
@@ -518,6 +441,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint8 updateFlags) const
             }
         }
     }
+
     if (updateFlags & UPDATEFLAG_HIGHGUID)
     {
         // unk uint32.
@@ -547,48 +471,19 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint8 updateFlags) const
     {
         // transport progress or mstime.
         GameObject const* go = ToGameObject();
-        if (go && go->IsTransport())
-            *data << uint32(static_cast<GenericTransport const*>(go)->GetPathProgress());
+        /** @TODO Use IsTransport() to also handle type 11 (TRANSPORT)
+            Currently grid objects are not updated if there are no nearby players,
+            this causes clients to receive different PathProgress
+            resulting in players seeing the object in a different position
+        */
+        if (go && go->ToTransport())
+            *data << uint32(go->ToTransport()->GetPathProgress());
         else
-            *data << uint32(sWorld.GetCurrentMSTime());
+            *data << uint32(WorldTimer::getMSTime());           // ms time
     }
-#else
-    WorldObject const* wobject = ToWorldObject();
-    MovementInfo m = wobject ? wobject->m_movementInfo : MovementInfo();
-    if (!m.ctime)
-    {
-        m.stime = WorldTimer::getMSTime() + 1000;
-        if (updateFlags & UPDATEFLAG_TRANSPORT)
-        {
-            GameObject const* go = static_cast<GameObject const*>(wobject);
-            m.ChangePosition(go->GetStationaryX(), go->GetStationaryY(), go->GetStationaryZ(), go->GetStationaryO());
-        }
-        else if (wobject)
-            m.ChangePosition(wobject->GetPositionX(), wobject->GetPositionY(), wobject->GetPositionZ(), wobject->GetOrientation());
-    }
-    if (IsCreature())
-        m.moveFlags = m.moveFlags & ~MOVEFLAG_ROOT;
-    *data << m;
-    
-    if (Unit const* unit = ToUnit())
-    {
-        *data << float(unit->GetSpeed(MOVE_WALK));
-        *data << float(unit->GetSpeed(MOVE_RUN));
-        *data << float(unit->GetSpeed(MOVE_RUN_BACK));
-        *data << float(unit->GetSpeed(MOVE_SWIM));
-        *data << float(unit->GetSpeed(MOVE_SWIM_BACK));
-        *data << float(unit->GetSpeed(MOVE_TURN_RATE));
-        // Send current movement informations
-        if (unit->m_movementInfo.moveFlags & MOVEFLAG_SPLINE_ENABLED)
-            Movement::PacketBuilder::WriteCreate(*(unit->movespline), *data);
-    }
-    else
-        for (int i = 0; i < MAX_MOVE_TYPE; ++i)
-            *data << float(1.0f);
-#endif
 }
 
-void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* updateMask, Player* target) const
+void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *updateMask, Player *target) const
 {
     if (!target)
         return;
@@ -597,11 +492,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
 
     bool IsActivateToQuest = false;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     if (updatetype == UPDATETYPE_CREATE_OBJECT || updatetype == UPDATETYPE_CREATE_OBJECT2)
-#else
-    if (updatetype == UPDATETYPE_CREATE_OBJECT)
-#endif
     {
         if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
         {
@@ -610,19 +501,8 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
 
             updateMask->SetBit(GAMEOBJECT_DYN_FLAGS);
         }
-        else if (isType(TYPEMASK_UNIT) && target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
-        {
-            // Force include dynamic flags to make special info visible.
-            updateMask->SetBit(UNIT_DYNAMIC_FLAGS);
-        }
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-        else if (isType(TYPEMASK_ITEM))
-        {
-            // Force include flags field in create object packet,
-            // because the static flags need to be sent in that field.
-            updateMask->SetBit(ITEM_FIELD_FLAGS);
-        }
-#endif
+        if (target->HasOption(PLAYER_VIDEO_MODE) && isType(TYPEMASK_UNIT))
+            updateMask->SetBit(UNIT_FIELD_FLAGS);
     }
     else                                                    // case UPDATETYPE_VALUES
     {
@@ -632,9 +512,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                 IsActivateToQuest = true;
 
             updateMask->SetBit(GAMEOBJECT_DYN_FLAGS);
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
             updateMask->SetBit(GAMEOBJECT_ANIMPROGRESS);
-#endif
         }
     }
     if (isType(TYPEMASK_GAMEOBJECT))
@@ -700,6 +578,12 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                                 }
                             }
                         }
+
+                        if (appendValue & UNIT_NPC_FLAG_ITEMRESTORE)
+                        {
+                            appendValue &= ~UNIT_NPC_FLAG_ITEMRESTORE;
+                            appendValue |= UNIT_NPC_FLAG_VENDOR;
+                        }
                     }
 
                     *data << uint32(appendValue);
@@ -713,10 +597,13 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
 
                 // there are some float values which may be negative or can't get negative due to other checks
                 else if ((index >= PLAYER_FIELD_NEGSTAT0    && index <= PLAYER_FIELD_NEGSTAT4) ||
-                         (index >= PLAYER_FIELD_RESISTANCEBUFFMODSPOSITIVE  && index <= (PLAYER_FIELD_RESISTANCEBUFFMODSPOSITIVE + 6)) ||
-                         (index >= PLAYER_FIELD_RESISTANCEBUFFMODSNEGATIVE  && index <= (PLAYER_FIELD_RESISTANCEBUFFMODSNEGATIVE + 6)) ||
+                         (index >= PLAYER_FIELD_RES_BUFF_MODS_POSITIVE  && index <= (PLAYER_FIELD_RES_BUFF_MODS_POSITIVE + 6)) ||
+                         (index >= PLAYER_FIELD_RES_BUFF_MODS_NEGATIVE  && index <= (PLAYER_FIELD_RES_BUFF_MODS_NEGATIVE + 6)) ||
                          (index >= PLAYER_FIELD_POSSTAT0    && index <= PLAYER_FIELD_POSSTAT4))
                     *data << uint32(m_floatValues[index]);
+                // Video maker - hide unit name, etc ...
+                else if (index == UNIT_FIELD_FLAGS && target->HasOption(PLAYER_VIDEO_MODE) && target != this)
+                    *data << (m_uint32Values[index] | UNIT_FLAG_NOT_SELECTABLE);
                 // Gamemasters should be always able to select units and view auras
                 else if (index == UNIT_FIELD_FLAGS && target->IsGameMaster())
                     *data << ((m_uint32Values[index] | UNIT_FLAG_AURAS_VISIBLE) & ~UNIT_FLAG_NOT_SELECTABLE);
@@ -725,13 +612,14 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                 {
                     uint32 dynamicFlags = m_uint32Values[index];
                     if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_TRACK_UNIT))
-                    {
-                        if (Unit const* unit = ToUnit())
+                        if (Unit const * unit = ToUnit())
                         {
-                            if (!unit->HasAuraTypeByCaster(SPELL_AURA_MOD_STALKED, target->GetObjectGuid()))
+                            Unit::AuraList auras = unit->GetAurasByType(SPELL_AURA_MOD_STALKED);
+                            if (std::find_if(auras.begin(), auras.end(),[target](Aura *a){
+                                return target->GetObjectGuid() == a->GetCasterGuid();
+                            }) == auras.end())
                                 dynamicFlags &= ~UNIT_DYNFLAG_TRACK_UNIT;
                         }
-                    }
                     if (Creature const* creature = ToCreature())
                     {
                         if (creature->HasLootRecipient())
@@ -753,25 +641,20 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                         if (!target->IsAllowedToLoot(creature))
                             dynamicFlags &= ~UNIT_DYNFLAG_LOOTABLE;
                     }
-                    if (target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
-                        dynamicFlags |= UNIT_DYNFLAG_SPECIALINFO;
-
                     *data << dynamicFlags;
                 }
                 // RAID ally-horde - Faction
                 else if (index == UNIT_FIELD_FACTIONTEMPLATE)
                 {
-                    Unit const* owner = ((Unit*)this)->GetCharmerOrOwner();
-                    if (!owner)
-                        owner = ToPlayer();
+                    Player* owner = ((Unit*)this)->GetCharmerOrOwnerPlayerOrPlayerItself();
                     bool forceFriendly = false;
-                    if (owner && owner->IsPlayer())
+                    if (owner)
                     {
-                        FactionTemplateEntry const* ft1,* ft2;
+                        FactionTemplateEntry const *ft1, *ft2;
                         ft1 = owner->GetFactionTemplateEntry();
                         ft2 = target->GetFactionTemplateEntry();
-                        if (ft1 && ft2 && !ft1->IsFriendlyTo(*ft2) && static_cast<Player const*>(owner)->IsInSameRaidWith(target))
-                            if (static_cast<Player const*>(owner)->IsInInterFactionMode() && target->IsInInterFactionMode())
+                        if (ft1 && ft2 && !ft1->IsFriendlyTo(*ft2) && owner->IsInSameRaidWith(target))
+                            if (owner->IsInInterFactionMode() && target->IsInInterFactionMode())
                                 forceFriendly = true;
                     }
                     uint32 faction = m_uint32Values[index];
@@ -815,7 +698,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                 }
                 else if (target == this && (index == PLAYER_TRACK_CREATURES || index == PLAYER_TRACK_RESOURCES))
                 {
-                    //if (Warden* base = target->GetSession()->GetWarden())
+                    //if (WardenInterface* base = target->GetSession()->GetWarden())
                         //base->TrackingUpdateSent(index, m_uint32Values[index]);
                     *data << m_uint32Values[index];
                 }
@@ -844,7 +727,6 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                     }
                     *data << m_uint32Values[index];
                 }
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
                 else if (index == UNIT_MOD_CAST_SPEED)
                 {
                     if (m_floatValues[index] < 0.001f)
@@ -852,7 +734,6 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                     else
                         *data << m_floatValues[index];
                 }
-#endif
                 else
                 {
                     // send in current format (float as float, uint32 as uint32)
@@ -895,7 +776,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
             }
         }
     }
-    else if (isType(TYPEMASK_CORPSE))
+    else                                                    // other objects case (no special index checks)
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -906,7 +787,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                     uint32 dynFlags = m_uint32Values[CORPSE_FIELD_DYNAMIC_FLAGS];
                     if (Corpse const* corpse = ToCorpse())
                     {
-                        Loot const* loot = &corpse->loot;
+                        const Loot* loot = &corpse->loot;
                         if (loot->isLooted()) // nothing to loot or everything looted.
                             dynFlags &= ~CORPSE_DYNFLAG_LOOTABLE;
                         if (dynFlags & CORPSE_DYNFLAG_LOOTABLE)
@@ -918,40 +799,6 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                 else
                     // send in current format (float as float, uint32 as uint32)
                     *data << m_uint32Values[index];
-            }
-        }
-    }
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-    else if (isType(TYPEMASK_ITEM))
-    {
-        for (uint16 index = 0; index < m_valuesCount; ++index)
-        {
-            if (updateMask->GetBit(index))
-            {
-                // Static item flags are part of that field prior to patch 1.7.
-                if (index == ITEM_FIELD_FLAGS)
-                {
-                    if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(GetEntry()))
-                        *data << uint16(pProto->Flags);
-                    else
-                        *data << uint16(0);
-                    *data << uint16(m_uint32Values[index]);
-                }
-                else
-                    // send in current format (float as float, uint32 as uint32)
-                    *data << m_uint32Values[index];
-            }
-        }
-    }
-#endif
-    else                                                    // other objects case (no special index checks)
-    {
-        for (uint16 index = 0; index < m_valuesCount; ++index)
-        {
-            if (updateMask->GetBit(index))
-            {
-                // send in current format (float as float, uint32 as uint32)
-                *data << m_uint32Values[index];
             }
         }
     }
@@ -971,7 +818,7 @@ void Object::ClearUpdateMask(bool remove)
     _delayedActions &= ~OBJECT_DELAYED_MARK_CLIENT_UPDATE;
 }
 
-bool Object::LoadValues(char const* data)
+bool Object::LoadValues(const char* data)
 {
     if (!m_uint32Values) _InitValues();
 
@@ -986,68 +833,6 @@ bool Object::LoadValues(char const* data)
         m_uint32Values[index] = atol((*iter).c_str());
 
     return true;
-}
-
-uint16 Object::GetUpdateFieldFlagsForTarget(Player const* target, uint16 const*& flags) const
-{
-    flags = UpdateFields::GetUpdateFieldFlagsArray(GetTypeId());
-    uint16 visibleFlag = UF_FLAG_PUBLIC | UF_FLAG_DYNAMIC;
-
-    if (target == this)
-        visibleFlag |= UF_FLAG_PRIVATE;
-
-    switch (GetTypeId())
-    {
-        case TYPEID_ITEM:
-        case TYPEID_CONTAINER:
-            if (static_cast<Item const*>(this)->GetOwnerGuid() == target->GetObjectGuid())
-                visibleFlag |= UF_FLAG_OWNER_ONLY | UF_FLAG_UNK2;
-            break;
-        case TYPEID_UNIT:
-        case TYPEID_PLAYER:
-        {
-            if (target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
-            {
-                visibleFlag |= UF_FLAG_OWNER_ONLY | UF_FLAG_SPECIAL_INFO | UF_FLAG_GROUP_ONLY;
-            }
-            else
-            {
-                if (static_cast<Unit const*>(this)->GetOwnerGuid() == target->GetObjectGuid() ||
-                    static_cast<Unit const*>(this)->GetCharmerGuid() == target->GetObjectGuid())
-                    visibleFlag |= UF_FLAG_OWNER_ONLY;
-
-                if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_SPECIALINFO))
-                    if (target->CanSeeSpecialInfoOf(static_cast<Unit const*>(this)))
-                        visibleFlag |= UF_FLAG_SPECIAL_INFO;
-
-                if (Player* plr = static_cast<Unit const*>(this)->GetCharmerOrOwnerPlayerOrPlayerItself())
-                    if (plr->IsInSameRaidWith(target))
-                        visibleFlag |= UF_FLAG_GROUP_ONLY;
-            }
-            
-            break;
-        }
-        /*
-        Optimization: these objects dont actually have any fields marked as owner only, so comment this out
-
-        case TYPEID_GAMEOBJECT:
-            if (static_cast<GameObject const*>(this)->GetOwnerGuid() == target->GetObjectGuid())
-                visibleFlag |= UF_FLAG_OWNER_ONLY;
-            break;
-        case TYPEID_DYNAMICOBJECT:
-            if (static_cast<DynamicObject const*>(this)->GetCasterGuid() == target->GetObjectGuid())
-                visibleFlag |= UF_FLAG_OWNER_ONLY;
-            break;
-        case TYPEID_CORPSE:
-            if (static_cast<Corpse const*>(this)->GetOwnerGuid() == target->GetObjectGuid())
-                visibleFlag |= UF_FLAG_OWNER_ONLY;
-            break;
-        case TYPEID_OBJECT:
-            break;
-        */
-    }
-
-    return visibleFlag;
 }
 
 void Object::_LoadIntoDataField(std::string const& data, uint32 startOffset, uint32 count)
@@ -1067,41 +852,21 @@ void Object::_LoadIntoDataField(std::string const& data, uint32 startOffset, uin
     }
 }
 
-void Object::MarkUpdateFieldsWithFlagForUpdate(UpdateMask& updateMask, uint16 flag, bool includingEmpty) const
+void Object::_SetUpdateBits(UpdateMask *updateMask, Player* /*target*/) const
 {
-    uint16 const* flags = UpdateFields::GetUpdateFieldFlagsArray(GetTypeId());
-    ASSERT(flags);
-
     for (uint16 index = 0; index < m_valuesCount; ++index)
     {
-        if ((includingEmpty || (m_uint32Values[index] != 0)) && (flags[index] & flag))
-            updateMask.SetBit(index);
+        if (m_uint32Values_mirror[index] != m_uint32Values[index])
+            updateMask->SetBit(index);
     }
 }
 
-void Object::_SetUpdateBits(UpdateMask& updateMask, Player const* target) const
+void Object::_SetCreateBits(UpdateMask *updateMask, Player* /*target*/) const
 {
-    uint16 const* flags = nullptr;
-    uint16 visibleFlag = GetUpdateFieldFlagsForTarget(target, flags);
-    ASSERT(flags);
-
     for (uint16 index = 0; index < m_valuesCount; ++index)
     {
-        if ((m_uint32Values_mirror[index] != m_uint32Values[index]) && (flags[index] & visibleFlag))
-            updateMask.SetBit(index);
-    }
-}
-
-void Object::_SetCreateBits(UpdateMask& updateMask, Player const* target) const
-{
-    uint16 const* flags = nullptr;
-    uint16 visibleFlag = GetUpdateFieldFlagsForTarget(target, flags);
-    ASSERT(flags);
-
-    for (uint16 index = 0; index < m_valuesCount; ++index)
-    {
-        if ((m_uint32Values[index] != 0) && (flags[index] & visibleFlag))
-            updateMask.SetBit(index);
+        if (GetUInt32Value(index) != 0)
+            updateMask->SetBit(index);
     }
 }
 
@@ -1127,7 +892,7 @@ void Object::SetUInt32Value(uint16 index, uint32 value)
     }
 }
 
-void Object::SetUInt64Value(uint16 index, uint64 const& value)
+void Object::SetUInt64Value(uint16 index, const uint64 &value)
 {
     MANGOS_ASSERT(index + 1 < m_valuesCount || PrintIndexError(index, true));
     if (*((uint64*) & (m_uint32Values[ index ])) != value)
@@ -1170,7 +935,7 @@ void Object::SetByteValue(uint16 index, uint8 offset, uint8 value)
 
     if (offset > 4)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::SetByteValue: wrong offset %u", offset);
+        sLog.outError("Object::SetByteValue: wrong offset %u", offset);
         return;
     }
 
@@ -1188,7 +953,7 @@ void Object::SetUInt16Value(uint16 index, uint8 offset, uint16 value)
 
     if (offset > 2)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::SetUInt16Value: wrong offset %u", offset);
+        sLog.outError("Object::SetUInt16Value: wrong offset %u", offset);
         return;
     }
 
@@ -1280,7 +1045,7 @@ void Object::SetByteFlag(uint16 index, uint8 offset, uint8 newFlag)
 
     if (offset > 4)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::SetByteFlag: wrong offset %u", offset);
+        sLog.outError("Object::SetByteFlag: wrong offset %u", offset);
         return;
     }
 
@@ -1297,7 +1062,7 @@ void Object::RemoveByteFlag(uint16 index, uint8 offset, uint8 oldFlag)
 
     if (offset > 4)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Object::RemoveByteFlag: wrong offset %u", offset);
+        sLog.outError("Object::RemoveByteFlag: wrong offset %u", offset);
         return;
     }
 
@@ -1332,7 +1097,7 @@ void Object::RemoveShortFlag(uint16 index, bool highpart, uint16 oldFlag)
 
 bool Object::PrintIndexError(uint32 index, bool set) const
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "%s nonexistent value field: %u (count: %u) for object typeid: %u type mask: %u",
+    sLog.outInfo("%s nonexistent value field: %u (count: %u) for object typeid: %u type mask: %u",
                     (set ? "set value to" : "get value from"), index, m_valuesCount, GetTypeId(), m_objectType);
 
     // ASSERT must fail after function call
@@ -1350,24 +1115,24 @@ void Object::BuildUpdateDataForPlayer(Player* pl, UpdateDataMapType& update_play
         iter = p.first;
     }
 
-    BuildValuesUpdateBlockForPlayer(iter->second, iter->first);
+    BuildValuesUpdateBlockForPlayer(&iter->second, iter->first);
 }
 
 void Object::AddToClientUpdateList()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unexpected call of Object::AddToClientUpdateList for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
+    sLog.outError("Unexpected call of Object::AddToClientUpdateList for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
     MANGOS_ASSERT(false);
 }
 
 void Object::RemoveFromClientUpdateList()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unexpected call of Object::RemoveFromClientUpdateList for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
+    sLog.outError("Unexpected call of Object::RemoveFromClientUpdateList for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
     MANGOS_ASSERT(false);
 }
 
 void Object::BuildUpdateData(UpdateDataMapType& /*update_players */)
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unexpected call of Object::BuildUpdateData for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
+    sLog.outError("Unexpected call of Object::BuildUpdateData for object (TypeId: %u Update fields: %u)", GetTypeId(), m_valuesCount);
     MANGOS_ASSERT(false);
 }
 
@@ -1412,27 +1177,17 @@ void Object::ExecuteDelayedActions()
     }
 }
 
-bool WorldObject::IsWithinLootXPDist(WorldObject const* objToLoot) const
+bool WorldObject::IsWithinLootXPDist(WorldObject const * objToLoot) const
 {
-    if (!IsInMap(objToLoot))
-        return false;
-
-    if (objToLoot->GetMap()->Instanceable())
-    {
-        if (objToLoot->GetMap()->IsRaid())
-            return true;
-
-        if (Creature const* pCreature = objToLoot->ToCreature())
-            if (pCreature->HasStaticFlag(CREATURE_STATIC_FLAG_CORPSE_RAID))
-                return true;
-    }
+    if (objToLoot && IsInMap(objToLoot) && objToLoot->GetMap()->IsRaid())
+        return true;
 
     // Bosses have increased loot distance.
     float lootDistance = sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE);
     if (objToLoot->IsCreature() && (static_cast<Creature const*>(objToLoot)->GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS))
         lootDistance += 150.0f;
 
-    return _IsWithinDist(objToLoot, lootDistance, false);
+    return objToLoot && IsInMap(objToLoot) && _IsWithinDist(objToLoot, lootDistance, false);
 }
 
 float WorldObject::GetVisibilityModifier() const
@@ -1451,11 +1206,13 @@ void WorldObject::SetVisibilityModifier(float f)
     m_visibilityModifier = f;
 }
 
-WorldObject::WorldObject()
-    :   m_isActiveObject(false), m_visibilityModifier(DEFAULT_VISIBILITY_MODIFIER), m_currMap(nullptr),
-        m_mapId(0), m_InstanceId(0), m_summonLimitAlert(0), worldMask(WORLD_DEFAULT_OBJECT), m_zoneScript(nullptr),
-        m_transport(nullptr)
+WorldObject::WorldObject() :
+    m_isActiveObject(false), m_visibilityModifier(DEFAULT_VISIBILITY_MODIFIER), m_currMap(nullptr), m_mapId(0), m_InstanceId(0), m_summonLimitAlert(0)
 {
+    // Phasing
+    worldMask = WORLD_DEFAULT_OBJECT;
+    m_zoneScript = nullptr;
+    m_transport = nullptr;
     m_movementInfo.stime = WorldTimer::getMSTime();
 }
 
@@ -1463,9 +1220,8 @@ void WorldObject::CleanupsBeforeDelete()
 {
     RemoveFromWorld();
 
-    if (Unit* pUnit = ToUnit())
-        if (GenericTransport* transport = GetTransport())
-            transport->RemovePassenger(pUnit);
+    if (Transport* transport = GetTransport())
+        transport->RemovePassenger(this);
 }
 
 void WorldObject::_Create(uint32 guidlow, HighGuid guidhigh)
@@ -1548,11 +1304,9 @@ float WorldObject::GetSizeFactorForDistance(WorldObject const* obj, SizeFactor d
         }
         case SizeFactor::CombatReachWithMelee:
         {
-            sizefactor = BASE_MELEERANGE_OFFSET + GetCombatReach();
+            sizefactor = std::max(1.5f, GetCombatReach());
             if (obj)
-                sizefactor += obj->GetCombatReach();
-            if (sizefactor < ATTACK_DISTANCE)
-                sizefactor = ATTACK_DISTANCE;
+                sizefactor += std::max(1.5f, obj->GetCombatReach());
             break;
         }
         default:
@@ -1641,7 +1395,7 @@ bool WorldObject::IsWithinDist2d(float x, float y, float dist2compare, SizeFacto
 
 bool WorldObject::IsInMap(WorldObject const* obj) const
 {
-    return IsInWorld() && obj->IsInWorld() && (FindMap() == obj->FindMap());
+    return IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap());
 }
 
 bool WorldObject::_IsWithinDist(WorldObject const* obj, float const dist2compare, const bool is3D, SizeFactor distcalc) const
@@ -1668,25 +1422,20 @@ bool WorldObject::IsWithinLOSInMap(WorldObject const* obj, bool checkDynLos) con
     if (IsWithinDist(obj, 0.0f))
         return true;
     float ox, oy, oz;
-    obj->GetLosCheckPosition(ox, oy, oz);
-    return (IsWithinLOS(ox, oy, oz, checkDynLos, 0.0f));
+    obj->GetPosition(ox, oy, oz);
+    float targetHeight = obj->IsUnit() ? obj->ToUnit()->GetCollisionHeight() : 2.f;
+    return (IsWithinLOS(ox, oy, oz, checkDynLos, targetHeight));
 }
 
 bool WorldObject::IsWithinLOSAtPosition(float ownX, float ownY, float ownZ, float targetX, float targetY, float targetZ, bool checkDynLos, float targetHeight) const
 {
     if (IsInWorld())
     {
-        float height = IsUnit() ? static_cast<Unit const*>(this)->GetCollisionHeight() : 1.0f;
+        float height = IsUnit() ? ToUnit()->GetCollisionHeight() : 2.f;
         return GetMap()->isInLineOfSight(ownX, ownY, ownZ + height, targetX, targetY, targetZ + targetHeight, checkDynLos);
     }
 
     return true;
-}
-
-void WorldObject::GetLosCheckPosition(float& x, float& y, float& z) const
-{
-    GetPosition(x, y, z);
-    z += 1.0f;
 }
 
 bool WorldObject::GetDistanceOrder(WorldObject const* obj1, WorldObject const* obj2, bool is3D /* = true */) const
@@ -1785,8 +1534,8 @@ bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float
     if (!pVictim || !pVictim->IsInWorld())
         return false;
 
-    float reach = IsUnit() && pVictim->IsUnit() ? 
-        static_cast<Unit const*>(this)->GetCombatReachToTarget(static_cast<Unit const*>(pVictim), true, flat_mod) : ATTACK_DISTANCE;
+    float reach = IsUnit() && pVictim->IsUnit() ?
+        static_cast<Unit const*>(this)->GetCombatReach(static_cast<Unit const*>(pVictim), true, flat_mod) : ATTACK_DISTANCE;
 
     // This check is not related to bounding radius
     float dx = GetPositionX() - pVictim->GetPositionX();
@@ -1796,39 +1545,6 @@ bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float
     return dx * dx + dy * dy < reach * reach;
 }
 
-float WorldObject::GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability)
-{
-    if (ability)
-        return (player->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
-
-    // auto attacks do not check speed, only flags
-    return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
-}
-
-float WorldObject::GetLeewayBonusRange(Unit const* target, bool ability) const
-{
-    if (target && IsUnit())
-    {
-        if (Player const* pPlayer = ToPlayer())
-            return GetLeewayBonusRangeForTargets(pPlayer, target, ability);
-        else if (Player const* pPlayer = target->ToPlayer())
-            return GetLeewayBonusRangeForTargets(pPlayer, static_cast<Unit const*>(this), ability);
-    }
-
-    return 0.0f;
-}
-
-float WorldObject::GetLeewayBonusRadius() const
-{
-    if (Player const* pPlayer = ToPlayer())
-    {
-        if ((pPlayer->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) || pPlayer->m_movementInfo.HasMovementFlag(MOVEFLAG_JUMPING))
-            return LEEWAY_BONUS_RANGE;
-    }  
-
-    return 0.0f;
-}
-
 float WorldObject::GetAngle(WorldObject const* obj) const
 {
     if (!obj) return 0;
@@ -1836,7 +1552,7 @@ float WorldObject::GetAngle(WorldObject const* obj) const
 }
 
 // Return angle in range 0..2*pi
-float WorldObject::GetAngle(float const x, float const y) const
+float WorldObject::GetAngle(const float x, const float y) const
 {
     float dx = x - GetPositionX();
     float dy = y - GetPositionY();
@@ -1846,7 +1562,7 @@ float WorldObject::GetAngle(float const x, float const y) const
     return ang;
 }
 
-bool WorldObject::HasInArc(float const arcangle, float const x, float const y) const
+bool WorldObject::HasInArc(const float arcangle, const float x, const float y) const
 {
     // always have self in arc
     if (x == m_position.x && y == m_position.y)
@@ -1900,10 +1616,10 @@ bool WorldObject::HasInArc(WorldObject const* target, float const arcangle, floa
 
 bool WorldObject::IsFacingTarget(WorldObject const* target) const
 {
-    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(target);
+    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(target, M_PI_F);
 }
 
-bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
+bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath) const
 {
     if (distance < 0.1f)
     {
@@ -1912,12 +1628,13 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
         rand_z = z;
         return true;
     }
-    
-    Map const* pMap = GetMap();
-    Unit const* pUnit = ToUnit();
+    ASSERT(FindMap());
+    Map const* map = GetMap();
 
-    // 1st case we can fly => Position in the air, easy.
-    if (pUnit && pUnit->CanFly())
+    bool is_air_ok   = isType(TYPEMASK_UNIT) ? ((Unit*)this)->CanFly() : false;
+
+    // 1er cas on peut voler => Position en l'air, facile.
+    if (is_air_ok)
     {
         float randAngle1 = rand_norm_f() * 2 * M_PI;
         float randAngle2 = rand_norm_f() * 2 * M_PI;
@@ -1928,44 +1645,24 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
         // May happen in the border of the map
         if (!MaNGOS::IsValidMapCoord(x, y, z) || !MaNGOS::IsValidMapCoord(rand_x, rand_y, rand_z))
             return false;
-        pMap->GetLosHitPosition(x, y, z, rand_x, rand_y, rand_z, -0.5f);
+        map->GetLosHitPosition(x, y, z, rand_x, rand_y, rand_z, -0.5f);
         return true;
     }
-
-    // Get swimming position using just vmaps.
-    if (pUnit && pUnit->CanSwim() && pUnit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_USE_SWIM_ANIMATION))
+    else
     {
-        GridMapLiquidData liquid_status;
-        GridMapLiquidStatus res = pMap->GetTerrain()->getLiquidStatus(x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
-        if (res & (LIQUID_MAP_UNDER_WATER | LIQUID_MAP_IN_WATER))
-        {
-            rand_x = x;
-            rand_y = y;
-            rand_z = z;
-            if (pMap->GetSwimRandomPosition(rand_x, rand_y, rand_z, distance, liquid_status, true))
-            {
-                pMap->GetLosHitPosition(x, y, z, rand_x, rand_y, rand_z, -0.5f);
-                return true;
-            }
-        }
-    }
-    
-    {
-        // Otherwise, we find a position on the ground, or in water, or in lava (not for players)
+        // Sinon, on trouve une position au sol, ou dans l'eau, ou dans la lave (pas pour les joueurs)
         uint32 moveAllowed = NAV_GROUND | NAV_WATER;
         if (GetTypeId() != TYPEID_PLAYER)
             moveAllowed |= NAV_MAGMA | NAV_SLIME;
         rand_x = x;
         rand_y = y;
         rand_z = z;
-        if (pMap->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, moveAllowed))
+        if (map->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, allowStraightPath, moveAllowed))
         {
             // Giant type creatures walk underwater
-            if ((pUnit && !pUnit->CanSwim()) ||
-                (IsCreature() && !pUnit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_USE_SWIM_ANIMATION)))
+            if ((isType(TYPEMASK_UNIT) && !ToUnit()->CanSwim()) || (IsCreature() && ToCreature()->GetCreatureInfo()->type == CREATURE_TYPE_GIANT))
                 return true;
-
-            // The position returned by the pathfinding is at the bottom of the water. We're randomizing it a bit...
+            // La position renvoyee par le pathfinding est tout au fond de l'eau. On randomise ca un peu ...
             float ground = 0.0f;
             float waterSurface = GetTerrain()->GetWaterLevel(x, y, z, &ground);
             if (waterSurface == VMAP_INVALID_HEIGHT_VALUE)
@@ -1975,7 +1672,7 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
             rand_z += rand_norm_f() * distance / 2.0f;
             if (rand_z < ground)
                 rand_z = ground;
-            // Flying case checked before that, so we stay UNDER water.
+            // Ici 'is_air_ok' = false, donc on reste SOUS l'eau.
             if (rand_z > waterSurface)
                 rand_z = waterSurface;
             return true;
@@ -1985,6 +1682,41 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
         rand_z = z;
         return false;
     }
+}
+
+/**
+ * \brief Gets a point behind the object.
+ * \param location The location to fill with the point behind the target.
+ * \param distance The distance away from the object.
+ */
+void WorldObject::GetPointBehindObject(WorldLocation& location, float distance) const
+{
+    // Get our current location.
+    WorldLocation myLocation, behindLocation;
+    GetPosition(myLocation);
+    GetPosition(behindLocation);
+
+    // Calculate an XY point behind us.
+    behindLocation.x -= distance * cos(myLocation.o);
+    behindLocation.y -= distance * sin(myLocation.o);
+
+    // Snap the Z axis to the correct level.
+    behindLocation.z = GetTerrain()->GetWaterOrGroundLevel(
+        behindLocation.x,
+        behindLocation.y,
+        behindLocation.z);
+
+    // Get the LOS hit point between our position and the generated point.
+    GetMap()->GetLosHitPosition(
+        myLocation.x,
+        myLocation.y,
+        myLocation.z,
+        behindLocation.x,
+        behindLocation.y,
+        behindLocation.z,
+        -0.5f);
+
+    location.CopyFrom(behindLocation);
 }
 
 void WorldObject::UpdateGroundPositionZ(float x, float y, float &z) const
@@ -2054,93 +1786,12 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z) const
     }
 }
 
-void WorldObject::MovePositionToFirstCollision(Position& pos, float dist, float angle)
-{
-    float destX = pos.x + dist * cos(angle);
-    float destY = pos.y + dist * sin(angle);
-    float destZ = pos.z;
-
-    GenericTransport* transport = GetTransport();
-
-    float halfHeight = IsUnit() ? static_cast<Unit*>(this)->GetCollisionHeight() : 1.0f;
-    if (IsUnit())
-    {
-        PathFinder path(static_cast<Unit*>(this));
-        Vector3 src(pos.x, pos.y, pos.z);
-        Vector3 dest(destX, destY, destZ + halfHeight);
-        if (transport) // need to use offsets for PF check
-        {
-            transport->CalculatePassengerOffset(src.x, src.y, src.z);
-            transport->CalculatePassengerOffset(dest.x, dest.y, dest.z);
-        }
-        path.calculate(src, dest, false, true);
-        if (path.getPathType())
-        {
-            G3D::Vector3 result = path.getPath().back();
-            destX = result.x;
-            destY = result.y;
-            destZ = result.z;
-            if (transport) // transport produces offset, but we need global pos
-                transport->CalculatePassengerPosition(destX, destY, destZ);
-        }
-    }
-
-    UpdateAllowedPositionZ(destX, destY, destZ);
-    destZ += halfHeight;
-    bool colPoint = GetMap()->GetLosHitPosition(pos.x, pos.y, pos.z + halfHeight, destX, destY, destZ, -0.5f);
-    destZ -= halfHeight;
-
-    if (colPoint)
-    {
-        destX -= CONTACT_DISTANCE * cos(angle);
-        destY -= CONTACT_DISTANCE * sin(angle);
-        dist = sqrt((pos.x - destX) * (pos.x - destX) + (pos.y - destY) * (pos.y - destY));
-    }
-
-    colPoint = GetMap()->GetLosHitPosition(destX, destY, destZ + halfHeight, destX, destY, destZ, -0.5f);
-    if (colPoint)
-        dist = sqrt((pos.x - destX) * (pos.x - destX) + (pos.y - destY) * (pos.y - destY));
-
-    float step = dist / 10.0f;
-    Position tempPos(destX, destY, destZ, 0.f);
-    bool distanceZSafe = true;
-    float previousZ = destZ;
-
-    for (int i = 0; i < 10; i++)
-    {
-        if (fabs(pos.z - destZ) > ATTACK_DISTANCE)
-        {
-            previousZ = destZ;
-            destX -= step * cos(angle);
-            destY -= step * sin(angle);
-            UpdateAllowedPositionZ(destX, destY, destZ);
-            if (fabs(previousZ - destZ) > (ATTACK_DISTANCE / 2))
-                distanceZSafe = false;
-        }
-        else
-        {
-            pos.x = destX;
-            pos.y = destY;
-            pos.z = destZ;
-            break;
-        }
-    }
-
-    if (distanceZSafe)
-        pos = tempPos;
-
-    MaNGOS::NormalizeMapCoord(pos.x);
-    MaNGOS::NormalizeMapCoord(pos.y);
-    UpdateAllowedPositionZ(pos.x, pos.y, pos.z);
-    pos.o = m_position.o;
-}
-
 bool WorldObject::IsPositionValid() const
 {
     return MaNGOS::IsValidMapCoord(m_position.x, m_position.y, m_position.z, m_position.o);
 }
 
-void WorldObject::SendMessageToSet(WorldPacket* data, bool /*bToSelf*/) const
+void WorldObject::SendMessageToSet(WorldPacket *data, bool /*bToSelf*/) const
 {
     //if object is in world, map for it already created!
     if (IsInWorld())
@@ -2152,8 +1803,8 @@ struct ObjectViewersDeliverer
     WorldPacket* i_message;
     WorldObject const* i_sender;
     WorldObject const* i_except;
-    explicit ObjectViewersDeliverer(WorldObject const* sender, WorldPacket* msg, WorldObject const* except) : i_message(msg), i_sender(sender), i_except(except) {}
-    void Visit(CameraMapType& m)
+    explicit ObjectViewersDeliverer(WorldObject const* sender, WorldPacket *msg, WorldObject const* except) : i_message(msg), i_sender(sender), i_except(except) {}
+    void Visit(CameraMapType &m)
     {
         for (const auto& iter : m)
             if (Player* player = iter.getSource()->GetOwner())
@@ -2161,28 +1812,10 @@ struct ObjectViewersDeliverer
                     if (player->IsInVisibleList_Unsafe(i_sender))
                         player->GetSession()->SendPacket(i_message);
     }
-    template<class SKIP> void Visit(GridRefManager<SKIP>&) {}
+    template<class SKIP> void Visit(GridRefManager<SKIP> &) {}
 };
 
-struct ObjectViewersMovementDeliverer
-{
-    WorldPacket* i_message;
-    WorldObject const* i_sender;
-    WorldObject const* i_except;
-    explicit ObjectViewersMovementDeliverer(WorldObject const* sender, WorldPacket* msg, WorldObject const* except) : i_message(msg), i_sender(sender), i_except(except) {}
-    void Visit(CameraMapType& m)
-    {
-        for (const auto& iter : m)
-            if (Player* player = iter.getSource()->GetOwner())
-                if (player != i_except && player != i_sender)
-                    if (player->IsInVisibleList_Unsafe(i_sender))
-                        player->GetSession()->SendMovementPacket(i_message);
-    }
-    template<class SKIP> void Visit(GridRefManager<SKIP>&) {}
-};
-
-template<class DelivererType>
-void WorldObject::SendObjectMessageToSetImpl(WorldPacket* data, bool self, WorldObject const* except) const
+void WorldObject::SendObjectMessageToSet(WorldPacket *data, bool self, WorldObject const* except) const
 {
     if (self && this != except)
         if (Player const* me = ToPlayer())
@@ -2202,23 +1835,15 @@ void WorldObject::SendObjectMessageToSetImpl(WorldPacket* data, bool self, World
     if (!GetMap()->IsLoaded(GetPositionX(), GetPositionY()))
         return;
 
-    DelivererType post_man(this, data, except);
-    TypeContainerVisitor<DelivererType, WorldTypeMapContainer> message(post_man);
+    ObjectViewersDeliverer post_man(this, data, except);
+    TypeContainerVisitor<ObjectViewersDeliverer, WorldTypeMapContainer> message(post_man);
     cell.Visit(p, message, *GetMap(), *this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
-}
-
-void WorldObject::SendObjectMessageToSet(WorldPacket* data, bool self, WorldObject const* except) const
-{
-    SendObjectMessageToSetImpl<ObjectViewersDeliverer>(data, self, except);
 }
 
 void WorldObject::SendMovementMessageToSet(WorldPacket data, bool self, WorldObject const* except)
 {
-    if (self && !except && IsPlayer())
-        static_cast<Player*>(this)->GetCheatData()->LogMovementPacket(false, data);
-
     if (!IsPlayer() || !sWorld.GetBroadcaster()->IsEnabled())
-        SendObjectMessageToSetImpl<ObjectViewersMovementDeliverer>(&data, true, except);
+        SendObjectMessageToSet(&data, true, except);
     else
     {
         auto player_broadcast = ToPlayer()->m_broadcaster;
@@ -2228,14 +1853,14 @@ void WorldObject::SendMovementMessageToSet(WorldPacket data, bool self, WorldObj
     }
 }
 
-void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*bToSelf*/) const
+void WorldObject::SendMessageToSetInRange(WorldPacket *data, float dist, bool /*bToSelf*/) const
 {
     //if object is in world, map for it already created!
     if (IsInWorld())
         GetMap()->MessageDistBroadcast(this, data, dist);
 }
 
-void WorldObject::SendMessageToSetExcept(WorldPacket* data, Player const* skipped_receiver) const
+void WorldObject::SendMessageToSetExcept(WorldPacket *data, Player const* skipped_receiver) const
 {
     //if object is in world, map for it already created!
     if (IsInWorld())
@@ -2261,6 +1886,10 @@ void WorldObject::SendObjectDeSpawnAnim() const
 
 bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewPoint, bool inVisibleList) const
 {
+	if (!ExclusiveVisibleGuid.IsEmpty())
+	{
+		return viewer->GetObjectGuid() == ExclusiveVisibleGuid;
+	}
     if (viewer->IsTaxiFlying())
     {
         float distance = std::max(World::GetMaxVisibleDistanceInFlight() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f), GetVisibilityModifier());
@@ -2280,7 +1909,7 @@ bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject c
     return true;
 }
 
-void WorldObject::SetMap(Map* map)
+void WorldObject::SetMap(Map * map)
 {
     MANGOS_ASSERT(map);
     m_currMap = map;
@@ -2315,7 +1944,15 @@ void WorldObject::AddObjectToRemoveList()
     if (_deleted) // Already in the remove list
         return;
 
-    GetMap()->AddObjectToRemoveList(this);
+    Map* map = FindMap();
+
+    if (!map)
+    {
+        sLog.outError("CRASH: Object %s at attempt add to move list not have valid map (Id: %u).", GetObjectGuid().GetString().c_str(), GetMapId());
+        return;
+    }
+
+    map->AddObjectToRemoveList(this);
     _deleted = true;
 }
 
@@ -2345,7 +1982,7 @@ void WorldObject::SetCreatureSummonLimit(uint32 limit)
     if (FindMap())
         return FindMap()->SetSummonLimitForObject(GetGUID(), limit);
     else
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to set summon limit for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
+        sLog.outError("Attempt to set summon limit for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
 }
 
 uint32 Map::GetSummonCountForObject(uint64 guid) const
@@ -2367,7 +2004,7 @@ uint32 WorldObject::GetCreatureSummonCount() const
 
 void Map::DecrementSummonCountForObject(uint64 guid)
 {
-    auto itr = m_mCreatureSummonCount.find(guid);
+    const auto itr = m_mCreatureSummonCount.find(guid);
     if (itr != m_mCreatureSummonCount.end())
         if (itr->second != 0)
             itr->second--;
@@ -2384,7 +2021,7 @@ void WorldObject::DecrementSummonCounter()
             m_summonLimitAlert = 0;
     }
     else
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to decrement summon count for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
+        sLog.outError("Attempt to decrement summon count for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
 }
 
 void Map::IncrementSummonCountForObject(uint64 guid)
@@ -2397,10 +2034,10 @@ void WorldObject::IncrementSummonCounter()
     if (FindMap())
         FindMap()->IncrementSummonCountForObject(GetGUID());
     else
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to increment summon count for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
+        sLog.outError("Attempt to increment summon count for %s but object is not added to map yet!", GetObjectGuid().GetString().c_str());
 }
 
-Creature* Map::SummonCreature(uint32 entry, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject)
+Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject)
 {
     CreatureInfo const* pInf = sObjectMgr.GetCreatureTemplate(entry);
     if (!pInf)
@@ -2426,23 +2063,37 @@ Creature* Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
     if (pCreature->IsLinkingEventTrigger())
         GetCreatureLinkingHolder()->DoCreatureLinkingEvent(LINKING_EVENT_RESPAWN, pCreature);
 
+    // Scaling
+    if (pCreature->GetMap()->IsRaid()) {
+        uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+        uint32 maxCount = ((DungeonMap *) pCreature->GetMap())->GetMaxPlayers();
+        if (maxCount > 10 && playerCount < maxCount) {
+            if (maxCount == 20 && playerCount < 12)
+                playerCount = 12;
+            else if (maxCount == 40 && playerCount < 20)
+                playerCount = 20;
+            
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+        }
+    }
+
     // return the creature therewith the summoner has access to it
     return pCreature;
 }
 
-Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, GenericTransport* pTransport)
+Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, bool attach)
 {
-    CreatureInfo const* cinfo = sObjectMgr.GetCreatureTemplate(id);
+    CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(id);
     if (!cinfo)
     {
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "WorldObject::SummonCreature: Creature (Entry: %u) not existed for summoner: %s. ", id, GetGuidStr().c_str());
+        sLog.outErrorDb("WorldObject::SummonCreature: Creature (Entry: %u) not existed for summoner: %s. ", id, GetGuidStr().c_str());
         return nullptr;
     }
 
     uint32 const currentSummonCount = GetCreatureSummonCount();
-    if (currentSummonCount >= GetCreatureSummonLimit())
+    if (currentSummonCount >= GetCreatureSummonLimit() && attach)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "WorldObject::SummonCreature: %s in (map %u, instance %u) attempted to summon Creature (Entry: %u), but already has %u active summons",
+        sLog.outInfo("WorldObject::SummonCreature: %s in (map %u, instance %u) attempted to summon Creature (Entry: %u), but already has %u active summons",
             GetGuidStr().c_str(), GetMapId(), GetInstanceId(), id, currentSummonCount);
 
         // Alert GMs in the next tick if we don't already have an alert scheduled
@@ -2465,9 +2116,6 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
         return nullptr;
     }
 
-    if (pTransport)
-        pTransport->AddPassenger(pCreature);
-
     pCreature->SetTempPacified(pacifiedTimer);
     pCreature->SetSummonPoint(pos);
 
@@ -2476,10 +2124,8 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
 
     pCreature->Summon(spwtype, despwtime, pFuncAiSetter);
 
-    if (IsCreature() && ((Creature*)this)->AI())
+    if (GetTypeId() == TYPEID_UNIT && ((Creature*)this)->AI())
         ((Creature*)this)->AI()->JustSummoned(pCreature);
-    else if (IsGameObject() && ((GameObject*)this)->AI())
-        ((GameObject*)this)->AI()->JustSummoned(pCreature);
 
     // Creature Linking, Initial load is handled like respawn
     if (pCreature->IsLinkingEventTrigger())
@@ -2488,11 +2134,28 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
     pCreature->SetWorldMask(GetWorldMask());
     // return the creature therewith the summoner has access to it
 
-    IncrementSummonCounter();
+    // Scaling
+    if (pCreature->GetMap()->IsRaid()) {
+        uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+        uint32 maxCount = ((DungeonMap *) pCreature->GetMap())->GetMaxPlayers();
+        if (maxCount > 10 && playerCount < maxCount) {
+            if (maxCount == 20 && playerCount < 12)
+                playerCount = 12;
+            else if (maxCount == 40 && playerCount < 20)
+                playerCount = 20;
+            
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+        }
+    }
+
+    if (attach)
+        IncrementSummonCounter();
     return pCreature;
 }
 
-GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime, bool attach)
+// Nostalrius
+GameObject* WorldObject::SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang,
+    const float rotation0, const float rotation1, const float rotation2, const float rotation3, const uint32 respawnTime, const bool attach)
 {
     if (!IsInWorld())
         return nullptr;
@@ -2500,29 +2163,32 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float 
     GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectInfo(entry);
     if (!goinfo)
     {
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Gameobject template %u not found in database!", entry);
+        sLog.outErrorDb("Gameobject template %u not found in database!", entry);
         return nullptr;
     }
-    Map* map = GetMap();
-    GameObject* go = GameObject::CreateGameObject(entry);
+
+    Map *map = GetMap();
+    GameObject *go = new GameObject();
+
     if (!go->Create(map->GenerateLocalLowGuid(HIGHGUID_GAMEOBJECT), entry, map, x, y, z, ang, rotation0, rotation1, rotation2, rotation3, 100, GO_STATE_READY))
     {
         delete go;
         return nullptr;
     }
+
     go->SetRespawnTime(respawnTime);
-    if (attach && (GetTypeId() == TYPEID_PLAYER || GetTypeId() == TYPEID_UNIT)) //not sure how to handle this
+
+    if (attach && (GetTypeId() == TYPEID_PLAYER || GetTypeId() == TYPEID_UNIT)) // Not sure how to handle this
         ((Unit*)this)->AddGameObject(go);
     else
         go->SetSpawnedByDefault(false);
 
-    if (IsCreature() && ((Creature*)this)->AI())
+    if (GetTypeId() == TYPEID_UNIT && ((Creature*)this)->AI())
         ((Creature*)this)->AI()->JustSummoned(go);
-    else if (IsGameObject() && ((GameObject*)this)->AI())
-        ((GameObject*)this)->AI()->JustSummoned(go);
 
     map->Add(go);
     go->SetWorldMask(GetWorldMask());
+
     return go;
 }
 
@@ -2557,7 +2223,7 @@ public:
         float x, y, z;
 
         if (!c->IsAlive() || c->HasUnitState(UNIT_STAT_NOT_MOVE) ||
-            !c->GetMotionMaster()->GetDestination(x, y, z))
+                !c->GetMotionMaster()->GetDestination(x, y, z))
         {
             x = c->GetPositionX();
             y = c->GetPositionY();
@@ -2609,7 +2275,7 @@ private:
 
 //===================================================================================================
 
-void WorldObject::GetNearPoint2DAroundPosition(float ownX, float ownY, float &x, float &y, float distance2d, float absAngle) const
+void WorldObject::GetNearPoint2DAroundPosition(float ownX, float ownY, float& x, float& y, float distance2d, float absAngle) const
 {
     x = ownX + (GetObjectBoundingRadius() + distance2d) * cos(absAngle);
     y = ownY + (GetObjectBoundingRadius() + distance2d) * sin(absAngle);
@@ -2619,13 +2285,13 @@ void WorldObject::GetNearPoint2DAroundPosition(float ownX, float ownY, float &x,
 }
 
 
-void WorldObject::GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_bounding_radius, float distance2d, float absAngle) const
+void WorldObject::GetNearPoint(WorldObject const* searcher, float& x, float& y, float& z, float searcher_bounding_radius, float distance2d, float absAngle) const
 {
     GetPosition(x, y, z);
     GetNearPointAroundPosition(searcher, x, y, z, searcher_bounding_radius, distance2d, absAngle);
 }
 
-void WorldObject::GetNearPointAroundPosition(WorldObject const* searcher, float &x, float &y, float &z, float searcher_bounding_radius, float distance2d, float absAngle) const
+void WorldObject::GetNearPointAroundPosition(WorldObject const* searcher, float& x, float& y, float& z, float searcher_bounding_radius, float distance2d, float absAngle) const
 {
     float startX = x;
     float startY = y;
@@ -2648,7 +2314,7 @@ void WorldObject::GetNearPointAroundPosition(WorldObject const* searcher, float 
     float first_y = y;
     bool first_los_conflict = false;                        // first point LOS problems
 
-                                                            // prepare selector for work
+    // prepare selector for work
     ObjectPosSelector selector(startX, startY, GetObjectBoundingRadius(), distance2d + searcher_bounding_radius);
 
     // adding used positions around object
@@ -2675,7 +2341,7 @@ void WorldObject::GetNearPointAroundPosition(WorldObject const* searcher, float 
 
     float angle;                                            // candidate of angle for free pos
 
-                                                            // special case when one from list empty and then empty side preferred
+    // special case when one from list empty and then empty side preferred
     if (selector.FirstAngle(angle))
     {
         GetNearPoint2DAroundPosition(startX, startY, x, y, distance2d, absAngle + angle);
@@ -2746,13 +2412,13 @@ void WorldObject::GetNearPointAroundPosition(WorldObject const* searcher, float 
     selector.InitializeAngle();
 
     // select in positions after current nodes (selection one by one)
-    while (selector.NextUsedAngle(angle))                   // angle for used pos but maybe without LOS problem
+    while (selector.NextUsedAngle(angle)) // Angle for used pos but maybe without LOS problem
     {
         GetNearPoint2DAroundPosition(startX, startY, x, y, distance2d, absAngle + angle);
         z = startZ;
 
         if (searcher)
-            searcher->UpdateAllowedPositionZ(x, y, z);      // update to LOS height if available
+            searcher->UpdateAllowedPositionZ(x, y, z); // Update to LOS height if available
         else
             UpdateGroundPositionZ(x, y, z);
 
@@ -2839,7 +2505,7 @@ struct WorldObjectChangeAccumulator
             i_object.BuildUpdateDataForPlayer((Player*)&i_object, i_updateDatas);
     }
 
-    void Visit(CameraMapType& m)
+    void Visit(CameraMapType &m)
     {
         for (const auto& iter : m)
         {
@@ -2849,7 +2515,7 @@ struct WorldObjectChangeAccumulator
         }
     }
 
-    template<class SKIP> void Visit(GridRefManager<SKIP>&) {}
+    template<class SKIP> void Visit(GridRefManager<SKIP> &) {}
 };
 
 void WorldObject::BuildUpdateData(UpdateDataMapType & update_players)
@@ -2879,6 +2545,7 @@ bool WorldObject::IsControlledByPlayer() const
     }
 }
 
+// Nostalrius
 void Object::ForceValuesUpdateAtIndex(uint16 i)
 {
     m_uint32Values_mirror[i] = GetUInt32Value(i) + 1; // makes server think the field changed
@@ -2927,7 +2594,7 @@ void WorldObject::DestroyForNearbyPlayers()
     MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
     Cell::VisitWorldObjects(this, searcher, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
-    for (const auto plr : targets)
+    for (Player* plr : targets)
     {
         if (plr == this)
             continue;
@@ -3056,26 +2723,6 @@ Player* WorldObject::FindNearestPlayer(float range) const
     return target;
 }
 
-Player* WorldObject::FindNearestHostilePlayer(float range) const
-{
-    Player* target = nullptr;
-    MaNGOS::NearestHostileUnitCheck check(this, range);
-    MaNGOS::PlayerLastSearcher<MaNGOS::NearestHostileUnitCheck> searcher(target, check);
-    Cell::VisitWorldObjects(this, searcher, range);
-
-    return target;
-}
-
-Player* WorldObject::FindNearestFriendlyPlayer(float range) const
-{
-    Player* target = nullptr;
-    MaNGOS::NearestFriendlyUnitCheck check(this, range);
-    MaNGOS::PlayerLastSearcher<MaNGOS::NearestFriendlyUnitCheck> searcher(target, check);
-    Cell::VisitWorldObjects(this, searcher, range);
-
-    return target;
-}
-
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const
 {
     CellPair pair(MaNGOS::ComputeCellPair(GetPositionX(), GetPositionY()));
@@ -3107,40 +2754,6 @@ void WorldObject::GetAlivePlayerListInRange(WorldObject const* pSource, std::lis
     MaNGOS::AnyPlayerInObjectRangeCheck check(pSource, fMaxSearchRange);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(lList, check);
     Cell::VisitWorldObjects(pSource, searcher, fMaxSearchRange);
-}
-
-uint32 WorldObject::DespawnNearCreaturesByEntry(uint32 entry, float range)
-{
-    std::list<Creature*> creatures;
-    GetCreatureListWithEntryInGrid(creatures, entry, range);
-    uint32 count = 0;
-    for (const auto& it : creatures)
-    {
-        if (it->IsInWorld())
-        {
-            ++count;
-            it->DisappearAndDie();
-        }
-    }
-    return count;
-}
-
-uint32 WorldObject::RespawnNearCreaturesByEntry(uint32 entry, float range)
-{
-    if (range == 0.0f)
-        range = GetMap()->GetVisibilityDistance();
-    uint32 count = 0;
-    std::list<Creature*> lList;
-    GetCreatureListWithEntryInGrid(lList, entry, range);
-    for (const auto& it : lList)
-    {
-        if (!it->IsAlive())
-        {
-            it->Respawn();
-            ++count;
-        }
-    }
-    return count;
 }
 
 void WorldObject::GetRelativePositions(float fForwardBackward, float fLeftRight, float fUpDown, float &x, float &y, float &z)
@@ -3227,6 +2840,21 @@ void WorldObject::GetFirstCollision(float dist, float angle, float &x, float &y,
     UpdateGroundPositionZ(x, y, z);
 }
 
+bool Object::IsPet() const
+{
+    return IsCreature() && static_cast<Creature const*>(this)->IsPet();
+}
+
+Pet const* Object::ToPet() const
+{
+    return IsPet() ? static_cast<Pet const*>(this) : nullptr;
+}
+
+Pet* Object::ToPet()
+{
+    return IsPet() ? static_cast<Pet*>(this) : nullptr;
+}
+
 bool WorldObject::IsLikePlayer() const
 {
     if (IsPlayer())
@@ -3240,7 +2868,7 @@ bool WorldObject::IsLikePlayer() const
 
 bool WorldObject::PrintCoordinatesError(float x, float y, float z, char const* descr) const
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s with invalid %s coordinates: mapid = %uu, x = %f, y = %f, z = %f", GetGuidStr().c_str(), descr, GetMapId(), x, y, z);
+    sLog.outError("%s with invalid %s coordinates: mapid = %uu, x = %f, y = %f, z = %f", GetGuidStr().c_str(), descr, GetMapId(), x, y, z);
     return false;                                           // always false for continue assert fail
 }
 
@@ -3274,6 +2902,59 @@ void WorldObject::SetActiveObjectState(bool on)
     }
 }
 
+namespace MaNGOS
+{
+    class MonsterChatBuilderFormat
+    {
+    public:
+        MonsterChatBuilderFormat(WorldObject const& obj, ChatMsg msgtype, int32 textId, Language language, Unit const* target, va_list* vaList = nullptr)
+            : i_source(obj), i_msgtype(msgtype), i_textId(textId), i_language(language), i_target(target), i_vaList(vaList) {}
+        void operator()(WorldPacket& data, int32 loc_idx)
+        {
+            char const* text = i_textId > 0 ? sObjectMgr.GetBroadcastText(i_textId, loc_idx, i_source.GetGender()) : sObjectMgr.GetMangosString(i_textId, loc_idx);
+            char textFinal[2048];
+            va_list argsCpy;
+            va_copy(argsCpy, *i_vaList);
+            vsnprintf(textFinal, 2048, text, argsCpy);
+            va_end(argsCpy);
+            ChatHandler::BuildChatPacket(data, i_msgtype, text, i_language, CHAT_TAG_NONE, i_source.GetObjectGuid(), i_source.GetNameForLocaleIdx(loc_idx),
+                i_target ? i_target->GetObjectGuid() : ObjectGuid(), i_target ? i_target->GetNameForLocaleIdx(loc_idx) : "");
+        }
+
+    private:
+        WorldObject const& i_source;
+        ChatMsg i_msgtype;
+        int32 i_textId;
+        Language i_language;
+        Unit const* i_target;
+        va_list* i_vaList;
+    };
+}
+
+namespace MaNGOS
+{
+    class MonsterChatBuilder
+    {
+    public:
+        MonsterChatBuilder(WorldObject const& obj, ChatMsg msgtype, int32 textId, Language language, Unit const* target)
+            : i_source(obj), i_msgtype(msgtype), i_textId(textId), i_language(language), i_target(target) {}
+        void operator()(WorldPacket& data, int32 loc_idx) const
+        {
+            char const* text = i_textId > 0 ? sObjectMgr.GetBroadcastText(i_textId, loc_idx, i_source.GetGender()) : sObjectMgr.GetMangosString(i_textId, loc_idx);
+
+            ChatHandler::BuildChatPacket(data, i_msgtype, text, i_language, CHAT_TAG_NONE, i_source.GetObjectGuid(), i_source.GetNameForLocaleIdx(loc_idx),
+                i_target ? i_target->GetObjectGuid() : ObjectGuid(), i_target ? i_target->GetNameForLocaleIdx(loc_idx) : "");
+        }
+
+    private:
+        WorldObject const& i_source;
+        ChatMsg i_msgtype;
+        int32 i_textId;
+        Language i_language;
+        Unit const* i_target;
+    };
+}                                                           // namespace MaNGOS
+
 void WorldObject::PMonsterSay(int32 textId, ...) const
 {
     va_list ap;
@@ -3286,7 +2967,7 @@ void WorldObject::PMonsterSay(int32 textId, ...) const
     va_end(ap);
 }
 
-void WorldObject::PMonsterSay(char const* text, ...) const
+void WorldObject::PMonsterSay(const char* text, ...) const
 {
     va_list ap;
     char str[2048];
@@ -3308,7 +2989,7 @@ void WorldObject::PMonsterYell(int32 textId, ...) const
     va_end(ap);
 }
 
-void WorldObject::PMonsterYell(char const* text, ...) const
+void WorldObject::PMonsterYell(const char* text, ...) const
 {
     va_list ap;
     char str[2048];
@@ -3318,7 +2999,7 @@ void WorldObject::PMonsterYell(char const* text, ...) const
     MonsterYell(str);
 }
 
-void WorldObject::MonsterSay(char const* text, uint32 language, Unit const* target) const
+void WorldObject::MonsterSay(const std::string& text, uint32 language, Unit const* target) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_MONSTER_SAY, text, Language(language), CHAT_TAG_NONE, GetObjectGuid(), GetName(),
@@ -3326,7 +3007,7 @@ void WorldObject::MonsterSay(char const* text, uint32 language, Unit const* targ
     SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY), true);
 }
 
-void WorldObject::MonsterYell(char const* text, uint32 language, Unit const* target) const
+void WorldObject::MonsterYell(const std::string& text, uint32 language, Unit const* target) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_MONSTER_YELL, text, Language(language), CHAT_TAG_NONE, GetObjectGuid(), GetName(),
@@ -3334,21 +3015,38 @@ void WorldObject::MonsterYell(char const* text, uint32 language, Unit const* tar
     SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_YELL), true);
 }
 
-void WorldObject::MonsterTextEmote(char const* text, Unit const* target, bool IsBossEmote) const
+void WorldObject::MonsterTextEmote(const char* text, Unit const* target, bool IsBossEmote, float rangeOverride) const
 {
+    float range = 0.0f;
+    if (rangeOverride > 0.0f)
+        range = rangeOverride;
+    else
+        range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, text, LANG_UNIVERSAL, CHAT_TAG_NONE, GetObjectGuid(), GetName(),
         target ? target->GetObjectGuid() : ObjectGuid(), target ? target->GetName() : "");
-    SendMessageToSetInRange(&data, sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true);
+    SendMessageToSetInRange(&data, range, true);
 }
 
-void WorldObject::MonsterWhisper(char const* text, Unit const* target, bool IsBossWhisper) const
+void WorldObject::MonsterWhisper(const char* text, Unit const* target, bool IsBossWhisper) const
 {
     if (!target || target->GetTypeId() != TYPEID_PLAYER)
         return;
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, text, LANG_UNIVERSAL, CHAT_TAG_NONE, GetObjectGuid(), GetName(),
+        target->GetObjectGuid(), target->GetName());
+    ((Player*)target)->GetSession()->SendPacket(&data);
+}
+
+void WorldObject::MonsterSayToPlayer(const char* text, Unit const* target, bool IsBossWhisper) const
+{
+    if (!target || target->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_SAY, text, LANG_UNIVERSAL, CHAT_TAG_NONE, GetObjectGuid(), GetName(),
         target->GetObjectGuid(), target->GetName());
     ((Player*)target)->GetSession()->SendPacket(&data);
 }
@@ -3369,6 +3067,36 @@ void WorldObject::MonsterYell(int32 textId, uint32 language, Unit const* target)
     MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> say_do(say_build);
     MaNGOS::CameraDistWorker<MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> > say_worker(this, range, say_do);
     Cell::VisitWorldObjects(this, say_worker, range);
+}
+
+/**
+ * \brief Sends text from a monster to all players within a zone.
+ * \param text The text to send.
+ * \param messageType The type of message to send (say, yell, etc.)
+ * \param language The language to send. Defaults to LANG_UNIVERSAL.
+ * \param target The target of the message (used to fill name, class, gender, etc.)
+ * \param senderName The sender name to display (for message types that support it.) If nullptr, will use our name.
+ */
+void WorldObject::MonsterSendTextToZone(const char* text, const ChatMsg messageType, const Language language, Unit* const target, const char* senderName) const
+{
+    WorldPacket worldPacket;
+    ChatHandler::BuildChatPacket(
+        worldPacket,
+        messageType,
+        text,
+        language,
+        CHAT_TAG_NONE,
+        GetObjectGuid(),
+        senderName == nullptr ? GetName() : senderName,
+        target 
+            ? target->GetObjectGuid()
+            : ObjectGuid(),
+        target ? target->GetName() : "");
+
+    if (const auto &players = GetMap()->GetPlayers(); !players.isEmpty())
+    {
+        (*players.begin())->SendToPlayersInZone(&worldPacket, GetZoneId());
+    }
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, Unit const* target) const
@@ -3397,9 +3125,13 @@ void WorldObject::MonsterScriptToZone(int32 textId, ChatMsg type, uint32 languag
             say_do(itr.getSource());
 }
 
-void WorldObject::MonsterTextEmote(int32 textId, Unit const* target, bool IsBossEmote) const
+void WorldObject::MonsterTextEmote(int32 textId, Unit const* target, bool IsBossEmote, float rangeOverride) const
 {
-    float range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+    float range = 0.0f;
+    if (rangeOverride > 0.0f)
+        range = rangeOverride;
+    else
+        range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
 
     MaNGOS::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, target);
     MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> say_do(say_build);
@@ -3422,7 +3154,7 @@ void WorldObject::MonsterWhisper(int32 textId, Unit const* target, bool IsBossWh
     ((Player*)target)->GetSession()->SendPacket(&data);
 }
 
-void WorldObject::GetPosition(float &x, float &y, float &z, GenericTransport const* t) const
+void WorldObject::GetPosition(float &x, float &y, float &z, Transport* t) const
 {
     if (t && m_movementInfo.t_guid == t->GetObjectGuid())
     {
@@ -3463,7 +3195,7 @@ void WorldObject::Update(uint32 update_diff, uint32 /*time_diff*/)
 class NULLNotifier
 {
 public:
-    template<class T> void Visit(GridRefManager<T>& m) {}
+    template<class T> void Visit(GridRefManager<T> &m) {}
     void Visit(CameraMapType&) {}
 };
 
@@ -3474,9 +3206,66 @@ void WorldObject::LoadMapCellsAround(float dist) const
     Cell::VisitAllObjects(this, notifier, dist, false);
 }
 
-bool WorldObject::isVisibleFor(Player const* u, WorldObject const* viewPoint) const
+Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectIndex eff)
 {
-    return IsVisibleForInState(u, viewPoint, false);
+    if (!victim)
+        return nullptr;
+
+    SpellEntry const* pProto = nullptr;
+    if (spell)
+        pProto = spell->m_spellInfo;
+
+    // Magic case
+
+    if (pProto && pProto->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
+        return victim;
+
+    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
+    {
+        Unit::AuraList const& magnetAuras = victim->GetAurasByType(SPELL_AURA_SPELL_MAGNET);
+        for (const auto magnetAura : magnetAuras)
+        {
+            if (Unit* magnet = magnetAura->GetCaster())
+            {
+                if (magnet->IsAlive() && magnet->IsInMap(this) && spell->CheckTarget(magnet, eff))
+                {
+                    if (SpellAuraHolder* holder = magnetAura->GetHolder())
+                        if (holder->DropAuraCharge())
+                        {
+                            magnet->RemoveAurasDueToSpell(holder->GetId()); // Remove from grounding totem also
+                            victim->RemoveSpellAuraHolder(holder);
+                        }
+                    return magnet;
+                }
+            }
+        }
+    }
+    // Melee && ranged case
+    else
+    {
+        if (spell && pProto && pProto->HasAttribute(SPELL_ATTR_EX_CANT_BE_REDIRECTED))
+            return victim;
+
+        auto const& hitTriggerAuras = victim->GetAurasByType(SPELL_AURA_ADD_CASTER_HIT_TRIGGER);
+        for (auto& hitTriggerAura : hitTriggerAuras)
+        {
+            if (Unit* magnet = hitTriggerAura->GetCaster())
+            {
+                if (magnet->IsAlive() && IsValidAttackTarget(magnet))
+                {
+                    if (roll_chance_i(hitTriggerAura->GetModifier()->m_amount))
+                    {
+                        if (SpellAuraHolder* holder = hitTriggerAura->GetHolder())
+                            if (holder->DropAuraCharge())
+                                victim->RemoveSpellAuraHolder(holder);
+                        return magnet;
+                    }
+                }
+            }
+        }
+    }
+
+    return victim;
 }
 
 FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
@@ -3488,19 +3277,11 @@ FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
 
         if (GetObjectGuid() != guid)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s have invalid faction (faction template id) #%u", GetGuidStr().c_str(), GetFactionTemplateId());
+            sLog.outError("%s have invalid faction (faction template id) #%u", GetGuidStr().c_str(), GetFactionTemplateId());
             guid = GetObjectGuid();
         }
     }
     return entry;
-}
-
-bool WorldObject::HasFactionTemplateFlag(uint32 flag) const
-{
-    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
-        return (pTemplate->factionFlags & flag) != 0;
-
-    return false;
 }
 
 FactionEntry const* WorldObject::GetFactionEntry() const
@@ -3522,13 +3303,16 @@ uint32 WorldObject::GetFactionId() const
 // function based on function Unit::UnitReaction from 13850 client
 ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 {
+    // possible crashfix
+    if (!target)
+        return REP_NEUTRAL;
+
     // always friendly to self
     if (this == target)
         return REP_FRIENDLY;
 
     // always friendly to charmer or owner
-    if (IsUnit() && target->IsUnit() && 
-        ToUnit()->GetCharmerOrOwnerOrSelf() == target->ToUnit()->GetCharmerOrOwnerOrSelf())
+    if (IsUnit() && target->IsUnit() && ToUnit()->GetCharmerOrOwnerOrSelf() == target->ToUnit()->GetCharmerOrOwnerOrSelf())
         return REP_FRIENDLY;
 
     Player const* selfPlayerOwner = GetAffectingPlayer();
@@ -3539,6 +3323,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
     {
         if (selfPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
+
         if (FactionTemplateEntry const* targetFactionTemplateEntry = target->GetFactionTemplateEntry())
             if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                 return *repRank;
@@ -3547,14 +3332,16 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
     {
         if (targetPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
+
         if (FactionTemplateEntry const* selfFactionTemplateEntry = GetFactionTemplateEntry())
             if (ReputationRank const* repRank = targetPlayerOwner->GetReputationMgr().GetForcedRankIfAny(selfFactionTemplateEntry))
                 return *repRank;
     }
 
-    if (IsUnit() && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+    bool b_IsPossessed = HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED) || target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
+    if (IsUnit() && (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || b_IsPossessed))
     {
-        if (target->IsUnit() && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+        if (target->IsUnit() && (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || b_IsPossessed))
         {
             if (selfPlayerOwner && targetPlayerOwner)
             {
@@ -3562,51 +3349,43 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
                 if (selfPlayerOwner == targetPlayerOwner)
                     return REP_FRIENDLY;
 
-                // duel - always hostile to opponent
-                if (selfPlayerOwner->duel && selfPlayerOwner->duel->opponent == targetPlayerOwner && selfPlayerOwner->duel->startTime != 0 && !selfPlayerOwner->duel->finished)
+                // m_duel - always hostile to opponent
+                if (selfPlayerOwner->m_duel && selfPlayerOwner->m_duel->opponent == targetPlayerOwner && selfPlayerOwner->m_duel->startTime != 0 && !selfPlayerOwner->m_duel->finished)
                     return REP_HOSTILE;
 
                 // same group - checks dependant only on our faction - skip FFA_PVP for example
                 if (selfPlayerOwner->IsInRaidWith(targetPlayerOwner))
-                    return REP_FRIENDLY; // return true to allow config option AllowTwoSide.Interaction.Group to work
-                                         // however client seems to allow mixed group parties, because in 13850 client it works like:
-                                         // return GetFactionReactionTo(GetFactionTemplateEntry(), target);
+                    return REP_FRIENDLY;
 
-                                         // Sanctuary
                 if (selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY) && targetPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY))
                     return REP_FRIENDLY;
 
-                // Nostalrius: Hackfix because UNIT_BYTE2_FLAG_FFA_PVP is not implemented yet.
+                // Hackfix because UNIT_BYTE2_FLAG_FFA_PVP is not implemented yet.
                 if (selfPlayerOwner->IsFFAPvP() && targetPlayerOwner->IsFFAPvP())
                     return REP_HOSTILE;
             }
-
-            // check FFA_PVP - not implemented that way on MaNGOS :/
-            /*
-            if (GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP
-            && target->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP)
-            return REP_HOSTILE;
-            */
         }
+
         if (selfPlayerOwner)
         {
             if (FactionTemplateEntry const* targetFactionTemplateEntry = target->GetFactionTemplateEntry())
             {
                 if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                     return *repRank;
+
                 if (FactionEntry const* targetFactionEntry = sObjectMgr.GetFactionEntry(targetFactionTemplateEntry->faction))
                 {
                     if (targetFactionEntry->CanHaveReputation())
                     {
                         // check contested flags
-                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_ATTACK_PVP_ACTIVE_PLAYERS
-                            && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
+                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_ATTACK_PVP_ACTIVE_PLAYERS && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
                             return REP_HOSTILE;
 
                         // if faction has reputation, hostile state depends only from AtWar state
                         if (FactionState const* factionState = selfPlayerOwner->GetReputationMgr().GetState(targetFactionEntry))
                             if (factionState->Flags & FACTION_FLAG_AT_WAR)
                                 return REP_HOSTILE;
+
                         return REP_FRIENDLY;
                     }
                 }
@@ -3656,8 +3435,2077 @@ ReputationRank WorldObject::GetFactionReactionTo(FactionTemplateEntry const* fac
         return REP_FRIENDLY;
     if (targetFactionTemplateEntry->IsFriendlyTo(*factionTemplateEntry))
         return REP_FRIENDLY;
+
     // neutral by default
     return REP_NEUTRAL;
+}
+
+uint32 WorldObject::GetLevelForTarget(WorldObject const* target) const
+{
+    // Bosses are 3 levels higher than players.
+    if (Creature const* pCreature = ToCreature())
+    {
+        if (!pCreature->IsWorldBoss() || !target || !target->IsUnit())
+            return pCreature->GetLevel();
+
+        uint32 level = static_cast<Unit const*>(target)->GetLevel() + sWorld.getConfig(CONFIG_UINT32_WORLD_BOSS_LEVEL_DIFF);
+        if (level < 1)
+            return 1;
+        if (level > 255)
+            return 255;
+        return level;
+    }
+
+    if (Unit const* pUnit = ToUnit())
+        return pUnit->GetLevel();
+
+    if (GameObject const* pGo = ToGameObject())
+    {
+        uint32 level = 0;
+
+        switch (pGo->GetGOInfo()->type)
+        {
+            case GAMEOBJECT_TYPE_CHEST:
+                level = pGo->GetGOInfo()->chest.level;
+                break;
+            case GAMEOBJECT_TYPE_TRAP:
+                level = pGo->GetGOInfo()->trap.level;
+                break;
+        }
+
+        if (!level)
+            level = pGo->GetUInt32Value(GAMEOBJECT_LEVEL);
+
+        if (level)
+            return level;
+    }
+
+    if (Unit const* pUnit = ::ToUnit(target))
+        return pUnit->GetLevel();
+
+    return PLAYER_MAX_LEVEL;
+}
+
+uint32 WorldObject::GetWeaponSkillValue(WeaponAttackType attType, WorldObject const* target) const
+{
+    if (Player const* pPlayer = ToPlayer())
+    {
+        Item* item = pPlayer->GetWeaponForAttack(attType, true, true);
+
+        // feral or unarmed skill only for base attack
+        if (attType != BASE_ATTACK && !item)
+            return 0;
+
+        if (pPlayer->IsInFeralForm())
+            return GetSkillMaxForLevel();              // always maximized SKILL_FERAL_COMBAT in fact
+
+        // weapon skill or (unarmed for base attack)
+        uint32 skill = item ? item->GetProto()->GetProficiencySkill() : SKILL_UNARMED;
+
+// Daemon: pas en preBC !
+//        // in PvP use full skill instead current skill value
+//        value = (target && target->GetTypeId() == TYPEID_PLAYER)
+//            ? ((Player*)this)->GetSkillMax(skill)
+//            : ((Player*)this)->GetSkillValue(skill);
+        return pPlayer->GetSkillValue(skill);
+    }
+
+    return GetUnitMeleeSkill(target);
+}
+
+uint32 WorldObject::GetDefenseSkillValue(WorldObject const* target) const
+{
+    if (Player const* pPlayer = ToPlayer())
+    {
+        // in PvP use full skill instead current skill value
+        uint32 value = (target && target->IsPlayer())
+            ? pPlayer->GetSkillMax(SKILL_DEFENSE)
+            : pPlayer->GetSkillValue(SKILL_DEFENSE);
+        return value;
+    }
+
+    return GetUnitMeleeSkill(target);
+}
+
+// Calculate spell hit result can be:
+// Every spell can: Evade/Immune/Reflect/Sucesful hit
+// For melee based spells:
+//   Miss
+//   Dodge
+//   Parry
+// For spells
+//   Resist
+SpellMissInfo WorldObject::SpellHitResult(Unit* pVictim, SpellEntry const* spell, SpellEffectIndex effIndex, bool CanReflect, Spell* spellPtr)
+{
+    // Return evade for units in evade mode
+    if (pVictim->GetTypeId() == TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode())
+        return SPELL_MISS_EVADE;
+
+    // Check for immune (use charges)
+    if (pVictim != this && !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
+        pVictim->IsImmuneToSpell(spell, pVictim == this))
+        return SPELL_MISS_IMMUNE;
+
+    // All positive spells can`t miss
+    // TODO: client not show miss log for this spells - so need find info for this in dbc and use it!
+    if (spell->IsPositiveSpell(this, pVictim) || spell->IsPositiveEffect(effIndex, this, pVictim))
+        return SPELL_MISS_NONE;
+
+    // Check for immune (use charges)
+    SpellSchoolMask schoolMask;
+    if (spellPtr)
+        schoolMask = spellPtr->m_spellSchoolMask;
+    else
+        schoolMask = spell->GetSpellSchoolMask();
+
+    if (pVictim != this && pVictim->IsImmuneToDamage(schoolMask, spell))
+        return SPELL_MISS_IMMUNE;
+
+    // Try victim reflect spell
+    if (CanReflect)
+    {
+        int32 reflectchance = pVictim->GetTotalAuraModifier(SPELL_AURA_REFLECT_SPELLS);
+        Unit::AuraList const& mReflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
+        for (const auto i : mReflectSpellsSchool)
+            if (i->GetModifier()->m_miscvalue & spell->GetSpellSchoolMask())
+                reflectchance += i->GetModifier()->m_amount;
+
+        if (reflectchance > 0 && roll_chance_i(reflectchance))
+        {
+            // Start triggers for remove charges if need (trigger only for victim, and mark as active spell)
+            ProcDamageAndSpell(pVictim, PROC_FLAG_NONE, PROC_FLAG_TAKE_HARMFUL_SPELL, PROC_EX_REFLECT, 1, BASE_ATTACK, spell);
+            return SPELL_MISS_REFLECT;
+        }
+    }
+
+    switch (spell->DmgClass)
+    {
+        case SPELL_DAMAGE_CLASS_NONE:
+            return SPELL_MISS_NONE;
+        case SPELL_DAMAGE_CLASS_MAGIC:
+            return MagicSpellHitResult(pVictim, spell, spellPtr);
+        case SPELL_DAMAGE_CLASS_MELEE:
+        case SPELL_DAMAGE_CLASS_RANGED:
+            return MeleeSpellHitResult(pVictim, spell, spellPtr);
+    }
+    return SPELL_MISS_NONE;
+}
+
+void WorldObject::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procExtra, uint32 amount, WeaponAttackType attType, SpellEntry const *procSpell, Spell* spell)
+{
+    if ((pVictim && !IsInMap(pVictim)) || !IsInWorld())
+        return;
+
+    ProcTriggeredList procTriggered;
+
+    // Not much to do if no flags are set.
+    if (procAttacker)
+        if (Unit* pUnit = ToUnit())
+            pUnit->ProcDamageAndSpellFor(false, pVictim, procAttacker, procExtra, attType, procSpell, amount, procTriggered, spell);
+
+    // Now go on with a victim's events'n'auras
+    // Not much to do if no flags are set or there is no victim
+    if (pVictim && pVictim->IsAlive() && procVictim)
+    {
+        // http://blue.cardplace.com/cache/wow-paladin/1069149.htm
+        // "Charges will not generate off auto attacks or npc attacks by trying"
+        // "to sit down and force a crit. However, ability crits from physical"
+        // "abilities such as Sinister Strike, Hamstring, Auto-shot, Aimed shot,"
+        // "etc will generate a charge if you're sitting."
+        pVictim->ProcDamageAndSpellFor(true, IsUnit() ? static_cast<Unit*>(this) : pVictim, procVictim, !procSpell && !pVictim->IsStandingUpForProc() ? procExtra & ~PROC_EX_CRITICAL_HIT : procExtra, attType, procSpell, amount, procTriggered, spell);
+    }
+
+    if (Unit* pUnit = ToUnit())
+        pUnit->HandleTriggers(pVictim, procExtra, amount, procSpell, procTriggered);
+}
+
+// Melee based spells can be miss, parry or dodge on this step
+// Crit or block - determined on damage calculation phase! (and can be both in some time)
+float WorldObject::MeleeSpellMissChance(Unit* pVictim, WeaponAttackType attType, int32 skillDiff, SpellEntry const* spell, Spell* spellPtr)
+{
+    if (!pVictim || !pVictim->IsStandingUp())
+        return 0.0f;
+
+    // Calculate hit chance (more correct for chance mod)
+    float hitChance = 0.0f;
+    float missChance = 0.0f;
+
+    // PvP - PvE melee chances
+    if (pVictim->GetTypeId() == TYPEID_PLAYER)
+        missChance = 5.0f - skillDiff * 0.04f;
+    else if (skillDiff < -10)
+        missChance = 5.0f - skillDiff * 0.2f;
+    else
+        missChance = 5.0f - skillDiff * 0.1f;
+
+    // Low level reduction
+    if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
+        missChance *= pVictim->GetLevel() / 10.0f;
+
+    if (Unit* pUnit = ToUnit())
+    {
+        // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
+        if (Player * modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, hitChance, spellPtr);
+
+        // Bonuses from attacker aura and ratings
+        if (attType == RANGED_ATTACK)
+            hitChance += pUnit->m_modRangedHitChance;
+        else
+            hitChance += pUnit->m_modMeleeHitChance;
+    } 
+
+    // There is some code in 1.12 that explicitly adds a modifier that causes the first 1% of +hit gained from
+    // talents or gear to be ignored against monsters with more than 10 Defense Skill above the attacking players Weapon Skill.
+    // https://us.forums.blizzard.com/en/wow/t/bug-hit-tables/185675/33
+    if (skillDiff < -10 && hitChance > 0)
+        hitChance -= 1.0f;
+
+    // Hit chance depends from victim auras
+    if (attType == RANGED_ATTACK)
+        hitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE);
+    else
+        hitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE);
+
+    missChance -= hitChance;
+
+    // Limit miss chance from 0 to 60%
+    if (missChance < 0.0f)
+        return 0.0f;
+    if (missChance > 60.0f)
+        return 60.0f;
+    return missChance;
+}
+
+// Melee based spells hit result calculations
+SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* spell, Spell* spellPtr)
+{
+    WeaponAttackType attType = BASE_ATTACK;
+
+    if (spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED)
+        attType = RANGED_ATTACK;
+
+    // Warrior spell Execute (5308) should never dodge, miss, resist ... Only the trigger can (20647)
+    if (spell->IsFitToFamily<SPELLFAMILY_WARRIOR, CF_WARRIOR_EXECUTE>() && spell->Id != 20647)
+        return SPELL_MISS_NONE;
+
+    // bonus from skills is 0.04% per skill Diff
+    int32 attackerWeaponSkill = (spell->EquippedItemClass == ITEM_CLASS_WEAPON) ? int32(GetWeaponSkillValue(attType, pVictim)) : GetSkillMaxForLevel();
+    int32 skillDiff = attackerWeaponSkill - int32(pVictim->GetSkillMaxForLevel(this));
+    int32 fullSkillDiff = attackerWeaponSkill - int32(pVictim->GetDefenseSkillValue(this));
+    int32 minWeaponSkill = GetSkillMaxForLevel(pVictim) < attackerWeaponSkill ? GetSkillMaxForLevel(pVictim) : attackerWeaponSkill;
+    int32 cappedSkillDiff = minWeaponSkill - pVictim->GetSkillMaxForLevel(this);
+
+    uint32 roll = urand(0, 9999);
+
+    uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell, spellPtr) * 100.0f);
+    // Roll miss
+    uint32 tmp = spell->AttributesEx3 & SPELL_ATTR_EX3_CANT_MISS ? 0 : missChance;
+    if (roll < tmp)
+        return SPELL_MISS_MISS;
+
+    // Chance resist mechanic for spell (effect resistance handled later)
+    int32 resist_mech = 0;
+    if (spell->Mechanic)
+        resist_mech = pVictim->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_MECHANIC_RESISTANCE, spell->Mechanic) * 100;
+    // Roll chance
+    tmp += resist_mech;
+    if (roll < tmp)
+        return SPELL_MISS_RESIST;
+
+    bool canDodge = true;
+    bool canParry = true;
+
+    // Same spells cannot be parry/dodge
+    if (spell->Attributes & SPELL_ATTR_IMPOSSIBLE_DODGE_PARRY_BLOCK)
+        return SPELL_MISS_NONE;
+
+    // Ranged attack cannot be parry/dodge
+    if (attType == RANGED_ATTACK)
+        return SPELL_MISS_NONE;
+
+    bool from_behind = !pVictim->HasInArc(this, M_PI_F);
+
+    // Check for attack from behind
+    if (from_behind)
+    {
+        // Can`t dodge from behind in PvP (but its possible in PvE)
+        if (GetTypeId() == TYPEID_PLAYER && pVictim->GetTypeId() == TYPEID_PLAYER)
+            canDodge = false;
+        // Can`t parry
+        canParry = false;
+    }
+    // Check creatures flags_extra for disable parry
+    if (Creature* pCreatureVictim = pVictim->ToCreature())
+    { 
+        if (pCreatureVictim->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_PARRY))
+            canParry = false;
+    }
+    // Check if the player can parry
+    else
+    {
+        if (!((Player*)pVictim)->CanParry())
+            canParry = false;
+    }
+
+    if (canDodge)
+    {
+        // Roll dodge
+        int32 dodgeModifier = pVictim->IsPlayer() ? skillDiff * 4 : skillDiff * 10;
+        int32 dodgeChance = int32(pVictim->GetUnitDodgeChance() * 100.0f) - dodgeModifier;
+
+        if (dodgeChance < 0)
+            dodgeChance = 0;
+
+        // Low level reduction
+        if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
+            dodgeChance *= pVictim->GetLevel() / 10.0f;
+
+        tmp += dodgeChance;
+        if (roll < tmp)
+            return SPELL_MISS_DODGE;
+    }
+
+    if (canParry)
+    {
+        // Roll parry
+        int32 parryModifier = pVictim->IsPlayer() ? skillDiff * 4 : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
+        int32 parryChance = int32(pVictim->GetUnitParryChance() * 100.0f) - parryModifier;
+
+        // Can`t parry from behind
+        if (parryChance < 0)
+            parryChance = 0;
+
+        // Low level reduction
+        if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
+            parryChance *= pVictim->GetLevel() / 10.0f;
+
+        tmp += parryChance;
+        if (roll < tmp)
+            return SPELL_MISS_PARRY;
+    }
+
+    return SPELL_MISS_NONE;
+}
+
+SpellMissInfo WorldObject::MagicSpellHitResult(Unit* pVictim, SpellEntry const* spell, Spell* spellPtr)
+{
+    // Can`t miss on dead target (on skinning for example)
+    if (!pVictim->IsAlive())
+        return SPELL_MISS_NONE;
+
+    // Spell cannot be resisted (not exist on dbc, custom flag)
+    if (spell->AttributesEx4 & SPELL_ATTR_EX4_IGNORE_RESISTANCES)
+        return SPELL_MISS_NONE;
+
+    int32 hitChance = MagicSpellHitChance(pVictim, spell, spellPtr);
+    int32 missChance = 10000 - hitChance;
+    int32 rand = irand(0, 10000);
+
+    if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) ||
+        (pVictim->IsPlayer() && pVictim->ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)))
+        missChance = 0;
+
+    if (rand < missChance)
+        return SPELL_MISS_RESIST;
+
+    return SPELL_MISS_NONE;
+}
+
+int32 WorldObject::MagicSpellHitChance(Unit* pVictim, SpellEntry const* spell, Spell* spellPtr)
+{
+     if (spell->AttributesEx3 & SPELL_ATTR_EX3_CANT_MISS)
+        return 10000;
+
+    SpellSchoolMask schoolMask = spell->GetSpellSchoolMask();
+    // PvP - PvE spell misschances per leveldif > 2
+    int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
+    int32 leveldif = int32(pVictim->GetLevelForTarget(this)) - int32(GetLevelForTarget(pVictim));
+
+    // Base hit chance from attacker and victim levels
+    float modHitChance;
+    if (leveldif < 3)
+        modHitChance = 96 - leveldif;
+    else
+        modHitChance = 94 - (leveldif - 2) * lchance;
+
+    //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "%s [%u] : Binary [%s]. Base hit chance %f, level diff: %d", spell->SpellName[2].c_str(), spell->Id, spell->IsBinary() ? "YES" : "NO", modHitChance, leveldif);
+
+    // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
+    if (Unit* pUnit = ToUnit())
+    {
+        if (Player * modOwner = pUnit->GetSpellModOwner())
+        {
+            modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, modHitChance, spellPtr);
+            //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELLMOD_RESIST_MISS_CHANCE : %f", modHitChance);
+        }
+    }
+
+    // Chance hit from victim SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE auras
+    modHitChance += pVictim->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE, schoolMask);
+    //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE (+ %i) : %f", pVictim->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE, schoolMask), modHitChance);
+
+    // Reduce spell hit chance for Area of effect spells from victim SPELL_AURA_MOD_AOE_AVOIDANCE aura
+    if (spell->IsAreaOfEffectSpell())
+    {
+        modHitChance -= pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE);
+        //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_AOE_AVOIDANCE (- %i) : %f", pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE), modHitChance);
+    }
+
+    // Chance resist mechanic for spell (effect resistance handled later)
+    int32 resist_mech = 0;
+    if (spell->Mechanic)
+        resist_mech = pVictim->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_MECHANIC_RESISTANCE, spell->Mechanic);
+    // Apply mod
+    modHitChance -= resist_mech;
+    //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_MECHANIC_RESISTANCE (- %i) : %f", resist_mech, modHitChance);
+
+    // Chance resist debuff
+    modHitChance -= pVictim->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DEBUFF_RESISTANCE, int32(spell->Dispel));
+    //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_DEBUFF_RESISTANCE (- %i) : %f", pVictim->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DEBUFF_RESISTANCE, int32(spell->Dispel)), modHitChance);
+
+    // Increase hit chance from attacker SPELL_AURA_MOD_SPELL_HIT_CHANCE and attacker ratings
+    if (Unit* pUnit = ToUnit())
+        modHitChance += int32(pUnit->m_modSpellHitChance);
+    //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "SPELL_AURA_MOD_SPELL_HIT_CHANCE (+ %i) : %f", int32(m_modSpellHitChance), modHitChance);
+
+    // Nostalrius: sorts binaires.
+    if (spell->IsBinary())
+    {
+        // Get base victim resistance for school
+        float resistModHitChance = GetSpellResistChance(pVictim, schoolMask, false);
+        modHitChance *= (1 - resistModHitChance);
+        //DEBUG_UNIT(this, DEBUG_SPELL_COMPUTE_RESISTS, "x %f : HitChance = %f", (1 - resistModHitChance), modHitChance);
+    }
+
+    int32 HitChance = modHitChance * 100;
+    if (HitChance < 100) HitChance = 100;
+    if (HitChance > 9900) HitChance = 9900;
+    return HitChance;
+}
+
+float WorldObject::GetSpellResistChance(Unit const* victim, uint32 schoolMask, bool innateResists) const
+{
+    Unit const* pUnit = ToUnit();
+    // Get base victim resistance for school
+    float const baseResistance = victim->GetResistance(GetFirstSchoolInMask(SpellSchoolMask(schoolMask)));
+    // Get attacker spell penetration from SPELL_AURA_MOD_TARGET_RESISTANCE aura
+    float const selfResistance = pUnit ? pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, schoolMask) : 0;
+
+    float resistModHitChance = baseResistance + selfResistance;
+
+    if ((resistModHitChance < 0.0f) && (baseResistance >= 0.0f))
+        resistModHitChance = 0.0f;
+
+    // Magic vulnerability calculation
+    if (resistModHitChance < 0.0f)
+    {
+        // Victim's level based skill, penalize when calculating for low levels (< 20):
+        const float skill = std::max(GetSkillMaxForLevel(victim), uint16(100));
+        // Convert resistance value to vulnerability percentage through comparision with skill
+        resistModHitChance = (float(resistModHitChance) / skill) * 100;
+        return (resistModHitChance * 0.01f);
+    }
+
+    // Turtle: no resist chance for holy school
+    if (schoolMask & SPELL_SCHOOL_MASK_HOLY)
+        return 0.0f;
+
+    uint32 const uiLevel = GetLevel();
+
+    // Computing innate resists, resistance bonus when attacking a creature higher level. Not affected by modifiers.
+    if (innateResists && victim->GetTypeId() == TYPEID_UNIT)
+    {
+        int32 leveldiff = int32(victim->GetLevelForTarget(this)) - int32(GetLevelForTarget(victim));
+        resistModHitChance += int32((8.0f * leveldiff) * uiLevel / 63.0f);
+    }
+    resistModHitChance *= (float)(0.15f / uiLevel);
+
+    if (resistModHitChance < 0.0f)
+        resistModHitChance = 0.0f;
+    if (resistModHitChance > 0.75f)
+        resistModHitChance = 0.75f;
+
+    return resistModHitChance;
+}
+
+void WorldObject::SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo) const
+{
+    WorldPacket data(SMSG_SPELLLOGMISS, (4 + 8 + 1 + 4 + 8 + 1));
+    data << uint32(spellID);
+    data << GetObjectGuid();
+    data << uint8(0);                                       // unk8
+    data << uint32(1);                                      // target count
+    // for(i = 0; i < target count; ++i)
+    data << target->GetObjectGuid();                        // target GUID
+    data << uint8(missInfo);
+    // Nostalrius: + 2 * float if unk8=1
+    // end loop
+    SendObjectMessageToSet(&data, true);
+}
+
+void WorldObject::SendSpellDamageResist(Unit* target, uint32 spellId) const
+{
+    WorldPacket data(SMSG_PROCRESIST, 8 + 8 + 4 + 1);
+    data << GetObjectGuid();
+    data << target->GetObjectGuid();
+    data << uint32(spellId);
+    data << uint8(0); // bool - log format: 0-default, 1-debug
+    SendMessageToSet(&data, true);
+}
+
+void WorldObject::SendSpellOrDamageImmune(Unit* target, uint32 spellID) const
+{
+    WorldPacket data(SMSG_SPELLORDAMAGE_IMMUNE, (8 + 8 + 4 + 1));
+    data << GetObjectGuid();
+    data << target->GetObjectGuid();
+    data << uint32(spellID);
+    data << uint8(0);
+    SendMessageToSet(&data, true);
+}
+
+uint32 WorldObject::SpellCriticalDamageBonus(SpellEntry const *spellProto, uint32 damage, Unit *pVictim, Spell* spell)
+{
+    // Calculate critical bonus
+    int32 crit_bonus;
+    switch (spellProto->DmgClass)
+    {
+        case SPELL_DAMAGE_CLASS_MELEE:                      // for melee based spells is 100%
+        case SPELL_DAMAGE_CLASS_RANGED:
+            crit_bonus = damage;
+            break;
+        default:
+            crit_bonus = damage / 2;                        // for spells is 50%
+            break;
+    }
+
+    Unit const* pUnit = ToUnit();
+
+    // adds additional damage to crit_bonus (from talents)
+    if (pUnit)
+    {
+        if (Player* modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CRIT_DAMAGE_BONUS, crit_bonus, spell);
+    }
+
+
+    if (!pVictim)
+        return damage += crit_bonus;
+
+    uint32 creatureTypeMask = pVictim->GetCreatureTypeMask();
+
+    float critPctDamageMod = pUnit ? pUnit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, creatureTypeMask) : 1;
+
+    damage = (damage + crit_bonus) * critPctDamageMod;
+
+    return damage;
+}
+
+uint32 WorldObject::SpellCriticalHealingBonus(SpellEntry const *spellProto, uint32 damage, Unit const* pVictim) const
+{
+    // Calculate critical bonus
+    int32 crit_bonus;
+    switch (spellProto->DmgClass)
+    {
+        case SPELL_DAMAGE_CLASS_MELEE:                      // for melee based spells is 100%
+        case SPELL_DAMAGE_CLASS_RANGED:
+            // TODO: write here full calculation for melee/ranged spells
+            crit_bonus = damage;
+            break;
+        default:
+            crit_bonus = damage / 2;                        // for spells is 50%
+            break;
+    }
+
+    if (pVictim)
+    {
+        if (Unit const* pUnit = ToUnit())
+        {
+            uint32 creatureTypeMask = pVictim->GetCreatureTypeMask();
+            crit_bonus = int32(crit_bonus * pUnit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_CRIT_PERCENT_VERSUS, creatureTypeMask));
+        }
+    }
+
+    if (crit_bonus > 0)
+        damage += crit_bonus;
+
+    return damage;
+}
+
+int32 WorldObject::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellProto, bool critical)
+{
+    Unit* pUnit = ToUnit();
+
+    // Script Event HealedBy
+    if (pVictim->AI() && pUnit)
+        pVictim->AI()->HealedBy(pUnit, addhealth);
+
+    int32 gain = pVictim->ModifyHealth(int32(addhealth));
+
+    WorldObject* pHealer = this;
+
+    if (IsCreature() && ((Creature*)this)->IsTotem() && ((Totem*)this)->GetTotemType() != TOTEM_STATUE)
+        pHealer = pUnit->GetOwner();
+
+    if (IsPlayer() || pVictim->IsPlayer())
+        pHealer->SendHealSpellLog(pVictim, spellProto->Id, addhealth, critical);
+
+    return gain;
+}
+
+void WorldObject::SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, bool critical) const
+{
+    // we guess size
+    WorldPacket data(SMSG_SPELLHEALLOG, (8 + 8 + 4 + 4 + 1));
+    data << pVictim->GetPackGUID();
+    data << GetPackGUID();
+    data << uint32(SpellID);
+    data << uint32(Damage);
+    data << uint8(critical ? 1 : 0);
+    // data << uint8(0);                                    // [-ZERO]
+    SendMessageToSet(&data, true);
+}
+
+void WorldObject::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype)
+{
+    SendEnergizeSpellLog(pVictim, SpellID, Damage, powertype);
+    // needs to be called after sending spell log
+    pVictim->ModifyPower(powertype, Damage);
+}
+
+void WorldObject::SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, Powers powertype) const
+{
+    WorldPacket data(SMSG_SPELLENERGIZELOG, (8 + 8 + 4 + 4 + 4 + 1));
+    data << pVictim->GetPackGUID();
+    data << GetPackGUID();
+    data << uint32(SpellID);
+    data << uint32(powertype);
+    data << uint32(Damage);
+    SendMessageToSet(&data, true);
+}
+
+void WorldObject::SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log) const
+{
+    WorldPacket data(SMSG_SPELLNONMELEEDAMAGELOG, (16 + 4 + 4 + 1 + 4 + 4 + 1 + 1 + 4 + 4 + 1)); // we guess size
+    data << log->target->GetPackGUID();
+    data << log->attacker->GetPackGUID();
+    data << uint32(log->SpellID);
+    data << uint32(log->damage);                            // damage amount
+    data << uint8(log->school);                             // damage school
+    data << uint32(log->absorb);                            // AbsorbedDamage
+    data << int32(log->resist);                             // resist
+    data << uint8(log->periodicLog);                        // if 1, then client show spell name (example: %s's ranged shot hit %s for %u school or %s suffers %u school damage from %s's spell_name
+    data << uint8(log->unused);                             // unused
+    data << uint32(log->blocked);                           // blocked
+    data << uint32(log->HitInfo);
+    data << uint8(0);                                       // flag to use extend data
+    SendMessageToSet(&data, true);
+}
+
+void WorldObject::SendSpellNonMeleeDamageLog(Unit* target, uint32 spellID, uint32 damage, SpellSchoolMask damageSchoolMask, uint32 absorbedDamage, int32 resist, bool isPeriodic, uint32 blocked, bool criticalHit, bool split)
+{
+    SpellNonMeleeDamage log(this, target, spellID, GetFirstSchoolInMask(damageSchoolMask));
+    log.damage = damage;
+    log.damage += (resist < 0 ? uint32(std::abs(resist)) : 0);
+    log.damage -= (absorbedDamage + (resist > 0 ? uint32(resist) : 0) + blocked);
+    log.absorb = absorbedDamage;
+    log.resist = resist;
+    log.periodicLog = isPeriodic;
+    log.blocked = blocked;
+    log.HitInfo = 0;
+    if (criticalHit)
+        log.HitInfo |= SPELL_HIT_TYPE_CRIT;
+    if (split)
+        log.HitInfo |= SPELL_HIT_TYPE_SPLIT;
+    SendSpellNonMeleeDamageLog(&log);
+}
+
+SpellSchoolMask WorldObject::GetMeleeDamageSchoolMask() const
+{
+    return SPELL_SCHOOL_MASK_NORMAL;
+}
+
+uint32 WorldObject::CalcArmorReducedDamage(Unit* pVictim, const uint32 damage) const
+{
+    uint32 newdamage = 0;
+    float armor = (float)pVictim->GetArmor();
+    Unit const* pUnit = ToUnit();
+
+    // Ignore enemy armor by SPELL_AURA_MOD_TARGET_RESISTANCE aura
+    if (pUnit)
+        armor += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, SPELL_SCHOOL_MASK_NORMAL);
+
+    if (armor < 0.0f)
+        armor = 0.0f;
+
+    float tmpvalue = 0.1f * armor / (8.5f * float(GetLevel()) + 40.0f);
+    tmpvalue = tmpvalue / (1.0f + tmpvalue);
+
+    if (tmpvalue < 0.0f)
+        tmpvalue = 0.0f;
+    if (tmpvalue > 0.75f)
+        tmpvalue = 0.75f;
+
+    newdamage = uint32(roundf(damage - (damage * tmpvalue)));
+
+    return (newdamage > 1) ? newdamage : 1;
+}
+
+int32 WorldObject::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* effBasePoints, Spell* spell) const
+{
+    Unit const* pUnit = ToUnit();
+    Player const* pPlayer = ToPlayer();
+
+    uint8 comboPoints = pPlayer ? pPlayer->GetComboPoints() : 0;
+
+    int32 level = GetLevel();
+
+    if (level > (int32)spellProto->maxLevel && spellProto->maxLevel > 0)
+        level = (int32)spellProto->maxLevel;
+    else if (level < (int32)spellProto->baseLevel)
+        level = (int32)spellProto->baseLevel;
+    level -= (int32)spellProto->spellLevel;
+
+    int32 baseDice = int32(spellProto->EffectBaseDice[effect_index]);
+    float basePointsPerLevel = spellProto->EffectRealPointsPerLevel[effect_index];
+    float randomPointsPerLevel = spellProto->EffectDicePerLevel[effect_index];
+    int32 basePoints = effBasePoints
+                       ? *effBasePoints - baseDice
+                       : spellProto->EffectBasePoints[effect_index];
+
+    basePoints += int32(level * basePointsPerLevel);
+    int32 randomPoints = int32(spellProto->EffectDieSides[effect_index] + level * randomPointsPerLevel);
+    float comboDamage = spellProto->EffectPointsPerComboPoint[effect_index];
+
+    switch (randomPoints)
+    {
+        case 0:
+        case 1:
+            basePoints += baseDice;
+            break;              // range 1..1
+        default:
+        {
+            // range can have positive (1..rand) and negative (rand..1) values, so order its for irand
+            int32 randvalue = baseDice >= randomPoints
+                              ? irand(randomPoints, baseDice)
+                              : irand(baseDice, randomPoints);
+
+            basePoints += randvalue;
+            break;
+        }
+    }
+
+    int32 value = basePoints;
+
+    // random damage
+    if (comboDamage != 0 && pPlayer && target && (target->GetObjectGuid() == pPlayer->GetComboTargetGuid()))
+        value += (int32)(comboDamage * comboPoints);
+
+    if (pUnit)
+    {
+        if (Player* modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_ALL_EFFECTS, value, spell);
+    }
+
+    if (spellProto->Attributes & SPELL_ATTR_LEVEL_DAMAGE_CALCULATION && spellProto->spellLevel &&
+            spellProto->Effect[effect_index] != SPELL_EFFECT_WEAPON_PERCENT_DAMAGE &&
+            spellProto->Effect[effect_index] != SPELL_EFFECT_KNOCK_BACK &&
+            (spellProto->Effect[effect_index] != SPELL_EFFECT_APPLY_AURA || spellProto->EffectApplyAuraName[effect_index] != SPELL_AURA_MOD_DECREASE_SPEED))
+        value = int32(value * 0.25f * exp(GetLevel() * (70 - spellProto->spellLevel) / 1000.0f));
+
+    return value;
+}
+
+void WorldObject::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 damage, SpellEntry const* spellInfo, SpellEffectIndex effectIndex, WeaponAttackType attackType, Spell* spell, bool crit)
+{
+    SpellSchoolMask damageSchoolMask = GetSchoolMask(damageInfo->school);
+    Unit *pVictim = damageInfo->target;
+    if (!pVictim)
+        return;
+
+    if (damage < 0)
+        return;
+
+    if (!pVictim->IsAlive())
+        return;
+
+    // damage bonus (per damage class)
+    switch (spellInfo->DmgClass)
+    {
+        // Melee and Ranged Spells
+        case SPELL_DAMAGE_CLASS_RANGED:
+        case SPELL_DAMAGE_CLASS_MELEE:
+        {
+            //Calculate damage bonus
+            damage = MeleeDamageBonusDone(pVictim, damage, attackType, spellInfo, effectIndex, SPELL_DIRECT_DAMAGE, 1, spell);
+            damage = pVictim->MeleeDamageBonusTaken(this, damage, attackType, spellInfo, effectIndex, SPELL_DIRECT_DAMAGE, 1, spell);
+
+            // if crit add critical bonus
+            if (crit)
+            {
+                damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
+                damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
+            }
+            break;
+        }
+        // Magical Attacks
+        case SPELL_DAMAGE_CLASS_NONE:
+        case SPELL_DAMAGE_CLASS_MAGIC:
+        {
+            // Calculate damage bonus
+            damage = SpellDamageBonusDone(pVictim, spellInfo, effectIndex, damage, SPELL_DIRECT_DAMAGE, 1, spell);
+            damage = pVictim->SpellDamageBonusTaken(this, spellInfo, effectIndex, damage, SPELL_DIRECT_DAMAGE, 1, spell);
+
+            // If crit add critical bonus
+            if (crit)
+            {
+                damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
+                damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
+            }
+            break;
+        }
+    }
+
+    // damage mitigation
+    if (damage > 0)
+    {
+        // physical damage => armor
+        if (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL && !(spellInfo->Custom & SPELL_CUSTOM_IGNORE_ARMOR))
+            damage = CalcArmorReducedDamage(pVictim, damage);
+    }
+    else
+        damage = 0;
+    damageInfo->damage = damage;
+}
+
+/**
+ * Calculates caster part of melee damage bonuses,
+ * also includes different bonuses dependent from target auras
+ */
+uint32 WorldObject::MeleeDamageBonusDone(Unit* pVictim, uint32 pdamage, WeaponAttackType attType, SpellEntry const* spellProto, SpellEffectIndex effectIndex, DamageEffectType damagetype, uint32 stack, Spell* spell, bool flat)
+{
+    if (!pVictim)
+        return pdamage;
+
+    if (pdamage == 0)
+        return pdamage;
+
+    // differentiate for weapon damage based spells
+    bool isWeaponDamageBasedSpell = !(spellProto && (damagetype == DOT || spellProto->HasEffect(SPELL_EFFECT_SCHOOL_DAMAGE)));
+    Item*  pWeapon          = GetTypeId() == TYPEID_PLAYER ? ((Player*)this)->GetWeaponForAttack(attType, true, false) : nullptr;
+    uint32 creatureTypeMask = pVictim->GetCreatureTypeMask();
+    uint32 schoolMask       = spellProto ? spellProto->GetSpellSchoolMask() : GetMeleeDamageSchoolMask();
+
+    // FLAT damage bonus auras
+    // =======================
+    int32 DoneFlat  = 0;
+    int32 APbonus   = 0;
+
+    Unit* pUnit = ToUnit();
+
+    // ..done flat, already included in weapon damage based spells
+    if (pUnit && !isWeaponDamageBasedSpell)
+    {
+        Unit::AuraList const& mModDamageDone = pUnit->GetAurasByType(SPELL_AURA_MOD_DAMAGE_DONE);
+        for (const auto i : mModDamageDone)
+        {
+            if (i->GetModifier()->m_miscvalue & schoolMask &&                         // schoolmask has to fit with the intrinsic spell school
+                    (i->GetModifier()->m_miscvalue & GetMeleeDamageSchoolMask() ||    // AND schoolmask has to fit with weapon damage school (essential for non-physical spells)
+                     spellProto->DmgClass == SPELL_DAMAGE_CLASS_RANGED) &&               // Some ranged physical attacks use magic damage, ex. Arcane Shot
+                    ((i->GetSpellProto()->EquippedItemClass == -1) ||                     // general, weapon independent
+                     (pWeapon && pWeapon->IsFitToSpellRequirements(i->GetSpellProto()))))  // OR used weapon fits aura requirements
+                DoneFlat += i->GetModifier()->m_amount;
+        }
+
+        // Pets just add their bonus damage to their melee damage
+        if (GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsPet())
+            DoneFlat += ((Pet*)this)->GetBonusDamage();
+    }
+
+    // ..done flat (by creature type mask)
+    if (pUnit)
+        DoneFlat += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_DAMAGE_DONE_CREATURE, creatureTypeMask);
+
+    // ..done flat (base at attack power for marked target and base at attack power for creature type)
+    if (attType == RANGED_ATTACK)
+    {
+        APbonus += pVictim->GetTotalAuraModifier(SPELL_AURA_RANGED_ATTACK_POWER_ATTACKER_BONUS);
+        if (pUnit)
+            APbonus += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_RANGED_ATTACK_POWER_VERSUS, creatureTypeMask);
+    }
+    else
+    {
+        APbonus += pVictim->GetTotalAuraModifier(SPELL_AURA_MELEE_ATTACK_POWER_ATTACKER_BONUS);
+        if (pUnit)
+            APbonus += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS, creatureTypeMask);
+    }
+
+    // PERCENT damage auras
+    // ====================
+    float DonePercent   = 1.0f;
+
+    // ..done pct, already included in weapon damage based spells
+    if (pUnit && !isWeaponDamageBasedSpell)
+    {
+        Unit::AuraList const& mModDamagePercentDone = pUnit->GetAurasByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+        for (const auto i : mModDamagePercentDone)
+        {
+            if (i->GetModifier()->m_miscvalue & schoolMask &&                         // schoolmask has to fit with the intrinsic spell school
+                    i->GetModifier()->m_miscvalue & GetMeleeDamageSchoolMask() &&         // AND schoolmask has to fit with weapon damage school (essential for non-physical spells)
+                    ((i->GetSpellProto()->EquippedItemClass == -1) ||                     // general, weapon independent
+                     (pWeapon && pWeapon->IsFitToSpellRequirements(i->GetSpellProto()))))  // OR used weapon fits aura requirements
+                DonePercent *= (i->GetModifier()->m_amount + 100.0f) / 100.0f;
+        }
+
+        if (pUnit && attType == OFF_ATTACK)
+            DonePercent *= pUnit->GetModifierValue(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_PCT);                    // no school check required
+    }
+
+    // Pet happiness increases damage of Hunter pet melee spells
+    if (IsPet() && ((Pet*)this)->getPetType() == HUNTER_PET)
+    {
+        if (Pet* pet = ((Pet*)this))
+        {
+            switch (pet->GetHappinessState())
+            {
+                case HAPPY:     DonePercent *= 1.25; break;
+                case CONTENT:   break;
+                case UNHAPPY:   DonePercent *= 0.75; break;
+            }
+        }
+    }
+
+    // ..done pct (by creature type mask)
+    if (pUnit)
+        DonePercent *= pUnit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_DONE_VERSUS, creatureTypeMask);
+
+    // final calculation
+    // =================
+
+    float DoneTotal = 0.0f;
+
+    // scaling of non weapon based spells
+    if (!isWeaponDamageBasedSpell)
+    {
+        // apply ap bonus and benefit affected by spell power implicit coeffs and spell level penalties
+        DoneTotal = SpellBonusWithCoeffs(spellProto, effectIndex, DoneTotal, DoneFlat, APbonus, damagetype, true, this, spell);
+    }
+    // weapon damage based spells
+    else if (APbonus || DoneFlat)
+    {
+        bool normalized = spellProto ? spellProto->HasEffect(SPELL_EFFECT_NORMALIZED_WEAPON_DMG) : false;
+        DoneTotal += int32(APbonus / 14.0f * GetAPMultiplier(attType, normalized));
+
+        // for weapon damage based spells we still have to apply damage done percent mods
+        // (that are already included into pdamage) to not-yet included DoneFlat
+        // e.g. from doneVersusCreature, apBonusVs...
+        UnitMods unitMod;
+        switch (attType)
+        {
+            default:
+            case BASE_ATTACK:
+                unitMod = UNIT_MOD_DAMAGE_MAINHAND;
+                break;
+            case OFF_ATTACK:
+                unitMod = UNIT_MOD_DAMAGE_OFFHAND;
+                break;
+            case RANGED_ATTACK:
+                unitMod = UNIT_MOD_DAMAGE_RANGED;
+                break;
+        }
+
+        DoneTotal += DoneFlat;
+
+        if (pUnit)
+            DoneTotal *= pUnit->GetModifierValue(unitMod, TOTAL_PCT);
+    }
+
+    if (!flat)
+        DoneTotal = 0.0f;
+
+    float tmpDamage = float(int32(pdamage) + DoneTotal * int32(stack)) * DonePercent;
+
+    // apply spellmod to Done damage
+    if (spellProto && pUnit)
+    {
+        if (Player* modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spellProto->Id, damagetype == DOT ? SPELLMOD_DOT : SPELLMOD_DAMAGE, tmpDamage, spell);
+    }
+
+    // bonus result can be negative
+    return tmpDamage > 0 ? uint32(tmpDamage) : 0;
+}
+
+/**
+ * Calculates caster part of healing spell bonuses,
+ * also includes different bonuses dependent from target auras
+ */
+uint32 WorldObject::SpellHealingBonusDone(Unit* pVictim, SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 healamount, DamageEffectType damagetype, uint32 stack, Spell* spell)
+{
+    Unit* pUnit = ToUnit();
+
+    // For totems get healing bonus from owner (statue isn't totem in fact)
+    if (GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsTotem() && ((Totem*)this)->GetTotemType() != TOTEM_STATUE)
+        if (Unit* owner = pUnit->GetOwner())
+            return owner->SpellHealingBonusDone(pVictim, spellProto, effectIndex, healamount, damagetype, stack, spell);
+
+    // No heal amount for this class spells
+    if (((spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE) && spellProto->HasAttribute(SPELL_ATTR_PASSIVE)) || (spellProto->Custom & SPELL_CUSTOM_FIXED_DAMAGE))
+    {
+        //DEBUG_UNIT(this, DEBUG_SPELLS_DAMAGE, "SpellHealingBonusDone[spell=%u]: has fixed damage (SPELL_DAMAGE_CLASS_NONE)", spellProto->Id);
+        return healamount < 0 ? 0 : healamount;
+    }
+
+    // Healing Done
+    // Done total percent damage auras
+    float  DoneTotalMod = 1.0f;
+    int32  DoneTotal = 0;
+
+    if (pUnit)
+    {
+        // Healing done percent
+        Unit::AuraList const& mHealingDonePct = pUnit->GetAurasByType(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
+        for (const auto i : mHealingDonePct)
+            DoneTotalMod *= (100.0f + i->GetModifier()->m_amount) / 100.0f;
+
+        // done scripted mod (take it from owner)
+        Unit *owner = pUnit->GetOwner();
+        if (!owner)
+            owner = pUnit;
+
+        Unit::AuraList const& mOverrideClassScript = owner->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
+        for (const auto i : mOverrideClassScript)
+        {
+            if (!i->isAffectedOnSpell(spellProto))
+                continue;
+            switch (i->GetModifier()->m_miscvalue)
+            {
+                case 4415: // Increased Rejuvenation Healing
+                    DoneTotal += i->GetModifier()->m_amount / 4; // 4 ticks
+                    break;
+                case 3736: // Hateful Totem of the Third Wind / Increased Lesser Healing Wave / Savage Totem of the Third Wind
+                    DoneTotal += i->GetModifier()->m_amount;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    // Done fixed damage bonus auras
+    int32 DoneAdvertisedBenefit  = SpellBaseHealingBonusDone(spellProto->GetSpellSchoolMask());
+
+    // apply ap bonus and benefit affected by spell power implicit coeffs and spell level penalties
+    DoneTotal = SpellBonusWithCoeffs(spellProto, effectIndex, DoneTotal, DoneAdvertisedBenefit, 0, damagetype, true, this, spell);
+
+    // use float as more appropriate for negative values and percent applying
+    float heal = (healamount + DoneTotal * int32(stack)) * DoneTotalMod;
+
+    if (pUnit)
+    {
+        // apply spellmod to Done amount
+        if (Player* modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spellProto->Id, damagetype == DOT ? SPELLMOD_DOT : SPELLMOD_DAMAGE, heal, spell);
+    }
+
+    //DEBUG_UNIT(this, DEBUG_SPELLS_DAMAGE, "SpellHealingBonusDone[spell=%u]: (base=%u + %i) * %f. HealingPwr=%i", spellProto->Id, healamount, DoneTotal, DoneTotalMod, DoneAdvertisedBenefit);
+    return heal < 0 ? 0 : uint32(heal);
+}
+
+int32 WorldObject::SpellBaseHealingBonusDone(SpellSchoolMask schoolMask)
+{
+    int32 AdvertisedBenefit = 0;
+
+    if (Unit* pUnit = ToUnit())
+    {
+        Unit::AuraList const& mHealingDone = pUnit->GetAurasByType(SPELL_AURA_MOD_HEALING_DONE);
+        for (const auto i : mHealingDone)
+            if ((i->GetModifier()->m_miscvalue & schoolMask) != 0)
+                AdvertisedBenefit += i->GetModifier()->m_amount;
+
+        // Healing bonus of spirit, intellect and strength
+        if (GetTypeId() == TYPEID_PLAYER)
+        {
+            // Healing bonus from stats
+            Unit::AuraList const& mHealingDoneOfStatPercent = pUnit->GetAurasByType(SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT);
+            for (const auto i : mHealingDoneOfStatPercent)
+            {
+                // 1.12.* have only 1 stat type support
+                Stats usedStat = STAT_SPIRIT;
+                AdvertisedBenefit += int32(pUnit->GetStat(usedStat) * i->GetModifier()->m_amount / 100.0f);
+            }
+        }
+    }
+
+    return AdvertisedBenefit;
+}
+
+/**
+ * Calculates caster part of spell damage bonuses,
+ * also includes different bonuses dependent from target auras
+ */
+uint32 WorldObject::SpellDamageBonusDone(Unit* pVictim, SpellEntry const* spellProto, SpellEffectIndex effectIndex, uint32 pdamage, DamageEffectType damagetype, uint32 stack, Spell* spell)
+{
+    if (!spellProto || !pVictim || damagetype == DIRECT_DAMAGE)
+        return pdamage;
+
+    if (spellProto->Custom & SPELL_CUSTOM_FIXED_DAMAGE)
+        return pdamage;
+
+    // Ignite damage already includes modifiers
+    if (spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_IGNITE>())
+        return pdamage;
+
+    Unit* pUnit = ToUnit();
+
+    // For totems get damage bonus from owner (statue isn't totem in fact)
+    if (pUnit && GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsTotem() && ((Totem*)this)->GetTotemType() != TOTEM_STATUE)
+    {
+        if (Unit* owner = pUnit->GetOwner())
+            return owner->SpellDamageBonusDone(pVictim, spellProto, effectIndex, pdamage, damagetype, stack, spell);
+    }
+
+    float DoneTotalMod = 1.0f;
+    int32 DoneTotal = 0;
+    Item*  pWeapon = GetTypeId() == TYPEID_PLAYER ? ((Player*)this)->GetWeaponForAttack(BASE_ATTACK, true, false) : nullptr;
+
+    // Creature damage
+    if (GetTypeId() == TYPEID_UNIT && !((Creature*)this)->IsPet())
+        DoneTotalMod *= Creature::_GetSpellDamageMod(((Creature*)this)->GetCreatureInfo()->rank);
+
+    if (pUnit)
+    {
+        Unit::AuraList const& mModDamagePercentDone = pUnit->GetAurasByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+        for (const auto i : mModDamagePercentDone)
+        {
+            if ((i->GetModifier()->m_miscvalue & spellProto->GetSpellSchoolMask()) &&
+                // no benefit for wands
+                i->GetSpellProto()->EquippedItemClass == -1 &&
+                i->GetSpellProto()->EquippedItemInventoryTypeMask == 0 &&
+                !(spellProto->EquippedItemClass == ITEM_CLASS_WEAPON && spellProto->EquippedItemSubClassMask & (1 << ITEM_SUBCLASS_WEAPON_WAND)))
+            {
+                DoneTotalMod *= (i->GetModifier()->m_amount + 100.0f) / 100.0f;
+            }
+            // Paladin seals benefit from weapon modifiers
+            else if (i->GetModifier()->m_miscvalue & GetMeleeDamageSchoolMask() &&
+                spellProto->SpellFamilyName == SPELLFAMILY_PALADIN && spellProto->IsFitToFamilyMask<CF_PALADIN_SEALS>() &&
+                ((i->GetSpellProto()->EquippedItemClass == -1) ||
+                (pWeapon && pWeapon->IsFitToSpellRequirements(i->GetSpellProto()))))
+            {
+                DoneTotalMod *= (i->GetModifier()->m_amount + 100.0f) / 100.0f;
+            }
+        }
+    }
+
+    uint32 creatureTypeMask = pVictim->GetCreatureTypeMask();
+
+    // Add pct bonus from spell damage versus
+    if (pUnit)
+        DoneTotalMod *= pUnit->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_DONE_VERSUS, creatureTypeMask);
+
+    // Add flat bonus from spell damage creature
+    if (pUnit)
+        DoneTotal += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_DAMAGE_DONE_CREATURE, creatureTypeMask);
+
+    // done scripted mod (take it from owner)
+    Unit *owner = pUnit ? pUnit->GetOwner() : nullptr;
+    if (!owner) owner = pUnit;
+    if (owner)
+    {
+        Unit::AuraList const& mOverrideClassScript = owner->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
+        for (const auto i : mOverrideClassScript)
+        {
+            if (!i->isAffectedOnSpell(spellProto))
+                continue;
+            switch (i->GetModifier()->m_miscvalue)
+            {
+            case 4418: // Increased Shock Damage
+            case 4554: // Increased Lightning Damage
+            case 4555: // Improved Moonfire
+            {
+                DoneTotal += i->GetModifier()->m_amount;
+                break;
+            }
+            }
+        }
+    }
+
+    // Pet happiness increases damage of Hunter pet spells (e.g. Lightning Breath)
+    if (IsPet() && ((Pet*)this)->getPetType() == HUNTER_PET)
+    {
+        if (Pet* pet = ((Pet*)this))
+        {
+            switch (pet->GetHappinessState())
+            {
+                case HAPPY:     DoneTotalMod *= 1.25; break;
+                case CONTENT:   break;
+                case UNHAPPY:   DoneTotalMod *= 0.75; break;
+            }
+        }
+    }
+
+    // Done fixed damage bonus auras
+    int32 DoneAdvertisedBenefit = SpellBaseDamageBonusDone(spellProto->GetSpellSchoolMask());
+
+    // Add flat bonus from spell damage versus
+    if (pUnit)
+        DoneAdvertisedBenefit += pUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_FLAT_SPELL_DAMAGE_VERSUS, creatureTypeMask);
+
+    // Pets just add their bonus damage to their spell damage
+    // note that their spell damage is just gain of their own auras
+    if (GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsPet())
+        DoneAdvertisedBenefit += ((Pet*)this)->GetBonusDamage();
+
+    // apply ap bonus and benefit affected by spell power implicit coeffs and spell level penalties
+    DoneTotal = SpellBonusWithCoeffs(spellProto, effectIndex, DoneTotal, DoneAdvertisedBenefit, 0, damagetype, true, this, spell);
+
+    float tmpDamage = (int32(pdamage) + DoneTotal * int32(stack)) * DoneTotalMod;
+    // apply spellmod to Done damage (flat and pct)
+    if (pUnit)
+    {
+        if (Player* modOwner = pUnit->GetSpellModOwner())
+            modOwner->ApplySpellMod(spellProto->Id, damagetype == DOT ? SPELLMOD_DOT : SPELLMOD_DAMAGE, tmpDamage, spell);
+    }
+
+    //DEBUG_UNIT(this, DEBUG_SPELLS_DAMAGE, "SpellDmgBonus[spell=%u]: (base=%u + %i) * %f. SP=%i", spellProto->Id, pdamage, DoneTotal, DoneTotalMod, DoneAdvertisedBenefit);
+    return tmpDamage > 0 ? uint32(tmpDamage) : 0;
+}
+
+int32 WorldObject::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask)
+{
+    int32 DoneAdvertisedBenefit = 0;
+
+    if (Unit* pUnit = ToUnit())
+    {
+        Unit::AuraList const& mDamageDone = pUnit->GetAurasByType(SPELL_AURA_MOD_DAMAGE_DONE);
+        for (const auto i : mDamageDone)
+        {
+            if ((i->GetModifier()->m_miscvalue & schoolMask) != 0 &&
+                i->GetSpellProto()->EquippedItemClass == -1 &&                   // -1 == any item class (not wand then)
+                i->GetSpellProto()->EquippedItemInventoryTypeMask == 0)          //  0 == any inventory type (not wand then)
+                DoneAdvertisedBenefit += i->GetModifier()->m_amount;
+        }
+
+        if (GetTypeId() == TYPEID_PLAYER)
+        {
+            // Damage bonus from stats
+            Unit::AuraList const& mDamageDoneOfStatPercent = pUnit->GetAurasByType(SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT);
+            for (const auto i : mDamageDoneOfStatPercent)
+            {
+                if (i->GetModifier()->m_miscvalue & schoolMask)
+                {
+                    // stat used stored in miscValueB for this aura
+                    Stats usedStat = STAT_SPIRIT;
+                    DoneAdvertisedBenefit += int32(pUnit->GetStat(usedStat) * i->GetModifier()->m_amount / 100.0f);
+                }
+            }
+        }
+    }
+
+    return DoneAdvertisedBenefit;
+}
+
+int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject* pCaster, Spell* spell) const
+{
+    // Distribute Damage over multiple effects, reduce by AoE
+    float coeff = 0.0f;
+
+    // Not apply this to creature casted spells
+    // Daemon: n'importe quoi. Et apres on se demande pourquoi les degats du sceau du croise sont abuses ...
+    //if (GetTypeId()==TYPEID_UNIT && !((Creature*)this)->IsPet())
+    //    coeff = 1.0f;
+    // Check for table values
+    if (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f)
+        coeff = spellProto->EffectBonusCoefficient[effectIndex];
+    // Calculate default coefficient
+    else if (benefit)
+        coeff = spellProto->CalculateDefaultCoefficient(damagetype);
+
+    if (benefit)
+    {
+        // Calculate level penalty only if spell does not have coefficient set in template,
+        // since the coefficients already have the level penalty accounted for.
+        const float LvlPenalty = (spellProto->EffectBonusCoefficient[effectIndex] >= 0.0f) ? 1.0f : CalculateLevelPenalty(spellProto);
+
+        // Calculate custom coefficient
+        coeff = spellProto->CalculateCustomCoefficient(pCaster, damagetype, coeff, spell, donePart);
+
+        // Spellmod SpellDamage
+        if (Unit const* pUnit = ToUnit())
+        {
+            if (Player* modOwner = pUnit->GetSpellModOwner())
+            {
+                coeff *= 100.0f;
+                modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_SPELL_BONUS_DAMAGE, coeff, spell);
+                coeff /= 100.0f;
+            }
+        }
+
+        // Nostalrius.
+        bool bUsePenalty = true;
+        // Flash of Light
+        if (spellProto->Id == 19993)
+        {
+            bUsePenalty = false;
+            if (Unit const* pUnit = ToUnit())
+            {
+                if (pUnit->HasAura(28853)) total += 53.0f;  // Libram of Divinity
+                if (pUnit->HasAura(28851)) total += 83.0f;  // Libram of Light
+            }
+        }
+
+        // Dragonbreath Chili
+        if (spellProto->Id == 15851)
+            bUsePenalty = false;
+
+        if (bUsePenalty)
+            total += int32(benefit * coeff * LvlPenalty);
+        else
+            total += int32(benefit * coeff);
+    }
+
+    return total;
+};
+
+void WorldObject::DealDamageMods(Unit *victim, uint32 &damage, uint32* absorb)
+{
+    Unit* pUnit = ToUnit();
+    // [Nostalrius] Pas de degats sous esprit de redemption
+    if (!victim->IsAlive() ||
+        victim->IsTaxiFlying() ||
+        (victim->IsCreature() && static_cast<Creature*>(victim)->IsInEvadeMode()) ||
+        (pUnit && pUnit->GetClass() == CLASS_PRIEST && pUnit->HasAura(27827)))
+    {
+        if (absorb)
+            *absorb += damage;
+        damage = 0;
+        return;
+    }
+
+    uint32 originalDamage = damage;
+
+    //Script Event damage Deal
+    if (Creature* pCreature = ToCreature())
+        if (pCreature->AI())
+            pCreature->AI()->DamageDeal(victim, damage);
+
+    //Script Event damage taken
+    if (Creature* pCreature = victim->ToCreature())
+        if (pCreature->AI() && pUnit)
+            pCreature->AI()->DamageTaken(pUnit, damage);
+
+    if (absorb && originalDamage > damage)
+        *absorb += (originalDamage - damage);
+}
+
+float WorldObject::CalculateLevelPenalty(SpellEntry const* spellProto)
+{
+    // Fix Nostalrius. La formule de MaNGOSZero est BC.
+    uint32 spellLevel = spellProto->spellLevel;
+    if (spellLevel <= 0 || spellLevel > 20)
+        return 1.0f;
+    return 1 - ((20.0f - spellLevel) * 0.0375f);
+
+    /*
+        float LvlPenalty = 0.0f;
+        if(spellLevel < 20)
+            LvlPenalty = 20.0f - spellLevel * 3.75f;
+        float LvlFactor = (float(spellLevel) + 6.0f) / float(GetLevel());
+        if(LvlFactor > 1.0f)
+            LvlFactor = 1.0f;
+        return (100.0f - LvlPenalty) * LvlFactor / 100.0f;
+    */
+}
+
+float WorldObject::GetAPMultiplier(WeaponAttackType attType, bool normalized) const
+{
+    Unit const* pUnit = ToUnit();
+    if (!pUnit)
+        return 0;
+
+    if (!normalized || GetTypeId() != TYPEID_PLAYER)
+        return float(pUnit->GetAttackTime(attType)) / 1000.0f;
+
+    Item *Weapon = ((Player*)this)->GetWeaponForAttack(attType, true, false);
+    if (!Weapon)
+        return 2.4f;                                         // fist attack
+
+    switch (Weapon->GetProto()->InventoryType)
+    {
+        case INVTYPE_2HWEAPON:
+            return 3.3f;
+        case INVTYPE_RANGED:
+        case INVTYPE_RANGEDRIGHT:
+        case INVTYPE_THROWN:
+            return 2.8f;
+        case INVTYPE_WEAPON:
+        case INVTYPE_WEAPONMAINHAND:
+        case INVTYPE_WEAPONOFFHAND:
+        default:
+            return Weapon->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_DAGGER ? 1.7f : 2.4f;
+    }
+}
+
+void WorldObject::DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss)
+{
+    if (!damageInfo)
+        return;
+
+    Unit *pVictim = damageInfo->target;
+
+    if (!pVictim)
+        return;
+
+    if (!pVictim->IsAlive() || pVictim->IsTaxiFlying() || (pVictim->GetTypeId() == TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode()))
+        return;
+
+    SpellEntry const *spellProto = sSpellMgr.GetSpellEntry(damageInfo->SpellID);
+    if (spellProto == nullptr)
+    {
+        sLog.outError("WorldObject::DealSpellDamage have wrong damageInfo->SpellID: %u", damageInfo->SpellID);
+        return;
+    }
+
+    // Call default DealDamage (send critical in hit info for threat calculation)
+    CleanDamage cleanDamage(0, BASE_ATTACK, damageInfo->HitInfo & SPELL_HIT_TYPE_CRIT ? MELEE_HIT_CRIT : MELEE_HIT_NORMAL, damageInfo->absorb, damageInfo->resist);
+    DealDamage(pVictim, damageInfo->damage, &cleanDamage, SPELL_DIRECT_DAMAGE, GetSchoolMask(damageInfo->school), spellProto, durabilityLoss, damageInfo->spell);
+}
+
+uint32 WorldObject::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell, bool addThreat)
+{
+    // Should never happen since DealDamage is overriden in Unit class.
+    if (pVictim == this)
+        return 0;
+
+    return pVictim->DealDamage(pVictim, damage, cleanDamage, damagetype, damageSchoolMask, spellProto, durabilityLoss, spell, addThreat);
+}
+
+bool WorldObject::CheckAndIncreaseCastCounter()
+{
+    uint32 maxCasts = sWorld.getConfig(CONFIG_UINT32_MAX_SPELL_CASTS_IN_CHAIN);
+
+    if (maxCasts && m_castCounter >= maxCasts)
+        return false;
+
+    ++m_castCounter;
+    return true;
+}
+
+void WorldObject::MoveChannelledSpellWithCastTime(Spell* pSpell)
+{
+    MANGOS_ASSERT(pSpell);
+    MANGOS_ASSERT(pSpell->m_spellInfo->IsChanneledSpell() && pSpell->m_casttime && !pSpell->m_IsTriggeredSpell && pSpell->getState() == SPELL_STATE_CASTING);
+    MANGOS_ASSERT(m_currentSpells[CURRENT_GENERIC_SPELL] == pSpell);
+
+    if (Spell* pChannelled = m_currentSpells[CURRENT_CHANNELED_SPELL])
+    {
+        MANGOS_ASSERT(pChannelled->m_spellInfo->Id == pSpell->m_spellInfo->Id);
+        InterruptSpell(CURRENT_CHANNELED_SPELL, true);
+    }
+
+    m_currentSpells[CURRENT_GENERIC_SPELL] = nullptr;
+    m_currentSpells[CURRENT_CHANNELED_SPELL] = pSpell;
+    pSpell->m_selfContainer = &(m_currentSpells[CURRENT_CHANNELED_SPELL]);
+}
+
+void WorldObject::SetCurrentCastedSpell(Spell * pSpell)
+{
+    MANGOS_ASSERT(pSpell);                                  // nullptr may be never passed here, use InterruptSpell or InterruptNonMeleeSpells
+
+    CurrentSpellTypes CSpellType = pSpell->GetCurrentContainer();
+
+    if (pSpell == m_currentSpells[CSpellType]) return;      // avoid breaking self
+    // break same type spell if it is not delayed
+    InterruptSpell(CSpellType, false);
+
+    // special breakage effects:
+    switch (CSpellType)
+    {
+        case CURRENT_GENERIC_SPELL:
+        {
+            // a channelled spell with a cast time is considered generic before channeling starts,
+            // but it does not break itself if you start to recast it, only once channeling starts
+            if (!pSpell->m_spellInfo->IsChanneledSpell() || (m_currentSpells[CURRENT_CHANNELED_SPELL] && m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->Id != pSpell->m_spellInfo->Id))
+                InterruptSpell(CURRENT_CHANNELED_SPELL, false);
+
+            // autorepeat breaking
+            if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL])
+            {
+                // break autorepeat if not Auto Shot
+                if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Category == 351)
+                    InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
+
+                if (Unit* pUnit = ToUnit())
+                    pUnit->m_AutoRepeatFirstCast = true;
+            }
+        }
+        break;
+
+        case CURRENT_CHANNELED_SPELL:
+        {
+            // channel spells always break generic non-delayed and any channeled spells
+            InterruptSpell(CURRENT_GENERIC_SPELL, false);
+            InterruptSpell(CURRENT_CHANNELED_SPELL);
+
+            // it also does break autorepeat if not Auto Shot
+            if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL] &&
+                    m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Category == 351)
+                InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
+        }
+        break;
+
+        case CURRENT_AUTOREPEAT_SPELL:
+        {
+            // only Auto Shoot does not break anything
+            if (pSpell->m_spellInfo->Category == 351)
+            {
+                // generic autorepeats break generic non-delayed and channeled non-delayed spells
+                InterruptSpell(CURRENT_GENERIC_SPELL, false);
+                InterruptSpell(CURRENT_CHANNELED_SPELL, false);
+            }
+            // special action: set first cast flag
+            if (Unit* pUnit = ToUnit())
+                pUnit->m_AutoRepeatFirstCast = true;
+        }
+        break;
+
+        default:
+        {
+            // other spell types don't break anything now
+        } break;
+    }
+
+    // current spell (if it is still here) may be safely deleted now
+    if (m_currentSpells[CSpellType])
+        m_currentSpells[CSpellType]->SetReferencedFromCurrent(false);
+
+    // set new current spell
+    m_currentSpells[CSpellType] = pSpell;
+    pSpell->SetReferencedFromCurrent(true);
+
+    pSpell->m_selfContainer = &(m_currentSpells[pSpell->GetCurrentContainer()]);
+}
+
+Spell* WorldObject::FindCurrentSpellBySpellId(uint32 spell_id) const
+{
+    for (uint32 i = 0; i < CURRENT_MAX_SPELL; ++i)
+        if (m_currentSpells[i] && m_currentSpells[i]->m_spellInfo->Id == spell_id)
+            return m_currentSpells[i];
+    return nullptr;
+}
+
+bool WorldObject::IsNonMeleeSpellCasted(bool withDelayed, bool skipChanneled, bool skipAutorepeat) const
+{
+    // We don't do loop here to explicitly show that melee spell is excluded.
+    // Maybe later some special spells will be excluded too.
+
+    // generic spells are casted when they are not finished and not delayed
+    if (m_currentSpells[CURRENT_GENERIC_SPELL] &&
+            (m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_FINISHED) &&
+            (withDelayed || m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_DELAYED))
+        return (true);
+
+    // channeled spells may be delayed, but they are still considered casted
+    else if (!skipChanneled && m_currentSpells[CURRENT_CHANNELED_SPELL] &&
+             (m_currentSpells[CURRENT_CHANNELED_SPELL]->getState() != SPELL_STATE_FINISHED))
+        return (true);
+
+    // autorepeat spells may be finished or delayed, but they are still considered casted
+    else if (!skipAutorepeat && m_currentSpells[CURRENT_AUTOREPEAT_SPELL])
+        return (true);
+
+    return (false);
+}
+
+bool WorldObject::IsNextSwingSpellCasted() const
+{
+    if (m_currentSpells[CURRENT_MELEE_SPELL] && m_currentSpells[CURRENT_MELEE_SPELL]->IsNextMeleeSwingSpell())
+        return (true);
+
+    return (false);
+}
+
+bool WorldObject::IsNoMovementSpellCasted() const
+{
+    if (m_currentSpells[CURRENT_GENERIC_SPELL] &&
+            (m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_FINISHED) &&
+             m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_DELAYED &&
+             m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT)
+        return (true);
+    else if (m_currentSpells[CURRENT_CHANNELED_SPELL] &&
+             m_currentSpells[CURRENT_CHANNELED_SPELL]->getState() != SPELL_STATE_FINISHED &&
+             m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT)
+        return (true);
+    // don't need to check for AUTOREPEAT_SPELL
+
+    return (false);
+}
+
+void WorldObject::InterruptSpellsWithInterruptFlags(uint32 flags, uint32 except)
+{
+    for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
+        if (Spell* spell = GetCurrentSpell(CurrentSpellTypes(i)))
+            if (spell->getState() == SPELL_STATE_PREPARING && spell->GetCastedTime())
+                if (!spell->IsNextMeleeSwingSpell() && !spell->IsAutoRepeat() && !spell->IsTriggered() && (spell->m_spellInfo->InterruptFlags & flags) && spell->m_spellInfo->Id != except)
+                    InterruptSpell(CurrentSpellTypes(i));
+}
+
+
+void WorldObject::InterruptNonMeleeSpells(bool withDelayed, uint32 spell_id)
+{
+    // generic spells are interrupted if they are not finished or delayed
+    if (m_currentSpells[CURRENT_GENERIC_SPELL] && (!spell_id || m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->Id == spell_id))
+        InterruptSpell(CURRENT_GENERIC_SPELL, withDelayed);
+
+    // autorepeat spells are interrupted if they are not finished or delayed
+    if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL] && (!spell_id || m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Id == spell_id))
+        InterruptSpell(CURRENT_AUTOREPEAT_SPELL, withDelayed);
+
+    // channeled spells are interrupted if they are not finished, even if they are delayed
+    if (m_currentSpells[CURRENT_CHANNELED_SPELL] && (!spell_id || m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->Id == spell_id))
+        InterruptSpell(CURRENT_CHANNELED_SPELL, true);
+}
+
+void WorldObject::InterruptSpell(CurrentSpellTypes spellType, bool withDelayed)
+{
+    MANGOS_ASSERT(spellType < CURRENT_MAX_SPELL);
+
+    if (m_currentSpells[spellType] && (withDelayed || m_currentSpells[spellType]->getState() != SPELL_STATE_DELAYED))
+    {
+        // send autorepeat cancel message for autorepeat spells
+        if (spellType == CURRENT_AUTOREPEAT_SPELL)
+        {
+            if (GetTypeId() == TYPEID_PLAYER)
+                ((Player*)this)->SendAutoRepeatCancel();
+        }
+
+        if (m_currentSpells[spellType]->getState() != SPELL_STATE_FINISHED)
+            m_currentSpells[spellType]->cancel();
+
+        // cancel can interrupt spell already (caster cancel ->target aura remove -> caster iterrupt)
+        if (m_currentSpells[spellType])
+        {
+            m_currentSpells[spellType]->SetReferencedFromCurrent(false);
+            m_currentSpells[spellType] = nullptr;
+        }
+    }
+}
+
+void WorldObject::FinishSpell(CurrentSpellTypes spellType, bool ok /*= true*/)
+{
+    Spell* spell = m_currentSpells[spellType];
+    if (!spell)
+        return;
+
+    spell->finish(ok);
+
+    if (spellType == CURRENT_CHANNELED_SPELL)
+        spell->SendChannelUpdate(0);
+}
+
+void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut)
+{
+    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    {
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        if (!dynObj)
+        {
+            i = m_dynObjGUIDs.erase(i);
+            continue;
+        }
+
+        if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effectIndex)
+            dynObjsOut.push_back(dynObj);
+        ++i;
+    }
+}
+
+DynamicObject * WorldObject::GetDynObject(uint32 spellId, SpellEffectIndex effIndex)
+{
+    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    {
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        if (!dynObj)
+        {
+            i = m_dynObjGUIDs.erase(i);
+            continue;
+        }
+
+        if (dynObj->GetSpellId() == spellId && dynObj->GetEffIndex() == effIndex)
+            return dynObj;
+        ++i;
+    }
+    return nullptr;
+}
+
+DynamicObject * WorldObject::GetDynObject(uint32 spellId)
+{
+    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    {
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        if (!dynObj)
+        {
+            i = m_dynObjGUIDs.erase(i);
+            continue;
+        }
+
+        if (dynObj->GetSpellId() == spellId)
+            return dynObj;
+        ++i;
+    }
+    return nullptr;
+}
+
+void WorldObject::AddDynObject(DynamicObject* dynObj)
+{
+    m_dynObjGUIDs.push_back(dynObj->GetObjectGuid());
+    dynObj->SetWorldMask(GetWorldMask()); // Nostalrius : phasing
+}
+
+void WorldObject::RemoveDynObject(uint32 spellid)
+{
+    if (m_dynObjGUIDs.empty())
+        return;
+    for (DynObjectGUIDs::iterator i = m_dynObjGUIDs.begin(); i != m_dynObjGUIDs.end();)
+    {
+        DynamicObject* dynObj = GetMap()->GetDynamicObject(*i);
+        if (!dynObj)
+            i = m_dynObjGUIDs.erase(i);
+        else if (spellid == 0 || dynObj->GetSpellId() == spellid)
+        {
+            dynObj->Delete();
+            i = m_dynObjGUIDs.erase(i);
+        }
+        else
+            ++i;
+    }
+}
+
+void WorldObject::RemoveAllDynObjects()
+{
+    while (!m_dynObjGUIDs.empty())
+    {
+        if (DynamicObject* dynObj = GetMap()->GetDynamicObject(*m_dynObjGUIDs.begin()))
+            dynObj->Delete();
+        m_dynObjGUIDs.erase(m_dynObjGUIDs.begin());
+    }
+}
+
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
+{
+    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell: unknown spell id %i by caster: %s triggered by aura %u (eff %u)", spellId, GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell: unknown spell id %i by caster: %s", spellId, GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent, bCanIgnoreLOS);
+}
+
+SpellCastResult WorldObject::CastSpell(GameObject* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
+{
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
+
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell: unknown spell id %i by caster: %s triggered by aura %u (eff %u)", spellId, GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell: unknown spell id %i by caster: %s", spellId, GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent);
+}
+
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
+{
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell: unknown spell by caster: %s triggered by aura %u (eff %u)", GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell: unknown spell by caster: %s", GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    if (castItem)
+        DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "WORLD: cast Item spellId - %i", spellInfo->Id);
+
+    if (triggeredByAura)
+    {
+        if (!originalCaster)
+            originalCaster = triggeredByAura->GetCasterGuid();
+
+        triggeredBy = triggeredByAura->GetSpellProto();
+    }
+
+    Spell* spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent, bCanIgnoreLOS);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent, bCanIgnoreLOS);
+    else
+        return SPELL_FAILED_ERROR;
+
+    SpellCastTargets targets;
+
+
+    if (pTarget)
+    {
+        // Don't set unit target on destination target based spells, otherwise the spell will cancel
+        // as soon as the target dies or leaves the area of the effect
+        if (spellInfo->Targets & TARGET_FLAG_DEST_LOCATION)
+            targets.setDestination(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+        else if (Unit* pUnitTarget = pTarget->ToUnit())
+            targets.setUnitTarget(pUnitTarget);
+        else
+            return SPELL_FAILED_ERROR;
+    }
+
+    if (spellInfo->Targets & TARGET_FLAG_SOURCE_LOCATION)
+        if (WorldObject* caster = spell->GetCastingObject())
+            targets.setSource(caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ());
+
+    spell->SetCastItem(castItem);
+    return spell->prepare(std::move(targets), triggeredByAura);
+}
+
+SpellCastResult WorldObject::CastSpell(GameObject* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
+{
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell: unknown spell by caster: %s triggered by aura %u (eff %u)", GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell: unknown spell by caster: %s", GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    if (castItem)
+        DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "WORLD: cast Item spellId - %i", spellInfo->Id);
+
+    if (triggeredByAura)
+    {
+        if (!originalCaster)
+            originalCaster = triggeredByAura->GetCasterGuid();
+
+        triggeredBy = triggeredByAura->GetSpellProto();
+    }
+
+    Spell *spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent);
+    else
+        return SPELL_FAILED_ERROR;
+
+    SpellCastTargets targets;
+
+    // Don't set unit target on destination target based spells, otherwise the spell will cancel
+    // as soon as the target dies or leaves the area of the effect
+    if (spellInfo->Targets & TARGET_FLAG_DEST_LOCATION)
+        targets.setDestination(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+    else
+        targets.setGOTarget(pTarget);
+
+    if (spellInfo->Targets & TARGET_FLAG_SOURCE_LOCATION)
+        if (WorldObject* caster = spell->GetCastingObject())
+            targets.setSource(caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ());
+
+    spell->SetCastItem(castItem);
+    return spell->prepare(std::move(targets), triggeredByAura);
+}
+
+void WorldObject::CastCustomSpell(Unit* pTarget, uint32 spellId, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, bool addThreat, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+{
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
+
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastCustomSpell: unknown spell id %i by caster: %s triggered by aura %u (eff %u)", spellId, GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastCustomSpell: unknown spell id %i by caster: %s", spellId, GetGuidStr().c_str());
+        return;
+    }
+
+    CastCustomSpell(pTarget, spellInfo, bp0, bp1, bp2, triggered, castItem, triggeredByAura, addThreat, originalCaster, triggeredBy);
+}
+
+void WorldObject::CastCustomSpell(Unit* pTarget, SpellEntry const *spellInfo, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, bool addThreat, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+{
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastCustomSpell: unknown spell by caster: %s triggered by aura %u (eff %u)", GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastCustomSpell: unknown spell by caster: %s", GetGuidStr().c_str());
+        return;
+    }
+
+    if (castItem)
+        DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "WORLD: cast Item spellId - %i", spellInfo->Id);
+
+    if (triggeredByAura)
+    {
+        if (!originalCaster)
+            originalCaster = triggeredByAura->GetCasterGuid();
+
+        triggeredBy = triggeredByAura->GetSpellProto();
+    }
+
+    Spell *spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy);
+    else
+        return;
+
+    if (bp0)
+        spell->m_currentBasePoints[EFFECT_INDEX_0] = *bp0;
+
+    if (bp1)
+        spell->m_currentBasePoints[EFFECT_INDEX_1] = *bp1;
+
+    if (bp2)
+        spell->m_currentBasePoints[EFFECT_INDEX_2] = *bp2;
+
+    SpellCastTargets targets;
+    targets.setUnitTarget(pTarget);
+    spell->SetCastItem(castItem);
+    spell->m_addThreat = addThreat;
+    spell->prepare(std::move(targets), triggeredByAura);
+}
+
+void WorldObject::CastCustomSpell(Unit* target, SpellEntry const* customInfo, bool triggered)
+{
+    Spell* spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, customInfo, triggered);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, customInfo, triggered);
+    else
+        return;
+
+    SpellCastTargets targets;
+    targets.setUnitTarget(target);
+    spell->MarkCustom();
+    spell->prepare(std::move(targets));
+}
+
+// used for scripting
+SpellCastResult WorldObject::CastSpell(float x, float y, float z, uint32 spellId, bool triggered, Item *castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+{
+    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
+
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell(x,y,z): unknown spell id %i by caster: %s triggered by aura %u (eff %u)", spellId, GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell(x,y,z): unknown spell id %i by caster: %s", spellId, GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    return CastSpell(x, y, z, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy);
+}
+
+// used for scripting
+SpellCastResult WorldObject::CastSpell(float x, float y, float z, SpellEntry const *spellInfo, bool triggered, Item *castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+{
+    if (!spellInfo)
+    {
+        if (triggeredByAura)
+            sLog.outError("CastSpell(x,y,z): unknown spell by caster: %s triggered by aura %u (eff %u)", GetGuidStr().c_str(), triggeredByAura->GetId(), triggeredByAura->GetEffIndex());
+        else
+            sLog.outError("CastSpell(x,y,z): unknown spell by caster: %s", GetGuidStr().c_str());
+        return SPELL_FAILED_SPELL_UNAVAILABLE;
+    }
+
+    if (castItem)
+        DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "WORLD: cast Item spellId - %i", spellInfo->Id);
+
+    if (triggeredByAura)
+    {
+        if (!originalCaster)
+            originalCaster = triggeredByAura->GetCasterGuid();
+
+        triggeredBy = triggeredByAura->GetSpellProto();
+    }
+
+    Spell *spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy);
+    else
+        return SPELL_FAILED_ERROR;
+
+    SpellCastTargets targets;
+    targets.setDestination(x, y, z);
+    spell->SetCastItem(castItem);
+    return spell->prepare(std::move(targets), triggeredByAura);
+}
+
+bool WorldObject::isVisibleFor(Player const* u, WorldObject const* viewPoint) const
+{
+    return IsVisibleForInState(u, viewPoint, false);
+}
+
+void WorldObject::PMonsterEmote(const char *text, Unit const* target, bool IsBossEmote, ...) const
+{
+    va_list ap;
+    char str[2048];
+    va_start(ap, text);
+    vsnprintf(str, 2048, text, ap);
+    va_end(ap);
+    MonsterTextEmote(str, target, IsBossEmote);
+}
+
+void WorldObject::PMonsterEmote(int32 textId, Unit const* target, bool IsBossEmote, ...) const
+{
+    va_list ap;
+    va_start(ap, textId);
+    float range = sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+    MaNGOS::MonsterChatBuilderFormat emote_build(*this, CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, nullptr, &ap);
+    MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> emote_do(emote_build);
+    MaNGOS::CameraDistWorker<MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> > emote_worker(this, range, emote_do);
+    Cell::VisitWorldObjects(this, emote_worker, range);
+    va_end(ap);
+}
+
+bool WorldObject::isFacing(const Position location, const float tolerance) const {
+    const auto requiredAngle = atan2(location.y - m_position.y, location.x - m_position.x);
+    auto minAngle = requiredAngle - tolerance;
+    if (minAngle < 0) {
+        minAngle += (M_PI_F * 2);
+    }
+    auto maxAngle = requiredAngle + tolerance;
+    if (maxAngle > (M_PI_F * 2)) {
+        maxAngle -= M_PI_F;
+    }
+
+    bool isWithinTolerance = false;
+    if (maxAngle < minAngle) {
+        // We wrapped around.
+        isWithinTolerance = m_position.o <= maxAngle || m_position.o >= minAngle;
+    } else {
+        isWithinTolerance = m_position.o <= maxAngle && m_position.o >= minAngle;
+    }
+    return isWithinTolerance;
 }
 
 // function based on function Unit::CanAttack from 13850 client
@@ -3672,7 +5520,7 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
     if (FindMap() != target->FindMap())
         return false;
 
-    if (!target->IsTargetableBy(this, false, checkAlive))
+    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself(), false, checkAlive))
         return false;
 
     Unit const* pThisUnit = ToUnit();
@@ -3684,7 +5532,7 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
     // PvP, PvC, CvP case
     // can't attack friendly targets
     if (GetReactionTo(target) > REP_NEUTRAL
-            || target->GetReactionTo(this) > REP_NEUTRAL)
+        || target->GetReactionTo(this) > REP_NEUTRAL)
         return false;
 
     Player const* playerAffectingAttacker = GetAffectingPlayer();
@@ -3692,10 +5540,10 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
 
     // Not all neutral creatures can be attacked
     if (GetReactionTo(target) == REP_NEUTRAL &&
-            target->GetReactionTo(this) == REP_NEUTRAL)
+        target->GetReactionTo(this) == REP_NEUTRAL)
     {
         if (!(playerAffectingTarget && playerAffectingAttacker) &&
-                !(!playerAffectingTarget && !playerAffectingAttacker))
+            !(!playerAffectingTarget && !playerAffectingAttacker))
         {
             Player const* player = playerAffectingTarget ? playerAffectingTarget : playerAffectingAttacker;
             WorldObject const* object = playerAffectingTarget ? this : target;
@@ -3715,61 +5563,32 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
     // PvP checks
     if (playerAffectingAttacker && playerAffectingTarget)
     {
-        if (playerAffectingAttacker->duel && playerAffectingAttacker->duel->opponent == playerAffectingTarget && playerAffectingAttacker->duel->startTime != 0)
+
+        if (playerAffectingAttacker->GetGroup() && playerAffectingTarget->GetGroup())
+        {
+            if (playerAffectingAttacker->GetGroup() == playerAffectingTarget->GetGroup())
+                return false;
+        }
+
+        if (playerAffectingAttacker->m_duel && playerAffectingAttacker->m_duel->opponent == playerAffectingTarget && playerAffectingAttacker->m_duel->startTime != 0)
             return true;
 
         if (playerAffectingTarget->IsPvP())
+        {
+            if (playerAffectingAttacker->IsHardcore() && !playerAffectingAttacker->IsPvP()) // custom check, disable HC accidentally flagging.
+                return false;
             return true;
+        }
 
-        if ((playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP)
-                && (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP))
+        if ((playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
+            && (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP))
             return true;
 
         if (playerAffectingAttacker->IsFFAPvP() && playerAffectingTarget->IsFFAPvP())
             return true;
 
-        return (playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_UNK1)
-               || (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_UNK1);
-    }
-    return true;
-}
-
-bool WorldObject::IsValidHelpfulTarget(Unit const* target, bool checkAlive) const
-{
-    ASSERT(target);
-
-    // this unit flag prevents casting on friendly or self too
-    if (target == this)
-        return !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2) && (!checkAlive || target->IsAlive());
-
-    if (FindMap() != target->FindMap())
-        return false;
-
-    if (!target->IsTargetableBy(this, false, checkAlive, true))
-        return false;
-
-    if (GetReactionTo(target) < REP_UNFRIENDLY ||
-        target->GetReactionTo(this) < REP_UNFRIENDLY)
-        return false;
-
-    Player const* playerAffectingCaster = GetAffectingPlayer();
-    Player const* playerAffectingTarget = target->GetAffectingPlayer();
-
-    // PvP checks
-    if (playerAffectingCaster && playerAffectingTarget)
-    {
-        // pet and owner
-        if (playerAffectingCaster == playerAffectingTarget)
-            return true;
-
-        // cannot help others in duels
-        if (playerAffectingTarget->duel && playerAffectingTarget->duel->startTime != 0)
-            return false;
-
-        // group forces friendly relations in ffa pvp
-        if (playerAffectingCaster->IsFFAPvP() && playerAffectingTarget->IsFFAPvP() &&
-           !playerAffectingCaster->IsInSameRaidWith(playerAffectingTarget))
-            return false;
+        return (playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_UNK1)
+            || (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_UNK1);
     }
 
     return true;

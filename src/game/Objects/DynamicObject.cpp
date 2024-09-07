@@ -20,26 +20,28 @@
  */
 
 #include "Common.h"
+#include "UpdateMask.h"
+#include "Opcodes.h"
 #include "World.h"
 #include "ObjectAccessor.h"
+#include "Database/DatabaseEnv.h"
 #include "GridNotifiers.h"
 #include "CellImpl.h"
 #include "GridNotifiersImpl.h"
 #include "SpellMgr.h"
 
-DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_INDEX_0), m_aliveDuration(0), m_radius(0), m_positive(false), m_channeled(false)
+DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_INDEX_0), m_aliveDuration(0), m_radius(0), m_positive(false)
 {
     m_objectType |= TYPEMASK_DYNAMICOBJECT;
     m_objectTypeId = TYPEID_DYNAMICOBJECT;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     m_updateFlag = (UPDATEFLAG_ALL | UPDATEFLAG_HAS_POSITION);
-#endif
+
     m_valuesCount = DYNAMICOBJECT_END;
 }
 
 void DynamicObject::AddToWorld()
 {
-    // Register the dynamicObject for guid lookup
+    ///- Register the dynamicObject for guid lookup
     if (!IsInWorld())
         GetMap()->InsertObject<DynamicObject>(GetObjectGuid(), this);
 
@@ -48,7 +50,7 @@ void DynamicObject::AddToWorld()
 
 void DynamicObject::RemoveFromWorld()
 {
-    // Remove the dynamicObject from the accessor
+    ///- Remove the dynamicObject from the accessor
     if (IsInWorld())
     {
         GetMap()->EraseObject<DynamicObject>(GetObjectGuid());
@@ -66,7 +68,7 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
 
     if (!IsPositionValid())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "DynamicObject (spell %u eff %u) not created. Suggested coordinates isn't valid (X: %f Y: %f)", spellId, effIndex, GetPositionX(), GetPositionY());
+        sLog.outError("DynamicObject (spell %u eff %u) not created. Suggested coordinates isn't valid (X: %f Y: %f)", spellId, effIndex, GetPositionX(), GetPositionY());
         return false;
     }
 
@@ -107,7 +109,7 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
     SpellEntry const* spellProto = sSpellMgr.GetSpellEntry(spellId);
     if (!spellProto)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "DynamicObject (spell %u) not created. Spell not exist!", spellId, GetPositionX(), GetPositionY());
+        sLog.outError("DynamicObject (spell %u) not created. Spell not exist!", spellId, GetPositionX(), GetPositionY());
         return false;
     }
 
@@ -116,7 +118,6 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
     m_effIndex = effIndex;
     m_spellId = spellId;
     m_positive = spellProto->IsPositiveEffect(m_effIndex);
-    m_channeled = spellProto->IsChanneledSpell();
 
     if (type == DYNAMIC_OBJECT_FARSIGHT_FOCUS)
         m_isActiveObject = true;
@@ -124,7 +125,7 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
     return true;
 }
 
-SpellCaster* DynamicObject::GetCaster() const
+WorldObject* DynamicObject::GetCaster() const
 {
     if (ObjectGuid guid = GetCasterGuid())
     {
@@ -150,7 +151,7 @@ Unit* DynamicObject::GetUnitCaster() const
 
     if (pCaster->IsUnit())
         return static_cast<Unit*>(pCaster);
-    
+
     if (GameObject* pGo = pCaster->ToGameObject())
         return pGo->GetOwner();
 
@@ -158,40 +159,32 @@ Unit* DynamicObject::GetUnitCaster() const
     return nullptr;
 }
 
-Player* DynamicObject::GetAffectingPlayer() const
-{
-    return ::ToPlayer(GetUnitCaster());
-}
-
 uint32 DynamicObject::GetFactionTemplateId() const
 {
     return GetCaster()->GetFactionTemplateId();
+}
+
+uint32 DynamicObject::GetLevel() const
+{
+    return GetCaster()->GetLevel();
 }
 
 void DynamicObject::Update(uint32 update_diff, uint32 p_time)
 {
     WorldObject::Update(update_diff, p_time);
     // caster can be not in world at time dynamic object update, but dynamic object not yet deleted in Unit destructor
-    SpellCaster* caster = GetCaster();
+    WorldObject* caster = GetCaster();
     if (!caster)
     {
         Delete();
         return;
     }
 
-    if (_deleted)
-        return;
-
-    // If this object is from the current channeled spell, do not delete it. Otherwise
-    // we can lose the last tick of the effect due to differeng updates. The spell
-    // itself will call for the object to be removed at the end of the cast
     bool deleteThis = false;
 
-    m_aliveDuration -= p_time;
-    if (m_aliveDuration <= 0)
-        m_aliveDuration = 0;
-
-    if (m_aliveDuration == 0 && (!m_channeled || (caster->IsUnit() && static_cast<Unit*>(caster)->GetChannelObjectGuid() != GetObjectGuid())))
+    if (m_aliveDuration > int32(p_time))
+        m_aliveDuration -= p_time;
+    else
         deleteThis = true;
 
     for (auto& iter : m_affected)
@@ -244,10 +237,10 @@ void DynamicObject::Delay(int32 delaytime)
     m_aliveDuration -= delaytime;
     for (AffectedMap::iterator iter = m_affected.begin(); iter != m_affected.end();)
     {
-        Unit* target = GetMap()->GetUnit(iter->first);
+        Unit *target = GetMap()->GetUnit(iter->first);
         if (target)
         {
-            SpellAuraHolder* holder = target->GetSpellAuraHolder(m_spellId, GetCasterGuid());
+            SpellAuraHolder *holder = target->GetSpellAuraHolder(m_spellId, GetCasterGuid());
             if (!holder)
             {
                 ++iter;

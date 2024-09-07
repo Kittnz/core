@@ -34,8 +34,7 @@ class TargetedMovementGeneratorBase
 };
 
 template<class T, typename D>
-class TargetedMovementGeneratorMedium
-: public MovementGeneratorMedium< T, D >, public TargetedMovementGeneratorBase
+class TargetedMovementGeneratorMedium : public MovementGeneratorMedium< T, D >, public TargetedMovementGeneratorBase
 {
     protected:
         TargetedMovementGeneratorMedium(Unit &target, float offset, float angle) :
@@ -89,7 +88,7 @@ class ChaseMovementGenerator : public TargetedMovementGeneratorMedium<T, ChaseMo
 
         MovementGeneratorType GetMovementGeneratorType() const { return CHASE_MOTION_TYPE; }
 
-        bool Update(T &, uint32 const&);
+        bool Update(T &, const uint32 &);
         void Initialize(T &);
         void Finalize(T &);
         void Interrupt(T &);
@@ -138,7 +137,7 @@ class FollowMovementGenerator : public TargetedMovementGeneratorMedium<T, Follow
 
         MovementGeneratorType GetMovementGeneratorType() const { return FOLLOW_MOTION_TYPE; }
 
-        bool Update(T &, uint32 const&);
+        bool Update(T &, const uint32 &);
         void Initialize(T &);
         void Finalize(T &);
         void Interrupt(T &);

@@ -17,10 +17,9 @@
 #
 
 if (MINGW)
-add_subdirectory(libseh)
+    add_subdirectory(libseh)
 endif()
 add_subdirectory(g3dlite)
-add_subdirectory(gsoap)
 if(WIN32)
     add_subdirectory(zlib)
 endif()

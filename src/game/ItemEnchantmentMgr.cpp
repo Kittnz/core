@@ -19,12 +19,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <stdlib.h>
 #include <functional>
 #include "ItemEnchantmentMgr.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 #include "ObjectMgr.h"
-#include "ProgressBar.h"
 #include <list>
 #include <vector>
 #include "Util.h"
@@ -53,18 +53,14 @@ void LoadRandomEnchantmentsTable()
 
     EnchantmentStore::const_iterator tab;
     uint32 entry, ench;
-    uint32 count = 0;
 
-    std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT entry, ench, chance FROM item_enchantment_template WHERE ((%u >= patch_min) && (%u <= patch_max))", sWorld.GetWowPatch(), sWorld.GetWowPatch());
+    QueryResult* result = WorldDatabase.Query("SELECT entry, ench, chance FROM item_enchantment_template");
 
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
             Field* fields = result->Fetch();
-            bar.step();
 
             entry = fields[0].GetUInt32();
             ench = fields[1].GetUInt32();
@@ -72,18 +68,10 @@ void LoadRandomEnchantmentsTable()
 
             if (chance > 0.000001f && chance <= 100.0f)
                 RandomItemEnch[entry].push_back(EnchStoreItem(ench, chance));
-
-            ++count;
         }
         while (result->NextRow());
 
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u Item Enchantment definitions", count);
-    }
-    else
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, ">> Loaded 0 Item Enchantment definitions. DB table `item_enchantment_template` is empty.");
+        delete result;
     }
 }
 
@@ -95,7 +83,7 @@ uint32 GetItemEnchantMod(uint32 entry)
 
     if (tab == RandomItemEnch.end())
     {
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Item RandomProperty id #%u used in `item_template` but it doesn't have records in `item_enchantment_template` table.", entry);
+        sLog.outErrorDb("Item RandomProperty id #%u used in `item_template` but it doesn't have records in `item_enchantment_template` table.", entry);
         return 0;
     }
 

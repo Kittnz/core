@@ -43,21 +43,23 @@ class PostgreSQLConnection : public SqlConnection
 
         bool OpenConnection(bool reconnect);
 
-        std::unique_ptr<QueryResult> Query(std::string const& sql) override;
-        std::unique_ptr<QueryNamedResult> QueryNamed(std::string const& sql) override;
-        bool Execute(std::string const& sql) override;
+        QueryResult* Query(const char *sql);
 
-        unsigned long escape_string(char* to, char const* from, unsigned long length);
+        QueryNamedResult* QueryNamed(const char *sql);
+        bool Execute(const char *sql);
+        bool ExecuteMultiline(const char* sql);
 
-        bool BeginTransaction() override;
-        bool CommitTransaction() override;
-        bool RollbackTransaction() override;
+        unsigned long escape_string(char *to, const char *from, unsigned long length);
+
+        bool BeginTransaction();
+        bool CommitTransaction();
+        bool RollbackTransaction();
 
     private:
-        bool _TransactionCmd(std::string const& sql);
-        bool _Query(std::string const& sql, PGresult** pResult, uint64* pRowCount, uint32* pFieldCount);
+        bool _TransactionCmd(const char *sql);
+        bool _Query(const char *sql, PGresult **pResult, uint64* pRowCount, uint32* pFieldCount);
 
-        PGconn* mPGconn;
+        PGconn *mPGconn;
 };
 
 class DatabasePostgre : public Database
@@ -72,7 +74,7 @@ class DatabasePostgre : public Database
         /*! infoString should be formated like hostname;username;password;database. */
 
     protected:
-        virtual SqlConnection* CreateConnection();
+        virtual SqlConnection * CreateConnection();
 
     private:
         static size_t db_count;

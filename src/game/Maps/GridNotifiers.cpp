@@ -36,7 +36,7 @@
 using namespace MaNGOS;
 
 void
-VisibleChangesNotifier::Visit(CameraMapType& m)
+VisibleChangesNotifier::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
         iter.getSource()->UpdateVisibilityOf(&i_object);
@@ -48,7 +48,7 @@ VisibleNotifier::Notify()
     Player& player = *i_camera.GetOwner();
     // at this moment i_clientGUIDs have guids that not iterate at grid level checks
     // but exist one case when this possible and object not out of range: transports
-    if (GenericTransport* transport = player.GetTransport())
+    if (Transport* transport = player.GetTransport())
     {
         for (const auto itr : transport->GetPassengers())
         {
@@ -82,6 +82,17 @@ VisibleNotifier::Notify()
     if (player.GetMap())
         player.GetMap()->UpdateActiveObjectVisibility(&player, i_clientGUIDs, i_data, i_visibleNow);
 
+	for (auto iter = i_clientGUIDs.begin(); iter != i_clientGUIDs.end();)
+	{
+		if (player.IsObjectIsExclusiveVisible(*iter))
+		{
+			iter = i_clientGUIDs.erase(iter);
+			continue;
+		}
+
+		iter++;
+	}
+
     // generate outOfRange for not iterate objects
     i_data.AddOutOfRangeGUID(i_clientGUIDs);
     std::unique_lock<std::shared_timed_mutex> lock(player.m_visibleGUIDs_lock);
@@ -92,6 +103,13 @@ VisibleNotifier::Notify()
             if (Player* targetPlayer = player.GetMap()->GetPlayer(*itr))
                 if (targetPlayer->m_broadcaster)
                     targetPlayer->m_broadcaster->RemoveListener(&player);
+        }
+        else if ((*itr).IsCreature() && player.IsInCombat() && !player.GetMap()->IsDungeon())
+        {
+            // Make sure mobs who become out of range leave combat before grid unload.
+            if (Creature* targetCreature = player.GetMap()->GetCreature(*itr))
+                if (targetCreature->IsInCombat())
+                    targetCreature->GetThreatManager().modifyThreatPercent(&player, -101);
         }
 
         player.m_visibleGUIDs.erase(*itr);
@@ -120,7 +138,7 @@ VisibleNotifier::Notify()
 }
 
 void
-MessageDeliverer::Visit(CameraMapType& m)
+MessageDeliverer::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
     {
@@ -134,7 +152,7 @@ MessageDeliverer::Visit(CameraMapType& m)
     }
 }
 
-void MessageDelivererExcept::Visit(CameraMapType& m)
+void MessageDelivererExcept::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
     {
@@ -150,7 +168,7 @@ void MessageDelivererExcept::Visit(CameraMapType& m)
 
 
 void
-ObjectMessageDeliverer::Visit(CameraMapType& m)
+ObjectMessageDeliverer::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
     {
@@ -160,7 +178,7 @@ ObjectMessageDeliverer::Visit(CameraMapType& m)
 }
 
 void
-MessageDistDeliverer::Visit(CameraMapType& m)
+MessageDistDeliverer::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
     {
@@ -177,7 +195,7 @@ MessageDistDeliverer::Visit(CameraMapType& m)
 }
 
 void
-ObjectMessageDistDeliverer::Visit(CameraMapType& m)
+ObjectMessageDistDeliverer::Visit(CameraMapType &m)
 {
     for (const auto& iter : m)
     {
@@ -190,7 +208,7 @@ ObjectMessageDistDeliverer::Visit(CameraMapType& m)
 }
 
 template<class T> void
-ObjectUpdater::Visit(GridRefManager<T>& m)
+ObjectUpdater::Visit(GridRefManager<T> &m)
 {
     for (typename GridRefManager<T>::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
@@ -236,5 +254,5 @@ void MaNGOS::RespawnDo::operator()(GameObject* u) const
 }
 
 
-template void ObjectUpdater::Visit<GameObject>(GameObjectMapType&);
-template void ObjectUpdater::Visit<DynamicObject>(DynamicObjectMapType&);
+template void ObjectUpdater::Visit<GameObject>(GameObjectMapType &);
+template void ObjectUpdater::Visit<DynamicObject>(DynamicObjectMapType &);

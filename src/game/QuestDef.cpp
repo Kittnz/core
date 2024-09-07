@@ -23,7 +23,7 @@
 #include "Player.h"
 #include "World.h"
 
-Quest::Quest(Field* questRecord)
+Quest::Quest(Field * questRecord)
 {
     QuestId = questRecord[0].GetUInt32();
     QuestMethod = questRecord[1].GetUInt32();
@@ -36,7 +36,6 @@ Quest::Quest(Field* questRecord)
     RequiredRaces = questRecord[7].GetUInt32();
     RequiredSkill = questRecord[8].GetUInt32();
     RequiredSkillValue = questRecord[9].GetUInt32();
-    RequiredCondition = questRecord[128].GetUInt32();
     RepObjectiveFaction = questRecord[10].GetUInt32();
     RepObjectiveValue = questRecord[11].GetInt32();
     RequiredMinRepFaction = questRecord[12].GetUInt32();
@@ -50,7 +49,6 @@ Quest::Quest(Field* questRecord)
     PrevQuestId = questRecord[20].GetInt32();
     NextQuestId = questRecord[21].GetInt32();
     ExclusiveGroup = questRecord[22].GetInt32();
-    BreadcrumbForQuestId = questRecord[129].GetInt32();
     NextQuestInChain = questRecord[23].GetUInt32();
     SrcItemId = questRecord[24].GetUInt32();
     SrcItemCount = questRecord[25].GetUInt32();
@@ -172,7 +170,7 @@ Quest::Quest(Field* questRecord)
     }
 }
 
-uint32 Quest::XPValue(Player* pPlayer) const
+uint32 Quest::XPValue(Player *pPlayer) const
 {
     if (pPlayer)
     {
@@ -182,15 +180,18 @@ uint32 Quest::XPValue(Player* pPlayer) const
             uint32 qLevel = QuestLevel;
             float fullxp = RewXP;
 
-            if (pLevel <= qLevel +  5)
+            ///- Turtle WoW custom settings: 
+            if (pLevel <= qLevel + 25)
                 return uint32(ceilf(fullxp));
-            else if (pLevel == qLevel +  6)
+            else if (pLevel == qLevel + 26)
                 return uint32(ceilf(fullxp * 0.8f));
-            else if (pLevel == qLevel +  7)
+            else if (pLevel == qLevel + 27)
+                return uint32(ceilf(fullxp * 0.8f));
+            else if (pLevel == qLevel + 28)
                 return uint32(ceilf(fullxp * 0.6f));
-            else if (pLevel == qLevel +  8)
+            else if (pLevel == qLevel + 29)
                 return uint32(ceilf(fullxp * 0.4f));
-            else if (pLevel == qLevel +  9)
+            else if (pLevel == qLevel + 30)
                 return uint32(ceilf(fullxp * 0.2f));
             else
                 return uint32(ceilf(fullxp * 0.1f));
@@ -216,9 +217,6 @@ int32 Quest::GetRewMoneyMaxLevelAtComplete() const
     //    their experience reward converted to a healthy amount of gold, thus
     //    adding additional incentive to completing those quests in your log
     //    once you hit 60.
-    if (sWorld.getConfig(CONFIG_BOOL_NO_QUEST_XP_TO_GOLD) && (sWorld.GetWowPatch() < WOW_PATCH_110))
-        return 0;
-
     return int32(GetRewMoneyMaxLevel() * sWorld.getConfig(CONFIG_FLOAT_RATE_DROP_MONEY));
 }
 

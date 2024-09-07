@@ -22,7 +22,7 @@
 #ifndef MANGOS_CREATIONPOLICY_H
 #define MANGOS_CREATIONPOLICY_H
 
-#include <cstdlib>
+#include <stdlib.h>
 #include "Platform/Define.h"
 
 namespace MaNGOS

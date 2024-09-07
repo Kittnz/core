@@ -29,19 +29,12 @@ namespace VMAP
     class GroupModel;
     class VMapManager2;
 
-    struct GroupLocationInfo
-    {
-        GroupModel const* hitModel = nullptr;
-        int32 rootId = -1;
-    };
-
     struct LocationInfo
     {
-        LocationInfo() : hitInstance(nullptr), hitModel(nullptr), ground_Z(-G3D::inf()), rootId(-1) {};
-        ModelInstance const* hitInstance;
-        GroupModel const* hitModel;
+        LocationInfo() : hitInstance(nullptr), hitModel(nullptr), ground_Z(-G3D::inf()) {};
+        const ModelInstance* hitInstance;
+        const GroupModel* hitModel;
         float ground_Z;
-        int32 rootId;
     };
 
     class StaticMapTree
@@ -64,7 +57,7 @@ namespace VMAP
             std::string iBasePath;
 
         private:
-            bool getIntersectionTime(G3D::Ray const& pRay, float& pMaxDist, bool pStopAtFirstHit = false, bool ignoreM2Model = false) const;
+            bool getIntersectionTime(const G3D::Ray& pRay, float& pMaxDist, bool pStopAtFirstHit, bool isLosCheck) const;
             // bool containsLoadedMapTile(unsigned int pTileIdent) const { return(iLoadedMapTiles.containsKey(pTileIdent)); }
         public:
             static std::string getTileFileName(uint32 mapID, uint32 tileX, uint32 tileY);
@@ -75,13 +68,13 @@ namespace VMAP
             StaticMapTree(uint32 mapID, std::string const& basePath);
             ~StaticMapTree();
 
-            bool isInLineOfSight(G3D::Vector3 const& pos1, G3D::Vector3 const& pos2, bool ignoreM2Model) const;
-            ModelInstance* FindCollisionModel(G3D::Vector3 const& pos1, G3D::Vector3 const& pos2);
-            bool getObjectHitPos(G3D::Vector3 const& pos1, G3D::Vector3 const& pos2, G3D::Vector3& pResultHitPos, float pModifyDist) const;
-            float getHeight(G3D::Vector3 const& pPos, float maxSearchDist) const;
+            bool isInLineOfSight(const G3D::Vector3& pos1, const G3D::Vector3& pos2) const;
+            ModelInstance* FindCollisionModel(const G3D::Vector3& pos1, const G3D::Vector3& pos2);
+            bool getObjectHitPos(const G3D::Vector3& pos1, const G3D::Vector3& pos2, G3D::Vector3& pResultHitPos, float pModifyDist) const;
+            float getHeight(const G3D::Vector3& pPos, float maxSearchDist) const;
             bool getAreaInfo(G3D::Vector3& pos, uint32& flags, int32& adtId, int32& rootId, int32& groupId) const;
             bool isUnderModel(G3D::Vector3& pos, float* outDist = nullptr, float* inDist = nullptr) const;
-            bool GetLocationInfo(Vector3 const& pos, LocationInfo& info) const;
+            bool GetLocationInfo(const Vector3& pos, LocationInfo& info) const;
 
             bool InitMap(std::string const& fname, VMapManager2* vm);
             void UnloadMap(VMapManager2* vm);

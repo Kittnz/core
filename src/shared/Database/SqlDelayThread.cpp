@@ -19,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Log.h"
 #include "Database/SqlDelayThread.h"
 #include "Database/SqlOperations.h"
 #include "DatabaseEnv.h"
@@ -52,25 +51,25 @@ void SqlDelayThread::run()
     mysql_thread_init();
     #endif
 
-    auto loopSleepDelay = std::chrono::milliseconds(10);
+    const uint32 loopSleepms = 10;
 
-    auto lastAliveCheck = Clock::now();
-    auto aliveCheckInterval = std::chrono::milliseconds(m_dbEngine->GetPingIntervalMs());
+    const uint32 pingEveryLoop = m_dbEngine->GetPingIntervall() / loopSleepms;
 
+    uint32 loopCounter = 0;
     while (m_running)
     {
         // if the running state gets turned off while sleeping
         // empty the queue before exiting
-        std::this_thread::sleep_for(loopSleepDelay);
+        std::this_thread::sleep_for(std::chrono::milliseconds(loopSleepms));
 
         ProcessRequests();
 
-        if ((lastAliveCheck + aliveCheckInterval) <= Clock::now())
+        if((loopCounter++) >= pingEveryLoop)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Run database reachability check");
+            loopCounter = 0;
             m_dbEngine->Ping();
-            /* ignore result */ m_dbConnection->Query("SELECT 1"); // TODO: Why is this here, when its already check in m_dbEngine->Ping(); ???
-            lastAliveCheck = Clock::now();
+            if (QueryResult* res = m_dbConnection->Query("SELECT 1"))
+                delete res;
         }
     }
 

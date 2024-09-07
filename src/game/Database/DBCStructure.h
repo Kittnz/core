@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "DBCEnums.h"
 #include "Path.h"
+#include "Platform/Define.h"
 #include "SpellClassMask.h"
 
 #include <map>
@@ -35,7 +36,7 @@
 // Structures using to access raw DBC data and required packing to portability
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
 #pragma pack(1)
 #else
 #pragma pack(push,1)
@@ -98,41 +99,6 @@ struct ChatChannelsEntry
                                                             // 20 string flag
 };
 
-struct CharacterFacialHairStylesEntry
-{
-    uint32 RaceID;                                          // 0
-    uint32 SexID;                                           // 1
-    uint32 VariationID;                                     // 2
-  //uint32 Geoset[6];                                       // 3-8
-};
-
-enum CharSectionFlags
-{
-    SECTION_FLAG_UNAVAILABLE = 0x01,
-};
-
-enum CharSectionType
-{
-    SECTION_TYPE_SKIN = 0,
-    SECTION_TYPE_FACE = 1,
-    SECTION_TYPE_FACIAL_HAIR = 2,
-    SECTION_TYPE_HAIR = 3,
-    SECTION_TYPE_UNDERWEAR = 4
-};
-
-struct CharSectionsEntry
-{
-    //uint32 Id;
-    uint32 Race;
-    uint32 Gender;
-    uint32 BaseSection;
-    uint32 VariationIndex;
-    uint32 ColorIndex;
-    //char* TexturePath[3];
-    uint32 Flags;
-    inline bool HasFlag(CharSectionFlags flag) const { return (Flags & flag) != 0; }
-};
-
 struct ChrClassesEntry
 {
     uint32  ClassID;                                        // 0        m_ID
@@ -150,8 +116,8 @@ struct ChrClassesEntry
 enum ChrRacesFlags
 {
     CHRRACES_FLAGS_NOT_PLAYABLE = 0x01,
-    CHRRACES_FLAGS_BARE_FEET    = 0x02,
-    CHRRACES_FLAGS_CAN_MOUNT    = 0x04
+    CHRRACES_FLAGS_BARE_FEET = 0x02,
+    CHRRACES_FLAGS_CAN_MOUNT = 0x04
 };
 
 struct ChrRacesEntry
@@ -166,8 +132,8 @@ struct ChrRacesEntry
                                                             // 7        unused
     uint32      TeamID;                                     // 8        m_BaseLanguage (7-Alliance 1-Horde)
     uint32      creatureType;                               // 9        m_creatureType (blizzlike always 7-humanoid)
-    uint32      loginSpellId;                               // 10       all 836
-    uint32      dazeSpellId;                                // 11       all 1604
+                                                            // 10       unused, all 836
+                                                            // 11       unused, all 1604
     uint32      resSicknessSpellId;                         // 12       m_ResSicknessSpellId (blizzlike always 15007)
                                                             // 13       m_SplashSoundID
     uint32      startingTaxiMask;                           // 14
@@ -285,9 +251,7 @@ struct CreatureTypeEntry
     uint32    ID;                                           // 0        m_ID
     //char*   Name[8];                                      // 1-8      m_name_lang
                                                             // 9 string flags
-    //uint32    flags;                                      // 10       m_flags
-
-    //inline bool HasFlag(CreatureTypeEntryFlags flag) const { return !!(flags & flag); }
+    //uint32    no_expirience;                              // 10       m_flags
 };
 
 struct DurabilityCostsEntry
@@ -369,34 +333,34 @@ struct FactionTemplateEntry
     uint32      friendFaction[4];                           // 10-13
     //-------------------------------------------------------  end structure
 
-    // assigned by core
-    bool isEnemyOfAnother = false;
-
     // helpers
     bool IsFriendlyTo(FactionTemplateEntry const& entry) const
     {
-        if (entry.faction)
+        if(entry.faction)
         {
-            for(uint32 i : enemyFaction)
+            for (uint32 i : enemyFaction)
                 if (i  == entry.faction)
                     return false;
-            for(uint32 i : friendFaction)
+
+            for (uint32 i : friendFaction)
                 if (i == entry.faction)
                     return true;
         }
         return (friendlyMask & entry.ourMask) || (ourMask & entry.friendlyMask);
     }
+
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
         if (entry.faction)
         {
-            for(uint32 i : enemyFaction)
+            for (uint32 i : enemyFaction)
                 if (i  == entry.faction)
                     return true;
-            for(uint32 i : friendFaction)
+            for (uint32 i : friendFaction)
                 if (i == entry.faction)
                     return false;
         }
+
         return (hostileMask & entry.ourMask) != 0;
     }
     bool IsHostileToPlayers() const { return (hostileMask & FACTION_MASK_PLAYER) !=0; }
@@ -405,6 +369,7 @@ struct FactionTemplateEntry
         for(uint32 i : enemyFaction)
             if (i != 0)
                 return false;
+
         return hostileMask == 0 && friendlyMask == 0;
     }
     bool IsContestedGuardFaction() const { return (factionFlags & FACTION_TEMPLATE_FLAG_ATTACK_PVP_ACTIVE_PLAYERS)!=0; }
@@ -452,10 +417,8 @@ struct ItemSetEntry
     //uint32    itemId[17];                                 // 10-26    m_itemID
     uint32    spells[8];                                    // 27-34    m_setSpellID
     uint32    items_to_triggerspell[8];                     // 35-42    m_setThreshold
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     uint32    required_skill_id;                            // 43       m_requiredSkill
     uint32    required_skill_value;                         // 44       m_requiredSkillRank
-#endif
 };
 
 struct LiquidTypeEntry
@@ -486,18 +449,6 @@ struct MailTemplateEntry
                                                             // 9 string flags
 };
 
-struct NamesProfanityEntry
-{
-    //uint32    ID;                                         // 0
-    char const* Name;                                       // 1
-};
-
-struct NamesReservedEntry
-{
-    //uint32    ID;                                         // 0
-    char const* Name;                                       // 1
-};
-
 struct QuestSortEntry
 {
     uint32      id;                                         // 0        m_ID
@@ -521,7 +472,7 @@ struct SkillRaceClassInfoEntry
     uint32    classMask;                                    // 3        m_classMask
     uint32    flags;                                        // 4        m_flags
     uint32    reqLevel;                                     // 5        m_minLevel
-    uint32    skillTierId;                                // 6        m_skillTierID
+    uint32    skillTierId;                                  // 6        m_skillTierID
     //uint32    skillCostID;                                // 7        m_skillCostIndex
 };
 
@@ -608,35 +559,21 @@ struct SpellRangeEntry
     //uint32 NameFlags;                                     // 21 string flags
 };
 
+struct SpellIconEntry
+{
+    uint32      ID;                                           
+    char*       TextureFilename;
+};
+
 struct SpellShapeshiftFormEntry
 {
     uint32 ID;                                              // 0        m_ID
     //uint32 buttonPosition;                                // 1        m_bonusActionBar
-    char*  Name[8];                                         // 2-9      m_name_lang
+    //char*  Name[8];                                       // 2-9      m_name_lang
     //uint32 NameFlags;                                     // 10 string flags
     uint32 flags1;                                          // 11       m_flags
     int32  creatureType;                                    // 12       m_creatureType <=0 humanoid, other normal creature types
     //uint32 unk1;                                          // 13       m_attackIconID
-};
-
-struct SpellVisualEntry
-{
-    uint32 id;
-    uint32 precastKit;
-    uint32 castKit;
-    uint32 impactKit;
-    uint32 stateKit;
-    uint32 channelKit;
-    uint32 hasMissile;
-    uint32 missileModel;
-    uint32 missilePathType;
-    uint32 missileDestinationAttachment;
-    uint32 missileSound;
-    uint32 hasAreaEffect;
-    uint32 areaModel;
-    uint32 areaKit;
-    uint32 animEventSoundID;
-    uint32 flags;
 };
 
 struct SpellDurationEntry
@@ -664,7 +601,7 @@ struct StableSlotPricesEntry
     uint32 Price;                                           //          m_cost
 };
 
-#define MAX_TALENT_RANK 5
+constexpr std::uint8_t MAX_TALENT_RANK{ 5 };
 
 struct TalentEntry
 {
@@ -725,17 +662,6 @@ struct TaxiPathNodeEntry
     float     z;                                            // 6        m_LocZ
     uint32    actionFlag;                                   // 7        m_flags
     uint32    delay;                                        // 8        m_delay
-};
-
-struct TransportAnimationEntry
-{
-    //uint32  Id;
-    uint32  TransportEntry;
-    uint32  TimeSeg;
-    float   X;
-    float   Y;
-    float   Z;
-    //uint32  MovementId;
 };
 
 struct WMOAreaTableEntry
@@ -800,7 +726,7 @@ struct WorldSafeLocsEntry
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
 #pragma pack()
 #else
 #pragma pack(pop)
@@ -847,6 +773,6 @@ struct TaxiPathNodePtr
 typedef Path<TaxiPathNodePtr,TaxiPathNodeEntry const> TaxiPathNodeList;
 typedef std::vector<TaxiPathNodeList> TaxiPathNodesByPath;
 
-#define TaxiMaskSize 8
-typedef uint32 TaxiMask[TaxiMaskSize];
+static constexpr size_t TaxiMaskSize = 8;
+typedef std::array<uint32, TaxiMaskSize> TaxiMask;
 #endif

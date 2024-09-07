@@ -34,7 +34,7 @@ public:
     void Finalize(T &);
     void Interrupt(T &);
     void Reset(T &);
-    bool Update(T &, uint32 const&);
+    bool Update(T &, const uint32 &);
 
     void UnitSpeedChanged() override { _forceUpdate = true; }
     MovementGeneratorType GetMovementGeneratorType() const { return FLEEING_MOTION_TYPE; }
@@ -61,7 +61,7 @@ class TimedFearMovementGenerator : public FearMovementGenerator<Creature>
 public:
     TimedFearMovementGenerator(ObjectGuid fright, uint32 time);
    
-    bool Update(Unit &, uint32 const&);
+    bool Update(Unit &, const uint32 &);
     void Initialize(Unit &);
     void Finalize(Unit &);
 

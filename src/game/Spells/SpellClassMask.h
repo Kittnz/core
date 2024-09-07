@@ -19,6 +19,8 @@
 #ifndef _SPELL_CLASS_MASK_H
 #define _SPELL_CLASS_MASK_H
 
+#include "Platform/Define.h"
+
 enum ClassFlag
 {
     // -- Mage (3)
@@ -76,7 +78,7 @@ enum ClassFlag
     CF_WARRIOR_DEMORALIZING_SHOUT           = 17,   // CM0 00020000
     CF_WARRIOR_INTIMIDATING_SHOUT           = 18,   // CM0 00040000
     CF_WARRIOR_CHALLENGING_SHOUT            = 19,   // CM0 00080000
-    CF_WARRIOR_INNER_RAGE                   = 20,   // CM0 00100000
+    CF_WARRIOR_INNER_RAGE                   = 20,   // CM0 00100000 Reused for Improved Disciplines to reduce Retaliation cooldown.
     CF_WARRIOR_SLAM                         = 21,   // CM0 00200000
     CF_WARRIOR_CLEAVE                       = 22,   // CM0 00400000
     CF_WARRIOR_STANCES                      = 23,   // CM0 00800000
@@ -127,6 +129,7 @@ enum ClassFlag
 
     CF_WARLOCK_SIPHON_LIFE                  = 32,   // CM1 00000001
     CF_WARLOCK_CURSE_OF_DOOM                = 33,   // CM1 00000002
+    CF_WARLOCK_DEMON_SKIN_ARMOR             = 34,   // CM1 00000004
 
     // -- Priest (6)
     CF_PRIEST_POWER_WORD_SHIELD             = 0,    // CM0 00000001
@@ -152,7 +155,7 @@ enum ClassFlag
     CF_PRIEST_HOLY_FIRE                     = 20,   // CM0 00100000
     CF_PRIEST_STARSHARDS                    = 21,   // CM0 00200000
     CF_PRIEST_HOLY_NOVA1                    = 22,   // CM0 00400000
-    CF_PRIEST_MIND_FLAY                     = 23,   // CM0 00800000
+    CF_PRIEST_MIND_FLAY                     = 23,   // CM0 00800000 Also used for Pain Spike (Custom)
     CF_PRIEST_DESPERATE_PRAYER              = 24,   // CM0 01000000
     CF_PRIEST_DEVOURING_PLAGUE              = 25,   // CM0 02000000
     CF_PRIEST_MIND_VISION                   = 26,   // CM0 04000000
@@ -202,6 +205,8 @@ enum ClassFlag
     CF_DRUID_SWIFTMEND                      = 33,   // CM1 00000002
     CF_DRUID_DISPELLS                       = 34,   // CM1 00000004
     CF_DRUID_GROWL                          = 35,   // CM1 00000008
+    CF_DRUID_TIGERS_FURY                    = 36,   // CM1 00000010
+    CF_DRUID_SAVAGE_BITE                    = 37,   // CM1 00000020
 
     // -- Rogue (8)
     CF_ROGUE_THROW                          = 0,    // CM0 00000001
@@ -301,7 +306,7 @@ enum ClassFlag
     CF_PALADIN_AURAS                        = 26,   // CM0 04000000 Shadow/Fire/Frost Resistance Auras & Sanctity Aura
     CF_PALADIN_SEALS                        = 27,   // CM0 08000000
     CF_PALADIN_BLESSINGS                    = 28,   // CM0 10000000 Most of them aren't used anymore by players
-    CF_PALADIN_JUDGEMENT_OF_THE_CRUSADER    = 29,   // CM0 20000000
+    CF_PALADIN_CRUSADER_STRIKE_DEBUFF       = 29,   // CM0 20000000
     CF_PALADIN_FLASH_OF_LIGHT2              = 30,   // CM0 40000000
     CF_PALADIN_HOLY_LIGHT2                  = 31,   // CM0 80000000
 

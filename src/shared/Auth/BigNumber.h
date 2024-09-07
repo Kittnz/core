@@ -28,45 +28,45 @@ class BigNumber
 {
     public:
         BigNumber();
-        BigNumber(BigNumber const& bn);
+        BigNumber(const BigNumber &bn);
         BigNumber(uint32);
         ~BigNumber();
 
         void SetDword(uint32);
         void SetQword(uint64);
-        void SetBinary(uint8 const* bytes, int len);
-        int SetHexStr(char const* str);
+        void SetBinary(const uint8 *bytes, int len);
+        void SetHexStr(const char *str);
 
         void SetRand(int numbits);
 
-        BigNumber& operator=(BigNumber const& bn);
+        BigNumber operator=(const BigNumber &bn);
 
-        BigNumber& operator+=(BigNumber const& bn);
-        BigNumber operator+(BigNumber const& bn)
+        BigNumber operator+=(const BigNumber &bn);
+        BigNumber operator+(const BigNumber &bn)
         {
             BigNumber t(*this);
             return t += bn;
         }
-        BigNumber& operator-=(BigNumber const& bn);
-        BigNumber operator-(BigNumber const& bn)
+        BigNumber operator-=(const BigNumber &bn);
+        BigNumber operator-(const BigNumber &bn)
         {
             BigNumber t(*this);
             return t -= bn;
         }
-        BigNumber& operator*=(BigNumber const& bn);
-        BigNumber operator*(BigNumber const& bn)
+        BigNumber operator*=(const BigNumber &bn);
+        BigNumber operator*(const BigNumber &bn)
         {
             BigNumber t(*this);
             return t *= bn;
         }
-        BigNumber& operator/=(BigNumber const& bn);
-        BigNumber operator/(BigNumber const& bn)
+        BigNumber operator/=(const BigNumber &bn);
+        BigNumber operator/(const BigNumber &bn)
         {
             BigNumber t(*this);
             return t /= bn;
         }
-        BigNumber& operator%=(BigNumber const& bn);
-        BigNumber operator%(BigNumber const& bn)
+        BigNumber operator%=(const BigNumber &bn);
+        BigNumber operator%(const BigNumber &bn)
         {
             BigNumber t(*this);
             return t %= bn;
@@ -74,20 +74,20 @@ class BigNumber
 
         bool isZero() const;
 
-        BigNumber ModExp(BigNumber const& bn1, BigNumber const& bn2);
-        BigNumber Exp(BigNumber const&);
+        BigNumber ModExp(const BigNumber &bn1, const BigNumber &bn2);
+        BigNumber Exp(const BigNumber &);
 
         int GetNumBytes(void) const;
 
-        struct bignum_st* BN() { return _bn; }
+        struct bignum_st *BN() { return _bn; }
 
         uint32 AsDword();
         std::vector<uint8> AsByteArray(int minSize = 0, bool reverse = true) const;
 
-        char const* AsHexStr();
-        char const* AsDecStr();
+        const char *AsHexStr();
+        const char *AsDecStr();
 
     private:
-        struct bignum_st* _bn;
+        struct bignum_st *_bn;
 };
 #endif

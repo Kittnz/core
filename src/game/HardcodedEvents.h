@@ -1,11 +1,10 @@
-/*
- *
- */
 
 #pragma once
 
 #include "GameEventMgr.h"
 #include "ObjectMgr.h"
+#include <queue>
+#include <optional>
 
 /*
  * Elemental Invasion
@@ -57,9 +56,53 @@ struct ElementalInvasion : WorldEvent
 
 private:
     void StartLocalInvasion(uint8 index, uint32 stage);
-    void StartLocalBoss(uint8 index, uint32 stage, uint8 delay);
-    void StopLocalInvasion(uint8 index, uint32 stage, uint8 delay);
+    void StartLocalBoss(uint8 index, uint32 stage, uint32 delay);
+    void StopLocalInvasion(uint8 index, uint32 stage, uint32 delay);
     void ResetThings();
+};
+
+/*
+ * Leprithus (rare) & Rotten Ghouls spawn at night
+ */
+
+enum LeprithusEventState
+{
+    LEPRITHUS_EVENT_NONE = 0,
+    LEPRITHUS_EVENT_ONGOING = 150
+};
+
+struct Leprithus : WorldEvent
+{
+    Leprithus() : WorldEvent(LEPRITHUS_EVENT_ONGOING) {}
+
+    void Update() override;
+    void Enable() override;
+    void Disable() override;
+
+private:
+    LeprithusEventState GetLeprithusState();
+};
+
+/*
+ * Moonbrook graveyard vultures(Fleshrippers) spawn at daylight
+ */
+
+enum MoonbrookEventState
+{
+    MOONBROOK_EVENT_NONE = 0,
+    MOONBROOK_EVENT_ONGOING = 151
+};
+
+struct Moonbrook : WorldEvent
+{
+    Moonbrook() : WorldEvent(MOONBROOK_EVENT_ONGOING) {}
+
+    void Update() override;
+    void Enable() override;
+    void Disable() override;
+
+private:
+    MoonbrookEventState GetMoonbrookState();
 };
 
 /*
@@ -87,9 +130,9 @@ struct DragonsOfNightmare : WorldEvent
     static void CheckSingleVariable(uint32 idx, uint32& value);
 
 private:
-    void GetAliveCountAndUpdateRespawnTime(std::vector<ObjectGuid>& dragons, uint32& alive, time_t respawnTime);
-    bool LoadDragons(std::vector<ObjectGuid>& dragonGUIDs);
-    //void GetExistingDragons(std::vector<ObjectGuid>& dragonGUIDs, std::vector<Creature*>& existingDragons);
+    void GetAliveCountAndUpdateRespawnTime(std::vector<ObjectGuid> &dragons, uint32 &alive, time_t respawnTime);
+    bool LoadDragons(std::vector<ObjectGuid> &dragonGUIDs);
+    //void GetExistingDragons(std::vector<ObjectGuid> &dragonGUIDs, std::vector<Creature*> &existingDragons);
     void PermutateDragons();
 };
 
@@ -106,7 +149,7 @@ enum DarkmoonState
     DARKMOON_H2 = 5,
 };
 
-static uint16 const DMFValidEvent[] =
+static const uint16 DMFValidEvent[] =
 {
     DARKMOON_A2_INSTALLATION, DARKMOON_A2,
     DARKMOON_H2_INSTALLATION, DARKMOON_H2
@@ -121,7 +164,7 @@ struct DarkmoonFaire : WorldEvent
     void Disable() override;
 
 private:
-    uint32 FindMonthFirstMonday(bool& foireAlly, struct tm *timeinfo);
+    uint32 FindMonthFirstMonday(bool &foireAlly, struct tm *timeinfo);
     DarkmoonState GetDarkmoonState();
 };
 
@@ -170,66 +213,53 @@ struct ScourgeInvasionEvent : WorldEvent
     ScourgeInvasionEvent();
 
     void Update() override;
-    uint32 GetZoneTime(uint32 zoneId);
-    void LogNextZoneTime();
-    void EnableAndStartEvent(uint16 event_id);
-    void DisableAndStopEvent(uint16 event_id);
-    void HandleDefendedZones();
     void Enable() override;
     void Disable() override;
     uint32 GetNextUpdateDelay() override;
 
 private:
+    struct InvasionXYZ {
+        InvasionXYZ(float x, float y, float z)
+            : x(x), y(y), z(z) {}
+        float x, y, z;
+    };
+
+    struct InvasionNecropolis {
+        InvasionNecropolis(float x, float y, float z, float o)
+            : x(x), y(y), z(z), o(o) {}
+        float x, y, z, o;
+        std::vector<InvasionXYZ> shards;
+
+        ObjectGuid relayGuid;
+    };
+
     struct InvasionZone
     {
         uint32 map;
         uint32 zoneId;
         uint32 remainingVar;
-        uint32 necroAmount;
-        ObjectGuid mouthGuid;
-        std::vector<Position> mouth;
-    };
-
-    struct CityAttack
-    {
-        uint32 map;
-        uint32 zoneId;
-        ObjectGuid pallidGuid;
-        std::vector<Position> pallid;
+        std::vector<InvasionNecropolis> points;
     };
 
     bool invasion1Loaded;
     bool invasion2Loaded;
-    bool invasion3Loaded;
-    bool invasion4Loaded;
-    bool invasion5Loaded;
-    bool invasion6Loaded;
 
-    bool undercityLoaded;
-    bool stormwindLoaded;
+    void HandleActiveZone(uint32 attackTimeVar, uint32 attackZoneVar, uint32 remainingVar, time_t now, uint32 zoneId);
 
-    void HandleActiveZone(uint32 attackTimeVar, uint32 zoneId, uint32 remainingVar, time_t now);
-    void HandleActiveCity(uint32 attackTimeVar, time_t now, uint32 zoneId);
-
-    bool OnEnable(uint32 zoneId, uint32 attackTimeVar);
+    bool OnEnable(uint32 attackZoneVar, uint32 attackTimeVar);
 
     void StartNewInvasionIfTime(uint32 timeVariable, uint32 zoneVariable);
-    void StartNewCityAttackIfTime(uint32 timeVariable, uint32 zoneVariable);
     bool ResumeInvasion(uint32 zoneId);
-    bool SummonMouth(Map* pMap, InvasionZone* zone, Position position);
-    bool SummonPallid(Map* pMap, CityAttack* zone, Position position, uint32 spawnLoc);
+    bool SummonNecropolis(Map* pMap, InvasionNecropolis& point);
 
-    Map* GetMap(uint32 mapId, Position const& invZone);
+    Map* GetMap(uint32 mapId, const InvasionNecropolis& invZone);
     bool isValidZoneId(uint32 zoneId);
-    bool isActiveZone(uint32 zoneId);
-    uint32 GetActiveZones();
-    InvasionZone* GetInvasionZone(uint32 zoneId);
-    CityAttack* GetCityZone(uint32 zoneId);
+    InvasionZone* GetZone(uint32 zoneId);
+    uint32 GetNewRandomZone(uint32 curr1, uint32 curr2);
 
     void UpdateWorldState();
 
     std::vector<InvasionZone> invasionPoints;
-    std::vector<CityAttack> attackPoints;
     int previousRemainingCounts[6];
 };
 
@@ -249,40 +279,6 @@ enum WarEffortEventStage
     WAR_EFFORT_STAGE_FINALBATTLE    = 11,
     WAR_EFFORT_STAGE_COMPLETE       = 12
 };
-
-inline char const* WarEffortStageToString(uint32 stage)
-{
-    switch (stage)
-    {
-        case WAR_EFFORT_STAGE_COLLECTION:
-            return "Collection of Materials";
-        case WAR_EFFORT_STAGE_READY:
-            return "Material Collection Ready";
-        case WAR_EFFORT_STAGE_MOVE_1:
-            return "Moving to Silithus Day 1";
-        case WAR_EFFORT_STAGE_MOVE_2:
-            return "Moving to Silithus Day 2";
-        case WAR_EFFORT_STAGE_MOVE_3:
-            return "Moving to Silithus Day 3";
-        case WAR_EFFORT_STAGE_MOVE_4:
-            return "Moving to Silithus Day 4";
-        case WAR_EFFORT_STAGE_MOVE_5:
-            return "Moving to Silithus Day 5";
-        case WAR_EFFORT_STAGE_GONG_WAIT:
-            return "Waiting for Gong to be Rung";
-        case WAR_EFFORT_STAGE_GONG_RUNG:
-            return "Gong has been Rung";
-        case WAR_EFFORT_STAGE_BATTLE:
-            return "Battle at Gate";
-        case WAR_EFFORT_STAGE_CH_ATTACK:
-            return "Cenarion Hold Attack";
-        case WAR_EFFORT_STAGE_FINALBATTLE:
-            return "Final Battle";
-        case WAR_EFFORT_STAGE_COMPLETE:
-            return "Completed";
-    }
-    return "UNKNOWN";
-}
 
 enum WarEffortEnums
 {
@@ -323,4 +319,186 @@ private:
     void EnableAndStartEvent(uint16 event_id);
     void DisableAndStopEvent(uint16 event_id);
     void UpdateHiveColossusEvents();
+};
+
+struct MiracleRaceEvent;
+struct RaceSubEvent;
+enum class MiracleRaceSide;
+struct RaceCheckpoint
+{
+	uint32 Id;
+	Position pos;
+	Position camPos;
+};
+
+struct RaceCreature
+{
+	uint32 entry;
+	Position pos;
+	uint8 chance;
+};
+
+// basically the same as RaceCreature, but still should be another name
+struct RaceGameobject
+{
+	uint32 entry;
+	Position pos;
+	uint8 chance;
+};
+
+struct RacePlayerSetup
+{
+	Player* player;
+	MiracleRaceSide side;
+	uint32 startedByQuest;
+};
+
+struct RacePlayer
+{
+	RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent, uint32 mapId);
+	~RacePlayer();
+
+	ObjectGuid guid;
+	ObjectGuid checkpointEffectGuid;
+	ObjectGuid controllerNPC;
+	Map* map = nullptr; // might be dangerous
+	RaceSubEvent* raceEvent = nullptr;
+	MiracleRaceSide side;
+	uint32 startedQuest;
+
+	WorldLocation savedPlPos;
+	RaceCheckpoint nextCheckpoint;
+
+	bool bIsRaceMode = false;
+
+	void GoRaceMode();
+	void LeaveRaceMode();
+	void Update(uint32 deltaTime);
+private:
+	void IncrementCheckpoint(Player* pl);
+};
+
+struct RaceSubEvent
+{
+	RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent, uint32 mapId);
+
+	uint32 raceId;
+	std::vector<RacePlayer> racers;
+
+	enum class State
+	{
+		None,
+		WarmUp, // 15 sec.
+		Race
+	};
+	State state;
+
+	void Start();
+	void Update(uint32 deltaTime);
+
+	void AnnounceToRacers(const char* msg);
+
+	void End();
+
+	void OnFinishedRace(RacePlayer& param1);
+
+	void RewardPlayer(Player* pl, uint32 startedQuest);
+
+	inline const RaceCheckpoint& GetCheckpoint(size_t index) const
+	{
+		return checkpoints[index];
+	}
+
+	inline bool IsValidCheckpoint(size_t index) const
+	{
+		return checkpoints.size() > index;
+	}
+
+private:
+	// we need cached version, because we allow editing race checkpoints in-game
+	std::vector<RaceCheckpoint> checkpoints;
+	std::vector<RaceCreature> creatures;
+	std::vector<RaceGameobject> gameobjects;
+	MiracleRaceEvent* pEvent;
+	Map* theMap = nullptr;
+
+	std::list<std::string> leaderboard;
+	std::vector<ObjectGuid> spawnedCreatures;
+	std::vector<ObjectGuid> spawnedGameobjects;
+	uint32 backTimer = 0;
+	uint32 startReportBackTimer = 0;
+};
+
+enum class MiracleRaceSide
+{
+	Gnome,
+	Goblin
+};
+
+struct MiracleRaceQueueSystem
+{
+	void QueuePlayer(Player* player, MiracleRaceSide bySide);
+	void RemoveFromQueue(Player* p_Player);
+
+	bool isPlayerQueuedAlready(Player* player) const;
+
+	void Update(uint32 deltaTime);
+
+	std::list<ObjectGuid> gnomePlayers;
+	std::list<ObjectGuid> goblinPlayers;
+
+	std::function<void(ObjectGuid, ObjectGuid)> onFoundRace;
+
+	size_t GetInviteCount() const;
+
+
+private:
+
+	struct InviteRequest
+	{
+		InviteRequest(ObjectGuid InGnomePlayer, ObjectGuid InGoblinPlayer)
+			: GnomePlayer(InGnomePlayer), GoblinPlayer(InGoblinPlayer), InviteTimeStart(WorldTimer::getMSTime())
+		{}
+		ObjectGuid GnomePlayer;
+		ObjectGuid GoblinPlayer;
+		uint32 InviteTimeStart;
+	};
+
+	std::list<InviteRequest> _inviteRequests;
+
+	bool TryStartRace();
+};
+
+struct MiracleRaceEvent : WorldEvent
+{
+	MiracleRaceEvent();
+
+	bool InitializeRace(uint32 raceId);
+
+    void SetRaceMap(uint32 mapId) { m_mapId = mapId; }
+
+	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side, uint32 startedQuest = 0);
+
+	virtual void Update() override;
+	virtual uint32 GetNextUpdateDelay() override;
+
+	std::map<uint32, std::vector<RaceCheckpoint>> racesCheckpoints;
+	std::map<uint32, std::vector< RaceCreature>> racesCreatures;
+	std::map<uint32, std::vector< RaceGameobject>> racesGameobjects;
+	std::list<std::shared_ptr<RaceSubEvent>> races;
+
+	virtual void Disable() override;
+
+	inline MiracleRaceQueueSystem& queueSystem()
+	{
+		return _queueSystem;
+	}
+
+private:
+
+	void onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid goblinPlayer);
+
+	MiracleRaceQueueSystem _queueSystem;
+	uint32 lastTime = 0;
+    std::optional<uint32> m_mapId;
 };

@@ -15,10 +15,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+project(TurtleWoW)
+
 # CMake policies
 cmake_minimum_required(VERSION 3.1...3.20)
-
-project(MaNGOS)
 
 # Allow -DACE_ROOT, -DTBB_ROOT, etc.
 if(${CMAKE_VERSION} VERSION_GREATER "3.11")
@@ -31,14 +31,13 @@ set(CMAKE_MODULE_PATH
 )
 
 set(SUPPORTED_CLIENT_BUILD "CLIENT_BUILD_1_12_1" CACHE STRING "Client version the core will support")
-option(USE_STD_MALLOC "Use standard malloc instead of TBB" OFF)
-option(BUILD_FOR_HOST_CPU "Build specifically for the host CPU via `-march=native` (might not run on different machines)" ON)
+option(USE_STD_MALLOC "Use standard malloc instead of TBB" ON)
 option(TBB_DEBUG "Use TBB debug librairies" OFF)
-option(USE_ANTICHEAT "Use anticheat" OFF)
+option(USE_ANTICHEAT "Use anticheat" ON)
+option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
-option(USE_REALMMERGE "Compile helper tool for merging character databases" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -74,13 +73,26 @@ if(BUILDING_IN_SOURCE)
   )
 endif()
 
+# Giperion: Enable C++17
+set(CMAKE_CXX_STANDARD 17)
+if(MSVC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+endif(MSVC)
+if(NOT MSVC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+endif()
+# Giperion: Set Edit and Continue by default for all windows debug builds
+if(MSVC)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
+endif(MSVC)
+
 if(WIN32)
   if(MSVC)
     if(MSVC_VERSION LESS 1900)
       message(FATAL_ERROR "Only Visual Studio 2015 or newer is supported")
     endif()
   endif()
-
+  
   # Added by Giperion, in WIN32 output all compiled files in one directory
   set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
   set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
@@ -150,7 +162,7 @@ if(WIN32)
   set(LIBS_DIR ${CMAKE_INSTALL_PREFIX})
 else()
   set(BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin)
-  set(CONF_DIR ${CMAKE_INSTALL_PREFIX}/etc CACHE PATH "Set custom configuration directory")
+  set(CONF_DIR ${CMAKE_INSTALL_PREFIX}/etc)
   set(LIBS_DIR ${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
@@ -198,13 +210,13 @@ if(NOT USE_STD_MALLOC)
       ${TBB_LIBRARIES}
     )
   endif()
-
+  
   if (WIN32)
     list (GET TBB_LIBRARIES 1 TBB_SINGLE_FILEDIRECTORY)
     get_filename_component(TBB_LIB_DIRECTORY "${TBB_SINGLE_FILEDIRECTORY}" DIRECTORY)
     link_directories(${TBB_LIB_DIRECTORY})
   endif()
-
+  
 endif()
 
 # Win32 delifered packages
@@ -213,8 +225,8 @@ if(WIN32)
   set(MYSQL_LIBRARY ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libmySQL.lib)
   set(MYSQL_DEBUG_LIBRARY ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libmySQL.lib)
   set(OPENSSL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/windows/include/openssl)
-  set(OPENSSL_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libeay32.lib)
-  set(OPENSSL_DEBUG_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libeay32.lib)
+  set(OPENSSL_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libssl.lib ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libcrypto.lib)
+  set(OPENSSL_DEBUG_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libssl.lib ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libcrypto.lib)
   set(ZLIB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/dep/windows/include/zlib)
 endif()
 
@@ -256,7 +268,7 @@ else()
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_QUIET
   )
-
+  
   if(NOT rev_hash)
     # No valid ways available to find/set the revision/hash, so let's force some defaults
     message(STATUS "
@@ -265,19 +277,12 @@ else()
     set(rev_date "1970-01-01 00:00:00 +0000")
     set(rev_hash "unknown")
   endif()
-
+  
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/revision.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/revision.h)
 endif()
 
-set(supported_build ${SUPPORTED_CLIENT_BUILD})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Progression.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/Progression.h)
-
-# Generate migrations list
-include(cmake/migrations.cmake)
-
 message(STATUS "")
 message(STATUS "Core revision: ${rev_hash} ${rev_date} ")
-message(STATUS "Supported version: ${supported_build}")
 message(STATUS "Install server to: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "")
 
@@ -318,12 +323,6 @@ endif()
 message(STATUS "Memory allocation     : ${ALLOC_LIB_INFO_STRING} ${TBB_LIBRARIES}")
 message(STATUS "Detected compiler     : ${CMAKE_CXX_COMPILER_ID}")
 
-if(BUILD_FOR_HOST_CPU)
-  message(STATUS "Build for host CPU    : Yes (default)")
-else()
-  message(STATUS "Build for host CPU    : No")
-endif()
-
 message(STATUS "Build type            : ${CMAKE_BUILD_TYPE}")
 
 if(USE_ANTICHEAT)
@@ -339,6 +338,14 @@ else()
   message(STATUS "Build scripts         : No")
 endif()
 
+if(USE_DISCORD_BOT)
+  message(STATUS "Build Discord Bot    : Yes")
+  add_compile_definitions(USING_DISCORD_BOT)
+else()
+  message(STATUS "Build Discord Bot    : No (default)")
+endif()
+
+
 if(UNIX)
   if(DEBUG_SYMBOLS)
     message(STATUS "Debug symbols         : Included")
@@ -346,7 +353,7 @@ if(UNIX)
   else()
     message(STATUS "Debug symbols         : Disabled")
   endif()
-
+  
   if(GCC_SANITIZE)
     set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fno-omit-frame-pointer -fno-optimize-sibling-calls")
     set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fsanitize=address")
@@ -361,11 +368,7 @@ if(UNIX)
     #set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fsanitize=unsigned-integer-overflow")
   endif()
 
-  set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} --no-warnings -fexceptions -fnon-call-exceptions -pipe")
-  if(BUILD_FOR_HOST_CPU)
-    set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -march=native")
-  endif()
-  set(CMAKE_CXX_STANDARD 14)
+  set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} --no-warnings -fexceptions -fnon-call-exceptions -march=native -O3 -pipe ")
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     if(PROFILE_GENERATE)
       set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fprofile-generate")
@@ -403,7 +406,7 @@ if(MSVC)
   #if(PLATFORM MATCHES X86)
   #  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
   #endif()
-
+  
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif()
 
@@ -489,6 +492,6 @@ message(STATUS "Build flags (DEBUG)   : ${CMAKE_CXX_FLAGS_DEBUG}")
 add_subdirectory(src)
 add_subdirectory(dep)
 
-if (USE_EXTRACTORS OR USE_REALMMERGE)
-    add_subdirectory(contrib)
+if (USE_EXTRACTORS)
+    add_subdirectory(tools)
 endif()

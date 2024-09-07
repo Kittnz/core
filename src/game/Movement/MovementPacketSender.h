@@ -82,7 +82,6 @@ struct PlayerMovementPendingChange;
 /*
 xxxxxToMover() and xxxxxToObservers() methods should be only used on a unit controlled & moved by a player (as in direct client control: possess).
 ToMover() to send a packet to the client (asking for confirmation before acting the change) and ToObservers once the change has been acted and should be broadcasted to the other players around (the observers).
-
 xxxxxToAll() method should be used on a unit controlled & moved by the server (@todo note to self: does a player moved unit under the control of a temporary disorient (Scatter Shot eg) or fear fall into this category? EDIT: by looking at the effects of Psychic Scream (10890), the answer is yes)
 */
 namespace MovementPacketSender
@@ -106,9 +105,6 @@ namespace MovementPacketSender
         void SendMovementFlagChangeToController(Unit* unit, Player* mover, PlayerMovementPendingChange& pendingChange);
         void SendMovementFlagChangeToObservers(Unit* unit, MovementFlags mFlag, bool apply);
         void SendMovementFlagChangeToAll(Unit* unit, MovementFlags mFlag, bool apply);
-
-        /* run or walk*/
-        void SendToggleRunWalkToAll(Unit* unit, bool run);
 
         // utility method
         MovementChangeType GetChangeTypeByMoveType(UnitMoveType moveType);

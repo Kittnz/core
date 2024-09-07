@@ -18,6 +18,7 @@
 #define _GEOMETRY
 
 #include "Common.h"
+#include "SharedDefines.h"
 
 namespace Geometry
 {
@@ -83,7 +84,7 @@ namespace Geometry
         return distsq < maxRange * maxRange;
     }
 
-    inline void GetNearPoint2DAroundPosition(float ownX, float ownY, float &x, float &y, float distance2d, float absAngle)
+    inline void GetNearPoint2DAroundPosition(float ownX, float ownY, float& x, float& y, float distance2d, float absAngle)
     {
         x = ownX + distance2d * cos(absAngle);
         y = ownY + distance2d * sin(absAngle);
@@ -100,13 +101,6 @@ namespace Geometry
             o += M_PI_F * 2.0f;
         return o;
     }
-
-    template<class A, class B>
-    inline bool IsPointLeftOfLine(A lineStart, A lineEnd, B point)
-    {
-        return (lineEnd.x - lineStart.x) * (point.y - lineStart.y) - (lineEnd.y - lineStart.y) * (point.x - lineStart.x) > 0;
-    }
-
 }
 
 #endif

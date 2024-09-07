@@ -40,20 +40,16 @@ else( OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES )
 
   find_path(OPENSSL_INCLUDE_DIR
     NAMES
-      openssl/ssl.h
+      ssl.h
     PATHS
       /usr/include
       /usr/include/openssl
       /usr/local/include
       /usr/local/include/openssl
       /usr/local/openssl/include
-      /usr/local/opt/openssl@1.1/include
-      /usr/local/opt/openssl
-      /opt/homebrew/opt/openssl@1.1/include
-      /opt/homebrew/opt/openssl/include
       ${TMP_OPENSSL_INCLUDE_DIR}
     DOC
-      "Specify the directory containing ssl.h."
+      "Specify the directory containing openssl.h."
   )
 
   find_library(OPENSSL_LIBRARIES
@@ -66,10 +62,6 @@ else( OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES )
       /usr/local/lib
       /usr/local/lib/ssl
       /usr/local/ssl/lib
-      /usr/local/opt/openssl@1.1/lib
-      /usr/local/opt/openssl/lib
-      /opt/homebrew/opt/openssl@1.1/lib
-      /opt/homebrew/opt/openssl/lib
       ${TMP_OPENSSL_LIBRARIES}
     DOC "Specify the OpenSSL library here."
   )
@@ -95,10 +87,6 @@ else( OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES )
         /usr/local/lib
         /usr/local/lib/ssl
         /usr/local/ssl/lib
-        /usr/local/opt/openssl@1.1/lib
-        /usr/local/opt/openssl/lib
-        /opt/homebrew/opt/openssl@1.1/lib
-        /opt/homebrew/opt/openssl/lib
         ${TMP_OPENSSL_LIBRARIES}
       DOC "if more libraries are necessary to link in a OpenSSL client, specify them here."
     )

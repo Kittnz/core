@@ -26,13 +26,16 @@
 #include "Platform/Define.h"
 #include "Policies/Singleton.h"
 #include "Policies/ThreadingModel.h"
+
+#include "UpdateData.h"
+
 #include "GridDefines.h"
 #include "Object.h"
 #include "Player.h"
 #include "Corpse.h"
 #include "Transport.h"
-#include "Chat/MasterPlayer.h"
-#include "Chat/AbstractPlayer.h"
+#include "MapNodes/MasterPlayer.h"
+#include "MapNodes/AbstractPlayer.h"
 
 #include <set>
 #include <list>
@@ -46,7 +49,7 @@ class HashMapHolder
 {
     public:
 
-        typedef std::unordered_map<ObjectGuid, T*>   MapType;
+        typedef std::unordered_map<ObjectGuid, T*> MapType;
         typedef std::shared_timed_mutex LockType;
         typedef std::shared_lock<LockType> ReadGuard;
         typedef std::unique_lock<LockType> WriteGuard;
@@ -89,8 +92,8 @@ class ObjectAccessor : public MaNGOS::Singleton<ObjectAccessor, MaNGOS::ClassLev
 
     ObjectAccessor();
     ~ObjectAccessor();
-    ObjectAccessor(ObjectAccessor const&);
-    ObjectAccessor& operator=(ObjectAccessor const&);
+    ObjectAccessor(const ObjectAccessor &);
+    ObjectAccessor& operator=(const ObjectAccessor &);
 
     public:
         typedef std::unordered_map<ObjectGuid, Corpse*> Player2CorpsesMapType;
@@ -102,11 +105,11 @@ class ObjectAccessor : public MaNGOS::Singleton<ObjectAccessor, MaNGOS::ClassLev
         // Player access
         static Player* FindPlayer(ObjectGuid guid);         // if need player at specific map better use Map::GetPlayer
         static Player* FindPlayerNotInWorld(ObjectGuid guid);
-        static Player* FindPlayerByName(char const* name);
-        static Player* FindPlayerByNameNotInWorld(char const* name);
+        static Player* FindPlayerByName(const char *name);
+        static Player* FindPlayerByNameNotInWorld(const char *name);
 
         static MasterPlayer* FindMasterPlayer(ObjectGuid guid);
-        static MasterPlayer* FindMasterPlayer(char const* name);
+        static MasterPlayer* FindMasterPlayer(const char* name);
 
         /**
          * @brief These functions will attempt to return a Player* if available.
@@ -116,7 +119,7 @@ class ObjectAccessor : public MaNGOS::Singleton<ObjectAccessor, MaNGOS::ClassLev
          * @return IPlayerPointer
          */
         static PlayerPointer FindPlayerPointer(ObjectGuid guid);
-        static PlayerPointer FindPlayerPointer(char const* name);
+        static PlayerPointer FindPlayerPointer(const char* name);
 
         static void KickPlayer(ObjectGuid guid);
 
@@ -135,21 +138,21 @@ class ObjectAccessor : public MaNGOS::Singleton<ObjectAccessor, MaNGOS::ClassLev
         // Corpse access
         Corpse* GetCorpseForPlayerGUID(ObjectGuid guid);
         static Corpse* GetCorpseInMap(ObjectGuid guid, uint32 mapid);
-        void RemoveCorpse(Corpse* corpse);
+        void RemoveCorpse(Corpse *corpse);
         void AddCorpse(Corpse* corpse);
         void AddCorpsesToGrid(GridPair const& gridpair,GridType& grid,Map* map);
         void ConvertCorpseForPlayer(ObjectGuid player_guid, Player* looter = nullptr);
         void RemoveOldCorpses();
 
         // For call from Player/Corpse AddToWorld/RemoveFromWorld only
-        void AddObject(Corpse* object) { HashMapHolder<Corpse>::Insert(object); }
-        void AddObject(Player* object);
+        void AddObject(Corpse *object) { HashMapHolder<Corpse>::Insert(object); }
+        void AddObject(Player *object);
         void AddObject(Transport* object) { HashMapHolder<Transport>::Insert(object); }
         void AddObject(MasterPlayer* object);
-        void RemoveObject(Corpse* object) { HashMapHolder<Corpse>::Remove(object); }
-        void RemoveObject(Player* object);
+        void RemoveObject(Corpse *object) { HashMapHolder<Corpse>::Remove(object); }
+        void RemoveObject(Player *object);
         void RemoveObject(Transport* object) { HashMapHolder<Transport>::Remove(object); }
-        void RemoveObject(MasterPlayer* object);
+        void RemoveObject(MasterPlayer *object);
 
     private:
         Player2CorpsesMapType   i_player2corpse;

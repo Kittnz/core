@@ -29,9 +29,9 @@ enum AuraFlags
 {
     AFLAG_NONE                  = 0x00,
     AFLAG_CANCELABLE            = 0x01,
-    AFLAG_EFF_INDEX_2           = 0x02,
-    AFLAG_EFF_INDEX_1           = 0x04,
-    AFLAG_EFF_INDEX_0           = 0x08,
+    ALFAG_UNK2                  = 0x02,
+    AFLAG_UNK3                  = 0x04,
+    AFLAG_UNK4                  = 0x08,
 
     AFLAG_MASK_ALL              = 0x0F
 };
@@ -113,7 +113,7 @@ enum AuraType
      */
     SPELL_AURA_MOD_STEALTH = 16,
     /**
-     * Not handled by the Aura class, implemented in Unit::IsVisibleForOrDetect
+     * Not handled by the Aura class, implemented in Unit::isVisibleForOrDetect
      * which does a lot of checks to determine whether the person is visible or not,
      * the SPELL_AURA_MOD_STEALTH seems to determine how in/visible ie a rogue is.
      */
@@ -327,9 +327,11 @@ enum AuraType
     SPELL_AURA_MOD_RATING = 189,
     SPELL_AURA_MOD_FACTION_REPUTATION_GAIN = 190,
     SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED = 191,
-    // Nostalrius
-    SPELL_AURA_AURA_SPELL = 192, // Ajoute les auras d'un sort tant que cet aura est actif.
-    TOTAL_AURAS=193
+    // Custom
+    SPELL_AURA_AURA_SPELL = 192, // Adds the auras of a spell while this aura is active.
+    SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT = 193, // Needed for Spirit Link.
+    SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN = 194, // Needed for Pet Avoidance.
+    TOTAL_AURAS=195
 };
 
 enum AreaAuraType
@@ -339,8 +341,7 @@ enum AreaAuraType
     AREA_AURA_FRIEND,
     AREA_AURA_ENEMY,
     AREA_AURA_PET,
-    AREA_AURA_OWNER,
-    AREA_AURA_CREATURE_GROUP,
+    AREA_AURA_OWNER
 };
 
 #endif

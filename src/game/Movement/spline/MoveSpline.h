@@ -28,8 +28,8 @@ namespace Movement
     {
         Location() : orientation(0) {}
         Location(float x, float y, float z, float o) : Vector3(x, y, z), orientation(o) {}
-        Location(Vector3 const& v) : Vector3(v), orientation(0) {}
-        Location(Vector3 const& v, float o) : Vector3(v), orientation(o) {}
+        Location(const Vector3& v) : Vector3(v), orientation(0) {}
+        Location(const Vector3& v, float o) : Vector3(v), orientation(o) {}
 
         float orientation;
     };
@@ -64,9 +64,9 @@ namespace Movement
             int32           last_point_sent_Idx;
             int32           point_Idx_offset;
             bool            m_uninterruptible;
-            char const*     mvtOrigin; // For debug purposes
+            const char*     mvtOrigin; // For debug purposes
 
-            void init_spline(MoveSplineInitArgs const& args);
+            void init_spline(const MoveSplineInitArgs& args);
             UpdateResult _updateState(int32& ms_time_diff);
 
         public:
@@ -85,7 +85,7 @@ namespace Movement
             void _Finalize();
             void _Interrupt() { splineflags.done = true;}
 
-            void Initialize(MoveSplineInitArgs const&);
+            void Initialize(const MoveSplineInitArgs&);
             bool Initialized() const { return !spline.empty();}
 
             explicit MoveSpline();
@@ -125,8 +125,8 @@ namespace Movement
             int32 Duration(int first, int last) const { return spline.length(first, last);}
 
             std::string ToString() const;
-            char const* GetMovementOrigin() const { return mvtOrigin; }
-            void SetMovementOrigin(char const* m) { mvtOrigin = m; }
+            const char* GetMovementOrigin() const { return mvtOrigin; }
+            void SetMovementOrigin(const char* m) { mvtOrigin = m; }
     };
 }
 #endif // MANGOSSERVER_MOVEPLINE_H

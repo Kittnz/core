@@ -39,7 +39,7 @@ class HomeMovementGenerator<Creature>
         void Finalize(Creature &);
         void Interrupt(Creature &) {}
         void Reset(Creature &);
-        bool Update(Creature &, uint32 const&);
+        bool Update(Creature &, const uint32 &);
         MovementGeneratorType GetMovementGeneratorType() const { return HOME_MOTION_TYPE; }
 
     private:

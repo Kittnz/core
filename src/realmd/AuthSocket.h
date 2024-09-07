@@ -19,9 +19,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-// \addtogroup realmd
-// @{
-// \file
+/// \addtogroup realmd
+/// @{
+/// \file
 
 #ifndef _AUTHSOCKET_H
 #define _AUTHSOCKET_H
@@ -29,7 +29,6 @@
 #include "Common.h"
 #include "Auth/BigNumber.h"
 #include "Auth/Sha1.h"
-#include "SRP6/SRP6.h"
 #include "ByteBuffer.h"
 
 #include "BufferedSocket.h"
@@ -51,13 +50,13 @@ enum LockFlag
     GEO_CITY        = 0x20
 };
 
-// Handle login commands
+/// Handle login commands
 class AuthSocket: public BufferedSocket
 {
     public:
         const static int s_BYTE_SIZE = 32;
 
-        AuthSocket() = default;
+        AuthSocket();
         ~AuthSocket();
 
         void OnAccept();
@@ -65,7 +64,7 @@ class AuthSocket: public BufferedSocket
         void SendProof(Sha1Hash sha);
         void LoadRealmlist(ByteBuffer &pkt);
         bool VerifyPinData(uint32 pin, const PINData& clientData);
-        uint32 GenerateTotpPin(const std::string& secret, int interval);
+        bool ValidateToken(std::string const& secretString, PINData& data);
 
         bool _HandleLogonChallenge();
         bool _HandleLogonProof();
@@ -77,6 +76,8 @@ class AuthSocket: public BufferedSocket
         bool _HandleXferResume();
         bool _HandleXferCancel();
         bool _HandleXferAccept();
+
+        void _SetVSFields(const std::string& rI);
 
     private:
         enum eStatus
@@ -90,25 +91,26 @@ class AuthSocket: public BufferedSocket
         };
 
         bool VerifyVersion(uint8 const* a, int32 aLength, uint8 const* versionProof, bool isReconnect);
-        std::string GetRealmAddress(Realm const& realm) const;
 
-        SRP6 srp;
-        BigNumber m_reconnectProof;
+        BigNumber N, s, g, v;
+        BigNumber b, B;
+        BigNumber K;
+        BigNumber _reconnectProof;
 
-        bool m_promptPin = false;
+        bool promptPin;
 
-        eStatus m_status = STATUS_CHALLENGE;
+        eStatus _status;
 
-        std::string m_login;
-        std::string m_safelogin;
-        std::string m_securityInfo;
-        std::string m_lastIP;
-        std::string m_email;
+        std::string _login;
+        std::string _safelogin;
+        std::string securityInfo;
+        std::string _lastIP;
+        std::string _email;
 
-        BigNumber m_serverSecuritySalt;
-        LockFlag m_lockFlags = NONE;
-        uint32 m_gridSeed = 0;
-        uint32 m_geoUnlockPIN = 0;
+        BigNumber serverSecuritySalt;
+        LockFlag lockFlags;
+        uint32 gridSeed;
+        uint32_t _geoUnlockPIN;
 
         static constexpr uint32 Win = 'Win';
         static constexpr uint32 OSX = 'OSX';
@@ -116,27 +118,27 @@ class AuthSocket: public BufferedSocket
         static constexpr uint32 X86 = 'x86';
         static constexpr uint32 PPC = 'PPC';
 
-        uint32 m_os = 0;
-        uint32 m_platform = 0;
-        uint32 m_accountId = 0;
-        uint32 m_lastRealmListRequest = 0;
+        uint32 _os;
+        uint32 _platform;
+        uint32 _accountId;
+        uint32 _lastRealmListRequest;
 
         // Since GetLocaleByName() is _NOT_ bijective, we have to store the locale as a string. Otherwise we can't differ
         // between enUS and enGB, which is important for the patch system
-        std::string m_localizationName;
-        uint16 m_build = 0;
+        std::string _localizationName;
+        uint16 _build;
 
         AccountTypes GetSecurityOn(uint32 realmId) const;
         void LoadAccountSecurityLevels(uint32 accountId);
         bool GeographicalLockCheck();
 
-        AccountTypes m_accountDefaultSecurityLevel = SEC_PLAYER;
+        AccountTypes _accountDefaultSecurityLevel;
         typedef std::map<uint32, AccountTypes> AccountSecurityMap;
-        AccountSecurityMap m_accountSecurityOnRealm;
+        AccountSecurityMap _accountSecurityOnRealm;
 
-        ACE_HANDLE m_patch = ACE_INVALID_HANDLE;
+        ACE_HANDLE patch_;
 
         void InitPatch();
 };
 #endif
-// @}
+/// @}

@@ -32,8 +32,7 @@ DelayExecutor* DelayExecutor::instance()
     return &MaNGOS::Singleton<DelayExecutor, DelayExecutorLock>::Instance();
 }
 
-DelayExecutor::DelayExecutor()
-    : pre_svc_hook_(0), post_svc_hook_(0), activated_(false)
+DelayExecutor::DelayExecutor() : pre_svc_hook_(0), post_svc_hook_(0), activated_(false)
 {
 }
 
@@ -41,6 +40,7 @@ DelayExecutor::~DelayExecutor()
 {
     delete pre_svc_hook_;
     delete post_svc_hook_;
+
     deactivate();
 }
 

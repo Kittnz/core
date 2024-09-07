@@ -27,7 +27,6 @@
 #include "Policies/Singleton.h"
 #include "Map.h"
 #include "GridStates.h"
-#include <condition_variable>
 
 class BattleGround;
 
@@ -59,15 +58,15 @@ struct MapID
     explicit MapID(uint32 id) : nMapId(id), nInstanceId(0) {}
     MapID(uint32 id, uint32 instid) : nMapId(id), nInstanceId(instid) {}
 
-    bool operator<(MapID const& val) const
+    bool operator<(const MapID& val) const
     {
-        if (nMapId == val.nMapId)
+        if(nMapId == val.nMapId)
             return nInstanceId < val.nInstanceId;
 
         return nMapId < val.nMapId;
     }
 
-    bool operator==(MapID const& val) const { return nMapId == val.nMapId && nInstanceId == val.nInstanceId; }
+    bool operator==(const MapID& val) const { return nMapId == val.nMapId && nInstanceId == val.nInstanceId; }
 
     uint32 nMapId;
     uint32 nInstanceId;
@@ -88,15 +87,14 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         typedef std::map<MapID, Map* > MapMapType;
 
         uint32 GetContinentInstanceId(uint32 mapId, float x, float y, bool* transitionArea = nullptr);
-        Map* CreateMap(uint32, WorldObject const* obj);
+        Map* CreateMap(uint32, const WorldObject* obj);
         Map* CreateBgMap(uint32 mapid, BattleGround* bg);
         Map* CreateTestMap(uint32 mapid, bool instanced, float posX, float posY);
         void DeleteTestMap(Map* map);
         Map* FindMap(uint32 mapid, uint32 instanceId = 0) const;
-        void ScheduleNewWorldOnFarTeleport(Player* pPlayer);
-        void CancelInstanceCreationForPlayer(Player* pPlayer) { m_scheduledNewInstancesForPlayers.erase(pPlayer); }
 
-        void UpdateGridState(grid_state_t state, Map& map, NGridType& ngrid, GridInfo& ginfo, uint32 const& x, uint32 const& y, uint32 const& t_diff);
+
+        void UpdateGridState(grid_state_t state, Map& map, NGridType& ngrid, GridInfo& ginfo, const uint32 &x, const uint32 &y, const uint32 &t_diff);
 
         // only const version for outer users
         void DeleteInstance(uint32 mapid, uint32 instanceId);
@@ -106,7 +104,7 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
 
         void SetGridCleanUpDelay(uint32 t)
         {
-            if (t < MIN_GRID_DELAY)
+            if( t < MIN_GRID_DELAY )
                 i_gridCleanUpDelay = MIN_GRID_DELAY;
             else
                 i_gridCleanUpDelay = t;
@@ -114,14 +112,14 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
 
         void SetMapUpdateInterval(uint32 t)
         {
-            if (t > MIN_MAP_UPDATE_DELAY)
+            if( t > MIN_MAP_UPDATE_DELAY )
                 t = MIN_MAP_UPDATE_DELAY;
 
             i_timer.SetInterval(t);
             i_timer.Reset();
         }
 
-        //void LoadGrid(int mapid, int instId, float x, float y, WorldObject const* obj, bool no_unload = false);
+        //void LoadGrid(int mapid, int instId, float x, float y, const WorldObject* obj, bool no_unload = false);
         void UnloadAll();
 
         static bool ExistMapAndVMap(uint32 mapid, float x, float y);
@@ -152,7 +150,7 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         {
             // fmod only supports positive numbers. Thus we have
             // to emulate negative numbers
-            if (o < 0)
+            if(o < 0)
             {
                 float mod = o *-1;
                 mod = fmod(mod, 2.0f*M_PI_F);
@@ -169,9 +167,10 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         void InitMaxInstanceId();
         void InitializeVisibilityDistanceInfo();
 
-        // statistics
+        /* statistics */
         uint32 GetNumInstances();
         uint32 GetNumPlayersInInstances();
+
 
         //get list of all maps
         const MapMapType& Maps() const { return i_maps; }
@@ -202,14 +201,14 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         MapManager();
         ~MapManager();
 
-        MapManager(MapManager const&);
-        MapManager& operator=(MapManager const&);
+        MapManager(const MapManager &);
+        MapManager& operator=(const MapManager &);
 
         void InitStateMachine();
         void DeleteStateMachine();
 
-        Map* CreateInstance(uint32 id, Player* player);
-        DungeonMap* CreateDungeonMap(uint32 id, uint32 InstanceId, DungeonPersistentState* save = nullptr);
+        Map* CreateInstance(uint32 id, Player * player);
+        DungeonMap* CreateDungeonMap(uint32 id, uint32 InstanceId, DungeonPersistentState *save = nullptr);
         BattleGroundMap* CreateBattleGroundMap(uint32 id, uint32 InstanceId, BattleGround* bg);
 
         uint32 i_gridCleanUpDelay;
@@ -217,10 +216,10 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
         IntervalTimer i_timer;
 
         uint32 i_MaxInstanceId;
-        int             i_maxContinentThread = 0;
+        int i_maxContinentThread = 0;
 
-        mutable std::mutex      m_continentMutex;
-        mutable std::condition_variable      m_continentCV;
+        mutable std::mutex m_continentMutex;
+        mutable std::condition_variable m_continentCV;
         std::atomic<int> i_continentUpdateFinished{0};
 
         std::unique_ptr<ThreadPool> m_threads;
@@ -229,12 +228,8 @@ class MapManager : public MaNGOS::Singleton<MapManager, MaNGOS::ClassLevelLockab
 
         // Instanced continent zones
         const static int LAST_CONTINENT_ID = 2;
-        std::mutex    m_scheduledInstanceSwitches_lock[LAST_CONTINENT_ID];
+        std::mutex m_scheduledInstanceSwitches_lock[LAST_CONTINENT_ID];
         std::map<Player*, uint16 /* new instance */> m_scheduledInstanceSwitches[LAST_CONTINENT_ID]; // 2 continents
-
-        // Handle creation of new maps for teleport while continents are being updated.
-        void CreateNewInstancesForPlayers();
-        std::unordered_set<Player*> m_scheduledNewInstancesForPlayers;
 
         std::mutex m_scheduledFarTeleportsLock;
         typedef std::map<Player*, ScheduledTeleportData*> ScheduledTeleportMap;

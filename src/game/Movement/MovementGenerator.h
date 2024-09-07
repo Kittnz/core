@@ -46,7 +46,7 @@ class MovementGenerator
         // called after return movement generator to top position (after remove above movement generator)
         virtual void Reset(Unit &) = 0;
 
-        virtual bool Update(Unit &, uint32 const& time_diff) = 0;
+        virtual bool Update(Unit &, const uint32 &time_diff) = 0;
         // Should be trade-safe! No AI call, no other unit modification, etc ...
         // Can use pathfinding things (use to compute paths)
         virtual void UpdateAsync(Unit&, uint32) {}
@@ -74,37 +74,36 @@ class MovementGeneratorMedium : public MovementGenerator
     public:
         void Initialize(Unit &u) override
         {
-            //u->AssertIsType<T>();
             (static_cast<D*>(this))->Initialize(*((T*)&u));
         }
+
         void Finalize(Unit &u) override
         {
-            //u->AssertIsType<T>();
             (static_cast<D*>(this))->Finalize(*((T*)&u));
         }
+
         void Interrupt(Unit &u) override
         {
-            //u->AssertIsType<T>();
             (static_cast<D*>(this))->Interrupt(*((T*)&u));
         }
+
         void Reset(Unit &u) override
         {
-            //u->AssertIsType<T>();
             (static_cast<D*>(this))->Reset(*((T*)&u));
         }
-        bool Update(Unit &u, uint32 const& time_diff) override
+
+        bool Update(Unit &u, const uint32 &time_diff) override
         {
-            //u->AssertIsType<T>();
             return (static_cast<D*>(this))->Update(*((T*)&u), time_diff);
         }
+
         void UpdateAsync(Unit &u, uint32 time_diff) override
         {
-            //u->AssertIsType<T>();
             (static_cast<D*>(this))->UpdateAsync(*((T*)&u), time_diff);
         }
+
         bool GetResetPosition(Unit& u, float& x, float& y, float& z) override
         {
-            //u->AssertIsType<T>();
             return (static_cast<D*>(this))->GetResetPosition(*((T*)&u), x, y, z);
         }
 
@@ -113,7 +112,7 @@ class MovementGeneratorMedium : public MovementGenerator
         void Finalize(T &u);
         void Interrupt(T &u);
         void Reset(T &u);
-        bool Update(T &u, uint32 const& time_diff);
+        bool Update(T &u, const uint32 &time_diff);
         void UpdateAsync(T &/*u*/, uint32 /*time_diff*/) {}
 
         // not need always overwrites

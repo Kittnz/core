@@ -22,10 +22,14 @@
 #include "AddonHandler.h"
 #include "Database/DatabaseEnv.h"
 #include "Opcodes.h"
-#include "WorldPacket.h"
 #include "Log.h"
 #include "Policies/SingletonImp.h"
+
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
 #include "zlib.h"
+#endif
 
 INSTANTIATE_SINGLETON_1(AddonHandler);
 
@@ -37,7 +41,7 @@ AddonHandler::~AddonHandler()
 {
 }
 
-bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
+bool AddonHandler::BuildAddonPacket(WorldPacket *Source, WorldPacket *Target)
 {
     ByteBuffer AddOnPacked;
     uLongf AddonRealSize;
@@ -56,7 +60,7 @@ bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
 
     if (TempValue > 0xFFFFF)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSession::ReadAddonsInfo addon info too big, size %u", TempValue);
+        sLog.outError("WorldSession::ReadAddonsInfo addon info too big, size %u", TempValue);
         return false;
     }
 
@@ -68,10 +72,8 @@ bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
 
     if (!uncompress(const_cast<uint8*>(AddOnPacked.contents()), &AddonRealSize, const_cast<uint8*>((*Source).contents() + CurrentPosition), (*Source).size() - CurrentPosition) != Z_OK)
     {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
         Target->Initialize(SMSG_ADDON_INFO);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
 
         unsigned char tdata[256] =
         {
@@ -102,7 +104,7 @@ bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
 
             AddOnPacked >> crc >> unk7 >> unk6;
 
-            //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "ADDON: Name:%s CRC:%x Unknown1 :%x Unknown2 :%x", AddonNames.c_str(), crc, unk7, unk6);
+            //DEBUG_LOG("ADDON: Name:%s CRC:%x Unknown1 :%x Unknown2 :%x", AddonNames.c_str(), crc, unk7, unk6);
 
             *Target << (uint8)2;
 
@@ -125,43 +127,10 @@ bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
                 // String, 256
             }
         }
-#else
-        uint32 Unknown1;
-        uint8 Unknown0;
-
-        AddOnPacked >> Unknown0;
-        AddOnPacked >> Unknown1;
-        while (AddOnPacked.rpos() < AddOnPacked.size())
-        {
-            std::string AddonNames;
-            uint8 unk6;
-            uint64 crc;
-
-            AddOnPacked >> AddonNames;
-
-            AddOnPacked >> crc >> unk6;
-
-            //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "ADDON: Name:%s CRC:%llx Unknown1 :%x", AddonNames.c_str(), crc, unk6);
-
-            if (crc == 0x4C1C776D01LL)  // standard addon CRC
-            {
-                *Target << uint8(0) << uint8(2) << uint8(1) << uint8(0) << uint32(0);
-            }
-            else // if addon is custom
-            {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
-                *Target << uint8(0x00) << uint8(0x01) << uint8(0x00) << uint8(0x01);
-#else
-                *Target << uint8(0x00) << uint8(0x0) << uint8(0x00) << uint8(0x0);
-#endif
-            }
-        }
-#endif
-#endif
     }
     else
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Addon packet uncompress error :(");
+        sLog.outError("Addon packet uncompress error :(");
         return false;
     }
     return true;

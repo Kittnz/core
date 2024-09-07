@@ -24,7 +24,6 @@
   */
 
 #include "BufferedSocket.h"
-#include "Config/Config.h"
 
 #include <ace/OS_NS_string.h>
 #include <ace/INET_Addr.h>
@@ -48,12 +47,6 @@ BufferedSocket::BufferedSocket(void):
 {
     if(Base::open(arg) == -1)
         return -1;
-
-    if (time_t timer = sConfig.GetIntDefault("MaxSessionDuration", 300))
-    {
-        ACE_Time_Value interval(timer);
-        Base::reactor_timer_interface()->schedule_timer(this, NULL, interval);
-    }
 
     ACE_INET_Addr addr;
 
@@ -255,19 +248,8 @@ bool BufferedSocket::send(const char *buf, size_t len)
     return n == space ? 1 : 0;
 }
 
-/*virtual*/ int BufferedSocket::handle_close(ACE_HANDLE /*h*/, ACE_Reactor_Mask /*m*/)
+int BufferedSocket::handle_close(ACE_HANDLE /*h*/, ACE_Reactor_Mask /*m*/)
 {
-    this->OnClose();
-
-    Base::handle_close();
-
-    return 0;
-}
-
-int BufferedSocket::handle_timeout(ACE_Time_Value const& current_time, void const* act)
-{
-    this->close_connection();
-
     this->OnClose();
 
     Base::handle_close();

@@ -38,11 +38,6 @@
 // Target server framerate is 1000/WORLD_SLEEP_CONST
 #define WORLD_SLEEP_CONST 50
 
-#ifdef WIN32
-#include "ServiceWin32.h"
-extern int m_ServiceStatus;
-#endif
-
 // Heartbeat for the World
 void WorldRunnable::operator()()
 {
@@ -68,7 +63,7 @@ void WorldRunnable::operator()()
         auto diff = WorldTimer::getMSTimeDiff(prevTime, currTime);
 
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
-            sLog.Out(LOG_PERFORMANCE, LOG_LVL_MINIMAL, "Slow world update: %ums", diff);
+            sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
 
         // ANTICRASH
         if (sWorld.GetAnticrashRearmTimer())
@@ -82,7 +77,7 @@ void WorldRunnable::operator()()
             {
                 anticrashRearmTimer = 0;
                 Master::ArmAnticrash();
-                sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Anticrash rearmed");
+                sLog.outInfo("Anticrash rearmed");
             }
             else
                 anticrashRearmTimer -= diff;
@@ -104,25 +99,20 @@ void WorldRunnable::operator()()
 
         if (updateTime < WORLD_SLEEP_CONST)
             std::this_thread::sleep_for(std::chrono::milliseconds(WORLD_SLEEP_CONST - updateTime));
-
-        #ifdef WIN32
-            if (m_ServiceStatus == 0) World::StopNow(SHUTDOWN_EXIT_CODE);
-            while (m_ServiceStatus == 2) Sleep(1000);
-        #endif
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Shutting down world...");
+    sLog.outString("Shutting down world...");
     sWorld.Shutdown();
 
     // unload battleground templates before different singletons destroyed
     sBattleGroundMgr.DeleteAllBattleGrounds();
 
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Stopping network threads...");
+    sLog.outString("Stopping network threads...");
     sWorldSocketMgr->StopNetwork();
 
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Unloading all maps...");
-    sMapMgr.UnloadAll();                                    // unload all grids (including locked in memory)
+    sLog.outString("Unloading all maps...");
+    sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
 
     // End the database thread
-    WorldDatabase.ThreadEnd();                              // free mySQL thread resources
+    WorldDatabase.ThreadEnd(); // free mySQL thread resources
 }

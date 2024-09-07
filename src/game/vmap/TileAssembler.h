@@ -47,8 +47,8 @@ namespace VMAP
             {
                 iRotation = G3D::Matrix3::fromEulerAnglesZYX(G3D::pi() * iDir.y / 180.f, G3D::pi() * iDir.x / 180.f, G3D::pi() * iDir.z / 180.f);
             }
-            G3D::Vector3 transform(G3D::Vector3 const& pIn) const;
-            void moveToBasePos(G3D::Vector3 const& pBasePos) { iPos -= pBasePos; }
+            G3D::Vector3 transform(const G3D::Vector3& pIn) const;
+            void moveToBasePos(const G3D::Vector3& pBasePos) { iPos -= pBasePos; }
     };
 
     typedef std::map<uint32, ModelSpawn> UniqueEntryMap;
@@ -85,7 +85,7 @@ namespace VMAP
         uint32 RootWMOID;
         std::vector<GroupModel_Raw> groupsArray;
 
-        bool Read(char const* path);
+        bool Read(const char* path);
     };
 
     class TileAssembler
@@ -93,6 +93,9 @@ namespace VMAP
         private:
             std::string iDestDir;
             std::string iSrcDir;
+            bool (*iFilterMethod)(char* pName);
+            G3D::Table<std::string, unsigned int > iUniqueNameIds;
+            unsigned int iCurrentUniqueNameId;
             MapData mapData;
             std::set<std::string> spawnedModelFiles;
 
@@ -106,6 +109,7 @@ namespace VMAP
 
             void exportGameobjectModels();
             bool convertRawFile(std::string const& pModelFilename);
+            void setModelNameFilterMethod(bool (*pFilterMethod)(char* pName)) { iFilterMethod = pFilterMethod; }
     };
 }                                                           // VMAP
 #endif                                                      /*_TILEASSEMBLER_H_*/

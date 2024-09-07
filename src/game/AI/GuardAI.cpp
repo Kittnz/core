@@ -21,8 +21,9 @@
 
 #include "GuardAI.h"
 #include "Creature.h"
+#include "Player.h"
 
-int GuardAI::Permissible(Creature const* creature)
+int GuardAI::Permissible(const Creature *creature)
 {
     if (creature->IsGuard())
         return PERMIT_BASE_SPECIAL;
@@ -30,12 +31,12 @@ int GuardAI::Permissible(Creature const* creature)
     return PERMIT_BASE_NO;
 }
 
-GuardAI::GuardAI(Creature* c) : CreatureAI(c)
+GuardAI::GuardAI(Creature *c) : CreatureAI(c)
 {
 }
 
 // Returns whether the Unit is currently attacking other players or friendly npcs.
-bool GuardAI::IsAttackingPlayerOrFriendly(Unit const* pWho) const
+bool GuardAI::IsAttackingPlayerOrFriendly(const Unit* pWho) const
 {
     if (pWho->IsPvPContested())
         return true;
@@ -49,7 +50,7 @@ bool GuardAI::IsAttackingPlayerOrFriendly(Unit const* pWho) const
     return false;
 }
 
-void GuardAI::MoveInLineOfSight(Unit* pWho)
+void GuardAI::MoveInLineOfSight(Unit *pWho)
 {
     if (m_creature->GetVictim())
         return;
@@ -66,8 +67,12 @@ void GuardAI::MoveInLineOfSight(Unit* pWho)
     {
         // Assignment, not a typo.
         if (isAttackingFriend = IsAttackingPlayerOrFriendly(pWho))
-            if ((attackRadius < 30.0f))
+        {
+            if (attackRadius < 30.0f)
                 attackRadius = 30.0f;
+        }
+        else if (!pWho->IsPvP()) // lower aggro distance against non flagged players
+            attackRadius /= 2.0f;
     }
 
     if (!m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None))
@@ -81,7 +86,12 @@ void GuardAI::MoveInLineOfSight(Unit* pWho)
     }
 }
 
-void GuardAI::UpdateAI(uint32 const uiDiff)
+void GuardAI::EnterCombat(Unit *)
+{
+    m_creature->CallForHelp(30.0f);
+}
+
+void GuardAI::UpdateAI(const uint32 uiDiff)
 {
     if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         return;
@@ -92,3 +102,18 @@ void GuardAI::UpdateAI(uint32 const uiDiff)
     DoMeleeAttackIfReady();
 }
 
+void GuardAI::AttackStart(Unit *pWho)
+{
+    if (!pWho)
+        return;
+
+    if (m_creature->Attack(pWho, m_bMeleeAttack))
+    {
+        m_creature->AddThreat(pWho);
+        m_creature->SetInCombatWith(pWho);
+        pWho->SetInCombatWith(m_creature);
+
+        if (m_bCombatMovement)
+            m_creature->GetMotionMaster()->MoveChase(pWho);
+    }
+}

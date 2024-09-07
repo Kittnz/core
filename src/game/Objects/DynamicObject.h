@@ -27,9 +27,9 @@
 
 enum DynamicObjectType
 {
-    DYNAMIC_OBJECT_PORTAL           = 0x0,      // unused
-    DYNAMIC_OBJECT_AREA_SPELL       = 0x1,
-    DYNAMIC_OBJECT_FARSIGHT_FOCUS   = 0x2,
+    DYNAMIC_OBJECT_PORTAL = 0x0, // unused
+    DYNAMIC_OBJECT_AREA_SPELL = 0x1,
+    DYNAMIC_OBJECT_FARSIGHT_FOCUS = 0x2,
 };
 
 class SpellEntry;
@@ -50,31 +50,28 @@ class DynamicObject : public WorldObject
         SpellEffectIndex GetEffIndex() const { return m_effIndex; }
         uint32 GetDuration() const { return m_aliveDuration; }
         ObjectGuid const& GetCasterGuid() const { return GetGuidValue(DYNAMICOBJECT_CASTER); }
-        SpellCaster* GetCaster() const;
+        WorldObject* GetCaster() const;
         Unit* GetUnitCaster() const;
-        Player* GetAffectingPlayer() const final;
-        bool IsCharmerOrOwnerPlayerOrPlayerItself() const final { return GetCasterGuid().IsPlayer(); }
         float GetRadius() const { return m_radius; }
         DynamicObjectType GetType() const { return (DynamicObjectType)GetByteValue(DYNAMICOBJECT_BYTES,0); }
-        bool NeedsRefresh(Unit* unit) const;
-        bool IsChanneled() const { return m_channeled; }
+        bool NeedsRefresh(Unit *unit) const;
         void AddAffected(Unit* unit);
         void RemoveAffected(Unit* unit);
         void Delay(int32 delaytime);
-        char const* GetName() const final { return "DynamicObject"; }
 
         bool IsHostileTo(WorldObject const* target) const override;
         bool IsFriendlyTo(WorldObject const* target) const override;
-        uint32 GetFactionTemplateId() const final ;
+        uint32 GetFactionTemplateId() const final;
+        uint32 GetLevel() const final;
 
-        float GetObjectBoundingRadius() const override      // overwrite WorldObject version
+        float GetObjectBoundingRadius() const override // overwrite WorldObject version
         {
             return 0.0f;                                    // dynamic object not have real interact size
         }
 
         bool IsVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const override;
 
-        GridReference<DynamicObject>& GetGridRef() { return m_gridRef; }
+        GridReference<DynamicObject> &GetGridRef() { return m_gridRef; }
 
     protected:
         uint32 m_spellId;
@@ -82,7 +79,6 @@ class DynamicObject : public WorldObject
         int32 m_aliveDuration;
         float m_radius;                                     // radius apply persistent effect, 0 = no persistent effect
         bool m_positive;
-        bool m_channeled;
         AffectedMap m_affected;
     private:
         GridReference<DynamicObject> m_gridRef;

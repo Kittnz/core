@@ -23,17 +23,12 @@ set (shared_SRCS
     Errors.h
     LockedQueue.h
     Log.h
-    migrations_list.h
     PosixDaemon.h
-    ProgressBar.h
-    Progression.h
     revision.h
-    ServiceWin32.h
     SystemConfig.h
     ThreadPool.h
     Timer.h
     Util.h
-    WheatyExceptionReport.h
     WorldPacket.h
     Auth/ARC4.h
     Auth/AuthCrypt.h
@@ -45,8 +40,8 @@ set (shared_SRCS
     Auth/Sha1.h
     Config/Config.h
     Config/ConfigEnv.h
+    Database/AutoUpdater.hpp
     Database/Database.h
-    Database/DatabaseCallback.h
     Database/DatabaseEnv.h
     Database/DatabaseImpl.h
     Database/DatabaseMysql.h
@@ -64,20 +59,13 @@ set (shared_SRCS
     Database/SqlPreparedStatement.h
     Database/SQLStorage.h
     Database/SQLStorageImpl.h
-    Multithreading/Messager.h
-    SRP6/SRP6.h
-    nonstd/optional.hpp
-    ByteBuffer.cpp
     Common.cpp
     DelayExecutor.cpp
     Log.cpp
     PosixDaemon.cpp
-    ProgressBar.cpp
-    ServiceWin32.cpp
     ThreadPool.cpp
     Util.cpp
     Duration.h
-    WheatyExceptionReport.cpp
     Auth/ARC4.cpp
     Auth/AuthCrypt.cpp
     Auth/base32.cpp
@@ -86,6 +74,7 @@ set (shared_SRCS
     Auth/HMACSHA1.cpp
     Auth/Sha1.cpp
     Config/Config.cpp
+    Database/AutoUpdater.cpp
     Database/Database.cpp
     Database/DatabaseMysql.cpp
     Database/DatabasePostgre.cpp
@@ -97,8 +86,6 @@ set (shared_SRCS
     Database/SqlOperations.cpp
     Database/SqlPreparedStatement.cpp
     Database/SQLStorage.cpp
-    Multithreading/Messager.cpp
-    SRP6/SRP6.cpp
 )
 
 if(USE_LIBCURL)
@@ -117,16 +104,15 @@ if(WIN32)
     PosixDaemon.h
     PosixDaemon.cpp
     revision.h
-    migrations_list.h
   )
-  
-  if (NOT MSVC)
-    list(REMOVE_ITEM shared_SRCS
-      WheatyExceptionReport.cpp
-      WheatyExceptionReport.h
-    )
-  endif()
-  
+
+if (NOT MSVC)
+  list(REMOVE_ITEM shared_SRCS
+    WheatyExceptionReport.cpp
+    WheatyExceptionReport.h
+  )
+endif()
+
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D__ACE_INLINE__")
 else()
   list(REMOVE_ITEM shared_SRCS
@@ -135,7 +121,6 @@ else()
     ServiceWin32.cpp
     ServiceWin32.h
     revision.h
-    migrations_list.h
   )
 endif()
 
@@ -173,7 +158,7 @@ include_directories(
 
 if(WIN32)
   include_directories(
-    ${CMAKE_SOURCE_DIR}/dep/windows/include
+    ${CMAKE_SOURCE_DIR}/dep/include-windows
   )
 endif()
 
@@ -183,11 +168,22 @@ add_library(shared STATIC
 
 if(UNIX)
   find_package(Threads)
-  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
+      message(WARNING "Core requires GCC of 8 or higher.")
+    elseif (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
+      target_link_libraries(shared PUBLIC stdc++fs)
+    endif()
+  endif()
+
+  target_link_libraries(shared PUBLIC ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
 endif(UNIX)
 
 if(MINGW)
-  target_link_libraries(shared ${ACE_LIBRARIES} -lws2_32)
+  target_link_libraries(shared PUBLIC ${ACE_LIBRARIES} -lws2_32)
 endif()
+
+target_link_libraries(shared PUBLIC re2::re2)
+
 
 SET_TARGET_PROPERTIES (shared PROPERTIES FOLDER "Game Libs")

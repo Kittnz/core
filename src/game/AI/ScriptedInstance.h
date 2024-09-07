@@ -5,12 +5,10 @@
 #ifndef SC_INSTANCE_H
 #define SC_INSTANCE_H
 
+#include "Creature.h"
+#include "GameObject.h"
 #include "InstanceData.h"
 #include "Map.h"
-#include "ScriptMgr.h"
-
-class GameObject;
-class Creature;
 
 enum EncounterState
 {
@@ -21,11 +19,11 @@ enum EncounterState
     SPECIAL       = 4
 };
 
-#define OUT_SAVE_INST_DATA             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Saving Instance Data for Instance %s (Map %d, Instance Id %d)", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
-#define OUT_SAVE_INST_DATA_COMPLETE    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Saving Instance Data for Instance %s (Map %d, Instance Id %d) completed.", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
-#define OUT_LOAD_INST_DATA(a)          sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Loading Instance Data for Instance %s (Map %d, Instance Id %d). Input is '%s'", instance->GetMapName(), instance->GetId(), instance->GetInstanceId(), a)
-#define OUT_LOAD_INST_DATA_COMPLETE    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Instance Data Load for Instance %s (Map %d, Instance Id: %d) is complete.",instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
-#define OUT_LOAD_INST_DATA_FAIL        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unable to load Instance Data for Instance %s (Map %d, Instance Id: %d).",instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
+#define OUT_SAVE_INST_DATA             sLog.outDebug("Saving Instance Data for Instance %s (Map %d, Instance Id %d)", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
+#define OUT_SAVE_INST_DATA_COMPLETE    sLog.outDebug("Saving Instance Data for Instance %s (Map %d, Instance Id %d) completed.", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
+#define OUT_LOAD_INST_DATA(a)          sLog.outDebug("Loading Instance Data for Instance %s (Map %d, Instance Id %d). Input is '%s'", instance->GetMapName(), instance->GetId(), instance->GetInstanceId(), a)
+#define OUT_LOAD_INST_DATA_COMPLETE    sLog.outDebug("Instance Data Load for Instance %s (Map %d, Instance Id: %d) is complete.",instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
+#define OUT_LOAD_INST_DATA_FAIL        sLog.outError("Unable to load Instance Data for Instance %s (Map %d, Instance Id: %d).",instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
 
 class ScriptedInstance : public InstanceData
 {
@@ -49,12 +47,12 @@ class ScriptedInstance : public InstanceData
         //sends world state update to all players in instance
         void DoUpdateWorldState(uint32 uiStateId, uint32 uiStateData);
         std::string GenSaveData(uint32* encounters, uint32 maxIndex);
-        void LoadSaveData(char const* pStr, uint32* encounters, uint32 maxIndex);
+        void LoadSaveData(const char* pStr, uint32* encounters, uint32 maxIndex);
 
         // Get a Player from map
         Player* GetPlayerInMap(bool bOnlyAlive = false, bool bCanBeGamemaster = true);
 
-        // Wrapper for simulating map-wide text in this instance. It is expected that the Creature is stored in m_mNpcEntryGuidStore if loaded.
+        /// Wrapper for simulating map-wide text in this instance. It is expected that the Creature is stored in m_mNpcEntryGuidStore if loaded.
         void DoOrSimulateScriptTextForThisInstance(int32 iTextEntry, uint32 uiCreatureEntry)
         {
           // Prevent debug output in GetSingleCreatureFromStorage
@@ -64,8 +62,8 @@ class ScriptedInstance : public InstanceData
     protected:
         // Storage for GO-Guids and NPC-Guids
         typedef std::map<uint32, ObjectGuid> EntryGuidMap;
-        EntryGuidMap m_mGoEntryGuidStore;                   // Store unique GO-Guids by entry
-        EntryGuidMap m_mNpcEntryGuidStore;                  // Store unique NPC-Guids by entry
+        EntryGuidMap m_mGoEntryGuidStore;                   ///< Store unique GO-Guids by entry
+        EntryGuidMap m_mNpcEntryGuidStore;                  ///< Store unique NPC-Guids by entry
 };
 
 class ScriptedInstance_PTR : public ScriptedInstance
@@ -79,25 +77,25 @@ protected:
 };
 
 
-// A static const array of this structure must be handled to DialogueHelper
+/// A static const array of this structure must be handled to DialogueHelper
 struct SIDialogueEntry
 {
-    int32 iTextEntry;                                       // To be said text entry
-    uint32 uiSayerEntry;                                    // Entry of the mob who should say
-    uint32 uiTimer;                                         // Time delay until next text of array is said (0 stops)
+    int32 iTextEntry;                                       ///< To be said text entry
+    uint32 uiSayerEntry;                                    ///< Entry of the mob who should say
+    uint32 uiTimer;                                         ///< Time delay until next text of array is said (0 stops)
 };
 
-// A static const array of this structure must be handled to DialogueHelper
+/// A static const array of this structure must be handled to DialogueHelper
 struct SIDialogueEntryTwoSide
 {
-    int32 iTextEntry;                                       // To be said text entry (first side)
-    uint32 uiSayerEntry;                                    // Entry of the mob who should say (first side)
-    int32 iTextEntryAlt;                                    // To be said text entry (second side)
-    uint32 uiSayerEntryAlt;                                 // Entry of the mob who should say (second side)
-    uint32 uiTimer;                                         // Time delay until next text of array is said (0 stops)
+    int32 iTextEntry;                                       ///< To be said text entry (first side)
+    uint32 uiSayerEntry;                                    ///< Entry of the mob who should say (first side)
+    int32 iTextEntryAlt;                                    ///< To be said text entry (second side)
+    uint32 uiSayerEntryAlt;                                 ///< Entry of the mob who should say (second side)
+    uint32 uiTimer;                                         ///< Time delay until next text of array is said (0 stops)
 };
 
-// Helper class handling a dialogue given as static const array of DialogueEntry or DialogueEntryTwoSide
+/// Helper class handling a dialogue given as static const array of DialogueEntry or DialogueEntryTwoSide
 class DialogueHelper
 {
 public:
@@ -106,9 +104,9 @@ public:
     // The array MUST be terminated by {0,0,0,0,0}
     DialogueHelper(SIDialogueEntryTwoSide const* aDialogueTwoSide);
 
-    // Function to initialize the dialogue helper for instances. If not used with instances, GetSpeakerByEntry MUST be overwritten to obtain the speakers
+    /// Function to initialize the dialogue helper for instances. If not used with instances, GetSpeakerByEntry MUST be overwritten to obtain the speakers
     void InitializeDialogueHelper(ScriptedInstance* pInstance, bool bCanSimulateText = false) { m_pInstance = pInstance; m_bCanSimulate = bCanSimulateText; }
-    // Set if take first entries or second entries
+    /// Set if take first entries or second entries
     void SetDialogueSide(bool bIsFirstSide) { m_bIsFirstSide = bIsFirstSide; }
 
     void StartNextDialogueText(int32 iTextEntry);
@@ -116,9 +114,9 @@ public:
     void DialogueUpdate(uint32 uiDiff);
 
 protected:
-    // Will be called when a dialogue step was done
+    /// Will be called when a dialogue step was done
     virtual void JustDidDialogueStep(int32 /*iEntry*/) {}
-    // Will be called to get a speaker, MUST be implemented if not used in instances
+    /// Will be called to get a speaker, MUST be implemented if not used in instances
     virtual Creature* GetSpeakerByEntry(uint32 /*uiEntry*/) { return nullptr; }
 
     ScriptedInstance* m_pInstance;

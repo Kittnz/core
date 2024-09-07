@@ -15,11 +15,11 @@
 
 struct ObjectDistanceOrder
 {
-    Unit const* m_pSource;
+    const Unit* m_pSource;
 
-    ObjectDistanceOrder(Unit const* pSource) : m_pSource(pSource) {};
+    ObjectDistanceOrder(const Unit* pSource) : m_pSource(pSource) {};
 
-    bool operator()(WorldObject const* pLeft, WorldObject const* pRight) const
+    bool operator()(const WorldObject* pLeft, const WorldObject* pRight) const
     {
         return m_pSource->GetDistanceOrder(pLeft, pRight);
     }
@@ -27,11 +27,11 @@ struct ObjectDistanceOrder
 
 struct ObjectDistanceOrderReversed
 {
-    Unit const* m_pSource;
+    const Unit* m_pSource;
 
-    ObjectDistanceOrderReversed(Unit const* pSource) : m_pSource(pSource) {};
+    ObjectDistanceOrderReversed(const Unit* pSource) : m_pSource(pSource) {};
 
-    bool operator()(WorldObject const* pLeft, WorldObject const* pRight) const
+    bool operator()(const WorldObject* pLeft, const WorldObject* pRight) const
     {
         return !m_pSource->GetDistanceOrder(pLeft, pRight);
     }
@@ -40,10 +40,11 @@ struct ObjectDistanceOrderReversed
 GameObject* GetClosestGameObjectWithEntry(WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 Creature* GetClosestCreatureWithEntry(WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 
-void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
-void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, WorldObject* pSource, std::vector<uint32> const& entries, float fMaxSearchRange);
+void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList , WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
-void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, std::vector<uint32> const& entries, float fMaxSearchRange);
+void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, const std::vector<uint32>& entries, float fMaxSearchRange);
+
+void GetHostileCreaturesListInRange(std::list<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange);
 
 /*
 //Used in:
@@ -67,7 +68,7 @@ class AllFriendlyCreaturesInGrid
 class AllGameObjectsWithEntryInRangeCheck
 {
     public:
-        AllGameObjectsWithEntryInRangeCheck(WorldObject const* pObject, uint32 uiEntry, float fMaxRange) : m_pObject(pObject), m_uiEntry(uiEntry), m_fRange(fMaxRange) {}
+        AllGameObjectsWithEntryInRangeCheck(const WorldObject* pObject, uint32 uiEntry, float fMaxRange) : m_pObject(pObject), m_uiEntry(uiEntry), m_fRange(fMaxRange) {}
         bool operator() (GameObject* pGo)
         {
             if (pGo->GetEntry() == m_uiEntry && m_pObject->IsWithinDist(pGo,m_fRange,false))
@@ -77,7 +78,7 @@ class AllGameObjectsWithEntryInRangeCheck
         }
 
     private:
-        WorldObject const* m_pObject;
+        const WorldObject* m_pObject;
         uint32 m_uiEntry;
         float m_fRange;
 };
@@ -85,7 +86,7 @@ class AllGameObjectsWithEntryInRangeCheck
 class AllCreaturesOfEntryInRangeCheck
 {
     public:
-        AllCreaturesOfEntryInRangeCheck(WorldObject const* pObject, uint32 uiEntry, float fMaxRange) : m_pObject(pObject), m_uiEntry(uiEntry), m_fRange(fMaxRange) {}
+        AllCreaturesOfEntryInRangeCheck(const WorldObject* pObject, uint32 uiEntry, float fMaxRange) : m_pObject(pObject), m_uiEntry(uiEntry), m_fRange(fMaxRange) {}
         bool operator() (Unit* pUnit)
         {
             if (pUnit->GetEntry() == m_uiEntry && m_pObject->IsWithinDist(pUnit,m_fRange,false))
@@ -95,7 +96,7 @@ class AllCreaturesOfEntryInRangeCheck
         }
 
     private:
-        WorldObject const* m_pObject;
+        const WorldObject* m_pObject;
         uint32 m_uiEntry;
         float m_fRange;
 };

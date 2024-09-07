@@ -53,10 +53,7 @@ class GridReference : public Reference<GridRefManager<OBJECT>, OBJECT>
 
     public:
 
-        GridReference()
-            : Reference<GridRefManager<OBJECT>, OBJECT>()
-        {
-        }
+        GridReference() : Reference<GridRefManager<OBJECT>, OBJECT>() { }
 
         ~GridReference() override
         {

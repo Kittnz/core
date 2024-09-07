@@ -21,10 +21,10 @@ void ScriptedPetAI::MoveInLineOfSight(Unit* pWho)
     if (m_creature->GetVictim())
         return;
 
-    if (!m_creature->HasReactState(REACT_AGGRESSIVE))
+    if (!m_creature->GetCharmInfo() || !m_creature->GetCharmInfo()->HasReactState(REACT_AGGRESSIVE))
         return;
 
-    if (!m_creature->IsValidAttackTarget(pWho) || !pWho->IsVisibleForOrDetect(m_creature, m_creature, true) ||
+    if (!pWho || !m_creature->IsValidAttackTarget(pWho) || !pWho->IsVisibleForOrDetect(m_creature, m_creature, true) ||
         !m_creature->CanInitiateAttack() || !pWho->IsInAccessablePlaceFor(m_creature) || !m_creature->CanAttack(pWho, true))
         return;
 
@@ -40,7 +40,7 @@ void ScriptedPetAI::MoveInLineOfSight(Unit* pWho)
 
 void ScriptedPetAI::AttackStart(Unit* pWho)
 {
-    if (m_creature->Attack(pWho, true))
+    if (pWho && m_creature->Attack(pWho, true))
         m_creature->GetMotionMaster()->MoveChase(pWho);
 }
 
@@ -49,7 +49,7 @@ void ScriptedPetAI::AttackedBy(Unit* pAttacker)
     if (m_creature->GetVictim())
         return;
 
-    if (!m_creature->HasReactState(REACT_PASSIVE) &&
+    if (m_creature->GetCharmInfo() && !m_creature->GetCharmInfo()->HasReactState(REACT_PASSIVE) &&
         m_creature->CanReachWithMeleeAutoAttack(pAttacker))
         AttackStart(pAttacker);
 }
@@ -70,11 +70,11 @@ void ScriptedPetAI::ResetPetCombat()
 
     m_creature->AttackStop();
 
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "ScriptedPetAI reset pet combat and stop attack.");
+    DEBUG_LOG("ScriptedPetAI reset pet combat and stop attack.");
     Reset();
 }
 
-void ScriptedPetAI::UpdatePetAI(uint32 const uiDiff)
+void ScriptedPetAI::UpdatePetAI(const uint32 uiDiff)
 {
     if (!m_CreatureSpells.empty())
         UpdateSpellsList(uiDiff);
@@ -88,17 +88,17 @@ void ScriptedPetAI::JustRespawned()
     ResetCreature();
 }
 
-void ScriptedPetAI::UpdateAI(uint32 const uiDiff)
+void ScriptedPetAI::UpdateAI(const uint32 uiDiff)
 {
-    if (!m_creature->IsAlive())                             // should not be needed, isAlive is checked in mangos before calling UpdateAI
+    if (!m_creature->IsAlive())                             // should not be needed, IsAlive is checked in mangos before calling UpdateAI
         return;
 
     // UpdateAllies() is done in the generic PetAI in Mangos, but we can't do this from script side.
     // Unclear what side effects this has, but is something to be resolved from Mangos.
 
-    if (Unit* const pTarget = m_creature->GetVictim())                            // in combat
+    if (Unit * const pTarget = m_creature->GetVictim())                            // in combat
     {
-        if (!pTarget->IsTargetableBy(m_creature))
+        if (!pTarget->IsTargetable(true, m_creature->IsCharmerOrOwnerPlayerOrPlayerItself()))
         {
             // target no longer valid for pet, so either attack stops or new target are selected
             // doesn't normally reach this, because of how petAi is designed in Mangos. CombatStop
@@ -106,9 +106,9 @@ void ScriptedPetAI::UpdateAI(uint32 const uiDiff)
             ResetPetCombat();
             return;
         }
-        else if (pTarget->HasAuraPetShouldAvoidBreaking() && m_creature->GetCharmInfo() && (m_creature->GetReactState() != REACT_AGGRESSIVE))
+        else if (pTarget->HasAuraPetShouldAvoidBreaking() && m_creature->GetCharmInfo() && (m_creature->GetCharmInfo()->GetReactState() != REACT_AGGRESSIVE))
         {
-            m_creature->InterruptNonMeleeSpells(false);
+            m_creature->CastStop();
             m_creature->AttackStop(true);
             return;
         }
@@ -123,11 +123,11 @@ void ScriptedPetAI::UpdateAI(uint32 const uiDiff)
         if (!pOwner)
             return;
 
-        if (pOwner->IsInCombat() && !m_creature->HasReactState(REACT_PASSIVE))
+        if (pOwner->IsInCombat() && !m_creature->GetCharmInfo()->HasReactState(REACT_PASSIVE))
         {
             // Not correct in all cases.
             // When mob initiate attack by spell, pet should not start attack before spell landed.
-            if (Unit* const pTarget = pOwner->GetAttackerForHelper())
+            if (Unit * const pTarget = pOwner->GetAttackerForHelper())
             {
                 // Prevent scripted pets from breaking CC effects
                 if (!pTarget->HasAuraPetShouldAvoidBreaking())
@@ -137,7 +137,7 @@ void ScriptedPetAI::UpdateAI(uint32 const uiDiff)
                     // Main target is CC-ed, so pick another attacker.
                     for (const auto pAttacker : pOwner->GetAttackers())
                     {
-                        if (pAttacker->IsInMap(m_creature) && pAttacker->IsTargetableBy(m_creature) && !pAttacker->HasAuraPetShouldAvoidBreaking())
+                        if (pAttacker->IsInMap(m_creature) && pAttacker->IsTargetable(true, m_creature->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pAttacker->HasAuraPetShouldAvoidBreaking())
                         { 
                             AttackStart(pAttacker);
                             return;

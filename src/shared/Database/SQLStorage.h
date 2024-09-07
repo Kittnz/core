@@ -32,9 +32,9 @@ class SQLStorageBase
         char const* EntryFieldName() const { return m_entry_field; }
 
         FieldFormat GetDstFormat(uint32 idx) const { return (FieldFormat)m_dst_format[idx]; };
-        char const* GetDstFormat() const { return m_dst_format; };
+        const char* GetDstFormat() const { return m_dst_format; };
         FieldFormat GetSrcFormat(uint32 idx) const { return (FieldFormat)m_src_format[idx]; };
-        char const* GetSrcFormat() const { return m_src_format; };
+        const char* GetSrcFormat() const { return m_src_format; };
 
         uint32 GetMaxEntry() const { return m_maxEntry; };
         uint32 GetRecordCount() const { return m_recordCount; };
@@ -50,10 +50,10 @@ class SQLStorageBase
                 void operator ++() { pointer += recordSize; }
                 T const* operator *() const { return getValue(); }
                 T const* operator ->() const { return getValue(); }
-                bool operator <(SQLSIterator const& r) const { return pointer < r.pointer; }
-                inline bool operator == (SQLSIterator const& r) const { return pointer == r.pointer; }
-                inline bool operator != (SQLSIterator const& r) const { return !operator ==(r); }
-                void operator =(SQLSIterator const& r) { pointer = r.pointer; recordSize = r.recordSize; }
+                bool operator <(const SQLSIterator& r) const { return pointer < r.pointer; }
+                inline bool operator == (const SQLSIterator& r) const { return pointer == r.pointer; }
+                inline bool operator != (const SQLSIterator& r) const { return !operator ==(r); }
+                void operator =(const SQLSIterator& r) { pointer = r.pointer; recordSize = r.recordSize; }
 
             private:
                 SQLSIterator(char* ptr, uint32 _recordSize) : pointer(ptr), recordSize(_recordSize) {}
@@ -70,7 +70,7 @@ class SQLStorageBase
         SQLStorageBase();
         virtual ~SQLStorageBase() { Free(); }
 
-        void Initialize(char const* tableName, char const* entry_field, char const* src_format, char const* dst_format);
+        void Initialize(const char* tableName, const char* entry_field, const char* src_format, const char* dst_format);
 
         uint32 GetDstFieldCount() const { return m_dstFieldCount; }
         uint32 GetSrcFieldCount() const { return m_srcFieldCount; }
@@ -84,10 +84,10 @@ class SQLStorageBase
         char* createRecord(uint32 recordId);
 
         // Information about the table
-        char const* m_tableName;
-        char const* m_entry_field;
-        char const* m_src_format;
-        char const* m_dst_format;
+        const char* m_tableName;
+        const char* m_entry_field;
+        const char* m_src_format;
+        const char* m_dst_format;
 
         // Information about the records
         uint32 m_dstFieldCount;
@@ -105,9 +105,9 @@ class SQLStorage : public SQLStorageBase
         template<class DerivedLoader, class StorageClass> friend class SQLStorageLoaderBase;
 
     public:
-        SQLStorage(char const* fmt, char const* _entry_field, char const* sqlname);
+        SQLStorage(const char* fmt, const char* _entry_field, const char* sqlname);
 
-        SQLStorage(char const* src_fmt, char const* dst_fmt, char const* _entry_field, char const* sqlname);
+        SQLStorage(const char* src_fmt, const char* dst_fmt, const char* _entry_field, const char* sqlname);
 
         ~SQLStorage() override { Free(); }
 
@@ -120,8 +120,6 @@ class SQLStorage : public SQLStorageBase
         }
 
         void Load(bool error_at_empty = true);
-        void LoadProgressive(uint32 wow_patch, std::string column_name = "patch", bool error_at_empty = true);
-
         void EraseEntry(uint32 id);
 
     protected:
@@ -143,8 +141,8 @@ class SQLHashStorage : public SQLStorageBase
         template<class DerivedLoader, class StorageClass> friend class SQLStorageLoaderBase;
 
     public:
-        SQLHashStorage(char const* fmt, char const* _entry_field, char const* sqlname);
-        SQLHashStorage(char const* src_fmt, char const* dst_fmt, char const* _entry_field, char const* sqlname);
+        SQLHashStorage(const char* fmt, const char* _entry_field, const char* sqlname);
+        SQLHashStorage(const char* src_fmt, const char* dst_fmt, const char* _entry_field, const char* sqlname);
 
         ~SQLHashStorage() override { Free(); }
 
@@ -185,8 +183,8 @@ class SQLMultiStorage : public SQLStorageBase
         typedef std::multimap<uint32 /*recordId*/, char* /*record*/> RecordMultiMap;
 
     public:
-        SQLMultiStorage(char const* fmt, char const* _entry_field, char const* sqlname);
-        SQLMultiStorage(char const* src_fmt, char const* dst_fmt, char const* _entry_field, char const* sqlname);
+        SQLMultiStorage(const char* fmt, const char* _entry_field, const char* sqlname);
+        SQLMultiStorage(const char* src_fmt, const char* dst_fmt, const char* _entry_field, const char* sqlname);
 
         ~SQLMultiStorage() override { Free(); }
 
@@ -206,8 +204,8 @@ class SQLMultiStorage : public SQLStorageBase
                 void operator ++() { ++citerator; }
                 T const* operator *() const { return getValue(); }
                 T const* operator ->() const { return getValue(); }
-                bool operator !=(SQLMultiSIterator const& r) const { return citerator != r.citerator; }
-                bool operator ==(SQLMultiSIterator const& r) const { return citerator == r.citerator; }
+                bool operator !=(const SQLMultiSIterator& r) const { return citerator != r.citerator; }
+                bool operator ==(const SQLMultiSIterator& r) const { return citerator == r.citerator; }
 
             private:
                 SQLMultiSIterator(RecordMultiMap::const_iterator _itr) : citerator(_itr) {}
@@ -220,8 +218,8 @@ class SQLMultiStorage : public SQLStorageBase
                 friend class SQLMultiStorage;
 
             public:
-                SQLMultiSIterator<T> const first;
-                SQLMultiSIterator<T> const second;
+                const SQLMultiSIterator<T> first;
+                const SQLMultiSIterator<T> second;
 
             private:
                 SQLMSIteratorBounds(std::pair<RecordMultiMap::const_iterator, RecordMultiMap::const_iterator> pair) : first(pair.first), second(pair.second) {}
@@ -252,7 +250,6 @@ class SQLStorageLoaderBase
 {
     public:
         void Load(StorageClass& storage, bool error_at_empty = true);
-        void LoadProgressive(StorageClass& storage, uint32 wow_patch, std::string column_name = "patch", bool error_at_empty = true);
 
         template<class S, class D>
         void convert(uint32 field_pos, S src, D& dst);

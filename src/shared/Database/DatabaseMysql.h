@@ -33,47 +33,42 @@
 #endif
 #include <mysql.h>
 
-// my_bool declaration is removed in 8.0
 #if MYSQL_VERSION_ID >= 80000
 typedef char my_bool;
-#ifdef _MSC_VER
-#pragma message("You are using an incompatible mysql version!")
-#else
-#warning "You are using an incompatible mysql version!"
-#endif
 #endif
 
 //MySQL prepared statement class
 class MySqlPreparedStatement : public SqlPreparedStatement
 {
 public:
-    MySqlPreparedStatement(std::string const& fmt, SqlConnection& conn, MYSQL* mysql);
+    MySqlPreparedStatement(const std::string& fmt, SqlConnection& conn, MYSQL * mysql);
     ~MySqlPreparedStatement() override;
 
     //prepare statement
     bool prepare() override;
 
     //bind input parameters
-    void bind(SqlStmtParameters const& holder) override;
+    void bind(const SqlStmtParameters& holder) override;
 
     //execute DML statement
     bool execute() override;
 
 protected:
     //bind parameters
-    void addParam(int nIndex, SqlStmtFieldData const& data);
+    void addParam(int nIndex, const SqlStmtFieldData& data);
 
-    static enum_field_types ToMySQLType(SqlStmtFieldData const& data, my_bool& bUnsigned);
+    static enum_field_types ToMySQLType( const SqlStmtFieldData &data, my_bool &bUnsigned );
 
 private:
     void RemoveBinds();
 
-    MYSQL* m_pMySQLConn;
-    MYSQL_STMT* m_stmt;
-    MYSQL_BIND* m_pInputArgs;
-    MYSQL_BIND* m_pResult;
-    MYSQL_RES* m_pResultMetadata;
+    MYSQL * m_pMySQLConn;
+    MYSQL_STMT * m_stmt;
+    MYSQL_BIND * m_pInputArgs;
+    MYSQL_BIND * m_pResult;
+    MYSQL_RES *m_pResultMetadata;
 };
+
 
 class MySQLConnection : public SqlConnection
 {
@@ -85,24 +80,25 @@ class MySQLConnection : public SqlConnection
         bool Reconnect();
         bool HandleMySQLError(uint32 errNo);
 
-        std::unique_ptr<QueryResult> Query(std::string const& sql) override;
-        std::unique_ptr<QueryNamedResult> QueryNamed(std::string const& sql) override;
-        bool Execute(std::string const& sql) override;
+        QueryResult* Query(const char *sql) override;
+        QueryNamedResult* QueryNamed(const char *sql) override;
+        bool Execute(const char *sql) override;
+        bool ExecuteMultiline(const char* sql) override;
 
-        unsigned long escape_string(char* to, char const* from, unsigned long length) override;
+        unsigned long escape_string(char *to, const char *from, unsigned long length) override;
 
         bool BeginTransaction() override;
         bool CommitTransaction() override;
         bool RollbackTransaction() override;
 
     protected:
-        SqlPreparedStatement* CreateStatement(std::string const& fmt) override;
+        SqlPreparedStatement * CreateStatement(const std::string& fmt) override;
 
     private:
-        bool _TransactionCmd(std::string const& sql);
-        bool _Query(std::string const& sql, MYSQL_RES** pResult, MYSQL_FIELD** pFields, uint64* pRowCount, uint32* pFieldCount);
+        bool _TransactionCmd(const char *sql);
+        bool _Query(const char *sql, MYSQL_RES **pResult, MYSQL_FIELD **pFields, uint64* pRowCount, uint32* pFieldCount);
 
-        MYSQL* mMysql;
+        MYSQL *mMysql;
 };
 
 class DatabaseMysql : public Database

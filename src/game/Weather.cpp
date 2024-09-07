@@ -27,16 +27,14 @@
 #include "WorldSession.h"
 #include "Player.h"
 #include "Map.h"
-#include "Opcodes.h"
 #include "World.h"
 #include "WorldPacket.h"
 #include "Log.h"
 #include "Util.h"
-#include "ProgressBar.h"
 
 INSTANTIATE_SINGLETON_1(WeatherMgr);
 
-// Weather sound defines ( only for 1.12 )
+/// Weather sound defines ( only for 1.12 )
 enum WeatherSounds
 {
     WEATHER_NOSOUND                = 0,
@@ -51,7 +49,7 @@ enum WeatherSounds
     WEATHER_SANDSTORMHEAVY         = 8558
 };
 
-// Create the Weather object
+/// Create the Weather object
 Weather::Weather(uint32 zone, WeatherZoneChances const* weatherChances) :
     m_zone(zone),
     m_type(WEATHER_TYPE_FINE),
@@ -59,31 +57,54 @@ Weather::Weather(uint32 zone, WeatherZoneChances const* weatherChances) :
     m_weatherChances(weatherChances),
     m_isPermanentWeather(false)
 {
+	if (weatherChances != nullptr)
+	{
+		m_CopyFromAnotherZone = weatherChances->CopyWeatherFromAnotherZone;
+	}
     m_timer.SetInterval(sWorld.getConfig(CONFIG_UINT32_INTERVAL_CHANGEWEATHER));
     DETAIL_FILTER_LOG(LOG_FILTER_WEATHER, "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (m_timer.GetInterval() / (MINUTE * IN_MILLISECONDS)));
 }
 
-// Launch a weather update
+/// Launch a weather update
 bool Weather::Update(uint32 diff, Map const* _map)
 {
     m_timer.Update(diff);
 
-    // If the timer has passed, ReGenerate the weather
+    ///- If the timer has passed, ReGenerate the weather
     if (m_timer.Passed())
     {
         m_timer.Reset();
-        // update only if Regenerate has changed the weather
-        if (ReGenerate())
-        {
-            // Weather will be removed if not updated (no players in zone anymore)
-            if (!SendWeatherForPlayersInZone(_map))
-                return false;
-        }
+		if (m_CopyFromAnotherZone != 0)
+		{
+			if (Weather* AnotherWeather = _map->GetWeatherSystem()->FindOrCreateWeather(m_CopyFromAnotherZone))
+			{
+				bool bShouldUpdateToPlayers = m_type != AnotherWeather->m_type || m_grade != AnotherWeather->m_grade;
+				m_type = AnotherWeather->m_type;
+				m_grade = AnotherWeather->m_grade;
+
+				if (bShouldUpdateToPlayers)
+				{
+					///- Weather will be removed if not updated (no players in zone anymore)
+					if (!SendWeatherForPlayersInZone(_map))
+						return false;
+				}
+			}
+		}
+		else
+		{
+			// update only if Regenerate has changed the weather
+			if (ReGenerate())
+			{
+				///- Weather will be removed if not updated (no players in zone anymore)
+				if (!SendWeatherForPlayersInZone(_map))
+					return false;
+			}
+		}
     }
     return true;
 }
 
-// Calculate the new weather, returns true if and only if the weather changed
+/// Calculate the new weather, returns true if and only if the weather changed
 bool Weather::ReGenerate()
 {
     if (m_isPermanentWeather)
@@ -101,11 +122,11 @@ bool Weather::ReGenerate()
         return old_type != m_type || old_grade != m_grade;
     }
 
-    // Weather statistics:
-    // 30% - no change
-    // 30% - weather gets better (if not fine) or change weather type
-    // 30% - weather worsens (if not fine)
-    // 10% - radical change (if not fine)
+    /// Weather statistics:
+    ///- 30% - no change
+    ///- 30% - weather gets better (if not fine) or change weather type
+    ///- 30% - weather worsens (if not fine)
+    ///- 10% - radical change (if not fine)
     uint32 u = urand(0, 99);
 
     if (u < 30)
@@ -141,10 +162,10 @@ bool Weather::ReGenerate()
 
     if (m_type != WEATHER_TYPE_FINE)
     {
-        // Radical change:
-        // if light -> heavy
-        // if medium -> change weather type
-        // if heavy -> 50% light, 50% change weather type
+        /// Radical change:
+        ///- if light -> heavy
+        ///- if medium -> change weather type
+        ///- if heavy -> 50% light, 50% change weather type
 
         if (m_grade < 0.33333334f)
         {
@@ -183,11 +204,11 @@ bool Weather::ReGenerate()
     else
         m_type = WEATHER_TYPE_FINE;
 
-    // New weather statistics (if not fine):
-    // 85% light
-    // 7% medium
-    // 7% heavy
-    // If fine 100% sun (no fog)
+    /// New weather statistics (if not fine):
+    ///- 85% light
+    ///- 7% medium
+    ///- 7% heavy
+    /// If fine 100% sun (no fog)
 
     if (m_type == WEATHER_TYPE_FINE)
         m_grade = 0.0f;
@@ -213,7 +234,6 @@ void Weather::SendWeatherUpdateToPlayer(Player* player)
 {
     NormalizeGrade();
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     WorldPacket data(SMSG_WEATHER, 4 + 4 + 4 + 1);
     data << uint32(m_type);
     data << float(m_grade);
@@ -221,7 +241,6 @@ void Weather::SendWeatherUpdateToPlayer(Player* player)
     data << uint8(0);           // 1 = instant change, 0 = smooth change
 
     player->GetSession()->SendPacket(&data);
-#endif
 }
 
 // Send the new weather to all players in the zone
@@ -229,19 +248,17 @@ bool Weather::SendWeatherForPlayersInZone(Map const* _map)
 {
     NormalizeGrade();
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     WorldPacket data(SMSG_WEATHER, 4 + 4 + 4 + 1);
     data << uint32(m_type);
     data << float(m_grade);
     data << uint32(GetSound()); // 1.12 soundid
     data << uint8(0);           // 1 = instant change, 0 = smooth change
 
-    // Send the weather packet to all players in this zone
+    ///- Send the weather packet to all players in this zone
     if (!_map->SendToPlayersInZone(&data, m_zone))
         return false;
-#endif
 
-    // Log the event
+    ///- Log the event
     LogWeatherState(GetWeatherState());
 
     return true;
@@ -354,14 +371,14 @@ WeatherSystem::WeatherSystem(Map const* _map) : m_map(_map)
 
 WeatherSystem::~WeatherSystem()
 {
-    // Empty the WeatherMap
+    ///- Empty the WeatherMap
     for (const auto& weather : m_weathers)
         delete weather.second;
 
     m_weathers.clear();
 }
 
-// Find or Create a Weather object by the given zoneid
+/// Find or Create a Weather object by the given zoneid
 Weather* WeatherSystem::FindOrCreateWeather(uint32 zoneId)
 {
     WeatherMap::const_iterator itr = m_weathers.find(zoneId);
@@ -374,13 +391,13 @@ Weather* WeatherSystem::FindOrCreateWeather(uint32 zoneId)
     return w;
 }
 
-// Update Weathers for the different zones
+/// Update Weathers for the different zones
 void WeatherSystem::UpdateWeathers(uint32 diff)
 {
-    // Send an update signal to Weather objects
+    ///- Send an update signal to Weather objects
     for (WeatherMap::iterator itr = m_weathers.begin(); itr != m_weathers.end();)
     {
-        // and remove Weather objects for zones with no player
+        ///- and remove Weather objects for zones with no player
         // As interval > WorldTick
         if (!itr->second->Update(diff, m_map))
         {
@@ -392,7 +409,7 @@ void WeatherSystem::UpdateWeathers(uint32 diff)
     }
 }
 
-// Get the sound number associated with the current weather
+/// Get the sound number associated with the current weather
 uint32 Weather::GetSound()
 {
     uint32 sound;
@@ -436,64 +453,58 @@ uint32 Weather::GetSound()
     return sound;
 }
 
-// Load Weather chanced from table game_weather
+/// Load Weather chanced from table game_weather
 void WeatherMgr::LoadWeatherZoneChances()
 {
-    uint32 count = 0;
-
-    //                                                               0       1                     2                     3                      4                     5                     6                      7                   8                   9                    10                    11                    12
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `zone`, `spring_rain_chance`, `spring_snow_chance`, `spring_storm_chance`, `summer_rain_chance`, `summer_snow_chance`, `summer_storm_chance`, `fall_rain_chance`, `fall_snow_chance`, `fall_storm_chance`, `winter_rain_chance`, `winter_snow_chance`, `winter_storm_chance` FROM `game_weather`"));
+    //                                                               0		1					 2                     3                      4                     5                     6                      7                   8                   9                    10                    11                    12					  13
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `zone`, `spring_rain_chance`, `spring_snow_chance`, `spring_storm_chance`, `summer_rain_chance`, `summer_snow_chance`, `summer_storm_chance`, `fall_rain_chance`, `fall_snow_chance`, `fall_storm_chance`, `winter_rain_chance`, `winter_snow_chance`, `winter_storm_chance`, `copy_weather_from` FROM `game_weather`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, ">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
         return;
     }
-
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
         Field* fields = result->Fetch();
-        bar.step();
 
         uint32 zone_id = fields[0].GetUInt32();
 
         WeatherZoneChances& wzc = mWeatherZoneMap[zone_id];
 
-        for (int season = 0; season < WEATHER_SEASONS; ++season)
-        {
-            wzc.data[season].rainChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 1].GetUInt32();
-            wzc.data[season].snowChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 2].GetUInt32();
-            wzc.data[season].stormChance = fields[season * (MAX_WEATHER_TYPE - 1) + 3].GetUInt32();
+		if (!fields[13].IsNULL())
+		{
+			uint32 copy_weather_zone_id = fields[13].GetUInt32();
+			wzc.CopyWeatherFromAnotherZone = copy_weather_zone_id;
+		}
+		else
+		{
+			wzc.CopyWeatherFromAnotherZone = 0;
+			for (int season = 0; season < WEATHER_SEASONS; ++season)
+			{
+				wzc.data[season].rainChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 1].GetUInt32();
+				wzc.data[season].snowChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 2].GetUInt32();
+				wzc.data[season].stormChance = fields[season * (MAX_WEATHER_TYPE - 1) + 3].GetUInt32();
 
-            if (wzc.data[season].rainChance > 100)
-            {
-                wzc.data[season].rainChance = 25;
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
-            }
+				if (wzc.data[season].rainChance > 100)
+				{
+					wzc.data[season].rainChance = 25;
+					sLog.outErrorDb("Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
+				}
 
-            if (wzc.data[season].snowChance > 100)
-            {
-                wzc.data[season].snowChance = 25;
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
-            }
+				if (wzc.data[season].snowChance > 100)
+				{
+					wzc.data[season].snowChance = 25;
+					sLog.outErrorDb("Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
+				}
 
-            if (wzc.data[season].stormChance > 100)
-            {
-                wzc.data[season].stormChance = 25;
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
-            }
-        }
-
-        ++count;
+				if (wzc.data[season].stormChance > 100)
+				{
+					wzc.data[season].stormChance = 25;
+					sLog.outErrorDb("Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
+				}
+			}
+		}
     }
     while (result->NextRow());
-
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u weather definitions", count);
 }

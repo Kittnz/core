@@ -19,14 +19,13 @@
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 #include "packet_builder.h"
-#include "Opcodes.h"
-#include "WorldPacket.h"
 #include "Unit.h"
 #include "Transport.h"
-#include "ObjectMgr.h"
 #include "ObjectAccessor.h"
 #include "Anticheat.h"
-#include "MovementPacketSender.h"
+#include "WorldPacket.h"
+
+#include "Anticheat/Movement/Movement.hpp"
 
 namespace Movement
 {
@@ -41,7 +40,7 @@ UnitMoveType SelectSpeedType(uint32 moveFlags)
     }
     else if (moveFlags & MOVEFLAG_WALK_MODE)
     {
-        // if (speed_obj.run > speed_obj.walk)
+        // if ( speed_obj.run > speed_obj.walk )
         return MOVE_WALK;
     }
     else if (moveFlags & MOVEFLAG_BACKWARD /*&& speed_obj.run >= speed_obj.run_back*/)
@@ -67,26 +66,23 @@ int32 MoveSplineInit::Launch()
     float realSpeedRun = 0.0f;
     MoveSpline& move_spline = *unit.movespline;
 
-    GenericTransport* newTransport = nullptr;
+    Transport* newTransport = nullptr;
     if (args.transportGuid)
-        newTransport = unit.GetMap()->GetTransport(sObjectMgr.GetFullTransportGuidFromLowGuid(args.transportGuid));
-
+        newTransport = HashMapHolder<Transport>::Find(ObjectGuid(HIGHGUID_MO_TRANSPORT, args.transportGuid));
     Vector3 real_position(unit.GetPositionX(), unit.GetPositionY(), unit.GetPositionZ());
-
     // there is a big chance that current position is unknown if current state is not finalized, need compute it
     // this also allows calculate spline position and update map position in much greater intervals
     if (!move_spline.Finalized())
     {
         real_position = move_spline.ComputePosition();
-        GenericTransport* oldTransport = nullptr;
+        Transport* oldTransport = nullptr;
         if (move_spline.GetTransportGuid())
-            oldTransport = unit.GetMap()->GetTransport(sObjectMgr.GetFullTransportGuidFromLowGuid(move_spline.GetTransportGuid()));
+            oldTransport = HashMapHolder<Transport>::Find(ObjectGuid(HIGHGUID_MO_TRANSPORT, move_spline.GetTransportGuid()));
         if (oldTransport)
             oldTransport->CalculatePassengerPosition(real_position.x, real_position.y, real_position.z);
     }
-
     if (newTransport)
-        newTransport->CalculatePassengerOffset(real_position.x, real_position.y, real_position.z, &args.facing.angle);
+        newTransport->CalculatePassengerOffset(real_position.x, real_position.y, real_position.z);
 
     if (args.path.empty())
     {
@@ -128,32 +124,20 @@ int32 MoveSplineInit::Launch()
 
     args.splineId = splineCounter++;
 
-    if (Player* pPlayer = unit.ToPlayer())
-        pPlayer->GetCheatData()->ResetJumpCounters();
+    /*if (Player* pPlayer = unit.ToPlayer())
+        pPlayer->GetCheatData()->ResetJumpCounters();*/
 
-    if (unit.IsPlayer() || unit.GetPossessorGuid().IsPlayer())
-        unit.SetSplineDonePending(true);
-
-    unit.m_movementInfo.ctime = 0;
     unit.m_movementInfo.SetMovementFlags((MovementFlags)moveFlags);
     move_spline.SetMovementOrigin(movementType);
     move_spline.Initialize(args);
     
     WorldPacket data(SMSG_MONSTER_MOVE, 64);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << unit.GetPackGUID();
-#else
-    data << unit.GetGUID();
-#endif
 
     if (newTransport)
     {
         data.SetOpcode(SMSG_MONSTER_MOVE_TRANSPORT);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         data << newTransport->GetPackGUID();
-#else
-        data << newTransport->GetGUID();
-#endif
     }
 
     if (unit.GetTransport() && unit.GetTransport() != newTransport)
@@ -171,23 +155,55 @@ int32 MoveSplineInit::Launch()
     else
         move_spline.setLastPointSent(PacketBuilder::WriteMonsterMove(move_spline, data));
 
+    // Compress data or not ?
+    bool compress = false;
+
+    if (!args.flags.done && args.velocity > 4 * realSpeedRun)
+        compress = true;
+    else if ((data.wpos() + 2) > 0x10)
+        compress = true;
+    else if (oldMoveFlags & MOVEFLAG_ROOT)
+        compress = true;
+    // Since packet size is stored with an uint8, packet size is limited for compressed packets
+    if ((data.wpos() + 2) > 0xFF)
+        compress = false;
+
+    MovementData mvtData(compress ? nullptr : &unit);
+    // Nostalrius: client has a hardcoded limit to spline movement speed : 4*runSpeed.
+    // We need to fix this, in case of charges for example (if character has movement slowing effects)
+    if (args.velocity > 4 * realSpeedRun && !args.flags.done) // From client
+        mvtData.SetUnitSpeed(SMSG_SPLINE_SET_RUN_SPEED, unit.GetObjectGuid(), args.velocity);
     if ((oldMoveFlags & MOVEFLAG_ROOT) && !args.flags.done)
-        MovementPacketSender::SendMovementFlagChangeToAll(&unit, MOVEFLAG_ROOT, false);
+        mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_UNROOT, unit.GetObjectGuid());
     if (oldMoveFlags & MOVEFLAG_WALK_MODE && !(moveFlags & MOVEFLAG_WALK_MODE)) // Switch to run mode
-        MovementPacketSender::SendToggleRunWalkToAll(&unit, true);
+        mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_SET_RUN_MODE, unit.GetObjectGuid());
     if (moveFlags & MOVEFLAG_WALK_MODE && !(oldMoveFlags & MOVEFLAG_WALK_MODE)) // Switch to walk mode
-        MovementPacketSender::SendToggleRunWalkToAll(&unit, false);
+        mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_SET_WALK_MODE, unit.GetObjectGuid());
         
-    unit.SendMovementMessageToSet(std::move(data), true);
+    mvtData.AddPacket(data);
+    // Do not forget to restore velocity after movement !
+    if (args.velocity > 4 * realSpeedRun && !args.flags.done)
+        mvtData.SetUnitSpeed(SMSG_SPLINE_SET_RUN_SPEED, unit.GetObjectGuid(), realSpeedRun);
 
     // Restore correct walk mode for players
     if (unit.GetTypeId() == TYPEID_PLAYER && (moveFlags & MOVEFLAG_WALK_MODE) != (oldMoveFlags & MOVEFLAG_WALK_MODE))
-        MovementPacketSender::SendToggleRunWalkToAll(&unit, !(oldMoveFlags & MOVEFLAG_WALK_MODE));
+        mvtData.SetSplineOpcode(oldMoveFlags & MOVEFLAG_WALK_MODE ? SMSG_SPLINE_MOVE_SET_WALK_MODE : SMSG_SPLINE_MOVE_SET_RUN_MODE, unit.GetObjectGuid());
+
+    if (compress)
+    {
+        WorldPacket data2;
+        if (mvtData.BuildPacket(data2)) {
+            unit.SendMovementMessageToSet(std::move(data2), true);
+        }
+        else {
+            sLog.outError("[MoveSplineInit] Unable to compress move packet, move spline not sent");
+        }
+    }
     
     return move_spline.Duration();
 }
 
-MoveSplineInit::MoveSplineInit(Unit& m, char const* mvtType) : unit(m), movementType(mvtType)
+MoveSplineInit::MoveSplineInit(Unit& m, const char* mvtType) : unit(m), movementType(mvtType)
 {
     // mix existing state into new
     args.flags.runmode = !unit.m_movementInfo.HasMovementFlag(MOVEFLAG_WALK_MODE);

@@ -21,7 +21,6 @@
 
 #include "Util.h"
 #include "Timer.h"
-#include "Log.h"
 
 #include "utf8cpp/utf8.h"
 #include "mersennetwister/MersenneTwister.h"
@@ -33,7 +32,7 @@ typedef ACE_TSS<MTRand> MTRandTSS;
 static MTRandTSS mtRand;
 
 
-Tokenizer::Tokenizer(std::string const& src, char const sep, uint32 vectorReserve)
+Tokenizer::Tokenizer(const std::string &src, const char sep, uint32 vectorReserve)
 {
     m_str = new char[src.length() + 1];
     memcpy(m_str, src.c_str(), src.length() + 1);
@@ -81,7 +80,7 @@ uint32 WorldTimer::tick()
     m_iPrevTime = m_iTime;
 
     //get the new one and don't forget to persist current system time in m_SystemTickTime
-    m_iTime = WorldTimer::getMSTime_internal();
+    m_iTime = WorldTimer::getMSTime_internal(true);
 
     //return tick diff
     return getMSTimeDiff(m_iPrevTime, m_iTime);
@@ -92,10 +91,10 @@ uint32 WorldTimer::getMSTime()
     return getMSTime_internal();
 }
 
-uint32 WorldTimer::getMSTime_internal()
+uint32 WorldTimer::getMSTime_internal(bool /*savetime*/ /*= false*/)
 {
     //get current time
-    ACE_Time_Value const currTime = ACE_OS::gettimeofday();
+    const ACE_Time_Value currTime = ACE_OS::gettimeofday();
     //calculate time diff between two world ticks
     //special case: curr_time < old_time - we suppose that our time has not ticked at all
     //this should be constant value otherwise it is possible that our time can start ticking backwards until next world tick!!!
@@ -156,7 +155,7 @@ Milliseconds randtime(Milliseconds const& min, Milliseconds const& max)
     return min + Milliseconds(urand(0, diff));
 }
 
-Tokens StrSplit(std::string const& src, std::string const& sep)
+Tokens StrSplit(const std::string &src, const std::string &sep)
 {
     Tokens r;
     std::string s;
@@ -224,38 +223,6 @@ void stripLineInvisibleChars(std::string &str)
         str.erase(wpos,str.size());
 }
 
-void stripLineInvisibleChars(char* str)
-{
-    static std::string invChars = " \t\7\n";
-
-    size_t wpos = 0;
-
-    bool space = false;
-    size_t pos = 0;
-    for (; str[pos] != '\0'; ++pos)
-    {
-        if (invChars.find(str[pos]) != std::string::npos)
-        {
-            if (!space)
-            {
-                str[wpos++] = ' ';
-                space = true;
-            }
-        }
-        else
-        {
-            if (wpos != pos)
-                str[wpos++] = str[pos];
-            else
-                ++wpos;
-            space = false;
-        }
-    }
-
-    for (; wpos < pos; wpos++)
-        str[wpos] = '\0';
-}
-
 std::string secsToTimeString(time_t timeInSecs, bool shortText, bool hoursOnly)
 {
     time_t secs    = timeInSecs % MINUTE;
@@ -311,13 +278,13 @@ std::string secsToTimeString(time_t timeInSecs, bool shortText, bool hoursOnly)
     return ss.str();
 }
 
-uint32 TimeStringToSecs(std::string const& timestring)
+uint32 TimeStringToSecs(const std::string& timestring)
 {
     uint32 secs       = 0;
     uint32 buffer     = 0;
     uint32 multiplier = 0;
 
-    for(std::string::const_iterator itr = timestring.begin(); itr != timestring.end(); itr++)
+    for(std::string::const_iterator itr = timestring.begin(); itr != timestring.end(); itr++ )
     {
         if(isdigit(*itr))
         {
@@ -357,7 +324,7 @@ std::string TimeToTimestampStr(time_t t)
     return std::string(buf);
 }
 
-// Check if the string is a valid ip address representation
+/// Check if the string is a valid ip address representation
 bool IsIPAddress(char const* ipaddress)
 {
     if(!ipaddress)
@@ -368,10 +335,10 @@ bool IsIPAddress(char const* ipaddress)
     return ACE_OS::inet_addr(ipaddress) != INADDR_NONE;
 }
 
-// create PID file
-uint32 CreatePIDFile(std::string const& filename)
+/// create PID file
+uint32 CreatePIDFile(const std::string& filename)
 {
-    FILE* pid_file = fopen (filename.c_str(), "w");
+    FILE * pid_file = fopen (filename.c_str(), "w" );
     if (pid_file == nullptr)
         return 0;
 
@@ -381,7 +348,7 @@ uint32 CreatePIDFile(std::string const& filename)
     pid_t pid = getpid();
 #endif
 
-    fprintf(pid_file, "%lu", pid);
+    fprintf(pid_file, "%lu", pid );
     fclose(pid_file);
 
     return (uint32)pid;
@@ -391,68 +358,126 @@ size_t utf8length(std::string& utf8str)
 {
     try
     {
-        return utf8::distance(utf8str.c_str(),utf8str.c_str()+utf8str.size());
+        return utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
     }
-    catch(std::exception)
+    catch (std::exception const&)
     {
-        utf8str = "";
+        utf8str.clear();
         return 0;
     }
 }
 
-bool Utf8toWStr(std::string const& utf8str, std::wstring& wstr, size_t max_len)
+void utf8truncate(std::string& utf8str, size_t len)
 {
-    if (utf8str.empty())
-    {
-        wstr = std::wstring();
-        return true;
-    }
-
     try
     {
-        // A UTF8 string can have a maximum of 4 octets per character
-        // A 4 octet char can take up to two UTF16 characters (4*8 = 32 / 16 = 2)
-        // The UTF8 string may also actually be ASCII, in which case no truncation
-        // takes place! The final string length is therefore unknown. Reserve
-        // as long as the OG string, and back-insert
-        wstr.resize(utf8str.size());
+        size_t wlen = utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
+        if (wlen <= len)
+            return;
 
-        auto end = utf8::utf8to16(utf8str.cbegin(), utf8str.cend(), wstr.begin());
-
-        if (end != wstr.end())
-            wstr.erase(end, wstr.end());
-
-        // truncate to max len
-        if (!!max_len && wstr.size() > max_len)
-        {
-            wstr.resize(max_len);
-        }
+        std::wstring wstr;
+        wstr.resize(wlen);
+        utf8::utf8to16(utf8str.c_str(), utf8str.c_str() + utf8str.size(), &wstr[0]);
+        wstr.resize(len);
+        char* oend = utf8::utf16to8(wstr.c_str(), wstr.c_str() + wstr.size(), &utf8str[0]);
+        utf8str.resize(oend - (&utf8str[0]));                 // remove unused tail
     }
-    catch (std::exception)
+    catch (std::exception const&)
     {
-        wstr = L"";
+        utf8str.clear();
+    }
+}
+
+bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
+{
+    try
+    {
+        CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        out = utf8::utf8to16(utf8str, utf8str + csize, out);
+        wsize -= out.remaining(); // remaining unused space
+        wstr[wsize] = L'\0';
+    }
+    catch (std::exception const&)
+    {
+        // Replace the converted string with an error message if there is enough space
+        // Otherwise just return an empty string
+        wchar_t const* errorMessage = L"An error occurred converting string from UTF-8 to WStr";
+        size_t errorMessageLength = wcslen(errorMessage);
+        if (wsize >= errorMessageLength)
+        {
+            wcscpy(wstr, errorMessage);
+            wsize = wcslen(wstr);
+        }
+        else if (wsize > 0)
+        {
+            wstr[0] = L'\0';
+            wsize = 0;
+        }
+        else
+            wsize = 0;
+
         return false;
     }
 
     return true;
 }
 
-bool WStrToUtf8(std::wstring& wstr, std::string& utf8str)
+bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr)
+{
+    wstr.clear();
+    try
+    {
+        utf8::utf8to16(utf8str.begin(), utf8str.end(), std::back_inserter(wstr));
+    }
+    catch (std::exception const&)
+    {
+        wstr.clear();
+        return false;
+    }
+
+    return true;
+}
+
+bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str)
+{
+    try
+    {
+        std::string utf8str2;
+        utf8str2.resize(size * 4);                            // allocate for most long case
+
+        if (size)
+        {
+            char* oend = utf8::utf16to8(wstr, wstr + size, &utf8str2[0]);
+            utf8str2.resize(oend - (&utf8str2[0]));               // remove unused tail
+        }
+        utf8str = utf8str2;
+    }
+    catch (std::exception const&)
+    {
+        utf8str.clear();
+        return false;
+    }
+
+    return true;
+}
+
+bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str)
 {
     try
     {
         std::string utf8str2;
         utf8str2.resize(wstr.size() * 4);                     // allocate for most long case
 
-        auto end = utf8::utf16to8(wstr.cbegin(), wstr.cend(), utf8str2.begin());
-        if (end != utf8str2.end())
-            utf8str2.erase(end, utf8str2.end());
-
+        if (!wstr.empty())
+        {
+            char* oend = utf8::utf16to8(wstr.begin(), wstr.end(), &utf8str2[0]);
+            utf8str2.resize(oend - (&utf8str2[0]));                // remove unused tail
+        }
         utf8str = utf8str2;
     }
-    catch (std::exception)
+    catch (std::exception const&)
     {
-        utf8str = "";
+        utf8str.clear();
         return false;
     }
 
@@ -461,7 +486,7 @@ bool WStrToUtf8(std::wstring& wstr, std::string& utf8str)
 
 typedef wchar_t const* const* wstrlist;
 
-bool utf8ToConsole(std::string const& utf8str, std::string& conStr)
+bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
 {
 #if PLATFORM == PLATFORM_WINDOWS
     std::wstring wstr;
@@ -478,7 +503,7 @@ bool utf8ToConsole(std::string const& utf8str, std::string& conStr)
     return true;
 }
 
-bool consoleToUtf8(std::string const& conStr, std::string& utf8str)
+bool consoleToUtf8(const std::string& conStr, std::string& utf8str)
 {
 #if PLATFORM == PLATFORM_WINDOWS
     std::wstring wstr;
@@ -493,7 +518,7 @@ bool consoleToUtf8(std::string const& conStr, std::string& utf8str)
 #endif
 }
 
-bool Utf8FitTo(std::string const& str, std::wstring search)
+bool Utf8FitTo(const std::string& str, std::wstring search)
 {
     std::wstring temp;
 
@@ -506,7 +531,7 @@ bool Utf8FitTo(std::string const& str, std::wstring search)
     return temp.find(search) != std::wstring::npos;
 }
 
-void utf8printf(FILE* out, char const* str, ...)
+void utf8printf(FILE* out, const char *str, ...)
 {
     va_list ap;
     va_start(ap, str);
@@ -514,24 +539,22 @@ void utf8printf(FILE* out, char const* str, ...)
     va_end(ap);
 }
 
-void vutf8printf(FILE* out, char const* str, va_list* ap)
+void vutf8printf(FILE *out, const char *str, va_list* ap)
 {
 #if PLATFORM == PLATFORM_WINDOWS
-    std::string temp_buf;
-    temp_buf.resize(32 * 1024);
-    std::wstring wtemp_buf;
+    char temp_buf[32 * 1024];
+    wchar_t wtemp_buf[32 * 1024];
 
-    vsnprintf(&temp_buf[0], 32 * 1024, str, *ap);
-    temp_buf.resize(strlen(temp_buf.c_str())); // Resize to match the formatted string
+    size_t temp_len = vsnprintf(temp_buf, 32 * 1024, str, *ap);
+    //vsnprintf returns -1 if the buffer is too small
+    if (temp_len == size_t(-1))
+        temp_len = 32 * 1024 - 1;
 
-    if (!temp_buf.empty())
-    {
-        Utf8toWStr(temp_buf, wtemp_buf, 32 * 1024);
-        wtemp_buf.push_back('\0');
+    size_t wtemp_len = 32 * 1024 - 1;
+    Utf8toWStr(temp_buf, temp_len, wtemp_buf, wtemp_len);
 
-        CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], wtemp_buf.size());
-    }
-    fprintf(out, "%s", temp_buf.c_str());
+    CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], uint32(wtemp_len + 1));
+    fprintf(out, "%s", temp_buf);
 #else
     vfprintf(out, str, *ap);
 #endif
@@ -553,22 +576,26 @@ void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result)
             ss << encodedNibble;
         }
     }
+
     result = ss.str();
 }
 
-std::string ByteArrayToHexStr(uint8 const* bytes, uint32 arrayLen, bool reverse /* = false */) {
+std::string ByteArrayToHexStr(uint8 const* bytes, uint32 arrayLen, bool reverse /* = false */)
+{
     int32 init = 0;
     int32 end = arrayLen;
     int8 op = 1;
 
-    if (reverse) {
+    if (reverse)
+    {
         init = arrayLen - 1;
         end = -1;
         op = -1;
     }
 
     std::ostringstream ss;
-    for (int32 i = init; i != end; i += op) {
+    for (int32 i = init; i != end; i += op)
+    {
         char buffer[4];
         sprintf(buffer, "%02X", bytes[i]);
         ss << buffer;
@@ -577,7 +604,8 @@ std::string ByteArrayToHexStr(uint8 const* bytes, uint32 arrayLen, bool reverse 
     return ss.str();
 }
 
-void HexStrToByteArray(std::string const& str, uint8* out, bool reverse /*= false*/) {
+void HexStrToByteArray(std::string const& str, uint8* out, bool reverse /*= false*/)
+{
     // string must have even number of characters
     if (str.length() & 1)
         return;
@@ -586,75 +614,45 @@ void HexStrToByteArray(std::string const& str, uint8* out, bool reverse /*= fals
     int32 end = str.length();
     int8 op = 1;
 
-    if (reverse) {
+    if (reverse)
+    {
         init = str.length() - 2;
         end = -2;
         op = -1;
     }
 
     uint32 j = 0;
-    for (int32 i = init; i != end; i += 2 * op) {
+    for (int32 i = init; i != end; i += 2 * op)
+    {
         char buffer[3] = { str[i], str[i + 1], '\0' };
         out[j++] = strtoul(buffer, nullptr, 16);
     }
 }
 
-int32 dither(float v)
+uint32 dither(float v)
 {
-    return std::copysign(std::floor(std::abs(v) + frand(0,1)), v);
+    return std::floor(v + frand(0, 1));
 }
 
-uint32 ditheru(float v)
+std::string MoneyToString(uint32 copper)
 {
-    return std::copysign(std::floor(std::abs(v) + frand(0,1)), v);
-}
+    uint32 gold = copper / GOLD;
+    uint32 silver = (copper % GOLD) / SILVER;
+    copper = (copper % GOLD) % SILVER;
 
-void SetByteValue(uint32& variable, uint8 offset, uint8 value)
-{
-    if (offset > 4)
+    std::ostringstream ss;
+    if (gold)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Utility::SetByteValue: wrong offset %u", offset);
-        return;
+        ss << gold;
+        ss << "g";
     }
-
-    if (uint8(variable >> (offset * 8)) != value)
+    if (silver || gold)
     {
-        variable &= ~uint32(uint32(0xFF) << (offset * 8));
-        variable |= uint32(uint32(value) << (offset * 8));
+        ss << silver;
+        ss << "s";
     }
-}
+    ss << copper;
+    ss << "c";
 
-void SetUInt16Value(uint32& variable, uint8 offset, uint16 value)
-{
-    if (offset > 2)
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Utility::SetUInt16Value: wrong offset %u", offset);
-        return;
-    }
-
-    if (uint16(variable >> (offset * 16)) != value)
-    {
-        variable &= ~uint32(uint32(0xFFFF) << (offset * 16));
-        variable |= uint32(uint32(value) << (offset * 16));
-    }
-}
-
-std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc)
-{
-    if (!flags)
-        return "None";
-
-    std::string names;
-    for (uint32 i = 0; i < 32; i++)
-    {
-        uint32 flag = 1 << i;
-        if (flags & flag)
-        {
-            if (!names.empty())
-                names += ", ";
-
-            names += getNameFunc(flag);
-        }
-    }
-    return names;
+    return ss.str();
 }

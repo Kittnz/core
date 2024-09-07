@@ -38,14 +38,19 @@ TalentSpellPos const* GetTalentSpellPos(uint32 spellId);
 
 WMOAreaTableEntry const* GetWMOAreaTableEntryByTripple(int32 rootid, int32 adtid, int32 groupid);
 
-CharacterFacialHairStylesEntry const* GetCharFacialHairEntry(uint8 race, uint8 gender, uint8 facialHairId);
-CharSectionsEntry const* GetCharSectionEntry(uint8 race, CharSectionType genType, uint8 gender, uint8 type, uint8 color);
+uint32 GetVirtualMapForMapAndZone(uint32 mapid, uint32 zoneId);
 
 ChatChannelsEntry const* GetChannelEntryFor(uint32 channel_id);
 ChatChannelsEntry const* GetChannelEntryFor(std::string const& name);
 
+// [-ZERO] bool IsTotemCategoryCompatiableWith(uint32 itemTotemCategoryId, uint32 requiredTotemCategoryId);
+
 bool Zone2MapCoordinates(float& x,float& y,uint32 zone);
 bool Map2ZoneCoordinates(float& x,float& y,uint32 zone);
+
+uint32 GetTalentInspectBitPosInTab(uint32 talentId);
+uint32 GetTalentTabInspectBitSize(uint32 talentTabId);
+uint32 const* /*[3]*/ GetTalentTabPages(uint32 cls);
 
 bool IsPointInAreaTriggerZone(AreaTriggerEntry const* atEntry, uint32 mapid, float x, float y, float z, float delta = 0.0f);
 
@@ -53,13 +58,9 @@ typedef std::multimap<uint32, SkillRaceClassInfoEntry const*> SkillRaceClassInfo
 typedef std::pair<SkillRaceClassInfoMap::iterator, SkillRaceClassInfoMap::iterator> SkillRaceClassInfoBounds;
 SkillRaceClassInfoEntry const* GetSkillRaceClassInfo(uint32 skill, uint8 race, uint8 class_);
 
-uint8 ValidateName(std::wstring const& name);
-
 extern DBCStorage <AuctionHouseEntry>            sAuctionHouseStore;
 extern DBCStorage <BankBagSlotPricesEntry>       sBankBagSlotPricesStore;
 //extern DBCStorage <ChatChannelsEntry>           sChatChannelsStore; -- accessed using function, no usable index
-extern DBCStorage <CharacterFacialHairStylesEntry>  sCharacterFacialHairStylesStore;
-extern DBCStorage <CharSectionsEntry>            sCharSectionsStore;
 extern DBCStorage <ChrClassesEntry>              sChrClassesStore;
 extern DBCStorage <ChrRacesEntry>                sChrRacesStore;
 extern DBCStorage <CinematicSequencesEntry>      sCinematicSequencesStore;
@@ -82,7 +83,7 @@ extern DBCStorage <LockEntry>                    sLockStore;
 extern DBCStorage <QuestSortEntry>               sQuestSortStore;
 extern DBCStorage <SkillLineEntry>               sSkillLineStore;
 extern DBCStorage <SkillRaceClassInfoEntry>      sSkillRaceClassInfoStore;
-extern DBCStorage <SkillTiersEntry>              sSkillTiersStore;
+extern DBCStorage <SkillTiersEntry>				 sSkillTiersStore;
 extern DBCStorage <SpellCastTimesEntry>          sSpellCastTimesStore;
 extern DBCStorage <SpellDurationEntry>           sSpellDurationStore;
 extern DBCStorage <SpellFocusObjectEntry>        sSpellFocusObjectStore;
@@ -92,8 +93,8 @@ extern SpellCategoriesStore                      sSpellCategoriesStore;
 extern PetFamilySpellsStore                      sPetFamilySpellsStore;
 extern DBCStorage <SpellRadiusEntry>             sSpellRadiusStore;
 extern DBCStorage <SpellRangeEntry>              sSpellRangeStore;
+extern DBCStorage <SpellIconEntry>               sSpellIconStore;
 extern DBCStorage <SpellShapeshiftFormEntry>     sSpellShapeshiftFormStore;
-extern DBCStorage <SpellVisualEntry>             sSpellVisualStore;
 extern DBCStorage <StableSlotPricesEntry>        sStableSlotPricesStore;
 extern DBCStorage <TalentEntry>                  sTalentStore;
 extern DBCStorage <TalentTabEntry>               sTalentTabStore;
@@ -101,7 +102,6 @@ extern DBCStorage <TaxiPathEntry>                sTaxiPathStore;
 extern TaxiMask                                  sTaxiNodesMask;
 extern TaxiPathSetBySource                       sTaxiPathSetBySource;
 extern TaxiPathNodesByPath                       sTaxiPathNodesByPath;
-extern DBCStorage <TransportAnimationEntry> sTransportAnimationStore;
 extern DBCStorage <WMOAreaTableEntry>            sWMOAreaTableStore;
 //extern DBCStorage <WorldMapAreaEntry>           sWorldMapAreaStore; -- use Zone2MapCoordinates and Map2ZoneCoordinates
 //extern DBCStorage <WorldMapOverlayEntry>         sWorldMapOverlayStore;
@@ -109,7 +109,7 @@ extern DBCStorage <WorldSafeLocsEntry>           sWorldSafeLocsStore;
 
 void LoadDBCStores(std::string const& dataPath);
 
-char const* GetUnitRaceName(uint8 race, uint8 locale);
-char const* GetUnitClassName(uint8 class_, uint8 locale);
+char const* GetRaceName(uint8 race, uint8 locale);
+char const* GetClassName(uint8 class_, uint8 locale);
 
 #endif

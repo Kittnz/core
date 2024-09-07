@@ -1,4 +1,3 @@
-
 #ifndef EXTRACTOR_DEFINES_H
 #define EXTRACTOR_DEFINES_H
 
@@ -16,7 +15,7 @@ struct GridMapFileHeader
     uint32 holesSize;
 };
 
-#define MAP_AREA_NO_AREA      0x0001
+#define MAP_AREA_NO_AREA 0x0001
 
 struct GridMapAreaHeader
 {
@@ -25,9 +24,9 @@ struct GridMapAreaHeader
     uint16 gridArea;
 };
 
-#define MAP_HEIGHT_NO_HEIGHT  0x0001
-#define MAP_HEIGHT_AS_INT16   0x0002
-#define MAP_HEIGHT_AS_INT8    0x0004
+#define MAP_HEIGHT_NO_HEIGHT 0x0001
+#define MAP_HEIGHT_AS_INT16 0x0002
+#define MAP_HEIGHT_AS_INT8 0x0004
 
 struct GridMapHeightHeader
 {
@@ -37,8 +36,8 @@ struct GridMapHeightHeader
     float gridMaxHeight;
 };
 
-#define MAP_LIQUID_NO_TYPE    0x01
-#define MAP_LIQUID_NO_HEIGHT  0x02
+#define MAP_LIQUID_NO_TYPE 0x01
+#define MAP_LIQUID_NO_HEIGHT 0x02
 
 struct GridMapLiquidHeader
 {
@@ -55,24 +54,24 @@ struct GridMapLiquidHeader
 
 enum GridMapLiquidStatus
 {
-    LIQUID_MAP_NO_WATER     = 0x00000000,
-    LIQUID_MAP_ABOVE_WATER  = 0x00000001,
-    LIQUID_MAP_WATER_WALK   = 0x00000002,
-    LIQUID_MAP_IN_WATER     = 0x00000004,
-    LIQUID_MAP_UNDER_WATER  = 0x00000008
+    LIQUID_MAP_NO_WATER    = 0x00000000,
+    LIQUID_MAP_ABOVE_WATER = 0x00000001,
+    LIQUID_MAP_WATER_WALK  = 0x00000002,
+    LIQUID_MAP_IN_WATER    = 0x00000004,
+    LIQUID_MAP_UNDER_WATER = 0x00000008
 };
 
 // defined in DBC and left shifted for flag usage
-#define MAP_LIQUID_TYPE_NO_WATER    0x00
-#define MAP_LIQUID_TYPE_MAGMA       0x01
-#define MAP_LIQUID_TYPE_OCEAN       0x02
-#define MAP_LIQUID_TYPE_SLIME       0x04
-#define MAP_LIQUID_TYPE_WATER       0x08
+#define MAP_LIQUID_TYPE_NO_WATER 0x00
+#define MAP_LIQUID_TYPE_MAGMA 0x01
+#define MAP_LIQUID_TYPE_OCEAN 0x02
+#define MAP_LIQUID_TYPE_SLIME 0x04
+#define MAP_LIQUID_TYPE_WATER 0x08
 
-#define MAP_ALL_LIQUIDS   (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_MAGMA | MAP_LIQUID_TYPE_OCEAN | MAP_LIQUID_TYPE_SLIME)
+#define MAP_ALL_LIQUIDS (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_MAGMA | MAP_LIQUID_TYPE_OCEAN | MAP_LIQUID_TYPE_SLIME)
 
-#define MAP_LIQUID_TYPE_DEEP_WATER  0x10
-#define MAP_LIQUID_TYPE_WMO_WATER   0x20
+#define MAP_LIQUID_TYPE_DARK_WATER 0x10
+#define MAP_LIQUID_TYPE_WMO_WATER 0x20
 
 struct GridMapLiquidData
 {

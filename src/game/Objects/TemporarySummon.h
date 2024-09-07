@@ -29,7 +29,7 @@ class TemporarySummon : public Creature
 {
     public:
         explicit TemporarySummon(ObjectGuid summoner = ObjectGuid());
-        ~TemporarySummon() override;
+        virtual ~TemporarySummon();
 
         void Update(uint32 update_diff, uint32 time) override;
         void Summon(TempSummonType type, uint32 lifetime, CreatureAiSetter pFuncAiSetter = nullptr);
@@ -38,7 +38,7 @@ class TemporarySummon : public Creature
         void SaveToDB();
         ObjectGuid const& GetSummonerGuid() const { return m_summoner ; }
         Unit* GetSummoner() const { return ObjectAccessor::GetUnit(*this, m_summoner); }
-        TempSummonType GetDespawnType() const { return m_type; }
+
     private:
         TempSummonType m_type;
         uint32 m_timer;

@@ -26,24 +26,25 @@
 
 enum TotemType
 {
-    TOTEM_PASSIVE    = 0,
-    TOTEM_ACTIVE     = 1,
+    TOTEM_PASSIVE = 0,
+    TOTEM_ACTIVE = 1,
+    TOTEM_STATUE = 2
 };
 
 class Totem : public Creature
 {
     public:
         explicit Totem();
-        ~Totem() override{};
+        virtual ~Totem(){};
         bool Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, Unit* owner);
         void Update(uint32 update_diff, uint32 time) override;
         void Summon(Unit* owner);
         void UnSummon();
         uint32 GetSpell() const { return m_spells[0]; }
         uint32 GetTotemDuration() const { return m_duration; }
-        Unit* GetOwner();
+        Unit *GetOwner();
         TotemType GetTotemType() const { return m_type; }
-        void SetTypeBySummonSpell(SpellEntry const* spellProto);
+        void SetTypeBySummonSpell(SpellEntry const * spellProto);
         void SetDuration(uint32 dur) { m_duration = dur; }
         void SetOwner(Unit* owner);
 
@@ -53,10 +54,10 @@ class Totem : public Creature
         void UpdateArmor() override {}
         void UpdateMaxHealth() override {}
         void UpdateMaxPower(Powers /*power*/) override {}
-        void UpdateAttackPowerAndDamage(bool /*ranged*/) override {}
+        void UpdateAttackPowerAndDamage(bool /*ranged*/ ) override {}
         void UpdateDamagePhysical(WeaponAttackType /*attType*/) override {}
 
-        bool IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const override;
+        bool IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex index, bool castOnSelf) const override;
 
     protected:
         TotemType m_type;

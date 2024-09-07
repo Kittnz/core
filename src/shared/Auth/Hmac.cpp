@@ -19,7 +19,7 @@
 #include "Auth/Hmac.h"
 #include "BigNumber.h"
 
-HmacHash::HmacHash(uint8 const* data, int length)
+HmacHash::HmacHash(const uint8* data, int length)
 {
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
     m_ctx = HMAC_CTX_new();
@@ -44,7 +44,7 @@ void HmacHash::UpdateBigNumber(BigNumber* bn)
     UpdateData(bn->AsByteArray());
 }
 
-void HmacHash::UpdateData(std::vector<uint8> const& data)
+void HmacHash::UpdateData(const std::vector<uint8>& data)
 {
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
     HMAC_Update(m_ctx, data.data(), data.size());
@@ -53,7 +53,7 @@ void HmacHash::UpdateData(std::vector<uint8> const& data)
 #endif
 }
 
-void HmacHash::UpdateData(uint8 const* data, int length)
+void HmacHash::UpdateData(const uint8* data, int length)
 {
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
     HMAC_Update(m_ctx, data, length);

@@ -23,9 +23,7 @@
 #define MANGOS_FORMULAS_H
 
 #include "World.h"
-#include "Creature.h"
-#include "Player.h"
-#include "Map.h"
+#include "ObjectMgr.h"
 
 namespace MaNGOS
 {
@@ -91,6 +89,7 @@ namespace MaNGOS
                     return (ZD + victim_level - pl_level) / float(ZD);
                 }
             }
+
             return 0;
         }
 
@@ -100,21 +99,18 @@ namespace MaNGOS
             return (ownerLevel * 5 + nBaseExp) * BaseGainLevelFactor(unitLevel, mob_level);
         }
 
-        inline uint32 Gain(Unit const* pUnit, Creature const* pCreature)
+        inline uint32 Gain(Unit* pUnit, Creature* pCreature, bool withChallenges = true)
         {
             if (pCreature->GetUInt32Value(UNIT_CREATED_BY_SPELL) &&
                ((pCreature->GetCreatureInfo()->type == CREATURE_TYPE_CRITTER) ||
                 (pCreature->GetCreatureInfo()->type == CREATURE_TYPE_NOT_SPECIFIED) ||
                 (pCreature->GetCreatureInfo()->type == CREATURE_TYPE_TOTEM) ||
-                (pCreature->GetCreatureInfo()->health_multiplier <= 0.1f)))
+                (pCreature->GetCreatureInfo()->health_min <= 50)))
                 return 0;
 
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
-            if (pCreature->HasStaticFlag(CREATURE_STATIC_FLAG_NO_XP))
-                return 0;
-            
             uint32 ownerLevel = pUnit->GetLevel();
             uint32 unitLevel = pUnit->GetLevel();
             if (pUnit->IsPet())
@@ -122,15 +118,6 @@ namespace MaNGOS
                 if (Unit* pOwner = pUnit->GetOwner())
                 {
                     ownerLevel = pOwner->GetLevel();
-
-                    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
-                    // - Hunter pets now gain experience based on the level difference between
-                    //   them and their target rather than the difference between the Hunters
-                    //   and their target.This will make it much easier to level up a low
-                    //   level pet.Keep in mind that the Hunter must still kill creatures
-                    //   from which he / she will gain experience.
-                    if (sWorld.GetWowPatch() < WOW_PATCH_107)
-                        unitLevel = pOwner->GetLevel();
                 }
             }
 
@@ -152,15 +139,19 @@ namespace MaNGOS
                 xp_gain *= 0.75f;
 
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
-            xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
+            if (!pCreature->GetMap()->IsDungeon())
+                xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-            Player const* pPlayer = pUnit->GetCharmerOrOwnerPlayerOrPlayerItself();
-            float personalRate = pPlayer ? pPlayer->GetPersonalXpRate() : -1.0f;
+            if (withChallenges)
+            {
+                if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
+                    xp_gain *= 0.5f;
 
-            if (personalRate >= 0.0f)
-                xp_gain *= personalRate;
-            else
-                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+                if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE))
+                    xp_gain *= 1.3f;
+            }
+
+            xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
 
             return std::nearbyint(xp_gain);
         }
@@ -188,17 +179,15 @@ namespace MaNGOS
 
     namespace Honor
     {
-        inline float GetHonorGain(uint8 killerLevel, uint8 victimLevel, uint32 victimRank, uint32 totalKills = 0, uint32 groupSize = 1)
+        inline float GetHonorGain(uint8 killerLevel, uint8 victimLevel, uint32 victimRank, uint32 totalKills = 0, uint32 groupSize = 1, bool inGurubashiArena = false)
         {
             // Penalty due to level diff
             float diffLevelPenalty = XP::BaseGainLevelFactor(killerLevel, victimLevel);
 
             // Same unit killing penalty
-            // [-PROGRESSIVE] Total kills per day cahnged in 1.12 (http://wow.gamepedia.com/Patch_1.12.0#General)
+            // Total kills per day cahnged in 1.12 (http://wow.gamepedia.com/Patch_1.12.0#General)
             // Honorable Kills now diminish at a rate 10% per kill rather than 25% per kill.
-            float penalty = 4.0f;
-            if (sWorld.GetWowPatch() >= WOW_PATCH_112 || !sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_REWARDS))
-                penalty = 10.0f;
+            const float penalty = 10.0f;
 
             double sameVictimPenalty = totalKills >= static_cast<uint32>(penalty) ? 0 : 1 - totalKills / penalty;
 
@@ -215,19 +204,20 @@ namespace MaNGOS
                 levelCoeff = 0.3434;
             else if ((killerLevel <= 29) && (killerLevel >= 20))
                 levelCoeff = 0.2070;
-            else if (killerLevel <= 19)
-                levelCoeff = 0.1212;
-            else
-                levelCoeff = 0.1212; // Not sure
+            // Blizzlike:
+            //else if (killerLevel <= 19)
+            //    levelCoeff = 0.1212;
+            //else
+            //    levelCoeff = 0.1212; // Not sure
+            // Turtle WoW:
+            else levelCoeff = 0.1212; 
 
-            float expFactor = 188.3f;
+            const float expFactor = 188.3f;
 
-            // [-PROGRESSIVE] Honor gain per victim rank changed in 1.8
-            // Values from http://www.wowwiki.com/Honor_system_(pre-2.0_formulas)
-            if (sWorld.GetWowPatch() < WOW_PATCH_108 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_REWARDS))
-                expFactor = 157.4f;
-
+            // Blizzlike:
             return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
+            // Turtle WoW. Adding x5 honor inside Gurubashi's Arena Battle Ring:
+            // return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * (inGurubashiArena ? 2 : 1));
         }
     }
 }

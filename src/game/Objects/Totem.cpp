@@ -20,12 +20,15 @@
  */
 
 #include "Totem.h"
+#include "WorldPacket.h"
+#include "Log.h"
 #include "Group.h"
 #include "Player.h"
+#include "ObjectMgr.h"
 #include "SpellMgr.h"
+#include "DBCStores.h"
 #include "CreatureAI.h"
 #include "InstanceData.h"
-#include "ObjectAccessor.h"
 
 Totem::Totem() : Creature(CREATURE_SUBTYPE_TOTEM)
 {
@@ -64,7 +67,7 @@ bool Totem::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* 
 
 void Totem::Update(uint32 update_diff, uint32 time)
 {
-    Unit* owner = GetOwner();
+    Unit *owner = GetOwner();
     if (!owner || !owner->IsAlive() || !IsAlive() || !isWithinVisibilityDistanceOf(owner, owner))
     {
         UnSummon();                                         // remove self
@@ -82,8 +85,8 @@ void Totem::Update(uint32 update_diff, uint32 time)
         UnSummon();                                         // remove self
         return;
     }
-
-    m_duration -= update_diff;
+    else
+        m_duration -= update_diff;
 }
 
 void Totem::Summon(Unit* owner)
@@ -100,9 +103,16 @@ void Totem::Summon(Unit* owner)
     if (!GetSpell())
         return;
 
-    if (m_type==TOTEM_PASSIVE)
+    switch (m_type)
     {
-        CastSpell(this, GetSpell(), true);
+        case TOTEM_PASSIVE:
+            CastSpell(this, GetSpell(), true);
+            break;
+        case TOTEM_STATUE:
+            CastSpell(GetOwner(), GetSpell(), true);
+            break;
+        default:
+            break;
     }
 }
 
@@ -113,7 +123,7 @@ void Totem::UnSummon()
     CombatStop();
     RemoveAurasDueToSpell(GetSpell());
 
-    if (Unit* owner = GetOwner())
+    if (Unit *owner = GetOwner())
     {
         owner->_RemoveTotem(this);
         owner->RemoveAurasDueToSpell(GetSpell());
@@ -122,9 +132,9 @@ void Totem::UnSummon()
         if (owner->GetTypeId() == TYPEID_PLAYER)
         {
             // Not only the player can summon the totem (scripted AI)
-            if (Group* pGroup = ((Player*)owner)->GetGroup())
+            if (Group *pGroup = ((Player*)owner)->GetGroup())
             {
-                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                for (GroupReference *itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
                 {
                     Player* Target = itr->getSource();
                     if (Target && pGroup->SameSubGroup((Player*)owner, Target))
@@ -152,7 +162,7 @@ void Totem::SetOwner(Unit* owner)
     SetLevel(owner->GetLevel());
 }
 
-Unit* Totem::GetOwner()
+Unit *Totem::GetOwner()
 {
     if (ObjectGuid ownerGuid = GetOwnerGuid())
         return ObjectAccessor::GetUnit(*this, ownerGuid);
@@ -160,19 +170,21 @@ Unit* Totem::GetOwner()
     return nullptr;
 }
 
-void Totem::SetTypeBySummonSpell(SpellEntry const* spellProto)
+void Totem::SetTypeBySummonSpell(SpellEntry const * spellProto)
 {
     // Get spell casted by totem
-    SpellEntry const* totemSpell = sSpellMgr.GetSpellEntry(GetSpell());
+    SpellEntry const * totemSpell = sSpellMgr.GetSpellEntry(GetSpell());
     if (totemSpell)
     {
         // If spell have cast time -> so its active totem
         if (totemSpell->GetCastTime(this))
             m_type = TOTEM_ACTIVE;
     }
+    if (spellProto->SpellIconID == 2056)
+        m_type = TOTEM_STATUE;                              //Jewelery statue
 }
 
-bool Totem::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const
+bool Totem::IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex index, bool castOnSelf) const
 {
     // Check for Mana Spring & Healing Stream totems
     switch (spellInfo->SpellFamilyName)
@@ -216,5 +228,6 @@ bool Totem::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex 
         if (spellInfo->IsPeriodicRegenerateEffect(index))
             return true;
     }
+
     return Creature::IsImmuneToSpellEffect(spellInfo, index, castOnSelf);
 }

@@ -34,22 +34,26 @@ void CritterAI::DamageTaken(Unit* pWho, uint32& uiDamage)
     {
         if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != TIMED_FLEEING_MOTION_TYPE)
             m_creature->GetMotionMaster()->MoveFleeing(pWho, ESCAPE_TIMER);
+
         m_uiCombatTimer = ESCAPE_TIMER;
     }
 }
 
-void CritterAI::SpellHit(SpellCaster* pCaster, SpellEntry const* pSpell)
+void CritterAI::SpellHit(WorldObject* pWho, const SpellEntry* pSpell)
 {
-    if (!pSpell->IsPositiveSpell() && !pSpell->IsDirectDamageSpell() && m_creature->IsAlive())
+    if (Unit* pUnit = ToUnit(pWho))
     {
-        if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != TIMED_FLEEING_MOTION_TYPE)
-            if (Unit* pUnit = pCaster->ToUnit())
+        if (!pSpell->IsPositiveSpell() && !pSpell->IsDirectDamageSpell() && m_creature->IsAlive())
+        {
+            if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != TIMED_FLEEING_MOTION_TYPE)
                 m_creature->GetMotionMaster()->MoveFleeing(pUnit, ESCAPE_TIMER);
-        m_uiCombatTimer = ESCAPE_TIMER;
+
+            m_uiCombatTimer = ESCAPE_TIMER;
+        }
     }
 }
 
-void CritterAI::UpdateAI(uint32 const diff)
+void CritterAI::UpdateAI(const uint32 diff)
 {
     if (m_creature->IsInCombat())
     {
@@ -62,4 +66,3 @@ void CritterAI::UpdateAI(uint32 const diff)
             m_uiCombatTimer -= diff;
     }
 }
-

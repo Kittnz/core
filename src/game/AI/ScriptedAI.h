@@ -5,17 +5,19 @@
 #ifndef SC_CREATURE_H
 #define SC_CREATURE_H
 
-#include "BasicAI.h"
+#include "CreatureAI.h"
+#include "Creature.h"
+#include "ScriptMgr.h"
 
 #define CAST_AI(a,b)    (dynamic_cast<a*>(b))
 
 enum SCEquip
 {
     EQUIP_NO_CHANGE = -1,
-    EQUIP_UNEQUIP   = 0
+    EQUIP_UNEQUIP = 0
 };
 
-struct ScriptedAI : BasicAI
+struct ScriptedAI : CreatureAI
 {
     explicit ScriptedAI(Creature* pCreature);
     ~ScriptedAI() override {}
@@ -23,6 +25,12 @@ struct ScriptedAI : BasicAI
     //*************
     //CreatureAI Functions
     //*************
+
+    // Called when an unit moves within visibility distance
+    void MoveInLineOfSight(Unit*) override;
+
+    // Called at each attack of m_creature by any victim
+    void AttackStart(Unit*) override;
 
     // Called for reaction at enter to combat if not in combat yet (enemy can be nullptr)
     void EnterCombat(Unit*) override;
@@ -33,8 +41,41 @@ struct ScriptedAI : BasicAI
     // Called when the creature leaves combat
     void OnCombatStop() override {}
 
+    // Called at any heal cast/item used (call non implemented in mangos)
+    void HealedBy(Unit* /*pHealer*/, uint32& /*uiAmountHealed*/) override {}
+
+    // Called at any Damage to any victim (before damage apply)
+    void DamageDeal(Unit* /*pDoneTo*/, uint32& /*uiDamage*/) override {}
+
+    // Called at any Damage from any attacker (before damage apply)
+    void DamageTaken(Unit* /*pDoneBy*/, uint32& /*uiDamage*/) override {}
+
+    // Called at World update tick
+    void UpdateAI(const uint32) override;
+
+    // Called at creature death
+    void JustDied(Unit*) override {}
+
+    // Called at creature killing another unit
+    void KilledUnit(Unit*) override {}
+
+    // Called when the creature summon successfully other creature
+    void JustSummoned(Creature*) override {}
+
+    // Called when a summoned creature is despawned
+    void SummonedCreatureDespawn(Creature*) override {}
+
+    // Called when hit by a spell
+    void SpellHit(WorldObject*, const SpellEntry*) override {}
+
+    // Called when spell hits creature's target
+    void SpellHitTarget(Unit*, const SpellEntry*) override {}
+
     // Called when creature is spawned or respawned (for reseting variables)
     void JustRespawned() override;
+
+    // Called at waypoint reached or PointMovement end
+    void MovementInform(uint32, uint32) override {}
 
     //*************
     // Variables
@@ -87,8 +128,10 @@ struct ScriptedAI : BasicAI
     // Return a player with at least minimumRange from m_creature
     Player* GetPlayerAtMinimumRange(float fMinimumRange);
 
+    Player* GetRandomPlayerInRange(float radius, bool mustBeAlive = true, const std::list<Player*>* excludedPlayers = nullptr) const;
+
     // Get a list of all players within range of m_creature
-    void GetPlayersWithinRange(std::list<Player*>& players, float range);
+    void GetPlayersWithinRange(std::list<Player*>& players, float range) const;
 
     // Spawns a creature relative to m_creature
     Creature* DoSpawnCreature(uint32 uiId, float fX, float fY, float fZ, float fAngle, uint32 uiType, uint32 uiDespawntime);
@@ -98,7 +141,7 @@ struct ScriptedAI : BasicAI
 
     void SetEquipmentSlots(bool bLoadDefault, int32 uiMainHand = EQUIP_NO_CHANGE, int32 uiOffHand = EQUIP_NO_CHANGE, int32 uiRanged = EQUIP_NO_CHANGE);
 
-    bool EnterEvadeIfOutOfCombatArea(uint32 const uiDiff);
+    bool EnterEvadeIfOutOfCombatArea(const uint32 uiDiff);
     void EnterEvadeIfOutOfHomeArea();
 
     void DoGoHome();
@@ -109,12 +152,14 @@ struct ScriptedAI : BasicAI
     float DoGetThreat(Unit* pUnit);
     void DoModifyThreatPercent(Unit* pUnit, int32 pct);
     void DoTeleportTo(float fX, float fY, float fZ);
-    void DoTeleportTo(float const fPos[4]);
+    void DoTeleportTo(const float fPos[4]);
     void DoTeleportAll(float fX, float fY, float fZ, float fO);
     Creature* me;
 
     private:
         uint32 m_uiEvadeCheckCooldown;
+
+
 
         bool m_bEvadeOutOfHomeArea;
         uint32 m_uiHomeArea;

@@ -17,7 +17,6 @@
  */
 
 #include "BIH.h"
-
 #include <cmath>
 
 void BIH::buildHierarchy(std::vector<uint32>& tempTree, buildData& dat, BuildStats& stats)
@@ -160,6 +159,7 @@ void BIH::subdivide(int left, int right, std::vector<uint32>& tempTree, buildDat
                 createNode(tempTree, nodeIndex, left, right);
                 return;
             }
+
             if (clipR >= split)
             {
                 // keep looping on right half

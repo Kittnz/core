@@ -37,11 +37,9 @@ EndScriptData */
 
 enum
 {
-    SPELL_SPIRIT_HEAL_CHANNEL       = 22011,                // Spirit Heal Channel
-
-    SPELL_SPIRIT_HEAL               = 22012,                // Spirit Heal
-
-    SPELL_WAITING_TO_RESURRECT      = 2584                  // players who cancel this aura don't want a resurrection
+    SPELL_SPIRIT_HEAL_CHANNEL = 22011, // Spirit Heal Channel
+    SPELL_SPIRIT_HEAL = 22012, // Spirit Heal
+    SPELL_WAITING_TO_RESURRECT = 2584 // players who cancel this aura don't want a resurrection
 };
 
 struct npc_spirit_guideAI : ScriptedAI
@@ -64,7 +62,7 @@ struct npc_spirit_guideAI : ScriptedAI
         return uiTimerRez;
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (uiTimerRez < uiDiff)
         {
@@ -82,7 +80,8 @@ struct npc_spirit_guideAI : ScriptedAI
         // TODO: would be better to cast a dummy spell
         Map* pMap = m_creature->GetMap();
 
-        if (!pMap || !pMap->IsBattleGround())
+        // if (!pMap || !pMap->IsBattleGround()) // Return this check if you don't plan to run Turtle WoW Arena Tournament
+        if (!pMap)
             return;
 
         Map::PlayerList const &PlayerList = pMap->GetPlayers();
@@ -166,7 +165,7 @@ struct npc_etendardAI : NullCreatureAI
     bool m_bSpawned;
     uint32 m_bAutoRepeatSpell;
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_bSpawned)
         {
@@ -179,10 +178,76 @@ struct npc_etendardAI : NullCreatureAI
     }
 };
 
-
 CreatureAI* GetAI_npc_etendard(Creature* pCreature)
 {
     return new npc_etendardAI(pCreature);
+}
+
+enum FlagSpellsWS
+{
+    AT_SILVERWING_FLAG   = 3646,
+    AT_WARSONG_FLAG      = 3647,
+
+    AURA_WARSONG_FLAG    = 23333,
+    AURA_SILVERWING_FLAG = 23335,
+
+    GO_SILVERWING_FLAG   = 179830,
+    GO_WARSONG_FLAG      = 179831,
+};
+
+struct go_wsg_flagAI : public GameObjectAI
+{
+    go_wsg_flagAI(GameObject * pGo) : GameObjectAI(pGo)
+    {
+        m_checkForPlayerTimer = 0;
+    }
+
+    uint32 m_checkForPlayerTimer;
+
+    void UpdateAI(uint32 const diff) override
+    {
+        if (m_checkForPlayerTimer < diff)
+        {
+            Map* pMap = me->FindMap();
+            if (!pMap)
+                return;
+
+            Map::PlayerList const& playerList = pMap->GetPlayers();
+            for (const auto& itr : playerList)
+            {
+                Player* pPlayer = itr.getSource();
+                if (!pPlayer || !pPlayer->IsWithinDistInMap(me, 3.0f))
+                    continue;
+
+                BattleGround* bg = pPlayer->GetBattleGround();
+                if (!bg)
+                    continue;
+
+                switch (me->GetEntry())
+                {
+                    case GO_SILVERWING_FLAG:
+                        if (pPlayer->HasAura(AURA_WARSONG_FLAG))
+                            bg->HandleAreaTrigger(pPlayer, AT_SILVERWING_FLAG);
+                        break;
+                    case GO_WARSONG_FLAG:
+                        if (pPlayer->HasAura(AURA_SILVERWING_FLAG))
+                            bg->HandleAreaTrigger(pPlayer, AT_WARSONG_FLAG);
+                        break;
+                    default:
+                        sLog.outError("WSG flag script assigned to wrong gobject.");
+                        break;
+                }
+            }
+            m_checkForPlayerTimer = 1000;
+        }
+        else
+            m_checkForPlayerTimer -= diff;
+    }
+};
+
+GameObjectAI* GetAIgo_wsg_flag(GameObject* pGo)
+{
+    return new go_wsg_flagAI(pGo);
 }
 
 void AddSC_battleground()
@@ -198,5 +263,10 @@ void AddSC_battleground()
     newscript = new Script;
     newscript->Name = "npc_etendard";
     newscript->GetAI = &GetAI_npc_etendard;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_wsg_flag";
+    newscript->GOGetAI = &GetAIgo_wsg_flag;
     newscript->RegisterSelf();
 }

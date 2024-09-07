@@ -31,7 +31,7 @@
 # define _MANGOSDCONFVERSION 2010100901
 #endif
 #ifndef _REALMDCONFVERSION
-# define _REALMDCONFVERSION 2020010501
+# define _REALMDCONFVERSION 2010062001
 #endif
 #ifndef _MODSCONFVERSION
 # define _MODSCONFVERSION 2010062001
@@ -49,10 +49,6 @@
 # define ARCHITECTURE "x64"
 #elif defined(__ia64)  || defined(__IA64__)  || defined(_M_IA64)
 # define ARCHITECTURE "IA64"
-#elif defined(__aarch64__)
-# define ARCHITECTURE "AArch64"
-#elif defined(__arm__)
-# define ARCHITECTURE "ARM32"
 #else
 # define ARCHITECTURE "x32"
 #endif
@@ -71,6 +67,7 @@
 # define _MANGOSD_CONFIG  SYSCONFDIR "mangosd.conf"
 # define _REALMD_CONFIG   SYSCONFDIR "realmd.conf"
 # define _MODS_CONFIG     SYSCONFDIR "mods.conf"
+# define _RATE_CONFIG     SYSCONFDIR "rate.conf"
 #else
 # if defined  (__FreeBSD__)
 #  define _ENDIAN_PLATFORM "FreeBSD_" ARCHITECTURE " (" _ENDIAN_STRING ")"
@@ -89,10 +86,11 @@
 # endif
 # define _MANGOSD_CONFIG  SYSCONFDIR "mangosd.conf"
 # define _REALMD_CONFIG  SYSCONFDIR "realmd.conf"
-# define _MODS_CONFIG  SYSCONFDIR "mods.conf"
+# define _MODS_CONFIG     SYSCONFDIR "mods.conf"
+# define _RATE_CONFIG     SYSCONFDIR "rate.conf"
 #endif
 
-#define _FULLVERSION REVISION_HASH " / " REVISION_DATE " / " _ENDIAN_PLATFORM
+#define _FULLVERSION REVISION_DATE
 
 #define DEFAULT_PLAYER_LIMIT 100
 #define DEFAULT_WORLDSERVER_PORT 8085                       //8129

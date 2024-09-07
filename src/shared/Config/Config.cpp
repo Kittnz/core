@@ -27,7 +27,7 @@ INSTANTIATE_SINGLETON_2(Config, Config::Lock);
 INSTANTIATE_CLASS_MUTEX(Config, std::shared_timed_mutex);
 
 // Defined here as it must not be exposed to end-users.
-bool Config::GetValueHelper(char const* name, ACE_TString& result)
+bool Config::GetValueHelper(const char* name, ACE_TString &result)
 {
     GuardType guard(m_configLock);
 
@@ -36,7 +36,7 @@ bool Config::GetValueHelper(char const* name, ACE_TString& result)
 
     ACE_TString section_name;
     ACE_Configuration_Section_Key section_key;
-    ACE_Configuration_Section_Key const& root_key = mConf->root_section();
+    const ACE_Configuration_Section_Key &root_key = mConf->root_section();
 
     int i = 0;
     while (mConf->enumerate_sections(root_key, i, section_name) == 0)
@@ -50,8 +50,76 @@ bool Config::GetValueHelper(char const* name, ACE_TString& result)
     return false;
 }
 
+std::string Config::GetStringDefaultInSection(const char* name, const char* section, const char* def)
+{
+    GuardType guard(m_configLock);
+
+    if (!mConf)
+        return def;
+
+    const ACE_Configuration_Section_Key &root_key = mConf->root_section();
+    ACE_Configuration_Section_Key primary_section_key;
+    int openErrCode = mConf->open_section(root_key, section, 0, primary_section_key);
+    if (openErrCode != 0)
+    {
+        return def;
+    }
+
+    ACE_TString section_value;
+    openErrCode = mConf->get_string_value(primary_section_key, name, section_value);
+    if (openErrCode != 0) return def;
+
+    return section_value.c_str();
+}
+
+void Config::GetRootSections(std::vector<std::string>& OutSectionList)
+{
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+
+    ACE_TString section_name;
+    int i = 0;
+    while (mConf->enumerate_sections(RootKey, i, section_name) == 0)
+    {
+        OutSectionList.emplace_back(section_name.c_str());
+        ++i;
+    }
+}
+
+void Config::GetSections(const char* SectionName, std::vector<std::string>& OutSectionList)
+{
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+    ACE_Configuration_Section_Key BaseSectionKey;
+    if (mConf->open_section(RootKey, SectionName, 0, BaseSectionKey) == 0)
+    {
+        ACE_TString section_name;
+        int i = 0;
+        while (mConf->enumerate_sections(BaseSectionKey, i, section_name) == 0)
+        {
+            OutSectionList.emplace_back(section_name.c_str());
+            ++i;
+        }
+    }
+}
+
+void Config::GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList)
+{
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+    ACE_Configuration_Section_Key BaseSectionKey;
+    if (mConf->open_section(RootKey, SectionName, 0, BaseSectionKey) == 0)
+    {
+        ACE_TString key_name;
+        ACE_Configuration::VALUETYPE valueType;
+        int i = 0;
+        while (mConf->enumerate_values(BaseSectionKey, i, key_name, valueType) == 0)
+        {
+            OutKeysList.emplace_back(key_name.c_str());
+            ++i;
+        }
+    }
+}
+
 Config::Config()
-: mConf(nullptr)
+    : mConf(nullptr)
 {
 }
 
@@ -60,7 +128,7 @@ Config::~Config()
     delete mConf;
 }
 
-bool Config::SetSource(char const* file)
+bool Config::SetSource(const char *file)
 {
     mFilename = file;
 
@@ -84,34 +152,41 @@ bool Config::Reload()
     return false;
 }
 
-std::string Config::GetStringDefault(char const* name, char const* def)
+std::string Config::GetStringDefault(const char* name, const char* def)
 {
     ACE_TString val;
     return GetValueHelper(name, val) ? val.c_str() : def;
 }
 
-bool Config::GetBoolDefault(char const* name, bool def)
+bool Config::GetBoolDefault(const char* name, bool def)
 {
     ACE_TString val;
     if (!GetValueHelper(name, val))
         return def;
 
-    char const* str = val.c_str();
+    const char* str = val.c_str();
     return strcmp(str, "true") == 0 || strcmp(str, "TRUE") == 0 ||
            strcmp(str, "yes") == 0 || strcmp(str, "YES") == 0 ||
            strcmp(str, "1") == 0;
 }
 
 
-int32 Config::GetIntDefault(char const* name, int32 def)
+int32 Config::GetIntDefault(const char* name, int32 def)
 {
     ACE_TString val;
     return GetValueHelper(name, val) ? atoi(val.c_str()) : def;
 }
 
 
-float Config::GetFloatDefault(char const* name, float def)
+float Config::GetFloatDefault(const char* name, float def)
 {
     ACE_TString val;
     return GetValueHelper(name, val) ? (float)atof(val.c_str()) : def;
+}
+
+float Config::GetFloatDefault(const char* name, const char* section, const float def)
+{
+    std::string rawValue = GetStringDefaultInSection(name, section, "invalid");
+    if (rawValue == "invalid") return def;
+    return atof(rawValue.c_str());
 }

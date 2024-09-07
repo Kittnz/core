@@ -49,7 +49,7 @@ LocaleNameStr const fullLocaleNameList[] =
     { NULL,   LOCALE_enUS }
 };
 
-LocaleConstant GetLocaleByName(std::string const& name)
+LocaleConstant GetLocaleByName(const std::string& name)
 {
     for(LocaleNameStr const* itr = &fullLocaleNameList[0]; itr->name; ++itr)
         if (name==itr->name)
@@ -77,7 +77,7 @@ LocaleConstant GetDbcLocaleFromDbLocale(DBLocaleConstant localeIndex)
         case DB_LOCALE_esES:
             return LOCALE_esES;
         case DB_LOCALE_esMX:
-            return LOCALE_esMX; // index exists in dbcs, but no actual client
+            return LOCALE_esMX;
         case DB_LOCALE_ruRU:
             return LOCALE_enUS; // there are no russian dbcs for vanilla
     }

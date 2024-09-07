@@ -31,7 +31,6 @@
 #include <list>
 #include <atomic>
 
-
 #define MAX_HEIGHT            100000.0f                     // can be use for find ground height at surface
 #define INVALID_HEIGHT       -100000.0f                     // for check, must be equal to VMAP_INVALID_HEIGHT, real value for unknown height is VMAP_INVALID_HEIGHT_VALUE
 #define INVALID_HEIGHT_VALUE -200000.0f                     // for return, must be equal to VMAP_INVALID_HEIGHT_VALUE, check value for unknown height is VMAP_INVALID_HEIGHT
@@ -52,7 +51,6 @@ class GridMap
 {
     private:
 
-        uint16 m_holes[16][16];
         uint32 m_flags = 0;
 
         // Area data
@@ -90,8 +88,6 @@ class GridMap
         bool loadAreaData(FILE* in, uint32 offset, uint32 size);
         bool loadHeightData(FILE* in, uint32 offset, uint32 size);
         bool loadGridMapLiquidData(FILE* in, uint32 offset, uint32 size);
-        bool loadHolesData(FILE* in, uint32 offset, uint32 size);
-        bool isHole(int row, int col) const;
 
         // Get height functions and pointers
         typedef float(GridMap::*pGetHeightPtr)(float x, float y) const;
@@ -130,8 +126,8 @@ class Referencable
         bool IsReferenced() const { return (m_count > 0); }
 
     private:
-        Referencable(Referencable const&);
-        Referencable& operator=(Referencable const&);
+        Referencable(const Referencable&);
+        Referencable& operator=(const Referencable&);
 
         Countable m_count;
 };
@@ -175,25 +171,25 @@ class TerrainInfo : public Referencable<AtomicLong>
         // to cleanup unreferenced GridMap objects - they are too heavy
         // to destroy them dynamically, especially on highly populated servers
         // THIS METHOD IS NOT THREAD-SAFE!!!! AND IT SHOULDN'T BE THREAD-SAFE!!!!
-        void CleanUpGrids(uint32 const diff);
+        void CleanUpGrids(const uint32 diff);
 
     protected:
         friend class Map;
         // load/unload terrain data
-        GridMap* Load(uint32 const x, uint32 const y);
-        void Unload(uint32 const x, uint32 const y);
+        GridMap* Load(const uint32 x, const uint32 y);
+        void Unload(const uint32 x, const uint32 y);
 
     private:
-        TerrainInfo(TerrainInfo const&);
-        TerrainInfo& operator=(TerrainInfo const&);
+        TerrainInfo(const TerrainInfo&);
+        TerrainInfo& operator=(const TerrainInfo&);
 
-        GridMap* GetGrid(float const x, float const y);
-        GridMap* LoadMapAndVMap(uint32 const x, uint32 const y);
+        GridMap* GetGrid(const float x, const float y);
+        GridMap* LoadMapAndVMap(const uint32 x, const uint32 y);
 
-        int RefGrid(uint32 const& x, uint32 const& y);
-        int UnrefGrid(uint32 const& x, uint32 const& y);
+        int RefGrid(const uint32& x, const uint32& y);
+        int UnrefGrid(const uint32& x, const uint32& y);
 
-        uint32 const m_mapId;
+        const uint32 m_mapId;
 
         GridMap* m_GridMaps[MAX_NUMBER_OF_GRIDS][MAX_NUMBER_OF_GRIDS];
         int16 m_GridRef[MAX_NUMBER_OF_GRIDS][MAX_NUMBER_OF_GRIDS];
@@ -201,7 +197,7 @@ class TerrainInfo : public Referencable<AtomicLong>
         // global garbage collection timer
         ShortIntervalTimer i_timer;
 
-        using LOCK_TYPE = std::mutex ;
+        using LOCK_TYPE = std::mutex;
         using LOCK_GUARD = std::unique_lock<LOCK_TYPE>;
         LOCK_TYPE m_mutex;
         LOCK_TYPE m_refMutex;
@@ -213,10 +209,10 @@ class TerrainManager : public MaNGOS::Singleton<TerrainManager, MaNGOS::ClassLev
         friend class MaNGOS::OperatorNew<TerrainManager>;
 
     public:
-        TerrainInfo* LoadTerrain(uint32 const mapId);
-        void UnloadTerrain(uint32 const mapId);
+        TerrainInfo* LoadTerrain(const uint32 mapId);
+        void UnloadTerrain(const uint32 mapId);
 
-        void Update(uint32 const diff);
+        void Update(const uint32 diff);
         void UnloadAll();
 
         // Liquid Types
@@ -249,8 +245,8 @@ class TerrainManager : public MaNGOS::Singleton<TerrainManager, MaNGOS::ClassLev
         TerrainManager();
         ~TerrainManager();
 
-        TerrainManager(TerrainManager const&);
-        TerrainManager& operator=(TerrainManager const&);
+        TerrainManager(const TerrainManager&);
+        TerrainManager& operator=(const TerrainManager&);
 
         typedef MaNGOS::ClassLevelLockable<TerrainManager, std::mutex>::Lock Guard;
         TerrainDataMap i_TerrainMap;

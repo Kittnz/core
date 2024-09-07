@@ -23,6 +23,7 @@
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
 #include "Log.h"
+#include "Errors.h"
 #include "Player.h"
 
 Camera::Camera(Player* pl) : m_owner(*pl), m_source(pl)
@@ -39,7 +40,7 @@ Camera::~Camera()
     m_source->GetViewPoint().Detach(this);
 }
 
-void Camera::ReceivePacket(WorldPacket* data)
+void Camera::ReceivePacket(WorldPacket *data)
 {
     m_owner.SendDirectMessage(data);
 }
@@ -54,7 +55,7 @@ void Camera::UpdateForCurrentViewPoint()
     UpdateVisibilityForOwner();
 }
 
-void Camera::SetView(WorldObject* obj, bool update_far_sight_field /*= true*/)
+void Camera::SetView(WorldObject *obj, bool update_far_sight_field /*= true*/)
 {
     MANGOS_ASSERT(obj);
 
@@ -63,13 +64,13 @@ void Camera::SetView(WorldObject* obj, bool update_far_sight_field /*= true*/)
 
     if (!m_owner.IsInMap(obj))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Camera::SetView, viewpoint is not in map with camera's owner");
+        sLog.outError("Camera::SetView, viewpoint is not in map with camera's owner");
         return;
     }
 
     if (!obj->isType(TypeMask(TYPEMASK_DYNAMICOBJECT | TYPEMASK_UNIT)))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Camera::SetView, viewpoint type is not available for client");
+        sLog.outError("Camera::SetView, viewpoint type is not available for client");
         return;
     }
 
@@ -139,16 +140,16 @@ void Camera::UpdateVisibilityOf(WorldObject* target)
 }
 
 template<class T>
-void Camera::UpdateVisibilityOf(T* target, UpdateData& data, std::set<WorldObject*>& vis)
+void Camera::UpdateVisibilityOf(T * target, UpdateData &data, std::set<WorldObject*>& vis)
 {
     m_owner.template UpdateVisibilityOf<T>(m_source, target, data, vis);
 }
 
-template void Camera::UpdateVisibilityOf(Player*       , UpdateData&, std::set<WorldObject*>&);
-template void Camera::UpdateVisibilityOf(Creature*     , UpdateData&, std::set<WorldObject*>&);
-template void Camera::UpdateVisibilityOf(Corpse*       , UpdateData&, std::set<WorldObject*>&);
-template void Camera::UpdateVisibilityOf(GameObject*   , UpdateData&, std::set<WorldObject*>&);
-template void Camera::UpdateVisibilityOf(DynamicObject*, UpdateData&, std::set<WorldObject*>&);
+template void Camera::UpdateVisibilityOf(Player*        , UpdateData& , std::set<WorldObject*>&);
+template void Camera::UpdateVisibilityOf(Creature*      , UpdateData& , std::set<WorldObject*>&);
+template void Camera::UpdateVisibilityOf(Corpse*        , UpdateData& , std::set<WorldObject*>&);
+template void Camera::UpdateVisibilityOf(GameObject*    , UpdateData& , std::set<WorldObject*>&);
+template void Camera::UpdateVisibilityOf(DynamicObject* , UpdateData& , std::set<WorldObject*>&);
 
 void Camera::UpdateVisibilityForOwner()
 {
@@ -169,5 +170,5 @@ void Camera::UpdateVisibilityForOwner()
 ViewPoint::~ViewPoint()
 {
     if (!m_cameras.empty())
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "ViewPoint destructor called, but some cameras referenced to it");
+        sLog.outError("ViewPoint destructor called, but some cameras referenced to it");
 }

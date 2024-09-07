@@ -17,29 +17,15 @@
  */
 
 #include "DatabaseEnv.h"
-#include "Log.h"
 
-bool SqlStmtFieldData::toBool() const { MANGOS_ASSERT(m_type == FIELD_BOOL); return m_binaryData.boolean; }
-uint8 SqlStmtFieldData::toUint8() const { MANGOS_ASSERT(m_type == FIELD_UI8); return m_binaryData.ui8; }
-int8 SqlStmtFieldData::toInt8() const { MANGOS_ASSERT(m_type == FIELD_I8); return m_binaryData.i8; }
-uint16 SqlStmtFieldData::toUint16() const { MANGOS_ASSERT(m_type == FIELD_UI16); return m_binaryData.ui16; }
-int16 SqlStmtFieldData::toInt16() const { MANGOS_ASSERT(m_type == FIELD_I16); return m_binaryData.i16; }
-uint32 SqlStmtFieldData::toUint32() const { MANGOS_ASSERT(m_type == FIELD_UI32); return m_binaryData.ui32; }
-int32 SqlStmtFieldData::toInt32() const { MANGOS_ASSERT(m_type == FIELD_I32); return m_binaryData.i32; }
-uint64 SqlStmtFieldData::toUint64() const { MANGOS_ASSERT(m_type == FIELD_UI64); return m_binaryData.ui64; }
-int64 SqlStmtFieldData::toInt64() const { MANGOS_ASSERT(m_type == FIELD_I64); return m_binaryData.i64; }
-float SqlStmtFieldData::toFloat() const { MANGOS_ASSERT(m_type == FIELD_FLOAT); return m_binaryData.f; }
-double SqlStmtFieldData::toDouble() const { MANGOS_ASSERT(m_type == FIELD_DOUBLE); return m_binaryData.d; }
-char const* SqlStmtFieldData::toStr() const { MANGOS_ASSERT(m_type == FIELD_STRING); return m_szStringData.c_str(); }
-
-SqlStmtParameters::SqlStmtParameters(int nParams)
+SqlStmtParameters::SqlStmtParameters( int nParams )
 {
     //reserve memory if needed
     if(nParams > 0)
         m_params.reserve(nParams);
 }
 
-void SqlStmtParameters::reset(SqlStatement const& stmt)
+void SqlStmtParameters::reset( const SqlStatement& stmt )
 {
     m_params.clear();
     //reserve memory if needed
@@ -48,7 +34,7 @@ void SqlStmtParameters::reset(SqlStatement const& stmt)
 }
 
 //////////////////////////////////////////////////////////////////////////
-SqlStatement& SqlStatement::operator=(SqlStatement const& index)
+SqlStatement& SqlStatement::operator=( const SqlStatement& index )
 {
     if(this != &index)
     {
@@ -70,13 +56,12 @@ SqlStatement& SqlStatement::operator=(SqlStatement const& index)
 
 bool SqlStatement::Execute()
 {
-    SqlStmtParameters* args = detach();
+    SqlStmtParameters * args = detach();
     //verify amount of bound parameters
     if(args->boundParams() != arguments())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SQL ERROR: wrong amount of parameters (%i instead of %i)", args->boundParams(), arguments());
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SQL ERROR: statement: %s", m_pDB->GetStmtString(ID()).c_str());
-        delete args;
+        sLog.outError("SQL ERROR: wrong amount of parameters (%i instead of %i)", args->boundParams(), arguments());
+        sLog.outError("SQL ERROR: statement: %s", m_pDB->GetStmtString(ID()).c_str());
         MANGOS_ASSERT(false);
         return false;
     }
@@ -86,13 +71,12 @@ bool SqlStatement::Execute()
 
 bool SqlStatement::DirectExecute()
 {
-    SqlStmtParameters* args = detach();
+    SqlStmtParameters * args = detach();
     //verify amount of bound parameters
     if(args->boundParams() != arguments())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SQL ERROR: wrong amount of parameters (%i instead of %i)", args->boundParams(), arguments());
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SQL ERROR: statement: %s", m_pDB->GetStmtString(ID()).c_str());
-        delete args;
+        sLog.outError("SQL ERROR: wrong amount of parameters (%i instead of %i)", args->boundParams(), arguments());
+        sLog.outError("SQL ERROR: statement: %s", m_pDB->GetStmtString(ID()).c_str());
         MANGOS_ASSERT(false);
         return false;
     }
@@ -101,14 +85,14 @@ bool SqlStatement::DirectExecute()
 }
 
 //////////////////////////////////////////////////////////////////////////
-SqlPlainPreparedStatement::SqlPlainPreparedStatement(std::string const& fmt, SqlConnection& conn) : SqlPreparedStatement(fmt, conn)
+SqlPlainPreparedStatement::SqlPlainPreparedStatement( const std::string& fmt, SqlConnection& conn ) : SqlPreparedStatement(fmt, conn)
 {
     m_bPrepared = true;
     m_nParams = std::count(m_szFmt.begin(), m_szFmt.end(), '?');
     m_bIsQuery = strnicmp(m_szFmt.c_str(), "select", 6) == 0;
 }
 
-void SqlPlainPreparedStatement::bind(SqlStmtParameters const& holder)
+void SqlPlainPreparedStatement::bind( const SqlStmtParameters& holder )
 {
     //verify if we bound all needed input parameters
     if(m_nParams != holder.boundParams())
@@ -127,7 +111,7 @@ void SqlPlainPreparedStatement::bind(SqlStmtParameters const& holder)
     for (SqlStmtParameters::ParameterContainer::const_iterator iter = _args.begin(); iter != iter_last; ++iter)
     {
         //bind parameter
-        SqlStmtFieldData const& data = (*iter);
+        const SqlStmtFieldData& data = (*iter);
 
         std::ostringstream fmt;
         DataToString(data, fmt);
@@ -150,7 +134,7 @@ bool SqlPlainPreparedStatement::execute()
     return m_pConn.Execute(m_szPlainRequest.c_str());
 }
 
-void SqlPlainPreparedStatement::DataToString(SqlStmtFieldData const& data, std::ostringstream& fmt)
+void SqlPlainPreparedStatement::DataToString( const SqlStmtFieldData& data, std::ostringstream& fmt )
 {
     switch (data.type())
     {

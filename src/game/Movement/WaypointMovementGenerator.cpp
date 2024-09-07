@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 #include <ctime>
 
 #include "WaypointMovementGenerator.h"
+#include "ObjectMgr.h"
 #include "Creature.h"
 #include "CreatureAI.h"
 #include "WaypointManager.h"
@@ -27,11 +28,9 @@
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 #include "CreatureGroups.h"
-#include "Map.h"
 
 #include <cassert>
 
-//-----------------------------------------------//
 void WaypointMovementGenerator<Creature>::LoadPath(uint32 guid, uint32 entry, WaypointPathOrigin wpOrigin)
 {
     DETAIL_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "LoadPath: loading waypoint path for GUID %u Entry %u", guid, entry);
@@ -40,14 +39,14 @@ void WaypointMovementGenerator<Creature>::LoadPath(uint32 guid, uint32 entry, Wa
         i_path = sWaypointMgr.GetDefaultPath(entry, guid, &m_PathOrigin);
     else
     {
-        m_PathOrigin = wpOrigin == PATH_NO_PATH ? PATH_FROM_ENTRY : wpOrigin;
+        m_PathOrigin = wpOrigin;
         i_path = sWaypointMgr.GetPathFromOrigin(entry, guid, 0, m_PathOrigin);
     }
 
     // No movement found for entry nor guid
     if (!i_path)
     {
-        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "WaypointMovementGenerator::LoadPath: GUID %u Entry %u doesn't have waypoint path", guid, entry);
+        sLog.outErrorDb("WaypointMovementGenerator::LoadPath: GUID %u Entry %u doesn't have waypoint path", guid, entry);
         return;
     }
 
@@ -85,7 +84,7 @@ void WaypointMovementGenerator<Creature>::InitializeWaypointPath(Creature& creat
             m_lastReachedWaypoint = startPoint - 1;
         }
         else
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WaypointMovementGenerator::InitializeWaypointPath: %s tries to start movement from invalid point id %u", creature.GetGuidStr().c_str(), startPoint);
+            sLog.outError("WaypointMovementGenerator::InitializeWaypointPath: %s tries to start movement from invalid point id %u", creature.GetGuidStr().c_str(), startPoint);
     }
 
     i_nextMoveTime.Reset(initialDelay);
@@ -152,7 +151,7 @@ bool WaypointMovementGenerator<Creature>::OnArrived(Creature& creature)
     if (node.script_id)
     {
         DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "Creature movement start script %u at point %u for %s.", node.script_id, i_currentNode, creature.GetGuidStr().c_str());
-        creature.GetMap()->ScriptsStart(sCreatureMovementScripts, node.script_id, creature.GetObjectGuid(), creature.GetObjectGuid());
+        creature.GetMap()->ScriptsStart(sCreatureMovementScripts, node.script_id, &creature, &creature);
     }
 
     // Inform script
@@ -194,12 +193,10 @@ void WaypointMovementGenerator<Creature>::StartMove(Creature &creature)
 
     if (m_isArrivalDone)
     {
-        bool reachedLast = false;
         ++currPoint;
+
         if (currPoint == i_path->end())
         {
-            reachedLast = true;
-
             if (!m_repeating)
             {
                 creature.SetHomePosition(i_path->at(i_currentNode).x, i_path->at(i_currentNode).y, i_path->at(i_currentNode).z, i_path->at(i_currentNode).orientation);
@@ -218,21 +215,7 @@ void WaypointMovementGenerator<Creature>::StartMove(Creature &creature)
 
     WaypointNode const& nextNode = currPoint->second;
     Movement::MoveSplineInit init(creature, "WaypointMovementGenerator<Creature>::StartMove");
-
-    if (WaypointPath const* pSubpath = (nextNode.path_id ? sWaypointMgr.GetPathFromOrigin(nextNode.path_id, 0, 0, PATH_FROM_SPECIAL) : nullptr))
-    {
-        PointsArray genPath;
-        genPath.resize(pSubpath->size());
-        for (auto const& node : *pSubpath)
-            genPath[node.first] = G3D::Vector3(node.second.x, node.second.y, node.second.z);
-
-        if (creature.CanFly())
-            init.SetFly();
-
-        init.MovebyPath(genPath);
-    }
-    else
-        init.MoveTo(nextNode.x, nextNode.y, nextNode.z, (m_PathOrigin == PATH_FROM_SPECIAL) ? MOVE_STRAIGHT_PATH : MOVE_PATHFINDING);
+    init.MoveTo(nextNode.x, nextNode.y, nextNode.z, (m_PathOrigin == PATH_FROM_SPECIAL) ? MOVE_STRAIGHT_PATH : MOVE_PATHFINDING);
 
     if (nextNode.orientation != 100 && nextNode.delay != 0)
         init.SetFacing(nextNode.orientation);
@@ -241,7 +224,7 @@ void WaypointMovementGenerator<Creature>::StartMove(Creature &creature)
     init.Launch();
 }
 
-bool WaypointMovementGenerator<Creature>::Update(Creature &creature, uint32 const& diff)
+bool WaypointMovementGenerator<Creature>::Update(Creature &creature, const uint32 &diff)
 {
     // Waypoint movement can be switched on/off
     // This is quite handy for escort quests and other stuff
@@ -252,21 +235,6 @@ bool WaypointMovementGenerator<Creature>::Update(Creature &creature, uint32 cons
     // prevent a crash at empty waypoint path.
     if (shouldWait)
     {
-        creature.ClearUnitState(UNIT_STAT_ROAMING_MOVE);
-        return true;
-    }
-
-    // prevent movement while casting spells with cast time or channel time
-    // don't stop creature movement for spells without interrupt movement flags
-    if (creature.IsNoMovementSpellCasted())
-    {
-        if (!creature.IsStopped())
-        {
-            creature.StopMoving();
-            i_nextMoveTime.Reset(1);
-            m_isArrivalDone = false;
-        }
-
         creature.ClearUnitState(UNIT_STAT_ROAMING_MOVE);
         return true;
     }
@@ -282,10 +250,11 @@ bool WaypointMovementGenerator<Creature>::Update(Creature &creature, uint32 cons
             Stop(STOP_TIME_FOR_PLAYER);
         else if (creature.movespline->Finalized())
         {
-            if (OnArrived(creature))        // fire script events
-                StartMove(creature);        // restart movement if needed
+            if (OnArrived(creature)) // Fire script events
+                StartMove(creature); // Restart movement if needed
         }
     }
+
     return true;
 }
 
@@ -353,7 +322,7 @@ void FlightPathMovementGenerator::Initialize(Player &player)
 void FlightPathMovementGenerator::Finalize(Player & player)
 {
     // Reset fall information to prevent fall dmg at arrive
-    player.SetFallInformation(0);
+    player.SetFallInformation(0, player.GetPositionZ());
 
     // remove flag to prevent send object build movement packets for flight state and crash (movement generator already not at top of stack)
     player.ClearUnitState(UNIT_STAT_TAXI_FLIGHT);
@@ -361,7 +330,7 @@ void FlightPathMovementGenerator::Finalize(Player & player)
 
     player.Unmount();
     player.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
-    player.TaxiStepFinished(!MovementInProgress());
+    player.TaxiStepFinished();
 
     if (player.GetTaxi().empty())
     {
@@ -387,7 +356,7 @@ void FlightPathMovementGenerator::Interrupt(Player & player)
     player.RemoveUnitMovementFlag(MOVEFLAG_FLYING);
 }
 
-#define PLAYER_FLIGHT_SPEED        32.0f
+#define PLAYER_FLIGHT_SPEED 32.0f
 
 void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
 {
@@ -395,9 +364,11 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
     player.AddUnitState(UNIT_STAT_TAXI_FLIGHT);
     player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
-    Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
+    uint32 currentNodeId = GetCurrentNode();
     uint32 end = GetPathAtMapEnd();
-    for (uint32 i = GetCurrentNode(); i != end; ++i)
+
+    Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
+    for (uint32 i = currentNodeId; i != end; ++i)
     {
         G3D::Vector3 vertice((*i_path)[i].x, (*i_path)[i].y, (*i_path)[i].z);
         init.Path().push_back(vertice);
@@ -414,9 +385,22 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
     // currentPathIdx returns lastIdx + 1 at arrive
     while (static_cast <int32>(i_currentNode) < pointId)
     {
-        //DoEventIfAny(player, (*i_path)[i_currentNode], true);
-        //DoEventIfAny(player, (*i_path)[i_currentNode], false);
         ++i_currentNode;
+        if (MovementInProgress() && (*i_path)[i_currentNode].actionFlag & 4)
+        {
+            // temporary hack 
+            uint32 nextNode = i_currentNode + 4;
+            switch ((*i_path)[i_currentNode].path)
+            {
+            case 1605: nextNode = 13; break;
+            case 1606: nextNode = 12; break;
+            }
+
+            player.SaveTaxiFlightData(nextNode);
+            player.PrepareTaxiFlightWithTeleport();
+            player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
+            return false;
+        }
         if (MovementInProgress() && (*i_path)[i_currentNode + 1].path != (*i_path)[i_currentNode].path)
         {
             player.GetTaxi().NextTaxiDestination();
@@ -466,7 +450,6 @@ bool FlightPathMovementGenerator::GetResetPosition(Player&, float& x, float& y, 
     z = node.z;
     return true;
 }
-
 // ------------------------------------------------------
 // -- PATROLS SYSTEM
 bool PatrolMovementGenerator::InitPatrol(Creature& creature)
@@ -474,17 +457,17 @@ bool PatrolMovementGenerator::InitPatrol(Creature& creature)
     CreatureGroup* group = creature.GetCreatureGroup();
     if (!group || !group->IsFormation() || group->GetLeaderGuid() == creature.GetObjectGuid())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[PatrolMovementGenerator] %s is not allowed for this generator.", creature.GetObjectGuid().GetString().c_str());
+        sLog.outError("[PatrolMovementGenerator] %s is not allowed for this generator.", creature.GetObjectGuid().GetString().c_str());
         return false;
     }
-    std::map<ObjectGuid, CreatureGroupMember>::const_iterator it = group->GetMembers().find(creature.GetObjectGuid());
+    std::map<ObjectGuid, CreatureGroupMember*>::const_iterator it = group->GetMembers().find(creature.GetObjectGuid());
     if (it == group->GetMembers().end())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[PatrolMovementGenerator] %s not found in patrol members.", creature.GetObjectGuid().GetString().c_str());
+        sLog.outError("[PatrolMovementGenerator] %s not found in patrol members.", creature.GetObjectGuid().GetString().c_str());
         return false;
     }
-    m_leaderGuid = group->GetLeaderGuid();
-    m_groupMember = it->second;
+    _leaderGuid = group->GetLeaderGuid();
+    _groupMember = it->second;
     return true;
 }
 
@@ -514,7 +497,7 @@ void PatrolMovementGenerator::Finalize(Creature &creature)
     creature.SetWalk(!creature.HasUnitState(UNIT_STAT_RUNNING), false);
 }
 
-bool PatrolMovementGenerator::Update(Creature &creature, uint32 const& diff)
+bool PatrolMovementGenerator::Update(Creature &creature, const uint32 &diff)
 {
     if (creature.HasUnitState(UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_DISTRACTED))
     {
@@ -522,29 +505,17 @@ bool PatrolMovementGenerator::Update(Creature &creature, uint32 const& diff)
         return true;
     }
 
-    // prevent movement while casting spells with cast time or channel time
-    // don't stop creature movement for spells without interrupt movement flags
-    if (creature.IsNoMovementSpellCasted())
-    {
-        if (!creature.IsStopped())
-            creature.StopMoving();
-
-        creature.ClearUnitState(UNIT_STAT_ROAMING_MOVE);
-        return true;
-    }
-
     if (creature.movespline->Finalized())
         StartMove(creature);
-
     return true;
 }
 
 bool PatrolMovementGenerator::GetResetPosition(Creature& creature, float& x, float& y, float& z)
 {
-    Creature* leader = creature.GetMap()->GetCreature(m_leaderGuid);
+    Creature* leader = creature.GetMap()->GetCreature(_leaderGuid);
     if (!leader)
         return false;
-    m_groupMember.ComputeRelativePosition(leader->GetOrientation(), x, y);
+    _groupMember->ComputeRelativePosition(leader->GetOrientation(), x, y);
     x += leader->GetPositionX();
     y += leader->GetPositionY();
     z = leader->GetPositionZ();
@@ -555,7 +526,7 @@ bool PatrolMovementGenerator::GetResetPosition(Creature& creature, float& x, flo
 
 void PatrolMovementGenerator::StartMove(Creature& creature)
 {
-    Creature* leader = creature.GetMap()->GetCreature(m_leaderGuid);
+    Creature* leader = creature.GetMap()->GetCreature(_leaderGuid);
     if (!leader || leader->movespline->Finalized())
         return;
 
@@ -569,34 +540,22 @@ void PatrolMovementGenerator::StartMove(Creature& creature)
         default:
             return;
     }
-
-    // Teleport when distance is too far away instead of running through terrain.
-    if (creature.GetDistance3dToCenter(leader) >= DEFAULT_VISIBILITY_DISTANCE)
-    {
-        creature.NearTeleportTo(leader->GetPosition());
-        return;
-    }
-
-    // Calculation of the next position.
-    uint32 leaderTimeBeforeNextWP = leader->movespline->timeElapsed(); // Time remaining for the leader.
+    // Calcul de la prochaine position
+    uint32 leaderTimeBeforeNextWP = leader->movespline->timeElapsed(); // Temps restant pour le leader.
     if (!leaderTimeBeforeNextWP)
         return;
-
     uint32 totalLeaderPoints = leader->movespline->CountSplinePoints();
     Vector3 last = leader->movespline->GetPoint(totalLeaderPoints);
     Vector3 direction = last - leader->movespline->GetPoint(totalLeaderPoints - 1);
-
-    if (direction.isZero())
-        return;
-
     float angle = atan2(direction.y, direction.x);
     float x, y, z;
-    m_groupMember.ComputeRelativePosition(angle, x, y);
+    _groupMember->ComputeRelativePosition(angle, x, y);
     x += last.x;
     y += last.y;
     z = last.z;
     creature.UpdateGroundPositionZ(x, y, z);
     creature.GetMap()->GetWalkHitPosition(creature.GetTransport(), last.x, last.y, last.z, x, y, z);
+
     creature.AddUnitState(UNIT_STAT_ROAMING_MOVE);
 
     PathInfo p(&creature);
@@ -608,7 +567,6 @@ void PatrolMovementGenerator::StartMove(Creature& creature)
     float speed = p.Length() / float(leaderTimeBeforeNextWP) * 1000.0f;
     if (speed > creature.GetSpeed(MOVE_RUN) * 1.3f)
         speed = creature.GetSpeed(MOVE_RUN) * 1.3f;
-
     Movement::MoveSplineInit init(creature, "PatrolMovementGenerator::StartMove");
     init.Move(&p);
     init.SetWalk(creature.IsWalking() && !creature.IsLevitating());

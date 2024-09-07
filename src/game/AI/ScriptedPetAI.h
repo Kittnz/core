@@ -27,15 +27,15 @@ public:
 
     void JustRespawned() override;
 
-    void UpdateAI(uint32 const uiDiff) override;
+    void UpdateAI(const uint32 uiDiff) override;
 
     virtual void Reset() {}
 
     virtual void ResetCreature() {}
 
-    virtual void UpdatePetAI(uint32 const uiDiff);      // while in combat
+    virtual void UpdatePetAI(const uint32 uiDiff);      // while in combat
 
-    virtual void UpdatePetOOCAI(uint32 const uiDiff) {} // when not in combat
+    virtual void UpdatePetOOCAI(const uint32 uiDiff) {} // when not in combat
 
 protected:
     void ResetPetCombat();

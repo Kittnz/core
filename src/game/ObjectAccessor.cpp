@@ -23,6 +23,8 @@
 #include "ObjectMgr.h"
 #include "Policies/SingletonImp.h"
 #include "Player.h"
+#include "WorldPacket.h"
+#include "Item.h"
 #include "Corpse.h"
 #include "GridNotifiers.h"
 #include "MapManager.h"
@@ -30,6 +32,7 @@
 #include "CellImpl.h"
 #include "GridNotifiersImpl.h"
 #include "ObjectGuid.h"
+#include "World.h"
 
 #include <cmath>
 
@@ -50,7 +53,7 @@ ObjectAccessor::~ObjectAccessor()
 }
 
 Unit*
-ObjectAccessor::GetUnit(WorldObject const& u, ObjectGuid guid)
+ObjectAccessor::GetUnit(WorldObject const &u, ObjectGuid guid)
 {
     if (!guid)
         return nullptr;
@@ -66,7 +69,7 @@ ObjectAccessor::GetUnit(WorldObject const& u, ObjectGuid guid)
 
 Corpse* ObjectAccessor::GetCorpseInMap(ObjectGuid guid, uint32 mapid)
 {
-    Corpse* ret = HashMapHolder<Corpse>::Find(guid);
+    Corpse * ret = HashMapHolder<Corpse>::Find(guid);
     if (!ret)
         return nullptr;
     if (ret->GetMapId() != mapid)
@@ -84,14 +87,14 @@ Player* ObjectAccessor::FindPlayerNotInWorld(ObjectGuid guid)
 
 Player* ObjectAccessor::FindPlayer(ObjectGuid guid)
 {
-    Player* plr = FindPlayerNotInWorld(guid);
+    Player * plr = FindPlayerNotInWorld(guid);
     if (!plr || !plr->IsInWorld())
         return nullptr;
 
     return plr;
 }
 
-Player* ObjectAccessor::FindPlayerByNameNotInWorld(char const* name)
+Player* ObjectAccessor::FindPlayerByNameNotInWorld(const char *name)
 {
     std::string cppname(name);
     if (!normalizePlayerName(cppname))
@@ -104,7 +107,7 @@ Player* ObjectAccessor::FindPlayerByNameNotInWorld(char const* name)
     return nullptr;
 }
 
-Player* ObjectAccessor::FindPlayerByName(char const* name)
+Player* ObjectAccessor::FindPlayerByName(const char *name)
 {
     Player* player = FindPlayerByNameNotInWorld(name);
     if (!player || !player->IsInWorld())
@@ -112,7 +115,7 @@ Player* ObjectAccessor::FindPlayerByName(char const* name)
     return player;
 }
 
-MasterPlayer* ObjectAccessor::FindMasterPlayer(char const* name)
+MasterPlayer* ObjectAccessor::FindMasterPlayer(const char *name)
 {
     std::string cppname(name);
     if (!normalizePlayerName(cppname))
@@ -130,7 +133,7 @@ MasterPlayer* ObjectAccessor::FindMasterPlayer(ObjectGuid guid)
     if (!guid)
         return nullptr;
 
-    return HashMapHolder<MasterPlayer>::Find(guid);
+    return HashMapHolder<MasterPlayer>::Find(guid);;
 }
 
 
@@ -145,7 +148,7 @@ PlayerPointer ObjectAccessor::FindPlayerPointer(ObjectGuid guid)
     return PlayerPointer(nullptr);
 }
 
-PlayerPointer ObjectAccessor::FindPlayerPointer(char const* name)
+PlayerPointer ObjectAccessor::FindPlayerPointer(const char* name)
 {
     Player* player = FindPlayerByNameNotInWorld(name);
     if (player)
@@ -192,7 +195,7 @@ ObjectAccessor::GetCorpseForPlayerGUID(ObjectGuid guid)
 }
 
 void
-ObjectAccessor::RemoveCorpse(Corpse* corpse)
+ObjectAccessor::RemoveCorpse(Corpse *corpse)
 {
     MANGOS_ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
 
@@ -212,7 +215,7 @@ ObjectAccessor::RemoveCorpse(Corpse* corpse)
 }
 
 void
-ObjectAccessor::AddCorpse(Corpse* corpse)
+ObjectAccessor::AddCorpse(Corpse *corpse)
 {
     MANGOS_ASSERT(corpse && corpse->GetType() != CORPSE_BONES);
 
@@ -254,7 +257,7 @@ void ObjectAccessor::ConvertCorpseForPlayer(ObjectGuid player_guid, Player* loot
 {
     ASSERT(player_guid.IsPlayer());
 
-    Corpse* corpse = GetCorpseForPlayerGUID(player_guid);
+    Corpse *corpse = GetCorpseForPlayerGUID(player_guid);
     if (!corpse)
         return;
 
@@ -263,7 +266,7 @@ void ObjectAccessor::ConvertCorpseForPlayer(ObjectGuid player_guid, Player* loot
 
     // remove resurrectable corpse from grid object registry (loaded state checked into call)
     // do not load the map if it's not loaded
-    Map* map = sMapMgr.FindMap(corpse->GetMapId(), corpse->GetInstanceId());
+    Map *map = sMapMgr.FindMap(corpse->GetMapId(), corpse->GetInstanceId());
 
     // If the corpse is not in the same map as the player, then we cannot safely remove
     // the corpse now. Instead, add it to a list in the map for delayed processing.
@@ -303,32 +306,32 @@ void ObjectAccessor::RemoveOldCorpses()
 ObjectAccessor::NameToPlayerPtr ObjectAccessor::playerNameToPlayerPointer;
 ObjectAccessor::NameToMasterPlayerPtr ObjectAccessor::playerNameToMasterPlayerPointer;
 
-void ObjectAccessor::AddObject(Player* player)
+void ObjectAccessor::AddObject(Player *player)
 {
     HashMapHolder<Player>::Insert(player);
     playerNameToPlayerPointer[player->GetName()] = player;
 }
-void ObjectAccessor::RemoveObject(Player* player)
+void ObjectAccessor::RemoveObject(Player *player)
 {
     HashMapHolder<Player>::Remove(player);
     playerNameToPlayerPointer.erase(player->GetName());
 }
-void ObjectAccessor::AddObject(MasterPlayer* player)
+void ObjectAccessor::AddObject(MasterPlayer *player)
 {
     HashMapHolder<MasterPlayer>::Insert(player);
     playerNameToMasterPlayerPointer[player->GetName()] = player;
 }
-void ObjectAccessor::RemoveObject(MasterPlayer* player)
+void ObjectAccessor::RemoveObject(MasterPlayer *player)
 {
     HashMapHolder<MasterPlayer>::Remove(player);
     playerNameToMasterPlayerPointer.erase(player->GetName());
 }
-// Define the static member of HashMapHolder
+/// Define the static member of HashMapHolder
 
 template <class T> typename HashMapHolder<T>::MapType HashMapHolder<T>::m_objectMap;
 template <class T> std::shared_timed_mutex HashMapHolder<T>::i_lock;
 
-// Global definitions for the hashmap storage
+/// Global definitions for the hashmap storage
 
 template class HashMapHolder<Player>;
 template class HashMapHolder<Corpse>;

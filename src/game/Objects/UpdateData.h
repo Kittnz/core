@@ -34,26 +34,22 @@ enum ObjectUpdateType
     UPDATETYPE_VALUES               = 0,
     UPDATETYPE_MOVEMENT             = 1,
     UPDATETYPE_CREATE_OBJECT        = 2,
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     UPDATETYPE_CREATE_OBJECT2       = 3,
-#endif
-    UPDATETYPE_OUT_OF_RANGE_OBJECTS,
-    UPDATETYPE_NEAR_OBJECTS
+    UPDATETYPE_OUT_OF_RANGE_OBJECTS = 4,
+    UPDATETYPE_NEAR_OBJECTS         = 5
 };
 
 // checked for 1.12.1
 enum ObjectUpdateFlags
 {
-    UPDATEFLAG_NONE             = 0x0000,
-    UPDATEFLAG_SELF             = 0x0001,
-    UPDATEFLAG_TRANSPORT        = 0x0002,
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-    UPDATEFLAG_MELEE_ATTACKING  = 0x0004,
-    UPDATEFLAG_HIGHGUID         = 0x0008,
-    UPDATEFLAG_ALL              = 0x0010,
-    UPDATEFLAG_LIVING           = 0x0020,
-    UPDATEFLAG_HAS_POSITION     = 0x0040
-#endif
+    UPDATEFLAG_NONE = 0x0000,
+    UPDATEFLAG_SELF = 0x0001,
+    UPDATEFLAG_TRANSPORT = 0x0002,
+    UPDATEFLAG_MELEE_ATTACKING = 0x0004,
+    UPDATEFLAG_HIGHGUID = 0x0008,
+    UPDATEFLAG_ALL = 0x0010,
+    UPDATEFLAG_LIVING = 0x0020,
+    UPDATEFLAG_HAS_POSITION = 0x0040
 };
 
 class UpdatePacket
@@ -67,7 +63,7 @@ class UpdatePacket
 class PacketCompressor
 {
     public:
-        static void Compress(void* dst, uint32* dst_size, void* src, int src_size);
+        static void Compress(void* dst, uint32 *dst_size, void* src, int src_size);
 };
 
 class UpdateData
@@ -77,11 +73,11 @@ class UpdateData
         ~UpdateData();
 
         void AddOutOfRangeGUID(ObjectGuidSet& guids);
-        void AddOutOfRangeGUID(ObjectGuid const& guid);
-        ByteBuffer& AddUpdateBlockAndGetBuffer();
+        void AddOutOfRangeGUID(ObjectGuid const &guid);
+        void AddUpdateBlock(const ByteBuffer &block);
         void Send(WorldSession* session, bool hasTransport = false);
-        bool BuildPacket(WorldPacket* packet, bool hasTransport = false);
-        bool BuildPacket(WorldPacket* packet, UpdatePacket const* updPacket, bool hasTransport = false);
+        bool BuildPacket(WorldPacket *packet, bool hasTransport = false);
+        bool BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket, bool hasTransport = false);
         bool HasData() { return !m_datas.empty() || !m_outOfRangeGUIDs.empty(); }
         void Clear();
 
@@ -92,20 +88,18 @@ class UpdateData
         std::list<UpdatePacket> m_datas;
 };
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
 class MovementData
 {
     public:
-        MovementData() : m_buffer(1024) {}
+        MovementData(WorldObject* owner = nullptr) : _buffer(100), _owner(owner) {}
         ~MovementData() {}
-        bool CanAddPacket(WorldPacket const& data);
-        void AddPacket(WorldPacket const& data);
+        void AddPacket(WorldPacket& data);
+        void SetUnitSpeed(uint32 opcode, ObjectGuid const& unit, float value);
+        void SetSplineOpcode(uint32 opcode, ObjectGuid const& unit);
         bool BuildPacket(WorldPacket& data);
-        bool HasData() const { return m_buffer.wpos() != 0; }
-        void ClearBuffer() { m_buffer.clear(); }
     protected:
-        ByteBuffer m_buffer;
+        ByteBuffer _buffer;
+        WorldObject* _owner; // If not nullptr, we dont compress data
 };
-#endif
 
 #endif

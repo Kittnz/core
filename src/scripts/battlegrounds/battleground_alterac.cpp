@@ -6,7 +6,6 @@ SDCategory: BG
 EndScriptData */
 
 #include "scriptPCH.h"
-#include "CreatureGroups.h"
 
 /*
 Vanndar: Thunderclap (about 200-300 nature damage per player in range not been upgraded since vanilla, Time between attacks increased by 33%, movement speed reduced by 40%.) Storm Bolt (about 450 nature damage, stuns for 8 seconds, dispellable, used on non tanks) Avatar (50% increased damage and armor, up for 15 seconds, comes back up about 15-20 seconds later) Drek'thar: Whirlwind (2 second cast time, weapon damage to all in range) Frenzy (167% damage increase and attack speed increase by 50%, lasts 2 minutes, goes up after about 15-20 seconds from the start of fight) Knockdown (Infli
@@ -144,7 +143,7 @@ struct npc_VanndarAI : public ScriptedAI, public npc_alterac_bossHelper
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 23.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 23.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -401,7 +400,7 @@ struct npc_DrekTharAI : public ScriptedAI, public npc_alterac_bossHelper
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 22.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 22.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -602,7 +601,7 @@ struct npc_BalindaAI : public ScriptedAI
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 28.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 28.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -851,7 +850,7 @@ struct npc_GalvangarAI : public ScriptedAI
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 28.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 28.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -1522,49 +1521,6 @@ struct AV_NpcEventTroopsAI : public npc_escortAI
 
 enum
 {
-    SAY_KORRAK_SPAWN = 9038
-};
-
-/** Korrak should appear after 2 hours of battle */
-class npc_korrak_the_bloodragerAI: public ScriptedAI
-{
-    public:
-        npc_korrak_the_bloodragerAI(Creature* c) : ScriptedAI(c), m_appeared(false)
-        {
-            Reset();
-            m_yell = false;
-        }
-        void Reset() override
-        {
-        }
-        void UpdateAI(uint32 const diff) override
-        {
-            if (!m_appeared)
-            {
-                m_creature->DisappearAndDie();
-                m_creature->SetRespawnTime(7200);
-                m_appeared = true;
-                return;
-            }
-            else
-            {
-                if (!m_yell)
-                {
-                    DoScriptText(SAY_KORRAK_SPAWN, m_creature);
-                    m_yell = true;
-                }
-            }
-            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-                return;
-            DoMeleeAttackIfReady();
-        }
-    protected:
-        bool        m_appeared;
-        bool        m_yell;
-};
-
-enum
-{
     SPELL_CHAIN_LIGHTNING  =   16006,
     SPELL_EARTHBIND_TOTEM  =   15786,
     SPELL_FLAME_SHOCK      =   15616,
@@ -1915,8 +1871,11 @@ struct AV_NpcEventAI : public npc_escortAI
         m_creature->SetHomePosition(av_x, av_y, av_z, 0.0f);
         m_creature->GetMotionMaster()->MovePoint(POINT_LAST_POINT, av_x, av_y, av_z);
 
-        npc_escortAI::Stop();
-        npc_escortAI::JustRespawned();
+        if (AV_NpcEventTroopsAI* pEscortAI = dynamic_cast<AV_NpcEventTroopsAI*>(m_creature->AI()))
+        {
+            pEscortAI->Stop();
+            pEscortAI->JustRespawned();
+        }
 
         /** Respawn Primalist at her original place with the adds */
         if (m_creature->GetEntry() == AV_NPC_PRIMALIST_THURLOGA)
@@ -1961,7 +1920,7 @@ struct AV_NpcEventAI : public npc_escortAI
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_WOLFRIDER, 1000.0f);
             for (const auto& it : m_RamRiderList)
             {
-                it->SetRespawnDelay(5 * DAY);
+                it->SetRespawnDelay(432000);
                 it->SetDeathState(JUST_DIED);
                 it->RemoveCorpse();
             }
@@ -2301,7 +2260,7 @@ struct AV_NpcEventAI : public npc_escortAI
                 if (AV_NpcEventTroopsAI* pEscortAI = dynamic_cast<AV_NpcEventTroopsAI*>(it->AI()))
                 {
                     pEscortAI->Reset();
-                    it->SetRespawnDelay(5 * DAY);
+                    it->SetRespawnDelay(432000);
                     pEscortAI->Start(true, 0, nullptr, false);
                     pEscortAI->setCurrentWP(getCurrentWP());
                 }
@@ -2625,9 +2584,11 @@ bool QuestComplete_npc_AVBlood_collector(Player* pPlayer, Creature* pQuestGiver,
                         break;
                     case ITEM_IRONDEEP_SUPPLIES:
                         m_challenge = BG_AV_IRONDEEP_GROUND_ASSAULT;
+                        m_ressources_delivered *= 2; // make it easier to launch ground assault
                         break;
                     case ITEM_COLDTOOTH_SUPPLIES:
                         m_challenge = BG_AV_COLDTOOTH_GROUND_ASSAULT;
+                        m_ressources_delivered *= 2; // make it easier to launch ground assault
                         break;
                     case 17422:
                         m_challenge = 0;
@@ -2635,7 +2596,7 @@ bool QuestComplete_npc_AVBlood_collector(Player* pPlayer, Creature* pQuestGiver,
                         break;
 
                     default:
-                        sLog.Out(LOG_SCRIPTS, LOG_LVL_MINIMAL, "[Alterac] QuestComplete_npc_AVBlood_collector called with quest %u reqItem=%u unknown !", pQuest->GetQuestId(), pQuest->ReqItemId[0]);
+                        sLog.outInfo("[Alterac] QuestComplete_npc_AVBlood_collector called with quest %u reqItem=%u unknown !", pQuest->GetQuestId(), pQuest->ReqItemId[0]);
                         return false;
                 }
             }
@@ -4203,7 +4164,7 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
             static ScriptInfo si;
             si.command = SCRIPT_COMMAND_TALK;
             si.talk.textId[0] = SAY_LOKHOLAR_SPAWN_2;
-            m_creature->GetMap()->ScriptCommandStart(si, 3, m_creature->GetObjectGuid(), m_creature->GetObjectGuid());
+            m_creature->GetMap()->ScriptCommandStart(si, 3, m_creature, m_creature);
 
             isYelling = true;
         }
@@ -4808,11 +4769,6 @@ CreatureAI* GetAI_npc_eventTroopsAV(Creature* pCreature)
     return new AV_NpcEventTroopsAI(pCreature);
 }
 
-CreatureAI* GetAI_npc_korrak_the_bloodrager(Creature* pCreature)
-{
-    return new npc_korrak_the_bloodragerAI(pCreature);
-}
-
 CreatureAI* GetAI_AV_WarRiderAI(Creature* pCreature)
 {
     return new AV_WarRiderAI(pCreature);
@@ -4909,7 +4865,7 @@ struct MineNPC_AI : public ScriptedAI
                 Unit*   pPet    = pPlayer->GetPet();
 
                 /** Range limit set to 35 meters/yards */
-                if (pPlayer->IsNoWeaponShapeShift() && m_creature->GetDistance2d(pPlayer) < 35.0f)
+                if (pPlayer->IsInFeralForm() && m_creature->GetDistance2d(pPlayer) < 35.0f)
                 {
                     if (DoCastSpellIfCan(pPlayer, SPELL_FLASH_BOMB) == CAST_OK)
                         m_uiFlashBomb_Timer = 7500;
@@ -5120,7 +5076,8 @@ struct AV_mineNpcAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        DoMeleeAttackIfReady();
+        if (m_creature->IsAlive())
+            DoMeleeAttackIfReady();
     }
 };
 
@@ -5151,6 +5108,158 @@ class npc_av_trigger_for_questAI: public ScriptedAI
 CreatureAI* GetAI_npc_av_trigger_for_quest(Creature* creature)
 {
     return new npc_av_trigger_for_questAI(creature);
+}
+
+enum
+{
+    GO_RYSONS_BEACON = 178605,
+    GO_GLOBE_OF_SCRYING_H = 178439,
+    GO_GLOBE_OF_SCRYING_A = 178604,
+    NPC_EAGLE = 13221,
+};
+
+bool ProcessEventId_event_rysons_beacon_horde(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    if (pPlayer->FindNearestGameObject(GO_RYSONS_BEACON, 50.0f))
+    {
+        pPlayer->GetSession()->SendNotification("Another beacon is already spawned near you.");
+        return true;
+    }
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+    {
+        pPlayer->GetSession()->SendNotification("You are not in a battleground.");
+        return true;
+    }
+
+    if (pBG->IsActiveEvent(BG_AV_RYSONS_BEACON_H, 1))
+    {
+        pPlayer->GetSession()->SendNotification("Ryson's Eye is already observing this position.");
+        return true;
+    }
+
+    GameObject* pBeacon = pPlayer->SummonGameObject(GO_RYSONS_BEACON, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0, 0, 0, 0, 61000);
+    if (!pBeacon)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("The beacon has been planted. Protect it for 60 seconds.");
+
+    WorldPacket data(SMSG_NOTIFICATION);
+    data << "The enemy has planted Ryson's Beacon in your base!";
+    pBG->SendPacketToTeam(ALLIANCE, &data);
+
+    pBeacon->m_Events.AddLambdaEventAtOffset([pBeacon, pBG]
+        {
+            if (!pBeacon->isSpawned())
+                return;
+
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, 633.282f, -67.7342f, 91.4057f, 1.70274f, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            {
+                pEagle->SetWanderDistance(15.0f);
+                pEagle->GetMotionMaster()->Initialize();
+            }
+
+            pBeacon->SummonGameObject(GO_GLOBE_OF_SCRYING_H, -352.1f, -657.1f, 127.382f, 0.71f, 0, 0, 0, 0, 1440 * MINUTE * IN_MILLISECONDS, false);
+
+            WorldPacket data(SMSG_NOTIFICATION);
+            data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
+            pBG->SendPacketToTeam(HORDE, &data);
+
+            pBG->SpawnEvent(BG_AV_RYSONS_BEACON_H, 1, true, true);
+            pBeacon->AddObjectToRemoveList();
+            
+        }, 60000);
+
+    return true;//to always override what could be in DB.
+}
+
+bool ProcessEventId_event_rysons_beacon_alliance(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    if (pPlayer->FindNearestGameObject(GO_RYSONS_BEACON, 50.0f))
+    {
+        pPlayer->GetSession()->SendNotification("Another beacon is already spawned near you.");
+        return true;
+    }
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+    {
+        pPlayer->GetSession()->SendNotification("You are not in a battleground.");
+        return true;
+    }
+
+    if (pBG->IsActiveEvent(BG_AV_RYSONS_BEACON_A, 1))
+    {
+        pPlayer->GetSession()->SendNotification("Ryson's Eye is already observing this position.");
+        return true;
+    }
+
+    GameObject* pBeacon = pPlayer->SummonGameObject(GO_RYSONS_BEACON, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0, 0, 0, 0, 61000);
+    if (!pBeacon)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("The beacon has been planted. Protect it for 60 seconds.");
+
+    WorldPacket data(SMSG_NOTIFICATION);
+    data << "The enemy has planted Ryson's Beacon in your base!";
+    pBG->SendPacketToTeam(HORDE, &data);
+
+    pBeacon->m_Events.AddLambdaEventAtOffset([pBeacon, pBG]
+        {
+            if (!pBeacon->isSpawned())
+                return;
+
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, -1323.61f, -289.991f, 140.6765f, 0.350284f, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            {
+                pEagle->SetWanderDistance(15.0f);
+                pEagle->GetMotionMaster()->Initialize();
+            }
+
+            pBeacon->SummonGameObject(GO_GLOBE_OF_SCRYING_A, -352.1f, -657.1f, 127.382f, 0.71f, 0, 0, 0, 0, 1440 * MINUTE * IN_MILLISECONDS, false);
+
+            WorldPacket data(SMSG_NOTIFICATION);
+            data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
+            pBG->SendPacketToTeam(ALLIANCE, &data);
+
+            pBG->SpawnEvent(BG_AV_RYSONS_BEACON_A, 1, true, true);
+            pBeacon->AddObjectToRemoveList();
+
+        }, 60000);
+
+    return true;//to always override what could be in DB.
+}
+
+bool ProcessEventId_event_rysons_beacon_destroyed(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("You have destroyed Ryson's Beacon.");
+
+    if (pPlayer->GetTeam() == HORDE)
+    {
+        pBG->SpawnEvent(BG_AV_RYSONS_BEACON_A, 0, true, true);
+    }
+    else
+    {
+        pBG->SpawnEvent(BG_AV_RYSONS_BEACON_H, 0, true, true);
+    }
+
+    return true;//to always override what could be in DB.
 }
 
 void AddSC_bg_alterac()
@@ -5232,12 +5341,6 @@ void AddSC_bg_alterac()
     newscript->Name = "npc_AlteracBowman";
     newscript->GetAI = &GetAI_npc_AlteracBowman;
     newscript->RegisterSelf();
-    /*
-    newscript = new Script;
-    newscript->Name = "npc_AlteracDardosh";
-    newscript->GetAI = &GetAI_npc_AlteracDardosh;
-    newscript->RegisterSelf();
-    */
 
     newscript = new Script;
     newscript->Name = "npc_worldboss_h_av";
@@ -5252,11 +5355,6 @@ void AddSC_bg_alterac()
     newscript = new Script;
     newscript->Name = "npc_cavalry";
     newscript->GetAI = &GetAI_npc_eventTroopsAV;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_korrak_the_bloodrager";
-    newscript->GetAI = &GetAI_npc_korrak_the_bloodrager;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -5280,5 +5378,20 @@ void AddSC_bg_alterac()
     newscript = new Script;
     newscript->Name = "npc_av_trigger_for_quest";
     newscript->GetAI = &GetAI_npc_av_trigger_for_quest;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_horde";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_horde;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_alliance";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_alliance;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_destroyed";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_destroyed;
     newscript->RegisterSelf();
 }

@@ -94,7 +94,7 @@ struct WorldEvent
 };
 
 typedef std::pair<uint32, GameEventCreatureData> GameEventCreatureDataPair;
-typedef std::vector<WorldEvent*> HardcodedEventList;
+typedef std::list<WorldEvent*> HardcodedEventList;
 
 class GameEventMgr
 {
@@ -128,6 +128,10 @@ class GameEventMgr
 
         GameEventCreatureData const* GetCreatureUpdateDataForActiveEvent(uint32 lowguid) const;       
         HardcodedEventList mGameEventHardcodedList;
+
+		template<typename RequestedEventType>
+		RequestedEventType* GetHardcodedEvent();
+
         void LoadHardcodedEvents(HardcodedEventList& eventList);
     private:
         bool m_IsSilithusEventCompleted;
@@ -139,23 +143,23 @@ class GameEventMgr
         void UpdateEventQuests(uint16 event_id, bool activate);
         void SendEventMails(int16 event_id);
     protected:
-        typedef std::vector<uint32> GuidList;
-        typedef std::vector<uint16> IdList;
+        typedef std::list<uint32> GuidList;
+        typedef std::list<uint16> IdList;
         typedef std::vector<GuidList> GameEventGuidMap;
         typedef std::vector<IdList> GameEventIdMap;
-        typedef std::vector<GameEventCreatureDataPair> GameEventCreatureDataList;
+        typedef std::list<GameEventCreatureDataPair> GameEventCreatureDataList;
         typedef std::vector<GameEventCreatureDataList> GameEventCreatureDataMap;
         typedef std::multimap<uint32, uint32> GameEventCreatureDataPerGuidMap;
         typedef std::pair<GameEventCreatureDataPerGuidMap::const_iterator,GameEventCreatureDataPerGuidMap::const_iterator> GameEventCreatureDataPerGuidBounds;        
 
-        typedef std::vector<uint32> QuestList;
+        typedef std::list<uint32> QuestList;
         typedef std::vector<QuestList> GameEventQuestMap;
         GameEventQuestMap mGameEventQuests;                 // events size, only positive event case
 
         GameEventCreatureDataMap mGameEventCreatureData;    // events size, only positive event case
         GameEventCreatureDataPerGuidMap mGameEventCreatureDataPerGuid;
 
-        typedef std::vector<GameEventMail> MailList;
+        typedef std::list<GameEventMail> MailList;
         typedef std::vector<MailList> GameEventMailMap;
         GameEventMailMap  mGameEventMails;                  // events*2-1
         
@@ -166,6 +170,20 @@ class GameEventMgr
         ActiveEvents m_ActiveEvents;
         bool m_IsGameEventsInit;
 };
+
+template<typename RequestedEventType>
+RequestedEventType* GameEventMgr::GetHardcodedEvent()
+{
+	for (WorldEvent* event : mGameEventHardcodedList)
+	{
+		if (RequestedEventType* TargetType = dynamic_cast<RequestedEventType*>(event))
+		{
+			return TargetType;
+		}
+	}
+
+	return nullptr;
+}
 
 #define sGameEventMgr MaNGOS::Singleton<GameEventMgr>::Instance()
 

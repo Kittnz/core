@@ -2,7 +2,7 @@
 #define _AUTOBROADCAST_MGR_H
 
 #include "Policies/Singleton.h"
-#include "Platform/Define.h"
+#include "SharedDefines.h"
 
 #include <vector>
 
@@ -14,7 +14,7 @@ struct AutoBroadCastEntry
 class AutoBroadCastMgr
 {
     public :
-        AutoBroadCastMgr();
+         AutoBroadCastMgr();
         ~AutoBroadCastMgr();
 
         void Load();

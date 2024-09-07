@@ -100,17 +100,21 @@ class MassMailMgr
 
     private:
 
-        // Mass mail task store mail prototype and receivers list who not get mail yet
+        /// Mass mail task store mail prototype and receivers list who not get mail yet
         struct MassMail
         {
-            explicit MassMail(MailDraft* mailProto, MailSender sender);
+            explicit MassMail(MailDraft* mailProto, MailSender sender)
+                : m_protoMail(mailProto), m_sender(sender)
+            {
+                MANGOS_ASSERT(mailProto);
+            }
 
             MassMail(MassMail const& massmail)
                 : m_protoMail(std::move(const_cast<MassMail&>(massmail).m_protoMail)), m_sender(massmail.m_sender)
             {
             }
 
-            // m_protoMail is owned by MassMail, so at copy original MassMail field set to nullptr
+            /// m_protoMail is owned by MassMail, so at copy original MassMail field set to nullptr
             std::unique_ptr<MailDraft> m_protoMail;
 
             MailSender m_sender;
@@ -119,7 +123,7 @@ class MassMailMgr
 
         typedef std::list<MassMail> MassMailList;
 
-        // List of current queued mass mail tasks
+        /// List of current queued mass mail tasks
         MassMailList m_massMails;
 };
 

@@ -25,12 +25,10 @@
 #include "World.h"
 #include "GameObjectModel.h"
 #include "DBCStores.h"
-#include "ModelInstance.h"
 
 struct GameobjectModelData
 {
-    GameobjectModelData(std::string const& name_, G3D::AABox const& box) :
-        name(name_), bound(box) {}
+    GameobjectModelData(std::string const& name_, const G3D::AABox& box) : name(name_), bound(box) {}
 
     std::string name;
     G3D::AABox bound;
@@ -54,14 +52,45 @@ void LoadGameObjectModelList()
 
         if (name_length >= sizeof(buff))
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "File %s seems to be corrupted", VMAP::GAMEOBJECT_MODELS);
+            DEBUG_LOG("File %s seems to be corrupted", VMAP::GAMEOBJECT_MODELS);
             break;
         }
 
         fread(&buff, sizeof(char), name_length, model_list_file);
+        buff[name_length] = 0;
         Vector3 v1, v2;
         fread(&v1, sizeof(Vector3), 1, model_list_file);
         fread(&v2, sizeof(Vector3), 1, model_list_file);
+        bool bReportedFailModel = false;
+        if (v1.isNaN())
+        {
+            v1 = Vector3::zero();
+            // Models work fine, afaik some collision mismatchihg might be in place. 
+            // Some of those models are original from Vanilla and were not modified at any way:
+
+            /*
+            
+            File Easternbacklandscape.wmo seems to be corrupted. V1 variable is NaN
+            File Westernbacklandscape.wmo seems to be corrupted. V1 variable is NaN
+            File Uppermesac.wmo seems to be corrupted. V1 variable is NaN
+            File Zulamon_Enterance.wmo seems to be corrupted. V1 variable is NaN
+            File Be_Gardenstairs01.wmo seems to be corrupted. V1 variable is NaN
+            File Sw_Harbor_Lgwall01.wmo seems to be corrupted. V1 variable is NaN
+            File Sw_Harbor_Lgwall02.wmo seems to be corrupted. V1 variable is NaN
+            
+            */
+
+            // ERROR_LOG("File %s seems to be corrupted. V1 variable is NaN", buff);
+            bReportedFailModel = true;
+        }
+        if (v2.isNaN())
+        {
+            v2 = Vector3::one();
+            if (!bReportedFailModel)
+            {
+                ERROR_LOG("File %s seems to be corrupted. V2 variable is NaN", buff);
+            }
+        }
 
         model_list.insert(ModelList::value_type(displayId, GameobjectModelData(std::string(buff, name_length), AABox(v1, v2))));
     }
@@ -70,9 +99,10 @@ void LoadGameObjectModelList()
 
 GameObjectModel::~GameObjectModel()
 {
+    
 }
 
-bool GameObjectModel::initialize(GameObject const* const pGo, GameObjectDisplayInfoEntry const* pDisplayInfo)
+bool GameObjectModel::initialize(const GameObject* const pGo, const GameObjectDisplayInfoEntry* const pDisplayInfo)
 {
     ModelList::const_iterator it = model_list.find(pDisplayInfo->Displayid);
     if (it == model_list.end())
@@ -82,7 +112,7 @@ bool GameObjectModel::initialize(GameObject const* const pGo, GameObjectDisplayI
     // ignore models with no bounds
     if (mdl_box == G3D::AABox::zero())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Model %s has zero bounds, loading skipped", it->second.name.c_str());
+        DEBUG_LOG("Model %s has zero bounds, loading skipped", it->second.name.c_str());
         return false;
     }
 
@@ -90,10 +120,6 @@ bool GameObjectModel::initialize(GameObject const* const pGo, GameObjectDisplayI
 
     if (!iModel)
         return false;
-
-    if (!pGo->GetGOInfo()->CanAlwaysBreakLoS() &&
-        it->second.name.find(".m2") != std::string::npos)
-        iModel->setModelFlags(VMAP::MOD_M2);
 
     name = it->second.name;
     iPos = Vector3(pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ());
@@ -127,7 +153,7 @@ bool GameObjectModel::initialize(GameObject const* const pGo, GameObjectDisplayI
     return true;
 }
 
-GameObjectModel* GameObjectModel::construct(GameObject const* const object)
+GameObjectModel* GameObjectModel::construct(const GameObject* const object)
 {
     if (GameObjectInfo const* gobjInfo = object->GetGOInfo())
     {
@@ -136,10 +162,8 @@ GameObjectModel* GameObjectModel::construct(GameObject const* const object)
             return nullptr;
         if (gobjInfo->type == GAMEOBJECT_TYPE_GOOBER && gobjInfo->goober.losOK)
             return nullptr;
-        if (gobjInfo->IsServerOnly())
-            return nullptr;
     }
-    GameObjectDisplayInfoEntry const* info = sGameObjectDisplayInfoStore.LookupEntry(object->GetDisplayId());
+    const GameObjectDisplayInfoEntry* info = sGameObjectDisplayInfoStore.LookupEntry(object->GetDisplayId());
     if (!info)
         return nullptr;
 
@@ -153,7 +177,7 @@ GameObjectModel* GameObjectModel::construct(GameObject const* const object)
     return mdl;
 }
 
-bool GameObjectModel::intersectRay(G3D::Ray const& ray, float& MaxDist, bool StopAtFirstHit, bool ignoreM2Model) const
+bool GameObjectModel::intersectRay(const G3D::Ray& ray, float& MaxDist, bool StopAtFirstHit) const
 {
     if (!collision_enabled)
         return false;
@@ -166,7 +190,7 @@ bool GameObjectModel::intersectRay(G3D::Ray const& ray, float& MaxDist, bool Sto
     Vector3 p = iInvRot * (ray.origin() - iPos) * iInvScale;
     Ray modRay(p, iInvRot * ray.direction());
     float distance = MaxDist * iInvScale;
-    bool hit = iModel->IntersectRay(modRay, distance, StopAtFirstHit, ignoreM2Model);
+    bool hit = iModel->IntersectRay(modRay, distance, StopAtFirstHit);
     if (hit)
     {
         distance *= iScale;
@@ -175,7 +199,7 @@ bool GameObjectModel::intersectRay(G3D::Ray const& ray, float& MaxDist, bool Sto
     return hit;
 }
 
-bool GameObjectModel::Relocate(GameObject const& go)
+bool GameObjectModel::Relocate(const GameObject& go)
 {
     if (!iModel)
         return false;
@@ -188,7 +212,7 @@ bool GameObjectModel::Relocate(GameObject const& go)
     // ignore models with no bounds
     if (mdl_box == G3D::AABox::zero())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "GameObject model %s has zero bounds, loading skipped", it->second.name.c_str());
+        DEBUG_LOG("GameObject model %s has zero bounds, loading skipped", it->second.name.c_str());
         return false;
     }
 

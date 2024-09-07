@@ -37,20 +37,20 @@ class InstanceData : public ZoneScript
 {
     public:
 
-        explicit InstanceData(Map* map) : instance(map) { SetMap(map); }
-        ~InstanceData() override {}
+        explicit InstanceData(Map *map) : instance(map) { SetMap(map); }
+        virtual ~InstanceData() {}
 
-        Map* instance;
+        Map *instance;
 
         //On creation, NOT load.
         virtual void Initialize() {}
 
         //On load
-        virtual void Load(char const* /*data*/) {}
+        virtual void Load(const char* /*data*/) {}
         virtual void Create() {} // A la creation. Pas au chargement.
 
         //When save is needed, this function generates the data
-        virtual char const* Save() { return ""; }
+        virtual const char* Save() { return ""; }
 
         void SaveToDB();
 

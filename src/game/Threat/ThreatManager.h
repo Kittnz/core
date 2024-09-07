@@ -34,6 +34,7 @@
 
 class Unit;
 class Creature;
+class Player;
 class ThreatManager;
 class SpellEntry;
 
@@ -43,14 +44,14 @@ class SpellEntry;
 class ThreatCalcHelper
 {
     public:
-        static float CalcThreat(Unit* pHatedUnit, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const* threatSpell);
+        static float CalcThreat(Unit* pHatedUnit, Unit* pHatingUnit, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const *threatSpell);
 };
 
 //==============================================================
 class HostileReference : public Reference<Unit, ThreatManager>
 {
     public:
-        HostileReference(Unit* pUnit, ThreatManager *pThreatManager, float threat);
+        HostileReference(Unit* pUnit, ThreatManager *pThreatManager, float pThreat);
 
         //=================================================
         void addThreat(float pMod);
@@ -73,12 +74,12 @@ class HostileReference : public Reference<Unit, ThreatManager>
 
         // used for temporary setting a threat and reducting it later again.
         // the threat modification is stored
-        void setTempThreat(float pThreat) { iTempThreatModifyer = pThreat - getThreat(); if (iTempThreatModifyer != 0.0f) addThreat(iTempThreatModifyer);  }
+        void setTempThreat(float pThreat) { iTempThreatModifyer = pThreat - getThreat(); if(iTempThreatModifyer != 0.0f) addThreat(iTempThreatModifyer);  }
         void setTempThreatModifier(float thread) { iTempThreatModifyer = thread; addThreat(iTempThreatModifyer); }
 
         void resetTempThreat()
         {
-            if (iTempThreatModifyer != 0.0f)
+            if(iTempThreatModifyer != 0.0f)
             {
                 addThreat(-iTempThreatModifyer);  iTempThreatModifyer = 0.0f;
             }
@@ -95,7 +96,7 @@ class HostileReference : public Reference<Unit, ThreatManager>
         void setAccessibleState(bool pIsAccessible);
         //=================================================
 
-        bool operator ==(HostileReference const& pHostileReference) const { return pHostileReference.getUnitGuid() == getUnitGuid(); }
+        bool operator ==(const HostileReference& pHostileReference) const { return pHostileReference.getUnitGuid() == getUnitGuid(); }
 
         //=================================================
 
@@ -110,7 +111,7 @@ class HostileReference : public Reference<Unit, ThreatManager>
 
         //=================================================
 
-        HostileReference* next() { return ((HostileReference*) Reference<Unit, ThreatManager>::next()); }
+        HostileReference* next() { return ((HostileReference* ) Reference<Unit, ThreatManager>::next()); }
 
         //=================================================
 
@@ -154,9 +155,9 @@ public:
     ThreatContainer() { iDirty = false; }
     ~ThreatContainer() { clearReferences(); }
 
-    HostileReference* addThreat(Unit* pVictim, float threat);
+    HostileReference* addThreat(Unit* pVictim, float pThreat);
 
-    void modifyThreatPercent(Unit* pVictim, int32 percent);
+    void modifyThreatPercent(Unit *pVictim, int32 percent);
 
     HostileReference* selectNextVictim(Creature* pAttacker, HostileReference* pCurrentVictim);
 
@@ -180,21 +181,23 @@ class ThreatManager
 public:
     friend class HostileReference;
 
-    explicit ThreatManager(Unit* pOwner);
+    explicit ThreatManager(Unit *pOwner);
 
     ~ThreatManager() { clearReferences(); }
 
     void clearReferences();
 
-    void addThreat(Unit* pVictim, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const* threatSpell, bool isAssistThreat);
+    void addThreat(Unit* pVictim, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const *threatSpell, bool isAssistThreat);
     void addThreat(Unit* pVictim, float threat) { addThreat(pVictim, threat, false, SPELL_SCHOOL_MASK_NONE, nullptr, false); }
 
+	static void UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit, bool tankMode = false);
+
     // add threat as raw value (ignore redirections and expection all mods applied already to it
-    void addThreatDirectly(Unit* pVictim, float threat, bool noNew = false);
+    void addThreatDirectly(Unit* pVictim, float threat);
 
-    void modifyThreatPercent(Unit* pVictim, int32 pPercent);
+    void modifyThreatPercent(Unit *pVictim, int32 pPercent);
 
-    float getThreat(Unit* pVictim, bool pAlsoSearchOfflineList = false);
+    float getThreat(Unit *pVictim, bool pAlsoSearchOfflineList = false);
 
     bool isThreatListEmpty() const { return iThreatContainer.empty(); }
 
@@ -208,7 +211,7 @@ public:
     Unit* getHostileTarget();
 
     void tauntApply(Unit* pTaunter);
-    void tauntFadeOut(Unit* pTaunter);
+    void tauntFadeOut(Unit *pTaunter);
 
     void setCurrentVictim(HostileReference* pHostileReference);
 

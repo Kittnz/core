@@ -16,7 +16,9 @@
  */
 
 #include "ZoneScriptMgr.h"
-#include "Log.h"
+#include "ObjectMgr.h"
+#include "Player.h"
+#include "ScriptMgr.h"
 #include "Policies/SingletonImp.h"
 
 INSTANTIATE_SINGLETON_1(ZoneScriptMgr);
@@ -53,21 +55,19 @@ void ZoneScriptMgr::InitMapZoneScripts(uint32 mapId, Map* pMap)
         pScript = itr->GetZoneScript();
         if (!pScript)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Could not initialize ZoneScript object. Got nullptr pointer from script.");
+            sLog.outError("Could not initialize ZoneScript object. Got nullptr pointer from script.");
             continue;
         }
         pScript->SetMap(pMap);
         if (!pScript->SetupZoneScript())
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Could not initialize ZoneScript object. SetupZoneScript failed.");
+            sLog.outError("Could not initialize ZoneScript object. SetupZoneScript failed.");
             delete pScript;
             continue;
         }
         m_ZoneScriptsSet.insert(pScript);
         ++counter;
     }
-
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "ZoneScriptMgr : %u scripts on the map %u.", counter, mapId);
 }
 
 void ZoneScriptMgr::AddZone(uint32 zoneid, ZoneScript *handle)
@@ -75,7 +75,7 @@ void ZoneScriptMgr::AddZone(uint32 zoneid, ZoneScript *handle)
     m_ZoneScriptsMap[zoneid] = handle;
 }
 
-void ZoneScriptMgr::HandlePlayerEnterZone(Player* plr, uint32 zoneid)
+void ZoneScriptMgr::HandlePlayerEnterZone(Player *plr, uint32 zoneid)
 {
     ZoneScriptsMap::iterator itr = m_ZoneScriptsMap.find(zoneid);
     if (itr == m_ZoneScriptsMap.end())
@@ -85,10 +85,10 @@ void ZoneScriptMgr::HandlePlayerEnterZone(Player* plr, uint32 zoneid)
         return;
 
     itr->second->OnPlayerEnter(plr);
-    //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Player %u entered ZoneScript", plr->GetGUIDLow());
+    DEBUG_LOG("Player %u entered ZoneScript", plr->GetGUIDLow());
 }
 
-void ZoneScriptMgr::HandlePlayerLeaveZone(Player* plr, uint32 zoneid)
+void ZoneScriptMgr::HandlePlayerLeaveZone(Player *plr, uint32 zoneid)
 {
     ZoneScriptsMap::iterator itr = m_ZoneScriptsMap.find(zoneid);
     if (itr == m_ZoneScriptsMap.end())
@@ -99,7 +99,7 @@ void ZoneScriptMgr::HandlePlayerLeaveZone(Player* plr, uint32 zoneid)
         return;
 
     itr->second->OnPlayerLeave(plr);
-    //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Player %u left ZoneScript", plr->GetGUIDLow());
+    DEBUG_LOG("Player %u left ZoneScript", plr->GetGUIDLow());
 }
 
 ZoneScript * ZoneScriptMgr::GetZoneScriptToZoneId(uint32 zoneid)
@@ -108,7 +108,7 @@ ZoneScript * ZoneScriptMgr::GetZoneScriptToZoneId(uint32 zoneid)
     if (itr == m_ZoneScriptsMap.end())
     {
         // no handle for this zone, return
-        //sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Pas de script pour la zone %u", zoneid);
+        //DETAIL_LOG("Pas de script pour la zone %u", zoneid);
         return nullptr;
     }
     return itr->second;
@@ -121,17 +121,19 @@ void ZoneScriptMgr::Update(uint32 diff)
     {
         for (const auto itr : m_ZoneScriptsSet)
             itr->Update(m_UpdateTimer);
+
         m_UpdateTimer = 0;
     }
 }
 
-bool ZoneScriptMgr::HandleCustomSpell(Player* plr, uint32 spellId, GameObject* go)
+bool ZoneScriptMgr::HandleCustomSpell(Player *plr, uint32 spellId, GameObject * go)
 {
     for (const auto itr : m_ZoneScriptsSet)
     {
         if (itr->HandleCustomSpell(plr, spellId, go))
             return true;
     }
+
     return false;
 }
 
@@ -172,7 +174,6 @@ void ZoneScriptMgr::HandleDropFlag(Player* plr, uint32 spellId)
     }
 }
 
-
 void ZoneScriptMgr::OnMapCrashed(Map* map)
 {
     ZoneScriptsSet::iterator itr = m_ZoneScriptsSet.begin();
@@ -189,5 +190,13 @@ void ZoneScriptMgr::OnMapCrashed(Map* map)
             m_ZoneScriptsMap.erase(itr2);
             itr2 = m_ZoneScriptsMap.begin();
         }
+}
+
+void ZoneScriptMgr::OnPlayerGettingDestroyed(Player* plr)
+{
+	for (const std::pair<const uint32, ZoneScript*>& ZoneScriptPair : m_ZoneScriptsMap)
+	{
+		ZoneScriptPair.second->OnPlayerLeave(plr, true);
+	}
 }
 

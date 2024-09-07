@@ -16,17 +16,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 set(EXECUTABLE_NAME realmd)
-set(EXECUTABLE_SRCS 
-  AuthCodes.h
-  AuthSocket.h
-  BufferedSocket.h
-  PatchHandler.h
-  RealmList.h
-  AuthSocket.cpp
-  BufferedSocket.cpp
-  Main.cpp
-  PatchHandler.cpp
-  RealmList.cpp
+set (EXECUTABLE_SRCS 
+	AuthCodes.h
+	AuthSocket.h
+	BufferedSocket.h
+	PatchHandler.h
+	RealmList.h
+	AuthSocket.cpp
+	BufferedSocket.cpp
+	Main.cpp
+	PatchHandler.cpp
+        PatchLimiter.hpp
+	RealmList.cpp
 )
 
 
@@ -50,7 +51,7 @@ include_directories(
 
 if(WIN32)
   include_directories(
-    ${CMAKE_SOURCE_DIR}/dep/windows/include
+    ${CMAKE_SOURCE_DIR}/dep/include-windows
   )
 endif()
 
@@ -71,11 +72,13 @@ if(WIN32)
     debug ${MYSQL_DEBUG_LIBRARY}
     debug ${OPENSSL_DEBUG_LIBRARIES}
   )
-  if(MINGW)
-    target_link_libraries(${EXECUTABLE_NAME}
-      -lws2_32
-    )
-  endif()
+
+if(MINGW)
+  target_link_libraries(${EXECUTABLE_NAME}
+    -lws2_32
+  )
+endif()
+
   if(PLATFORM MATCHES X86)
     target_link_libraries(${EXECUTABLE_NAME})
   endif()
@@ -111,5 +114,5 @@ install(TARGETS ${EXECUTABLE_NAME} DESTINATION ${BIN_DIR})
 install(FILES realmd.conf.dist.in DESTINATION ${CONF_DIR} RENAME realmd.conf.dist)
 
 if(WIN32 AND MSVC)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/Debug/${EXECUTABLE_NAME}.pdb DESTINATION ${BIN_DIR} CONFIGURATIONS Debug)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/${EXECUTABLE_NAME}.pdb DESTINATION ${BIN_DIR} CONFIGURATIONS Debug)
 endif()

@@ -1,188 +1,214 @@
 /*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ * Contains interface and calls that have to be implemented by the anticheat lib.
+ */
 
-#ifndef ANTICHEAT_H
-#define ANTICHEAT_H
+#ifndef __ANTICHEAT_HPP_
+#define __ANTICHEAT_HPP_
 
-#include "Common.h"
-#include "AbstractPlayer.h"
-#include "UnitDefines.h"
+#include "WorldPacket.h"
+#include "Auth/BigNumber.h"
+#include "Opcodes.h"
+#include "Chat.h"
+#include "Util.h"
+#include "AddonHandler.h"
 
-enum WardenActions
-{
-    WARDEN_ACTION_LOG,
-    WARDEN_ACTION_KICK,
-    WARDEN_ACTION_BAN,
-    WARDEN_ACTION_MAX
-};
+#include <memory>
+#include <string>
+#include <unordered_set>
 
 enum CheatAction
 {
-    CHEAT_ACTION_NONE             = 0x00,
-    CHEAT_ACTION_LOG              = 0x01,
-    CHEAT_ACTION_REPORT_GMS       = 0x02,
-    CHEAT_ACTION_GLOBAL_ANNOUNNCE = 0x04,
-    CHEAT_ACTION_KICK             = 0x08,
-    CHEAT_ACTION_BAN_ACCOUNT      = 0x10,
-    CHEAT_ACTION_BAN_IP_ACCOUNT   = 0x20,
-    CHEAT_ACTION_MUTE_PUB_CHANS   = 0x40, // Mutes the account from public channels
-    CHEAT_MAX_ACTIONS,
+    // take no action
+    CHEAT_ACTION_NONE           = 0x00,
+
+    // informational logging to the anticheat table of the log database, and gm notification
+    CHEAT_ACTION_INFO_LOG       = 0x01,
+
+    // log to the anticheat table of the log database, notify gms, and prompt for action
+    // NOTE: other actions combined with this one are considered acceptable candidates for
+    // MANUAL action and are NOT performed automatically!
+    CHEAT_ACTION_PROMPT_LOG     = 0x02,
+
+    // disconnect the offending world session
+    CHEAT_ACTION_KICK           = 0x04,
+
+    // permanently ban the offending account
+    CHEAT_ACTION_BAN_ACCOUNT    = 0x08,
+
+    // permanently ban the offending ip address
+    CHEAT_ACTION_BAN_IP         = 0x10,
+
+    // permanently silences the offending account from whispers, mail, say, channels, and yells
+    CHEAT_ACTION_SILENCE        = 0x20,
 };
 
-class Unit;
-class Player;
-class MovementInfo;
-class BigNumber;
-class WorldPacket;
 class WorldSession;
-class ChatHandler;
-class Warden;
-class MovementAnticheat;
-class AccountPersistentData;
+class Player;
 struct AreaEntry;
+
+typedef std::unordered_set<std::string> StringSet;
 
 class AntispamInterface
 {
 public:
     virtual ~AntispamInterface() {}
 
-    virtual void loadData() {}
-    virtual void loadConfig() {}
+    virtual void LoadConfig() {}
 
-    virtual std::string normalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
-    virtual bool filterMessage(std::string const& msg) { return 0; }
+    virtual std::string NormalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
+    virtual bool FilterMessage(std::string const& msg) { return 0; }
 
-    virtual void addMessage(std::string const& msg, uint32 type, PlayerPointer from, PlayerPointer to) {}
+    virtual bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) { return true; }
 
-    virtual bool isMuted(uint32 accountId, bool checkChatType = false, uint32 chatType = 0) const { return false; }
-    virtual void mute(uint32 accountId) {}
-    virtual void unmute(uint32 accountId) {}
-    virtual void showMuted(WorldSession* session) {}
+    virtual bool IsMuted(uint32 accountId, bool checkChatType = false, uint32 chatType = 0) const { return false; }
+    virtual void Mute(uint32 accountId) {}
+    virtual void Unmute(uint32 accountId) {}
+    virtual void ShowMuted(WorldSession* session) {}
+    virtual StringSet const* GetMutedMessagesForAccount(uint32 accountId) { return nullptr; }
+
+    virtual void BlacklistWord(std::string word) {};
+    virtual void WhitelistWord(std::string word) {};
+};
+
+// interface to anticheat session (one for each world session)
+class SessionAnticheatInterface
+{
+    public:
+        virtual ~SessionAnticheatInterface() = default;
+
+        virtual void Update(uint32 diff) = 0;
+
+        // character enum packet has been built and is ready to send
+        virtual void SendCharEnum(WorldPacket &&packet) = 0;
+
+        virtual void NewPlayer() = 0;
+        virtual void LeaveWorld() = 0;
+        virtual void Disconnect() = 0;
+
+        // addon checksum verification
+        virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &) = 0;
+        virtual uint32 GetFingerprint() const { return 0; }
+
+        // chat
+        virtual void SendPlayerInfo(ChatHandler *) const = 0;
+
+        // miscellaneous cheat entry
+        virtual void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...) = 0;
+
+        // movement cheats
+        virtual bool Movement(MovementInfo &mi, const WorldPacket &) = 0;
+        virtual void TimeSkipped(const ObjectGuid &mover, uint32 ms) = 0;
+        virtual bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos) = 0;
+        virtual bool SpeedChangeAck(MovementInfo &mi, const WorldPacket &packet, float newSpeed) = 0;
+        virtual bool IsInKnockBack() const = 0;
+        virtual void KnockBack(float speedxy, float speedz, float cos, float sin) = 0;
+        virtual void OnExplore(const AreaEntry *p) = 0;
+        virtual void Teleport(const Position &pos) = 0;
+
+        virtual void OrderSent(uint16 opcode, uint32 counter) = 0;
+        virtual void OrderAck(uint16 opcode, uint32 counter) = 0;
+
+        // warden
+        virtual void WardenPacket(WorldPacket &packet) = 0;
+};
+
+// interface to anticheat system
+class AnticheatLibInterface
+{
+    public:
+        // this function needs to support executing at any time
+        virtual void Reload() = 0;
+
+        // run only on startup
+        virtual void Initialize() = 0;
+
+        // create anticheat session for a new world session
+        virtual std::unique_ptr<SessionAnticheatInterface> NewSession(WorldSession *session, const BigNumber &K) = 0;
+
+        // GM .anticheat command handler
+        //virtual bool ChatCommand(ChatHandler *handler, const std::string &args) = 0;
+
+        virtual AntispamInterface* GetAntispam() const { return nullptr; }
+};
+
+AnticheatLibInterface* GetAnticheatLib();
+#define sAnticheatLib (GetAnticheatLib())
+
+class NullSessionAnticheat : public SessionAnticheatInterface
+{
+    private:
+        WorldSession * const _session;
+        bool _inKnockBack;
+
+    public:
+        NullSessionAnticheat(WorldSession *session) : _session(session), _inKnockBack(false) {}
+
+        void Update(uint32) override {}
+
+        // character enum packet has been built and is ready to send
+        void SendCharEnum(WorldPacket &&packet) override { _session->SendPacket(&packet); }
+
+        void NewPlayer() override {}
+        void LeaveWorld() override {};
+        void Disconnect() override {};
+
+        // addon checksum verification
+        bool ReadAddonInfo(WorldPacket* source, WorldPacket& target) override
+        {
+            sAddOnHandler.BuildAddonPacket(source, &target);
+            return true;
+        }
+
+        // chat
+        void SendPlayerInfo(ChatHandler *) const override {}
+
+        // miscellaneous action
+        void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...) override
+        {
+            if (!!(actionMask & CHEAT_ACTION_KICK))
+                _session->KickPlayer();
+        }
+
+        // movement cheats
+        bool Movement(MovementInfo &, const WorldPacket &packet) override
+        {
+            if (packet.GetOpcode() == MSG_MOVE_FALL_LAND)
+                _inKnockBack = false;
+
+            return true;
+        }
+        void TimeSkipped(const ObjectGuid &mover, uint32 ms) override {}
+        bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos) override { return false; }
+        bool SpeedChangeAck(MovementInfo &, const WorldPacket &, float) override { return true; }
+        bool IsInKnockBack() const override { return _inKnockBack; }
+        void KnockBack(float speedxy, float speedz, float cos, float sin) override { _inKnockBack = true; }
+        void OnExplore(const AreaEntry *) override {}
+        void Teleport(const Position &) override {}
+
+        void OrderSent(uint16, uint32) override {}
+        void OrderAck(uint16, uint32) override {}
+
+        // warden
+        void WardenPacket(WorldPacket &) override {}
 };
 
 #ifdef USE_ANTICHEAT
-#include "WardenAnticheat/Warden.hpp"
-#include "MovementAnticheat/MovementAnticheat.h"
-#include <mutex>
-#include <thread>
+#include "libanticheat.hpp"
 #else
-class Warden
+class NullAnticheatLib : public AnticheatLibInterface
 {
-protected: // forbid instantiation
-    Warden() = default;
-public:
-    ~Warden() = default;
-    void HandlePacket(WorldPacket&) {}
-    virtual void Update() {}
-    virtual void GetPlayerInfo(std::string&, std::string&, std::string&, std::string&, std::string&) const {}
-    bool HasUsedClickToMove() const { return false; }
-};
+    public:
+        virtual void Reload() {}
+        virtual void Initialize() {}
 
-class MovementAnticheat
-{
-public:
-    MovementAnticheat() = default;
-    ~MovementAnticheat() = default;
+        virtual std::unique_ptr<SessionAnticheatInterface> NewSession(WorldSession *session, const BigNumber &)
+        {
+            return std::make_unique<NullSessionAnticheat>(session);
+        }
 
-    void Init() {}
-    void InitNewPlayer(Player* pPlayer) {}
-    void ResetJumpCounters() {}
-
-    bool IsInKnockBack() const { return false; }
-
-    uint32 Update(Player* pPlayer, uint32 diff, std::stringstream& reason) { return CHEAT_ACTION_NONE; }
-    uint32 Finalize(Player* pPlayer, std::stringstream& reason) { return CHEAT_ACTION_NONE; }
-    void AddCheats(uint32 cheats, uint32 count = 1) {}
-    void HandleCommand(ChatHandler* handler) const {}
-    void OnKnockBack(Player* pPlayer, float speedxy, float speedz, float cos, float sin) {}
-
-    void OnUnreachable(Unit* attacker) {}
-    void OnExplore(AreaEntry const* pArea) {}
-    void OnWrongAckData() {};
-    void OnFailedToAckChange() {};
-    void OnDeath() {};
-
-    /*
-    pPlayer - player who is being moved (not necessarily same as this session's player)
-    movementInfo - new movement info that was just received
-    opcode - the packet we are checking
-    */
-    uint32 HandlePositionTests(Player* /*pPlayer*/, MovementInfo& /*movementInfo*/, uint16 /*opcode*/) { return 0; }
-    uint32 HandleFlagTests(Player* /*pPlayer*/, MovementInfo& /*movementInfo*/, uint16 /*opcode*/) { return 0; }
-    bool HandleSplineDone(Player* /*pPlayer*/, MovementInfo const& /*movementInfo*/, uint32 /*splineId*/) { return true; }
-    void LogMovementPacket(bool /*isClientPacket*/, WorldPacket const& /*packet*/) {}
-    static bool IsLoggedOpcode(uint16 /*opcode*/) { return false; }
+        // GM .anticheat command handler
+        virtual bool ChatCommand(ChatHandler *, const std::string &) { return false; }
 };
 #endif
 
-class AnticheatManager
-{
-public:
-#ifdef USE_ANTICHEAT
-    ~AnticheatManager();
-    void LoadAnticheatData();
-
-    Warden * CreateWardenFor(WorldSession* client, BigNumber* K);
-    MovementAnticheat* CreateAnticheatFor(Player* player);
-
-    void StartWardenUpdateThread();
-    void StopWardenUpdateThread();
-    void UpdateWardenSessions();
-    void AddWardenSession(Warden* warden);
-    void RemoveWardenSession(Warden* warden);
-
-private:
-    Warden * CreateWardenForInternal(WorldSession* client, BigNumber* K);
-    void AddWardenSessionInternal(Warden* warden);
-    void RemoveWardenSessionInternal(Warden* warden);
-    void AddOrRemovePendingSessions();
-    std::vector<Warden*> m_wardenSessions;
-    std::vector<Warden*> m_wardenSessionsToAdd;
-    std::vector<Warden*> m_wardenSessionsToRemove;
-    std::mutex m_wardenSessionsMutex;
-    std::thread m_wardenUpdateThread;
-#else
-    void LoadAnticheatData() {}
-
-    Warden* CreateWardenFor(WorldSession* client, BigNumber* K)
-    {
-        return nullptr;
-    }
-    MovementAnticheat* CreateAnticheatFor(Player* player)
-    {
-        return new MovementAnticheat();
-    }
-
-    void StartWardenUpdateThread() {}
-    void StopWardenUpdateThread() {}
-    void UpdateWardenSessions() {}
-    void AddWardenSession(Warden* warden) {}
-    void RemoveWardenSession(Warden* warden) {}
-#endif
-
-public:
-    // Antispam wrappers
-    AntispamInterface* GetAntispam() const { return nullptr; }
-    bool CanWhisper(AccountPersistentData const& data, MasterPlayer* player) { return true; }
-
-    static AnticheatManager* instance();
-};
-
-AnticheatManager* GetAnticheatLib();
-
-#define sAnticheatMgr (GetAnticheatLib())
-
-#endif // ANTICHEAT_H
+#endif /*!__ANTICHEAT_HPP_*/

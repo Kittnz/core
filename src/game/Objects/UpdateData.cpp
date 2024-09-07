@@ -27,7 +27,12 @@
 #include "Opcodes.h"
 #include "World.h"
 #include "ObjectGuid.h"
-#include <zlib.h>
+
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
+#include "zlib.h"
+#endif
 
 #define MAX_UNCOMPRESSED_PACKET_SIZE 0x8000 // 32ko
 
@@ -45,12 +50,12 @@ void UpdateData::AddOutOfRangeGUID(ObjectGuidSet& guids)
     m_outOfRangeGUIDs.insert(guids.begin(), guids.end());
 }
 
-void UpdateData::AddOutOfRangeGUID(ObjectGuid const& guid)
+void UpdateData::AddOutOfRangeGUID(ObjectGuid const &guid)
 {
     m_outOfRangeGUIDs.insert(guid);
 }
 
-ByteBuffer& UpdateData::AddUpdateBlockAndGetBuffer()
+void UpdateData::AddUpdateBlock(const ByteBuffer &block)
 {
     if (m_datas.empty())
         m_datas.push_back(UpdatePacket());
@@ -62,11 +67,11 @@ ByteBuffer& UpdateData::AddUpdateBlockAndGetBuffer()
         it = m_datas.end();
         --it;
     }
+    it->data.append(block);
     ++it->blockCount;
-    return it->data;
 }
 
-void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_size)
+void PacketCompressor::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
 {
     z_stream c_stream;
 
@@ -75,10 +80,10 @@ void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_
     c_stream.opaque = (voidpf)0;
 
     // default Z_BEST_SPEED (1)
-    int z_res = deflateInit(&c_stream, sWorld.getConfig(CONFIG_UINT32_COMPRESSION_LEVEL));
+    int z_res = deflateInit(&c_stream, sWorld.getConfig(CONFIG_UINT32_COMPRESSION));
     if (z_res != Z_OK)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));
+        sLog.outError("Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
@@ -91,14 +96,14 @@ void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_
     z_res = deflate(&c_stream, Z_NO_FLUSH);
     if (z_res != Z_OK)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't compress update packet (zlib: deflate) Error code: %i (%s)", z_res, zError(z_res));
+        sLog.outError("Can't compress update packet (zlib: deflate) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
 
     if (c_stream.avail_in != 0)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't compress update packet (zlib: deflate not greedy)");
+        sLog.outError("Can't compress update packet (zlib: deflate not greedy)");
         *dst_size = 0;
         return;
     }
@@ -106,7 +111,7 @@ void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_
     z_res = deflate(&c_stream, Z_FINISH);
     if (z_res != Z_STREAM_END)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't compress update packet (zlib: deflate should report Z_STREAM_END instead %i (%s)", z_res, zError(z_res));
+        sLog.outError("Can't compress update packet (zlib: deflate should report Z_STREAM_END instead %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
@@ -114,7 +119,7 @@ void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_
     z_res = deflateEnd(&c_stream);
     if (z_res != Z_OK)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't compress update packet (zlib: deflateEnd) Error code: %i (%s)", z_res, zError(z_res));
+        sLog.outError("Can't compress update packet (zlib: deflateEnd) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
@@ -122,14 +127,15 @@ void PacketCompressor::Compress(void* dst, uint32* dst_size, void* src, int src_
     *dst_size = c_stream.total_out;
 }
 
-bool UpdateData::BuildPacket(WorldPacket* packet, bool hasTransport)
+bool UpdateData::BuildPacket(WorldPacket *packet, bool hasTransport)
 {
     if (m_datas.empty())
         return BuildPacket(packet, nullptr, hasTransport);
+
     return BuildPacket(packet, &(m_datas.front()), hasTransport);
 }
 
-bool UpdateData::BuildPacket(WorldPacket* packet, UpdatePacket const* updPacket, bool hasTransport)
+bool UpdateData::BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket, bool hasTransport)
 {
     MANGOS_ASSERT(packet->empty());                         // shouldn't happen
 
@@ -144,13 +150,8 @@ bool UpdateData::BuildPacket(WorldPacket* packet, UpdatePacket const* updPacket,
         buf << (uint8) UPDATETYPE_OUT_OF_RANGE_OBJECTS;
         buf << (uint32) m_outOfRangeGUIDs.size();
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         for (const auto& guid : m_outOfRangeGUIDs)
             buf << guid.WriteAsPacked();
-#else
-        for (const auto& guid : m_outOfRangeGUIDs)
-            buf << guid;
-#endif
     }
 
     if (updPacket)
@@ -158,11 +159,10 @@ bool UpdateData::BuildPacket(WorldPacket* packet, UpdatePacket const* updPacket,
 
     size_t pSize = buf.wpos();                              // use real used data size
 
-    // compress large packets
-    if (pSize > sWorld.getConfig(CONFIG_UINT32_COMPRESSION_UPDATE_SIZE))
+    if (pSize > 100)                                       // compress large packets
     {
         if (pSize >= 900000)
-            sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[CRASH-CLIENT] Too large packet: %u", pSize);
+            sLog.outInfo("[CRASH-CLIENT] Too large packet: %u", pSize);
 
         uint32 destsize = compressBound(pSize);
         packet->resize(destsize + sizeof(uint32));
@@ -194,6 +194,7 @@ void UpdateData::Send(WorldSession* session, bool hasTransport)
         m_outOfRangeGUIDs.clear();
         return;
     }
+
     for (const auto& itr : m_datas)
     {
         BuildPacket(&data, &itr, hasTransport);
@@ -209,40 +210,47 @@ void UpdateData::Clear()
     m_outOfRangeGUIDs.clear();
 }
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
-bool MovementData::CanAddPacket(WorldPacket const& data)
+void MovementData::SetSplineOpcode(uint32 opcode, ObjectGuid const& unit)
 {
-    // Since packet size is stored with an uint8, packet size is limited for compressed packets
-    if ((data.wpos() + 2) > 0xFF)
-        return false;
-
-    if ((m_buffer.wpos() + (data.wpos() + 2)) >= 900000)
-        return false;
-
-    return true;
+    WorldPacket data(opcode, 9);
+    data << unit.WriteAsPacked();
+    AddPacket(data);
 }
 
-void MovementData::AddPacket(WorldPacket const& data)
+void MovementData::SetUnitSpeed(uint32 opcode, ObjectGuid const& unit, float value)
 {
+    WorldPacket data(opcode, 9 + 4);
+    data << unit.WriteAsPacked();
+    data << float(value);
+    AddPacket(data);
+}
+
+void MovementData::AddPacket(WorldPacket& data)
+{
+    if (_owner) // Do not compress data
+    {
+        _owner->SendMovementMessageToSet(std::move(data), true);
+        return;
+    }
     ASSERT(data.wpos() + 2 <= 0xFF); // Max packet size to be stored on uint8. Client crash else.
-    m_buffer << uint8(data.wpos() + 2); // Packet + opcode size
-    m_buffer << uint16(data.GetOpcode());
-    m_buffer.append(data.contents(), data.wpos());
+    _buffer << uint8(data.wpos() + 2); // Packet + opcode size
+    _buffer << uint16(data.GetOpcode());
+    _buffer.append(data.contents(), data.wpos());
 }
 
 bool MovementData::BuildPacket(WorldPacket& packet)
 {
     MANGOS_ASSERT(packet.empty()); // We want a clean packet !
 
-    size_t pSize = m_buffer.wpos();                              // use real used data size
+    size_t pSize = _buffer.wpos();                              // use real used data size
 
     if (pSize >= 900000)
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[CRASH-CLIENT] Too large packet size %u (SMSG_COMPRESSED_MOVES)", pSize);
+        sLog.outInfo("[CRASH-CLIENT] Too large packet size %u (SMSG_COMPRESSED_MOVES)", pSize);
 
     uint32 destsize = compressBound(pSize);
     packet.resize(destsize + sizeof(uint32));
     packet.put<uint32>(0, pSize);
-    PacketCompressor::Compress(const_cast<uint8*>(packet.contents()) + sizeof(uint32), &destsize, (void*)m_buffer.contents(), pSize);
+    PacketCompressor::Compress(const_cast<uint8*>(packet.contents()) + sizeof(uint32), &destsize, (void*)_buffer.contents(), pSize);
     if (destsize == 0)
         return false;
 
@@ -250,4 +258,3 @@ bool MovementData::BuildPacket(WorldPacket& packet)
     packet.SetOpcode(SMSG_COMPRESSED_MOVES);
     return true;
 }
-#endif

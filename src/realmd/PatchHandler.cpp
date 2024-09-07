@@ -23,15 +23,22 @@
   \ingroup realmd
   */
 
-#include "PatchHandler.h"
 #include "AuthCodes.h"
 #include "Log.h"
 #include "Common.h"
+#include "Timer.h"
+#include "PatchHandler.h"
+#include "PatchLimiter.hpp"
+
+#ifdef WIN32
+#include <filesystem>
+#endif
 
 #include <ace/OS_NS_sys_socket.h>
 #include <ace/OS_NS_dirent.h>
 #include <ace/OS_NS_errno.h>
 #include <ace/OS_NS_unistd.h>
+
 
 #include <ace/os_include/netinet/os_tcp.h>
 
@@ -47,6 +54,8 @@
 #else
 #pragma pack(push,1)
 #endif
+
+extern int32 PatchHandlerKBytesDownloadLimit;
 
 struct Chunk
 {
@@ -66,6 +75,9 @@ PatchHandler::PatchHandler(ACE_HANDLE socket, ACE_HANDLE patch)
     reactor(nullptr);
     set_handle(socket);
     patch_fd_ = patch;
+
+	LastUpdateMs = WorldTimer::getMSTime();
+	SecondLimitBytes = PatchHandlerKBytesDownloadLimit * 1024;
 }
 
 PatchHandler::~PatchHandler()
@@ -121,12 +133,47 @@ int PatchHandler::svc(void)
     {
         data.data_size = (ACE_UINT16)r;
 
-        if(peer().send((const char*)&data,
-                    ((size_t) r) + sizeof(data) - sizeof(data.data),
-                    flags) == -1)
+        auto size = ((size_t)r) + sizeof(data) - sizeof(data.data);
+        while (!sPatchLimiter->IsAllowed(size))
         {
-            return -1;
+            ACE_Time_Value SleepValue;
+            SleepValue.set_msec(100u);
+            ACE_OS::sleep(SleepValue);
         }
+
+		ssize_t sendedBytes = peer().send((const char*)&data,
+			size,
+			flags);
+
+		if (sendedBytes == -1)
+		{
+			return -1;
+		}
+
+
+		SecondLimitBytes -= sendedBytes;
+
+		if (SecondLimitBytes <= 0)
+		{
+			// check for time limit now
+			uint32 Diff = 0;
+			do 
+			{
+				uint32 CurrentTime = WorldTimer::getMSTime();
+				Diff = CurrentTime - LastUpdateMs;
+				if (Diff > 1000)
+				{
+					SecondLimitBytes = PatchHandlerKBytesDownloadLimit * 1024;
+					LastUpdateMs = CurrentTime;
+				}
+				else
+				{
+					ACE_Time_Value SleepValue;
+					SleepValue.set_msec(100u);
+					ACE_OS::sleep(SleepValue);
+				}
+			} while (Diff < 1000);
+		}
     }
 
     if(r == -1)
@@ -148,7 +195,6 @@ PatchCache::PatchCache()
     LoadPatchesInfo();
 }
 
-
 using PatchCacheLock = MaNGOS::ClassLevelLockable<PatchCache, std::mutex>;
 INSTANTIATE_SINGLETON_2(PatchCache, PatchCacheLock);
 INSTANTIATE_CLASS_MUTEX(PatchCache, std::mutex);
@@ -162,8 +208,8 @@ void PatchCache::LoadPatchMD5(const char* szFileName)
 {
     // Try to open the patch file
     std::string path = szFileName;
-    FILE* pPatch = fopen(path.c_str (), "rb");
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Loading patch info from file %s", path.c_str());
+    FILE* pPatch = fopen(path.c_str(), "rb");
+    DEBUG_LOG("Loading patch info from file %s", path.c_str());
 
     if(!pPatch)
         return;
@@ -201,33 +247,62 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
     return false;
 }
 
+#ifdef WIN32
+#define fssystem std::filesystem
+#endif
+
 void PatchCache::LoadPatchesInfo()
 {
+#ifdef WIN32
+	fssystem::path PatchesDir = "./patches/";
+
+	if (!fssystem::exists(PatchesDir))
+	{
+		return;
+	}
+
+	fssystem::directory_iterator iter(PatchesDir);
+
+	for (const fssystem::directory_entry& DirEntry : fssystem::directory_iterator(PatchesDir))
+	{
+		const fssystem::path& filePath = DirEntry.path();
+		fssystem::path clearFilename = filePath.filename();
+		std::string strClearFilename = clearFilename.string();
+
+		if (strClearFilename.size() < 8)
+		{
+			continue;
+		}
+
+		if (clearFilename.extension().compare("mpq"))
+		{
+			LoadPatchMD5(strClearFilename.c_str());
+		}
+	}
+#else
     std::string path = sConfig.GetStringDefault("PatchesDir", "./patches") + "/";
     std::string fullpath;
     ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT(path.c_str()));
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Loading patch info from folder %s", path.c_str());
+    DEBUG_LOG("Loading patch info from folder %s", path.c_str());
 
-    if (!dirp)
-        return;
+	if (!dirp)
+		return;
 
-    ACE_DIRENT* dp;
+	ACE_DIRENT* dp;
 
-    while ((dp = ACE_OS::readdir(dirp)) != nullptr)
-    {
-        int l = strlen(dp->d_name);
-        if (l < 8)
-            continue;
+	while ((dp = ACE_OS::readdir(dirp)) != nullptr)
+	{
+		int l = strlen(dp->d_name);
+		if (l < 8)
+			continue;
 
         if (!memcmp(&dp->d_name[l - 4], ".mpq", 4))
         {
             fullpath = path + dp->d_name;
             LoadPatchMD5(fullpath.c_str());
-        }
-    }
+}
+	}
 
-    // causes crash on windows
-#ifndef _WIN32
-    ACE_OS::closedir(dirp);
+	ACE_OS::closedir(dirp);
 #endif
 }

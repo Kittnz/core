@@ -21,7 +21,11 @@
 #define MANGOS_PLAYERAI_H
 
 #include "Common.h"
-#include "ObjectGuid.h"
+#include "Platform/Define.h"
+#include "Policies/Singleton.h"
+#include "Dynamic/ObjectRegistry.h"
+#include "Dynamic/FactoryHolder.h"
+#include "CreatureAI.h" // Pour 'enum CanCastResult'
 
 class WorldObject;
 class Unit;
@@ -38,13 +42,13 @@ class PlayerAI
         virtual void Remove();
 
         // Called at World update tick
-        virtual void UpdateAI(uint32 const /*diff*/);
+        virtual void UpdateAI(const uint32 /*diff*/);
         virtual void MovementInform(uint32 MovementType, uint32 Data = 0) {}
 
-        // == Helpers =====================================
-        bool CanCastSpell(Unit* pTarget, SpellEntry const* pSpell, bool isTriggered, bool checkControlled = true);
+        ///== Helpeurs =====================================
+        CanCastResult CanCastSpell(Unit* pTarget, const SpellEntry *pSpell, bool isTriggered, bool checkControlled = true);
 
-        // == Fields =======================================
+        ///== Fields =======================================
 
         // Pointer to controlled by AI player
         Player* me;
@@ -56,14 +60,14 @@ class PlayerControlledAI: public PlayerAI
     public:
         explicit PlayerControlledAI(Player* pPlayer, Unit* caster = nullptr);
 
-        ~PlayerControlledAI() override;
+        virtual ~PlayerControlledAI();
 
         // Called at World update tick
-        void UpdateAI(uint32 const /*diff*/) override;
+        void UpdateAI(const uint32 /*diff*/) override;
         Unit* FindController();
         void UpdateTarget(Unit* victim);
 
-        // == Fields =======================================
+        ///== Fields =======================================
         ObjectGuid controllerGuid;
         uint32 uiGlobalCD;
         std::vector<uint32> usableSpells;

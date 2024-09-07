@@ -84,7 +84,7 @@ class BIH
     public:
         BIH() {init_empty();}
         template< class BoundsFunc, class PrimArray >
-        void build(PrimArray const& primitives, BoundsFunc& getBounds, uint32 leafSize = 3, bool printStats = false)
+        void build(const PrimArray& primitives, BoundsFunc& getBounds, uint32 leafSize = 3, bool printStats = false)
         {
             if (primitives.size() == 0)
             {
@@ -120,15 +120,16 @@ class BIH
         size_t primCount() const { return objects.size(); }
 
         template<typename RayCallback>
-        void intersectRay(Ray const& r, RayCallback& intersectCallback, float& maxDist, bool stopAtFirst = false, bool ignoreM2Model = false) const
+        void intersectRay(const Ray& r, RayCallback& intersectCallback, float& maxDist, bool stopAtFirst = false) const
         {
             float intervalMin = -1.f;
             float intervalMax = -1.f;
-            Vector3 const& org = r.origin();
-            Vector3 const& dir = r.direction();
-            Vector3 const& invDir = r.invDirection();
+            Vector3 org = r.origin();
+            Vector3 dir = r.direction();
+            Vector3 invDir;
             for (int i = 0; i < 3; ++i)
             {
+                invDir[i] = 1.f / dir[i];
                 if (G3D::fuzzyNe(dir[i], 0.0f))
                 {
                     float t1 = (bounds.low()[i]  - org[i]) * invDir[i];
@@ -222,7 +223,7 @@ class BIH
                             int n = tree[node + 1];
                             while (n > 0)
                             {
-                                bool hit = intersectCallback(r, objects[offset], maxDist, stopAtFirst, ignoreM2Model);
+                                bool hit = intersectCallback(r, objects[offset], maxDist, stopAtFirst);
                                 if (stopAtFirst && hit) return;
                                 --n;
                                 ++offset;
@@ -263,7 +264,7 @@ class BIH
         }
 
         template<typename IsectCallback>
-        void intersectPoint(Vector3 const& p, IsectCallback& intersectCallback) const
+        void intersectPoint(const Vector3& p, IsectCallback& intersectCallback) const
         {
             if (!bounds.contains(p))
                 return;
@@ -382,9 +383,7 @@ class BIH
 
             public:
                 BuildStats():
-                    numNodes(0), numLeaves(0), sumObjects(0), minObjects(0x0FFFFFFF),
-                    maxObjects(0xFFFFFFFF), sumDepth(0), minDepth(0x0FFFFFFF),
-                    maxDepth(0xFFFFFFFF), numBVH2(0)
+                    numNodes(0), numLeaves(0), sumObjects(0), minObjects(0x0FFFFFFF), maxObjects(0xFFFFFFFF), sumDepth(0), minDepth(0x0FFFFFFF), maxDepth(0xFFFFFFFF), numBVH2(0)
                 {
                     for (int& i : numLeavesN) i = 0;
                 }

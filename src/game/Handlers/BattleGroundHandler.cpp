@@ -24,7 +24,6 @@
 #include "Opcodes.h"
 #include "Log.h"
 #include "Player.h"
-#include "Group.h"
 #include "ObjectMgr.h"
 #include "WorldSession.h"
 #include "Object.h"
@@ -37,12 +36,14 @@
 #include "World.h"
 #include "Anticheat.h"
 
-void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket& recv_data)
+void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recv_data)
 {
     ObjectGuid guid;
     recv_data >> guid;
 
-    Creature* pCreature = GetPlayer()->GetMap()->GetCreature(guid);
+    DEBUG_LOG("WORLD: Recvd CMSG_BATTLEMASTER_HELLO Message from %s", guid.GetString().c_str());
+
+    Creature *pCreature = GetPlayer()->GetMap()->GetCreature(guid);
 
     if (!pCreature)
         return;
@@ -66,8 +67,6 @@ void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket& recv_data)
         return;
     }
 
-    _player->InterruptSpellsWithChannelFlags(AURA_INTERRUPT_INTERACTING_CANCELS);
-    _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_INTERACTING_CANCELS);
     SendBattleGroundList(guid, bgTypeId);
 }
 
@@ -78,12 +77,13 @@ void WorldSession::SendBattleGroundList(ObjectGuid guid, BattleGroundTypeId bgTy
     SendPacket(&data);
 }
 
-void WorldSession::HandleBattlefieldJoinOpcode(WorldPacket& recv_data)
+void WorldSession::HandleBattlefieldJoinOpcode(WorldPacket & recv_data)
 {
     uint32 mapId;
     recv_data >> mapId;
+    DEBUG_LOG("WorldSession::HandleBattlefieldJoinOpcode : mapId=%u", mapId);
 
-    WorldPacket data(recv_data.GetOpcode());
+    WorldPacket data(CMSG_BATTLEMASTER_JOIN);
     data << uint64(0);
     data << uint32(mapId);
     data << uint32(0);
@@ -92,75 +92,65 @@ void WorldSession::HandleBattlefieldJoinOpcode(WorldPacket& recv_data)
     HandleBattlemasterJoinOpcode(data);
 }
 
-void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
+void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 {
     ObjectGuid guid;
     uint32 instanceId;
     uint32 mapId;
     uint8 joinAsGroup;
     bool queuedAtBGPortal = false;
+    bool queuedviaCommand = false;
     bool isPremade = false;
-    Group* grp;
+    Group * grp;
 
     recv_data >> guid;                                      // battlemaster guid, or player guid if joining queue from BG portal
     recv_data >> mapId;
     recv_data >> instanceId;                                // instance id, 0 if First Available selected
     recv_data >> joinAsGroup;                               // join as group
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     if (guid == GetPlayer()->GetObjectGuid())
         queuedAtBGPortal = true;
-#endif
+
+    if (guid.GetRawValue() == 1337) // temp command
+        queuedviaCommand = true;
 
     BattleGroundTypeId bgTypeId = GetBattleGroundTypeIdByMapId(mapId);
 
     if (bgTypeId == BATTLEGROUND_TYPE_NONE)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for invalid BG type", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for invalid BG type", CHEAT_ACTION_INFO_LOG);
         return;
     }
+
     if (bgTypeId == BATTLEGROUND_AV && joinAsGroup)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for AV as group", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for AV as group", CHEAT_ACTION_INFO_LOG);
         return;
     }
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-    if (queuedAtBGPortal)
+    if (!queuedviaCommand)
     {
-        auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
-        if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
+        if (queuedAtBGPortal)
         {
-            ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
-            return;
-        }
-    }
-    else
-    {
-        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER))
-        {
-            ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
-            return;
-        }
-    }
-#else
-    if (!_player->FindNearestInteractableNpcWithFlag(UNIT_NPC_FLAG_BATTLEMASTER))
-    {
-        auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
-        if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
-        {
-            ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
-            return;
+            auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
+            if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
+            {
+                //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_INFO_LOG);
+                return;
+            }
         }
         else
-            queuedAtBGPortal = true;
+        {
+            if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER) && !_player->IsAllowedToQueueBGDueToTabard())
+            {
+                //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_INFO_LOG);
+                return;
+            }
+        }
     }
-    else
-        queuedAtBGPortal = false;
-#endif
 
     // can do this, since it's battleground, not arena
-    BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BgQueueTypeId(bgTypeId);
+    BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(bgTypeId);
 
     // ignore if player is already in BG
     if (_player->InBattleGround())
@@ -173,7 +163,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
 
     if (!bg && !(bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId)))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground: no available bg / template found");
+        sLog.outError("Battleground: no available bg / template found");
         return;
     }
 
@@ -203,9 +193,9 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
 
         // if we're here, then the conditions to join a bg are met. We can proceed in joining.
         // _player->GetGroup() was already checked, grp is already initialized
-        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_battleGroundQueues[bgQueueTypeId];
+        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
 
-        GroupQueueInfo* ginfo = bgQueue.AddGroup(_player, nullptr, bgTypeId, bgBracketId, isPremade, instanceId, nullptr);
+        GroupQueueInfo * ginfo = bgQueue.AddGroup(_player, nullptr, bgTypeId, bgBracketId, isPremade, instanceId, nullptr);
         uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bgBracketId);
         // already checked if queueSlot is valid, now just get it
         uint32 queueSlot = _player->AddBattleGroundQueueId(bgQueueTypeId);
@@ -216,7 +206,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
         // send status packet (in queue)
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_WAIT_QUEUE, avgTime, 0);
         SendPacket(&data);
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, _player->GetGUIDLow(), _player->GetName());
+        DEBUG_LOG("Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, _player->GetGUIDLow(), _player->GetName());
     }
     else
     {
@@ -247,13 +237,13 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
         // if we're here, then the conditions to join a bg are met. We can proceed in joining.
 
         // _player->GetGroup() was already checked, grp is already initialized
-        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_battleGroundQueues[bgQueueTypeId];
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: the following players are joining as group:");
-        GroupQueueInfo* ginfo = bgQueue.AddGroup(_player, grp, bgTypeId, bgBracketId, isPremade, instanceId, &excludedMembers);
+        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
+        DEBUG_LOG("Battleground: the following players are joining as group:");
+        GroupQueueInfo * ginfo = bgQueue.AddGroup(_player, grp, bgTypeId, bgBracketId, isPremade, instanceId, &excludedMembers);
         uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bgBracketId);
-        for (GroupReference* itr = grp->GetFirstMember(); itr != nullptr; itr = itr->next())
+        for (GroupReference *itr = grp->GetFirstMember(); itr != nullptr; itr = itr->next())
         {
-            Player* member = itr->getSource();
+            Player *member = itr->getSource();
             if (!member) continue;  // this should never happen
             
             if (std::find(excludedMembers.begin(), excludedMembers.end(), member->GetGUIDLow()) != excludedMembers.end())
@@ -274,17 +264,19 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recv_data)
             member->GetSession()->SendPacket(&data);
             sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, bg->GetMapId());
             member->GetSession()->SendPacket(&data);
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, member->GetGUIDLow(), member->GetName());
+            DEBUG_LOG("Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, member->GetGUIDLow(), member->GetName());
         }
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: group end");
+        DEBUG_LOG("Battleground: group end");
     }
 
     sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, bgBracketId);
 }
 
-void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket & /*recv_data*/)
 {
     // empty opcode
+    //DEBUG_LOG("WORLD: Recvd MSG_BATTLEGROUND_PLAYER_POSITIONS Message");
+
     BattleGround *bg = _player->GetBattleGround();
     if (!bg)                                                // can't be received if player not in battleground
         return;
@@ -297,7 +289,7 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket& /*recv_d
     {
         for (auto const& itr : bg->GetPlayers())
         {
-            if (_player->GetTeam() == itr.second.playerTeam)
+            if (_player->GetTeam() == itr.second.PlayerTeam)
             {
                 if (Player const* pPlayer = sObjectMgr.GetPlayer(itr.first))
                 {
@@ -319,7 +311,7 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket& /*recv_d
             if (_player->GetTeam() == ALLIANCE)
                 pFlagCarrier = sObjectMgr.GetPlayer(((BattleGroundWS*)bg)->GetHordeFlagPickerGuid());
             else
-                pFlagCarrier = sObjectMgr.GetPlayer(((BattleGroundWS*)bg)->GetAllianceFlagPickerGuid());
+                pFlagCarrier = sObjectMgr.GetPlayer(((BattleGroundWS*)bg)->GetAllianceFlagPickerGuid());;
 
             data << uint8(pFlagCarrier ? 1 : 0);
 
@@ -342,36 +334,33 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode(WorldPacket& /*recv_d
     SendPacket(&data);
 }
 
-void WorldSession::HandlePVPLogDataOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recv_data*/)
 {
+    DEBUG_LOG("WORLD: Recvd MSG_PVP_LOG_DATA Message");
+
     BattleGround *bg = _player->GetBattleGround();
     if (!bg)
         return;
 
-    if (bg->GetStatus() != STATUS_WAIT_LEAVE)
-    {
-        WorldPacket data;
-        sBattleGroundMgr.BuildPvpLogDataPacket(&data, bg);
-        SendPacket(&data);
-    }
-    else
-        SendPacket(bg->GetFinalScorePacket());
+    WorldPacket data;
+    sBattleGroundMgr.BuildPvpLogDataPacket(&data, bg);
+    SendPacket(&data);
+
+    DEBUG_LOG("WORLD: Sent MSG_PVP_LOG_DATA Message");
 }
 
-void WorldSession::HandleBattlefieldListOpcode(WorldPacket& recv_data)
+void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recv_data)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+    DEBUG_LOG("WORLD: Recvd CMSG_BATTLEFIELD_LIST Message");
+
     uint32 mapId;
     recv_data >> mapId;
 
     BattleGroundTypeId bgTypeId = GetBattleGroundTypeIdByMapId(mapId);
-#else
-    BattleGroundTypeId bgTypeId = BattleGroundTypeId(_player->GetQueuedBattleground());
-#endif
 
     if (bgTypeId == BATTLEGROUND_TYPE_NONE)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground: invalid bgtype received.");
+        sLog.outError("Battleground: invalid bgtype received.");
         return;
     }
 
@@ -380,58 +369,53 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket& recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
+void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
 {
+    DEBUG_LOG("WORLD: Recvd CMSG_BATTLEFIELD_PORT Message");
+
     uint8 action = 0; // enter battle 0x1, leave queue 0x0
     uint32 mapId = 0;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     recv_data >> mapId >> action;
 
     BattleGroundTypeId bgTypeId = GetBattleGroundTypeIdByMapId(mapId);
-#else
-    recv_data >> action;
-
-    BattleGroundTypeId bgTypeId = BattleGroundTypeId(_player->GetQueuedBattleground());
-#endif
 
     if (bgTypeId == BATTLEGROUND_TYPE_NONE)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BattlegroundHandler: invalid bg map (%u) received.", mapId);
+        DEBUG_LOG("BattlegroundHandler: invalid bg map (%u) received.", mapId);
         return;
     }
     if (!_player->InBattleGroundQueue())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BattlegroundHandler: Invalid CMSG_BATTLEFIELD_PORT received from player (%u), he is not in bg_queue.", _player->GetGUIDLow());
+        DEBUG_LOG("BattlegroundHandler: Invalid CMSG_BATTLEFIELD_PORT received from player (%u), he is not in bg_queue.", _player->GetGUIDLow());
         return;
     }
 
     //get GroupQueueInfo from BattleGroundQueue
-    BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BgQueueTypeId(bgTypeId);
-    BattleGroundQueue& bgQueue = sBattleGroundMgr.m_battleGroundQueues[bgQueueTypeId];
+    BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(bgTypeId);
+    BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
     //we must use temporary variable, because GroupQueueInfo pointer can be deleted in BattleGroundQueue::RemovePlayer() function
     GroupQueueInfo ginfo;
     if (!bgQueue.GetPlayerGroupInfoData(_player->GetObjectGuid(), &ginfo))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BattlegroundHandler: itrplayerstatus not found.");
+        DEBUG_LOG("BattlegroundHandler: itrplayerstatus not found.");
         return;
     }
     // if action == 1, then instanceId is required
-    if (!ginfo.isInvitedToBgInstanceGuid && action == 1)
+    if (!ginfo.IsInvitedToBGInstanceGUID && action == 1)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BattlegroundHandler: instance not found.");
+        DEBUG_LOG("BattlegroundHandler: instance not found.");
         return;
     }
 
-    BattleGround *bg = sBattleGroundMgr.GetBattleGround(ginfo.isInvitedToBgInstanceGuid, bgTypeId);
+    BattleGround *bg = sBattleGroundMgr.GetBattleGround(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
 
     // bg template might and must be used in case of leaving queue, when instance is not created yet
     if (!bg && action == 0)
         bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
-
     if (!bg)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "BattlegroundHandler: bgTemplate not found for type id %u.", bgTypeId);
+        DEBUG_LOG("BattlegroundHandler: bg_template not found for type id %u.", bgTypeId);
         return;
     }
 
@@ -446,26 +430,16 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
             data2 << uint32(0xFFFFFFFE);
             _player->GetSession()->SendPacket(&data2);
             action = 0;
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player %s (%u) has a deserter debuff, do not port him to battleground!", _player->GetName(), _player->GetGUIDLow());
+            DEBUG_LOG("Battleground: player %s (%u) has a deserter debuff, do not port him to battleground!", _player->GetName(), _player->GetGUIDLow());
         }
-
         //if player don't match battleground max level, then do not allow him to enter! (this might happen when player leveled up during his waiting in queue
         if (_player->GetLevel() > bg->GetMaxLevel())
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground: Player %s (%u) has level (%u) higher than maxlevel (%u) of battleground (%u)! Do not port him to battleground!",
+            sLog.outError("Battleground: Player %s (%u) has level (%u) higher than maxlevel (%u) of battleground (%u)! Do not port him to battleground!",
                           _player->GetName(), _player->GetGUIDLow(), _player->GetLevel(), bg->GetMaxLevel(), bg->GetTypeID());
             action = 0;
         }
-
-        // do not allow entering bg which is already over
-        if (bg->GetStatus() == STATUS_WAIT_LEAVE)
-        {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground: Player %s (%u) is attempting to enter battleground (%u) which has already ended!",
-                _player->GetName(), _player->GetGUIDLow(), bg->GetTypeID());
-            action = 0;
-        }
     }
-
     uint32 queueSlot = _player->GetBattleGroundQueueIndex(bgQueueTypeId);
     WorldPacket data;
     switch (action)
@@ -473,7 +447,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
         case 1:                                         // port to battleground
             if (!_player->IsInvitedForBattleGroundQueueType(bgQueueTypeId))
             {
-                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground: Player %s (%u) is not invited in queue type %u !", _player->GetName(), _player->GetGUIDLow(), bgQueueTypeId);
+                sLog.outError("Battleground: Player %s (%u) is not invited in queue type %u !", _player->GetName(), _player->GetGUIDLow(), bgQueueTypeId);
                 return;                                 // cheating?
             }
 
@@ -483,6 +457,9 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
                 _player->ResurrectPlayer(1.0f);
                 _player->SpawnCorpseBones();
             }
+
+            _player->SetBattleGroundEntryPoint();
+
             // stop taxi flight at port
             if (_player->IsTaxiFlying())
             {
@@ -502,13 +479,14 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
             // set the destination instance id
             _player->SetBattleGroundId(bg->GetInstanceID(), bgTypeId);
             // set the destination team
-            _player->SetBGTeam(ginfo.groupTeam);
+            _player->SetBGTeam(ginfo.GroupTeam);
+            
             // bg->HandleBeforeTeleportToBattleGround(_player);
-            sBattleGroundMgr.SendToBattleGround(_player, ginfo.isInvitedToBgInstanceGuid, bgTypeId);
+            sBattleGroundMgr.SendToBattleGround(_player, ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
             // add only in HandleMoveWorldPortAck()
             // bg->AddPlayer(_player,team);
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player %s (%u) joined battle for bg %u, bgtype %u, queue type %u.", _player->GetName(), _player->GetGUIDLow(), bg->GetInstanceID(), bg->GetTypeID(), bgQueueTypeId);
-            sLog.Out(LOG_BG, LOG_LVL_DETAIL, "[%u,%u]: %s:%u [%u:%s] enters",
+            DEBUG_LOG("Battleground: player %s (%u) joined battle for bg %u, bgtype %u, queue type %u.", _player->GetName(), _player->GetGUIDLow(), bg->GetInstanceID(), bg->GetTypeID(), bgQueueTypeId);
+            sLog.out(LOG_BG, "[%u,%u]: %s:%u [%u:%s] enters",
                      bg->GetMapId(), bg->GetInstanceID(),
                      _player->GetName(),
                      _player->GetGUIDLow(),
@@ -521,8 +499,8 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
             // player left queue, we should update it
             sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, _player->GetBattleGroundBracketIdFromLevel(bgTypeId));
             SendPacket(&data);
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player %s (%u) left queue for bgtype %u, queue type %u.", _player->GetName(), _player->GetGUIDLow(), bg->GetTypeID(), bgQueueTypeId);
-            sLog.Out(LOG_BG, LOG_LVL_DETAIL, "[%u,%u] %s:%u [%u:%s] leaves queue",
+            DEBUG_LOG("Battleground: player %s (%u) left queue for bgtype %u, queue type %u.", _player->GetName(), _player->GetGUIDLow(), bg->GetTypeID(), bgQueueTypeId);
+            sLog.out(LOG_BG, "[%u,%u] %s:%u [%u:%s] leaves queue",
                      bg->GetMapId(), bg->GetInstanceID(),
                      _player->GetName(),
                      _player->GetGUIDLow(),
@@ -530,19 +508,19 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
                      bgTypeId);
             break;
         default:
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Battleground port: unknown action %u", action);
+            sLog.outError("Battleground port: unknown action %u", action);
             break;
     }
 }
 
 void WorldSession::HandleLeaveBattlefieldOpcode(WorldPacket& recv_data)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
+    DEBUG_LOG("WORLD: Recvd CMSG_LEAVE_BATTLEFIELD Message");
+
     uint32 mapId;
     recv_data >> mapId;
     if (_player->GetMapId() != mapId)
         return;
-#endif
 
     // not allow leave battleground in combat
     if (_player->IsInCombat())
@@ -553,9 +531,11 @@ void WorldSession::HandleLeaveBattlefieldOpcode(WorldPacket& recv_data)
     _player->LeaveBattleground();
 }
 
-void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recv_data*/)
 {
     // empty opcode
+    DEBUG_LOG("WORLD: Battleground status");
+
     WorldPacket data;
     // we must update all queues here
     BattleGround *bg = nullptr;
@@ -565,7 +545,7 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket& /*recv_data*/)
         if (!bgQueueTypeId)
             continue;
 
-        BattleGroundTypeId bgTypeId = BattleGroundMgr::BgTemplateId(bgQueueTypeId);
+        BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
         if (bgTypeId == _player->GetBattleGroundTypeId())
         {
             bg = _player->GetBattleGround();
@@ -581,16 +561,16 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket& /*recv_data*/)
         }
         //we are sending update to player about queue - he can be invited there!
         //get GroupQueueInfo for queue status
-        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_battleGroundQueues[bgQueueTypeId];
+        BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
         GroupQueueInfo ginfo;
         if (!bgQueue.GetPlayerGroupInfoData(_player->GetObjectGuid(), &ginfo))
             continue;
-        if (ginfo.isInvitedToBgInstanceGuid)
+        if (ginfo.IsInvitedToBGInstanceGUID)
         {
-            bg = sBattleGroundMgr.GetBattleGround(ginfo.isInvitedToBgInstanceGuid, bgTypeId);
+            bg = sBattleGroundMgr.GetBattleGround(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
             if (!bg)
                 continue;
-            uint32 remainingTime = WorldTimer::getMSTimeDiff(WorldTimer::getMSTime(), ginfo.removeInviteTime);
+            uint32 remainingTime = WorldTimer::getMSTimeDiff(WorldTimer::getMSTime(), ginfo.RemoveInviteTime);
             // send status invited to BattleGround
             sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, i, STATUS_WAIT_JOIN, remainingTime, 0);
             SendPacket(&data);
@@ -602,22 +582,24 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket& /*recv_data*/)
                 continue;
             uint32 avgTime = bgQueue.GetAverageQueueWaitTime(&ginfo, _player->GetBattleGroundBracketIdFromLevel(bgTypeId));
             // send status in BattleGround Queue
-            sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, i, STATUS_WAIT_QUEUE, avgTime, WorldTimer::getMSTimeDiff(ginfo.joinTime, WorldTimer::getMSTime()));
+            sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, i, STATUS_WAIT_QUEUE, avgTime, WorldTimer::getMSTimeDiff(ginfo.JoinTime, WorldTimer::getMSTime()));
             SendPacket(&data);
         }
     }
 }
 
-void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket& recv_data)
+void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
 {
+    DEBUG_LOG("WORLD: CMSG_AREA_SPIRIT_HEALER_QUERY");
+
     BattleGround *bg = _player->GetBattleGround();
-    if (!bg)
+    if (!bg && !_player->InGurubashiArena(true))
         return;
 
     ObjectGuid guid;
     recv_data >> guid;
 
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
         return;
 
@@ -627,8 +609,10 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket& recv_data)
     unit->SendAreaSpiritHealerQueryOpcode(GetPlayer());
 }
 
-void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket& recv_data)
+void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket & recv_data)
 {
+    DEBUG_LOG("WORLD: CMSG_AREA_SPIRIT_HEALER_QUEUE");
+
     BattleGround *bg = _player->GetBattleGround();
     if (!bg)
         return;
@@ -636,7 +620,7 @@ void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket& recv_data)
     ObjectGuid guid;
     recv_data >> guid;
 
-    Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
+    Creature *unit = GetPlayer()->GetMap()->GetCreature(guid);
     if (!unit)
         return;
 
@@ -679,10 +663,7 @@ void WorldSession::SendBattleGroundJoinError(uint8 err)
             return;
             break;
     }
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
+
     ChatHandler::BuildChatPacket(data, CHAT_MSG_BG_SYSTEM_NEUTRAL, GetMangosString(msg), LANG_UNIVERSAL);
-#else
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, GetMangosString(msg), LANG_UNIVERSAL);
-#endif
     SendPacket(&data);
 }

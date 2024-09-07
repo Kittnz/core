@@ -82,22 +82,6 @@ enum LootSlotType
     MAX_LOOT_SLOT_TYPE,
 };
 
-enum LootError
-{
-    LOOT_ERROR_DIDNT_KILL               = 0,    // You don't have permission to loot that corpse.
-    LOOT_ERROR_TOO_FAR                  = 4,    // You are too far away to loot that corpse.
-    LOOT_ERROR_BAD_FACING               = 5,    // You must be facing the corpse to loot it.
-    LOOT_ERROR_LOCKED                   = 6,    // Someone is already looting that corpse.
-    LOOT_ERROR_NOTSTANDING              = 8,    // You need to be standing up to loot something!
-    LOOT_ERROR_STUNNED                  = 9,    // You can't loot anything while stunned!
-    LOOT_ERROR_PLAYER_NOT_FOUND         = 10,   // Player not found
-    LOOT_ERROR_PLAY_TIME_EXCEEDED       = 11,   // Maximum play time exceeded
-    LOOT_ERROR_MASTER_INV_FULL          = 12,   // That player's inventory is full
-    LOOT_ERROR_MASTER_UNIQUE_ITEM       = 13,   // Player has too many of that item already
-    LOOT_ERROR_MASTER_OTHER             = 14,   // Can't assign item to that player
-    LOOT_ERROR_ALREADY_PICKPOCKETED     = 15,   // Your target has already had its pockets picked
-    LOOT_ERROR_NOT_WHILE_SHAPESHIFTED   = 16    // You can't do that while shapeshifted.
-};
 
 class Player;
 class WorldObject;
@@ -192,7 +176,7 @@ class LootStore
 
         bool HaveLootFor(uint32 loot_id) const { return m_LootTemplates.find(loot_id) != m_LootTemplates.end(); }
         bool HaveQuestLootFor(uint32 loot_id) const;
-        bool HaveQuestLootForPlayer(uint32 loot_id, Player const* player) const;
+        bool HaveQuestLootForPlayer(uint32 loot_id,Player* player) const;
 
         LootTemplate const* GetLootFor(uint32 loot_id) const;
 
@@ -223,7 +207,7 @@ class LootTemplate
         // True if template includes at least 1 quest drop entry
         bool HasQuestDrop(LootTemplateMap const& store, uint8 GroupId = 0) const;
         // True if template includes at least 1 quest drop for an active quest of the player
-        bool HasQuestDropForPlayer(LootTemplateMap const& store, Player const* player, uint8 GroupId = 0) const;
+        bool HasQuestDropForPlayer(LootTemplateMap const& store, Player const * player, uint8 GroupId = 0) const;
 
         // Checks integrity of the template
         void Verify(LootStore const& store, uint32 Id) const;
@@ -277,20 +261,12 @@ struct Loot
     LootItemList items;
     uint32 gold;
     uint8 unlootedCount;
+    ObjectGuid groupLeaderGuid;
     uint64 roundRobinPlayer;
     LootType loot_type;                                     // required for for proper item loot finish (store internal loot types in different from 3.x version, in fact this meaning that it send same loot types for interesting cases like 3.x version code, skip pre-3.x client loot type limitaitons)
 
     Loot(WorldObject const* lootTarget, uint32 _gold = 0) :
-        m_personal(false),
-        gold(_gold),
-        unlootedCount(0),
-        roundRobinPlayer(0),
-        loot_type(LOOT_CORPSE),
-        m_lootTarget(lootTarget),
-        m_groupTeam(TEAM_CROSSFACTION),
-        m_hasFFAQuestItems(false)
-    {
-    }
+        m_personal(false), gold(_gold), unlootedCount(0), roundRobinPlayer(0), loot_type(LOOT_CORPSE), m_lootTarget(lootTarget), m_groupTeam(TEAM_CROSSFACTION) { }
     ~Loot() { clear(); }
 
     // if loot becomes invalid this reference is used to inform the listener
@@ -304,11 +280,11 @@ struct Loot
     {
         if (clearQuestItems)
         {
-                for (const auto& itr : m_playerQuestItems)
-                    delete itr.second;
-                m_playerQuestItems.clear();
+            for (const auto& itr : m_playerQuestItems)
+                delete itr.second;
+            m_playerQuestItems.clear();
 
-                m_questItems.clear();
+            m_questItems.clear();
         }
 
         for (const auto& itr : m_playerFFAItems)
@@ -330,7 +306,6 @@ struct Loot
         m_allowedLooters.clear();
         m_personal = true;
         m_groupTeam = TEAM_CROSSFACTION;
-        m_hasFFAQuestItems = false;
     }
 
     void leaveOnlyQuestItems()
@@ -340,21 +315,21 @@ struct Loot
 
     bool empty() const { return items.empty() && m_questItems.empty() && gold == 0; }
     bool isLooted() const { return gold == 0 && unlootedCount == 0; }
-    bool HasFFAQuestItems() const { return m_hasFFAQuestItems; }
 
     void NotifyItemRemoved(uint8 lootIndex);
     void NotifyQuestItemRemoved(uint8 questIndex);
     void NotifyMoneyRemoved();
-    void AddLooter(ObjectGuid guid) { m_playersLooting.insert(guid); }
-    void RemoveLooter(ObjectGuid guid) { m_playersLooting.erase(guid); }
+    void AddLooter(Player* player);
+    void RemoveLooter(Player* player);
     bool HasPlayersLooting() const { return !m_playersLooting.empty(); }
+    const auto& GetLootingPlayers() const { return m_playersLooting; }
+
 
     void GenerateMoneyLoot(uint32 minAmount, uint32 maxAmount);
     bool FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, bool personal, bool noEmptyError = false, WorldObject const* looted = nullptr);
-    void FillPlayerDependentLoot(Player* loot_owner, bool personal, WorldObject const* looted = nullptr);
 
     // Inserts the item into the loot (called by LootTemplate processors)
-    void AddItem(LootStoreItem const& item);
+    void AddItem(LootStoreItem const & item);
 
     LootItem* LootItemInSlot(uint32 lootslot, uint32 playerGuid, QuestItem** qitem = nullptr, QuestItem** ffaitem = nullptr, QuestItem** conditem = nullptr);
     uint32 GetMaxSlotInLootFor(uint32 playerGuid) const;
@@ -391,15 +366,14 @@ struct Loot
         // What is looted
         WorldObject const* m_lootTarget;
         Team m_groupTeam;
-        bool m_hasFFAQuestItems;
 };
 
 struct LootView
 {
     Loot &loot;
-    Player* viewer;
+    Player *viewer;
     PermissionTypes permission;
-    LootView(Loot &_loot, Player* _viewer,PermissionTypes _permission = ALL_PERMISSION)
+    LootView(Loot &_loot, Player *_viewer,PermissionTypes _permission = ALL_PERMISSION)
         : loot(_loot), viewer(_viewer), permission(_permission) {}
 };
 

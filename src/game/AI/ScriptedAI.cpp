@@ -10,7 +10,7 @@
 #include "ScriptedAI.h"
 #include "GridSearchers.h"
 
-ScriptedAI::ScriptedAI(Creature* pCreature) : BasicAI(pCreature),
+ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
     me(pCreature),
     m_uiEvadeCheckCooldown(2500),
     m_uiHomeArea(m_creature->GetAreaId())
@@ -22,6 +22,44 @@ ScriptedAI::ScriptedAI(Creature* pCreature) : BasicAI(pCreature),
         if (cData->spawn_flags & SPAWN_FLAG_EVADE_OUT_HOME_AREA)
             m_bEvadeOutOfHomeArea = true;
     }
+}
+
+void ScriptedAI::MoveInLineOfSight(Unit* pWho)
+{
+    if (!m_creature->IsWithinDistInMap(pWho, m_creature->GetAttackDistance(pWho), true, SizeFactor::None) || pWho->HasHCImmunity())
+        return;
+
+    if (m_creature->CanInitiateAttack() && pWho->IsTargetable(true, m_creature->IsCharmerOrOwnerPlayerOrPlayerItself()) && m_creature->IsHostileTo(pWho))
+    {
+        if (pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
+        {
+            if (!m_creature->GetVictim())
+                AttackStart(pWho);
+            else if (m_creature->GetMap()->IsDungeon())
+            {
+                pWho->SetInCombatWith(m_creature);
+                m_creature->AddThreat(pWho);
+            }
+        }
+    }
+}
+
+void ScriptedAI::AttackStart(Unit* pWho)
+{
+    if (!pWho)
+        return;
+
+    if (m_creature->Attack(pWho, true))
+    {
+        m_creature->AddThreat(pWho);
+        m_creature->SetInCombatWith(pWho);
+        pWho->SetInCombatWith(m_creature);
+
+        if (m_bCombatMovement)
+            m_creature->GetMotionMaster()->MoveChase(pWho);
+    }
+    else
+        DEBUG_UNIT(m_creature, DEBUG_AI, "AttackStart %s impossible.", pWho->GetName());
 }
 
 void ScriptedAI::EnterCombat(Unit* pEnemy)
@@ -36,9 +74,19 @@ void ScriptedAI::Aggro(Unit* pEnemy)
 {
 }
 
+void ScriptedAI::UpdateAI(const uint32 uiDiff)
+{
+    //Check if we have a current target
+    m_creature->SelectHostileTarget();
+
+    if (!m_CreatureSpells.empty() && m_creature->IsInCombat())
+        UpdateSpellsList(uiDiff);
+
+    DoMeleeAttackIfReady();
+}
+
 void ScriptedAI::EnterEvadeMode()
 {
-    m_creature->ClearComboPointHolders();
     m_creature->RemoveAurasAtReset();
     m_creature->DeleteThreatList();
     m_creature->CombatStop(true);
@@ -99,7 +147,7 @@ void ScriptedAI::DoPlaySoundToSet(WorldObject* pSource, uint32 uiSoundId)
 
     if (!sObjectMgr.GetSoundEntry(uiSoundId))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", uiSoundId, pSource->GetTypeId(), pSource->GetGUIDLow());
+        sLog.outError("Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", uiSoundId, pSource->GetTypeId(), pSource->GetGUIDLow());
         return;
     }
 
@@ -121,7 +169,20 @@ Creature* ScriptedAI::DoSpawnCreature(uint32 id, float dist, uint32 type, uint32
 
 void ScriptedAI::DoResetThreat()
 {
-    m_creature->DoResetThreat();
+    if (!m_creature->CanHaveThreatList() || m_creature->GetThreatManager().isThreatListEmpty())
+    {
+        sLog.outError("DoResetThreat called for creature that either cannot have threat list or has empty threat list (m_creature entry = %d)", m_creature->GetEntry());
+        return;
+    }
+
+    ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+    for (const auto itr : tList)
+    {
+        Unit* pUnit = m_creature->GetMap()->GetUnit(itr->getUnitGuid());
+
+        if (pUnit && m_creature->GetThreatManager().getThreat(pUnit))
+            m_creature->GetThreatManager().modifyThreatPercent(pUnit, -100);
+    }
 }
 
 void ScriptedAI::DoTeleportPlayer(Unit* pUnit, float fX, float fY, float fZ, float fO)
@@ -129,7 +190,7 @@ void ScriptedAI::DoTeleportPlayer(Unit* pUnit, float fX, float fY, float fZ, flo
     if (!pUnit || pUnit->GetTypeId() != TYPEID_PLAYER)
     {
         if (pUnit)
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Creature %u (Entry: %u) Tried to teleport non-player unit (Type: %u GUID: %u) to x: %f y:%f z: %f o: %f. Aborted.", m_creature->GetGUID(), m_creature->GetEntry(), pUnit->GetTypeId(), pUnit->GetGUID(), fX, fY, fZ, fO);
+            sLog.outError("Creature %u (Entry: %u) Tried to teleport non-player unit (Type: %u GUID: %u) to x: %f y:%f z: %f o: %f. Aborted.", m_creature->GetGUID(), m_creature->GetEntry(), pUnit->GetTypeId(), pUnit->GetGUID(), fX, fY, fZ, fO);
 
         return;
     }
@@ -173,7 +234,41 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float fMinimumRange)
     return pPlayer;
 }
 
-void ScriptedAI::GetPlayersWithinRange(std::list<Player*>& players, float range)
+/**
+ * \brief Randomly selects a player within the given radius.
+ * \param radius The radius to search.
+ * \param mustBeAlive Whether we should only return alive players.
+ * \param excludedPlayers The list of players to exclude from the search.
+ * \return A pointer to a player in range, or nullptr if a valid player was not found.
+ */
+Player* ScriptedAI::GetRandomPlayerInRange(const float radius, const bool mustBeAlive, const std::list<Player*>* excludedPlayers) const
+{
+    std::list<Player*> players;
+    GetPlayersWithinRange(players, radius);
+    if (excludedPlayers != nullptr)
+    {
+        players.remove_if([excludedPlayers, mustBeAlive](Player* player)
+        {
+            if (mustBeAlive && player->IsDead())
+            {
+                return true;
+            }
+
+            return std::find(excludedPlayers->begin(), excludedPlayers->end(), player) != excludedPlayers->end();
+        });
+    }
+
+    if (players.empty())
+    {
+        return nullptr;
+    }
+
+    auto iterator = players.begin();
+    advance(iterator, rand() % players.size());
+    return *iterator;
+}
+
+void ScriptedAI::GetPlayersWithinRange(std::list<Player*>& players, float range) const
 {
     MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, range);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
@@ -190,13 +285,13 @@ void ScriptedAI::SetEquipmentSlots(bool bLoadDefault, int32 uiMainHand, int32 ui
     }
 
     if (uiMainHand >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 0, uint32(uiMainHand));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 0, uint32(uiMainHand));
 
     if (uiOffHand >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 1, uint32(uiOffHand));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 1, uint32(uiOffHand));
 
     if (uiRanged >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 2, uint32(uiRanged));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 2, uint32(uiRanged));
 }
 
 // Hacklike storage used for misc creatures that are expected to evade of outside of a certain area.
@@ -209,7 +304,7 @@ enum
     NPC_VARIMATHRAS = 2425
 };
 
-bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const uiDiff)
+bool ScriptedAI::EnterEvadeIfOutOfCombatArea(const uint32 uiDiff)
 {
     if (m_uiEvadeCheckCooldown < uiDiff)
         m_uiEvadeCheckCooldown = 2500;
@@ -242,7 +337,7 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const uiDiff)
                 return false;
             break;
         default:
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EnterEvadeIfOutOfCombatArea used for creature entry %u, but does not have any definition.", m_creature->GetEntry());
+            sLog.outError("EnterEvadeIfOutOfCombatArea used for creature entry %u, but does not have any definition.", m_creature->GetEntry());
             return false;
     }
 
@@ -256,11 +351,16 @@ void ScriptedAI::EnterEvadeIfOutOfHomeArea()
         return;
 
     if (m_creature->GetAreaId() != m_uiHomeArea)
+    {
         EnterEvadeMode();
+    }
 }
 
 void Scripted_NoMovementAI::AttackStart(Unit* pWho)
 {
+    if (!pWho)
+        return;
+
     if (m_creature->Attack(pWho, true))
     {
         m_creature->AddThreat(pWho);
@@ -296,18 +396,18 @@ void ScriptedAI::DoTeleportTo(float fX, float fY, float fZ)
     me->NearTeleportTo(fX, fY, fZ, me->GetOrientation());
 }
 
-void ScriptedAI::DoTeleportTo(float const fPos[4])
+void ScriptedAI::DoTeleportTo(const float fPos[4])
 {
     me->NearTeleportTo(fPos[0], fPos[1], fPos[2], fPos[3]);
 }
 
 void ScriptedAI::DoTeleportAll(float fX, float fY, float fZ, float fO)
 {
-    Map* map = me->GetMap();
+    Map *map = me->GetMap();
     if (!map->IsDungeon())
         return;
 
-    Map::PlayerList const& PlayerList = map->GetPlayers();
+    Map::PlayerList const &PlayerList = map->GetPlayers();
     for (const auto& i : PlayerList)
         if (Player* i_pl = i.getSource())
             if (i_pl->IsAlive())

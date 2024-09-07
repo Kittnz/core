@@ -25,14 +25,14 @@
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 #include "GridDefines.h"
-#include "CellImpl.h"
 #include "World.h"
-#include "Player.h"
-#include "Group.h"
+#include "CellImpl.h"
+#include "Corpse.h"
+#include "ObjectMgr.h"
 #include "ZoneScriptMgr.h"
 #include "Map.h"
-#include "BattleGround.h"
 #include "ThreadPool.h"
+#include "MoveMap.h"
 
 typedef MaNGOS::ClassLevelLockable<MapManager, std::recursive_mutex> MapManagerLock;
 INSTANTIATE_SINGLETON_2(MapManager, MapManagerLock);
@@ -92,7 +92,7 @@ void MapManager::DeleteStateMachine()
     delete si_GridStates[GRID_STATE_REMOVAL];
 }
 
-void MapManager::UpdateGridState(grid_state_t state, Map& map, NGridType& ngrid, GridInfo& ginfo, uint32 const& x, uint32 const& y, uint32 const& t_diff)
+void MapManager::UpdateGridState(grid_state_t state, Map& map, NGridType& ngrid, GridInfo& ginfo, const uint32 &x, const uint32 &y, const uint32 &t_diff)
 {
     // TODO: The grid state array itself is static and therefore 100% safe, however, the data
     // the state classes in it accesses is not, since grids are shared across maps (for example
@@ -107,15 +107,15 @@ void MapManager::InitializeVisibilityDistanceInfo()
         itr.second->InitVisibilityDistance();
 }
 
-Map* MapManager::CreateMap(uint32 id, WorldObject const* obj)
+Map* MapManager::CreateMap(uint32 id, const WorldObject* obj)
 {
     MANGOS_ASSERT(obj);
-    //if (!obj->IsInWorld()) sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "GetMap: called for map %d with object (typeid %d, guid %d, mapid %d, instanceid %d) who is not in world!", id, obj->GetTypeId(), obj->GetGUIDLow(), obj->GetMapId(), obj->GetInstanceId());
+    //if(!obj->IsInWorld()) sLog.outError("GetMap: called for map %d with object (typeid %d, guid %d, mapid %d, instanceid %d) who is not in world!", id, obj->GetTypeId(), obj->GetGUIDLow(), obj->GetMapId(), obj->GetInstanceId());
     Guard _guard(*this);
 
-    Map* m = nullptr;
+    Map * m = nullptr;
 
-    MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(id);
+    const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(id);
     if (!entry)
         return nullptr;
 
@@ -176,27 +176,27 @@ Map* MapManager::FindMap(uint32 mapid, uint32 instanceId) const
 */
 bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
 {
-    MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(mapid);
+    const MapEntry *entry = sMapStorage.LookupEntry<MapEntry>(mapid);
     if (!entry)
         return false;
 
-    char const* mapName = entry->name;
+    const char *mapName = entry->name;
 
     if (entry->IsDungeon())
     {
         if (entry->IsRaid())
         {
             // GMs can avoid raid limitations
-            if (!player->IsGameMaster() && !player->HasCheatOption(PLAYER_CHEAT_TRIGGER_PASS) &&
-                !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_RAID))
+            if (!player->IsGameMaster() && !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_RAID))
             {
                 // can only enter in a raid group
                 Group* group = player->GetGroup();
                 if (!group || !group->isRaidGroup())
                 {
+                    // probably there must be special opcode, because client has this string constant in GlobalStrings.lua
                     // TODO: this is not a good place to send the message
-                    player->SendRaidGroupOnlyError(0, ERR_RAID_GROUP_REQUIRED);
-                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "MAP: Player '%s' must be in a raid group to enter instance of '%s'", player->GetName(), mapName);
+                    player->GetSession()->SendAreaTriggerMessage("You must be in a raid group to enter %s instance", mapName);
+                    DEBUG_LOG("MAP: Player '%s' must be in a raid group to enter instance of '%s'", player->GetName(), mapName);
                     return false;
                 }
             }
@@ -205,7 +205,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
         uint32 instanceId = state ? state->GetInstanceId() : 0;
         if (!player->CheckInstanceCount(instanceId))
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "MAP: Player '%s' can't enter instance %u on map %u. Has already entered too many instances.", player->GetName(), instanceId, mapid);
+            DEBUG_LOG("MAP: Player '%s' can't enter instance %u on map %u. Has already entered too many instances.", player->GetName(), instanceId, mapid);
             player->SendTransferAborted(TRANSFER_ABORT_TOO_MANY_INSTANCES);
             return false;
         }
@@ -221,7 +221,7 @@ void MapManager::DeleteInstance(uint32 mapid, uint32 instanceId)
     MapMapType::iterator iter = i_maps.find(MapID(mapid, instanceId));
     if (iter != i_maps.end())
     {
-        Map* pMap = iter->second;
+        Map * pMap = iter->second;
         if (pMap->Instanceable())
         {
             i_maps.erase(iter);
@@ -230,62 +230,6 @@ void MapManager::DeleteInstance(uint32 mapid, uint32 instanceId)
             delete pMap;
         }
     }
-}
-
-void MapManager::ScheduleNewWorldOnFarTeleport(Player* pPlayer)
-{
-    WorldLocation const& dest = pPlayer->GetTeleportDest();
-    MapEntry const* pMapEntry = sMapStorage.LookupEntry<MapEntry>(dest.mapId);
-    MANGOS_ASSERT(pMapEntry);
-
-    if (pMapEntry->IsDungeon())
-    {
-        DungeonPersistentState* pSave = pPlayer->GetBoundInstanceSaveForSelfOrGroup(pMapEntry->id);
-        if (!pSave || !FindMap(pMapEntry->id, pSave->GetInstanceId()))
-        {
-            m_scheduledNewInstancesForPlayers.insert(pPlayer);
-            return;
-        }
-    }
-
-    // map already created
-    pPlayer->SendNewWorld();
-}
-
-void MapManager::CreateNewInstancesForPlayers()
-{
-    do
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-        std::unordered_set<Player*> players;
-        std::swap(players, m_scheduledNewInstancesForPlayers);
-
-        for (auto const& player : players)
-        {
-            WorldLocation const& dest = player->GetTeleportDest();
-            if (!player->IsBeingTeleportedFar())
-            {
-                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Scheduled instance creation for map %u for player %u but he is no longer being teleported!", dest.mapId, player->GetGUIDLow());
-                continue;
-            }
-
-            MapEntry const* pMapEntry = sMapStorage.LookupEntry<MapEntry>(dest.mapId);
-            MANGOS_ASSERT(pMapEntry->IsDungeon());
-
-            DungeonMap* pMap = static_cast<DungeonMap*>(CreateInstance(dest.mapId, player));
-            if (pMap->CanEnter(player))
-            {
-                pMap->BindPlayerOrGroupOnEnter(player);
-                player->SendNewWorld();
-            } 
-            else
-            {
-                WorldLocation oldLoc;
-                player->GetPosition(oldLoc);
-                player->HandleReturnOnTeleportFail(oldLoc);
-            }
-        } 
-    } while (asyncMapUpdating);
 }
 
 void MapManager::Update(uint32 diff)
@@ -335,10 +279,8 @@ void MapManager::Update(uint32 diff)
             continentsIdx++;
         }
     }
-
-    std::thread instanceCreationThread = std::thread(&MapManager::CreateNewInstancesForPlayers, this);
-    
     i_maxContinentThread = continentsIdx;
+
     i_continentUpdateFinished.store(0);
 
     if (!m_continentThreads || m_continentThreads->size() < continentsUpdaters.size())
@@ -348,6 +290,8 @@ void MapManager::Update(uint32 diff)
     }
     std::future<void> continents = m_continentThreads->processWorkload(std::move(continentsUpdaters),
                                                                        ThreadPool::Callable());
+
+    SwitchPlayersInstances();
 
     std::chrono::high_resolution_clock::time_point start;
     do {
@@ -359,16 +303,13 @@ void MapManager::Update(uint32 diff)
             f.wait();
         else
             break;
-    }while(!sMapMgr.waitContinentUpdateFinishedUntil(start + std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_INTERVAL_MAPUPDATE))));
+    } while(!sMapMgr.waitContinentUpdateFinishedUntil(start + std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_INTERVAL_MAPUPDATE))));
+
 
     if (continents.valid())
         continents.wait();
 
-    SwitchPlayersInstances();
     asyncMapUpdating = false;
-
-    if (instanceCreationThread.joinable())
-        instanceCreationThread.join();
 
     // Execute far teleports after all map updates have finished
     ExecuteDelayedPlayerTeleports();
@@ -390,7 +331,7 @@ void MapManager::Update(uint32 diff)
     MapMapType::iterator iter = i_maps.begin();
     while (iter != i_maps.end())
     {
-        Map* pMap = iter->second;
+        Map * pMap = iter->second;
         //check if map can be unloaded
         if (pMap->CanUnload((uint32)i_timer.GetCurrent()))
         {
@@ -450,10 +391,11 @@ void MapManager::InitMaxInstanceId()
 {
     i_MaxInstanceId = RESERVED_INSTANCES_LAST;
 
-    std::unique_ptr<QueryResult> result = CharacterDatabase.Query("SELECT MAX(`id`) FROM `instance`");
+    QueryResult *result = CharacterDatabase.Query("SELECT MAX(id) FROM instance");
     if (result)
     {
         i_MaxInstanceId = result->Fetch()[0].GetUInt32();
+        delete result;
     }
     if (i_MaxInstanceId < RESERVED_INSTANCES_LAST)
         i_MaxInstanceId = RESERVED_INSTANCES_LAST;
@@ -485,16 +427,16 @@ uint32 MapManager::GetNumPlayersInInstances()
     return ret;
 }
 
-// returns a new or existing Instance
-// in case of battlegrounds it will only return an existing map, those maps are created by bg-system
-Map* MapManager::CreateInstance(uint32 id, Player* player)
+///// returns a new or existing Instance
+///// in case of battlegrounds it will only return an existing map, those maps are created by bg-system
+Map* MapManager::CreateInstance(uint32 id, Player * player)
 {
     Guard _guard(*this);
     Map* map = nullptr;
-    Map* pNewMap = nullptr;
+    Map * pNewMap = nullptr;
     uint32 NewInstanceId = 0;                                   // instanceId of the resulting map
     bool newlyGeneratedInstanceId = false;
-    MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(id);
+    const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(id);
 
     if (entry->IsBattleGround())
     {
@@ -552,10 +494,10 @@ Map* MapManager::CreateTestMap(uint32 mapid, bool instanced, float posX, float p
     }
 
     // make sure we have a valid map id
-    MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(mapid);
+    const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(mapid);
     if (!entry)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "CreateTestMap: no entry for map %d", mapid);
+        sLog.outError("CreateTestMap: no entry for map %d", mapid);
         MANGOS_ASSERT(false);
     }
     uint32 instanceId = GenerateInstanceId();
@@ -580,17 +522,17 @@ void MapManager::DeleteTestMap(Map* map)
     delete map;
 }
 
-DungeonMap* MapManager::CreateDungeonMap(uint32 id, uint32 InstanceId, DungeonPersistentState* save)
+DungeonMap* MapManager::CreateDungeonMap(uint32 id, uint32 InstanceId, DungeonPersistentState *save)
 {
     // make sure we have a valid map id
-    MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(id);
+    const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(id);
     if (!entry)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "CreateDungeonMap: no entry for map %d", id);
+        sLog.outError("CreateDungeonMap: no entry for map %d", id);
         MANGOS_ASSERT(false);
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "MapInstanced::CreateInstanceMap: %s map instance %d for %d created", save ? "" : "new ", InstanceId, id);
+    DEBUG_LOG("MapInstanced::CreateInstanceMap: %s map instance %d for %d created", save ? "" : "new ", InstanceId, id);
 
     DungeonMap *map = new DungeonMap(id, i_gridCleanUpDelay, InstanceId);
 
@@ -603,7 +545,7 @@ DungeonMap* MapManager::CreateDungeonMap(uint32 id, uint32 InstanceId, DungeonPe
 
 BattleGroundMap* MapManager::CreateBattleGroundMap(uint32 id, uint32 InstanceId, BattleGround* bg)
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "MapInstanced::CreateBattleGroundMap: instance:%d for map:%d and bgType:%d created.", InstanceId, id, bg->GetTypeID());
+    DEBUG_LOG("MapInstanced::CreateBattleGroundMap: instance:%d for map:%d and bgType:%d created.", InstanceId, id, bg->GetTypeID());
 
     BattleGroundMap *map = new BattleGroundMap(id, i_gridCleanUpDelay, InstanceId);
     MANGOS_ASSERT(map->IsBattleGround());
@@ -647,7 +589,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
     {
         case 0:
         {
-            static float const topNorthSouthLimit[] = {
+            const static float topNorthSouthLimit[] = {
                 2032.048340f, -6927.750000f,
                 1634.863403f, -6157.505371f,
                 1109.519775f, -5181.036133f,
@@ -665,7 +607,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                 1458.520264f,  1727.373291f,
                 1591.916138f,  3728.139404f
             };
-            static float const ironforgeAreaSouthLimit[] = {
+            const static float ironforgeAreaSouthLimit[] = {
                 -7491.33f,  3093.74f,
                 -7472.04f,  -391.88f,
                 -6366.68f,  -730.10f,
@@ -675,10 +617,10 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                 -6308.63f, -3049.32f,
                 -6107.82f, -3345.30f,
                 -6008.49f, -3590.52f,
-                -5989.37f, -4312.29f,
+                -5989.37f, -4312.29f, 
                 -5806.26f, -5864.11f
             };
-            static float const stormwindAreaNorthLimit[] = {
+            const static float stormwindAreaNorthLimit[] = {
                  -8004.25f,  3714.11f,
                  -8075.00f, -179.00f,
                  -8638.00f, 169.00f,
@@ -696,7 +638,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                 -13006.40f, -1622.80f,
                 -12863.23f, -4798.42f
             };
-            static float const stormwindAreaSouthLimit[] = {
+            const static float stormwindAreaSouthLimit[] = {
                  -8725.337891f,  3535.624023f,
                  -9525.699219f,   910.132568f,
                  -9796.953125f,   839.069580f,
@@ -726,13 +668,13 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                 return MAP0_IRONFORGE_AREA;
             if (IsNorthTo(x, y, stormwindAreaNorthLimit, sizeof(stormwindAreaNorthLimit) / (2 * sizeof(float))))
                 return MAP0_MIDDLE;
-            if (IsNorthTo(x, y, stormwindAreaSouthLimit, sizeof(stormwindAreaSouthLimit) / (2 * sizeof(float))))
+            if (IsNorthTo(x, y, stormwindAreaSouthLimit, sizeof(stormwindAreaNorthLimit) / (2 * sizeof(float))))
                 return MAP0_STORMWIND_AREA;
             return MAP0_SOUTH;
         }
         case 1:
         {
-            static float const northMiddleLimit[] = {
+            const static float northMiddleLimit[] = {
                   -2280.00f,  4054.00f,
                   -2401.00f,  2365.00f,
                   -2432.00f,  1338.00f,
@@ -767,7 +709,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                    1497.59f, -6376.56f,
                    1368.00f, -8530.00f
             };
-            static float const durotarSouthLimit[] = {
+            const static float durotarSouthLimit[] = {
                     2755.00f, -3766.00f,
                     2225.00f, -3596.00f,
                     1762.00f, -3746.00f,
@@ -790,7 +732,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                    -1387.00f, -4674.00f,
                    -2243.00f, -6046.00f
             };
-            static float const valleyoftrialsSouthLimit[] = {
+            const static float valleyoftrialsSouthLimit[] = {
                     -324.00f, -3869.00f,
                     -774.00f, -3992.00f,
                     -965.00f, -4290.00f,
@@ -799,7 +741,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                     -661.00f, -4541.00f,
                     -521.00f, -4582.00f
             };
-            static float const middleToSouthLimit[] = {
+            const static float middleToSouthLimit[] = {
                         -2402.01f,      4255.70f,
                     -2475.933105f,  3199.568359f, // Desolace
                     -2344.124023f,  1756.164307f,
@@ -816,13 +758,13 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                         -5437.00f,     -5863.00f
             };
 
-            static float const orgrimmarSouthLimit[] = {
+            const static float orgrimmarSouthLimit[] = {
                     2132.5076f, -3912.2478f,
                     1944.4298f, -3855.2583f,
                     1735.6906f, -3834.2417f,
                     1654.3671f, -3380.9902f,
                     1593.9861f, -3975.5413f,
-                    1400.9472f, -4242.2387f,
+                    1439.2548f, -4249.6923f,
                     1436.3106f, -4007.8950f,
                     1393.3199f, -4196.0625f,
                     1445.2428f, -4373.9052f,
@@ -835,7 +777,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
                     2219.1562f, -4854.3330f
             };
 
-            static float const feralasThousandNeedlesSouthLimit[] = {
+            const static float feralasThousandNeedlesSouthLimit[] = {
                     -6495.4995f, -4711.981f,
                     -6674.9995f, -4515.0019f,
                     -6769.5717f, -4122.4272f,
@@ -875,7 +817,7 @@ uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* 
     return 0;
 }
 
-void MapManager::ScheduleFarTeleport(Player* player, ScheduledTeleportData* data)
+void MapManager::ScheduleFarTeleport(Player *player, ScheduledTeleportData *data)
 {
     // If we're not in the middle of an async update, it's safe to execute the
     // teleport immediately.
@@ -907,7 +849,7 @@ void MapManager::ExecuteDelayedPlayerTeleports()
 // Execute a single delayed teleport for the given player (if there are any). It should
 // only be necessary to call this in teleports performed outside of an update (i.e.
 // player logout and login).
-void MapManager::ExecuteSingleDelayedTeleport(Player* player)
+void MapManager::ExecuteSingleDelayedTeleport(Player *player)
 {
     std::unique_lock<std::mutex> guard(m_scheduledFarTeleportsLock);
     ScheduledTeleportMap::iterator iter = m_scheduledFarTeleports.find(player);
@@ -931,7 +873,7 @@ void MapManager::ExecuteSingleDelayedTeleport(ScheduledTeleportMap::iterator ite
     delete iter->second; // don't leak tele data
 }
 
-void MapManager::CancelDelayedPlayerTeleport(Player* player)
+void MapManager::CancelDelayedPlayerTeleport(Player *player)
 {
     std::unique_lock<std::mutex> guard(m_scheduledFarTeleportsLock);
     ScheduledTeleportMap::iterator iter = m_scheduledFarTeleports.find(player);

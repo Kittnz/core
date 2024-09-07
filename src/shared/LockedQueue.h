@@ -24,7 +24,8 @@
 
 #include <deque>
 #include <mutex>
-#include <cassert>
+#include <assert.h>
+#include "Errors.h"
 
 template <class T, class LockType, typename StorageType=std::deque<T> >
     class LockedQueue
@@ -52,17 +53,10 @@ template <class T, class LockType, typename StorageType=std::deque<T> >
         }
 
         //! Adds an item to the queue.
-        void add(T const& item)
+        void add(const T& item)
         {
             std::unique_lock<LockType> g(this->_lock);
             _queue.push_back(item);
-        }
-
-        //! Moves an item into the queue.
-        void add(T&& item)
-        {
-            std::unique_lock<LockType> g(this->_lock);
-            _queue.push_back(std::move(item));
         }
 
         //! Gets the next result in the queue, if any.
@@ -73,7 +67,7 @@ template <class T, class LockType, typename StorageType=std::deque<T> >
             if (_queue.empty())
                 return false;
 
-            result = std::move(_queue.front());
+            result = _queue.front();
             _queue.pop_front();
 
             return true;
@@ -87,10 +81,10 @@ template <class T, class LockType, typename StorageType=std::deque<T> >
             if (_queue.empty())
                 return false;
 
-            if(!check.Process(_queue.front()))
+            result = _queue.front();
+            if(!check.Process(result))
                 return false;
 
-            result = std::move(_queue.front());
             _queue.pop_front();
             return true;
         }
@@ -131,17 +125,11 @@ template <class T, class LockType, typename StorageType=std::deque<T> >
             this->_lock.unlock();
         }
 
-        void clear()
-        {
-            std::unique_lock<LockType> g(this->_lock);
-            _queue.clear();
-        }
-
         bool empty_unsafe()
         {
             return _queue.empty();
         }
-        // Checks if we're empty or not with locks held
+        ///! Checks if we're empty or not with locks held
         bool empty()
         {
             std::unique_lock<LockType> g(this->_lock);

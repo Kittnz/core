@@ -22,13 +22,13 @@ set (game_SRCS
     Camera.cpp
     Conditions.cpp
     CreatureGroups.cpp
+    DailyQuestHandler.cpp
     GameEventMgr.cpp
     GuardMgr.cpp
     GMTicketMgr.cpp
     GossipDef.cpp
     HardcodedEvents.cpp
     HonorMgr.cpp
-    InstanceStatistics.cpp
     ItemEnchantmentMgr.cpp
     LootMgr.cpp
     ObjectAccessor.cpp
@@ -36,18 +36,17 @@ set (game_SRCS
     ObjectGuid.cpp
     ObjectMgr.cpp
     ObjectPosSelector.cpp
-    PlayerDump.cpp
     QuestDef.cpp
     ReputationMgr.cpp
     ScriptMgr.cpp
-    SniffFile.cpp
     SocialMgr.cpp
     StatSystem.cpp
+    TransmogMgr.cpp
     UnitAuraProcHandler.cpp
     Weather.cpp
     World.cpp
     WorldSession.cpp
-    AI/BasicAI.cpp
+    AI/AggressorAI.cpp
     AI/CreatureAI.cpp
     AI/CreatureAIRegistry.cpp
     AI/CreatureAISelector.cpp
@@ -61,38 +60,28 @@ set (game_SRCS
     AI/PetAI.cpp
     AI/PetEventAI.cpp
     AI/PlayerAI.cpp
+    AI/ReactorAI.cpp
     AI/ScriptedAI.cpp
     AI/ScriptedEscortAI.cpp
     AI/ScriptedFollowerAI.cpp
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
-    Anticheat/Anticheat.cpp
-    AuctionHouse/AuctionHouseBotMgr.cpp
+    Autoscaling/AutoScaler.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
     Battlegrounds/BattleGroundAB.cpp
     Battlegrounds/BattleGroundAV.cpp
     Battlegrounds/BattleGroundMgr.cpp
     Battlegrounds/BattleGroundWS.cpp
+    Battlegrounds/BattleGroundBR.cpp
+    Battlegrounds/BattleGroundSV.cpp
     Chat/Channel.cpp
     Chat/ChannelMgr.cpp
     Chat/Chat.cpp
     Chat/AsyncCommandHandlers.cpp
-    Chat/AbstractPlayer.cpp
-    Chat/MasterPlayer.cpp
-    Chat/MasterPlayerChat.cpp
-    Commands/AccountCommands.cpp
-    Commands/CharacterCommands.cpp
-    Commands/CreatureCommands.cpp
-    Commands/DebugCommands.cpp
-    Commands/LookupCommands.cpp
-    Commands/MiscCommands.cpp
-    Commands/ObjectCommands.cpp
-    Commands/ServerCommands.cpp
-    Commands/TeleportCommands.cpp
-    Commands/TicketCommands.cpp
-    Commands/UnitCommands.cpp
+    Chat/WhisperTargetLimits.cpp
+    Commands/Commands.cpp
     Database/CharacterDatabaseCache.cpp
     Database/CharacterDatabaseCleaner.cpp
     Database/DBCStores.cpp
@@ -114,6 +103,7 @@ set (game_SRCS
     Handlers/GroupHandler.cpp
     Handlers/GuildHandler.cpp
     Handlers/ItemHandler.cpp
+    Handlers/LFGHandler.cpp
     Handlers/LootHandler.cpp
     Handlers/MailHandler.cpp
     Handlers/MiscHandler.cpp
@@ -127,11 +117,12 @@ set (game_SRCS
     Handlers/SpellHandler.cpp
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
-    LFG/LFGHandler.cpp
     LFG/LFGMgr.cpp
-    LFG/LFGQueue.cpp
     Mail/Mail.cpp
     Mail/MassMailMgr.cpp
+    MapNodes/AbstractPlayer.cpp
+    MapNodes/MasterPlayer.cpp
+    MapNodes/MasterPlayerChat.cpp
     Maps/GridMap.cpp
     Maps/GridNotifiers.cpp
     Maps/GridSearchers.cpp
@@ -148,7 +139,6 @@ set (game_SRCS
     Maps/ZoneScriptMgr.cpp
     Maps/Pool/PoolManager.cpp
     Movement/ConfusedMovementGenerator.cpp
-    Movement/CyclicMovementGenerator.cpp
     Movement/FearMovementGenerator.cpp
     Movement/FleeingMovementGenerator.cpp
     Movement/FollowerReference.cpp
@@ -176,27 +166,21 @@ set (game_SRCS
     Objects/Object.cpp
     Objects/Pet.cpp
     Objects/Player.cpp
-    Objects/SpellCaster.cpp
     Objects/TemporarySummon.cpp
     Objects/Totem.cpp
     Objects/Unit.cpp
     Objects/UpdateData.cpp
-    Objects/UpdateFields.cpp
     OutdoorPvP/OutdoorPvPEP.cpp
     OutdoorPvP/OutdoorPvPSI.cpp
     OutdoorPvP/Register.cpp
-    PacketBroadcast/ChatCommands.cpp
     PacketBroadcast/MovementBroadcaster.cpp
     PacketBroadcast/PlayerBroadcaster.cpp
-    PlayerBots/PartyBotAI.cpp
-    PlayerBots/CombatBotBaseAI.cpp
-    PlayerBots/BattleBotAI.cpp
-    PlayerBots/BattleBotWaypoints.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
     Protocol/WorldSocket.cpp
     Protocol/WorldSocketMgr.cpp
+    Protocol/Opcodes_1_12_1.h
     Spells/Spell.cpp
     Spells/SpellAuras.cpp
     Spells/SpellEffects.cpp
@@ -207,6 +191,7 @@ set (game_SRCS
     Threat/ThreatManager.cpp
     Transports/Transport.cpp
     Transports/TransportMgr.cpp
+    TWDebuff/TWDebuff.cpp
     vmap/BIH.cpp
     vmap/DynamicTree.cpp
     vmap/GameObjectModel.cpp
@@ -216,15 +201,16 @@ set (game_SRCS
     vmap/VMapFactory.cpp
     vmap/VMapManager2.cpp
     vmap/WorldModel.cpp
-    AccountData.h
+    Shop/ShopMgr.cpp
+    GuildBank/GuildBank.cpp
     AccountMgr.h
     AuraRemovalMgr.h
     AutoBroadCastMgr.h
     Camera.h
-    ClientDefines.h
     Conditions.h
     CreatureGroups.h
     Formulas.h
+    GuidObjectScaling.h
     GameEventMgr.h
     Geometry.h
     GuardMgr.h
@@ -232,30 +218,26 @@ set (game_SRCS
     GossipDef.h
     HardcodedEvents.h
     HonorMgr.h
-    InstanceStatistics.h
     ItemEnchantmentMgr.h
     Language.h
     LootMgr.h
-    LoveIsInTheAir.h
     ObjectAccessor.h
     ObjectGridLoader.h
     ObjectGuid.h
     ObjectMgr.h
     ObjectPosSelector.h
-    PlayerDump.h
     QuestDef.h
     ReputationMgr.h
     ScriptedGossip.h
     ScriptMgr.h
     SharedDefines.h
-    SniffFile.h
     SocialMgr.h
+    TransmogMgr.h
     UnitEvents.h
     Weather.h
     World.h
     WorldSession.h
-    WorldStates.h
-    AI/BasicAI.h
+    AI/AggressorAI.h
     AI/CreatureAI.h
     AI/CreatureAIImpl.h
     AI/CreatureAIRegistry.h
@@ -263,6 +245,7 @@ set (game_SRCS
     AI/CreatureEventAI.h
     AI/CreatureEventAIMgr.h
     AI/CritterAI.h
+	AI/GenericSpellAI.h
     AI/GameObjectAI.h
     AI/GuardAI.h
     AI/GuardEventAI.h
@@ -270,6 +253,7 @@ set (game_SRCS
     AI/PetAI.h
     AI/PetEventAI.h
     AI/PlayerAI.h
+    AI/ReactorAI.h
     AI/ScriptedAI.h
     AI/ScriptedEscortAI.h
     AI/ScriptedFollowerAI.h
@@ -277,22 +261,22 @@ set (game_SRCS
     AI/ScriptedInstance.h
     AI/ScriptedPetAI.h
     AI/TotemAI.h
+    Anticheat/libanticheat.hpp
     Anticheat/Anticheat.h
-    AuctionHouse/AuctionHouseBotMgr.h
     AuctionHouse/AuctionHouseMgr.h
     Battlegrounds/BattleGround.h
     Battlegrounds/BattleGroundAB.h
     Battlegrounds/BattleGroundAV.h
     Battlegrounds/BattleGroundMgr.h
-    Battlegrounds/BattleGroundDefines.h
     Battlegrounds/BattleGroundWS.h
+    Battlegrounds/BattleGroundBR.h
+    Battlegrounds/BattleGroundSV.h
     Chat/Channel.h
     Chat/ChannelMgr.h
     Chat/Chat.h
     Chat/AsyncCommandHandlers.h
-    Chat/AbstractPlayer.h
-    Chat/MasterPlayer.h
-    Chat/MonsterChatBuilder.h
+    Chat/WhisperTargetLimits.h
+    Commands/Nostalrius.h
     Database/CharacterDatabaseCache.h
     Database/CharacterDatabaseCleaner.h
     Database/DBCEnums.h
@@ -308,9 +292,8 @@ set (game_SRCS
     Guild/GuildMgr.h
     Handlers/AddonHandler.h
     Handlers/NPCHandler.h
-    LFG/LFGDefines.h
+    Handlers/LFGHandler.h
     LFG/LFGMgr.h
-    LFG/LFGQueue.h
     Mail/Mail.h
     Mail/MassMailMgr.h
     Maps/Cell.h
@@ -332,12 +315,10 @@ set (game_SRCS
     Maps/MoveMapSharedDefines.h
     Maps/Path.h
     Maps/PathFinder.h
-    Maps/ScriptCommands.h
     Maps/ZoneScript.h
     Maps/ZoneScriptMgr.h
     Maps/Pool/PoolManager.h
     Movement/ConfusedMovementGenerator.h
-    Movement/CyclicMovementGenerator.h
     Movement/FearMovementGenerator.h
     Movement/FleeingMovementGenerator.h
     Movement/FollowerReference.h
@@ -364,22 +345,17 @@ set (game_SRCS
     Objects/Bag.h
     Objects/Corpse.h
     Objects/Creature.h
-    Objects/CreatureDefines.h
     Objects/DynamicObject.h
     Objects/GameObject.h
-    Objects/GameObjectDefines.h
     Objects/Item.h
     Objects/ItemPrototype.h
-    Objects/MovementInfo.h
     Objects/Object.h
-    Objects/ObjectDefines.h
     Objects/Pet.h
     Objects/Player.h
-    Objects/SpellCaster.h
     Objects/TemporarySummon.h
     Objects/Totem.h
     Objects/Unit.h
-    Objects/UnitDefines.h
+	Objects/UnitDefines.h
     Objects/UpdateData.h
     Objects/UpdateFields.h
     Objects/UpdateMask.h
@@ -387,10 +363,6 @@ set (game_SRCS
     OutdoorPvP/OutdoorPvPSI.h
     PacketBroadcast/MovementBroadcaster.h
     PacketBroadcast/PlayerBroadcaster.h
-    PlayerBots/CombatBotBaseAI.h
-    PlayerBots/PartyBotAI.h
-    PlayerBots/BattleBotAI.h
-    PlayerBots/BattleBotWaypoints.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h
@@ -400,7 +372,7 @@ set (game_SRCS
     Spells/SpellAuraDefines.h
     Spells/SpellAuras.h
     Spells/SpellClassMask.h
-    Spells/SpellDefines.h
+	Spells/SpellDefines.h
     Spells/SpellEntry.h
     Spells/SpellMgr.h
     Spells/SpellModMgr.h
@@ -422,6 +394,8 @@ set (game_SRCS
     vmap/VMapManager2.h
     vmap/VMapTools.h
     vmap/WorldModel.h
+    Shop/ShopMgr.h
+    GuildBank/GuildBank.h
 
 )
 
@@ -451,31 +425,69 @@ if(USE_SCRIPTS)
   )
 else()
   list(APPEND game_SRCS
-      ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader_noscripts.cpp
       ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader.h
   )
 endif()
 
+if(USE_DISCORD_BOT)
+    list(APPEND game_SRCS
+      DiscordBot/Bot.cpp
+      DiscordBot/Bot.hpp
+      DiscordBot/BaseCommandHandler.hpp
+	  DiscordBot/BaseCommandHandler.cpp
+      DiscordBot/GMCommandHandler.cpp
+      DiscordBot/GMCommandHandler.hpp
+	  DiscordBot/CommandRegistrar.cpp
+	  DiscordBot/AuthManager.cpp
+	  DiscordBot/AuthManager.hpp
+	  DiscordBot/LoginCommandHandler.cpp
+	  DiscordBot/LoginCommandHandler.hpp
+	  DiscordBot/PlayerCommandHandler.cpp
+	  DiscordBot/PlayerCommandHandler.hpp
+	  DiscordBot/MiscUtil.hpp
+	  DiscordBot/toojpeg.hpp
+	  DiscordBot/toojpeg.cpp
+	  DiscordBot/QrCodeGen.hpp
+	  DiscordBot/QrCodeGen.cpp	 
+    )
+endif()
+
 if(USE_ANTICHEAT)
   list(APPEND game_SRCS
-      Anticheat/MovementAnticheat/MovementAnticheat.cpp
-      Anticheat/MovementAnticheat/MovementAnticheat.h
-      Anticheat/WardenAnticheat/Warden.cpp
-      Anticheat/WardenAnticheat/Warden.hpp
-      Anticheat/WardenAnticheat/WardenKeyGeneration.h
-      Anticheat/WardenAnticheat/WardenMac.cpp
-      Anticheat/WardenAnticheat/WardenMac.hpp
-      Anticheat/WardenAnticheat/WardenModule.cpp
-      Anticheat/WardenAnticheat/WardenModule.hpp
-      Anticheat/WardenAnticheat/WardenModuleMgr.cpp
-      Anticheat/WardenAnticheat/WardenModuleMgr.hpp
-      Anticheat/WardenAnticheat/WardenScan.cpp
-      Anticheat/WardenAnticheat/WardenScan.hpp
-      Anticheat/WardenAnticheat/WardenScanMgr.cpp
-      Anticheat/WardenAnticheat/WardenScanMgr.hpp
-      Anticheat/WardenAnticheat/WardenWin.cpp
-      Anticheat/WardenAnticheat/WardenWin.hpp
+      Anticheat/Antispam/Antispam.cpp
+      Anticheat/Antispam/Antispam.h
+      Anticheat/Movement/Movement.cpp
+      Anticheat/Movement/Movement.hpp
+      Anticheat/Warden/Warden.cpp
+      Anticheat/Warden/Warden.hpp
+      Anticheat/Warden/WardenKeyGeneration.h
+      Anticheat/Warden/WardenMac.cpp
+      Anticheat/Warden/WardenMac.hpp
+      Anticheat/Warden/WardenWin.cpp
+      Anticheat/Warden/WardenWin.hpp
+      Anticheat/Warden/WardenModule.cpp
+      Anticheat/Warden/WardenModule.hpp
+      Anticheat/Warden/WardenModuleMgr.cpp
+      Anticheat/Warden/WardenModuleMgr.hpp
+      Anticheat/Warden/WardenScan.cpp
+      Anticheat/Warden/WardenScan.hpp
+      Anticheat/Warden/WardenScanMgr.cpp
+      Anticheat/Warden/WardenScanMgr.hpp
+      Anticheat/AddonHandler.cpp
+      Anticheat/AnticheatChatCommands.h
+      Anticheat/AnticheatChatCommandsFunctions.cpp
+      Anticheat/AnticheatChatCommandsFunctions.h
+      Anticheat/Config.cpp
+      Anticheat/Config.hpp
+      Anticheat/cyclic.hpp
+      Anticheat/dldist.hpp
+      Anticheat/priority.hpp
+      Anticheat/libanticheat.cpp
   )
+  else()
+    list(APPEND game_SRCS
+        Anticheat/Anticheat.cpp
+    )
 endif()
 
 
@@ -493,6 +505,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Handlers
   ${CMAKE_CURRENT_SOURCE_DIR}/LFG
   ${CMAKE_CURRENT_SOURCE_DIR}/Mail
+  ${CMAKE_CURRENT_SOURCE_DIR}/MapNodes
+  ${CMAKE_CURRENT_SOURCE_DIR}/MapNodes/Handlers
+  ${CMAKE_CURRENT_SOURCE_DIR}/MapNodes/Serializers
   ${CMAKE_CURRENT_SOURCE_DIR}/Maps
   ${CMAKE_CURRENT_SOURCE_DIR}/Maps/Pool
   ${CMAKE_CURRENT_SOURCE_DIR}/Movement
@@ -507,7 +522,6 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Transports
   ${CMAKE_CURRENT_SOURCE_DIR}/vmap
   ${CMAKE_SOURCE_DIR}/src/scripts
-  ${CMAKE_SOURCE_DIR}/src/scripts/PrecompiledHeaders
   ${CMAKE_SOURCE_DIR}/dep/include/g3dlite
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation
@@ -521,14 +535,14 @@ include_directories(
   ${TBB_INCLUDE_DIRS}
   ${ACE_INCLUDE_DIR}
   ${OPENSSL_INCLUDE_DIR}
-  ${ZLIB_INCLUDE_DIRS}
 )
 
 if(WIN32)
   include_directories(
-    ${CMAKE_SOURCE_DIR}/dep/windows/include
+    ${CMAKE_SOURCE_DIR}/dep/include-windows
   )
 endif()
+
 
 source_group("Object"
   REGULAR_EXPRESSION .*
@@ -548,12 +562,6 @@ source_group("Server"
     SharedDefines.h
 )
 
-source_group("Chat Commands"
-  REGULAR_EXPRESSION Level[0-9]
-  FILES
-    debugcmds.cpp
-)
-
 source_group("Tool"
   REGULAR_EXPRESSION DatabaseCleaner|Language|PlayerDump
 )
@@ -566,16 +574,29 @@ source_group("Anticheat"
   REGULAR_EXPRESSION Anticheat
 )
 
+source_group("DiscordBot"
+  REGULAR_EXPRESSION DiscordBot
+)
+
+
 add_library(game STATIC
   ${game_SRCS}
 )
 
-SET_TARGET_PROPERTIES (game PROPERTIES FOLDER "Game Libs")
+
+SET_TARGET_PROPERTIES(game PROPERTIES FOLDER "Game Libs")
 
 target_link_libraries(game
   shared
   Detour
 )
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(game 
+	dpp
+  )
+  target_compile_definitions(game PUBLIC USING_DISCORD_BOT)
+endif()
 
 #add_dependencies(game revision.h)
 

@@ -1,3 +1,4 @@
+
 @ECHO Off
 SETLOCAL ENABLEDELAYEDEXPANSION
 
@@ -7,26 +8,11 @@ REM Get the UTC date-time string to use
 CALL :GetFormattedCurrentUTCDate UTC
 ECHO "Formatted UTC Date time : %UTC%"
 
-SET "output=migrations\%UTC%_world.sql"
+SET "output=%UTC%_world.sql"
 
-ECHO DROP PROCEDURE IF EXISTS add_migration;>> %output%
-ECHO DELIMITER ??>> %output%
-ECHO CREATE PROCEDURE `add_migration`()>> %output%
-ECHO BEGIN>> %output%
-ECHO DECLARE v INT DEFAULT 1;>> %output%
-ECHO SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='%UTC%');>> %output%
-ECHO IF v = 0 THEN>> %output%
-ECHO INSERT INTO `migrations` VALUES ('%UTC%');>> %output%
-ECHO -- Add your query below.>> %output%
-ECHO.>> %output%
-ECHO.>> %output%
-ECHO.>> %output%
-ECHO -- End of migration.>> %output%
-ECHO END IF;>> %output%
-ECHO END??>> %output%
-ECHO DELIMITER ;>> %output%
-ECHO CALL add_migration();>> %output%
-ECHO DROP PROCEDURE IF EXISTS add_migration;>> %output%
+ECHO.>> database_updates/%output%
+ECHO.>> database_updates/%output%
+ECHO.>> database_updates/%output%
 
 REM End of the script Body
 :EndOfScriptBody

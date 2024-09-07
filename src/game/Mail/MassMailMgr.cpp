@@ -38,27 +38,21 @@
 
 INSTANTIATE_SINGLETON_1(MassMailMgr);
 
-MassMailMgr::MassMail::MassMail(MailDraft* mailProto, MailSender sender)
-    : m_protoMail(mailProto), m_sender(sender)
-{
-    MANGOS_ASSERT(mailProto);
-}
-
 void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender const& sender, uint32 raceMask)
 {
     if (RACEMASK_ALL_PLAYABLE & ~raceMask)                  // have races not included in mask
     {
         std::ostringstream ss;
-        ss << "SELECT `guid` FROM `characters` WHERE (1 << (`race` - 1)) & " << raceMask << " AND `deleted_time` IS NULL";
+        ss << "SELECT `guid` FROM `characters` WHERE (1 << (`race` - 1)) & " << raceMask << " AND `deleteDate` IS NULL";
         AddMassMailTask(mailProto, sender, ss.str().c_str());
     }
     else
-        AddMassMailTask(mailProto, sender, "SELECT `guid` FROM `characters` WHERE `deleted_time` IS NULL");
+        AddMassMailTask(mailProto, sender, "SELECT `guid` FROM `characters` WHERE `deleteDate` IS NULL");
 }
 
 struct MassMailerQueryHandler
 {
-    void HandleQueryCallback(std::unique_ptr<QueryResult> result, MailDraft* mailProto, MailSender sender)
+    void HandleQueryCallback(QueryResult* result, MailDraft* mailProto, MailSender sender)
     {
         if (!result)
             return;
@@ -69,8 +63,10 @@ struct MassMailerQueryHandler
         {
             Field* fields = result->Fetch();
             recievers.insert(fields[0].GetUInt32());
+
         }
         while (result->NextRow());
+        delete result;
     }
 } massMailerQueryHandler;
 
@@ -139,6 +135,5 @@ void MassMailMgr::GetStatistic(uint32& tasks, uint32& mails, uint32& needTime) c
     // 50 msecs is tick length
     needTime = 50 * mailsCount / sWorld.getConfig(CONFIG_UINT32_MASS_MAILER_SEND_PER_TICK) / IN_MILLISECONDS;
 }
-
 
 /*! @} */

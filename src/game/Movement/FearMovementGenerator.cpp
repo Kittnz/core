@@ -4,6 +4,7 @@
 
 #include "Creature.h"
 #include "CreatureAI.h"
+#include "MapManager.h"
 #include "FearMovementGenerator.h"
 #include "ObjectAccessor.h"
 #include "MoveSplineInit.h"
@@ -17,13 +18,12 @@ void FearMovementGenerator<T>::_setTargetLocation(T &owner)
     if (!&owner)
         return;
 
-    // ignore in case other no reaction state
+    // Ignore in case other no reaction state
     if (owner.HasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
         return;
 
-    if (Player* pPlayer = owner.ToPlayer())
-        if (pPlayer->IsBeingTeleported())
-            return;
+    if (owner.IsRooted())
+        return;
 
     float x, y, z;
     if (!_getPoint(owner, x, y, z))
@@ -113,14 +113,7 @@ template<class T>
 void FearMovementGenerator<T>::Initialize(T &owner)
 {
     owner.AddUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
-
-    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
-    // - Fear will now cause creatures to flee immediately, even if they are
-    //   already moving.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     owner.StopMoving();
-#endif
-
     owner.UpdateControl();
 
     if (owner.GetTypeId() == TYPEID_UNIT)
@@ -128,11 +121,6 @@ void FearMovementGenerator<T>::Initialize(T &owner)
         owner.SetWalk(_forceWalking, false);
         owner.SetTargetGuid(0);
     }
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-    if (!owner.movespline->Finalized())
-        return;
-#endif
 
     _setTargetLocation(owner);
 }
@@ -167,7 +155,7 @@ void FearMovementGenerator<T>::Reset(T &owner)
 }
 
 template<class T>
-bool FearMovementGenerator<T>::Update(T &owner, uint32 const&  time_diff)
+bool FearMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
 {
     if (!&owner || !owner.IsAlive())
         return false;
@@ -209,8 +197,8 @@ template void FearMovementGenerator<Player>::Interrupt(Player &);
 template void FearMovementGenerator<Creature>::Interrupt(Creature &);
 template void FearMovementGenerator<Player>::Reset(Player &);
 template void FearMovementGenerator<Creature>::Reset(Creature &);
-template bool FearMovementGenerator<Player>::Update(Player &, uint32 const&);
-template bool FearMovementGenerator<Creature>::Update(Creature &, uint32 const&);
+template bool FearMovementGenerator<Player>::Update(Player &, const uint32 &);
+template bool FearMovementGenerator<Creature>::Update(Creature &, const uint32 &);
 
 void TimedFearMovementGenerator::Initialize(Unit& owner)
 {
@@ -240,7 +228,7 @@ TimedFearMovementGenerator::TimedFearMovementGenerator(ObjectGuid fright, uint32
     i_initialFleeTime.Reset(DEFAULT_INIT_FLEE_TIME + urand(0, time * INIT_FLEE_TIME_RAND_MULT));
 }
 
-bool TimedFearMovementGenerator::Update(Unit & owner, uint32 const&  time_diff)
+bool TimedFearMovementGenerator::Update(Unit & owner, const uint32 & time_diff)
 {
     if (!owner.IsAlive())
         return false;

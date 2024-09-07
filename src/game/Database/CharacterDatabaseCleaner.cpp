@@ -32,13 +32,14 @@ void CharacterDatabaseCleaner::CleanDatabase()
     if (!sWorld.getConfig(CONFIG_BOOL_CLEAN_CHARACTER_DB))
         return;
 
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Cleaning character database...");
+    sLog.outString("Cleaning character database...");
 
     // check flags which clean ups are necessary
-    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT cleaning_flags FROM saved_variables");
+    QueryResult* result = CharacterDatabase.PQuery("SELECT cleaning_flags FROM saved_variables");
     if (!result)
         return;
     uint32 flags = (*result)[0].GetUInt32();
+    delete result;
 
     // clean up
     if (flags & CLEANING_FLAG_SKILLS)
@@ -48,23 +49,20 @@ void CharacterDatabaseCleaner::CleanDatabase()
     CharacterDatabase.Execute("UPDATE saved_variables SET cleaning_flags = 0");
 }
 
-void CharacterDatabaseCleaner::CheckUnique(char const* column, char const* table, bool (*check)(uint32))
+void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table, bool (*check)(uint32))
 {
-    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
+    QueryResult* result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
     if (!result)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Table %s is empty.", table);
+        sLog.outString("Table %s is empty.", table);
         return;
     }
 
     bool found = false;
     std::ostringstream ss;
-    BarGoLink bar(result->GetRowCount());
     do
     {
-        bar.step();
-
-        Field* fields = result->Fetch();
+        Field *fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
 
@@ -81,6 +79,7 @@ void CharacterDatabaseCleaner::CheckUnique(char const* column, char const* table
         }
     }
     while (result->NextRow());
+    delete result;
 
     if (found)
     {

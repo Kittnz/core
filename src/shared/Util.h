@@ -19,11 +19,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _UTIL_H
-#define _UTIL_H
+#pragma once
 
 #include "Common.h"
 #include "Duration.h"
+#include "Errors.h"
+#include "Log.h" // Zerix: Again, here we are asking for MANGOS_ASSERT to work. What's up?
 
 #include <string>
 #include <vector>
@@ -56,6 +57,34 @@ private:
     StorageType m_storage;
 };
 
+template <class T>
+class CheckedBufferOutputIterator
+{
+public:
+    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using pointer = T*;
+    using reference = T&;
+    using difference_type = std::ptrdiff_t;
+
+    CheckedBufferOutputIterator(T* buf, size_t n) : _buf(buf), _end(buf + n) {}
+
+    T& operator*() const { check(); return *_buf; }
+    CheckedBufferOutputIterator& operator++() { check(); ++_buf; return *this; }
+    CheckedBufferOutputIterator operator++(int) { CheckedBufferOutputIterator v = *this; operator++(); return v; }
+
+    size_t remaining() const { return (_end - _buf); }
+
+private:
+    T* _buf;
+    T* _end;
+    void check() const
+    {
+        if (!(_buf < _end))
+            throw std::out_of_range("index");
+    }
+};
+
 typedef std::vector<std::string> Tokens;
 
 Tokens StrSplit(std::string const& src, std::string const& sep);
@@ -63,7 +92,6 @@ uint32 GetUInt32ValueFromArray(Tokens const& data, uint16 index);
 float GetFloatValueFromArray(Tokens const& data, uint16 index);
 
 void stripLineInvisibleChars(std::string &src);
-void stripLineInvisibleChars(char* str);
 
 std::string secsToTimeString(time_t timeInSecs, bool shortText = false, bool hoursOnly = false);
 uint32 TimeStringToSecs(std::string const& timestring);
@@ -109,24 +137,24 @@ inline bool roll_chance_f(float chance)
 {
     return chance > rand_chance();
 }
+
 inline bool roll_chance_i(int chance)
 {
     return chance > irand(0, 99);
 }
+
 inline bool roll_chance_u(uint32 chance)
 {
     return chance > urand(0, 99);
 }
 
-// Select a random element from a container. Note: make sure you explicitly empty check the container
-template <class C>
-typename C::value_type const& SelectRandomContainerElement(C const& container)
+/* Select a random element from a container. Note: make sure you explicitly empty check the container */
+template <class C> typename C::value_type const& SelectRandomContainerElement(C const& container)
 {
     typename C::const_iterator it = container.begin();
     std::advance(it, urand(0, container.size() - 1));
     return *it;
 }
-
 template<typename T, typename... Args>
 T PickRandomValue(T first, Args ...rest)
 {
@@ -142,15 +170,6 @@ inline float round_float(float value)
         return urand(0, 1) ? floor(value) : ceil(value);
 
     if (remainder > 0.5f)
-        return ceil(value);
-
-    return floor(value);
-}
-
-inline float round_float_chance(float value)
-{
-    float const remainder = value - floor(value);
-    if (remainder && roll_chance_f(remainder * 100.0f))
         return ceil(value);
 
     return floor(value);
@@ -179,49 +198,60 @@ inline void ApplyPercentModFloatVar(float& var, float val, bool apply)
     var *= (apply?(100.0f+val)/100.0f : 100.0f / (100.0f+val));
 }
 
-bool Utf8toWStr(std::string const& utf8str, std::wstring& wstr, size_t max_len = 0);
+// UTF8 handling
+bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr);
+
 // in wsize==max size of buffer, out wsize==real string size
+bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize);
 
-bool WStrToUtf8(std::wstring& wstr, std::string& utf8str);
+inline bool Utf8toWStr(std::string_view utf8str, wchar_t* wstr, size_t& wsize)
+{
+    return Utf8toWStr(utf8str.data(), utf8str.size(), wstr, wsize);
+}
 
-size_t utf8length(std::string& utf8str);                    // set string to "" if invalid utf8 sequence
-void utf8truncate(std::string& utf8str,size_t len);
+bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str);
+// size==real string size
+bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str);
+
+// set string to "" if invalid utf8 sequence
+size_t utf8length(std::string& utf8str);
+void utf8truncate(std::string& utf8str, size_t len);
 
 inline bool isBasicLatinCharacter(wchar_t wchar)
 {
-    if(wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z
+    if (wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z
         return true;
-    if(wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
+    if (wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
         return true;
     return false;
 }
 
 inline bool isExtendedLatinCharacter(wchar_t wchar)
 {
-    if(isBasicLatinCharacter(wchar))
+    if (isBasicLatinCharacter(wchar))
         return true;
-    if(wchar >= 0x00C0 && wchar <= 0x00D6)                  // LATIN CAPITAL LETTER A WITH GRAVE - LATIN CAPITAL LETTER O WITH DIAERESIS
+    if (wchar >= 0x00C0 && wchar <= 0x00D6)                  // LATIN CAPITAL LETTER A WITH GRAVE - LATIN CAPITAL LETTER O WITH DIAERESIS
         return true;
-    if(wchar >= 0x00D8 && wchar <= 0x00DF)                  // LATIN CAPITAL LETTER O WITH STROKE - LATIN CAPITAL LETTER THORN
+    if (wchar >= 0x00D8 && wchar <= 0x00DE)                  // LATIN CAPITAL LETTER O WITH STROKE - LATIN CAPITAL LETTER THORN
         return true;
-    if(wchar == 0x00DF)                                     // LATIN SMALL LETTER SHARP S
+    if (wchar == 0x00DF)                                     // LATIN SMALL LETTER SHARP S
         return true;
-    if(wchar >= 0x00E0 && wchar <= 0x00F6)                  // LATIN SMALL LETTER A WITH GRAVE - LATIN SMALL LETTER O WITH DIAERESIS
+    if (wchar >= 0x00E0 && wchar <= 0x00F6)                  // LATIN SMALL LETTER A WITH GRAVE - LATIN SMALL LETTER O WITH DIAERESIS
         return true;
-    if(wchar >= 0x00F8 && wchar <= 0x00FE)                  // LATIN SMALL LETTER O WITH STROKE - LATIN SMALL LETTER THORN
+    if (wchar >= 0x00F8 && wchar <= 0x00FE)                  // LATIN SMALL LETTER O WITH STROKE - LATIN SMALL LETTER THORN
         return true;
-    if(wchar >= 0x0100 && wchar <= 0x012F)                  // LATIN CAPITAL LETTER A WITH MACRON - LATIN SMALL LETTER I WITH OGONEK
+    if (wchar >= 0x0100 && wchar <= 0x012F)                  // LATIN CAPITAL LETTER A WITH MACRON - LATIN SMALL LETTER I WITH OGONEK
         return true;
-    if(wchar == 0x1E9E)                                     // LATIN CAPITAL LETTER SHARP S
+    if (wchar == 0x1E9E)                                     // LATIN CAPITAL LETTER SHARP S
         return true;
     return false;
 }
 
 inline bool isCyrillicCharacter(wchar_t wchar)
 {
-    if(wchar >= 0x0410 && wchar <= 0x044F)                  // CYRILLIC CAPITAL LETTER A - CYRILLIC SMALL LETTER YA
+    if (wchar >= 0x0410 && wchar <= 0x044F)                  // CYRILLIC CAPITAL LETTER A - CYRILLIC SMALL LETTER YA
         return true;
-    if(wchar == 0x0401 || wchar == 0x0451)                  // CYRILLIC CAPITAL LETTER IO, CYRILLIC SMALL LETTER IO
+    if (wchar == 0x0401 || wchar == 0x0451)                  // CYRILLIC CAPITAL LETTER IO, CYRILLIC SMALL LETTER IO
         return true;
     return false;
 }
@@ -335,12 +365,28 @@ inline bool isLeapYear(int year)
 
 inline void strToUpper(std::string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), toupper);
+    std::transform( str.begin(), str.end(), str.begin(), toupper );
 }
 
 inline void strToLower(std::string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), tolower);
+    std::transform( str.begin(), str.end(), str.begin(), tolower );
+}
+
+inline void strToLower(char* str, int strLen)
+{
+    for (int i = 0; i < strLen; i++)
+    {
+        str[i] = tolower(str[i]);
+    }
+}
+
+inline void strToUpper(char* str, int strLen)
+{
+    for (int i = 0; i < strLen; i++)
+    {
+        str[i] = toupper(str[i]);
+    }
 }
 
 inline wchar_t wcharToUpper(wchar_t wchar)
@@ -396,19 +442,32 @@ inline wchar_t wcharToLower(wchar_t wchar)
 
 inline void wstrToUpper(std::wstring& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), wcharToUpper);
+    std::transform( str.begin(), str.end(), str.begin(), wcharToUpper );
 }
 
 inline void wstrToLower(std::wstring& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), wcharToLower);
+    std::transform( str.begin(), str.end(), str.begin(), wcharToLower );
+}
+
+inline bool iequals(const std::string& a, const std::string& b)
+{
+    unsigned long sz = a.size();
+    if (b.size() != sz)
+        return false;
+
+    for (unsigned int i = 0; i < sz; ++i)
+        if (tolower(a[i]) != tolower(b[i]))
+            return false;
+
+    return true;
 }
 
 bool utf8ToConsole(std::string const& utf8str, std::string& conStr);
 bool consoleToUtf8(std::string const& conStr,std::string& utf8str);
 bool Utf8FitTo(std::string const& str, std::wstring search);
-void utf8printf(FILE* out, char const* str, ...);
-void vutf8printf(FILE* out, char const* str, va_list* ap);
+void utf8printf(FILE *out, char const* str, ...);
+void vutf8printf(FILE *out, char const* str, va_list* ap);
 
 bool IsIPAddress(char const* ipaddress);
 uint32 CreatePIDFile(std::string const& filename);
@@ -417,11 +476,7 @@ void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result);
 std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
 void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false);
 
-uint32 ditheru(float v);
-int32 dither(float v);
-
-void SetByteValue(uint32& variable, uint8 offset, uint8 value);
-void SetUInt16Value(uint32& variable, uint8 offset, uint16 value);
+uint32 dither(float v);
 
 inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
 {
@@ -431,8 +486,4 @@ inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
     return value * interval;
 }
 
-typedef char const*(*ValueToStringFunc) (uint32 value);
-
-std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc);
-
-#endif
+std::string MoneyToString(uint32 copper);

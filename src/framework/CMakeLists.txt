@@ -17,40 +17,45 @@
 
 # include(${CMAKE_SOURCE_DIR}/dep/tbb/tbbinclude.cmake)
 
-set(framework_SRCS 
-  Dynamic/FactoryHolder.h
-  Dynamic/ObjectRegistry.h
-  GameSystem/Grid.h
-  GameSystem/GridLoader.h
-  GameSystem/GridReference.h
-  GameSystem/GridRefManager.h
-  GameSystem/NGrid.h
-  GameSystem/TypeContainer.h
-  GameSystem/TypeContainerFunctions.h
-  GameSystem/TypeContainerFunctionsPtr.h
-  GameSystem/TypeContainerVisitor.h
-  Network/MangosSocket.h
-  Network/MangosSocketImpl.h
-  Network/MangosSocketMgr.h
-  Network/MangosSocketMgrImpl.h
-  Platform/CompilerDefs.h
-  Platform/Define.h
-  Policies/CreationPolicy.h
-  Policies/ObjectLifeTime.h
-  Policies/Singleton.h
-  Policies/SingletonImp.h
-  Policies/ThreadingModel.h
-  Utilities/ByteConverter.h
-  Utilities/EventProcessor.h
-  Utilities/EventMap.h
-  Utilities/LinkedList.h
-  Utilities/TypeList.h
-  Utilities/LinkedReference/Reference.h
-  Utilities/LinkedReference/RefManager.h
-  Policies/MemoryManagement.cpp
-  Policies/ObjectLifeTime.cpp
-  Utilities/EventProcessor.cpp
-  Utilities/EventMap.cpp
+set (framework_SRCS 
+	Dynamic/FactoryHolder.h
+	Dynamic/ObjectRegistry.h
+	GameSystem/Grid.h
+	GameSystem/GridLoader.h
+	GameSystem/GridReference.h
+	GameSystem/GridRefManager.h
+	GameSystem/NGrid.h
+	GameSystem/TypeContainer.h
+	GameSystem/TypeContainerFunctions.h
+	GameSystem/TypeContainerFunctionsPtr.h
+	GameSystem/TypeContainerVisitor.h
+	Network/MangosSocket.h
+	Network/MangosSocketImpl.h
+	Network/MangosSocketMgr.h
+	Network/MangosSocketMgrImpl.h
+        Network/Socket.h
+	Network/AsyncAcceptor.h
+	Network/SocketMgr.h
+	Network/NetworkThread.h
+	Platform/CompilerDefs.h
+	Platform/Define.h
+	Policies/CreationPolicy.h
+	Policies/ObjectLifeTime.h
+	Policies/Singleton.h
+	Policies/SingletonImp.h
+	Policies/ThreadingModel.h
+	Utilities/ByteConverter.h
+	Utilities/Callback.h
+	Utilities/EventProcessor.h
+	Utilities/EventMap.h
+	Utilities/LinkedList.h
+	Utilities/TypeList.h
+	Utilities/LinkedReference/Reference.h
+	Utilities/LinkedReference/RefManager.h
+	Policies/MemoryManagement.cpp
+	Policies/ObjectLifeTime.cpp
+	Utilities/EventProcessor.cpp
+	Utilities/EventMap.cpp
 
 )
 
@@ -81,6 +86,10 @@ source_group("LinkedReference"
 
 source_group("Dynamic"
   REGULAR_EXPRESSION Dynamic
+)
+
+source_group("Network"
+  REGULAR_EXPRESSION Network
 )
 
 include_directories(

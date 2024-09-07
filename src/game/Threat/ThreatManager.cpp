@@ -28,11 +28,15 @@
 #include "UnitEvents.h"
 #include "TargetedMovementGenerator.h"
 
+#include "Chat.h"
+#include "GridSearchers.h"
+
 //==============================================================
 //================= ThreatCalcHelper ===========================
 //==============================================================
 
-float ThreatCalcHelper::CalcThreat(Unit* pHatedUnit, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const* pThreatSpell)
+// The pHatingUnit is not used yet
+float ThreatCalcHelper::CalcThreat(Unit* pHatedUnit, Unit* /*pHatingUnit*/, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const *pThreatSpell)
 {
     // all flat mods applied early
     if (!threat)
@@ -40,6 +44,9 @@ float ThreatCalcHelper::CalcThreat(Unit* pHatedUnit, float threat, bool crit, Sp
 
     if (pThreatSpell)
     {
+        if (pThreatSpell->AttributesEx & SPELL_ATTR_EX_NO_THREAT)
+            return 0.0f;
+
         if (Player* modOwner = pHatedUnit->GetSpellModOwner())
             modOwner->ApplySpellMod(pThreatSpell->Id, SPELLMOD_THREAT, threat);
 
@@ -55,9 +62,9 @@ float ThreatCalcHelper::CalcThreat(Unit* pHatedUnit, float threat, bool crit, Sp
 //================= HostileReference ==========================
 //============================================================
 
-HostileReference::HostileReference(Unit* pUnit, ThreatManager *pThreatManager, float threat)
+HostileReference::HostileReference(Unit* pUnit, ThreatManager *pThreatManager, float pThreat)
 {
-    iThreat = threat;
+    iThreat = pThreat;
     iTempThreatModifyer = 0.0f;
     link(pUnit, pThreatManager);
     iUnitGuid = pUnit->GetObjectGuid();
@@ -113,9 +120,9 @@ void HostileReference::addThreat(float pMod)
 
     if (isValid() && pMod >= 0)
     {
-        Unit* pVictimOwner = getTarget()->GetOwner();
-        if (pVictimOwner && pVictimOwner->IsTargetableBy(getSource()->getOwner()))
-            getSource()->addThreat(pVictimOwner, 0.0f);     // create a threat to the owner of a pet, if the pet attacks
+        Unit* victim_owner = getTarget()->GetOwner();
+        if (victim_owner && victim_owner->IsAlive())
+            getSource()->addThreat(victim_owner, 0.0f);     // create a threat to the owner of a pet, if the pet attacks
     }
 }
 
@@ -231,20 +238,20 @@ HostileReference* ThreatContainer::getReferenceByTarget(Unit* pVictim)
 //============================================================
 // Add the threat, if we find the reference
 
-HostileReference* ThreatContainer::addThreat(Unit* pVictim, float threat)
+HostileReference* ThreatContainer::addThreat(Unit* pVictim, float pThreat)
 {
     if (!pVictim)
         return nullptr;
 
     HostileReference* ref = getReferenceByTarget(pVictim);
     if (ref)
-        ref->addThreat(threat);
+        ref->addThreat(pThreat);
     return ref;
 }
 
 //============================================================
 
-void ThreatContainer::modifyThreatPercent(Unit* pVictim, int32 pPercent)
+void ThreatContainer::modifyThreatPercent(Unit *pVictim, int32 pPercent)
 {
     if (HostileReference* ref = getReferenceByTarget(pVictim))
     {
@@ -260,7 +267,7 @@ void ThreatContainer::modifyThreatPercent(Unit* pVictim, int32 pPercent)
 
 //============================================================
 
-bool HostileReferenceSortPredicate(HostileReference const* lhs, HostileReference const* rhs)
+bool HostileReferenceSortPredicate(const HostileReference* lhs, const HostileReference* rhs)
 {
     // std::list::sort ordering predicate must be: (Pred(x,y)&&Pred(y,x))==false
     return lhs->getThreat() > rhs->getThreat();             // reverse sorting
@@ -316,22 +323,17 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                 continue;
             }
 
+            float attackDistance = pAttacker->GetMaxChaseDistance(target);
             // Skip this unit if low priority
-            if (!allowLowPriorityTargets)
+            if (!allowLowPriorityTargets && (target->IsImmuneToDamage(pAttacker->GetMeleeDamageSchoolMask()) ||
+                                            target->IsSecondaryThreatTarget() ||
+                                           (attackerImmobilized && !target->IsWithinDist(pAttacker, attackDistance))))
             {
-                float attackDistance = pAttacker->GetMaxChaseDistance(target);
-                // second choice targets are: immune to attacker's autoattack damage school / is secondary threat target (fear, gouge etc) /
-                // is outside of attacker's caster chase distance if rooted caster / is unreachable by attacker's melee attacks if rooted melee.
-                if ( target->IsImmuneToDamage(pAttacker->GetMeleeDamageSchoolMask()) || target->IsSecondaryThreatTarget() ||
-                   ( attackerImmobilized && pAttacker->HasDistanceCasterMovement() &&!target->IsWithinDist(pAttacker, attackDistance, true, SizeFactor::None)) ||
-                   ( attackerImmobilized && !pAttacker->CanReachWithMeleeAutoAttack(target)))
-                {
-                    // current victim is a second choice target, so don't compare threat with it below
-                    if (currentRef == pCurrentVictim)
-                        pCurrentVictim = nullptr;
-                    ++iter;
-                    continue;
-                }
+                // current victim is a second choice target, so don't compare threat with it below
+                if (currentRef == pCurrentVictim)
+                    pCurrentVictim = nullptr;
+                ++iter;
+                continue;
             }
 
             if (pCurrentVictim)                             // select 1.3/1.1 better target in comparison current target
@@ -344,8 +346,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                     break;
                 }
 
-                if ((currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat()) ||
-                    (currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAutoAttack(target)))
+                if ((currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat()) || (currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAutoAttack(target)))
                 {
                     //implement 110% threat rule for targets in melee range
                     found = true;                           //and 130% rule for targets in ranged distances
@@ -357,9 +358,11 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                 found = true;
                 break;
             }
+
             ++iter;
         }
     }
+
     if (!found)
         currentRef = nullptr;
 
@@ -385,7 +388,7 @@ void ThreatManager::clearReferences()
 
 //============================================================
 
-void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const* pThreatSpell, bool isAssistThreat)
+void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellSchoolMask schoolMask, SpellEntry const *pThreatSpell, bool isAssistThreat)
 {
     //function deals with adding threat and adding players and pets into ThreatList
     //mobs, NPCs, guards have ThreatList and HateOfflineList
@@ -409,19 +412,185 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
     // don't add assist threat to targets under hard CC
     // check for fear, blind, freezing trap, reckless charge, banish, etc.
     if (isAssistThreat)
-    {
-        if (getOwner()->HasUnitState(UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_ISOLATED) ||
-            (getOwner()->HasUnitState(UNIT_STAT_STUNNED) && getOwner()->HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN, 0)))
-        {
-            threat = 0.0f;
-        }
-    }
+        if (getOwner()->HasUnitState(UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_ISOLATED) || (getOwner()->HasUnitState(UNIT_STAT_STUNNED) && getOwner()->HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN, 0)))
+            pThreat = 0.0f;
 
-    float totalThreat = ThreatCalcHelper::CalcThreat(pVictim, threat, crit, schoolMask, pThreatSpell);
-    addThreatDirectly(pVictim, totalThreat, pThreatSpell && pThreatSpell->HasAttribute(SPELL_ATTR_EX_NO_THREAT));
+    float threat = ThreatCalcHelper::CalcThreat(pVictim, iOwner, pThreat, crit, schoolMask, pThreatSpell);
+    addThreatDirectly(pVictim, threat);
 }
 
-void ThreatManager::addThreatDirectly(Unit* pVictim, float threat, bool noNew)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit, bool tankMode)
+{
+
+	if (!creature || !creature->IsInCombat() || !creature->IsElite() || !creature->IsAlive() || !creature->CanHaveThreatList())
+        return;
+
+    if (!requester || !requester->IsAlive() || requester->GetTypeId() != TYPEID_PLAYER || !requester->GetGroup())
+        return;
+
+    if (!creature->GetThreatManager().getHostileTarget() || creature->GetThreatManager().isThreatListEmpty())
+        return;
+
+	std::string tankName           = creature->GetThreatManager().getHostileTarget()->GetName();
+	std::string creatureName       = creature->GetName();
+	std::string threatSeparator    = ":";
+	std::string rowSeparator       = ";";
+	std::string normalModePrefix   = "TWTv4=";  // threat api version
+	std::string tankModePrefix     = "TMTv1=";  // tankMode threat api version
+	std::string bigPacket		   = normalModePrefix;
+
+	bool isMelee    = true;
+	bool isTanking  = false;
+	bool inParty    = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
+
+	int tankThreat  =  0;
+	int threatValue =  0;
+	int myPos       = -1;
+	int position    = -1;                // for player iteration
+
+	float threatPct = 0;
+	
+
+	ThreatList const& threatList = creature->GetThreatManager().getThreatList();
+
+	tankThreat = (int)round(creature->GetThreatManager().getThreat(creature->GetThreatManager().getHostileTarget()));
+
+	if (tankThreat <= 0)
+		return;
+
+	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+	{
+		myPos++;
+		if ((*iter)->getTarget()->GetName() == requester->GetName())
+			break;
+	}
+
+	// packet struct:
+	// TWTv4=da:ta:1;da:ta:2;da:ta:3;...
+	// or with tankmode enabled, separated by #
+	// TWTv4=da:ta:1;da:ta:2;... # TMTv1=da:ta:1;da:ta2;...
+
+	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+	{
+		position++;
+
+		// skips !
+		if (myPos < limit && position >= limit)							 // skip sending whats over the limit
+			continue;
+		if (myPos >= limit && position > limit - 2 && position != myPos) // skip sending whats not me
+			continue;
+
+		threatValue = (int)round((*iter)->getThreat());
+
+		if (threatValue <= 0)                                             // dont care for negative
+			continue;
+
+		isTanking = (*iter)->getTarget()->GetName() == tankName;
+		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAutoAttack((*iter)->getTarget());
+
+		threatPct = isTanking ? 100 : threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3));
+		threatPct = (float)((int)(threatPct * 10 + .5)) / 10;
+		threatPct = threatPct > 100 ? 100 : threatPct;
+
+		bigPacket += (*iter)->getTarget()->GetName() + threatSeparator;           // player name
+		bigPacket += std::to_string((int)isTanking) + threatSeparator;            // 1 if player is tanking
+		bigPacket += std::to_string(threatValue) + threatSeparator;               // player's threat value, rounded
+		bigPacket += std::to_string(threatPct) + threatSeparator;                 // player's threat percent, rounded
+		bigPacket += std::to_string(isMelee);                                     // 1 if creature can reach player with melee
+
+		bigPacket += rowSeparator;
+	}
+
+	if (bigPacket.length() > 3096 || bigPacket.empty())
+		return;
+
+	bigPacket.pop_back(); // remove last rowSeparator
+	
+	if (tankMode)
+	{
+		std::list<std::string> pSecondMessage;   // players that are 2nd on threat
+		pSecondMessage.clear();
+
+		std::list<Creature*> hCreatureNear;
+		GetHostileCreaturesListInRange(hCreatureNear, requester, 5.0f);
+
+		int creatureIndex = 0;
+
+		if (hCreatureNear.size() >= 2)
+			for (std::list<Creature*>::iterator iter = hCreatureNear.begin(); iter != hCreatureNear.end(); ++iter)
+			{
+				if (creatureIndex > 4)
+					break;
+
+				if (!(*iter)->CanHaveThreatList() || !(*iter)->IsElite() || !(*iter)->IsInCombat())
+					continue;
+				if (!(*iter)->GetThreatManager().getHostileTarget() || (*iter)->GetThreatManager().isThreatListEmpty())
+					continue;
+				if ((*iter)->GetThreatManager().getHostileTarget()->GetName() != requester->GetName())
+					continue;
+
+				ThreatList const& hThreatList = (*iter)->GetThreatManager().getThreatList();
+
+				if (hThreatList.size() < 2)
+					continue;
+
+				ThreatList::const_iterator hatedPlayers = hThreatList.begin();
+
+				//if im 1st on threat, send 2nd, else im not 1st on threat, send 1st, begin()
+				if ((*hatedPlayers)->getTarget()->GetName() == requester->GetName())
+					++hatedPlayers;
+
+				int tTankThreat = 0;
+				for (ThreatList::const_iterator tankThreatIter = hThreatList.begin(); tankThreatIter != hThreatList.end(); ++tankThreatIter)
+					if ((*tankThreatIter)->getTarget()->GetName() == requester->GetName())
+					{
+						tTankThreat = (int)round((*tankThreatIter)->getThreat());
+						break;
+					}
+
+				if (tTankThreat <= 0)
+					continue;
+
+				bool tIsMelee = (*hatedPlayers)->getSourceUnit()->CanReachWithMeleeAutoAttack((*hatedPlayers)->getTarget());
+
+				float tThreatPct = (*hatedPlayers)->getThreat() * 100 / (tTankThreat * (tIsMelee ? 1.1 : 1.3));
+				tThreatPct = (float)((int)(tThreatPct * 10 + .5)) / 10;
+				tThreatPct = tThreatPct > 100 ? 100 : tThreatPct;
+
+				std::string tMsg;
+				tMsg += (*iter)->GetName() + threatSeparator;						 // creature name
+				tMsg += std::to_string((*iter)->GetGUIDLow()) + threatSeparator;	 // creature guid
+				tMsg += (*hatedPlayers)->getTarget()->GetName() + threatSeparator;   // player name
+				tMsg += std::to_string(tThreatPct);                                  // player's threat percent
+
+				pSecondMessage.push_back(tMsg);
+
+				creatureIndex++;
+
+			}
+
+		if (pSecondMessage.size() > 1)
+		{
+			bigPacket += "#" + tankModePrefix;
+			for (std::list<std::string>::const_iterator itr = pSecondMessage.begin(); itr != pSecondMessage.end(); ++itr)
+				bigPacket += (*itr).c_str() + rowSeparator;
+
+			bigPacket.pop_back(); // remove last rowSeparator
+		}
+	}
+
+	if (bigPacket.length() > 3096 || bigPacket.empty())
+		return;
+
+	WorldPacket data;
+	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+		("TWT \t" + bigPacket).c_str(), Language(LANG_ADDON), requester->GetChatTag(),
+		requester->GetObjectGuid(), requester->GetName());
+	requester->GetSession()->SendPacket(&data);
+
+}
+
+void ThreatManager::addThreatDirectly(Unit* pVictim, float threat)
 {
     if (!pVictim || pVictim == getOwner() || !pVictim->IsAlive() || !pVictim->IsInMap(getOwner()))
         return;
@@ -431,8 +600,7 @@ void ThreatManager::addThreatDirectly(Unit* pVictim, float threat, bool noNew)
     if (!ref)
         ref = iThreatOfflineContainer.addThreat(pVictim, threat);
 
-    // there was no ref => create a new one
-    if (!ref && !noNew)
+    if (!ref)                                               // there was no ref => create a new one
     {
         // threat has to be 0 here
         HostileReference* hostileReference = new HostileReference(pVictim, this, 0);
@@ -445,7 +613,7 @@ void ThreatManager::addThreatDirectly(Unit* pVictim, float threat, bool noNew)
 
 //============================================================
 
-void ThreatManager::modifyThreatPercent(Unit* pVictim, int32 pPercent)
+void ThreatManager::modifyThreatPercent(Unit *pVictim, int32 pPercent)
 {
     iThreatContainer.modifyThreatPercent(pVictim, pPercent);
 }
@@ -462,7 +630,7 @@ Unit* ThreatManager::getHostileTarget()
 
 //============================================================
 
-float ThreatManager::getThreat(Unit* pVictim, bool pAlsoSearchOfflineList)
+float ThreatManager::getThreat(Unit *pVictim, bool pAlsoSearchOfflineList)
 {
     float threat = 0.0f;
     HostileReference* ref = iThreatContainer.getReferenceByTarget(pVictim);
@@ -490,7 +658,7 @@ void ThreatManager::tauntApply(Unit* pTaunter)
 
 //============================================================
 
-void ThreatManager::tauntFadeOut(Unit* pTaunter)
+void ThreatManager::tauntFadeOut(Unit *pTaunter)
 {
     if (HostileReference* ref = iThreatContainer.getReferenceByTarget(pTaunter))
         ref->resetTempThreat();
@@ -553,7 +721,7 @@ void ThreatManager::processThreatEvent(ThreatRefStatusChangeEvent* threatRefStat
     }
 }
 
-void ThreatManager::setCurrentVictimIfCan(Unit* pVictim)
+void ThreatManager::setCurrentVictimIfCan(Unit * pVictim)
 {
     if (HostileReference* pHRef = iThreatContainer.getReferenceByTarget(pVictim))
     {

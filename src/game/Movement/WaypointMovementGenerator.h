@@ -27,7 +27,7 @@
 
 #include "MovementGenerator.h"
 #include "WaypointManager.h"
-#include "CreatureGroups.h"
+
 #include "Player.h"
 
 #include <vector>
@@ -35,6 +35,8 @@
 
 #define FLIGHT_TRAVEL_UPDATE  100
 #define STOP_TIME_FOR_PLAYER  (30 * IN_MILLISECONDS)
+
+struct CreatureGroupMember;
 
 template<class T, class P>
 class PathMovementBase
@@ -68,16 +70,16 @@ class WaypointMovementGenerator<Creature>
   public PathMovementBase<Creature, WaypointPath const*>
 {
     public:
-        WaypointMovementGenerator(Creature &, bool repeating = true) : i_nextMoveTime(0), m_isArrivalDone(false), m_repeating(repeating), m_isWandering(false), m_lastReachedWaypoint(0) {}
+        explicit WaypointMovementGenerator(Creature &, bool repeating = true) : i_nextMoveTime(0), m_isArrivalDone(false), m_repeating(repeating), m_isWandering(false), m_lastReachedWaypoint(0), m_PathOrigin(PATH_NO_PATH) {}
         ~WaypointMovementGenerator() { i_path = nullptr; }
         void Initialize(Creature &u);
         void Interrupt(Creature &);
         void Finalize(Creature &);
         void Reset(Creature &u);
-        bool Update(Creature &u, uint32 const& diff);
+        bool Update(Creature &u, const uint32 &diff);
         void InitializeWaypointPath(Creature& creature, uint32 startPoint, WaypointPathOrigin wpSource, uint32 initialDelay, uint32 overwriteGuid, uint32 overwriteEntry, bool repeat);
 
-        MovementGeneratorType GetMovementGeneratorType() const { return WAYPOINT_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return WAYPOINT_MOTION_TYPE; }
 
         // now path movement implementation
         bool GetResetPosition(Creature&, float& x, float& y, float& z);
@@ -86,12 +88,11 @@ class WaypointMovementGenerator<Creature>
         void GetPathInformation(std::ostringstream& oss) const;
         bool SetNextWaypoint(uint32 pointId);
 
-        void AddPauseTime(int32 waitTimeDiff)
+        void AddPauseTime(const int32& waitTimeDiff)
         {
             if (i_nextMoveTime.GetExpiry() < waitTimeDiff)
                 i_nextMoveTime.Reset(waitTimeDiff);
         }
-        
     protected:
         void LoadPath(uint32 guid, uint32 entry, WaypointPathOrigin wpOrigin);
         void Stop(int32 time) { i_nextMoveTime.Reset(time);}
@@ -118,16 +119,13 @@ class WaypointMovementGenerator<Creature>
         bool m_repeating;
         bool m_isWandering;
         uint32 m_lastReachedWaypoint;
-
         WaypointPathOrigin m_PathOrigin;
 };
 
 /** FlightPathMovementGenerator generates movement of the player for the paths
  * and hence generates ground and activities for the player.
  */
-class FlightPathMovementGenerator
-: public MovementGeneratorMedium< Player, FlightPathMovementGenerator >,
-  public PathMovementBase<Player,TaxiPathNodeList const*>
+class FlightPathMovementGenerator : public MovementGeneratorMedium< Player, FlightPathMovementGenerator >, public PathMovementBase<Player,TaxiPathNodeList const*>
 {
     public:
         explicit FlightPathMovementGenerator(TaxiPathNodeList const& pathnodes, uint32 startNode = 0)
@@ -139,8 +137,8 @@ class FlightPathMovementGenerator
         void Finalize(Player &);
         void Interrupt(Player &);
         void Reset(Player &, float modSpeed = 1.0f);
-        bool Update(Player &, uint32 const&);
-        MovementGeneratorType GetMovementGeneratorType() const { return FLIGHT_MOTION_TYPE; }
+        bool Update(Player &, const uint32 &);
+        MovementGeneratorType GetMovementGeneratorType() const override { return FLIGHT_MOTION_TYPE; }
 
         TaxiPathNodeList const& GetPath() { return *i_path; }
         uint32 GetPathAtMapEnd() const;
@@ -149,14 +147,14 @@ class FlightPathMovementGenerator
         void SkipCurrentNode() { ++i_currentNode; }
         void DoEventIfAny(Player& player, TaxiPathNodeEntry const& node, bool departure);
         bool GetResetPosition(Player&, float& x, float& y, float& z);
+        void UpdateCurrentNode(uint32 newNode) { i_currentNode = newNode; }
 };
 
-class PatrolMovementGenerator
-: public MovementGeneratorMedium<Creature, PatrolMovementGenerator >
+class PatrolMovementGenerator : public MovementGeneratorMedium<Creature, PatrolMovementGenerator >
 {
     public:
         explicit PatrolMovementGenerator(Creature& c) { ASSERT(InitPatrol(c)); }
-        explicit PatrolMovementGenerator(ObjectGuid leader, CreatureGroupMember const* member) : m_leaderGuid(leader), m_groupMember(*member) {}
+        explicit PatrolMovementGenerator(ObjectGuid leader, CreatureGroupMember const* member) : _leaderGuid(leader), _groupMember(member) {}
         bool InitPatrol(Creature& c);
 
         void LoadPath(Creature &c);
@@ -164,14 +162,14 @@ class PatrolMovementGenerator
         void Finalize(Creature &);
         void Interrupt(Creature &);
         void Reset(Creature &);
-        bool Update(Creature &, uint32 const&);
+        bool Update(Creature &, const uint32 &);
         void StartMove(Creature&);
-        MovementGeneratorType GetMovementGeneratorType() const { return PATROL_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return PATROL_MOTION_TYPE; }
 
         bool GetResetPosition(Creature&, float& x, float& y, float& z);
     private:
-        ObjectGuid m_leaderGuid;
-        CreatureGroupMember m_groupMember;
+        ObjectGuid _leaderGuid;
+        CreatureGroupMember const* _groupMember;
 };
 
 #endif

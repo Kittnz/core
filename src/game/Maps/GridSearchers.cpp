@@ -41,15 +41,6 @@ void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList , WorldObjec
     Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
 }
 
-void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, WorldObject* pSource, std::vector<uint32> const& entries, float fMaxSearchRange)
-{
-    ASSERT(pSource);
-    MaNGOS::AllGameObjectsMatchingOneEntryInRange check(pSource, entries, fMaxSearchRange);
-    MaNGOS::GameObjectListSearcher<MaNGOS::AllGameObjectsMatchingOneEntryInRange> searcher(lList, check);
-
-    Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
-}
-
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange)
 {
     ASSERT(pSource);
@@ -59,11 +50,20 @@ void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pS
     Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
 }
 
-void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, std::vector<uint32> const& entries, float fMaxSearchRange)
+void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, const std::vector<uint32>& entries, float fMaxSearchRange)
 {
     ASSERT(pSource);
     MaNGOS::AllCreaturesMatchingOneEntryInRange check(pSource, entries, fMaxSearchRange);
     MaNGOS::CreatureListSearcher<MaNGOS::AllCreaturesMatchingOneEntryInRange> searcher(lList, check);
 
     Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
+}
+
+void GetHostileCreaturesListInRange(std::list<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange)
+{
+	ASSERT(pSource);
+	MaNGOS::AllHostileCreaturesInRange check(pSource, fMaxSearchRange);
+	MaNGOS::CreatureListSearcher<MaNGOS::AllHostileCreaturesInRange> searcher(lList, check);
+
+	Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
 }

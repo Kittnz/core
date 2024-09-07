@@ -31,17 +31,17 @@ class Sha1Hash
         Sha1Hash();
         ~Sha1Hash();
 
-        void UpdateBigNumbers(BigNumber* bn0, ...);
+        void UpdateBigNumbers(BigNumber *bn0, ...);
 
-        void UpdateData(uint8 const* dta, int len);
-        void UpdateData(std::string const& str);
-        void UpdateData(std::vector<uint8> const& data);
+        void UpdateData(const uint8 *dta, int len);
+        void UpdateData(const std::string &str);
+        void UpdateData(const std::vector<uint8>& data);
 
         void Initialize();
         void Finalize();
 
-        uint8* GetDigest(void) { return mDigest; };
-        static int GetLength(void) { return SHA_DIGEST_LENGTH; };
+        uint8 *GetDigest(void) { return mDigest; };
+        int GetLength(void) { return SHA_DIGEST_LENGTH; };
 
     private:
         SHA_CTX mC;

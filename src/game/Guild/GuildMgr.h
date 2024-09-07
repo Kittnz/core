@@ -22,7 +22,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include "World.h"
-#include <shared_mutex>
+#include "GuildBank/GuildBank.h"
 
 class Guild;
 class ObjectGuid;
@@ -48,41 +48,46 @@ class GuildMgr
 
         void GuildMemberAdded(uint32 guildId, uint32 memberGuid)
         {
-            std::lock_guard<std::shared_timed_mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
             m_guid2guild[memberGuid] = guildId;
         }
         void GuildMemberRemoved(uint32 memberGuid)
         {
-            std::lock_guard<std::shared_timed_mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
             m_guid2guild.erase(memberGuid);
         }
         Guild* GetPlayerGuild(uint32 lowguid)
         {
-            std::shared_lock<std::shared_timed_mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
             std::map<uint32, uint32>::iterator it = m_guid2guild.find(lowguid);
             if (it != m_guid2guild.end())
                 return GetGuildById(it->second);
             return nullptr;
         }
 
-        void CreatePetition(uint32 id, Player* player, ObjectGuid const& charterGuid, std::string& name);
+        void CreatePetition(uint32 id, Player* player, const ObjectGuid& charterGuid, std::string& name);
         void DeletePetition(Petition* petition);
-        Petition* GetPetitionByCharterGuid(ObjectGuid const& charterGuid);
+        void Update(uint32 diff);
+        void SaveGuildBanks();
+        Petition* GetPetitionByCharterGuid(const ObjectGuid& charterGuid);
         Petition* GetPetitionById(uint32 id);
-        Petition* GetPetitionByOwnerGuid(ObjectGuid const& ownerGuid);
-        void DeletePetitionSignaturesByPlayer(ObjectGuid guid, uint32 exceptPetitionId = 0);
+        Petition* GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid);
 
         void LoadGuilds();
         void LoadPetitions();
+		
     private:
         void CleanUpPetitions();
-        mutable std::shared_timed_mutex m_guildMutex;
+        mutable std::mutex m_guildMutex;
         GuildMap m_GuildMap;
-        std::shared_timed_mutex m_guid2GuildMutex;
+        std::mutex m_guid2GuildMutex;
         std::map<uint32, uint32> m_guid2guild;
 
-        std::shared_timed_mutex m_petitionsMutex;
+        std::mutex m_petitionsMutex;
         PetitionMap m_petitionMap;
+
+		uint32 m_guildBankSaveTimer;
+
 };
 
 class Petition
@@ -96,13 +101,13 @@ public:
 
     ~Petition();
 
-    bool LoadFromDB(const std::unique_ptr<QueryResult>& result);
+    bool LoadFromDB(QueryResult* result);
     void Delete();
     void SaveToDB();
 
     uint32 GetId() const { return m_id; }
-    ObjectGuid const& GetCharterGuid() { return m_charterGuid; }
-    ObjectGuid const& GetOwnerGuid() { return m_ownerGuid; }
+    const ObjectGuid& GetCharterGuid() { return m_charterGuid; }
+    const ObjectGuid& GetOwnerGuid() { return m_ownerGuid; }
     std::string const& GetName() { return m_name; }
     Team GetTeam() const { return m_team; }
     void SetTeam(Team team) { m_team = team; }
@@ -110,16 +115,15 @@ public:
     uint8 GetSignatureCount() const { return static_cast<uint8>(m_signatures.size()); }
     const PetitionSignatureList& GetSignatureList() { return m_signatures; }
 
-    void BuildSignatureData(WorldPacket& data);
+    void BuildSignatureData(WorldPacket &data);
 
     bool Rename(std::string& newname);
 
-    PetitionSignature* GetSignatureForPlayerGuid(ObjectGuid const& player);
+    PetitionSignature* GetSignatureForPlayerGuid(const ObjectGuid& player);
     PetitionSignature* GetSignatureForPlayer(Player* player);
     PetitionSignature* GetSignatureForAccount(uint32 accountId);
     void AddSignature(PetitionSignature* signature);
     bool AddNewSignature(Player* player);
-    void DeleteSignatureByPlayer(ObjectGuid guid);
 
     bool IsComplete() const { return m_signatures.size() == sWorld.getConfig(CONFIG_UINT32_MIN_PETITION_SIGNS); }
 
@@ -146,7 +150,7 @@ public:
 
     void SaveToDB();
 
-    ObjectGuid const& GetSignatureGuid() { return m_playerGuid; }
+    const ObjectGuid& GetSignatureGuid() { return m_playerGuid; }
     uint32 GetSignatureAccountId() const { return m_playerAccount; }
 
 private:
@@ -155,6 +159,8 @@ private:
     uint32 m_playerAccount;
 };
 
-#define sGuildMgr MaNGOS::Singleton<GuildMgr>::Instance()
+//#define sGuildMgr MaNGOS::Singleton<GuildMgr>::Instance()
+
+extern GuildMgr sGuildMgr;
 
 #endif // _GUILDMGR_H

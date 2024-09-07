@@ -42,9 +42,17 @@ enum ItemSpelltriggerType
     ITEM_SPELLTRIGGER_ON_USE          = 0,                  // use after equip cooldown
     ITEM_SPELLTRIGGER_ON_EQUIP        = 1,
     ITEM_SPELLTRIGGER_CHANCE_ON_HIT   = 2,
+    ITEM_SPELLTRIGGER_SOULSTONE       = 4,
+    /*
+     * ItemSpelltriggerType 5 might have changed on 2.4.3/3.0.3: Such auras
+     * will be applied on item pickup and removed on item loss - maybe on the
+     * other hand the item is destroyed if the aura is removed ("removed on
+     * death" of spell 57348 makes me think so)
+     */
+    ITEM_SPELLTRIGGER_ON_NO_DELAY_USE = 5,                  // no equip cooldown
 };
 
-#define MAX_ITEM_SPELLTRIGGER           3
+#define MAX_ITEM_SPELLTRIGGER           6
 
 enum ItemBondingType
 {
@@ -53,27 +61,28 @@ enum ItemBondingType
     BIND_WHEN_EQUIPPED                          = 2,
     BIND_WHEN_USE                               = 3,
     BIND_QUEST_ITEM                             = 4,
-    BIND_QUEST_ITEM1                            = 5         // not used in game
+    BIND_QUEST_ITEM1                            = 5,         // not used in game
+	BIND_ACCOUNT								= 6, // Turtle specific
 };
 
-#define MAX_BIND_TYPE                             6
+#define MAX_BIND_TYPE                             7
 
 // Mask for ItemPrototype.Flags field
 enum ItemPrototypeFlags
 {
-    ITEM_FLAG_NO_PICKUP                       = 0x00000001, // not used
+    ITEM_FLAG_UNK0                            = 0x00000001, // not used
     ITEM_FLAG_CONJURED                        = 0x00000002,
     ITEM_FLAG_LOOTABLE                        = 0x00000004, // affect only non container items that can be "open" for loot. It or lockid set enable for client show "Right click to open". See also ITEM_DYNFLAG_UNLOCKED
-    ITEM_FLAG_EXOTIC                          = 0x00000008, // not used in pre-3.x
+    ITEM_FLAG_UNK3                            = 0x00000008, // not used in pre-3.x
     ITEM_FLAG_DEPRECATED                      = 0x00000010, // can't repeat old note: appears red icon (like when item durability==0)
     ITEM_FLAG_INDESTRUCTIBLE                  = 0x00000020, // used for totem. Item can not be destroyed, except by using spell (item can be reagent for spell and then allowed)
-    ITEM_FLAG_PLAYERCAST                      = 0x00000040, // ? old note: usable
+    ITEM_FLAG_UNK6                            = 0x00000040, // ? old note: usable
     ITEM_FLAG_NO_EQUIP_COOLDOWN               = 0x00000080,
-    ITEM_FLAG_INTBONUSINSTEAD                 = 0x00000100,
+    ITEM_FLAG_UNK8                            = 0x00000100,
     ITEM_FLAG_WRAPPER                         = 0x00000200, // used or not used wrapper
     ITEM_FLAG_IGNORE_BAG_SPACE                = 0x00000400, // ignore bag space at new item creation?
     ITEM_FLAG_PARTY_LOOT                      = 0x00000800, // determines if item is party loot or not
-    ITEM_FLAG_BRIEFSPELLEFFECTS               = 0x00001000, // not used in pre-3.x
+    ITEM_FLAG_UNK12                           = 0x00001000, // not used in pre-3.x
     ITEM_FLAG_CHARTER                         = 0x00002000, // guild charter
     ITEM_FLAG_HAS_TEXT                        = 0x00004000, // Only readable items have this (but not all)
     ITEM_FLAG_NO_DISENCHANT                   = 0x00008000,
@@ -156,36 +165,32 @@ enum ItemClass
 
 enum ItemSubclassConsumable
 {
-    ITEM_SUBCLASS_CONSUMABLE                    = 0,
-/*  [-ZERO] not used in pre-bc
-    ITEM_SUBCLASS_POTION                        = 1,
-    ITEM_SUBCLASS_ELIXIR                        = 2,
-    ITEM_SUBCLASS_FLASK                         = 3,
-    ITEM_SUBCLASS_SCROLL                        = 4,
-    ITEM_SUBCLASS_FOOD                          = 5,
-    ITEM_SUBCLASS_ITEM_ENHANCEMENT              = 6,
-    ITEM_SUBCLASS_BANDAGE                       = 7,
-    ITEM_SUBCLASS_CONSUMABLE_OTHER              = 8
-*/
+    ITEM_SUBCLASS_CONSUMABLE = 0,
+    ITEM_SUBCLASS_POTION = 1,
+    ITEM_SUBCLASS_ELIXIR = 2,
+    ITEM_SUBCLASS_FLASK = 3,
+    ITEM_SUBCLASS_SCROLL = 4,
+    ITEM_SUBCLASS_FOOD = 5,
+    ITEM_SUBCLASS_ITEM_ENHANCEMENT = 6,
+    ITEM_SUBCLASS_BANDAGE = 7,
+    ITEM_SUBCLASS_CONSUMABLE_OTHER = 8
 };
 
-#define MAX_ITEM_SUBCLASS_CONSUMABLE              1
+#define MAX_ITEM_SUBCLASS_CONSUMABLE 9
 
 enum ItemSubclassContainer
 {
-    ITEM_SUBCLASS_CONTAINER                     = 0,
-    ITEM_SUBCLASS_SOUL_CONTAINER                = 1,
-    ITEM_SUBCLASS_HERB_CONTAINER                = 2,
-    ITEM_SUBCLASS_ENCHANTING_CONTAINER          = 3,
-/*  [-ZERO] not used in pre-bc
-    ITEM_SUBCLASS_ENGINEERING_CONTAINER         = 4,
-    ITEM_SUBCLASS_GEM_CONTAINER                 = 5,
-    ITEM_SUBCLASS_MINING_CONTAINER              = 6,
-    ITEM_SUBCLASS_LEATHERWORKING_CONTAINER      = 7
-*/
+    ITEM_SUBCLASS_CONTAINER = 0,
+    ITEM_SUBCLASS_SOUL_CONTAINER = 1,
+    ITEM_SUBCLASS_HERB_CONTAINER = 2,
+    ITEM_SUBCLASS_ENCHANTING_CONTAINER = 3,
+    ITEM_SUBCLASS_ENGINEERING_CONTAINER = 4,
+    ITEM_SUBCLASS_GEM_CONTAINER = 5,
+    ITEM_SUBCLASS_MINING_CONTAINER = 6,
+    ITEM_SUBCLASS_LEATHERWORKING_CONTAINER = 7
 };
 
-#define MAX_ITEM_SUBCLASS_CONTAINER               4
+#define MAX_ITEM_SUBCLASS_CONTAINER 8
 
 enum ItemSubclassWeapon
 {
@@ -213,20 +218,6 @@ enum ItemSubclassWeapon
 };
 
 #define MAX_ITEM_SUBCLASS_WEAPON                  21
-
-/* enum ItemSubclassGem [-ZERO] not used in pre-bc
-{
-    ITEM_SUBCLASS_GEM_RED                       = 0,
-    ITEM_SUBCLASS_GEM_BLUE                      = 1,
-    ITEM_SUBCLASS_GEM_YELLOW                    = 2,
-    ITEM_SUBCLASS_GEM_PURPLE                    = 3,
-    ITEM_SUBCLASS_GEM_GREEN                     = 4,
-    ITEM_SUBCLASS_GEM_ORANGE                    = 5,
-    ITEM_SUBCLASS_GEM_META                      = 6,
-    ITEM_SUBCLASS_GEM_SIMPLE                    = 7,
-    ITEM_SUBCLASS_GEM_PRISMATIC                 = 8
-};
-*/
 
 #define MAX_ITEM_SUBCLASS_GEM                     1
 
@@ -266,47 +257,44 @@ enum ItemSubclassProjectile
 
 enum ItemSubclassTradeGoods
 {
-    ITEM_SUBCLASS_TRADE_GOODS                   = 0,
-    ITEM_SUBCLASS_PARTS                         = 1,
-    ITEM_SUBCLASS_EXPLOSIVES                    = 2,
-    ITEM_SUBCLASS_DEVICES                       = 3,
-/*  [-ZERO] not used in pre-bc
-    ITEM_SUBCLASS_JEWELCRAFTING                 = 4,
-    ITEM_SUBCLASS_CLOTH                         = 5,
-    ITEM_SUBCLASS_LEATHER                       = 6,
-    ITEM_SUBCLASS_METAL_STONE                   = 7,
-    ITEM_SUBCLASS_MEAT                          = 8,
-    ITEM_SUBCLASS_HERB                          = 9,
-    ITEM_SUBCLASS_ELEMENTAL                     = 10,
-    ITEM_SUBCLASS_TRADE_GOODS_OTHER             = 11,
-    ITEM_SUBCLASS_ENCHANTING                    = 12
-*/
+    ITEM_SUBCLASS_TRADE_GOODS = 0,
+    ITEM_SUBCLASS_PARTS = 1,
+    ITEM_SUBCLASS_EXPLOSIVES = 2,
+    ITEM_SUBCLASS_DEVICES = 3,
+    ITEM_SUBCLASS_CLOTH = 5,
+    ITEM_SUBCLASS_LEATHER = 6,
+    ITEM_SUBCLASS_METAL_STONE = 7,
+    ITEM_SUBCLASS_MEAT = 8,
+    ITEM_SUBCLASS_HERB = 9,
+    ITEM_SUBCLASS_ELEMENTAL = 10,
+    ITEM_SUBCLASS_TRADE_GOODS_OTHER = 11,
+    ITEM_SUBCLASS_ENCHANTING = 12
 };
 
-#define MAX_ITEM_SUBCLASS_TRADE_GOODS             4
+#define MAX_ITEM_SUBCLASS_TRADE_GOODS 14
 
 enum ItemSubclassGeneric
 {
-    ITEM_SUBCLASS_GENERIC                       = 0
+    ITEM_SUBCLASS_GENERIC = 0
 };
 
-#define MAX_ITEM_SUBCLASS_GENERIC                 1
+#define MAX_ITEM_SUBCLASS_GENERIC 1
 
 enum ItemSubclassRecipe
 {
-    ITEM_SUBCLASS_BOOK                          = 0,
-    ITEM_SUBCLASS_LEATHERWORKING_PATTERN        = 1,
-    ITEM_SUBCLASS_TAILORING_PATTERN             = 2,
-    ITEM_SUBCLASS_ENGINEERING_SCHEMATIC         = 3,
-    ITEM_SUBCLASS_BLACKSMITHING                 = 4,
-    ITEM_SUBCLASS_COOKING_RECIPE                = 5,
-    ITEM_SUBCLASS_ALCHEMY_RECIPE                = 6,
-    ITEM_SUBCLASS_FIRST_AID_MANUAL              = 7,
-    ITEM_SUBCLASS_ENCHANTING_FORMULA            = 8,
-    ITEM_SUBCLASS_FISHING_MANUAL                = 9,
+    ITEM_SUBCLASS_BOOK = 0,
+    ITEM_SUBCLASS_LEATHERWORKING_PATTERN = 1,
+    ITEM_SUBCLASS_TAILORING_PATTERN = 2,
+    ITEM_SUBCLASS_ENGINEERING_SCHEMATIC = 3,
+    ITEM_SUBCLASS_BLACKSMITHING = 4,
+    ITEM_SUBCLASS_COOKING_RECIPE = 5,
+    ITEM_SUBCLASS_ALCHEMY_RECIPE = 6,
+    ITEM_SUBCLASS_FIRST_AID_MANUAL = 7,
+    ITEM_SUBCLASS_ENCHANTING_FORMULA = 8,
+    ITEM_SUBCLASS_FISHING_MANUAL = 9,
 };
 
-#define MAX_ITEM_SUBCLASS_RECIPE                  10
+#define MAX_ITEM_SUBCLASS_RECIPE 10
 
 enum ItemSubclassMoney
 {
@@ -349,19 +337,17 @@ enum ItemSubclassPermanent
 
 enum ItemSubclassJunk
 {
-    ITEM_SUBCLASS_JUNK                          = 0,
-/*  [-ZERO] not used in pre-bc
-    ITEM_SUBCLASS_JUNK_REAGENT                  = 1,
-    ITEM_SUBCLASS_JUNK_PET                      = 2,
-    ITEM_SUBCLASS_JUNK_HOLIDAY                  = 3,
-    ITEM_SUBCLASS_JUNK_OTHER                    = 4,
-    ITEM_SUBCLASS_JUNK_MOUNT                    = 5
-*/
+    ITEM_SUBCLASS_JUNK = 0,
+    ITEM_SUBCLASS_JUNK_REAGENT = 1,
+    ITEM_SUBCLASS_JUNK_PET = 2,
+    ITEM_SUBCLASS_JUNK_HOLIDAY = 3,
+    ITEM_SUBCLASS_JUNK_OTHER = 4,
+    ITEM_SUBCLASS_JUNK_MOUNT = 5
 };
 
-#define MAX_ITEM_SUBCLASS_JUNK                    1
+#define MAX_ITEM_SUBCLASS_JUNK 6
 
-uint32 const MaxItemSubclassValues[MAX_ITEM_CLASS] =
+const uint32 MaxItemSubclassValues[MAX_ITEM_CLASS] =
 {
     MAX_ITEM_SUBCLASS_CONSUMABLE,
     MAX_ITEM_SUBCLASS_CONTAINER,
@@ -396,12 +382,11 @@ enum ItemExtraFlags
     ITEM_EXTRA_MAIL_STATIONERY     = 0x01,      // Used as icon or background for mails
     ITEM_EXTRA_IGNORE_QUEST_STATUS = 0x02,      // No quest status will be checked when this item drops
     ITEM_EXTRA_NOT_OBTAINABLE      = 0x04,      // Never obtainable by players in vanilla
-    ITEM_EXTRA_CAST_AS_TRIGGERED   = 0x08,      // Spell assigned on item is cast as triggered (no cast time)
-    ITEM_EXTRA_ALL                 = 0x0F       // All used flags, used to check DB data (mask all above flags)
+    ITEM_EXTRA_ALL                 = 0x07       // All used flags, used to check DB data (mask all above flags)
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
 #pragma pack(1)
 #else
 #pragma pack(push,1)
@@ -409,25 +394,25 @@ enum ItemExtraFlags
 
 struct _ItemDamage
 {
-    float   DamageMin = 0.0f;
-    float   DamageMax = 0.0f;
-    uint32  DamageType = 0;                                 // id from Resistances.dbc
+    float   DamageMin;
+    float   DamageMax;
+    uint32  DamageType;                                     // id from Resistances.dbc
 };
 
 struct _ItemStat
 {
-    uint32  ItemStatType = 0;
-    int32   ItemStatValue = 0;
+    uint32  ItemStatType;
+    int32   ItemStatValue;
 };
 struct _ItemSpell
 {
-    uint32 SpellId = 0;                                     // id from Spell.dbc
-    uint32 SpellTrigger = 0;
-    int32  SpellCharges = 0;
-    float  SpellPPMRate = 0.0f;
-    int32  SpellCooldown = 0;
-    uint32 SpellCategory = 0;                               // id from SpellCategory.dbc
-    int32  SpellCategoryCooldown = 0;
+    uint32 SpellId;                                         // id from Spell.dbc
+    uint32 SpellTrigger;
+    int32  SpellCharges;
+    float  SpellPPMRate;
+    int32  SpellCooldown;
+    uint32 SpellCategory;                                   // id from SpellCategory.dbc
+    int32  SpellCategoryCooldown;
 };
 
 #define MAX_ITEM_PROTO_DAMAGES 5
@@ -436,74 +421,74 @@ struct _ItemSpell
 
 struct ItemPrototype
 {
-    uint32 ItemId = 0;
-    uint32 Class = 0;                                       // id from ItemClass.dbc
-    uint32 SubClass = 0;                                    // id from ItemSubClass.dbc
-    char*  Name1 = nullptr;
-    char*  Description = nullptr;
-    uint32 DisplayInfoID = 0;                               // id from ItemDisplayInfo.dbc
-    uint32 Quality = 0;
-    uint32 Flags = 0;
-    uint32 BuyCount = 0;
-    uint32 BuyPrice = 0;
-    uint32 SellPrice = 0;
-    uint32 InventoryType = 0;
-    uint32 AllowableClass = 0;
-    uint32 AllowableRace = 0;
-    uint32 ItemLevel = 0;
-    uint32 RequiredLevel = 0;
-    uint32 RequiredSkill = 0;                               // id from SkillLine.dbc
-    uint32 RequiredSkillRank = 0;
-    uint32 RequiredSpell = 0;                               // id from Spell.dbc
-    uint32 RequiredHonorRank = 0;
-    uint32 RequiredCityRank = 0;
-    uint32 RequiredReputationFaction = 0;                   // id from Faction.dbc
-    uint32 RequiredReputationRank = 0;
-    uint32 MaxCount = 0;
-    uint32 Stackable = 0;
-    uint32 ContainerSlots = 0;
-    _ItemStat ItemStat[MAX_ITEM_PROTO_STATS] = {};
-    uint32 Delay = 0;
-    float  RangedModRange = 0.0f;
-    uint32 AmmoType = 0;
-    _ItemDamage Damage[MAX_ITEM_PROTO_DAMAGES] = {};
-    uint32 Block = 0;
-    int32 Armor = 0;
-    int32 HolyRes = 0;
-    int32 FireRes = 0;
-    int32 NatureRes = 0;
-    int32 FrostRes = 0;
-    int32 ShadowRes = 0;
-    int32 ArcaneRes = 0;
-    _ItemSpell Spells[MAX_ITEM_PROTO_SPELLS] = {};
-    uint32 Bonding = 0;
-    uint32 PageText = 0;
-    uint32 LanguageID = 0;
-    uint32 PageMaterial = 0;
-    uint32 StartQuest = 0;                                  // id from QuestCache.wdb
-    uint32 LockID = 0;
-    uint32 Material = 0;                                    // id from Material.dbc
-    uint32 Sheath = 0;
-    uint32 RandomProperty = 0;                              // id from ItemRandomProperties.dbc
-    uint32 ItemSet = 0;                                     // id from ItemSet.dbc
-    uint32 MaxDurability = 0;
-    uint32 Area = 0;                                        // id from AreaTable.dbc
-    uint32 Map = 0;                                         // id from Map.dbc
-    uint32 Duration = 0;
-    uint32 BagFamily = 0;
-    uint32 DisenchantID = 0;
-    uint32 FoodType = 0;
-    uint32 MinMoneyLoot = 0;
-    uint32 MaxMoneyLoot = 0;
-    uint32 WrappedGift = 0;
-    uint32 ExtraFlags = 0;                                  // see ItemExtraFlags
-    uint32 OtherTeamEntry = 0;
+    uint32 ItemId;
+    uint32 Class;                                           // id from ItemClass.dbc
+    uint32 SubClass;                                        // id from ItemSubClass.dbc
+    char*  Name1;
+    char*  Description;
+    uint32 DisplayInfoID;                                   // id from ItemDisplayInfo.dbc
+    uint32 Quality;
+    uint32 Flags;
+    uint32 BuyCount;
+    uint32 BuyPrice;
+    uint32 SellPrice;
+    uint32 InventoryType;
+    uint32 AllowableClass;
+    uint32 AllowableRace;
+    uint32 ItemLevel;
+    uint32 RequiredLevel;
+    uint32 RequiredSkill;                                   // id from SkillLine.dbc
+    uint32 RequiredSkillRank;
+    uint32 RequiredSpell;                                   // id from Spell.dbc
+    uint32 RequiredHonorRank;
+    uint32 RequiredCityRank;
+    uint32 RequiredReputationFaction;                       // id from Faction.dbc
+    uint32 RequiredReputationRank;
+    uint32 MaxCount;
+    uint32 Stackable;
+    uint32 ContainerSlots;
+    _ItemStat ItemStat[MAX_ITEM_PROTO_STATS];
+    uint32 Delay;
+    float  RangedModRange;
+    uint32 AmmoType;
+    _ItemDamage Damage[MAX_ITEM_PROTO_DAMAGES];
+    uint32 Block;
+    int32 Armor;
+    int32 HolyRes;
+    int32 FireRes;
+    int32 NatureRes;
+    int32 FrostRes;
+    int32 ShadowRes;
+    int32 ArcaneRes;
+    _ItemSpell Spells[MAX_ITEM_PROTO_SPELLS];
+    uint32 Bonding;
+    uint32 PageText;
+    uint32 LanguageID;
+    uint32 PageMaterial;
+    uint32 StartQuest;                                      // id from QuestCache.wdb
+    uint32 LockID;
+    uint32 Material;                                        // id from Material.dbc
+    uint32 Sheath;
+    uint32 RandomProperty;                                  // id from ItemRandomProperties.dbc
+    uint32 ItemSet;                                         // id from ItemSet.dbc
+    uint32 MaxDurability;
+    uint32 Area;                                            // id from AreaTable.dbc
+    uint32 Map;                                             // id from Map.dbc
+    uint32 Duration;
+    uint32 BagFamily;
+    uint32 DisenchantID;
+    uint32 FoodType;
+    uint32 MinMoneyLoot;
+    uint32 MaxMoneyLoot;
+    uint32 ExtraFlags;                                      // see ItemExtraFlags
+    uint32 OtherTeamEntry;
+    uint32 ScriptId;                                        // Turtle WoW Services, such as: race/faction change, character rename etc, etc.
+    uint32 DestItemId = 0;                                  // Transmogrification
+    uint32 SourceItemId = 0;                                // Transmogrification
 
-    // values assigned by core
-    mutable int32 SourceQuestLevel = -1;                    // minimum level of quest that rewards this item
-    mutable uint32 SourceQuestRaces = 0;                    // allowed races of quest that rewards this item
-    mutable uint32 SourceQuestClasses = 0;                  // allowed classes of quest that rewards this item
-    mutable bool Discovered = false;                        // has item been discovered by players
+    bool IsQuestItem = false;
+
+    mutable bool m_bDiscovered = false;                     // has item been discovered by players
 
     // helpers
     bool CanChangeEquipStateInCombat() const
@@ -526,23 +511,20 @@ struct ItemPrototype
         return false;
     }
 
-    void GetAllowedEquipSlots(uint8 slots[4], uint8 classId, bool canDualWield) const;
-
     uint32 GetMaxStackSize() const { return Stackable; }
 
+    bool IsPotion() const { return Class==ITEM_CLASS_CONSUMABLE && SubClass==ITEM_SUBCLASS_POTION; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_FLAG_CONJURED); }
     bool IsWeapon() const { return Class == ITEM_CLASS_WEAPON; }
     bool IsRangedWeapon() const { return IsWeapon() && (InventoryType == INVTYPE_RANGED || InventoryType == INVTYPE_THROWN || InventoryType == INVTYPE_RANGEDRIGHT); }
     bool HasSignature() const { return GetMaxStackSize() == 1 && Class != ITEM_CLASS_CONSUMABLE && Class != ITEM_CLASS_QUEST && (Flags & ITEM_FLAG_NO_CREATOR) == 0 && ItemId != 6948; /*Hearthstone*/ }
-    bool HasItemFlag(uint32 flag) const { return Flags & flag; }
-    bool HasExtraFlag(uint32 flag) const { return ExtraFlags & flag; }
 
     uint32 GetProficiencySkill() const;
     uint32 GetProficiencySpell() const;
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
 #pragma pack()
 #else
 #pragma pack(pop)

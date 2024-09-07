@@ -48,7 +48,7 @@ struct Modifier
      * be reduced by 27% if the earlier mentioned AuraType
      * would have been used. And 27 would increase the value by 27%
      */
-    float m_amount;
+    int32 m_amount;
     /**
      * A miscvalue that is dependent on what the aura will do, this
      * is usually decided by the AuraType, ie:
@@ -109,7 +109,7 @@ class SpellAuraHolder
 
         Aura* GetAuraByEffectIndex(SpellEffectIndex index) const { return m_auras[index]; }
 
-        uint32 GetId() const;
+        uint32 GetId() const { return m_spellProto->Id; }
         SpellEntry const* GetSpellProto() const { return m_spellProto; }
 
         ObjectGuid const& GetCasterGuid() const { return m_casterGuid; }
@@ -118,7 +118,7 @@ class SpellAuraHolder
         void SetRealCasterGuid(ObjectGuid guid) { m_realCasterGuid = guid; }
         ObjectGuid const& GetCastItemGuid() const { return m_castItemGuid; }
         Unit* GetCaster() const;
-        SpellCaster* GetRealCaster() const;
+        WorldObject* GetRealCaster() const;
         Unit* GetTarget() const { return m_target; }
         void SetTarget(Unit* target) { m_target = target; }
 
@@ -128,14 +128,12 @@ class SpellAuraHolder
         HeartBeatData* _pveHeartBeatData;
 
         // Debuff limit
-        void CalculateForBuffLimit();
         void CalculateForDebuffLimit();
-        bool IsAffectedByVisibleSlotLimit() const { return m_visibleSlotLimitAffected; }
-        void SetAffectedByVisibleSlotLimit(bool isAffectedByDebuffLimit);
-        bool IsMoreImportantVisualAuraThan(SpellAuraHolder* other) const;
-        bool m_visibleSlotLimitAffected;
-        uint32 m_visibleSlotLimitScore; // higher means more important
-
+        bool IsAffectedByDebuffLimit() const { return m_debuffLimitAffected; }
+        void SetAffectedByDebuffLimit(bool isAffectedByDebuffLimit);
+        bool IsMoreImportantDebuffThan(SpellAuraHolder* other) const;
+        bool m_debuffLimitAffected;
+        uint32 m_debuffLimitScore; // + haut => + important
         // Refresh de buff
         void Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithAura);
         bool CanBeRefreshedBy(SpellAuraHolder* other) const;
@@ -160,11 +158,11 @@ class SpellAuraHolder
 
         void SetInUse(bool state)
         {
-            if (state)
+            if(state)
                 ++m_in_use;
             else
             {
-                if (m_in_use)
+                if(m_in_use)
                     --m_in_use;
             }
         }
@@ -172,17 +170,17 @@ class SpellAuraHolder
         void UpdateHolder(uint32 diff) { SetInUse(true); Update(diff); SetInUse(false); }
         void Update(uint32 diff);
         void RefreshHolder();
-        void RefreshAuraPeriodicTimers(int32 duration = 0);
 
         bool IsSingleTarget() const { return m_isSingleTarget; }
         void SetIsSingleTarget(bool val) { m_isSingleTarget = val; }
-        bool IsChanneled() { return m_isChanneled; }
         void UnregisterSingleCastHolder();
 
         int32 GetAuraMaxDuration() const { return m_maxDuration; }
         void SetAuraMaxDuration(int32 duration);
         int32 GetAuraDuration() const { return m_duration; }
         void SetAuraDuration(int32 duration) { m_duration = duration; };
+        int32 GetSkippedTime() const { return m_skippedTime; }
+        void AddSkippedTime(int32 duration) { m_skippedTime += duration; }
 
         uint8 GetAuraSlot() const { return m_auraSlot; }
         void SetAuraSlot(uint8 slot) { m_auraSlot = slot; }
@@ -221,25 +219,20 @@ class SpellAuraHolder
             SetAuraDuration(duration);
         }
 
-        bool HasAuraType(AuraType auraType) const;
         bool HasMechanic(uint32 mechanic) const;
         bool HasMechanicMask(uint32 mechanicMask) const;
 
         void UpdateAuraDuration() const;
 
-        void SetAura(uint32 slot, bool remove);
+        void SetAura(uint32 slot, bool remove) { m_target->SetUInt32Value(UNIT_FIELD_AURA + slot, remove ? 0 : GetId()); }
         void SetAuraFlag(uint32 slot, bool add);
         void SetAuraLevel(uint32 slot, uint32 level);
 
         void SetTargetSecondaryThreatFocus(bool v) { m_makesTargetSecondaryFocus = v; }
         bool IsTargetSecondaryThreatFocus() const { return m_makesTargetSecondaryFocus; }
 
-        void SetTriggered(bool triggered) { m_spellTriggered = triggered; }
+        void SetTriggered(bool t) { m_spellTriggered = t; }
         bool IsTriggered() const { return m_spellTriggered; }
-        void SetReflected(bool reflected) { m_isReflected = reflected; }
-        bool IsReflected() const { return m_isReflected; }
-        void SetAddedBySpell(bool spell) { m_addedBySpell = spell; }
-        bool IsAddedBySpell() const { return m_addedBySpell; }
 
         ~SpellAuraHolder();
     private:
@@ -259,6 +252,7 @@ class SpellAuraHolder
         uint32 m_stackAmount;                               // Aura stack amount
         int32 m_maxDuration;                                // Max aura duration
         int32 m_duration;                                   // Current time
+        int32 m_skippedTime;                                // Reduced duration due to pushback
         int32 m_timeCla;                                    // Timer for power per sec calculation
 
         AuraRemoveMode m_removeMode:8;                      // Store info for know remove aura reason
@@ -271,11 +265,8 @@ class SpellAuraHolder
         bool m_isRemovedOnShapeLost:1;
         bool m_isSingleTarget:1;                            // true if it's a single target spell and registered at caster - can change at spell steal for example
         bool m_deleted:1;
-        bool m_isChanneled:1;
         bool m_makesTargetSecondaryFocus;
         bool m_spellTriggered;                              // applied by a triggered spell (used in debuff priority computation)
-        bool m_isReflected;                                 // applied by a reflected spell (used to prevent death in duel)
-        bool m_addedBySpell;                                // whether aura was applied by spell cast or added directly
 
         uint32 m_in_use;                                    // > 0 while in SpellAuraHolder::ApplyModifiers call/SpellAuraHolder::Update/etc
 };
@@ -284,15 +275,15 @@ typedef void(Aura::*pAuraHandler)(bool Apply, bool Real);
 // Real == true at aura add/remove
 // Real == false at aura mod unapply/reapply; when adding/removing dependent aura/item/stat mods
 //
-// Code in aura handler can be guarded by if (Real) check if it should execution only at real add/remove of aura
+// Code in aura handler can be guarded by if(Real) check if it should execution only at real add/remove of aura
 //
-// MAIN RULE: Code MUST NOT be guarded by if (Real) check if it modifies any stats
+// MAIN RULE: Code MUST NOT be guarded by if(Real) check if it modifies any stats
 //      (percent auras, stats mods, etc)
-// Second rule: Code must be guarded by if (Real) check if it modifies object state (start/stop attack, send packets to client, etc)
+// Second rule: Code must be guarded by if(Real) check if it modifies object state (start/stop attack, send packets to client, etc)
 //
-// Other case choice: each code line moved under if (Real) check is mangos speedup,
-//      each setting object update field code line moved under if (Real) check is significant mangos speedup, and less server->client data sends
-//      each packet sending code moved under if (Real) check is _large_ mangos speedup, and lot less server->client data sends
+// Other case choice: each code line moved under if(Real) check is mangos speedup,
+//      each setting object update field code line moved under if(Real) check is significant mangos speedup, and less server->client data sends
+//      each packet sending code moved under if(Real) check is _large_ mangos speedup, and lot less server->client data sends
 
 class Aura
 {
@@ -352,7 +343,6 @@ class Aura
         void HandleAuraModTotalHealthPercentRegen(bool Apply, bool Real);
         void HandleAuraModTotalManaPercentRegen(bool Apply, bool Real);
         void HandleAuraModResistance(bool Apply, bool Real);
-        void HandleDetectAmore(bool apply, bool Real);
         void HandleAuraModRoot(bool Apply, bool Real);
         void HandleAuraModSilence(bool Apply, bool Real);
         void HandleAuraModStat(bool Apply, bool Real);
@@ -376,14 +366,15 @@ class Aura
         void HandleAuraModBlockPercent(bool Apply, bool Real);
         void HandleAuraModCritPercent(bool Apply, bool Real);
         void HandlePeriodicLeech(bool Apply, bool Real);
+        void HandleModHitChance(bool Apply, bool Real);
         void HandleModSpellHitChance(bool Apply, bool Real);
         void HandleAuraModScale(bool Apply, bool Real);
         void HandlePeriodicManaLeech(bool Apply, bool Real);
         void HandlePeriodicHealthFunnel(bool apply, bool Real);
+        void HandlePeriodicManaFunnel(bool apply, bool Real);
         void HandleModCastingSpeed(bool Apply, bool Real);
         void HandleAuraMounted(bool Apply, bool Real);
         void HandleWaterBreathing(bool Apply, bool Real);
-        void HandleModWaterBreathing(bool apply, bool Real);
         void HandleModBaseResistance(bool Apply, bool Real);
         void HandleModRegen(bool Apply, bool Real);
         void HandleModPowerRegen(bool Apply, bool Real);
@@ -440,18 +431,18 @@ class Aura
 
         virtual ~Aura();
 
-        void SetModifier(AuraType t, float a, uint32 pt, int32 miscValue);
+        void SetModifier(AuraType t, int32 a, uint32 pt, int32 miscValue);
         Modifier*       GetModifier()       { return &m_modifier; }
         Modifier const* GetModifier() const { return &m_modifier; }
-        int32 GetMiscValue() const;
+        int32 GetMiscValue() const { return m_spellAuraHolder->GetSpellProto()->EffectMiscValue[m_effIndex]; }
 
         SpellEntry const* GetSpellProto() const { return GetHolder()->GetSpellProto(); }
-        uint32 GetId() const{ return GetHolder()->GetId(); }
+        uint32 GetId() const{ return GetHolder()->GetSpellProto()->Id; }
         ObjectGuid const& GetCastItemGuid() const { return GetHolder()->GetCastItemGuid(); }
         ObjectGuid const& GetCasterGuid() const { return GetHolder()->GetCasterGuid(); }
         ObjectGuid const& GetRealCasterGuid() const { return GetHolder()->GetRealCasterGuid(); }
         Unit* GetCaster() const { return GetHolder()->GetCaster(); }
-        SpellCaster* GetRealCaster() const { return GetHolder()->GetRealCaster(); }
+        WorldObject* GetRealCaster() const { return GetHolder()->GetRealCaster(); }
         Unit* GetTarget() const { return GetHolder()->GetTarget(); }
 
         SpellEffectIndex GetEffIndex() const{ return m_effIndex; }
@@ -459,23 +450,33 @@ class Aura
 
         int32 GetAuraMaxDuration() const { return GetHolder()->GetAuraMaxDuration(); }
         int32 GetAuraDuration() const { return GetHolder()->GetAuraDuration(); }
+        int32 GetSkippedTime() const { return GetHolder()->GetSkippedTime(); }
         time_t GetAuraApplyTime() const { return m_applyTime; }
         uint32 GetAuraTicks() const { return m_periodicTick; }
         int32 GetAuraPeriodicTimer() const { return m_periodicTimer; }
         uint32 GetAuraMaxTicks() const
         {
-            int32 maxDuration = GetAuraMaxDuration();
+            int32 maxDuration = GetAuraMaxDuration() - GetSkippedTime();
             return maxDuration > 0 && m_modifier.periodictime > 0 ? maxDuration / m_modifier.periodictime : 0;
+        }
+        uint32 GetRemainingTicks() const
+        {
+            uint32 maxTicks = GetAuraMaxTicks();
+
+            if (m_periodicTick < maxTicks)
+                return maxTicks - m_periodicTick;
+            
+            return 0;
         }
         uint32 GetStackAmount() const { return GetHolder()->GetStackAmount(); }
 
         void CalculatePeriodic(Player* modOwner, bool create);
-        void SetLoadedState(float damage, uint32 periodicTime)
+        void SetLoadedState(int32 damage, uint32 periodicTime)
         {
             m_modifier.m_amount = damage;
             m_modifier.periodictime = periodicTime;
 
-            if (uint32 maxticks = GetAuraMaxTicks())
+            if(uint32 maxticks = GetAuraMaxTicks())
                 m_periodicTick = maxticks - GetAuraDuration() / m_modifier.periodictime;
         }
 
@@ -484,7 +485,6 @@ class Aura
         bool IsAreaAura() const { return m_isAreaAura; }
         bool IsPeriodic() const { return m_isPeriodic; }
         bool IsInUse() const { return m_in_use; }
-        bool IsChanneled() const { return GetHolder()->IsChanneled(); }
         // NOSTALRIUS
         void SetPositive(bool pos) { m_positive = pos; }
         void SetPersistent(bool on) { m_isPersistent = on; }
@@ -494,10 +494,10 @@ class Aura
         void ComputeExclusive();
         bool IsExclusive() const { return m_exclusive; }
         bool IsApplied() const { return m_applied; }
-        // Results :
-        // - 0 : Not in the same category.
-        // - 1 : I am more important. I apply myself. 
-        // - 2 : Other aura is more important. It applies. 
+        // Resultat :
+        // - 0 : pas dans la meme categorie.
+        // - 1 : je suis plus important. Je m'applique.
+        // - 2 : il est plus important. Il s'applique.
         int CheckExclusiveWith(Aura const* other) const;
         bool ExclusiveAuraCanApply();
         void ExclusiveAuraUnapply();
@@ -505,21 +505,18 @@ class Aura
 
         void SetInUse(bool state)
         {
-            if (state)
+            if(state)
                 ++m_in_use;
             else
             {
-                if (m_in_use)
+                if(m_in_use)
                     --m_in_use;
             }
         }
         // NOSTALRIUS: Ajout de 'skipCheckExclusive'
         void ApplyModifier(bool apply, bool Real = false, bool skipCheckExclusive = false);
 
-        void UpdatePeriodicTimer(int32 duration);
         void UpdateAura(uint32 diff) { SetInUse(true); Update(diff); SetInUse(false); }
-        // Called only in Aura::Update, for area aura owners to update affected targets
-        virtual void UpdateForAffected(uint32 diff);
         void Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHolder);
 
         void SetRemoveMode(AuraRemoveMode mode) { m_removeMode = mode; }
@@ -550,7 +547,7 @@ class Aura
         void PeriodicTick(SpellEntry const* sProto = nullptr, AuraType auraType = SPELL_AURA_NONE, uint32 data = 0);
         void PeriodicDummyTick();
 
-        float CalculateDotDamage() const;
+        uint32 CalculateDotDamage() const;
         void ReapplyAffectedPassiveAuras();
 
         Modifier m_modifier;
@@ -585,22 +582,19 @@ class AreaAura : public Aura
         ~AreaAura() override;
     protected:
         void Update(uint32 diff) override;
-        void UpdateForAffected(uint32 diff) override;
     private:
         float m_radius;
         AreaAuraType m_areaAuraType;
-        uint32       m_originalRankSpellId;
+        uint32 m_originalRankSpellId;
 };
 
 class PersistentAreaAura : public Aura
 {
     public:
-        PersistentAreaAura(ObjectGuid dynObjectGuid, SpellEntry const* spellproto, SpellEffectIndex eff, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr);
+        PersistentAreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
         ~PersistentAreaAura() override;
-        DynamicObject* GetDynObject() const;
     protected:
         void Update(uint32 diff) override;
-        ObjectGuid m_dynObjectGuid;
 };
 
 class SingleEnemyTargetAura : public Aura

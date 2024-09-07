@@ -25,12 +25,11 @@
 #include "Common.h"
 
 //#ifndef HAVE_CONFIG_H
-#define HAVE_ACE_STACK_TRACE_H 1
+#  define HAVE_ACE_STACK_TRACE_H 1
 //#endif
 
 #ifdef HAVE_ACE_STACK_TRACE_H
-#include "ace/Stack_Trace.h"
-#include "Log.h" // sLog in only used when HAVE_ACE_STACK_TRACE_H
+#  include "ace/Stack_Trace.h"
 #endif
 
 #ifdef HAVE_ACE_STACK_TRACE_H
@@ -39,22 +38,13 @@
 if (!(CONDITION)) \
 { \
     ACE_Stack_Trace st; \
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "%s:%i: Error: Assertion in %s failed: %s", \
+    sLog.outInfo("%s:%i: Error: Assertion in %s failed: %s", \
         __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "%s", st.c_str()); \
+    sLog.outInfo("%s", st.c_str()); \
     throw std::runtime_error(STRINGIZE(CONDITION)); \
     assert(STRINGIZE(CONDITION) && 0); \
 }
 
-// Just warn.
-#define WPWarning(CONDITION) \
-if (!(CONDITION)) \
-{ \
-    ACE_Stack_Trace st; \
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s:%i: Warning: Assertion in %s failed: %s",\
-        __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s", st.c_str()); \
-}
 #else
 // Normal assert.
 #define WPError(CONDITION) \
@@ -63,14 +53,6 @@ if (!(CONDITION)) \
     printf("%s:%i: Error: Assertion in %s failed: %s", \
         __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
     assert(STRINGIZE(CONDITION) && 0); \
-}
-
-// Just warn.
-#define WPWarning(CONDITION) \
-if (!(CONDITION)) \
-{ \
-    printf("%s:%i: Warning: Assertion in %s failed: %s",\
-        __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
 }
 #endif
 
@@ -81,12 +63,6 @@ if (!(CONDITION)) \
 #else
 #  define MANGOS_ASSERT WPError                             // Error even if in release mode.
 #endif
-#endif
-
-#ifdef MANGOS_DEBUG
-#define MANGOS_DEBUG_ASSERT(x) MANGOS_ASSERT(x)
-#else
-#define MANGOS_DEBUG_ASSERT(x)
 #endif
 
 #endif

@@ -35,7 +35,9 @@ public:
 
     void AttackStart(Unit* /*pWho*/) override;
 
-    void UpdateAI(uint32 const uiDiff) override;
+    void AttackedBy(Unit* /*pAttacker*/) override;
+
+    void UpdateAI(const uint32 uiDiff) override;
 
     virtual void OwnerAttackedBy(Unit* /*attacker*/) override;
 
@@ -43,9 +45,9 @@ public:
 
     void MovementInform(uint32 type, uint32 id) override;
 
-    static int Permissible(Creature const*);
+    static int Permissible(const Creature *);
 private:
-    Unit* FindTargetForAttack() const;
+    bool FindTargetForAttack();
 };
 
 #endif

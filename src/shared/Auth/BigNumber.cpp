@@ -25,7 +25,7 @@ BigNumber::BigNumber()
     _bn = BN_new();
 }
 
-BigNumber::BigNumber(BigNumber const& bn)
+BigNumber::BigNumber(const BigNumber &bn)
 {
     _bn = BN_dup(bn._bn);
 }
@@ -53,7 +53,7 @@ void BigNumber::SetQword(uint64 val)
     BN_add_word(_bn, (uint32)(val & 0xFFFFFFFF));
 }
 
-void BigNumber::SetBinary(uint8 const* bytes, int len)
+void BigNumber::SetBinary(const uint8 *bytes, int len)
 {
     uint8 t[1000];
     for (int i = 0; i < len; i++)
@@ -61,9 +61,9 @@ void BigNumber::SetBinary(uint8 const* bytes, int len)
     BN_bin2bn(t, len, _bn);
 }
 
-int BigNumber::SetHexStr(const char* str)
+void BigNumber::SetHexStr(const char *str)
 {
-    return BN_hex2bn(&_bn, str);
+    BN_hex2bn(&_bn, str);
 }
 
 void BigNumber::SetRand(int numbits)
@@ -71,25 +71,25 @@ void BigNumber::SetRand(int numbits)
     BN_rand(_bn, numbits, 0, 1);
 }
 
-BigNumber& BigNumber::operator=(BigNumber const& bn)
+BigNumber BigNumber::operator=(const BigNumber &bn)
 {
     BN_copy(_bn, bn._bn);
     return *this;
 }
 
-BigNumber& BigNumber::operator+=(BigNumber const& bn)
+BigNumber BigNumber::operator+=(const BigNumber &bn)
 {
     BN_add(_bn, _bn, bn._bn);
     return *this;
 }
 
-BigNumber& BigNumber::operator-=(BigNumber const& bn)
+BigNumber BigNumber::operator-=(const BigNumber &bn)
 {
     BN_sub(_bn, _bn, bn._bn);
     return *this;
 }
 
-BigNumber& BigNumber::operator*=(BigNumber const& bn)
+BigNumber BigNumber::operator*=(const BigNumber &bn)
 {
     BN_CTX *bnctx;
 
@@ -100,7 +100,7 @@ BigNumber& BigNumber::operator*=(BigNumber const& bn)
     return *this;
 }
 
-BigNumber& BigNumber::operator/=(BigNumber const& bn)
+BigNumber BigNumber::operator/=(const BigNumber &bn)
 {
     BN_CTX *bnctx;
 
@@ -111,7 +111,7 @@ BigNumber& BigNumber::operator/=(BigNumber const& bn)
     return *this;
 }
 
-BigNumber& BigNumber::operator%=(BigNumber const& bn)
+BigNumber BigNumber::operator%=(const BigNumber &bn)
 {
     BN_CTX *bnctx;
 
@@ -122,7 +122,7 @@ BigNumber& BigNumber::operator%=(BigNumber const& bn)
     return *this;
 }
 
-BigNumber BigNumber::Exp(BigNumber const& bn)
+BigNumber BigNumber::Exp(const BigNumber &bn)
 {
     BigNumber ret;
     BN_CTX *bnctx;
@@ -134,7 +134,7 @@ BigNumber BigNumber::Exp(BigNumber const& bn)
     return ret;
 }
 
-BigNumber BigNumber::ModExp(BigNumber const& bn1, BigNumber const& bn2)
+BigNumber BigNumber::ModExp(const BigNumber &bn1, const BigNumber &bn2)
 {
     BigNumber ret;
     BN_CTX *bnctx;
@@ -174,7 +174,7 @@ std::vector<uint8> BigNumber::AsByteArray(int minSize, bool reverse) const
     // Padding should add leading zeroes, not trailing
     int paddingOffset = length - GetNumBytes();
 
-    BN_bn2bin(_bn, (unsigned char*)byteArray.data() + paddingOffset);
+    BN_bn2bin(_bn, (unsigned char *)byteArray.data() + paddingOffset);
 
     if (reverse)
         std::reverse(byteArray.begin(), byteArray.end());
@@ -183,12 +183,12 @@ std::vector<uint8> BigNumber::AsByteArray(int minSize, bool reverse) const
     return byteArray;
 }
 
-char const* BigNumber::AsHexStr()
+const char *BigNumber::AsHexStr()
 {
     return BN_bn2hex(_bn);
 }
 
-char const* BigNumber::AsDecStr()
+const char *BigNumber::AsDecStr()
 {
     return BN_bn2dec(_bn);
 }

@@ -21,31 +21,22 @@
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
 #include "Player.h"
-#include "ProgressBar.h"
 
 INSTANTIATE_SINGLETON_1(AuraRemovalManager);
 
 void AuraRemovalManager::LoadFromDB()
 {
     m_data.clear();
-
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "> Loading table `instance_buff_removal`");
     uint32 count = 0;
-    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT map_id, spell_id, enabled, flags, comment FROM instance_buff_removal");
+    QueryResult* result = WorldDatabase.Query("SELECT map_id, spell_id, enabled, flags, comment FROM instance_buff_removal");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Table instance_buff_removal is empty.");
+        return;
     }
     else
     {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
-
             Field* fields = result->Fetch();
 
             uint32 mapId  = fields[0].GetUInt32();
@@ -56,12 +47,12 @@ void AuraRemovalManager::LoadFromDB()
             ++count;
 
             if (enabled)
-                m_data[mapId].push_back(AuraRemovalEntry{ auraId, flags });
+                m_data[mapId].emplace_back(AuraRemovalEntry{ auraId, flags });
 
         } while (result->NextRow());
 
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u entries from instance_buff_removal", count);
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+
+        delete result;
     }
 }
 

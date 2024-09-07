@@ -32,7 +32,7 @@ class FleeingMovementGenerator : public MovementGeneratorMedium< T, FleeingMovem
         void Finalize(T &);
         void Interrupt(T &);
         void Reset(T &);
-        bool Update(T &, uint32 const&);
+        bool Update(T &, const uint32 &);
 
         void UnitSpeedChanged() override { _forceUpdate = true; }
         MovementGeneratorType GetMovementGeneratorType() const override { return FLEEING_MOTION_TYPE; }
@@ -57,7 +57,7 @@ class TimedFleeingMovementGenerator : public FleeingMovementGenerator<Creature>
             i_totalFleeTime(time) {}
 
         MovementGeneratorType GetMovementGeneratorType() const override { return TIMED_FLEEING_MOTION_TYPE; }
-        bool Update(Unit &, uint32 const&);
+        bool Update(Unit &, const uint32 &);
         void Initialize(Unit &);
         void Finalize(Unit &);
 

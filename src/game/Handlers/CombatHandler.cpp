@@ -21,23 +21,23 @@
 
 #include "Common.h"
 #include "Log.h"
-#include "Opcodes.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "CreatureAI.h"
 #include "ObjectGuid.h"
 #include "Player.h"
-#include "Map.h"
 
-void WorldSession::HandleAttackSwingOpcode(WorldPacket& recv_data)
+void WorldSession::HandleAttackSwingOpcode(WorldPacket & recv_data)
 {
     ObjectGuid guid;
     recv_data >> guid;
 
+    DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "WORLD: Recvd CMSG_ATTACKSWING Message %s", guid.GetString().c_str());
+
     if (!guid.IsUnit())
         return;
 
-    Unit* pEnemy = _player->GetMap()->GetUnit(guid);
+    Unit *pEnemy = _player->GetMap()->GetUnit(guid);
 
     if (!pEnemy)
     {
@@ -64,7 +64,7 @@ void WorldSession::HandleAttackSwingOpcode(WorldPacket& recv_data)
     _player->Attack(pEnemy, true);
 }
 
-void WorldSession::HandleAttackStopOpcode(WorldPacket& /*recv_data*/)
+void WorldSession::HandleAttackStopOpcode(WorldPacket & /*recv_data*/)
 {
     GetPlayer()->AttackStop();
 
@@ -80,29 +80,24 @@ void WorldSession::HandleAttackStopOpcode(WorldPacket& /*recv_data*/)
     GetPlayer()->ResetExtraAttacks();
 }
 
-void WorldSession::HandleSetSheathedOpcode(WorldPacket& recv_data)
+void WorldSession::HandleSetSheathedOpcode(WorldPacket & recv_data)
 {
     uint32 sheathed;
     recv_data >> sheathed;
+
+    //DEBUG_LOG( "WORLD: Recvd CMSG_SETSHEATHED Message guidlow:%u value1:%u", GetPlayer()->GetGUIDLow(), sheathed );
+
     if (sheathed >= MAX_SHEATH_STATE)
         return;
 
-    GetPlayer()->InterruptSpellsWithChannelFlags(AURA_INTERRUPT_SHEATHING_CANCELS);
-    GetPlayer()->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_SHEATHING_CANCELS);
     GetPlayer()->SetSheath(SheathState(sheathed));
 }
 
 void WorldSession::SendAttackStop(Unit const* enemy)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(SMSG_ATTACKSTOP, (4 + 20));            // we guess size
     data << GetPlayer()->GetPackGUID();
     data << (enemy ? enemy->GetPackGUID() : PackedGuid());  // must be packed guid
-#else
-    WorldPacket data(SMSG_ATTACKSTOP);
-    data << GetPlayer()->GetGUID();
-    data << (enemy ? enemy->GetGUID() : uint64());
-#endif
     data << uint32(0);                                      // unk, can be 1 also
     SendPacket(&data);
 }

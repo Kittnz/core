@@ -1,9 +1,8 @@
 #include "Database/DatabaseEnv.h"
 #include "World.h"
-#include "Log.h"
-#include "ProgressBar.h"
-#include "Policies/SingletonImp.h"
 #include "Util.h"
+#include "Log.h"
+#include "Policies/SingletonImp.h"
 
 #include "AutoBroadCastMgr.h"
 
@@ -27,21 +26,14 @@ void AutoBroadCastMgr::Load()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded 0 AutoBroadCast message");
         return;
     }
 
     uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
 
-    Field* fields;
+    Field *fields;
     do
     {
-        bar.step();
         AutoBroadCastEntry e;
         fields = result->Fetch();
 
@@ -51,10 +43,6 @@ void AutoBroadCastMgr::Load()
         ++count;
     }
     while (result->NextRow());
-
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u AutoBroadCast messages", count);
-
 }
 
 void AutoBroadCastMgr::Update(uint32 diff)

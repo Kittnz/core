@@ -101,7 +101,7 @@ struct CommonInitializer
     }
 };
 
-void MoveSpline::init_spline(MoveSplineInitArgs const& args)
+void MoveSpline::init_spline(const MoveSplineInitArgs& args)
 {
     const SplineBase::EvaluationMode modes[2] = {SplineBase::ModeLinear, SplineBase::ModeCatmullrom};
     if (args.flags.cyclic)
@@ -130,13 +130,13 @@ void MoveSpline::init_spline(MoveSplineInitArgs const& args)
     // TODO: what to do in such cases? problem is in input data (all points are at same coords)
     if (spline.length() < minimal_duration)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "MoveSpline::init_spline: zero length spline, wrong input data?");
+        sLog.outError("MoveSpline::init_spline: zero length spline, wrong input data?");
         spline.set_length(spline.last(), spline.isCyclic() ? 1000 : 1);
     }
     point_Idx = spline.first();
 }
 
-void MoveSpline::Initialize(MoveSplineInitArgs const& args)
+void MoveSpline::Initialize(const MoveSplineInitArgs& args)
 {
     splineflags = args.flags;
     facing = args.facing;
@@ -162,7 +162,7 @@ bool MoveSplineInitArgs::Validate(Unit* unit) const
 #define CHECK(exp) \
     if (!(exp))\
     {\
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "MoveSplineInitArgs::Validate: expression '%s' failed for %s", #exp, unit->GetGuidStr().c_str());\
+        sLog.outError("MoveSplineInitArgs::Validate: expression '%s' failed for %s", #exp, unit->GetGuidStr().c_str());\
         return false;\
     }
     CHECK(path.size() > 1);
@@ -189,7 +189,7 @@ bool MoveSplineInitArgs::_checkPathBounds() const
             offset = path[i] - middle;
             if (fabs(offset.x) >= MAX_OFFSET || fabs(offset.y) >= MAX_OFFSET || fabs(offset.z) >= MAX_OFFSET)
             {
-                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "MoveSplineInitArgs::_checkPathBounds check failed");
+                sLog.outError("MoveSplineInitArgs::_checkPathBounds check failed");
                 return false;
             }
         }

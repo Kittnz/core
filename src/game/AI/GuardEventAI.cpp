@@ -17,12 +17,11 @@
 */
 
 #include "GuardEventAI.h"
-#include "Creature.h"
 
 GuardEventAI::GuardEventAI(Creature* pCreature) : CreatureEventAI(pCreature)
 {}
 
-int GuardEventAI::Permissible(Creature const* creature)
+int GuardEventAI::Permissible(const Creature *creature)
 {
     if ((creature->GetAIName() == "GuardEventAI") || (creature->IsGuard() && (creature->GetAIName() == "EventAI")))
         return PERMIT_BASE_SPECIAL;
@@ -31,7 +30,7 @@ int GuardEventAI::Permissible(Creature const* creature)
 }
 
 // Returns whether the Unit is currently attacking other players or friendly npcs.
-bool GuardEventAI::IsAttackingPlayerOrFriendly(Unit const* pWho) const
+bool GuardEventAI::IsAttackingPlayerOrFriendly(const Unit* pWho) const
 {
     if (pWho->IsPvPContested())
         return true;
@@ -45,8 +44,11 @@ bool GuardEventAI::IsAttackingPlayerOrFriendly(Unit const* pWho) const
     return false;
 }
 
-void GuardEventAI::MoveInLineOfSight(Unit* pWho)
+void GuardEventAI::MoveInLineOfSight(Unit *pWho)
 {
+    if (!pWho)
+        return;
+
     if (m_creature->GetVictim())
         return;
 
@@ -66,8 +68,12 @@ void GuardEventAI::MoveInLineOfSight(Unit* pWho)
     {
         // Assignment, not a typo.
         if (isAttackingFriend = IsAttackingPlayerOrFriendly(pWho))
-            if ((attackRadius < 30.0f))
+        {
+            if (attackRadius < 30.0f)
                 attackRadius = 30.0f;
+        }
+        else if (!pWho->IsPvP()) // lower aggro distance against non flagged players
+            attackRadius /= 2.0f;
     }
 
     if (!m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None))
@@ -80,3 +86,11 @@ void GuardEventAI::MoveInLineOfSight(Unit* pWho)
         AttackStart(pWho);
     }
 }
+
+void GuardEventAI::EnterCombat(Unit *pWho)
+{
+    CreatureEventAI::EnterCombat(pWho);
+    m_creature->CallForHelp(30.0f);
+}
+
+

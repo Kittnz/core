@@ -1,17 +1,14 @@
-#include "Log.h"
 #include "Timer.h"
-#include "ObjectGuid.h"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
 #include "World.h"
 #include "Player.h"
 
-MovementBroadcaster::MovementBroadcaster(std::size_t threads, std::chrono::milliseconds frequency)
-    : m_num_threads(threads), m_sleep_timer(frequency)
+MovementBroadcaster::MovementBroadcaster(std::size_t threads, std::chrono::milliseconds frequency) : m_num_threads(threads), m_sleep_timer(frequency)
 {
     if (threads)
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[NETWORK] Movement broadcaster configured to run every %ums "
-                        "with %u threads", frequency.count(), threads);
+        sLog.outInfo("[NETWORK] Movement broadcaster configured to run every %ums with %u threads", frequency.count(), threads);
+
     StartThreads();
 }
 
@@ -25,7 +22,7 @@ void MovementBroadcaster::StartThreads()
     ASSERT(m_threads.empty());
 
     // Create new mutex vector - can't resize a vector of locks (non-copyable)
-    std::vector<std::shared_timed_mutex> locks(m_num_threads);
+    std::vector<std::mutex> locks(m_num_threads);
     m_thread_locks = std::move(locks);
     m_thread_players.resize(m_num_threads);
     m_thread_update_stats.resize(m_num_threads);
@@ -33,32 +30,46 @@ void MovementBroadcaster::StartThreads()
     m_stop = false;
 
     // start the workers
-    for(std::size_t i = 0; i < m_num_threads; ++i)
-        m_threads.emplace_back(&MovementBroadcaster::Work, this, i);
-
+    for (std::size_t i = 0; i < m_num_threads; ++i)
+    {
+        auto mb = new MovementBroadcasterWorker(i, this);
+        m_threads.emplace_back(new std::thread(
+                                [mb, i](){mb->run();
+        }),[mb](std::thread *thread) {
+            if (thread->joinable())
+                thread->join();
+            delete thread;
+            delete mb;
+        });
+    }
 }
 
-void MovementBroadcaster::RegisterPlayer(std::shared_ptr<PlayerBroadcaster> const& player)
+void MovementBroadcaster::RegisterPlayer(const std::shared_ptr<PlayerBroadcaster>& player)
 {
     if (!m_num_threads)
         return;
 
     std::size_t index = player->GetGUID().GetRawValue() % m_num_threads;
-    std::lock_guard<std::shared_timed_mutex> guard(m_thread_locks[index]);
+    std::unique_lock<std::mutex> guard(m_thread_locks[index]);
     m_thread_players[index].insert(player);
 }
 
-void MovementBroadcaster::RemovePlayer(std::shared_ptr<PlayerBroadcaster> const& player)
+void MovementBroadcaster::RemovePlayer(const std::shared_ptr<PlayerBroadcaster>& player)
 {
     if (!m_num_threads)
         return;
 
     std::size_t index = player->GetGUID().GetRawValue() % m_num_threads;
-    std::lock_guard<std::shared_timed_mutex> guard(m_thread_locks[index]);
+    std::unique_lock<std::mutex> guard(m_thread_locks[index]);
     auto it = m_thread_players[index].find(player);
 
     if (it != m_thread_players[index].end())
         m_thread_players[index].erase(it);
+}
+
+void MovementBroadcasterWorker::run()
+{
+    m_broadcaster->Work(m_threadId);
 }
 
 void MovementBroadcaster::Work(std::size_t thread_id)
@@ -74,7 +85,7 @@ void MovementBroadcaster::Work(std::size_t thread_id)
 
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET_BCAST) &&
             stats.update_time > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET_BCAST))
-            sLog.Out(LOG_PERFORMANCE, LOG_LVL_MINIMAL, "MovementBroadcaster thread %02u: %04ums to process queue [%u packets]",
+            sLog.out(LOG_PERFORMANCE, "MovementBroadcaster thread %02u: %04ums to process queue [%u packets]",
                 thread_id, stats.update_time, num_packets);
 
         if (sWorld.getConfig(CONFIG_UINT32_PBCAST_DIFF_LOWER_VISIBILITY_DISTANCE) &&
@@ -91,19 +102,21 @@ uint32 MovementBroadcaster::IdentifySlowMap(std::size_t thread_id)
 {
     std::map<uint32 /* instanceId */, uint32 /* numPackets */> map_packets;
 
-    std::shared_lock<std::shared_timed_mutex> guard(m_thread_locks[thread_id]);
+    std::unique_lock<std::mutex> guard(m_thread_locks[thread_id]);
 
     for (auto& player : m_thread_players[thread_id])
         map_packets[player->instanceId] += player->lastUpdatePackets;
 
     uint32 max_number_packets = 0;
     uint32 max_instance_id = 0;
-    for (auto it = map_packets.begin(); it != map_packets.end(); ++it)
-        if (it->second > max_number_packets)
+    for (const auto& itr : map_packets)
+    {
+        if (itr.second > max_number_packets)
         {
-            max_instance_id = it->first;
-            max_number_packets = it->second;
+            max_instance_id = itr.first;
+            max_number_packets = itr.second;
         }
+    }
     return max_instance_id;
 }
 
@@ -111,7 +124,7 @@ void MovementBroadcaster::BroadcastPackets(std::size_t index, uint32& num_packet
 {
     PlayersBCastSet my_players;
     {
-        std::shared_lock<std::shared_timed_mutex> guard(m_thread_locks[index]);
+        std::unique_lock<std::mutex> guard(m_thread_locks[index]);
         my_players = m_thread_players[index];
     }
 
@@ -121,15 +134,8 @@ void MovementBroadcaster::BroadcastPackets(std::size_t index, uint32& num_packet
 
 void MovementBroadcaster::Stop()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[NETWORK] Stopping movement broadcaster...");
-
+    sLog.outInfo("[NETWORK] Stopping movement broadcaster...");
     m_stop = true;
-
-    for (auto& thread : m_threads)
-    {
-        if (thread.joinable())
-            thread.join();
-    }
     m_threads.clear();
 }
 
@@ -163,7 +169,7 @@ void MovementBroadcaster::UpdateConfiguration(std::size_t new_threads_count, std
             RegisterPlayer(broadcaster);
     }
 
-    sLog.Out(LOG_PERFORMANCE, LOG_LVL_MINIMAL, "[MovementBroadcaster] Changing number of threads from %u to %u in %ums",
+    sLog.out(LOG_PERFORMANCE, "[MovementBroadcaster] Changing number of threads from %u to %u in %ums",
         old_num_threads, new_threads_count, WorldTimer::getMSTimeDiffToNow(begin_time));
 }
 

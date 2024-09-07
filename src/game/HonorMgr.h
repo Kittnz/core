@@ -23,7 +23,7 @@ struct HonorStanding
     float  cp;
 
     // create the standing order
-    bool operator < (HonorStanding const& hs) const
+    bool operator < (const HonorStanding& hs) const
     {
         return cp > hs.cp;
     }
@@ -33,10 +33,7 @@ typedef std::vector<HonorStanding> HonorStandingList;
 
 struct WeeklyScore
 {
-    WeeklyScore()
-        : level(0), account(0), hk(0), dk(0), 
-          cp(0.0f), oldRp(0.0f), newRp(0.0f), earning(0.0f), 
-          standing(0), highestRank(0) {}
+    WeeklyScore() : level(0), account(0), hk(0), dk(0), cp(0.0f), oldRp(0.0f), newRp(0.0f), earning(0.0f), standing(0), highestRank(0) {}
 
     uint8  level;
     uint32 account;
@@ -65,9 +62,12 @@ class HonorMaintenancer
         void LoadStandingLists();
         void DistributeRankPoints(Team team);
         void InactiveDecayRankPoints();
-        void FlushRankPoints();
         void SetCityRanks();
+        void FlushRankPoints();
         void CreateCalculationReport();
+
+        void FlushWeeklyQuests();
+        void AssignBountyTargets();
 
         float GetStandingCPByPosition(HonorStandingList& standingList, uint32 position);
         uint32 GetStandingPositionByGUID(uint32 guid, Team team);
@@ -124,8 +124,7 @@ struct HonorCP
 
 struct HonorRankInfo
 {
-    HonorRankInfo()
-        : rank(0), visualRank(0), maxRP(0.0f), minRP(0.0f), positive(true) {}
+    HonorRankInfo() : rank(0), visualRank(0), maxRP(0.0f), minRP(0.0f), positive(true) {}
 
     uint8 rank;        // internal range [0..18]
     int8  visualRank;  // number visualized in rank bar [-4..14]
@@ -136,20 +135,10 @@ struct HonorRankInfo
 
 typedef std::list<HonorCP> HonorCPMap;
 
-#define MIN_HONOR_KILLS_PRE_1_10 25
-#define MIN_HONOR_KILLS_POST_1_10 15
+#define MIN_HONOR_KILLS 15
 #define NEGATIVE_HONOR_RANK_COUNT 4
 #define POSITIVE_HONOR_RANK_COUNT 15
 #define HONOR_RANK_COUNT 19
-
-// World of Warcraft Client Patch 1.7.0 (2005-09-13)
-// - Racial "Leaders" have been strengthened, and are now worth slightly
-//   less honor.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-#define RACIAL_LEADER_HONOR 488.0f
-#else
-#define RACIAL_LEADER_HONOR 500.0f // guess
-#endif
 
 class HonorMgr
 {
@@ -159,9 +148,9 @@ class HonorMgr
 
         void Save();
         void SaveStoredData();
-        void Load(std::unique_ptr<QueryResult> result);
+        void Load(QueryResult* result);
 
-        bool Add(float CP, uint8 type, Unit const* source = nullptr);
+        bool Add(float CP, uint8 type, Unit* source = nullptr);
         void Update();
         void Reset();
         void ClearHonorData();
@@ -204,7 +193,7 @@ class HonorMgr
         
         HonorCPMap& GetHonorCP() { return m_honorCP; }
 
-        void SendPVPCredit(Unit const* victim, float honor);
+        void SendPVPCredit(Unit* victim, float honor);
 
     private:
         HonorCPMap m_honorCP;

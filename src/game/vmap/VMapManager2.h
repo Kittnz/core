@@ -49,8 +49,7 @@ namespace VMAP
     class WorldModel;
     class ModelInstance;
 
-    class ManagedModel :
-            public std::weak_ptr<WorldModel>
+    class ManagedModel : public std::weak_ptr<WorldModel>
     {
     public:
         ManagedModel(const std::shared_ptr<WorldModel> &ptr, bool managed);
@@ -71,7 +70,7 @@ namespace VMAP
             bool _loadMap(uint32 pMapId, std::string const& basePath, uint32 tileX, uint32 tileY);
             /* void _unloadMap(uint32 pMapId, uint32 x, uint32 y); */
 
-            std::shared_timed_mutex    m_modelsLock;
+            std::shared_timed_mutex m_modelsLock;
         public:
             // public for debug
             G3D::Vector3 convertPositionToInternalRep(float x, float y, float z) const;
@@ -80,12 +79,12 @@ namespace VMAP
             VMapManager2();
             ~VMapManager2();
 
-            VMAPLoadResult loadMap(char const* pBasePath, unsigned int pMapId, int x, int y) override;
+            VMAPLoadResult loadMap(const char* pBasePath, unsigned int pMapId, int x, int y) override;
 
             void unloadMap(unsigned int pMapId, int x, int y) override;
             void unloadMap(unsigned int pMapId) override;
 
-            bool isInLineOfSight(unsigned int pMapId, float x1, float y1, float z1, float x2, float y2, float z2, bool ignoreM2Model) override;
+            bool isInLineOfSight(unsigned int pMapId, float x1, float y1, float z1, float x2, float y2, float z2) override;
             ModelInstance* FindCollisionModel(unsigned int mapId, float x0, float y0, float z0, float x1, float y1, float z1) override;
             /**
             fill the hit pos and return true, if an object was hit
@@ -97,7 +96,7 @@ namespace VMAP
 
             bool getAreaInfo(unsigned int pMapId, float x, float y, float& z, uint32& flags, int32& adtId, int32& rootId, int32& groupId) const override;
             bool isUnderModel(unsigned int pMapId, float x, float y, float z, float* outDist = nullptr, float* inDist = nullptr) const override;
-            bool GetLiquidLevel(uint32 pMapId, float x, float y, float z, uint8 ReqLiquidTypeMask, float& level, float& floor, uint32& type) const override;
+            bool GetLiquidLevel(uint32 pMapId, float x, float y, float z, uint8 ReqLiquidType, float& level, float& floor, uint32& type) const override;
 
             std::shared_ptr<WorldModel> acquireModelInstance(std::string const& basepath, std::string const& filename);
 
@@ -106,7 +105,7 @@ namespace VMAP
             {
                 return getMapFileName(pMapId);
             }
-            bool existsMap(char const* pBasePath, unsigned int pMapId, int x, int y) override;
+            bool existsMap(const char* pBasePath, unsigned int pMapId, int x, int y) override;
 
 #ifdef MMAP_GENERATOR
         public:

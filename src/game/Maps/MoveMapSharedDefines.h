@@ -22,7 +22,7 @@
 #include "Platform/Define.h"
 #include "../recastnavigation/Detour/Include/DetourNavMesh.h"
 
-#define MMAP_MAGIC 0x4d4d4150   // 'MMAP'
+#define MMAP_MAGIC 0x4d4d4150 // 'MMAP'
 #define MMAP_VERSION 6
 
 struct MmapTileHeader
@@ -33,8 +33,7 @@ struct MmapTileHeader
     uint32 size;
     uint32 usesLiquids;
 
-    MmapTileHeader() : mmapMagic(MMAP_MAGIC), dtVersion(DT_NAVMESH_VERSION),
-                       mmapVersion(MMAP_VERSION), size(0), usesLiquids(0) {}
+    MmapTileHeader() : mmapMagic(MMAP_MAGIC), dtVersion(DT_NAVMESH_VERSION), mmapVersion(MMAP_VERSION), size(0), usesLiquids(0) {}
 };
 
 enum NavTerrain

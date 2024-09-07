@@ -23,6 +23,8 @@
 #define MANGOS_PETAI_H
 
 #include "CreatureAI.h"
+#include "ObjectGuid.h"
+#include "Timer.h"
 
 class Creature;
 class Spell;
@@ -34,19 +36,17 @@ enum ePetSelectTargetReason : uint8
     PSTR_FAIL_PASSIVE,
     PSTR_FAIL_NO_OWNER,
     PSTR_FAIL_RETURNING,
-    PSTR_SUCCESS_THREAT_LIST,
-    PSTR_SUCCESS_OWNER_VICTIM,
     PSTR_SUCCESS_OWNER_ATTACKER,
-    PSTR_SUCCESS_SELF_ATTACKER,
+    PSTR_SUCCESS_AGGRO_RANGE,
 };
 
 class PetAI : public CreatureAI
 {
     public:
 
-        explicit PetAI(Creature* c);
+        explicit PetAI(Creature *c);
 
-        void MoveInLineOfSight(Unit*) final;
+        void MoveInLineOfSight(Unit *) {}
         void EnterEvadeMode() {}
 
         void KilledUnit(Unit* /*victim*/);
@@ -56,8 +56,8 @@ class PetAI : public CreatureAI
         void OwnerAttacked(Unit* target);
         void AttackedBy(Unit* attacker);
 
-        void UpdateAI(uint32 const);
-        static int Permissible(Creature const*);
+        void UpdateAI(const uint32);
+        static int Permissible(const Creature *);
 
     private:
         bool _needToStop() const;
@@ -65,10 +65,11 @@ class PetAI : public CreatureAI
 
         void UpdateAllies();
 
-        uint32 m_updateAlliesTimer;
+        bool hasMelee;
         std::set<uint64> m_AllySet;
+        uint32 m_updateAlliesTimer;
 
-        std::pair<Unit*, ePetSelectTargetReason> SelectNextTarget() const;
+        std::pair<Unit*, ePetSelectTargetReason> SelectNextTarget(bool allowAutoSelect) const;
         void HandleReturnMovement();
         void DoAttack(Unit* target, bool chase);
         bool CanAttack(Unit* target);

@@ -74,7 +74,7 @@ class MapPersistentState
         uint32 GetInstanceId() const { return m_instanceid; }
         uint32 GetMapId() const { return m_mapid; }
 
-        MapEntry const* GetMapEntry() const;
+        const MapEntry* GetMapEntry() const;
 
         bool IsUsedByMap() const { return m_usedByMap; }
         Map* GetMap() const { return m_usedByMap; }         // Can be nullptr if map not loaded for persistent state
@@ -182,11 +182,11 @@ class DungeonPersistentState : public MapPersistentState
 
         /* online players bound to the instance (perm/solo)
            does not include the members of the group unless they have permanent saves */
-        void AddPlayer(Player* player) { m_playerList.push_back(player); }
-        bool RemovePlayer(Player* player) { m_playerList.remove(player); return UnloadIfEmpty(); }
+        void AddPlayer(Player *player) { m_playerList.push_back(player); }
+        bool RemovePlayer(Player *player) { m_playerList.remove(player); return UnloadIfEmpty(); }
         /* all groups bound to the instance */
-        void AddGroup(Group* group) { m_groupList.push_back(group); }
-        bool RemoveGroup(Group* group) { m_groupList.remove(group); return UnloadIfEmpty(); }
+        void AddGroup(Group *group) { m_groupList.push_back(group); }
+        bool RemoveGroup(Group *group) { m_groupList.remove(group); return UnloadIfEmpty(); }
 
         /* for normal instances this corresponds to max(creature respawn time) + X hours
            for raid instances this caches the global respawn time for the map */
@@ -243,15 +243,15 @@ class BattleGroundPersistentState : public MapPersistentState
 
 enum ResetEventType
 {
-    RESET_EVENT_NORMAL_DUNGEON      = 0,                    // no fixed reset time
-    RESET_EVENT_INFORM_1            = 1,                    // raid/heroic warnings
-    RESET_EVENT_INFORM_2            = 2,
-    RESET_EVENT_INFORM_3            = 3,
-    RESET_EVENT_INFORM_LAST         = 4,
-    RESET_EVENT_FORCED_INFORM_1     = 5,
-    RESET_EVENT_FORCED_INFORM_2     = 6,
-    RESET_EVENT_FORCED_INFORM_3     = 7,
-    RESET_EVENT_FORCED_INFORM_LAST  = 8,
+    RESET_EVENT_NORMAL_DUNGEON = 0, // no fixed reset time
+    RESET_EVENT_INFORM_1 = 1, // raid/heroic warnings
+    RESET_EVENT_INFORM_2 = 2,
+    RESET_EVENT_INFORM_3 = 3,
+    RESET_EVENT_INFORM_LAST = 4,
+    RESET_EVENT_FORCED_INFORM_1 = 5,
+    RESET_EVENT_FORCED_INFORM_2 = 6,
+    RESET_EVENT_FORCED_INFORM_3 = 7,
+    RESET_EVENT_FORCED_INFORM_LAST = 8
 };
 
 #define MAX_RESET_EVENT_TYPE   9
@@ -269,14 +269,14 @@ enum InstanceResetFailReason
 struct DungeonResetEvent
 {
     ResetEventType type   :8;                               // if RESET_EVENT_DUNGEON then InstanceID == 0 and applied to all instances for map)
-    uint16 mapId;                                           // used with mapId used as for select reset for global cooldown instances (instanceid==0 for event)
+    uint16 mapid;                                           // used with mapid used as for select reset for global cooldown instances (instanceid==0 for event)
     uint32 instanceId;                                      // used for select reset for normal dungeons
 
-    DungeonResetEvent() : type(RESET_EVENT_NORMAL_DUNGEON), mapId(0), instanceId(0) {}
+    DungeonResetEvent() : type(RESET_EVENT_NORMAL_DUNGEON), mapid(0), instanceId(0) {}
     DungeonResetEvent(ResetEventType t, uint32 _mapid, uint32 _instanceid)
-        : type(t), mapId(_mapid), instanceId(_instanceid) {}
+        : type(t), mapid(_mapid), instanceId(_instanceid) {}
 
-    bool operator == (DungeonResetEvent const& e) { return e.mapId == mapId && e.instanceId == instanceId; }
+    bool operator == (const DungeonResetEvent& e) { return e.mapid == mapid && e.instanceId == instanceId; }
 };
 
 typedef std::map<uint32, std::pair<uint32, time_t> > ResetTimeMapType;
@@ -290,21 +290,20 @@ class DungeonResetScheduler
         void ScheduleAllDungeonResets();
 
     public:                                                 // accessors
-        time_t GetResetTimeFor(uint32 mapId) { return m_resetTimeByMapId[mapId]; }
+        time_t GetResetTimeFor(uint32 mapid) { return m_resetTimeByMapId[mapid]; }
 
         static uint32 GetMaxResetTimeFor(MapEntry const* temp);
         static time_t CalculateNextResetTime(MapEntry const* temp, time_t prevResetTime);
     public:                                                 // modifiers
-        void SetResetTimeFor(uint32 mapId, time_t t)
+        void SetResetTimeFor(uint32 mapid, time_t t)
         {
-            m_resetTimeByMapId[mapId] = t;
+            m_resetTimeByMapId[mapid] = t;
         }
 
         void ScheduleReset(bool add, time_t time, DungeonResetEvent event);
-
         void Update();
-
         void ResetAllRaid();
+
     private:                                                // fields
         MapPersistentStateManager& m_InstanceSaves;
 
@@ -347,7 +346,7 @@ class MapPersistentStateManager : public MaNGOS::Singleton<MapPersistentStateMan
 
         DungeonResetScheduler& GetScheduler() { return m_Scheduler; }
 
-        static void DeleteInstanceFromDB(uint32 mapId, uint32 instanceId);
+        static void DeleteInstanceFromDB(uint32 mapid, uint32 instanceid);
 
         void GetStatistics(uint32& numStates, uint32& numBoundPlayers, uint32& numBoundGroups);
 
@@ -356,12 +355,12 @@ class MapPersistentStateManager : public MaNGOS::Singleton<MapPersistentStateMan
         typedef std::unordered_map<uint32 /*InstanceId or MapId*/, MapPersistentState*> PersistentStateMap;
 
         //  called by scheduler for DungeonPersistentStates
-        void _ResetOrWarnAll(uint32 mapId, bool warn, uint32 timeleft);
-        void _ResetInstance(uint32 mapId, uint32 instanceId);
+        void _ResetOrWarnAll(uint32 mapid, bool warn, uint32 timeleft);
+        void _ResetInstance(uint32 mapid, uint32 instanceId);
         void _CleanupExpiredInstancesAtTime(time_t t);
 
         void _ResetSave(PersistentStateMap& holder, PersistentStateMap::iterator &itr);
-        void _DelHelper(DatabaseType &db, char const* fields, char const* table, char const* queryTail,...);
+        void _DelHelper(DatabaseType &db, const char *fields, const char *table, const char *queryTail,...);
         // used during global instance resets
         bool lock_instLists;
         // fast lookup by instance id for instanceable maps
@@ -397,5 +396,5 @@ void MapPersistentStateManager::DoForAllStatesWithMapId(uint32 mapId, uint32 ins
     }
 }
 
-#define sMapPersistentStateMgr MapPersistentStateManager::Instance()
+#define sMapPersistentStateMgr MaNGOS::Singleton<MapPersistentStateManager>::Instance()
 #endif

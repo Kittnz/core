@@ -20,14 +20,27 @@
 #include "PlayerAI.h"
 #include "Player.h"
 #include "DBCStores.h"
+#include "Log.h"
 #include "SpellMgr.h"
 #include "MotionMaster.h"
+#include "MoveSpline.h"
 #include "Spell.h"
-#include "Map.h"
+
+// Misc spells we dont want players to cast
+static std::vector<uint32> priestSkipSpells =
+{
+    453,8123,8192,8193,10953,10954,  // mind soothe
+    1150,2096,2097,10909,10910,      // mind vision
+    1265,9580,9581,9593,10943,10944, // fade
+};
+static std::vector<uint32> hunterSkipSpells =
+{
+    75, // auto shot
+};
 
 void PlayerAI::Remove()
 {
-    me->SetAI(nullptr);
+    me->setAI(nullptr);
     delete this;
 }
 
@@ -35,30 +48,29 @@ PlayerAI::~PlayerAI()
 {
 }
 
-bool PlayerAI::CanCastSpell(Unit* pTarget, SpellEntry const* pSpell, bool isTriggered, bool checkControlled)
+CanCastResult PlayerAI::CanCastSpell(Unit* pTarget, const SpellEntry *pSpell, bool isTriggered, bool checkControlled)
 {
     if (!pTarget)
-        return false;
-
+        return CAST_FAIL_OTHER;
     // If not triggered, we check
     if (!isTriggered)
     {
         // State does not allow
         if (me->HasUnitState(checkControlled ? UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL : UNIT_STAT_CAN_NOT_REACT))
-            return false;
+            return CAST_FAIL_STATE;
 
         if (pSpell->PreventionType == SPELL_PREVENTION_TYPE_SILENCE && me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED))
-            return false;
+            return CAST_FAIL_STATE;
 
         if (pSpell->PreventionType == SPELL_PREVENTION_TYPE_PACIFY && me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED))
-            return false;
+            return CAST_FAIL_STATE;
 
         // Check for power (also done by Spell::CheckCast())
         if (me->GetPower((Powers)pSpell->powerType) < pSpell->manaCost)
-            return false;
+            return CAST_FAIL_POWER;
     }
 
-    if (SpellRangeEntry const* pSpellRange = sSpellRangeStore.LookupEntry(pSpell->rangeIndex))
+    if (const SpellRangeEntry *pSpellRange = sSpellRangeStore.LookupEntry(pSpell->rangeIndex))
     {
         if (pTarget != me)
         {
@@ -66,20 +78,20 @@ bool PlayerAI::CanCastSpell(Unit* pTarget, SpellEntry const* pSpell, bool isTrig
             float fDistance = me->GetCombatDistance(pTarget);
 
             if (fDistance > pSpellRange->maxRange)
-                return false;
+                return CAST_FAIL_TOO_FAR;
 
             float fMinRange = pSpellRange->minRange;
 
             if (fMinRange && fDistance < fMinRange)
-                return false;
+                return CAST_FAIL_TOO_CLOSE;
         }
-        return true;
+        return CAST_OK;
     }
-    
-    return false;
+    else
+        return CAST_FAIL_OTHER;
 }
 
-void PlayerAI::UpdateAI(uint32 const /*diff*/)
+void PlayerAI::UpdateAI(const uint32 /*diff*/)
 {
 }
 
@@ -110,30 +122,54 @@ PlayerControlledAI::PlayerControlledAI(Player* pPlayer, Unit* caster) : PlayerAI
             bIsMelee = false;
             break;
     }
+
     PlayerSpellMap spells = me->GetSpellMap();
     usableSpells.clear();
     for (const auto& spell : spells)
     {
         if (spell.second.state == PLAYERSPELL_REMOVED || spell.second.disabled)
             continue;
+
         SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell.first);
+
         if (spellInfo->SpellFamilyName == SPELLFAMILY_GENERIC)
             continue;
+
         if (spellInfo->Attributes & (SPELL_ATTR_PASSIVE | 0x80))
             continue;
-        if (spellInfo->AttributesEx & SPELL_ATTR_EX_NO_AUTOCAST_AI)
+
+        if (spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE)
             continue;
-        if (spellInfo->HasAuraInterruptFlag(AURA_INTERRUPT_DAMAGE_CANCELS))
-            continue;
+
         if (Spells::IsPositiveSpell(spell.first) && !enablePositiveSpells)
             continue;
+
+        switch (pPlayer->GetClass())
+        {
+        case CLASS_WARRIOR:
+        case CLASS_ROGUE:
+        case CLASS_PALADIN:
+        case CLASS_DRUID:
+        case CLASS_SHAMAN:
+        case CLASS_MAGE:
+        case CLASS_WARLOCK:
+            break;
+        case CLASS_HUNTER:
+            if (std::find(hunterSkipSpells.begin(), hunterSkipSpells.end(), spell.first) != hunterSkipSpells.end())
+                continue;
+            break;
+        case CLASS_PRIEST:
+            if (std::find(priestSkipSpells.begin(), priestSkipSpells.end(), spell.first) != priestSkipSpells.end())
+                continue;
+            break;
+        }
         usableSpells.push_back(spell.first);
     }
-    // Ignore non-max rank
+    // Suppression des sorts dont on a deja des rangs superieurs
     for (std::vector<uint32>::iterator it = usableSpells.begin(); it != usableSpells.end();)
     {
         bool foundSupRank = false;
-        SpellEntry const* pCurrSpell_1 = sSpellMgr.GetSpellEntry(*(it));
+        SpellEntry const *pCurrSpell_1 = sSpellMgr.GetSpellEntry(*(it));
         for (const auto& usableSpell : usableSpells)
         {
             SpellEntry const* pCurrSpell_2 = sSpellMgr.GetSpellEntry(usableSpell);
@@ -141,12 +177,13 @@ PlayerControlledAI::PlayerControlledAI(Player* pPlayer, Unit* caster) : PlayerAI
             {
                 if (Spells::CompareAuraRanks(pCurrSpell_1->Id, pCurrSpell_2->Id) < 0) // pCurrSpell_1 < pCurrSpell_2
                 {
-                    // So we ignore pCurrSpell_1
+                    // Donc on supprime pCurrSpell_1
                     foundSupRank = true;
                     break;
                 }
             }
         }
+
         if (foundSupRank)
         {
             usableSpells.erase(it);
@@ -174,7 +211,7 @@ void PlayerControlledAI::UpdateTarget(Unit* victim)
     if ((victim->IsCharmed() && victim->GetCharmerGuid() == me->GetCharmerGuid()) || me->IsFeared() || me->IsPolymorphed())
     {
         me->AttackStop();
-        me->InterruptNonMeleeSpells(false);
+        me->CastStop();
         return;
     }
 
@@ -218,7 +255,7 @@ void PlayerControlledAI::UpdateTarget(Unit* victim)
         else
         {
             bool inMeleeRange = me->CanReachWithMeleeAutoAttack(victim);
-            if ((bIsMelee && inMeleeRange) || (!bIsMelee && !me->IsMoving() && me->IsWithinDist(victim, 30.0f)))
+            if ( (bIsMelee && inMeleeRange) || (!bIsMelee && !me->IsMoving() && me->IsWithinDist(victim, 30.0f)))
             {
                 me->GetMotionMaster()->Clear();
                 if (bIsMelee && !me->HasInArc(victim, 0.2f))
@@ -247,7 +284,7 @@ PlayerControlledAI::~PlayerControlledAI()
 {
 }
 
-void PlayerControlledAI::UpdateAI(uint32 const uiDiff)
+void PlayerControlledAI::UpdateAI(const uint32 uiDiff)
 {
     if (me->IsDeleted() || !me->IsInWorld() || !me->IsAlive())
     {
@@ -300,7 +337,7 @@ void PlayerControlledAI::UpdateAI(uint32 const uiDiff)
     {
         Creature* Ccontroller = controller ? controller->ToCreature() : nullptr;
 
-        // Unit* victim = controller-> getVictim ();
+        // Unit * victim = controller-> GetVictim ();
         // Ivina <Nostalrius>: chooses the target randomly and not always the target of the controller.
         victim = Ccontroller ? Ccontroller->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0) : me->SelectNearestTarget(50.0f);
         if (Unit* v2 = me->GetVictim())
@@ -324,46 +361,60 @@ void PlayerControlledAI::UpdateAI(uint32 const uiDiff)
             return;
 
         UpdateTarget(victim);
-    }
 
-    if (uiGlobalCD < uiDiff)
-    {
-        if (me->IsNonMeleeSpellCasted(true))
-            uiGlobalCD = 200;
-        else
+
+        if (uiGlobalCD < uiDiff)
         {
-            // Since we are going to do something usableSpells [0, urand (0, usableSpells.size () - 1)], we must have at least one element.
-            if (usableSpells.empty())
-                return;
-
-            uint32 spellId = usableSpells[urand(0, usableSpells.size() - 1)];
-            SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
-
-            // If its a positive spell we prioritize controller, if he's out of range,
-            // ourself, otherwise it will probably not be cast.
-            Unit* spellTarget = victim;
-            if (controller && spellInfo->IsPositiveSpell(me, controller))
-                spellTarget = controller;
-            else if (spellInfo->IsPositiveSpell(me, me))
-                spellTarget = me;
-
-            if (spellInfo)
+            if (me->GetClass() == CLASS_HUNTER)
             {
-                if (CanCastSpell(spellTarget, spellInfo, false, false))
+                float dist = me->GetDistance(victim);
+                if (dist > 10.0f)
                 {
-                    me->CastSpell(spellTarget, spellId, false);
-                    uiGlobalCD = 1500;
-                    if (!bIsMelee)
-                        me->SetCasterChaseDistance(25.0f);
+                    if (Spell* pSpell = me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
+                    {
+                        if (pSpell->m_spellInfo && pSpell->m_spellInfo->Id != 75) // auto shoot
+                            me->CastSpell(victim, 75, true);
+                    }
                 }
-                else
+            }
+
+            if (me->IsNonMeleeSpellCasted(true))
+                uiGlobalCD = 200;
+            else
+            {
+                // Since we are going to do something usableSpells [0, urand (0, usableSpells.size () - 1)], we must have at least one element.
+                if (usableSpells.empty())
+                    return;
+
+                uint32 spellId = usableSpells[urand(0, usableSpells.size() - 1)];
+                SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
+                
+                // If its a positive spell we prioritize controller, if he's out of range,
+                // ourself, otherwise it will probably not be cast.
+                Unit* spellTarget = victim;
+                if (controller && spellInfo->IsPositiveSpell(me, controller))
+                    spellTarget = controller;
+                else if (spellInfo->IsPositiveSpell(me, me))
+                    spellTarget = me;
+
+                if (spellInfo)
                 {
-                    if (!bIsMelee)
-                        me->SetCasterChaseDistance(0.0f);
+                    if (CanCastSpell(spellTarget, spellInfo, false, false) == CAST_OK)
+                    {
+                        me->CastSpell(spellTarget, spellId, false);
+                        uiGlobalCD = 1500;
+                        if(!bIsMelee)
+                            me->SetCasterChaseDistance(25.0f);
+                    }
+                    else
+                    {
+                        if (!bIsMelee)
+                            me->SetCasterChaseDistance(0.0f);
+                    }
                 }
             }
         }
+        else
+            uiGlobalCD -= uiDiff;
     }
-    else
-        uiGlobalCD -= uiDiff;
 }

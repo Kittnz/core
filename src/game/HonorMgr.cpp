@@ -11,10 +11,10 @@
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
 #include "ObjectAccessor.h"
-#include "ObjectMgr.h"
-#include "Opcodes.h"
 
 #include <fstream>
+
+#define FAKE_PVP_POOL 800
 
 INSTANTIATE_SINGLETON_1(HonorMaintenancer);
 
@@ -65,7 +65,7 @@ void HonorMaintenancer::LoadWeeklyScores()
 
     std::ostringstream query;
 
-    query << "SELECT `scores`.`guid`, `c`.`level`, `c`.`account`, `c`.`honor_rank_points`, `c`.`honor_highest_rank`, SUM(`hk`), SUM(`dk`), SUM(`cp`) FROM"
+    query << "SELECT `scores`.`guid`, `c`.`level`, `c`.`account`, `c`.`honorRankPoints`, `c`.`honorHighestRank`, SUM(`hk`), SUM(`dk`), SUM(`cp`) FROM"
         "("
         "  SELECT `guid` AS `guid`, COUNT(*) AS `hk`, 0 AS `dk`, SUM(`cp`) AS `cp` FROM `character_honor_cp` WHERE `type` = " << HONORABLE <<
         "  AND (`date` BETWEEN " << weekBeginDay << " AND " << weekEndDay << ") GROUP BY `guid`"
@@ -76,10 +76,10 @@ void HonorMaintenancer::LoadWeeklyScores()
         "  SELECT `guid` AS `guid`, 0 AS `hk`, 0 AS `dk`, SUM(`cp`) AS `cp` FROM `character_honor_cp` WHERE `type` NOT IN (" << HONORABLE << ", " << DISHONORABLE << ")"
         "  AND (`date` BETWEEN " << weekBeginDay << " AND " << weekEndDay << ") GROUP BY `guid`"
         "  UNION"
-        "  SELECT `guid` AS `guid`, 0 AS `hk`, 0 AS `dk`, 0 AS `cp` FROM `characters` WHERE `honor_rank_points` > 0"
+        "  SELECT `guid` AS `guid`, 0 AS `hk`, 0 AS `dk`, 0 AS `cp` FROM `characters` WHERE `honorRankPoints` > 0"
         ") AS `scores` INNER JOIN `characters` AS `c` ON `scores`.`guid` = `c`.`guid` GROUP BY `guid` ORDER BY `guid` ";
 
-    std::unique_ptr<QueryResult> result = CharacterDatabase.Query(query.str().c_str());
+    QueryResult* result = CharacterDatabase.Query(query.str().c_str());
 
     if (result)
     {
@@ -97,6 +97,7 @@ void HonorMaintenancer::LoadWeeklyScores()
             m_weeklyScores[fields[0].GetUInt32()] = score;
         }
         while (result->NextRow());
+        delete result;
     }
 }
 
@@ -129,7 +130,7 @@ void HonorMaintenancer::LoadStandingLists()
     std::sort(m_allianceStandingList.begin(), m_allianceStandingList.end());
     std::sort(m_hordeStandingList.begin(), m_hordeStandingList.end());
 
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Alliance: %u, Horde: %u, Inactive: %u",
+    sLog.outHonor("[MAINTENANCE] Alliance: %u, Horde: %u, Inactive: %u",
         m_allianceStandingList.size(), m_hordeStandingList.size(), m_inactiveStandingList.size());
 }
 
@@ -183,7 +184,7 @@ void HonorMaintenancer::InactiveDecayRankPoints()
 
 void HonorMaintenancer::SetCityRanks()
 {
-    CharacterDatabase.Execute("UPDATE `characters` SET `extra_flags` = `extra_flags` & ~0x0400");
+    CharacterDatabase.Execute("UPDATE `characters` SET `city_protector` = 0");
 
     std::map<uint8, std::pair<uint32, uint32>> highestStandingInRace =
     {
@@ -195,24 +196,28 @@ void HonorMaintenancer::SetCityRanks()
         {RACE_TAUREN, {0,0}},
         {RACE_GNOME, {0,0}},
         {RACE_TROLL, {0,0}},
+        {RACE_GOBLIN, {0,0}},
+        {RACE_HIGH_ELF, {0,0}},
     };
 
     for (uint8 i = 1; i < MAX_RACES; ++i)
     {
-        std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT `guid`, `honor_standing` FROM `characters` WHERE `honor_standing` > 0 and `race` = %u ORDER BY `honor_standing` ASC LIMIT 1", i);
+        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u' ORDER BY `honorLastWeekHK` DESC LIMIT 1", i);
 
         if (result)
         {
             do
             {
-                Field* fields = result->Fetch();
+                Field *fields = result->Fetch();
                 uint32 guid = fields[0].GetUInt32();
-                uint32 honorStanding = fields[1].GetUInt32();
+                uint32 kills = fields[1].GetUInt32();
 
-                highestStandingInRace[i] = std::make_pair(guid, honorStanding);
-            }
-            while (result->NextRow());
+                highestStandingInRace[i] = std::make_pair(guid, kills);
+
+            } while (result->NextRow());
         }
+
+        delete result;
     }
 
     for (auto& standing : highestStandingInRace)
@@ -220,14 +225,64 @@ void HonorMaintenancer::SetCityRanks()
         uint32 lowGuid = standing.second.first;
 
         if (lowGuid > 0)
-            CharacterDatabase.PExecute("UPDATE `characters` SET `extra_flags` = `extra_flags` | 0x0400 WHERE `guid` = %u", standing.second.first);
+            CharacterDatabase.PExecute("UPDATE `characters` SET city_protector = 1 WHERE `guid` = '%u'", standing.second.first);
     }
+}
+
+void HonorMaintenancer::FlushWeeklyQuests()
+{
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (50322, 50323, 70059)");
+}
+
+void HonorMaintenancer::AssignBountyTargets()
+{  
+    uint32 HordePlayerGUID{ 1 };
+    uint32 AlliancePlayerGUID{ 1 };
+
+    std::string HordePlayerName{"H_Empty"};
+    std::string AlliancePlayerName{"A_Empty"};
+
+    // Horde Player
+
+    QueryResult* result1 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorLastWeekHK` FROM characters WHERE race in (2,5,6,8) ORDER BY `honorLastWeekHK` DESC LIMIT 1");
+
+    if (result1)
+    {
+        Field* fields = result1->Fetch();
+        HordePlayerGUID = fields[0].GetUInt32();
+        HordePlayerName = fields[1].GetString();
+    }
+    delete result1;
+
+    // Alliance Player
+
+    QueryResult* result2 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorLastWeekHK` FROM characters WHERE race in (1,3,4,7) ORDER BY `honorLastWeekHK` DESC LIMIT 1");
+
+    if (result2)
+    {
+        Field* fields = result2->Fetch();
+        AlliancePlayerGUID = fields[0].GetUInt32();
+        AlliancePlayerName = fields[1].GetString();
+    }
+    delete result2;
+
+    CharacterDatabase.PExecute("REPLACE INTO `bounty_quest_targets` (id, horde_player, alliance_player) VALUES (1, %u, %u)", HordePlayerGUID, AlliancePlayerGUID);
+    
+    WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectives = CONCAT('Recently a vile criminal was sighted with actions uspeakably evil and such actions must be punished! On behalf of Military forces and royalty combined we issue an order for this person elimination.\n\nThere is a just reward for those brave enough to slay the criminal in question.\n\nName is: %s.\n\nReward: 250 Reputation points.\r\n') where entry = 50322", HordePlayerName.c_str());    
+    
+    WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectives = CONCAT('Recently a vile criminal was sighted with actions uspeakably evil and such actions must be punished! On behalf of Military forces and royalty combined we issue an order for this person elimination.\n\nThere is a just reward for those brave enough to slay the criminal in question.\n\nName is: %s.\n\nReward: 250 Reputation points.\r\n') where entry = 50323", AlliancePlayerName.c_str());    
 }
 
 void HonorMaintenancer::FlushRankPoints()
 {
-    // Imediatly reset honor standing before flushing
-    CharacterDatabase.Execute("UPDATE `characters` SET `honor_standing` = 0 WHERE `honor_standing` > 0");
+    // Immediately reset honor standing before flushing
+    CharacterDatabase.Execute("UPDATE `characters` SET `honorStanding` = 0 WHERE `honorStanding` > 0");
 
     for (auto& pair : m_weeklyScores)
     {
@@ -242,8 +297,8 @@ void HonorMaintenancer::FlushRankPoints()
         if (currentRank.visualRank > 0 && (currentRank.visualRank > highestRank.visualRank))
             highestRank = currentRank;
 
-        CharacterDatabase.PExecute("UPDATE `characters` SET `honor_highest_rank` = %u, `honor_rank_points` = %.1f, `honor_standing` = %u, "
-            "`honor_last_week_hk` = %u, `honor_stored_hk` = (`honor_stored_hk` + %u), `honor_stored_dk` = (`honor_stored_dk` + %u), `honor_last_week_cp` = %.1f WHERE `guid` = %u",
+        CharacterDatabase.PExecute("UPDATE `characters` SET `honorHighestRank` = %u, `honorRankPoints` = %.1f, `honorStanding` = %u, "
+            "`honorLastWeekHK` = %u, `honorStoredHK` = (`honorStoredHK` + %u), `honorStoredDK` = (`honorStoredDK` + %u), `honorLastWeekCP` = %.1f WHERE `guid` = %u",
             highestRank.rank,
             finiteAlways(weeklyScore.newRp), weeklyScore.standing,
             weeklyScore.hk, weeklyScore.hk, weeklyScore.dk,
@@ -259,31 +314,30 @@ void HonorMaintenancer::DoMaintenance()
     if (!m_markerToStart)
         return;
 
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Honor maintenance starting.");
+    sLog.outHonor("[MAINTENANCE] Honor maintenance starting.");
 
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Load weekly players scores.");
+    sLog.outHonor("[MAINTENANCE] Load weekly players scores.");
     LoadWeeklyScores();
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Load standing lists.");
+    sLog.outHonor("[MAINTENANCE] Load standing lists.");
     LoadStandingLists();
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Distribute rank points for Alliance.");
+    sLog.outHonor("[MAINTENANCE] Distribute rank points for Alliance.");
     DistributeRankPoints(ALLIANCE);
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Distribute rank points for Horde.");
+    sLog.outHonor("[MAINTENANCE] Distribute rank points for Horde.");
     DistributeRankPoints(HORDE);
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Decay rank points for inactive players.");
+    sLog.outHonor("[MAINTENANCE] Decay rank points for inactive players.");
     InactiveDecayRankPoints();
-
-    if (sWorld.getConfig(CONFIG_BOOL_ENABLE_CITY_PROTECTOR))
-    {
-        sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Assign city titles.");
-        SetCityRanks();
-    }
-
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Flush rank points.");
+    sLog.outHonor("[MAINTENANCE] Flush rank points.");
     FlushRankPoints();
+    sLog.outHonor("[MAINTENANCE] Assign city ranks.");
+    SetCityRanks();
+    sLog.outHonor("[MAINTENANCE] Flush weekly quests.");
+    FlushWeeklyQuests();
+    sLog.outHonor("[MAINTENANCE] Assign bounty quest targets.");
+    AssignBountyTargets();
 
     CreateCalculationReport();
 
-    sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[MAINTENANCE] Honor maintenance finished.");
+    sLog.outHonor("[MAINTENANCE] Honor maintenance finished.");
 
     ToggleMaintenanceMarker();
     SetMaintenanceDays(GetNextMaintenanceDay());
@@ -291,7 +345,7 @@ void HonorMaintenancer::DoMaintenance()
 
 void HonorMaintenancer::CreateCalculationReport()
 {
-    std::string timestamp = sLog.GetTimestampStr();
+    std::string timestamp = Log::GetTimestampStr();
     std::string filename = "HCR_" + timestamp + ".txt";
     std::string path = sWorld.GetHonorPath() + filename;
 
@@ -299,7 +353,7 @@ void HonorMaintenancer::CreateCalculationReport()
     ofs.open(path.c_str());
     if (!ofs.is_open())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Can't create HCR file!");
+        sLog.outError("Can't create HCR file!");
         return;
     }
 
@@ -433,51 +487,24 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
 {
     HonorScores sc;
 
-    // initialize the breakpoint values
-    // [-PROGRESSIVE]
-    // 1.11- values (source: http://www.wowwiki.com/Honor_system_%28pre-2.0_formulas%29)
-    if (sWorld.GetWowPatch() < WOW_PATCH_112)
-    {
-        sc.BRK[13] = 0.002f;
-        sc.BRK[12] = 0.007f;
-        sc.BRK[11] = 0.017f;
-        sc.BRK[10] = 0.037f;
-        sc.BRK[9] = 0.077f;
-        sc.BRK[8] = 0.137f;
-        sc.BRK[7] = 0.207f;
-        sc.BRK[6] = 0.287f;
-        sc.BRK[5] = 0.377f;
-        sc.BRK[4] = 0.477f;
-        sc.BRK[3] = 0.587f;
-        sc.BRK[2] = 0.715f;
-        sc.BRK[1] = 0.858f;
-        sc.BRK[0] = 1.000f;
-    }
-    else
-    {
-        // 1.12+
-        sc.BRK[13] = 0.003f;
-        sc.BRK[12] = 0.008f;
-        sc.BRK[11] = 0.020f;
-        sc.BRK[10] = 0.035f;
-        sc.BRK[9] = 0.060f;
-        sc.BRK[8] = 0.100f;
-        sc.BRK[7] = 0.159f;
-        sc.BRK[6] = 0.228f;
-        sc.BRK[5] = 0.327f;
-        sc.BRK[4] = 0.436f;
-        sc.BRK[3] = 0.566f;
-        sc.BRK[2] = 0.697f;
-        sc.BRK[1] = 0.845f;
-        sc.BRK[0] = 1.000f;
-    }
+    sc.BRK[13] = 0.003f;
+    sc.BRK[12] = 0.008f;
+    sc.BRK[11] = 0.020f;
+    sc.BRK[10] = 0.035f;
+    sc.BRK[9] = 0.060f;
+    sc.BRK[8] = 0.100f;
+    sc.BRK[7] = 0.159f;
+    sc.BRK[6] = 0.228f;
+    sc.BRK[5] = 0.327f;
+    sc.BRK[4] = 0.436f;
+    sc.BRK[3] = 0.566f;
+    sc.BRK[2] = 0.697f;
+    sc.BRK[1] = 0.845f;
+    sc.BRK[0] = 1.000f;
 
-    uint32 poolSize = sWorld.getConfig(CONFIG_UINT32_PVP_POOL_SIZE_PER_FACTION) == 0 ?
-            standingList.size() : sWorld.getConfig(CONFIG_UINT32_PVP_POOL_SIZE_PER_FACTION);
     // get the WS scores at the top of each break point
     for (float & group : sc.BRK)
-        group = floor((group * poolSize) + 0.5f);
-
+        group = floor((group * (standingList.size() > FAKE_PVP_POOL ? standingList.size() : FAKE_PVP_POOL)) + 0.5f); // Turtle WoW Custom: Fake PvP player pool
     // initialize RP array
     // set the low point
     sc.FY[0] = 0;
@@ -488,10 +515,10 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
         sc.FY[i] = (i - 1) * 1000;
 
     // and finally
-    sc.FY[14] = 13000;   // ... gets 13000 RP
+    sc.FY[14] = 13000; // ... gets 13000 RP
 
     // the X values for each breakpoint are found from the CP scores
-    // of the players around that point in the WS scores
+    // of the players around that point in the WS schcores
     float honor;
     float tempHonor;
 
@@ -547,9 +574,7 @@ float HonorMaintenancer::CalculateRpEarning(float cp, HonorScores sc)
 
 float HonorMaintenancer::CalculateRpDecay(float rpEarning, float rp)
 {
-    float decayMultiplier = sWorld.getConfig(CONFIG_FLOAT_RP_DECAY);
-
-    float decay = floor((decayMultiplier * rp) + 0.5f);
+    float decay = floor((0.2f * rp) + 0.5f);
     float delta = rpEarning - decay;
 
     if (delta < 0)
@@ -582,11 +607,11 @@ void HonorMaintenancer::CheckMaintenanceDay()
 {
     if (sWorld.GetGameDay() >= m_nextMaintenanceDay && !m_markerToStart)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "HonorMaintenancer: Server needs to be restarted to perform honor rank calculations.");
-
         // Restart 15 minutes after honor weekend by server time
         if (sWorld.getConfig(CONFIG_BOOL_AUTO_HONOR_RESTART))
-            sWorld.ShutdownServ(900, SHUTDOWN_MASK_RESTART, RESTART_EXIT_CODE);
+            sWorld.ShutdownServ(900, SHUTDOWN_MASK_RESTART, SHUTDOWN_EXIT_CODE);
+        else
+            sLog.outString("HonorMaintenancer: Server needs to be restarted to perform honor rank calculations.");
 
         ToggleMaintenanceMarker();
     }
@@ -595,8 +620,8 @@ void HonorMaintenancer::CheckMaintenanceDay()
 void HonorMaintenancer::ToggleMaintenanceMarker()
 {
     m_markerToStart = !m_markerToStart;
-    CharacterDatabase.PExecute("INSERT INTO `saved_variables` (`key`, `honor_maintenance_marker`) VALUES (0, %u) "
-        "ON DUPLICATE KEY UPDATE `honor_maintenance_marker` = %u", m_markerToStart, m_markerToStart);
+    CharacterDatabase.PExecute("INSERT INTO `saved_variables` (`key`, `honorMaintenanceMarker`) VALUES (0, %u) "
+        "ON DUPLICATE KEY UPDATE `honorMaintenanceMarker` = %u", m_markerToStart, m_markerToStart);
 }
 
 void HonorMaintenancer::SetMaintenanceDays(uint32 last, uint32 next)
@@ -606,22 +631,21 @@ void HonorMaintenancer::SetMaintenanceDays(uint32 last, uint32 next)
     if (!next)
         m_nextMaintenanceDay = m_lastMaintenanceDay + 7;
 
-    CharacterDatabase.PExecute("INSERT INTO `saved_variables` (`key`, `honor_last_maintenance_day`, `honor_next_maintenance_day`) VALUES (0, %u, %u) "
-        "ON DUPLICATE KEY UPDATE `honor_last_maintenance_day` = %u, `honor_next_maintenance_day` = %u",
+    CharacterDatabase.PExecute("INSERT INTO `saved_variables` (`key`, `lastHonorMaintenanceDay`, `nextHonorMaintenanceDay`) VALUES (0, %u, %u) "
+        "ON DUPLICATE KEY UPDATE `lastHonorMaintenanceDay` = %u, `nextHonorMaintenanceDay` = %u",
         m_lastMaintenanceDay, m_nextMaintenanceDay, m_lastMaintenanceDay, m_nextMaintenanceDay);
 }
 
 void HonorMaintenancer::Initialize()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Initialize Honor Maintenance system...");
-
-    std::unique_ptr<QueryResult> result = CharacterDatabase.Query("SELECT `honor_last_maintenance_day`, `honor_next_maintenance_day`, `honor_maintenance_marker` FROM `saved_variables`");
+    QueryResult* result = CharacterDatabase.Query("SELECT `lastHonorMaintenanceDay`, `nextHonorMaintenanceDay`, `honorMaintenanceMarker` FROM `saved_variables`");
     if (result)
     {
         Field* fields = result->Fetch();
         m_lastMaintenanceDay = fields[0].GetUInt32();
         m_nextMaintenanceDay = fields[1].GetUInt32();
         m_markerToStart = fields[2].GetBool();
+        delete result;
     }
 
     if (!m_lastMaintenanceDay)
@@ -675,7 +699,7 @@ void HonorMgr::Save()
         switch (honorCP.state)
         {
             case STATE_NEW:
-                CharacterDatabase.PExecute("INSERT INTO `character_honor_cp` (`guid`, `victim_type`, `victim_id`, `cp`, `date`, `type`) "
+                CharacterDatabase.PExecute("INSERT INTO `character_honor_cp` (`guid`, `victimType`, `victim`, `cp`, `date`, `type`) "
                     " VALUES (%u, %u, %u, %.1f, %u, %u)", m_owner->GetGUIDLow(), honorCP.victimType, honorCP.victimId,
                     finiteAlways(honorCP.cp), honorCP.date, honorCP.type);
                 honorCP.state = STATE_UNCHANGED;
@@ -699,8 +723,8 @@ void HonorMgr::Save()
     ss << "INSERT INTO `character_honor_static` (`guid`, `hk`, `dk`, `today_hk`, `today_dk`, "
         "`yesterday_kills`, `yesterday_cp`, `thisWeek_kills`, `thisWeek_cp`, `lastWeek_kills`, `lastWeek_cp`) VALUES ("
         << m_owner->GetGUIDLow() << ", "
-        << m_owner->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS) << ", "
-        << m_owner->GetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORBALE_KILLS) << ", "
+        << m_owner->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) << ", "
+        << m_owner->GetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORABLE_KILLS) << ", "
         << m_owner->GetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 0) << ", "
         << m_owner->GetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 1) << ", "
         << m_owner->GetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS) << ", "
@@ -717,13 +741,13 @@ void HonorMgr::SaveStoredData()
     if (!m_owner)
         return;
 
-    CharacterDatabase.PExecute("UPDATE `characters` SET `honor_rank_points` = %.1f, `honor_standing` = %u, `honor_highest_rank` = %u, "
-            "`honor_last_week_hk` = %u, `honor_last_week_cp` = %.1f, `honor_stored_hk` = %u, `honor_stored_dk` = %u WHERE `guid` = %u",
+    CharacterDatabase.PExecute("UPDATE `characters` SET `honorRankPoints` = %.1f, `honorStanding` = %u, `honorHighestRank` = %u, "
+            "`honorLastWeekHK` = %u, `honorLastWeekCP` = %.1f, `honorStoredHK` = %u, `honorStoredDK` = %u WHERE `guid` = %u",
             finiteAlways(m_rankPoints), m_standing, m_highestRank.rank, m_lastWeekHK,
             finiteAlways(m_lastWeekCP), m_storedHK, m_storedDK, m_owner->GetGUIDLow());
 }
 
-void HonorMgr::Load(std::unique_ptr<QueryResult> result)
+void HonorMgr::Load(QueryResult* result)
 {
     if (result)
     {
@@ -749,14 +773,14 @@ void HonorMgr::Load(std::unique_ptr<QueryResult> result)
     }
 }
 
-bool HonorMgr::Add(float cp, uint8 type, Unit const* source)
+bool HonorMgr::Add(float cp, uint8 type, Unit* source)
 {
     // Prevent give fake records to db with 0 honor
     if (!cp || !m_owner)
         return false;
 
     // If not source, then give yourself
-    Unit const* realSource = source;
+    Unit* realSource = source;
     if (!source)
         source = m_owner;
 
@@ -772,25 +796,21 @@ bool HonorMgr::Add(float cp, uint8 type, Unit const* source)
 
     // get IP if source is player
     std::string ip;
-    if (Player const* victim = source->ToPlayer())
+    if (Player* victim = source->ToPlayer())
         ip = victim->GetSession()->GetRemoteAddress();
 
     bool plr = source->GetTypeId() == TYPEID_PLAYER;
 
     if (m_owner->GetMap()->IsBattleGround())
-        sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[BATTLEGROUND]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
+        sLog.outHonor("[BATTLEGROUND]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
             m_owner->GetSession()->GetPlayerName(), m_owner->GetSession()->GetAccountId(), honor, type, plr ? "player" : "unit", source->GetName(), ip.c_str());
     else
-        sLog.Out(LOG_HONOR, LOG_LVL_BASIC, "[OPEN WORLD]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
+        sLog.outHonor("[OPEN WORLD]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
             m_owner->GetSession()->GetPlayerName(), m_owner->GetSession()->GetAccountId(), honor, type, plr ? "player" : "unit", source->GetName(), ip.c_str());
 
+	// DK penalties are subtracted from your RP score immediately and are not included in weekly adjustment.
     if (type == DISHONORABLE)
-    {
-        // DK penalties are subtracted from your RP score immediately
-        // and are not included in weekly adjustment
-        // remove this check to have negative ranks
-        m_rankPoints = m_rankPoints > honorCP.cp ? m_rankPoints - honorCP.cp : 0;
-    }
+        m_rankPoints = m_rankPoints - honorCP.cp;
 
     m_honorCP.push_back(honorCP);
 
@@ -800,8 +820,7 @@ bool HonorMgr::Add(float cp, uint8 type, Unit const* source)
     return true;
 }
 
-void HonorMgr::Update()
-{
+void HonorMgr::Update() {
     if (!m_owner)
         return;
 
@@ -819,25 +838,21 @@ void HonorMgr::Update()
     m_totalDK = m_storedDK;
     m_totalHK = m_storedHK;
 
-    for (auto& itr : m_honorCP)
-    {
-        if (itr.type == HONORABLE)
-        {
+    for (auto &itr : m_honorCP) {
+        if (itr.type == HONORABLE) {
             if (itr.date == today)
                 ++todayHK;
 
             if (itr.date == yesterday)
                 ++yesterdayKills;
 
-            if (itr.date >= thisWeekBegin)
-            {
+            if (itr.date >= thisWeekBegin) {
                 ++thisWeekKills;
                 ++m_totalHK;
             }
         }
 
-        if (itr.type != DISHONORABLE)
-        {
+        if (itr.type != DISHONORABLE) {
             if (itr.date == yesterday)
                 yesterdayCP += itr.cp;
 
@@ -845,8 +860,7 @@ void HonorMgr::Update()
                 thisWeekCP += itr.cp;
         }
 
-        if (itr.type == DISHONORABLE)
-        {
+        if (itr.type == DISHONORABLE) {
             if (itr.date == today)
                 ++todayDK;
 
@@ -859,19 +873,17 @@ void HonorMgr::Update()
         SetHighestRank(m_rank);
 
     // HIGHEST RANK
-    m_owner->SetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_HIGHEST_HONOR_RANK, m_highestRank.rank);
+    m_owner->SetByteValue(PLAYER_FIELD_BYTES, 3, m_highestRank.rank);
     // RANK (Patent)
-    m_owner->SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_HONOR_RANK, m_rank.rank);
-
-// World of Warcraft Client Patch 1.6.0 (2005-07-12)
-// - There is now a progress bar on the Honor tab of your character window that displays how close you are to your next rank.
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
-    uint32 honorBar = uint32(m_rankPoints >= 0.0f ? m_rankPoints : -1 * m_rankPoints);
-    honorBar = uint8(((honorBar - m_rank.minRP) / (m_rank.maxRP - m_rank.minRP)) * (m_rank.positive ? 255 : -255));
-
-    // PLAYER_FIELD_HONOR_BAR
-    m_owner->SetByteValue(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_HONOR_RANK_BAR, honorBar);
-#endif
+    if (!m_owner->IsIgnoringTitles()) {
+        m_owner->SetByteValue(PLAYER_BYTES_3, 3, m_rank.rank);
+    
+        uint32 honorBar = uint32(m_rankPoints >= 0.0f ? m_rankPoints : -1 * m_rankPoints);
+        honorBar = uint8(((honorBar - m_rank.minRP) / (m_rank.maxRP - m_rank.minRP)) * (m_rank.positive ? 255 : -255));
+    
+        // PLAYER_FIELD_HONOR_BAR
+        m_owner->SetUInt32Value(PLAYER_FIELD_BYTES2, honorBar);
+    }
 
     // TODAY
     m_owner->SetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 0, todayHK);
@@ -881,13 +893,9 @@ void HonorMgr::Update()
     m_owner->SetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS, yesterdayKills);
     m_owner->SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, uint32(yesterdayCP > 0.0f ? yesterdayCP : 0.0f));
 
-// World of Warcraft Client Patch 1.6.0 (2005-07-12)
-// - There is a new "This Week" section of the Honor tab, which will display PvP accomplishments of the current week.
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_6_1
     // THIS WEEK
     m_owner->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_KILLS, thisWeekKills);
     m_owner->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_CONTRIBUTION, uint32(thisWeekCP > 0.0f ? thisWeekCP : 0.0f));
-#endif
 
     // LAST WEEK
     m_owner->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_KILLS, m_lastWeekHK);
@@ -895,8 +903,8 @@ void HonorMgr::Update()
     m_owner->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_RANK, m_standing);
 
     // LIFE TIME
-    m_owner->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS, m_totalHK);
-    m_owner->SetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORBALE_KILLS, m_totalDK);
+    m_owner->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, m_totalHK);
+    m_owner->SetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORABLE_KILLS, m_totalDK);
 }
 
 void HonorMgr::InitRankInfo(HonorRankInfo &prk)
@@ -1019,10 +1027,10 @@ float HonorMgr::HonorableKillPoints(Player* killer, Player* victim, uint32 group
     uint8 killerLevel = killer->GetLevel();
     uint8 victimLevel = victim->GetLevel();
 
-    return MaNGOS::Honor::GetHonorGain(killerLevel, victimLevel, victimRank, totalKills, groupSize);
+    return MaNGOS::Honor::GetHonorGain(killerLevel, victimLevel, victimRank, totalKills, groupSize, killer->InGurubashiArena(false));
 }
 
-void HonorMgr::SendPVPCredit(Unit const* victim, float honor)
+void HonorMgr::SendPVPCredit(Unit* victim, float honor)
 {
     if (!m_owner)
         return;
@@ -1039,25 +1047,15 @@ void HonorMgr::SendPVPCredit(Unit const* victim, float honor)
     {
         data << victim->GetObjectGuid();
 
-        if (victim->IsCreature())
+        if (victim->GetTypeId() == TYPEID_UNIT)
         {
             if (((Creature*)victim)->IsRacialLeader())
                 data << int32(19);
             else
                 data << int32(0);
         }
-        else if (victim->IsPlayer())
-        {
-            // Never display just "HK:" without rank name.
-            // When killing a player with no rank,
-            // we need to send first rank instead.
-            // https://youtu.be/hef06Cs6Q34?t=191
-            // New classic client does this on its own.
-            int32 rank = ((Player const*)victim)->GetHonorMgr().GetRank().rank;
-            if (!rank)
-                rank = (HONOR_RANK_COUNT - POSITIVE_HONOR_RANK_COUNT) + 1;
-            data << uint32(rank);
-        }
+        else if (victim->GetTypeId() == TYPEID_PLAYER)
+            data << uint32(((Player*)victim)->GetHonorMgr().GetRank().rank);
     }
 
     m_owner->SendDirectMessage(&data);
