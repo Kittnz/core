@@ -29,6 +29,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include "AllocatorWithCategory.h"
 
 /** ObjectRegistry holds all registry item of the same type
  */

@@ -46,6 +46,7 @@ set (framework_SRCS
 	Policies/ThreadingModel.h
 	Utilities/ByteConverter.h
 	Utilities/Callback.h
+	Utilities/robin_hood.h
 	Utilities/EventProcessor.h
 	Utilities/EventMap.h
 	Utilities/LinkedList.h
@@ -118,3 +119,7 @@ SET_TARGET_PROPERTIES (framework PROPERTIES FOLDER "Game Libs")
 target_link_libraries(framework
   ${TBB_LIBRARIES}
 )
+
+if(USE_TRACY)
+  target_link_libraries(framework PUBLIC TracyClient)
+endif()

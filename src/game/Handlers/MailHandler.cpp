@@ -295,7 +295,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(req->receiver.GetCounter()))
             hardcoreStatus = pCache->uiHardcoreStatus;
 
-        bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+        bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60);
         if (!GetPlayer()->IsHardcore() && receiverIsHardcore)
         {
             if (req->money || req->COD || req->itemGuid)
@@ -406,7 +406,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     }
 
     // Antispam checks
-    if (loadedPlayer->GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_LEVEL) &&
+    if (loadedPlayer->GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_LEVEL) && !loadedPlayer->GetSession()->HasHighLevelCharacter() &&
         req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
         (sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
     {
@@ -833,7 +833,15 @@ void WorldSession::HandleMailTakeMoney(WorldPacket& recv_data)
 
     SendMailResult(mailId, MAIL_MONEY_TAKEN, MAIL_OK);
 
-    loadedPlayer->LogModifyMoney(m->money, "Mail", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    if (m->stationery == MAIL_STATIONERY_DEFAULT)
+        loadedPlayer->LogModifyMoney(m->money, "MailNormal", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    else if (m->stationery == MAIL_STATIONERY_GM)
+        loadedPlayer->LogModifyMoney(m->money, "MailGM", ObjectGuid(HIGHGUID_PLAYER, m->sender));
+    else if (m->stationery == MAIL_STATIONERY_AUCTION)
+        loadedPlayer->LogModifyMoney(m->money, "MailAuction", ObjectGuid(), m->sender);
+    else
+        loadedPlayer->LogModifyMoney(m->money, "MailSpecial", ObjectGuid(), m->sender);
+
     m->money = 0;
     m->state = MAIL_STATE_CHANGED;
     pl->MarkMailsUpdated();

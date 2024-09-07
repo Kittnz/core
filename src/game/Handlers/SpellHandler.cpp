@@ -285,7 +285,6 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
 {
-    uint32 now = WorldTimer::getMSTime();
     ObjectGuid guid;
 
     recv_data >> guid;
@@ -321,10 +320,6 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
         _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_USE);
         obj->Use(_player);
     }
-    
-    uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
-    if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
-        sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_GAMEOBJ_USE with lowGUID %u, entry %u.", obj->GetGUIDLow(), obj->GetEntry());
 }
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
@@ -443,7 +438,13 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
     if (!spellInfo)
         return;
 
-    if (spellInfo->Attributes & SPELL_ATTR_CANT_CANCEL)
+    if (spellInfo->HasAttribute( SPELL_ATTR_CANT_CANCEL))
+        return;
+
+    if (spellInfo->HasAttribute(SPELL_ATTR_HIDDEN_CLIENTSIDE))
+        return;
+
+    if (spellInfo->HasAttribute(SPELL_ATTR_EX_DONT_DISPLAY_IN_AURA_BAR) && !spellInfo->activeIconID)
         return;
 
     if (spellInfo->IsPassiveSpell())

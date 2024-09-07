@@ -186,16 +186,10 @@ typedef std::unordered_map<uint32, std::unique_ptr<GmTicket>> GmTicketList;
 
 class TicketMgr
 {
-private:
-    TicketMgr();
-    ~TicketMgr();
-
 public:
-    static TicketMgr* instance()
-    {
-        static TicketMgr instance;
-        return &instance;
-    }
+
+	TicketMgr();
+	~TicketMgr();
 
     void LoadTickets();
     void LoadSurveys();
@@ -268,6 +262,6 @@ protected:
     std::vector<std::pair<std::string, std::string>> m_ticketTemplates;
 };
 
-#define sTicketMgr TicketMgr::instance()
+extern TicketMgr sTicketMgr;
 
 #endif // _TICKETMGR_H

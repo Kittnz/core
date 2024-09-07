@@ -27,6 +27,7 @@
 #include "ItemEnchantmentMgr.h"
 #include "GuildMgr.h"
 #include "miscellaneous/feature_transmog.h"
+#include "PerfStats.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -232,6 +233,13 @@ Item::Item() : loot(nullptr)
     mb_in_trade = false;
     m_lootState = ITEM_LOOT_NONE;
     generatedLoot = false;
+
+    ++PerfStats::g_totalItems;
+}
+
+Item::~Item()
+{
+    --PerfStats::g_totalItems;
 }
 
 bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
@@ -296,7 +304,7 @@ void Item::UpdateDuration(Player* owner, uint32 diff)
     SetState(ITEM_CHANGED, owner);                          // save new time in database
 }
 
-void Item::SaveToDB()
+void Item::SaveToDB(bool direct)
 {
     uint32 guid = GetGUIDLow();
     switch (uState)
@@ -349,7 +357,10 @@ void Item::SaveToDB()
             stmt.addUInt32(GetUInt32Value(ITEM_FIELD_ITEM_TEXT_ID));
             stmt.addUInt8(generatedLoot); // can't use bool, SQL ERROR: Using unsupported buffer type: 16  (parameter: 13), todo, maybe.
             stmt.addUInt32(guid);
-            stmt.Execute();
+            if (!direct)
+                stmt.Execute();
+            else
+                stmt.DirectExecute();
         }
         break;
         case ITEM_REMOVED:
@@ -1125,6 +1136,28 @@ void Item::BuildUpdateData(UpdateDataMapType& update_players)
         BuildUpdateDataForPlayer(pl, update_players);
 
     ClearUpdateMask(false);
+}
+
+void Item::UpdateDurability(uint32 durability, Player* pPlayer)
+{
+    m_uint32Values[ITEM_FIELD_DURABILITY] = durability;
+    UpdateData data;
+    BuildValuesUpdateBlockForPlayer(&data, pPlayer);
+    data.Send(pPlayer->GetSession());
+    m_uint32Values_mirror[ITEM_FIELD_DURABILITY] = durability;
+}
+
+uint32 Item::GetVisibleEntry() const
+{
+    if (sWorld.IsAprilFools())
+    {
+        if (GetProto()->InventoryType == INVTYPE_HEAD)
+            return 51050;
+    }
+
+    if (uint32 appearanceItemId = GetTransmogrification())
+        return appearanceItemId;
+    return GetEntry();
 }
 
 InventoryResult Item::CanBeMergedPartlyWith(ItemPrototype const* proto) const

@@ -74,15 +74,16 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
             m_creature->AddThreat(randomPlayer, 300.f);
 
             // Special Attack Handling
-            if (randomPlayer->GetHealthPercent() <= 40) {
-                me->DoKillUnit(randomPlayer);
+            if (randomPlayer->GetHealthPercent() <= 40)
+            {
+                int32 damage = randomPlayer->GetHealth();
+                me->CastCustomSpell(randomPlayer, SpellBackstab, &damage, nullptr, nullptr, false);
                 me->MonsterSendTextToZone("Another one bites the dust.", CHAT_MSG_MONSTER_YELL);
-            } else {
-                const auto damage = randomPlayer->GetHealth() / 50;
-                me->DealDamage(randomPlayer, damage, nullptr, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-
-                // Cast Backstab on the player
-                DoCast(randomPlayer, SpellBackstab, false);
+            }
+            else
+            {
+                int32 damage = randomPlayer->GetHealth() / 2;
+                me->CastCustomSpell(randomPlayer, SpellBackstab, &damage, nullptr, nullptr, false);
             }
         }
 
@@ -147,7 +148,7 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
 
 private:
     enum eSpellIds {
-        SpellBackstab = 22416,
+        SpellBackstab = 46320,
         SpellDarkMending = 16588,
         SpellGouge = 11286,
         SpellSinisterStrike = 11294,

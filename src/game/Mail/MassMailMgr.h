@@ -127,7 +127,7 @@ class MassMailMgr
         MassMailList m_massMails;
 };
 
-#define sMassMailMgr MaNGOS::Singleton<MassMailMgr>::Instance()
+extern MassMailMgr sMassMailMgr;
 
 #endif
 /*! @} */

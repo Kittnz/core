@@ -261,6 +261,32 @@ BattleGround::~BattleGround()
 
 void BattleGround::Update(uint32 diff)
 {
+
+    /*********************************************************/
+/***           BATTLEGROUND ENDING SYSTEM              ***/
+/*********************************************************/
+
+    if (GetStatus() == STATUS_WAIT_LEAVE)
+    {
+        // remove all players from battleground after 2 minutes
+        m_EndTime -= diff;
+        if (m_EndTime <= 0)
+        {
+            m_EndTime = 0;
+            BattleGroundPlayerMap::iterator itr, next;
+            for (itr = m_Players.begin(); itr != m_Players.end(); itr = next)
+            {
+                next = itr;
+                ++next;
+                //itr is erased here!
+                RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
+                // do not change any battleground's private variables
+            }
+            delete this;
+            return;
+        }
+    }
+
     if (!GetPlayersSize())
     {
         // BG is empty
@@ -275,6 +301,9 @@ void BattleGround::Update(uint32 diff)
         // BattleGround Template instance cannot be updated, because it would be deleted
         if (!GetInvitedCount(HORDE) && !GetInvitedCount(ALLIANCE))
             delete this;
+        // update queue to avoid bg remaining indefinitely until player logs back in if he logs out after it pops
+        else if (GetStatus() <= STATUS_WAIT_JOIN && (GetBgMap()->GetCreateTime() + 2 * MINUTE) < time(nullptr))
+            sBattleGroundMgr.ScheduleQueueUpdate(BattleGroundMgr::BGQueueTypeId(GetTypeID()), GetTypeID(), GetBracketId());
 
         return;
     }
@@ -387,7 +416,7 @@ void BattleGround::Update(uint32 diff)
             PlaySoundToAll(SOUND_BG_START);
 
             // Announce BG starting
-            if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
+            if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START) && GetTypeID() != BATTLEGROUND_BR)
             {
                 static time_t lastAnnounceTime = 0;
                 if (sWorld.GetGameTime() > (lastAnnounceTime + MINUTE * 2))
@@ -403,29 +432,6 @@ void BattleGround::Update(uint32 diff)
     {
         StartingEventDespawnDoors();
         m_Events |= BG_DOORS_DESPAWNED;
-    }
-
-    /*********************************************************/
-    /***           BATTLEGROUND ENDING SYSTEM              ***/
-    /*********************************************************/
-
-    if (GetStatus() == STATUS_WAIT_LEAVE)
-    {
-        // remove all players from battleground after 2 minutes
-        m_EndTime -= diff;
-        if (m_EndTime <= 0)
-        {
-            m_EndTime = 0;
-            BattleGroundPlayerMap::iterator itr, next;
-            for (itr = m_Players.begin(); itr != m_Players.end(); itr = next)
-            {
-                next = itr;
-                ++next;
-                //itr is erased here!
-                RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
-                // do not change any battleground's private variables
-            }
-        }
     }
 
     //update start time
@@ -772,6 +778,10 @@ void BattleGround::EndBattleGround(Team winner)
 
     if (winmsg_id)
         SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+
+    // remove any invited players from the queue when bg ends
+    if (GetInvitedCount(HORDE) || GetInvitedCount(ALLIANCE))
+        sBattleGroundMgr.ScheduleQueueUpdate(BattleGroundMgr::BGQueueTypeId(GetTypeID()), GetTypeID(), GetBracketId());
 }
 
 uint32 BattleGround::GetBonusHonorFromKill(uint32 kills) const
@@ -927,6 +937,9 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             pPlayer->SetHealth(pPlayer->GetMaxHealth());
             if (pPlayer->GetPowerType() == POWER_MANA)
                 pPlayer->SetPower(POWER_MANA, pPlayer->GetMaxPower(POWER_MANA));
+
+            // Turtle: always dismount on leaving
+            pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
         }
         else
         {
@@ -934,6 +947,10 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             pPlayer->ResurrectPlayer(1.0f);
             pPlayer->SpawnCorpseBones();
         }
+
+        // Turtle: unflag players after bg ends
+        if (!pPlayer->HasChallenge(CHALLENGE_WAR_MODE))
+            pPlayer->UpdatePvP(false, true);
 
         // Turtle: restore spent Soul Shards at bg end
         if (pPlayer->GetSoulShardCountBeforeBgJoin())
@@ -1291,7 +1308,7 @@ void BattleGround::DoorOpen(ObjectGuid guid)
 
 bool BattleGround::CanBeSpawned(Creature* creature) const
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1308,7 +1325,7 @@ bool BattleGround::CanBeSpawned(Creature* creature) const
 
 void BattleGround::OnObjectDBLoad(Creature* creature)
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1341,7 +1358,7 @@ ObjectGuid BattleGround::GetSingleGameObjectGuid(uint8 event1, uint8 event2)
 
 void BattleGround::OnObjectDBLoad(GameObject* obj)
 {
-    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetGameObjectEventsVector(obj->GetGUIDLow());
+    turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetGameObjectEventsVector(obj->GetGUIDLow());
 
     ASSERT(eventsVector.size());
 
@@ -1468,7 +1485,7 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
     GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
-        std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
 
         ASSERT(eventsVector.size());
 
@@ -1501,7 +1518,7 @@ void BattleGround::SetSpawnEventMode(uint8 event1, uint8 event2, BattleGroundCre
     GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
-        std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
+        turtle_vector<BattleGroundEventIdx, Category_Battleground> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
 
         ASSERT(eventsVector.size());
 
@@ -1867,6 +1884,27 @@ bool BattleGround::IsPlayerInBattleGround(ObjectGuid guid)
 {
     BattleGroundPlayerMap::const_iterator itr = m_Players.find(guid);
     return itr != m_Players.end();
+}
+
+std::string BattleGround::TypeToString(BattleGroundTypeId type)
+{
+    switch (type)
+    {
+    case BATTLEGROUND_TYPE_NONE:
+        return "None";
+    case BATTLEGROUND_AV:
+        return "Alterac Valley";
+    case BATTLEGROUND_WS:
+        return "Warsong Gulch";
+    case BATTLEGROUND_AB:
+        return "Arathi Basin";
+    case BATTLEGROUND_BR:
+        return "Blood Ring";
+    case BATTLEGROUND_SV:
+        return "Sunnyglade Valley";
+    default:
+        return "???";
+    }
 }
 
 void BattleGround::PlayerAddedToBGCheckIfBGIsRunning(Player* pPlayer)

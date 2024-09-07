@@ -883,6 +883,8 @@ enum SpellAttributesCustom
     SPELL_CUSTOM_NOT_REMOVED_ON_EVADE       = 0x400,     // Aura persists after creature evades
     SPELL_CUSTOM_SEND_CHANNEL_VISUAL        = 0x800,     // Will periodically send the channeling spell visual kit
     SPELL_CUSTOM_PERSISTENT_NO_STACK        = 0x1000,    // Makes persistent area auras not stack between casters
+    SPELL_CUSTOM_DEATH_DUNGEON_PERSISTENT   = 0x2000,
+    SPELL_CUSTOM_STACK_WITH_SPELL_SPECIFIC  = 0x4000,    // Stacks with other auras from caster with same spell specific type
 };
 
 // Custom flags assigned by the core based on spell template data

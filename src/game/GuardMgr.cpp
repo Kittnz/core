@@ -22,7 +22,7 @@
 #include "Log.h"
 #include "Policies/SingletonImp.h"
 
-INSTANTIATE_SINGLETON_1(GuardMgr);
+GuardMgr sGuardMgr;
 
 #define GUARD_POST_USE_COOLDOWN  10000
 #define GUARD_POST_RECHARGE_TIME 60000

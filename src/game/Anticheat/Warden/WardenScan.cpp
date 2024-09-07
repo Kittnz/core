@@ -174,7 +174,7 @@ WindowsMemoryScan::WindowsMemoryScan(const std::string &module, uint32 offset, s
              << static_cast<uint8>(this->_expected.size());
     }, checker, module.length() + sizeof(uint8) + sizeof(uint8) + sizeof(uint32) + sizeof(uint8), sizeof(uint8) + length, comment, flags) {}
 
-WindowsCodeScan::WindowsCodeScan(uint32 offset, const std::vector<uint8> &pattern, bool memImageOnly, bool wanted, const std::string &comment, uint32 flags)
+WindowsCodeScan::WindowsCodeScan(uint32 offset, const std::vector<uint8>& pattern, bool memImageOnly, bool wanted, const std::string &comment, uint32 flags)
     : _offset(offset), _pattern(pattern), _memImageOnly(memImageOnly), _wanted(wanted),
     WindowsScan(
     // builder

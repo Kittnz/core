@@ -520,13 +520,19 @@ void PatrolMovementGenerator::StartMove(Creature& creature)
         default:
             return;
     }
-    // Calcul de la prochaine position
+
+    // Calculation of the next position.
     uint32 leaderTimeBeforeNextWP = leader->movespline->timeElapsed(); // Temps restant pour le leader.
     if (!leaderTimeBeforeNextWP)
         return;
+
     uint32 totalLeaderPoints = leader->movespline->CountSplinePoints();
     Vector3 last = leader->movespline->GetPoint(totalLeaderPoints);
     Vector3 direction = last - leader->movespline->GetPoint(totalLeaderPoints - 1);
+
+    if (direction.isZero())
+        return;
+
     float angle = atan2(direction.y, direction.x);
     float x, y, z;
     _groupMember->ComputeRelativePosition(angle, x, y);

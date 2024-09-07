@@ -29,6 +29,7 @@
 #include "Warden/WardenWin.hpp"
 #include "Warden/WardenMac.hpp"
 #include "Warden/WardenScanMgr.hpp"
+#include "Warden/WardenModuleMgr.hpp"
 
 #include <memory>
 #include <sstream>
@@ -237,6 +238,8 @@ void AnticheatLib::Reload()
 void AnticheatLib::Initialize()
 {
     Reload();
+
+    sWardenModuleMgr.LoadWardenModules();
 
     // these should be loaded only on startup since they wont change without a recompile anyway
     sLog.outString("Loading scripted Warden scans...");

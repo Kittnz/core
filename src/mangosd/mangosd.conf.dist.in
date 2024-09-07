@@ -868,7 +868,6 @@ AllowTwoSide.AddFriend = 1
 
 GM.JoinOppositeFactionChannels = 0
 
-
 #FactionBalance.Enable. Enables or disables below config to check for strict faction balance on active players.
 
 FactionBalance.Enable = 0
@@ -1058,11 +1057,11 @@ WhisperRestriction = 0
 
 # SayMinLevel. Minimum level to /say in chat.
 
-SayMinLevel = 1;
+SayMinLevel = 1
 
 # SayEmoteMinLevel. Minimum level to /emote in chat.
 
-SayEmoteMinLevel = 1;
+SayEmoteMinLevel = 1
 
 # Antiflood.Sanction. Sanction applied to a player if sending too many packets.
 
@@ -1810,7 +1809,6 @@ DurabilityLossChance.Damage = 0.5
 
 DurabilityLossChance.Absorb = 0.5
 
-
 # DurabilityLossChance.Parry. Chance lost weapon durability point at parry.
 
 DurabilityLossChance.Parry = 0.05
@@ -1945,7 +1943,6 @@ OutdoorPvp.EPEnabled = 1
 
 Network.Threads = 4
 
-#
 # Network.OutKBuff. The size of the output kernel buffer used ( SO_SNDBUF socket option, tcp manual ).
 
 Network.OutKBuff = -1
@@ -2090,9 +2087,16 @@ Suspicious.Movement.Enable = 1
 Suspicious.Fishing.Enable = 1
 Suspicious.Npckilling.Enable = 1
 
-
-
 # If player reach speed higher then this - it will be reported
 # For reference - walking speed is 8 units per second
 # Please note, that calculation is not precise!
 Suspicious.Movement.MovementSpeedThreshold = 100.0
+
+# Shop.RefundWindow - how long players have to request refund of shop items after buying them (in seconds)
+Shop.RefundWindow = 2592000
+
+# Performance tracking
+Perf.Enable = 1
+
+# Report to logs DB. Time in seconds
+Perf.ReportInterval = 600

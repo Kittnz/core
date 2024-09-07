@@ -94,6 +94,8 @@ struct boss_grizikilAI : public ScriptedAI
 			m_GrellkinFlameweaveTimer -= uiDiff;
 
 		DoMeleeAttackIfReady();
+
+		EnterEvadeIfOutOfCombatArea(uiDiff);
 	}
 };
 

@@ -170,27 +170,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     uint32 type;
     uint32 lang;
 
-    auto LogPerformance = [&now, type, lang](const std::string& message, bool bWasTurtleCommand)
-    {
-        uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
-        if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
-        {
-            sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_MESSAGECHAT(%s) with type %u, lang %u, message %s.", bWasTurtleCommand ? "t" : "g", type, lang, message.c_str());
-        }
-    };
-
-    struct MessageChatMonitor
-    {
-        std::string text = "NO MESSAGE";
-        std::function<void(std::string, bool)> _logger;
-        bool bWasTurtleAddonMsg = false;
-        MessageChatMonitor(std::function<void(std::string, bool)> logger) : _logger(logger) {}
-        ~MessageChatMonitor()
-        {
-            _logger(text, bWasTurtleAddonMsg);
-        }
-    } mon{ LogPerformance };
-
     recv_data >> type;
     recv_data >> lang;
 
@@ -260,26 +239,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (!ModLangAuras.empty())
                 lang = ModLangAuras.front()->GetModifier()->m_miscvalue;
         }
-
-        if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
-        {
-            time_t currTime = time(nullptr);
-
-            if (!_player->CanSpeak()) // Muted
-            {
-                std::string timeStr = "";
-
-                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
-                    timeStr = secsToTimeString(m_muteTime / 1000);
-                else
-                    timeStr = secsToTimeString(m_muteTime - currTime);
-
-                SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
-                return;
-            }
-            if (lang != LANG_ADDON && GetMasterPlayer())
-                GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
-        }
     }
 
     if (type != CHAT_MSG_AFK &&
@@ -297,7 +256,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             recv_data >> channel;
             recv_data >> msg;
-            mon.text = msg;
 
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
@@ -325,7 +283,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_HARDCORE:
         {
             recv_data >> msg;
-            mon.text = msg;
             if (!ProcessChatMessageAfterSecurityCheck(msg, lang, type))
                 return;
             if (msg.empty())
@@ -336,7 +293,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         case CHAT_MSG_DND:
         {
             recv_data >> msg;
-            mon.text = msg;
             if (!CheckChatMessageValidity(msg, lang, type))
                 return;
             break;
@@ -348,14 +304,69 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
+
+    //Move muted here to check if whispers are whispering a GM, let those pass.
+    if (lang != LANG_ADDON)
+    {
+        if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+        {
+            time_t currTime = time(nullptr);
+
+            bool skipMute = false;
+
+            if (type == CHAT_MSG_WHISPER)
+            {
+                MasterPlayer* player = ObjectAccessor::FindMasterPlayer(to.c_str());
+                if (player && player->GetSession()->GetSecurity() > SEC_PLAYER)
+                    skipMute = true; // skip mute when whispering to GMs but allow GM to still .whisp off later on.
+            }
+
+            if (!_player->CanSpeak() && !skipMute) // Muted
+            {
+                std::string timeStr = "";
+
+                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+                    timeStr = secsToTimeString(m_muteTime / 1000);
+                else
+                    timeStr = secsToTimeString(m_muteTime - currTime);
+
+                SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+                return;
+            }
+            if (lang != LANG_ADDON && GetMasterPlayer())
+                GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
+        }
+    }
+
     //temp workaround to move RP addons to their correct LANG, the addons are broken rn.
     if (msg.find("MR:") != std::string::npos || msg.find("TR:") != std::string::npos)
         lang = LANG_ADDON;
 
+    if (type == CHAT_MSG_CHANNEL)
+    {
+        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+        {
+            static uint64 lastAnnounce = 0;
+
+            //CN network has an addon using the channel Twb that's spamming and causing a lot of server stress.
+            //Temp throttle until this is fixed by the author.
+
+            std::string chnLower = channel;
+            std::transform(chnLower.begin(), chnLower.end(), chnLower.begin(), ::tolower);
+            if (chnLower.find("twb") != std::string::npos)
+            {
+                auto timeNow = time(nullptr);
+
+                if ((timeNow - lastAnnounce) < 10)
+                    return;
+                lastAnnounce = timeNow;
+            }
+        }
+    }
+
     if (HandleTurtleAddonMessages(lang, type, msg))
     {
         // Message was a turtle addon message, no point to process further
-        mon.bWasTurtleAddonMsg = true;
         return;
     }
 
@@ -907,7 +918,17 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
     if (!em)
         return;
 
+
     uint32 emoteId = em->textid;
+
+    if (sWorld.IsAprilFools())
+    {
+        if (textEmote == TEXTEMOTE_PURR)
+        {
+            uint32 cats[] = { 5585, 9989, 18628 };
+            GetPlayer()->SetDisplayId(cats[urand(0, 2)]);
+        }
+    }
 
     switch (emoteId)
     {
@@ -1195,38 +1216,15 @@ bool WorldSession::HandleTurtleAddonMessages(uint32 lang, uint32 type, std::stri
 
                 _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
 
-                // we have to order them by shop id not item id
-                // currently does not work because the UI will reorder them by item id...
-                std::vector<ShopEntry const*> shopEntries;
-                for (auto const& itr : sObjectMgr.GetShopEntriesList())
+                const ShopCategoriesMap& ShopCategories = sObjectMgr.GetShopCategoriesList();
+                ShopCategoriesMap::const_iterator ShopIter = ShopCategories.find(categoryID);
+                if (ShopIter != ShopCategories.cend())
                 {
-                    if (itr.second.Category == categoryID)
-                        shopEntries.push_back(&itr.second);
-                }
-                std::sort(shopEntries.begin(), shopEntries.end(), [&](ShopEntry const* t1, ShopEntry const* t2)
-                {
-                    return t1->shopId < t2->shopId;
-                });
+                    const ShopCategory& ShopCat = ShopIter->second;
 
-                for (auto const& itr : shopEntries)
-                {
-                    if (itr->Category != categoryID)
-                        continue;
-
-                    if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr->Item))
+                    for (const std::string& EntryStr : ShopCat.CachedItemEntries)
                     {
-                        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
-                            _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-                                + itr->Description_loc4 + "="
-                                + std::to_string(itr->Price) + "="
-                                + pProto->Description + "="
-                                + std::to_string(itr->Item));
-                        else
-                            _player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
-                                + itr->Description + "="
-                                + std::to_string(itr->Price) + "="
-                                + pProto->Description + "="
-                                + std::to_string(itr->Item));
+                        _player->SendAddonMessage(prefix, EntryStr);
                     }
                 }
 
@@ -1347,9 +1345,9 @@ bool WorldSession::HandleTurtleAddonMessages(uint32 lang, uint32 type, std::stri
             if (strstr(msg.c_str(), "GM_ADDON")) // prefix
             {
                 if (strstr(msg.c_str(), "GET_TICKETS"))
-                    sTicketMgr->SendTicketsInAddonMessage(_player);
+                    sTicketMgr.SendTicketsInAddonMessage(_player);
                 else if (strstr(msg.c_str(), "GET_TEMPLATES"))
-                    sTicketMgr->SendTicketTemplatesInAddonMessage(_player);
+                    sTicketMgr.SendTicketTemplatesInAddonMessage(_player);
                 else if (char const* pSubString = strstr(msg.c_str(), "PLAYER_INFO:"))
                     sAccountMgr.SendPlayerInfoInAddonMessage(pSubString + strlen("PLAYER_INFO:"), _player);
                 return true;

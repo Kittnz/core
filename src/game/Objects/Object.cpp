@@ -332,20 +332,43 @@ void WorldObject::DirectSendPublicValueUpdate(uint32 index, uint32 count)
     if (abort)
         return;
 
-    UpdateData data;
-    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
-    buf << uint8(UPDATETYPE_VALUES);
-    buf << GetPackGUID();
-
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
     for (int i = 0; i < count; i++)
         updateMask.SetBit(index + i);
 
+    DirectSendPublicValueUpdate(updateMask);
+}
+
+void WorldObject::DirectSendPublicValueUpdate(std::initializer_list<uint32> indexes)
+{
+    UpdateMask updateMask;
+    updateMask.SetCount(m_valuesCount);
+    for (auto const& index : indexes)
+        updateMask.SetBit(index);
+
+    DirectSendPublicValueUpdate(updateMask);
+}
+
+void WorldObject::DirectSendPublicValueUpdate(UpdateMask& updateMask)
+{
+    UpdateData data;
+
+    ByteBuffer& buf = data.AddUpdateBlockAndGetBuffer();
+    buf << uint8(UPDATETYPE_VALUES);
+    buf << GetPackGUID();
+
     buf << (uint8)updateMask.GetBlockCount();
     buf.append(updateMask.GetMask(), updateMask.GetLength());
-    for (int i = 0; i < count; i++)
-        buf << uint32(m_uint32Values[index + i]);
+
+    for (uint16 index = 0; index < m_valuesCount; ++index)
+    {
+        if (updateMask.GetBit(index))
+        {
+            buf << uint32(m_uint32Values[index]);
+            m_uint32Values_mirror[index] = m_uint32Values[index];
+        }
+    }
 
     WorldPacket packet;
     data.BuildPacket(&packet);
@@ -1235,6 +1258,9 @@ bool WorldObject::IsWithinLootXPDist(WorldObject const * objToLoot) const
     if (objToLoot->IsCreature() && (static_cast<Creature const*>(objToLoot)->GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS))
         lootDistance += 150.0f;
 
+    if (objToLoot->IsCreature())
+        objToLoot->ToCreature()->CheckLootDistance(lootDistance);
+
     return objToLoot && IsInMap(objToLoot) && _IsWithinDist(objToLoot, lootDistance, false);
 }
 
@@ -1314,7 +1340,7 @@ float WorldObject::GetVisibilityDistance() const
 {
     if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
     {
-        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        auto optVis = sDynamicVisMgr.GetDynamicVisibility(GetCachedAreaId());
         if (optVis)
             return optVis.value();
     }
@@ -1325,7 +1351,7 @@ float WorldObject::GetGridActivationDistance() const
 {
     if (sWorld.getConfig(CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES))
     {
-        auto optVis = sDynamicVisMgr->GetDynamicVisibility(GetCachedAreaId());
+        auto optVis = sDynamicVisMgr.GetDynamicVisibility(GetCachedAreaId());
         if (optVis)
             return optVis.value();
     }
@@ -2619,6 +2645,12 @@ void WorldObject::BuildUpdateData(UpdateDataMapType & update_players)
     Cell::VisitWorldObjects(this, notifier, std::max(GetVisibilityDistance(), GetVisibilityModifier()));
 
     ClearUpdateMask(false);
+}
+
+Creature* WorldObject::SummonCreature(uint32_t id, const Movement::Location& location, TempSummonType spwtype,
+    uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, bool attach)
+{
+    return SummonCreature(id, location.x, location.y, location.z, location.orientation, spwtype, despwtime, asActiveObject, pacifiedTimer, pFuncAiSetter, attach);
 }
 
 bool WorldObject::IsControlledByPlayer() const
@@ -4350,6 +4382,9 @@ int32 WorldObject::CalculateSpellDamage(Unit const* target, SpellEntry const* sp
                               ? irand(randomPoints, baseDice)
                               : irand(baseDice, randomPoints);
 
+            if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_NO_DAMAGE_RNG))
+                randvalue = 0;
+
             basePoints += randvalue;
             break;
         }
@@ -4927,7 +4962,7 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
 void WorldObject::DealDamageMods(Unit *victim, uint32 &damage, uint32* absorb)
 {
     Unit* pUnit = ToUnit();
-    // [Nostalrius] Pas de degats sous esprit de redemption
+    // Don't allow Spirit of Redemption to take damage
     if (!victim->IsAlive() ||
         victim->IsTaxiFlying() ||
         (victim->IsCreature() && static_cast<Creature*>(victim)->IsInEvadeMode()) ||
@@ -5187,11 +5222,12 @@ bool WorldObject::IsNoMovementSpellCasted() const
     if (m_currentSpells[CURRENT_GENERIC_SPELL] &&
             (m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_FINISHED) &&
              m_currentSpells[CURRENT_GENERIC_SPELL]->getState() != SPELL_STATE_DELAYED &&
-             m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT)
+             m_currentSpells[CURRENT_GENERIC_SPELL]->m_spellInfo->HasSpellInterruptFlag(SPELL_INTERRUPT_FLAG_MOVEMENT))
         return (true);
     else if (m_currentSpells[CURRENT_CHANNELED_SPELL] &&
              m_currentSpells[CURRENT_CHANNELED_SPELL]->getState() != SPELL_STATE_FINISHED &&
-             m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT)
+            (m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->HasSpellInterruptFlag(SPELL_INTERRUPT_FLAG_MOVEMENT) ||
+             m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->HasChannelInterruptFlag(AURA_INTERRUPT_FLAG_MOVE)))
         return (true);
     // don't need to check for AUTOREPEAT_SPELL
 
@@ -5227,8 +5263,15 @@ void WorldObject::InterruptSpell(CurrentSpellTypes spellType, bool withDelayed)
 {
     MANGOS_ASSERT(spellType < CURRENT_MAX_SPELL);
 
-    if (m_currentSpells[spellType] && (withDelayed || m_currentSpells[spellType]->getState() != SPELL_STATE_DELAYED))
+    Spell* targetSpell = m_currentSpells[spellType];
+
+    if (targetSpell && (withDelayed || targetSpell->getState() != SPELL_STATE_DELAYED))
     {
+        // Remove Insignia spell is very special, and should'nt be interrupted usually
+        if (targetSpell->m_spellInfo->Id == 22027)
+        {
+            return;
+        }
         // send autorepeat cancel message for autorepeat spells
         if (spellType == CURRENT_AUTOREPEAT_SPELL)
         {
@@ -5236,14 +5279,15 @@ void WorldObject::InterruptSpell(CurrentSpellTypes spellType, bool withDelayed)
                 ((Player*)this)->SendAutoRepeatCancel();
         }
 
-        if (m_currentSpells[spellType]->getState() != SPELL_STATE_FINISHED)
-            m_currentSpells[spellType]->cancel();
+        if (targetSpell->getState() != SPELL_STATE_FINISHED)
+            targetSpell->cancel();
 
         // cancel can interrupt spell already (caster cancel ->target aura remove -> caster iterrupt)
         if (m_currentSpells[spellType])
         {
             m_currentSpells[spellType]->SetReferencedFromCurrent(false);
             m_currentSpells[spellType] = nullptr;
+            targetSpell = nullptr;
         }
     }
 }

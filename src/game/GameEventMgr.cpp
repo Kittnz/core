@@ -34,7 +34,7 @@
 #include "SpellMgr.h"
 #include "Policies/SingletonImp.h"
 
-INSTANTIATE_SINGLETON_1(GameEventMgr);
+GameEventMgr sGameEventMgr;
 
 bool GameEventMgr::CheckOneGameEvent(uint16 entry, time_t currenttime) const
 {

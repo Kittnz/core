@@ -6,11 +6,10 @@
 
 #include "AutoBroadCastMgr.h"
 
-INSTANTIATE_SINGLETON_1(AutoBroadCastMgr);
+AutoBroadCastMgr sAutoBroadCastMgr;
 
 AutoBroadCastMgr::AutoBroadCastMgr()
 {
-    _constInterval = sWorld.getConfig(CONFIG_UINT32_AUTOBROADCAST_INTERVAL);
     _current = 0;
 }
 
@@ -22,6 +21,7 @@ AutoBroadCastMgr::~AutoBroadCastMgr()
 void AutoBroadCastMgr::Load()
 {
     entries.clear();
+	_constInterval = sWorld.getConfig(CONFIG_UINT32_AUTOBROADCAST_INTERVAL);
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `string_id` FROM `autobroadcast`"));
 
     if (!result)

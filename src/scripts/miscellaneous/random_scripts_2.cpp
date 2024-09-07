@@ -1061,6 +1061,94 @@ CreatureAI* GetAI_npc_j_eevee(Creature* pCreature)
     return NULL;
 }
 
+struct ItemCountPair
+{
+    uint32 itemId = 0;
+    uint32 count = 0;
+};
+
+struct SwappableItemReward
+{
+    ItemCountPair currentItem;
+    ItemCountPair potentialItem;
+};
+
+static std::map<uint32 /*player low guid*/, std::vector<SwappableItemReward>> s_questRewardSwapData;
+
+#define GOSSIP_SWAP_QUEST_ITEMS 60939
+
+bool GossipHello_QuestRewardSwap(Player* player, Creature* creature)
+{
+    s_questRewardSwapData.erase(player->GetGUIDLow());
+
+    for (auto const& itrQuest : sObjectMgr.GetQuestTemplates())
+    {
+        if (!itrQuest.second->HasSpecialFlag(QUEST_SPECIAL_FLAG_CAN_SWAP_REWARDS))
+            continue;
+
+        if (!player->GetQuestRewardStatus(itrQuest.first))
+            continue;
+
+        ItemCountPair currentItem;
+        for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+        {
+            if (itrQuest.second->RewChoiceItemId[i] && itrQuest.second->RewChoiceItemCount[i] &&
+                player->HasItemCount(itrQuest.second->RewChoiceItemId[i], itrQuest.second->RewChoiceItemCount[i]))
+            {
+                currentItem.itemId = itrQuest.second->RewChoiceItemId[i];
+                currentItem.count = itrQuest.second->RewChoiceItemCount[i];
+                break;
+            }
+        }
+
+        if (!currentItem.itemId || !currentItem.count)
+            continue;
+
+        for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+        {
+            if (itrQuest.second->RewChoiceItemId[i] != currentItem.itemId &&
+                itrQuest.second->RewChoiceItemId[i] && itrQuest.second->RewChoiceItemCount[i])
+            {
+                SwappableItemReward reward;
+                reward.currentItem = currentItem;
+                reward.potentialItem.itemId = itrQuest.second->RewChoiceItemId[i];
+                reward.potentialItem.count = itrQuest.second->RewChoiceItemCount[i];
+                s_questRewardSwapData[player->GetGUIDLow()].push_back(reward);
+
+                std::string txt = sObjectMgr.GetItemPrototype(reward.currentItem.itemId)->Name1 + " to " + sObjectMgr.GetItemPrototype(reward.potentialItem.itemId)->Name1;
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, txt.c_str(), GOSSIP_SENDER_MAIN, s_questRewardSwapData[player->GetGUIDLow()].size());
+            }
+        }
+    }
+
+    player->SEND_GOSSIP_MENU(GOSSIP_SWAP_QUEST_ITEMS, creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_QuestRewardSwap(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (!uiAction)
+        return false;
+
+    std::vector<SwappableItemReward> const& rewards = s_questRewardSwapData[pPlayer->GetGUIDLow()];
+
+    uint32 option = uiAction - 1;
+    if (rewards.size() <= option)
+        return false;
+
+    if (pPlayer->HasItemCount(rewards[option].currentItem.itemId, rewards[option].currentItem.count))
+    {
+        if (Item* pItem = pPlayer->StoreNewItemInInventorySlot(rewards[option].potentialItem.itemId, rewards[option].potentialItem.count))
+        {
+            pPlayer->SendNewItem(pItem, rewards[option].potentialItem.count, true, false);
+            pPlayer->DestroyItemCount(rewards[option].currentItem.itemId, rewards[option].currentItem.itemId, true);
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_2()
 {
 	Script* newscript;	
@@ -1100,5 +1188,11 @@ void AddSC_random_scripts_2()
     newscript->GetAI = &GetAI_npc_escort_genericAI;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_escort_genericAI;
     newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_quest_reward_swap";
+    newscript->pGossipHello = &GossipHello_QuestRewardSwap;
+    newscript->pGossipSelect = &GossipSelect_QuestRewardSwap;
+    newscript->RegisterSelf();
 
 }

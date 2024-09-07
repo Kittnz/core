@@ -19,12 +19,6 @@ struct VisibilitySettings
 class DynamicVisibilityMgr
 {
 public:
-    static DynamicVisibilityMgr* instance()
-    {
-        static DynamicVisibilityMgr instance;
-        return &instance;
-    }
-
 
     void LoadFromDB(bool reload);
     void InitVisibilities(bool reload);
@@ -39,4 +33,4 @@ private:
 
 };
 
-#define sDynamicVisMgr DynamicVisibilityMgr::instance()
+extern DynamicVisibilityMgr sDynamicVisMgr;

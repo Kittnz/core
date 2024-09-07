@@ -40,5 +40,6 @@ class CreatureEventAIMgr
         CreatureEventAI_Event_Map  m_CreatureEventAI_Event_Map;
 };
 
-#define sEventAIMgr MaNGOS::Singleton<CreatureEventAIMgr>::Instance()
+extern CreatureEventAIMgr sEventAIMgr;
+
 #endif

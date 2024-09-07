@@ -4,7 +4,8 @@
 #include "ChannelMgr.h"
 #include "World.h"
 
-ChannelBroadcaster::ChannelBroadcaster()
+
+ChannelBroadcaster::ChannelBroadcaster() : MessageQueue(15)
 {
 	StartThread();
 }
@@ -58,8 +59,7 @@ void ChannelBroadcaster::DisableSendingMessages()
 
 void ChannelBroadcaster::EnqueueMessage(std::string&& Message, const std::string& ChannelName, ObjectGuid PlayerGuid, uint32 Language, Team ChannelTeam, bool bSkipChecks)
 {
-	std::lock_guard guard(MessageQueueGuard);
-	MessageQueue.emplace(ChannelMessage{std::move(Message), ChannelName, PlayerGuid, Language, ChannelTeam, bSkipChecks });
+	MessageQueue.enqueue(ChannelMessage{std::move(Message), ChannelName, PlayerGuid, Language, ChannelTeam, bSkipChecks });
 }
 
 void ChannelBroadcaster::ThreadProc()
@@ -70,34 +70,20 @@ void ChannelBroadcaster::ThreadProc()
 		{
 			bIsWorking.store(true);
 
-			bool bIsEmpty = false;
 
+			constexpr int32 MessageLimit = 5;
+			int32 MessageIterator = 0;
+
+
+			ChannelMessage msg;
+			while (MessageIterator < 5 && MessageQueue.try_dequeue(msg))
 			{
-				std::lock_guard guard(MessageQueueGuard);
+				ChannelMessage& ChanMsg = msg;
 
-				bIsEmpty = MessageQueue.empty();
-				if (!bIsEmpty)
-				{
-					constexpr int32 MessageLimit = 5;
-					int32 MessageIterator = 0;
-					do 
-					{
-						ChannelMessage& ChanMsg = MessageQueue.front();
-
-						ChannelMgr* ChannelManager = channelMgr(ChanMsg.ChannelTeam);
-						Channel* TargetChannel = ChannelManager->GetOrCreateChannel(ChanMsg.ChannelName);
-						TargetChannel->Say(ChanMsg.PlayerGuid, ChanMsg.Message.c_str(), ChanMsg.Language, ChanMsg.bSkipChecks);
-
-						MessageQueue.pop();
-						bIsEmpty = MessageQueue.empty();
-						MessageIterator++;
-					} while (!bIsEmpty && MessageIterator < MessageLimit);
-				}
-			}
-			if (bIsEmpty)
-			{
-				std::this_thread::sleep_for(std::chrono::microseconds(500)); // 0.5 ms.
-				continue;
+				ChannelMgr* ChannelManager = channelMgr(ChanMsg.ChannelTeam);
+				Channel* TargetChannel = ChannelManager->GetOrCreateChannel(ChanMsg.ChannelName);
+				TargetChannel->Say(ChanMsg.PlayerGuid, ChanMsg.Message.c_str(), ChanMsg.Language, ChanMsg.bSkipChecks);
+				MessageIterator++;
 			}
 		}
 		bIsWorking.store(false);

@@ -52,8 +52,12 @@ namespace VMAP
     // declared in src/shared/vmap/WorldModel.h
     void GroupModel::getMeshData(vector<Vector3>& outVertices, vector<MeshTriangle>& outTriangles, WmoLiquid*& liquid)
     {
-        outVertices = vertices;
-        outTriangles = triangles;
+        outVertices.resize(vertices.size());
+        memcpy(outVertices.data(), vertices.data(), vertices.size() * sizeof(Vector3));
+
+        outTriangles.resize(triangles.size());
+		memcpy(outTriangles.data(), triangles.data(), triangles.size() * sizeof(MeshTriangle));
+
         liquid = iLiquid;
     }
 

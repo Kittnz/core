@@ -448,6 +448,26 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
     return SPELL_PROC_TRIGGER_ROLL_FAILED;
 }
 
+SpellAuraProcResult Unit::HandleNULLProc(Unit* /*pVictim*/, uint32 /*damage*/, int32 /*originalAmount*/, Aura* triggeredByAura, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 cooldown)
+{
+    if (cooldown)
+    {
+        // We need a way to store cooldown for procs which dont trigger another spell.
+        // Since spell ids are limited to uint16 in db, lets use unique fake id above that.
+        // Eye of the Dead needs this to not proc on each hit, but we can't add and check
+        // cooldown for its spell id, because the spell has an on use cooldown already.
+        uint32 const spellId = triggeredByAura->GetId() + UINT16_MAX;
+
+        if (HasSpellCooldown(spellId))
+            return SPELL_AURA_PROC_FAILED;
+
+        AddSpellCooldown(spellId, 0, time(nullptr) + cooldown);
+    }
+
+    // no proc handler for this aura type
+    return SPELL_AURA_PROC_OK;
+}
+
 SpellAuraProcResult Unit::HandleHasteAuraProc(Unit *pVictim, uint32 damage, int32 /*originalAmount*/, Aura* triggeredByAura, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 procEx, uint32 cooldown)
 {
     // Flurry: last charge crit will reapply the buff, don't remove any charges
@@ -519,7 +539,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                     if (procSpell && procSpell->Id == 1680)
                         radius = 8.0f;
 
-                    target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true);
+                    // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+                    // - Sweeping Strikes will now ignore dead targets, and will ignore PvP
+                    //   enabled targets if you are not PvP enabled.
+                    target = SelectRandomUnfriendlyTarget(pVictim, radius, false, true, true);
                     if (!target)
                         return SPELL_AURA_PROC_FAILED;
 
@@ -562,7 +585,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                 {
                     // Need to remove one 24659 aura
                     // Holy Nova both heals and damages, so check needed to avoid consuming 2 charges
-                    if (!procSpell->IsFitToFamilyMask<CF_PRIEST_HOLY_NOVA1>())
+                    if (!procSpell->IsFitToFamilyMask<CF_PRIEST_HOLY_NOVA1>() && procSpell->UsesSpellPower())
                         RemoveAuraHolderFromStack(24659);
                     return SPELL_AURA_PROC_OK;
                 }
@@ -805,34 +828,24 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
                         SpellAuraHolder* igniteHolder = igniteAura->GetHolder();
                         
                         int32 tickDamage = igniteModifier->m_amount;
-                        
-                        bool notAtMaxStack = igniteAura->GetStackAmount() < 5;
-                        
-                        bool reapplyIgnite = igniteAura->GetAuraTicks() >= igniteAura->GetAuraMaxTicks();
-                        
-                        if (!reapplyIgnite)
+
+                        if (igniteAura->GetStackAmount() < 5)
                         {
-                            if (notAtMaxStack)
-                            {
-                                tickDamage += basepoints[0];
-                                
-                                igniteHolder->ModStackAmount(1);
-                                
-                                // Update DOT damage
-                                igniteModifier->m_amount = tickDamage;
-                                igniteAura->ApplyModifier(true, true, false);
-                            }
-                            else
-                                igniteHolder->SetStackAmount(5);
+                            tickDamage += basepoints[0];
                             
-                            // Refresh Ignite Stack
-                            igniteHolder->Refresh(igniteAura->GetCaster(), target, igniteHolder );
+                            igniteHolder->ModStackAmount(1);
                             
-                            return SPELL_AURA_PROC_OK;
+                            // Update DOT damage
+                            igniteModifier->m_amount = tickDamage;
+                            igniteAura->ApplyModifier(true, true, false);
                         }
+                        else
+                            igniteHolder->SetStackAmount(5);
                         
-                        // All damage done, remove and continue to reapply
-                        target->RemoveAurasDueToSpell(12654);
+                        // Refresh Ignite Stack
+                        igniteHolder->Refresh(igniteAura->GetCaster(), target, igniteHolder );
+                        
+                        return SPELL_AURA_PROC_OK;
                     }
                     
                     // No Ignite found, apply Ignite Aura
@@ -881,6 +894,13 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, int3
             {
                 // check attack comes not from behind
                 if (!HasInArc(pVictim))
+                    return SPELL_AURA_PROC_FAILED;
+
+                // World of Warcraft Client Patch 1.7.0 (2005-09-13)
+                // - Retaliation - Will now cause a maximum of 30 retaliatory strikes in
+                //  15 seconds.In addition, retaliatory strikes will not be possible
+                //  while stunned.
+                if (HasUnitState(UNIT_STAT_CAN_NOT_REACT))
                     return SPELL_AURA_PROC_FAILED;
 
                 triggered_spell_id = 22858;
@@ -1313,7 +1333,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 }
                 case 28200:                                 // Talisman of Ascendance
                 {
-                    if (procSpell && procSpell->IsAreaOfEffectSpell())
+                    if (procSpell && (procSpell->IsAreaOfEffectSpell() || procSpell->Effect[0] == SPELL_EFFECT_SCRIPT_EFFECT))
                         return SPELL_AURA_PROC_FAILED;
                     break;
                 }
@@ -1479,8 +1499,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         }
         case SPELLFAMILY_DRUID:
         {
-            // Thorns Explosion Chance
+            // Thorns Explosion Chance (Talent)
             if (auraSpellInfo->Id == 21972)
+            {
+                target = pVictim;
+            }
+            // Thorns Explosion Chance (Hidden Aura on Thorns Target)
+            else if (auraSpellInfo->Id == 46431)
             {
                 if (!HasAuraType(SPELL_AURA_DAMAGE_SHIELD))
                     return SPELL_AURA_PROC_CANT_TRIGGER;

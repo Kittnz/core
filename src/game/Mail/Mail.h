@@ -252,7 +252,7 @@ class MailDraft
         void CloneFrom(MailDraft const& draft);
     public:                                                 // finishers
         void SendReturnToSender(uint32 sender_acc, ObjectGuid sender_guid, ObjectGuid receiver_guid);
-        void SendMailTo(MailReceiver const& receiver, MailSender const& sender, MailCheckMask checked = MAIL_CHECK_MASK_NONE, uint32 deliver_delay = 0, uint32 expire_delay = 0);
+        void SendMailTo(MailReceiver const& receiver, MailSender const& sender, MailCheckMask checked = MAIL_CHECK_MASK_NONE, uint32 deliver_delay = 0, uint32 expire_delay = 0, bool direct = false);
     private:
         MailDraft(MailDraft const&);                        // trap decl, no body, mail draft must cloned only explicitly...
         MailDraft& operator=(MailDraft const&);             // trap decl, no body, ...because items clone is high price operation

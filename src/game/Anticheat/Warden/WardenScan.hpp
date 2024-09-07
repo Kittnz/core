@@ -119,7 +119,7 @@ class WindowsModuleScan : public WindowsScan
 class WindowsMemoryScan : public WindowsScan
 {
     private:
-        std::vector<uint8> _expected;
+        turtle_vector<uint8, Category_Anticheat> _expected;
         uint32 _offset;
         std::string _module;
 

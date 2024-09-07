@@ -26,6 +26,8 @@ EndScriptData */
 #include <random>
 #include <algorithm>
 #include <array>
+#include "Geometry.h"
+
 enum
 {
     // from cmangos, unimplemented
@@ -118,13 +120,14 @@ struct mob_webwrapAI : public ScriptedAI
         {
             if (Player* pVictim = m_creature->GetMap()->GetPlayer(m_victimGuid))
             {
-                if (pVictim->IsAlive()) {
+                if (pVictim->IsAlive())
+                {
                     pVictim->RemoveAurasDueToSpell(SPELL_WEBWRAP);
                     pVictim->RemoveAurasDueToSpell(SPELL_SUMMON_WEB_WRAP);
                 }
             }
         }
-        ((TemporarySummon*)m_creature)->UnSummon();
+        m_creature->DespawnOrUnsummon(1);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -133,9 +136,9 @@ struct mob_webwrapAI : public ScriptedAI
             return;
 
         Player* pVictim = m_creature->GetMap()->GetPlayer(m_victimGuid);
-        if (!pVictim || pVictim->IsDead()) {
+        if (!pVictim || pVictim->IsDead())
+        {
             m_creature->Kill(m_creature, nullptr);
-            // ((TemporarySummon*)m_creature)->UnSummon();
             return;
         }
         // todo: can this be removed? We set MovePoint in SetVictim
@@ -145,6 +148,9 @@ struct mob_webwrapAI : public ScriptedAI
         */
     }
 };
+
+static G3D::Vector2 const WEB_BARRIER_A(3442.64f, -3875.92f);
+static G3D::Vector2 const WEB_BARRIER_B(3458.14f, -3849.25f);
 
 struct boss_maexxnaAI : public ScriptedAI
 {
@@ -160,6 +166,7 @@ struct boss_maexxnaAI : public ScriptedAI
     uint32 m_uiPoisonShockTimer;
     uint32 m_uiNecroticPoisonTimer;
     uint32 m_uiSummonSpiderlingTimer;
+    uint32 m_uiCheckExploitTimer;
     bool   m_bEnraged;
     std::random_device m_randDevice;
     std::mt19937 m_random{ m_randDevice() };
@@ -188,12 +195,13 @@ struct boss_maexxnaAI : public ScriptedAI
         m_uiPoisonShockTimer = PoisonShockCooldown(true);
         m_uiNecroticPoisonTimer = NecroticPoisonCooldown(true);
         m_uiSummonSpiderlingTimer = SummonSpiderlingsCooldown(true);
+        m_uiCheckExploitTimer = 500;
         m_bEnraged = false;
         wraps.clear();
         wraps2.clear();
     }
 
-    void Aggro(Unit* pWho) override
+    void EnterCombat(Unit* pWho) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MAEXXNA, IN_PROGRESS);
@@ -246,10 +254,16 @@ struct boss_maexxnaAI : public ScriptedAI
 
         std::list<Player*> candidates;
         ThreatList::const_iterator it = tList.begin();
-        ++it;
+
+        ObjectGuid currentVictimGuid = m_creature->GetThreatManager().getCurrentVictim() ? m_creature->GetThreatManager().getCurrentVictim()->getUnitGuid() : ObjectGuid{};
+
+
         for (it; it != tList.end(); ++it) {
             Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
             if (!pPlayer) continue;
+
+            if ((*it)->getUnitGuid() == currentVictimGuid)
+                continue; // skip tank / main victim
 
             // todo: verify that IsWithinLOSInMap does not screw anyting up. Afaik there should be nowhere
             // to los in maexxnas room, so would only stop us from selecting players outside the room, which is good.
@@ -426,6 +440,27 @@ struct boss_maexxnaAI : public ScriptedAI
                 DoScriptText(EMOTE_BOSS_GENERIC_ENRAGE, m_creature);
             }
         }
+
+        if (m_uiCheckExploitTimer < uiDiff)
+        {
+            if (m_creature->GetDistance(m_creature->GetHomePosition()) > 55.f)
+            {
+                ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+
+                ThreatList::const_iterator it = tList.begin();
+                for (it; it != tList.end(); ++it) {
+                    Player* pPlayer = m_creature->GetMap()->GetPlayer((*it)->getUnitGuid());
+                    if (!pPlayer) continue;
+
+                    int32 dmg = 25000;
+                    int32 dmg2 = 2000;
+                    m_creature->CastCustomSpell(pPlayer, SPELL_WEBSPRAY, &dmg2, &dmg, nullptr, false);
+                }
+            }
+            m_uiCheckExploitTimer = 500;
+        }
+        else
+            m_uiCheckExploitTimer -= uiDiff;
         
         DoMeleeAttackIfReady();
     }

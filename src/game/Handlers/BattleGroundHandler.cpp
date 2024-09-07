@@ -445,6 +445,14 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
             action = 0;
             DEBUG_LOG("Battleground: player %s (%u) has a deserter debuff, do not port him to battleground!", _player->GetName(), _player->GetGUIDLow());
         }
+
+        // Turtle: Don't allow entering the battleground while in combat.
+        if (_player->IsInCombat() && _player->IsPvP())
+        {
+            _player->SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, nullptr);
+            return;
+        }
+
         //if player don't match battleground max level, then do not allow him to enter! (this might happen when player leveled up during his waiting in queue
         if (_player->GetLevel() > bg->GetMaxLevel())
         {
@@ -452,7 +460,16 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recv_data)
                           _player->GetName(), _player->GetGUIDLow(), _player->GetLevel(), bg->GetMaxLevel(), bg->GetTypeID());
             action = 0;
         }
+
+        // do not allow entering bg which is already over
+        if (bg->GetStatus() == STATUS_WAIT_LEAVE)
+        {
+            sLog.outError("Battleground: Player %s (%u) is attempting to enter battleground (%u) which has already ended!",
+                _player->GetName(), _player->GetGUIDLow(), bg->GetTypeID());
+            action = 0;
+        }
     }
+
     uint32 queueSlot = _player->GetBattleGroundQueueIndex(bgQueueTypeId);
     WorldPacket data;
     switch (action)

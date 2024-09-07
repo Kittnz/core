@@ -308,6 +308,15 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(const uint32 uiDiff)
     float fY = m_creature->GetPositionY();
     float fZ = m_creature->GetPositionZ();
 
+    if (m_creature->GetMapId() == 532 && m_creature->GetLevel() == 63) //kara, leash to work around kiting bug
+    {
+        if (m_creature->GetDistance(m_creature->GetHomePosition()) > 120.f)
+        {
+            EnterEvadeMode();
+            return true;
+        }
+    }
+
     switch(m_creature->GetEntry())
     {
         case NPC_BROODLORD:                                 // broodlord (not move down stairs)

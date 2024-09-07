@@ -110,6 +110,8 @@ struct boss_brood_queen_araxxnaAI : public ScriptedAI
 			m_SpawnEggsTimer -= uiDiff;
 
 		DoMeleeAttackIfReady();
+
+		EnterEvadeIfOutOfCombatArea(uiDiff);
 	}
 };
 

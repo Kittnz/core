@@ -50,6 +50,6 @@ class GuardMgr
         uint32 m_uiRechargeTimer;
 };
 
-#define sGuardMgr MaNGOS::Singleton<GuardMgr>::Instance()
+extern GuardMgr sGuardMgr;
 
 #endif

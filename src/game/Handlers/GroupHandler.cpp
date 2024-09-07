@@ -91,8 +91,11 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (GetPlayer()->GetMapId() > 1 && GetPlayer()->GetInstanceId() && player->GetInstanceId() && GetPlayer()->GetInstanceId() != player->GetInstanceId() && GetPlayer()->GetMapId() == player->GetMapId())
+    // Prevent inviting player to group who is in a different instance of the same map.
+    if (GetPlayer()->GetMapId() > 1 && GetPlayer()->GetInstanceId() && player->GetInstanceId() &&
+        GetPlayer()->GetInstanceId() != player->GetInstanceId() && GetPlayer()->GetMapId() == player->GetMapId())
         return;
+
     // Just ignore us
     if (player->GetSocial()->HasIgnore(GetPlayer()->GetObjectGuid()))
     {
@@ -195,6 +198,13 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket & /*recv_data*/)
         SendPartyResult(PARTY_OP_INVITE, "", ERR_GROUP_FULL);
         return;
     }
+
+    if (!group->HandleHardcoreInteraction(GetPlayer()))
+    {
+        GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn�t higher than 5.");
+        return;
+    }
+
 
     Player* leader = sObjectMgr.GetPlayer(group->GetLeaderGuid());
 

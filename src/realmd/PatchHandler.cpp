@@ -55,6 +55,8 @@
 #pragma pack(push,1)
 #endif
 
+PatchLimiter sPatchLimiter;
+
 extern int32 PatchHandlerKBytesDownloadLimit;
 
 struct Chunk
@@ -134,7 +136,7 @@ int PatchHandler::svc(void)
         data.data_size = (ACE_UINT16)r;
 
         auto size = ((size_t)r) + sizeof(data) - sizeof(data.data);
-        while (!sPatchLimiter->IsAllowed(size))
+        while (!sPatchLimiter.IsAllowed(size))
         {
             ACE_Time_Value SleepValue;
             SleepValue.set_msec(100u);

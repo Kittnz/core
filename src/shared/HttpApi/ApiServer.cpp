@@ -14,6 +14,7 @@ namespace HttpApi
         std::string privateKeyPath = sConfig.GetStringDefault("ApiPrivateKeyPath", "turtle.pkey");
 
         sLog.out(LOG_API, string_format("Starting HTTP Api Server with cert path {} and pKeypath {}.", certPath, privateKeyPath).c_str());
+
         _server = std::make_unique<SSLServer>(certPath.c_str(), privateKeyPath.c_str());
 
 
@@ -58,6 +59,7 @@ namespace HttpApi
                 while (_running)
                 {
                     _server->listen(address, port);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 30 FPS
                 }
                 mysql_thread_end();
         });

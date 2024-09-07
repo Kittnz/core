@@ -37,7 +37,7 @@ void PlayerBotAI::Remove()
 void PlayerBotFleeingAI::OnPlayerLogin()
 {
     me->GetMotionMaster()->MoveFleeing(me);
-    me->SetGodMode(true);
+    me->SetInvincibilityHpThreshold(1);
 }
 
 /// MageOrgrimmarAttackerAI event
@@ -94,7 +94,7 @@ bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_,
     newChar->CreatePacketBroadcaster();
     MasterPlayer* mPlayer = new MasterPlayer(sess);
     mPlayer->LoadPlayer(newChar);
-    mPlayer->SetSocial(sSocialMgr->LoadFromDB(nullptr, newChar->GetObjectGuid()));
+    mPlayer->SetSocial(sSocialMgr.LoadFromDB(nullptr, newChar->GetObjectGuid()));
     if (!newChar->GetMap()->Add(newChar))
     {
         sLog.outError("PlayerBotAI::SpawnNewPlayer: Unable to add player to map!");

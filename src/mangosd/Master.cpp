@@ -62,7 +62,7 @@
 #include "ace/ACE.h"
 #include "ace/Malloc_T.h"
 
-INSTANTIATE_SINGLETON_1( Master );
+Master sMaster;
 
 volatile uint32 Master::m_masterLoopCounter = 0;
 volatile bool Master::m_handleSigvSignals = false;

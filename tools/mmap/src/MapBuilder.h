@@ -73,6 +73,13 @@ namespace MMAP
 
             // builds list of maps, then builds all of mmap tiles (based on the skip settings)
             void buildAllMaps();
+
+            void WaitForAllTilesToBeBuild();
+
+            void ShutdownAsyncBuilders();
+
+            void StartupAsyncBuilders();
+
             bool IsBusy();
 
             void buildGameObject(std::string modelName, uint32 displayId);
@@ -108,9 +115,32 @@ namespace MMAP
             bool m_bigBaseUnit;
 
             std::atomic<bool> m_cancel;
+            std::vector<TileBuilder*> workers;
 
             ProducerConsumerQueue<TileInfo> m_tileQueue;
     };
+
+    struct MapSettings
+    {
+        float agentMaxClimbModelTerrainTransition;
+        float agentMaxClimbTerrain;
+        float WalkableSlopeAngle;
+        bool bIncludeLimitsOnRasterizeTriangles;
+    };
+
+    class MapBuilderConfig
+    {
+    public:
+
+        void LoadConfigIfExist();
+
+        const MapSettings* GetSettingsForMap(int MapID) const;
+
+    protected:
+        std::map<int, MapSettings> SettingCollection;
+    };
+
+    extern MapBuilderConfig gMMapBuilderConfig;
 }
 
 #endif

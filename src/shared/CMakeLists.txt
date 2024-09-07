@@ -24,12 +24,14 @@ set (shared_SRCS
     LockedQueue.h
     Log.h
     httplib.h
+    PerfStats.h
     PosixDaemon.h
     revision.h
     SystemConfig.h
     ThreadPool.h
     Timer.h
     Util.h
+    AllocatorWithCategory.h
     OptickIntegration.h
     WorldPacket.h
     Auth/ARC4.h
@@ -64,10 +66,12 @@ set (shared_SRCS
     Common.cpp
     DelayExecutor.cpp
     Log.cpp
+    PerfStats.cpp
     PosixDaemon.cpp
     ThreadPool.cpp
     BS_thread_pool.hpp
     Util.cpp
+    Timer.cpp
     Duration.h
     Auth/ARC4.cpp
     Auth/AuthCrypt.cpp

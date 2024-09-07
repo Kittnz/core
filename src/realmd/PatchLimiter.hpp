@@ -9,12 +9,6 @@ extern uint64_t MaxDataPerSecond;
 class PatchLimiter
 {
 public:
-	static PatchLimiter * Instance()
-	{
-		static PatchLimiter i;
-		return &i;
-	}
-
 
 	void Update(uint32_t diff)
 	{
@@ -41,4 +35,4 @@ private:
 	uint32_t timeDiff = 1000;
 };
 
-#define sPatchLimiter PatchLimiter::Instance()
+extern PatchLimiter sPatchLimiter;

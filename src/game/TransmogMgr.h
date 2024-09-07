@@ -22,12 +22,14 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include "Platform/Define.h"
+#include <unordered_set>
 
 typedef std::vector<uint32> TransmogContainer;
 
 class Player;
 struct ItemPrototype;
 class QueryResult;
+class Item;
 
 class TransmogMgr
 {
@@ -47,9 +49,12 @@ class TransmogMgr
         // Helpers
         bool HasTransmog(uint32 newItemId);
         void AddToCollection(uint32 itemId);
+        void RemoveFromCollection(uint32 itemId);
         bool ItemIsValidTransmogForDest(uint32 item, ItemPrototype const* destItemProto);
 
-        TransmogContainer GetTransmogs() { return _transmogs; }
+        void RemoveTransmog(Item* item);
+
+        const std::unordered_set<uint32>& GetTransmogs() const { return _transmogs; }
         
 		std::vector<uint32> GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
 		void SendAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
@@ -59,7 +64,7 @@ class TransmogMgr
     private:
         Player* _owner;
         std::string prefix;
-        TransmogContainer _transmogs{};
+        std::unordered_set<uint32> _transmogs{};
         
 };
 

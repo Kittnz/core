@@ -153,6 +153,14 @@ struct boss_heiganAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
+        // teleport player that goes into room without having been ported there
+        if (m_creature->IsInCombat() && portedPlayersThisPhase.empty() && pWho->IsPlayer() &&
+            (pWho->GetPositionX() > 2825.0f || pWho->GetPositionY() < -3737.0f) &&
+           !(m_creature->GetPositionX() > 2825.0f || m_creature->GetPositionY() < -3737.0f))
+        {
+            pWho->NearTeleportTo(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), pWho->GetOrientation());
+        }
+
         if (currentPhase == PHASE_DANCE)
             return;
         else
@@ -342,11 +350,16 @@ struct boss_heiganAI : public ScriptedAI
     void EventPortPlayer()
     {
         const ThreatList& tl = m_creature->GetThreatManager().getThreatList();
+
+        ObjectGuid currentVictimGuid = m_creature->GetThreatManager().getCurrentVictim() ? m_creature->GetThreatManager().getCurrentVictim()->getUnitGuid() : ObjectGuid{};
+
         std::vector<Unit*> candidates;
         auto it = tl.begin();
-        ++it; // skip the tank
         for (it; it != tl.end(); it++)
         {
+            if ((*it)->getUnitGuid() == currentVictimGuid)
+                continue; // Skip tank / current target.
+
             if (Unit* pUnit = m_creature->GetMap()->GetUnit((*it)->getUnitGuid()))
             {
                 // Candidates are only alive players who have not yet been ported during this phase rotation

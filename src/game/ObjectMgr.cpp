@@ -52,6 +52,7 @@
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
 #include "miscellaneous/feature_transmog.h"
+#include "Geometry.h"
 
 #include <limits>
 
@@ -436,7 +437,7 @@ Position const* ObjectMgr::GetCinematicInitialPosition(uint32 cinematicId)
         }
     }
     // Not found
-    sLog.outError("Can not find the starting point of cinematic %u", cinematicId);
+    //sLog.outError("Can not find the starting point of cinematic %u", cinematicId);
     return nullptr;
 }
 
@@ -478,19 +479,19 @@ void ObjectMgr::SetPlayerWorldMask(const uint64 guid, uint32 newWorldMask)
 
 uint32 ObjectMgr::GetSavedVariable(uint32 index, uint32 defaultValue, bool *exist)
 {
-    SavedVariablesVector::iterator it;
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
+    auto itr = m_SavedVariables.find(index);
+
+    if (itr == m_SavedVariables.end())
     {
-        if (it->uiIndex == index)
-        {
-            if (exist)
-                (*exist) = true;
-            return it->uiValue;
-        }
+        if (exist)
+            *exist = false;
+        return defaultValue;
     }
+
     if (exist)
-        (*exist) = false;
-    return defaultValue;
+        *exist = true;
+
+    return itr->second.uiValue;
 }
 
 SavedVariable& ObjectMgr::_InsertVariable(uint32 index, uint32 value, bool saved)
@@ -500,8 +501,8 @@ SavedVariable& ObjectMgr::_InsertVariable(uint32 index, uint32 value, bool saved
     tmp.uiValue      = value;
     tmp.bSavedInDb   = saved;
 
-    m_SavedVariables.push_back(tmp);
-    return m_SavedVariables[m_SavedVariables.size()-1];
+    m_SavedVariables[index] = tmp;
+    return m_SavedVariables[index];
 }
 
 void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
@@ -516,11 +517,10 @@ void ObjectMgr::_SaveVariable(const SavedVariable& toSave)
 
 void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
 {
-    SavedVariablesVector::iterator it;
-    // Already registered?
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
-        if (it->uiIndex == index)
-            return;
+    auto itr = m_SavedVariables.find(index);
+
+    if (itr != m_SavedVariables.end())
+        return;
     
     // If we are there, it means that the variable does not exist.
     SavedVariable& variable = _InsertVariable(index, value, true);
@@ -529,22 +529,22 @@ void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
 
 void ObjectMgr::SetSavedVariable(uint32 index, uint32 value, bool autoSave)
 {
-    for (SavedVariable& vSavedVariable : m_SavedVariables)
-    {
-        if (vSavedVariable.uiIndex == index)
-        {
-            // If the value has not changed.
-            if (vSavedVariable.uiValue == value)
-                return;
+    auto itr = m_SavedVariables.find(index);
 
-            vSavedVariable.uiValue = value;
-            if (autoSave)
-                _SaveVariable(vSavedVariable);
-            else
-                vSavedVariable.bSavedInDb = false;
+    if (itr != m_SavedVariables.end())
+    {
+        // If the value has not changed.
+        if (itr->second.uiValue == value)
             return;
-        }
+
+        itr->second.uiValue = value;
+        if (autoSave)
+            _SaveVariable(itr->second);
+        else
+            itr->second.bSavedInDb = false;
+        return;
     }
+
     // If we are here, it means that the variable does not exist.
     SavedVariable& variable = _InsertVariable(index, value, autoSave);
     if (autoSave)
@@ -567,11 +567,10 @@ void ObjectMgr::LoadVariable(uint32 index, uint32* variable, uint32 defaultValue
 }
 void ObjectMgr::SaveVariables()
 {
-    SavedVariablesVector::iterator it;
-    for (it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
+    for (auto it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
     {
-        if (!it->bSavedInDb)
-            _SaveVariable(*it);
+        if (!it->second.bSavedInDb)
+            _SaveVariable(it->second);
     }
 }
 
@@ -869,7 +868,7 @@ void ObjectMgr::LoadActivePlayersPerFaction()
 {
     m_ActivePlayersPerFaction.clear();                              // need for reload case
 
-    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `logout_time` > %u", (time(nullptr) - MONTH)));
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `level` > 10 && `logout_time` > %u", (time(nullptr) - MONTH)));
 
     if (!result)
     {
@@ -3641,6 +3640,43 @@ void ObjectMgr::LoadQuestSpellCastObjectives()
     } while (result->NextRow());
 }
 
+//void ObjectMgr::ResetYearlyQuests()
+//{
+//    std::string questListStr;
+//
+//    for (auto& iter : m_QuestTemplatesMap)
+//    {
+//       std::unique_ptr<Quest> const& pQuest = iter.second;
+//       if (pQuest->HasSpecialFlag(QUEST_SPECIAL_FLAG_YEARLY_RESET))
+//       {
+//           if (!questListStr.empty())
+//               questListStr += ",";
+//           questListStr += std::to_string(pQuest->GetQuestId());
+//       }
+//    }
+//
+//    if (questListStr.empty())
+//    {
+//        sLog.outErrorDb("No yearly quests defined in database.");
+//        return;
+//    }
+//
+//    tm local;
+//    time_t curr;
+//    time(&curr);
+//    local = *(localtime(&curr));
+//
+//    // Last Year December 31st 23:59:59
+//    local.tm_year -= 1;
+//    local.tm_mon = 11;
+//    local.tm_mday = 31;
+//    local.tm_hour = 23;
+//    local.tm_min = 59;
+//    local.tm_sec = 59;
+//
+//    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE (`rewarded` = 1) && (`timer` < %u) && (`quest` IN (%s))", mktime(&local), questListStr.c_str());
+//}
+
 void ObjectMgr::LoadQuests()
 {
     // For reload case
@@ -4921,7 +4957,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     OldMailsReturner* cb = new OldMailsReturner();
     cb->serverUp = serverUp;
     cb->basetime = basetime;
-    uint32 limit = serverUp ? 100 : 1000;
+    uint32 limit = serverUp ? 300 : 1000;
     CharacterDatabase.AsyncPQueryUnsafe(cb, &OldMailsReturner::Callback, "SELECT `id`, `messageType`, `sender`, `receiver`, `itemTextId`, `has_items`, `expire_time`, `cod`, `checked`, `mailTemplateId` FROM `mail` WHERE `expire_time` < '" UI64FMTD "' AND isDeleted = 0 LIMIT %u", (uint64)basetime, limit);
 }
 
@@ -5102,7 +5138,7 @@ void ObjectMgr::LoadBattlegroundEntranceTriggers()
     while (result->NextRow());
 }
 
-uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Team team)
+uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Team team, std::optional<std::function<bool(const TaxiNodesEntry*)>> pred)
 {
     bool found = false;
     float dist = 0.0f;
@@ -5122,6 +5158,9 @@ uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Te
 
         // skip not taxi network nodes
         if ((sTaxiNodesMask[field] & submask) == 0)
+            continue;
+
+        if (pred && !(*pred)(node))
             continue;
 
         float dist2 = (node->x - x) * (node->x - x) + (node->y - y) * (node->y - y) + (node->z - z) * (node->z - z);
@@ -5514,17 +5553,20 @@ AreaTriggerTeleport const* ObjectMgr::GetGoBackTrigger(uint32 map_id) const
     if (!mapEntry || !mapEntry->IsDungeon())
         return nullptr;
 
+    AreaTriggerTeleport const* pClosestTrigger = nullptr;
+
     for (const auto& itr : m_AreaTriggerTeleportMap)
     {
         if (itr.second.destination.mapId == uint32(mapEntry->ghostEntranceMap))
         {
             AreaTriggerEntry const* atEntry = GetAreaTrigger(itr.first);
-            if (atEntry && atEntry->mapid == map_id)
-                return &itr.second;
+            if (atEntry && atEntry->mapid == map_id &&
+               (!pClosestTrigger || Geometry::GetDistance2D(itr.second.destination.x, itr.second.destination.y, mapEntry->ghostEntranceX, mapEntry->ghostEntranceY) < Geometry::GetDistance2D(pClosestTrigger->destination.x, pClosestTrigger->destination.y, mapEntry->ghostEntranceX, mapEntry->ghostEntranceY)))
+                pClosestTrigger = &itr.second;
         }
     }
 
-    return nullptr;
+    return pClosestTrigger;
 }
 
 /**
@@ -8528,7 +8570,7 @@ void ObjectMgr::RemoveGroup(Group* group)
 bool FindCreatureData::operator()(CreatureDataPair const& dataPair)
 {
     // skip wrong entry ids
-    if (i_id && dataPair.second.creature_id[0] != i_id)
+    if (i_id && !dataPair.second.HasCreatureId(i_id))
         return false;
 
     if (!i_anyData)
@@ -9327,6 +9369,15 @@ AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
 
 void ObjectMgr::LoadShop()
 {
+    auto CheckRegionRequirements = [&](ShopRegion region)
+    {
+        //For now just expect EU if SEA config is 0..
+        ShopRegion currentRegion = sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) ? ShopRegion::China : ShopRegion::Europe;
+
+        return currentRegion == region || region == ShopRegion::Global;
+    };
+
+
     m_ShopCategoriesMap.clear();
     m_shopLogs.clear();
 
@@ -9357,7 +9408,7 @@ void ObjectMgr::LoadShop()
 
     m_ShopEntriesMap.clear();
 
-    result = WorldDatabase.Query("SELECT ID, category, item, description, description_loc4, price FROM shop_items");
+    result = WorldDatabase.Query("SELECT ID, category, item, model_id, item_id, description, description_loc4, price, region_locked FROM shop_items");
 
     if (!result)
         return;
@@ -9369,14 +9420,28 @@ void ObjectMgr::LoadShop()
         uint32 id = fields[0].GetUInt32();
         uint8 category = fields[1].GetUInt8();
         uint32 item = fields[2].GetUInt32();
-        std::string text = fields[3].GetString();
-        std::string description_loc4 = fields[4].GetString();
-        uint32 price = fields[5].GetUInt32();
+        uint32 ModelID = fields[3].GetUInt32();
+        uint32 ItemID = fields[4].GetUInt32();
+        std::string text = fields[5].GetString();
+        std::string description_loc4 = fields[6].GetString();
+        uint32 price = fields[7].GetUInt32();
+        ShopRegion region = (ShopRegion)fields[8].GetUInt8();
+
+
+        if (!CheckRegionRequirements(region))
+            continue;
+
+        auto raceChangeItems = make_array(50603, 50604, 50605, 50606, 50607, 50608, 50609, 50610, 50613, 50612);
+
+        if (std::find(raceChangeItems.begin(), raceChangeItems.end(), item) != raceChangeItems.end() && sWorld.IsPvPRealm())
+            continue;
 
         ShopEntry shopentry;
         shopentry.shopId = id;
         shopentry.Category = category;
         shopentry.Item = item;
+        shopentry.ModelID = ModelID;
+        shopentry.ItemDisplayID = ItemID;
         shopentry.Description = text;
         shopentry.Description_loc4 = description_loc4;
         shopentry.Price = price;
@@ -9393,11 +9458,77 @@ void ObjectMgr::LoadShop()
             continue;
         }
 
+        ShopCategoriesMap::iterator CategoryIter = m_ShopCategoriesMap.find(shopentry.Category);
+        if (CategoryIter != m_ShopCategoriesMap.end())
+        {
+            CategoryIter->second.Items.push_back(shopentry);
+        }
+        else
+        {
+			sLog.outErrorDb("ERROR for item Id %u, category %u doesn't defined in category list!", id, shopentry.Category);
+			continue;
+        }
+
         m_ShopEntriesMap[item] = shopentry;
 
     } while (result->NextRow());
 
     delete result;
+
+    // Sort items in categories
+    for (auto& CategoryPair : m_ShopCategoriesMap)
+    {
+        ShopCategory& ShopCat = CategoryPair.second;
+		std::sort(ShopCat.Items.begin(), ShopCat.Items.end(), [&](ShopEntry const& t1, ShopEntry const& t2)
+			{
+				return t1.shopId < t2.shopId;
+			});
+
+        ShopCat.CachedItemEntries.resize(ShopCat.Items.size());
+        for (uint32 i = 0; i < ShopCat.Items.size(); i++)
+        {
+            std::string& CachedEntry = ShopCat.CachedItemEntries[i];
+            ShopEntry& Entry = ShopCat.Items[i];
+
+            ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(Entry.Item);
+
+            if (pProto == nullptr)
+            {
+                sLog.outErrorDb("ERROR for item Id %u, item_template missed info!", Entry.Item);
+                continue;
+            }
+
+			std::string ItemName;
+			if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+			{
+				ItemName = Entry.Description_loc4;
+			}
+			else
+			{
+				ItemName = Entry.Description;
+			}
+
+            CachedEntry.resize(1024);
+			int32 FormatResult = std::snprintf(CachedEntry.data(), 1024, "Entries:%u=%s=%u=%s=%u=%u=%u",
+                Entry.Category,
+				ItemName.c_str(),
+                Entry.Price,
+				pProto->Description.c_str(),
+                Entry.Item,
+                Entry.ModelID,
+                Entry.ItemDisplayID);
+
+            MANGOS_ASSERT(FormatResult > 0);
+            if (FormatResult > 1022)
+            {
+                sLog.outErrorDb("ERROR for item Id %u, entry size overflow buffer (size of buffer 1024)!", Entry.Item);
+            }
+
+            size_t StringRealLen = std::strlen(CachedEntry.c_str());
+            CachedEntry.resize(StringRealLen + 1);
+        }
+    }
+
 
     result = LoginDatabase.PQuery("SELECT `id`, `time`, `account`, `guid`, `item`, `price`, `refunded`, UNIX_TIMESTAMP(time) FROM `shop_logs` WHERE `realm_id` = %u OR `realm_id` = 0 ORDER BY `account`, `time` ASC",
         realmID);

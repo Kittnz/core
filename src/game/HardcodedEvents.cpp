@@ -1348,7 +1348,7 @@ void WarEffortEvent::UpdateWarEffortCollection(uint32 now)
     }
 
     // Collection is over - should there be a world announcement...?
-    if (completedObjectives == objectiveGoal)
+    if (completedObjectives >= objectiveGoal)
     {
         stage = WAR_EFFORT_STAGE_READY;
         UpdateStageTransitionTime();

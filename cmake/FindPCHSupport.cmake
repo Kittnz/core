@@ -10,31 +10,34 @@
 #   ADD_NATIVE_PRECOMPILED_HEADER _targetName _input _dowarn
 #   GET_NATIVE_PRECOMPILED_HEADER _targetName _input
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # Execute process to get the GCC compiler version
+    execute_process(
+        COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+        OUTPUT_VARIABLE gcc_compiler_version
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-    EXEC_PROGRAM(
-      ${CMAKE_CXX_COMPILER}
-        ARGS  ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
-        OUTPUT_VARIABLE gcc_compiler_version)
-    #MESSAGE("GCC Version: ${gcc_compiler_version}")
-    IF(gcc_compiler_version MATCHES "4\\.[0-9]\\.[0-9]")
-        SET(PCHSupport_FOUND TRUE)
-    ELSE(gcc_compiler_version MATCHES "4\\.[0-9]\\.[0-9]")
-        IF(gcc_compiler_version MATCHES "3\\.4\\.[0-9]")
-            SET(PCHSupport_FOUND TRUE)
-        ENDIF(gcc_compiler_version MATCHES "3\\.4\\.[0-9]")
-    ENDIF(gcc_compiler_version MATCHES "4\\.[0-9]\\.[0-9]")
+    # Uncomment the next line if you need to debug or check the GCC version
+    # message(STATUS "GCC Version: ${gcc_compiler_version}")
 
-  SET(_PCH_include_prefix "-I")
+    # Check if the GCC version supports Precompiled Headers (PCH)
+    if(gcc_compiler_version MATCHES "^4\\.[0-9]+\\.[0-9]+$" OR
+       gcc_compiler_version MATCHES "^3\\.4\\.[0-9]+$")
+        set(PCHSupport_FOUND TRUE)
+    endif()
 
-ELSE(CMAKE_COMPILER_IS_GNUCXX)
-  IF(WIN32)
-    SET(PCHSupport_FOUND TRUE) # for experimental msvc support
-    SET(_PCH_include_prefix "/I")
-  ELSE(WIN32)
-    SET(PCHSupport_FOUND FALSE)
-  ENDIF(WIN32)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+    # Set include prefix variable for GCC
+    set(_PCH_include_prefix "-I")
+
+elseif(WIN32)
+    # Assume PCH support for MSVC on Windows
+    set(PCHSupport_FOUND TRUE)
+    set(_PCH_include_prefix "/I")
+else()
+    # Default case for non-Windows, non-GCC compilers
+    set(PCHSupport_FOUND FALSE)
+endif()
 
 
 MACRO(_PCH_GET_COMPILE_FLAGS _out_compile_flags)

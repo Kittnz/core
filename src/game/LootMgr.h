@@ -82,6 +82,22 @@ enum LootSlotType
     MAX_LOOT_SLOT_TYPE,
 };
 
+enum LootError
+{
+    LOOT_ERROR_DIDNT_KILL               = 0,    // You don't have permission to loot that corpse.
+    LOOT_ERROR_TOO_FAR                  = 4,    // You are too far away to loot that corpse.
+    LOOT_ERROR_BAD_FACING               = 5,    // You must be facing the corpse to loot it.
+    LOOT_ERROR_LOCKED                   = 6,    // Someone is already looting that corpse.
+    LOOT_ERROR_NOTSTANDING              = 8,    // You need to be standing up to loot something!
+    LOOT_ERROR_STUNNED                  = 9,    // You can't loot anything while stunned!
+    LOOT_ERROR_PLAYER_NOT_FOUND         = 10,   // Player not found
+    LOOT_ERROR_PLAY_TIME_EXCEEDED       = 11,   // Maximum play time exceeded
+    LOOT_ERROR_MASTER_INV_FULL          = 12,   // That player's inventory is full
+    LOOT_ERROR_MASTER_UNIQUE_ITEM       = 13,   // Player has too many of that item already
+    LOOT_ERROR_MASTER_OTHER             = 14,   // Can't assign item to that player
+    LOOT_ERROR_ALREADY_PICKPOCKETED     = 15,   // Your target has already had its pockets picked
+    LOOT_ERROR_NOT_WHILE_SHAPESHIFTED   = 16    // You can't do that while shapeshifted.
+};
 
 class Player;
 class WorldObject;
@@ -137,7 +153,7 @@ struct LootItem
     LootSlotType GetSlotTypeForSharedLoot(PermissionTypes permission, Player* viewer, WorldObject const* lootTarget, bool condition_ok = false) const;
 };
 
-typedef std::vector<LootItem> LootItemList;
+typedef turtle_vector<LootItem, Category_Loot> LootItemList;
 
 struct QuestItem
 {
@@ -153,10 +169,10 @@ struct QuestItem
 
 class LootTemplate;
 
-typedef std::vector<QuestItem> QuestItemList;
-typedef std::map<uint32, QuestItemList *> QuestItemMap;
-typedef std::vector<LootStoreItem> LootStoreItemList;
-typedef std::unordered_map<uint32, LootTemplate*> LootTemplateMap;
+typedef turtle_vector<QuestItem, Category_Loot> QuestItemList;
+typedef turtle_map<uint32, QuestItemList *, Category_Loot> QuestItemMap;
+typedef turtle_vector<LootStoreItem, Category_Loot> LootStoreItemList;
+typedef turtle_unordered_map<uint32, LootTemplate*, Category_Loot> LootTemplateMap;
 
 typedef std::set<uint32> LootIdSet;
 

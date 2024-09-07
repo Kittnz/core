@@ -168,6 +168,11 @@ void WorldSession::HandleMoveWorldportAckOpcode()
 
     if (mEntry->IsRaid())
     {
+        // Cancel any group invites on teleport to dungeon to prevent raid reset exploits.
+        // We already prevent inviting player who is in different instance of same map.
+        // This makes sure you cant bypass that by inviting player first but not accepting until inside.
+        GetPlayer()->UninviteFromGroup();
+
         if (time_t timeReset = sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(mEntry->id))
         {
             uint32 timeleft = uint32(timeReset - time(nullptr));
@@ -185,6 +190,9 @@ void WorldSession::HandleMoveWorldportAckOpcode()
 
     // resummon pet
     GetPlayer()->ResummonPetTemporaryUnSummonedIfAny();
+
+    // stop drowning if not in water anymore
+    GetPlayer()->UpdateTerainEnvironmentFlags();
 
     //lets process all delayed operations on successful teleport
     GetPlayer()->ProcessDelayedOperations();
@@ -319,11 +327,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         }
     }
 
+#ifdef USE_ANTICHEAT
     if (pPlayerMover != nullptr)
     {
 		//If anticheat says ok, we still can detect suspisious activities over time
 	    sSuspiciousStatisticMgr.OnMovement(pPlayerMover, movementInfo);
     }
+#endif
 
     // This is required for proper movement extrapolation
     if (opcode == MSG_MOVE_JUMP)
@@ -342,8 +352,6 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         pMover->HandleEmoteState(0);
     }
 
-    HandleMoverRelocation(pMover, movementInfo);
-
     // fall damage generation (ignore in flight case that can be triggered also at lags in moment teleportation to another map).
     if (opcode == MSG_MOVE_FALL_LAND && pPlayerMover && !pPlayerMover->IsTaxiFlying())
         pPlayerMover->HandleFall(movementInfo);
@@ -361,17 +369,32 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     }
 
-    // Turtle WoW: Prevent falling, using space
+    HandleMoverRelocation(pMover, movementInfo);
+    
     Player* exceptPlayer = _player;
-
-    if (_player->IsFlying() && !movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
+    if (_player->IsFlying())
     {
-        movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        pMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        pMover->ClearUnitState(UNIT_STAT_MOVING);
-        movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
-        pMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
-        exceptPlayer = nullptr;
+        // Turtle WoW: Prevent falling, using space
+        if (!movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
+        {
+            movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+            pMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+            pMover->ClearUnitState(UNIT_STAT_MOVING);
+            movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
+            pMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
+            exceptPlayer = nullptr;
+        }
+    }
+    else
+    {
+        // if flags still remain somehow after flying is disabled
+        if (movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING) &&
+            movementInfo.HasMovementFlag(MOVEFLAG_LEVITATING))
+        {
+            movementInfo.RemoveMovementFlag(MOVEFLAG_SWIMMING);
+            movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
+            exceptPlayer = nullptr;
+        }
     }
 
     WorldPacket data(opcode, recvData.size());
@@ -476,10 +499,11 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -583,10 +607,11 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -679,10 +704,11 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
         if ((pMover == _player->GetMover()) &&
             (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
         {
-            // Update position if it has changed.
-            HandleMoverRelocation(pMover, movementInfo);
             if (pPlayerMover)
                 pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+
+            // Update position if it has changed.
+            HandleMoverRelocation(pMover, movementInfo);
         }
         else
         {
@@ -747,6 +773,8 @@ void WorldSession::HandleMoveKnockBackAck(WorldPacket& recvData)
             m_moveRejectTime = WorldTimer::getMSTime();
             return;
         }
+
+        pPlayerMover->SetFallInformation(0);
     }
 
     HandleMoverRelocation(pMover, movementInfo);
@@ -880,7 +908,9 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket& recvData)
             return;
         }
 
+#ifdef USE_ANTICHEAT
         sSuspiciousStatisticMgr.OnMovement(_player, movementInfo);
+#endif
     }
 
     HandleMoverRelocation(pMover, movementInfo);
@@ -1005,7 +1035,8 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
         if (movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
         {
             // Turtle: fix fall damage from transport bug by preventing it for next few seconds
-            pPlayerMover->m_lastTransportTime = movementInfo.stime;
+            if (pPlayerMover->IsHardcore())
+                pPlayerMover->SetHCImmunityTimer(10);
 
             //GetPlayer()->GetCheatData()->OnTransport(pPlayerMover, movementInfo.GetTransportGuid());
             Unit* loadPetOnTransport = nullptr;

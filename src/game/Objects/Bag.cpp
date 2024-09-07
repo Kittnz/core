@@ -91,9 +91,9 @@ bool Bag::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
     return true;
 }
 
-void Bag::SaveToDB()
+void Bag::SaveToDB(bool direct)
 {
-    Item::SaveToDB();
+    Item::SaveToDB(direct);
 }
 
 bool Bag::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry)
@@ -200,6 +200,15 @@ uint32 Bag::GetItemCount(uint32 item, Item* eItem) const
                 count += m_bagslot[i]->GetCount();
 
     return count;
+}
+
+void Bag::ApplyForAllItems(std::function<void(Item*)> func, bool inBank) const
+{
+    for (uint32 i = 0; i < GetBagSize(); ++i)
+    {
+        if (m_bagslot[i])
+            func(m_bagslot[i]);
+    }
 }
 
 uint8 Bag::GetSlotByItemGUID(ObjectGuid guid) const

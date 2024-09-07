@@ -315,7 +315,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
     m_applyTime = time(nullptr);
     CalculatePeriodic(modOwner, true);
 
-    // Re-calculation du montant de degats
+    // Recalculate damage amount
     if (IsApplied() || !IsExclusive())
     {
         bool lockStats = false;
@@ -328,7 +328,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
             case SPELL_AURA_MOD_STAT:
             case SPELL_AURA_MOD_PERCENT_STAT:
             case SPELL_AURA_MOD_INCREASE_HEALTH:
-            case SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT: // Exemple : 27038
+            case SPELL_AURA_MOD_INCREASE_HEALTH_PERCENT: // Example : 27038
                 lockStats = true;
                 break;
         }
@@ -336,7 +336,7 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
             target->SetCanModifyStats(false);
         //unapply with the old modifiers and reapply with the new.
         ApplyModifier(false, true, false);
-        // Refresh de quelques variables du modifier
+        // Refresh some modifier variables
         m_modifier.m_auraname = pHolderAura->GetModifier()->m_auraname;
         m_modifier.m_amount = pHolderAura->GetModifier()->m_amount;
         m_modifier.m_miscvalue = pHolderAura->GetModifier()->m_miscvalue;
@@ -1002,6 +1002,19 @@ void Aura::HandleAddModifier(bool apply, bool Real)
         m_spellmod = nullptr; // Deleted in Player::AddSpellMod.
 
     ReapplyAffectedPassiveAuras();
+
+    // Ghost Wolf Speed - recalculate modifier to update ghost wolf speed instantly
+    if (GetId() == 22801)
+    {
+        if (SpellAuraHolder* pGhostWolf = GetTarget()->GetSpellAuraHolder(2645))
+        {
+            if (Aura* pAura = pGhostWolf->GetAuraByEffectIndex(EFFECT_INDEX_1))
+            {
+                pAura->GetModifier()->m_amount = GetTarget()->CalculateSpellDamage(GetTarget(), pGhostWolf->GetSpellProto(), EFFECT_INDEX_1);
+                GetTarget()->UpdateSpeed(MOVE_RUN, false, GetTarget()->GetSpeedRatePersistance(MOVE_RUN));
+            }
+        }
+    }
 }
 
 void Aura::TriggerSpell()
@@ -2475,7 +2488,7 @@ void Aura::HandleAuraFeatherFall(bool apply, bool Real)
     GetTarget()->SetFeatherFall(apply);
 
     if (!apply && GetTarget()->GetTypeId() == TYPEID_PLAYER)
-        GetTarget()->ToPlayer()->SetFallInformation(0, GetTarget()->GetPositionZ());
+        GetTarget()->ToPlayer()->SetFallInformation(0);
 }
 
 void Aura::HandleAuraHover(bool apply, bool Real)
@@ -2669,11 +2682,36 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         switch (form)
         {
             case FORM_CAT:
-                target->RemoveAurasDueToSpellByCancel(45709); // remove bear form berserk version if exists.
+                // swap Berserk from Bear to Cat
+                if (SpellAuraHolder* pOldBerserk = target->GetSpellAuraHolder(45709))
+                {
+                    target->m_Events.AddLambdaEventAtOffset([target, duration = pOldBerserk->GetAuraDuration()]()
+                    {
+                        if (SpellAuraHolder* pNewBerserk = target->AddAura(45710, ADD_AURA_POSITIVE))
+                        {
+                            pNewBerserk->SetAuraDuration(duration);
+                            pNewBerserk->UpdateAuraDuration();
+                        }
+                    }, 1);
+                    target->RemoveAurasDueToSpellByCancel(45709);
+                }
                 break;
             case FORM_BEAR:
             case FORM_DIREBEAR:
-                target->RemoveAurasDueToSpellByCancel(45710); // remove cat form berserk version.
+                // swap Berserk from Cat to Bear
+                if (SpellAuraHolder* pOldBerserk = target->GetSpellAuraHolder(45710))
+                {
+                    target->m_Events.AddLambdaEventAtOffset([target, duration = pOldBerserk->GetAuraDuration()]()
+                    {
+                        int32 healthModSpellBasePoints0 = int32(target->GetMaxHealth() * 0.2);
+                        if (SpellAuraHolder* pNewBerserk = target->AddAura(45709, ADD_AURA_POSITIVE, nullptr, &healthModSpellBasePoints0))
+                        {
+                            pNewBerserk->SetAuraDuration(duration);
+                            pNewBerserk->UpdateAuraDuration();
+                        }
+                    }, 1);
+                    target->RemoveAurasDueToSpellByCancel(45710);
+                }
                 break;
         }
 
@@ -3418,7 +3456,6 @@ void Aura::HandleModCharm(bool apply, bool Real)
 
         target->SetCharmerGuid(GetCasterGuid());
         target->SetFactionTemplateId(caster->GetFactionTemplateId());
-        target->CastStop(target == caster ? GetId() : 0);
         caster->SetCharm(target);
 
         target->CombatStop(true);
@@ -3556,6 +3593,7 @@ void Aura::HandleModCharm(bool apply, bool Real)
         }
         
         target->UpdateControl();
+        target->InterruptNonMeleeSpells(true);
 
         if (pPlayerTarget)
             pPlayerTarget->SetFactionForRace(target->GetRace());
@@ -3563,9 +3601,6 @@ void Aura::HandleModCharm(bool apply, bool Real)
         if (pPlayerTarget && pPlayerTarget->IsAlive() && caster && caster->IsAlive() && caster->IsInCombat())
         {
             pPlayerTarget->SendAttackSwingCancelAttack();
-
-            if (target->IsNonMeleeSpellCasted(false))
-                target->InterruptNonMeleeSpells(false);
 
             target->AttackStop();
             target->RemoveAllAttackers();
@@ -4476,6 +4511,25 @@ void Aura::HandleAuraProcTriggerSpell(bool apply, bool Real)
                 GetTarget()->CastSpell(GetTarget(), 33006, true);
             break;
         }
+        // Drain Soul
+        case 1120: // Rank 1
+        case 8288: // Rank 2
+        case 8289: // Rank 3
+        case 11675: // Rank 4
+            if (apply)
+            {
+                // Fix talent Improved Drain Soul not triggering if target dies from last tick of Drain Soul damage.
+                GetHolder()->SetAuraDuration(GetHolder()->GetAuraMaxDuration() + 400);
+
+                // Fix drain soul aura remaining on caster upon resist.
+                GetTarget()->m_Events.AddLambdaEventAtOffset([spellId = GetId(), target = GetTarget()]()
+                {
+                    if (!target->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
+                        target->RemoveAurasDueToSpell(spellId);
+                }, 400);
+            }
+            break;
+            
         default:
             break;
     }
@@ -4507,6 +4561,18 @@ void Aura::HandlePeriodicTriggerSpell(bool apply, bool /*Real*/)
     {
         switch (GetId())
         {
+            case 24743:                             // Cannon Prep
+            case 24832:                             // Cannon Prep
+            {
+                if (GameObject* pGo = ToGameObject(GetRealCaster()))
+                {
+                    pGo->m_Events.AddLambdaEventAtOffset([pGo]()
+                    {
+                        pGo->SendGameObjectCustomAnim();
+                    }, 3200);
+                }
+                break;
+            }
             case 26869: // Amorous (Love is in the Air)
             {
                 if (Creature* pCreature = target->ToCreature())
@@ -5014,7 +5080,7 @@ void Aura::HandleModHealingDone(bool apply, bool /*Real*/)
     if (apply)
     {
         // Tree of Life Aura
-        if (GetId() == 45707)
+        if (GetId() == 45707 && GetHolder()->IsAddedBySpell())
         {
             if (Unit* pCaster = GetCaster())
                 m_modifier.m_amount = pCaster->GetStat(STAT_SPIRIT) * (float(m_modifier.m_amount) / 100.0f);
@@ -5327,18 +5393,6 @@ void Aura::HandleAuraModCritPercent(bool apply, bool Real)
         }
     }
 
-    // apply item specific bonuses for already equipped weapon
-    if (Real)
-    {
-        for (int i = 0; i < MAX_ATTACK; ++i)
-            if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
-                ((Player*)target)->_ApplyWeaponDependentAuraCritMod(pItem, WeaponAttackType(i), this, apply);
-    }
-
-    // mods must be applied base at equipped weapon class and subclass comparison
-    // with spell->EquippedItemClass and  EquippedItemSubClassMask and EquippedItemInventoryTypeMask
-    // m_modifier.m_miscvalue comparison with item generated damage types
-
     if (GetSpellProto()->EquippedItemClass == -1)
     {
         ((Player*)target)->HandleBaseModValue(CRIT_PERCENTAGE,         FLAT_MOD, float(m_modifier.m_amount), apply);
@@ -5346,7 +5400,19 @@ void Aura::HandleAuraModCritPercent(bool apply, bool Real)
     }
     else
     {
-        // done in Player::_ApplyWeaponDependentAuraMods
+        // apply item specific bonuses for already equipped weapon
+        if (Real)
+        {
+            // whether aura was really applied will be set in _ApplyWeaponDependentAuraCritMod
+            m_applied = !m_applied;
+
+            // mods must be applied base at equipped weapon class and subclass comparison
+            // with spell->EquippedItemClass and  EquippedItemSubClassMask and EquippedItemInventoryTypeMask
+            // m_modifier.m_miscvalue comparison with item generated damage types
+            for (int i = 0; i < MAX_ATTACK; ++i)
+                if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
+                    ((Player*)target)->_ApplyWeaponDependentAuraCritMod(pItem, WeaponAttackType(i), this, apply);
+        }
     }
 }
 
@@ -5510,7 +5576,7 @@ void CheckRangedOverrides(Unit* target, Aura* aura, bool apply, int32 amount)
     {
         if (aura->GetSpellProto()->Id == *itr)
         {
-            target->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, amount, apply);
+            target->HandleAttackPowerModifier(RANGED_AP_MODS, aura->IsPositive() ? AP_MOD_POSITIVE_FLAT : AP_MOD_NEGATIVE_FLAT, amount, apply);
             break;
         }
     }
@@ -5518,6 +5584,7 @@ void CheckRangedOverrides(Unit* target, Aura* aura, bool apply, int32 amount)
 
 void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
 {
+
     if (apply)
     {
         if (Unit* caster = GetCaster())
@@ -5525,7 +5592,7 @@ void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
                 modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_ATTACK_POWER, m_modifier.m_amount);
     }
 
-    GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, m_modifier.m_amount, apply);
+    GetTarget()->HandleAttackPowerModifier(MELEE_AP_MODS, IsPositive() ? AP_MOD_POSITIVE_FLAT : AP_MOD_NEGATIVE_FLAT, m_modifier.m_amount, apply);
 
     CheckRangedOverrides(GetTarget(), this, apply, m_modifier.m_amount);
 }
@@ -5542,7 +5609,7 @@ void Aura::HandleAuraModRangedAttackPower(bool apply, bool /*Real*/)
                 modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_ATTACK_POWER, m_modifier.m_amount);
     }
 
-    GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, m_modifier.m_amount, apply);
+    GetTarget()->HandleAttackPowerModifier(RANGED_AP_MODS, IsPositive() ? AP_MOD_POSITIVE_FLAT : AP_MOD_NEGATIVE_FLAT, m_modifier.m_amount, apply);
 }
 
 void Aura::HandleAuraModAttackPowerPercent(bool apply, bool /*Real*/)
@@ -5555,7 +5622,7 @@ void Aura::HandleAuraModAttackPowerPercent(bool apply, bool /*Real*/)
     }
 
     // UNIT_FIELD_ATTACK_POWER_MULTIPLIER = multiplier - 1
-    GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_PCT, m_modifier.m_amount, apply);
+    GetTarget()->HandleAttackPowerModifier(MELEE_AP_MODS, AP_MOD_PCT, m_modifier.m_amount, apply);
 }
 
 void Aura::HandleAuraModRangedAttackPowerPercent(bool apply, bool /*Real*/)
@@ -5571,7 +5638,7 @@ void Aura::HandleAuraModRangedAttackPowerPercent(bool apply, bool /*Real*/)
     }
 
     // UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER = multiplier - 1
-    GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_PCT, m_modifier.m_amount, apply);
+    GetTarget()->HandleAttackPowerModifier(RANGED_AP_MODS, AP_MOD_PCT, m_modifier.m_amount, apply);
 }
 
 /********************************/
@@ -5666,9 +5733,14 @@ void Aura::HandleModDamagePercentDone(bool apply, bool Real)
     // apply item specific bonuses for already equipped weapon
     if (Real && target->GetTypeId() == TYPEID_PLAYER)
     {
-        for (int i = 0; i < MAX_ATTACK; ++i)
-            if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
-                ((Player*)target)->_ApplyWeaponDependentAuraDamageMod(pItem, WeaponAttackType(i), this, apply);
+        //Have to check this explicitly instead of using GetWeaponForAttack(i, true, true) because it checks feral form.
+        //We shouldn't apply item specific bonuses for already equipped weapons when disarmed because HandleAuraModDisarm re-applies bonuses on debuff fade.
+        if (!target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED))
+        {
+            for (int i = 0; i < MAX_ATTACK; ++i)
+                if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
+                    ((Player*)target)->_ApplyWeaponDependentAuraDamageMod(pItem, WeaponAttackType(i), this, apply);
+        }
     }
 
     // m_modifier.m_miscvalue is bitmask of spell schools
@@ -5916,6 +5988,20 @@ void Aura::HandleShapeshiftBoosts(bool apply)
                 if (spell->m_spellInfo->IsRemovedOnShapeLostSpell())
                     target->InterruptSpell(CurrentSpellTypes(i), false);
     }
+
+    // Effects like Elemental Sharpening Stone should not apply in cat and bear form.
+    if (target->IsPlayer() && IsAttackSpeedOverridenForm(form))
+    {
+        for (int i = 0; i < MAX_ATTACK; ++i)
+        {
+            if (Item* pItem = ((Player*)target)->GetWeaponForAttack(WeaponAttackType(i), true, false))
+            {
+                auto const& auraCritList = target->GetAurasByType(SPELL_AURA_MOD_CRIT_PERCENT);
+                for (const auto itr : auraCritList)
+                    ((Player*)target)->_ApplyWeaponDependentAuraCritMod(pItem, WeaponAttackType(i), itr, !apply);
+            }
+        }
+    }
 }
 
 void Aura::HandleAuraEmpathy(bool apply, bool /*Real*/)
@@ -6024,11 +6110,27 @@ void Aura::HandleSpiritOfRedemption(bool apply, bool Real)
                 target->SetStandState(UNIT_STAND_STATE_STAND);
         }
 
-        target->SetHealth(1);
+        // set health and mana to maximum        
+        target->SetPower(POWER_MANA, target->GetMaxPower(POWER_MANA));
+        target->SetInvincibilityHpThreshold(target->GetMaxHealth());
+
+        // cast visual on next tick
+        target->m_Events.AddLambdaEventAtOffset([target]()
+        {
+            target->CastSpell(target, 25100, true);
+        }, BATCHING_INTERVAL);
     }
     // die at aura end
     else
-        target->DealDamage(target, target->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, GetSpellProto(), false);
+    {
+        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+        target->m_Events.AddLambdaEventAtOffset([target]()
+        {
+            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+            target->SetInvincibilityHpThreshold(0);
+            target->CastSpell(target, 27965, true);
+        }, BATCHING_INTERVAL);
+    }
 }
 
 void Aura::HandleAuraAoeCharm(bool apply, bool real)
@@ -6207,7 +6309,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
 
             if (pdamage)
                 procVictim |= PROC_FLAG_TAKEN_ANY_DAMAGE;
-
+            
             pCaster->ProcDamageAndSpell(target, procAttacker, procVictim, PROC_EX_NORMAL_HIT, pdamage, originalDamage, BASE_ATTACK, spellProto);
 
             cleanDamage.absorb = absorb;
@@ -6781,10 +6883,13 @@ void Aura::PeriodicDummyTick()
                 }
                 case 16336:                                 // Haunting Phantoms
                 {
-                    if (urand(0,1))
-                        target->CastSpell(target, 16334, true); // Summon Spiteful Phantom
-                    else
-                        target->CastSpell(target, 16335, true); // Summon Wrath Phantom
+                    if (target->GetMap()->IsDungeon())
+                    {
+                        if (urand(0, 1))
+                            target->CastSpell(target, 16334, true); // Summon Spiteful Phantom
+                        else
+                            target->CastSpell(target, 16335, true); // Summon Wrath Phantom
+                    }
                     return;
                 }
                 case 21827:                                 // Frostwolf Aura DND
@@ -7036,7 +7141,7 @@ void Aura::PeriodicDummyTick()
             {
                 case 47357: // Calming River
                 {
-                    if (target->HasAura(45527))
+                    if (target->HasAura(45527) && target->GetPower(POWER_MANA) != target->GetMaxPower(POWER_MANA))
                         target->CastSpell(target, 47358, true, nullptr, this);
                     return;
                 }
@@ -7133,6 +7238,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Uni
     m_applyTime = time(nullptr);
     m_isPassive = IsPassiveSpell(GetId()) || (spellproto->Attributes == SPELL_ATTR_HIDDEN_CLIENTSIDE && spellproto->DurationIndex == 21);
     m_isDeathPersist = spellproto->IsDeathPersistentSpell();
+    m_isDungeonDeathPersist = spellproto->IsDeathPersistentDungeonSpell();
     m_isSingleTarget = spellproto->HasSingleTargetAura();
     m_procCharges = spellproto->procCharges;
 
@@ -8470,7 +8576,7 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         modOwner->ApplySpellMod(GetId(), SPELLMOD_ACTIVATION_TIME, m_modifier.periodictime);
     }
 
-    // Totem griffes de pierre
+    // Stoneclaw Totem
     if (GetSpellProto()->SpellVisual == 0 && GetSpellProto()->SpellIconID == 689)
         return;
 
@@ -8484,7 +8590,6 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 8515:  // Windfury Totem Passive (Rank 1)
         case 10609: // Windfury Totem Passive (Rank 2)
         case 10612: // Windfury Totem Passive (Rank 3)
-        case 12654: // Ignite
         case 13797: // Immolation Trap Effect (Rank 1)
         case 14298: // Immolation Trap Effect (Rank 2)
         case 14299: // Immolation Trap Effect (Rank 3)
@@ -8492,6 +8597,11 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 14301: // Immolation Trap Effect (Rank 5)
         case 23184: // Mark of Frost
         case 25041: // Mark of Nature
+            break;
+        case 12654: // 
+            m_periodicTimer = m_periodicTimer == 0
+                ? m_modifier.periodictime
+                : std::min(m_periodicTimer, m_modifier.periodictime);
             break;
         default:
             m_periodicTimer = m_modifier.periodictime;
@@ -8636,6 +8746,8 @@ bool _IsExclusiveSpellAura(SpellEntry const* spellproto, SpellEffectIndex eff, A
         case 24427: // Diamond Flask
         case 17528: // Mighty Rage Potion
         case 23697: // Alterac Spring Water
+
+        case 28777: // Slayer's crest
         // Love is in the Air buffs
         case 27664:
         case 27665:

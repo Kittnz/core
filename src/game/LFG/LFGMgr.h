@@ -124,6 +124,6 @@ class LFGQueue
         uint32 _groupSize = 5;
 };
 
-#define sLFGMgr MaNGOS::Singleton<LFGQueue>::Instance()
+extern LFGQueue sLFGMgr;
 
 #endif

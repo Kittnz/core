@@ -25,13 +25,20 @@
 #include "Common.h"
 #include "Errors.h"
 #include "Field.h"
+#include "PerfStats.h"
 
 class QueryResult
 {
     public:
-        QueryResult(uint64 rowCount, uint32 fieldCount) : mCurrentRow(nullptr), mFieldCount(fieldCount), mRowCount(rowCount) {}
+        QueryResult(uint64 rowCount, uint32 fieldCount) : mCurrentRow(nullptr), mFieldCount(fieldCount), mRowCount(rowCount)
+        {
+            ++PerfStats::g_totalQueryResults;
+        }
 
-        virtual ~QueryResult() {}
+        virtual ~QueryResult()
+        {
+            --PerfStats::g_totalQueryResults;
+        }
 
         virtual bool NextRow() = 0;
 

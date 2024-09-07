@@ -35,12 +35,17 @@
 #include "Auth/base32.h"
 
 
+#include <ios>
+#include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
+#include "AllocatorWithCategory.h"
 
 typedef ACE_TSS<MTRand> MTRandTSS;
 static MTRandTSS mtRand;
 
+IPerfMonitor* gPerfMonitorInterface = nullptr;
 
 Tokenizer::Tokenizer(const std::string &src, const char sep, uint32 vectorReserve)
 {
@@ -750,6 +755,7 @@ std::string GetCurrentTimeString()
 #ifdef WIN32
 #include <windows.h>
 #include <VersionHelpers.h>
+#include <Psapi.h>
 
 bool Win10SupportNewThreadNameInit = false;
 
@@ -825,4 +831,74 @@ void thread_name(const char* name)
 #endif
 
     OPTICK_SETUP_THREAD(name);
+}
+
+#ifdef WIN32
+#pragma comment(lib,"Psapi.lib")
+#endif
+
+namespace Memory
+{
+	uint64 GetProcessMemory()
+	{
+#ifdef WIN32
+        PROCESS_MEMORY_COUNTERS_EX MemCounters;
+        ZeroMemory(&MemCounters, sizeof(MemCounters));
+        MemCounters.cb = sizeof(MemCounters);
+        HANDLE hCurrentProcess = GetCurrentProcess();
+        GetProcessMemoryInfo(hCurrentProcess, (PPROCESS_MEMORY_COUNTERS) &MemCounters, sizeof(MemCounters));
+
+        return MemCounters.PrivateUsage;
+#elif defined linux
+        using std::ios_base;
+        using std::ifstream;
+        using std::string;
+
+
+        ifstream stat_stream("/proc/self/stat", ios_base::in);
+
+        // dummy vars for leading entries in stat that we don't care about
+        //
+        string pid, comm, state, ppid, pgrp, session, tty_nr;
+        string tpgid, flags, minflt, cminflt, majflt, cmajflt;
+        string utime, stime, cutime, cstime, priority, nice;
+        string O, itrealvalue, starttime;
+
+        // the two fields we want
+        //
+        unsigned long vsize;
+        long rss;
+
+        stat_stream >> pid >> comm >> state >> ppid >> pgrp >> session >> tty_nr
+            >> tpgid >> flags >> minflt >> cminflt >> majflt >> cmajflt
+            >> utime >> stime >> cutime >> cstime >> priority >> nice
+            >> O >> itrealvalue >> starttime >> vsize >> rss; // don't care about the rest
+
+        stat_stream.close();
+
+        long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024; // in case x86-64 is configured to use 2MB pages
+        return rss * page_size_kb * 1000;
+#endif
+        return 0;
+	}
+}
+
+std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc)
+{
+    if (!flags)
+        return "None";
+
+    std::string names;
+    for (uint32 i = 0; i < 32; i++)
+    {
+        uint32 flag = 1 << i;
+        if (flags & flag)
+        {
+            if (!names.empty())
+                names += ", ";
+
+            names += getNameFunc(flag);
+        }
+    }
+    return names;
 }

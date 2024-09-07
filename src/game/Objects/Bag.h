@@ -51,6 +51,8 @@ class Bag : public Item
         Item* GetItemByEntry(uint32 item) const;
         uint32 GetItemCount(uint32 item, Item* eItem = nullptr) const;
 
+        void ApplyForAllItems(std::function<void(Item*)> func, bool inBank = false) const;
+
         uint8 GetSlotByItemGUID(ObjectGuid guid) const;
         bool IsEmpty() const;
         uint32 GetFreeSlots() const;
@@ -58,7 +60,7 @@ class Bag : public Item
 
         // DB operations
         // overwrite virtual Item::SaveToDB
-        void SaveToDB() override;
+        void SaveToDB(bool direct = false) override;
         // overwrite virtual Item::LoadFromDB
         bool LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry) override;
         // overwrite virtual Item::DeleteFromDB

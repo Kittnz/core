@@ -167,6 +167,28 @@ struct SpellPeriodicAuraLogInfo
     float  multiplier;
 };
 
+struct AttackPowerModInfo
+{
+    float positiveMods = 0; // int16 in client
+    float negativeMods = 0; // int16 in client
+    float multiplier = 1.0f;
+};
+
+enum AttackPowerModType
+{
+    AP_MOD_POSITIVE_FLAT,
+    AP_MOD_NEGATIVE_FLAT,
+    AP_MOD_PCT,
+    AP_MOD_TYPE_COUNT,
+};
+
+enum AttackPowerModIndex
+{
+    MELEE_AP_MODS,
+    RANGED_AP_MODS,
+    AP_MODS_COUNT,
+};
+
 uint32 CreateProcExtendMask(SpellNonMeleeDamage* damageInfo, SpellMissInfo missCondition);
 
 enum SpellProcEventTriggerCheck
@@ -395,6 +417,7 @@ class Unit : public WorldObject
         float m_createStats[MAX_STATS];
         int32 m_createResistances[MAX_SPELL_SCHOOL];
         float m_auraModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_END];
+        AttackPowerModInfo m_attackPowerMods[AP_MODS_COUNT];
         WeaponDamageInfo m_weaponDamage[MAX_ATTACK][MAX_ITEM_PROTO_DAMAGES];
         uint8 m_weaponDamageCount[MAX_ATTACK];
         bool m_canModifyStats;
@@ -477,6 +500,8 @@ class Unit : public WorldObject
         virtual uint32 GetShieldBlockValue() const = 0;
         float GetPPMProcChance(uint32 WeaponSpeed, float PPM) const;
 
+        bool HandleAttackPowerModifier(AttackPowerModIndex index, AttackPowerModType modifierType, float amount, bool apply);
+        float GetAttackPowerModifierValue(AttackPowerModIndex index, AttackPowerModType modifierType) const;
         bool HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, float amount, bool apply);
         void SetModifierValue(UnitMods unitMod, UnitModifierType modifierType, float value) { m_auraModifiersGroup[unitMod][modifierType] = value; }
         float GetModifierValue(UnitMods unitMod, UnitModifierType modifierType) const;
@@ -523,6 +548,7 @@ class Unit : public WorldObject
         bool m_AINotifyScheduled;
     protected:
         DeathState m_deathState;
+        uint32 m_invincibilityHpThreshold;
         uint32 m_transform;
         float m_modelCollisionHeight;
         bool m_isCreatureLinkingTrigger;
@@ -534,6 +560,8 @@ class Unit : public WorldObject
         bool HasUnitState(uint32 f) const { return m_stateFlags & f; }
         void ClearUnitState(uint32 f) { m_stateFlags &= ~f; }
         uint32 GetUnitState() const { return m_stateFlags; }
+        void SetInvincibilityHpThreshold(uint32 hp) { m_invincibilityHpThreshold = hp; }
+        uint32 GetInvincibilityHpThreshold() const { return m_invincibilityHpThreshold; }
         void UpdateControl();
         bool CanFreeMove() const { return !HasUnitState(UNIT_STAT_NO_FREE_MOVE) && !GetOwnerGuid(); }
         uint32 GetCreatureType() const;
@@ -544,6 +572,7 @@ class Unit : public WorldObject
         }
         bool IsAlive() const { return (m_deathState == ALIVE); }
         bool IsDead() const { return ((m_deathState == DEAD) || (m_deathState == CORPSE)); }
+
         DeathState GetDeathState() const { return m_deathState; }
         virtual void SetDeathState(DeathState s);           // overwritten in Creature/Player/Pet
         uint32 GetLevel() const final { return GetUInt32Value(UNIT_FIELD_LEVEL); }
@@ -569,8 +598,7 @@ class Unit : public WorldObject
         bool IsShapeShifted() const; // mirrors clientside logic, moonkin form not counted as shapeshift
         bool IsInFeralForm() const
         {
-            ShapeshiftForm form = GetShapeshiftForm();
-            return form == FORM_CAT || form == FORM_BEAR || form == FORM_DIREBEAR;
+            return IsAttackSpeedOverridenForm(GetShapeshiftForm());
         }
         Aura* GetDummyAura(uint32 spell_id) const;
         bool IsInDisallowedMountForm();
@@ -674,8 +702,8 @@ class Unit : public WorldObject
 
         void SendAttackStateUpdate(CalcDamageInfo *damageInfo) const;
 
-        void NearTeleportTo(WorldLocation location, uint32_t teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_UNSUMMON_PET);
-        void NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
+        bool NearTeleportTo(WorldLocation location, uint32_t teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_UNSUMMON_PET);
+        bool NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
         void NearLandTo(float x, float y, float z, float orientation);
         void TeleportPositionRelocation(float x, float y, float z, float o);
         void MonsterMoveWithSpeed(float x, float y, float z, float o, float speed, uint32 options);
@@ -787,7 +815,7 @@ class Unit : public WorldObject
         void SendSpellGo(Unit* target, uint32 spellId) const;
         void SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo, AuraType auraTypeOverride = SPELL_AURA_NONE) const;
 
-        SpellAuraHolder* AddAura(uint32 spellId, uint32 addAuraFlags = 0, Unit* pCaster = nullptr);
+        SpellAuraHolder* AddAura(uint32 spellId, uint32 addAuraFlags = 0, Unit* pCaster = nullptr, int32* bp0 = nullptr, int32* bp1 = nullptr, int32* bp2 = nullptr);
         SpellAuraHolder* RefreshAura(uint32 spellId, int32 duration);
         bool AddSpellAuraHolder(SpellAuraHolder *holder);
         void AddAuraToModList(Aura *aura);
@@ -908,8 +936,8 @@ class Unit : public WorldObject
 
         bool HasAuraType(AuraType auraType) const;
         bool HasAuraTypeByCaster(AuraType auraType, ObjectGuid casterGuid) const;
+        bool HasAura(uint32 spellId) const;
         bool HasAura(uint32 spellId, SpellEffectIndex effIndex) const;
-        bool HasAura(uint32 spellId) const { return m_spellAuraHolders.find(spellId) != m_spellAuraHolders.end(); }
         bool virtual HasSpell(uint32 /*spellID*/) const { return false; }
         bool IsFeared()  const { return HasAuraType(SPELL_AURA_MOD_FEAR); }
         bool IsInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }
@@ -956,11 +984,7 @@ class Unit : public WorldObject
         SpellAuraProcResult HandleRemoveByDamageChanceProc(Unit *pVictim, uint32 damage, int32 originalAmount, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         SpellAuraProcResult HandleInvisibilityAuraProc(Unit* pVictim, uint32 damage, int32 originalAmount, Aura* triggeredByAura, SpellEntry const* procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
         SpellAuraProcResult HandleModDamageAuraProc(Unit* pVictim, uint32 damage, int32 originalAmount, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
-        SpellAuraProcResult HandleNULLProc(Unit* /*pVictim*/, uint32 /*damage*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/)
-        {
-            // no proc handler for this aura type
-            return SPELL_AURA_PROC_OK;
-        }
+        SpellAuraProcResult HandleNULLProc(Unit* /*pVictim*/, uint32 /*damage*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* procSpell, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 cooldown);
         SpellAuraProcResult HandleCantTrigger(Unit* /*pVictim*/, uint32 /*damage*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/)
         {
             // this aura type can't proc
@@ -1028,7 +1052,7 @@ class Unit : public WorldObject
         float m_meleeZLimit;
         float m_meleeZReach;
         ThreatManager m_ThreatManager; // Manage all Units threatening us
-        HostileRefManager m_HostileRefManager; // Manage all Units that are threatened by us
+        HostileRefManager m_HostileRefManager; // Manage all Units that are threatened by us (has list of creatures that have us in their threat list)
         std::vector<ObjectGuid> m_tauntGuids;
     protected:
         uint32 m_attackTimer[MAX_ATTACK];
@@ -1249,7 +1273,7 @@ class Unit : public WorldObject
         // Script Helpers
         uint8 GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const;
         Unit* SelectNearestTarget(float dist) const;
-        Unit* SelectRandomUnfriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inFront = false, bool isValidAttackTarget = false) const;
+        Unit* SelectRandomUnfriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inFront = false, bool isValidAttackTarget = false, bool notPvpEnabling = false) const;
         Unit* SelectRandomFriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inCombat = false) const;
         Player* FindNearestHostilePlayer(float range) const;
         Player* FindNearestFriendlyPlayer(float range) const;
@@ -1279,6 +1303,7 @@ class Unit : public WorldObject
         uint32 GetCombatTimer() const { return m_combatTimer; }
         void SetCombatTimer(uint32 t) { m_combatTimer = t; }
         virtual void OnEnterCombat(Unit* /*pAttacker*/, bool /*notInCombat*/) {} // (pAttacker must be valid)
+        bool UsesPvPCombatTimer() const; // 5 second combat timer
 
         // Stop this unit from combat, if includingCast==true, also interrupt casting
         void CombatStop(bool includingCast = false);
@@ -1390,6 +1415,7 @@ class Unit : public WorldObject
                 return guid;
             return GetObjectGuid();
         }
+        Player* GetOwnerPlayerOrPlayerItself() const;
         Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
         Player* GetCharmerOrOwnerPlayer() const;
         Unit* GetCharmerOrOwner() const { return GetCharmerGuid() ? GetCharmer() : GetOwner(); }
@@ -1516,7 +1542,7 @@ class Unit : public WorldObject
         void RestoreMovement();
 
         template <class T>
-        void NearTeleportTo(T const& pos, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET) { NearTeleportTo(pos.x, pos.y, pos.z, pos.o, teleportOptions); }
+        bool NearTeleportTo(T const& pos, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET) { return NearTeleportTo(pos.x, pos.y, pos.z, pos.o, teleportOptions); }
         template <class T>
         void TeleportPositionRelocation(T const& pos) { TeleportPositionRelocation(pos.x, pos.y, pos.z, pos.o); }
         bool IsStopped() const { return !(HasUnitState(UNIT_STAT_MOVING)); }

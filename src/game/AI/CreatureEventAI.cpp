@@ -94,7 +94,6 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
     m_AttackDistance = 0.0f;
     m_AttackAngle = 0.0f;
     m_bCanSummonGuards = c->CanSummonGuards();
-    m_InvinceabilityHpLevel = 0;
 
     //Handle Spawned Events
     c->SetAI(this);
@@ -114,6 +113,9 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
 
     //Check the inverse phase mask (event doesn't trigger if current phase bit is set in mask)
     if (pHolder.Event.event_inverse_phase_mask & (1 << m_Phase))
+        return false;
+
+    if ((pHolder.Event.event_flags & EFLAG_NOT_CASTING) && m_creature->IsNonMeleeSpellCasted(false, false, true))
         return false;
 
     if (pHolder.Event.condition_id && !sObjectMgr.IsConditionSatisfied(pHolder.Event.condition_id, pActionInvoker ? pActionInvoker : m_creature->GetVictim(), m_creature->GetMap(), m_creature, CONDITION_FROM_EVENTAI))
@@ -426,11 +428,14 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
     if (pHolder.Event.event_chance <= rnd % 100)
         return false;
 
+    bool scriptFailed = false;
+
     //Process actions, normal case
     if (!(pHolder.Event.event_flags & EFLAG_RANDOM_ACTION))
     {
         for (const auto& action : pHolder.Event.action)
-            ProcessAction(action, pHolder.Event.event_id, pActionInvoker);
+            if (ProcessAction(action, pHolder.Event.event_id, pActionInvoker))
+                scriptFailed = true;
     }
     //Process actions, random case
     else
@@ -458,24 +463,35 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* 
                 }
             }
 
-            ProcessAction(pHolder.Event.action[j], pHolder.Event.event_id, pActionInvoker);
+            scriptFailed = ProcessAction(pHolder.Event.action[j], pHolder.Event.event_id, pActionInvoker);
         }
     }
+
+    if (scriptFailed && (pHolder.Event.event_flags & EFLAG_CHECK_RESULT))
+    {
+        pHolder.Enabled = true;
+        pHolder.UpdateRepeatTimer(m_creature, 0, 0);
+        return false;
+    }
+
     return true;
 }
 
-void CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker)
+bool CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker)
 {
     if (!action)
-        return;
+        return false;
 
     WorldObject* target = pActionInvoker ? pActionInvoker : m_creature->GetVictim();
     Map* map = m_creature->GetMap();
 
-    for (const auto& x : *action)
+    for (auto const& x : *action)
     {
-        map->ScriptCommandStartDirect(x.second, m_creature, target);
+        if (map->ScriptCommandStartDirect(x.second, m_creature, target))
+            return true;
     }
+
+    return false;
 }
 
 void CreatureEventAI::JustRespawned()
@@ -743,9 +759,9 @@ void CreatureEventAI::UpdateEventsOn_MoveInLineOfSight(Unit* pWho)
             //if range is ok and we are actually in LOS
             if (m_creature->IsWithinDistInMap(pWho, fMaxAllowedRange))
             {
-                //if friendly event&&who is not hostile OR hostile event&&who is hostile
-                if ((itr.Event.ooc_los.noHostile && !m_creature->IsHostileTo(pWho)) ||
-                    (!itr.Event.ooc_los.noHostile && m_creature->IsHostileTo(pWho)))
+                if ((itr.Event.ooc_los.reaction == ULR_ANY) ||
+                    (itr.Event.ooc_los.reaction == ULR_NON_HOSTILE && !m_creature->IsHostileTo(pWho)) ||
+                    (itr.Event.ooc_los.reaction == ULR_HOSTILE && m_creature->IsHostileTo(pWho)))
                     if (m_creature->IsWithinLOSInMap(pWho))
                         ProcessEvent(itr, pWho);
             }
@@ -881,11 +897,6 @@ void CreatureEventAI::UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat)
     }
 }
 
-void CreatureEventAI::SetInvincibilityHealthLevel(uint32 hp_level, bool is_percent)
-{
-    m_InvinceabilityHpLevel = is_percent ? m_creature->GetMaxHealth() * hp_level / 100 : hp_level;
-}
-
 //*********************************
 //*** Functions used globally ***
 
@@ -903,17 +914,6 @@ void CreatureEventAI::ReceiveEmote(Player* pPlayer, uint32 text_emote)
 
             ProcessEvent(itr, pPlayer);
         }
-    }
-}
-
-void CreatureEventAI::DamageTaken(Unit* /*done_by*/, uint32& damage)
-{
-    if (m_InvinceabilityHpLevel > 0 && m_creature->GetHealth() < m_InvinceabilityHpLevel + damage)
-    {
-        if (m_creature->GetHealth() <= m_InvinceabilityHpLevel)
-            damage = 0;
-        else
-            damage = m_creature->GetHealth() - m_InvinceabilityHpLevel;
     }
 }
 

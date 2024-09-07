@@ -16,10 +16,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-project(TurtleWoW)
-
 # CMake policies
-cmake_minimum_required(VERSION 3.1...3.20)
+cmake_minimum_required(VERSION 3.1...3.29)
+
+project(TurtleWoW)
+include(FetchContent)
 
 # Allow -DACE_ROOT, -DTBB_ROOT, etc.
 if(${CMAKE_VERSION} VERSION_GREATER "3.11")
@@ -38,9 +39,12 @@ option(USE_ANTICHEAT "Use anticheat" ON)
 option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
+option(USE_TRACY "Use Tracy Profiling" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
+option(USE_REALMMERGE "Compile helper tool for merging character databases" OFF)
 option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
 option(ENABLE_PROFILING "(Windows only) Enable Optick integration, which allows to profile CPU and Memory. Also disabling some async code" OFF)
+option(ENABLE_LSAN "Enables Leak Sanitizer" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -59,6 +63,17 @@ if(PCHSupport_FOUND AND (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16"))
     endif()
 else()
   unset(USE_PCH_OLD CACHE)
+endif()
+
+if(USE_TRACY)
+  FetchContent_Declare(
+  tracy
+  GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+  )
+  FetchContent_MakeAvailable(tracy)
 endif()
 
 if(USE_LIBCURL)
@@ -100,6 +115,7 @@ if(USE_ADDRESS_SANITIZER)
 	endif(MSVC)
 
 endif()
+
 
 #Giperion: Profiling part
 if (ENABLE_PROFILING)
@@ -380,6 +396,13 @@ if(UNIX)
   else()
     message(STATUS "Debug symbols         : Disabled")
   endif()
+
+
+  if(ENABLE_LSAN)
+    set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fsanitize=leak")
+    set(DEFINITIONS ${DEFINITIONS} ENABLE_LSAN)
+    message(STATUS "Compiling with LSAN ENABLED")
+  endif()
   
   if(GCC_SANITIZE)
     set(BUILD_ADDITIONAL_FLAGS "${BUILD_ADDITIONAL_FLAGS} -fno-omit-frame-pointer -fno-optimize-sibling-calls")
@@ -519,6 +542,6 @@ add_subdirectory(src)
 add_subdirectory(dep)
 
 
-if (USE_EXTRACTORS)
+if (USE_EXTRACTORS OR USE_REALMMERGE)
     add_subdirectory(tools)
 endif()

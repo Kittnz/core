@@ -55,16 +55,18 @@ OFFSET_HARDCORE_CHAT_CODECAVE5                = 0x0009F878,
 OFFSET_HARDCORE_CHAT_CODECAVE6                = 0x0009F887,
 OFFSET_HARDCORE_CHAT_CODECAVE7                = 0x0011BAE1,
 OFFSET_HARDCORE_CHAT_ADDED                    = 0x0048E000, // New section 
+OFFSET_BLUE_CHILD_MOON                        = 0x0003E5B83, // Azeroth has two moons: The larger, bright and silver moon is known as The White Lady. The smaller cool, blue-green moon is known as the The Blue Child.
+OFFSET_BLUE_CHILD_MOON_TIMER                  = 0x0002D2095, // Normally Blue Child comes up once in two nights, but we make it daily.
 };
 
 bool fov_build = false;
-constexpr bool bPatcher = false;
+constexpr bool bPatcher = true;
 constexpr bool bDownloadPatchFromInternet = false;
 
 #define NEW_BUILD 7100u
 #define NEW_VISUAL_BUILD "7100"
 #define NEW_VISUAL_VERSION "1.17.1"
-#define NEW_BUILD_DATE "Dec 20 2023"
+#define NEW_BUILD_DATE "Jan 10 2024"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-5.mpq"
@@ -72,8 +74,13 @@ constexpr bool bDownloadPatchFromInternet = false;
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 #define MAIN_GAME_BINARY "WoW.exe"
-#define SHOULD_COPY_REALM_SETTINGS true
+#define SHOULD_COPY_REALM_SETTINGS false
 #define NEW_REALM_NAME "Nordanaar"
+
+#define DOWNLOAD_FILENAME "twpatch_cn_rest_7100.mpq"
+
+#define DOWNLOAD_LINK_MAIN "https://turtle-wow.b-cdn.net/cn/"
+#define DOWNLOAD_LINK_BACKUP "https://download.turtle-wow.org/cn/"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -329,6 +336,15 @@ void PatchBinary(FILE* hWoW)
 	0xE9, 0x43, 0x51, 0x79, 0xFF };
 	fseek(hWoW, OFFSET_HARDCORE_CHAT_ADDED, SEEK_SET);
 	fwrite(patch_23, sizeof(patch_23), 1, hWoW);
+
+	// Offset discovered by this guy: https://www.youtube.com/watch?v=9uWt7dJ8H3w
+	unsigned char patch_24[] = { 0xC7, 0x05, 0xA4, 0x98, 0xCE, 0x00, 0xD4, 0xE2, 0xE7, 0xFF, 0xC2, 0x04, 0x00 };
+	fseek(hWoW, OFFSET_BLUE_CHILD_MOON, SEEK_SET);
+	fwrite(patch_24, sizeof(patch_24), 1, hWoW);
+
+	unsigned char patch_25[] = { 0x00, 0x00, 0x80, 0x3F };
+	fseek(hWoW, OFFSET_BLUE_CHILD_MOON_TIMER, SEEK_SET);
+	fwrite(patch_25, sizeof(patch_25), 1, hWoW);
 }
 
 constexpr int max_path = 260;
@@ -1208,8 +1224,11 @@ DWORD DoPatcherMainWork()
 			return true;
 		};
 
-		std::string MainLinkToPatch = "https://turtle-wow.b-cdn.net/cn/wow-patch.mpq";
-		std::string BackupLinkToPatch = "https://download.turtle-wow.org/cn/wow-patch.mpq";
+		std::string MainLinkToPatch = DOWNLOAD_LINK_MAIN;
+		std::string BackupLinkToPatch = DOWNLOAD_LINK_BACKUP;
+
+		MainLinkToPatch += DOWNLOAD_FILENAME;
+		BackupLinkToPatch += DOWNLOAD_FILENAME;
 
 #if 0
 		if (FILE* DownloadLinkFile = fopen("downloadlink.txt", "rb"))

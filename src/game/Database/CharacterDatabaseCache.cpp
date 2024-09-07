@@ -3,6 +3,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Pet.h"
 
+CharacterDatabaseCache sCharacterDatabaseCache;
 
 CharacterDatabaseCache::~CharacterDatabaseCache()
 {

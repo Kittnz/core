@@ -105,6 +105,7 @@ public:
     AnalysisInfo& GetCurrentSample() { return _currentSample; }
 
     void CheckExtendedPrintMark();
+    static bool IsAutoBannedPrint(uint64 extendedPrint);
 
     uint32& RescheduleTimer() { return _rescheduleTimer; }
 
@@ -113,15 +114,16 @@ public:
 
     static void CheckExtendedHashes();
     static void MarkExtendedPrint(uint64 extendedPrint);
+    static void AddAutoBanExtendedPrint(uint64 extendedPrint);
 
 private:
     WorldSession* _session;
     uint32 _accountId;
     std::atomic_int m_loadStep = 0;
 
-    std::vector<AnalysisInfo> _loadedSamples;
-    std::unordered_set<uint32> _fingerprintSampleLookup;
-    std::unordered_map<std::string, std::pair<uint32, bool>> _ipHistory;
+    turtle_vector<AnalysisInfo, Category_Anticheat> _loadedSamples;
+    turtle_unordered_set<uint32, Category_Anticheat> _fingerprintSampleLookup;
+    turtle_unordered_map<std::string, std::pair<uint32, bool>, Category_Anticheat> _ipHistory;
 
     AnalysisInfo _currentSample;
     bool _enabled = false; // only enable if we get any data at all from client.
@@ -135,4 +137,5 @@ private:
 
 
     inline static std::unordered_set<uint64> _markedExtendedPrints;
+    inline static std::unordered_set<uint64> _autoBannedPrints;
 };

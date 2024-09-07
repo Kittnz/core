@@ -31,7 +31,7 @@
 #include "zlib.h"
 #endif
 
-INSTANTIATE_SINGLETON_1(AddonHandler);
+AddonHandler sAddOnHandler;
 
 AddonHandler::AddonHandler()
 {

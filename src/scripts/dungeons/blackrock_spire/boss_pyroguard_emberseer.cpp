@@ -26,16 +26,17 @@ EndScriptData */
 
 enum
 {
+    SPELL_STRIKE = 15580,
     SPELL_FIRENOVA = 23462,
     SPELL_FLAMEBUFFET = 23341,
     SPELL_PYROBLAST = 20228,                        // guesswork, but best fitting in spells-area, was 17274 (has mana cost)
 
-    CANALISEURS_ENTRY = 10316,
+    NPC_INCARCERATOR = 10316,
 
-    SPELL_MISE_EN_CAGE = 15281,
+    SPELL_ENCAGE_EMBERSEEER = 15281,
     SPELL_SELF_CAGE = 15282,
     AURA_PLAYER_CANALISATION = 16532,
-    SPELL_PLAYER_MISE_EN_CAGE = 16045,
+    SPELL_PLAYER_ENCAGE = 16045,
 
     SPELL_LIBERATION = 16047,
     SPELL_GROWTH = 16048,
@@ -51,7 +52,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
     boss_pyroguard_emberseerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (instance_blackrock_spire*) pCreature->GetInstanceData();
-        initialized = false;
+        m_initialized = false;
         Reset();
     }
 
@@ -60,12 +61,12 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
     uint32 m_uiFlameBuffetTimer;
     uint32 m_uiPyroBlastTimer;
 
-    std::set<Player*> sSummoners;
+    std::set<Player*> m_summoners;
 
     // NOSTALRIUS
-    bool initialized;
-    bool bCanalisationEnCours;
-    bool bBossEnferme;
+    bool m_initialized;
+    bool m_encaged;
+    bool m_bossLocked;
     std::vector<ObjectGuid> canaliseurs;
 
     void RespawnAddWarlocks()
@@ -76,14 +77,14 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
             {
                 if (!pCanaliser->IsAlive())
                     pCanaliser->Respawn();
-                pCanaliser->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
+                pCanaliser->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
             }
     }
 
     bool Initialize()
     {
         std::list<Creature*> tmpFoundCrea;
-        GetCreatureListWithEntryInGrid(tmpFoundCrea, m_creature, CANALISEURS_ENTRY, 35.0f);
+        GetCreatureListWithEntryInGrid(tmpFoundCrea, m_creature, NPC_INCARCERATOR, 35.0f);
         while (!tmpFoundCrea.empty())
         {
             canaliseurs.push_back(tmpFoundCrea.front()->GetObjectGuid());
@@ -93,14 +94,14 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         if (canaliseurs.empty())
             return false;
 
-        // Tous doivent etre en vie au debut de l'event.
+        // Everyone must be alive at the start of the event.
         RespawnAddWarlocks();
         if (!m_creature->HasAura(SPELL_SELF_CAGE))
             m_creature->CastSpell(m_creature, SPELL_SELF_CAGE, false);
         return true;
     }
 
-    // Tous les canaliseurs sont-ils morts ?
+    // Are all the channelers dead?
     bool AreAllWarlockDead()
     {
         std::vector<ObjectGuid>::iterator it;
@@ -111,7 +112,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         return true;
     }
 
-    void RefreshCanalisation()
+    void RefreshAltar()
     {
         if (!m_pInstance)
             return;
@@ -123,12 +124,12 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
             Player* currPlayer = it2.getSource();
             if (currPlayer)
             {
-                it = sSummoners.find(currPlayer);
+                it = m_summoners.find(currPlayer);
                 bool isUsing = pGo->HasUniqueUser(currPlayer);
-                if (isUsing && it == sSummoners.end())
-                    sSummoners.insert(currPlayer);
-                else if (!isUsing && it != sSummoners.end())
-                    sSummoners.erase(currPlayer);
+                if (isUsing && it == m_summoners.end())
+                    m_summoners.insert(currPlayer);
+                else if (!isUsing && it != m_summoners.end())
+                    m_summoners.erase(currPlayer);
             }
         }
     }
@@ -137,25 +138,25 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
     {
         std::set<Player*>::const_iterator itSummoners;
 
-        // Le combat avec les adds commence
+        // The fight with the adds begins.
         m_pInstance->SetData(TYPE_EMBERSEER, SPECIAL);
         for (const auto& guid : canaliseurs)
         {
             Creature *currCanaliseur = m_creature->GetMap()->GetCreature(guid);
             if (!currCanaliseur)
                 continue;
-            currCanaliseur->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
+            currCanaliseur->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
             currCanaliseur->InterruptNonMeleeSpells(false);
             if (currCanaliseur->AI())
             {
-                itSummoners = sSummoners.begin();
-                if (itSummoners != sSummoners.end())
-                    std::advance(itSummoners, urand(0, sSummoners.size() - 1));
+                itSummoners = m_summoners.begin();
+                if (itSummoners != m_summoners.end())
+                    std::advance(itSummoners, urand(0, m_summoners.size() - 1));
                 currCanaliseur->AI()->AttackStart(*itSummoners);
             }
         }
-        bCanalisationEnCours = false;
-        bBossEnferme = true;
+        m_encaged = false;
+        m_bossLocked = true;
     }
 
     void EventBossLiberation()
@@ -165,8 +166,9 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_GROWTH, true);
         m_creature->MonsterSay(SAY_BOSS_FREE, LANG_UNIVERSAL, 0);
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
-        // On attaque tout le monde.
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+
+        // We attack everyone.
         Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
         for (const auto& it2 : pl)
         {
@@ -201,20 +203,20 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         m_uiPyroBlastTimer = 14000;
 
         // NOSTALRIUS
-        bCanalisationEnCours = true;
-        bBossEnferme = true;
+        m_encaged = true;
+        m_bossLocked = true;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
     }
 
     void AttackStart(Unit *target) override
     {
-        // $target commence a nous attaquer.
-        // Pas de combat autorise avec le boss.
-        if (bCanalisationEnCours || bBossEnferme)
+        // $target starts attacking us.
+        // No fight allowed with the boss.
+        if (m_encaged || m_bossLocked)
             return;
 
-        // Sinon, go attaquer.
+        // Otherwise, go attack.
         if (m_creature->Attack(target, true))
         {
             m_creature->AddThreat(target);
@@ -242,7 +244,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_EMBERSEER, FAIL);
         RespawnAddWarlocks();
-        bCanalisationEnCours = true;
+        m_encaged = true;
         if (!m_creature->HasAura(SPELL_SELF_CAGE))
             m_creature->CastSpell(m_creature, SPELL_SELF_CAGE, false);
     }
@@ -251,28 +253,28 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
     {
         if (!m_pInstance)
             return;
-        if (!initialized)
+        if (!m_initialized)
         {
             Initialize();
-            initialized = true;
+            m_initialized = true;
         }
         // Return since we have no target
-        if (bCanalisationEnCours)
+        if (m_encaged)
         {
-            RefreshCanalisation();
+            RefreshAltar();
             return;
         }
-        if (bBossEnferme)
+        if (m_bossLocked)
         {
             if (AreAllWarlockDead())
             {
-                bBossEnferme = false;
+                m_bossLocked = false;
                 EventBossLiberation();
             }
             return;
         }
 
-        // Sinon, on est "normalement" en combat.
+        // Otherwise, we are “normally” in combat.
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -339,27 +341,28 @@ struct npc_geolier_main_noireAI : public ScriptedAI
     }
 
     instance_blackrock_spire* m_pInstance;
-    uint32 MiseEnCage_Timer;
-    uint32 Frappe_Timer;
-    bool fled;
+    uint32 m_uiEncageTimer;
+    uint32 m_uiStrikeTimer;
+    bool m_fled;
     // END NOSTALRIUS
 
     void Reset() override
     {
-        MiseEnCage_Timer = urand(5000, 40000);
-        Frappe_Timer = urand(2000, 12100);
-        fled = false;
+        m_uiEncageTimer = urand(5000, 40000);
+        m_uiStrikeTimer = urand(2000, 12100);
+        m_fled = false;
     }
 
     void AttackStart(Unit *target) override
     {
         if (!m_pInstance)
             return;
-        // Pas pret (event pas commence)
+
+        // Not ready (event not started).
         if (m_pInstance->GetData(TYPE_EMBERSEER) != SPECIAL)
             return;
 
-        // Sinon, go attaquer.
+        // Otherwise, go attack.
         if (m_creature->Attack(target, true))
         {
             m_creature->AddThreat(target);
@@ -377,41 +380,44 @@ struct npc_geolier_main_noireAI : public ScriptedAI
 
         if (m_pInstance->GetData(TYPE_EMBERSEER) != SPECIAL)
         {
-            // Pas de combat autorise pour l'instant.
-            if (!m_creature->IsNonMeleeSpellCasted(false, false, true))
-                m_creature->CastSpell(m_creature, SPELL_MISE_EN_CAGE, false);
-            // Regen vie
+            // No fighting allowed at this time.
+            if (!m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
+                m_creature->CastSpell(m_creature, SPELL_ENCAGE_EMBERSEEER, false);
+
             m_creature->RegenerateHealth();
             return;
         }
-        // Sinon go.
+
+        // Otherwise go.
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
-        if (MiseEnCage_Timer < uiDiff)
+
+        if (m_uiEncageTimer < uiDiff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
-                if (pTarget->IsWithinLOSInMap(m_creature) && !pTarget->HasAura(SPELL_PLAYER_MISE_EN_CAGE))
+                if (pTarget->IsWithinLOSInMap(m_creature) && !pTarget->HasAura(SPELL_PLAYER_ENCAGE))
                 {
-                    m_creature->CastSpell(pTarget, SPELL_PLAYER_MISE_EN_CAGE, false);
-                    MiseEnCage_Timer = urand(20000, 40000);
+                    m_creature->CastSpell(pTarget, SPELL_PLAYER_ENCAGE, false);
+                    m_uiEncageTimer = urand(20000, 40000);
                 }
             }
         }
         else
-            MiseEnCage_Timer -= uiDiff;
+            m_uiEncageTimer -= uiDiff;
 
-        if (Frappe_Timer < uiDiff)
+        if (m_uiStrikeTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), 15580) == CAST_OK)
-                Frappe_Timer = urand(7900, 14000);
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STRIKE) == CAST_OK)
+                m_uiStrikeTimer = urand(7900, 14000);
         }
         else
-            Frappe_Timer -= uiDiff;
-        if (!fled && m_creature->GetHealthPercent() < 15.0f)
+            m_uiStrikeTimer -= uiDiff;
+
+        if (!m_fled && m_creature->GetHealthPercent() < 15.0f)
         {
             m_creature->DoFlee();
-            fled = true;
+            m_fled = true;
         }
 
         DoMeleeAttackIfReady();

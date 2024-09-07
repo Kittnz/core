@@ -77,19 +77,27 @@ struct ShopEntry
     uint32 shopId;
     uint32 Category;
     uint32 Item;
+    uint32 ModelID;
+    uint32 ItemDisplayID;
     std::string Description;
     std::string Description_loc4;
     uint32 Price;
 };
 
-struct ShopCategory
-{
-    std::string Name;
-    std::string Name_loc4;
-    std::string Icon;
-};
 
 typedef robin_hood::unordered_map<uint32, ShopEntry> ShopEntriesMap;
+
+struct ShopCategory
+{
+	std::string Name;
+	std::string Name_loc4;
+	std::string Icon;
+
+    std::vector< ShopEntry > Items;
+
+    std::vector< std::string > CachedItemEntries;
+};
+
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 
@@ -103,6 +111,14 @@ struct ShopLogEntry
     uint32 itemPrice;
     bool refunded;
     uint32 dateUnix;
+};
+
+//Acts like bitmask.
+enum class ShopRegion : uint32
+{
+    Global = 0,
+    Europe = 1,
+    China  = 2
 };
 
 struct BattlegroundEntranceTrigger
@@ -492,7 +508,7 @@ struct SavedVariable
     uint32 uiValue;
     bool bSavedInDb;
 };
-typedef std::vector<SavedVariable> SavedVariablesVector;
+typedef std::unordered_map<uint32, SavedVariable> SavedVariablesMap;
 
 struct PlayerCacheData
 {
@@ -604,6 +620,8 @@ enum PermVariables
     VAR_WE_GONG_BANG_TIMES          = 30053,    // Track how many times the gong has been rung
     VAR_WE_AUTOCOMPLETE_TIME        = 30054,    // The last time the progress auto complete was performed
     VAR_WE_HIVE_REWARD              = 30055,    // A mask of slain colossus events to start
+
+    VAR_APRIL_FOOLS_ENABLED         = 42000
 };
 
 class GameObjectUseRequirement
@@ -760,8 +778,9 @@ class ObjectMgr
         void LoadActivePlayersPerFaction();
         bool IsFactionImbalanced(Team team);
         void IncreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]++; }
+        void DecreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]--; }
 
-        uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team );
+        uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team, std::optional<std::function<bool(const TaxiNodesEntry*)>> pred = std::nullopt);
         void GetTaxiPath( uint32 source, uint32 destination, uint32 &path, uint32 &cost);
         uint32 GetTaxiMountDisplayId( uint32 id, Team team, bool allowed_alt_team = false);
 
@@ -911,6 +930,7 @@ class ObjectMgr
 
             return nullptr;
         }
+        // void ResetYearlyQuests();
         void LoadQuestRelations()
         {
             LoadGameobjectQuestRelations();
@@ -1371,7 +1391,7 @@ class ObjectMgr
             return m_ShopEntriesMap;
         }
 
-        ShopCategoriesMap GetShopCategoriesList() const
+        const ShopCategoriesMap& GetShopCategoriesList() const
         {
             return m_ShopCategoriesMap;
         }
@@ -1465,7 +1485,7 @@ class ObjectMgr
 
         void LoadSavedVariable();
         void SaveVariables();
-        SavedVariablesVector m_SavedVariables;
+        SavedVariablesMap m_SavedVariables;
 
         // Caching Player Data
         void LoadPlayerCacheData(uint32 lowGuid = 0);
@@ -1779,8 +1799,6 @@ class ObjectMgr
         robin_hood::unordered_map<uint32, ChatChannelsEntry> m_chatChannelsMap;
         robin_hood::unordered_map<uint32 /*spell id*/, std::vector<QuestSpellCastObjective>> m_questSpellCastObjectives;
 };
-
-//#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
 
 extern ObjectMgr sObjectMgr;
 

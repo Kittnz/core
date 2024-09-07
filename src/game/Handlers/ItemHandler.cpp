@@ -168,6 +168,12 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
     if (!pSrcItem)
         return;                                             // only at cheat
 
+    // Automatically unequip 2 handed weapon when clicking on off-hand item in inventory.
+    if (pSrcItem->GetProto()->IsOffHandItem())
+        if (Item* pMainHand = _player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            if (pMainHand->GetProto()->InventoryType == INVTYPE_2HWEAPON)
+                _player->AutoUnequipItemFromSlot(EQUIPMENT_SLOT_MAINHAND, false);
+
     uint16 dest;
     InventoryResult msg = _player->CanEquipItem(NULL_SLOT, dest, pSrcItem, !pSrcItem->IsBag());
     if (msg != EQUIP_ERR_OK)
@@ -882,10 +888,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
             return;
         }
         else
-        {
-            GetPlayer()->canSeeVendorList = false;
             pCreature = creature;
-        }
     }
 
     // remove fake death
@@ -920,6 +923,20 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
     size_t count_pos = data.wpos();
     data << uint8(count);
 
+    if (sWorld.IsAprilFools() && urand(0, 10) == 0)
+    {
+        ++count;
+
+        auto proto = sObjectMgr.GetItemPrototype(19019);
+        data << uint32(count);
+        data << uint32(19019);
+        data << uint32(proto->DisplayInfoID);
+        data << uint32(0xFFFFFFFF);
+        data << uint32(100);
+        data << uint32(1);
+        data << uint32(1);
+    }
+
     float discountMod = _player->GetReputationPriceDiscount(pCreature);
 
     for (int i = 0; i < numitems; ++i)
@@ -942,7 +959,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
 
                     // when no faction required but rank > 0 will be used faction id from the vendor faction template to compare the rank
                     if (!pProto->RequiredReputationFaction && pProto->RequiredReputationRank > 0 &&
-                            ReputationRank(pProto->RequiredReputationRank) > _player->GetReputationRank(pCreature->GetFactionTemplateEntry()->faction))
+                            ReputationRank(pProto->RequiredReputationRank) > _player->GetReputationRank(pCreature->GetFactionId()))
                         continue;
 
                     if (crItem->conditionId && !sObjectMgr.IsConditionSatisfied(crItem->conditionId, _player, pCreature->GetMap(), pCreature, CONDITION_FROM_VENDOR))

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
  * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
@@ -162,7 +162,6 @@ void WorldSession::HandleCharEnum(QueryResult * result)
     WorldPacket data(SMSG_CHAR_ENUM, 100);                  // we guess size
 
     uint8 num = 0;
-
     _characterMaxLevel = 0;
 
     data << num;
@@ -177,7 +176,7 @@ void WorldSession::HandleCharEnum(QueryResult * result)
             if (_characterMaxLevel < level)
                 _characterMaxLevel = level;
 
-            if (m_shouldBackupCharacters && level > sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL))
+            if (m_shouldBackupCharacters && level > sWorld.getConfig(CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL) && !sWorld.IsCharacterPDumpedRecently(guidlow, sWorld.GetGameTime()))
                 sWorld.SchedulePlayerDump(guidlow);
 
             if (!active)
@@ -188,7 +187,6 @@ void WorldSession::HandleCharEnum(QueryResult * result)
                 ++num;
         }
         while (result->NextRow());
-
         delete result;
     }
 
@@ -209,12 +207,12 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recv_data*/)
                                   //   8                9               10                     11                     12                     13                    14
                                   "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guildid, characters.playerFlags, "
                                   //  15                    16                   17                     18                   19                                20
-                                  "characters.at_login, character_pet.entry, character_pet.modelid, character_pet.level, characters.equipmentCache, characters.mortality_status, characters.total_deaths, characters.active "
-                                  "FROM characters LEFT JOIN character_pet ON characters.guid=character_pet.owner AND character_pet.slot='%u' "
+                                  "characters.at_login,     0,                   0,                     0, characters.equipmentCache, characters.mortality_status, characters.total_deaths, characters.active "
+                                  "FROM characters "
                                   "LEFT JOIN guild_member ON characters.guid = guild_member.guid "
                                   "WHERE characters.account = '%u' ORDER BY characters.guid "
                                   "LIMIT 0,10",
-                                  PET_SAVE_AS_CURRENT, GetAccountId());
+                                   GetAccountId());
 }
 
 void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
@@ -404,8 +402,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     sObjectMgr.UpdatePlayerCachedPosition(pNewChar.get());
     _charactersCount += 1;
 
-    LoginDatabase.PExecute("DELETE FROM realmcharacters WHERE acctid= '%u' AND realmid = '%u'", GetAccountId(), realmID);
-    LoginDatabase.PExecute("INSERT INTO realmcharacters (numchars, acctid, realmid) VALUES (%u, %u, %u)",  _charactersCount, GetAccountId(), realmID);
+    LoginDatabase.PExecute("REPLACE INTO realmcharacters (numchars, acctid, realmid) VALUES (%u, %u, %u)",  _charactersCount, GetAccountId(), realmID);
 
     data << (uint8)CHAR_CREATE_SUCCESS;
     SendPacket(&data);
@@ -413,7 +410,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Create Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
     sLog.out(LOG_CHAR, "[%s:%u@%s] Create Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), pNewChar->GetGUIDLow());
-    sDBLogger->LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
+    sDBLogger.LogCharAction({ pNewChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionCreate, {} });
     sObjectMgr.IncreaseActivePlayersCount(team);
 }
 
@@ -470,7 +467,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     std::string IP_str = GetRemoteAddress();
     BASIC_LOG("Account: %d (IP: %s) Delete Character:[%s] (guid: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
     sLog.out(LOG_CHAR, "[%s:%u@%s] Delete Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), IP_str.c_str(), name.c_str(), lowguid);
-    sDBLogger->LogCharAction({ lowguid, GetAccountId(), LogCharAction::ActionDelete, {} });
+    sDBLogger.LogCharAction({ lowguid, GetAccountId(), LogCharAction::ActionDelete, {} });
 
     // If the character is online (ALT-F4 logout for example)
     if (Player* onlinePlayer = sObjectAccessor.FindPlayer(guid))
@@ -726,14 +723,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (!pCurrChar->IsAlive())
         pCurrChar->SendCorpseReclaimDelay(true);
 
-    if (pCurrChar->IsHardcore())
-    {
-        uint32 secondsUptime = sWorld.GetUptime();
-        if (secondsUptime < 15 * MINUTE)
-        {
-            pCurrChar->noAggroTimer = 20 * IN_MILLISECONDS;
-        }
-    }
+    if (pCurrChar->IsHardcore() && sWorld.GetUptime() < 15 * MINUTE)
+        pCurrChar->SetHCImmunityTimer(20);
 
     pCurrChar->SendInitialPacketsBeforeAddToMap();
     GetMasterPlayer()->SendInitialActionButtons();
@@ -803,7 +794,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         GetMasterPlayer()->areaId = pCurrChar->GetCachedAreaId();
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
         if (!pCurrChar->HasGMDisabledSocials())
-            sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+            sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
 
         if (Guild* guild = sGuildMgr.GetGuildById(pCurrChar->GetGuildId()))
             guild->AddToCache(GetMasterPlayer()->GetGUIDLow());
@@ -892,7 +883,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (!alreadyOnline && !pCurrChar->IsStandingUp() && !pCurrChar->HasUnitState(UNIT_STAT_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
-    sDBLogger->LogCharAction({ pCurrChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogin, {} });
+    sDBLogger.LogCharAction({ pCurrChar->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogin, {} });
 
     m_playerLoading = false;
     m_clientMoverGuid = pCurrChar->GetObjectGuid();
@@ -904,13 +895,65 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (pCurrChar->GetDeathState() == CORPSE)
             pCurrChar->KillPlayer();
     }
-    pCurrChar->RestorePendingTeleport();
 
     sObjectMgr.UpdatePlayerCachedPosition(pCurrChar);
 
     if (sWorld.getConfig(CONFIG_BOOL_SEND_LOOT_ROLL_UPON_RECONNECT) && alreadyOnline)
         if (Group* pGroup = pCurrChar->GetGroup())
             pGroup->SendLootStartRollsForPlayer(pCurrChar);
+
+    if (pCurrChar->GetRace() == RACE_GOBLIN && pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN))
+    {
+        uint32 itemEntry = 80699;
+        std::string subject = "Goblin's Appearance Token";
+        std::string message = "Greetings! Use this to improve your look!\n\nSafe travels,\nTurtle WoW Team";
+        Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
+        ToMailItem->SaveToDB();
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN);
+    }      
+        
+
+    // Chinese Lunar Festivale
+    //if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK) && !pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT))
+    //{
+    //    uint32 itemEntry = 91790;
+    //    
+    //    std::string subject = sObjectMgr.GetMangosString(50306, 4);
+    //    std::string message = sObjectMgr.GetMangosString(50307, 4);
+    //    Item* ToMailItem = Item::CreateItem(itemEntry, 1, pCurrChar);
+    //    ToMailItem->SaveToDB();
+    //    MailDraft(subject, sObjectMgr.CreateItemText(message))
+    //        .AddItem(ToMailItem)
+    //        .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    //    pCurrChar->SetCustomFlag(CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT);
+    //}
+
+
+    if (pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED))
+    {
+        pCurrChar->HandleTransferChecks();
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED);
+    }
+
+    if (pCurrChar->HasCustomFlag(CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK))
+    {
+        pCurrChar->HandleRaceChangeFixup();
+        pCurrChar->RemoveCustomFlag(CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK);
+    }
+
+
+    auto security = pCurrChar->GetSession()->GetSecurity();
+    if (pCurrChar->GetSession()->GetSecurity() > SEC_PLAYER  && security <= SEC_ADMINISTRATOR)
+    {
+        sWorld.SendGMText(string_format("GM {} just logged in.", pCurrChar->GetName()));
+    }
+
+
+    pCurrChar->RecallPvPGear();
 
     // Update warden speeds
     //if (GetWarden())
@@ -1075,7 +1118,7 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uin
 
     sLog.out(LOG_CHAR, "[%s:%u@%s] Character:[%s] (guid:%u) Changed name to: %s", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), oldname.c_str(), guidLow, newname.c_str());
 
-    sDBLogger->LogCharAction({ guidLow, session->GetAccountId(), LogCharAction::ActionRename, CharActionRenameEntry{0, oldname, newname} });
+    sDBLogger.LogCharAction({ guidLow, session->GetAccountId(), LogCharAction::ActionRename, CharActionRenameEntry{0, oldname, newname} });
 
     WorldPacket data(SMSG_CHAR_RENAME, 1 + 8 + (newname.size() + 1));
     data << uint8(RESPONSE_SUCCESS);

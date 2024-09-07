@@ -488,6 +488,20 @@ struct npc_stitchesAI : npc_escortAI
         }
     }
 
+    void AttackStart(Unit* pVictim) override
+    {
+        if (Player* pPlayer = pVictim->ToPlayer())
+        {
+            if (!m_creature->IsWithinDist(pPlayer, 50.0f))
+                return;
+
+            if (pPlayer->IsHardcore() && !pPlayer->IsInCombat())
+                return;
+        }
+
+        npc_escortAI::AttackStart(pVictim);
+    }
+
     void KilledUnit(Unit* pUnit) override
     {
         if (pUnit && (pUnit->GetEntry() == NPC_WATCHER_SELKIN))

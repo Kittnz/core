@@ -55,7 +55,7 @@ void TransmogMgr::LoadFromDB(QueryResult* result)
         Field* fields = result->Fetch();
         uint32 itemId = fields[0].GetUInt32();
 
-        _transmogs.push_back(itemId);
+        _transmogs.insert(itemId);
 
     } while (result->NextRow());
 }
@@ -370,6 +370,14 @@ std::string TransmogMgr::GetTransmogStatus()
 	return status;
 }
 
+void TransmogMgr::RemoveTransmog(Item* item)
+{
+	sObjectMgr.DeleteItemTransmogrifyTemplate(item->GetTransmogrification());
+
+    item->SetTransmogrification(0);
+    item->SetState(ITEM_CHANGED, _owner);
+}
+
 bool TransmogMgr::HasTransmog(uint32 newItemId)
 {
 
@@ -390,6 +398,12 @@ bool TransmogMgr::HasTransmog(uint32 newItemId)
     return false;
 }
 
+void TransmogMgr::RemoveFromCollection(uint32 itemId)
+{
+	_transmogs.erase(itemId);
+	CharacterDatabase.PExecute("DELETE FROM character_transmogs WHERE guid = %u AND itemId = %u", _owner->GetGUIDLow(), itemId);
+}
+
 void TransmogMgr::AddToCollection(uint32 itemId)
 {
     if (HasTransmog(itemId))
@@ -403,7 +417,7 @@ void TransmogMgr::AddToCollection(uint32 itemId)
     if (!sObjectMgr.IsItemSubClassTransmoggable(proto->SubClass))
         return;
 
-    _transmogs.push_back(itemId);
+    _transmogs.insert(itemId);
 
     static SqlStatementID insTransmog;
     SqlStatement stmtIns = CharacterDatabase.CreateStatement(insTransmog, "INSERT INTO character_transmogs (guid,itemId) VALUES (?, ?)");

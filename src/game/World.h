@@ -34,6 +34,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Opcodes.h"
 #include "Utilities/robin_hood.h"
 
 //#include "Creature.h"
@@ -414,6 +415,11 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL,
     CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS,
     CONFIG_UINT32_CONTENT_PHASE,
+    CONFIG_UINT32_SHOP_REFUND_WINDOW,
+    CONFIG_UINT32_PERFORMANCE_REPORT_INTERVAL,
+    CONFIG_UINT32_MAX_GOLD_TRANSFERRED,
+    CONFIG_UINT32_MAX_ITEM_STACK_TRANSFERRED,
+    CONFIG_UINT32_DYNAMIC_SCALING_POP,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -575,8 +581,6 @@ enum eConfigBoolValues
     CONFIG_BOOL_SILENTLY_GM_JOIN_TO_CHANNEL,
     CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS,
     CONFIG_BOOL_CHAT_FAKE_MESSAGE_PREVENTING,
-    CONFIG_BOOL_CHAT_STRICT_LINK_CHECKING_SEVERITY,
-    CONFIG_BOOL_CHAT_STRICT_LINK_CHECKING_KICK,
     CONFIG_BOOL_ADDON_CHANNEL,
     CONFIG_BOOL_CORPSE_EMPTY_LOOT_SHOW,
     CONFIG_BOOL_DEATH_CORPSE_RECLAIM_DELAY_PVP,
@@ -700,6 +704,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_ENABLE_FACTION_BALANCE,
     CONFIG_BOOL_BLOCK_ALL_HANZI,
     CONFIG_BOOL_HOLIDAY_EVENT,
+    CONFIG_BOOL_PERFORMANCE_ENABLE,
 	CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -847,7 +852,7 @@ struct AccountCacheData
     uint32 id;
     std::string username;
     std::string email;
-    uint64 lastExtendedFingerprint;
+    uint64 lastExtendedFingerprint = 0;
 };
 
 
@@ -901,6 +906,8 @@ class World
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
 
+        float m_dynamicRespawnRatio = 1.0f;
+
         uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
 
         void SetLastDiff(uint32 diff);
@@ -938,6 +945,8 @@ class World
         const char* GetMotd() const { return m_motd.c_str(); }
 
         uint32 GetContentPhase() const { return getConfig(CONFIG_UINT32_CONTENT_PHASE); }
+
+        bool IsAprilFools() const;
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
@@ -978,6 +987,10 @@ class World
         void RestoreLostGOs();
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
+        bool LoadConfigSettingsFromDB(bool reload = false);
+        void LoadConfigSettingsFromFile(bool reload = false);
+        void LoadConfigSettingsCommonPart(bool reload = false);
+        void ExportConfigSettingsToDB();
 
         template<class Builder>
         class LocalizedPacketListDo
@@ -1096,6 +1109,7 @@ class World
         void KickAll();
         void KickAllLess(AccountTypes sec);
         void WarnAccount(uint32 accountId, std::string from, std::string reason, const char* type = "WARNING");
+        void RemoveWarning(uint32 warningId);
         void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author);
         BanReturn BanAccount(BanMode mode, std::string nameOrIP, uint32 duration_secs, std::string reason, std::string author);
         bool RemoveBanAccount(BanMode mode, std::string const& source, std::string const& message, std::string nameOrIP);
@@ -1181,6 +1195,8 @@ class World
         void DeleteOldPDumps();
         void UnlockCharacter(uint32 guidLow);
         bool IsCharacterLocked(uint32 guidLow);
+        bool IsCharacterPDumpedRecently(uint32 guidLow, time_t timestamp);
+        void AddPDumpedCharacterToList(uint32 guidLow, time_t timestamp);
 
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
@@ -1229,6 +1245,11 @@ class World
         void SetWorldUpdateTimer(WorldTimers timer, uint32 current);
         time_t GetWorldUpdateTimer(WorldTimers timer);
         time_t GetWorldUpdateTimerInterval(WorldTimers timer);
+
+        // packet statistics
+        bool m_collectPacketStats = false;
+        std::atomic_uint64_t m_packetsCount[NUM_MSG_TYPES] = {};
+        std::atomic_uint64_t m_packetsSize[NUM_MSG_TYPES] = {};
 
     protected:
         void _UpdateGameTime();
@@ -1342,6 +1363,7 @@ class World
         std::thread m_autoPDumpThread;
         std::mutex m_autoPDumpMutex;
         std::set<uint32> m_autoPDumpPendingGuids;
+        std::unordered_map<uint32, std::unordered_set<time_t>> m_autoPDumpCharTimes;
         std::set<uint32> m_lockedCharacterGuids;
         std::thread m_asyncPacketsThread;
         bool m_canProcessAsyncPackets;
@@ -1367,8 +1389,6 @@ class World
 };
 
 extern uint32 realmID;
-
-//#define sWorld MaNGOS::Singleton<World>::Instance()
 
 extern World sWorld;
 

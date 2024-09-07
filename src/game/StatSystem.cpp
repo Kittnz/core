@@ -222,7 +222,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     float val2 = 0.0f;
     float level = float(GetLevel());
 
-    UnitMods unitMod = ranged ? UNIT_MOD_ATTACK_POWER_RANGED : UNIT_MOD_ATTACK_POWER;
+    AttackPowerModIndex unitMod = ranged ? RANGED_AP_MODS : MELEE_AP_MODS;
 
     uint16 index = UNIT_FIELD_ATTACK_POWER;
     uint16 index_mod = UNIT_FIELD_ATTACK_POWER_MODS;
@@ -336,18 +336,18 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         }
     }
 
-    SetModifierValue(unitMod, BASE_VALUE, val2);
+    float baseAttackPower = val2;
 
-    float base_attPower  = GetModifierValue(unitMod, BASE_VALUE) * GetModifierValue(unitMod, BASE_PCT);
-    float attPowerMod = GetModifierValue(unitMod, TOTAL_VALUE);
+    // attack power mods are split into positive and negative field
+    float attackPowerModPositive = GetAttackPowerModifierValue(unitMod, AP_MOD_POSITIVE_FLAT);
+    float attackPowerModNegative = GetAttackPowerModifierValue(unitMod, AP_MOD_NEGATIVE_FLAT);
 
-    float attPowerMultiplier = GetModifierValue(unitMod, TOTAL_PCT) - 1.0f;
+    SetInt32Value(index, (int32)baseAttackPower);               //UNIT_FIELD_(RANGED)_ATTACK_POWER field
+    SetInt16Value(index_mod, 0, (int16)attackPowerModPositive); //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field (positive)
+    SetInt16Value(index_mod, 1, (int16)attackPowerModNegative); //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field (negative)
 
-//  sLog.outError("BaseAP: %f, SpellMod: %f, Multiplier: %f", base_attPower, attPowerMod, attPowerMultiplier);
-
-    SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(index_mod, (uint32)attPowerMod);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field
-    SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
+    float attackPowerMultiplier = GetAttackPowerModifierValue(unitMod, AP_MOD_PCT) - 1.0f;
+    SetFloatValue(index_mult, attackPowerMultiplier);           //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
     //automatically update weapon damage after attack power modification
     if (ranged)
@@ -741,7 +741,7 @@ void Creature::UpdateManaRegen()
 
 void Creature::UpdateAttackPowerAndDamage(bool ranged)
 {
-    UnitMods unitMod = ranged ? UNIT_MOD_ATTACK_POWER_RANGED : UNIT_MOD_ATTACK_POWER;
+    AttackPowerModIndex unitMod = ranged ? RANGED_AP_MODS : MELEE_AP_MODS;
 
     uint16 index = UNIT_FIELD_ATTACK_POWER;
     uint16 index_mod = UNIT_FIELD_ATTACK_POWER_MODS;
@@ -754,13 +754,18 @@ void Creature::UpdateAttackPowerAndDamage(bool ranged)
         index_mult = UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER;
     }
 
-    float base_attPower  = GetModifierValue(unitMod, BASE_VALUE) * GetModifierValue(unitMod, BASE_PCT);
-    float attPowerMod = GetModifierValue(unitMod, TOTAL_VALUE);
-    float attPowerMultiplier = GetModifierValue(unitMod, TOTAL_PCT) - 1.0f;
+    float baseAttackPower = ranged ? GetCreatureInfo()->ranged_attack_power : GetCreatureInfo()->attack_power;
 
-    SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(index_mod, (uint32)attPowerMod);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field
-    SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
+    // attack power mods are split into positive and negative field
+    float attackPowerModPositive = GetAttackPowerModifierValue(unitMod, AP_MOD_POSITIVE_FLAT);
+    float attackPowerModNegative = GetAttackPowerModifierValue(unitMod, AP_MOD_NEGATIVE_FLAT);
+
+    SetInt32Value(index, (int32)baseAttackPower);               //UNIT_FIELD_(RANGED)_ATTACK_POWER field
+    SetInt16Value(index_mod, 0, (int16)attackPowerModPositive); //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field (positive)
+    SetInt16Value(index_mod, 1, (int16)attackPowerModNegative); //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field (negative)
+
+    float attackPowerMultiplier = GetAttackPowerModifierValue(unitMod, AP_MOD_PCT) - 1.0f;
+    SetFloatValue(index_mult, attackPowerMultiplier);           //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
     if (ranged)
     {
@@ -957,27 +962,25 @@ void Pet::UpdateAttackPowerAndDamage(bool ranged)
     if (ranged)
         return;
 
-    float val = 0.0f;
-    UnitMods unitMod = UNIT_MOD_ATTACK_POWER;
+    AttackPowerModIndex unitMod = MELEE_AP_MODS;
 
-    if (GetEntry() == 416)                                  // imp's attack power
-        val = GetStat(STAT_STRENGTH) - 10.0f;
-    else
-        val = 2 * GetStat(STAT_STRENGTH) - 20.0f;
+    float baseAttackPower = (GetEntry() == 416) ? GetStat(STAT_STRENGTH) - 10.0f : 2 * GetStat(STAT_STRENGTH) - 20.0f;
 
-    SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, val);
-
-    //in BASE_VALUE of UNIT_MOD_ATTACK_POWER for creatures we store data of meleeattackpower field in DB
-    float base_attPower  = GetModifierValue(unitMod, BASE_VALUE) * GetModifierValue(unitMod, BASE_PCT);
-    float attPowerMod = GetModifierValue(unitMod, TOTAL_VALUE);
-    float attPowerMultiplier = GetModifierValue(unitMod, TOTAL_PCT) - 1.0f;
+    // attack power mods are split into positive and negative field
+    float attackPowerModPositive = GetAttackPowerModifierValue(unitMod, AP_MOD_POSITIVE_FLAT);
+    float attackPowerModNegative = GetAttackPowerModifierValue(unitMod, AP_MOD_NEGATIVE_FLAT);
 
     //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(UNIT_FIELD_ATTACK_POWER, (int32)base_attPower);
+    SetInt32Value(UNIT_FIELD_ATTACK_POWER, (int32)baseAttackPower);
+
     //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field
-    SetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS, (int32)attPowerMod);
+    SetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 0, (int16)attackPowerModPositive); // positive
+    SetInt16Value(UNIT_FIELD_ATTACK_POWER_MODS, 1, (int16)attackPowerModNegative); // negative
+
     //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
-    SetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER, attPowerMultiplier);
+    float attackPowerMultiplier = GetAttackPowerModifierValue(unitMod, AP_MOD_PCT) - 1.0f;
+    SetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER, attackPowerMultiplier);
+
 
     //automatically update weapon damage after attack power modification
     UpdateDamagePhysical(BASE_ATTACK);

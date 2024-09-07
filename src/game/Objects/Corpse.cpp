@@ -29,6 +29,7 @@
 #include "GossipDef.h"
 #include "World.h"
 #include "ObjectMgr.h"
+#include "PerfStats.h"
 
 Corpse::Corpse(CorpseType type) : WorldObject(), loot(this), lootRecipient(nullptr), m_faction(nullptr)
 {
@@ -43,12 +44,16 @@ Corpse::Corpse(CorpseType type) : WorldObject(), loot(this), lootRecipient(nullp
     m_time = time(nullptr);
 
     lootForBody = false;
+
+    ++PerfStats::g_totalCorpses;
 }
 
 Corpse::~Corpse()
 {
     if (m_currMap && (GetType() == CORPSE_BONES))
         GetMap()->RemoveBones(this);
+
+    --PerfStats::g_totalCorpses;
 }
 
 void Corpse::AddToWorld()

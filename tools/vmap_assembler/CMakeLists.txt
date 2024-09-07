@@ -68,6 +68,8 @@ target_link_libraries(vmap_assembler PUBLIC
                     ${ACE_LIBRARIES}
                     shared
                     framework
+                    ${OPENSSL_LIBRARIES}
+                    ${MYSQL_LIBRARY}
 )
 
 install(TARGETS vmap_assembler DESTINATION ${BIN_DIR})

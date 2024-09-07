@@ -1,5 +1,6 @@
 #include "DynamicVisibilityMgr.h"
 
+DynamicVisibilityMgr sDynamicVisMgr;
 
 void DynamicVisibilityMgr::LoadFromDB(bool reload)
 {

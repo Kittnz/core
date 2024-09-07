@@ -396,10 +396,11 @@ class Spell
         static void SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCastResult result);
         void SendCastResult(SpellCastResult result);
         void SendSpellStart();
-        void SendSpellGo(bool SendToCaster = true);
+        void SendSpellGo(bool bSendToCaster = true);
         void SendSpellCooldown();
         void SendLogExecute();
-        void SendInterrupted(uint8 result);
+        void SendInterrupted();
+        void SendAllTargetsMiss(bool bSendToCaster = true);
         void SendChannelUpdate(uint32 time, bool interrupted = false);
         void SendChannelStart(uint32 duration);
         void SendResurrectRequest(Player* target, bool sickness);
@@ -537,6 +538,7 @@ class Spell
                                                             // no effect handled, only channel start/update is sent
 
         bool m_setCreatureTarget = false; // Set for spell casts that need to make the creature face the target
+        bool m_bIsBeingCancelled = false;
 
         uint8 m_delayAtDamageCount = 0;
         int32 GetNextDelayAtDamageMsTime() { return m_delayAtDamageCount < 5 ? 1000 - (m_delayAtDamageCount++)* 200 : 200; }
@@ -628,6 +630,8 @@ class Spell
         };
 
         bool m_destroyed = false;
+
+        SpellCastResult CheckScriptTargeting(SpellEffectIndex effIndex, uint32 chainTargets, float radius, uint32 targetMode, UnitList& tempUnitList);
 
 #ifndef USE_STANDARD_MALLOC
         typedef tbb::concurrent_vector<TargetInfo>     TargetList;

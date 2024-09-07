@@ -36,7 +36,9 @@
 #include "Group.h"
 #include "InstanceData.h"
 
-INSTANTIATE_SINGLETON_1(MapPersistentStateManager);
+typedef MaNGOS::ClassLevelLockable<MapPersistentStateManager, std::mutex> MapPersistanceStateManagerLock;
+INSTANTIATE_SINGLETON_2(MapPersistentStateManager, MapPersistanceStateManagerLock);
+INSTANTIATE_CLASS_MUTEX(MapPersistentStateManager, std::mutex);
 
 static uint32 resetEventTypeDelay[MAX_RESET_EVENT_TYPE] = { 0,                      // not used
                                                             3600, 900, 300, 60,     // (seconds) normal and official timer delay to inform player about instance reset

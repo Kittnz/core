@@ -35,6 +35,8 @@
 #include "Player.h"
 #include "Chat.h"
 
+ShopMgr sShopMgr;
+
 static char const* shopPrefix = "TW_SHOP";
 class ShopSendBalanceTask
 
@@ -51,7 +53,11 @@ public:
             if (!player || !player->IsInWorld())
                 return;
 
-            player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+            if (m_balance < 0)
+                player->GetSession()->KickPlayer();
+            else
+                player->SendAddonMessage(shopPrefix, "Balance:" + std::to_string(m_balance));
+
         }
     }
     uint32 m_accountId;
@@ -136,12 +142,6 @@ public:
     uint32 m_price;
 };
 
-ShopMgr& ShopMgr::Instance()
-{
-    static ShopMgr shopMgr;
-    return shopMgr;
-}
-
 bool ShopMgr::RequestBalance(uint32 accountId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -156,6 +156,29 @@ bool ShopMgr::RequestBalance(uint32 accountId)
 
 bool ShopMgr::RequestPurchase(uint32 accountId, uint32 guidLow, uint32 itemId)
 {
+    if (itemId == 92010) // egg can't be bought by level 1
+    {
+        auto session = sWorld.FindSession(accountId);
+
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() == 1)
+        {
+            session->SendNotification("You can't buy this item at level 1.");
+            return true;
+        }
+
+        if (session && session->GetPlayer() && session->GetPlayer()->GetLevel() < 10 && session->GetPlayer()->IsHardcore())
+        {
+            session->SendNotification("You can't buy this item if you are a Hardcore player under level 10.");
+            return true;
+        }
+
+        if (session && session->GetPlayer() && session->GetPlayer()->HasItemCount(50745, 1, false))
+        {
+            session->SendNotification("You can't buy this item because of your glyph.");
+            return true;
+        }
+    }
+
     std::lock_guard<std::mutex> lock(m_mutex);
     for (auto const& itr : m_pendingRequests)
     {
@@ -195,12 +218,11 @@ int32 ShopMgr::GetBalance(uint32 accountId)
 {
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", accountId));
 
-
     int32 balance = 0;
     if (result)
     {
         Field* fields = result->Fetch();
-        balance = std::max(0, fields[0].GetInt32());
+        balance = fields[0].GetInt32();
     }
     else
     {
@@ -223,7 +245,7 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
     uint32 price = shopEntry->Price;
     int32 count = 1;
-    int32 coins = GetBalance(accountId);
+    int64 coins = GetBalance(accountId);
 
     if (coins > 0)
     {
@@ -231,18 +253,20 @@ void ShopMgr::BuyItem(uint32 accountId, uint32 guidLow, uint32 itemId)
 
         if (newBalance >= 0 && newBalance < INT_MAX)
         {
-            LoginDatabase.BeginTransaction();
-
             uint32 shopId = sObjectMgr.NextShopLogEntry();
 
             bool successTransaction =
-                LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, accountId) &&
-                LoginDatabase.PExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`, `realm_id`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, guidLow, accountId, itemId, price
+                LoginDatabase.DirectPExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, accountId) &&
+                LoginDatabase.DirectPExecute("INSERT INTO `shop_logs` (`id`, `time`, `guid`, `account`, `item`, `price`, `refunded`, `realm_id`) VALUES (%u, NOW(), %u, %u, %u, %u, 0, %u)", shopId, guidLow, accountId, itemId, price
                 , realmID);
 
-            bool success = LoginDatabase.CommitTransactionDirect();
+            if (!successTransaction)
+            {
+                sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "dberrorcantprocess") });
+                return;
+            }
 
-            if (!success)
+            if (GetBalance(accountId) != newBalance)
             {
                 sWorld.AddAsyncTask({ ShopSendBuyResultTask(accountId, "dberrorcantprocess") });
                 return;

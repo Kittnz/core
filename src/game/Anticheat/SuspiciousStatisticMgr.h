@@ -147,12 +147,12 @@ protected:
     float MovementDetectValue = 100.0f;
 
     //Store time when player fishing. Key - player low guid, Value - MS timestamp
-    std::unordered_map<uint32, FishingTracker> FishingTimeCounterMap;
+    turtle_unordered_map<uint32, FishingTracker, Category_SuspiciousStat> FishingTimeCounterMap;
 
     std::mutex FishingTimeCounterMapGuard;
 
     //Players that already reported by stat system. Have protection by FishingTimeCounterMapGuard
-    std::vector<uint32> FishingReportedPlayers;
+    turtle_vector<uint32, Category_SuspiciousStat> FishingReportedPlayers;
 
     uint32 FishingClearMaintanceTimer = 0;
 };

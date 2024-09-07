@@ -339,6 +339,23 @@ namespace Spells
         return false;
     }
 
+    inline bool IsScriptTarget(uint32 target)
+    {
+        switch (target)
+        {
+            case TARGET_ENUM_UNITS_SCRIPT_AOE_AT_SRC_LOC:
+            case TARGET_ENUM_UNITS_SCRIPT_AOE_AT_DEST_LOC:
+            case TARGET_UNIT_SCRIPT_NEAR_CASTER:
+            case TARGET_GAMEOBJECT_SCRIPT_NEAR_CASTER:
+            case TARGET_LOCATION_SCRIPT_NEAR_CASTER:
+            case TARGET_ENUM_GAMEOBJECTS_SCRIPT_AOE_AT_SRC_LOC:
+            case TARGET_ENUM_GAMEOBJECTS_SCRIPT_AOE_AT_DEST_LOC:
+            case TARGET_ENUM_UNITS_SCRIPT_IN_CONE_60:
+                return true;
+        }
+        return false;
+    }
+
     inline bool IsAreaEffectPossitiveTarget(SpellTarget target)
     {
         switch (target)
@@ -776,6 +793,8 @@ public:
         return false;
     }
 
+    bool HasAuraOrTriggersAnotherSpellWithAura(AuraType aura) const;
+
     bool IsCustomSpell() const
     {
         return Internal & SPELL_INTERNAL_CUSTOM;
@@ -796,6 +815,11 @@ public:
     inline bool IsFromBehindOnlySpell() const
     {
         return ((AttributesEx2 == 0x100000 && (AttributesEx & 0x200) == 0x200) || (Custom & SPELL_CUSTOM_BEHIND_TARGET));
+    }
+
+    inline bool IsDeathPersistentDungeonSpell() const
+    {
+        return Custom & SPELL_CUSTOM_DEATH_DUNGEON_PERSISTENT;
     }
 
     inline bool IsPassiveSpell() const
@@ -953,6 +977,17 @@ public:
             }
         }
         
+        return false;
+    }
+
+    inline bool UsesSpellPower() const
+    {
+        for (float coeff : EffectBonusCoefficient)
+        {
+            if (coeff > 0)
+                return true;
+        }
+
         return false;
     }
 

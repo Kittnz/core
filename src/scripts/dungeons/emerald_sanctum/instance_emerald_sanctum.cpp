@@ -500,14 +500,14 @@ struct erenniusAI : public ScriptedAI
 		if (m_killSayTimer >= 3000)
 		{
 			m_killSayTimer = 0;
-			m_creature->MonsterYell("Your efforts will disturb everything, begone...");
+			m_creature->MonsterYell(30172);
 			m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_2);
 		}
 	}
 
 	void JustDied(Unit* pWho)
 	{
-		m_creature->MonsterYell("The shadow must not prevail, the dragonflight must stand... Against it..");
+		m_creature->MonsterYell(30173);
 		m_creature->PlayDirectSound(ERENNIUS_SAY_SOUND_3);
 		if (m_pInstance)
 			m_pInstance->SetData(DATA_ERENNIUS, DONE);

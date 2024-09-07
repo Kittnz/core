@@ -243,6 +243,7 @@ class Item : public Object
         Item* CloneItem(uint32 count, Player const* player = nullptr) const;
 
         Item();
+        virtual ~Item();
 
         virtual bool Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid = ObjectGuid());
         void RemoveFromWorld() override;
@@ -259,7 +260,7 @@ class Item : public Object
         bool IsAccountBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA); }
         bool IsBindedNotWith(Player const* player) const;
         bool IsBoundByEnchant() const;
-        virtual void SaveToDB();
+        virtual void SaveToDB(bool direct = false);
         virtual bool LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry);
         virtual void DeleteFromDB();
         void DeleteFromInventoryDB();
@@ -357,13 +358,9 @@ class Item : public Object
         void AddToClientUpdateList() override;
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType& update_players) override;
+        void UpdateDurability(uint32 durability, Player* pPlayer);
 
-        uint32 GetVisibleEntry() const
-        {
-            if (uint32 appearanceItemId = GetTransmogrification())
-                return appearanceItemId;
-            return GetEntry();
-        }
+        uint32 GetVisibleEntry() const;
 
         void SetGeneratedLoot(bool value) { generatedLoot = value; }
         bool HasGeneratedLootSecondary() {  return generatedLoot; } // todo, remove and add condition to HasGeneratedLoot
@@ -380,6 +377,8 @@ class Item : public Object
         void AddPlayerToAllowedTradeList(ObjectGuid guid) { m_canBeTradedWithPlayers.insert(guid); }
         bool CanTradeSoulBoundToPlayer(ObjectGuid guid) const { return m_canBeTradedWithPlayers.find(guid) != m_canBeTradedWithPlayers.end(); }
         void ResetSoulBoundTradeData();
+
+        bool preventCancel = false;
 
     private:
         uint32 transmogrifyId;

@@ -3,6 +3,7 @@
 * Please see the included DOCS/LICENSE.TXT for more information */
 
 #include "scriptPCH.h"
+#include "world/silithus/silithus.h"
 
 // AI system
 void AddSC_generic_spell_ai();
@@ -19,6 +20,9 @@ void AddSC_event_fireworks();
 
 // Event
 void AddSC_elemental_invasions();
+
+// Items
+void AddSC_item_orb_of_draconic_energy();
 
 // HT
 void AddSC_instance_dire_maul();
@@ -115,7 +119,6 @@ void AddSC_boss_herod();
 void AddSC_boss_high_inquisitor_fairbanks();
 void AddSC_boss_houndmaster_loksey();
 void AddSC_boss_interrogator_vishas();
-void AddSC_boss_mograine_and_whitemane();
 void AddSC_instance_scarlet_monastery();
 void AddSC_boss_darkmaster_gandling();               //scholomance
 void AddSC_boss_theolenkrastinov();
@@ -318,6 +321,7 @@ void AddSC_boss_gerastrasz();
 void AddSC_boss_chronormu();
 
 // Misc
+void AddSC_npc_loothelper();
 void AddSC_npc_ptr();
 void AddScripts()
 {
@@ -336,6 +340,9 @@ void AddScripts()
 
     // Event
     AddSC_elemental_invasions();
+
+    // Items
+    AddSC_item_orb_of_draconic_energy();
 
     // HT
     AddSC_instance_dire_maul();
@@ -432,7 +439,6 @@ void AddScripts()
     AddSC_boss_high_inquisitor_fairbanks();
     AddSC_boss_houndmaster_loksey();
     AddSC_boss_interrogator_vishas();
-    AddSC_boss_mograine_and_whitemane();
     AddSC_instance_scarlet_monastery();
     AddSC_boss_darkmaster_gandling();                       //scholomance
     AddSC_boss_theolenkrastinov();
@@ -559,6 +565,7 @@ void AddScripts()
     AddSC_mulgore();
     AddSC_orgrimmar();
     AddSC_silithus();
+    RegisterScripts_Silithus();
     AddSC_stonetalon_mountains();
     AddSC_tanaris();
     AddSC_teldrassil();
@@ -634,5 +641,6 @@ void AddScripts()
     AddSC_boss_chronormu();
 
     // Misc
+    AddSC_npc_loothelper();
     AddSC_npc_ptr();
 }

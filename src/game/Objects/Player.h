@@ -97,8 +97,14 @@ enum EnvironmentFlags
 
 enum CustomPlayerFlags
 {
-    CUSTOM_PLAYER_FLAG_HC_RESTORED      = 0x01,
-    CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE = 0x02
+    CUSTOM_PLAYER_FLAG_HC_RESTORED            = 0x01,
+    CUSTOM_PLAYER_FLAG_HC_SENT_INFERNO_INVITE = 0x02,
+    CUSTOM_PLAYER_FLAG_BROKEN_GOBLIN          = 0x04,
+    CUSTOM_PLAYER_FLAG_BYPASS_WHO_COOLDOWN    = 0x08,
+    CUSTOM_PLAYER_FLAG_RECEIVED_LUNAR_GIFT    = 0x10,
+    CUSTOM_PLAYER_FLAG_WAS_TRANSFERRED        = 0x20,
+    CUSTOM_PLAYER_FLAG_RACE_CHANGE_CHECK      = 0x40,
+    CUSTOM_PLAYER_FLAG_GOT_RACE_REFUND        = 0x80
 };
 
 enum BuyBankSlotResult
@@ -501,7 +507,7 @@ enum AtLoginFlags
 // Nostalrius
 enum PlayerCheatOptions
 {
-    PLAYER_CHEAT_GOD               = 0x001,
+    //PLAYER_CHEAT_GOD               = 0x001,
     PLAYER_CHEAT_NO_COOLDOWN       = 0x002,
     PLAYER_CHEAT_NO_CAST_TIME      = 0x004,
     PLAYER_CHEAT_NO_POWER          = 0x008,
@@ -513,7 +519,8 @@ enum PlayerCheatOptions
     PLAYER_CHEAT_UNRANDOMIZE       = 0x200,
     PLAYER_CHEAT_ALWAYS_SPELL_CRIT = 0x400,
     PLAYER_RANDOMIZE_WHISPER_NAMES = 0x800,
-    PLAYER_ANON_MAIL               = 0x1000
+    PLAYER_ANON_MAIL               = 0x1000,
+    PLAYER_CHEAT_NO_DAMAGE_RNG     = 0x2000
 };
 
 typedef std::map<uint32, QuestStatusData> QuestStatusMap;
@@ -846,6 +853,9 @@ class PlayerTaxi
         {
             uint8  field   = uint8((nodeidx - 1) / 32);
             uint32 submask = 1 << ((nodeidx - 1) % 32);
+            if (field >= m_taximask.size())
+                return false;
+
             return (m_taximask[field] & submask) == submask;
         }
         bool SetTaximaskNode(uint32 nodeidx)
@@ -860,6 +870,15 @@ class PlayerTaxi
             else
                 return false;
         }
+
+        void SetTaximaskNodeMasked(uint8 field, uint32 submask)
+        {
+            if (field >= m_taximask.size())
+                return;
+
+            m_taximask[field] |= submask;
+        }
+
         void AppendTaximaskTo(ByteBuffer& data, bool all);
 
         // Destinations
@@ -1032,9 +1051,9 @@ struct ScheduledTeleportData
 {
     ScheduledTeleportData() = default;
     ScheduledTeleportData(uint32 mapid, float x, float y, float z, float o,
-        uint32 options, std::function<void()> recover, std::function<void()> InOnTeleportFinished)
+        uint32 options)
         : targetMapId(mapid), x(x), y(y), z(z),
-          orientation(o), options(options), recover(recover), OnTeleportFinished(InOnTeleportFinished){};
+          orientation(o), options(options){};
 
     uint32 targetMapId = 0;
     float x = 0.0f;
@@ -1043,9 +1062,6 @@ struct ScheduledTeleportData
     float orientation = 0.0f;
 
     uint32 options = 0;
-
-    std::function<void()> recover = std::function<void()>();
-    std::function<void()> OnTeleportFinished = std::function<void()>();
 };
 
 enum class PlayerVariables : uint32
@@ -1053,7 +1069,17 @@ enum class PlayerVariables : uint32
     HardcoreMessagesEnabled = 1,
     HardcoreMessageLevel,
     UnlockedSpecTabs,
-    FreeTalentResets
+    FreeTalentResets,
+    OriginalSkinByte
+};
+
+struct PlayerEggLoot
+{
+    uint32 Id;
+    uint32 PlayerGuid;
+    uint32 ItemId;
+    uint32 ItemGuid;
+    bool Refunded;
 };
 
 class Player final: public Unit
@@ -1072,7 +1098,7 @@ class Player final: public Unit
 
         bool Create(uint32 guidlow, std::string const& name, uint8 race, uint8 class_, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair);
         void Update(uint32 update_diff, uint32 time) override;
-        static bool BuildEnumData(QueryResult* result,  WorldPacket* p_data);
+        static bool BuildEnumData(QueryResult* result,  WorldPacket* pData);
 
         /**
          * @brief Can only be called from Master server (or ASSERT will fail)
@@ -1112,8 +1138,6 @@ class Player final: public Unit
         void SetGMSocials(bool on, bool init = false);
         void SetGMVisible(bool on);
         void SetPvPDeath(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_PVP_DEATH; else m_ExtraFlags &= ~PLAYER_EXTRA_PVP_DEATH; }
-        void SetGodMode(bool on) { SetOption(PLAYER_CHEAT_GOD, on); }
-        bool IsGod() const { return HasOption(PLAYER_CHEAT_GOD); }
 
         void SetShopAllowed(bool allowed) { m_shopAllowed = allowed; }
         bool IsShopAllowed() const { return m_shopAllowed; }
@@ -1181,7 +1205,6 @@ class Player final: public Unit
         Item* _StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool update);
         InventoryResult CanTakeMoreSimilarItems(Item* pItem) const { return _CanTakeMoreSimilarItems(pItem->GetEntry(), pItem->GetCount(), pItem); }
         InventoryResult CanTakeMoreSimilarItems(uint32 entry, uint32 count) const { return _CanTakeMoreSimilarItems(entry, count, nullptr); }
-        InventoryResult CanEquipUniqueItem(Item* pItem, uint8 except_slot = NULL_SLOT) const;
         InventoryResult CanEquipUniqueItem(ItemPrototype const* itemProto, uint8 except_slot = NULL_SLOT) const;
         InventoryResult _CanTakeMoreSimilarItems(uint32 entry, uint32 count, Item* pItem, uint32* no_space_count = nullptr) const;
         InventoryResult _CanStoreItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, uint32 entry, uint32 count, Item* pItem = nullptr, bool swap = false, uint32* no_space_count = nullptr) const;
@@ -1227,6 +1250,7 @@ class Player final: public Unit
         uint8 GetBankBagSlotCount() const { return GetByteValue(PLAYER_BYTES_2, 2); }
         void SetBankBagSlotCount(uint8 count) { SetByteValue(PLAYER_BYTES_2, 2, count); }
         bool HasItemCount(const uint32 item, const uint32 count = 1, const bool inBankAlso = false) const;
+        void ApplyForAllItems(std::function<void(Item*)> func, bool inBank = false) const;
         bool HasItemFitToSpellReqirements(SpellEntry const* spellInfo, Item const* ignoreItem = nullptr);
         bool HasItemWithIdEquipped(uint32 item, uint32 count = 1, uint8 except_slot = NULL_SLOT) const;
         InventoryResult CanStoreNewItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, uint32 item, uint32 count, uint32* no_space_count = nullptr) const
@@ -1244,6 +1268,7 @@ class Player final: public Unit
         InventoryResult CanStoreItems(Item** pItem,int count) const;
         InventoryResult CanEquipNewItem(uint8 slot, uint16 &dest, uint32 item, bool swap) const;
         InventoryResult CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool swap, bool not_loading = true) const;
+        InventoryResult CanEquipItem(uint8 slot, uint16& dest, ItemPrototype const* pProto, Item* pItem = nullptr, bool swap = false, bool not_loading = true) const;
         InventoryResult CanUnequipItems(uint32 item, uint32 count) const;
         InventoryResult CanUnequipItem(uint16 src, bool swap) const;
         InventoryResult CanBankItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, Item* pItem, bool swap, bool not_loading = true) const;
@@ -1256,7 +1281,7 @@ class Player final: public Unit
         Item* EquipItem(uint16 pos, Item* pItem, bool update);
         void AutoUnequipWeaponsIfNeed();
         void AutoUnequipOffhandIfNeed();
-        void AutoUnequipItemFromSlot(uint32 slot);
+        void AutoUnequipItemFromSlot(uint32 slot, bool sendMail = true);
         void SatisfyItemRequirements(ItemPrototype const* pItem);
         bool StoreNewItemInBestSlots(uint32 item_id, uint32 item_count, uint32 enchantId = 0);
         Item* StoreNewItemInInventorySlot(uint32 itemEntry, uint32 amount);
@@ -1281,7 +1306,6 @@ class Player final: public Unit
         void MailCityProtectorMedallion();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
-        void RewardBountyHuntKill(Unit* pVictim);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         bool IsInMainCity();
         void SetFlying(bool apply);
@@ -1335,7 +1359,7 @@ class Player final: public Unit
 
         Player* GetTrader() const { return m_trade ? m_trade->GetTrader() : nullptr; }
         TradeData* GetTradeData() const { return m_trade; }
-        void TradeCancel(bool sendback);
+        void TradeCancel(bool sendback, TradeStatus status = TRADE_STATUS_TRADE_CANCELED);
 
         uint32 GetTimeLoggedIn() const { return m_timeLoggedIn; }
         void AddLoggedInTime(uint32 diff) { m_timeLoggedIn += diff; }
@@ -1363,6 +1387,7 @@ class Player final: public Unit
         void RemovedInsignia(Player* looterPlr, Corpse* corpse);
         void SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim = nullptr);
         void SendLootRelease(ObjectGuid guid) const;
+        void SendLootError(ObjectGuid guid, LootError error) const;
         void SendNotifyLootItemRemoved(uint8 lootSlot) const;
         void SendNotifyLootMoneyRemoved() const;
         bool IsAllowedToLoot(Creature const* creature);
@@ -1658,7 +1683,7 @@ class Player final: public Unit
         void SendSpellRemoved(uint32 spell_id) const;
 
         void LearnSpell(uint32 spell_id, bool dependent, bool talent = false);
-        void RemoveSpell(uint32 spell_id, bool disabled = false, bool learn_low_rank = true);
+        void RemoveSpell(uint32 spell_id, bool disabled = false, bool learn_low_rank = true, bool hardReset = false);
         void ResetSpells();
         void LearnDefaultSpells();
         void LearnQuestRewardedSpells();
@@ -1838,7 +1863,7 @@ class Player final: public Unit
     private:
         void InitPrimaryProfessions();
         void UpdateSkillTrainedSpells(uint16 id, uint16 currVal);                                   // learns/unlearns spells dependent on a skill
-        void UpdateSpellTrainedSkills(uint32 spellId, bool apply);                                  // learns/unlearns skills dependent on a spell
+        void UpdateSpellTrainedSkills(uint32 spellId, bool apply, bool hardReset = false);                                  // learns/unlearns skills dependent on a spell
         void UpdateOldRidingSkillToNew(bool has_epic_mount);
         void UpdateSkillsForLevel();
         SkillStatusMap mSkillStatus;
@@ -1892,14 +1917,9 @@ class Player final: public Unit
         // Current teleport data
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
-        std::function<void()> m_teleportRecover;
-        std::function<void()> m_teleportRecoverDelayed;
-        std::function<void()> m_teleportFinishedDelayed;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
-
-        std::vector<std::function<void(Player* player)>> m_delayedCustomOps;
 
         uint32 m_DelayedOperations;
         bool m_bCanDelayTeleport;
@@ -1940,8 +1960,7 @@ class Player final: public Unit
         GridReference<Player> m_gridRef;
         MapReference m_mapRef;
 
-        uint32 m_lastFallTime;
-        float  m_lastFallZ;
+        float m_fallStartZ;
         uint32 m_bNextRelocationsIgnored;
 
         // Recall position
@@ -1991,11 +2010,11 @@ class Player final: public Unit
         * Should be called in a thread-safe environment (not in map update for example !)
         */
         bool SwitchInstance(uint32 newInstanceId);
-        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>());
+        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0);
         template <class T>
-        bool TeleportTo(T const& loc, uint32 options = 0, std::function<void()> recover = std::function<void()>())
+        bool TeleportTo(T const& loc, uint32 options = 0)
         {
-            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options, recover);
+            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options);
         }
 
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we
@@ -2008,13 +2027,6 @@ class Player final: public Unit
         bool IsAllowedToQueueBGDueToTabard() { return m_BGQueueAllowed; };
 
         bool TeleportToBGEntryPoint();
-        void RestorePendingTeleport();
-
-        template <typename T, typename = std::enable_if_t<std::is_invocable_v<T, Player*>>>
-        void AddDelayedOperation(T operation)
-        {
-            m_delayedCustomOps.emplace_back(operation);
-        }
 
         void UpdateZone(uint32 newZone,uint32 newArea);
         void UpdateArea(uint32 newArea);
@@ -2037,14 +2049,12 @@ class Player final: public Unit
 
         bool HasMovementFlag(MovementFlags f) const;        // for script access to m_movementInfo.HasMovementFlag
         void UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode);
-        void SetFallInformation(uint32 time, float z)
+        void SetFallInformation(float fallStartZ)
         {
-            m_lastFallTime = time;
-            m_lastFallZ = z;
+            m_fallStartZ = fallStartZ;
         }
         void HandleFall(MovementInfo const& movementInfo);
-        bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
-        uint32 m_lastTransportTime; // Turtle: used to prevent fall damage from stepping off transport
+        bool IsFalling() const { return m_fallStartZ != 0; }
 
         bool IsControlledByOwnClient() const { return m_session->GetClientMoverGuid() == GetObjectGuid(); }
         void SetClientControl(Unit* target, uint8 allowMove);
@@ -2368,6 +2378,10 @@ class Player final: public Unit
         /***                 MISC GAME SYSTEMS                 ***/
         /*********************************************************/
 
+        void HandleTransferChecks();
+
+        void HandleRaceChangeFixup();
+
     private:
         uint8 m_newStandState;
         uint32 m_standStateTimer;
@@ -2415,15 +2429,32 @@ class Player final: public Unit
         }
 
 
-        //Little safeguard for HC characters after a server start.
-        uint32 noAggroTimer = 0;
-        bool HasHCImmunity() const override { return noAggroTimer != 0; }
+        // Prevents environmental damage and aggro for hardcore chars shortly after login, disconnect, and riding transport.
+        mutable time_t m_hardcoreImmunityTime = 0;
+        bool HasHCImmunity() const final
+        {
+            if (m_hardcoreImmunityTime)
+            {
+                if (m_hardcoreImmunityTime >= time(nullptr))
+                    return true;
+                else
+                    m_hardcoreImmunityTime = 0;
+            }
+
+            return false;
+        }
+        void SetHCImmunityTimer(uint32 secs)
+        {
+            m_hardcoreImmunityTime = time(nullptr) + secs;
+        }
 
         void ScheduleStandStateChange(uint8 state);
         void ClearScheduledStandState() { m_newStandState = MAX_UNIT_STAND_STATE; m_standStateTimer = 0; }
         bool IsStandingUpForProc() const override;
         UnitMountResult Mount(uint32 mount, uint32 spellId = 0) override;
         UnitDismountResult Unmount(bool from_aura = false) override;
+
+        void RecallPvPGear();
 
         bool CanInteractWithQuestGiver(Object* questGiver) const;
         Creature* FindNearestInteractableNpcWithFlag(uint32 npcFlags) const;
@@ -3006,7 +3037,10 @@ public:
         //uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
         //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
-        void FixTransmogItemAfterDurabilityUpdate(Item* pItem);
+        void UpdateItemDurability(Item* pItem, uint32 durability);
+        void RemoveTransmogsToItem(uint32 itemId);
+
+        TransmogMgr* GetTransmogMgr() { return _transmogMgr; }
     private:
         TransmogMgr* _transmogMgr;
         // Tanatos Transmog End

@@ -90,7 +90,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     _charactersCount(10), _characterMaxLevel(sAccountMgr.GetHighestCharLevel(id)), _clientHashComputeStep(HASH_NOT_COMPUTED),
     m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr), m_BinaryAddress(binaryIp),
     _whisper_targets(id, sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_MAX), sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_BYPASS_LEVEL),
-    sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_DECAY)), sessionDbcLocaleRaw(locale)
+    sWorld.getConfig(CONFIG_UINT32_WHISPER_TARGETS_DECAY), this), sessionDbcLocaleRaw(locale)
 {
     if (sock)
     {
@@ -172,6 +172,12 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         // Packet will be rejected by client
         sLog.outInfo("[NETWORK] Packet %s size %u is too large. Not sent [Account %u Player %s]", LookupOpcodeName(packet->GetOpcode()), packet->size(), GetAccountId(), GetPlayerName());
         return;
+    }
+
+    if (sWorld.m_collectPacketStats)
+    {
+        ++sWorld.m_packetsCount[packet->GetOpcode()];
+        sWorld.m_packetsSize[packet->GetOpcode()] += packet->size();
     }
 
 #ifdef _DEBUG
@@ -415,11 +421,29 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
 {
     WorldPacket* packet = nullptr;
     _receivedPacketType[updater.PacketProcessType()] = false;
+
+    uint64 timeNow = time(nullptr);
+
+    std::vector<WorldPacket*> requeuePackets;
+
+    constexpr uint32 MaxPacketsPerUpdate = 200;
+    uint32 totalPackets = 0;
+
     while (CanProcessPackets() && _recvQueue[updater.PacketProcessType()].next(packet, updater))
     {
+        ++totalPackets;
+
         _receivedPacketType[updater.PacketProcessType()] = true;
-        if (!AllowPacket(packet->GetOpcode()))
+        auto packetAllowed = AllowPacket(packet->GetOpcode(), timeNow);
+        if (packetAllowed == PacketAllowResult::Denied)
             break;
+
+        if (packetAllowed == PacketAllowResult::Requeue)
+        {
+            requeuePackets.push_back(packet);
+            continue;
+        }
+
 
         ALL_SESSION_SCRIPTS(this, OnPacket(packet->GetOpcode()));
         OpcodeHandler const& opHandle = opcodeTable[packet->GetOpcode()];
@@ -520,6 +544,14 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
         }
 
         delete packet;
+
+        if (totalPackets > MaxPacketsPerUpdate)
+            break;
+    }
+
+    for (const auto& elem : requeuePackets)
+    {
+        _recvQueue[updater.PacketProcessType()].add(elem);
     }
 }
 
@@ -567,7 +599,7 @@ void WorldSession::LogoutPlayer(bool Save)
         bool inWorld = _player->IsInWorld() && _player->FindMap();
 
         sLog.out(LOG_CHAR, "[%s:%u@%s] Logout Character:[%s] (guid: %u)", GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
-        sDBLogger->LogCharAction({ _player->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogout, {} });
+        sDBLogger.LogCharAction({ _player->GetGUIDLow(), GetAccountId(), LogCharAction::ActionLogout, {} });
         if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
             DoLootRelease(lootGuid);
 
@@ -756,8 +788,8 @@ void WorldSession::LogoutPlayer(bool Save)
         if (m_masterPlayer->GetSocial())
         {
             if(!disabledSocials)
-                sSocialMgr->SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
-            sSocialMgr->RemovePlayerSocial(m_masterPlayer->GetObjectGuid());
+                sSocialMgr.SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
+            sSocialMgr.RemovePlayerSocial(m_masterPlayer->GetObjectGuid());
             m_masterPlayer->SetSocial(nullptr);
         }
 
@@ -1056,9 +1088,11 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
     sLog.outAnticheat(detector, playerDesc.c_str(), reason, action);
 }
 
-bool WorldSession::AllowPacket(uint16 opcode)
+WorldSession::PacketAllowResult WorldSession::AllowPacket(uint16 opcode, uint64 time)
 {
     // Do not count packets that are often spamed by the client when loading a zone for example.
+
+
     switch (opcode)
     {
         case CMSG_GAMEOBJECT_QUERY:
@@ -1068,10 +1102,31 @@ bool WorldSession::AllowPacket(uint16 opcode)
         case CMSG_NAME_QUERY:
         case CMSG_PET_NAME_QUERY:
         case CMSG_GUILD_QUERY:
+        {
+            //If last packet was 4 seconds ago then just let it go through anyway
+            if (time - m_requeuePacketCount[opcode].first > 3)
+            {
+                m_requeuePacketCount[opcode].first = time;
+                m_requeuePacketCount[opcode].second = 0;
+                return PacketAllowResult::Allowed;
+            }
+
+            uint32& count = m_requeuePacketCount[opcode].second;
+            ++count;
+            if (count > 1000)
+            {
+                //sLog.outInfo("Account %u is over requeue limit for packet opcode %u. Count %u.", GetAccountId(), opcode, count);
+                return PacketAllowResult::Requeue;
+            }
+
+            return PacketAllowResult::Allowed;
+        }
+
         case CMSG_JOIN_CHANNEL:         // Can be flooded by addons upon login
         case CMSG_AUCTION_LIST_ITEMS:   // We already handle only one per session update
         case CMSG_WHO:                  // We already handle only one per session update
-            return true;
+            return PacketAllowResult::Allowed;
+
         default:
             break;
     }
@@ -1116,10 +1171,10 @@ bool WorldSession::AllowPacket(uint16 opcode)
     {
         reason << " (" << LookupOpcodeName(opcode) << ")";
         ProcessAnticheatAction("AntiFlood", reason.str().c_str(), sWorld.getConfig(CONFIG_UINT32_ANTIFLOOD_SANCTION));
-        return false;
+        return PacketAllowResult::Denied;
     }
 
-    return true;
+    return PacketAllowResult::Allowed;
 }
 
 /**

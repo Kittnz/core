@@ -34,6 +34,7 @@
 #include "ThreadPool.h"
 #include "MoveMap.h"
 #include "ChannelBroadcaster.h"
+#include "PerformanceMonitor.h"
 
 typedef MaNGOS::ClassLevelLockable<MapManager, std::recursive_mutex> MapManagerLock;
 INSTANTIATE_SINGLETON_2(MapManager, MapManagerLock);
@@ -231,7 +232,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
         }
         DungeonPersistentState* state = player->GetBoundInstanceSaveForSelfOrGroup(mapid);
         uint32 instanceId = state ? state->GetInstanceId() : 0;
-        if (!player->CheckInstanceCount(instanceId))
+        if (!player->CheckInstanceCount(instanceId) && !player->IsGameMaster())
         {
             DEBUG_LOG("MAP: Player '%s' can't enter instance %u on map %u. Has already entered too many instances.", player->GetName(), instanceId, mapid);
             player->SendTransferAborted(TRANSFER_ABORT_TOO_MANY_INSTANCES);
@@ -328,6 +329,7 @@ void MapManager::Update(uint32 diff)
     if (!i_timer.Passed())
         return;
 
+    XScopeStatTimer ScopeStatTimer{sPerfMonitor.MapManager};
     // Execute any teleports scheduled in the main thread prior to map update
     // eg. area triggers, world port acks
     ExecuteDelayedPlayerTeleports();
@@ -371,10 +373,6 @@ void MapManager::Update(uint32 diff)
         }
     }
 
-#ifndef TURTLE_PROFILE
-    std::thread instanceCreationThread = std::thread(&MapManager::CreateNewInstancesForPlayers, this);
-#endif
-
     i_maxContinentThread = continentsIdx;
     i_continentUpdateFinished.store(0);
 
@@ -406,12 +404,7 @@ void MapManager::Update(uint32 diff)
     SwitchPlayersInstances();
     asyncMapUpdating = false;
 
-#ifndef TURTLE_PROFILE
-	if (instanceCreationThread.joinable())
-		instanceCreationThread.join();
-#else
     CreateNewInstancesForPlayersSync();
-#endif
 
     // Execute far teleports after all map updates have finished
     ExecuteDelayedPlayerTeleports();
@@ -676,6 +669,84 @@ bool IsNorthTo(float x, float y, float const* limits, int count /* last case is 
         }
     }
     return insideCount % 2 == 1;
+}
+
+
+std::vector<std::pair<float, float>> MapManager::GetBorderPoints(uint32 mapId)
+{
+    switch (mapId)
+    {
+    case 0:
+        std::vector<std::pair<float, float>> points = {
+            {2032.048340f, -6927.750000f},
+    {1634.863403f, -6157.505371f},
+    {1109.519775f, -5181.036133f},
+    {1315.204712f, -4096.020508f},
+    {1073.089233f, -3372.571533f},
+     {825.833191f, -3125.778809f},
+     {657.343994f, -2314.813232f},
+     {424.736145f, -1888.283691f},
+     {744.395813f, -1647.935425f},
+    {1424.160645f,  -654.948181f},
+    {1447.065308f,  -169.751358f},
+    {1208.715454f,   189.748703f},
+    {1596.240356f,   998.616699f},
+    {1577.923706f,  1293.419922f},
+    {1458.520264f,  1727.373291f},
+    {1591.916138f,  3728.139404f},
+    {-7491.33f,  3093.74f},
+    {-7472.04f,  -391.88f},
+    {-6366.68f,  -730.10f},
+    {-6063.96f, -1411.76f},
+    {-6087.62f, -2190.21f},
+    {-6349.54f, -2533.66f},
+    {-6308.63f, -3049.32f},
+    {-6107.82f, -3345.30f},
+    {-6008.49f, -3590.52f},
+    {-5989.37f, -4312.29f},
+    {-5806.26f, -5864.11f},
+                { -8004.25f,  3714.11f},
+            { -8075.00f, -179.00f},
+            { -8638.00f, 169.00f},
+            { -9044.00f, 35.00f},
+            { -9068.00f, -125.00f},
+            { -9094.00f, -147.00f},
+            { -9206.00f, -290.00f},
+            { -9097.00f, -510.00f},
+            { -8739.00f, -501.00f},
+            { -8725.50f, -1618.45f},
+            { -9810.40f, -1698.41f},
+            {-10049.60f, -1740.40f},
+            {-10670.61f, -1692.51f},
+            {-10908.48f, -1563.87f},
+            {-13006.40f, -1622.80f},
+            {-12863.23f, -4798.42f},
+                        { -8725.337891f,  3535.624023f},
+            { -9525.699219f,   910.132568f},
+            { -9796.953125f,   839.069580f},
+            { -9946.341797f,   743.102844f},
+            {-10287.361328f,   760.076477f},
+            {-10083.828125f,   380.389893f},
+            {-10148.072266f,    80.056450f},
+            {-10014.583984f,  -161.638519f},
+            { -9978.146484f,  -361.638031f},
+            { -9877.489258f,  -563.304871f},
+            { -9980.967773f, -1128.510498f},
+            { -9991.717773f, -1428.793213f},
+            { -9887.579102f, -1618.514038f},
+            {-10169.600586f, -1801.582031f},
+            { -9966.274414f, -2227.197754f},
+            { -9861.309570f, -2989.841064f},
+            { -9944.026367f, -3205.886963f},
+            { -9610.209961f, -3648.369385f},
+            { -7949.329590f, -4081.389404f},
+            { -7910.859375f, -5855.578125f}
+        };
+
+        return points;
+
+    }
+    return {};
 }
 
 uint32 MapManager::GetContinentInstanceId(uint32 mapId, float x, float y, bool* transitionArea)

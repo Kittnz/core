@@ -184,8 +184,6 @@ struct npc_artoriusAI : public ScriptedAI
         switch (m_creature->GetEntry())
         {
             case NPC_ARTORIUS_THE_AMIABLE:
-                m_creature->SetRespawnDelay(35*MINUTE);
-                m_creature->SetRespawnTime(35*MINUTE);
                 m_creature->SetHomePosition(7909.71f, -4598.67f, 710.008f, 0.606013f);
                 m_creature->NearTeleportTo(7909.71f, -4598.67f, 710.008f, 0.606013f);
                 if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != WAYPOINT_MOTION_TYPE) 
@@ -245,23 +243,11 @@ struct npc_artoriusAI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(7909.71f, -4598.67f, 710.008f, 0.606013f);
-
-        // DRSS
-        uint32 m_respawn_delay_Timer = 3*HOUR;
-        if (sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
-
-        m_creature->SetRespawnDelay(m_respawn_delay_Timer);
-        m_creature->SetRespawnTime(m_respawn_delay_Timer);
-        m_creature->SaveRespawnTime();
     }
     
     void DemonDespawn(bool triggered = true)
     {
         m_creature->SetHomePosition(7909.71f, -4598.67f, 710.008f, 0.606013f);
-        m_creature->SetRespawnDelay(15*MINUTE);
-        m_creature->SetRespawnTime(15*MINUTE);
-        m_creature->SaveRespawnTime();
         
         if (triggered)
         {

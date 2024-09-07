@@ -166,7 +166,7 @@ PlayerControlledAI::PlayerControlledAI(Player* pPlayer, Unit* caster) : PlayerAI
         usableSpells.push_back(spell.first);
     }
     // Suppression des sorts dont on a deja des rangs superieurs
-    for (std::vector<uint32>::iterator it = usableSpells.begin(); it != usableSpells.end();)
+    for (auto it = usableSpells.begin(); it != usableSpells.end();)
     {
         bool foundSupRank = false;
         SpellEntry const *pCurrSpell_1 = sSpellMgr.GetSpellEntry(*(it));
@@ -291,6 +291,10 @@ void PlayerControlledAI::UpdateAI(const uint32 uiDiff)
         me->RemoveAI();
         return;
     }
+
+    // Always dismount player when under charm so he can attack.
+    if (me->HasAuraType(SPELL_AURA_MOUNTED))
+        me->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
 
     Unit* victim = nullptr;
     CharmInfo* charmInfo = me->GetCharmInfo();

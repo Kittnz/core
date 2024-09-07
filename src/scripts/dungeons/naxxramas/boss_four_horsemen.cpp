@@ -23,13 +23,15 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "naxxramas.h"
+#include "Geometry.h"
 
 enum
 {
     //all horsemen
     SPELL_SHIELDWALL        = 29061,
     SPELL_BESERK            = 26662,
-    SPELL_MARK		    = 28836,
+    SPELL_MARK		        = 28836,
+    SPELL_SUMMON_PLAYER     = 25104,
 
     //lady blaumeux
     SAY_BLAU_AGGRO          = -1533044,
@@ -336,6 +338,46 @@ struct boss_four_horsemen_shared : public ScriptedAI
         if (m_creature->GetMapId() != 533)
             return;
 
+        if (!m_bIsSpirit)
+        {
+            if (Unit* pVictim = m_creature->GetVictim())
+            {
+                // Attack the owner if pulled by pet.
+                if (Unit* pOwner = pVictim->GetOwner())
+                {
+                    if (m_creature->IsValidAttackTarget(pOwner))
+                    {
+                        m_creature->GetThreatManager().modifyThreatPercent(pVictim, -100);
+                        m_creature->GetThreatManager().addThreat(pOwner, 100);
+                        AttackStart(pOwner);
+                        pVictim = pOwner;
+                    }
+                }
+
+                if (!m_creature->IsWithinDistInMap(pVictim, VISIBILITY_DISTANCE_NORMAL * 2) ||
+                    Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, pVictim->GetPosition()) &&
+                   !Geometry::IsPointLeftOfLine(DK_DOOR_A, DK_DOOR_B, m_creature->GetPosition()))
+                    m_creature->CastSpell(pVictim, SPELL_SUMMON_PLAYER, true);
+
+                if (m_pInstance)
+                {
+                    static uint32 horsemen[4] = { NPC_BLAUMEUX , NPC_MOGRAINE , NPC_ZELIEK , NPC_THANE };
+                    
+                    for (auto const& creatureId : horsemen)
+                    {
+                        if (creatureId == m_creature->GetEntry())
+                            continue;
+
+                        Creature* pOther = m_pInstance->GetSingleCreatureFromStorage(creatureId);
+                        if (pOther->IsDead() || pOther->IsInCombat())
+                            continue;
+
+                        pOther->AI()->AttackStart(pVictim);
+                    }
+                }
+            }
+        }
+
         m_events.Update(uiDiff);
         killSayCooldown -= std::min(killSayCooldown, uiDiff);
 
@@ -389,13 +431,13 @@ struct boss_four_horsemen_shared : public ScriptedAI
 struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
 {
     int32 changeTargetTimer;
-    Unit* pTank;
+    ObjectGuid pTankGuid;
     Creature* fakeVZ;
     int32 pVZTimer;
     Position VZPosition;
 
     boss_lady_blaumeuxAI(Creature* pCreature)
-        : boss_four_horsemen_shared(pCreature, SPELL_MARK_OF_BLAUMEUX, SPELL_SPIRIT_OF_BLAUMEUX)
+        : boss_four_horsemen_shared(pCreature, SPELL_MARK_OF_BLAUMEUX, SPELL_SPIRIT_OF_BLAUMEUX), pTankGuid()
     {
         Reset();
     }
@@ -412,8 +454,8 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         }
         changeTargetTimer = 2000;
         pVZTimer = 1000;
-        pTank = nullptr;
         fakeVZ = nullptr;
+        pTankGuid.Clear();
     }
 
     void Aggro(Unit *who) override
@@ -474,7 +516,7 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
                 if (m_bIsSpirit)
                     break;
 
-                pTank = m_creature->GetVictim();
+                pTankGuid = m_creature->GetVictim()->GetObjectGuid();
 
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, SPELL_VOIDZONE, SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER))
                 {
@@ -537,12 +579,18 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         }
 
         if (changeTargetTimer <= 0) {
-            m_creature->SetTargetGuid(pTank->GetObjectGuid());
-            pTank = nullptr;
+            if (!pTankGuid.IsEmpty())
+            {
+                //Only reset target if target still exists.
+                if (m_creature->GetMap()->GetUnit(pTankGuid))
+                    m_creature->SetTargetGuid(pTankGuid);
+            }
+
+            pTankGuid.Clear();
             changeTargetTimer = 500;
         }
 
-        if (pTank != nullptr)
+        if (!pTankGuid.IsEmpty())
             changeTargetTimer -= uiDiff;
         
         DoMeleeAttackIfReady();

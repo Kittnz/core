@@ -54,9 +54,9 @@ public:                                                 // Accessors
 
 private:
     // <map ID, aura ID>
-    std::map<uint32, std::vector<AuraRemovalEntry>> m_data;
+    turtle_map<uint32, turtle_vector<AuraRemovalEntry, Category_AuraRemoval>, Category_AuraRemoval> m_data;
 };
 
-#define sAuraRemovalMgr MaNGOS::Singleton<AuraRemovalManager>::Instance()
+extern AuraRemovalManager sAuraRemovalMgr;
 
 #endif

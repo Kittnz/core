@@ -25,6 +25,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include<functional>
 
 enum DumpTableType
 {
@@ -53,6 +54,7 @@ enum DumpTableType
     DTT_PET,            //    -> pet guids collection       // character_pet
     DTT_PET_TABLE,      // <- pet guids                     // pet_aura, pet_spell, pet_spell_cooldown
     DTT_ITEM_TEXT,      // <- item_text                     // item_text
+    DTT_TRANSMOG_COLLECTION // <- character_transmogs 
 };
 
 enum DumpReturn
@@ -97,7 +99,7 @@ class PlayerDumpReader : public PlayerDump
         PlayerDumpReader() {}
 
         DumpReturn LoadDump(std::string const& file, uint32 account, std::string name, uint32 guid);
-        DumpReturn LoadStringDump(std::string const& data, uint32 account, std::string name, uint32& guid);
+        DumpReturn LoadStringDump(std::string const& data, uint32 account, std::string& name, uint32& guid, std::function<void(bool)>* callback = nullptr);
 };
 
 #endif

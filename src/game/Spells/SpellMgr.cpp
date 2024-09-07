@@ -35,14 +35,10 @@
 
 using namespace Spells;
 
+SpellMgr sSpellMgr;
+
 SpellMgr::SpellMgr()
 {
-}
-
-SpellMgr& SpellMgr::Instance()
-{
-    static SpellMgr spellMgr;
-    return spellMgr;
 }
 
 void SpellMgr::LoadSpellTargetPositions()
@@ -1228,6 +1224,11 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
         return false;
 
     if (spellInfo_1->SpellFamilyName != spellInfo_2->SpellFamilyName)
+        return false;
+
+    // Why would a buff and a debuff ever be exclusive with each other?
+    // Fixes Corrupted Mind getting removed by Lightning Shield.
+    if (spellInfo_1->IsPositiveSpell() != spellInfo_2->IsPositiveSpell())
         return false;
 
     // Nostalrius: potions fonctionnent autrement.
@@ -2422,7 +2423,8 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             case 7278: // Summon Harvester Swarm
             case 9515: // Summon Tracking Hound
             case 17490: // Summon Skeleton
-            case 18307: // Death by Peasant
+            case 18307: // Death by Peasant (Horde)
+            case 18308: // Death by Peasant (Alliance)
             case 19363: // Summon Mechanical Yeti
             case 23074: // Arcanite Dragonling
             case 23075: // Mithril Mechanical Dragonling
@@ -2472,18 +2474,18 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
             return SPELL_CAST_OK;
         }
         // Disable big mounts in cities.
-        case 46211:
-        case 46212:
-        case 46504:
-        case 46505:
-        case 46506:
-        case 46507:
-        case 46508:
-        case 46509:
-        case 46510:
-        case 46511:
-        case 46512:
-        case 46513:
+        case 46211: // Immortal Champion's Drake
+        case 46212: // Riding Bronze Drake
+        case 46504: // Red Goblin Shredder
+        case 46505: // Green Goblin Shredder
+        case 46506: // Red Spidertank
+        case 46507: // Black Spidertank
+        case 46508: // Blue Spidertank
+        case 46509: // Green Spidertank
+        case 46510: // Black Pounder
+        case 46511: // Blue Pounder
+        case 46512: // Green Pounder
+        case 46513: // Red Pounder
         {
             switch (player->GetCachedAreaId())
             {
@@ -2496,6 +2498,13 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
                     return SPELL_FAILED_NO_MOUNTS_ALLOWED;
             }
             return SPELL_CAST_OK;
+        }
+        case 46038: // Little Winter Veil Tree
+        {
+            // Don't allow summoning xmas trees in instances.
+            // Can be exploited in Naxxramas to avoid Sapphiron's frost breath. Probably other abuses too.
+            if (caster && caster->GetMapId() > 1)
+                return SPELL_FAILED_FIZZLE;
         }
     }
 

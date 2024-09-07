@@ -61,7 +61,7 @@
 #include "ScriptedEscortAI.h"
 #include "GuardMgr.h"
 #include "GuidObjectScaling.h"
-
+#include "PerfStats.h"
 #include "Autoscaling/AutoScaler.hpp"
 
 // apply implementation of the singletons
@@ -221,7 +221,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), m_creatureGroup(nullptr),
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     m_lastLeashExtensionTime(nullptr), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
-    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
+    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_callsForHelp(true), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
     m_reputationId(-1), m_gossipMenuId(0), m_castingTargetGuid(0)
 {
     m_regenTimer = 200;
@@ -229,6 +229,8 @@ Creature::Creature(CreatureSubtype subtype) :
 
     for (uint32 & spell : m_spells)
         spell = 0;
+
+    ++PerfStats::g_totalCreatures;
 }
 
 Creature::~Creature()
@@ -239,6 +241,8 @@ Creature::~Creature()
 
     delete i_AI;
     i_AI = nullptr;
+
+    --PerfStats::g_totalCreatures;
 }
 
 void Creature::AddToWorld()
@@ -249,7 +253,7 @@ void Creature::AddToWorld()
     if (!IsInWorld() && GetObjectGuid().GetHigh() == HIGHGUID_UNIT)
         GetMap()->InsertObject<Creature>(GetObjectGuid(), this);
 
-    sCreatureGroupsManager->LoadCreatureGroup(this, m_creatureGroup);
+    sCreatureGroupsManager.LoadCreatureGroup(this, m_creatureGroup);
     if (m_creatureGroup)
     {
         if (m_creatureGroup->IsFormation())
@@ -366,7 +370,7 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     SetEntry(Entry);                                        // normal entry always
     m_creatureInfo = cinfo;                                 // map mode related always
 
-    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), cinfo->scale));
+    SetObjectScale(sGuidObjectScaling.GetScale(GetGUID(), cinfo->scale));
     // Reset native scale before we apply creature info multiplier, otherwise we are
     // stuck at 1 from the previous m_nativeScaleOverride if the unit's entry is
     // being changed
@@ -918,7 +922,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
 
                         float x, y, z;
                         GetRespawnCoord(x, y, z, nullptr, nullptr);
-                        if (GetDistance(x, y, z) > 10.0f)
+                        if (CallsForHelp() && GetDistance(x, y, z) > 10.0f)
                             CallForHelp(m_callForHelpDist);
                     }
                     else
@@ -1077,10 +1081,24 @@ void Creature::RegenerateHealth()
     ModifyHealth(addvalue);
 }
 
-void Creature::DoFlee()
+bool Creature::DoFlee()
 {
-    if (!GetVictim() || HasAuraType(SPELL_AURA_PREVENTS_FLEEING) || HasUnitState(UNIT_STAT_NOT_MOVE | UNIT_STAT_CONFUSED | UNIT_STAT_LOST_CONTROL))
-        return;
+    /*
+    Some observations from tests on classic regarding what happens if creature
+    cant flee at the moment its health reaches the amount it should flee at.
+
+    In these cases both emote and move is delayed:
+    - Casting a spell.
+    - Mind controlled.
+
+    In these cases emote is shown instantly:
+    - Stunned
+    - Feared.
+    */
+
+    if (!GetVictim() || HasAuraType(SPELL_AURA_PREVENTS_FLEEING) ||
+        HasUnitState(UNIT_STAT_FEIGN_DEATH | UNIT_STAT_POSSESSED | UNIT_STAT_DISTRACTED | UNIT_STAT_CONFUSED))
+        return false;
 
     float hpPercent = GetHealthPercent();
     ModifyAuraState(AURA_STATE_HEALTHLESS_15_PERCENT, hpPercent < 16.0f);
@@ -1093,12 +1111,14 @@ void Creature::DoFlee()
     MonsterTextEmote(CREATURE_FLEE_TEXT, GetVictim());
     UpdateSpeed(MOVE_RUN, false);
     InterruptSpellsWithInterruptFlags(SPELL_INTERRUPT_FLAG_MOVEMENT);
+    return true;
 }
 
-void Creature::DoFleeToGetAssistance()
+bool Creature::DoFleeToGetAssistance()
 {
-    if (!GetVictim() || HasAuraType(SPELL_AURA_PREVENTS_FLEEING) || HasUnitState(UNIT_STAT_NOT_MOVE | UNIT_STAT_CONFUSED | UNIT_STAT_LOST_CONTROL))
-        return;
+    if (!GetVictim() || HasAuraType(SPELL_AURA_PREVENTS_FLEEING) ||
+        HasUnitState(UNIT_STAT_FEIGN_DEATH | UNIT_STAT_POSSESSED | UNIT_STAT_DISTRACTED | UNIT_STAT_CONFUSED))
+        return false;
 
     float radius = sWorld.getConfig(CONFIG_FLOAT_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
 
@@ -1122,7 +1142,10 @@ void Creature::DoFleeToGetAssistance()
         MonsterTextEmote(CREATURE_FLEE_TEXT, GetVictim());
         UpdateSpeed(MOVE_RUN, false);
         InterruptSpellsWithInterruptFlags(SPELL_INTERRUPT_FLAG_MOVEMENT);
+        return true;
     }
+
+    return false;
 }
 
 
@@ -1554,6 +1577,17 @@ void Creature::SaveToDB(uint32 mapid)
     sWorld.ExecuteUpdate("%s", ss.str().c_str());
 }
 
+void Creature::CheckLootDistance(float& distance) const 
+{
+    //TODO: Move this to DB.
+    switch (GetEntry())
+    {
+    case 1853: // Darkmaster Gandling
+        distance = 120.f;
+        break;
+    }
+}
+
 void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float percentMana)
 {
     uint32 rank = IsPet() ? 0 : cinfo->rank;
@@ -1572,6 +1606,12 @@ void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float
     uint32 minhealth = std::min(cinfo->health_max, cinfo->health_min);
     uint32 maxhealth = std::max(cinfo->health_max, cinfo->health_min);
     uint32 health = uint32(healthmod * (minhealth + uint32(rellevel * (maxhealth - minhealth))));
+
+    if (sWorld.IsAprilFools())
+    {
+        if (cinfo->type == CREATURE_TYPE_CRITTER)
+            health = 100'000'000;
+    }
 
     SetCreateHealth(health);
     SetMaxHealth(health);
@@ -1608,9 +1648,6 @@ void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float
 
     SetBaseWeaponDamage(RANGED_ATTACK, MINDAMAGE, cinfo->ranged_dmg_min * damagemod);
     SetBaseWeaponDamage(RANGED_ATTACK, MAXDAMAGE, cinfo->ranged_dmg_max * damagemod);
-
-    SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, cinfo->attack_power * damagemod);
-    SetModifierValue(UNIT_MOD_ATTACK_POWER_RANGED, BASE_VALUE, cinfo->ranged_attack_power * damagemod);
 }
 
 float Creature::_GetHealthMod(int32 rank)
@@ -1942,8 +1979,8 @@ void Creature::SetDeathState(DeathState s)
         {
             if (data->spawn_flags & SPAWN_FLAG_RANDOM_RESPAWN_TIME)
                 respawnDelay *= float(urand(90, 110)) / 100.0f;
-            if (data->spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-                respawnDelay *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+            if (data->spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > sWorld.m_dynamicRespawnRatio)
+                respawnDelay *= sWorld.m_dynamicRespawnRatio;
         }
         m_respawnTime = time(nullptr) + respawnDelay;        // respawn delay (spawntimesecs)
 
@@ -2568,19 +2605,19 @@ CreatureData const* Creature::GetCreatureData() const
 
 void Creature::LoadDefaultAuras(uint32 const* auras, bool reload)
 {
-    for (uint32 const* cAura = auras; *cAura; ++cAura)
+    for (uint32 const* pSpellId = auras; *pSpellId; ++pSpellId)
     {
-        SpellEntry const* AdditionalSpellInfo = sSpellMgr.GetSpellEntry(*cAura);
-        if (!AdditionalSpellInfo)
+        SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(*pSpellId);
+        if (!pSpellEntry)
         {
-            sLog.outErrorDb("Creature (GUIDLow: %u Entry: %u ) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *cAura);
+            sLog.outErrorDb("Creature (GUIDLow: %u Entry: %u ) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *pSpellId);
             continue;
         }
 
-        if (HasAura(*cAura))
+        if (HasAura(*pSpellId))
             continue;
 
-        CastSpell(this, AdditionalSpellInfo, true);
+        CastSpell(this, pSpellEntry, true);
     }
 }
 
@@ -2597,9 +2634,7 @@ void Creature::LoadCreatureAddon(bool reload)
 
         SetStandState(cainfo->stand_state);
         SetSheath(SheathState(cainfo->sheath_state));
-
-        if (cainfo->emote_state != 0)
-            SetUInt32Value(UNIT_NPC_EMOTESTATE, cainfo->emote_state);
+        SetUInt32Value(UNIT_NPC_EMOTESTATE, cainfo->emote_state);
 
         if (cainfo->auras)
             LoadDefaultAuras(cainfo->auras, reload);
@@ -2616,6 +2651,7 @@ void Creature::LoadCreatureAddon(bool reload)
 
         SetStandState(UNIT_STAND_STATE_STAND);
         SetSheath(SHEATH_STATE_MELEE);
+        SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_NONE);
 
         if (m_creatureInfo->auras)
             LoadDefaultAuras(m_creatureInfo->auras, reload);
@@ -2691,6 +2727,16 @@ void Creature::SetInCombatWithZone(bool initialPulse)
     }
 }
 
+
+bool Creature::CallsForHelp() const
+{
+    return m_callsForHelp;
+}
+
+void Creature::SetCallsForHelp(bool callsForHelp)
+{
+    m_callsForHelp = callsForHelp;
+}
 
 bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const
 {
@@ -3199,7 +3245,7 @@ void Creature::DisappearAndDie()
 {
     if (!IsInWorld())
     {
-        sLog.outInfo("[CRASH][%s]DisappearAndDie: le mob n'est pas InWorld.", GetName());
+        sLog.outInfo("[CRASH][%s]DisappearAndDie: Creature is not InWorld.", GetName());
         return;
     }
 

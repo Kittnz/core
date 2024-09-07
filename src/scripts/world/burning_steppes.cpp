@@ -431,10 +431,6 @@ enum
 #define GOSSIP_ITEM                 "Show me your real face, demon."
 
 /*######
-## npc_franklin_the_friendly
-######*/
-
-/*######
 ## npc_klinfran_the_crazed
 ######*/
 
@@ -460,8 +456,6 @@ struct npc_klinfranAI : public ScriptedAI
         switch (m_creature->GetEntry())
         {
             case NPC_NELSON_THE_NICE:
-                m_creature->SetRespawnDelay(35*MINUTE);
-                m_creature->SetRespawnTime(35*MINUTE);
                 m_creature->SetHomePosition(-8318.19f, -993.662f, 176.956f, 5.65024f);
                 m_creature->NearTeleportTo(-8318.19f, -993.662f, 176.956f, 5.65024f);
                 if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != WAYPOINT_MOTION_TYPE)
@@ -520,23 +514,11 @@ struct npc_klinfranAI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(-8318.19f, -993.662f, 176.956f, 5.65024f);
-
-        // DRSS
-        uint32 m_respawn_delay_Timer = 3*HOUR;
-        if (sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
-
-        m_creature->SetRespawnDelay(m_respawn_delay_Timer);
-        m_creature->SetRespawnTime(m_respawn_delay_Timer);
-        m_creature->SaveRespawnTime();
     }
     
     void DemonDespawn(bool triggered = true)
     {
         m_creature->SetHomePosition(-8318.19f, -993.662f, 176.956f, 5.65024f);
-        m_creature->SetRespawnDelay(15*MINUTE);
-        m_creature->SetRespawnTime(15*MINUTE);
-        m_creature->SaveRespawnTime();
     
         if (triggered)
         {

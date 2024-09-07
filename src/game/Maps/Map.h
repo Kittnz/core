@@ -416,6 +416,7 @@ class Map : public GridRefManager<NGridType>
         }
 
         time_t GetGridExpiry(void) const { return i_gridExpiry; }
+        time_t GetCreateTime() const { return m_createTime; }
         uint32 GetId(void) const { return i_id; }
 
         // some calls like isInWater should not use vmaps due to processor power
@@ -493,7 +494,7 @@ class Map : public GridRefManager<NGridType>
         // Adds the provided command to the queue. Will be handled by ScriptsProcess.
         void ScriptCommandStart(ScriptInfo const& script, uint32 delay, ObjectGuid sourceGuid, ObjectGuid targetGuid);
         // Immediately executes the provided command.
-        void ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target);
         // Removes all parts of script from the queue.
         void TerminateScript(const ScriptAction& step);
 
@@ -616,6 +617,10 @@ class Map : public GridRefManager<NGridType>
         void RemoveBones(Corpse* corpse);
         void ScheduleCorpseRemoval();
 
+        XStatTimer MovementPerfTimer;
+        XStatTimer SpellPerfTimer;
+        XStatTimer UpdateTimer;
+
     private:
         void LoadMapAndVMap(int gx, int gy);
 
@@ -716,6 +721,7 @@ class Map : public GridRefManager<NGridType>
         uint32 m_updateDiffMod;
         uint32 m_lastMvtSpellsUpdate = 0;
     private:
+        time_t m_createTime; // time when map was created
         time_t i_gridExpiry;
 
         NGridType* i_grids[MAX_NUMBER_OF_GRIDS][MAX_NUMBER_OF_GRIDS];

@@ -12,8 +12,11 @@
 #include <istream>
 #include <locale>
 #include <iostream>
+#include <regex>
 
 using namespace std::filesystem;
+
+DBUpdater::AutoUpdater sAutoUpdater;
 
 namespace DBUpdater
 {
@@ -98,7 +101,7 @@ namespace DBUpdater
         return dbMigrations;
     }
 
-    bool AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const
+    bool AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase, bool region) const
     {
         auto fileMigrations = LoadFileMigrations(targetPath);
         auto dbMigrations = LoadDatabaseMigrations(targetDatabase);
@@ -124,9 +127,14 @@ namespace DBUpdater
             dbMigrations.erase(hash);
         }
 
-        for (const auto& dbMigration : dbMigrations)
+
+        if (!region)
         {
-            sLog.outInfo("[DB Auto-Updater] Migration %s with hash %s exists in DB but not as file, old migration?", dbMigration.second.Name.c_str(), dbMigration.first.c_str());
+            for (const auto& dbMigration : dbMigrations)
+            {
+                auto name = dbMigration.second.Name;
+                sLog.outInfo("[DB Auto-Updater] Migration %s with hash %s exists in DB but not as file, old migration?", dbMigration.second.Name.c_str(), dbMigration.first.c_str());
+            }
         }
 
         //sort by modified-at ascending for oldest -> newest updates
@@ -163,10 +171,121 @@ namespace DBUpdater
         sLog.out(LOG_AUTOUPDATER, "[INFO] Attempting to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
         std::string sqlString{ migration.FileData.begin(), migration.FileData.end() };
 
+
+
         if (!targetDatabase->BeginTransaction())
             return false;
 
-        targetDatabase->Execute(sqlString.c_str(), true);
+      
+        
+        //Split strings into separate queries because multiline has some unfortunate side-effects. - Jamey
+
+        enum StringStatus
+        {
+            None,
+            SingleQuotes,
+            DoubleQuotes
+        };
+
+        std::vector<std::string> queries;
+
+        StringStatus stringScope = None;
+        bool inComment = false;
+        std::string query = "";
+
+        for (size_t i = 0; i < sqlString.size(); ++i)
+        {
+            char ch = sqlString[i];
+
+            if (ch == '\r' || ch == '\n')
+            {
+                if (ch == '\n')
+                {
+                    query += ' ';
+                }
+                inComment = false;
+                continue;
+            }
+
+            if (inComment)
+                continue;
+
+            if (ch == '-')
+            {
+                if (i < sqlString.size() - 1 && stringScope == None && sqlString[i + 1] == '-')
+                {
+                    inComment = true;
+                    continue;
+                }
+            }
+
+            //If we find a ' or a " make sure to note down we're in a string and check for escape characters.
+            //However, some text queries (ab)use no usage of escape characters and instead take advantage of using ' in " strings and " in ' strings.
+            if (ch == '\'')
+            {                
+                if (stringScope == None)
+                {
+                    //Simple, just enter the string.
+                    stringScope = SingleQuotes;
+                }
+                else if (stringScope == SingleQuotes)
+                {
+                    //Check if we're dealing with an escape, if not then leave the string scope.
+                    //We can't be in SingleQuotes scope without prior characters so we can safely backtrack.
+                    //This can fail if we have things like \\' but at that point the writers need to ask questions.
+                    char prevChar = sqlString[i - 1];
+                    if (prevChar != '\\')
+                        stringScope = None;
+                }
+                else if (stringScope == DoubleQuotes)
+                {
+                    //Intentionally left empty. These types of quotes should not take us out of string scope.
+                }
+            }
+
+            if (ch == '\"')
+            {
+                //Same as ' except inverted.
+                if (stringScope == None)
+                {
+                    stringScope = DoubleQuotes;
+                }
+                else if (stringScope == DoubleQuotes)
+                {
+                    char prevChar = sqlString[i - 1];
+                    if (prevChar != '\\')
+                        stringScope = None;
+                }
+                else if (stringScope == SingleQuotes)
+                {
+                    //..
+                }
+            }
+
+            query += ch;
+
+            //Only finish this query if we're not inside a string.
+            if (ch == ';' && stringScope == None)
+            {
+                queries.emplace_back(std::move(query));
+                query = ""; // In practice all moved-from objects are valid & empty but to be standard compliant we re-init.
+            }
+        }
+
+        //Add in-buffer query only if not empty.
+        if (query.find_first_not_of("\t\r\n ") != std::string::npos)
+            queries.emplace_back(std::move(query));
+
+        if (stringScope != None) // mid-string query at the end of SQL, bad news.
+        {
+            sLog.out(LOG_AUTOUPDATER, "[FAIL] Failed to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+            return false;
+        }
+
+        for (const auto& query : queries)
+        {
+            targetDatabase->Execute(query.c_str());
+        }
 
         targetDatabase->PExecute("INSERT INTO `%s` (`Name`, `Hash`, `AppliedAt`) VALUES (\'%s\', \'%s\', NOW());", MigrationTable, migration.Name.c_str(), migration.Hash.c_str());
 
@@ -234,14 +353,36 @@ namespace DBUpdater
         directory_entry charUpdatePath{ folderPath / charUpdateFolder };
         directory_entry worldUpdatePath{ folderPath / worldUpdateFolder };
 
-        if (!ProcessTargetUpdates(logonUpdatePath, &LoginDatabase))
+        if (!ProcessTargetUpdates(logonUpdatePath, &LoginDatabase, false))
             return false;
 
-        if (!ProcessTargetUpdates(charUpdatePath, &CharacterDatabase))
+        if (!ProcessTargetUpdates(charUpdatePath, &CharacterDatabase, false))
             return false;
 
-        if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase))
+        if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase, false))
             return false;
+
+
+        
+        if (sConfig.GetBoolDefault("NiHao", false))
+        {
+
+            sLog.out(LOG_AUTOUPDATER, "Starting CN-only Migrations.");
+
+            directory_entry cnLogonPath { logonUpdatePath.path() / "cn" };
+            directory_entry cnCharPath{ charUpdatePath.path() / "cn" };
+            directory_entry cnWorldPath{ worldUpdatePath.path() / "cn" };
+
+
+            if (!ProcessTargetUpdates(cnLogonPath, &LoginDatabase, true))
+                return false;
+
+            if (!ProcessTargetUpdates(cnCharPath, &CharacterDatabase, true))
+                return false;
+
+            if (!ProcessTargetUpdates(cnWorldPath, &WorldDatabase, true))
+                return false;
+        }
 
         return true;
 

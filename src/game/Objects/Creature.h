@@ -294,8 +294,8 @@ struct CreatureData
     float visibility_mod = 0.0f;
 
     // non db field
-
     uint32 instanciatedContinentInstanceId;
+
     // helper function
     ObjectGuid GetObjectGuid(uint32 lowguid) const { return ObjectGuid(CreatureInfo::GetHighGuid(), creature_id[0], lowguid); }
     uint32 GetRandomRespawnTime() const { return urand(spawntimesecsmin, spawntimesecsmax); }
@@ -312,6 +312,10 @@ struct CreatureData
             creatureId = 1;
 
         return creatureId;
+    }
+    bool HasCreatureId(uint32 id) const
+    {
+        return std::find(creature_id.begin(), creature_id.end(), id) != creature_id.end();
     }
     uint32 GetCreatureIdCount() const
     {
@@ -750,8 +754,10 @@ class Creature : public Unit
 
         void SendAIReaction(AiReaction reactionType);
 
-        void DoFlee();
-        void DoFleeToGetAssistance();
+        void CheckLootDistance(float& distance) const;
+
+        bool DoFlee();
+        bool DoFleeToGetAssistance();
         float GetFleeingSpeed() const;
         void MoveAwayFromTarget(Unit* pTarget, float distance);
         void CallForHelp(float fRadius);
@@ -1026,6 +1032,38 @@ class Creature : public Unit
         uint32 GetPhaseQuestId() const { return GetCreatureInfo()->phase_quest_id; }
 		std::string GetDebuffs();
 
+        void SetLootIdOverride(uint32_t lootEntry) { m_lootIdOverride = lootEntry; }
+        uint32_t GetLootId() const
+        {
+            return GetCreatureInfo() && m_lootIdOverride == 0
+                ? GetCreatureInfo()->loot_id
+                : m_lootIdOverride; 
+        }
+
+        uint32_t GetGoldMin() const
+        {
+            return GetCreatureInfo() && m_goldMinOverride == 0
+                ? GetCreatureInfo()->gold_min
+                : m_goldMinOverride;
+        }
+
+        uint32_t GetGoldMax() const
+        {
+            return GetCreatureInfo() && m_goldMaxOverride == 0
+                ? GetCreatureInfo()->gold_max
+                : m_goldMaxOverride;
+        }
+
+        void SetGoldOverride(uint32_t min, uint32_t max)
+        {
+            ASSERT(min <= max);
+            m_goldMinOverride = min; 
+            m_goldMaxOverride = max;
+        }
+
+        bool CallsForHelp() const;
+        void SetCallsForHelp(bool callsForHelp);
+
     protected:
         bool MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const;
 
@@ -1091,8 +1129,13 @@ class Creature : public Unit
         
         uint32 m_callForHelpTimer;
         float m_callForHelpDist;
+        bool m_callsForHelp;
         float m_leashDistance;
         float m_detectionDistance;
+
+        uint32_t m_goldMinOverride = 0;
+        uint32_t m_goldMaxOverride = 0;
+        uint32_t m_lootIdOverride = 0;
 
     private:
         GridReference<Creature> m_gridRef;

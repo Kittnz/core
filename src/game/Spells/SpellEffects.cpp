@@ -315,7 +315,7 @@ void Spell::EffectInstaKill(SpellEffectIndex /*eff_idx*/)
     data << uint32(m_spellInfo->Id);
     m_caster->SendMessageToSet(&data, true);
 
-    m_caster->DealDamage(unitTarget, unitTarget->GetMaxHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+    m_caster->DealDamage(unitTarget, unitTarget->GetMaxHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, m_spellInfo, false, this);
 }
 
 void Spell::EffectEnvironmentalDMG(SpellEffectIndex eff_idx)
@@ -1859,6 +1859,29 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 50100: // Lunar Lanterns
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        bool blue = 0;
+                        float dis{ 0.1F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        float  p_r, o_r;
+                        p_r = m_caster->GetOrientation();
+                        o_r = remainderf(p_r + M_PI_F, M_PI_F * 2.0f);
+                        float rot2 = sin(o_r / 2);
+                        float rot3 = cos(o_r / 2);
+
+                        blue = (0 + urand(0, 1));
+                        
+                        m_caster->SummonGameObject(blue ? 2004261 : 2004263, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 600, true);
+                        break;
+                    }
+                }
                 case 45840: // Toy Train Set
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -2022,7 +2045,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         fX += (fDist * cos(m_caster->GetOrientation()));
                         fY += (fDist * sin(m_caster->GetOrientation()));
 
-                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 120, true);
+                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 300, true);
                     }
 
                     return;
@@ -2047,7 +2070,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
                 case 56053: // Skin Change Tokens:
                 {
-                    if (m_caster && m_caster->IsPlayer())
+                    if (m_caster && m_CastItem && m_caster->IsPlayer())
                     {
                         uint32 item_entry = m_CastItem->GetEntry();
                         bool is_male = m_caster->ToPlayer()->GetGender() == GENDER_MALE;
@@ -2062,10 +2085,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                             if (bytes > 0)
                             {
+                                // Store original skin color value for refunds of skins.
+                                m_caster->ToPlayer()->SetPlayerVariable(PlayerVariables::OriginalSkinByte, std::to_string(m_caster->GetByteValue(PLAYER_BYTES, 0)));
+                                
                                 m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
                                 m_caster->ToPlayer()->SetDisplayId(15435);
 
-                                if (bytes = 6 && m_caster->ToPlayer()->GetRace() == RACE_UNDEAD)
+                                if (bytes == 6 && m_caster->ToPlayer()->GetRace() == RACE_UNDEAD)
                                 {
                                     m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES_2, 0, 0); // Remove features for the dark Undeads.
                                 }
@@ -2111,6 +2137,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             case 50437: displayid = 4923;   break; // Naga Explorer
                             case 50438: displayid = 11263;  break; // Naga Siren 
                             case 80175: displayid = 6292;   break; // Bronze Whelpling
+                            case 91792: displayid = (14778 + urand(0, 1));   break; // Celestial Dragons
                             case 50408: displayid = bIsMale ? 150 : 876;  break; // Dryad
                             case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
                             case 80694: // Scourge
@@ -2279,7 +2306,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_CastItem)
                     {
-                        auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
+                        auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
@@ -2299,7 +2326,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_CastItem)
                     {
-                        auto spellIdOpt = sMountMgr->GetMountSpellId(m_CastItem->GetEntry());
+                        auto spellIdOpt = sMountMgr.GetMountSpellId(m_CastItem->GetEntry());
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
@@ -4246,12 +4273,10 @@ void Spell::EffectPickPocket(SpellEffectIndex /*eff_idx*/)
         return;
 
     // victim must be creature and attackable
-    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT || m_caster->IsFriendlyTo(unitTarget))
+    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT || !unitTarget->IsAlive() || m_caster->IsFriendlyTo(unitTarget))
         return;
 
-    // victim have to be alive and humanoid or undead
-    if (unitTarget->IsAlive() && (unitTarget->GetCreatureTypeMask() & CREATURE_TYPEMASK_HUMANOID_OR_UNDEAD) != 0)
-        ((Player*)m_caster)->SendLoot(unitTarget->GetObjectGuid(), LOOT_PICKPOCKETING);
+    ((Player*)m_caster)->SendLoot(unitTarget->GetObjectGuid(), LOOT_PICKPOCKETING);
 }
 
 void Spell::EffectAddFarsight(SpellEffectIndex eff_idx)
@@ -4766,6 +4791,10 @@ void Spell::EffectEnchantItemPerm(SpellEffectIndex eff_idx)
 
     // add new enchanting if equipped
     item_owner->ApplyEnchantment(itemTarget, PERM_ENCHANTMENT_SLOT, true);
+
+    // do not allow trading raid items after enchanting them
+    if (itemTarget->CanBeTradedEvenIfSoulBound())
+        itemTarget->ResetSoulBoundTradeData();
 }
 
 void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
@@ -4817,6 +4846,10 @@ void Spell::EffectEnchantItemTmp(SpellEffectIndex eff_idx)
 
     // add new enchanting if equipped
     item_owner->ApplyEnchantment(itemTarget, TEMP_ENCHANTMENT_SLOT, true);
+
+    // do not allow trading raid items after enchanting them
+    if (itemTarget->CanBeTradedEvenIfSoulBound())
+        itemTarget->ResetSoulBoundTradeData();
 }
 
 void Spell::EffectTameCreature(SpellEffectIndex /*eff_idx*/)
@@ -4857,7 +4890,7 @@ void Spell::EffectTameCreature(SpellEffectIndex /*eff_idx*/)
         return;
     }
 
-    pet->GetCharmInfo()->SetPetNumber(sObjectMgr.GeneratePetNumber(), true);
+    pet->GetCharmInfo()->SetPetNumber(pet->GetObjectGuid().GetEntry(), true);
     pet->InitializeDefaultName();
     pet->AIM_Initialize();
     pet->InitPetCreateSpells();
@@ -6671,6 +6704,10 @@ void Spell::EffectActivateObject(SpellEffectIndex eff_idx)
 
     GameObjectActions action = (GameObjectActions)m_spellInfo->EffectMiscValue[eff_idx];
 
+    // Can be handled by script.
+    if (gameObjTarget->AI() && gameObjTarget->AI()->OnActivateBySpell(m_caster, m_spellInfo->Id, (uint32)action))
+        return;
+
     switch (action)
     {
         case GameObjectActions::None:
@@ -6981,6 +7018,10 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex eff_idx)
         // Apply the temporary enchantment
         item->SetEnchantment(slot, enchant_id, duration, charges);
         item_owner->ApplyEnchantment(item, slot, true);
+
+        // do not allow trading raid items after enchanting them
+        if (item->CanBeTradedEvenIfSoulBound())
+            item->ResetSoulBoundTradeData();
     }
 }
 

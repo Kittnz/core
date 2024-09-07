@@ -38,6 +38,8 @@
 #include <string>
 #include <array>
 
+#include "MoveSpline.h"
+
 #define CONTACT_DISTANCE 0.5f
 #define INTERACTION_DISTANCE 5.0f
 #define ATTACK_DISTANCE 5.0f
@@ -470,6 +472,13 @@ class Object
             MANGOS_ASSERT(index < m_valuesCount || PrintIndexError(index , false));
             MANGOS_ASSERT(offset < 2);
             return *(((uint16*)&m_uint32Values[index])+offset);
+        }
+
+        int16 GetInt16Value(uint16 index, uint8 offset) const
+        {
+            MANGOS_ASSERT(index < m_valuesCount || PrintIndexError(index, false));
+            MANGOS_ASSERT(offset < 2);
+            return *(((int16*)&m_int32Values[index]) + offset);
         }
 
         ObjectGuid const& GetGuidValue(uint16 index) const { return *reinterpret_cast<ObjectGuid const*>(&GetUInt64Value(index)); }
@@ -985,6 +994,8 @@ class WorldObject : public Object
         virtual void SendMessageToSetInRange(WorldPacket *data, float dist, bool self) const;
         void SendMessageToSetExcept(WorldPacket *data, Player const* skipped_receiver) const;
         void DirectSendPublicValueUpdate(uint32 index, uint32 count = 1);
+        void DirectSendPublicValueUpdate(UpdateMask& updateMask);
+        void DirectSendPublicValueUpdate(std::initializer_list<uint32> indexes);
 
         void PlayDistanceSound(uint32 sound_id, Player const* target = nullptr) const;
         void PlayDirectSound(uint32 sound_id, Player const* target = nullptr) const;
@@ -1061,6 +1072,7 @@ class WorldObject : public Object
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType &) override;
 
+        Creature* SummonCreature(uint32_t id, const Movement::Location& location, TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN, uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr, bool attach = true);
         Creature* SummonCreature(uint32 id, float x, float y, float z, float ang,TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN,uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr, bool attach = true);
         GameObject* SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang, const float rotation0 = 0.0f, const float rotation1 = 0.0f, const float rotation2 = 0.0f, const float rotation3 = 0.0f, const uint32 respawnTime = 25000, const bool attach = true);
 

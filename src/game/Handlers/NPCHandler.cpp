@@ -381,6 +381,12 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket & recv_data)
     if (pCreature->IsSpiritGuide())
         pCreature->SendAreaSpiritHealerQueryOpcode(_player);
 
+    if (sWorld.IsAprilFools())
+    {
+        if (urand(0, 8) == 1)
+            pCreature->HandleEmote(EMOTE_STATE_DANCE);
+    }
+
     if (!sScriptMgr.OnGossipHello(_player, pCreature))
     {
         _player->PrepareGossipMenu(pCreature, pCreature->GetDefaultGossipMenuId());

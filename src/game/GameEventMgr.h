@@ -186,6 +186,6 @@ RequestedEventType* GameEventMgr::GetHardcodedEvent()
 	return nullptr;
 }
 
-#define sGameEventMgr MaNGOS::Singleton<GameEventMgr>::Instance()
+extern GameEventMgr sGameEventMgr;
 
 #endif

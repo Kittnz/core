@@ -173,7 +173,11 @@ enum QuestSpecialFlags
     QUEST_SPECIAL_FLAG_SPEAKTO              = 0x010,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_KILL_OR_CAST         = 0x020,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_TIMED                = 0x040,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080
+
+    // Turtle custom flags
+    QUEST_SPECIAL_FLAG_HARDCORE_ONLY        = 0x080,
+    QUEST_SPECIAL_FLAG_YEARLY_RESET         = 0x100,
+    QUEST_SPECIAL_FLAG_CAN_SWAP_REWARDS     = 0x200
 };
 
 enum QuestMethod
@@ -185,7 +189,7 @@ enum QuestMethod
     QUEST_METHOD_LIMIT                      = 0x3,          // Highest Method entry DB should have
 };
 
-#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT | QUEST_SPECIAL_FLAG_DAILY)
+#define QUEST_SPECIAL_FLAG_DB_ALLOWED (QUEST_SPECIAL_FLAG_REPEATABLE | QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT | QUEST_SPECIAL_FLAG_DAILY | QUEST_SPECIAL_FLAG_HARDCORE_ONLY | QUEST_SPECIAL_FLAG_YEARLY_RESET)
 
 struct QuestLocale
 {
@@ -277,6 +281,22 @@ class Quest
         // quest can be fully deactivated and will not be available for any player
         void SetQuestActiveState(bool state) { m_isActive = state; }
         bool IsActive() const { return m_isActive; }
+
+        bool SatisfiesRaceRequirements(uint32 raceMask) const
+        {
+            uint32 reqraces = GetRequiredRaces();
+
+            if (reqraces == 0)
+                return true;
+
+            if ((reqraces & raceMask) == 0)
+                return false;
+
+            return true;
+        }
+
+        // needed by honormgr for daily most hk/dk quests
+        void SetEndText(std::string text) { EndText = text; }
 
         // multiple values
         std::string ObjectiveText[QUEST_OBJECTIVES_COUNT];

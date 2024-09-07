@@ -208,8 +208,7 @@ void GenericSpellMob::Finalize()
 		return;
 	}
 
-	std::vector<GenericAISpell>::iterator it;
-	for (it = m_uiSpells.begin(); it != m_uiSpells.end() && isDistanceCaster; ++it)
+	for (auto it = m_uiSpells.begin(); it != m_uiSpells.end() && isDistanceCaster; ++it)
 	{
 		if (it->minRange <= 2.0f)
 			isDistanceCaster = false;
@@ -219,8 +218,7 @@ void GenericSpellMob::Finalize()
 
 void GenericSpellMob::Reset()
 {
-	std::vector<GenericAISpell>::iterator it;
-	for (it = m_uiSpells.begin(); it != m_uiSpells.end(); ++it)
+	for (auto it = m_uiSpells.begin(); it != m_uiSpells.end(); ++it)
 	{
 #ifdef DEBUG_ON
 		sLog.outString(">> Spell %u reset", it->spellId);
@@ -251,11 +249,10 @@ void GenericSpellMob::UpdateAI(const uint32 uiDiff)
 	if (m_creature->IsNonMeleeSpellCasted(false))
 		return;
 
-	std::vector<GenericAISpell>::iterator it;
 #ifdef DEBUG_ON
 	sLog.outString("UpdateAI with SpellSize = %u", m_uiSpells.size());
 #endif
-	for (it = m_uiSpells.begin(); it != m_uiSpells.end(); ++it)
+	for (auto it = m_uiSpells.begin(); it != m_uiSpells.end(); ++it)
 	{
 #ifdef DEBUG_ON
 		sLog.outString("Spell %u update : timer %u", it->spellId, it->timer);

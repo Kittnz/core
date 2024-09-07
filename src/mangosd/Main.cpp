@@ -46,6 +46,21 @@ DatabaseType LogsDatabase;                                  ///< Accessor to the
 
 uint32 realmID;                                             ///< Id of the realm
 
+
+const char* lsan_output_path = "log_path=leaks.txt";
+
+//override LSAN options if found.
+#ifdef ENABLE_LSAN
+#ifdef __cplusplus
+extern "C"
+#endif
+const char* __lsan_default_options()
+{
+    return lsan_output_path;
+}
+#endif
+
+
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
 {

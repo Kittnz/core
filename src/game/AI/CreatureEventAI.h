@@ -46,7 +46,7 @@ enum EventAI_Type
     EVENT_T_EVADE                   = 7,                    // NONE
     EVENT_T_HIT_BY_SPELL                = 8,                    // SpellID, School, RepeatMin, RepeatMax
     EVENT_T_RANGE                   = 9,                    // MinDist, MaxDist, RepeatMin, RepeatMax
-    EVENT_T_OOC_LOS                 = 10,                   // NoHostile, MaxRnage, RepeatMin, RepeatMax
+    EVENT_T_OOC_LOS                 = 10,                   // Reaction, MaxRnage, RepeatMin, RepeatMax
     EVENT_T_SPAWNED                 = 11,                   // NONE
     EVENT_T_TARGET_HP               = 12,                   // HPMax%, HPMin%, RepeatMin, RepeatMax
     EVENT_T_TARGET_CASTING          = 13,                   // RepeatMin, RepeatMax
@@ -80,8 +80,17 @@ enum EventFlags
 {
     EFLAG_REPEATABLE            = 0x01,                     //Event repeats
     EFLAG_RANDOM_ACTION         = 0x02,                     //Event only execute one from existed actions instead each action.
-    EFLAG_DEBUG_ONLY            = 0x04,                     //Event only occurs in debug build
+    EFLAG_NOT_CASTING           = 0x04,                     //Event will not occur while creature is casting a spell
+    EFLAG_CHECK_RESULT          = 0x08,                     //Event will not go on cooldown if script actions fail
+    EFLAG_DEBUG_ONLY            = 0x10,                     //Event only occurs in debug build
     // uint8 field
+};
+
+enum UnitInLosReaction
+{
+    ULR_ANY             = 0,
+    ULR_HOSTILE         = 1,
+    ULR_NON_HOSTILE     = 2
 };
 
 struct CreatureEventAI_Event
@@ -146,7 +155,7 @@ struct CreatureEventAI_Event
         // EVENT_T_OOC_LOS                                  = 10
         struct
         {
-            uint32 noHostile;
+            uint32 reaction;
             uint32 maxRange;
             uint32 repeatMin;
             uint32 repeatMax;
@@ -266,8 +275,8 @@ struct CreatureEventAI_Event
 };
 
 //Event_Map
-typedef std::vector<CreatureEventAI_Event> CreatureEventAI_Event_Vec;
-typedef std::unordered_map<uint32, CreatureEventAI_Event_Vec > CreatureEventAI_Event_Map;
+typedef turtle_vector<CreatureEventAI_Event, Category_EventAI> CreatureEventAI_Event_Vec;
+typedef turtle_unordered_map<uint32, CreatureEventAI_Event_Vec, Category_EventAI > CreatureEventAI_Event_Map;
 
 struct CreatureEventAIHolder
 {
@@ -305,7 +314,6 @@ class CreatureEventAI : public CreatureAI
         void MoveInLineOfSight(Unit *who) override;
         void SpellHit(WorldObject* pUnit, const SpellEntry* pSpell) override;
         void MovementInform(uint32 type, uint32 id) override;
-        void DamageTaken(Unit* done_by, uint32& damage) override;
         void UpdateAI(const uint32 diff) override;
         void ReceiveEmote(Player* pPlayer, uint32 text_emote) override;
         void GroupMemberJustDied(Creature* unit, bool isLeader) override;
@@ -317,8 +325,7 @@ class CreatureEventAI : public CreatureAI
         static int Permissible(const Creature *);
 
         bool ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* pActionInvoker = nullptr);
-        void ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker);
-        void SetInvincibilityHealthLevel(uint32 hp_level, bool is_percent);
+        bool ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker);
 
         uint8  m_Phase;                                     // Current phase, max 32 phases
 
@@ -332,7 +339,6 @@ class CreatureEventAI : public CreatureAI
         CreatureEventAIList m_CreatureEventAIList;          //Holder for events (stores enabled, time, and eventid)
         float  m_AttackDistance;                            // Distance to attack from
         float  m_AttackAngle;                               // Angle of attack
-        uint32 m_InvinceabilityHpLevel;                     // Minimal health level allowed at damage apply
         bool m_bCanSummonGuards;
 
         void UpdateEventsOn_UpdateAI(const uint32 diff, bool Combat);

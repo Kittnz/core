@@ -59,6 +59,7 @@
 #include "CreatureGroups.h"
 #include "Autoscaling/AutoScaler.hpp"
 #include "Logging/DatabaseLogger.hpp"
+#include "PerfStats.h"
 
 Map::~Map()
 {
@@ -85,6 +86,8 @@ Map::~Map()
 
     delete m_weatherSystem;
     m_weatherSystem = nullptr;
+
+    --PerfStats::g_totalMaps;
 }
 
 void Map::LoadMapAndVMap(int gx, int gy)
@@ -102,7 +105,7 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
       i_id(id), i_InstanceId(InstanceId), m_unloadTimer(0),
       m_VisibleDistance(DEFAULT_VISIBILITY_DISTANCE), m_persistentState(nullptr),
       m_activeNonPlayersIter(m_activeNonPlayers.end()),
-      i_gridExpiry(expiry), m_TerrainData(sTerrainMgr.LoadTerrain(id)),
+      m_createTime(time(nullptr)), i_gridExpiry(expiry), m_TerrainData(sTerrainMgr.LoadTerrain(id)),
       i_data(nullptr), i_script_id(0), m_unloading(false), m_crashed(false),
       _processingSendObjUpdates(false), _processingUnitsRelocation(false),
       m_updateFinished(false), m_updateDiffMod(0), m_GridActivationDistance(DEFAULT_VISIBILITY_DISTANCE),
@@ -146,6 +149,8 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
         m_motionThreads->start();
         m_objectThreads->start<ThreadPool::MySQL<ThreadPool::MultiQueue>>();
     }
+
+    ++PerfStats::g_totalMaps;
 }
 
 // Nostalrius
@@ -755,7 +760,16 @@ inline void Map::UpdateCells(uint32 map_diff)
 
 void Map::ProcessSessionPackets(PacketProcessing type)
 {
-    uint32 beginTime = WorldTimer::getMSTime();
+    switch (type)
+    {
+    case PACKET_PROCESS_MOVEMENT:
+        MovementPerfTimer.Begin();
+        break;
+	case PACKET_PROCESS_SPELLS:
+        SpellPerfTimer.Begin();
+		break;
+    }
+
     /// update worldsessions for existing players
     for (m_mapRefIter = m_mapRefManager.begin(); m_mapRefIter != m_mapRefManager.end(); ++m_mapRefIter)
     {
@@ -768,9 +782,16 @@ void Map::ProcessSessionPackets(PacketProcessing type)
             pSession->ProcessPackets(updater);
         }
     }
-    beginTime = WorldTimer::getMSTimeDiffToNow(beginTime);
-    if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS) && beginTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_MAP_PACKETS))
-        sLog.out(LOG_PERFORMANCE, "Map %u inst %u: %3ums to update packets type %u", GetId(), GetInstanceId(), beginTime, (uint32)type);
+
+	switch (type)
+	{
+	case PACKET_PROCESS_MOVEMENT:
+		MovementPerfTimer.End();
+		break;
+	case PACKET_PROCESS_SPELLS:
+		SpellPerfTimer.End();
+		break;
+	}
 }
 
 void Map::UpdateSessionsMovementAndSpellsIfNeeded()
@@ -819,7 +840,7 @@ void Map::UpdatePlayers()
 
 void Map::DoUpdate(uint32 maxDiff)
 {
-    uint32 now = WorldTimer::getMSTime();
+    uint32 const now = WorldTimer::getMSTime();
     uint32 diff = WorldTimer::getMSTimeDiff(_lastMapUpdate, now);
     if (diff > maxDiff)
         diff = maxDiff;
@@ -827,10 +848,19 @@ void Map::DoUpdate(uint32 maxDiff)
     if (HavePlayers())
         _lastPlayerLeftTime = now;
     Update(diff);
+
+    // track slowest map for performance statistics
+    uint32 diff2 = WorldTimer::getMSTimeDiffToNow(now);
+    if (diff2 > PerfStats::g_slowestMapUpdateTime)
+    {
+        PerfStats::g_slowestMapId = GetId();
+        PerfStats::g_slowestMapUpdateTime = diff2;
+    }
 }
 
 void Map::Update(uint32 t_diff)
 {
+    XScopeStatTimer ScopeStatTimer{ UpdateTimer };
     uint32 updateMapTime = WorldTimer::getMSTime();
     _dynamicTree.update(t_diff);
 
@@ -2203,7 +2233,7 @@ bool DungeonMap::Reset(InstanceResetMethod method)
         }
         else
         {
-            if (method == INSTANCE_RESET_GLOBAL)
+            if (method == INSTANCE_RESET_GLOBAL || IsRaid())
             {
                 // set the homebind timer for players inside (1 minute)
                 for (const auto& itr : m_mapRefManager)
@@ -2233,6 +2263,14 @@ void DungeonMap::PermBindAllPlayers(Player *player)
     for (const auto& itr : m_mapRefManager)
     {
         Player* plr = itr.getSource();
+
+        if (m_resetAfterUnload)
+        {
+            sLog.outError("Attempt to permanently save player %u to raid (map %u, instance %u) scheduled for reset on unload and already deleted from DB!", plr->GetGUIDLow(), GetId(), GetInstanceId());
+            plr->TeleportToHomebind();
+            continue;
+        }
+
         // players inside an instance cannot be bound to other instances
         // some players may already be permanently bound, in this case nothing happens
         InstancePlayerBind *bind = plr->GetBoundInstance(GetId());
@@ -2412,12 +2450,14 @@ void Map::ScriptCommandStart(ScriptInfo const& script, uint32 delay, ObjectGuid 
     sScriptMgr.IncreaseScheduledScriptsCount();
 }
 
-void Map::ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target)
+bool Map::ScriptCommandStartDirect(const ScriptInfo& script, WorldObject* source, WorldObject* target)
 {
     if ((script.command != SCRIPT_COMMAND_DISABLED) && 
         FindScriptFinalTargets(source, target, script) && 
         (!script.condition || sObjectMgr.IsConditionSatisfied(script.condition, target, this, source, CONDITION_FROM_DBSCRIPTS)))
-        (this->*(m_ScriptCommands[script.command]))(script, source, target);
+        return (this->*(m_ScriptCommands[script.command]))(script, source, target);
+
+    return (script.raw.data[4] & SF_GENERAL_ABORT_ON_FAILURE) != 0;
 }
 
 bool Map::FindScriptInitialTargets(WorldObject*& source, WorldObject*& target, const ScriptAction& step)
@@ -3328,14 +3368,14 @@ void Map::CrashUnload()
         {
             WorldSession* session = player->GetSession();
             sLog.out(LOG_CHAR, "[%s:%u@%s] Logout Character:[%s] (guid: %u)", session->GetUsername().c_str(), session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
-            sDBLogger->LogCharAction({ player->GetGUIDLow(), session->GetAccountId(), LogCharAction::ActionLogout, {} });
+            sDBLogger.LogCharAction({ player->GetGUIDLow(), session->GetAccountId(), LogCharAction::ActionLogout, {} });
             session->SetPlayer(nullptr);
             player->SaveInventoryAndGoldToDB(); // Prevent possible exploits
             player->UninviteFromGroup();
 
             if (player->GetSocial())
             {
-                sSocialMgr->RemovePlayerSocial(player->GetObjectGuid());
+                sSocialMgr.RemovePlayerSocial(player->GetObjectGuid());
                 session->GetMasterPlayer()->SetSocial(nullptr);
             }
 
@@ -3407,6 +3447,11 @@ void Map::PrintInfos(ChatHandler& handler)
 bool Map::ShouldUpdateMap(uint32 now, uint32 inactiveTimeLimit)
 {
     auto update = true;
+
+
+    //For now just always update and let Battlegroud::Update kill its own Map.
+    if (IsBattleGround())
+        return true;
 
     if (!HavePlayers() && inactiveTimeLimit)
     {

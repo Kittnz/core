@@ -67,7 +67,6 @@ class HonorMaintenancer
         void CreateCalculationReport();
 
         void FlushWeeklyQuests();
-        void AssignBountyTargets();
 
         float GetStandingCPByPosition(HonorStandingList& standingList, uint32 position);
         uint32 GetStandingPositionByGUID(uint32 guid, Team team);
@@ -139,6 +138,8 @@ typedef std::list<HonorCP> HonorCPMap;
 #define NEGATIVE_HONOR_RANK_COUNT 4
 #define POSITIVE_HONOR_RANK_COUNT 15
 #define HONOR_RANK_COUNT 19
+#define QUEST_DAILY_MOST_HK 39981
+#define QUEST_DAILY_MOST_DK 39980
 
 class HonorMgr
 {
@@ -160,6 +161,16 @@ class HonorMgr
         static void CalculateRankInfo(HonorRankInfo& prk);
         static HonorRankInfo CalculateRank(float rankPoints, uint32 totalHK = 0);
         uint32 CalculateTotalKills(Unit* victim) const;
+
+        static void LoadMostDkHkYesterdayPlayers();
+        static uint32 GetMostHkYesterdayPlayerGuid()
+        {
+            return m_mostHkYesterdayGuid;
+        }
+        static uint32 GetMostDkYesterdayPlayerGuid()
+        {
+            return m_mostDkYesterdayGuid;
+        }
         
         static float DishonorableKillPoints(uint8 level);
         static float HonorableKillPoints(Player* killer, Player* victim, uint32 groupsize);
@@ -207,10 +218,12 @@ class HonorMgr
         HonorRankInfo m_rank;
         HonorRankInfo m_highestRank;
         uint32 m_standing;
+        static uint32 m_mostHkYesterdayGuid;
+        static uint32 m_mostDkYesterdayGuid;
 
         Player* m_owner;
 };
 
-#define sHonorMaintenancer MaNGOS::Singleton<HonorMaintenancer>::Instance()
+extern HonorMaintenancer sHonorMaintenancer;
 
 #endif

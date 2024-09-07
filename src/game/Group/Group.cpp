@@ -815,7 +815,7 @@ void Group::SendLootAllPassed(Roll const& r)
     }
 }
 
-void Group::GroupLoot(Creature *creature, Loot *loot)
+void Group::GroupLoot(Creature *creature, Loot* loot)
 {
     for (uint8 itemSlot = 0; itemSlot < loot->items.size(); ++itemSlot)
     {
@@ -838,7 +838,7 @@ void Group::GroupLoot(Creature *creature, Loot *loot)
     }
 }
 
-void Group::NeedBeforeGreed(Creature *creature, Loot *loot)
+void Group::NeedBeforeGreed(Creature *creature, Loot* loot)
 {
     for (uint8 itemSlot = 0; itemSlot < loot->items.size(); ++itemSlot)
     {
@@ -861,7 +861,7 @@ void Group::NeedBeforeGreed(Creature *creature, Loot *loot)
     }
 }
 
-void Group::MasterLoot(Creature* creature, Loot* loot)
+void Group::MasterLoot(Creature* creature, Loot* loot, Player* player)
 {
     for (auto& i : loot->items)
     {
@@ -871,6 +871,12 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
         if (item->Quality < uint32(m_lootThreshold))
             i.is_underthreshold = 1;
     }
+
+
+    auto creatureMap = creature->GetMap();
+
+    if (!creatureMap)
+        return;
 
     uint32 playerCount = 0;
 
@@ -883,8 +889,7 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
         if (!looter->IsInWorld())
             continue;
 
-        //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if(looter->IsWithinLootXPDist(creature))
+        if (looter->IsWithinLootXPDist(creature) && loot->IsAllowedLooter(looter->GetObjectGuid(), false))
         {
             data << looter->GetObjectGuid();
             ++playerCount;
@@ -893,15 +898,7 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
 
     data.put<uint8>(0, playerCount);
 
-    for (GroupReference *itr = GetFirstMember(); itr != nullptr; itr = itr->next())
-    {
-        Player *looter = itr->getSource();
-        if (!looter->IsInWorld())
-            continue;
-        //if (looter->IsWithinDistInMap(creature, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-        if (looter->IsWithinLootXPDist(creature))
-            looter->GetSession()->SendPacket(&data);
-    }
+    player->GetSession()->SendPacket(&data);
 }
 
 bool Group::CountRollVote(Player* player, ObjectGuid const& lootedTarget, uint32 itemSlot, RollVote vote)
@@ -985,14 +982,13 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
         if (!playerToRoll || !playerToRoll->GetSession() || !playerToRoll->IsInWorld())
             continue;
 
-        if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) && lootItem.AllowedForPlayer(playerToRoll, lootTarget))
+        if ((method != NEED_BEFORE_GREED || playerToRoll->CanUseItem(item) == EQUIP_ERR_OK) &&
+            lootItem.AllowedForPlayer(playerToRoll, lootTarget) &&
+            loot->IsAllowedLooter(playerToRoll->GetObjectGuid(), false) &&
+            playerToRoll->IsWithinLootXPDist(lootTarget))
         {
-            //if (playerToRoll->IsWithinDistInMap(lootTarget, sWorld.getConfig(CONFIG_FLOAT_GROUP_XP_DISTANCE), false))
-            if (playerToRoll->IsWithinLootXPDist(lootTarget))
-            {
-                r->playerVote[playerToRoll->GetObjectGuid()] = ROLL_NOT_EMITED_YET;
-                ++r->totalPlayersRolling;
-            }
+            r->playerVote[playerToRoll->GetObjectGuid()] = ROLL_NOT_EMITED_YET;
+            ++r->totalPlayersRolling;
         }
     }
 
@@ -1001,18 +997,10 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
         r->setLoot(loot);
         r->itemSlot = itemSlot;
 
-        if (r->totalPlayersRolling == 1)                    // single looter
-        {
-            r->playerVote.begin()->second = ROLL_NEED;
-            CountSingleLooterRoll(r);
-        }
-        else
-        {
-            SendLootStartRoll(LOOT_ROLL_TIMEOUT, *r);
-            loot->items[itemSlot].is_blocked = true;
-            lootTarget->StartGroupLoot(this, LOOT_ROLL_TIMEOUT);
-            RollId.push_back(r);
-        }
+        SendLootStartRoll(LOOT_ROLL_TIMEOUT, *r);
+        loot->items[itemSlot].is_blocked = true;
+        lootTarget->StartGroupLoot(this, LOOT_ROLL_TIMEOUT);
+        RollId.push_back(r);
     }
     else                                            // no looters??
         delete r;
@@ -1075,44 +1063,8 @@ void Group::CountSingleLooterRoll(Roll* roll)
     SendLootRollWon(playerGuid, uint8(100), ROLL_NEED, *roll);
 
     LootItem *item = &(roll->getLoot()->items[roll->itemSlot]);
-    if (player && player->GetSession())
-    {
-        ItemPosCountVec dest;
-        InventoryResult msg = player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, roll->itemid, item->count);
-        if (msg == EQUIP_ERR_OK)
-        {
-            item->is_looted = true;
-            roll->getLoot()->NotifyItemRemoved(roll->itemSlot);
-            --roll->getLoot()->unlootedCount;
-            sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
-                player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
-
-            sDBLogger->LogLoot(
-                {
-                    player->GetGUIDLow(),
-                    player->GetName(),
-                    player->GetSession()->GetAccountId(),
-                    player->GetSession()->GetRemoteAddress(),
-                    LogLoot::SourceType(roll->lootedTargetGUID),
-                    roll->lootedTargetGUID.GetCounter(),
-                    roll->lootedTargetGUID.GetEntry(),
-                    0,
-                    item->itemid,
-                    item->count,
-                    LogLoot::TypeRoll
-                });
-            
-
-            if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
-                player->OnReceivedItem(newItem);
-        }
-        else
-        {
-            item->is_blocked = false;
-            item->lootOwner = playerGuid;
-            player->SendEquipError(msg, nullptr, nullptr, roll->itemid);
-        }
-    }
+    item->lootOwner = playerGuid;
+    item->is_blocked = false;
 
     delete roll;
 }
@@ -1130,25 +1082,22 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
     // Turtle:: Make raid looted items not appear soul bound.
     const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem, Creature* creature)
     {
-        if (player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
+        auto itemProto = newitem->GetProto();
+        if (player->GetMap()->IsRaid() && creature && itemProto && (creature->IsWorldBoss() || itemProto->Quality >= ITEM_QUALITY_RARE))
         {
-            auto itemProto = newitem->GetProto();
-            if (itemProto)
+            if (!lootItem.freeforall && itemProto->Stackable <= 1)
             {
-                if (!lootItem.freeforall && itemProto->Stackable <= 1)
+                newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
                 {
-                    newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
-                    for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
+                    if (Player* pMember = itr->getSource())
                     {
-                        if (Player* pMember = itr->getSource())
-                        {
-                            if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
-                                newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
-                        }
+                        if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
+                            newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
                     }
-                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
-                    newitem->SendCreateUpdateToPlayer(player);
                 }
+                //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                newitem->SendCreateUpdateToPlayer(player);
             }
         }
     };
@@ -1192,7 +1141,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
 
-                    sDBLogger->LogLoot(
+                    sDBLogger.LogLoot(
                         {
                             player->GetGUIDLow(),
                             player->GetName(),
@@ -1262,7 +1211,7 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     sLog.out(LOG_LOOTS, "%s wins greed roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
 
-                    sDBLogger->LogLoot(
+                    sDBLogger.LogLoot(
                         {
                             player->GetGUIDLow(),
                             player->GetName(),
@@ -1391,6 +1340,26 @@ void Group::SendTargetIconList(WorldSession *session)
 
 void Group::SendUpdate()
 {
+    // sending full group list update clears marked targets when not in a raid, so we need to resend them
+    std::unique_ptr<WorldPacket> markedTargets;
+    if (!isRaidGroup())
+    {
+        for (int i = 0; i < TARGET_ICON_COUNT; ++i)
+        {
+            if (!m_targetIcons[i])
+                continue;
+
+            if (!markedTargets)
+            {
+                markedTargets = std::make_unique<WorldPacket>(MSG_RAID_TARGET_UPDATE, (1 + TARGET_ICON_COUNT * 9));
+                *markedTargets << uint8(1); // 1 - full icon list, 0 - delta update
+            }
+
+            *markedTargets << uint8(i);
+            *markedTargets << m_targetIcons[i];
+        }
+    }
+
     for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
     {
         Player *player = sObjectMgr.GetPlayer(citr->guid);
@@ -1423,16 +1392,16 @@ void Group::SendUpdate()
         {
             data << uint8(m_lootMethod);                    // loot method
             if (GetLootMethod() == MASTER_LOOT)
-            {
                 data << m_looterGuid;                       // looter guid
-            }
             else
-            {
-                data << ObjectGuid(uint64_t(0));
-            }
+                data <<uint64(0);
             data << uint8(m_lootThreshold);                 // loot threshold
+            data << uint8(0);                               // dungeon difficulty
         }
         player->GetSession()->SendPacket(&data);
+
+        if (markedTargets)
+            player->GetSession()->SendPacket(markedTargets.get());
     }
 }
 
@@ -2553,19 +2522,6 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
         SetLooterGuid(0);
         SendUpdate();
     }
-
-    // SendUpdate clears the target icons, send an icon update
-    if (!isRaidGroup()) 
-    {
-        for (const auto& itr : m_memberSlots)
-        {
-            Player* player = sObjectMgr.GetPlayer(itr.guid);
-            if (!player || !player->GetSession() || player->GetGroup() != this)
-                continue;
-
-            SendTargetIconList(player->GetSession());
-        }
-    }
 }
 
 bool Group::HandleHardcoreInteraction(Player * invitee)
@@ -2587,7 +2543,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
                 level = pCache->uiLevel;
             }
 
-            bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+            bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60);
 
             if (memberIsHardcore)
             {

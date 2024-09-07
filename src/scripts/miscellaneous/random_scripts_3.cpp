@@ -2,6 +2,10 @@
 #include "Utilities/EventProcessor.h"
 #include "GuardAI.h"
 #include "PetAI.h"
+#include "Language.h"
+#include "MountManager.hpp"
+#include "CompanionManager.hpp"
+#include "Shop/ShopMgr.h"
 
 template <typename Functor>
 void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
@@ -350,219 +354,246 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
     {
         switch (pCreature->GetEntry())
         {
-        case 60441: // Torble Sparksprocket
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66372);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+            case 60441: // Torble Sparksprocket
+                DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->SetVisibility(VISIBILITY_ON);
-                }
+                    npc->MonsterSay(66372);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->SetVisibility(VISIBILITY_ON);
+                    }
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x51->MonsterSay(66373);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66373);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 7 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66374);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66374);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 9 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66374);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66374);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 11 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66375);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66375);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66376);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66376);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66377);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 20 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66378);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66377);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66379);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 25 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66380);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66378);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66381);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 30 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66382);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66379);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66383);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 35 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66384);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66380);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer(67026, player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                DoAfterTime(pCreature, 40 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x51->MonsterSay(66386);
-                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
-                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                    analyzer_x51->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }
+                    npc->MonsterSay(66381);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            break;
+                DoAfterTime(pCreature, 45 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66382);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 50 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66383);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pCreature, 55 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x51 = npc->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66384);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npcGuid = pCreature->GetObjectGuid()]()
+                {
+                    if (Creature* npc = player->GetMap()->GetCreature(npcGuid))
+                    {
+                        npc->MonsterSayToPlayer(67026, player);
+                        npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer]()
+                {
+                    if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                    {
+                        analyzer_x51->MonsterSay(66386);
+                        analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
+                            player->KilledMonster(cInfo, ObjectGuid());
+                    }
+                });
+                break;
 
-        case 60443: // Kex Blowmaster
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66387);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+            case 60443: // Kex Blowmaster
+                DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->SetVisibility(VISIBILITY_ON);
-                }
+                    npc->MonsterSay(66387);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->SetVisibility(VISIBILITY_ON);
+                    }
                 });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x48->MonsterSay(66373);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66373);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66374);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66374);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66374);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66374);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 15 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66388);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66388);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 20 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66389);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66389);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66390);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 25 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66391);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66390);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66392);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 30 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66393);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66391);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66394);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 35 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66395);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    npc->MonsterSay(66392);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66396);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 40 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66397);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                }
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66393);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
                 });
-            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSay(66398);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                DoAfterTime(pCreature, 45 * IN_MILLISECONDS, [npc = pCreature]()
                 {
-                    analyzer_x48->MonsterSay(66399);
-                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
-                    if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                    analyzer_x48->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }
+                    npc->MonsterSay(66394);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
-            break;
+                DoAfterTime(pCreature, 50 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66395);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 55 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66396);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pCreature, 60 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    if (Creature* analyzer_x48 = npc->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66397);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                });
+                DoAfterTime(pCreature, 65 * IN_MILLISECONDS, [npc = pCreature]()
+                {
+                    npc->MonsterSay(66398);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+                DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer]()
+                {
+                    if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                    {
+                        analyzer_x48->MonsterSay(66399);
+                        analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                        if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60324))
+                            player->KilledMonster(cInfo, ObjectGuid());
+                    }
+                });
+                break;
         }
     }
 
@@ -2010,21 +2041,25 @@ bool QuestAccept_npc_korgan(Player* pPlayer, Creature* pQuestGiver, Quest const*
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 14 * IN_MILLISECONDS, [npc = pQuestGiver]()
+        {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 1449, false);
-            });
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        });
+        DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS, [playerGuid = pPlayer->GetObjectGuid(), npc = pQuestGiver]()
+        {
+            if (Player* player = npc->GetMap()->GetPlayer(playerGuid))
             {
                 npc->MonsterSayToPlayer(66689, player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 if (CreatureInfo const* dummy_bunny = sObjectMgr.GetCreatureTemplate(60344))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-                return true;
             }
-            });
+
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+            return true;
+        });
     }
 
     return false;
@@ -7235,7 +7270,7 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
         {
             Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
 
-            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            //pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -7346,8 +7381,13 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
                     pQuestGiver->HandleEmote(EMOTE_STATE_STAND);
                 }, 59000);
 
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            //pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            //    {
+            //        pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            //    }, 60000);
+
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer]()
+            {
                 if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(60053))
                 {
                     player->KilledMonster(cInfo, ObjectGuid());
@@ -7364,7 +7404,7 @@ bool QuestAccept_npc_rommath(Player* pPlayer, Creature* pQuestGiver, Quest const
                         }
                     }
                 }
-                });
+            });
         }
     }
 
@@ -7453,12 +7493,509 @@ bool GossipSelect_Christmas_Entity(Player* player, Creature* creature, uint32 se
     return true;
 }
 
+bool QuestAccept_npc_daily_hk_dk(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    // Forcibly send quest data to player to update player name in cache.
+    WorldPacket data(CMSG_QUEST_QUERY, 4);
+    data << uint32(pQuest->GetQuestId());
+    pPlayer->GetSession()->HandleQuestQueryOpcode(data);
+    pQuestGiver->MonsterWhisper(pQuest->GetEndText().c_str(), pPlayer);
+
+    return false;
+}
+
+enum
+{
+    GOSSIP_WHICH_ITEM = 61905,
+    GOSSIP_CONFIRM_REFUND = 61906,
+};
+
+inline bool CanRefundShopItem(ShopLogEntry* pEntry, Player* player)
+{
+    if (!pEntry->refunded && pEntry->charGuid == player->GetGUIDLow() &&
+        (pEntry->dateUnix + sWorld.getConfig(CONFIG_UINT32_SHOP_REFUND_WINDOW)) > time(nullptr))
+    {
+
+        auto shopEntry = sObjectMgr.GetShopEntryInfo(pEntry->itemEntry);
+        //no skins illu's or fashion in auto refund.
+        if (!shopEntry || (shopEntry->Category == 2 || shopEntry->Category == 7 || shopEntry->Category == 8))
+            return false;
+
+
+        //brainwashing device
+        if (shopEntry->Item == 51715)
+            return false;
+
+        if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry))
+        {
+            // Has the item - okay in any case
+            if (player->HasItemCount(pEntry->itemEntry))
+            {
+                return true;
+            }
+            // Skins - check if skin is applied
+            else if (pProto->Spells[0].SpellId == 56053)
+            {
+                if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(pEntry->itemEntry))
+                {
+                    uint8 skinId = player->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
+                    return skinId != 0 && player->GetByteValue(PLAYER_BYTES, 0) == skinId;
+                }
+            }
+            // Mounts - check if spell is learned
+            else if (pProto->Spells[0].SpellId == 46499)
+            {
+                if (auto spellIdOpt = sMountMgr.GetMountSpellId(pEntry->itemEntry))
+                {
+                    return player->HasSpell(spellIdOpt.value());
+                }
+            }
+            // Pets - check if spell is learned
+            else if (pProto->Spells[0].SpellId == 46498)
+            {
+                if (auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(pEntry->itemEntry))
+                {
+                    return player->HasSpell(spellIdOpt.value());
+                }
+            }
+        }
+    }
+    return false;
+}
+
+static std::map<uint32 /*low guid*/, uint32 /*shopId*/> g_refundGossipState;
+
+bool GossipHello_ShopRefundNPC(Player* player, Creature* creature)
+{
+    auto history = sObjectMgr.GetShopLogEntries(player->GetSession()->GetAccountId());
+
+    uint32 count = 0;
+    for (auto itr : history)
+    {
+        if (CanRefundShopItem(itr, player))
+        {
+            if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr->itemEntry))
+            {
+                std::string const* name = &pProto->Name1;
+                int loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+                if (loc_idx >= 0)
+                {
+                    ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->ItemId);
+                    if (il)
+                    {
+                        if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
+                            name = &il->Name[loc_idx];
+                    }
+                }
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_2, name->c_str(), GOSSIP_SENDER_MAIN, itr->id);
+
+                if (++count >= GOSSIP_MAX_MENU_ITEMS)
+                    break;
+            }
+        }
+    }
+
+    player->SEND_GOSSIP_MENU(GOSSIP_WHICH_ITEM, creature->GetGUID());
+    return true;
+}
+
+// return true if item is consumable, and its effect was removed
+// in that case there is no need to remove actual item from inventory
+// this fixes case where you've bought same consumable item twice,
+// and used it once, and refunding it ends up deleting both
+bool RemoveSpecialEffectOnRefund(uint32 itemId, uint32 spellId, Player* pPlayer)
+{
+    // Skins - unapply skin
+    if (spellId == 56053)
+    {
+        if (CustomCharacterSkinEntry const* pCustomSkin = sObjectMgr.GetCustomCharacterSkin(itemId))
+        {
+            uint8 skinId = pPlayer->GetGender() == GENDER_MALE ? pCustomSkin->male_id : pCustomSkin->female_id;
+            if (skinId != 0 && pPlayer->GetByteValue(PLAYER_BYTES, 0) == skinId)
+            {
+                uint8 originalSkinId = 0;
+
+                auto originalSkinOpt = pPlayer->GetPlayerVariable(PlayerVariables::OriginalSkinByte);
+
+                if (originalSkinOpt)
+                {
+                    int32 skin = 0;
+                    try {
+                        skin = std::stoi(originalSkinOpt.value());
+                    }
+                    catch (...) {}
+
+                    if (skin > 0)
+                        originalSkinId = static_cast<uint8>(skin);
+                }
+
+                pPlayer->SetByteValue(PLAYER_BYTES, 0, originalSkinId);
+                pPlayer->SetDisplayId(15435);
+                pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() {pPlayer->DeMorph(); }, 1000);
+                return false; // non consumable
+            }
+        }
+    }
+    // Mounts - unlearn the spell
+    else if (spellId == 46499)
+    {
+        if (auto spellIdOpt = sMountMgr.GetMountSpellId(itemId))
+        {
+            if (pPlayer->HasSpell(spellIdOpt.value()))
+            {
+                pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                pPlayer->RemoveAurasDueToSpellByCancel(spellIdOpt.value());
+                return true; // consumable
+            }
+        }
+    }
+    // Pets - unlearn the spells
+    else if (spellId == 46498)
+    {
+        if (auto spellIdOpt = sCompanionMgr.GetCompanionSpellId(itemId))
+        {
+            if (pPlayer->HasSpell(spellIdOpt.value()))
+            {
+                pPlayer->RemoveSpell(spellIdOpt.value(), false, false);
+                if (Pet* pPet = pPlayer->GetMiniPet())
+                    pPet->DoKillUnit();
+                return true; // consumable
+            }
+        }
+    }
+    // Illusions - demorph
+    else if (spellId == 46003)
+    {
+        pPlayer->DeMorph();
+        return false; // non consumable
+    }
+
+    // no special handling, make sure item is removed
+    return false;
+}
+
+bool GossipSelect_ShopRefundNPC(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    uint32& shopId = g_refundGossipState[pPlayer->GetGUIDLow()];
+    if (shopId)
+    {
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        {
+            if (ShopLogEntry* pEntry = sObjectMgr.GetShopLogEntry(shopId))
+            {
+                if (CanRefundShopItem(pEntry, pPlayer))
+                {
+                    ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(pEntry->itemEntry);
+
+                    if (!RemoveSpecialEffectOnRefund(pEntry->itemEntry, pProto->Spells[0].SpellId, pPlayer))
+                    {
+                        uint32 countBefore = pPlayer->GetItemCount(pEntry->itemEntry);
+                        pPlayer->DestroyItemCount(pEntry->itemEntry, 1, true, false);
+
+                        if (pPlayer->GetItemCount(pEntry->itemEntry) == countBefore)
+                        {
+                            ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_CANT_REMOVE);
+                            pPlayer->CLOSE_GOSSIP_MENU();
+                            return true;
+                        }
+                    }
+
+                    //Remove existing xmogs that reference refunded item if wearable, remove xmog history.
+                    pPlayer->RemoveTransmogsToItem(pEntry->itemEntry);
+
+                    pEntry->refunded = true;
+                    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", pEntry->itemPrice, pPlayer->GetSession()->GetAccountId());
+                    LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE `id` = %u", shopId);
+                    sLog.outString("[SHOP] Player %u refunded shop id %u for %u coins through refund npc.", pPlayer->GetGUIDLow(), shopId, pEntry->itemPrice);
+                    ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_REFUNDED, shopId);
+                }
+                else
+                    ChatHandler(pPlayer).SendSysMessage(LANG_SHOP_ITEM_NOT_ELIGIBLE);
+            }
+            else
+                ChatHandler(pPlayer).PSendSysMessage(LANG_SHOP_ITEM_NOT_FOUND, shopId);
+        }
+
+        shopId = 0;
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    else
+    {
+        shopId = uiAction;
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, pPlayer->GetSession()->GetMangosString(LANG_NO), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 0);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, pPlayer->GetSession()->GetMangosString(LANG_YES), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_CONFIRM_REFUND, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+enum
+{
+    GOSSIP_REFUND_EGG_ITEMS = 64000
+};
+
+
+std::unordered_map<uint32, std::vector<PlayerEggLoot>> playerEggLoot;
+
+uint32 currentEggId = 0;
+
+bool GossipHello_EggRefundNPC(Player* player, Creature* creature)
+{
+    auto& eggItems = playerEggLoot[player->GetGUIDLow()];
+
+    uint32 count = 0;
+    for (const auto& eggLoot : eggItems)
+    {
+        Item* targetItem = nullptr;
+        player->ApplyForAllItems([&targetItem, itemGuid = eggLoot.ItemGuid](Item* item)
+            {
+                if (targetItem)
+                    return;
+
+                if (item->GetGUIDLow() == itemGuid && !item->IsEquipped())
+                    targetItem = item;
+            });
+
+        if (!eggLoot.Refunded && targetItem)
+        {
+            if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(eggLoot.ItemId))
+            {
+                std::string const* name = &pProto->Name1;
+                int loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+                if (loc_idx >= 0)
+                {
+                    ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->ItemId);
+                    if (il)
+                    {
+                        if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
+                            name = &il->Name[loc_idx];
+                    }
+                }
+                std::string msg = *name;
+                msg += " -> 40 tokens";
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, msg.c_str(), GOSSIP_SENDER_MAIN, eggLoot.Id);
+
+                if (++count >= GOSSIP_MAX_MENU_ITEMS)
+                    break;
+            }
+        }
+    }
+    player->SEND_GOSSIP_MENU(GOSSIP_REFUND_EGG_ITEMS, creature->GetGUID());
+
+    return true;
+}
+
+
+bool GossipSelect_EggRefundNPC(Player* player, Creature* creature, uint32 /*uiSender*/, uint32 action)
+{
+    auto& eggLoot = playerEggLoot[player->GetGUIDLow()];
+
+    auto itr = std::find_if(eggLoot.begin(), eggLoot.end(), [action](PlayerEggLoot& loot) { return action == loot.Id; });
+    if (itr != eggLoot.end())
+    {
+
+        Item* targetItem = nullptr;
+        player->ApplyForAllItems([&targetItem, itemGuid = itr->ItemGuid](Item* item)
+            {
+                if (targetItem)
+                    return;
+
+                if (item->GetGUIDLow() == itemGuid && !item->IsEquipped())
+                    targetItem = item;
+            });
+
+        if (!itr->Refunded && targetItem)
+        {
+            player->DestroyItem(targetItem->GetBagSlot(), targetItem->GetSlot(), true);
+            itr->Refunded = true;
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = (`coins`+%u) WHERE `id` = %u", 40, player->GetSession()->GetAccountId());
+            CharacterDatabase.PExecute("UPDATE `character_egg_loot` SET refunded = 1 WHERE `id` = %u", itr->Id);
+        }
+        player->SaveInventoryAndGoldToDB();
+    }
+
+    player->CLOSE_GOSSIP_MENU();
+
+    return true;
+}
+
+
+void LoadPlayerEggLoot()
+{
+    auto result = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT * FROM character_egg_loot"));
+
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+            PlayerEggLoot loot{ fields[0].GetUInt32(), fields[1].GetUInt32(), fields[2].GetUInt32() , fields[3].GetUInt32(), fields[4].GetBool() };
+            playerEggLoot[loot.PlayerGuid].push_back(std::move(loot));
+        } while (result->NextRow());
+    }
+
+    result = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT MAX(id) FROM character_egg_loot"));
+
+    if (result)
+        currentEggId = (*result)[0].GetUInt32();
+}
+
+
+bool ItemUseSpell_easter_egg(Player* player, Item* item, const SpellCastTargets&)
+{
+    static std::map<uint32, uint32> weightedDrops;
+
+    static uint32 currentKey = 0;
+
+    if (!currentKey)
+    {
+        std::vector<uint32> possibleItemIds =
+        {
+            12303, 13582, 13584, 18768, 23193, 23705, 50003, 50004, 50005, 50007,
+            50009, 50011, 50081, 50399, 50400, 50407, 50602, 51421, 51700, 51715,
+            51891, 60982, 69001, 69002, 69004, 69006, 80430, 80449, 81081, 81082,
+            81085, 81091, 81102, 81152, 81153, 81155, 81158, 81207, 81231, 81232,
+            81234, 81235, 81236, 81258, 83150, 83300, 83301, 83302,
+            92011, 92012, 92013, 92014, 92016, 92017, 92018, 92019
+        };
+
+        if (sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+        {
+            //clouds on CN
+            possibleItemIds.push_back(81239);
+            possibleItemIds.push_back(81240);
+        }
+
+        for (uint32 itemId : possibleItemIds)
+        {
+            if (auto shopInfo = sObjectMgr.GetShopEntryInfo(itemId))
+            {
+                currentKey += static_cast<uint32>(ceil(10'000 / shopInfo->Price));
+                weightedDrops[currentKey] = itemId;
+            }
+            else
+            {
+                //Shop-exclusive drops, semi-hardcoded for now.
+                uint32 price = 100;
+
+                uint32 normalPets[] = { 13582, 50081, 69001, 69002, 81152, 92016};
+                uint32 shirts[] = { 92011, 92012, 92013, 92014, 92019 };
+
+
+                if (std::find(std::begin(normalPets), std::end(normalPets), itemId) != std::end(normalPets))
+                {
+                    price = 100;
+                }
+                else if (itemId == 51700 || itemId == 51891) // special pets
+                    price = 150;
+                else if (std::find(std::begin(shirts), std::end(shirts), itemId) != std::end(shirts))
+                {
+                    price = 250;
+                }
+                else if (itemId == 60982) // socks
+                    price = 300;
+                else
+                {
+                    //mounts
+                    price = 300;
+                }
+
+
+                currentKey += static_cast<uint32>(ceil(10'000 / price));
+                weightedDrops[currentKey] = itemId;
+            }
+        }
+
+        /*int idx = 0;
+        float totalOdds = 0.f;
+        uint32 maxKey = weightedDrops.rbegin()->first;
+        if (FILE* pFile = fopen("eggodds.txt", "w"))
+        {
+            for (const auto& [key, val] : weightedDrops)
+            {
+                float odd = (float)(key - idx) / maxKey * 100;
+                idx = key;
+                totalOdds += odd;
+                auto proto = sObjectMgr.GetItemPrototype(val);
+                fprintf(pFile, "Item %s (%u) has odds %.2f.\n", proto->Name1.c_str(), val, odd);
+            }
+            fprintf(pFile, "Total odds : %.2f", totalOdds);
+            fclose(pFile);
+        }*/
+    }
+
+    uint32 rand = urand(0, currentKey);
+    auto itr = weightedDrops.lower_bound(rand);
+
+    if (itr != weightedDrops.end())
+    {
+        auto lootedItem = player->AddItem(itr->second);
+        if (lootedItem)
+        {
+            uint32 eggId = ++currentEggId;
+            item->preventCancel = true;
+            player->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+            playerEggLoot[player->GetGUIDLow()].push_back(PlayerEggLoot{ eggId, player->GetGUIDLow(), lootedItem->GetEntry(), lootedItem->GetGUIDLow(), false });
+            CharacterDatabase.PExecute("INSERT INTO character_egg_loot VALUES (%u, %u, %u, %u, 0)",
+                eggId, player->GetGUIDLow(), lootedItem->GetEntry(), lootedItem->GetGUIDLow());
+            player->SaveInventoryAndGoldToDB();
+        }
+        else
+            ChatHandler(player).SendSysMessage("Try again!");
+    }
+
+    return true;
+}
+
+struct npc_froggerAI : public ScriptedPetAI
+{
+    npc_froggerAI(Creature* pCreature) : ScriptedPetAI(pCreature) { Reset(); }
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override { }
+    void EnterCombat() { }
+
+    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
+    {
+        if (m_creature && m_creature->IsAlive())
+        {
+            if (uiEmote == TEXTEMOTE_KISS && !pPlayer->HasAura(25199))
+            {
+                m_creature->MonsterSay(66707);
+                pPlayer->CastSpell(pPlayer, 25199, false);
+            }
+        }
+    }
+
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_frogger(Creature* pCreature)
+{
+    return new npc_froggerAI(pCreature);
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     Script* pNewScript;
+
+    newscript = new Script;
+    newscript->Name = "npc_frogger";
+    newscript->GetAI = &GetAI_npc_frogger;
+    newscript->RegisterSelf();
 
     pNewScript = new Script;
     pNewScript->Name = "npc_snow_vendor";
@@ -8385,4 +8922,26 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_compact_harvest_reaper";
     newscript->GetAI = &GetAI_npc_compact_harvest_reaper;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_daily_hk_dk";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_daily_hk_dk;
+    newscript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_shop_refund";
+    pNewScript->pGossipHello = &GossipHello_ShopRefundNPC;
+    pNewScript->pGossipSelect = &GossipSelect_ShopRefundNPC;
+    pNewScript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_easter_egg";
+    newscript->pItemUseSpell = &ItemUseSpell_easter_egg;
+    newscript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_egg_hunter";
+    pNewScript->pGossipHello = &GossipHello_EggRefundNPC;
+    pNewScript->pGossipSelect = &GossipSelect_EggRefundNPC;
+    pNewScript->RegisterSelf();
 }

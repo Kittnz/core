@@ -51,6 +51,7 @@
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>
 #include "SuspiciousStatisticMgr.h"
+#include "PerfStats.h"
 
 bool QuaternionData::isUnit() const
 {
@@ -91,6 +92,8 @@ GameObject::GameObject() : WorldObject(),
     m_playerGroupId = 0;
 	m_bTemporaryNonInteracted = false;
     m_summonTarget = ObjectGuid();
+
+    ++PerfStats::g_totalGameObjects;
 }
 
 GameObject::~GameObject()
@@ -109,6 +112,8 @@ GameObject::~GameObject()
     delete m_model;
 
     MANGOS_ASSERT(m_spellDynObjects.empty());
+
+    --PerfStats::g_totalGameObjects;
 }
 
 bool CanOnlyBeLootedByPlayersOnMapAtSpawn(uint32 entry)
@@ -223,7 +228,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
         return false;
     }
 
-    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), goinfo->size));
+    SetObjectScale(sGuidObjectScaling.GetScale(GetGUID(), goinfo->size));
 
     SetFloatValue(GAMEOBJECT_POS_X, x);
     SetFloatValue(GAMEOBJECT_POS_Y, y);
@@ -702,8 +707,8 @@ uint32 GameObjectData::ComputeRespawnDelay(uint32 respawnDelay) const
 {
     if (spawn_flags & SPAWN_FLAG_RANDOM_RESPAWN_TIME)
         respawnDelay = uint32(float(respawnDelay * urand(90, 110)) / 100.f);
-    if (spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
-        respawnDelay = uint32(float(respawnDelay * BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount()));
+    if (spawn_flags & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME && sWorld.GetActiveSessionCount() > sWorld.m_dynamicRespawnRatio)
+        respawnDelay *= sWorld.m_dynamicRespawnRatio;
     return respawnDelay;
 }
 
@@ -1683,7 +1688,9 @@ void GameObject::Use(Unit* user)
                     // 2) if skill == base_zone_skill => 5% chance
                     // 3) chance is linear dependence from (base_zone_skill-skill)
 
+#ifdef USE_ANTICHEAT
                     sSuspiciousStatisticMgr.OnFishingAttempt(player);
+#endif
 
                     uint32 zone, subzone;
                     GetZoneAndAreaId(zone, subzone);

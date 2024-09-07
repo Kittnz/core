@@ -61,6 +61,8 @@ enum
     SPELL_BERSERK                       = 28498,
 
     SPELL_DISPELL_SHACKLES              = 28471,            // not used, doing it "manually"
+
+    SPELL_SUMMON_PLAYER                 = 25104,
 };
 
 enum AddSpells
@@ -108,6 +110,8 @@ enum Events
 
 // the shiny thing in center that despawns after pull
 static constexpr float pullPortal[3] = { 3716.379883f, -5106.779785f, 132.9f };
+static constexpr float ROOM_RADIUS = 82.0f;
+static constexpr float ROOM_FLOOR_Z = 142.0f;
 
 // Center position of each alcove
 static constexpr uint32 NUM_ALCOVES = 7;
@@ -376,6 +380,11 @@ struct boss_kelthuzadAI : public ScriptedAI
             m_pInstance->SetData(TYPE_KELTHUZAD, DONE);
         
         EvadeAllGuardians();
+
+        std::list<GameObject*> targets;
+        m_creature->GetGameObjectListWithEntryInGrid(targets, 180322, 100.0f);
+        for (auto const& pGo : targets)
+            pGo->AddObjectToRemoveList();
     }
 
     void MoveInLineOfSight(Unit* /*pWho*/) override {}
@@ -475,6 +484,19 @@ struct boss_kelthuzadAI : public ScriptedAI
             events.ScheduleEvent(EVENT_ABOMINATION, i);
         for (uint32 i : soulweaverSpawnMs)
             events.ScheduleEvent(EVENT_SOUL_WEAVER, i);
+
+        auto const& pList = m_creature->GetMap()->GetPlayers();
+        for (auto const& itr : pList)
+        {
+            if (Player* pPlayer = itr.getSource())
+            {
+                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() &&
+                    pPlayer->GetDistance3dToCenter(pullPortal[0], pullPortal[1], ROOM_FLOOR_Z) > ROOM_RADIUS)
+                {
+                    pPlayer->NearTeleportTo(pullPortal[0], pullPortal[1], ROOM_FLOOR_Z, pPlayer->GetOrientation());
+                }
+            }
+        }
 
         m_pInstance->DoUseDoorOrButton(pullPortalGuid);
 
@@ -964,6 +986,16 @@ struct mob_abomAI : public kt_p1AddAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+        {
+            if (!m_creature->CanReachWithMeleeAutoAttack(pPlayer) &&
+               (pPlayer->GetPositionZ() - m_creature->GetPositionZ() > 5.0f) &&
+                !pPlayer->IsBeingTeleported() && !m_creature->IsWithinLOSInMap(pPlayer))
+            {
+                m_creature->CastSpell(pPlayer, SPELL_SUMMON_PLAYER, true);
+            }
+        }
+
         if (mortalWoundTimer < diff)
         {
             if(m_creature->GetVictim() && m_creature->CanReachWithMeleeAutoAttack(m_creature->GetVictim()))
@@ -994,15 +1026,9 @@ struct mob_soldierAI : public kt_p1AddAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
         if (!m_creature->HasAura(SPELL_DARK_BLAST_AUR))
             m_creature->CastSpell(m_creature, SPELL_DARK_BLAST_AUR, true);
-
-        //if (m_creature->GetVictim() && m_creature->GetVictim()->IsPlayer()) 
-        //{
-        //    bool inVisibleList = m_creature->GetVictim()->ToPlayer()->IsInVisibleList(m_creature);
-        //    sLog.outBasic("%s visible: %d", m_creature->GetVictim()->GetName(), inVisibleList);
-        //}
-        //m_creature->ForceValuesUpdateAtIndex(UNIT_FIELD_TARGET);
 
         // to avoid melees being able to dps while casters hold aggro, this is most likely a logic that's supposed to exist
         if (Unit* pNearest = m_creature->SelectAttackingTarget(ATTACKING_TARGET_NEAREST, 0))
@@ -1012,6 +1038,17 @@ struct mob_soldierAI : public kt_p1AddAI
                 ScriptedAI::AttackStart(pNearest);
             }
         }
+
+        if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+        {
+            if (!m_creature->CanReachWithMeleeAutoAttack(pPlayer) &&
+               (pPlayer->GetPositionZ() - m_creature->GetPositionZ() > 5.0f) &&
+                !pPlayer->IsBeingTeleported() && !m_creature->IsWithinLOSInMap(pPlayer))
+            {
+                m_creature->CastSpell(pPlayer, SPELL_SUMMON_PLAYER, true);
+            }
+        }
+
         DoMeleeAttackIfReady();
     }
 };
@@ -1036,6 +1073,7 @@ struct mob_soulweaverAI : public kt_p1AddAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
         if (!m_creature->HasAura(SPELL_WAIL_SOULS_AUR))
             m_creature->CastSpell(m_creature, SPELL_WAIL_SOULS_AUR, true);
 
@@ -1047,6 +1085,17 @@ struct mob_soulweaverAI : public kt_p1AddAI
                 ScriptedAI::AttackStart(pNearest);
             }
         }
+
+        if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+        {
+            if (!m_creature->CanReachWithMeleeAutoAttack(pPlayer) &&
+               (pPlayer->GetPositionZ() - m_creature->GetPositionZ() > 5.0f) &&
+                !pPlayer->IsBeingTeleported() && !m_creature->IsWithinLOSInMap(pPlayer))
+            {
+                m_creature->CastSpell(pPlayer, SPELL_SUMMON_PLAYER, true);
+            }
+        }
+
         DoMeleeAttackIfReady();
     }
 };
@@ -1063,6 +1112,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
     void Reset() override
     {
         bloodTapTimer = 18000; // from classic logs
+        m_creature->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING);
     }
     void JustReachedHome() override
     {

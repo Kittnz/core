@@ -26,6 +26,8 @@
 #include <stack>
 #include <vector>
 
+#include "MoveSpline.h"
+
 class MovementGenerator;
 class Unit;
 
@@ -131,6 +133,7 @@ class MotionMaster : std::stack<MovementGenerator *>
         void MoveConfused();
         void MoveFleeing(Unit* enemy, uint32 time = 0);
         void MoveFeared(Unit* enemy, uint32 time = 0);
+        void MovePoint(uint32 id, const Movement::Location& location, uint32 options = MOVE_NONE, float speed = 0.0f, float finalOrientation = -10);
         void MovePoint(uint32 id, float x, float y, float z, uint32 options = MOVE_NONE, float speed = 0.0f, float finalOrientation = -10);
         void MoveSeekAssistance(float x,float y,float z);
         void MoveSeekAssistanceDistract(uint32 timer);

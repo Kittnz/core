@@ -1188,6 +1188,45 @@ CreatureAI* GetAI_npc_arcanite_dragonling(Creature* pCreature)
 }
 
 /*######
+## mithril dragonling
+######*/
+
+struct npc_mithril_dragonlingAI : ScriptedPetAI
+{
+	explicit npc_mithril_dragonlingAI(Creature* pCreature) : ScriptedPetAI(pCreature)
+	{
+		m_creature->SetCanModifyStats(true);
+		m_creature->GetCharmInfo()->SetReactState(REACT_AGGRESSIVE);
+		npc_mithril_dragonlingAI::Reset();
+	}
+
+	uint32 m_flamebreathTimer;
+
+	void Reset() override
+	{
+		m_flamebreathTimer = urand(10000, 60000);
+	}
+
+	void UpdatePetAI(const uint32 uiDiff) override
+	{
+		if (m_flamebreathTimer < uiDiff)
+		{
+			if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAME_BREATH) == CAST_OK)
+				m_flamebreathTimer = urand(10000, 60000);
+		}
+		else
+			m_flamebreathTimer -= uiDiff;
+
+		ScriptedPetAI::UpdatePetAI(uiDiff);
+	}
+};
+
+CreatureAI* GetAI_npc_mithril_dragonling(Creature* pCreature)
+{
+	return new npc_mithril_dragonlingAI(pCreature);
+}
+
+/*######
 ## Emerald Dragon Whelp
 ######*/
 
@@ -1316,13 +1355,26 @@ struct npc_the_cleanerAI : public ScriptedAI
         if (m_uiDespawnTimer < uiDiff)
         {
             if (m_creature->GetThreatManager().getThreatList().empty())
+            {
                 m_creature->ForcedDespawn();
+                return;
+            }
         }
         else
             m_uiDespawnTimer -= uiDiff;
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+        {
+            if (pPlayer->IsHardcore())
+            {
+                m_creature->GetThreatManager().modifyThreatPercent(pPlayer, -101);
+                pPlayer->TeleportToHomebind();
+                return;
+            }
+        }
 
         DoMeleeAttackIfReady();
     }
@@ -2288,7 +2340,9 @@ struct npc_kwee_peddlefeetAI : public ScriptedAI
         if (!sGameEventMgr.IsActiveEvent(EVENT_LOVE_IS_IN_THE_AIR))
         {
             SetVariables();
-            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+
+            // Turtle: allow turning in the quests
+            // m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
         Reset();
     }
@@ -2424,6 +2478,10 @@ bool GossipHello_npc_kwee_peddlefeet(Player* pPlayer, Creature* pCreature)
     {
         if (npc_kwee_peddlefeetAI* kweeAI = dynamic_cast<npc_kwee_peddlefeetAI*>(pCreature->AI()))
         {
+            // Turtle: allow turning in the quests
+            if (pCreature->IsQuestGiver())
+                pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
             uint32 faction = kweeAI->winningFaction;
             uint32 textId = faction == VAR_KWEE_HORDE ? TEXT_ID_VICTORY_H : faction == VAR_KWEE_ALLIANCE ? TEXT_ID_VICTORY_A : TEXT_ID_TIE;
             pPlayer->PlayerTalkClass->SendGossipMenu(textId, pCreature->GetObjectGuid());
@@ -2708,6 +2766,11 @@ void AddSC_random_scripts_0()
     newscript->Name = "npc_arcanite_dragonling";
     newscript->GetAI = &GetAI_npc_arcanite_dragonling;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "npc_mithril_dragonling";
+	newscript->GetAI = &GetAI_npc_mithril_dragonling;
+	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_emerald_dragon_whelp";

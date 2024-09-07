@@ -20,7 +20,7 @@ class WardenScanMgr
         // these are stored as shared pointers to allow this collection to be emptied (presumably in the
         // process of repopulating it) without invalidating pointers held elsewhere, namely in the queues
         // of existing clients
-        std::vector<std::shared_ptr<const Scan>> m_scans;
+        turtle_vector<std::shared_ptr<const Scan>, Category_Anticheat> m_scans;
 
     public:
         // load static scans from database
@@ -37,6 +37,6 @@ class WardenScanMgr
         std::vector<std::shared_ptr<const Scan>> GetRandomScans(ScanFlags flags) const;
 };
 
-#define sWardenScanMgr MaNGOS::Singleton<WardenScanMgr>::Instance()
+extern WardenScanMgr sWardenScanMgr;
 
 #endif /*!__WARDENSCANMGR_HPP_*/

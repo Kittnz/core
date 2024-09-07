@@ -19,8 +19,6 @@
 #include <string>
 #include <fstream>
 
-INSTANTIATE_SINGLETON_1(WardenModuleMgr);
-
 namespace
 {
 std::vector<std::string> GetModuleNames(const std::string &moduleDir)
@@ -53,12 +51,19 @@ std::vector<std::string> GetModuleNames(const std::string &moduleDir)
 }
 }
 
+WardenModuleMgr sWardenModuleMgr;
+
 WardenModuleMgr::WardenModuleMgr()
+{
+    
+}
+
+void WardenModuleMgr::LoadWardenModules()
 {
     auto const moduleDir = sAnticheatConfig.GetWardenModuleDirectory();
     auto const modules = GetModuleNames(moduleDir);
 
-    for (auto const &mod : modules)
+    for (auto const& mod : modules)
     {
         auto const key = mod.substr(0, mod.length() - 3) + "key";
         auto const cr = mod.substr(0, mod.length() - 3) + "cr";
@@ -72,7 +77,7 @@ WardenModuleMgr::WardenModuleMgr()
             else
                 _macModules.emplace_back(std::move(newMod));
         }
-        catch (const std::runtime_error &)
+        catch (const std::runtime_error&)
         {
             continue;
         }

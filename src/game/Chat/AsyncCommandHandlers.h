@@ -49,6 +49,11 @@ struct PInfoData
     uint32 level = 0;
     uint32 latency = 0;
     uint32 security_flag = 0;
+    std::string tfa_verif;
+    std::string security2;
+    std::string pass_verif;
+    std::string token_key;
+    std::string email_keyword;
     LocaleConstant loc = LOCALE_enUS;
     ObjectGuid target_guid;
     uint32 m_accountId;

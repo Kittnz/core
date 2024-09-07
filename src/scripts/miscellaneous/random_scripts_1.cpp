@@ -344,7 +344,7 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
 
 bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
     {
         pPlayer->GetSession()->SendNotification("Can't change race at this moment!");
         return false;
@@ -359,7 +359,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     switch (pItem->GetEntry())
     {
     case 50603: // Human
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_HUNTER || pPlayer->GetClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -404,7 +404,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         race = RACE_ORC;
         break;
     case 50608: // Troll
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -450,130 +450,49 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         break;
     }
 
+    uint32 freeSpots = 0;
+
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (!pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            ++freeSpots;
+    }
+
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (!pPlayer->GetItemByPos(i, j))
+                    ++freeSpots;
+            }
+        }
+    }
+
+    if (freeSpots < 5)
+    {
+        pPlayer->GetSession()->SendNotification("You need at least 5 free bag slots.");
+        return false;
+    }
+
     bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
 	if (pPlayer->ChangeRace(race, player_gender, bytes, bytes2))
 	{
 		uint32 Count = 1;
 		pPlayer->DestroyItemCount(pItem, Count, false);
+        pPlayer->AddItem(80699, 1); // add appearance token. This should always work because we just removed a race change token from inventory.
 		pPlayer->SaveInventoryAndGoldToDB();
 		//pPlayer->GetSession()->LogoutPlayer(false);
 		return true;
 	}
+    else
+    {
+        pPlayer->GetSession()->SendNotification("Race change failed. You will be disconnected.");
+        //have to disconnect to restore proper state back.
+        pPlayer->GetSession()->LogoutPlayer(false);
+    }
     return false;
-}
-
-bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetRace() == RACE_GOBLIN)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66823, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        if (pPlayer->GetGender() == GENDER_MALE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66824, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_barber_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
-    {
-        uint16 style = 0;
-        uint16 limit = 0;
-        uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
-        limit = pPlayer->GetGender() == GENDER_MALE ? 12 : 14;
-        style = (curr_style == limit) ? 0 : ++curr_style; // byte limit should match the last available option
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        uint16 feature = 0;
-        uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
-        feature = (curr_feature == 3) ? 0 : ++curr_feature;
-
-        pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    pPlayer->SaveToDB();
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetRace() == RACE_GOBLIN)
-    {
-        switch (pPlayer->GetGender())
-        {
-        case GENDER_FEMALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66825, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66826, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            break;
-        case GENDER_MALE:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66827, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, 66828, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-            break;
-        }
-    }
-    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) // goblin females | face
-    {
-        uint16 face = 0;
-        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
-        face = (curr_face == 0) ? 2 : --curr_face;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)  // goblin females | skin
-    {
-        uint16 skintone = 0;
-        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
-        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3) // goblin males | face
-    {
-        uint16 face = 0;
-        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
-        face = (curr_face == 0) ? 3 : --curr_face;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4) // goblin males | skin
-    {
-        uint16 skintone = 0;
-        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
-        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    pPlayer->SaveToDB();
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
 }
 
 bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -896,80 +815,6 @@ bool GOHello_go_portal_to_darnassus(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-enum BountyQuests
-{
-    QUEST_HORDE_PLAYER = 50322,
-    QUEST_ALLIANCE_PLAYER = 50323
-};
-
-bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
-{
-    std::string HordePlayerName{ "H_Empty" };
-    std::string AlliancePlayerName{ "A_Empty" };
-
-
-    QueryResult* result = CharacterDatabase.Query("SELECT horde_player, alliance_player FROM bounty_quest_targets WHERE id = 1");
-    if (result)
-    {
-        auto playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[0].GetUInt32());
-        if (playerData)
-            HordePlayerName = playerData->sName;
-
-        playerData = sObjectMgr.GetPlayerDataByGUID(result->Fetch()[1].GetUInt32());
-        if (playerData)
-            AlliancePlayerName = playerData->sName;
-        delete result;
-    }
-    
-
-    switch (pPlayer->GetTeam())
-    {
-    case ALLIANCE:
-        if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
-        {
-            std::stringstream WantedHordePlayerName;
-            WantedHordePlayerName << "WANTED: " << HordePlayerName;
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
-        break;
-
-    case HORDE:
-
-        if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
-        {
-            std::stringstream WantedAlliancePlayerName;
-            WantedAlliancePlayerName << "WANTED: " << AlliancePlayerName;
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedAlliancePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        }
-        break;
-    case TEAM_NONE:
-    case TEAM_CROSSFACTION:
-        break;
-    default:
-        break;
-    }
-    pPlayer->SEND_GOSSIP_MENU(90325, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1) 
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_HORDE_PLAYER);
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
-    if (action == GOSSIP_ACTION_INFO_DEF + 2) 
-    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
-        pPlayer->AddQuest(pQuest, nullptr);
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 {
     int32 coin = 51600 + urand(0, 45);
@@ -1013,6 +858,13 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
 	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
+
+        if (pPlayer->IsInCombat())
+        {
+            pPlayer->GetSession()->SendNotification("You're in combat.");
+            return false;
+        }
+
         uint32 tabs = GetTabAmount(pPlayer);
 
         std::string activateText{};
@@ -1957,77 +1809,80 @@ enum DressingBoxes
 
 bool GossipHello_rented_mount(Player* player, Creature* mount)
 {    
+    if (player->GetMountID())
+        return false;
+
     switch (mount->GetEntry())
     {
-    case 51560:
-    case 51561:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66850, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
-        return true;
-    case 51580:
-    case 51581:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66851, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
-        return true;
-    case 51588:
-    case 51589:
-    case 51587:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66852, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
-        return true;
-    case 4779:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66853, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
-        return true;
-    case 4710:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66854, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
-        return true;
-    case 12354:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66855, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
-        return true;
-    case 12355:
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66856, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
-        return true;
-    default:
-        break;
+        case 51560:
+        case 51561:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66850, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
+            return true;
+        case 51580:
+        case 51581:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66851, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
+            return true;
+        case 51588:
+        case 51589:
+        case 51587:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66852, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
+            return true;
+        case 4779:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66853, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
+            return true;
+        case 4710:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66854, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
+            return true;
+        case 12354:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66855, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
+            return true;
+        case 12355:
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, 66856, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
+            return true;
+        default:
+            break;
     }
     return true;
 }
 
-bool GossipSelect_rented_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+bool GossipSelect_rented_mount(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 spell{ 0 };
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1 && !pPlayer->GetMountID())
     {
-        if (p_Player->GetMoney() >= 50)
+        if (pPlayer->GetMoney() >= 50)
         {
-            switch (p_Creature->GetEntry())
+            switch (pCreature->GetEntry())
             {
-            case 51560: spell = 468;    break; // White Stallion
-            case 51561: spell = 471;    break; // Palomino
-            case 51580: spell = 6653;   break; // Dire Riding Wolf
-            case 51581: spell = 580;    break; // Timber Riding Wolf
-            case 51588: spell = 17462;  break; // Red Skeletal Horse
-            case 51589: spell = 17463;  break; // Blue Skeletal Horse
-            case 51587: spell = 17464;  break; // Brown Skeletal Horse
-            case 4779:  spell = 6899;   break; // Brown Riding Ram
-            case 4710:  spell = 6777;   break; // Gray Riding Ram
-            case 12354: spell = 18990;  break; // Brown Riding Kodo
-            case 12355: spell = 18989;  break; // Gray Riding Kodo
-            default:
-                break;
+                case 51560: spell = 468;    break; // White Stallion
+                case 51561: spell = 471;    break; // Palomino
+                case 51580: spell = 6653;   break; // Dire Riding Wolf
+                case 51581: spell = 580;    break; // Timber Riding Wolf
+                case 51588: spell = 17462;  break; // Red Skeletal Horse
+                case 51589: spell = 17463;  break; // Blue Skeletal Horse
+                case 51587: spell = 17464;  break; // Brown Skeletal Horse
+                case 4779:  spell = 6899;   break; // Brown Riding Ram
+                case 4710:  spell = 6777;   break; // Gray Riding Ram
+                case 12354: spell = 18990;  break; // Brown Riding Kodo
+                case 12355: spell = 18989;  break; // Gray Riding Kodo
+                default:
+                    break;
             }
-            p_Player->CastSpell(p_Player, spell, true);
-            p_Player->ModifyMoney(-50);
+            pPlayer->CastSpell(pPlayer, spell, true);
+            pPlayer->ModifyMoney(-50);
         }
         else
-            p_Player->GetSession()->SendNotification("You don't have enough money!");
+            pPlayer->GetSession()->SendNotification("You don't have enough money!");
     }
-    p_Player->CLOSE_GOSSIP_MENU();
+    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -3835,254 +3690,6 @@ bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
-bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
-{
-    if (!pQuestGiver)
-        return false;
-
-    if (!pPlayer)
-        return false;
-
-    if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
-    {
-        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-        pQuestGiver->MonsterSayToPlayer(66906, pPlayer);
-    }
-    return false;
-}
-
-struct go_teslinah_search : public GameObjectAI
-{
-    explicit go_teslinah_search(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiUpdateTimer = 10000;
-    }
-
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-            Cell::VisitWorldObjects(me, searcher, 15.0f);
-
-            for (Player* pPlayer : players)
-            {
-                if (pPlayer->GetQuestStatus(80261) == QUEST_STATUS_INCOMPLETE) // Teslinah's Search I
-                {
-                    Creature* teslinah = pPlayer->GetMiniPet();
-
-                    if (!teslinah)
-                        break;
-
-                    switch (me->GetEntry())
-                    {
-                    case 3000250:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80270);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66907, pPlayer);
-                        break;
-                    }
-                    case 3000251:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80271);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66908, pPlayer);
-                        break;
-                    }
-                    case 3000252:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80272);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66909, pPlayer);
-                        break;
-                    }
-                    case 3000253:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80273);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66910, pPlayer);
-                        break;
-                    }
-                    }
-                }
-                if (pPlayer->GetQuestStatus(80262) == QUEST_STATUS_INCOMPLETE) // Teslinah's Search II
-                {
-                    Creature* teslinah = pPlayer->GetMiniPet();
-
-                    if (!teslinah)
-                        break;
-
-                    switch (me->GetEntry())
-                    {
-                    case 3000254:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80274);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66911, pPlayer);
-                        break;
-                    }
-                    case 3000255:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80275);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66912, pPlayer);
-                        break;
-                    }
-                    case 3000256:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80276);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66913, pPlayer);
-                        break;
-                    }
-                    case 3000257:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80277);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66914, pPlayer);
-                        break;
-                    }
-                    }
-                }
-                if (pPlayer->GetQuestStatus(80263) == QUEST_STATUS_INCOMPLETE) // Teslinah's Search III
-                {
-                    Creature* teslinah = pPlayer->GetMiniPet();
-
-                    if (!teslinah)
-                        break;
-
-                    switch (me->GetEntry())
-                    {
-                    case 3000258:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80278);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66915, pPlayer);
-                        break;
-                    }
-                    case 3000259:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80279);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66916, pPlayer);
-                        break;
-                    }
-                    case 3000260:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80280);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66917, pPlayer);
-                        break;
-                    }
-                    case 3000261:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80281);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66918, pPlayer);
-                        break;
-                    }
-                    }
-                }
-                if (pPlayer->GetQuestStatus(80264) == QUEST_STATUS_INCOMPLETE) // Teslinah's Search IV
-                {
-                    Creature* teslinah = pPlayer->GetMiniPet();
-
-                    if (!teslinah)
-                        break;
-
-                    switch (me->GetEntry())
-                    {
-                    case 3000262:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80282);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66919, pPlayer);
-                        break;
-                    }
-                    case 3000263:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80283);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66920, pPlayer);
-                        break;
-                    }
-                    case 3000264:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80284);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66921, pPlayer);
-                        teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
-                    }
-                    break;
-                    case 3000265:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80285);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66922, pPlayer);
-                        break;
-                    }
-                    }
-                }
-                if (pPlayer->GetQuestStatus(80265) == QUEST_STATUS_INCOMPLETE) // Teslinah's Search V
-                {
-                    Creature* teslinah = pPlayer->GetMiniPet();
-
-                    if (!teslinah)
-                        break;
-
-                    switch (me->GetEntry())
-                    {
-                    case 3000266:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80286);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66923, pPlayer);
-                        break;
-                    }
-                    case 3000267:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80287);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66924, pPlayer);
-                        break;
-                    }
-                    case 3000268:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80288);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66925, pPlayer);
-                        break;
-                    }
-                    case 3000269:
-                    {
-                        CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(80289);
-                        pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer(66926, pPlayer);
-                        break;
-                    }
-                    }
-                }
-            }
-            m_uiUpdateTimer = 10000;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_teslinah_search(GameObject* gameobject)
-{
-    return new go_teslinah_search(gameobject);
-}
-
 bool GossipHello_npc_iluria(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80315) == QUEST_STATUS_INCOMPLETE) // Apple a Day...
@@ -5162,7 +4769,23 @@ bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(91296))
+        {
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        if (pMember == pPlayer)
+                            continue;
+
+                        pMember->KilledMonster(cInfo, ObjectGuid());
+                    }
+                }
+            }
+        }
 
         pCreature->MonsterSay(66188);
         pPlayer->RemoveAurasDueToSpell(50060);
@@ -5312,26 +4935,6 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
-
-
-struct npc_lazokoAI : public ScriptedAI
-{
-    npc_lazokoAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() {}
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!m_creature->IsInCombat())
-        {
-                m_creature->CastSpell((Unit*)nullptr, 13236, true);
-        }
-        DoMeleeAttackIfReady();
-    }
-    void JustRespawned() {}
-};
-
-CreatureAI* GetAI_npc_lazoko(Creature* _Creature) { return new npc_lazokoAI(_Creature); }
 
 bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -7115,11 +6718,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_lazoko";
-    newscript->GetAI = &GetAI_npc_lazoko;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_harlus";
     newscript->pGossipHello = &GossipHello_npc_harlus;
     newscript->pGossipSelect = &GossipSelect_npc_harlus;
@@ -7279,17 +6877,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_iluria";
     newscript->pGossipHello = &GossipHello_npc_iluria;
     newscript->pGossipSelect = &GossipSelect_npc_iluria;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_teslinah_search";
-    newscript->GOGetAI = &GetAI_go_teslinah_search;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_teslinah";
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_teslinah;
-    newscript->pQuestRewardedNPC = &QuestRewarded_npc_teslinah;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7553,12 +7140,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_bounty";
-    newscript->pGOHello = &GOHello_go_bounty;
-    newscript->pGOGossipSelect = &GOSelect_go_bounty;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_refreshment_portal";
     newscript->GOGetAI = &GetAI_refreshment_portal_clicks;
     newscript->RegisterSelf();
@@ -7576,18 +7157,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "go_soulwell";
     newscript->GOGetAI = &GetAI_soulwell_clicks;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_barber_go";
-    newscript->pGossipHello = &GossipHello_npc_barber_go;
-    newscript->pGossipSelect = &GossipSelect_npc_barber_go;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_surgeon_go";
-    newscript->pGossipHello = &GossipHello_npc_surgeon_go;
-    newscript->pGossipSelect = &GossipSelect_npc_surgeon_go;
     newscript->RegisterSelf();
 
     newscript = new Script;
