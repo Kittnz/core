@@ -460,7 +460,7 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     }
 
     if (script.summonCreature.scriptId)
-        ScriptsStart(sGenericScripts, script.summonCreature.scriptId, pCreature, target);
+        ScriptsStart(sGenericScripts, script.summonCreature.scriptId, pCreature->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
     return false;
 }
@@ -856,7 +856,7 @@ bool Map::ScriptCommand_Morph(const ScriptInfo& script, WorldObject* source, Wor
         pSource->SetDisplayId(script.morph.creatureOrModelEntry);
     else
     {
-        CreatureInfo const* ci = ObjectMgr::GetCreatureTemplate(script.morph.creatureOrModelEntry);
+        CreatureInfo const* ci = sObjectMgr.GetCreatureTemplate(script.morph.creatureOrModelEntry);
         uint32 display_id = Creature::ChooseDisplayId(ci);
 
         pSource->SetDisplayId(display_id);
@@ -876,7 +876,7 @@ bool Map::ScriptCommand_Mount(ScriptInfo const& script, WorldObject* source, Wor
         return ShouldAbortScript(script);
     }
 
-    uint32 displayId = script.mount.isDisplayId || !script.mount.creatureOrModelEntry ? script.mount.creatureOrModelEntry : Creature::ChooseDisplayId(ObjectMgr::GetCreatureTemplate(script.mount.creatureOrModelEntry));
+    uint32 displayId = script.mount.isDisplayId || !script.mount.creatureOrModelEntry ? script.mount.creatureOrModelEntry : Creature::ChooseDisplayId(sObjectMgr.GetCreatureTemplate(script.mount.creatureOrModelEntry));
 
     if (pSource->IsAlive())
     {
@@ -1291,7 +1291,7 @@ bool Map::ScriptCommand_StartScript(ScriptInfo const& script, WorldObject* sourc
     uint32 const scriptId = ChooseScriptIdToStart(script);
 
     if (scriptId)
-        ScriptsStart(sGenericScripts, scriptId, source, target);
+        ScriptsStart(sGenericScripts, scriptId, source ? source->GetObjectGuid() : ObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
     else
         return ShouldAbortScript(script);
 
@@ -1988,7 +1988,7 @@ bool Map::ScriptCommand_StartScriptForAll(const ScriptInfo& script, WorldObject*
         }
 
         if (!script.startScriptForAll.objectEntry || (pWorldObject->GetEntry() == script.startScriptForAll.objectEntry))
-            ScriptsStart(sGenericScripts, script.startScriptForAll.scriptId, pWorldObject, target);
+            ScriptsStart(sGenericScripts, script.startScriptForAll.scriptId, pWorldObject->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
     }
     
     return false;
@@ -2088,19 +2088,8 @@ bool Map::ScriptCommand_AssistUnit(const ScriptInfo& script, WorldObject* source
     if (!pAttacker)
         return false;
 
-    if (Unit* pVictim = pSource->GetVictim())
-    {
-        if (pVictim == pAttacker)
-            return false;
-
-        if (pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
-            pSource->AddThreat(pAttacker);
-    }
-    else
-    {
-        if (pSource->AI() && pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
-            pSource->AI()->AttackStart(pAttacker);
-    }
+    if (pSource->IsValidAttackTarget(pAttacker) && pSource->IsWithinDistInMap(pAttacker, 40.0f))
+        pSource->EnterCombatWithTarget(pAttacker);
 
     return false;
 }
@@ -2136,7 +2125,7 @@ bool Map::ScriptCommand_AddAura(const ScriptInfo& script, WorldObject* source, W
         return ShouldAbortScript(script);
     }
 
-    pSource->AddAura(script.addAura.spellId, script.addAura.flags);
+    pSource->AddAura(script.addAura.spellId, script.addAura.flags, ToUnit(target));
 
     return false;
 }
@@ -2294,14 +2283,14 @@ bool Map::ScriptCommand_DespawnGameObject(ScriptInfo const& script, WorldObject*
     return false;
 }
 
-// SCRIPT_COMMAND_LOAD_GAMEOBJECT (82)
+// SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN (82)
 bool Map::ScriptCommand_LoadGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target)
 {
     GameObjectData const* pGameObjectData = sObjectMgr.GetGOData(script.loadGo.goGuid);
 
     if (GetId() != pGameObjectData->position.mapId)
     {
-        sLog.outError("SCRIPT_COMMAND_LOAD_GAMEOBJECT (script id %u) tried to spawn guid %u on wrong map %u.", script.id, script.loadGo.goGuid, GetId());
+        sLog.outError("SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN (script id %u) tried to spawn guid %u on wrong map %u.", script.id, script.loadGo.goGuid, GetId());
         return ShouldAbortScript(script);
     }
 
@@ -2454,19 +2443,19 @@ bool Map::ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject
     if (!scriptId)
         return ShouldAbortScript(script);
 
-    ScriptsStart(sGenericScripts, scriptId, pSource, target);
+    ScriptsStart(sGenericScripts, scriptId, pSource->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
     if (Creature* pCreature = pSource->ToCreature())
     {
         if (CreatureGroup* pGroup = pCreature->GetCreatureGroup())
         {
             if (pGroup->GetLeaderGuid() != pCreature->GetObjectGuid())
-                ScriptsStart(sGenericScripts, scriptId, GetCreature(pGroup->GetLeaderGuid()), target);
+                ScriptsStart(sGenericScripts, scriptId, pGroup->GetLeaderGuid(), target ? target->GetObjectGuid() : ObjectGuid());
 
             for (auto const& itr : pGroup->GetMembers())
             {
                 if (itr.first != pCreature->GetObjectGuid())
-                    ScriptsStart(sGenericScripts, scriptId, GetCreature(itr.first), target);
+                    ScriptsStart(sGenericScripts, scriptId, itr.first, target ? target->GetObjectGuid() : ObjectGuid());
             }
         }
     }
@@ -2479,9 +2468,40 @@ bool Map::ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject
                 if (Player* pMember = itr->getSource())
                 {
                     if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
-                        ScriptsStart(sGenericScripts, scriptId, GetPlayer(pMember->GetObjectGuid()), target);
+                        ScriptsStart(sGenericScripts, scriptId, pMember->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
                 }
             }
+        }
+    }
+
+    return false;
+}
+
+// SCRIPT_COMMAND_LOAD_CREATURE_SPAWN (91)
+bool Map::ScriptCommand_LoadCreatureSpawn(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    if (script.loadCreature.withGroup)
+    {
+        if (!LoadCreatureSpawnWithGroup(script.loadCreature.dbGuid))
+            return ShouldAbortScript(script);
+    }
+    else
+    {
+        if (!LoadCreatureSpawn(script.loadCreature.dbGuid))
+            return ShouldAbortScript(script);
+    }
+
+    return false;
+}
+
+// SCRIPT_COMMAND_START_SCRIPT_ON_ZONE (92)
+bool Map::ScriptCommand_StartScriptOnZone(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    for (auto const& itr : m_mapRefManager)
+    {
+        if (itr.getSource()->GetCachedZoneId() == script.startScriptOnZone.zoneId)
+        {
+            ScriptsStart(sGenericScripts, script.startScriptOnZone.scriptId, itr.getSource()->GetObjectGuid(), target ? target->GetObjectGuid() : ObjectGuid());
         }
     }
 

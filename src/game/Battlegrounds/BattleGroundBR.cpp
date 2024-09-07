@@ -11,6 +11,27 @@
 #include "MapManager.h"
 #include "World.h"
 
+uint32 BattleGroundBR::GetNextArenaId()
+{
+    static std::atomic<uint32> arenaId = 0;
+    static bool init = false;
+
+    //initial state, query.
+    if (!init)
+    {
+        std::unique_ptr<QueryResult> res = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT MAX(arena_id) FROM arena_stats_single"));
+
+        if (res)
+        {
+            arenaId = (*res)[0].GetUInt32();
+        }
+        init = true;
+    }
+
+    return ++arenaId;
+}
+
+
 BattleGroundBR::BattleGroundBR()
 {
     m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = 0;
@@ -18,18 +39,47 @@ BattleGroundBR::BattleGroundBR()
     m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_ARENA_FIFTEEN_SECONDS;
     m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_BEGUN;
 
-    m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_35S;
+    m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_1M;
     m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
     m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
     m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+
+    m_arenaId = GetNextArenaId();
 }
 
-BattleGroundBR::~BattleGroundBR()
+
+//somehow THIS is the reconstructuring constructor call.
+BattleGroundBR::BattleGroundBR(const BattleGroundBR& br) : BattleGround(br)
 {
+    m_StartMessageIds[BG_STARTING_EVENT_FIRST] = 0;
+    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
+    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = LANG_ARENA_FIFTEEN_SECONDS;
+    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_BEGUN;
+
+    m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_1M;
+    m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
+    m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
+    m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
+
+    m_arenaId = GetNextArenaId();
 }
 
 void BattleGroundBR::Update(uint32 diff)
 {
+    // prevent players from falling under the floor
+    for (const auto& itr : m_Players)
+    {
+        Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
+        if (!pPlayer)
+            continue;
+
+        if (pPlayer->GetPositionZ() < -1.0f)
+            pPlayer->NearLandTo(pPlayer->GetPositionX(), pPlayer->GetPositionY(), 3.0f, pPlayer->GetOrientation());
+    }
+
+    if (GetStatus() == STATUS_IN_PROGRESS)
+        m_totalTime += diff;
+
     // Execute this at the end, since it can delete the BattleGround object!
     BattleGround::Update(diff);
 }
@@ -52,6 +102,25 @@ void BattleGroundBR::StartingEventCloseDoors()
     //GetBgMap()->SetVisibilityDistance(45.0f);
 }
 
+inline void ResetUnitHealthAndPower(Unit* pUnit)
+{
+    if (!pUnit->IsAlive())
+        return;
+
+    pUnit->SetHealth(pUnit->GetMaxHealth());
+
+    if (pUnit->GetMaxPower(POWER_MANA))
+        pUnit->SetPower(POWER_MANA, pUnit->GetMaxPower(POWER_MANA));
+
+    switch (pUnit->GetPowerType())
+    {
+        case POWER_FOCUS:
+        case POWER_ENERGY:
+            pUnit->SetPower(pUnit->GetPowerType(), pUnit->GetMaxPower(pUnit->GetPowerType()));
+            break;
+    }
+}
+
 void BattleGroundBR::StartingEventOpenDoors()
 {
     // Reset visibility distance back to normal.
@@ -62,12 +131,12 @@ void BattleGroundBR::StartingEventOpenDoors()
     // Notice we do not reset cooldowns here, like on AddPlayer() due to potential abuse.
     for (auto& itr : GetPlayers())
     {
-        if (Player* plr = sObjectMgr.GetPlayer(itr.first))
+        if (Player* pPlayer = sObjectMgr.GetPlayer(itr.first))
         {
-            plr->SetHealth(plr->GetMaxHealth());
+            ResetUnitHealthAndPower(pPlayer);
 
-            if (plr->GetPowerType() == POWER_MANA)
-                plr->SetPower(POWER_MANA, plr->GetMaxPower(POWER_MANA));
+            if (Pet* pPet = pPlayer->GetPet())
+                ResetUnitHealthAndPower(pPet);
         }
     }
 }
@@ -104,8 +173,8 @@ bool BattleGroundBR::SetupBattleGround()
     /*doors
     for (int i = 0; i < BG_BR_NODES_MAX; ++i)
     {
-        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY)
-            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY))
+        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2))
+            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2)))
             sLog.outErrorDb("BatteGroundSV: Failed to spawn door objects!");
     }
     */
@@ -130,11 +199,29 @@ void BattleGroundBR::EndBattleGround(Team winner)
         return;
 
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+
     // rewards
-    RewardReputationToTeam(1008, 100, winner);
-    RewardReputationToTeam(1008, 25, loser);
-    RewardHonorToTeam(200, winner);
-    RewardHonorToTeam(50, loser);
+    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+
+    uint32 repGain = isBGWeekend ? 90 : 60;
+    RewardReputationToTeam(1008, repGain, winner);
+    RewardReputationToTeam(1008, repGain / 4, loser);
+    RewardHonorToTeam(isBGWeekend ? 400 : 200, winner);
+    RewardHonorToTeam(isBGWeekend ? 100 : 50, loser);
+    
+    for (const auto& bgPlayer : m_Players)
+    {
+        auto player = sObjectAccessor.FindPlayer(bgPlayer.first);
+
+        if (player)
+        {
+            CharacterDatabase.PExecute("INSERT INTO arena_stats_single (`arena_id`, `team_id`, `level`, `item_level`, `class`, `race`, `won`, `duration`) VALUES (%u, %u, %u, %u, %u, %u, %u, %u)",
+                m_arenaId, player->GetTeam() == ALLIANCE ? 0 : 1,
+                player->GetLevel(), player->GetAverageItemLevel(), 
+                player->GetClass(), player->GetRace(), player->GetTeam() == winner ? 1 : 0, m_totalTime / IN_MILLISECONDS);
+        }
+    }
+
 
     BattleGround::EndBattleGround(winner);
 }

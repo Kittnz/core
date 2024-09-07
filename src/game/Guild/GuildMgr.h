@@ -23,20 +23,24 @@
 #include "Policies/Singleton.h"
 #include "World.h"
 #include "GuildBank/GuildBank.h"
+#include "Utilities/robin_hood.h"
+#include <shared_mutex>
 
 class Guild;
 class ObjectGuid;
 class Petition;
 class PetitionSignature;
 
-typedef std::unordered_map<uint32, Petition*> PetitionMap;
+typedef robin_hood::unordered_map<uint32, Petition*> PetitionMap;
 typedef std::list<PetitionSignature*> PetitionSignatureList;
-typedef std::unordered_map<uint32, Guild*> GuildMap;
+typedef robin_hood::unordered_map<uint32, Guild*> GuildMap;
 class GuildMgr
 {
     public:
         GuildMgr();
         ~GuildMgr();
+
+        void FixupInfernoBanks();
 
         void AddGuild(Guild* guild);
         void RemoveGuild(uint32 guildId);
@@ -48,17 +52,17 @@ class GuildMgr
 
         void GuildMemberAdded(uint32 guildId, uint32 memberGuid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::shared_mutex> guard(m_guid2GuildMutex);
             m_guid2guild[memberGuid] = guildId;
         }
         void GuildMemberRemoved(uint32 memberGuid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::lock_guard<std::shared_mutex> guard(m_guid2GuildMutex);
             m_guid2guild.erase(memberGuid);
         }
         Guild* GetPlayerGuild(uint32 lowguid)
         {
-            std::lock_guard<std::mutex> guard(m_guid2GuildMutex);
+            std::shared_lock<std::shared_mutex> guard(m_guid2GuildMutex);
             std::map<uint32, uint32>::iterator it = m_guid2guild.find(lowguid);
             if (it != m_guid2guild.end())
                 return GetGuildById(it->second);
@@ -72,18 +76,19 @@ class GuildMgr
         Petition* GetPetitionByCharterGuid(const ObjectGuid& charterGuid);
         Petition* GetPetitionById(uint32 id);
         Petition* GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid);
+        PetitionSignature* GetSignatureForPlayerGuid(const ObjectGuid& guid);
 
         void LoadGuilds();
         void LoadPetitions();
 		
     private:
         void CleanUpPetitions();
-        mutable std::mutex m_guildMutex;
+        mutable std::shared_mutex m_guildMutex;
         GuildMap m_GuildMap;
-        std::mutex m_guid2GuildMutex;
+        std::shared_mutex m_guid2GuildMutex;
         std::map<uint32, uint32> m_guid2guild;
 
-        std::mutex m_petitionsMutex;
+        std::shared_mutex m_petitionsMutex;
         PetitionMap m_petitionMap;
 
 		uint32 m_guildBankSaveTimer;
@@ -123,6 +128,7 @@ public:
     PetitionSignature* GetSignatureForPlayer(Player* player);
     PetitionSignature* GetSignatureForAccount(uint32 accountId);
     void AddSignature(PetitionSignature* signature);
+    void DeleteSignature(PetitionSignature* signature);
     bool AddNewSignature(Player* player);
 
     bool IsComplete() const { return m_signatures.size() == sWorld.getConfig(CONFIG_UINT32_MIN_PETITION_SIGNS); }
@@ -149,8 +155,10 @@ public:
     PetitionSignature(Petition* petition, Player* player);
 
     void SaveToDB();
+    void DeleteFromDB();
 
     const ObjectGuid& GetSignatureGuid() { return m_playerGuid; }
+    Petition* GetSignaturePetition() { return m_petition; }
     uint32 GetSignatureAccountId() const { return m_playerAccount; }
 
 private:

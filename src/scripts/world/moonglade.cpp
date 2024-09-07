@@ -50,8 +50,10 @@ bool GossipHello_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature)
         pPlayer->SEND_GOSSIP_MENU(4719, pCreature->GetGUID());
     }
     else
+    {
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(4718, pCreature->GetGUID());
-
+    }
     return true;
 }
 
@@ -162,6 +164,8 @@ enum KeeperRemulosData
     SAY_MALFURION_3        = 10873,
     SAY_MALFURION_4        = 10876,
     SAY_MALFURION_5        = 10878,
+
+    ZONE_MOONGLADE         = 493,
 
     POINT_ID_ERANIKUS_FLIGHT   = 0,
     POINT_ID_ERANIKUS_COMBAT   = 1,
@@ -302,7 +306,9 @@ struct npc_keeper_remulosAI : public npc_escortAI
         {
             if (Player* pPlayer = GetPlayerForEscort())
             {
-                if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS && m_creature->IsWithinDistInMap(pPlayer, 200))
+                if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS &&
+                    m_creature->IsWithinDistInMap(pPlayer, 200) &&
+                    pPlayer->IsCurrentQuest(QUEST_NIGHTMARE_MANIFESTS, 1))
                     m_creature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
             }
         }
@@ -495,8 +501,10 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     void DoHandleOutro(Creature* pTarget)
     {
-        if (Player* pPlayer = GetPlayerForEscort())
-            pPlayer->GroupEventHappens(QUEST_NIGHTMARE_MANIFESTS, pTarget);
+        std::list<Player*> players;
+        me->GetAlivePlayerListInRange(me, players, 200.0f);
+        for (auto const& pPlayer : players)
+            pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
         // despawn manifests
         for (auto&& itr : summonedGUIDs)
@@ -511,6 +519,12 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     void UpdateEscortAI(const uint32 uiDiff) override
     {
+        if (m_creature->GetZoneId() != ZONE_MOONGLADE)
+        {
+            m_creature->DoKillUnit();
+            return;
+        }
+
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
             if (m_uiOutroTimer)
@@ -569,26 +583,39 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         switch (m_uiSummonCount % 2)
                         {
                             case 0:
+                            {
                                 if (Player* pPlayer = GetPlayerForEscort())
                                 {
                                     float plfX, plfY, plfZ;
                                     plfX = pPlayer->GetPositionX();
                                     plfY = pPlayer->GetPositionY();
                                     plfZ = pPlayer->GetPositionZ();
-                                    for (uint8 i = 0; i < MAX_SHADOWS; ++i)
+                                    for (uint8 i = 0; i < 2; ++i)
                                     {
                                         m_creature->GetRandomPoint(plfX, plfY, plfZ, 20.0f, fX, fY, fZ);
                                         m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ + 2, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
                                     }
                                 }
+
+                                uint8 randomSummonPoint = urand(3, 5);
+                                for (uint8 i = 0; i < MAX_SHADOWS - 1; ++i)
+                                {
+                                    m_creature->GetRandomPoint(aShadowsLocations[randomSummonPoint].m_fX, aShadowsLocations[randomSummonPoint].m_fY, aShadowsLocations[randomSummonPoint].m_fZ, 10.0f, fX, fY, fZ);
+                                    m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
+                                }
                                 break;
+                            }
                             case 1:
+                            {
                                 uint8 randomSummonPoint = urand(3, 5);
                                 for (uint8 i = 0; i < MAX_SHADOWS; ++i)
                                 {
                                     m_creature->GetRandomPoint(aShadowsLocations[randomSummonPoint].m_fX, aShadowsLocations[randomSummonPoint].m_fY, aShadowsLocations[randomSummonPoint].m_fZ, 10.0f, fX, fY, fZ);
                                     m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
                                 }
+                                break;
+                            }
+                            default:
                                 break;
                         }
                         ++m_uiSummonCount;
@@ -1097,11 +1124,10 @@ struct boss_eranikusAI : public ScriptedAI
             m_creature->DeleteThreatList();
             m_creature->CombatStop(true);
             m_creature->LoadCreatureAddon(true);
-
             m_creature->SetLootRecipient(nullptr);
 
             // Get Remulos guid and make him stop summoning shades
-            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 50.0f))
+            if (Creature* pRemulos = GetClosestCreatureWithEntry(m_creature, NPC_REMULOS, 200.0f))
             {
                 m_uiRemulosGUID = pRemulos->GetObjectGuid();
                 pRemulos->AI()->EnterEvadeMode();
@@ -1109,6 +1135,12 @@ struct boss_eranikusAI : public ScriptedAI
                 pRemulos->DeleteThreatList();
                 pRemulos->CombatStop(true);
             }
+
+            // Complete quest for nearby players
+            std::list<Player*> players;
+            me->GetAlivePlayerListInRange(me, players, 200.0f);
+            for (auto const& pPlayer : players)
+                pPlayer->AreaExploredOrEventHappens(QUEST_NIGHTMARE_MANIFESTS);
 
             // Despawn the priestess
             DoDespawnSummoned();

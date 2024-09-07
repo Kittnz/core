@@ -402,7 +402,7 @@ class Spell
         void SendInterrupted(uint8 result);
         void SendChannelUpdate(uint32 time, bool interrupted = false);
         void SendChannelStart(uint32 duration);
-        void SendResurrectRequest(Player* target);
+        void SendResurrectRequest(Player* target, bool sickness);
 
         void HandleEffects(Unit *pUnitTarget,Item *pItemTarget,GameObject *pGOTarget,SpellEffectIndex i, float DamageMultiplier = 1.0);
         void HandleThreatSpells();
@@ -547,6 +547,9 @@ class Spell
         bool m_immediateHandled = false;                    // were immediate actions handled? (used by delayed spells only)
 
         // Channeled spells system
+        uint32 m_channeledVisualKit = 0;                    // id from SpellVisualKit.dbc that needs to be sent in SMSG_PLAY_SPELL_VISUAL periodically
+        uint32 m_channeledVisualTimer = 0;                  // timer for sending the visual kit
+        void InitializeChanneledVisualTimer();
 
         // These vars are used in both delayed spell system and modified immediate spell system
         bool m_referencedFromCurrentSpell = false;          // mark as references to prevent deleted and access by dead pointers
@@ -658,9 +661,8 @@ class Spell
         // -------------------------------------------
 
         //List For Triggered Spells
-        typedef std::list<SpellEntry const*> SpellInfoList;
-        SpellInfoList m_TriggerSpells;                      // casted by caster to same targets settings in m_targets at success finish of current spell
-        SpellInfoList m_preCastSpells;                      // casted by caster to each target at spell hit before spell effects apply
+        std::vector<SpellEntry const*> m_TriggerSpells;                      // casted by caster to same targets settings in m_targets at success finish of current spell
+        std::vector<SpellEntry const*> m_preCastSpells;                      // casted by caster to each target at spell hit before spell effects apply
 
         uint32 m_spellState = SPELL_STATE_NULL;
         uint32 m_timer = 0;

@@ -496,7 +496,7 @@ namespace VMAP
         return false;
     }
 
-    bool WorldModel::GetLocationInfo(G3D::Vector3 const& p, G3D::Vector3 const& down, float& dist, LocationInfo& info) const
+    bool WorldModel::GetLocationInfo(G3D::Vector3 const& p, G3D::Vector3 const& down, float& dist, GroupLocationInfo& info) const
     {
         if (groupModels.empty())
             return false;
@@ -504,6 +504,7 @@ namespace VMAP
         groupTree.intersectPoint(p, callback);
         if (callback.hit != groupModels.end())
         {
+            info.rootId = RootWMOID;
             info.hitModel = &(*callback.hit);
             dist = callback.zDist;
             return true;

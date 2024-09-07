@@ -9,9 +9,12 @@
 #include <string>
 #include <windows.h>
 #include <DirectXMath.h>
+#include <sstream>
 
 #undef min
 #undef max
+
+// Спасибо Окси!
 #include "vector3.h"
 
 using uint32 = uint32_t;
@@ -193,8 +196,6 @@ struct ModelAnimRange
 	uint32 Second;
 };
 
-Vec3D CamPos;
-
 struct CameraPoint
 {
 	Fvector Position;
@@ -202,87 +203,35 @@ struct CameraPoint
 	uint32 Time;
 };
 
-const uint32 Duration = 53 * 1000;
+typedef std::vector<std::string> Tokens;
 
-const Fvector CameraOrigin = { -5281.0f, -3686.0f, 330.0f };
-//const Fvector CameraOrigin = { 1017.0f, 61.0f, 19.0f };
+Tokens StrSplit(const std::string& src, const std::string& sep)
+{
+	Tokens r;
+	std::string s;
+	for (std::string::const_iterator i = src.begin(); i != src.end(); i++)
+	{
+		if (sep.find(*i) != std::string::npos)
+		{
+			if (s.length()) r.push_back(s);
+			s = "";
+		}
+		else
+		{
+			s += *i;
+		}
+	}
+	if (s.length()) r.push_back(s);
+	return r;
+}
 
-// const CameraPoint sCameraPoints[] =
-// {
-// 	{ {-5515.0f, -4098.0f, 435.0f}, {-5524.0f, -4119.0f, 423.0f}, 0},
-// 	{ {-5566.0f, -4153.0f, 380.0f}, {-5569.0f, -4160.0f, 380.0f}, 7500},
-// 	{ {-5564.0f, -4184.0f, 387.0f}, {-5559.0f, -4181.0f, 393.0f}, 15000},
-// 	{ {-5547.0f, -4217.0f, 404.0f}, {-5547.0f, -4232.0f, 411.0f}, 22500},
-// 	{ {-5561.0f, -4266.0f, 418.0f}, {-5566.0f, -4281.0f, 418.0f}, 30000},
-// 	{ {-5590.0f, -4309.0f, 416.0f}, {-5596.0f, -4309.0f, 416.0f}, 37500},
-// 	{ {-5630.0f, -4332.0f, 406.0f}, {-5630.0f, -4324.0f, 402.0f}, 53000},
-// };
-//  const CameraPoint sCameraPoints[] =
-//  {
-// 	 { {-4662.0f, -3242.0f, 289.0f}, { -4662.0f, -3286.0f, 313.0f}, 0},
-// 	 { {-4723.0f, -3383.0f, 360.0f}, { -4743.0f, -3412.0f, 358.0f}, 4400},
-// 	 { {-4876.0f, -3543.0f, 305.0f}, { -4903.0f, -3564.0f, 304.0f}, 8800},
-// 	 { {-4984.0f, -3675.0f, 356.0f}, { -5007.0f, -3725.0f, 365.0f}, 13200},
-// 	 { {-5082.0f, -3881.0f, 407.0f}, { -5127.0f, -3921.0f, 406.0f}, 17600},
-// 	 { {-5231.0f, -3991.0f, 411.0f}, { -5252.0f, -4017.0f, 410.0f}, 22000},
-// 	 { {-5344.0f, -4136.0f, 456.0f}, { -5378.0f, -4167.0f, 498.0f}, 26400},
-// 	 { {-5414.0f, -4203.0f, 501.0f}, { -5424.0f, -4217.0f, 496.0f}, 30800},
-// 	 { {-5480.0f, -4281.0f, 499.0f}, { -5503.0f, -4285.0f, 485.0f}, 35200},
-// 	 { {-5540.0f, -4322.0f, 470.0f}, { -5558.0f, -4319.0f, 460.0f}, 39600},
-// 	 { {-5622.0f, -4331.0f, 424.0f}, { -5623.0f, -4328.0f, 414.0f}, 44000},
-// 	 { {-5630.0f, -4333.0f, 406.0f}, { -5630.0f, -4324.0f, 40.0f}, 53000},
-//  };
 
-// const CameraPoint sCameraPoints[] =
-// {
-// 	{ {-4696.0f, -3279.0f, 270}, { -4692.0f, -3284.0f, 270.0f}, 0},
-// 	{ {-4707.0f, -3297.0f, 306}, { -4731.0f, -3322.0f, 318.0f}, 4000},
-// 	{ {-4803.0f, -3388.0f, 316}, { -4806.0f, -3402.0f, 315.0f}, 8000},
-// 	{ {-4922.0f, -3575.0f, 334}, { -4928.0f, -3583.0f, 334.0f}, 12000},
-// 	{ {-4997.0f, -3780.0f, 364}, { -5000.0f, -3787.0f, 363.0f}, 16000},
-// 	{ {-5050.0f, -3949.0f, 374}, { -5054.0f, -3954.0f, 374.0f}, 20000},
-// 	{ {-5238.0f, -4121.0f, 361}, { -5266.0f, -4134.0f, 374.0f}, 24000},
-// 	{ {-5378.0f, -4168.0f, 415}, { -5388.0f, -4174.0f, 424.0f}, 28000},
-// 	{ {-5454.0f, -4298.0f, 493}, { -5463.0f, -4297.0f, 490.0f}, 32000},
-// 	{ {-5556.0f, -4316.0f, 477}, { -5561.0f, -4313.0f, 475.0f}, 36000},
-// 	{ {-5601.0f, -4323.0f, 458}, { -5626.0f, -4327.0f, 434.0f}, 40000},
-// 	{ {-5628.0f, -4327.0f, 418}, { -5633.0f, -4332.0f, 415.0f}, 44000},
-// 	{ {-5630.0f, -4333.0f, 406}, { -5630.0f, -4324.0f, 402.0f}, 53000},
-// };
+uint32 Duration = 53 * 1000;
+uint32 CinematicID = 0;
 
-// const CameraPoint sCameraPoints[] =
-// {
-// 	{ {1017.0f, 61.0f,    19.0f}, { 1040.0f,   41.0f,  17.0f}, 0},
-// 	{ {1043.0f, 39.0f,    17.0f}, { 1059.0f,   26.0f,  16.0f}, 5000},
-// 	{ {1085.0f, 10.0f,    14.0f}, { 1104.0f,    9.0f,  12.0f}, 10000},
-// 	{ {1154.0f, 2.0f,     10.0f}, { 1169.0f,   -4.0f,  10.0f}, 15000},
-// 	{ {1210.0f, 21.0f,     8.0f}, { 1218.0f,   46.0f,   8.0f}, 20000},
-// 	{ {1219.0f, 50.0f,     8.0f}, { 1204.0f,   88.0f,   8.0f}, 25000},
-// 	{ {1216.0f, 143.0f,   20.0f}, { 1229.0f,  175.0f,  32.0f}, 30000},
-// 	{ {1294.0f, 328.0f,  107.0f}, { 1303.0f,  350.0f, 119.0f}, 35000},
-// 	{ {1402.0f, 566.0f,  254.0f}, { 1421.0f,  595.0f, 233.0f}, 40000},
-// 	{ {1586.0f, 869.0f,  184.0f}, { 1596.0f,  924.0f, 189.0f}, 45000},
-// 	{ {1637.0f, 1036.0f, 222.0f}, { 1662.0f, 1129.0f, 247.0f}, 50000},
-// 	{ {1683.0f, 1246.0f, 290.0f}, { 1702.0f, 1270.0f, 277.0f}, 55000},
-// 	{ {1725.0f, 1321.0f, 252.0f}, { 1741.0f, 1346.0f, 233.0f}, 60000},
-// 	{ {1814.0f, 1391.0f, 154.0f}, { 1831.0f, 1385.0f, 148.0f}, 71000},
-// };
+Fvector CameraOrigin = { -5281.0f, -3686.0f, 330.0f };
 
- const CameraPoint sCameraPoints[] =
- {
-	 { {-4662.0f, -3242.0f, 289.0f}, { -4662.0f, -3286.0f, 313.0f}, 0},		// P0
-	 { {-4723.0f, -3383.0f, 360.0f}, { -4743.0f, -3412.0f, 358.0f}, 4400},	// P1
-	 { {-4876.0f, -3543.0f, 305.0f}, { -4903.0f, -3564.0f, 304.0f}, 8800},  // P2
-	 { {-4984.0f, -3675.0f, 356.0f}, { -5007.0f, -3725.0f, 365.0f}, 13200}, // P3
-	 { {-5082.0f, -3881.0f, 407.0f}, { -5127.0f, -3921.0f, 406.0f}, 17600},
-	 { {-5231.0f, -3991.0f, 411.0f}, { -5252.0f, -4017.0f, 410.0f}, 22000},
-	 { {-5344.0f, -4136.0f, 456.0f}, { -5378.0f, -4167.0f, 498.0f}, 26400},
-	 { {-5414.0f, -4203.0f, 501.0f}, { -5424.0f, -4217.0f, 496.0f}, 30800},
-	 { {-5480.0f, -4281.0f, 499.0f}, { -5503.0f, -4285.0f, 485.0f}, 35200},
-	 { {-5628.0f, -4327.0f, 418}, { -5633.0f, -4332.0f, 415.0f}, 44000},
-	 { {-5630.0f, -4333.0f, 406}, { -5630.0f, -4324.0f, 402.0f}, 53000},
- };
-
+std::vector<CameraPoint> CameraPoints;
 
 enum TargetBlock
 {
@@ -341,17 +290,23 @@ void SmoothPoint(Fvector PrevPoint, Fvector BasePoint, Fvector NextPoint, Smooth
 
 void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock block)
 {
-	int AnimPoints = sizeof(sCameraPoints) / sizeof(sCameraPoints[0]);
+	int AnimPoints = CameraPoints.size();
 
 	ModelAnimRange* Range = (ModelAnimRange*)(m2Content + InBlock.ofsRanges);
 	Range->Second = AnimPoints - 1;
+
+	if (AnimPoints > InBlock.nTimes )
+	{
+		std::cerr << "Amount of points is greater then donor point count: " << InBlock.nTimes << std::endl;
+		return;
+	}
 
 	InBlock.nTimes = AnimPoints;
 
 	uint32* TimeData = (uint32*)(m2Content + InBlock.ofsTimes);
 	for (int i = 0; i < AnimPoints; i++)
 	{
-		TimeData[i] = sCameraPoints[i].Time;
+		TimeData[i] = CameraPoints[i].Time;
 	}
 
 	InBlock.nKeys = AnimPoints;
@@ -373,10 +328,10 @@ void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock blo
 		switch (block)
 		{
 		case TargetBlockPos:
-			OurPoint = sCameraPoints[i].Position;
+			OurPoint = CameraPoints[i].Position;
 			break;
 		case TargetBlockTarget:
-			OurPoint = sCameraPoints[i].Target;
+			OurPoint = CameraPoints[i].Target;
 			break;
 		default:
 			break;
@@ -518,21 +473,141 @@ void PrintAnimationBlock(char* m2Content, AnimationBlock& InBlock)
 	}
 }
 
+bool ReadPoints()
+{
+	FILE* pointsFile = fopen("points.txt", "rt");
+	if (pointsFile == NULL)
+	{
+		std::cerr << "points.txt is not found!" << std::endl;
+		return false;
+	}
+
+
+	fseek(pointsFile, 0, SEEK_END);
+	long fileSize = ftell(pointsFile);
+	fseek(pointsFile, 0, SEEK_SET);
+
+	std::string AllFile;
+	AllFile.resize(fileSize + 1);
+	fread((char*)AllFile.data(), fileSize, 1, pointsFile);
+	fclose(pointsFile); pointsFile = NULL;
+
+	Tokens FileLines = StrSplit(AllFile, "\n");
+
+	for (int32 i = 0; i < FileLines.size(); i++)
+	{
+		std::string& Line = FileLines[i];
+		std::string ClearLine;
+		size_t CommentPlace = Line.find(';');
+		if (CommentPlace != std::string::npos)
+		{
+			Tokens CommentAndVarTokens = StrSplit(Line, ";");
+			ClearLine = CommentAndVarTokens[0];
+		}
+		else
+		{
+			ClearLine = Line;
+		}
+		if (i == 0)
+		{
+			Tokens PosTokens = StrSplit(ClearLine, " ");
+			if (PosTokens.size() != 3)
+			{
+				std::cerr << "Position should be a 3 point vector" << std::endl;
+				return false;
+			}
+
+			CameraOrigin.x = atof(PosTokens[0].c_str());
+			CameraOrigin.y = atof(PosTokens[1].c_str());
+			CameraOrigin.z = atof(PosTokens[2].c_str());
+		}
+		else if (i == 1)
+		{
+			Duration = atoi(ClearLine.c_str());
+			Duration *= 1000;
+		}
+		else if (i == 2)
+		{
+			CinematicID = atoi(ClearLine.c_str());
+		}
+		else
+		{
+			Tokens CameraPointsTok = StrSplit(ClearLine, ":");
+			if (CameraPointsTok.size() != 3)
+			{
+				std::cerr << "Camera point should be 3 component. Stuck at point: " << i << std::endl;
+				return false;
+			}
+
+			Tokens OriginPointTok = StrSplit(CameraPointsTok[0], " ");
+			Tokens TargetPointTok = StrSplit(CameraPointsTok[1], " ");
+			double Duration = atof(CameraPointsTok[2].c_str());
+
+			CameraPoint Point;
+			Point.Position.x = atof(OriginPointTok[0].c_str());
+			Point.Position.y = atof(OriginPointTok[1].c_str());
+			Point.Position.z = atof(OriginPointTok[2].c_str());
+
+			Point.Target.x = atof(TargetPointTok[0].c_str());
+			Point.Target.y = atof(TargetPointTok[1].c_str());
+			Point.Target.z = atof(TargetPointTok[2].c_str());
+
+			Point.Time = (uint32)floor(Duration * 1000.0);
+			CameraPoints.push_back(Point);
+		}
+	}
+
+	return true;
+}
+
+std::string OutputFile;
+
+void GenerateSQLScript()
+{
+	std::stringstream ss;
+	ss << "-- Generated by \"GenerateCameraMesh\" program. Giperion 2020 - 2023 for Turtle project" << std::endl;
+	ss << std::endl;
+	ss << "DELETE FROM cinematic_waypoints WHERE cinematic = " << CinematicID << ";" << std::endl;
+	ss << std::endl;
+	for (int32 i = 0; i < CameraPoints.size(); i++)
+	{
+		const CameraPoint& p = CameraPoints[i];
+		char Comment[256] = {0};
+		wsprintfA(Comment, "%s_%d", OutputFile.c_str(), i);
+		ss << "INSERT INTO `cinematic_waypoints` (`cinematic`, `timer`, `position_x`, `position_y`, `position_z`, `comment`) "
+			"VALUES('" << CinematicID << "', '" << p.Time << "', '" << p.Position.x << "', '" << p.Position.y << "', '" << p.Position.z << "', '" << Comment << "');" << std::endl;
+	}
+	ss << std::endl;
+
+	std::string Buf = ss.str();
+	FILE* CinematicScriptFile = fopen("CinematicPoints.sql", "wb+");
+	fwrite(Buf.c_str(), Buf.size(), 1, CinematicScriptFile);
+	fclose(CinematicScriptFile);
+}
+
 
 int OpenVanillaMesh_Main(int argc, char** argv)
 {
-	//Fvector Test1{ 0.0f, 0.0f, 0.0f };
-	//Fvector Test2{ 45.0f, 45.0f, 15.0f };
-	//Fvector Smoothed;
-	//SmoothPointIn(Test1, Test2, Smoothed);
-
-
-	if (argc < 2)
+	if (argc < 3)
 	{
+		std::cerr << "Usage: GenerateCameraMesh %DonorFile% %OutputFile%" << std::endl;
+		std::cerr << "Example: GenerateCameraMesh FlyByHuman.m2 FlyByGoblin.m2" << std::endl;
 		return 1;
 	}
 
-	FILE* m2File = fopen(argv[1], "rb");
+	if (!ReadPoints())
+	{
+		std::cerr << "Invalid points.txt file" << std::endl;
+		return 1;
+	}
+
+	std::string DonorFile = argv[1];
+	OutputFile = argv[2];
+
+	// argv[1] = m2 donor
+	// argv[2] = out file
+
+	FILE* m2File = fopen(DonorFile.c_str(), "rb");
 	if (m2File == NULL)
 	{
 		return 1;
@@ -554,29 +629,8 @@ int OpenVanillaMesh_Main(int argc, char** argv)
 
 	char* NameData = m2Content + m2Header->nameOfs;
 	ModelAnimation* AnimData = (ModelAnimation*) (m2Content + m2Header->ofsAnimations);
-	char* AnimLookupsData = m2Content + m2Header->ofsAnimationLookup;
 	ModelCameraDef* CameraData = (ModelCameraDef*) (m2Content + m2Header->ofsCameras);
-	char* CameraLookupData = m2Content + m2Header->ofsCameraLookup;
 
-	uint16_t* CameraIndx = (uint16_t*)(m2Content + m2Header->ofsCameraLookup);
-
-	CamPos = CameraData->pos;
-
-	ModelBoneDef* BoneData = (ModelBoneDef*)(m2Content + m2Header->ofsBones);
-
-	ModelView* ViewArr = (ModelView*)(m2Content + m2Header->ofsViews);
-
-	ModelView& FirstView = ViewArr[0];
-	ModelView& SecondView = ViewArr[1];
-	ModelView& ThirdView = ViewArr[2];
-	ModelView& FourthView = ViewArr[3];
-	
-	//std::cout << "M2 Camera transPos: " << std::endl;
-	//PrintAnimationBlock(m2Content, CameraData->transPos);
-	//std::cout << "M2 Camera transTarget: " << std::endl;
-	//PrintAnimationBlock(m2Content, CameraData->transTarget);
-	//std::cout << "M2 Camera rot: " << std::endl;
-	//PrintAnimationBlock(m2Content, CameraData->rot);
 	CameraData->pos.x = 0.0f;
 	CameraData->pos.y = 0.0f;
 	CameraData->pos.z = 0.0f;
@@ -584,25 +638,23 @@ int OpenVanillaMesh_Main(int argc, char** argv)
 	CameraData->target.y = 0.0f;
 	CameraData->target.z = 0.0f;
 
-	//std::cout << "M2 Camera Bone translation: " << std::endl;
-	//PrintAnimationBlock(m2Content, BoneData->translation);
-	//std::cout << "M2 Camera Bone rotation: " << std::endl;
-	//PrintAnimationBlock(m2Content, BoneData->rotation);
-	//std::cout << "M2 Camera Bone scaling: " << std::endl;
-	//PrintAnimationBlock(m2Content, BoneData->scaling);
-
 	// modify anim
 	ModAnimationBlock(m2Content, CameraData->transPos, TargetBlockPos);
 	ModAnimationBlock(m2Content, CameraData->transTarget, TargetBlockTarget);
 	AnimData->timeEnd = Duration;
 
-	//FILE* OutFile = fopen("FlyByGoblin.m2", "wb+");
-	FILE* OutFile = fopen("FlyByElf.m2", "wb+");
+	std::cout << "Creating " << OutputFile << std::endl;
+	FILE* OutFile = fopen(OutputFile.c_str(), "wb+");
 	size_t Elems = fwrite(m2Content, fileSize, 1, OutFile);
 	assert(Elems == 1);
 	fclose(OutFile);
 
 	delete[] m2Content;
+
+	std::cout << "Generating CinematicPoints.sql" << std::endl;
+	GenerateSQLScript();
+
+	std::cout << "DONE!" << std::endl;
 	return 0;
 }
 
@@ -715,7 +767,7 @@ int CreateVanillaCameraMesh_Main(int argc, char** argv)
 	Camera.farclip = 27.77f;
 	Camera.nearclip = 0.22f;
 
-	int AnimPoints = sizeof(sCameraPoints) / sizeof(sCameraPoints[0]);
+	int AnimPoints = CameraPoints.size();
 	
 	Camera.transPos.type = InterpolationMethod::Hermite;
 	Camera.transPos.seq = -1;
@@ -728,7 +780,7 @@ int CreateVanillaCameraMesh_Main(int argc, char** argv)
 	TimesArr.resize(AnimPoints);
 	for (int i = 0; i < AnimPoints; i++)
 	{
-		TimesArr[i] = sCameraPoints[i].Time;
+		TimesArr[i] = CameraPoints[i].Time;
 	}
 
 	Camera.transPos.ofsTimes = PutDataInFileAndTellOffset(TimesArr.data(), TimesArr.size() * sizeof(uint32));
@@ -739,9 +791,9 @@ int CreateVanillaCameraMesh_Main(int argc, char** argv)
 	for (int i = 0; i < AnimPoints; i++)
 	{
 		int baseIndex = i * 3;
-		KeysArr[baseIndex] = sCameraPoints[i].Position;
-		KeysArr[baseIndex + 1] = sCameraPoints[i].Position;
-		KeysArr[baseIndex + 2] = sCameraPoints[i].Position;
+		KeysArr[baseIndex] = CameraPoints[i].Position;
+		KeysArr[baseIndex + 1] = CameraPoints[i].Position;
+		KeysArr[baseIndex + 2] = CameraPoints[i].Position;
 	}
 
 	Camera.transPos.ofsKeys = PutDataInFileAndTellOffset(KeysArr.data(), KeysArr.size() * sizeof(Vec3D));
@@ -759,9 +811,9 @@ int CreateVanillaCameraMesh_Main(int argc, char** argv)
 	for (int i = 0; i < AnimPoints; i++)
 	{
 		int baseIndex = i * 3;
-		KeysArr2[baseIndex] = sCameraPoints[i].Target;
-		KeysArr2[baseIndex + 1] = sCameraPoints[i].Target;
-		KeysArr2[baseIndex + 2] = sCameraPoints[i].Target;
+		KeysArr2[baseIndex] = CameraPoints[i].Target;
+		KeysArr2[baseIndex + 1] = CameraPoints[i].Target;
+		KeysArr2[baseIndex + 2] = CameraPoints[i].Target;
 	}
 
 	Camera.transTarget.ofsKeys = PutDataInFileAndTellOffset(KeysArr2.data(), KeysArr2.size() * sizeof(Vec3D));

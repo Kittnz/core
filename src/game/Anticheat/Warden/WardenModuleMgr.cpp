@@ -35,8 +35,13 @@ std::vector<std::string> GetModuleNames(const std::string &moduleDir)
 
         // look only for .bin files, and assume (for now) that the corresponding .key and .cr files exist
         while (!!(dp = ACE_OS::readdir(dirp)))
+        {
+            if (strlen(dp->d_name) < 4)
+                continue;
+
             if (!memcmp(&dp->d_name[strlen(dp->d_name) - 4], ".bin", 4))
                 results.emplace_back(moduleDir + "/" + dp->d_name);
+        }
 
 #ifndef _WIN32
         // this causes a crash on Windows, so just accept a minor memory leak for now

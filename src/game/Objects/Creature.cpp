@@ -49,7 +49,7 @@
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
 #include "Language.h"
-
+#include "Mail.h"
 #include "CreatureGroups.h"
 #include "ZoneScript.h"
 #include "MoveSplineInit.h"
@@ -203,6 +203,9 @@ bool CreatureCreatePos::Relocate(Creature* cr) const
         return false;
     }
 
+    //don't expect creatures to change this v much.
+    cr->GetZoneAndAreaId(cr->m_areaUpdateId, cr->m_zoneUpdateId);
+
     return true;
 }
 
@@ -218,7 +221,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), m_creatureGroup(nullptr),
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     m_lastLeashExtensionTime(nullptr), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
-    m_detectionDistance(20.0f), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0),
+    m_detectionDistance(20.0f), m_callForHelpTimer(0), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0), m_isDeadByDefault(false),
     m_reputationId(-1), m_gossipMenuId(0), m_castingTargetGuid(0)
 {
     m_regenTimer = 200;
@@ -289,6 +292,41 @@ void Creature::RemoveCorpse()
     // stop loot rolling before loot clear and for close client dialogs
     StopGroupLoot();
 
+    // send unlooted rares to player who won them by mail
+    if (loot.unlootedCount)
+    {
+        for (auto& itr : loot.items)
+        {
+            if (!itr.is_looted && !itr.needs_quest && !itr.lootOwner.IsEmpty())
+            {
+                if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itr.itemid))
+                {
+                    if (pProto->Quality >= ITEM_QUALITY_RARE)
+                    {
+                        if (Player* pPlayer = sObjectMgr.GetPlayer(itr.lootOwner))
+                        {
+                            if (Item* pItem = Item::CreateItem(itr.itemid, itr.count, pPlayer))
+                            {
+                                itr.is_looted = true;
+                                --loot.unlootedCount;
+
+                                pItem->SaveToDB();
+                                std::string subject = pProto->Name1;
+                                std::string body = "You won a roll for this item but were unable to loot it in time.";
+                                MailDraft(subject, body)
+                                    .AddItem(pItem)
+                                    .SendMailTo(pPlayer, MailSender(MAIL_CREATURE, GetEntry()), MAIL_CHECK_MASK_COPIED, 15 * MINUTE, 1 * DAY);
+
+                                if (!loot.unlootedCount)
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     loot.clear();
     uint32 respawnDelay = 0;
 
@@ -307,14 +345,6 @@ void Creature::RemoveCorpse()
     GetMap()->CreatureRelocation(this, x, y, z, o);
 }
 
-bool Creature::IsDeadByDefault() const
-{
-    if (CreatureData const* pData = sObjectMgr.GetCreatureData(GetGUIDLow()))
-        return pData->spawn_flags & SPAWN_FLAG_DEAD;
-
-    return false;
-}
-
 /**
  * change the entry of creature until respawn
  */
@@ -324,7 +354,7 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     if (eventData && eventData->entry_id)
         Entry = eventData->entry_id;
 
-    CreatureInfo const *normalInfo = ObjectMgr::GetCreatureTemplate(Entry);
+    CreatureInfo const *normalInfo = sObjectMgr.GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
         sLog.outErrorDb("Creature::UpdateEntry creature entry %u does not exist.", Entry);
@@ -361,8 +391,10 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(displayId);
     if (!minfo)                                             // Cancel load if no display info addon defined
     {
-        sLog.outErrorDb("Creature (Entry: %u) has no display id data defined in table `creature_display_info_addon`, can't load.", Entry);
-        return false;
+        sLog.outErrorDb("Creature (Entry: %u) has no display id data defined in table `creature_display_info_addon`, using default.", Entry);
+        minfo = sObjectMgr.GetCreatureDisplayInfoAddon(13);
+        if (!minfo)
+            return false;
     }
 
     displayId = minfo->display_id;                          // it can be different (for another gender)
@@ -387,7 +419,6 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
         LoadEquipment(addon->equipment_id);
     }
 
-    SetName(normalInfo->name);                              // at normal entry always
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 
     // update speed for the new CreatureInfo base speed mods
@@ -396,6 +427,57 @@ bool Creature::InitEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, Cr
     SetFly(CanFly());
 
     m_defaultMovementType = MovementGeneratorType(data ? data->movement_type : cinfo->movement_type);
+
+    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
+    switch (GetCreatureInfo()->type)
+    {
+        case CREATURE_TYPE_MECHANICAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL_MAX_HEALTH, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_HEAL, true);
+            ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_LEECH, true);
+            // no break
+        }
+        case CREATURE_TYPE_ELEMENTAL:
+        {
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+            ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+            break;
+        }
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_TAUNT))
+    {
+        ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_STAT))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_STAT, true);
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_MOD_CAST_SPEED))
+    {
+        ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_DISEASE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_POISON))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
+    }
+
+    if (HasImmunityFlag(CREATURE_IMMUNITY_CURSE))
+    {
+        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_CURSE, true);
+    }
 
     return true;
 }
@@ -601,7 +683,7 @@ uint32 Creature::ChooseDisplayId(CreatureInfo const* cinfo, CreatureData const* 
     {
         sLog.outErrorDb("Creature::ChooseDisplayId can not select native display id for creature entry %u, model from creature entry 1 will be used instead.", cinfo->entry);
 
-        if (const CreatureInfo *creatureDefault = ObjectMgr::GetCreatureTemplate(1))
+        if (const CreatureInfo *creatureDefault = sObjectMgr.GetCreatureTemplate(1))
             display_id = creatureDefault->display_id[0];
     }
 
@@ -612,6 +694,20 @@ void Creature::Update(uint32 update_diff, uint32 diff)
 {
     update_diff *= sWorld.GetTimeRate();
     diff *= sWorld.GetTimeRate();
+
+    // AI was locked and switch was delayed to next update.
+    if (HasCreatureState(CSTATE_INIT_AI_ON_UPDATE))
+    {
+        ClearCreatureState(CSTATE_INIT_AI_ON_UPDATE);
+        AIM_Initialize();
+    }
+
+    if (HasCreatureState(CSTATE_EVADE_ON_UPDATE))
+    {
+        ClearCreatureState(CSTATE_EVADE_ON_UPDATE);
+        if (IsInCombat() && AI())
+            AI()->EnterEvadeMode();
+    }
 
     switch (m_deathState)
     {
@@ -697,7 +793,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                         else if (maxCount == 40 && playerCount < 20)
                             playerCount = 20;
                         
-                        sAutoScaler->ScaleCreature(this, playerCount, maxCount);
+                        sAutoScaler->ScaleCreature(this, playerCount, maxCount, GetMap());
                     }
                 }
                 
@@ -776,20 +872,15 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                     m_corpseDecayTimer -= update_diff;
             }
 
-            if (m_pacifiedTimer <= update_diff)
-                m_pacifiedTimer = 0;
-            else
-                m_pacifiedTimer -= update_diff;
+            if (m_pacifiedTimer)
+            {
+                if (m_pacifiedTimer <= update_diff)
+                    m_pacifiedTimer = 0;
+                else
+                    m_pacifiedTimer -= update_diff;
+            }
 
             Unit::Update(update_diff, diff);
-
-            if (GetVictim())
-            {
-                float x, y, z;
-                GetRespawnCoord(x, y, z, nullptr, nullptr);
-                if (GetDistance(x, y, z) > 10.0f)
-                    CallForHelp(m_callForHelpDist);
-            }
 
             // creature can be dead after Unit::Update call
             // CORPSE/DEAD state will processed at next tick (in other case death timer will be updated unexpectedly)
@@ -801,30 +892,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             ModifyAuraState(AURA_STATE_HEALTHLESS_10_PERCENT, hpPercent < 11.0f);
             ModifyAuraState(AURA_STATE_HEALTHLESS_5_PERCENT, hpPercent < 6.0f);
 
-            bool unreachableTarget = !i_motionMaster.empty() &&
-                GetVictim() && !HasExtraFlag(CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE) &&
-                GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE &&
-                !HasDistanceCasterMovement() &&
-                (!CanReachWithMeleeAutoAttack(GetVictim()) || !IsWithinLOSInMap(GetVictim())) &&
-                !GetMotionMaster()->GetCurrent()->IsReachable();
-
-            // No evade mode for pets.
-            if (unreachableTarget && GetCharmerOrOwnerGuid().IsPlayer())
-                unreachableTarget = false;
-            if (unreachableTarget)
-                if (GetVictim())
-                    if (Player* victimPlayer = GetVictim()->ToPlayer())
-                        if(victimPlayer->GetSession()->GetAntiCheat()->IsInKnockBack())
-                            unreachableTarget = false;
-            if (unreachableTarget)
-            {
-                m_TargetNotReachableTimer += update_diff;
-                if (GetMapId() == 30 && CanHaveThreatList() && m_TargetNotReachableTimer > 1000) // Alterac Valley exploit fix
-                    GetThreatManager().modifyThreatPercent(GetVictim(), -101);
-            }
-            else
-                m_TargetNotReachableTimer = 0;
-
+            bool unreachableTarget = false;
             bool leash = false;
             if (HasCreatureState(CSTATE_COMBAT))
             {
@@ -841,7 +909,39 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                     else if (HasCreatureState(CSTATE_COMBAT_WITH_ZONE))
                         SetInCombatWithZone(false);
                 }
+
+                if (GetVictim())
+                {
+                    if (m_callForHelpTimer <= update_diff)
+                    {
+                        m_callForHelpTimer = 1000;
+
+                        float x, y, z;
+                        GetRespawnCoord(x, y, z, nullptr, nullptr);
+                        if (GetDistance(x, y, z) > 10.0f)
+                            CallForHelp(m_callForHelpDist);
+                    }
+                    else
+                        m_callForHelpTimer -= update_diff;
+
+                    unreachableTarget = !i_motionMaster.empty() &&
+                        !HasExtraFlag(CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE) &&
+                        i_motionMaster.GetCurrent()->GetMovementGeneratorType() == CHASE_MOTION_TYPE &&
+                        !i_motionMaster.GetCurrent()->IsReachable() &&
+                        !HasDistanceCasterMovement() && !GetCharmerOrOwnerGuid().IsPlayer() &&
+                        (!CanReachWithMeleeAutoAttack(GetVictim()) || !IsWithinLOSInMap(GetVictim())) &&
+                        !(GetVictim()->IsPlayer() && static_cast<Player*>(GetVictim())->GetSession()->GetAntiCheat()->IsInKnockBack());
+                }
             }
+
+            if (unreachableTarget)
+            {
+                m_TargetNotReachableTimer += update_diff;
+                if (GetMapId() == 30 && CanHaveThreatList() && m_TargetNotReachableTimer > 1000) // Alterac Valley exploit fix
+                    GetThreatManager().modifyThreatPercent(GetVictim(), -101);
+            }
+            else
+                m_TargetNotReachableTimer = 0;
 
             if (AI())
             {
@@ -1047,6 +1147,7 @@ bool Creature::AIM_Initialize()
     if (m_AI_locked)
     {
         DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "AIM_Initialize: failed to init, locked.");
+        AddCreatureState(CSTATE_INIT_AI_ON_UPDATE);
         return false;
     }
 
@@ -1091,13 +1192,6 @@ bool Creature::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo cons
         default:
             m_corpseDelay = sWorld.getConfig(CONFIG_UINT32_CORPSE_DECAY_NORMAL);
             break;
-    }
-
-    // Apply Poison & Disease immunities for Elemental and Mechanical type creatures
-    if (GetCreatureInfo()->type == CREATURE_TYPE_ELEMENTAL || (GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL))
-    {
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_DISEASE, true);
-        ApplySpellImmune(0, IMMUNITY_DISPEL, DISPEL_POISON, true);
     }
 
     // Add to CreatureLinkingHolder if needed
@@ -1397,6 +1491,12 @@ bool Creature::IsTappedBy(Player const* player) const
     return true;
 }
 
+// checked for trading of soulbound items within raid
+bool Creature::WasPlayerPresentAtDeath(Player const* player) const
+{
+    return m_playersPresentAtDeath.find(player->GetObjectGuid()) != m_playersPresentAtDeath.end();
+}
+
 void Creature::SaveToDB()
 {
     // this should only be used when the creature has already been loaded
@@ -1594,7 +1694,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map *map, bool force)
         return false;
 
     uint32 const creatureId = data->ChooseCreatureId();
-    CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(creatureId);
+    CreatureInfo const *cinfo = sObjectMgr.GetCreatureTemplate(creatureId);
     if (!cinfo)
     {
         sLog.outErrorDb("Creature (Entry: %u) not found in table `creature_template`, can't load. ", creatureId);
@@ -1675,6 +1775,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map *map, bool force)
 
     // checked at creature_template loading
     m_defaultMovementType = MovementGeneratorType(data->movement_type);
+    m_isDeadByDefault = (data->spawn_flags & SPAWN_FLAG_DEAD) != 0;
 
     // Creature Linking, Initial load is handled like respawn
     if (m_isCreatureLinkingTrigger && IsAlive())
@@ -1794,8 +1895,8 @@ float Creature::GetAttackDistance(Unit const* pTarget) const
     int32 leveldif = int32(targetlevel) - int32(creaturelevel);
 
     // "The maximum Aggro Radius has a cap of 25 levels under. Example: A level 30 char has the same Aggro Radius of a level 5 char on a level 60 mob."
-    if (leveldif < - 25)
-        leveldif = -25;
+    if (leveldif < - MAX_LEVEL_DIFF_FOR_AGGRO_RANGE)
+        leveldif = - MAX_LEVEL_DIFF_FOR_AGGRO_RANGE;
 
     // "The aggro radius of a mob having the same level as the player is roughly 18 yards"
     float const detectionRange = GetDetectionRange();
@@ -1855,6 +1956,15 @@ void Creature::SetDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
+        // Turtle: Store players in map during raid boss death,
+        // to allow trading of soulbound items among eligible players.
+        if (IsWorldBoss() && IsInWorld() && FindMap() && FindMap()->IsRaid())
+        {
+            Map::PlayerList const& players = FindMap()->GetPlayers();
+            for (auto const& itr : players)
+                m_playersPresentAtDeath.insert(itr.getSource()->GetObjectGuid());
+        }
+
         SetTargetGuid(ObjectGuid());                        // remove target selection in any cases (can be set at aura remove in Unit::SetDeathState)
         SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 
@@ -1878,6 +1988,8 @@ void Creature::SetDeathState(DeathState s)
 
     if (s == JUST_ALIVED)
     {
+        m_playersPresentAtDeath.clear();
+
         ClearUnitState(UNIT_STAT_ALL_DYN_STATES);
 
         CreatureInfo const *cinfo = GetCreatureInfo();
@@ -1966,9 +2078,9 @@ void Creature::Respawn()
     UnitVisibility currentVis = GetVisibility();
     SetVisibility(VISIBILITY_RESPAWN);
     SetUnitMovementFlags(MOVEFLAG_NONE);
-    UpdateObjectVisibility();
+    CheckPendingVisibilityAndViewUpdate();                  // will call UpdateObjectVisibility
     SetVisibility(currentVis);                              // restore visibility state
-    UpdateObjectVisibility();
+    CheckPendingVisibilityAndViewUpdate();                  // will call UpdateObjectVisibility
 
     if (IsDespawned())
     {
@@ -2028,7 +2140,7 @@ bool Creature::IsImmuneToSpell(SpellEntry const *spellInfo, bool castOnSelf) con
         if (spellInfo->Mechanic && GetCreatureInfo()->mechanic_immune_mask & (1 << (spellInfo->Mechanic - 1)))
             return true;
 
-        if (GetCreatureInfo()->school_immune_mask & (1 << spellInfo->School))
+        if ((GetCreatureInfo()->school_immune_mask & (1 << spellInfo->School)) && !spellInfo->IsPositiveSpell())
             return true;
     }
 
@@ -2058,50 +2170,10 @@ bool Creature::IsImmuneToDamage(SpellSchoolMask meleeSchoolMask, SpellEntry cons
     return Unit::IsImmuneToDamage(meleeSchoolMask, spellInfo);
 }
 
-// hacky - seems to be the only way of doing this without wasting more time
-void Creature::SetTauntImmunity(bool immune)
-{
-    if (immune)
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra |= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-    else
-    {
-        auto info = const_cast<CreatureInfo*>(m_creatureInfo);
-        info->flags_extra ^= CREATURE_FLAG_EXTRA_NOT_TAUNTABLE;
-    }
-}
-
 bool Creature::IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex index, bool castOnSelf) const
 {
     if (!castOnSelf && spellInfo->EffectMechanic[index] && GetCreatureInfo()->mechanic_immune_mask & (1 << (spellInfo->EffectMechanic[index] - 1)))
         return true;
-
-    // Taunt immunity special flag check
-    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NOT_TAUNTABLE))
-    {
-        // Taunt aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_MOD_TAUNT)
-                return true;
-        }
-        // Spell effect taunt check
-        else if (spellInfo->Effect[index] == SPELL_EFFECT_ATTACK_ME)
-            return true;
-    }
-
-    // Ustaag <Nostalrius> : Mechanical Creature Type check
-    if (GetCreatureInfo()->type && GetCreatureInfo()->type == CREATURE_TYPE_MECHANICAL)
-    {
-        // Periodic leech aura apply check
-        if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
-        {
-            if (spellInfo->EffectApplyAuraName[index] == SPELL_AURA_PERIODIC_LEECH)
-                return true;
-        }
-    }
 
     return Unit::IsImmuneToSpellEffect(spellInfo, index, castOnSelf);
 }
@@ -2265,10 +2337,10 @@ bool Creature::CanInitiateAttack()
     return true;
 }
 
-class DynamicRespawnRatesChecker
+class DynamicRespawnRatesPlayerChecker
 {
 public:
-    DynamicRespawnRatesChecker(Creature* crea) : _count(0), _hasNearbyEscort(false)
+    DynamicRespawnRatesPlayerChecker(Creature* crea) : _count(0), _hasNearbyEscort(false)
     {
         _myLevel = crea->GetLevel();
         _maxLevelDiff = sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_LEVELDIFF);
@@ -2297,6 +2369,31 @@ private:
     bool _hasNearbyEscort;
 };
 
+class DynamicRespawnRatesCreatureChecker
+{
+public:
+    DynamicRespawnRatesCreatureChecker(uint32 entry)
+        : m_entry(entry), m_aliveCount(0), m_deadCount(0)
+    {}
+    void operator()(Creature* u)
+    {
+        if (u->GetEntry() != m_entry)
+            return;
+
+        if (u->IsAlive())
+            m_aliveCount++;
+        else
+            m_deadCount++;
+    }
+
+    uint32 GetAliveCount() const { return m_aliveCount; }
+    uint32 GetDeadCount() const { return m_deadCount; }
+private:
+    uint32 m_entry;
+    uint32 m_aliveCount;
+    uint32 m_deadCount;
+};
+
 void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
 {
     if (!IsInWorld())
@@ -2310,10 +2407,13 @@ void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
     if (GetSubtype() != CREATURE_SUBTYPE_GENERIC)
         return;
 
+    if (!data || (data->spawn_flags & SPAWN_FLAG_NO_DYNAMIC_RESPAWN))
+        return;
+
     // Only affects rares and above with the forced flag
     if (GetCreatureInfo()->rank >= CREATURE_ELITE_ELITE)
     {
-        if (!data || !(data->spawn_flags & SPAWN_FLAG_FORCE_DYNAMIC_ELITE))
+        if (!(data->spawn_flags & SPAWN_FLAG_FORCE_DYNAMIC_ELITE))
             return;
     }
 
@@ -2330,30 +2430,42 @@ void Creature::ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data)
     if (delay < sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_MIN_RESPAWN_TIME))
         return;
 
-    DynamicRespawnRatesChecker check(this);
-    MaNGOS::PlayerWorker<DynamicRespawnRatesChecker> searcher(check);
+    DynamicRespawnRatesPlayerChecker check(this);
+    MaNGOS::PlayerWorker<DynamicRespawnRatesPlayerChecker> searcher(check);
     Cell::VisitWorldObjects(this, searcher, checkRange);
 
     // No dynamic respawns around an in progress escort
     if (check.HasNearbyEscort())
         return;
 
-    int32 count = check.GetCount();
-    count -= sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_THRESHOLD);
-    if (count <= 0)
+    uint32 playerCount = check.GetCount();
+    if (playerCount < sWorld.getConfig(CONFIG_UINT32_DYN_RESPAWN_PLAYERS_THRESHOLD))
         return;
 
-    uint32 originalDelay = delay;
-
     float maxReductionRate = sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_MAX_REDUCTION_RATE);
-    float reductionRate = count * sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_PERCENT_PER_PLAYER) / 100.0f;
-    if (reductionRate > maxReductionRate)
+
+    DynamicRespawnRatesCreatureChecker check2(GetEntry());
+    MaNGOS::CreatureWorker<DynamicRespawnRatesCreatureChecker> worker(this, check2);
+    Cell::VisitGridObjects(this, worker, checkRange);
+
+    float reductionRate;
+    if ((check2.GetAliveCount() < check2.GetDeadCount()) &&
+        (check2.GetAliveCount() < playerCount))
+    {
         reductionRate = maxReductionRate;
+    }
+    else
+    {
+        reductionRate = playerCount * sWorld.getConfig(CONFIG_FLOAT_DYN_RESPAWN_PERCENT_PER_PLAYER) / 100.0f;
+        if (reductionRate > maxReductionRate)
+            reductionRate = maxReductionRate;
+    }
 
     // Invalid configuration
     if (reductionRate < 0)
         return;
 
+    uint32 originalDelay = delay;
     uint32 reduction = static_cast<uint32>(reductionRate * originalDelay);
     if (reduction >= delay)
         delay = 0;
@@ -2549,29 +2661,31 @@ void Creature::SetInCombatWithZone(bool initialPulse)
         return;
 
     if (!HasCreatureState(CSTATE_COMBAT_WITH_ZONE))
+    {
         UpdateCombatWithZoneState(true);
+
+        // Attack closest player first.
+        // Prevent case where boss runs to somebody who just entered raid.
+        if (initialPulse && !GetVictim() && AI())
+        {
+            if (Player* pPlayer = FindNearestHostilePlayer(MAX_VISIBILITY_DISTANCE))
+                AI()->AttackStart(pPlayer);
+        }
+    }
 
     for (const auto& i : PlList)
     {
         if (Player* pPlayer = i.getSource())
         {
-            if (pPlayer->IsGameMaster())
-                continue;
-
             if (!initialPulse && pPlayer->IsInCombat())
                 continue;
 
-            if (pPlayer->IsAlive() && !IsFriendlyTo(pPlayer))
+            if (IsValidAttackTarget(pPlayer))
             {
-                if (IsInCombat())
-                {
-                    pPlayer->SetInCombatWith(this);
-                    AddThreat(pPlayer);
-                }
-                else if (AI())
-                {
-                    AI()->AttackStart(pPlayer);
-                }
+                EnterCombatWithTarget(pPlayer);
+                Pet* pet = pPlayer->GetPet();
+                if (pet && IsValidAttackTarget(pet))
+                    EnterCombatWithTarget(pet);
             }
         }
     }
@@ -2580,49 +2694,104 @@ void Creature::SetInCombatWithZone(bool initialPulse)
 
 bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const
 {
-    if (selectFlags & SELECT_FLAG_PLAYER && pTarget->GetTypeId() != TYPEID_PLAYER)
-        return false;
+    if (selectFlags)
+    {
+        if ((selectFlags & SELECT_FLAG_PLAYER) && pTarget->GetTypeId() != TYPEID_PLAYER)
+            return false;
 
-    if (selectFlags & SELECT_FLAG_NO_TOTEM && pTarget->ToCreature() && pTarget->ToCreature()->IsTotem())
-        return false;
+        if ((selectFlags & SELECT_FLAG_NO_TOTEM) && pTarget->ToCreature() && pTarget->ToCreature()->IsTotem())
+            return false;
 
-    if (selectFlags & SELECT_FLAG_NO_PET && pTarget->ToCreature() && pTarget->ToCreature()->IsPet())
-        return false;
+        if ((selectFlags & SELECT_FLAG_NO_PET) && pTarget->ToCreature() && pTarget->ToCreature()->IsPet())
+            return false;
 
-    if (selectFlags & SELECT_FLAG_POWER_MANA && pTarget->GetPowerType() != POWER_MANA)
-        return false;
+        if ((selectFlags & SELECT_FLAG_POWER_MANA) && pTarget->GetPowerType() != POWER_MANA)
+            return false;
 
-    if ((selectFlags & SELECT_FLAG_POWER_NOT_MANA) && pTarget->GetPowerType() == POWER_MANA)
-        return false;
+        if ((selectFlags & SELECT_FLAG_POWER_NOT_MANA) && pTarget->GetPowerType() == POWER_MANA)
+            return false;
 
-    if (selectFlags & SELECT_FLAG_POWER_RAGE && pTarget->GetPowerType() != POWER_RAGE)
-        return false;
+        if ((selectFlags & SELECT_FLAG_POWER_RAGE) && pTarget->GetPowerType() != POWER_RAGE)
+            return false;
 
-    if (selectFlags & SELECT_FLAG_POWER_ENERGY && pTarget->GetPowerType() != POWER_ENERGY)
-        return false;
+        if ((selectFlags & SELECT_FLAG_POWER_ENERGY) && pTarget->GetPowerType() != POWER_ENERGY)
+            return false;
 
-    if (selectFlags & SELECT_FLAG_IN_MELEE_RANGE && !CanReachWithMeleeAutoAttack(pTarget))
-        return false;
+        if ((selectFlags & SELECT_FLAG_IN_MELEE_RANGE) && !CanReachWithMeleeAutoAttack(pTarget))
+            return false;
 
-    if (selectFlags & SELECT_FLAG_NOT_IN_MELEE_RANGE && CanReachWithMeleeAutoAttack(pTarget))
-        return false;
+        if ((selectFlags & SELECT_FLAG_NOT_IN_MELEE_RANGE) && CanReachWithMeleeAutoAttack(pTarget))
+            return false;
 
-    if (selectFlags & SELECT_FLAG_IN_LOS && !IsWithinLOSInMap(pTarget))
-        return false;
+        if ((selectFlags & SELECT_FLAG_IN_LOS) && !IsWithinLOSInMap(pTarget))
+            return false;
 
-    if (selectFlags & SELECT_FLAG_PLAYER_NOT_GM && (pTarget->GetTypeId() != TYPEID_PLAYER || pTarget->ToPlayer()->IsGameMaster()))
-        return false;
+        if ((selectFlags & SELECT_FLAG_PLAYER_NOT_GM) && (pTarget->GetTypeId() != TYPEID_PLAYER || pTarget->ToPlayer()->IsGameMaster()))
+            return false;
 
-    if (selectFlags & SELECT_FLAG_PET && !pTarget->ToPet())
-        return false;
+        if ((selectFlags & SELECT_FLAG_PET) && !pTarget->ToPet())
+            return false;
 
-    if (selectFlags & SELECT_FLAG_NOT_PLAYER && pTarget->GetTypeId() == TYPEID_PLAYER)
+        if ((selectFlags & SELECT_FLAG_NOT_PLAYER) && pTarget->GetTypeId() == TYPEID_PLAYER)
+            return false;
+    }
+
+    // It makes more sense to check IsValidAttackTarget, but will break Kel'Thuzad script when IsTargetableBy is synced with vmangos.
+    // He is immune to players in first phase, but picks random targets from threat list for summons to attack.
+    if (pTarget->IsDead() ||
+        pTarget->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_SELECTABLE) ||
+        IsFriendlyTo(pTarget))
         return false;
 
     if (pSpellInfo)
         return pSpellInfo->IsTargetInRange(this, pTarget);
 
     return true;
+}
+
+void Creature::LogDeath(Unit* pKiller) const
+{
+    // by default we log bosses only
+    if (!IsWorldBoss() && !HasExtraFlag(CREATURE_FLAG_EXTRA_INSTANCE_BIND))
+        return;
+
+    if (pKiller)
+    {
+        if (Player* pPlayer = pKiller->GetCharmerOrOwnerPlayerOrPlayerItself())
+        {
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                float groupMembersCount = 0;
+                float groupItemLevel = 0;
+                std::string groupMemberNames;
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        groupMembersCount++;
+                        groupItemLevel += pMember->GetAverageItemLevel();
+
+                        // Not self.
+                        if (pMember == pPlayer)
+                            continue;
+
+                        if (!groupMemberNames.empty())
+                            groupMemberNames += ", ";
+
+                        groupMemberNames += pMember->GetName() + std::string(" (Guid: ") + std::to_string(pMember->GetGUIDLow()) + ")";
+                    }
+                }
+
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) in group (ilvl %g) with: %s", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow(), (groupItemLevel / groupMembersCount), groupMemberNames.c_str());
+            }
+            else
+                sLog.outRaid("[Map %u] [Instance %u] %s killed by Player %s (Guid: %u) not in group.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pPlayer->GetName(), pPlayer->GetGUIDLow());
+        }
+        else
+            sLog.outRaid("[Map %u] [Instance %u] %s killed by %s.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str(), pKiller->GetGuidStr().c_str());
+    }
+    else
+        sLog.outRaid("[Map %u] [Instance %u] %s died on its own.", GetMapId(), GetMap()->GetInstanceId(), GetGuidStr().c_str());
 }
 
 Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags) const
@@ -2652,7 +2821,7 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
             advance(itr, position);
             for (; itr != threatlist.end(); ++itr)
                 if (Unit* pTarget = GetMap()->GetUnit((*itr)->getUnitGuid()))
-                    if (!selectFlags || MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
+                    if (MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
                         suitableUnits.push_back(pTarget);
 
             if (!suitableUnits.empty())
@@ -2665,7 +2834,7 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
             advance(itr, position);
             for (; itr != threatlist.end(); ++itr)
                 if (Unit* pTarget = GetMap()->GetUnit((*itr)->getUnitGuid()))
-                    if (!selectFlags || MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
+                    if (MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
                         return pTarget;
 
             break;
@@ -2675,7 +2844,7 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
             advance(ritr, position);
             for (; ritr != threatlist.rend(); ++ritr)
                 if (Unit* pTarget = GetMap()->GetUnit((*itr)->getUnitGuid()))
-                    if (!selectFlags || MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
+                    if (MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
                         return pTarget;
 
             break;
@@ -2867,7 +3036,7 @@ void Creature::AllLootRemovedFromCorpse()
 
 std::string Creature::GetAIName() const
 {
-    return ObjectMgr::GetCreatureTemplate(GetEntry())->ai_name;
+    return sObjectMgr.GetCreatureTemplate(GetEntry())->ai_name;
 }
 
 std::string Creature::GetScriptName() const
@@ -2877,7 +3046,7 @@ std::string Creature::GetScriptName() const
 
 uint32 Creature::GetScriptId() const
 {
-    return ObjectMgr::GetCreatureTemplate(GetEntry())->script_id;
+    return sObjectMgr.GetCreatureTemplate(GetEntry())->script_id;
 }
 
 VendorItemData const* Creature::GetVendorItems() const
@@ -2910,7 +3079,7 @@ uint32 Creature::GetVendorItemCurrentCount(VendorItem const* vItem)
 
     if (vCount->lastIncrementTime + vCount->restockDelay <= ptime)
     {
-        ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(vItem->item);
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(vItem->item);
 
         uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vCount->restockDelay);
         if ((vCount->count + diff * pProto->BuyCount) >= vItem->maxcount)
@@ -2955,7 +3124,7 @@ uint32 Creature::UpdateVendorItemCurrentCount(VendorItem const* vItem, uint32 us
 
     if (vCount->lastIncrementTime + vCount->restockDelay <= ptime)
     {
-        ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(vItem->item);
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(vItem->item);
 
         uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vCount->restockDelay);
         if ((vCount->count + diff * pProto->BuyCount) < vItem->maxcount)
@@ -2994,7 +3163,7 @@ const char* Creature::GetNameForLocaleIdx(int32 loc_idx) const
         }
     }
 
-    return GetName();
+    return Creature::GetName();
 }
 
 void Creature::SetFactionTemporary(uint32 factionId, uint32 tempFactionFlags)
@@ -3368,8 +3537,8 @@ Unit* Creature::SelectNearestHostileUnitInAggroRange(bool useLOS, bool ignoreCiv
     TypeContainerVisitor<MaNGOS::UnitLastSearcher<MaNGOS::NearestHostileUnitInAggroRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
     TypeContainerVisitor<MaNGOS::UnitLastSearcher<MaNGOS::NearestHostileUnitInAggroRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
-    cell.Visit(p, world_unit_searcher, *GetMap(), *this, MAX_VISIBILITY_DISTANCE);
-    cell.Visit(p, grid_unit_searcher, *GetMap(), *this, MAX_VISIBILITY_DISTANCE);
+    cell.Visit(p, world_unit_searcher, *GetMap(), *this, GetDetectionRange() + MAX_LEVEL_DIFF_FOR_AGGRO_RANGE);
+    cell.Visit(p, grid_unit_searcher, *GetMap(), *this, GetDetectionRange() + MAX_LEVEL_DIFF_FOR_AGGRO_RANGE);
 
     return target;
 }
@@ -3566,6 +3735,17 @@ void Creature::ResetCombatTime(bool combat)
         m_combatResetCount = 0;
 }
 
+void Creature::EnterCombatWithTarget(Unit* pVictim)
+{
+    if (!GetVictim() && AI())
+        AI()->AttackStart(pVictim);
+    else if (GetVictim() != pVictim)
+    {
+        AddThreat(pVictim);
+        pVictim->SetInCombatWith(this);
+    }
+}
+
 bool Creature::canStartAttack(Unit const* who, bool force) const
 {
     if (IsCivilian())
@@ -3696,7 +3876,7 @@ void Creature::SetVirtualItem(VirtualItemSlot slot, uint32 item_id)
         return;
     }
 
-    ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item_id);
+    ItemPrototype const* proto = sObjectMgr.GetItemPrototype(item_id);
     if (!proto)
     {
         sLog.outError("Not listed in 'item_template' item (ID:%u) used as virtual item for %s", item_id, GetGuidStr().c_str());

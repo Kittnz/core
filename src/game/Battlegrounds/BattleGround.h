@@ -27,6 +27,7 @@
 #include "Map.h"
 #include "ByteBuffer.h"
 #include "ObjectGuid.h"
+#include "WorldPacket.h"
 
 // magic event-numbers
 #define BG_EVENT_NONE 255
@@ -80,6 +81,8 @@ enum BattleGroundMarks
     SPELL_AB_MARK_WINNER            = 24953,
     SPELL_AV_MARK_LOSER             = 24954,
     SPELL_AV_MARK_WINNER            = 24955,
+    SPELL_BR_MARK_LOSER             = 29128,
+    SPELL_BR_MARK_WINNER            = 29129
 };
 
 enum BattleGroundTimeIntervals
@@ -90,12 +93,10 @@ enum BattleGroundTimeIntervals
     INVITE_ACCEPT_WAIT_TIME         = 80000,                // ms
     TIME_TO_AUTOREMOVE              = 120000,               // ms
     MAX_OFFLINE_TIME                = 30,                   // secs
-    RESPAWN_ONE_DAY                 = 86400,                // secs
     RESPAWN_IMMEDIATELY             = 0,                    // secs
+    RESPAWN_2MINUTES                = 120,                  // secs
     BUFF_RESPAWN_TIME               = 180,                  // secs
-    RESPAWN_FOUR_DAYS               = 345600,               // secs
-    DESPAWN_IMMEDIATELY             = 345601,               // secs
-    RESPAWN_2MINUTES                = 120
+    RESPAWN_NEVER                   = 31536000,             // secs (1 year)
 };
 
 enum BattleGroundStartTimeIntervals
@@ -365,6 +366,7 @@ class BattleGround
         BattleGroundScoreMap::const_iterator GetPlayerScoresBegin() const { return m_PlayerScores.begin(); }
         BattleGroundScoreMap::const_iterator GetPlayerScoresEnd() const { return m_PlayerScores.end(); }
         uint32 GetPlayerScoresSize() const { return m_PlayerScores.size(); }
+        WorldPacket const* GetFinalScorePacket() const { return &m_finalScore; }
 
         void StartBattleGround();
         void StopBattleGround();
@@ -503,7 +505,7 @@ class BattleGround
         GuidVector m_BgObjects;
         GuidVector m_BgCreatures;
         void SpawnObject(ObjectGuid guid, uint32 respawntime);
-        bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime = 0);
+        bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3);
         void SpawnCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode mode);
         virtual Creature* AddCreature(uint32 entry, uint32 type, float x, float y, float z, float o, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
         Creature* AddCreature(uint32 entry, uint32 type, Position const& pos, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
@@ -570,6 +572,8 @@ class BattleGround
         BattleGroundTypeId m_TypeID;
         BattleGroundStatus m_Status;
         BattleGroundWinner  m_Winner;
+        WorldPacket m_finalScore;
+
         uint32 m_ClientInstanceID;                          //the instance-id which is sent to the client and without any other internal use
         uint32 m_StartTime;
         int32 m_EndTime;                                    // it is set to 120000 when bg is ending and it decreases itself

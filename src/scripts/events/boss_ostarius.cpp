@@ -40,6 +40,8 @@ void DeleteObject(WorldObject* object, std::vector<ObjectGuid> &list)
     object->DeleteLater();
 }
 
+static time_t lastOstariusSummonTime = 0;
+
 struct boss_ostariusAI : public ScriptedAI
 {
     explicit boss_ostariusAI(Creature *c) : ScriptedAI(c)
@@ -61,6 +63,7 @@ struct boss_ostariusAI : public ScriptedAI
     uint32 m_chainLightningTimer = 0;
     uint32 m_spawnPortalsTimer = 0;
     uint32 m_spawnDevicesTimer = 0;
+    uint32 m_teleportTargetTimer = 0;
 
     std::vector<ObjectGuid> m_constructSpawns;
     std::vector<ObjectGuid> m_sentrySpawns;
@@ -110,6 +113,7 @@ struct boss_ostariusAI : public ScriptedAI
         m_spawnPortalsTimer = 0;
         m_spawnDevicesTimer = 0;
         m_portalActivateTimer = 10000;
+        m_teleportTargetTimer = 3000;
 
         me->SetAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
 
@@ -127,6 +131,9 @@ struct boss_ostariusAI : public ScriptedAI
 
     void OnRemoveFromWorld() override
     {
+        if (m_creature->IsAlive())
+            lastOstariusSummonTime = 0;
+
         DespawnSummons();
     }
 
@@ -240,16 +247,9 @@ struct boss_ostariusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateEvents(uint32 const diff)
     {
         m_events.Update(diff);
-
-        // Anti-leash protection
-        if (me->GetPositionX() > (me->GetHomePosition().x + 150))
-            EnterEvadeMode();
-
-        if (!me->SelectHostileTarget() || !me->GetVictim())
-            return;
 
         // Timer events
         while (uint32 eventId = m_events.ExecuteEvent())
@@ -278,7 +278,8 @@ struct boss_ostariusAI : public ScriptedAI
                 }
                 case EVENT_INTRO_RP_4:
                 {
-                    me->CastSpell(me->GetVictim(), SPELL_SCAN_OF_OSTARIUS, true);
+                    if (me->GetVictim())
+                        me->CastSpell(me->GetVictim(), SPELL_SCAN_OF_OSTARIUS, true);
                     m_events.ScheduleEvent(EVENT_INTRO_RP_5, Seconds(6));
                     break;
                 }
@@ -321,15 +322,44 @@ struct boss_ostariusAI : public ScriptedAI
                 case EVENT_PHASE_3_DELAY:
                 {
                     // Remove physical immunity, reset combat reach, unroot, restore swing timer.
-                    MakeNormal();
+                    if (me->GetVictim())
+                    {
+                        MakeNormal();
 
-                    me->SetAttackTimer(BASE_ATTACK, 2000);
-                    me->SetInCombatWith(me->GetVictim());
+                        me->SetAttackTimer(BASE_ATTACK, 2000);
+                        me->SetInCombatWith(me->GetVictim());
+                    }
 
                     break;
                 }
             }
         }
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        UpdateEvents(diff);
+
+        // wait for rp event on spawn to finish
+        if (!m_currentPhase)
+            return;
+
+        if (!me->SelectHostileTarget() || !me->GetVictim())
+            return;
+
+        // Anti-leash protection
+        if (me->GetPositionX() > (me->GetHomePosition().x + 150))
+            EnterEvadeMode();
+
+        if (m_teleportTargetTimer <= diff)
+        {
+            if (!me->CanReachWithMeleeAutoAttack(me->GetVictim()))
+                me->CastSpell(me->GetVictim(), SPELL_SUMMON_PLAYER, true);
+
+            m_teleportTargetTimer = 3000;
+        }
+        else
+            m_teleportTargetTimer -= diff;
 
         // Portal phase.
         if (m_currentPhase == 1 && !(m_phaseState & STATE_PHASE_1))
@@ -526,6 +556,12 @@ struct boss_ostariusAI : public ScriptedAI
                 10 * IN_MILLISECONDS,
                 true
             );
+
+            if (!spawn)
+            {
+                m_creature->MonsterSay(66110);
+                return;
+            }
 
             ConstructSpawns().push_back(spawn->GetObjectGuid());
 
@@ -866,16 +902,12 @@ struct npc_uldum_pedestalAI : public ScriptedAI
         npc_uldum_pedestalAI::Reset();
     }
 
-    uint32 InitialDelay_Timer{};
     EventMap m_events;
-    uint8 failedSearches{};
     bool m_started = false;
-
 
     void SetDefaults()
     {
         m_events.Reset();
-        failedSearches = 0;
         m_started = false;
     }
 
@@ -911,20 +943,6 @@ struct npc_uldum_pedestalAI : public ScriptedAI
     {
         m_events.Update(diff);
 
-        if (!me->GetVictim())
-        {
-            failedSearches++;
-
-            if (failedSearches >= 20)
-            {
-                TogglePedestal();
-                Reset();
-                me->DeleteLater();
-            }
-
-            return;
-        }
-
         while (uint32 eventId = m_events.ExecuteEvent())
         {
             switch (eventId)
@@ -933,46 +951,62 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                 // "Plates present, scanning for item validation...";
                 // "Plates authentication complete. Unlocking the gates...";
                 // "Activating Gate Keeper to greet the guests...";
-            case PEDESTAL_EVENT_INTRO_1:
-            {
-                me->MonsterSay(PED_TEXT_1);
-                PlaySound(me, SOUND_PED_TEXT_1);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_2:
-            {
-                me->MonsterSay(PED_TEXT_2);
-                PlaySound(me, SOUND_PED_TEXT_2);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
-                DoCast(nullptr, 25425, true);
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_3:
-            {
-                me->MonsterSay(PED_TEXT_3);
-                PlaySound(me, SOUND_PED_TEXT_3);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
-                break;
-            }
-            case PEDESTAL_EVENT_INTRO_4:
-            {
-                me->MonsterSay(PED_TEXT_4);
-                PlaySound(me, SOUND_PED_TEXT_4);
-                m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
-                break;
-            }
-            case PEDESTAL_EVENT_BOSS_SPAWN:
-            {
-                if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
+                case PEDESTAL_EVENT_INTRO_1:
                 {
-                    ostarius->AI()->JustRespawned();
-                    ostarius->SetInCombatWith(me->GetVictim());
+                    me->MonsterSay(PED_TEXT_1);
+                    PlaySound(me, SOUND_PED_TEXT_1);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
+                    break;
                 }
+                case PEDESTAL_EVENT_INTRO_2:
+                {
+                    me->MonsterSay(PED_TEXT_2);
+                    PlaySound(me, SOUND_PED_TEXT_2);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
+                    DoCast(nullptr, 25425, true);
+                    break;
+                }
+                case PEDESTAL_EVENT_INTRO_3:
+                {
+                    me->MonsterSay(PED_TEXT_3);
+                    PlaySound(me, SOUND_PED_TEXT_3);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
+                    break;
+                }
+                case PEDESTAL_EVENT_INTRO_4:
+                {
+                    me->MonsterSay(PED_TEXT_4);
+                    PlaySound(me, SOUND_PED_TEXT_4);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
+                    break;
+                }
+                case PEDESTAL_EVENT_BOSS_SPAWN:
+                {
+                    std::list<Player*> players;
+                    me->GetAlivePlayerListInRange(me, players, 100.0f);
 
-                me->DeleteLater();
-                break;
-            }
+                    if (!players.empty())
+                    {
+                        if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                        {
+                            ostarius->AI()->JustRespawned();
+
+                            for (auto const& itr : players)
+                            {
+                                ostarius->SetInCombatWith(itr);
+                                ostarius->AddThreat(itr);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TogglePedestal();
+                        lastOstariusSummonTime = 0;
+                    }
+
+                    me->DespawnOrUnsummon();
+                    break;
+                }
             }
         }
     }
@@ -1057,7 +1091,7 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
     //check if we already have an active event..
     if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
     {
-        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress)
+        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress && ((lastOstariusSummonTime + 7 * DAY) < sWorld.GetGameTime()))
             player->PrepareQuestMenu(pGo->GetObjectGuid());
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -1069,8 +1103,25 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 
 bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+    switch (uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF + 1:
+        {
+            if (player->IsGameMaster())
+            {
+                lastOstariusSummonTime = 0;
+                player->GetSession()->SendNotification("Ostarius cooldown has been reset.");
+            }
+            else
+                player->GetSession()->SendNotification("Ostarius is on cooldown and cannot be summoned yet.");
+            break;
+        }
+        case GOSSIP_ACTION_INFO_DEF + 2:
+        {
+            pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+            break;
+        }
+    }
 
     player->CLOSE_GOSSIP_MENU();
     return true;
@@ -1086,6 +1137,9 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
 
     if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
     {
+        if (sWorld.GetContentPhase() < CONTENT_PHASE_2)
+            return false;
+
         if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
         {
             if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))
@@ -1102,7 +1156,7 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         else
             second_item_added = true;
 
-        if (!first_item_added || !second_item_added)
+        if (!first_item_added || !second_item_added || ((lastOstariusSummonTime + 7 * DAY) > sWorld.GetGameTime()))
         {
             player->RemoveQuest(40107);
             player->RemoveQuest(40115);
@@ -1113,8 +1167,10 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         }
 
         // Summon pedestal NPC to start encounter RP phase.
-        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
+        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 120000))
         {
+            lastOstariusSummonTime = sWorld.GetGameTime();
+
             if (auto pedestalAI = dynamic_cast<npc_uldum_pedestalAI*>(c->AI()))
                 pedestalAI->Start();
             // If vanilla quest line NPC is on-top of the pedestal, despawn him.

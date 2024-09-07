@@ -21,12 +21,22 @@
 
 #include "Util.h"
 #include "Timer.h"
+#include "Log.h"
 
 #include "utf8cpp/utf8.h"
+#include "Log.h"
 #include "mersennetwister/MersenneTwister.h"
 
 #include <ace/TSS_T.h>
 #include <ace/OS_NS_arpa_inet.h>
+#include <openssl/md5.h>
+
+#include "Auth/Hmac.h"
+#include "Auth/base32.h"
+
+
+#include <iomanip>
+#include <sstream>
 
 typedef ACE_TSS<MTRand> MTRandTSS;
 static MTRandTSS mtRand;
@@ -194,7 +204,7 @@ float GetFloatValueFromArray(Tokens const& data, uint16 index)
 
 void stripLineInvisibleChars(std::string &str)
 {
-    static std::string invChars = " \t\7\n";
+    static std::string invChars = " \t\7\n\r";
 
     size_t wpos = 0;
 
@@ -322,6 +332,47 @@ std::string TimeToTimestampStr(time_t t)
     char buf[20];
     snprintf(buf,20,"%04d-%02d-%02d_%02d-%02d-%02d",aTm->tm_year+1900,aTm->tm_mon+1,aTm->tm_mday,aTm->tm_hour,aTm->tm_min,aTm->tm_sec);
     return std::string(buf);
+}
+
+std::string NormalizeString(const std::string& InStr)
+{
+    std::wstring WideString;
+    bool bConversionOk = Utf8toWStr(InStr, WideString);
+    if (!bConversionOk)
+    {
+        sLog.outError("Can't normalize string %s. Someone hacking, or DB corrupted", InStr.c_str());
+        return "";
+    }
+
+
+    std::wstring ClearedWideString;
+    ClearedWideString.reserve(WideString.size());
+    for (wchar_t ch : WideString)
+    {
+        if (isExtendedLatinCharacter(ch) || 
+            isCyrillicCharacter(ch) || 
+            isEastAsianCharacter(ch) ||
+            isPrintableAsciiCharacter(ch)
+            || (ch == 0xD)) // Symbols: CR
+        {
+            ClearedWideString.push_back(ch);
+        }
+        else
+        {
+            ClearedWideString.push_back(L'?');
+        }
+    }
+
+    std::string result;
+
+    bConversionOk = WStrToUtf8(ClearedWideString, result);
+	if (!bConversionOk)
+	{
+		sLog.outError("Can't convert back to UTF8 %s. Someone hacking, or core goes crazy", InStr.c_str());
+		return "";
+	}
+
+    return result;
 }
 
 /// Check if the string is a valid ip address representation
@@ -484,6 +535,26 @@ bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str)
     return true;
 }
 
+void ReplaceAll(std::string& str, const std::string& from, const std::string& to)
+{
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::string::npos)
+    {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
+}
+
+void ReplaceAllW(std::wstring& str, const std::wstring& from, const std::wstring& to)
+{
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
+    {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
+}
+
 typedef wchar_t const* const* wstrlist;
 
 bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
@@ -521,6 +592,7 @@ bool consoleToUtf8(const std::string& conStr, std::string& utf8str)
 bool Utf8FitTo(const std::string& str, std::wstring search)
 {
     std::wstring temp;
+    temp.reserve(str.size());
 
     if (!Utf8toWStr(str, temp))
         return false;
@@ -555,6 +627,14 @@ void vutf8printf(FILE *out, const char *str, va_list* ap)
 
     CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], uint32(wtemp_len + 1));
     fprintf(out, "%s", temp_buf);
+
+    //Giperion: God knows how many times I reimplement that function in various mangos forks
+	if (IsDebuggerPresent())
+	{
+		OutputDebugStringW(wtemp_buf);
+		OutputDebugStringW(L"\n");
+	}
+
 #else
     vfprintf(out, str, *ap);
 #endif
@@ -655,4 +735,94 @@ std::string MoneyToString(uint32 copper)
     ss << "c";
 
     return ss.str();
+}
+
+std::string GetCurrentTimeString()
+{
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
+
+#ifdef WIN32
+#include <windows.h>
+#include <VersionHelpers.h>
+
+bool Win10SupportNewThreadNameInit = false;
+
+using ThreadCall = HRESULT(WINAPI*)(HANDLE handle, PCWSTR name);
+ThreadCall pThreadCall = nullptr;
+
+#pragma pack(push,8)
+struct THREAD_NAME
+{
+	DWORD dwType;
+	const char* szName;
+	DWORD dwThreadID;
+	DWORD dwFlags;
+};
+
+#pragma pack(pop)
+
+void InternalThreadName(const char* name)
+{
+#ifdef _WIN32_WINNT_WIN10
+	if (IsWindows10OrGreater() && !Win10SupportNewThreadNameInit)
+	{
+		HMODULE KernelLib = GetModuleHandle("kernel32.dll");
+		pThreadCall = (ThreadCall)GetProcAddress(KernelLib, "SetThreadDescription");
+		Win10SupportNewThreadNameInit = true;
+	}
+#endif
+
+	if (pThreadCall)
+	{
+		constexpr size_t cSize = 64;
+		wchar_t wc[cSize];
+		mbstowcs(wc, name, cSize);
+
+		pThreadCall(GetCurrentThread(), wc);
+	}
+	else
+	{
+		THREAD_NAME tn;
+		tn.dwType = 0x1000;
+		tn.szName = name;
+		tn.dwThreadID = DWORD(-1);
+		tn.dwFlags = 0;
+		__try
+		{
+			RaiseException(0x406D1388, 0, sizeof(tn) / sizeof(size_t), (size_t*)&tn);
+		}
+		__except (EXCEPTION_CONTINUE_EXECUTION)
+		{
+		}
+	}
+}
+
+#else
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#include <pthread.h>
+
+#endif
+
+
+
+void thread_name(const char* name)
+{
+#ifdef WIN32
+    // Should be in separate function, because of __try and /EHse, while we have scope object from Optick
+    InternalThreadName(name);
+#else
+    pthread_t threadID = pthread_self();
+    pthread_setname_np(threadID, name);
+#endif
+
+    OPTICK_SETUP_THREAD(name);
 }

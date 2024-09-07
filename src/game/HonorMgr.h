@@ -74,7 +74,7 @@ class HonorMaintenancer
         HonorStandingList& GetStandingListByTeam(Team team);
         HonorScores GenerateScores(HonorStandingList& standingList);
         float CalculateRpEarning(float cp, HonorScores sc);
-        float CalculateRpDecay(float rpEarning, float rp);
+        float CalculateRpDecay(float rpEarning, const WeeklyScore& wk);
         float MaximumRpAtLevel(uint8 level);
 
         void CheckMaintenanceDay();

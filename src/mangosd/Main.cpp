@@ -42,6 +42,7 @@
 DatabaseType WorldDatabase;                                 ///< Accessor to the world database
 DatabaseType CharacterDatabase;                             ///< Accessor to the character database
 DatabaseType LoginDatabase;                                 ///< Accessor to the realm/login database
+DatabaseType LogsDatabase;                                  ///< Accessor to the Logs database
 
 uint32 realmID;                                             ///< Id of the realm
 
@@ -72,6 +73,8 @@ extern int main(int argc, char **argv)
 
 
     char const *options = ":c:s:";
+
+    thread_name("MainThread");
 
     ACE_Get_Opt cmd_opts(argc, argv, options);
     cmd_opts.long_option("version", 'v');

@@ -145,7 +145,7 @@ class WMOGroup
         char* LiquBytes;
         uint32 liquflags;
 
-        int nDoodads;
+        int nDoodads = 0;
         short* doodads;
 
         WMOGroup(std::string& filename, WMORoot* root);

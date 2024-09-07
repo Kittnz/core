@@ -25,6 +25,10 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include <mutex>
+#include <shared_mutex>
+#include "Util.h"
+
+#include "fmt/core.h"
 
 class Config;
 class ByteBuffer;
@@ -110,6 +114,7 @@ enum LogFile
     LOG_ANTICHEAT_BASIC,
     LOG_ANTICHEAT_DEBUG,
     LOG_DISCORD,
+    LOG_API,
     LOG_MAX_FILES
 };
 
@@ -167,6 +172,14 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         if (discordLogFile)
             fclose(discordLogFile);
 
+        discordLogFile = nullptr;
+
+        if (discordCoreLogFile)
+            fclose(discordCoreLogFile);
+
+        discordCoreLogFile = nullptr;
+
+
         for (auto& logFile : logFiles)
         {
             if (logFile != nullptr)
@@ -183,13 +196,44 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void InitSmartlogEntries(std::string const& str);
         void InitSmartlogGuids(std::string const& str);
 
-        void out(LogFile t, char const* format, ...) ATTR_PRINTF(3,4);
+        void LogDiscord(LogFile type, std::string log);
+
+        template<typename... Args>
+        void out(LogFile type, const char* str, Args... args)
+        {
+            if (!str)
+                return;
+
+            std::shared_lock<std::shared_mutex> l{ logLock };
+
+
+            std::string log = string_format_depr(str, args...);
+
+#ifdef USING_DISCORD_BOT
+            LogDiscord(type, log);
+#endif
+
+            if (logFiles[type])
+            {
+                if (timestampPrefix[type])
+                    outTimestamp(logFiles[type]);
+
+                fprintf(logFiles[type], "%s", log.c_str());
+                fprintf(logFiles[type], "\n");
+                fflush(logFiles[type]);
+
+                fflush(logFiles[type]);
+            }
+            fflush(stdout);
+        }
+
         void outCommand(uint32 account, char const* str, ...) ATTR_PRINTF(3,4);
         void outString(); // any log level
         void outString(char const* str, ...) ATTR_PRINTF(2,3);
         void outInfo(char const* str, ...) ATTR_PRINTF(2,3);
         void outHonor(char const* str, ...) ATTR_PRINTF(2, 3);
         void outError(char const* err, ...) ATTR_PRINTF(2,3);
+        void outRaid(char const* str, ...) ATTR_PRINTF(2, 3);
         void outBasic(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 1
         void outDetail(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 2
         void outDebug(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 3
@@ -197,6 +241,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
         void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
         void outDiscord(char const* str, ...) ATTR_PRINTF(2, 3);
+        void outDiscordCore(char const* str);
         void outSpam(char const* wrd, ...) ATTR_PRINTF(2, 3);
         void outErrorDb(); // any log level
         void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
@@ -230,9 +275,12 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* wardenLogfile;
         FILE* anticheatLogfile;
         FILE* discordLogFile;
+        FILE* apiLogFile;
+        FILE* discordCoreLogFile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;
+        FILE* raidLogFile;
         FILE* logFiles[LOG_MAX_FILES];
         bool  timestampPrefix[LOG_MAX_FILES];
 

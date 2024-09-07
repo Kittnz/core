@@ -25,15 +25,15 @@
 #undef IGNORE
 #endif
 
-ThreadPool::ThreadPool(int numThreads, ClearMode when, ErrorHandling mode) :
-    m_errorHandling(mode), m_size(numThreads), m_clearMode(when), m_active(0)
+ThreadPool::ThreadPool(int numThreads, std::string InName, ClearMode when, ErrorHandling mode) :
+    m_errorHandling(mode), m_size(numThreads), m_clearMode(when), m_active(0), Name(InName)
 {
     m_workers.reserve(m_size);
 }
 
 ThreadPool::~ThreadPool()
 {
-    std::unique_lock<std::shared_timed_mutex> lock(m_mutex);
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
     m_status = Status::TERMINATING;
     m_waitForWork.notify_all();
 }
@@ -50,7 +50,7 @@ std::future<void> ThreadPool::processWorkload(Callable pre, Callable post)
     m_active = std::min(m_size, m_workload.size());
     m_index = 0;
     m_status = Status::PROCESSING;
-    std::unique_lock<std::shared_timed_mutex> lock(m_mutex);
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
     for (int i = 0; i < m_active; i++)
         m_workers[i]->prepare(pre, post);
     m_waitForWork.notify_all();
@@ -92,7 +92,7 @@ std::vector<std::exception_ptr> ThreadPool::taskErrors() const
 
 void ThreadPool::worker::waitForWork()
 {
-    std::shared_lock<std::shared_timed_mutex> lock(pool->m_mutex); //locked!
+    std::shared_lock<std::shared_mutex> lock(pool->m_mutex); //locked!
     while(!busy && pool->status() != Status::TERMINATING) //wait for work
         pool->m_waitForWork.wait(lock);
 }
@@ -113,8 +113,8 @@ void ThreadPool::clearWorkload()
     m_workload.clear();
 }
 
-ThreadPool::worker::worker(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    id(id), errorHandling(mode), pool(pool), thread([this](){this->loop_wrapper();})
+ThreadPool::worker::worker(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    id(id), Name(InName), errorHandling(mode), pool(pool), thread([this](){this->loop_wrapper();})
 {
 }
 
@@ -125,6 +125,10 @@ ThreadPool::worker::~worker()
 
 void ThreadPool::worker::loop_wrapper()
 {
+    char ThreadName[128];
+    sprintf(ThreadName, "PoolThread %s %d", Name.c_str(), id);
+    thread_name(ThreadName);
+    
     if (pool->m_errorHandling == ErrorHandling::NONE)
         loop();
     else
@@ -217,8 +221,8 @@ void ThreadPool::worker::loop()
     }
 }
 
-ThreadPool::worker_mq::worker_mq(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    worker(pool,id,mode)
+ThreadPool::worker_mq::worker_mq(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    worker(pool, InName, id,mode)
 {
 }
 
@@ -238,8 +242,8 @@ void ThreadPool::worker_mq::prepare(ThreadPool::Callable pre, ThreadPool::Callab
     worker::prepare(pre, post);
 }
 
-ThreadPool::worker_sq::worker_sq(ThreadPool *pool, int id, ThreadPool::ErrorHandling mode) :
-    worker(pool,id,mode)
+ThreadPool::worker_sq::worker_sq(ThreadPool *pool, std::string InName, int id, ThreadPool::ErrorHandling mode) :
+    worker(pool, InName, id,mode)
 {
 }
 
@@ -254,8 +258,8 @@ void ThreadPool::worker_sq::doWork()
 }
 
 template <class T>
-ThreadPool::worker_mysql<T>::worker_mysql(ThreadPool *tp, int id, ThreadPool::ErrorHandling e):
-    T(tp, id, e)
+ThreadPool::worker_mysql<T>::worker_mysql(ThreadPool *tp, std::string InName, int id, ThreadPool::ErrorHandling e):
+    T(tp, InName, id, e)
 {
 }
 

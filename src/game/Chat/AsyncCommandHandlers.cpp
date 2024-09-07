@@ -41,7 +41,7 @@
 void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, ObjectGuid& target_guid, std::string& name)
 {
     PInfoData* data = new PInfoData;
-    data->m_accountId = session->GetAccountId();
+    data->m_accountId = session ? session->GetAccountId() : 1;
     data->target_name = name;
 
     if (target)
@@ -57,19 +57,23 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
 
         data->target_guid = target->GetObjectGuid();
         data->online = true;
-        data->isHardcore = target->IsHardcore();
+        data->m_hardcoreStatus = target->GetHardcoreStatus();
         data->fingerprint = target->GetSession()->GetAntiCheat()->GetFingerprint();
         data->isFingerprintBanned = target->GetSession()->IsFingerprintBanned();
-        if (session->GetSecurity() >= SEC_ADMINISTRATOR)
+        data->isSuspicious = target->GetSession()->IsSuspicious();
+        if (!session || session->GetSecurity() >= SEC_ADMINISTRATOR)
             data->email = target->GetSession()->GetEmail();
-
+        data->m_hasUsedClickToMove = target->GetSession()->HasUsedClickToMove();
+        data->m_extendedFingerprint = target->GetSession()->_analyser->GetCurrentSample().GetHash();
+        data->m_activePlayerTime = target->GetTimeLoggedIn();
+        data->m_activeSessionTime = target->GetSession()->GetTimeActive();
         HandleDataAfterPlayerLookup(data);
     }
     else
     {
         data->target_guid = target_guid;
         CharacterDatabase.AsyncPQuery(&PInfoHandler::HandlePlayerLookupResult, data,
-                   //  0          1      2      3        4     5
+                   //  0          1      2      3        4     5   6
             "SELECT totaltime, level, money, account, race, class, mortality_status FROM characters WHERE guid = '%u'",
             target_guid.GetCounter());
     }
@@ -90,8 +94,7 @@ void PInfoHandler::HandlePlayerLookupResult(QueryResult *result, PInfoData *data
     data->accId = fields[3].GetUInt32();
     data->race = fields[4].GetUInt8();
     data->class_ = fields[5].GetUInt8();
-    uint32 mort_status = fields[6].GetUInt32();
-    data->isHardcore = mort_status == HARDCORE_MODE_STATUS_ALIVE || mort_status == HARDCORE_MODE_STATUS_DEAD;
+    data->m_hardcoreStatus = fields[6].GetUInt32();
     const auto accData = sWorld.FindAccountData(data->accId);
     
     if (accData)
@@ -215,8 +218,23 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         data->latency, localeNames[data->loc], data->two_factor_enabled.c_str());
     if (!data->email.empty())
         cHandler.PSendSysMessage("Email: %s", data->email.c_str());
-    cHandler.PSendSysMessage("Current Fingerprint: %u%s", data->fingerprint, data->isFingerprintBanned ? " (BANNED)" : "");
-    cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
+    cHandler.PSendSysMessage("Current Fingerprint: %s%s", cHandler.playerLink(std::to_string(data->fingerprint)).c_str(), data->isFingerprintBanned ? " (BANNED)" : "");
+    cHandler.PSendSysMessage("Extended Fingerprint: %s", cHandler.playerLink(std::to_string(data->m_extendedFingerprint)).c_str());
+    cHandler.PSendSysMessage("Hardcore Status: %s", HardcoreStatusToString(data->m_hardcoreStatus));
+
+    auto player = sObjectAccessor.FindPlayer(data->target_guid);
+    if (player)
+        cHandler.PSendSysMessage("Is Warmode: %s", player->HasChallenge(CHALLENGE_WAR_MODE) ? "YES" : "NO");
+
+
+    cHandler.PSendSysMessage("Is Sus: %s", data->isSuspicious ? "YES" : "NO");
+    
+
+
+    cHandler.PSendSysMessage("Actively logged in time: %s", secsToTimeString(data->m_activePlayerTime / 1000, true, false).c_str());
+    cHandler.PSendSysMessage("Active session time: %s", secsToTimeString(data->m_activeSessionTime / 1000, true, false).c_str());
+    if (data->m_hasUsedClickToMove)
+        cHandler.SendSysMessage("Using Click To Move!");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
     uint32 money = data->money;

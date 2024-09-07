@@ -6,6 +6,9 @@
 #include "ObjectMgr.h"
 #include "AccountMgr.h"
 #include "Antispam/Antispam.h"
+#include "CommandStream.h"
+
+#include <istream>
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
@@ -138,6 +141,55 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnticheatHwPrintMarkCommand(char* args)
+{
+    CommandStream commandStream{ args };
+    uint64 extendedPrint;
+
+    if (!(commandStream >> extendedPrint))
+    {
+        SendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+
+    AccountAnalyser::MarkExtendedPrint(extendedPrint);
+
+    PSendSysMessage("Marking Extended Print %llu", extendedPrint);
+
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatHwPrintListCommand(char* args)
+{
+    CommandStream commandStream { args };
+    uint64 extendedPrint;
+
+    if (!(commandStream >> extendedPrint))
+    {
+        SendSysMessage("Wrongly formatted HWPrint.");
+        return false;
+    }
+
+
+    PSendSysMessage("Listing logged in clients with extended FP %llu:", extendedPrint);
+
+    const World::SessionMap& sessions = sWorld.GetAllSessions();
+    for (const auto& sessionPair : sessions)
+    {
+        const auto& session = sessionPair.second;
+        auto& sample = session->_analyser->GetCurrentSample();
+        if (sample.GetHash() == extendedPrint && sample.GetHash() != 0)
+        {
+            auto player = session->GetPlayer();
+            PSendSysMessage("Found Match for Account ID %u, player %s (GUID %u). IP: %s", session->GetAccountId(), player ? player->GetName() : "<None> (Not logged in)", player ? player->GetGUIDLow() : 0
+                , session->GetRemoteAddress().c_str());
+        }
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
 {
     uint32 fingerprintNum = 0;
@@ -209,6 +261,52 @@ bool ChatHandler::HandleAnticheatFingerprintAHistoryCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnticheatFingerprintAutobanAddCommand(char* args)
+{
+    uint32 fingerprint = 0;
+    if (!ExtractUInt32(&args, fingerprint))
+        return false;
+
+    if (!fingerprint)
+        return false;
+
+    char* cReason = ExtractArg(&args);
+    if (!cReason)
+        return false;
+
+    std::string reason(cReason);
+    LoginDatabase.escape_string(reason);
+
+    LoginDatabase.PExecute("REPLACE INTO `fingerprint_autoban` (`fingerprint`, `banreason`) VALUES (%u, '%s')", fingerprint, reason.c_str());
+    sAccountMgr.AddAutobanFingerprint(fingerprint);
+    PSendSysMessage("Accounts that connect with fingerprint %u will be automatically banned periodically.", fingerprint);
+
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand(char* args)
+{
+    uint32 fingerprint = 0;
+    if (!ExtractUInt32(&args, fingerprint))
+        return false;
+
+    if (!fingerprint)
+        return false;
+
+    char* cReason = ExtractArg(&args);
+    if (!cReason)
+        return false;
+
+    std::string reason(cReason);
+    LoginDatabase.escape_string(reason);
+
+    LoginDatabase.PExecute("DELETE FROM `fingerprint_autoban` WHERE `fingerprint`=%u", fingerprint);
+    sAccountMgr.RemoveAutobanFingerprint(fingerprint);
+    PSendSysMessage("Removed fingerprint %u from auto ban list.", fingerprint);
+
+    return true;
+}
+
 bool ChatHandler::HandleAnticheatCheatinformCommand(char* args)
 {
     WorldSession* session = GetSession();
@@ -265,9 +363,22 @@ bool ChatHandler::HandleAnticheatBlacklistCommand(char* args)
     }
 
     strToUpper(args, strlen(args));
-    pAntispam->BlacklistWord(args);
 
-    PSendSysMessage("Added '%s' to antispam blacklist.", args);
+    char* blacklistArg = ExtractQuotedArg(&args);
+    if (!blacklistArg)
+        return false;
+
+    std::string blacklistedWord = blacklistArg;
+
+    if (blacklistedWord.empty() || blacklistedWord.find_first_not_of(' ') == std::string::npos)
+    {
+        SendSysMessage("Bad word. Please use quotes to add the word to blacklist.");
+        return false;
+    }
+
+    pAntispam->BlacklistWord(blacklistedWord.c_str());
+
+    PSendSysMessage("Added '%s' to antispam blacklist.", blacklistedWord.c_str());
     return true;
 }
 

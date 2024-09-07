@@ -55,12 +55,15 @@ void HostileRefManager::addTempThreat(float threat, bool apply)
 }
 
 //=================================================
-// send threat to all my hateres for the pVictim
-// The pVictim is hated than by them as well
+// send threat to all my haters for the victim
+// the victim is hated by them as well
 // use for buffs and healing threat functionality
 
 void HostileRefManager::threatAssist(Unit *pVictim, float pThreat, SpellEntry const *pThreatSpell, bool pSingleTarget)
 {
+    if (pThreatSpell && pThreatSpell->HasAttribute(SPELL_ATTR_EX4_NO_HELPFUL_THREAT))
+        return;
+
     uint32 size = pSingleTarget ? 1 : getSize();            // if pSingleTarget do not devide threat
     float threat = pThreat / size;
     HostileReference* ref = getFirst();

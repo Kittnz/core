@@ -30,6 +30,7 @@
 #include "CreatureAI.h"
 #include "Util.h"
 #include "CharacterDatabaseCache.h"
+#include "AuraRemovalMgr.h"
 
 //numbers represent minutes * 100 while happy (you get 100 loyalty points per min while happy)
 uint32 const LevelUpLoyalty[6] =
@@ -174,7 +175,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         return false;
     }
 
-    CreatureInfo const *creatureInfo = ObjectMgr::GetCreatureTemplate(petentry);
+    CreatureInfo const *creatureInfo = sObjectMgr.GetCreatureTemplate(petentry);
     if (!creatureInfo)
     {
         sLog.outError("Pet entry %u does not exist but used at pet load (owner: %s).", petentry, owner->GetGuidStr().c_str());
@@ -382,15 +383,12 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     owner->SetPet(this);                                    // in DB stored only full controlled creature
     DEBUG_LOG("New Pet has guid %u", GetGUIDLow());
 
-    if (owner->GetTypeId() == TYPEID_PLAYER)
-    {
-        if (owner->IsMounted())
-            m_enabled = false;
+    if (owner->IsMounted())
+        m_enabled = false;
 
-        ((Player*)owner)->PetSpellInitialize();
-        if (((Player*)owner)->GetGroup())
-            ((Player*)owner)->SetGroupUpdateFlag(GROUP_UPDATE_PET);
-    }
+    ((Player*)owner)->PetSpellInitialize();
+    if (((Player*)owner)->GetGroup())
+        ((Player*)owner)->SetGroupUpdateFlag(GROUP_UPDATE_PET);
 
     m_loading = false;
 
@@ -403,7 +401,10 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     {
         SetByteValue(UNIT_FIELD_BYTES_1, 1, m_pTmpCache->loyalty);
 
-        SetUInt32Value(UNIT_FIELD_FLAGS, m_pTmpCache->renamed ? UNIT_FLAG_PET_ABANDON : UNIT_FLAG_PET_RENAME | UNIT_FLAG_PET_ABANDON);
+        if (m_pTmpCache->renamed)
+            RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
+        else
+            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME);
 
         SetTP(m_pTmpCache->trainpoint);
 
@@ -411,17 +412,6 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         SetPower(POWER_HAPPINESS, m_pTmpCache->curhappiness);
         SetPowerType(POWER_FOCUS);
     }
-
-    if (getPetType() != MINI_PET)
-    {
-        if (owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
-            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-        else
-            RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-    }
-
-    if (owner->IsPvP())
-        SetPvP(true);
 
     // Save pet for resurrection by spirit healer.
     if (IsPermanentPetFor(owner))
@@ -431,7 +421,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     }
 
     //track overspent points, if too many then reset all.
-    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1 && GetOwnerGuid().IsPlayer())
+    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1)
     {
         CharmInfo* charmInfo = GetCharmInfo();
 
@@ -457,6 +447,8 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
             GetOwner()->ToPlayer()->PetSpellInitialize();
         }
     }
+
+    sAuraRemovalMgr.RemoveForbiddenAuras(GetMapId(), this, owner->GetTeam());
 
     m_pTmpCache = nullptr;
     return true;
@@ -1338,11 +1330,6 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(creature->GetLevel()));
     SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 
-    if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->beast_family))
-        SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
-    else
-        SetName(creature->GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
-
     m_loyaltyPoints = 1000;
     if (cinfo->type == CREATURE_TYPE_BEAST)
     {
@@ -1540,6 +1527,8 @@ bool Pet::InitStatsForLevel(const uint32 petlevel, Unit* owner)
             SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
         else
             RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+
+        SetPvP(owner->IsPvP());
     }
 
     UpdateAllStats();
@@ -1900,8 +1889,9 @@ void Pet::_SaveAuras()
         {
             SpellEntry const* spellInfo = holder->GetSpellProto();
             if (spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_STEALTH ||
-                    spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_POSSESS_PET || // Nostalrius : Fix crash avec "oeil de la bete"
-                    spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AREA_AURA_PET)
+                spellInfo->EffectApplyAuraName[j] == SPELL_AURA_MOD_POSSESS_PET || // Nostalrius : Fix crash avec "oeil de la bete"
+                spellInfo->Effect[j] == SPELL_EFFECT_APPLY_AREA_AURA_PET ||
+                spellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_CASTER_PET) // Turtle: Do not save Intimidation or Bestial Wrath
             {
                 save = false;
                 break;
@@ -2206,6 +2196,14 @@ void Pet::InitPetCreateSpells()
         }
     }
 
+    if (auto playerOwner = GetOwner() ? GetOwner()->ToPlayer() : nullptr; playerOwner && playerOwner->GetClass() == CLASS_HUNTER)
+    {
+        if (getPetType() == HUNTER_PET)
+        {
+            AddSpell(46023); // Pet:Avoidance
+        }
+    }
+
     LearnPetPassives();
 
     CastPetAuras(false);
@@ -2318,6 +2316,39 @@ bool Pet::IsPermanentPetFor(Player* owner) const
     default:
         return false;
     }
+}
+
+void Pet::InitializeDefaultName()
+{
+    switch (getPetType())
+    {
+        case SUMMON_PET:
+        case HUNTER_PET:
+        {
+            if (GetOwnerGuid().IsPlayer())
+            {
+                if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(GetCreatureInfo()->beast_family))
+                {
+                    SetName(cFamily->Name[sWorld.GetDefaultDbcLocale()]);
+                    break;
+                }
+            }
+            // no break
+        }
+        default:
+        {
+            SetName(Creature::GetNameForLocaleIdx(sObjectMgr.GetDBCLocaleIndex()));
+            break;
+        }
+    }
+}
+
+char const* Pet::GetNameForLocaleIdx(int32 locale_idx) const
+{
+    if (GetOwnerGuid().IsPlayer() && (getPetType() == SUMMON_PET || getPetType() == HUNTER_PET))
+        return GetName();
+
+    return Creature::GetNameForLocaleIdx(locale_idx);
 }
 
 bool Pet::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, uint32 pet_number)

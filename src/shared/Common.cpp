@@ -72,6 +72,7 @@ LocaleConstant GetDbcLocaleFromDbLocale(DBLocaleConstant localeIndex)
             return LOCALE_koKR;
         case DB_LOCALE_zhCN:
             return LOCALE_zhCN;
+            // return LOCALE_enUS; // Enough is enough... 
         case DB_LOCALE_zhTW:
             return LOCALE_zhTW;
         case DB_LOCALE_esES:

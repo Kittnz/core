@@ -25,6 +25,7 @@
 #include "Config/Config.h"
 #include "Util.h"
 #include "ByteBuffer.h"
+#include "DiscordBot/Bot.hpp"
 
 #include <stdarg.h>
 #include <fstream>
@@ -55,7 +56,7 @@ LogFilterData logFilterData[LOG_FILTER_COUNT] =
 };
 
 Log::Log() :
-    logfile(nullptr), gmLogfile(nullptr), dberLogfile(nullptr), wardenLogfile(nullptr), anticheatLogfile(nullptr), honorLogfile(nullptr), m_colored(false), m_includeTime(false), m_wardenDebug(false), m_gmlog_per_account(false)
+    logfile(nullptr), gmLogfile(nullptr), dberLogfile(nullptr), wardenLogfile(nullptr), anticheatLogfile(nullptr), honorLogfile(nullptr), raidLogFile(nullptr), m_colored(false), m_includeTime(false), m_wardenDebug(false), m_gmlog_per_account(false)
 {
     for (int i = 0; i < LOG_MAX_FILES; ++i)
     {
@@ -126,6 +127,21 @@ void Log::InitSmartlogGuids(const std::string& str)
         ss >> entry;
         m_smartlogExtraGuids.push_back(entry);
     }
+}
+
+void Log::LogDiscord(LogFile type, std::string log)
+{
+#ifdef USING_DISCORD_BOT
+    static const std::unordered_map<LogFile, uint64_t> ChannelLookup =
+    {
+       // {LOG_MONEY_TRADES, 1078715732013105252}
+    };
+
+    if (ChannelLookup.find(type) == ChannelLookup.end())
+        return;
+
+    sDiscordBot->SendMessageToChannel(ChannelLookup.find(type)->second, std::move(log));
+#endif
 }
 
 void Log::SetColor(bool stdout_stream, Color color)
@@ -297,6 +313,8 @@ void Log::Initialize()
     wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a+");
     anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a+");
     discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a+");
+    discordCoreLogFile = openLogFile("DiscordCoreLogFile", "DiscordLogTimestamp", "a+");
+    raidLogFile = openLogFile("RaidLogFile", "RaidLogTimestamp", "a+");
     logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a+");
     logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a+");
     logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a+");
@@ -316,6 +334,7 @@ void Log::Initialize()
     logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a+");
     logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
     logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
+    logFiles[LOG_API] = openLogFile("ApiLogFile", nullptr, "a+");
 
     timestampPrefix[LOG_DBERRFIX] = false;
 
@@ -538,29 +557,28 @@ void Log::outHonor(const char *str, ...)
     }
 }
 
-void Log::out(LogFile type, const char* str, ...)
+void Log::outRaid(const char* str, ...)
 {
-    ASSERT(type < LOG_MAX_FILES)
     if (!str)
         return;
 
-    std::shared_lock<std::shared_mutex> l{ logLock };
-
-    if (logFiles[type])
+    // only logged to file
+    if (raidLogFile)
     {
-        if (timestampPrefix[type])
-            outTimestamp(logFiles[type]);
+        std::shared_lock<std::shared_mutex> l{ logLock };
+
+        outTimestamp(raidLogFile);
+        fprintf(raidLogFile, "%s", "");
 
         va_list ap;
+
         va_start(ap, str);
-        vfprintf(logFiles[type], str, ap);
-        fprintf(logFiles[type], "\n");
-        fflush(logFiles[type]);
+        vfprintf(raidLogFile, str, ap);
         va_end(ap);
 
-        fflush(logFiles[type]);
+        fprintf(raidLogFile, "\n");
+        fflush(raidLogFile);
     }
-    fflush(stdout);
 }
 
 void Log::outError( const char * err, ... )
@@ -926,6 +944,7 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
     fflush(stdout);
 }
 
+//For application-level Discord bot logging.
 void Log::outDiscord(char const* str, ...)
 {
     if (!str)
@@ -950,6 +969,27 @@ void Log::outDiscord(char const* str, ...)
         fprintf(logfile, "\n");
         va_end(ap);
         fflush(logfile);
+    }
+}
+
+
+//For internal Discord hooks such as rate limits and bad gateways.
+void Log::outDiscordCore(char const* str)
+{
+    if (!str)
+        return;
+
+    if (m_includeTime)
+        outTime(stdout);
+
+    puts(str);
+
+    if (discordCoreLogFile)
+    {
+        outTimestamp(discordCoreLogFile);
+        fprintf(discordCoreLogFile, str);
+        fprintf(discordCoreLogFile, "\n");
+        fflush(discordCoreLogFile);
     }
 }
 

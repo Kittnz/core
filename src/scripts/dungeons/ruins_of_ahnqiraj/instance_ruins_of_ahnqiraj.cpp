@@ -157,7 +157,7 @@ void instance_ruins_of_ahnqiraj::OnCreatureEnterCombat(Creature * pCreature)
                 {
                     if (!pAndorov->IsAlive())
                         pAndorov->Respawn();
-                    GetMap()->ScriptsStart(sGenericScripts, ANDOROV_START_SCRIPT, pAndorov, pAndorov);
+                    GetMap()->ScriptsStart(sGenericScripts, ANDOROV_START_SCRIPT, pAndorov->GetObjectGuid(), pAndorov->GetObjectGuid());
                     SetData(TYPE_GENERAL_ANDOROV, IN_PROGRESS);
                 }
             }

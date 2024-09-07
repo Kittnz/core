@@ -12,35 +12,18 @@
 #include "Anticheat.h"
 #include "Antispam.h"
 
+#include <any>
+
 Antispam& Antispam::Instance()
 {
     static Antispam antispam;
     return antispam;
 }
 
-static inline void ReplaceAll(std::string &str, const std::string& from, const std::string& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::string::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
-}
-
-static inline void ReplaceAllW(std::wstring &str, const std::wstring& from, const std::wstring& to)
-{
-    size_t startPos = 0;
-    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
-    {
-        str.replace(startPos, from.length(), to);
-        startPos += to.length();
-    }
-}
-
 void AntispamAsyncWorker(Antispam *antispam)
 {
     using namespace std::chrono_literals;
+    thread_name("AntispamAsync");
     LoginDatabase.ThreadStart();
     auto prevNow = Clock::now();
     while (!sWorld.IsStopped())
@@ -74,7 +57,10 @@ void Antispam::LoadFromDB()
         do
         {
             auto fields = result->Fetch();
-            m_blackList.insert(fields[0].GetCppString());
+            if (fields[1].GetBool())
+                m_regexBlacklist.emplace_back(std::make_unique<re2::RE2>(fields[0].GetString())); // immediately create the regex pattern for precompiled matching
+            else
+                m_blackList.insert(fields[0].GetCppString());
         }
         while (result->NextRow());
         delete result;
@@ -82,6 +68,10 @@ void Antispam::LoadFromDB()
 
     sLog.outString(">> %u blacklist words loaded", m_blackList.size());
     sLog.outString();
+
+    sLog.outString(">> %u regex blacklist patterns loaded", m_regexBlacklist.size());
+    sLog.outString();
+
 
     sLog.outString("Loading table 'antispam_replacement'");
     m_replacement.clear();
@@ -178,18 +168,32 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     if (!m_enabled || from->IsGameMaster() || to && to->IsGameMaster())
         return true;
 
-    if (from->GetLevel() > m_restrictionLevel)
-        return true;
-
+    MessageBlock messageBlock;
     uint8 chatType = GetConvertedChatType(type);
 
-    if (chatType == A_CHAT_TYPE_MAX)
-        return true;
+    //Add LFT messages to the off-loading thread regardless of checks passing or failing for now.
+    //Reduces mainthread work.
+    if (channel && channel->GetName() == "Lft")
+    {
+        messageBlock.skipChecking = true;
+    }
+    else
+    {
+        if (from->GetLevel() > m_restrictionLevel)
+            return true;       
 
-    if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
-        return true;
+        if (chatType == A_CHAT_TYPE_MAX)
+            return true;
 
-    MessageBlock messageBlock;
+        //dont process self-whispers. Often used by RMT.
+        if (chatType == A_CHAT_TYPE_WHISPER && from && to && from->GetObjectGuid().GetCounter() == to->GetObjectGuid().GetCounter())
+            return true;
+
+        if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
+            return true;
+    }
+
+
     messageBlock.fromGuid = from->GetObjectGuid();
     messageBlock.fromAccount = from->GetSession()->GetAccountId();
     messageBlock.toGuid = (to && !m_mergeAllWhispers ? to->GetObjectGuid() : ObjectGuid());
@@ -198,8 +202,8 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     messageBlock.type = chatType;
     messageBlock.count = 1;
     messageBlock.time = time(nullptr);
-    messageBlock.channel = channel;
-    messageBlock.guild = guild;
+    messageBlock.channelName = channel != nullptr ? channel->GetName() : "";
+    messageBlock.guildId = guild ? guild->GetId() : 0;
 
     std::lock_guard<std::mutex> guard(m_messageMutex);
     m_messageQueue.push_back(messageBlock);
@@ -238,90 +242,125 @@ void Antispam::ProcessMessages(uint32 diff)
         std::swap(m_messageQueue, tempMessageQueue);
     }
 
+
+
+    const auto SendShadowPacket = [](ObjectGuid fromGuid, const std::string& message, uint8 spamType)
+    {
+        MasterPlayer* sender = ObjectAccessor::FindMasterPlayer(fromGuid);
+        if (!sender)
+            return;
+
+        switch (spamType)
+        {
+            case AntispamChatTypes::A_CHAT_TYPE_CHANNEL:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, message, LANG_UNIVERSAL, sender->GetChatTag(), fromGuid, nullptr, ObjectGuid(), "", 
+                    sender->GetName(), 0);
+                sender->GetSession()->SendPacket(&data);
+            }break;
+
+            case AntispamChatTypes::A_CHAT_TYPE_GUILD:
+            {
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, message, LANG_UNIVERSAL, sender->GetChatTag(), sender->GetObjectGuid(), sender->GetName());
+                sender->GetSession()->SendPacket(&data);
+            }break;
+        }
+
+    };
+
     for (auto const& messageBlock : tempMessageQueue)
     {
         if (IsMuted(messageBlock.fromAccount))
             continue;
 
-        auto type = messageBlock.type;
-        auto guidFrom = messageBlock.fromGuid.GetCounter();
-        auto guidTo = messageBlock.toGuid.GetCounter();
-
-        LowGuidPair lowGuidPair(guidFrom, guidTo);
-
-        m_messageRepeats[type][guidFrom].push_back(messageBlock.msg);
-
-        auto counter = m_messageCounters[type].find(guidFrom);
-        auto hasCounter = counter != m_messageCounters[type].end();
-
-        if (hasCounter)
+        if (!messageBlock.skipChecking)
         {
-            counter->second.count++;
-            counter->second.timeDiff = counter->second.timeDiff + (messageBlock.time - counter->second.timeLast);
-            counter->second.timeLast = messageBlock.time;
-        }
-        else
-        {
-            MessageCounter messageCounter;
-            messageCounter.count = 1;
-            messageCounter.timeDiff = 0;
-            messageCounter.timeLast = messageBlock.time;
-            messageCounter.detectMarker = false;
-            m_messageCounters[type][guidFrom] = messageCounter;
-        }
+            auto type = messageBlock.type;
+            auto guidFrom = messageBlock.fromGuid.GetCounter();
+            auto guidTo = messageBlock.toGuid.GetCounter();
 
-        if (hasCounter)
-        {
-            auto repeats = std::count_if(m_messageRepeats[type][guidFrom].begin(), m_messageRepeats[type][guidFrom].end(), FindMsg(messageBlock.msg));
-            if (repeats > m_messageRepeatCount)
+            LowGuidPair lowGuidPair(guidFrom, guidTo);
+
+            m_messageRepeats[type][guidFrom].push_back(messageBlock.msg);
+
+            auto counter = m_messageCounters[type].find(guidFrom);
+            auto hasCounter = counter != m_messageCounters[type].end();
+
+            if (hasCounter)
             {
-                ApplySanction(messageBlock, DETECT_FLOOD, repeats);
-                continue;
+                counter->second.count++;
+                counter->second.timeDiff = counter->second.timeDiff + (messageBlock.time - counter->second.timeLast);
+                counter->second.timeLast = messageBlock.time;
+            }
+            else
+            {
+                MessageCounter messageCounter;
+                messageCounter.count = 1;
+                messageCounter.timeDiff = 0;
+                messageCounter.timeLast = messageBlock.time;
+                messageCounter.detectMarker = false;
+                m_messageCounters[type][guidFrom] = messageCounter;
             }
 
-            if (counter->second.detectMarker || !m_frequencyCount ||
-                ((counter->second.count >= m_frequencyCount) && ((counter->second.count / m_frequencyCoeff) > counter->second.timeDiff)))
+            if (hasCounter)
             {
-                counter->second.detectMarker = true;
-
-                auto itr = m_messageBlocks[type].find(lowGuidPair);
-                if (itr != m_messageBlocks[type].end())
+                auto repeats = std::count_if(m_messageRepeats[type][guidFrom].begin(), m_messageRepeats[type][guidFrom].end(), FindMsg(messageBlock.msg));
+                if (repeats > m_messageRepeatCount)
                 {
-                    itr->second.msg.append(messageBlock.msg);
-                    itr->second.count++;
-
-                    if (FilterMessage(itr->second.msg))
-                    {
-                        ApplySanction(itr->second, DETECT_SEPARATED);
-                        m_messageBlocks[type].erase(itr);
-                        continue;
-                    }
-
-                    if (itr->second.count == m_messageBlockSize)
-                        m_messageBlocks[type].erase(itr);
-
-                }
-                else if (FilterMessage(messageBlock.msg))
-                {
-                    ApplySanction(messageBlock, DETECT_STANDARD);
+                    ApplySanction(messageBlock, DETECT_FLOOD, repeats);
                     continue;
                 }
-                else
-                    m_messageBlocks[type][lowGuidPair] = messageBlock;
+
+                if (counter->second.detectMarker || !m_frequencyCount ||
+                    ((counter->second.count >= m_frequencyCount) && ((counter->second.count / m_frequencyCoeff) > counter->second.timeDiff)))
+                {
+                    counter->second.detectMarker = true;
+
+                    auto itr = m_messageBlocks[type].find(lowGuidPair);
+                    if (itr != m_messageBlocks[type].end())
+                    {
+                        itr->second.msg.append(messageBlock.msg);
+                        itr->second.count++;
+
+                        if (FilterMessage(itr->second))
+                        {
+                            ApplySanction(itr->second, DETECT_SEPARATED);
+                            SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
+                            m_messageBlocks[type].erase(itr);
+                            continue;
+                        }
+
+                        if (itr->second.count == m_messageBlockSize)
+                            m_messageBlocks[type].erase(itr);
+
+                    }
+                    else if (FilterMessage(messageBlock))
+                    {
+                        ApplySanction(messageBlock, DETECT_STANDARD);
+                        SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
+                        continue;
+                    }
+                    else
+                        m_messageBlocks[type][lowGuidPair] = messageBlock;
+                }
+                else if (FilterMessage(messageBlock))
+                {
+                    ApplySanction(messageBlock, DETECT_STANDARD);
+                    SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
+                    continue;
+                }
             }
-            else if (FilterMessage(messageBlock.msg))
+            else if (FilterMessage(messageBlock))
             {
                 ApplySanction(messageBlock, DETECT_STANDARD);
+                SendShadowPacket(messageBlock.fromGuid, messageBlock.msg, messageBlock.type);
                 continue;
             }
+            else if (!m_frequencyCount)
+                m_messageBlocks[type][lowGuidPair] = messageBlock;
         }
-        else if (FilterMessage(messageBlock.msg))
-        {
-            ApplySanction(messageBlock, DETECT_STANDARD);
-            continue;
-        }
-        else if (!m_frequencyCount)
-            m_messageBlocks[type][lowGuidPair] = messageBlock;
 
         switch (messageBlock.type)
         {
@@ -338,16 +377,41 @@ void Antispam::ProcessMessages(uint32 diff)
             }
             case A_CHAT_TYPE_CHANNEL:
             {
-                if (messageBlock.channel)
-                    messageBlock.channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                if (!messageBlock.channelName.empty())
+                {
+					// Review if realm tyoe speficic!
+					// if (Channel* channel = channelMgr(ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
+                    auto fromPlayer = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid);
+                    if (!fromPlayer)
+                         return;
+                    if (Channel* channel = channelMgr(sWorld.IsPvPRealm() ? fromPlayer->m_team : ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
+                    {
+                        if (channel->GetName() == u8"World")
+                        {
+                            ChannelMgr::AnnounceBothFactionsChannel("Global", messageBlock.fromGuid, string_format("|cff{}{}|r", fromPlayer->GetTeam() == HORDE ? "ff0000" : "2773ff"
+                            , messageBlock.msg.c_str()).c_str());
+                            if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
+                            {
+                               // std::string logChat = sWorld.FormatLoggedChat(pSender->GetSession(), "Chan", messageBlock.msg, nullptr, 0, channel->GetName().c_str());
+                               // sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                            }
+                        }
+
+
+                        channel->AsyncSay(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                    }
+                }
                 break;
             }
             case A_CHAT_TYPE_GUILD:
             {
                 if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
                 {
-                    if (messageBlock.guild)
-                        messageBlock.guild->BroadcastToGuild(pSender, messageBlock.msg, LANG_UNIVERSAL);
+                    auto guild = sGuildMgr.GetGuildById(messageBlock.guildId);
+                    if (guild)
+                    {
+                        guild->BroadcastToGuild(pSender, messageBlock.msg, LANG_UNIVERSAL);
+                    }
                 }
                 break;
             }
@@ -433,10 +497,10 @@ std::string Antispam::NormalizeMessage(const std::string& msg, uint32 mask)
     return newMsg;
 }
 
-bool Antispam::FilterMessage(const std::string &msg)
+bool Antispam::FilterMessage(MessageBlock const& msgBlock)
 {
-    auto normMsg = NormalizeMessage(msg);
-    auto origMsg = NormalizeMessage(msg, m_originalNormalizeMask);
+    auto normMsg = NormalizeMessage(msgBlock.msg);
+    auto origMsg = NormalizeMessage(msgBlock.msg, m_originalNormalizeMask);
 
     bool block = false;
     uint32 score = 0;
@@ -447,6 +511,17 @@ bool Antispam::FilterMessage(const std::string &msg)
             normMsg.find(word) != std::string::npos)
         {
             block = true;
+            sLog.outSpam("[Acc %u][Char %u] Blocked because of blacklisted word \'%s\'.", msgBlock.fromAccount, msgBlock.fromGuid.GetCounter(), word.c_str());
+            break;
+        }
+    }
+
+    for (const auto& pattern : m_regexBlacklist)
+    {
+        if (re2::RE2::PartialMatch(origMsg, *pattern) || re2::RE2::PartialMatch(normMsg, *pattern))
+        {
+            block = true;
+            sLog.outSpam("[Acc %u][Char %u] Blocked because of blacklisted regex \'%s\'.", msgBlock.fromAccount, msgBlock.fromGuid.GetCounter(), pattern->pattern().c_str());
             break;
         }
     }
@@ -566,4 +641,11 @@ void Antispam::WhitelistWord(std::string word)
 
     LoginDatabase.escape_string(word);
     LoginDatabase.PExecute("DELETE FROM `antispam_blacklist` WHERE `word` = '%s'", word.c_str());
+}
+
+void Antispam::AddRegexBlacklist(std::string pattern)
+{
+    m_regexBlacklist.push_back(std::make_unique<re2::RE2>(std::move(pattern)));
+    LoginDatabase.escape_string(pattern);
+    LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`, `regex`) VALUES ('%s', 1)", pattern.c_str());
 }

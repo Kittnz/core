@@ -169,6 +169,7 @@ protected:
     {
         DEBUG_LOG("Network Thread Starting");
 
+        thread_name("NetThread");
         WorldDatabase.ThreadStart();
 
         MANGOS_ASSERT(m_Reactor);

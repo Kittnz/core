@@ -36,7 +36,7 @@ struct instance_karazhan_crypt : public ScriptedInstance
         switch (pCreature->GetEntry())
         {
         case 92935: // Guard Captain Gort
-            pCreature->MonsterSay("You have come farther than most. Now you will join us in this crypt!");
+            pCreature->MonsterSay(66105);
             break;
         }        
     }
@@ -51,7 +51,7 @@ struct instance_karazhan_crypt : public ScriptedInstance
             if (hivaxxis_door && hivaxxis_door->GetGoState() !=  GO_STATE_ACTIVE)
             {
                 hivaxxis_door->UseDoorOrButton(10800);
-                boss->MonsterTextEmote("A loud creaking echoes across the crypt...");
+                boss->MonsterTextEmote(66108);
                 boss->PlayDirectMusic(6762);
             }
             break;
@@ -62,14 +62,14 @@ struct instance_karazhan_crypt : public ScriptedInstance
             if (alarus_door && alarus_door->GetGoState() != GO_STATE_ACTIVE)
             {
                 alarus_door->UseDoorOrButton(10800);
-                boss->MonsterSay("Another... corpse... to the pile.");
+                boss->MonsterSay(66106);
                 boss->PlayDirectMusic(6762);
             }
             break;
         }
         case 92935: // Guard Captain Gort
         {
-            boss->MonsterSay("His grips holds me no longer... Find the runes and set us free...");
+            boss->MonsterSay(66107);
             boss->PlayDirectMusic(6762);
             break;
         }

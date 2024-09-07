@@ -109,15 +109,15 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     // Check guild petition name (use whisper type - 6)
     if (AntispamInterface* a = sAnticheatLib->GetAntispam())
     {
-        if (a->FilterMessage(name))
+        /*if (a->FilterMessage(name))
         {
             sWorld.LogChat(this, "Guild", "Attempt to create guild petition with spam name" + name);
             SendGuildCommandResult(GUILD_CREATE_S, name, ERR_GUILD_NAME_INVALID);
             return;
-        }
+        }*/
     }
 
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(charterid);
+    ItemPrototype const *pProto = sObjectMgr.GetItemPrototype(charterid);
     if (!pProto)
     {
         _player->SendBuyError(BUY_ERR_CANT_FIND_ITEM, nullptr, charterid, 0);
@@ -349,6 +349,13 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
         if (Player *owner = sObjectMgr.GetPlayer(petition->GetOwnerGuid()))
             owner->GetSession()->SendGuildCommandResult(GUILD_INVITE_S, _player->GetName(), ERR_ALREADY_INVITED_TO_GUILD_S);
         return;
+    }
+
+    // Before signing a new signature, delete any previous existing one.
+    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(_player->GetObjectGuid()))
+    {
+        signature->DeleteFromDB();
+        signature->GetSignaturePetition()->DeleteSignature(signature);
     }
 
     if (petition->AddNewSignature(_player))

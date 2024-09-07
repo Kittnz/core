@@ -62,6 +62,10 @@ bool FollowerAI::AssistPlayerInCombat(Unit* pWho)
     if (!pWho->GetVictim()->GetCharmerOrOwnerPlayerOrPlayerItself())
         return false;
 
+    // Creatures that are immune to players cannot initiate combat against players.
+    if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER) && pWho->IsCharmerOrOwnerPlayerOrPlayerItself())
+        return false;
+
     //never attack friendly
     if (m_creature->IsFriendlyTo(pWho))
         return false;
@@ -97,21 +101,16 @@ void FollowerAI::MoveInLineOfSight(Unit* pWho)
         if (!m_creature->CanInitiateAttack())
             return;
 
+        // Creatures that are immune to players cannot initiate combat against players.
+        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER) && pWho->IsCharmerOrOwnerPlayerOrPlayerItself())
+            return;
+
         if (m_creature->IsHostileTo(pWho))
         {
             float fAttackRadius = m_creature->GetAttackDistance(pWho);
             if (m_creature->IsWithinDistInMap(pWho, fAttackRadius, true, SizeFactor::None) && m_creature->IsWithinLOSInMap(pWho))
             {
-                if (!m_creature->GetVictim())
-                {
-                    pWho->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                    AttackStart(pWho);
-                }
-                else if (m_creature->GetMap()->IsDungeon())
-                {
-                    pWho->SetInCombatWith(m_creature);
-                    m_creature->AddThreat(pWho);
-                }
+                m_creature->EnterCombatWithTarget(pWho);
             }
         }
     }

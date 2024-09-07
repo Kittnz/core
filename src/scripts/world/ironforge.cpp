@@ -17,13 +17,8 @@
 /* ScriptData
 SDName: Ironforge
 SD%Complete: 100
-SDComment: Quest support: 3702
 SDCategory: Ironforge
 EndScriptData */
-
-/* ContentData
-npc_royal_historian_archesonus
-EndContentData */
 
 #include "scriptPCH.h"
 
@@ -31,60 +26,6 @@ template <typename Functor>
 void DoAfterTime(Creature* pCreature, const uint32 p_time, Functor&& function)
 {
     pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(p_time));
-}
-
-/*######
-## npc_royal_historian_archesonus
-######*/
-
-#define GOSSIP_ITEM_ROYAL   "I am ready to listen"
-#define GOSSIP_ITEM_ROYAL_1 "That is tragic. How did this happen?"
-#define GOSSIP_ITEM_ROYAL_2 "Interesting, continue please."
-#define GOSSIP_ITEM_ROYAL_3 "Unbelievable! How dare they??"
-#define GOSSIP_ITEM_ROYAL_4 "Of course I will help!"
-
-bool GossipHello_npc_royal_historian_archesonus(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    if (pPlayer->GetQuestStatus(3702) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ROYAL, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-        pPlayer->SEND_GOSSIP_MENU(2235, pCreature->GetGUID());
-    }
-    else
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-    return true;
-}
-
-bool GossipSelect_npc_royal_historian_archesonus(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    switch (uiAction)
-    {
-        case GOSSIP_ACTION_INFO_DEF:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ROYAL_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(2236, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF+1:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ROYAL_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            pPlayer->SEND_GOSSIP_MENU(2237, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF+2:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ROYAL_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-            pPlayer->SEND_GOSSIP_MENU(2238, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF+3:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ROYAL_4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-            pPlayer->SEND_GOSSIP_MENU(2239, pCreature->GetGUID());
-            break;
-        case GOSSIP_ACTION_INFO_DEF+4:
-            pPlayer->CLOSE_GOSSIP_MENU();
-            pPlayer->AreaExploredOrEventHappens(3702);
-            break;
-    }
-    return true;
 }
 
 /*######
@@ -96,10 +37,13 @@ bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
     if (!pPlayer->HasItemCount(83019, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE) // Gnomeregan
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque, I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
+    if (IsConditionSatisfied(83029, pPlayer, pCreature->GetMap(), pCreature, CONDITION_FROM_GOSSIP_OPTION))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Apologies, my liege, but I seem to have misplaced your letter to the Quel\'dorei...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
+    pPlayer->SEND_GOSSIP_MENU(60002, pCreature->GetGUID());
     return true;
 }
 
@@ -129,6 +73,10 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
                 creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
     }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->GetMap()->ScriptsStart(sGossipScripts, 4144901, pCreature->GetObjectGuid(), pPlayer->GetObjectGuid());
+    }
 
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
@@ -150,7 +98,7 @@ bool QuestRewarded_boss_magni_bronzebeard(Player* pPlayer, Creature* pQuestGiver
 
     if (pQuest->GetQuestId() == 40489) // Assaulting Hateforge
     {
-        pQuestGiver->MonsterSay("Good fortunes to you, and your own, you walk this world with dignity and honor, I hope others will follow in your example.");
+        pQuestGiver->MonsterSay(66155);
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
@@ -321,9 +269,9 @@ bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* p
 
     auto GetKnownItemRecipes = [](Player* player, std::vector<uint32>& recipes)
     {
-        for (uint32 i = 1; i < sItemStorage.GetMaxEntry(); ++i)
+        for (auto const& itr : sObjectMgr.GetItemPrototypeMap())
         {
-            ItemPrototype const* pItem = sItemStorage.LookupEntry<ItemPrototype >(i);
+            ItemPrototype const* pItem = &itr.second;
             if (!pItem)
                 continue;
             
@@ -402,12 +350,6 @@ void AddSC_ironforge()
     newscript->Name = "npc_blacksmithing_specialisations";
     newscript->pGossipHello = &GossipHello_npc_blacksmithing_specialisations;
     newscript->pGossipSelect = &GossipSelect_npc_blacksmithing_specialisations;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_royal_historian_archesonus";
-    newscript->pGossipHello =  &GossipHello_npc_royal_historian_archesonus;
-    newscript->pGossipSelect = &GossipSelect_npc_royal_historian_archesonus;
     newscript->RegisterSelf();
 
     newscript = new Script;

@@ -111,6 +111,9 @@ class Warden
         // true when the client has been confirmed and sent any initialization packet(s)
         bool _initialized;
 
+        // true if client has used click to move at any point since starting game
+        mutable bool m_hasUsedClickToMove = false;
+
         std::vector<std::shared_ptr<const Scan>> _pendingScans;
         std::vector<std::shared_ptr<const Scan>> _enqueuedScans;
 
@@ -122,6 +125,9 @@ class Warden
 
         // size, in bytes, of client reply buffer
         static constexpr size_t MaxReply = 256;
+
+        bool HasUsedClickToMove() const { return m_hasUsedClickToMove; }
+        void SetHasUsedClickToMove() const { m_hasUsedClickToMove = true; }
 
         static void LoadScriptedScans();
 

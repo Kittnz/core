@@ -32,6 +32,7 @@
 #include "SpellDefines.h"
 #include "DBCEnums.h"
 #include "Utilities/EventProcessor.h"
+#include "DynamicVisibilityMgr.h"
 
 #include <set>
 #include <string>
@@ -88,6 +89,36 @@ enum TempSummonType
   TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN = 11,   // dies after a specified time (in or out of combat) and despawns when creature disappears
 };
 
+inline char const* TempSummonTypeToString(uint32 summonType)
+{
+    switch (summonType)
+    {
+        case TEMPSUMMON_TIMED_OR_DEAD_DESPAWN:
+            return "Timed or Dead Despawn";
+        case TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN:
+            return "Timed or Corpse Despawn";
+        case TEMPSUMMON_TIMED_DESPAWN:
+            return "Timed Despawn";
+        case TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT:
+            return "Timed Despawn Out of Combat";
+        case TEMPSUMMON_CORPSE_DESPAWN:
+            return "Corpse Despawn";
+        case TEMPSUMMON_CORPSE_TIMED_DESPAWN:
+            return "Corpse Timed Despawn";
+        case TEMPSUMMON_DEAD_DESPAWN:
+            return "Dead Despawn";
+        case TEMPSUMMON_MANUAL_DESPAWN:
+            return "Manual Despawn";
+        case TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN:
+            return "Timed Combat or Dead Despawn";
+        case TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN:
+            return "Timed Combat or Corpse Despawn";
+        case TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN:
+            return "Timed Death and Dead Despawn";
+    }
+    return "UNKNOWN";
+}
+
 inline bool IsRespawnableTempSummonType(TempSummonType type)
 {
     switch (type)
@@ -112,6 +143,7 @@ enum class SizeFactor
 class WorldPacket;
 class UpdateData;
 class WorldSession;
+class Totem;
 class Creature;
 class Player;
 class Unit;
@@ -168,6 +200,7 @@ enum ObjectSpawnFlags
   SPAWN_FLAG_EVADE_OUT_HOME_AREA = 0x20, // creature only
   SPAWN_FLAG_NOT_VISIBLE = 0x40,         // creature only
   SPAWN_FLAG_DEAD = 0x80,                // creature only
+  SPAWN_FLAG_NO_DYNAMIC_RESPAWN = 0x100, // creature only
 };
 
 // [-ZERO] Need check and update
@@ -358,7 +391,7 @@ class Object
             m_inWorld = false;
         }
 
-        ObjectGuid const& GetObjectGuid() const { return GetGuidValue(OBJECT_FIELD_GUID); }
+         ObjectGuid const& GetObjectGuid() const { return GetGuidValue(OBJECT_FIELD_GUID); }
         const uint64& GetGUID() const { return GetUInt64Value(OBJECT_FIELD_GUID); } // Conserve par Nostalrius
         uint32 GetGUIDLow() const { return GetObjectGuid().GetCounter(); }
         PackedGuid const& GetPackGUID() const { return m_PackGUID; }
@@ -617,6 +650,10 @@ class Object
         Pet const* ToPet() const;
         Pet* ToPet();
 
+        bool IsTotem() const;
+        Totem const* ToTotem() const;
+        Totem* ToTotem();
+
         virtual bool HasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool HasInvolvedQuest(uint32 /* quest_id */) const { return false; }
     protected:
@@ -685,7 +722,7 @@ struct SpellNonMeleeDamage
 {
   SpellNonMeleeDamage(WorldObject *_attacker, Unit *_target, uint32 _SpellID, SpellSchools _school)
       : target(_target), attacker(_attacker), SpellID(_SpellID), damage(0), school(_school),
-        absorb(0), resist(0), periodicLog(false), unused(false), blocked(0), HitInfo(0), spell(nullptr)
+        absorb(0), resist(0), periodicLog(false), reflected(false), blocked(0), HitInfo(0), spell(nullptr)
   {
   }
 
@@ -697,7 +734,7 @@ struct SpellNonMeleeDamage
   uint32 absorb;
   int32 resist;
   bool periodicLog;
-  bool unused;
+  bool reflected;
   uint32 blocked;
   uint32 HitInfo;
   Spell *spell;
@@ -728,6 +765,7 @@ enum CurrentSpellTypes
 class WorldObject : public Object
 {
     friend struct WorldObjectChangeAccumulator;
+    friend class CreatureCreatePos;
 
     public:
 
@@ -767,7 +805,13 @@ class WorldObject : public Object
         void Relocate(float x, float y, float z, float orientation);
         void Relocate(float x, float y, float z);
 
+        uint32 GetCachedZoneId() const { return m_zoneUpdateId; }
+        uint32 GetCachedAreaId() const { return m_areaUpdateId; }
+
         void SetOrientation(float orientation);
+
+        float GetVisibilityDistance() const;
+        float GetGridActivationDistance() const;
 
         bool isFacing(const Position location, const float tolerance = (M_PI_F/2)) const;
 
@@ -804,6 +848,8 @@ class WorldObject : public Object
             // angle to face `obj` to `this` using distance includes size of `obj`
             GetNearPoint(obj, x, y, z, obj->GetObjectBoundingRadius(), distance2d, GetAngle(obj));
         }
+        virtual void GetLosCheckPosition(float& x, float& y, float& z) const;
+
         virtual float GetObjectBoundingRadius() const { return DEFAULT_WORLD_OBJECT_SIZE; }
         virtual float GetCombatReach() const { return 0.f; }
 
@@ -813,9 +859,9 @@ class WorldObject : public Object
 
         // Valeur de retour : false si aucun point correct trouve.
         bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath = false) const;
-    void GetPointBehindObject(WorldLocation& location, float distance) const;
+        void GetPointBehindObject(WorldLocation& location, float distance) const;
 
-    uint32 GetMapId() const { return m_mapId; }
+        uint32 GetMapId() const { return m_mapId; }
         uint32 GetInstanceId() const { return m_InstanceId; }
 
         uint32 GetZoneId() const;
@@ -825,9 +871,7 @@ class WorldObject : public Object
 
         InstanceData* GetInstanceData() const;
 
-        const char* GetName() const { return m_name.c_str(); }
-        void SetName(std::string const& newname) { m_name=newname; }
-
+        virtual char const* GetName() const = 0;
         virtual const char* GetNameForLocaleIdx(int32 /*locale_idx*/) const { return GetName(); }
         virtual uint8 GetGender() const { return 0; } // used in chat builder
 
@@ -940,7 +984,7 @@ class WorldObject : public Object
 
         virtual void SendMessageToSetInRange(WorldPacket *data, float dist, bool self) const;
         void SendMessageToSetExcept(WorldPacket *data, Player const* skipped_receiver) const;
-        void DirectSendPublicValueUpdate(uint32 index);
+        void DirectSendPublicValueUpdate(uint32 index, uint32 count = 1);
 
         void PlayDistanceSound(uint32 sound_id, Player const* target = nullptr) const;
         void PlayDirectSound(uint32 sound_id, Player const* target = nullptr) const;
@@ -957,13 +1001,14 @@ class WorldObject : public Object
         void MonsterYell(const std::string& text, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterTextEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
-        void MonsterSayToPlayer(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
+        void MonsterSayToPlayer(const char* text, Unit const* target) const;
         void MonsterSay(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterYell(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
     void MonsterSendTextToZone(const char* text, ChatMsg messageType, Language language = LANG_UNIVERSAL, Unit* target = nullptr,
                                const char* senderName = nullptr) const;
     void MonsterTextEmote(int32 textId, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(int32 textId, Unit const* receiver, bool IsBossWhisper = false) const;
+        void MonsterSayToPlayer(int32 textId, Unit const* target) const;
         void MonsterYellToZone(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterScriptToZone(int32 textId, ChatMsg type, uint32 language = 0, Unit const* target = nullptr) const;
 
@@ -1114,7 +1159,7 @@ virtual uint32 GetLevel() const = 0;
         int32 MagicSpellHitChance(Unit *pVictim, SpellEntry const *spell, Spell* spellPtr = nullptr);
         float GetSpellResistChance(Unit const* victim, uint32 schoolMask, bool innateResists) const;
         SpellMissInfo SpellHitResult(Unit *pVictim, SpellEntry const *spell, SpellEffectIndex effIndex, bool canReflect = false, Spell* spellPtr = nullptr);
-        void ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procEx, uint32 amount, WeaponAttackType attType = BASE_ATTACK, SpellEntry const *procSpell = nullptr, Spell* spell = nullptr);
+        void ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procEx, uint32 amount, int32 originalAmount, WeaponAttackType attType = BASE_ATTACK, SpellEntry const *procSpell = nullptr, Spell* spell = nullptr);
         void CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 damage, SpellEntry const* spellInfo, SpellEffectIndex effectIndex, WeaponAttackType attackType, Spell* spell, bool crit);
         int32 CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* basePoints = nullptr, Spell* spell = nullptr) const;
         int32 SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject* pCaster, Spell* spell = nullptr) const;
@@ -1127,7 +1172,7 @@ virtual uint32 GetLevel() const = 0;
         uint32 MeleeDamageBonusDone(Unit* pVictim, uint32 damage, WeaponAttackType attType, SpellEntry const* spellProto = nullptr, SpellEffectIndex effectIndex = EFFECT_INDEX_0, DamageEffectType damagetype = DIRECT_DAMAGE, uint32 stack = 1, Spell* spell = nullptr, bool flat = true);
         virtual SpellSchoolMask GetMeleeDamageSchoolMask() const;
         float GetAPMultiplier(WeaponAttackType attType, bool normalized) const;
-        virtual uint32 DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell = nullptr, bool addThreat = true);
+        virtual uint32 DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell = nullptr, bool addThreat = true, bool reflected = false);
         void DealDamageMods(Unit *pVictim, uint32 &damage, uint32* absorb);
         void DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss);
         void SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log) const;
@@ -1137,15 +1182,15 @@ virtual uint32 GetLevel() const = 0;
         void SendSpellOrDamageImmune(Unit* target, uint32 spellID) const;
         int32 DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellProto, bool critical = false);
         void SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, bool critical = false) const;
-        void EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype);
+        void EnergizeBySpell(Unit* pVictim, uint32 spellId, uint32 amount, Powers powerType);
         void SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, Powers powertype) const;
 
-        void GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut);
-        DynamicObject* GetDynObject(uint32 spellId, SpellEffectIndex effIndex);
-        DynamicObject* GetDynObject(uint32 spellId);
+        void GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut) const;
+        DynamicObject* GetDynObject(uint32 spellId, SpellEffectIndex effIndex) const;
+        DynamicObject* GetDynObject(uint32 spellId) const;
         void AddDynObject(DynamicObject* dynObj);
         void RemoveDynObject(uint32 spellid);
-        void RemoveDynObjectWithGUID(ObjectGuid guid) { m_dynObjGUIDs.remove(guid); }
+        void RemoveDynObjectWithGUID(ObjectGuid guid);
         void RemoveAllDynObjects();
 
         // Event handler
@@ -1159,7 +1204,6 @@ virtual uint32 GetLevel() const = 0;
     protected:
         explicit WorldObject();
 
-        std::string m_name;
         ZoneScript* m_zoneScript;
         bool m_isActiveObject;
         // Extra visibility distance for this unit, only used if it is an active object.
@@ -1172,6 +1216,9 @@ virtual uint32 GetLevel() const = 0;
         uint32 m_mapId;                                     // object at map with map_id
         uint32 m_InstanceId;                                // in map copy with instance id
 
+        uint32 m_areaUpdateId;
+        uint32 m_zoneUpdateId;
+
         Position m_position;
 
         ViewPoint m_viewPoint;
@@ -1182,8 +1229,7 @@ virtual uint32 GetLevel() const = 0;
 
         uint32 m_summonLimitAlert;                          // Timer to alert GMs if a creature is at the summon limit
 
-        typedef std::list<ObjectGuid> DynObjectGUIDs;
-        DynObjectGUIDs m_dynObjGUIDs;
+        std::vector<ObjectGuid> m_spellDynObjects;
 
         std::array<Spell*, CURRENT_MAX_SPELL> m_currentSpells{};
         uint32 m_castCounter = 0;                           // count casts chain of triggered spells for prevent infinity cast crashes

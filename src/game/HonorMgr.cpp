@@ -11,6 +11,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
 #include "ObjectAccessor.h"
+#include "CharacterDatabaseCleaner.h"
 
 #include <fstream>
 
@@ -155,8 +156,9 @@ void HonorMaintenancer::DistributeRankPoints(Team team)
         // Calculate rank points earning
         weeklyScore.earning = CalculateRpEarning(weeklyScore.cp, scores);
 
+
         // Calculate rank points with decay
-        weeklyScore.newRp = CalculateRpDecay(weeklyScore.earning, weeklyScore.oldRp);
+        weeklyScore.newRp = CalculateRpDecay(weeklyScore.earning, weeklyScore);
 
         // Level restrictions
         weeklyScore.newRp = std::min(MaximumRpAtLevel(weeklyScore.level), weeklyScore.newRp);
@@ -178,7 +180,7 @@ void HonorMaintenancer::InactiveDecayRankPoints()
 
         auto& weeklyScore = itrWS->second;
 
-        weeklyScore.newRp = finiteAlways(CalculateRpDecay(0, weeklyScore.oldRp));
+        weeklyScore.newRp = finiteAlways(CalculateRpDecay(0, weeklyScore));
     }
 }
 
@@ -231,7 +233,7 @@ void HonorMaintenancer::SetCityRanks()
 
 void HonorMaintenancer::FlushWeeklyQuests()
 {
-    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (50322, 50323, 70059)");
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (50322, 50323)");
 }
 
 void HonorMaintenancer::AssignBountyTargets()
@@ -313,6 +315,12 @@ void HonorMaintenancer::DoMaintenance()
 {
     if (!m_markerToStart)
         return;
+
+    if (sWorld.getConfig(CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY))
+        sObjectMgr.BackupCharacterInventory();
+
+    sLog.outInfo("Beginning character name cleanup...");
+    CharacterDatabaseCleaner::FreeInactiveCharacterNames();
 
     sLog.outHonor("[MAINTENANCE] Honor maintenance starting.");
 
@@ -572,9 +580,27 @@ float HonorMaintenancer::CalculateRpEarning(float cp, HonorScores sc)
     return sc.FY[i];
 }
 
-float HonorMaintenancer::CalculateRpDecay(float rpEarning, float rp)
+float HonorMaintenancer::CalculateRpDecay(float rpEarning, const WeeklyScore& wk)
 {
-    float decay = floor((0.2f * rp) + 0.5f);
+    //RP per rank needed, starting from rank 2
+    static const uint32 RankMinRP[] =
+    {
+        2000,
+        5000,
+        10000,
+        15000,
+        20000,
+        25000,
+        30000,
+        35000,
+        40000,
+        45000,
+        50000,
+        55000,
+        60000
+    };
+
+    float decay = floor((0.2f * wk.oldRp) + 0.5f);
     float delta = rpEarning - decay;
 
     if (delta < 0)
@@ -583,7 +609,17 @@ float HonorMaintenancer::CalculateRpDecay(float rpEarning, float rp)
     if (delta < -2500)
         delta = -2500;
 
-    return rp + delta;
+    float newRp = wk.oldRp + delta;
+
+    if (wk.highestRank > 1 + NEGATIVE_HONOR_RANK_COUNT)
+    {
+        // -2 because -1 for 0 based accessing and another -1 for starting at rank 2 because rank 1 only has HK req.
+        //And -4 for dishonorable ranks
+        float minRpForRank = (float)RankMinRP[wk.highestRank - 2 - NEGATIVE_HONOR_RANK_COUNT];
+        if (newRp < minRpForRank)
+            newRp = minRpForRank;
+    }
+    return newRp;
 }
 
 float HonorMaintenancer::MaximumRpAtLevel(uint8 level)
@@ -776,7 +812,7 @@ void HonorMgr::Load(QueryResult* result)
 bool HonorMgr::Add(float cp, uint8 type, Unit* source)
 {
     // Prevent give fake records to db with 0 honor
-    if (!cp || !m_owner)
+    if (cp <= 0 || !m_owner)
         return false;
 
     // If not source, then give yourself
@@ -882,7 +918,7 @@ void HonorMgr::Update() {
         honorBar = uint8(((honorBar - m_rank.minRP) / (m_rank.maxRP - m_rank.minRP)) * (m_rank.positive ? 255 : -255));
     
         // PLAYER_FIELD_HONOR_BAR
-        m_owner->SetUInt32Value(PLAYER_FIELD_BYTES2, honorBar);
+        m_owner->SetByteValue(PLAYER_FIELD_BYTES2, 0, honorBar);
     }
 
     // TODAY
@@ -1047,15 +1083,28 @@ void HonorMgr::SendPVPCredit(Unit* victim, float honor)
     {
         data << victim->GetObjectGuid();
 
-        if (victim->GetTypeId() == TYPEID_UNIT)
+        constexpr int minimumRank = (HONOR_RANK_COUNT - POSITIVE_HONOR_RANK_COUNT) + 1;
+
+        if (victim->IsCreature())
         {
             if (((Creature*)victim)->IsRacialLeader())
                 data << int32(19);
             else
-                data << int32(0);
+                data << int32(minimumRank);
         }
-        else if (victim->GetTypeId() == TYPEID_PLAYER)
-            data << uint32(((Player*)victim)->GetHonorMgr().GetRank().rank);
+        else if (victim->IsPlayer())
+        {
+            // Never display just "HK:" without rank name.
+            // When killing a player with no rank,
+            // we need to send first rank instead.
+            // https://youtu.be/hef06Cs6Q34?t=191
+            // New classic client does this on its own.
+            int32 rank = ((Player*)victim)->GetHonorMgr().GetRank().rank;
+            if (!rank)
+                rank = minimumRank;
+
+            data << int32(rank);
+        }
     }
 
     m_owner->SendDirectMessage(&data);

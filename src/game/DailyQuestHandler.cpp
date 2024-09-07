@@ -54,7 +54,7 @@ void DailyQuestHandler::Update(uint32 diff)
     {
         if (!m_questIds.empty())
         {
-            const auto& sessions = sWorld.GetAllSessions();
+            const World::SessionMap& sessions = sWorld.GetAllSessions();
 
             for (auto& sessionPair : sessions)
             {

@@ -29,6 +29,8 @@
 
 #include "WorldSocketMgr.h"
 
+#include "httplib.h"
+
 #include "Common.h"
 #include "Master.h"
 #include "WorldSocket.h"
@@ -45,17 +47,50 @@
 #include "Util.h"
 #include "MassMailMgr.h"
 #include "DBCStores.h"
+#include "re2/re2.h"
 
 
+#include <fstream>
+#include <iostream>
 #include <ace/OS_NS_signal.h>
 #include <ace/TP_Reactor.h>
 #include <ace/Dev_Poll_Reactor.h>
 #include <signal.h>
 
+#include "ace/MMAP_Memory_Pool.h"
+#include "ace/Shared_Memory_MM.h"
+#include "ace/ACE.h"
+#include "ace/Malloc_T.h"
+
 INSTANTIATE_SINGLETON_1( Master );
 
 volatile uint32 Master::m_masterLoopCounter = 0;
 volatile bool Master::m_handleSigvSignals = false;
+
+template <typename T>
+class SharedMemoryAllocator : public std::allocator<T>
+{
+public:
+    typedef size_t size_type;
+    typedef T* pointer;
+    typedef const T* const_pointer;
+
+    SharedMemoryAllocator(ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block>& memory_pool)
+        : memory_allocator_(memory_pool) {}
+
+    pointer allocate(size_type n, const void* hint = 0) {
+        return static_cast<pointer>(memory_allocator_.malloc(n * sizeof(T)));
+    }
+
+    void deallocate(pointer p, size_type n) {
+        memory_allocator_.free(p);
+    }
+
+private:
+    ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block>& memory_allocator_;
+};
+
+
 
 void freezeDetector(uint32 _delaytime)
 {
@@ -97,6 +132,7 @@ Master::~Master()
 {
 }
 
+
 /// Main function
 int Master::Run()
 {
@@ -122,6 +158,33 @@ int Master::Run()
         return 1;
     }
 
+#if 0
+    ACE_MMAP_Memory_Pool_Options opt;
+    opt.unique_ = true;
+   // opt.file_mode_ = S_IRUSR | S_IWUSR;
+
+    ACE_Malloc_T<ACE_MMAP_MEMORY_POOL, ACE_Process_Mutex, ACE_Control_Block> memory_allocator_{ "twow_pool", "twow_pool", &opt};
+
+    using pair_t = std::pair<const uint32, std::array<uint8, 20>>;
+    using shm_umap = std::unordered_map<uint32, std::array<uint8, 20>, std::hash<uint32>, std::equal_to<uint32>,
+        SharedMemoryAllocator<pair_t>>;
+
+    SharedMemoryAllocator<pair_t> shm_alloc{ memory_allocator_ };
+
+    shm_umap* mp = new (memory_allocator_.malloc(sizeof(shm_umap))) shm_umap(shm_alloc);
+    mp->insert({ 5, std::array<uint8, 20>{} });
+
+    if (mp)
+    {
+        int err = memory_allocator_.bind("sessionkey_store", mp);
+        if (!err)
+        {
+            memory_allocator_.sync();
+            Log::WaitBeforeContinueIfNeed();
+        }
+    }
+#endif
+
     ///- Initialize the World
     sWorld.SetInitialWorldSettings();
     
@@ -134,6 +197,7 @@ int Master::Run()
     CharacterDatabase.AllowAsyncTransactions();
     WorldDatabase.AllowAsyncTransactions();
     LoginDatabase.AllowAsyncTransactions();
+    LogsDatabase.AllowAsyncTransactions();
 
     ///- Catch termination signals
     _HookSignals();
@@ -248,8 +312,19 @@ int Master::Run()
     CharacterDatabase.StopServer();
     WorldDatabase.StopServer();
     LoginDatabase.StopServer();
+    LogsDatabase.StopServer();
 
     sLog.outString("Halting process...");
+
+#if 0
+    mp->~shm_umap();
+    memory_allocator_.free(mp);
+
+    // Cleanup
+    memory_allocator_.sync();
+    memory_allocator_.remove();
+
+#endif
 
     if (cliThread)
     {
@@ -300,8 +375,12 @@ int Master::Run()
 
     ///- Exit the process with specified return value
 	// WORLD SHUTDOWN
+
 	sWorld.InternalShutdown();
-    return World::GetExitCode();
+
+    uint8 exitCode = World::GetExitCode();
+    std::quick_exit(exitCode);
+    return exitCode;
 }
 
 bool StartDB(std::string name, DatabaseType& database)
@@ -350,7 +429,7 @@ bool StartDB(std::string name, DatabaseType& database)
     }
 
     ///- Initialise the world database
-    if (!database.Initialize(dbstring.c_str(), nConnections, nAsyncConnections))
+    if (!database.Initialize(name.c_str(), dbstring.c_str(), nConnections, nAsyncConnections))
     {
         sLog.outError("Cannot connect to world database %s", name.c_str());
         return false;
@@ -371,11 +450,13 @@ bool Master::_StartDB()
 
     if (!StartDB("World", WorldDatabase) ||
         !StartDB("Character", CharacterDatabase) ||
-        !StartDB("Login", LoginDatabase))
+        !StartDB("Login", LoginDatabase) ||
+        !StartDB("Logs", LogsDatabase))
     {
         WorldDatabase.HaltDelayThread();
         CharacterDatabase.HaltDelayThread();
         LoginDatabase.HaltDelayThread();
+        LogsDatabase.HaltDelayThread();
         return false;
     }
 

@@ -27,130 +27,16 @@ EndContentData */
 
 #include "scriptPCH.h"
 
-struct ThadiusGrimshadeAI : public ScriptedAI
+enum
 {
-    ThadiusGrimshadeAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        underEvent = false;
-        m_uiBeginTimer = 3000;
-        m_uiTranceTimer = 8000;
-        grimshadeGUID = 0;
-        underTrance = false;
-        underSpeak = false;
-        m_uiSpeakTimer = 8000;
-        sentence = false;
-        createObject = false;
-        isStun = false;
-        playerGUID = 0;
-        Reset();
-    }
-
-    bool underEvent;
-    bool underTrance;
-    bool underSpeak;
-    bool sentence;
-    bool createObject;
-    bool isStun;
-    uint32 m_uiSpeakTimer;
-    uint32 m_uiBeginTimer;
-    uint32 m_uiTranceTimer;
-    uint64 grimshadeGUID;
-    uint64 playerGUID;
-
-    void Reset() override
-    {
-    }
-
-    void QuestCompleted(Player* pPlayer, Quest const* pQuest)
-    {
-        if (!underEvent)
-        {
-            playerGUID = pPlayer->GetGUID();
-            underEvent = true;
-        }
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (underEvent)
-        {
-            if (!createObject)
-            {
-                if (GameObject* pGo = m_creature->SummonGameObject(144069, -10999.166992f, -3484.187012f, 103.127243f, 2.592681f))
-                    grimshadeGUID = pGo->GetGUID();
-                createObject = true;
-            }
-            if (m_uiBeginTimer < uiDiff)
-                underTrance = true;
-            else
-                m_uiBeginTimer -= uiDiff;
-
-        }
-
-        if (underTrance)
-        {
-            if (!isStun)
-            {
-                m_creature->HandleEmote(EMOTE_STATE_STUN);
-                isStun = true;
-            }
-            if (m_uiTranceTimer < uiDiff)
-                underSpeak = true;
-            else
-                m_uiTranceTimer -= uiDiff;
-
-        }
-
-        if (underSpeak)
-        {
-            if (!sentence)
-            {
-                m_creature->MonsterSay("...Cage...temple...trolls...", 0, 0);
-                sentence = true;
-            }
-            if (m_uiSpeakTimer < uiDiff)
-            {
-                m_creature->HandleEmote(EMOTE_STATE_NONE);
-                if (GameObject* pVision = m_creature->GetMap()->GetGameObject(grimshadeGUID))
-                    pVision->Delete();
-
-                underEvent = false;
-                m_uiBeginTimer = 3000;
-                m_uiTranceTimer = 3000;
-                grimshadeGUID = 0;
-                underTrance = false;
-                underSpeak = false;
-                m_uiSpeakTimer = 3000;
-                sentence = false;
-                createObject = false;
-                isStun = false;
-
-                if (Player* player = m_creature->GetMap()->GetPlayer(playerGUID))
-                {
-                    if (player->GetQuestStatus(2992) == QUEST_STATUS_INCOMPLETE)
-                        player->AreaExploredOrEventHappens(2992);
-                }
-            }
-            else
-                m_uiSpeakTimer -= uiDiff;
-        }
-    }
+    SPELL_SPIRIT_SHOCK          = 10794,
+    SPELL_FEL_CURSE             = 12938,
+    NPC_SERVANT_OF_RAZELIKH     = 7668,
+    NPC_SERVANT_OF_GROL         = 7669,
+    NPC_SERVANT_OF_ALLISTARJ    = 7670,
+    NPC_SERVANT_OF_SEVINE       = 7671
 };
 
-CreatureAI* GetAI_thadius_grimshade(Creature* pCreature)
-{
-    return new ThadiusGrimshadeAI(pCreature);
-}
-
-bool QuestAccept_npc_Thadius_Grimshade(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
-{
-    if (pQuest->GetQuestId() != 2992)
-        return false;
-
-    if (ThadiusGrimshadeAI* pThadius = dynamic_cast<ThadiusGrimshadeAI*>(pQuestGiver->AI()))
-        pThadius->QuestCompleted(pPlayer, pQuest);
-    return true;
-}
 bool GOHello_go_stone_of_binding(Player* pPlayer, GameObject* pGo)
 {
 // 141812 <= 7668 Servant of Razelikh   // 141857 <= 7669 Servant of Grol
@@ -159,34 +45,95 @@ bool GOHello_go_stone_of_binding(Player* pPlayer, GameObject* pGo)
     switch(pGo->GetEntry())
     {
         case 141812:
-            pCreature = pGo->FindNearestCreature(7668, 30.000000, true);//servant of razelikh
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_RAZELIKH, 30.0f, true);//servant of razelikh
             break;
         case 141857:
-            pCreature = pGo->FindNearestCreature(7669, 30.000000, true);//servant of grol
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_GROL, 30.0f, true);//servant of grol
             break;
         case 141858:
-            pCreature = pGo->FindNearestCreature(7670, 30.000000, true);//servant of allistarj
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_ALLISTARJ, 30.0f, true);//servant of allistarj
             break;
         case 141859:
-            pCreature = pGo->FindNearestCreature(7671, 30.000000, true);//servant of sevine
+            pCreature = pGo->FindNearestCreature(NPC_SERVANT_OF_SEVINE, 30.0f, true);//servant of sevine
             break;
     }
     if (pCreature)
-        pCreature->CastSpell(pCreature, 12938, true);
+        pCreature->CastSpell(pCreature, SPELL_FEL_CURSE, true);
     return false;
 }
+
+struct ServantAI : public ScriptedAI
+{
+    ServantAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    bool m_freezed;
+
+    void Reset() override
+    {
+        m_freezed = false;
+    }
+
+    void JustRespawned() override
+    {
+        Reset();
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_creature->HealthBelowPct(15) && !m_freezed)
+        {
+            DoCastSpellIfCan(m_creature, SPELL_SPIRIT_SHOCK);
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_creature->HealthBelowPctDamaged(10, uiDamage))
+        {
+            uiDamage = 0;
+        }
+    }
+
+    void SpellHit(WorldObject* pCaster, SpellEntry const* pSpell) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (pSpell->Id == SPELL_FEL_CURSE && m_creature->HasAura(SPELL_SPIRIT_SHOCK))
+        {
+            if (Player* pPlayer = m_creature->GetVictim()->ToPlayer())
+                pPlayer->DoKillUnit(m_creature);
+        }
+    }
+};
+
+CreatureAI* GetAI_servant(Creature* pCreature)
+{
+    return new ServantAI(pCreature);
+}
+
 void AddSC_blasted_lands()
 {
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "npc_thadius_grimshade";
-    newscript->GetAI = &GetAI_thadius_grimshade;
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_Thadius_Grimshade;
+    newscript->Name = "go_stone_of_binding";
+    newscript->pGOHello = &GOHello_go_stone_of_binding;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_stone_of_binding";
-    newscript->pGOHello = &GOHello_go_stone_of_binding;
+    newscript->Name = "npc_servant";
+    newscript->GetAI = &GetAI_servant;
     newscript->RegisterSelf();
 }

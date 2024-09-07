@@ -17,12 +17,11 @@
 /* ScriptData
 SDName: The_Barrens
 SD%Complete: 90
-SDComment: Quest support: 863, 898, 1719, 2458, 4921, 6981
+SDComment: Quest support: 863, 898, 1719, 2458, 6981
 SDCategory: Barrens
 EndScriptData */
 
 /* ContentData
-npc_beaten_corpse
 npc_gilthares
 npc_taskmaster_fizzule
 npc_twiggy_flathead
@@ -31,84 +30,6 @@ npc_wizzlecrank_shredder
 EndContentData */
 
 #include "scriptPCH.h"
-
-/*######
-## npc_beaten_corpse
-######*/
-
-enum
-{
-    QUEST_LOST_IN_BATTLE = 4921
-};
-
-bool GossipHello_npc_beaten_corpse(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(QUEST_LOST_IN_BATTLE) == QUEST_STATUS_INCOMPLETE ||
-            pPlayer->GetQuestStatus(QUEST_LOST_IN_BATTLE) == QUEST_STATUS_COMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Examine corpse in detail...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(3557, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_beaten_corpse(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->SEND_GOSSIP_MENU(3558, pCreature->GetGUID());
-        pPlayer->TalkedToCreature(pCreature->GetEntry(), pCreature->GetGUID());
-    }
-    return true;
-}
-bool GossipHello_npc_Gizmotronic(Player* pPlayer, Creature* pCreature)
-{
-    if ((pPlayer->GetQuestStatus(2381) == QUEST_STATUS_INCOMPLETE))
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT,
-                                 "Give me what I need stupid machine !",
-                                 GOSSIP_SENDER_MAIN,
-                                 GOSSIP_ACTION_INFO_DEF + 10);
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature),
-                                  pCreature->GetObjectGuid());
-    }
-    return true;
-}
-
-bool GossipSelect_npc_Gizmotronic(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction >= GOSSIP_ACTION_INFO_DEF + 10)
-    {
-        pPlayer->CLOSE_GOSSIP_MENU();
-        if (!pPlayer->HasItemCount(5060, 1, true))
-        {
-            uint32 noSpaceForCount = 0;
-            ItemPosCountVec dest;
-            uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT,
-                                                 dest, 5060, 1, &noSpaceForCount);
-
-            if (msg == EQUIP_ERR_OK)
-            {
-                Item* pItem = pPlayer->StoreNewItem(dest, 5060,
-                                                    true, Item::GenerateItemRandomPropertyId(5060));
-                pPlayer->SendNewItem(pItem, 1, true, false);
-            }
-        }
-        if (!pPlayer->HasItemCount(7970, 1, true))
-        {
-            uint32 noSpaceForCount = 0;
-            ItemPosCountVec dest;
-            uint8 msg = pPlayer->CanStoreNewItem(NULL_BAG, NULL_SLOT,
-                                                 dest, 7970, 1, &noSpaceForCount);
-            if (msg == EQUIP_ERR_OK)
-            {
-                Item* pItem = pPlayer->StoreNewItem(dest, 7970,
-                                                    true, Item::GenerateItemRandomPropertyId(7970));
-                pPlayer->SendNewItem(pItem, 1, true, false);
-            }
-        }
-    }
-    return true;
-}
 
 struct npc_pollyAI : public ScriptedAI
 {
@@ -128,8 +49,8 @@ struct npc_pollyAI : public ScriptedAI
     {
         if (!b_text)
         {
-            m_creature->MonsterSay("MmmmmMmmmm... Enormous chemically altered cracker...", 0, 0);
-            m_creature->MonsterSay("What the squawk? Squawk squawk, squawk? SQUAWK!", 0, 0);
+            m_creature->MonsterSay(66149, 0, 0);
+            m_creature->MonsterSay(66150, 0, 0);
             b_text = true;
         }
     }
@@ -822,9 +743,10 @@ struct npc_regthar_deathgateAI : public ScriptedAI
 
         ResetVars();
     }
+
     void Reset() override
     {
-
+        
     }
 
     void ResetVars()
@@ -833,6 +755,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         memset(&TimerTable, 0x0, sizeof(TimerTable));
         memset(&GuidPhaseOneGuards, 0x0, sizeof(GuidPhaseOneGuards));
         memset(&GuidPhaseTwoGuards, 0x0, sizeof(GuidPhaseTwoGuards));
+        guardAttackTimer = 0;
         kromzarGUID = ObjectGuid();
         AllKolkars.clear();
     }
@@ -846,6 +769,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
     uint32 TimerTable[12];
     uint64 GuidPhaseOneGuards[9];
     uint64 GuidPhaseTwoGuards[8];
+    uint32 guardAttackTimer;
     ObjectGuid kromzarGUID;
 
     void DoSummonKolkars()
@@ -856,8 +780,8 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             {
                 AllKolkars.push_back(a->GetGUID());
                 GuidKolkar[i] = a->GetGUID();
-                a->SetRespawnTime(600000);
-                a->SetRespawnDelay(600000);
+                a->SetRespawnTime(600);
+                a->SetRespawnDelay(600);
             }
         }
         //off-position.
@@ -868,7 +792,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             if (Creature* b = m_creature->SummonCreature(asSummonKolkarPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 AllKolkars.push_back(b->GetGUID());
-                b->SetRespawnTime(10000);
+                b->SetRespawnTime(30);
             }
         }
 
@@ -878,11 +802,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         float fX, fY, fZ;
         for (uint8 i = 0; i < 5; ++i)
         {
-            if (Creature* a = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (Creature* a = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 30000))
             {
                 GuidPhaseOneGuards[i] = a->GetGUID();
-                //a->SetRespawnDelay(30000);
-                a->SetRespawnTime(30000);
+                a->SetRespawnDelay(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetRandomPoint(-287.28f, -1874.94f, 92.76f, 5.0f, fX, fY, fZ); //a->GetPositionX(), a->GetPositionY(), a->GetPositionZ()
                 //go to random point near -287.28, -1874.94, 92.76 4m radius?
                 a->GetMotionMaster()->MovePoint(0, fX, fY, fZ);
@@ -892,10 +817,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         for (uint8 i = 0; i < 4; i++)
         {
             m_creature->GetRandomPoint(-207.977f, -1925.8556f, 93.5536f, 20.0f, fX, fY, fZ);
-            if (Creature* b = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (Creature* b = m_creature->SummonCreature(asSummonDefenderPositions[i].uiEntry, fX, fY, fZ, 0, TEMPSUMMON_MANUAL_DESPAWN, 30000))
             {
                 GuidPhaseOneGuards[5 + i] = b->GetGUID();
-                b->SetRespawnTime(30000);
+                b->SetRespawnDelay(30);
+                b->SetWanderDistance(20.0f);
+                b->GetMotionMaster()->Initialize();
             }
         }
     }
@@ -909,13 +836,17 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             if (a = m_creature->SummonCreature(NPC_DEFENDER, asSummonDefenderPositions[i].fX, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 GuidPhaseTwoGuards[i] = a->GetGUID();
-                a->SetRespawnTime(30000);
+                a->SetRespawnTime(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetMotionMaster()->MovePoint(0, fX, fY, fZ);
             }
             if (a = m_creature->SummonCreature(NPC_AXE_THROWER, asSummonDefenderPositions[i].fX - 1, asSummonDefenderPositions[i].fY, asSummonDefenderPositions[i].fZ, asSummonDefenderPositions[i].fO, TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 GuidPhaseTwoGuards[7 - i] = a->GetGUID();
-                a->SetRespawnTime(30000);
+                a->SetRespawnTime(30);
+                a->SetWanderDistance(20.0f);
+                a->GetMotionMaster()->Initialize();
                 a->GetMotionMaster()->MovePoint(0, fX - 1, fY, fZ);
             }
         }
@@ -962,6 +893,12 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             AllKolkars.pop_front();
         }
 
+        if (Creature* pKromzar = m_creature->GetMap()->GetCreature(kromzarGUID))
+        {
+            pKromzar->DespawnOrUnsummon();
+            kromzarGUID.Clear();
+        }
+
         ResetVars();
     }
     void SummonedCreatureJustDied(Creature* pSummoned) override
@@ -1006,17 +943,19 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                 if (phaseTimer < 200000)
                     phaseTimer = 200000;
                 //summon  NPC_KROMZAR + 2 adds en deaddespawn.
-                if (Creature* kromzar = m_creature->SummonCreature(NPC_KROMZAR, -288.344f, -1852.846f, 92.497f, 4.64f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                if (Creature* kromzar = m_creature->SummonCreature(NPC_KROMZAR, -288.344f, -1852.846f, 92.497f, 4.64f, TEMPSUMMON_MANUAL_DESPAWN))
                 {
-                    kromzar->JoinCreatureGroup(kromzar, 3, 0, (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER));
+                    kromzar->JoinCreatureGroup(kromzar, 3, 0, (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER | OPTION_RESPAWN_ALL_ON_ANY_EVADE));
                     kromzar->SetRespawnDelay(120);
                     kromzarGUID = kromzar->GetObjectGuid();
                     for (int i = 0; i < 2; i++)
                     {
-                        if (Creature* c = m_creature->SummonCreature(NPC_KOLKAR_INVADER, -288.344f + i, -1852.846f + i, 92.497f, 4.64f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                        if (Creature* c = m_creature->SummonCreature(NPC_KOLKAR_INVADER, -288.344f + i, -1852.846f + i, 92.497f, 4.64f, TEMPSUMMON_TIMED_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
                         {
-                            c->JoinCreatureGroup(kromzar, 3.0f, (3.0f + i) - kromzar->GetOrientation(), (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER));
+                            c->JoinCreatureGroup(kromzar, 3.0f, (3.0f + i) - kromzar->GetOrientation(), (OPTION_FORMATION_MOVE | OPTION_AGGRO_TOGETHER | OPTION_EVADE_TOGETHER | OPTION_RESPAWN_ALL_ON_ANY_EVADE));
                             c->SetRespawnDelay(120);
+                            c->GetMotionMaster()->Clear(false, true);
+                            c->GetMotionMaster()->MoveFollow(kromzar, 3.0f, (3.0f + i));
                         }
                     }
                     DoScriptText(YELL_KOLKAR_STRONGEST, kromzar);
@@ -1078,6 +1017,33 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                     }
                 }
             }
+
+            if (guardAttackTimer < uiDiff)
+            {
+                if (eventPhase < 2)
+                {
+                    // Something causes the respawn timer of the defenders to reset to 5 minutes once the 30 seconds expire.
+                    // Force them to respawn once it has jumped over 30 seconds.
+                    for (uint64 guid : GuidPhaseOneGuards)
+                    {
+                        if (Creature* b = m_creature->GetMap()->GetCreature(guid))
+                        {
+                            if (!b->IsAlive() && (b->GetRespawnTimeEx() - time(nullptr) > 30))
+                                b->Respawn();
+                        }
+                    }
+                }
+
+                if (Creature* pDefender = m_creature->FindRandomCreature(NPC_DEFENDER, 300.0f))
+                    if (!pDefender->GetVictim())
+                        if (Creature* pInvader = pDefender->FindRandomCreature(NPC_KOLKAR_INVADER, 75.0f))
+                            pDefender->AI()->AttackStart(pInvader);
+
+                guardAttackTimer = 10000;
+            }
+            else
+                guardAttackTimer -= uiDiff;
+            
             if (phaseTimer < uiDiff)
                 endEvent();
             else
@@ -1568,27 +1534,39 @@ bool GossipSelect_npc_jorn_skyseer(Player* pPlayer, Creature* pCreature, uint32 
     return true;
 }
 
+enum
+{
+    AURA_AIR_BUBBLES = 17775
+};
+
+struct go_bubbling_fissureAI : public GameObjectAI
+{
+    go_bubbling_fissureAI(GameObject* pGo) : GameObjectAI(pGo) {}
+
+    void UpdateAI(uint32 const diff) override
+    {
+        if (Player* player = me->FindNearestPlayer(5.0f))
+        {
+            if (!player->HasAura(AURA_AIR_BUBBLES))
+                player->AddAura(AURA_AIR_BUBBLES);
+        }
+    }
+};
+
+GameObjectAI* GetAIgo_bubbling_fissure(GameObject* pGo)
+{
+    return new go_bubbling_fissureAI(pGo);
+}
+
 
 void AddSC_the_barrens()
 {
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "npc_beaten_corpse";
-    newscript->pGossipHello = &GossipHello_npc_beaten_corpse;
-    newscript->pGossipSelect = &GossipSelect_npc_beaten_corpse;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_gilthares";
     newscript->GetAI = &GetAI_npc_gilthares;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_gilthares;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_gizmotronic";
-    newscript->pGossipHello = &GossipHello_npc_Gizmotronic;
-    newscript->pGossipSelect = &GossipSelect_npc_Gizmotronic;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -1670,5 +1648,10 @@ void AddSC_the_barrens()
     newscript->Name = "npc_jorn_skyseer";
     newscript->pGossipHello = &GossipHello_npc_jorn_skyseer;
     newscript->pGossipSelect = &GossipSelect_npc_jorn_skyseer;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_bubbling_fissure";
+    newscript->GOGetAI = &GetAIgo_bubbling_fissure;
     newscript->RegisterSelf();
 }

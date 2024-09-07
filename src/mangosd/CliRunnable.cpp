@@ -311,7 +311,7 @@ bool ChatHandler::HandleCharacterDeletedListCommand(char* args, bool useName)
  *
  * @param delInfo the informations about the character which will be restored
  */
-void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo)
+void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo& delInfo)
 {
     if (delInfo.accountName.empty())                    // account not exist
     {
@@ -330,7 +330,7 @@ void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo
     if (sObjectMgr.GetPlayerGuidByName(delInfo.name))
     {
         PSendSysMessage(LANG_CHARACTER_DELETED_SKIP_NAME, delInfo.name.c_str(), delInfo.lowguid, delInfo.accountId);
-        return;
+        delInfo.name = std::to_string(delInfo.lowguid);
     }
 
     // use blocking query as we need to reload character into cache
@@ -511,6 +511,7 @@ int kb_hit_return()
 /// %Thread start
 void CliRunnable::operator()()
 {
+    thread_name("CLI");
     ///- Init new SQL thread for the world database (one connection call enough)
     WorldDatabase.ThreadStart();                                // let thread do safe mySQL requests
 

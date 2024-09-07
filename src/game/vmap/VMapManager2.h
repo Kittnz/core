@@ -70,7 +70,7 @@ namespace VMAP
             bool _loadMap(uint32 pMapId, std::string const& basePath, uint32 tileX, uint32 tileY);
             /* void _unloadMap(uint32 pMapId, uint32 x, uint32 y); */
 
-            std::shared_timed_mutex m_modelsLock;
+            std::shared_mutex m_modelsLock;
         public:
             // public for debug
             G3D::Vector3 convertPositionToInternalRep(float x, float y, float z) const;

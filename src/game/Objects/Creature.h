@@ -57,13 +57,13 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_NO_CRUSH                     = 0x00000020,       // creature can't do crush attacks
     CREATURE_FLAG_EXTRA_FIXED_Z                      = 0x00000040,       // creature does not fall
     CREATURE_FLAG_EXTRA_INVISIBLE                    = 0x00000080,       // creature is always invisible for player (mostly trigger creatures)
-    CREATURE_FLAG_EXTRA_NOT_TAUNTABLE                = 0x00000100,       // creature is immune to taunt auras and effect attack me
+                                                                         // unused
     CREATURE_FLAG_EXTRA_AGGRO_ZONE                   = 0x00000200,       // creature sets itself in combat with zone on aggro
     CREATURE_FLAG_EXTRA_GUARD                        = 0x00000400,       // creature is a guard
     CREATURE_FLAG_EXTRA_NO_THREAT_LIST               = 0x00000800,       // creature does not select targets based on threat
     CREATURE_FLAG_EXTRA_KEEP_POSITIVE_AURAS_ON_EVADE = 0x00001000,       // creature keeps positive auras at reset
     CREATURE_FLAG_EXTRA_ALWAYS_CRUSH                 = 0x00002000,       // creature always roll a crushing melee outcome when not miss/crit/dodge/parry/block
-    CREATURE_FLAG_EXTRA_IMMUNE_AOE                   = 0x00004000,       // creature is immune to AoE
+                                                                         // unused
     CREATURE_FLAG_EXTRA_CHASE_GEN_NO_BACKING         = 0x00008000,       // creature does not move back when target is within bounding radius
     CREATURE_FLAG_EXTRA_NO_ASSIST                    = 0x00010000,       // creature does not aggro when nearby creatures aggro
     CREATURE_FLAG_EXTRA_NO_TARGET                    = 0x00020000,       // creature does not acquire targets
@@ -79,6 +79,17 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_APPEAR_DEAD                  = 0x08000000,       // 134217728 Creature will have UNIT_DYNFLAG_DEAD applied
     CREATURE_FLAG_EXTRA_NO_LEASH_EVADE               = 0x10000000,       // 268435456 Creature will not evade due to target running away
     CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY            = 0x20000000,       // 536870912 CREATURE_STATIC_FLAG_DESPAWN_INSTANTLY (despawn on death)
+};
+
+enum CreatureImmunityFlags
+{
+    CREATURE_IMMUNITY_AOE            = 0x01,
+    CREATURE_IMMUNITY_TAUNT          = 0x02, // SPELL_AURA_MOD_TAUNT, SPELL_EFFECT_ATTACK_ME
+    CREATURE_IMMUNITY_MOD_STAT       = 0x04, // SPELL_AURA_MOD_STAT, SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE
+    CREATURE_IMMUNITY_MOD_CAST_SPEED = 0x08, // SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK
+    CREATURE_IMMUNITY_DISEASE        = 0x10, // DISPEL_DISEASE
+    CREATURE_IMMUNITY_POISON         = 0x20, // DISPEL_POISON
+    CREATURE_IMMUNITY_CURSE          = 0x40, // DISPEL_CURSE
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
@@ -97,82 +108,154 @@ constexpr float SPEED_REDUCTION_HP_15 = 0.7f;
 constexpr float SPEED_REDUCTION_HP_10 = 0.6f;
 constexpr float SPEED_REDUCTION_HP_5 = 0.5f;
 
+enum InhabitTypeValues
+{
+    INHABIT_GROUND = 1,
+    INHABIT_WATER  = 2,
+    INHABIT_AIR    = 4,
+    INHABIT_ANYWHERE = INHABIT_GROUND | INHABIT_WATER | INHABIT_AIR
+};
+
+// Enums used by StringTextData::Type (CreatureEventAI)
+enum ChatType
+{
+    CHAT_TYPE_SAY               = 0,
+    CHAT_TYPE_YELL              = 1,
+    CHAT_TYPE_TEXT_EMOTE        = 2,
+    CHAT_TYPE_BOSS_EMOTE        = 3,
+    CHAT_TYPE_WHISPER           = 4,
+    CHAT_TYPE_BOSS_WHISPER      = 5,
+    CHAT_TYPE_ZONE_YELL         = 6
+};
+
+// Selection method used by SelectAttackingTarget
+enum AttackingTarget
+{
+    ATTACKING_TARGET_RANDOM = 0,                            // Just selects a random target
+    ATTACKING_TARGET_TOPAGGRO,                              // Selects targets from top aggro to bottom
+    ATTACKING_TARGET_BOTTOMAGGRO,                           // Selects targets from bottom aggro to top
+    ATTACKING_TARGET_NEAREST,                               // Selects the closest target
+    ATTACKING_TARGET_FARTHEST                               // Selects the farthest away target
+};
+
+enum SelectFlags
+{
+    SELECT_FLAG_IN_LOS              = 0x001,                // Default Selection Requirement for Spell-targets
+    SELECT_FLAG_PLAYER              = 0x002,
+    SELECT_FLAG_POWER_MANA          = 0x004,                // For Energy based spells, like manaburn
+    SELECT_FLAG_POWER_RAGE          = 0x008,
+    SELECT_FLAG_POWER_ENERGY        = 0x010,
+    SELECT_FLAG_IN_MELEE_RANGE      = 0x040,
+    SELECT_FLAG_NOT_IN_MELEE_RANGE  = 0x080,
+    SELECT_FLAG_NO_TOTEM            = 0x100,
+    SELECT_FLAG_PLAYER_NOT_GM       = 0x200,
+    SELECT_FLAG_PET                 = 0x400,
+    SELECT_FLAG_NOT_PLAYER          = 0x800,
+    SELECT_FLAG_POWER_NOT_MANA      = 0x1000, // Used in some dungeon encounters
+    SELECT_FLAG_NO_PET              = 0x2000
+};
+
+#define MAX_SELECT_FLAG_MASK (SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA | SELECT_FLAG_POWER_RAGE | SELECT_FLAG_POWER_ENERGY | SELECT_FLAG_IN_MELEE_RANGE | SELECT_FLAG_NOT_IN_MELEE_RANGE | SELECT_FLAG_NO_TOTEM | SELECT_FLAG_PLAYER_NOT_GM | SELECT_FLAG_PET | SELECT_FLAG_NOT_PLAYER | SELECT_FLAG_POWER_NOT_MANA)
+
+enum RegenStatsFlags
+{
+    REGEN_FLAG_HEALTH               = 0x001,
+    REGEN_FLAG_POWER                = 0x002,
+};
+
+enum CreatureStateFlag : uint16
+{
+    CSTATE_ALREADY_CALL_ASSIST   = 0x0001,
+    CSTATE_ALREADY_SEARCH_ASSIST = 0x0002,
+    CSTATE_REGEN_HEALTH          = 0x0004,
+    CSTATE_REGEN_MANA            = 0x0008,
+    CSTATE_INIT_AI_ON_RESPAWN    = 0x0010,
+    CSTATE_COMBAT                = 0x0020,
+    CSTATE_COMBAT_WITH_ZONE      = 0x0040,
+    CSTATE_ESCORTABLE            = 0x0080,
+    CSTATE_DESPAWNING            = 0x0100,
+    CSTATE_TARGETED_EMOTE        = 0x0200,
+    CSTATE_INIT_AI_ON_UPDATE     = 0x0800,
+    CSTATE_EVADE_ON_UPDATE       = 0x1000,
+};
+
 // from `creature_template` table
 struct CreatureInfo
 {
-    uint32  entry;
-    uint32  display_id[MAX_DISPLAY_IDS_PER_CREATURE];
-    uint32 mount_display_id;
-    char*   name;
-    char*   subname;
-    uint32  gossip_menu_id;
-    uint32  level_min;
-    uint32  level_max;
-    uint32  health_min;
-    uint32  health_max;
-    uint32  mana_min;
-    uint32  mana_max;
-    uint32  armor;
-    uint32  faction;
-    uint32  npc_flags;
-    float   speed_walk;
-    float   speed_run;
-    float   scale;
-    float   detection_range;                                // Detection Range for Line of Sight aggro
-    float   call_for_help_range;                            // Radius for combat assistance call
-    float   leash_range;                                    // Hard limit on allowed chase distance
-    uint32  rank;
-    float   xp_multiplier;
-    float   dmg_min;
-    float   dmg_max;
-    uint32  dmg_school;
-    uint32  attack_power;
-    float   dmg_multiplier;
-    uint32  base_attack_time;
-    uint32  ranged_attack_time;
-    uint32  unit_class;                                     // enum Classes. Note only 4 classes are known for creatures.
-    uint32  unit_flags;                                     // enum UnitFlags mask values
-    uint32  dynamic_flags;
-    uint32  beast_family;                                   // enum CreatureFamily values (optional)
-    uint32  trainer_type;
-    uint32  trainer_spell;
-    uint32  trainer_class;
-    uint32  trainer_race;
-    float   ranged_dmg_min;
-    float   ranged_dmg_max;
-    uint32  ranged_attack_power;
-    uint32  type;                                           // enum CreatureType values
-    uint32  type_flags;                                     // enum CreatureTypeFlags mask values
-    uint32  loot_id;
-    uint32  pickpocket_loot_id;
-    uint32  skinning_loot_id;
-    int32   holy_res;
-    int32   fire_res;
-    int32   nature_res;
-    int32   frost_res;
-    int32   shadow_res;
-    int32   arcane_res;
-    uint32  spells[CREATURE_MAX_SPELLS];
-    uint32  spell_list_id;
-    uint32  pet_spell_list_id;
-    uint32  spawn_spell_id;
-    uint32 const* auras;
-    uint32  gold_min;
-    uint32  gold_max;
-    char const* ai_name;
-    uint32  movement_type;
-    uint32  inhabit_type;
-    uint32  civilian;
-    bool    racial_leader;
-    uint32  regeneration;
-    uint32  equipment_id;
-    uint32  trainer_id;
-    uint32  vendor_id;
-    uint32  mechanic_immune_mask;
-    uint32  school_immune_mask;
-    uint32  flags_extra;
-    uint32  phase_quest_id;
-    uint32  script_id;
+    uint32  entry = 0;
+    uint32  display_id[MAX_DISPLAY_IDS_PER_CREATURE] = {};
+    uint32 mount_display_id = 0;
+    std::string name;
+    std::string subname;
+    uint32  gossip_menu_id = 0;
+    uint32  level_min = 1;
+    uint32  level_max = 1;
+    uint32  health_min = 1;
+    uint32  health_max = 1;
+    uint32  mana_min = 0;
+    uint32  mana_max = 0;
+    uint32  armor = 0;
+    uint32  faction = 35;
+    uint32  npc_flags = 0;
+    float   speed_walk = 1.0f;
+    float   speed_run = 1.14286f;
+    float   scale = 1.0f;
+    float   detection_range = 18.0f;                        // Detection Range for Line of Sight aggro
+    float   call_for_help_range = 5.0f;                     // Radius for combat assistance call
+    float   leash_range = 0.0f;                             // Hard limit on allowed chase distance
+    uint32  rank = 0;
+    float   xp_multiplier = 1.0f;
+    float   dmg_min = 1.0f;
+    float   dmg_max = 2.0f;
+    uint32  dmg_school = 0;
+    uint32  attack_power = 0;
+    float   dmg_multiplier = 1.0f;
+    uint32  base_attack_time = 0;
+    uint32  ranged_attack_time = 0;
+    uint32  unit_class = 0;                                 // enum Classes. Note only 4 classes are known for creatures.
+    uint32  unit_flags = 0;                                 // enum UnitFlags mask values
+    uint32  dynamic_flags = 0;
+    uint32  beast_family = 0;                               // enum CreatureFamily values (optional)
+    uint32  trainer_type = 0;
+    uint32  trainer_spell = 0;
+    uint32  trainer_class = 0;
+    uint32  trainer_race = 0;
+    float   ranged_dmg_min = 0.0f;
+    float   ranged_dmg_max = 0.0f;
+    uint32  ranged_attack_power = 0;
+    uint32  type = 0;                                       // enum CreatureType values
+    uint32  type_flags = 0;                                 // enum CreatureTypeFlags mask values
+    uint32  loot_id = 0;
+    uint32  pickpocket_loot_id = 0;
+    uint32  skinning_loot_id = 0;
+    int32   holy_res = 0;
+    int32   fire_res = 0;
+    int32   nature_res = 0;
+    int32   frost_res = 0;
+    int32   shadow_res = 0;
+    int32   arcane_res = 0;
+    uint32  spells[CREATURE_MAX_SPELLS] = {};
+    uint32  spell_list_id = 0;
+    uint32  pet_spell_list_id = 0;
+    uint32  spawn_spell_id = 0;
+    uint32 const* auras = nullptr;
+    uint32  gold_min = 0;
+    uint32  gold_max = 0;
+    std::string ai_name;
+    uint32  movement_type = 0;
+    uint32  inhabit_type = INHABIT_GROUND | INHABIT_WATER;
+    bool    civilian = false;
+    bool    racial_leader = false;
+    uint32  regeneration = REGEN_FLAG_HEALTH | REGEN_FLAG_POWER;
+    uint32  equipment_id = 0;
+    uint32  trainer_id = 0;
+    uint32  vendor_id = 0;
+    uint32  mechanic_immune_mask = 0;
+    uint32  school_immune_mask = 0;
+    uint32  immunity_flags = 0;
+    uint32  flags_extra = 0;
+    uint32  phase_quest_id = 0;
+    uint32  script_id = 0;
 
     // helpers
     static HighGuid GetHighGuid()
@@ -284,75 +367,6 @@ struct PointOfInterestLocale
     std::vector<std::string> IconName;
 };
 
-enum InhabitTypeValues
-{
-    INHABIT_GROUND = 1,
-    INHABIT_WATER  = 2,
-    INHABIT_AIR    = 4,
-    INHABIT_ANYWHERE = INHABIT_GROUND | INHABIT_WATER | INHABIT_AIR
-};
-
-// Enums used by StringTextData::Type (CreatureEventAI)
-enum ChatType
-{
-    CHAT_TYPE_SAY               = 0,
-    CHAT_TYPE_YELL              = 1,
-    CHAT_TYPE_TEXT_EMOTE        = 2,
-    CHAT_TYPE_BOSS_EMOTE        = 3,
-    CHAT_TYPE_WHISPER           = 4,
-    CHAT_TYPE_BOSS_WHISPER      = 5,
-    CHAT_TYPE_ZONE_YELL         = 6
-};
-
-// Selection method used by SelectAttackingTarget
-enum AttackingTarget
-{
-    ATTACKING_TARGET_RANDOM = 0,                            // Just selects a random target
-    ATTACKING_TARGET_TOPAGGRO,                              // Selects targets from top aggro to bottom
-    ATTACKING_TARGET_BOTTOMAGGRO,                           // Selects targets from bottom aggro to top
-    ATTACKING_TARGET_NEAREST,                               // Selects the closest target
-    ATTACKING_TARGET_FARTHEST                               // Selects the farthest away target
-};
-
-enum SelectFlags
-{
-    SELECT_FLAG_IN_LOS              = 0x001,                // Default Selection Requirement for Spell-targets
-    SELECT_FLAG_PLAYER              = 0x002,
-    SELECT_FLAG_POWER_MANA          = 0x004,                // For Energy based spells, like manaburn
-    SELECT_FLAG_POWER_RAGE          = 0x008,
-    SELECT_FLAG_POWER_ENERGY        = 0x010,
-    SELECT_FLAG_IN_MELEE_RANGE      = 0x040,
-    SELECT_FLAG_NOT_IN_MELEE_RANGE  = 0x080,
-    SELECT_FLAG_NO_TOTEM            = 0x100,
-    SELECT_FLAG_PLAYER_NOT_GM       = 0x200,
-    SELECT_FLAG_PET                 = 0x400,
-    SELECT_FLAG_NOT_PLAYER          = 0x800,
-    SELECT_FLAG_POWER_NOT_MANA      = 0x1000, // Used in some dungeon encounters
-    SELECT_FLAG_NO_PET              = 0x2000
-};
-
-#define MAX_SELECT_FLAG_MASK (SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA | SELECT_FLAG_POWER_RAGE | SELECT_FLAG_POWER_ENERGY | SELECT_FLAG_IN_MELEE_RANGE | SELECT_FLAG_NOT_IN_MELEE_RANGE | SELECT_FLAG_NO_TOTEM | SELECT_FLAG_PLAYER_NOT_GM | SELECT_FLAG_PET | SELECT_FLAG_NOT_PLAYER | SELECT_FLAG_POWER_NOT_MANA)
-
-enum RegenStatsFlags
-{
-    REGEN_FLAG_HEALTH               = 0x001,
-    REGEN_FLAG_POWER                = 0x002,
-};
-
-enum CreatureStateFlag : uint16
-{
-    CSTATE_ALREADY_CALL_ASSIST   = 0x0001,
-    CSTATE_ALREADY_SEARCH_ASSIST = 0x0002,
-    CSTATE_REGEN_HEALTH          = 0x0004,
-    CSTATE_REGEN_MANA            = 0x0008,
-    CSTATE_INIT_AI_ON_RESPAWN    = 0x0010,
-    CSTATE_COMBAT                = 0x0020,
-    CSTATE_COMBAT_WITH_ZONE      = 0x0040,
-    CSTATE_ESCORTABLE            = 0x0080,
-    CSTATE_DESPAWNING            = 0x0100,
-    CSTATE_TARGETED_EMOTE        = 0x0200,
-};
-
 // Vendors
 struct VendorItem
 {
@@ -412,7 +426,7 @@ enum VendorItemFlags
     VENDOR_ITEM_FLAG_DYNAMIC_RESTOCK  = 0x02,
 };
 
-typedef std::list<VendorItemCount> VendorItemCounts;
+typedef std::vector<VendorItemCount> VendorItemCounts;
 
 struct TrainerSpell
 {
@@ -445,7 +459,7 @@ struct TrainerSpellData
 // max different by z coordinate for creature aggro reaction
 #define CREATURE_Z_ATTACK_RANGE 3
 
-#define MAX_VENDOR_ITEMS 255                                // Limitation in item count field size in SMSG_LIST_INVENTORY
+#define MAX_VENDOR_ITEMS 128                                // Limitation in item count field size in SMSG_LIST_INVENTORY
 
 enum VirtualItemSlot
 {
@@ -506,6 +520,8 @@ enum TemporaryFactionFlags                                  // Used at real fact
     TEMPFACTION_ALL,
 };
 
+#define MAX_LEVEL_DIFF_FOR_AGGRO_RANGE 25
+
 class ThreatListProcesser
 {
     public:
@@ -550,7 +566,8 @@ class Creature : public Unit
         bool HasStaticDBSpawnData() const;                  // listed in `creature` table and have fixed in DB guid
         uint32 GetDBTableGUIDLow() const;
 
-        char const* GetSubName() const { return GetCreatureInfo()->subname; }
+        virtual char const* GetName() const override { return GetCreatureInfo()->name.c_str(); }
+        char const* GetSubName() const { return GetCreatureInfo()->subname.c_str(); }
 
         void Update(uint32 update_diff, uint32 time) override;  // overwrite Unit::Update
 
@@ -570,12 +587,11 @@ class Creature : public Unit
         void ClearCreatureState(CreatureStateFlag f) { m_creatureStateFlags &= ~f; }
         bool HasTypeFlag(CreatureTypeFlags flag) const { return GetCreatureInfo()->type_flags & flag; }
         bool HasExtraFlag(CreatureFlagsExtra flag) const { return GetCreatureInfo()->flags_extra & flag; }
+        bool HasImmunityFlag(CreatureImmunityFlags flag) const { return GetCreatureInfo()->immunity_flags & flag; }
 
         CreatureSubtype GetSubtype() const { return m_subtype; }
         bool IsPet() const { return m_subtype == CREATURE_SUBTYPE_PET; }
         bool IsTotem() const { return m_subtype == CREATURE_SUBTYPE_TOTEM; }
-        Totem const* ToTotem() const { return IsTotem() ? reinterpret_cast<Totem const*>(this) : nullptr; }
-        Totem* ToTotem() { return IsTotem() ? reinterpret_cast<Totem*>(this) : nullptr; }
         bool IsTemporarySummon() const { return m_subtype == CREATURE_SUBTYPE_TEMPORARY_SUMMON; }
         bool IsCorpse() const { return GetDeathState() ==  CORPSE; }
         bool IsDespawned() const { return GetDeathState() ==  DEAD; }
@@ -588,7 +604,7 @@ class Creature : public Unit
         // World of Warcraft Client Patch 1.10.0 (2006-03-28)
         // - Area effect spells and abilities will no longer consider totems as
         //   valid targets.
-        bool IsImmuneToAoe() const { return IsTotem() || HasExtraFlag(CREATURE_FLAG_EXTRA_IMMUNE_AOE); }
+        bool IsImmuneToAoe() const { return IsTotem() || HasImmunityFlag(CREATURE_IMMUNITY_AOE); }
 
         bool CanWalk() const override { return GetCreatureInfo()->inhabit_type & INHABIT_GROUND; }
         bool CanSwim() const override { return IsPet() || GetCreatureInfo()->inhabit_type & INHABIT_WATER; }
@@ -725,6 +741,7 @@ class Creature : public Unit
         Player* GetOriginalLootRecipient() const;           // ignore group changes/etc, not for looting
         bool IsTappedBy(Player const* player) const;
         bool IsSkinnableBy(Player const* player) const { return !skinningForOthersTimer || IsTappedBy(player); }
+        bool WasPlayerPresentAtDeath(Player const* player) const;
 
         uint32 m_spells[CREATURE_MAX_SPELLS];
 
@@ -760,8 +777,6 @@ class Creature : public Unit
 
         uint32 GetDefaultMount() { return m_mountId; }
         void SetDefaultMount(uint32 id) { m_mountId = id; }
-        
-        void SetTauntImmunity(bool immune);
 
         MovementGeneratorType GetDefaultMovementType() const { return m_defaultMovementType; }
         void SetDefaultMovementType(MovementGeneratorType mgt) { m_defaultMovementType = mgt; }
@@ -774,7 +789,8 @@ class Creature : public Unit
         bool IsVisibleInGridForPlayer(Player const* pl) const override;
 
         void RemoveCorpse();
-        bool IsDeadByDefault() const;
+        bool IsDeadByDefault() const { return m_isDeadByDefault; }
+        void SetDeadByDefault(bool state) { m_isDeadByDefault = state; }
 
         void ForcedDespawn(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
         void DespawnOrUnsummon(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
@@ -802,6 +818,7 @@ class Creature : public Unit
         void SendZoneUnderAttackMessage(Player* attacker);
 
         void SetInCombatWithZone(bool initialPulse = true);
+        void EnterCombatWithTarget(Unit* pTarget);
         bool canStartAttack(Unit const* who, bool force) const;
         bool _IsTargetAcceptable(Unit const *target) const;
         bool canCreatureAttack(Unit const *pVictim, bool force) const;
@@ -824,6 +841,7 @@ class Creature : public Unit
             else
                 ClearCreatureState(CSTATE_COMBAT_WITH_ZONE);
         }
+        void LogDeath(Unit* pKiller) const;
         // Smartlog end
 
         Unit* SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags = SELECT_FLAG_NO_TOTEM) const;
@@ -1024,6 +1042,7 @@ class Creature : public Unit
         uint32 m_lootMoney;
         ObjectGuid m_lootRecipientGuid;                     // player who will have rights for looting if m_lootGroupRecipient==0 or group disbanded
         uint32 m_lootGroupRecipientId;                      // group who will have rights for looting if set and exist
+        ObjectGuidSet m_playersPresentAtDeath;              // list of players that were in the map at time of death (for raid bosses only)
 
         /// Timers
         uint32 m_corpseDecayTimer;                          // (msecs)timer for death or corpse disappearance
@@ -1041,6 +1060,7 @@ class Creature : public Unit
         uint32 m_equipmentId;
         uint32 m_mountId;                                   // display Id to mount
 
+        bool m_isDeadByDefault;
         bool m_AI_locked;
         uint16 m_creatureStateFlags;
         uint32 m_temporaryFactionFlags;                     // used for real faction changes (not auras etc)
@@ -1069,6 +1089,7 @@ class Creature : public Unit
         uint32 m_playerDamageTaken;
         uint32 m_nonPlayerDamageTaken;
         
+        uint32 m_callForHelpTimer;
         float m_callForHelpDist;
         float m_leashDistance;
         float m_detectionDistance;

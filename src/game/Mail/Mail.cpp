@@ -314,9 +314,6 @@ void MailDraft::SendMailTo(MailReceiver const& receiver, MailSender const& sende
 
     time_t expire_time = deliver_time + expire_delay;
 
-    sLog.out(LOG_MAIL_AH, "Sending mail id %u to %s. AH : %s. expire_delay %u, item Id %u.", mailId, pReceiver ? pReceiver->GetShortDescription().c_str() : receiver.GetPlayerGuid().GetString().c_str(), 
-        sender.GetStationery() == MAIL_STATIONERY_AUCTION ? "yes" : "no", expire_delay, m_items.empty() ? 0 : m_items.begin()->second->GetEntry());
-
     // Add to DB
     std::string safe_subject = GetSubject();
 

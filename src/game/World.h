@@ -34,6 +34,8 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Utilities/robin_hood.h"
+
 //#include "Creature.h"
 
 #include <map>
@@ -42,6 +44,7 @@
 #include <chrono>
 #include <memory>
 #include <unordered_map>
+#include <atomic>
 #include <thread>
 #include <any>
 
@@ -51,12 +54,27 @@ class Player;
 class SqlResultQueue;
 class QueryResult;
 class World;
+class ChannelBroadcaster;
 namespace DiscordBot
 {
     class Bot;
 }
+
+namespace HttpApi
+{
+    class ApiServer;
+}
+
 class MovementBroadcaster;
 struct CreatureInfo;
+
+enum ContentPhase
+{
+    CONTENT_PHASE_1 = 0,
+    CONTENT_PHASE_2 = 1,
+    CONTENT_PHASE_3 = 2,
+    CONTENT_PHASE_4 = 3,
+};
 
 // ServerMessages.dbc
 enum ServerMessageType
@@ -92,7 +110,9 @@ enum WorldTimers
     WUPDATE_GROUPS      = 5,
     WUPDATE_CENSUS      = 6,
     WUPDATE_SHELLCOIN   = 7,
-    WUPDATE_COUNT       = 8
+    WUPDATE_TOTAL_MONEY = 8,
+    WUPDATE_COMMANDS    = 9,
+    WUPDATE_COUNT       = 10
 };
 
 /// Configuration elements
@@ -223,6 +243,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_GROUP_VISIBILITY,
     CONFIG_UINT32_MAIL_DELIVERY_DELAY,
     CONFIG_UINT32_MASS_MAILER_SEND_PER_TICK,
+    CONFIG_UINT32_MAIL_MAX_PER_HOUR,
     CONFIG_UINT32_UPTIME_UPDATE,
     CONFIG_UINT32_AUCTION_DEPOSIT_MIN,
     CONFIG_UINT32_SKILL_CHANCE_ORANGE,
@@ -257,12 +278,11 @@ enum eConfigUInt32Values
     CONFIG_UINT32_BATTLEGROUND_QUEUE_ANNOUNCER_JOIN,
     CONFIG_UINT32_GROUP_OFFLINE_LEADER_DELAY,
     CONFIG_UINT32_GUILD_EVENT_LOG_COUNT,
-    CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL,
-    CONFIG_UINT32_TIMERBAR_FATIGUE_MAX,
-    CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL,
-    CONFIG_UINT32_TIMERBAR_BREATH_MAX,
-    CONFIG_UINT32_TIMERBAR_FIRE_GMLEVEL,
-    CONFIG_UINT32_TIMERBAR_FIRE_MAX,
+    CONFIG_UINT32_MIRRORTIMER_FATIGUE_MAX,
+    CONFIG_UINT32_MIRRORTIMER_BREATH_MAX,
+    CONFIG_UINT32_MIRRORTIMER_ENVIRONMENTAL_MAX,
+    CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MIN,
+    CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MAX,
     CONFIG_UINT32_MIN_LEVEL_STAT_SAVE,
     CONFIG_UINT32_MAINTENANCE_DAY,
     CONFIG_UINT32_CHARDELETE_KEEP_DAYS,
@@ -361,13 +381,39 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME,
     CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT,
-    CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE,
-    CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_CHAT_MIN_LEVEL,
     CONFIG_UINT32_AUTO_COMMIT_MINUTES,
     CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS,
+    CONFIG_UINT32_PASSWORD_CHANGE_REWARD_ITEM,
+    CONFIG_UINT32_MAX_AGE_SHOW_WARNING,
+    CONFIG_UINT32_HIGH_LEVEL_CHARACTER,
+    CONFIG_UINT32_ACCOUNT_TRUSTED_IP_PERCENTAGE,
+    CONFIG_UINT32_ANALYSIS_NO_FINGERPRINT_MATCH_WEIGHT,
+    CONFIG_UINT32_ANALYSIS_NO_EXTENDED_DATA_MATCH_WEIGHT,
+    CONFIG_UINT32_ANALYSIS_NO_CPU_DATA_WEIGHT,
+    CONFIG_UINT32_ANALYSIS_NO_CPU_DATA_MATCH_WEIGHT,
+    CONFIG_UINT32_ANALYSIS_NO_EXTENDED_DATA_WEIGHT,
+    CONFIG_UINT32_ANALYSIS_WARNING_THRESHOLD,
+    CONFIG_UINT32_AUTO_RESTART_MAX_SERVER_UPTIME,
+    CONFIG_UINT32_AUTO_RESTART_HOUR_MIN,
+    CONFIG_UINT32_AUTO_RESTART_HOUR_MAX,
+    CONFIG_UINT32_DIFF_HC_PROTECTION,
+    CONFIG_UINT32_LOGIN_REGION_QUEUE_LEVEL_THRESHOLD,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_TICK,
+    CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_SETTINGS,
+    CONFIG_UINT32_PRIORITY_QUEUE_DONATOR_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_WESTERN_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR,
+    CONFIG_UINT32_PRIORITY_QUEUE_HIGH_LEVEL_CHAR_PRIORITY,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_PER_ACCOUNT_DAY,
+    CONFIG_UINT32_PRIORITY_QUEUE_PRIORITY_REDUCTION_MULTIBOX,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_NON_REGIONAL,
+    CONFIG_UINT32_MAX_PERCENTAGE_POP_REGIONAL,
+    CONFIG_UINT32_AUTO_PDUMP_MIN_CHAR_LEVEL,
+    CONFIG_UINT32_AUTO_PDUMP_DELETE_AFTER_DAYS,
+    CONFIG_UINT32_CONTENT_PHASE,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -389,7 +435,6 @@ enum eConfigInt32Values
     CONFIG_INT32_QUEST_LOW_LEVEL_HIDE_DIFF,
     CONFIG_INT32_QUEST_HIGH_LEVEL_HIDE_DIFF,
     CONFIG_INT32_AC_ANTICHEAT_MAX_ALLOWED_DESYNC,
-    CONFIG_INT32_KALIMDOR_TIME_OFFSET,
     CONFIG_INT32_VALUE_COUNT
 };
 
@@ -475,9 +520,14 @@ enum eConfigFloatValues
     CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV,
     CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS,
     CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB,
+    CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_SV,
     CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV,
     CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS,
     CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB,
+    CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_SV,
+    CONFIG_FLOAT_SUSPICIOUS_MOVEMENTSPEED_REPORT_THRESHOLD,
+    CONFIG_FLOAT_MAX_FACTION_IMBALANCE,
+    CONFIG_FLOAT_OPEN_WORLD_HONOR_MULTIPLIER,
     CONFIG_FLOAT_VALUE_COUNT
 };
 
@@ -568,7 +618,6 @@ enum eConfigBoolValues
     CONFIG_BOOL_RESTORE_DELETED_ITEMS,
     CONFIG_BOOL_UNLINKED_AUCTION_HOUSES,
     CONFIG_BOOL_PREVENT_ITEM_DATAMINING,
-    CONFIG_BOOL_BEGINNERS_GUILD,
     CONFIG_BOOL_TRANSMOG_ENABLED,
     CONFIG_BOOL_STATIC_OBJECT_LOS,
 	CONFIG_BOOL_DUAL_SPEC,
@@ -629,8 +678,29 @@ enum eConfigBoolValues
     CONFIG_BOOL_PTR,
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
     CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
-    CONFIG_BOOL_ANNIVERSARY,
-    CONFIG_BOOL_VALUE_COUNT
+    CONFIG_BOOL_ENFORCED_ENGLISH,
+    CONFIG_BOOL_SEA_NETWORK,
+    CONFIG_BOOL_BACKUP_CHARACTER_INVENTORY,
+    CONFIG_BOOL_ANALYSIS_STOP_ON_CORRECT_EXTENDED_DATA,
+    CONFIG_BOOL_ANALYSIS_DO_SHARED_DATA_DETAILED_REPORT,
+    CONFIG_BOOL_ANALYSIS_ALLOW_RELAXED_IP,
+    CONFIG_BOOL_ANALYSIS_LOG_DISCORD_SUMMARY,
+    CONFIG_BOOL_ANALYSIS_PING_ON_WARNING,
+    CONFIG_BOOL_ANALYSIS_AUTOMATIC_PUNIHSMENT,
+    CONFIG_BOOL_SUSPICIOUS_ENABLE,
+    CONFIG_BOOL_SUSPICIOUS_MOVEMENT_ENABLE,
+    CONFIG_BOOL_SUSPICIOUS_FISHING_ENABLE,
+    CONFIG_BOOL_SUSPICIOUS_NPC_KILLED_ENABLE,
+    CONFIG_BOOL_LOGIN_REGION_QUEUE,
+    CONFIG_BOOL_ENABLE_PRIORITY_QUEUE,
+    CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_WESTERN_PRIORITY,
+    CONFIG_BOOL_ENABLE_DYNAMIC_VISIBILITIES,
+    CONFIG_BOOL_PRIORITY_QUEUE_ENABLE_IP_PENALTY,
+    CONFIG_BOOL_LOAD_LOCALES,
+    CONFIG_BOOL_ENABLE_FACTION_BALANCE,
+    CONFIG_BOOL_BLOCK_ALL_HANZI,
+    CONFIG_BOOL_HOLIDAY_EVENT,
+	CONFIG_BOOL_VALUE_COUNT
 };
 
 /// Type of server
@@ -777,6 +847,7 @@ struct AccountCacheData
     uint32 id;
     std::string username;
     std::string email;
+    uint64 lastExtendedFingerprint;
 };
 
 
@@ -813,23 +884,38 @@ class World
 		void InternalShutdown();
 
         void StopDiscordBot();
+        void SendDiscordMessage(uint64 channelId, std::string message);
 
-        typedef std::unordered_map<uint32, WorldSession*> SessionMap;
+        typedef robin_hood::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
-        SessionMap GetAllSessions() { return m_sessions; }
+        const SessionMap& GetAllSessions() const { return m_sessions; }
         WorldSession* FindSession(uint32 id) const;
         void AddSession(WorldSession *s);
         bool RemoveSession(uint32 id);
         /// Get the number of current active sessions
         void UpdateMaxSessionCounters();
         uint32 GetActiveAndQueuedSessionCount() const { return m_sessions.size(); }
-        uint32 GetActiveSessionCount() const { return m_sessions.size() - m_QueuedSessions.size(); }
-        uint32 GetQueuedSessionCount() const { return m_QueuedSessions.size(); }
+        uint32 GetActiveSessionCount() const { return m_sessions.size() - GetQueuedSessionCount(); }
+        uint32 GetQueuedSessionCount() const { return getConfig(CONFIG_BOOL_ENABLE_PRIORITY_QUEUE) ? m_priorityQueue[0].size() + m_priorityQueue[1].size() : m_QueuedSessions.size(); }
         /// Get the maximum number of parallel sessions on the server since last reboot
         uint32 GetMaxQueuedSessionCount() const { return m_maxQueuedSessionCount; }
         uint32 GetMaxActiveSessionCount() const { return m_maxActiveSessionCount; }
 
-        void SetLastDiff(uint32 diff) { m_lastDiff = diff; }
+        uint32 GetRegionalIndexQueueCount(uint32 index) const { return m_priorityQueue[index].size(); }
+
+        void SetLastDiff(uint32 diff);
+        bool HitsDiffThreshold() const;
+
+
+        uint32 GetThresholdFlags() const { return m_diffThresholdHits; }
+
+        uint32 GetAverageDiff() const;
+
+        void CheckDiffProtection();
+
+        std::atomic<uint32> loggedNonRegionSessions = 0;
+        std::atomic<uint32> loggedRegionSessions = 0;
+
         uint32 GetLastDiff() const { return m_lastDiff; }
 
         /// Get the active session server limit (or security level limitations)
@@ -841,6 +927,7 @@ class World
 
         //player Queue
         typedef std::list<WorldSession*> Queue;
+        uint32 GetConnectionCountByIp(uint32 ip) const;
         void AddQueuedSession(WorldSession*);
         bool RemoveQueuedSession(WorldSession* session);
         int32 GetQueuedSessionPos(WorldSession*);
@@ -849,6 +936,8 @@ class World
         void SetMotd(std::string const& motd) { m_motd = motd; }
         /// Get the current Message of the Day
         const char* GetMotd() const { return m_motd.c_str(); }
+
+        uint32 GetContentPhase() const { return getConfig(CONFIG_UINT32_CONTENT_PHASE); }
 
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
@@ -883,6 +972,8 @@ class World
             uint32 lvl = getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL);
             return lvl > 60 ? 300 + ((lvl - 60) * 75) / 10 : lvl*5;
         }
+
+        void StopHttpApiServer();
 
         void RestoreLostGOs();
         void SetInitialWorldSettings();
@@ -957,11 +1048,13 @@ class World
         void SendGMTicketText(const char* text);
         void SendGMTextFlags(uint32 accountFlags, int32 string_id, ...);
         void SendGMText(int32 string_id, ...);
+        void SendGMText(const std::string& message, uint32 minGmLevel = SEC_MODERATOR);
         void SendGlobalText(const char* text, WorldSession *self);
         void SendGlobalMessage(WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);
         void SendZoneMessage(uint32 zone, WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);
         void SendZoneText(uint32 zone, const char *text, WorldSession *self = 0, uint32 team = 0);
         void SendServerMessage(ServerMessageType type, const char *text = "", Player* player = nullptr);
+        void SendHardcoreMessage(WorldPacket* packet, WorldSession* self);
 
         /// Are we in the middle of a shutdown?
         bool IsShutdowning() const { return m_ShutdownTimer > 0; }
@@ -1020,6 +1113,7 @@ class World
         static uint32 GetRelocationAINotifyDelay() { return m_relocation_ai_notify_delay; }
 
         std::string const& GetWardenModuleDirectory() const { return m_wardenModuleDirectory; }
+        std::string const& GetPDumpDirectory() const { return m_autoPDumpDirectory; }
         std::string const& GetWorldUpdatesDirectory() const { return m_worldUpdatesDirectory; }
         std::string const& GetWorldUpdatesMigration() const { return m_worldUpdatesMigration; }
         MigrationFile& GetMigration() { return m_worldMigration; };
@@ -1027,6 +1121,7 @@ class World
 
         void ProcessCliCommands();
         void QueueCliCommand(CliCommandHolder* commandHolder) { cliCmdQueue.add(commandHolder); }
+        void LoadPendingCommands(QueryResult* pResult);
 
         void UpdateResultQueue();
         void InitResultQueue();
@@ -1037,6 +1132,7 @@ class World
 
         // Nostalrius
         MovementBroadcaster* GetBroadcaster() { return m_broadcaster.get(); }
+        ChannelBroadcaster* GetChannelBroadcaster() { return m_ChannelBroadcaster.get(); } const
         float GetTimeRate() const { return m_timeRate; }
         void SetTimeRate(float rate) { m_timeRate = rate; }
         float m_timeRate;
@@ -1049,7 +1145,6 @@ class World
         void SetMinChatLevel(uint32 minLevel) { m_minChatLevel = minLevel; }
 
         void LoadAccountData();
-
 
         std::unordered_set<std::string> GetAccountNamesByFingerprint(uint32 fingerprint) const;
         void AddFingerprint(uint32 fingerprint, std::string accountName);
@@ -1065,8 +1160,8 @@ class World
         std::vector<std::function<void()>> _asyncTasksBusy;
 
         void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = nullptr, uint32 chanId = 0, const char* chanStr = nullptr);
+        std::string FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr);
         void Shutdown();
-        void AddSessionToSessionsMap(WorldSession* sess);
 
         // GM Logs
         struct ArchivedLogMessage
@@ -1079,6 +1174,13 @@ class World
 
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
+
+        // Automatic Player Dump
+        void SchedulePlayerDump(uint32 guidLow);
+        void AutoPDumpWorker();
+        void DeleteOldPDumps();
+        void UnlockCharacter(uint32 guidLow);
+        bool IsCharacterLocked(uint32 guidLow);
 
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
@@ -1098,6 +1200,11 @@ class World
         AccountDataWrapper GetAccountData(uint32 accountId)
         {
             return &m_accountData[accountId];
+        }
+
+        const auto& GetAllAccountData() const
+        {
+            return m_accountData;
         }
 
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
@@ -1165,10 +1272,13 @@ class World
 
         std::unordered_map<uint32, std::unordered_set<std::string>> m_fingerprintAccounts;
 
+        std::vector<uint32> m_lastDiffs;
+
+        uint32 m_diffThresholdHits = 0;
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
         SessionSet m_disconnectedSessions;
-        std::map<uint32 /*accountId*/, time_t /*last logout*/> m_accountsLastLogout;
+        robin_hood::unordered_map<uint32 /*accountId*/, time_t /*last logout*/> m_accountsLastLogout;
         bool CanSkipQueue(WorldSession const* session);
 
         uint32 m_maxActiveSessionCount = 0;
@@ -1180,9 +1290,6 @@ class World
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
 
         int32 m_playerLimit;
-#ifdef USING_DISCORD_BOT
-        DiscordBot::Bot* m_bot;
-#endif
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask = 0;                   // by loaded DBC
@@ -1192,6 +1299,7 @@ class World
         std::string m_dataPath;
         std::string m_honorPath;
         std::string m_wardenModuleDirectory;
+        std::string m_autoPDumpDirectory;
         std::string m_worldUpdatesDirectory;
         std::string m_worldUpdatesMigration;
         MigrationFile m_worldMigration;
@@ -1217,6 +1325,12 @@ class World
         //Player Queue
         Queue m_QueuedSessions;
 
+        //higher is first in the map, higher points -> higher priority.
+        //Priority is built from multiple factors, acc reg date, char levels etc etc.
+        std::deque<std::pair<uint32, WorldSession*>> m_priorityQueue[2];
+
+        std::unordered_map<uint32, uint32> m_Ipconnections; // binary IP, count
+
         //sessions that are added async
         void AddSession_(WorldSession* s);
         LockedQueue<WorldSession*, std::mutex> addSessQueue;
@@ -1225,12 +1339,29 @@ class World
         uint32 m_anticrashRearmTimer = 0;
         std::unique_ptr<std::thread> m_charDbWorkerThread;
         std::thread m_autoCommitThread;
+        std::thread m_autoPDumpThread;
+        std::mutex m_autoPDumpMutex;
+        std::set<uint32> m_autoPDumpPendingGuids;
+        std::set<uint32> m_lockedCharacterGuids;
+        std::thread m_asyncPacketsThread;
+        bool m_canProcessAsyncPackets;
+        void ProcessAsyncPackets();
+        std::thread m_shopThread;
+
+        struct ApiServerDeleter
+        {
+            void operator()(HttpApi::ApiServer* p);
+        };
+
+
+        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
 
         // Packet broadcaster
         std::unique_ptr<MovementBroadcaster> m_broadcaster;
+        std::unique_ptr<ChannelBroadcaster> m_ChannelBroadcaster;
 
         std::unique_ptr<ThreadPool> m_updateThreads;
 };

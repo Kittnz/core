@@ -20,6 +20,7 @@
 
 #include <G3D/Quat.h>
 #include "spline.h"
+#include <unordered_set>
 #include "DBCStores.h"
 
 struct KeyFrame;
@@ -97,13 +98,10 @@ class TransportMgr
         void LoadTransportTemplates();
 
         // Creates a transport using given GameObject template entry
-        Transport* CreateTransport(uint32 entry, uint32 guid = 0, Map* map = nullptr);
+        Transport* CreateTransport(uint32 entry, uint32 guid = 0);
 
         // Spawns all continent transports, used at core startup
         void SpawnContinentTransports();
-
-        // creates all transports for instance
-        void CreateInstanceTransports(Map* map);
 
         TransportTemplate const* GetTransportTemplate(uint32 entry) const
         {
@@ -112,6 +110,8 @@ class TransportMgr
                 return &itr->second;
             return nullptr;
         }
+
+        void Update(uint32 const diff);
 
     private:
         TransportMgr();
@@ -127,6 +127,9 @@ class TransportMgr
 
         // Container storing transport entries to create for instanced maps
         TransportInstanceMap _instanceTransports;
+
+        // Container for all ship transports
+        std::unordered_set<Transport*> m_shipTransports;
 };
 
 #define sTransportMgr TransportMgr::instance()

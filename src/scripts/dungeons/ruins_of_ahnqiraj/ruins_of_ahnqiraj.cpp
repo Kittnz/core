@@ -945,7 +945,7 @@ struct SwarmguardNeedlerAI : public ScriptedAI
     {
         m_uiUpdateTarget_Timer = 2000;
         m_uiTuubidGuid = 0;
-        m_uiCleave_Timer = urand(6000, 12000);;
+        m_uiCleave_Timer = urand(4000, 16000);;
         m_bisTuubidAlive = true;
     }
 
@@ -988,7 +988,7 @@ struct SwarmguardNeedlerAI : public ScriptedAI
         if (m_uiCleave_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                m_uiCleave_Timer = 8000;
+                m_uiCleave_Timer = urand(4000, 16000);
         }
         else
             m_uiCleave_Timer -= uiDiff;

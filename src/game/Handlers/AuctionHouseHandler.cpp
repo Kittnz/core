@@ -57,6 +57,9 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
         return;
     }
 
+    if (IsSuspicious())
+        return;
+
     // remove fake death
     if (GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
@@ -102,7 +105,7 @@ void WorldSession::SendAuctionCommandResult(AuctionEntry *auc, AuctionAction Act
             break;
     }
 
-    sLog.out(LOG_MAIL_AH, "SendAuctionCommandResult for auc Id %u, value %u, player %s(%u).", auc ? auc->Id : 0, ErrorCode,  GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
+    sLog.out(LOG_MAIL_AH, "SendAuctionCommandResult for auc Id %u, value %u, player %s(%u).", auc ? auc->Id : 0, (uint32)ErrorCode,  GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
     SendPacket(&data);
 }
 
@@ -287,7 +290,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     recv_data >> buyout;
     recv_data >> etime;
 
-    if (!bid || !etime)
+    if (!bid || !etime || IsSuspicious())
         return;                                             // check for cheaters
 
     // Client limit
@@ -369,7 +372,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
         return;
     }
 
-    if (!it->CanBeTraded())
+    if (!it->CanBeTraded() || it->IsSoulBound())
     {
         SendAuctionCommandResult(nullptr, AUCTION_STARTED, AUCTION_ERR_INVENTORY, EQUIP_ERR_ITEM_NOT_FOUND);
         return;
@@ -393,7 +396,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     if (GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
     {
         sLog.outCommand(GetAccountId(), "GM %s (Account: %u) create auction: %s (Entry: %u Count: %u)",
-                        GetPlayerName(), GetAccountId(), it->GetProto()->Name1, it->GetEntry(), it->GetCount());
+                        GetPlayerName(), GetAccountId(), it->GetProto()->Name1.c_str(), it->GetEntry(), it->GetCount());
     }
 
     pl->ModifyMoney(-int32(deposit));
@@ -466,6 +469,9 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
         sLog.outInfo("HandleAuctionPlaceBid - auctionHouseEntry missing WTF! [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;
     }
+
+    if (IsSuspicious())
+        return;
 
     // always return pointer
     AuctionHouseObject* auctionHouse = sAuctionMgr.GetAuctionsMap(auctionHouseEntry);

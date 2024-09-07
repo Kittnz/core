@@ -1002,6 +1002,8 @@ enum HolidayIds
     HOLIDAY_CALL_TO_ARMS_AV          = 283,
     HOLIDAY_CALL_TO_ARMS_WS          = 284,
     HOLIDAY_CALL_TO_ARMS_AB          = 285,
+    HOLIDAY_CALL_TO_ARMS_BR          = 286,
+    HOLIDAY_CALL_TO_ARMS_SV          = 287,
     HOLIDAY_FISHING_EXTRAVAGANZA     = 301,
     HOLIDAY_HARVEST_FESTIVAL         = 321,
     HOLIDAY_HALLOWS_END              = 324,
@@ -1197,6 +1199,7 @@ enum SkillType
     SKILL_RACIAL_TROLL             = 733,
     SKILL_RACIAL_GNOME             = 753,
     SKILL_RACIAL_HUMAN             = 754,
+    SKILL_JEWELCRAFTING            = 755,
     SKILL_PET_EVENT_RC             = 758,
     SKILL_RIDING                   = 762,
 };
@@ -1314,61 +1317,105 @@ constexpr uint32 MAX_WEATHER_TYPE = 4;
 
 enum ChatMsg
 {
-    CHAT_MSG_ADDON                  = 0xFFFFFFFF,
-    CHAT_MSG_SAY                    = 0x00,
-    CHAT_MSG_PARTY                  = 0x01,
-    CHAT_MSG_RAID                   = 0x02,
-    CHAT_MSG_GUILD                  = 0x03,
-    CHAT_MSG_OFFICER                = 0x04,
-    CHAT_MSG_YELL                   = 0x05,
-    CHAT_MSG_WHISPER                = 0x06,
-    CHAT_MSG_WHISPER_INFORM         = 0x07,
-    CHAT_MSG_EMOTE                  = 0x08,
-    CHAT_MSG_TEXT_EMOTE             = 0x09,
-    CHAT_MSG_SYSTEM                 = 0x0A,
-    CHAT_MSG_MONSTER_SAY            = 0x0B,
-    CHAT_MSG_MONSTER_YELL           = 0x0C,
-    CHAT_MSG_MONSTER_EMOTE          = 0x0D,
-    CHAT_MSG_CHANNEL                = 0x0E,
-    CHAT_MSG_CHANNEL_JOIN           = 0x0F,
-    CHAT_MSG_CHANNEL_LEAVE          = 0x10,
-    CHAT_MSG_CHANNEL_LIST           = 0x11,
-    CHAT_MSG_CHANNEL_NOTICE         = 0x12,
-    CHAT_MSG_CHANNEL_NOTICE_USER    = 0x13,
-    CHAT_MSG_AFK                    = 0x14,
-    CHAT_MSG_DND                    = 0x15,
-    CHAT_MSG_IGNORED                = 0x16,
-    CHAT_MSG_SKILL                  = 0x17,
-    CHAT_MSG_LOOT                   = 0x18,
-    CHAT_MSG_BG_SYSTEM_NEUTRAL      = 0x52,
-    CHAT_MSG_BG_SYSTEM_ALLIANCE     = 0x53,
-    CHAT_MSG_BG_SYSTEM_HORDE        = 0x54,
-    CHAT_MSG_RAID_LEADER            = 0x57,
-    CHAT_MSG_RAID_WARNING           = 0x58,
-    CHAT_MSG_BATTLEGROUND           = 0x5C,
-    CHAT_MSG_BATTLEGROUND_LEADER    = 0x5D,
-
-    // [-ZERO] Need find correct values
-    // Valeurs trouvees (Nostalrius)
-    CHAT_MSG_REPLY                  = 0x09,
-    CHAT_MSG_MONSTER_PARTY          = 0x30, //0x0D, just selected some free random value for avoid duplicates with really existed values
-    // 0x1A et non 0x31 (Nostalrius)
-    CHAT_MSG_MONSTER_WHISPER        = 0x1A, //0x0F, just selected some free random value for avoid duplicates with really existed values
-    //CHAT_MSG_MONEY                  = 0x1C,
-    //CHAT_MSG_OPENING                = 0x1D,
-    //CHAT_MSG_TRADESKILLS            = 0x1E,
-    //CHAT_MSG_PET_INFO               = 0x1F,
-    //CHAT_MSG_COMBAT_MISC_INFO       = 0x20,
-    //CHAT_MSG_COMBAT_XP_GAIN         = 0x21,
-    //CHAT_MSG_COMBAT_HONOR_GAIN      = 0x22,
-    //CHAT_MSG_COMBAT_FACTION_CHANGE  = 0x23,
-    CHAT_MSG_RAID_BOSS_WHISPER      = CHAT_MSG_MONSTER_WHISPER, // Et non 0x29. Y'a pas mieux.
-    CHAT_MSG_RAID_BOSS_EMOTE        = 0x5A, // 0x5A et non 0x2A (Nostalrius)
-    //CHAT_MSG_FILTERED               = 0x2B,
-    //CHAT_MSG_RESTRICTED             = 0x2E,
+    CHAT_MSG_ADDON                                = 0xFFFFFFFF,
+    CHAT_MSG_SAY                                  = 0x00,
+    CHAT_MSG_PARTY                                = 0x01,
+    CHAT_MSG_RAID                                 = 0x02,
+    CHAT_MSG_GUILD                                = 0x03,
+    CHAT_MSG_OFFICER                              = 0x04,
+    CHAT_MSG_YELL                                 = 0x05,
+    CHAT_MSG_WHISPER                              = 0x06,
+    CHAT_MSG_WHISPER_INFORM                       = 0x07,
+    CHAT_MSG_EMOTE                                = 0x08,
+    CHAT_MSG_TEXT_EMOTE                           = 0x09,
+    CHAT_MSG_SYSTEM                               = 0x0A,
+    CHAT_MSG_MONSTER_SAY                          = 0x0B,
+    CHAT_MSG_MONSTER_YELL                         = 0x0C,
+    CHAT_MSG_MONSTER_EMOTE                        = 0x0D,
+    CHAT_MSG_CHANNEL                              = 0x0E,
+    CHAT_MSG_CHANNEL_JOIN                         = 0x0F,
+    CHAT_MSG_CHANNEL_LEAVE                        = 0x10,
+    CHAT_MSG_CHANNEL_LIST                         = 0x11,
+    CHAT_MSG_CHANNEL_NOTICE                       = 0x12,
+    CHAT_MSG_CHANNEL_NOTICE_USER                  = 0x13,
+    CHAT_MSG_AFK                                  = 0x14,
+    CHAT_MSG_DND                                  = 0x15,
+    CHAT_MSG_IGNORED                              = 0x16,
+    CHAT_MSG_SKILL                                = 0x17,
+    CHAT_MSG_LOOT                                 = 0x18,
+    CHAT_MSG_COMBAT_MISC_INFO                     = 0x19,
+    CHAT_MSG_MONSTER_WHISPER                      = 0x1A,
+    CHAT_MSG_COMBAT_SELF_HITS                     = 0x1B,
+    CHAT_MSG_COMBAT_SELF_MISSES                   = 0x1C,
+    CHAT_MSG_COMBAT_PET_HITS                      = 0x1D,
+    CHAT_MSG_COMBAT_PET_MISSES                    = 0x1E,
+    CHAT_MSG_COMBAT_PARTY_HITS                    = 0x1F,
+    CHAT_MSG_COMBAT_PARTY_MISSES                  = 0x20,
+    CHAT_MSG_COMBAT_FRIENDLYPLAYER_HITS           = 0x21,
+    CHAT_MSG_COMBAT_FRIENDLYPLAYER_MISSES         = 0x22,
+    CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS            = 0x23,
+    CHAT_MSG_COMBAT_HOSTILEPLAYER_MISSES          = 0x24,
+    CHAT_MSG_COMBAT_CREATURE_VS_SELF_HITS         = 0x25,
+    CHAT_MSG_COMBAT_CREATURE_VS_SELF_MISSES       = 0x26,
+    CHAT_MSG_COMBAT_CREATURE_VS_PARTY_HITS        = 0x27,
+    CHAT_MSG_COMBAT_CREATURE_VS_PARTY_MISSES      = 0x28,
+    CHAT_MSG_COMBAT_CREATURE_VS_CREATURE_HITS     = 0x29,
+    CHAT_MSG_COMBAT_CREATURE_VS_CREATURE_MISSES   = 0x2A,
+    CHAT_MSG_COMBAT_FRIENDLY_DEATH                = 0x2B,
+    CHAT_MSG_COMBAT_HOSTILE_DEATH                 = 0x2C,
+    CHAT_MSG_COMBAT_XP_GAIN                       = 0x2D,
+    CHAT_MSG_SPELL_SELF_DAMAGE                    = 0x2E,
+    CHAT_MSG_SPELL_SELF_BUFF                      = 0x2F,
+    CHAT_MSG_SPELL_PET_DAMAGE                     = 0x30,
+    CHAT_MSG_SPELL_PET_BUFF                       = 0x31,
+    CHAT_MSG_SPELL_PARTY_DAMAGE                   = 0x32,
+    CHAT_MSG_SPELL_PARTY_BUFF                     = 0x33,
+    CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE          = 0x34,
+    CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF            = 0x35,
+    CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE           = 0x36,
+    CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF             = 0x37,
+    CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE        = 0x38,
+    CHAT_MSG_SPELL_CREATURE_VS_SELF_BUFF          = 0x39,
+    CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE       = 0x3A,
+    CHAT_MSG_SPELL_CREATURE_VS_PARTY_BUFF         = 0x3B,
+    CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE    = 0x3C,
+    CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF      = 0x3D,
+    CHAT_MSG_SPELL_TRADESKILLS                    = 0x3E,
+    CHAT_MSG_SPELL_DAMAGESHIELDS_ON_SELF          = 0x3F,
+    CHAT_MSG_SPELL_DAMAGESHIELDS_ON_OTHERS        = 0x40,
+    CHAT_MSG_SPELL_AURA_GONE_SELF                 = 0x41,
+    CHAT_MSG_SPELL_AURA_GONE_PARTY                = 0x42,
+    CHAT_MSG_SPELL_AURA_GONE_OTHER                = 0x43,
+    CHAT_MSG_SPELL_ITEM_ENCHANTMENTS              = 0x44,
+    CHAT_MSG_SPELL_BREAK_AURA                     = 0x45,
+    CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE           = 0x46,
+    CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS            = 0x47,
+    CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE          = 0x48,
+    CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS           = 0x49,
+    CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE = 0x4A,
+    CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS  = 0x4B,
+    CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE  = 0x4C,
+    CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS   = 0x4D,
+    CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE       = 0x4E,
+    CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS        = 0x4F,
+    CHAT_MSG_SPELL_FAILED_LOCALPLAYER             = 0x50,
+    CHAT_MSG_COMBAT_HONOR_GAIN                    = 0x51,
+    CHAT_MSG_BG_SYSTEM_NEUTRAL                    = 0x52,
+    CHAT_MSG_BG_SYSTEM_ALLIANCE                   = 0x53,
+    CHAT_MSG_BG_SYSTEM_HORDE                      = 0x54,
+    CHAT_MSG_COMBAT_FACTION_CHANGE                = 0x55,
+    CHAT_MSG_MONEY                                = 0x56,
+    CHAT_MSG_RAID_LEADER                          = 0x57,
+    CHAT_MSG_RAID_WARNING                         = 0x58,
+    CHAT_MSG_RAID_BOSS_WHISPER                    = 0x59, // appears as whisper, yet name is not in client
+    CHAT_MSG_RAID_BOSS_EMOTE                      = 0x5A,
+    CHAT_MSG_FILTERED                             = 0x5B,
+    CHAT_MSG_BATTLEGROUND                         = 0x5C,
+    CHAT_MSG_BATTLEGROUND_LEADER                  = 0x5D,
+    CHAT_MSG_HARDCORE                             = 0x5E,
 };
 
-#define MAX_CHAT_MSG_TYPE 0x5E
+#define MAX_CHAT_MSG_TYPE 0x5F
 
 enum ChatLinkColors
 {
@@ -1821,6 +1868,20 @@ struct WorldLocation
         y = other.y;
         z = other.z;
         o = other.o;
+    }
+
+    bool IsEmpty() const
+    {
+        return mapId == 0 && x == 0 && y == 0 && z == 0 && o == 0;
+    }
+
+    void Clear()
+    {
+        mapId = 0;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
+        o = 0.0f;
     }
 };
 

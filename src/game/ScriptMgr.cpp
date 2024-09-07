@@ -295,7 +295,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             }
             case SCRIPT_COMMAND_KILL_CREDIT:
             {
-                if (!ObjectMgr::GetCreatureTemplate(tmp.killCredit.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.killCredit.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.killCredit.creatureEntry))
                     {
@@ -352,7 +352,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                     continue;
                 }
 
-                if (!ObjectMgr::GetCreatureTemplate(tmp.summonCreature.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.summonCreature.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.summonCreature.creatureEntry))
                     {
@@ -439,7 +439,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             case SCRIPT_COMMAND_REMOVE_ITEM:
             case SCRIPT_COMMAND_CREATE_ITEM:
             {
-                if (!ObjectMgr::GetItemPrototype(tmp.createItem.itemId))
+                if (!sObjectMgr.GetItemPrototype(tmp.createItem.itemId))
                 {
                     if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemId))
                     {
@@ -471,7 +471,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 {
                     if (tmp.setEquipment.slot[i] > 0)
                     {
-                        if (!ObjectMgr::GetItemPrototype(tmp.setEquipment.slot[i]))
+                        if (!sObjectMgr.GetItemPrototype(tmp.setEquipment.slot[i]))
                         {
                             if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemId))
                             {
@@ -552,7 +552,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 }
                 else
                 {
-                    if (tmp.morph.creatureOrModelEntry && !ObjectMgr::GetCreatureTemplate(tmp.morph.creatureOrModelEntry))
+                    if (tmp.morph.creatureOrModelEntry && !sObjectMgr.GetCreatureTemplate(tmp.morph.creatureOrModelEntry))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.morph.creatureOrModelEntry))
                         {
@@ -578,7 +578,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 }
                 else
                 {
-                    if (tmp.mount.creatureOrModelEntry && !ObjectMgr::GetCreatureTemplate(tmp.mount.creatureOrModelEntry))
+                    if (tmp.mount.creatureOrModelEntry && !sObjectMgr.GetCreatureTemplate(tmp.mount.creatureOrModelEntry))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.mount.creatureOrModelEntry))
                         {
@@ -602,7 +602,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             }
             case SCRIPT_COMMAND_UPDATE_ENTRY:
             {
-                if (!ObjectMgr::GetCreatureTemplate(tmp.updateEntry.creatureEntry))
+                if (!sObjectMgr.GetCreatureTemplate(tmp.updateEntry.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.updateEntry.creatureEntry))
                     {
@@ -644,7 +644,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             }
             case SCRIPT_COMMAND_TERMINATE_SCRIPT:
             {
-                if (tmp.terminateScript.creatureEntry && !ObjectMgr::GetCreatureTemplate(tmp.terminateScript.creatureEntry))
+                if (tmp.terminateScript.creatureEntry && !sObjectMgr.GetCreatureTemplate(tmp.terminateScript.creatureEntry))
                 {
                     if (!sObjectMgr.IsExistingCreatureId(tmp.terminateScript.creatureEntry))
                     {
@@ -895,7 +895,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             {
                 if (tmp.removeGuardian.creatureId)
                 {
-                    if (!ObjectMgr::GetCreatureTemplate(tmp.removeGuardian.creatureId))
+                    if (!sObjectMgr.GetCreatureTemplate(tmp.removeGuardian.creatureId))
                     {
                         if (!sObjectMgr.IsExistingCreatureId(tmp.removeGuardian.creatureId))
                         {
@@ -1001,7 +1001,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                     {
                         if (tmp.startScriptForAll.objectEntry)
                         {
-                            if (!ObjectMgr::GetCreatureTemplate(tmp.startScriptForAll.objectEntry))
+                            if (!sObjectMgr.GetCreatureTemplate(tmp.startScriptForAll.objectEntry))
                             {
                                 if (!sObjectMgr.IsExistingCreatureId(tmp.startScriptForAll.objectEntry))
                                 {
@@ -1122,14 +1122,14 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 }
                 break;
             }
-            case SCRIPT_COMMAND_LOAD_GAMEOBJECT:
+            case SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN:
             {
                 GameObjectData const* data = sObjectMgr.GetGOData(tmp.GetGOGuid());
                 if (!data)
                 {
                     if (!sObjectMgr.IsExistingGameObjectGuid(tmp.GetGOGuid()))
                     {
-                        sLog.outErrorDb("Table `%s` has invalid gameobject (GUID: %u) in SCRIPT_COMMAND_LOAD_GAMEOBJECT for script id %u", tablename, tmp.GetGOGuid(), tmp.id);
+                        sLog.outErrorDb("Table `%s` has invalid gameobject (GUID: %u) in SCRIPT_COMMAND_LOAD_GAMEOBJECT_SPAWN for script id %u", tablename, tmp.GetGOGuid(), tmp.id);
                         continue;
                     }
                     else
@@ -1156,6 +1156,39 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 {
                     sLog.outErrorDb("Table `%s` using invalid anim id in datalong (%u) in SCRIPT_COMMAND_PLAY_CUSTOM_ANIM for script id %u",
                         tablename, tmp.setGoState.state, tmp.id);
+                    continue;
+                }
+                break;
+            }
+            case SCRIPT_COMMAND_LOAD_CREATURE_SPAWN:
+            {
+                if (!sObjectMgr.GetCreatureData(tmp.loadCreature.dbGuid))
+                {
+                    if (!sObjectMgr.IsExistingCreatureGuid(tmp.loadCreature.dbGuid))
+                    {
+                        sLog.outErrorDb("Table `%s` using invalid creature guid in datalong (%u) in SCRIPT_COMMAND_LOAD_CREATURE_SPAWN for script id %u",
+                            tablename, tmp.loadCreature.dbGuid, tmp.id);
+                        continue;
+                    }
+                    else
+                    {
+                        DisableScriptAction(tmp);
+                        break;
+                    }
+                }
+
+                break;
+            }
+            case SCRIPT_COMMAND_START_SCRIPT_ON_ZONE:
+            {
+                if (!tmp.startScriptOnZone.scriptId)
+                {
+                    sLog.outErrorDb("Table `%s` has no provided script id in SCRIPT_COMMAND_START_SCRIPT_ON_ZONE for script id %u.", tablename, tmp.id);
+                    continue;
+                }
+                if (!tmp.startScriptOnZone.zoneId)
+                {
+                    sLog.outErrorDb("Table `%s` has no provided zone id in SCRIPT_COMMAND_START_SCRIPT_ON_ZONE for script id %u.", tablename, tmp.id);
                     continue;
                 }
                 break;
@@ -1206,7 +1239,7 @@ bool ScriptMgr::CheckScriptTargets(uint32 targetType, uint32 targetParam1, uint3
         case TARGET_T_NEAREST_CREATURE_WITH_ENTRY:
         case TARGET_T_RANDOM_CREATURE_WITH_ENTRY:
         {
-            if (!ObjectMgr::GetCreatureTemplate(targetParam1))
+            if (!sObjectMgr.GetCreatureTemplate(targetParam1))
             {
                 if (!sObjectMgr.IsExistingCreatureId(targetParam1))
                     sLog.outErrorDb("Table `%s` has target_param1 = %u for id %u, but this creature_template does not exist.", tableName, targetParam1, tableEntry);
@@ -2325,8 +2358,8 @@ void ScriptMgr::CollectPossibleGenericIds(std::set<uint32>& genericIds)
             } while (result->NextRow());
         }
 
-        // From SCRIPT_COMMAND_START_SCRIPT_FOR_ALL.
-        result.reset(WorldDatabase.PQuery("SELECT `datalong` FROM `%s` WHERE `command`=68 && `datalong`!=0", script_table));
+        // From SCRIPT_COMMAND_START_SCRIPT_FOR_ALL and SCRIPT_COMMAND_START_SCRIPT_ON_ZONE.
+        result.reset(WorldDatabase.PQuery("SELECT `datalong` FROM `%s` WHERE `command` IN (68, 92) && `datalong`!=0", script_table));
 
         if (result)
         {

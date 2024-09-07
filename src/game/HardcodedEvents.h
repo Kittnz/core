@@ -280,6 +280,40 @@ enum WarEffortEventStage
     WAR_EFFORT_STAGE_COMPLETE       = 12
 };
 
+inline char const* WarEffortStageToString(uint32 stage)
+{
+    switch (stage)
+    {
+        case WAR_EFFORT_STAGE_COLLECTION:
+            return "Collection of Materials";
+        case WAR_EFFORT_STAGE_READY:
+            return "Material Collection Ready";
+        case WAR_EFFORT_STAGE_MOVE_1:
+            return "Moving to Silithus Day 1";
+        case WAR_EFFORT_STAGE_MOVE_2:
+            return "Moving to Silithus  Day 2";
+        case WAR_EFFORT_STAGE_MOVE_3:
+            return "Moving to Silithus  Day 3";
+        case WAR_EFFORT_STAGE_MOVE_4:
+            return "Moving to Silithus  Day 4";
+        case WAR_EFFORT_STAGE_MOVE_5:
+            return "Moving to Silithus  Day 5";
+        case WAR_EFFORT_STAGE_GONG_WAIT:
+            return "Waiting for Gong to be Rung";
+        case WAR_EFFORT_STAGE_GONG_RUNG:
+            return "Gong has been Rung";
+        case WAR_EFFORT_STAGE_BATTLE:
+            return "Battle at Gate";
+        case WAR_EFFORT_STAGE_CH_ATTACK:
+            return "Cenarion Hold Attack";
+        case WAR_EFFORT_STAGE_FINALBATTLE:
+            return "Final Battle";
+        case WAR_EFFORT_STAGE_COMPLETE:
+            return "Completed";
+    }
+    return "UNKNOWN";
+}
+
 enum WarEffortEnums
 {
     WAR_EFFORT_COLLECTION_TRANSITION_TIME   = 10 * MINUTE,  // 10 minutes between the event ending and starting the transition (what is the blizzlike thing here?)
@@ -319,186 +353,4 @@ private:
     void EnableAndStartEvent(uint16 event_id);
     void DisableAndStopEvent(uint16 event_id);
     void UpdateHiveColossusEvents();
-};
-
-struct MiracleRaceEvent;
-struct RaceSubEvent;
-enum class MiracleRaceSide;
-struct RaceCheckpoint
-{
-	uint32 Id;
-	Position pos;
-	Position camPos;
-};
-
-struct RaceCreature
-{
-	uint32 entry;
-	Position pos;
-	uint8 chance;
-};
-
-// basically the same as RaceCreature, but still should be another name
-struct RaceGameobject
-{
-	uint32 entry;
-	Position pos;
-	uint8 chance;
-};
-
-struct RacePlayerSetup
-{
-	Player* player;
-	MiracleRaceSide side;
-	uint32 startedByQuest;
-};
-
-struct RacePlayer
-{
-	RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent, uint32 mapId);
-	~RacePlayer();
-
-	ObjectGuid guid;
-	ObjectGuid checkpointEffectGuid;
-	ObjectGuid controllerNPC;
-	Map* map = nullptr; // might be dangerous
-	RaceSubEvent* raceEvent = nullptr;
-	MiracleRaceSide side;
-	uint32 startedQuest;
-
-	WorldLocation savedPlPos;
-	RaceCheckpoint nextCheckpoint;
-
-	bool bIsRaceMode = false;
-
-	void GoRaceMode();
-	void LeaveRaceMode();
-	void Update(uint32 deltaTime);
-private:
-	void IncrementCheckpoint(Player* pl);
-};
-
-struct RaceSubEvent
-{
-	RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent, uint32 mapId);
-
-	uint32 raceId;
-	std::vector<RacePlayer> racers;
-
-	enum class State
-	{
-		None,
-		WarmUp, // 15 sec.
-		Race
-	};
-	State state;
-
-	void Start();
-	void Update(uint32 deltaTime);
-
-	void AnnounceToRacers(const char* msg);
-
-	void End();
-
-	void OnFinishedRace(RacePlayer& param1);
-
-	void RewardPlayer(Player* pl, uint32 startedQuest);
-
-	inline const RaceCheckpoint& GetCheckpoint(size_t index) const
-	{
-		return checkpoints[index];
-	}
-
-	inline bool IsValidCheckpoint(size_t index) const
-	{
-		return checkpoints.size() > index;
-	}
-
-private:
-	// we need cached version, because we allow editing race checkpoints in-game
-	std::vector<RaceCheckpoint> checkpoints;
-	std::vector<RaceCreature> creatures;
-	std::vector<RaceGameobject> gameobjects;
-	MiracleRaceEvent* pEvent;
-	Map* theMap = nullptr;
-
-	std::list<std::string> leaderboard;
-	std::vector<ObjectGuid> spawnedCreatures;
-	std::vector<ObjectGuid> spawnedGameobjects;
-	uint32 backTimer = 0;
-	uint32 startReportBackTimer = 0;
-};
-
-enum class MiracleRaceSide
-{
-	Gnome,
-	Goblin
-};
-
-struct MiracleRaceQueueSystem
-{
-	void QueuePlayer(Player* player, MiracleRaceSide bySide);
-	void RemoveFromQueue(Player* p_Player);
-
-	bool isPlayerQueuedAlready(Player* player) const;
-
-	void Update(uint32 deltaTime);
-
-	std::list<ObjectGuid> gnomePlayers;
-	std::list<ObjectGuid> goblinPlayers;
-
-	std::function<void(ObjectGuid, ObjectGuid)> onFoundRace;
-
-	size_t GetInviteCount() const;
-
-
-private:
-
-	struct InviteRequest
-	{
-		InviteRequest(ObjectGuid InGnomePlayer, ObjectGuid InGoblinPlayer)
-			: GnomePlayer(InGnomePlayer), GoblinPlayer(InGoblinPlayer), InviteTimeStart(WorldTimer::getMSTime())
-		{}
-		ObjectGuid GnomePlayer;
-		ObjectGuid GoblinPlayer;
-		uint32 InviteTimeStart;
-	};
-
-	std::list<InviteRequest> _inviteRequests;
-
-	bool TryStartRace();
-};
-
-struct MiracleRaceEvent : WorldEvent
-{
-	MiracleRaceEvent();
-
-	bool InitializeRace(uint32 raceId);
-
-    void SetRaceMap(uint32 mapId) { m_mapId = mapId; }
-
-	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side, uint32 startedQuest = 0);
-
-	virtual void Update() override;
-	virtual uint32 GetNextUpdateDelay() override;
-
-	std::map<uint32, std::vector<RaceCheckpoint>> racesCheckpoints;
-	std::map<uint32, std::vector< RaceCreature>> racesCreatures;
-	std::map<uint32, std::vector< RaceGameobject>> racesGameobjects;
-	std::list<std::shared_ptr<RaceSubEvent>> races;
-
-	virtual void Disable() override;
-
-	inline MiracleRaceQueueSystem& queueSystem()
-	{
-		return _queueSystem;
-	}
-
-private:
-
-	void onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid goblinPlayer);
-
-	MiracleRaceQueueSystem _queueSystem;
-	uint32 lastTime = 0;
-    std::optional<uint32> m_mapId;
 };

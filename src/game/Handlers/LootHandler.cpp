@@ -35,6 +35,7 @@
 #include "World.h"
 #include "Util.h"
 #include "Anticheat.h"
+#include "Logging/DatabaseLogger.hpp"
 
 void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 {
@@ -180,6 +181,32 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 
 
         sLog.out(LOG_LOOTS, "%s loots %ux%u [loot from %s]", _player->GetShortDescription().c_str(), item->count, item->itemid, lguid.GetString().c_str());
+
+
+        auto lootType = LogLoot::TypeKill;
+
+        if (lguid.GetHigh() == HIGHGUID_ITEM)
+            lootType = LogLoot::TypeProfession;
+
+        if (lguid.GetHigh() == HIGHGUID_GAMEOBJECT)
+            lootType = LogLoot::TypeContainer;
+
+        sDBLogger->LogLoot(
+            {
+                player->GetGUIDLow(),
+                player->GetName(),
+                player->GetSession()->GetAccountId(),
+                player->GetSession()->GetRemoteAddress(),
+                LogLoot::SourceType(lguid),
+                lguid.GetCounter(),
+                lguid.GetEntry(),
+                0,
+                item->itemid,
+                item->count,
+                lootType
+            });
+
+
         player->SendNewItem(newitem, uint32(item->count), false, false, true);
         player->OnReceivedItem(newitem);
     }
@@ -375,6 +402,10 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
             if (!go)
                 return;
 
+            // Chest closed animation
+            if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST)
+                go->SetGoState(GO_STATE_READY);
+
             loot = &go->loot;
 
             if (go->GetGoType() == GAMEOBJECT_TYPE_DOOR)
@@ -398,7 +429,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                         DEBUG_LOG("Chest ScriptStart id %u for GO %u", go->GetGOInfo()->chest.eventId, go->GetGUIDLow());
 
                         if (!sScriptMgr.OnProcessEvent(go->GetGOInfo()->chest.eventId, _player, go, true))
-                            go->GetMap()->ScriptsStart(sEventScripts, go->GetGOInfo()->chest.eventId, _player, go);
+                            go->GetMap()->ScriptsStart(sEventScripts, go->GetGOInfo()->chest.eventId, _player->GetObjectGuid(), go->GetObjectGuid());
                     }
 
                     // Oh God forgive me
@@ -509,6 +540,8 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                         player->AutoStoreLoot(pItem->loot); // can be lost if no space
                     pItem->loot.clear();
                     sLog.out(LOG_LOOTS, "%s disenchants item [Entry : %u] %s", _player->GetShortDescription().c_str(), pItem->GetEntry(), lguid.GetString().c_str());
+
+
                     player->LogItem(pItem, LogItemAction::Disenchanted, 1);
                     pItem->SetLootState(ITEM_LOOT_REMOVED);
                     player->DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
@@ -606,10 +639,11 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
         return;
 
     Loot *pLoot = nullptr;
+    Creature* creature = nullptr;
 
     if (lootguid.IsCreature())
     {
-        Creature *creature = GetPlayer()->GetMap()->GetCreature(lootguid);
+        creature = GetPlayer()->GetMap()->GetCreature(lootguid);
         if (!creature)
             return;
         if (!_player->IsAtGroupRewardDistance(creature))
@@ -653,6 +687,52 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
     if (Item* newitem = target->StoreNewItem(dest, item.itemid, true, item.randomPropertyId))
     {
         sLog.out(LOG_LOOTS, "Master loot %s gives %ux%u to %s [loot from %s]", _player->GetShortDescription().c_str(), item.count, item.itemid, target->GetShortDescription().c_str(), lootguid.GetString().c_str());
+
+        // Turtle:: Make raid looted items not appear soul bound.
+        // Restrict to non-stackable and non party-loot.
+
+        if (_player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
+        {
+            auto itemProto = newitem->GetProto();
+            if (itemProto)
+            {
+                if (!item.freeforall && itemProto->Stackable <= 1)
+                {
+                    if (Group* pGroup = (Group*)_player->GetGroup())
+                    {
+                        newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, _player->GetMapId());
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember->GetMapId() == _player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
+                                    newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                            }
+                        }
+                    }
+                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                    newitem->SendCreateUpdateToPlayer(_player);
+                    newitem->SendCreateUpdateToPlayer(target);
+                }
+            }
+        }
+
+
+        sDBLogger->LogLoot(
+            {
+                target->GetGUIDLow(),
+                target->GetName(),
+                target->GetSession()->GetAccountId(),
+                target->GetSession()->GetRemoteAddress(),
+                LogLoot::SourceType(lootguid),
+                lootguid.GetCounter(),
+                lootguid.GetEntry(),
+                0,
+                item.itemid,
+                item.count,
+                LogLoot::TypeRoll
+            });
+
         target->SendNewItem(newitem, uint32(item.count), false, false, true);
         target->OnReceivedItem(newitem);
     }

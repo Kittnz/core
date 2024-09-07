@@ -173,12 +173,6 @@ enum GuildEmblem
     ERR_GUILDEMBLEM_FAIL_NO_MESSAGE       = 5
 };
 
-enum PublicGuilds
-{
-    GUILD_NEWCOMERS = 126,
-    GUILD_HARDCORE  = 238
-};
-
 struct GuildEventLogEntry
 {
     uint8  EventType;
@@ -218,6 +212,10 @@ struct RankInfo
     uint32 Rights;
 };
 
+constexpr uint32 OnlineMemberCache = 1000;
+constexpr uint32 RosterCache = 1000;
+constexpr uint32 CacheExpiryMs = 4000;
+
 class Guild
 {
     public:
@@ -251,6 +249,7 @@ class Guild
         uint32 GetBackgroundColor() const { return m_BackgroundColor; }
 
         void SetLeader(ObjectGuid guid);
+        void SetLeader(MemberSlot* slot);
         GuildAddStatus AddMember(ObjectGuid plGuid, uint32 plRank);
         bool DelMember(ObjectGuid guid, bool isDisbanding = false);
         //lowest rank is the count of ranks - 1 (the highest rank_id in table)
@@ -327,11 +326,12 @@ class Guild
 
         void SendRoster(WorldSession* session = nullptr)
         {
-            if (m_Id == GUILD_NEWCOMERS || m_Id == GUILD_HARDCORE)
-                TempRosterOnline(session);
-            else
                 Roster(session);
         }
+
+        
+        void UpdateCaches(uint32 diff);
+        WorldPacket BuildOnlineRosterPacket(bool sendOfficerNote);
         void Roster(WorldSession *session = nullptr);          // nullptr = broadcast
         void TempRosterOnline(WorldSession* session = nullptr);          // nullptr = broadcast
         void Query(WorldSession *session);
@@ -341,6 +341,29 @@ class Guild
         void   DisplayGuildEventLog(WorldSession *session);
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
         ObjectGuid GetGuildInviter(ObjectGuid playerGuid) const;
+        bool GetSuitableNewLeader(MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot);
+        void SetNewLeader(ObjectGuid newLeaderGuid);
+        void SetNewLeader(MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot);
+
+        void AddToCache(uint32 guidLow)
+        {
+            m_onlineMemberCache.insert(guidLow);
+        }
+
+        void RemoveFromCache(uint32 guidLow)
+        {
+            m_onlineMemberCache.erase(guidLow);
+        }
+
+        bool IsMemberCacheEnabled() const
+        {
+            return members.size() >= OnlineMemberCache;
+        }
+
+        bool IsRosterCacheEnabled() const
+        {
+            return members.size() >= RosterCache;
+        }
 
     protected:
         void AddRank(std::string const& name,uint32 rights);
@@ -363,11 +386,15 @@ class Guild
 
         RankList m_Ranks;
 
+        std::unique_ptr<WorldPacket> m_cachedRosterPacket;
+        std::unique_ptr<WorldPacket> m_cachedOfficerRosterPacket;
+        uint32 m_cacheTimer = CacheExpiryMs;
+
         MemberList members;
+        std::unordered_set<uint32> m_onlineMemberCache;
 
         /** These are actually ordered lists. The first element is the oldest entry.*/
-        typedef std::list<GuildEventLogEntry> GuildEventLog;
-        GuildEventLog m_GuildEventLog;
+        std::list<GuildEventLogEntry> m_GuildEventLog;
 
         std::unordered_set<ObjectGuid> m_GmListeners;
 
@@ -380,6 +407,7 @@ class Guild
 		// Guild Bank
 	public:
 		GuildBank* _Bank;
+        GuildBank* _InfernoBank;
 		// Guild Bank end;
 };
 

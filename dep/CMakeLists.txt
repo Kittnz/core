@@ -15,6 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+add_subdirectory(fmt)
+
 add_subdirectory(src)
 add_subdirectory(recastnavigation)
 if (USE_EXTRACTORS)
@@ -25,3 +27,5 @@ add_subdirectory(re2)
 if(USE_DISCORD_BOT)
   add_subdirectory(dpp)
 endif()
+
+add_subdirectory(libdeflate)

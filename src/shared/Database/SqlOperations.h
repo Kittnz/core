@@ -28,6 +28,8 @@
 #include <queue>
 #include "Utilities/Callback.h"
 #include <memory>
+#include <optional>
+#include <functional>
 
 /// ---- BASE ---
 
@@ -46,8 +48,16 @@ class SqlOperation
         virtual bool Execute(SqlConnection *conn) = 0;
         virtual ~SqlOperation() {}
 
+        const auto& GetCallback() const { return callback; }
+
+        void SetCallback(std::function<void(bool)>* cb)
+        {
+            callback = std::make_unique<std::function<void(bool)>>(*cb);
+        }
+
     protected:
         uint32 serialId;
+        std::unique_ptr<std::function<void(bool)>> callback;
 };
 
 /// ---- ASYNC STATEMENTS / TRANSACTIONS ----
@@ -112,7 +122,7 @@ class ThreadPool;
 class SqlResultQueue : public LockedQueue<MaNGOS::IQueryCallback* , std::mutex>
 {
     public:
-        SqlResultQueue();
+        SqlResultQueue(const char* Name);
         ~SqlResultQueue();
         void CancelAll();
         void Update(uint32 maxTime);

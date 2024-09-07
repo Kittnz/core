@@ -95,6 +95,7 @@ public:
 
     uint32 GetId() const { return _id; }
     Player* GetPlayer() const { return ObjectAccessor::FindPlayer(_playerGuid); }
+    uint32 GetCreatorLowGuid() const { return _playerGuid.GetCounter();  }
     std::string const& GetPlayerName() const { return _playerName; }
     std::string const& GetMessage() const { return _message; }
     Player* GetAssignedPlayer() const { return ObjectAccessor::FindPlayer(_assignedTo); }
@@ -144,6 +145,7 @@ public:
     void SendResponse(WorldSession* session) const;
 
     void TeleportTo(Player* player) const;
+    std::string FormatAddonMessage() const;
     std::string FormatMessageString(ChatHandler& handler, bool detailed = false) const;
     std::string FormatMessageString(ChatHandler& handler, const char* szClosedName, const char* szAssignedToName, const char* szUnassignedName, const char* szDeletedName, const char* szCompletedName) const;
     const char* GetTicketCategoryName(TicketType category) const;
@@ -180,7 +182,7 @@ private:
     std::string _response;
     std::string _chatLog; // No need to store in db, will be refreshed every session client side
 };
-typedef std::map<uint32, GmTicket*> GmTicketList;
+typedef std::unordered_map<uint32, std::unique_ptr<GmTicket>> GmTicketList;
 
 class TicketMgr
 {
@@ -202,50 +204,27 @@ public:
     {
         GmTicketList::iterator itr = _ticketList.find(ticketId);
         if (itr != _ticketList.end())
-            return itr->second;
+            return itr->second.get();
 
         return nullptr;
     }
 
     GmTicket* GetTicketByPlayer(ObjectGuid playerGuid)
     {
-        for (const auto& itr : _ticketList)
-            if (itr.second && itr.second->IsFromPlayer(playerGuid) && !itr.second->IsClosed())
-                return itr.second;
+        auto itr = _accountTicketList.find(playerGuid.GetCounter());
+        if (itr != _accountTicketList.end())
+            return itr->second;
 
         return nullptr;
     }
 
-    GmTicket* GetOldestOpenTicket()
+    uint64 GetOldestOpenTime()
     {
-        for (const auto& itr : _ticketList)
-            if (itr.second && !itr.second->IsClosed() && !itr.second->IsCompleted())
-                return itr.second;
-
-        return nullptr;
+        return _oldestOpenTime;
     }
 
-    GmTicket* GetNextTicket(uint32 counter)
-    {
-        for (const auto& itr : _ticketList)
-            if (itr.first > counter && !itr.second->IsClosed() && !itr.second->IsCompleted())
-                return itr.second;
-
-        return nullptr;
-    }
-
-    GmTicket* GetPreviousTicket(uint32 counter)
-    {
-        for (GmTicketList::const_reverse_iterator itr = _ticketList.rbegin(); itr != _ticketList.rend(); ++itr)
-            if (itr->first < counter && !itr->second->IsClosed() && !itr->second->IsCompleted())
-                return itr->second;
-
-        return nullptr;
-    }
-
-    void AddTicket(GmTicket* ticket);
+    void AddTicket(GmTicket&& ticket);
     void CloseTicket(uint32 ticketId, ObjectGuid source);
-    void RemoveTicket(uint32 ticketId);
 
     bool GetStatus() const { return _status; }
     void SetStatus(bool status) { _status = status; }
@@ -259,27 +238,34 @@ public:
     uint32 GetNextSurveyID() { return ++_lastSurveyId; }
 
     void Initialize();
-    void ResetTickets();
+
+    void LoadTicketTemplates();
+    void SendTicketTemplatesInAddonMessage(Player* pPlayer) const;
 
     void ShowList(ChatHandler& handler, bool onlineOnly, uint8 category = 0) const;
     void ShowClosedList(ChatHandler& handler) const;
     void ShowEscalatedList(ChatHandler& handler) const;
+    void SendTicketsInAddonMessage(Player* pPlayer) const;
 
     void SendTicket(WorldSession* session, GmTicket* ticket) const;
-    void ReloadTicket(uint32 ticketId);
-    void ReloadTicketCallback(QueryResult* holder);
+    /*void ReloadTicket(uint32 ticketId);
+    void ReloadTicketCallback(QueryResult* holder);*/
 
 protected:
     void _RemoveTicket(uint32 ticketId, int64 source = -1, bool permanently = false);
 
     GmTicketList _ticketList;
+    std::unordered_map<uint32, GmTicket*> _accountTicketList;
+    std::vector<GmTicket*> _openTickets;
 
     bool   _status;
     uint32 _lastTicketId;
     uint32 _lastSurveyId;
     uint32 _openTicketCount;
     uint64 _lastChange;
+    uint64 _oldestOpenTime = 0;
     std::set<uint32> _reloadTicketsSet;
+    std::vector<std::pair<std::string, std::string>> m_ticketTemplates;
 };
 
 #define sTicketMgr TicketMgr::instance()

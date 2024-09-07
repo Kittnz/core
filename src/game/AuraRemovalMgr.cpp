@@ -61,19 +61,23 @@ void AuraRemovalManager::PlayerEnterMap(uint32 mapId, Player* pPlayer)
     if (!pPlayer)
         return;
 
+    RemoveForbiddenAuras(mapId, pPlayer, pPlayer->GetTeam());
+}
+
+void AuraRemovalManager::RemoveForbiddenAuras(uint32 mapId, Unit* pTarget, Team team)
+{
     auto it = m_data.find(mapId);
-    if (it == m_data.end()) 
+    if (it == m_data.end())
         return;
 
-    for(const auto& aura : it->second)
+    for (const auto& aura : it->second)
     {
-        
-        if (pPlayer->GetTeam() == Team::HORDE && (aura.flags & AURA_REM_FLAG_EXCLUDE_HORDE))
+        if (team == Team::HORDE && (aura.flags & AURA_REM_FLAG_EXCLUDE_HORDE))
             continue;
-        else if (pPlayer->GetTeam() == Team::ALLIANCE && (aura.flags & AURA_REM_FLAG_EXCLUDE_ALLIANCE))
+        else if (team == Team::ALLIANCE && (aura.flags & AURA_REM_FLAG_EXCLUDE_ALLIANCE))
             continue;
 
-        if (pPlayer->HasAura(aura.auraEntry))
-            pPlayer->RemoveAurasDueToSpellByCancel(aura.auraEntry);
+        if (pTarget->HasAura(aura.auraEntry))
+            pTarget->RemoveAurasDueToSpellByCancel(aura.auraEntry);
     }
 }

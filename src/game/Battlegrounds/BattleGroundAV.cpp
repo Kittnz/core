@@ -944,7 +944,11 @@ void BattleGroundAV::StartingEventOpenDoors()
 
 void BattleGroundAV::AddPlayer(Player *plr)
 {
+    // Add Inactive Tracker aura.
+    plr->CastSpell(plr, 44025, true);
+
     BattleGround::AddPlayer(plr);
+
     // create score and add it to map, default values are set in constructor
     BattleGroundAVScore* sc = new BattleGroundAVScore;
     m_PlayerScores[plr->GetObjectGuid()] = sc;

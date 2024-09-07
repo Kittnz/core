@@ -158,6 +158,7 @@ public:
 
             std::string pname = pPlayer->GetName();
             std::wstring wpname;
+            wpname.reserve(pname.size());
             if (!Utf8toWStr(pname, wpname))
                 continue;
             wstrToLower(wpname);
@@ -167,6 +168,7 @@ public:
 
             std::string gname = sGuildMgr.GetGuildNameById(pPlayer->GetGuildId());
             std::wstring wgname;
+            wgname.reserve(gname.size());
             if (!Utf8toWStr(gname, wgname))
                 continue;
             wstrToLower(wgname);
@@ -245,6 +247,11 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
         return;
     //recv_data.hexlike();
 
+    time_t t = time(nullptr);
+
+    if (t - m_lastWhoRequest < 30)
+        return;
+
 
     std::string player_name, guild_name;
 
@@ -315,6 +322,9 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
     // update it to show GMs with characters after 100 level
     if (task.level_max >= MAX_LEVEL)
         task.level_max = PLAYER_STRONG_MAX_LEVEL;
+
+    if (GetSecurity() == SEC_PLAYER)
+        m_lastWhoRequest = time(nullptr);
 
     SetReceivedWhoRequest(true);
     sWorld.AddAsyncTask(std::move(task));
@@ -763,7 +773,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
 
     uint32 triggerId;
     recv_data >> triggerId;
-    printf("Trigger ID: %u\n", triggerId);
+    //printf("Trigger ID: %u\n", triggerId);
 
     Player* const pPlayer = GetPlayer();
 
@@ -800,6 +810,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         }
     }
     // SendAreaTriggerMessage("Area trigger found: %u", triggerId);
+
     // enter to tavern, not overwrite city rest
     if (sObjectMgr.IsTavernAreaTrigger(triggerId))
     {
@@ -847,6 +858,12 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
     MapEntry const* pTargetMap = sMapStorage.LookupEntry<MapEntry>(pTeleTrigger->destination.mapId);
     if (!pTargetMap)
         return;
+
+    if (pTeleTrigger->requiredPhase > sWorld.GetContentPhase())
+    {
+        SendAreaTriggerMessage(GetMangosString(LANG_INSTANCE_AVAILABLE_IN_PHASE), pTeleTrigger->requiredPhase + 1);
+        return;
+    }
 
     // ghost resurrected at enter attempt to dungeon with corpse (including fail enter cases)
     if (!pPlayer->IsAlive() && pTargetMap->IsDungeon())

@@ -55,8 +55,11 @@ uint32 GenerateFingerprint()
             fingerprint |= static_cast<uint8>(urand(0x03, 0xFF)) << 8*i;
 
         // if the fingerprint already exists, repeat
-        if (FingerprintExists(fingerprint))
-            continue;
+        if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+        {
+            if (FingerprintExists(fingerprint))
+                continue;
+        }
 
         // if we reach here, we are done
 
@@ -220,6 +223,16 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     }
 
     _fingerprint = fingerprint;
+    auto& sample = _session->_analyser->GetCurrentSample();
+    sample.fingerprint = _fingerprint;
+    sample.ipAddress = _session->GetRemoteAddress();
+
+    if (!sWorld.getConfig(CONFIG_BOOL_SEA_NETWORK))
+    {
+        _session->_analyser->Enable();
+        _session->_analyser->LoadFromDB();
+    }
+
     sWorld.AddFingerprint(_fingerprint, _session->GetUsername());
 
     out.Initialize(SMSG_ADDON_INFO);

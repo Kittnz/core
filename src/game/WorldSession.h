@@ -33,6 +33,7 @@
 #include "GossipDef.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WhisperTargetLimits.h"
+#include "Analysis/AccountAnalyser.hpp"
 
 
 #include <optional>
@@ -223,7 +224,8 @@ enum AccountFlags
     ACCOUNT_FLAG_SHOW_ANTISPAM = 0x10,
     ACCOUNT_FLAG_HIDDEN = 0x20,
     ACCOUNT_FLAG_SHOW_SUSPICIOUS = 0x40,
-    ACCOUNT_FLAG_ALWAYS_DESERTER_ON_LEAVE = 0x80
+    ACCOUNT_FLAG_ALWAYS_DESERTER_ON_LEAVE = 0x80,
+    ACCOUNT_FLAG_PASSWORD_CHANGE_REWARD = 0x100
 };
 
 //class to deal with packet processing
@@ -291,12 +293,19 @@ public:
 typedef std::map<std::string, WorldSessionScript*> SessionScriptsMap;
 #define ALL_SESSION_SCRIPTS(session, what) for (SessionScriptsMap::iterator it = session->scripts.begin(); it != session->scripts.end(); ++it) it->second->what;
 
+enum WorldRegion
+{
+    Western = 0,
+    Eastern,
+    MaxRegions
+};
+
 /// Player session in the World
 class WorldSession
 {
     friend class CharacterHandler;
     public:
-        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip);
+        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip, uint32 binaryIp);
         ~WorldSession();
 
         bool PlayerLoading() const { return m_playerLoading; }
@@ -315,16 +324,27 @@ class WorldSession
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2,3);
         void SendQueryTimeResponse();
 
+        //simple email check for now, can expand later.
+        WorldRegion GetRegion() const { return (HasChineseEmail() || sessionDbcLocaleRaw == LOCALE_zhCN) ? WorldRegion::Eastern : WorldRegion::Western;  }
+
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
         std::string GetUsername() const { return m_username; }
         void SetUsername(std::string const& s) { m_username = s; }
+        void SetJoinTimeStamp(uint32 timestamp) { m_joinTimestamp = timestamp; }
+        uint32 GetJoinTimeStamp() const { return m_joinTimestamp; }
+
+
+        bool HadQueue() const { return m_hadQueue; }
+
         std::string GetEmail() const { return m_email; }
         void SetEmail(std::string const& s) { m_email = s; }
+        bool HasChineseEmail() const;
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
         void SetSecurity(AccountTypes security) { _security = security; }
         std::string const& GetRemoteAddress() const { return m_Address; }
+        uint32 GetBinaryAddress() const { return m_BinaryAddress; }
         std::string const& GetClientHash() const { return _clientHash; }
         void SetPlayer(Player *plr) { _player = plr; }
         void SetMasterPlayer(MasterPlayer *plr) { m_masterPlayer = plr; }
@@ -333,8 +353,19 @@ class WorldSession
         void SetFingerprintBanned() { m_fingerprintBanned = true; }
         bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
+        uint32 GetBasePriority() const;
+
+        uint32 m_tokenBalance = 0;
+
+        bool CanQueueSkip() const { return m_canSkipQueue; }
+        void SetQueueSkip(bool value) { m_canSkipQueue = value; }
+
+        void MarkSuspicious() { m_suspicious = true; }
+        void UnmarkSuspicious() { m_suspicious = false; }
+        bool IsSuspicious() const { return m_suspicious; }
+
         /// Session in auth.queue currently
-        void SetInQueue(bool state) { m_inQueue = state; }
+        void SetInQueue(bool state) { m_inQueue = state; if (state) m_hadQueue = true;  }
 
         /// Is the user engaged in a log out process?
         bool isLogingOut() const { return _logoutTime || m_playerLogout; }
@@ -349,6 +380,11 @@ class WorldSession
         bool ShouldLogOut(time_t currTime) const
         {
             return (_logoutTime > 0 && currTime >= _logoutTime + 20);
+        }
+
+        void SetShouldBackupCharacters(bool on)
+        {
+            m_shouldBackupCharacters = on;
         }
 
         void LogoutPlayer(bool Save);
@@ -468,10 +504,17 @@ class WorldSession
         time_t m_muteTime;
         time_t m_lastPubChannelMsgTime;
 
+        uint32 GetTimeActive() const { return m_activeTime; }
+        void AddActiveTime(uint32 diff) { m_activeTime += diff; }
+
         // Locales
         LocaleConstant GetSessionDbcLocale() const { return m_sessionDbcLocale; }
         int GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
         const char *GetMangosString(int32 entry) const;
+
+        LocaleConstant sessionDbcLocaleRaw;
+
+        uint32 GetQueueIndex() const { return sessionDbcLocaleRaw == LOCALE_zhCN ? 1 : 0; }
 
         uint32 GetLatency() const { return m_latency; }
         void SetLatency(uint32 latency) { m_latency = latency; }
@@ -521,6 +564,8 @@ class WorldSession
         ClientIdentifiersMap const& GetClientIdentifiers() const { return _clientIdentifiers; }
         void ComputeClientHash();
         bool IsClientHashComputed() const { return _clientHashComputeStep != HASH_NOT_COMPUTED; }
+        bool HasUsedClickToMove() const { return m_hasUsedClickToMove; }
+        void SetHasUsedClickToMove() { m_hasUsedClickToMove = true; }
 
         //void InitCheatData(Player* pPlayer);
         //Anticheat::Movement* GetCheatData();
@@ -540,7 +585,14 @@ class WorldSession
 
         void ClearIncomingPacketsByType(PacketProcessing type);
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
+
+        // Movement
+        Unit* GetMoverFromGuid(ObjectGuid const& guid) const;
+        ObjectGuid const& GetClientMoverGuid() const { return m_clientMoverGuid; }
         bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
+
+        uint32 GetMaxLevelCharacterValue() const { return _characterMaxLevel; }
+        bool HasHighLevelCharacter() const;
 
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
         bool ReceivedWhoRequest() const { return m_who_recvd; }
@@ -549,6 +601,8 @@ class WorldSession
         void SetReceivedAHListRequest(bool v) { m_ah_list_recvd = v; }
         bool ReceivedAHListRequest() const { return m_ah_list_recvd; }
         bool m_ah_list_recvd;
+
+        void OnPassedQueue();
 
         void AddonDetected(std::string const& addon) { _addons.insert(addon); }
         std::set<std::string> const& GetAddons() const { return _addons; }
@@ -569,6 +623,10 @@ class WorldSession
         uint32 m_idleTime;
 
         uint32 m_lastUpdateTime;
+        bool m_suspicious = false;
+        time_t m_lastWhoRequest = 0;
+
+        std::unique_ptr<AccountAnalyser> _analyser;
 
     public:                                                 // opcodes handlers
 
@@ -833,6 +891,9 @@ class WorldSession
         void SendWrongFactionNotice();
         void SendChatRestrictedNotice();
         void HandleMessagechatOpcode(WorldPacket& recvPacket);
+
+        bool HandleTurtleAddonMessages(uint32 lang, uint32 type, std::string& msg);
+
         void HandleTextEmoteOpcode(WorldPacket& recvPacket);
         void HandleChatIgnoredOpcode(WorldPacket& recvPacket);
         uint32_t ChatCooldown();
@@ -927,14 +988,20 @@ class WorldSession
         uint32 m_moveRejectTime;
         WorldSocket *m_Socket;
         std::string m_Address;
+        uint32 m_BinaryAddress = 0;
 
         AccountTypes _security;
         uint32 _accountId;
 
+        uint32 m_activeTime = 0;
+
         WhisperTargetLimits _whisper_targets;
 
+        bool m_canSkipQueue = false;
+        time_t m_lastMailOpenTime;
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
+        bool m_hadQueue = false;                            // true if the session was in a queue this session.
         bool m_playerLoading;                               // code processed in LoginPlayer
         bool m_playerLogout;                                // code processed in LogoutPlayer
         bool m_playerRecentlyLogout;
@@ -948,6 +1015,8 @@ class WorldSession
         bool _receivedPacketType[PACKET_PROCESS_MAX_TYPE];
 
         Anticheat::Movement* m_cheatData;
+
+        uint32 m_joinTimestamp = 0;
         std::string m_username, m_email;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
         PlayerBotEntry* m_bot;
@@ -960,6 +1029,9 @@ class WorldSession
         uint32          _charactersCount;
         uint32          _characterMaxLevel;
         bool m_fingerprintBanned = false;
+        bool m_shouldBackupCharacters = false;
+        bool m_hasUsedClickToMove = false;
+        bool m_PassedQueue = false;
 
         enum ClientHashStep
         {

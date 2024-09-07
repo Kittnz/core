@@ -60,10 +60,14 @@ class UpdatePacket
         uint32 blockCount;
 };
 
+
+
 class PacketCompressor
 {
     public:
         static void Compress(void* dst, uint32 *dst_size, void* src, int src_size);
+
+        static size_t Bound(size_t size);
 };
 
 class UpdateData
@@ -74,7 +78,7 @@ class UpdateData
 
         void AddOutOfRangeGUID(ObjectGuidSet& guids);
         void AddOutOfRangeGUID(ObjectGuid const &guid);
-        void AddUpdateBlock(const ByteBuffer &block);
+        ByteBuffer& AddUpdateBlockAndGetBuffer();
         void Send(WorldSession* session, bool hasTransport = false);
         bool BuildPacket(WorldPacket *packet, bool hasTransport = false);
         bool BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket, bool hasTransport = false);

@@ -76,7 +76,7 @@ enum MangosStrings
     LANG_NON_EXIST_CHARACTER            = 47,
     LANG_FRIEND_IGNORE_UNKNOWN          = 48,
     LANG_LEVEL_MINREQUIRED              = 49,
-    //                                  = 50, not used
+    LANG_COMMAND_UNAVAILABLE            = 50,
     LANG_NPC_TAINER_HELLO               = 51,
     LANG_COMMAND_INVALID_ITEM_COUNT     = 52,
     LANG_COMMAND_MAIL_ITEMS_LIMIT       = 53,
@@ -86,7 +86,7 @@ enum MangosStrings
     //                                  = 57, not used
     //                                  = 58, not used
     //                                  = 59, not used
-    //                                  = 60, not used
+    LANG_INSTANCE_AVAILABLE_IN_PHASE    = 60,
     LANG_RA_USER                        = 61,
     LANG_RA_PASS                        = 62,
     LANG_GM_ACCEPTS_WHISPER             = 63,
@@ -1122,23 +1122,6 @@ enum MangosStrings
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
     // For other tables maybe             2000010000-2147483647 (max index),
-    // opvp ep
-    LANG_OPVP_EP_CAPTURE_NPT_H          = 10033,
-    LANG_OPVP_EP_CAPTURE_NPT_A          = 10034,
-    LANG_OPVP_EP_CAPTURE_EWT_H          = 10035,
-    LANG_OPVP_EP_CAPTURE_EWT_A          = 10036,
-    LANG_OPVP_EP_CAPTURE_CGT_H          = 10037,
-    LANG_OPVP_EP_CAPTURE_CGT_A          = 10038,
-    LANG_OPVP_EP_CAPTURE_PWT_H          = 10039,
-    LANG_OPVP_EP_CAPTURE_PWT_A          = 10040,
-    LANG_OPVP_EP_LOSE_NPT_H             = 10041,
-    LANG_OPVP_EP_LOSE_NPT_A             = 10042,
-    LANG_OPVP_EP_LOSE_EWT_H             = 10043,
-    LANG_OPVP_EP_LOSE_EWT_A             = 10044,
-    LANG_OPVP_EP_LOSE_CGT_H             = 10045,
-    LANG_OPVP_EP_LOSE_CGT_A             = 10046,
-    LANG_OPVP_EP_LOSE_PWT_H             = 10047,
-    LANG_OPVP_EP_LOSE_PWT_A             = 10048,
     // opvp si
     LANG_OPVP_SI_CAPTURE_H              = 10049,
     LANG_OPVP_SI_CAPTURE_A              = 10050,

@@ -239,7 +239,7 @@ BattleGround::~BattleGround()
 
     sBattleGroundMgr.RemoveBattleGround(GetInstanceID(), GetTypeID());
     if (GetInstanceID()) // Do not log deleted battleground templates.
-        sLog.out(LOG_BG, "[%u,%u]: winner=%u, duration=%s", GetTypeID(), GetInstanceID(), GetWinner(), secsToTimeString(GetStartTime() / 1000, true).c_str());
+        sLog.out(LOG_BG, "[%u,%u]: winner=%u, duration=%s", (uint32)GetTypeID(), GetInstanceID(), (uint32)GetWinner(), secsToTimeString(GetStartTime() / 1000, true).c_str());
 
     // Pas un BG 'template'
     if (GetBracketId() != BG_BRACKET_ID_NONE)
@@ -386,9 +386,16 @@ void BattleGround::Update(uint32 diff)
 
             PlaySoundToAll(SOUND_BG_START);
 
-            //Announce BG starting
+            // Announce BG starting
             if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
-                sWorld.SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
+            {
+                static time_t lastAnnounceTime = 0;
+                if (sWorld.GetGameTime() > (lastAnnounceTime + MINUTE * 2))
+                {
+                    lastAnnounceTime = sWorld.GetGameTime();
+                    sWorld.SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), std::min<uint32>(GetMaxLevel(), PLAYER_MAX_LEVEL));
+                }
+            }
         }
     }
     // Despawn des portes apres 2min (preparation) + 1min
@@ -538,6 +545,11 @@ void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
             rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB);
             break;
         }
+        case BATTLEGROUND_SV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_SV);
+            break;
+        }
         default:
         {
             rate = 1.0f;
@@ -589,6 +601,11 @@ void BattleGround::RewardReputationToTeam(uint32 factionId, uint32 reputation, T
             rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB);
             break;
         }
+        case BATTLEGROUND_SV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_SV);
+            break;
+        }
         default:
         {
             rate = 1.0f;
@@ -636,8 +653,15 @@ void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
 
         if (plr->GetLevel() > 20)
         {
-            factor /= (plr->GetLevel() / 10);
+            factor /= ((float)plr->GetLevel() / 10.f);
         }
+
+        if (GetTypeID() == BATTLEGROUND_BR)
+        {
+            //lower xp for BR, short BGs
+            factor /= 3;
+        }
+
         plr->GiveXP(static_cast<uint32>(sObjectMgr.GetXPForLevel(plr->GetLevel()) * factor), nullptr);
     }
 }
@@ -688,11 +712,10 @@ void BattleGround::EndBattleGround(Team winner)
         SetWinner(WINNER_NONE);
 
     SetStatus(STATUS_WAIT_LEAVE);
-    //we must set it this way, because end time is sent in packet!
-    m_EndTime = TIME_TO_AUTOREMOVE;
+    SetEndTime(GetTypeID() == BATTLEGROUND_BR ? 15000 : TIME_TO_AUTOREMOVE);
 
-    if (GetTypeID() == BATTLEGROUND_BR)
-        m_EndTime = 15000;
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 
     // If PvP week is active, award experience (5% to the winner team and 2.5% to the others)
     // always reward xp now.
@@ -739,8 +762,8 @@ void BattleGround::EndBattleGround(Team winner)
 
         BlockMovement(pPlayer);
 
-        sBattleGroundMgr.BuildPvpLogDataPacket(&data, this);
-        pPlayer->GetSession()->SendPacket(&data);
+        // Send final scoreboard
+        pPlayer->GetSession()->SendPacket(&m_finalScore);
 
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(GetTypeID());
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, pPlayer->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime());
@@ -831,7 +854,7 @@ void BattleGround::SendRewardMarkByMail(Player *pPlayer, uint32 mark, uint32 cou
     if (!bmEntry)
         return;
 
-    ItemPrototype const* markProto = ObjectMgr::GetItemPrototype(mark);
+    ItemPrototype const* markProto = sObjectMgr.GetItemPrototype(mark);
     if (!markProto)
         return;
 
@@ -890,16 +913,35 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
         m_PlayerScores.erase(itr2);
     }
 
-    Player *pPlayer = sObjectMgr.GetPlayer(guid);
+    Player* pPlayer = sObjectMgr.GetPlayer(guid);
 
-    // should remove spirit of redemption
-    if (pPlayer && pPlayer->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
-        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
-
-    if (pPlayer && !pPlayer->IsAlive())                             // resurrect on exit
+    if (pPlayer)
     {
-        pPlayer->ResurrectPlayer(1.0f);
-        pPlayer->SpawnCorpseBones();
+        // should remove spirit of redemption
+        if (pPlayer->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
+            pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
+
+        if (pPlayer->IsAlive())
+        {
+            // Turtle: reset health and mana on exit
+            pPlayer->SetHealth(pPlayer->GetMaxHealth());
+            if (pPlayer->GetPowerType() == POWER_MANA)
+                pPlayer->SetPower(POWER_MANA, pPlayer->GetMaxPower(POWER_MANA));
+        }
+        else
+        {
+            // resurrect on exit
+            pPlayer->ResurrectPlayer(1.0f);
+            pPlayer->SpawnCorpseBones();
+        }
+
+        // Turtle: restore spent Soul Shards at bg end
+        if (pPlayer->GetSoulShardCountBeforeBgJoin())
+        {
+            uint32 const currentCount = pPlayer->GetItemCount(6265);
+            if (currentCount < pPlayer->GetSoulShardCountBeforeBgJoin())
+                pPlayer->AddItem(6265, pPlayer->GetSoulShardCountBeforeBgJoin() - currentCount);
+        }
     }
 
     RemovePlayer(pPlayer, guid);                                // BG subclass specific code
@@ -939,18 +981,18 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
             // a player has left the battleground, so there are free slots -> add to queue
             AddToBGFreeSlotQueue();
             sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, GetBracketId());
-        }
 
-        // Let others know
-        WorldPacket data;
-        sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
-        SendPacketToTeam(team, &data, pPlayer, false);
+            // Let others know
+            WorldPacket data;
+            sBattleGroundMgr.BuildPlayerLeftBattleGroundPacket(&data, guid);
+            SendPacketToTeam(team, &data, pPlayer, false);
+        }
     }
 
     if (pPlayer)
     {
         // Do next only if found in battleground
-        pPlayer->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE);  // We're not in BG.
+        pPlayer->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE, PLAYER_MAX_BATTLEGROUND_QUEUES);  // We're not in BG.
         // reset destination bg team
         pPlayer->SetBGTeam(TEAM_NONE);
 
@@ -1179,7 +1221,9 @@ void BattleGround::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
             break;
         case SCORE_BONUS_HONOR:                             // Honor bonus
             // reward honor instantly
-            if (Source->GetHonorMgr().Add(value, BONUS))
+            if (value >= INT_MAX)
+                sLog.outError("BattleGround::UpdatePlayerScore attempt to give %i honor to player %s.", value, Source->GetName());
+            else if (Source->GetHonorMgr().Add(value, BONUS))
                 itr->second->BonusHonor += value;
             break;
         default:
@@ -1188,7 +1232,7 @@ void BattleGround::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
     }
 }
 
-bool BattleGround::AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 /*respawnTime*/)
+bool BattleGround::AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3)
 {
     Map* map = GetBgMap();
     if (!map)
@@ -1225,7 +1269,7 @@ void BattleGround::DoorClose(ObjectGuid guid)
         {
             //change state to allow door to be closed
             obj->SetLootState(GO_READY);
-            obj->UseDoorOrButton(RESPAWN_ONE_DAY);
+            obj->UseDoorOrButton(RESPAWN_NEVER);
         }
     }
     else
@@ -1239,7 +1283,7 @@ void BattleGround::DoorOpen(ObjectGuid guid)
     {
         //change state to be sure they will be opened
         obj->SetLootState(GO_READY);
-        obj->UseDoorOrButton(RESPAWN_ONE_DAY);
+        obj->UseDoorOrButton(RESPAWN_NEVER);
     }
     else
         sLog.outError("BattleGround: Door %s not found! - doors will be closed.", guid.GetString().c_str());
@@ -1308,7 +1352,7 @@ void BattleGround::OnObjectDBLoad(GameObject* obj)
     {
         m_EventObjects[MAKE_PAIR32(i.event1, i.event2)].gameobjects.push_back(obj->GetObjectGuid());
         if (!IsActiveEvent(i.event1, i.event2))
-            SpawnObject(obj->GetObjectGuid(), RESPAWN_ONE_DAY);
+            SpawnObject(obj->GetObjectGuid(), RESPAWN_NEVER);
         else
         {
             // it's possible, that doors aren't spawned anymore (wsg)
@@ -1443,7 +1487,7 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
 
     GuidVector::const_iterator itr2 = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
     for (; itr2 != m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.end(); ++itr2)
-        SpawnObject(*itr2, (spawn) ? delay : RESPAWN_ONE_DAY);
+        SpawnObject(*itr2, (spawn) ? delay : RESPAWN_NEVER);
 
     OnEventStateChanged(event1, event2, spawn);
 }
@@ -1476,15 +1520,26 @@ void BattleGround::SetSpawnEventMode(uint8 event1, uint8 event2, BattleGroundCre
     }
 }
 
-void BattleGround::SpawnObject(ObjectGuid guid, uint32 respawntime)
+void BattleGround::SpawnObject(ObjectGuid guid, uint32 respawnTime)
 {
     Map* map = GetBgMap();
+    GameObject* obj = map->GetGameObject(guid);
 
-    GameObject *obj = map->GetGameObject(guid);
-    if (!obj)
-        return;
-    if (respawntime != RESPAWN_ONE_DAY)
+    if (respawnTime != RESPAWN_NEVER)
     {
+        bool justLoaded = false;
+        if (!obj)
+        {
+            // try loading it if spawn is not found
+            obj = new GameObject();
+            if (!obj->LoadFromDB(guid.GetCounter(), map, true))
+            {
+                delete obj;
+                return;
+            }
+            justLoaded = true;
+        }
+
         //we need to change state from GO_JUST_DEACTIVATED to GO_READY in case battleground is starting again
         if (obj->getLootState() == GO_JUST_DEACTIVATED)
             obj->SetLootState(GO_READY);
@@ -1492,7 +1547,7 @@ void BattleGround::SpawnObject(ObjectGuid guid, uint32 respawntime)
         if (obj->GetGOInfo()->type != GAMEOBJECT_TYPE_FLAGSTAND)
             obj->SetGoState(GO_STATE_READY);
 
-        obj->SetRespawnTime(respawntime);
+        obj->SetRespawnTime(respawnTime);
         // custom respawn delay after spawn
         // BattleGroundAV, supplies
         if (obj->GetEntry() == 178786 || obj->GetEntry() == 178787 || obj->GetEntry() == 178788 || obj->GetEntry() == 178789)
@@ -1501,16 +1556,23 @@ void BattleGround::SpawnObject(ObjectGuid guid, uint32 respawntime)
         if (obj->GetEntry() == 179311)
             obj->SetRespawnDelay(10 * MINUTE);
 
-        if (!obj->GetRespawnTime())
+        if (justLoaded || !obj->GetRespawnTime())
             map->Add(obj);
     }
     else
     {
-        if (obj->GetGOInfo()->type != GAMEOBJECT_TYPE_FLAGSTAND)
-            obj->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
+        if (obj)
+        {
+            if (obj->GetGOInfo()->type != GAMEOBJECT_TYPE_FLAGSTAND)
+                obj->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
 
-        obj->SetRespawnTime(respawntime);
-        obj->SetLootState(GO_JUST_DEACTIVATED);
+            obj->SetRespawnTime(respawnTime);
+            obj->SetLootState(GO_JUST_DEACTIVATED);
+
+            // remove from map and delete the object
+            if (obj->HasStaticDBSpawnData())
+                obj->AddObjectToRemoveList();
+        }
     }
 }
 
@@ -1530,7 +1592,7 @@ void BattleGround::SpawnCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode 
     }
     else if (mode == DESPAWN_FORCED)
     {
-        obj->SetRespawnDelay(RESPAWN_FOUR_DAYS);
+        obj->SetRespawnDelay(RESPAWN_NEVER);
         obj->SetDeathState(JUST_DIED);
         obj->RemoveCorpse();
     }
@@ -1542,7 +1604,7 @@ void BattleGround::SpawnCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode 
     }
     else if (mode == RESPAWN_STOP)
     {
-        obj->SetRespawnDelay(RESPAWN_FOUR_DAYS);
+        obj->SetRespawnDelay(RESPAWN_NEVER);
         if (obj->IsDespawned())
         {
             obj->SetDeathState(JUST_DIED);
@@ -1701,6 +1763,9 @@ void BattleGround::EndNow()
     RemoveFromBGFreeSlotQueue();
     SetStatus(STATUS_WAIT_LEAVE);
     SetEndTime(0);
+
+    if (m_finalScore.empty())
+        sBattleGroundMgr.BuildPvpLogDataPacket(&m_finalScore, this);
 }
 
 /*
@@ -1740,7 +1805,7 @@ void BattleGround::HandleTriggerBuff(ObjectGuid go_guid)
     if (m_BuffChange && entry != Buff_Entries[buff])
     {
         //despawn current buff
-        SpawnObject(m_BgObjects[index], RESPAWN_ONE_DAY);
+        SpawnObject(m_BgObjects[index], RESPAWN_NEVER);
         //set index for new one
         for (uint8 currBuffTypeIndex = 0; currBuffTypeIndex < 3; ++currBuffTypeIndex)
         {

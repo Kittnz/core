@@ -46,7 +46,7 @@ bool IsPlayerHardcore(uint32 lowGuid)
     if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(lowGuid))
         hardcoreStatus = pCache->uiHardcoreStatus;
 
-    if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD)
+    if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD || hardcoreStatus == HARDCORE_MODE_STATUS_HC60)
         return true;
 
     return false;
@@ -139,6 +139,10 @@ uint32 AuctionHouseMgr::GetAuctionDeposit(AuctionHouseEntry const* entry, uint32
     if (deposit < min_deposit)
         deposit = min_deposit;
 
+    //increase deposit depending on how low count goes vs stack size to reduce amount of 1-stacked auctions
+    int32 diffSize = pItem->GetProto()->GetMaxStackSize() - pItem->GetCount();
+    deposit *= (1.0f + (diffSize * 0.05f));
+
     return uint32(deposit * sWorld.getConfig(CONFIG_FLOAT_RATE_AUCTION_DEPOSIT));
 }
 
@@ -190,7 +194,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
             uint32 owner_accid = sObjectMgr.GetPlayerAccountIdByGUID(owner_guid);
 
             sLog.outCommand(bidder_accId, "GM %s (Account: %u) won item in auction: %s (Entry: %u Count: %u) and pay money: %u. Original owner %s (Account: %u)",
-                            bidder_name.c_str(), bidder_accId, pItem->GetProto()->Name1, pItem->GetEntry(), pItem->GetCount(), auction->bid, owner_name.c_str(), owner_accid);
+                            bidder_name.c_str(), bidder_accId, pItem->GetProto()->Name1.c_str(), pItem->GetEntry(), pItem->GetCount(), auction->bid, owner_name.c_str(), owner_accid);
         }
     }
     else if (!bidder)
@@ -425,7 +429,7 @@ void AuctionHouseMgr::LoadAuctionItems()
         uint32 item_guid        = fields[11].GetUInt32();
         uint32 item_template    = fields[12].GetUInt32();
 
-        ItemPrototype const *proto = ObjectMgr::GetItemPrototype(item_template);
+        ItemPrototype const *proto = sObjectMgr.GetItemPrototype(item_template);
 
         if (!proto)
         {

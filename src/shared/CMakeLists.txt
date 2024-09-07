@@ -23,12 +23,14 @@ set (shared_SRCS
     Errors.h
     LockedQueue.h
     Log.h
+    httplib.h
     PosixDaemon.h
     revision.h
     SystemConfig.h
     ThreadPool.h
     Timer.h
     Util.h
+    OptickIntegration.h
     WorldPacket.h
     Auth/ARC4.h
     Auth/AuthCrypt.h
@@ -64,6 +66,7 @@ set (shared_SRCS
     Log.cpp
     PosixDaemon.cpp
     ThreadPool.cpp
+    BS_thread_pool.hpp
     Util.cpp
     Duration.h
     Auth/ARC4.cpp
@@ -86,7 +89,30 @@ set (shared_SRCS
     Database/SqlOperations.cpp
     Database/SqlPreparedStatement.cpp
     Database/SQLStorage.cpp
+    HttpApi/ApiServer.hpp
+    HttpApi/ApiServer.cpp
+    HttpApi/BaseController.cpp
+    HttpApi/BaseController.hpp
+    HttpApi/Authorizers/ApiKeyAuthorizer.hpp
+    HttpApi/Authorizers/BaseAuthorizer.hpp
 )
+
+
+if(USE_DISCORD_BOT)
+    list(APPEND shared_SRCS
+      DiscordBot/BaseCommandHandler.hpp
+      DiscordBot/BaseCommandHandler.cpp
+      DiscordBot/AuthManager.cpp
+      DiscordBot/AuthManager.hpp
+      DiscordBot/Bot.cpp
+      DiscordBot/Bot.hpp
+      DiscordBot/MiscUtil.hpp
+      DiscordBot/toojpeg.hpp
+      DiscordBot/toojpeg.cpp
+      DiscordBot/QrCodeGen.hpp
+      DiscordBot/QrCodeGen.cpp	 
+    )
+endif()
 
 if(USE_LIBCURL)
   set (shared_SRCS 
@@ -105,13 +131,24 @@ if(WIN32)
     PosixDaemon.cpp
     revision.h
   )
+  
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
 
-if (NOT MSVC)
-  list(REMOVE_ITEM shared_SRCS
-    WheatyExceptionReport.cpp
-    WheatyExceptionReport.h
-  )
-endif()
+    if (NOT MSVC)
+      list(REMOVE_ITEM shared_SRCS
+        WheatyExceptionReport.cpp
+        WheatyExceptionReport.h
+      )
+    endif()
+
+    set (shared_SRCS 
+    ${shared_SRCS}
+    Turtle.natvis
+    )
 
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D__ACE_INLINE__")
 else()
@@ -146,13 +183,18 @@ source_group("Log"
   REGULAR_EXPRESSION Log
 )
 
+source_group("DiscordBot"
+  REGULAR_EXPRESSION DiscordBot
+)
+
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/dep/include
+  ${CMAKE_SOURCE_DIR}/dep/libdeflate
   ${CMAKE_SOURCE_DIR}/src/framework
   ${CMAKE_BINARY_DIR}
   ${ACE_INCLUDE_DIR}
-  ${MYSQL_INCLUDE_DIR}
+  ${MYSQL_INCLUDE_DIR} 
   ${OPENSSL_INCLUDE_DIR}
 )
 
@@ -165,6 +207,14 @@ endif()
 add_library(shared STATIC
   ${shared_SRCS}
 )
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(shared PUBLIC
+	dpp
+  )
+  target_compile_definitions(shared PUBLIC USING_DISCORD_BOT)
+endif()
+
 
 if(UNIX)
   find_package(Threads)
@@ -184,6 +234,7 @@ if(MINGW)
 endif()
 
 target_link_libraries(shared PUBLIC re2::re2)
+target_link_libraries(shared PUBLIC fmt)
 
 
 SET_TARGET_PROPERTIES (shared PROPERTIES FOLDER "Game Libs")

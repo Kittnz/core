@@ -31,12 +31,13 @@
 #include "Chat.h"
 #include "WorldSession.h"
 #include "Chat.h"
+#include "Guild.h"
 #include "MasterPlayer.h"
 #include "Anticheat.h"
 
 INSTANTIATE_SINGLETON_1(AccountMgr);
 
-AccountMgr::AccountMgr() : m_banlistUpdateTimer(0)
+AccountMgr::AccountMgr() : m_banlistUpdateTimer(0), m_fingerprintAutobanTimer(0), m_accountMailsResetTimer(0)
 {}
 
 AccountMgr::~AccountMgr()
@@ -157,6 +158,10 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd,
 
 uint32 AccountMgr::GetId(std::string username)
 {
+    auto itr = m_accountNameToId.find(username);
+    if (itr != m_accountNameToId.end())
+        return itr->second;
+
     LoginDatabase.escape_string(username);
     QueryResult *result = LoginDatabase.PQuery("SELECT id FROM account WHERE username = '%s'", username.c_str());
     if (!result)
@@ -171,16 +176,31 @@ uint32 AccountMgr::GetId(std::string username)
 
 void AccountMgr::Load()
 {
+    LoadGmLevels();
+    LoadAccountNames();
+    LoadAccountBanList();
+    LoadAccountWarnings();
+    LoadAccountIP();
+    LoadAccountForumName();
+    LoadAccountEmail();
+    LoadIPBanList();
+    LoadFingerprintBanList();
+    LoadAccountHighestCharLevel();
+    LoadDonatorAccounts();
+}
+
+void AccountMgr::LoadGmLevels()
+{
     m_accountSecurity.clear();
 
-    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account`"));
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account` WHERE `rank` > 0"));
 
     if (!result)
     {
         return;
     }
 
-    Field *fields = nullptr;
+    Field* fields = nullptr;
     do
     {
         fields = result->Fetch();
@@ -188,22 +208,39 @@ void AccountMgr::Load()
         AccountTypes secu = AccountTypes(fields[1].GetUInt32());
         switch (secu)
         {
-        case SEC_PLAYER:
-            break;
         case SEC_OBSERVER:
         case SEC_MODERATOR:
         case SEC_DEVELOPER:
         case SEC_ADMINISTRATOR:
+        case SEC_SIGMACHAD:
             if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
                 m_accountSecurity[accountId] < secu)
                 m_accountSecurity[accountId] = secu;
             break;
         }
     } while (result->NextRow());
+}
 
-    LoadAccountBanList();
-    LoadIPBanList();
-    LoadFingerprintBanList();
+void AccountMgr::LoadAccountNames()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username` FROM `account`"));
+
+    if (result)
+    {
+        m_accountNameToId.clear();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            std::string username = fields[1].GetCppString();
+            if (username.empty())
+                continue;
+
+            m_accountNameToId.insert({ username, id });
+            m_accountIdNames.insert({ id, username });
+
+        } while (result->NextRow());
+    }
 }
 
 AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
@@ -222,6 +259,12 @@ void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 
 bool AccountMgr::GetName(uint32 acc_id, std::string &name)
 {
+    auto itr = m_accountIdNames.find(acc_id);
+    if (itr != m_accountIdNames.end())
+    {
+        name = itr->second;
+        return true;
+    }
     QueryResult *result = LoginDatabase.PQuery("SELECT username FROM account WHERE id = '%u'", acc_id);
     if (result)
     {
@@ -309,6 +352,28 @@ void AccountMgr::Update(uint32 diff)
     }
     else
         m_banlistUpdateTimer -= diff;
+
+    if (m_fingerprintAutobanTimer < diff)
+    {
+        // sLog.outInfo("Auto banning %u fingerprints.", (uint32)m_fingerprintAutoban.size());
+        m_fingerprintAutobanTimer = 1 * MINUTE * IN_MILLISECONDS;
+
+        for (auto const& fingerprint : m_fingerprintAutoban)
+        {
+            BanAccountsWithFingerprint(fingerprint, 0, "Fingerprint Autoban", nullptr);
+        }
+    }
+    else
+        m_fingerprintAutobanTimer -= diff;
+
+    if (m_accountMailsResetTimer < diff)
+    {
+        m_accountMailsResetTimer = 1 * HOUR * IN_MILLISECONDS;
+        std::lock_guard<std::mutex> lock(m_accountMailsMutex);
+        m_accountMails.clear();
+    }
+    else
+        m_accountMailsResetTimer -= diff;
 }
 
 void AccountMgr::LoadIPBanList(bool silent)
@@ -356,25 +421,212 @@ void AccountMgr::LoadAccountBanList(bool silent)
     } while (banresult->NextRow());
 }
 
-void AccountMgr::LoadFingerprintBanList(bool silent)
+void AccountMgr::LoadAccountWarnings(bool silent)
 {
-    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `fingerprint`, `unbandate`, `bandate` FROM `fingerprint_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    uint32 maxAge = sWorld.getConfig(CONFIG_UINT32_MAX_AGE_SHOW_WARNING);
+
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `banreason` FROM `account_banned` WHERE `active` = 0 AND (`banreason` LIKE \"WARN:%\") AND `bandate` > UNIX_TIMESTAMP(NOW() - INTERVAL %u DAY) ORDER BY `bandate`", maxAge));
 
     if (!banresult)
     {
         return;
     }
 
-    m_fingerprintBanned.clear();
+    m_accountWarnings.clear();
     do
     {
         Field* fields = banresult->Fetch();
-        uint32 unbandate = fields[1].GetUInt32();
-        uint32 bandate = fields[2].GetUInt32();
-        if (unbandate == bandate)
-            unbandate = 0xFFFFFFFF;
-        m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
+        m_accountWarnings[fields[0].GetUInt32()] = fields[1].GetCppString().substr(5, fields[1].GetCppString().size() - 5);
     } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountIP()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `last_ip` FROM `account` WHERE `last_ip` != '0.0.0.0'"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountIp.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountIp[fields[0].GetUInt32()] = fields[1].GetCppString();
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountForumName()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `forum_username` FROM `account` WHERE `forum_username` != ''"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountForumName.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountForumName[fields[0].GetUInt32()] = fields[1].GetCppString();
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountEmail()
+{
+
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.Query("SELECT `id`, `email` FROM `account` WHERE `email` != ''"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_accountEmail.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        m_accountEmail[fields[0].GetUInt32()] = fields[1].GetCppString();
+    } while (banresult->NextRow());
+}
+
+void AccountMgr::LoadAccountHighestCharLevel()
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `account`, `level` FROM `characters`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    m_accountHighestCharLevel.clear();
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+        uint32 level = fields[1].GetUInt32();
+
+        if (level > m_accountHighestCharLevel[accountId])
+            m_accountHighestCharLevel[accountId] = level;
+
+    } while (result->NextRow());
+}
+
+void AccountMgr::LoadDonatorAccounts()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.Query("SELECT DISTINCT `account_id` FROM `shop_coins_history`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    m_donatorAccounts.clear();
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+
+        m_donatorAccounts.insert(accountId);
+
+    } while (result->NextRow());
+}
+
+void AccountMgr::LoadFingerprintBanList(bool silent)
+{
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `fingerprint`, `unbandate`, `bandate` FROM `fingerprint_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    if (banresult)
+    {
+        m_fingerprintBanned.clear();
+        do
+        {
+            Field* fields = banresult->Fetch();
+            uint32 unbandate = fields[1].GetUInt32();
+            uint32 bandate = fields[2].GetUInt32();
+            if (unbandate == bandate)
+                unbandate = 0xFFFFFFFF;
+            m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
+        } while (banresult->NextRow());
+    }
+
+    banresult.reset(LoginDatabase.PQuery("SELECT `fingerprint` FROM `fingerprint_autoban`"));
+
+    if (banresult)
+    {
+        m_fingerprintAutoban.clear();
+        do
+        {
+            Field* fields = banresult->Fetch();
+            uint32 fingerprint = fields[0].GetUInt32();
+            m_fingerprintAutoban.insert(fingerprint);
+        } while (banresult->NextRow());
+    }
+}
+
+bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler)
+{
+    // add fingerprint to reason
+    reason = std::to_string(fingerprint) + " - " + reason;
+
+    auto accountNames = sWorld.GetAccountNamesByFingerprint(fingerprint);
+    for (auto it = accountNames.begin(); it != accountNames.end(); )
+    {
+        uint32 id = GetId(*it);
+        if (IsAccountBanned(id))
+        {
+            it = accountNames.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
+
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 accountId = fields[0].GetUInt32();
+            if (IsAccountBanned(accountId))
+                continue;
+
+            std::string username = fields[1].GetCppString();
+            if (!AccountMgr::normalizeString(username))
+                continue;
+
+            accountNames.insert(username);
+
+        } while (result->NextRow());
+    }
+
+    if (accountNames.empty())
+    {
+        if (chatHandler)
+            chatHandler->SendSysMessage("No accounts with that fingerprint found.");
+
+        return false;
+    }
+
+    for (const auto& accountName : accountNames)
+    {
+        if (chatHandler)
+            chatHandler->PSendSysMessage("Banning account %s...", accountName.c_str());
+        
+        sWorld.BanAccount(BAN_ACCOUNT, accountName, duration_secs, reason, chatHandler && chatHandler->GetSession() ? chatHandler->GetSession()->GetPlayerName() : "");
+    }
+
+    return true;
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
@@ -463,7 +715,7 @@ bool AccountMgr::IsGMAccount(uint32 gmlevel)
 
 bool AccountMgr::IsAdminAccount(uint32 gmlevel)
 {
-    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE;
+    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE || gmlevel == SEC_SIGMACHAD;
 }
 
 bool AccountMgr::IsConsoleAccount(uint32 gmlevel)
@@ -529,4 +781,34 @@ bool AccountPersistentData::CanMail(uint32 targetAccount)
 
     uint32 allowedScore = sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS);
     return totalScore < allowedScore;
+}
+
+void AccountMgr::SendPlayerInfoInAddonMessage(char const* playerName, Player* pPlayer)
+{
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(playerName);
+    if (guid.IsEmpty())
+        return;
+
+    PlayerCacheData const* pPlayerCache = sObjectMgr.GetPlayerDataByGUID(guid);
+    if (!pPlayerCache)
+        return;
+
+    std::stringstream ss;
+
+    // playerinfo;;guid;;account;;ip;;level;;email;;forumusername;;race;;class
+
+    ss << "playerinfo;;" << guid.GetCounter() << ";;";
+
+    uint32 accId = pPlayerCache->uiAccount;
+    std::string accName;
+    GetName(accId, accName);
+    ss << accName << ";;"
+       << GetAccountIP(accId) << ";;"
+       << pPlayerCache->uiLevel << ";;"
+       << GetAccountEmail(accId) << ";;"
+       << GetForumName(accId) << ";;"
+       << pPlayerCache->uiRace << ";;"
+       << pPlayerCache->uiClass;
+
+    pPlayer->SendAddonMessage("GM_ADDON", ss.str());
 }

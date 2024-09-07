@@ -382,7 +382,8 @@ enum ItemExtraFlags
     ITEM_EXTRA_MAIL_STATIONERY     = 0x01,      // Used as icon or background for mails
     ITEM_EXTRA_IGNORE_QUEST_STATUS = 0x02,      // No quest status will be checked when this item drops
     ITEM_EXTRA_NOT_OBTAINABLE      = 0x04,      // Never obtainable by players in vanilla
-    ITEM_EXTRA_ALL                 = 0x07       // All used flags, used to check DB data (mask all above flags)
+    ITEM_EXTRA_CREATE_BROKEN       = 0x08,      // Item starts with 0 durability instead of max
+    ITEM_EXTRA_ALL                 = 0x0F       // All used flags, used to check DB data (mask all above flags)
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
@@ -424,8 +425,8 @@ struct ItemPrototype
     uint32 ItemId;
     uint32 Class;                                           // id from ItemClass.dbc
     uint32 SubClass;                                        // id from ItemSubClass.dbc
-    char*  Name1;
-    char*  Description;
+    std::string Name1;
+    std::string Description;
     uint32 DisplayInfoID;                                   // id from ItemDisplayInfo.dbc
     uint32 Quality;
     uint32 Flags;
@@ -480,6 +481,7 @@ struct ItemPrototype
     uint32 FoodType;
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
+    uint32 WrappedGift = 0;
     uint32 ExtraFlags;                                      // see ItemExtraFlags
     uint32 OtherTeamEntry;
     uint32 ScriptId;                                        // Turtle WoW Services, such as: race/faction change, character rename etc, etc.
@@ -488,7 +490,7 @@ struct ItemPrototype
 
     bool IsQuestItem = false;
 
-    mutable bool m_bDiscovered = false;                     // has item been discovered by players
+    mutable bool Discovered = false;                     // has item been discovered by players
 
     // helpers
     bool CanChangeEquipStateInCombat() const

@@ -16,3 +16,8 @@ bool HandleAnticheatDebugExtrapCommand(char* args);
 bool HandleAnticheatFingerprintListCommand(char* args);
 bool HandleAnticheatFingerprintHistoryCommand(char* args);
 bool HandleAnticheatFingerprintAHistoryCommand(char* args);
+bool HandleAnticheatFingerprintAutobanAddCommand(char* args);
+bool HandleAnticheatFingerprintAutobanRemoveCommand(char* args);
+
+bool HandleAnticheatHwPrintMarkCommand(char* args);
+bool HandleAnticheatHwPrintListCommand(char* args);

@@ -231,8 +231,12 @@ class SpellAuraHolder
         void SetTargetSecondaryThreatFocus(bool v) { m_makesTargetSecondaryFocus = v; }
         bool IsTargetSecondaryThreatFocus() const { return m_makesTargetSecondaryFocus; }
 
-        void SetTriggered(bool t) { m_spellTriggered = t; }
+        void SetTriggered(bool triggered) { m_spellTriggered = triggered; }
         bool IsTriggered() const { return m_spellTriggered; }
+        void SetReflected(bool reflected) { m_isReflected = reflected; }
+        bool IsReflected() const { return m_isReflected; }
+        void SetAddedBySpell(bool spell) { m_addedBySpell = spell; }
+        bool IsAddedBySpell() const { return m_addedBySpell; }
 
         ~SpellAuraHolder();
     private:
@@ -267,6 +271,8 @@ class SpellAuraHolder
         bool m_deleted:1;
         bool m_makesTargetSecondaryFocus;
         bool m_spellTriggered;                              // applied by a triggered spell (used in debuff priority computation)
+        bool m_isReflected;                                 // applied by a reflected spell (used to prevent death in duel)
+        bool m_addedBySpell;                                // whether aura was applied by spell cast or added directly
 
         uint32 m_in_use;                                    // > 0 while in SpellAuraHolder::ApplyModifiers call/SpellAuraHolder::Update/etc
 };
@@ -343,6 +349,7 @@ class Aura
         void HandleAuraModTotalHealthPercentRegen(bool Apply, bool Real);
         void HandleAuraModTotalManaPercentRegen(bool Apply, bool Real);
         void HandleAuraModResistance(bool Apply, bool Real);
+        void HandleDetectAmore(bool apply, bool Real);
         void HandleAuraModRoot(bool Apply, bool Real);
         void HandleAuraModSilence(bool Apply, bool Real);
         void HandleAuraModStat(bool Apply, bool Real);
@@ -375,6 +382,7 @@ class Aura
         void HandleModCastingSpeed(bool Apply, bool Real);
         void HandleAuraMounted(bool Apply, bool Real);
         void HandleWaterBreathing(bool Apply, bool Real);
+        void HandleModWaterBreathing(bool apply, bool Real);
         void HandleModBaseResistance(bool Apply, bool Real);
         void HandleModRegen(bool Apply, bool Real);
         void HandleModPowerRegen(bool Apply, bool Real);
@@ -428,6 +436,7 @@ class Aura
         // Nostalrius
         void HandleAuraAuraSpell(bool apply, bool real);
         void HandleInterruptRegen(bool apply, bool real);
+        void HandleEnableFlying(bool apply, bool real);
 
         virtual ~Aura();
 
@@ -591,10 +600,12 @@ class AreaAura : public Aura
 class PersistentAreaAura : public Aura
 {
     public:
-        PersistentAreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
+        PersistentAreaAura(ObjectGuid dynObjectGuid, SpellEntry const* spellproto, SpellEffectIndex eff, SpellAuraHolder* holder, Unit* target, Unit* caster);
         ~PersistentAreaAura() override;
+        DynamicObject* GetDynObject() const;
     protected:
         void Update(uint32 diff) override;
+        ObjectGuid m_dynObjectGuid;
 };
 
 class SingleEnemyTargetAura : public Aura

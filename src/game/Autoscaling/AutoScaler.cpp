@@ -13,7 +13,7 @@ using namespace AutoScaling;
 // Unused
 void AutoScaler::LoadFromDB()
 {
-    std::unique_ptr<QueryResult> result{ WorldDatabase.Query("SELECT * FROM disabled_dungeon_scaling") };
+    std::unique_ptr<QueryResult> result{ WorldDatabase.Query("SELECT * FROM `disabled_dungeon_scaling`") };
 
     if (!result)
         return;
@@ -28,7 +28,7 @@ void AutoScaler::LoadFromDB()
 class Read_Mutex_Guard
 {
 public:
-    explicit Read_Mutex_Guard(std::shared_timed_mutex& mut)
+    explicit Read_Mutex_Guard(std::shared_mutex& mut)
         : mut(mut)
     {	// construct and lock
         mut.lock_shared();
@@ -41,7 +41,12 @@ public:
     Read_Mutex_Guard(const Read_Mutex_Guard&) = delete;
     Read_Mutex_Guard& operator=(const Read_Mutex_Guard&) = delete;
 private:
-    std::shared_timed_mutex& mut;
+    std::shared_mutex& mut;
+};
+
+static uint32 disabledMapIds[] =
+{
+    807
 };
 
 void AutoScaler::Scale(DungeonMap* map)
@@ -49,9 +54,12 @@ void AutoScaler::Scale(DungeonMap* map)
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
-    if (maxCount <= 10 || playerCount == maxCount)
+    if (std::find(std::begin(disabledMapIds), std::end(disabledMapIds), map->GetId()) != std::end(disabledMapIds))
         return;
 
+
+    if (maxCount <= 10 || playerCount == maxCount)
+        return;
     else if (maxCount == 20 && playerCount < 12)
         playerCount = 12;
     else if (maxCount == 40 && playerCount < 20)
@@ -60,6 +68,7 @@ void AutoScaler::Scale(DungeonMap* map)
     // Naxxramas specific
     if (map->GetId() == 533 && playerCount < 35)
         playerCount = 35;
+
 
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
@@ -70,13 +79,13 @@ void AutoScaler::Scale(DungeonMap* map)
     {
         auto creature = pairItr.first->second;
         if (creature && !creature->IsInCombat())
-            ScaleCreature(creature, playerCount, maxCount);
+            ScaleCreature(creature, playerCount, maxCount, map);
 
         ++pairItr.first;
     }
 }
 
-void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount)
+void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount, Map* map)
 {
     if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;
@@ -223,8 +232,8 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
     {
-        //store base vals.
-        const auto tup = std::make_tuple(
+        // store base vals.
+        auto tup = std::make_tuple(
                 std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
                 std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
                 creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));

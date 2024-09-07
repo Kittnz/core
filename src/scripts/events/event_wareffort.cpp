@@ -666,7 +666,7 @@ bool ChatHandler::HandleGetWarEffortResource(char* args)
     auto PrintResources = [this](WarEffortStockInfo &info)
     {
         double Progress = (double)info.count / (double)info.required;
-        PSendSysMessage("\"%s\" [%u] Current [%u] Required [%u] Completed: %.03f", info.proto->Name1, info.proto->ItemId, info.count, info.required, Progress);
+        PSendSysMessage("\"%s\" [%u] Current [%u] Required [%u] Completed: %.03f", info.proto->Name1.c_str(), info.proto->ItemId, info.count, info.required, Progress);
     };
 
     WarEffortStockInfo info;
@@ -715,7 +715,7 @@ bool ChatHandler::HandleSetWarEffortResource(char* args)
     uint32 PreviousResourceCount = info.count;
     sObjectMgr.SetSavedVariable(info.currentVar, resourceAmount, true);
     double Progress = (double)resourceAmount / (double)info.required;
-    PSendSysMessage("\"%s\" Previous count [%u] New count [%u] Completed: %.03f", info.proto->Name1, PreviousResourceCount, resourceAmount, Progress);
+    PSendSysMessage("\"%s\" Previous count [%u] New count [%u] Completed: %.03f", info.proto->Name1.c_str(), PreviousResourceCount, resourceAmount, Progress);
     return true;
 }
 

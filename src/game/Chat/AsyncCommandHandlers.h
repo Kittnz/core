@@ -54,17 +54,22 @@ struct PInfoData
     uint32 m_accountId;
     uint32 fingerprint = 0;
     bool online = false;
-    bool isHardcore = false;
+    uint32 m_hardcoreStatus = false;
     bool isFingerprintBanned = false;
+    bool isSuspicious = false;
 
     bool hasAccount = false;
     std::string two_factor_enabled;
     std::string username;
+    uint32 m_activePlayerTime = 0;
+    uint32 m_activeSessionTime = 0;
     std::string email;
     std::string last_ip;
     AccountTypes security = SEC_PLAYER;
     std::string last_login;
     std::string target_name;
+    bool m_hasUsedClickToMove = false;
+    uint64 m_extendedFingerprint = 0;
 };
 
 /**

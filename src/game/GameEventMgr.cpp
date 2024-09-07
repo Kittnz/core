@@ -112,7 +112,7 @@ void GameEventMgr::StopEvent(uint16 event_id, bool overwrite)
     }
 }
 
-void GameEventMgr::EnableEvent(uint16 event_id, bool enable)
+void GameEventMgr::EnableEvent(uint16 event_id, bool enable, bool updateDB)
 {
     // skip if event not exists or length <= 0
     if (!IsValidEvent(event_id))
@@ -129,7 +129,8 @@ void GameEventMgr::EnableEvent(uint16 event_id, bool enable)
 
     // change state
     mGameEvent[event_id].disabled = disabled;
-    WorldDatabase.PExecute("UPDATE `game_event` SET `disabled` = '%u' WHERE `entry` = '%u'", disabled, event_id);
+    if (updateDB)
+        WorldDatabase.PExecute("UPDATE `game_event` SET `disabled` = '%u' WHERE `entry` = '%u'", disabled, event_id);
    
     // we take no action if event needs to be started: GameEvent system will start it for us on its next iteration
     if (!IsActiveEvent(event_id))
@@ -179,7 +180,8 @@ void GameEventMgr::LoadFromDB()
         mGameEvent.resize(max_event_id + 1);
     }
 
-    QueryResult *result = WorldDatabase.Query("SELECT `entry`, UNIX_TIMESTAMP(`start_time`), UNIX_TIMESTAMP(`end_time`), `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled` FROM `game_event`");
+    //                                                 0       1                             2                            3            4         5          6              7            8           9
+    QueryResult *result = WorldDatabase.Query("SELECT `entry`, UNIX_TIMESTAMP(`start_time`), UNIX_TIMESTAMP(`end_time`), `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `required_phase` FROM `game_event`");
     if (!result)
     {
         mGameEvent.clear();
@@ -217,6 +219,10 @@ void GameEventMgr::LoadFromDB()
             pGameEvent.description  = fields[6].GetCppString();
             pGameEvent.hardcoded    = fields[7].GetUInt8();
             pGameEvent.disabled     = fields[8].GetUInt8();
+            pGameEvent.requiredPhase = fields[9].GetUInt8();
+
+            if (pGameEvent.requiredPhase > sWorld.GetContentPhase())
+                pGameEvent.disabled = true;
 
             // Leap days are needed to adjust yearly events
             if (pGameEvent.occurence == default_year_length && pGameEvent.length < default_year_length)
@@ -420,7 +426,7 @@ void GameEventMgr::LoadFromDB()
                 newData.equipment_id = 0;
             }
 
-            if (newData.entry_id && !ObjectMgr::GetCreatureTemplate(newData.entry_id))
+            if (newData.entry_id && !sObjectMgr.GetCreatureTemplate(newData.entry_id))
             {
                 if (!sObjectMgr.IsExistingCreatureId(newData.entry_id))
                     sLog.outErrorDb("Table `game_event_creature_data` have creature (Guid: %u) with event time entry %u not found in table `creature_template`, set to no 0.", guid, newData.entry_id);
@@ -545,7 +551,7 @@ void GameEventMgr::LoadFromDB()
                 continue;
             }
 
-            if (!ObjectMgr::GetCreatureTemplate(mail.senderEntry))
+            if (!sObjectMgr.GetCreatureTemplate(mail.senderEntry))
             {
                 sLog.outErrorDb("Table `game_event_mail` have nonexistent sender creature entry (%u) for game event %i that invalid not include any player races, ignoring.", mail.senderEntry, event_id);
                 continue;
@@ -1037,14 +1043,14 @@ void GameEventMgr::UpdateSilithusPVP()
     {
         if (!IsActiveEvent(SILITHUS_PVP_EVENT_ON))
         {
-            sLog.out(LOG_BG, "[SilithusPVPEvent] started %u", SILITHUS_PVP_EVENT_ON);
+            sLog.out(LOG_BG, "[SilithusPVPEvent] started %u", (uint32)SILITHUS_PVP_EVENT_ON);
             StartEvent(SILITHUS_PVP_EVENT_ON);
             sWorld.SendGlobalText("Les collecteurs de Silithystes sont repares! Depechez vous de revenir en Silithus et reprenez le travail soldat!", nullptr);
         }
     }
     else if (IsActiveEvent(SILITHUS_PVP_EVENT_ON))
     {
-        sLog.out(LOG_BG, "[SilithusPVPEvent] stopped %u", SILITHUS_PVP_EVENT_ON);
+        sLog.out(LOG_BG, "[SilithusPVPEvent] stopped %u", (uint32)SILITHUS_PVP_EVENT_ON);
         StopEvent(SILITHUS_PVP_EVENT_ON);
         sWorld.SendGlobalText("Le sable a enraille nos collecteurs de Silithystes, la collecte est interrompue en Silithus", nullptr);
     }

@@ -1,8 +1,15 @@
 #include "GMCommandHandler.hpp"
-#include "Bot.hpp"
+#include "DiscordBot/Bot.hpp"
 #include "World.h"
-#include "AuthManager.hpp"
+#include "DiscordBot/AuthManager.hpp"
 #include "Log.h"
+#include "Chat.h"
+
+bool ChatHandler::HandleDiscBotStopCommand(char* args)
+{
+    sWorld.StopDiscordBot();
+    return true;
+}
 
 namespace DiscordBot
 {
@@ -37,9 +44,15 @@ namespace DiscordBot
 
     void GMCommandHandler::ExecuteGMCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
     {
+        
         auto authinfo = AuthManager::Instance()->GetAuthInfo(&src.issuer);
         if (!authinfo)
+        {
             return;
+        }
+
+        sLog.outDiscord("%s", string_format_depr("Executing command %s for Discord user %s (%llu). Account (%s / %u)", command.c_str(), src.issuer.format_username().c_str(),
+            static_cast<uint64>(src.issuer.id), authinfo->gameAccountName.c_str(), authinfo->gameAccountId).c_str());
 
         std::string commandParam;
         bool selfOnly = false;

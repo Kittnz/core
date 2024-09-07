@@ -41,7 +41,6 @@ void AddSC_event_scourge_invasion();
 void AddSC_instance_blackrock_spire();
 void AddSC_blackrock_depths();                       //blackrock_depths
 void AddSC_blackrock_depths_arena_challenge();
-void AddSC_boss_ambassador_flamelash();
 void AddSC_boss_anubshiah();
 void AddSC_boss_draganthaurissan();
 void AddSC_boss_general_angerforge();
@@ -52,7 +51,6 @@ void AddSC_boss_magmus();
 void AddSC_boss_tomb_of_seven();
 void AddSC_boss_urok();
 void AddSC_instance_blackrock_depths();
-void AddSC_boss_drakkisath();                        //blackrock_spire
 void AddSC_boss_halycon();
 void AddSC_boss_highlordomokk();
 //void AddSC_boss_mothersmolderweb();
@@ -201,7 +199,6 @@ void AddSC_boss_celebras_the_cursed();               //maraudon
 void AddSC_boss_landslide();
 void AddSC_boss_noxxion();
 void AddSC_boss_ptheradras();
-void AddSC_maraudon();
 void AddSC_instance_maraudon();
 void AddSC_instance_onyxia_lair();
 void AddSC_boss_onyxia();                            //onyxias_lair
@@ -262,6 +259,9 @@ void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_instance_karazhan_crypt();
 void AddSC_instance_crescent_grove();
+void AddSC_instance_gilneas_city();
+void AddSC_boss_celia();
+void AddSC_boss_lord_mortimer();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
 void AddSC_mirage_raceway();
@@ -269,13 +269,20 @@ void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
+void AddSC_instance_emerald_sanctum();
+void AddSC_boss_solnius();
+void AddSC_instance_lower_karazhan_halls();
+void AddSC_boss_brood_queen_araxxna();
+void AddSC_boss_blackwald_ii();
+void AddSC_boss_clawlord_howlfang();
+void AddSC_boss_grizikil();
+void AddSC_boss_moroes();
 
 void AddSC_random_scripts_0();
 void AddSC_random_scripts_1();
 void AddSC_random_scripts_2();
 void AddSC_random_scripts_3();
 
-void AddSC_custom_teleports();
 void AddSC_custom_exploration_triggers();
 
 // Scarlet Citadel
@@ -309,11 +316,9 @@ void AddSC_black_morass_trash();
 void AddSC_instance_black_morass();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chronormu();
-void AddSC_boss_chromie();
 
 // Misc
 void AddSC_npc_ptr();
-
 void AddScripts()
 {
     //Nostalrius
@@ -354,7 +359,6 @@ void AddScripts()
     //eastern kingdoms
     AddSC_blackrock_depths();                               //blackrock_depths
     AddSC_blackrock_depths_arena_challenge();
-    AddSC_boss_ambassador_flamelash();
     AddSC_boss_anubshiah();
     AddSC_boss_draganthaurissan();
     AddSC_boss_general_angerforge();
@@ -365,7 +369,6 @@ void AddScripts()
     AddSC_boss_tomb_of_seven();
     AddSC_boss_urok();
     AddSC_instance_blackrock_depths();
-    AddSC_boss_drakkisath();                                //blackrock_spire
     AddSC_boss_halycon();
     AddSC_boss_highlordomokk();
     //AddSC_boss_mothersmolderweb();
@@ -513,7 +516,6 @@ void AddScripts()
     AddSC_boss_landslide();
     AddSC_boss_noxxion();
     AddSC_boss_ptheradras();
-    AddSC_maraudon();
     AddSC_instance_maraudon();
     AddSC_instance_onyxia_lair();
     AddSC_boss_onyxia();                                    //onyxias_lair
@@ -582,11 +584,22 @@ void AddScripts()
     AddSC_boss_turtlhu();
     AddSC_instance_karazhan_crypt();
     AddSC_instance_crescent_grove();
+    AddSC_instance_gilneas_city();
+    AddSC_boss_celia();
+    AddSC_boss_lord_mortimer();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
+    AddSC_instance_emerald_sanctum();
+    AddSC_boss_solnius();
+    AddSC_instance_lower_karazhan_halls();
+    AddSC_boss_brood_queen_araxxna();
+    AddSC_boss_blackwald_ii();
+    AddSC_boss_clawlord_howlfang();
+    AddSC_boss_grizikil();
+    AddSC_boss_moroes();
 
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
@@ -596,7 +609,6 @@ void AddScripts()
     AddSC_random_scripts_2();
     AddSC_random_scripts_3();
 
-    AddSC_custom_teleports();
     AddSC_custom_exploration_triggers();
 
     // Scarlet Citadel
@@ -620,7 +632,6 @@ void AddScripts()
     AddSC_instance_black_morass();
     AddSC_boss_gerastrasz();
     AddSC_boss_chronormu();
-    AddSC_boss_chromie();
 
     // Misc
     AddSC_npc_ptr();

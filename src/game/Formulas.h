@@ -111,6 +111,10 @@ namespace MaNGOS
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
+            // Turtle: No XP if you leave group in dungeon.
+            if (pUnit->IsPlayer() && !static_cast<Player*>(pUnit)->m_InstanceValid)
+                return 0;
+
             uint32 ownerLevel = pUnit->GetLevel();
             uint32 unitLevel = pUnit->GetLevel();
             if (pUnit->IsPet())
@@ -132,7 +136,11 @@ namespace MaNGOS
                 else
                     xp_gain *= 2;
 
-                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE);
+
+                bool isTurtleMode = pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY);
+
+                if (!isTurtleMode)
+                    xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE);
             }
 
             if (pCreature->IsPet())
@@ -148,10 +156,15 @@ namespace MaNGOS
                     xp_gain *= 0.5f;
 
                 if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE))
-                    xp_gain *= 1.3f;
+                    xp_gain *= 1.2f;
             }
 
-            xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+            bool isTurtleMode = pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY);
+
+
+            if (!isTurtleMode)
+                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+
 
             return std::nearbyint(xp_gain);
         }

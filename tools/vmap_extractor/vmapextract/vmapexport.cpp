@@ -203,6 +203,15 @@ bool ExtractSingleWmo(std::string& fname)
         printf("Couldn't open RootWmo!!!\n");
         return true;
     }
+
+	if (FILE* h = fopen(szLocalFile, "rb"))
+	{
+		fclose(h);
+
+        // already exported
+        return true;
+	}
+
     FILE* output = fopen(szLocalFile, "wb");
     if (!output)
     {
@@ -427,7 +436,6 @@ bool processArgv(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-    std::cin.get();
     bool success = true;
 
     // Use command line arguments, when some

@@ -57,10 +57,6 @@ Weather::Weather(uint32 zone, WeatherZoneChances const* weatherChances) :
     m_weatherChances(weatherChances),
     m_isPermanentWeather(false)
 {
-	if (weatherChances != nullptr)
-	{
-		m_CopyFromAnotherZone = weatherChances->CopyWeatherFromAnotherZone;
-	}
     m_timer.SetInterval(sWorld.getConfig(CONFIG_UINT32_INTERVAL_CHANGEWEATHER));
     DETAIL_FILTER_LOG(LOG_FILTER_WEATHER, "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (m_timer.GetInterval() / (MINUTE * IN_MILLISECONDS)));
 }
@@ -74,32 +70,13 @@ bool Weather::Update(uint32 diff, Map const* _map)
     if (m_timer.Passed())
     {
         m_timer.Reset();
-		if (m_CopyFromAnotherZone != 0)
-		{
-			if (Weather* AnotherWeather = _map->GetWeatherSystem()->FindOrCreateWeather(m_CopyFromAnotherZone))
-			{
-				bool bShouldUpdateToPlayers = m_type != AnotherWeather->m_type || m_grade != AnotherWeather->m_grade;
-				m_type = AnotherWeather->m_type;
-				m_grade = AnotherWeather->m_grade;
-
-				if (bShouldUpdateToPlayers)
-				{
-					///- Weather will be removed if not updated (no players in zone anymore)
-					if (!SendWeatherForPlayersInZone(_map))
-						return false;
-				}
-			}
-		}
-		else
-		{
-			// update only if Regenerate has changed the weather
-			if (ReGenerate())
-			{
-				///- Weather will be removed if not updated (no players in zone anymore)
-				if (!SendWeatherForPlayersInZone(_map))
-					return false;
-			}
-		}
+        // update only if Regenerate has changed the weather
+        if (ReGenerate())
+        {
+            ///- Weather will be removed if not updated (no players in zone anymore)
+            if (!SendWeatherForPlayersInZone(_map))
+                return false;
+        }
     }
     return true;
 }
@@ -456,8 +433,8 @@ uint32 Weather::GetSound()
 /// Load Weather chanced from table game_weather
 void WeatherMgr::LoadWeatherZoneChances()
 {
-    //                                                               0		1					 2                     3                      4                     5                     6                      7                   8                   9                    10                    11                    12					  13
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `zone`, `spring_rain_chance`, `spring_snow_chance`, `spring_storm_chance`, `summer_rain_chance`, `summer_snow_chance`, `summer_storm_chance`, `fall_rain_chance`, `fall_snow_chance`, `fall_storm_chance`, `winter_rain_chance`, `winter_snow_chance`, `winter_storm_chance`, `copy_weather_from` FROM `game_weather`"));
+    //                                                               0		1					 2                     3                      4                     5                     6                      7                   8                   9                    10                    11                    12					 
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `zone`, `spring_rain_chance`, `spring_snow_chance`, `spring_storm_chance`, `summer_rain_chance`, `summer_snow_chance`, `summer_storm_chance`, `fall_rain_chance`, `fall_snow_chance`, `fall_storm_chance`, `winter_rain_chance`, `winter_snow_chance`, `winter_storm_chance` FROM `game_weather`"));
 
     if (!result)
     {
@@ -472,39 +449,30 @@ void WeatherMgr::LoadWeatherZoneChances()
 
         WeatherZoneChances& wzc = mWeatherZoneMap[zone_id];
 
-		if (!fields[13].IsNULL())
-		{
-			uint32 copy_weather_zone_id = fields[13].GetUInt32();
-			wzc.CopyWeatherFromAnotherZone = copy_weather_zone_id;
-		}
-		else
-		{
-			wzc.CopyWeatherFromAnotherZone = 0;
-			for (int season = 0; season < WEATHER_SEASONS; ++season)
-			{
-				wzc.data[season].rainChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 1].GetUInt32();
-				wzc.data[season].snowChance  = fields[season * (MAX_WEATHER_TYPE - 1) + 2].GetUInt32();
-				wzc.data[season].stormChance = fields[season * (MAX_WEATHER_TYPE - 1) + 3].GetUInt32();
+        for (int season = 0; season < WEATHER_SEASONS; ++season)
+        {
+            wzc.data[season].rainChance = fields[season * (MAX_WEATHER_TYPE - 1) + 1].GetUInt32();
+            wzc.data[season].snowChance = fields[season * (MAX_WEATHER_TYPE - 1) + 2].GetUInt32();
+            wzc.data[season].stormChance = fields[season * (MAX_WEATHER_TYPE - 1) + 3].GetUInt32();
 
-				if (wzc.data[season].rainChance > 100)
-				{
-					wzc.data[season].rainChance = 25;
-					sLog.outErrorDb("Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
-				}
+            if (wzc.data[season].rainChance > 100)
+            {
+                wzc.data[season].rainChance = 25;
+                sLog.outErrorDb("Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
+            }
 
-				if (wzc.data[season].snowChance > 100)
-				{
-					wzc.data[season].snowChance = 25;
-					sLog.outErrorDb("Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
-				}
+            if (wzc.data[season].snowChance > 100)
+            {
+                wzc.data[season].snowChance = 25;
+                sLog.outErrorDb("Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
+            }
 
-				if (wzc.data[season].stormChance > 100)
-				{
-					wzc.data[season].stormChance = 25;
-					sLog.outErrorDb("Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
-				}
-			}
-		}
+            if (wzc.data[season].stormChance > 100)
+            {
+                wzc.data[season].stormChance = 25;
+                sLog.outErrorDb("Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
+            }
+        }
     }
     while (result->NextRow());
 }

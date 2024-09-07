@@ -49,6 +49,8 @@ class Unit;
 class GmTicket;
 struct ItemPrototype;
 struct GameObjectData;
+struct TrainerSpellData;
+struct SkillLineEntry;
 
 enum CommandFlags
 {
@@ -67,6 +69,7 @@ public:
         ChatCommand *      ChildCommands;
         uint8              Flags;
         std::string        FullName;
+        uint32             PermissionMask = 0;
 };
 
 enum ChatCommandSearchResult
@@ -87,9 +90,14 @@ enum PlayerChatTag
 class ChatHandler
 {
     public:
+
+        friend struct LookupPlayerHandler;
+
         explicit ChatHandler(WorldSession* session);
         explicit ChatHandler(Player* player);
         virtual ~ChatHandler();
+
+        static void LoadRbacPermissions();
 
         static char* LineFromMessage(char*& pos) { char* start = strtok(pos,"\n"); pos = nullptr; return start; }
 
@@ -152,7 +160,7 @@ class ChatHandler
     protected:
         explicit ChatHandler() : m_session(nullptr), sentErrorMessage(false) {}      // for CLI subclass
 
-        bool hasStringAbbr(const char* name, const char* part);
+        static bool hasStringAbbr(const char* name, const char* part);
 
         // function with different implementation for chat/console
         virtual uint32 GetAccountId() const;
@@ -168,15 +176,16 @@ class ChatHandler
 
         void SendGlobalSysMessage(const char *str);
 
-        bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint8 security, std::string const& help, uint8 flags);
+        static bool SetPermissionMaskForCommandInTable(ChatCommand* table, const char* text, uint32 permissionId);
+        static bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint8 security, std::string const& help, uint8 flags);
         void ExecuteCommand(const char* text);
         bool ShowHelpForCommand(ChatCommand *table, const char* cmd);
         bool ShowHelpForSubCommands(ChatCommand *table, char const* cmd);
-        ChatCommandSearchResult FindCommand(ChatCommand* table, char const*& text, ChatCommand*& command, ChatCommand** parentCommand = nullptr, std::string* cmdNamePtr = nullptr, bool allAvailable = false, bool exactlyName = false);
+        static ChatCommandSearchResult FindCommand(ChatCommand* table, char const*& text, ChatCommand*& command, ChatCommand** parentCommand = nullptr, std::string* cmdNamePtr = nullptr, bool allAvailable = false, bool exactlyName = false);
 
         void CheckIntegrity(ChatCommand *table, ChatCommand *parentCommand);
-        void FillFullCommandsName(ChatCommand* table, std::string prefix);
-        ChatCommand* getCommandTable();
+        static void FillFullCommandsName(ChatCommand* table, std::string prefix);
+        static ChatCommand* getCommandTable();
 
         bool HandleGodCommand(char *);
         bool HandleGMOptionsCommand(char *);
@@ -194,6 +203,12 @@ class ChatHandler
         bool HandleServiceDeleteCharacters(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
+        bool HandleDebugConditionCommand(char* args);
+		bool HandleDebugSetInstanceDataCommand(char* args);
+        bool HandleWarEffortInfoCommand(char* args);
+        bool HandleWarEffortSetGongTimeCommand(char* args);
+        bool HandleWarEffortSetStageCommand(char* args);
+		bool HandleCharacterInactivityDataCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
@@ -209,7 +224,7 @@ class ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-
+        bool HandleReloadHousingCommand(char* args);
         bool HandleGameObjectTempAddCommand(char *args);
 
         // Clean characters
@@ -223,6 +238,10 @@ class ChatHandler
         //Mmaps
         bool HandleMmapsPathCommand(char* args);
         bool HandleMmapsNearCommand(char* args);
+
+        //Faction
+        bool HandleFactionAtWarCommand(char* args);
+
 
         //Shellcoin
         bool HandleShellcoinCommand(char* args);
@@ -254,14 +273,107 @@ class ChatHandler
         bool HandleCrashCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
         bool HandleWhoCommand(char* args);
+        bool ForceJoinChannelCommand(char* args);
 
-        // Reload        
+        bool HandleMarkSuspiciousCommand(char* args);
+
+        // Reload commands
         bool HandleReloadShopCommand(char* args);
+
+        bool HandleReloadQuestAreaTriggersCommand(char* args);
+        bool HandleReloadAreaTriggerTavernCommand(char* args);
+        bool HandleReloadCharacterPetCommand(char* args);
+        bool HandleReloadConditionsCommand(char* args);
+        bool HandleReloadCreatureCommand(char* args);
+        bool HandleReloadCreatureTemplateCommand(char* args);
+        bool HandleReloadEventAIEventsCommand(char* args);
+        bool HandleReloadCreatureQuestInvRelationsCommand(char* args);
+        bool HandleReloadLootTemplatesCreatureCommand(char* args);
+        bool HandleReloadCreatureQuestRelationsCommand(char* args);
+        bool HandleReloadCreatureSpellsCommand(char* args);
+        bool HandleReloadCreatureSpellScriptsCommand(char* args);
+        bool HandleReloadLootTemplatesDisenchantCommand(char* args);
+        bool HandleReloadEventScriptsCommand(char* args);
+        bool HandleReloadLootTemplatesFishingCommand(char* args);
+        bool HandleReloadGameGraveyardZoneCommand(char* args);
+        bool HandleReloadGameTeleCommand(char* args);
+        bool HandleReloadTaxiPathTransitionsCommand(char* args);
+        bool HandleReloadGameObjectCommand(char* args);
+        bool HandleReloadGOQuestInvRelationsCommand(char* args);
+        bool HandleReloadLootTemplatesGameobjectCommand(char* args);
+        bool HandleReloadGOQuestRelationsCommand(char* args);
+        bool HandleReloadGORequirementsCommand(char* args);
+        bool HandleReloadGameObjectScriptsCommand(char* args);
+        bool HandleReloadBattleEventCommand(char* args);
+        bool HandleReloadGossipMenuCommand(char* args);
+        bool HandleReloadGossipMenuOptionCommand(char* args);
+        bool HandleReloadGenericScriptsCommand(char* args);
+        bool HandleReloadGossipScriptsCommand(char* args);
+        bool HandleReloadItemEnchantementsCommand(char* args);
+        bool HandleReloadLootTemplatesItemCommand(char* args);
+        bool HandleReloadItemRequiredTragetCommand(char* args);
+        bool HandleReloadLocalesCreatureCommand(char* args);
+        bool HandleReloadLocalesGameobjectCommand(char* args);
+        bool HandleReloadLocalesGossipMenuOptionCommand(char* args);
+        bool HandleReloadLocalesItemCommand(char* args);
+        bool HandleReloadLocalesPageTextCommand(char* args);
+        bool HandleReloadLocalesPointsOfInterestCommand(char* args);
+        bool HandleReloadLocalesQuestCommand(char* args);
+        bool HandleReloadLootTemplatesMailCommand(char* args);
+        bool HandleReloadNpcGossipCommand(char* args);
+        bool HandleReloadNpcTextCommand(char* args);
+        bool HandleReloadNpcTrainerCommand(char* args);
+        bool HandleReloadNpcVendorCommand(char* args);
+        bool HandleReloadPageTextsCommand(char* args);
+        bool HandleReloadLootTemplatesPickpocketingCommand(char* args);
+        bool HandleReloadPointsOfInterestCommand(char* args);
+        bool HandleReloadQuestEndScriptsCommand(char* args);
+        bool HandleReloadQuestStartScriptsCommand(char* args);
+        bool HandleReloadQuestGreetingCommand(char* args);
+        bool HandleReloadTrainerGreetingCommand(char* args);
+        bool HandleReloadLootTemplatesReferenceCommand(char* args);
+        bool HandleReloadReservedNameCommand(char* args);
+        bool HandleReloadReputationRewardRateCommand(char* args);
+        bool HandleReloadReputationSpilloverTemplateCommand(char* args);
+        bool HandleReloadSkillFishingBaseLevelCommand(char* args);
+        bool HandleReloadLootTemplatesSkinningCommand(char* args);
+        bool HandleReloadSpellAffectCommand(char* args);
+        bool HandleReloadSpellAreaCommand(char* args);
+        bool HandleReloadSpellChainCommand(char* args);
+        bool HandleReloadSpellElixirCommand(char* args);
+        bool HandleReloadSpellLearnSpellCommand(char* args);
+        bool HandleReloadSpellPetAurasCommand(char* args);
+        bool HandleReloadSpellProcEventCommand(char* args);
+        bool HandleReloadSpellProcItemEnchantCommand(char* args);
+        bool HandleReloadSpellScriptTargetCommand(char* args);
+        bool HandleReloadSpellScriptsCommand(char* args);
+        bool HandleReloadSpellTargetPositionCommand(char* args);
+        bool HandleReloadSpellThreatsCommand(char* args);
+        bool HandleReloadSpellModsCommand(char* args);
+        bool HandleReloadMapLootDisabledCommand(char* args);
+        bool HandleReloadCinematicWaypointsCommand(char* args);
+        bool HandleReloadSpellGroupCommand(char* args);
+        bool HandleReloadSpellGroupStackRulesCommand(char* args);
+        bool HandleReloadExplorationBaseXp(char* args);
+        bool HandleReloadPetNameGeneration(char* args);
+        bool HandleReloadCreatureOnKillReputation(char* args);
+        bool HandleReloadGameWeather(char* args);
+        bool HandleReloadFactionChangeReputations(char* args);
+        bool HandleReloadFactionChangeSpells(char* args);
+        bool HandleReloadFactionChangeItems(char* args);
+        bool HandleReloadFactionChangeQuests(char* args);
+        bool HandleReloadFactionChangeMounts(char* args);
+        bool HandleReloadCreatureDisplayInfoAddon(char* args);
+        bool HandleReloadIPBanList(char* args);
+        bool HandleReloadAccountBanList(char* args);
+        bool HandleReloadInstanceBuffRemoval(char* args);
+        bool HandleReloadPetitions(char* args);
 
         bool HandleAccountCommand(char* args);
         bool HandleAccountCharactersCommand(char* args);
         bool HandleAccountCreateCommand(char* args);
         bool HandleAccountDeleteCommand(char* args);
+        bool HandleAccountEmailCommand(char* args);
         bool HandleAccountPasswordCommand(char* args);
         bool HandleAccountSetGmLevelCommand(char* args);
         bool HandleAccountSetPasswordCommand(char* args);
@@ -288,6 +400,7 @@ class ChatHandler
         bool HandleCharacterDeletedListNameCommand(char* args);
         bool HandleCharacterDeletedRestoreCommand(char* args);
         bool HandleCharacterEraseCommand(char* args);
+        bool HandleCharacterDiffItemsCommand(char* args);
         bool HandleCharacterRenameCommand(char* args);
         bool HandleCharacterReputationCommand(char* args);
         bool HandleCharacterHasItemCommand(char* args);
@@ -312,6 +425,9 @@ class ChatHandler
         bool HandleGameObjectResetCommand(char* args);
         bool HandleGameObjectSelectCommand(char* args);
         bool HandleGameObjectRespawnCommand(char* args);
+        bool HandleGameObjectSetGoStateCommand(char* args);
+        bool HandleGameObjectSetLootStateCommand(char* args);
+        bool HandleGameObjectSetRespawnTimeCommand(char* args);
         bool HandleGameObjectInfoCommand(char* args);
         bool HandleGameObjectSendCustomAnimCommand(char* args);
         GameObject* getSelectedGameObject();
@@ -337,7 +453,9 @@ class ChatHandler
         bool HandleGuildRankCommand(char* args);
         bool HandleGuildDeleteCommand(char* args);
         bool HandleGuildRenameCommand(char* args);
+        bool HandleGuildLeaderCommand(char* args);
         bool HandleGuildListenCommand(char* args);
+        bool HandleGuildHouseCommand(char* args);
 
         bool HandleHonorShow(char* args);
         bool HandleHonorSetRPCommand(char* args);
@@ -352,13 +470,19 @@ class ChatHandler
 
         bool HandleListAurasCommand(char* args);
         bool HandleListCreatureCommand(char* args);
+        bool HandleListClickToMoveCommand(char* args);
         bool HandleListExploredAreasCommand(char* args);
         bool HandleListObjectCommand(char* args);
         bool HandleListDestroyedItemsCommand(char* args);
         bool HandleListBuybackItemsCommand(char* args);
+        bool HandleListHostileRefsCommand(char* args);
+        bool HandleListThreatCommand(char* args);
 
         bool HandleLearnCommand(char* args);
         bool HandleLearnAllMySpellsCommand(char* args);
+        bool HandleLearnAllRecipesCommand(char* args);
+        bool HandleLearnAllTrainerCommand(char* args);
+        bool HandleLearnAllItemsCommand(char* args);
 
         bool HandleLookupCreatureCommand(char* args);
         bool HandleLookupFactionCommand(char* args);
@@ -375,6 +499,8 @@ class ChatHandler
         bool HandleLookupItemSetCommand(char* args);
         bool HandleLookupEventCommand(char* args);
         bool HandleLookupGuildCommand(char* args);
+        bool HandleLookupHwPrintCommand(char* args);
+
 
         bool HandleModifyHPCommand(char* args);
         bool HandleModifyManaCommand(char* args);
@@ -406,6 +532,7 @@ class ChatHandler
         bool HandleNpcSetWanderDistanceCommand(char* args);
         bool HandleNpcDeleteCommand(char* args);
         bool HandleNpcDelVendorItemCommand(char* args);
+        bool HandleNpcEvadeCommand(char* args);
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
@@ -429,8 +556,21 @@ class ChatHandler
         bool HandleNpcSpawnWanderDistCommand(char* args);
         bool HandleNpcSpawnSetRespawnTimeCommand(char* args);
         bool HandleNpcSpawnSetAurasCommand(char* args);
+        bool HandleNpcTemplateSetDisplayIdCommand(char* args);
+        bool HandleNpcTemplateSetMountDisplayIdCommand(char* args);
+        bool HandleNpcTemplateSetLevelCommand(char* args);
+        bool HandleNpcTemplateSetFactionCommand(char* args);
+        bool HandleNpcTemplateSetScaleCommand(char* args);
+        bool HandleNpcTemplateSetDetectionRangeCommand(char* args);
+        bool HandleNpcTemplateSetCallForHelpRangeCommand(char* args);
+        bool HandleNpcTemplateSetLeashRangeCommand(char* args);
+        bool HandleNpcTopTarget(char* args);
 
         bool HandleUnitSpeedInfoCommand(char* args);
+
+        bool HandlePDumpListCommand(char* args);
+        bool HandlePDumpLoadCommand(char* args);
+        bool HandlePDumpWriteCommand(char* args);
 
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
@@ -438,6 +578,8 @@ class ChatHandler
         bool HandleQuestStatusCommand(char* args);
         bool HandleQuestTestCommand(char* args);
 
+        bool HandlePetLearnSpellCommand(char* args);
+        bool HandlePetUnlearnSpellCommand(char* args);
         bool HandlePetListCommand(char* args);
         bool HandlePetRenameCommand(char* args);
         bool HandlePetDeleteCommand(char* args);
@@ -511,6 +653,8 @@ class ChatHandler
         bool HandleWhispersCommand(char* args);
         bool HandleModifyDrunkCommand(char* args);
         bool HandleSetGMChatCommand(char* args);
+        bool HandleToggleIllusionsCommand(char* args);
+        bool HandleSetHCChatCommand(char* args);
         bool HandleSetViewCommand(char* args);
 
         bool HandleSetTimeCommand(char* args);
@@ -552,12 +696,15 @@ class ChatHandler
         bool HandleAddItemSetCommand(char* args);
 
         bool HandleDiscBotStopCommand(char* args);
+        bool HandleBlacklistNameCommand(char* args);
 
         bool HandleBankCommand(char* args);
         bool HandleChangeWeatherCommand(char* args);
         bool HandleKickPlayerCommand(char* args);
 
         // GM Tickets commands
+        bool HandleGMTicketAssignToCommand(char* args);
+        bool HandleGMTicketUnAssignCommand(char* args);
         bool ViewTicketByIdOrName(char* ticketId, char* name);
         bool ViewTicket(GmTicket* ticket);
         bool HandleGMTicketListCommand(char* args);
@@ -591,6 +738,9 @@ class ChatHandler
         bool HandleSaleCommand(char* args);
         bool HandleReloadBgAmounts(char* args);
         bool HandleReloadGmLevelsCommand(char* args);
+        bool HandleReloadGmTicketTemplatesCommand(char* args);
+        bool HandleReloadDynamicVisibilityCommand(char* args);
+        bool HandleReloadAreaTriggerTeleportCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
@@ -601,16 +751,35 @@ class ChatHandler
         bool HandleModifyAccessoriesCommand(char* args);
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
+        bool HandleGuildNameCommand(char* args);
         bool HandleSendPacketCommand(char* args);
         bool HandleXPCommand(char* args);
-        bool HandleHCInviteCommand(char* args);
         bool HandlePlayCommand(char* args);
+        bool HandleRadioCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
 
+		///Suspicious statistic commands
+
+		bool HandleSuspiciousEnable(char* args);
+		bool HandleSuspiciousMovementEnable(char* args);
+		bool HandleSuspiciousMovementDetectValue(char* args);
+		bool HandleSuspiciousFishingEnable(char* args);
+		bool HandleSuspiciousKilledNPC(char* args);
+		bool HandleSuspiciousFishers(char* args);
+        bool HandleSuspiciousNotify(char* args);
+        bool HandleSuspiciousWhitelist(char* args);
+
+        bool HandleStopApiServerCommand(char* args);
+        bool HandleTranslateCommand(char* args);
+        bool HandleToggleInfernoModeCommand(char* args);
+
+        bool HandleToggleTrainingCommand(char* args);
+
         // Shop info
+        bool HandleShopRefundCommand(char* args);
         bool HandleGetShopLogs(char* args);
 
         // Temp simple waypoints
@@ -671,8 +840,11 @@ class ChatHandler
         bool HandleBanHelper(BanMode mode, char* args);
         bool HandleBanInfoHelper(uint32 accountid, char const* accountname);
         bool HandleUnBanHelper(BanMode mode, char* args);
+        bool HandleMuteHistoryHelper(uint32 accountid, char const* accountname);
         void HandleCharacterLevel(Player* player, ObjectGuid player_guid, uint32 oldlevel, uint32 newlevel);
+        SkillLineEntry const* FindSkillLineEntryFromProfessionName(char* args, std::string& nameOut);
         void HandleLearnSkillRecipesHelper(Player* player,uint32 skill_id);
+        void HandleLearnTrainerHelper(Player* player, TrainerSpellData const* tSpells);
         bool HandleGoHelper(Player* _player, uint32 mapid, float x, float y, float const* zPtr = nullptr, float const* ortPtr = nullptr);
         bool HandleGetValueHelper(Object* target, uint32 field, char* typeStr);
         bool HandlerDebugModValueHelper(Object* target, uint32 field, char* typeStr, char* valStr);
@@ -704,7 +876,7 @@ class ChatHandler
         bool GetDeletedCharacterInfoList(DeletedInfoList& foundList, bool useName, std::string searchString = "");
         std::string GenerateDeletedCharacterGUIDsWhereStr(DeletedInfoList::const_iterator& itr, DeletedInfoList::const_iterator const& itr_end);
         void HandleCharacterDeletedListHelper(DeletedInfoList const& foundList);
-        void HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo);
+        void HandleCharacterDeletedRestoreHelper(DeletedInfo& delInfo);
 
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
 
@@ -712,7 +884,9 @@ class ChatHandler
         WorldSession * m_session;                           // != nullptr for chat command call and nullptr for CLI command
 
         // common global flag
-        static bool load_command_table;
+        static std::map<uint32 /*Permission Id*/, std::string /*Permission Name*/> m_rbacPermissionNames;
+        static std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> m_rbacAccountGrantedPermissions;
+        static std::map<uint32 /*Account Id*/, uint32 /*Permission Mask*/> m_rbacAccountBannedPermissions;
         bool sentErrorMessage;
 };
 

@@ -27,15 +27,28 @@
 #include "Chat.h"
 #include "Config/Config.h"
 #include "Util.h"
+#include "ChannelBroadcaster.h"
 
-Channel::Channel(std::string const& name)
-    : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0)
+Channel::Channel(std::string const& name, Team InTeam)
+    : m_area_dependant(true), m_announce(true), m_moderate(false), m_levelRestricted(true), m_name(name), m_flags(0), m_securityLevel(0), m_channelId(0),
+    m_Team(InTeam)
 {
+    // TODO: Hackfix to properly identify built-in Chinese channels until/if we add support for multi language DBC
+    //  loading.
+    std::string convertedName = name;
+    if (convertedName.find(u8"综合 - ") != std::string::npos) convertedName = "General - ";
+    else if (convertedName.find(u8"交易 - ") != std::string::npos) convertedName = "Trade - ";
+    else if (convertedName.find(u8"本地防务 - ") != std::string::npos) convertedName = "LocalDefense - ";
+    else if (convertedName == u8"世界防务") convertedName = "WorldDefense";
+    else if (convertedName == u8"寻求组队") convertedName = "LookingForGroup";
+    else if (convertedName.find(u8"公会招募 - ") != std::string::npos) convertedName = "GuildRecruitment - ";
+
     // set special flags if built-in channel
-    ChatChannelsEntry const* ch = GetChannelEntryFor(name);
+    ChatChannelsEntry const* ch = sObjectMgr.GetChannelEntryFor(name);
+
     if (ch)                                                 // it's built-in channel
     {
-        m_channelId = ch->ChannelID;                        // only built-in channel have channel id != 0
+        m_channelId = ch->id;                               // only built-in channel have channel id != 0
         m_announce = false;                                 // no join/leave announces
 
         m_flags |= CHANNEL_FLAG_GENERAL;                    // for all built-in channels
@@ -61,21 +74,28 @@ Channel::Channel(std::string const& name)
             m_name = "INVALIDCHANNEL";
             m_announce = false;
         }
-
-        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Toogle" || m_name == u8"Roleplay")
+        // Disable join/left announcements for Russians & Germans:
+        if (m_name == u8"Ru" || m_name == u8"Welt" || m_name == u8"China")
         {
-            m_flags |= CHANNEL_FLAG_GENERAL;
+            m_flags |= CHANNEL_FLAG_NATIONAL;
             m_announce = false;
+            return;
         }
         else
         {
             m_flags |= CHANNEL_FLAG_CUSTOM;
             m_levelRestricted = false;
         }
+        if (m_name == u8"World")
+        {
+            m_flags |= CHANNEL_FLAG_GENERAL;
+            m_flags &= ~CHANNEL_FLAG_CUSTOM;
+            m_announce = false;
+        }
     }
 }
 
-void Channel::Join(ObjectGuid guid, const char *password)
+void Channel::Join(ObjectGuid guid, const char *password, bool checkPassword)
 {
     WorldPacket data;
     if (IsOn(guid))
@@ -95,7 +115,7 @@ void Channel::Join(ObjectGuid guid, const char *password)
         return;
     }
 
-    if (m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
+    if (checkPassword && m_password.length() > 0 && strcmp(password, m_password.c_str()) != 0)
     {
         MakeWrongPassword(&data);
         SendToOne(&data, guid);
@@ -659,19 +679,31 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
         }
     }
 
-    // Send channel message
-    if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+    
+    if (pPlayer && IsDefenseChannel(GetChannelId()))
+        lang = sChrRacesStore.LookupEntry(pPlayer->GetRace())->baseLanguage;
+    else if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
         lang = LANG_UNIVERSAL;
 
+    // Send channel message
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, text, Language(lang), pPlayer ? pPlayer->GetChatTag() : 0, guid, nullptr, ObjectGuid(), "", m_name.c_str(), honor_rank);
 
     if (!skipCheck && pPlayer &&
-       (pPlayer->GetSession()->IsFingerprintBanned() ||
-        ((pPlayer->GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS) && pPlayer->GetSession()->GetAccountMaxLevel() < sWorld.getConfig(CONFIG_UINT32_PUB_CHANS_MUTE_VANISH_LEVEL))))
+        (pPlayer->GetSession()->IsFingerprintBanned() ||
+            ((pPlayer->GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS) && pPlayer->GetSession()->GetAccountMaxLevel() < sWorld.getConfig(CONFIG_UINT32_PUB_CHANS_MUTE_VANISH_LEVEL))))
+    {
         pPlayer->GetSession()->SendPacket(&data);
+    }
     else
+    {
         SendToAll(&data, (!skipCheck && !m_players[guid].IsModerator()) ? guid : ObjectGuid());
+    }
+}
+
+void Channel::AsyncSay(ObjectGuid guid, const char* what, uint32 lang /*= LANG_UNIVERSAL*/, bool skipCheck /*= false*/)
+{
+    sWorld.GetChannelBroadcaster()->EnqueueMessage(what, GetName(), guid, lang, GetTeam(), skipCheck);
 }
 
 void Channel::Invite(ObjectGuid guid, const char *targetName)

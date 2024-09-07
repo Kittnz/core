@@ -355,7 +355,7 @@ std::string TransmogMgr::GetTransmogStatus()
 			uint8 InventorySlotId = ServerSlotToClientInventorySlotId(slot);
 
 			//tmogProto->InventoryType
-			if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
+			if (ItemPrototype const* tmogProto = sObjectMgr.GetItemPrototype(pItem->GetTransmogrification()))
 				status += std::to_string(InventorySlotId) + ":" + std::to_string(tmogProto->SourceItemId) + ",";
 			else
 				status += std::to_string(0) + ":0" + ",";
@@ -373,14 +373,14 @@ std::string TransmogMgr::GetTransmogStatus()
 bool TransmogMgr::HasTransmog(uint32 newItemId)
 {
 
-    ItemPrototype const* newItemProto = ObjectMgr::GetItemPrototype(newItemId);
+    ItemPrototype const* newItemProto = sObjectMgr.GetItemPrototype(newItemId);
 
     if (!newItemProto)
         return true;
 
     for (auto& collectedItemId : _transmogs)
     {
-        ItemPrototype const* collectedItemProto = ObjectMgr::GetItemPrototype(collectedItemId);
+        ItemPrototype const* collectedItemProto = sObjectMgr.GetItemPrototype(collectedItemId);
         if (!collectedItemProto)
             continue;
         if (newItemProto->DisplayInfoID == collectedItemProto->DisplayInfoID && (newItemProto->Class == collectedItemProto->Class && newItemProto->SubClass == newItemProto->SubClass))
@@ -395,7 +395,7 @@ void TransmogMgr::AddToCollection(uint32 itemId)
     if (HasTransmog(itemId))
         return;
 
-    ItemPrototype const* proto = ObjectMgr::GetItemPrototype(itemId);
+    ItemPrototype const* proto = sObjectMgr.GetItemPrototype(itemId);
     if (!proto)
         return;
     if (!sObjectMgr.IsItemTypeTransmoggable(proto->InventoryType))
@@ -418,7 +418,7 @@ std::vector<uint32> TransmogMgr::GetAvailableTransmogs(uint8 InventorySlotId, ui
 
 	std::vector<uint32> tmogs;
 
-    ItemPrototype const* destItemProto = ObjectMgr::GetItemPrototype(destItemId);
+    ItemPrototype const* destItemProto = sObjectMgr.GetItemPrototype(destItemId);
 	if (!destItemProto)
 	{
 		tmogs.push_back(0); // 1st id
@@ -428,7 +428,7 @@ std::vector<uint32> TransmogMgr::GetAvailableTransmogs(uint8 InventorySlotId, ui
     	
 	for (auto& item : _transmogs)
 	{
-		if (ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item))
+		if (ItemPrototype const* proto = sObjectMgr.GetItemPrototype(item))
 		{
 
 			if (STUPID_RESTRICTIONS) {
@@ -566,7 +566,7 @@ void TransmogMgr::SendAvailableTransmogs(uint8 InventorySlotId, uint8 invType, u
 {
 	uint32 numPossibleTransmogs;
 
-	ItemPrototype const* destItemProto = ObjectMgr::GetItemPrototype(destItemId);
+	ItemPrototype const* destItemProto = sObjectMgr.GetItemPrototype(destItemId);
 	if (!destItemProto)
 	{
 		_owner->SendAddonMessage(prefix, "SendAvailableTransmogs:Error:CantFindProto");

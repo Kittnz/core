@@ -36,7 +36,7 @@ INSTANTIATE_SINGLETON_1(RealmList);
 // list sorted from high to low build and first build used as low bound for accepted by default range (any > it will accepted by realmd at least)
 static RealmBuildInfo ExpectedRealmdClientBuilds[] =
 {
-	{7060,  1, 16, 5, ' ', {{}}, {{}}}, 
+	{7100,  1, 17, 1, ' ', {{}}, {{}}}, 
     {0,     0, 0, 0,  ' ', {{}}, {{}}} // terminator
 };
 
@@ -148,7 +148,7 @@ void RealmList::UpdateRealms(bool init)
             UpdateRealm(
                 fields[0].GetUInt32(), fields[1].GetCppString(), realmAddress, fields[3].GetUInt32(),
                 fields[4].GetUInt8(), RealmFlags(realmflags), fields[6].GetUInt8(),
-                (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR),
+                (allowedSecurityLevel <= SEC_SIGMACHAD ? AccountTypes(allowedSecurityLevel) : SEC_SIGMACHAD),
                 fields[8].GetFloat());
 
             if(init)

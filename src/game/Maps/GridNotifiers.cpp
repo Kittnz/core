@@ -95,7 +95,7 @@ VisibleNotifier::Notify()
 
     // generate outOfRange for not iterate objects
     i_data.AddOutOfRangeGUID(i_clientGUIDs);
-    std::unique_lock<std::shared_timed_mutex> lock(player.m_visibleGUIDs_lock);
+    std::unique_lock<std::shared_mutex> lock(player.m_visibleGUIDs_lock);
     for (ObjectGuidSet::iterator itr = i_clientGUIDs.begin(); itr != i_clientGUIDs.end(); ++itr)
     {
         if ((*itr).IsPlayer())
@@ -108,7 +108,7 @@ VisibleNotifier::Notify()
         {
             // Make sure mobs who become out of range leave combat before grid unload.
             if (Creature* targetCreature = player.GetMap()->GetCreature(*itr))
-                if (targetCreature->IsInCombat())
+                if (targetCreature->IsInCombat() && player.GetCamera().GetBody() == player.GetCamera().GetOwner())
                     targetCreature->GetThreatManager().modifyThreatPercent(&player, -101);
         }
 

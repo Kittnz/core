@@ -470,7 +470,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
             // temporary measure to remove false positives
             if (GetLastMovementInfo().ctime - movementInfo.ctime < 1000)
             {
-                _anticheat->RecordCheatInternal(CHEAT_TYPE_TIME_BACK, "Clock moved in reverse from %u to %u",
+                _anticheat->RecordCheatInternal(CHEAT_TYPE_TIME_BACK, "Clock moved in reverse from %u to %u, possible bot!",
                     GetLastMovementInfo().ctime, movementInfo.ctime);
             }
             else
@@ -1040,7 +1040,7 @@ bool Movement::CheckTeleport(uint16 opcode, MovementInfo& movementInfo)
         {
             // XXX temporary debug logging
             sLog.out(LOG_ANTICHEAT_BASIC, "ANTICHEAT: Player %s sent bad movement flags (0x%lx) with opcode %s (%u)",
-                mover->GetName(), moveFlags, LookupOpcodeName(opcode), opcode);
+                mover->GetName(), (uint32)moveFlags, LookupOpcodeName(opcode), opcode);
             movementInfo.RemoveMovementFlag(MovementFlags(removeFlags));
         }
     }

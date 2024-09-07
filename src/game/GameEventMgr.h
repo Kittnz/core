@@ -54,6 +54,7 @@ struct GameEventData
     std::string description;
     uint8 hardcoded;
     uint8 disabled;
+    uint8 requiredPhase;
     uint8 leapDays;                                         // Leap days between current and start date
 
     bool isValid() const { return length > 0; }
@@ -94,7 +95,7 @@ struct WorldEvent
 };
 
 typedef std::pair<uint32, GameEventCreatureData> GameEventCreatureDataPair;
-typedef std::list<WorldEvent*> HardcodedEventList;
+typedef std::vector<WorldEvent*> HardcodedEventList;
 
 class GameEventMgr
 {
@@ -121,7 +122,7 @@ class GameEventMgr
         uint32 Initialize();
         void StartEvent(uint16 event_id, bool overwrite = false, bool resume = false);
         void StopEvent(uint16 event_id, bool overwrite = false);
-        void EnableEvent(uint16 event_id, bool enable);
+        void EnableEvent(uint16 event_id, bool enable, bool updateDB = true);
         bool IsEnabled(uint16 event_id);
         template<typename T>
         int16 GetGameEventId(uint32 guid_or_poolid);
@@ -143,23 +144,23 @@ class GameEventMgr
         void UpdateEventQuests(uint16 event_id, bool activate);
         void SendEventMails(int16 event_id);
     protected:
-        typedef std::list<uint32> GuidList;
-        typedef std::list<uint16> IdList;
+        typedef std::vector<uint32> GuidList;
+        typedef std::vector<uint16> IdList;
         typedef std::vector<GuidList> GameEventGuidMap;
         typedef std::vector<IdList> GameEventIdMap;
-        typedef std::list<GameEventCreatureDataPair> GameEventCreatureDataList;
+        typedef std::vector<GameEventCreatureDataPair> GameEventCreatureDataList;
         typedef std::vector<GameEventCreatureDataList> GameEventCreatureDataMap;
         typedef std::multimap<uint32, uint32> GameEventCreatureDataPerGuidMap;
         typedef std::pair<GameEventCreatureDataPerGuidMap::const_iterator,GameEventCreatureDataPerGuidMap::const_iterator> GameEventCreatureDataPerGuidBounds;        
 
-        typedef std::list<uint32> QuestList;
+        typedef std::vector<uint32> QuestList;
         typedef std::vector<QuestList> GameEventQuestMap;
         GameEventQuestMap mGameEventQuests;                 // events size, only positive event case
 
         GameEventCreatureDataMap mGameEventCreatureData;    // events size, only positive event case
         GameEventCreatureDataPerGuidMap mGameEventCreatureDataPerGuid;
 
-        typedef std::list<GameEventMail> MailList;
+        typedef std::vector<GameEventMail> MailList;
         typedef std::vector<MailList> GameEventMailMap;
         GameEventMailMap  mGameEventMails;                  // events*2-1
         

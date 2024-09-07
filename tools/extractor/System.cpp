@@ -104,7 +104,9 @@ const char* CONF_mpq_list[] =
     "terrain.MPQ",
     "patch.MPQ",
     "patch-2.MPQ",
-    "patch-3.MPQ"
+    "patch-3.MPQ",
+    "patch-4.MPQ",
+    "patch-5.MPQ"
 };
 
 static std::unordered_multimap<uint32, std::pair<uint32, uint32>> shangAdts =
@@ -998,7 +1000,6 @@ inline void CloseMPQFiles()
 
 int main(int argc, char* arg[])
 {
-    std::cin.get();
     printf("Map & DBC Extractor\n");
     printf("===================\n\n");
 

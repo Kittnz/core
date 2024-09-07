@@ -78,11 +78,24 @@ enum ChannelId
     CHANNEL_ID_LOCAL_DEFENSE        = 22,
     CHANNEL_ID_WORLD_DEFENSE        = 23,
     CHANNEL_ID_GUILD_RECRUITMENT    = 25,
-    CHANNEL_ID_LOOKING_FOR_GROUP    = 26
+    CHANNEL_ID_LOOKING_FOR_GROUP    = 26, // It's actually 24 in DBC!
+    CHANNEL_ID_WORLD                = 27
 };
+
+inline bool IsDefenseChannel(uint32 channelId)
+{
+    switch (channelId)
+    {
+        case CHANNEL_ID_LOCAL_DEFENSE:
+        case CHANNEL_ID_WORLD_DEFENSE:
+            return true;
+    }
+    return false;
+}
 
 class Channel
 {
+    friend class ChannelBroadcaster;
     public:
     enum ChannelFlags
     {
@@ -95,6 +108,7 @@ class Channel
         CHANNEL_FLAG_CITY       = 0x20,
         CHANNEL_FLAG_LFG        = 0x40,
         CHANNEL_FLAG_VOICE      = 0x80,
+        CHANNEL_FLAG_NATIONAL   = 0x100,
         // General                  0x18 = 0x10 | 0x08
         // Trade                    0x3C = 0x20 | 0x10 | 0x08 | 0x04
         // LocalDefence             0x18 = 0x10 | 0x08
@@ -156,14 +170,14 @@ class Channel
         }
     };
 
-        Channel(std::string const& name);
-        std::string GetName() const { return m_name; }
+        Channel(std::string const& name, Team InTeam);
+        std::string const& GetName() const { return m_name; }
         uint32 GetChannelId() const { return m_channelId; }
         bool IsConstant() const { return m_channelId != 0; }
         bool IsAnnounce() const { return m_announce; }
         bool IsLevelRestricted() const { return m_levelRestricted; }
         bool IsLFG() const { return GetFlags() & CHANNEL_FLAG_LFG; }
-        std::string GetPassword() const { return m_password; }
+        std::string const& GetPassword() const { return m_password; }
         void SetPassword(std::string const& npassword) { m_password = npassword; }
         void SetAnnounce(bool nannounce) { m_announce = nannounce; }
         uint32 GetNumPlayers() const { return m_players.size(); }
@@ -171,8 +185,9 @@ class Channel
         bool HasFlag(uint8 flag) { return m_flags & flag; }
         void SetSecurityLevel(uint8 sec) { m_securityLevel = sec; }
         uint8 GetSecurityLevel() const { return m_securityLevel; }
+        Team GetTeam() const { return m_Team;}
 
-        void Join(ObjectGuid guid, const char *password);
+        void Join(ObjectGuid guid, const char *password, bool checkPassword = true);
         void Leave(ObjectGuid guid, bool send = true);
         void KickOrBan(ObjectGuid guid, const char *targetName, bool ban);
         void Kick(ObjectGuid guid, const char *targetName) { KickOrBan(guid, targetName, false); }
@@ -190,7 +205,7 @@ class Channel
         void List(PlayerPointer guid);
         void Announce(ObjectGuid guid);
         void Moderate(ObjectGuid guid);
-        void Say(ObjectGuid guid, const char *what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
+        void AsyncSay(ObjectGuid guid, const char *what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
         void Invite(ObjectGuid guid, const char *newp);
         void Voice(ObjectGuid guid1, ObjectGuid guid2);
         void DeVoice(ObjectGuid guid1, ObjectGuid guid2);
@@ -203,6 +218,10 @@ class Channel
         */
         static void MakeNotOnPacket(WorldPacket* data, const std::string &name);
     private:
+
+        // Should be only called from ChannelBroadcaster
+		void Say(ObjectGuid guid, const char* what, uint32 lang = LANG_UNIVERSAL, bool skipCheck = false);
+
         // initial packet data (notify type and channel name)
         void MakeNotifyPacket(WorldPacket *data, uint8 notify_type);
         // type specific packet data
@@ -291,6 +310,7 @@ class Channel
         std::string m_password;
         uint8       m_flags;
         uint8       m_securityLevel;
+        Team        m_Team;
         uint32      m_channelId;
         ObjectGuid  m_ownerGuid;
 

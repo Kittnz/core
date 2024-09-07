@@ -61,7 +61,7 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, m_BannerTimers[node].type, m_BannerTimers[node].teamIndex, false);
                 }
             }
-
+            
             // 1-minute to occupy a tower from contested state
             if (m_NodeTimers[node])
             {
@@ -80,7 +80,8 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
                     NodeOccupied(node, (teamIndex == 0) ? ALLIANCE : HORDE);
 
-                    RewardHonorToTeam(35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+                    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+                    RewardHonorToTeam(isBGWeekend ? 70 : 35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
 
                     UpdateNodeWorldState(node);
 
@@ -100,6 +101,19 @@ void BattleGroundSV::Update(uint32 diff)
 
             if (node >= BG_SV_HERALD_POINT)
                 continue;
+
+            if (uint32 buffSpell = GetAuraForTower(node))
+            {
+                switch (m_Nodes[node])
+                {
+                    case BG_SV_NODE_STATUS_ALLY_OCCUPIED:
+                        ApplyTowerBuffOnTeam(buffSpell, ALLIANCE);
+                        break;
+                    case BG_SV_NODE_STATUS_HORDE_OCCUPIED:
+                        ApplyTowerBuffOnTeam(buffSpell, HORDE);
+                        break;
+                }
+            }
 
             for (uint8 team = 0; team < BG_TEAMS_COUNT; ++team)
                 if (m_Nodes[node] == team + BG_SV_NODE_TYPE_OCCUPIED)
@@ -134,20 +148,20 @@ void BattleGroundSV::StartingEventCloseDoors()
     for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
     {
         for (uint8 j = 0; j < 5; j++)
-            SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_NEUTRAL + j + (i * 5)], RESPAWN_ONE_DAY);
+            SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_NEUTRAL + j + (i * 5)], RESPAWN_NEVER);
     }
     // despawn all flagstands
     //for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
-        //SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_FLAGSTAND + i], RESPAWN_ONE_DAY);
+        //SpawnObject(m_BgObjects[BG_SV_OBJECT_BANNER_FLAGSTAND + i], RESPAWN_NEVER);
     // despawn all buffs
     for (uint8 i = 0; i < 6; ++i)
     {
         for (uint8 j = 0; j < 3; j++)
-            SpawnObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + j + (i * 3)], RESPAWN_ONE_DAY);
+            SpawnObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + j + (i * 3)], RESPAWN_NEVER);
     }
     // despawn all chests
     for (uint8 i = 0; i < 6; ++i)
-        SpawnObject(m_BgObjects[BG_SV_OBJECT_CHEST + i], RESPAWN_ONE_DAY);
+        SpawnObject(m_BgObjects[BG_SV_OBJECT_CHEST + i], RESPAWN_NEVER);
 }
 
 void BattleGroundSV::StartingEventOpenDoors()
@@ -352,7 +366,7 @@ void BattleGroundSV::Reset()
         m_BannerTimers[i].timer = 0;
     }
 
-    generalsActive = false;
+    m_generalsActive = false;
 
     for (uint8 i = 0; i < BG_SV_CREATURE_MAX; ++i)
         if (m_BgCreatures[i])
@@ -362,10 +376,12 @@ void BattleGroundSV::Reset()
 void BattleGroundSV::EndBattleGround(Team winner)
 {
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+
     // rewards
-    RewardReputationToTeam(1007, 150, winner);
-    RewardHonorToTeam(450, winner);
-    RewardHonorToTeam(120, loser);
+    bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
+    RewardReputationToTeam(1007, isBGWeekend ? 150 : 75, winner);
+    RewardHonorToTeam(isBGWeekend ? 1200 : 600, winner);
+    RewardHonorToTeam(isBGWeekend ? 600 : 300, loser);
 
     BattleGround::EndBattleGround(winner);
 }
@@ -505,18 +521,48 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     PlaySoundToAll(sound);
 }
 
+static void UpdateGeneralHealth(Creature* pGeneral, uint32 ourSparks, uint32 enemySparks)
+{
+    int32 health = pGeneral->GetCreatureInfo()->health_max;
+    health = health + (health / 3) * ourSparks - (health / 6) * enemySparks;
+    if (health <= 0)
+        health = pGeneral->GetCreatureInfo()->health_max;
+
+    pGeneral->SetMaxHealth(health);
+}
+
+void BattleGroundSV::AddTeamSparks(TeamId team, uint32 count)
+{
+    m_resources[team] += count;
+    UpdateTeamSparks(team);
+
+    if (IsGeneralsActive())
+    {
+        if (Creature* pHumanLeader = GetBgMap()->GetCreature(m_allianceGeneralGuid))
+            UpdateGeneralHealth(pHumanLeader, GetTeamSparks(TEAM_ALLIANCE), GetTeamSparks(TEAM_HORDE));
+        if (Creature* pOrcLeader = GetBgMap()->GetCreature(m_hordeGeneralGuid))
+            UpdateGeneralHealth(pOrcLeader, GetTeamSparks(TEAM_HORDE), GetTeamSparks(TEAM_ALLIANCE));
+    }
+    else
+    {
+        uint32 totalSparks = GetTeamSparks(TEAM_ALLIANCE) + GetTeamSparks(TEAM_HORDE);
+        uint32 maxSparks = sWorld.getConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT);
+
+        if (totalSparks >= maxSparks)
+            StartFinalEvent();
+    }
+}
+
 void BattleGroundSV::StartFinalEvent()
 {
-    generalsActive = true;
+    m_generalsActive = true;
     SendYellToAll(LANG_BG_SV_SUMMON_DRAGON, LANG_UNIVERSAL, m_BgCreatures[BG_SV_CREATURE_HERALD]);
 
     /*human leader*/
-    Creature* humanLeader = AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_LeaderPos[0].x, BG_SV_LeaderPos[0].y, BG_SV_LeaderPos[0].z, BG_SV_LeaderPos[0].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS);
-    if (humanLeader)
+    if (Creature* pHumanLeader = AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_LeaderPos[0].x, BG_SV_LeaderPos[0].y, BG_SV_LeaderPos[0].z, BG_SV_LeaderPos[0].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS))
     {
-        uint32 newHp = humanLeader->GetMaxHealth() * (GetTeamSparks(TEAM_ALLIANCE) > 1 ? GetTeamSparks(TEAM_ALLIANCE) : 1);
-        humanLeader->SetHealth(newHp);
-        humanLeader->SetMaxHealth(newHp);
+        m_allianceGeneralGuid = pHumanLeader->GetObjectGuid();
+        UpdateGeneralHealth(pHumanLeader, GetTeamSparks(TEAM_ALLIANCE), GetTeamSparks(TEAM_HORDE));
     }
 
     /*human leader guards*/
@@ -524,12 +570,10 @@ void BattleGroundSV::StartFinalEvent()
         AddCreature(BG_SV_LeaderGuardsPos[0][i].entry, BG_SV_CREATURE_LEADER_GUARDS_A + i, BG_SV_LeaderGuardsPos[0][i].x, BG_SV_LeaderGuardsPos[0][i].y, BG_SV_LeaderGuardsPos[0][i].z, BG_SV_LeaderGuardsPos[0][i].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS);
 
     /*orc leader*/
-    Creature* orcLeader = AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_LeaderPos[1].x, BG_SV_LeaderPos[1].y, BG_SV_LeaderPos[1].z, BG_SV_LeaderPos[1].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS);
-    if (orcLeader)
+    if (Creature* pOrcLeader = AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_LeaderPos[1].x, BG_SV_LeaderPos[1].y, BG_SV_LeaderPos[1].z, BG_SV_LeaderPos[1].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS))
     {
-        uint32 newHp = orcLeader->GetMaxHealth() * (GetTeamSparks(TEAM_HORDE) > 1 ? GetTeamSparks(TEAM_HORDE) : 1);
-        orcLeader->SetHealth(newHp);
-        orcLeader->SetMaxHealth(newHp);
+        m_hordeGeneralGuid = pOrcLeader->GetObjectGuid();
+        UpdateGeneralHealth(pOrcLeader, GetTeamSparks(TEAM_HORDE), GetTeamSparks(TEAM_ALLIANCE));
     }
 
     /*orc leader guards*/
@@ -555,7 +599,7 @@ void BattleGroundSV::CreateBanner(uint8 node, uint8 type, uint8 teamIndex, bool 
 void BattleGroundSV::DelBanner(uint8 node, uint8 type, uint8 teamIndex)
 {
     uint8 obj = type + teamIndex + (node * 5);
-    SpawnObject(m_BgObjects[obj], RESPAWN_ONE_DAY);
+    SpawnObject(m_BgObjects[obj], RESPAWN_NEVER);
 }
 
 void BattleGroundSV::NodeOccupied(uint8 node, Team team)
@@ -585,6 +629,43 @@ void BattleGroundSV::NodeDeOccupied(uint8 node)
     uint8 guardType = (node == 0) ? BG_SV_CREATURE_TOWER_GUARDS_A : BG_SV_CREATURE_TOWER_GUARDS_H;
     for (uint8 i = 0; i < 5; ++i)
         DelCreature(guardType+i);
+}
+
+void BattleGroundSV::ApplyTowerBuffOnTeam(uint32 spellId, Team teamId)
+{
+    for (const auto& itr : m_Players)
+    {
+        Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
+
+        if (!pPlayer)
+        {
+            sLog.outError("BattleGround:ApplyTowerBuffOnTeam: %s not found!", itr.first.GetString().c_str());
+            continue;
+        }
+
+        Team team = itr.second.PlayerTeam;
+        if (!team) team = pPlayer->GetTeam();
+
+        if (team == teamId)
+        {
+            if (pPlayer->IsAlive() && !pPlayer->HasAura(spellId))
+                pPlayer->CastSpell(pPlayer, spellId, true);
+        }
+        else
+            pPlayer->RemoveAurasDueToSpell(spellId);
+    }
+}
+
+uint32 BattleGroundSV::GetAuraForTower(uint8 node)
+{
+    switch (node)
+    {
+        case BG_SV_HUMAN_TOWER:
+            return SV_SPELL_NORTH_TOWER;
+        case BG_SV_ORC_TOWER:
+            return SV_SPELL_SOUTH_TOWER;
+    }
+    return 0;
 }
 
 uint32 BattleGroundSV::GetTowerNameId(uint8 node)

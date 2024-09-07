@@ -6,8 +6,10 @@
 
 #include "Util.h"
 #include "World.h"
+#include "GuildMgr.h"
 #include "ChannelMgr.h"
 #include "Anticheat.h"
+#include "re2/re2.h"
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -62,8 +64,9 @@ struct MessageBlock
     uint8 type;
     uint8 count;
     time_t time;
-    Channel* channel;
-    Guild* guild;
+    std::string channelName;
+    uint32 guildId;
+    bool skipChecking = false;
 };
 
 struct MessageCounter
@@ -107,7 +110,7 @@ class Antispam : public AntispamInterface
         void LoadConfig() override;
         
         std::string NormalizeMessage(const std::string& msg, uint32 mask = 0) override;
-        bool FilterMessage(const std::string &msg) override;
+        bool FilterMessage(MessageBlock const& msg) override;
         
         bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) override;
 
@@ -122,6 +125,7 @@ class Antispam : public AntispamInterface
 
         void BlacklistWord(std::string word) override;
         void WhitelistWord(std::string word) override;
+        void AddRegexBlacklist(std::string pattern) override;
 
         StringSet const* GetMutedMessagesForAccount(uint32 accountId) override
         {
@@ -168,6 +172,7 @@ class Antispam : public AntispamInterface
         bool m_banEnabled;
         bool m_mergeAllWhispers;
 
+        std::vector<std::unique_ptr<re2::RE2>> m_regexBlacklist;
         StringSet m_blackList;
         StringMap m_replacement;
         ScoreMap m_scores[MSG_TYPE_MAX];

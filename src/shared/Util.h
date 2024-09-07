@@ -24,10 +24,20 @@
 #include "Common.h"
 #include "Duration.h"
 #include "Errors.h"
-#include "Log.h" // Zerix: Again, here we are asking for MANGOS_ASSERT to work. What's up?
+#include "OptickIntegration.h"
 
 #include <string>
 #include <vector>
+#include <memory>
+
+#include "fmt/core.h"
+#include "Utilities/robin_hood.h"
+
+template <typename T, typename std::enable_if<std::is_enum_v<T>>::type>
+auto format_as(T enumx)
+{
+    return fmt::underlying(enumx);
+}
 
 class Tokenizer
 {
@@ -96,6 +106,29 @@ void stripLineInvisibleChars(std::string &src);
 std::string secsToTimeString(time_t timeInSecs, bool shortText = false, bool hoursOnly = false);
 uint32 TimeStringToSecs(std::string const& timestring);
 std::string TimeToTimestampStr(time_t t);
+
+std::string NormalizeString(const std::string& InStr);
+
+
+
+
+template<typename ... Args>
+std::string string_format(const std::string& format, Args ... args)
+{
+    return fmt::format(format, args...);
+}
+
+template<typename ... Args>
+std::string string_format_depr(const std::string& format, Args ... args)
+{
+    int size_s = std::snprintf(nullptr, 0, format.c_str(), args ...) + 1; // Extra space for '\0'
+    if (size_s <= 0) { throw std::runtime_error("Error during formatting."); }
+    auto size = static_cast<size_t>(size_s);
+    std::unique_ptr<char[]> buf(new char[size]);
+    std::snprintf(buf.get(), size, format.c_str(), args ...);
+    return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
+}
+
 
 inline uint32 secsToTimeBitFields(time_t secs)
 {
@@ -213,6 +246,9 @@ bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str);
 // size==real string size
 bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str);
 
+void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
+void ReplaceAllW(std::wstring& str, const std::wstring& from, const std::wstring& to);
+
 // set string to "" if invalid utf8 sequence
 size_t utf8length(std::string& utf8str);
 void utf8truncate(std::string& utf8str, size_t len);
@@ -224,6 +260,17 @@ inline bool isBasicLatinCharacter(wchar_t wchar)
     if (wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
         return true;
     return false;
+}
+
+
+inline bool isPrintableAsciiCharacter(wchar_t wchar)
+{
+    return wchar >= 0x20 && wchar <= 0x7E;
+}
+
+inline bool isPrintableExtendedAsciiCharacter(wchar_t wchar)
+{
+    return wchar >= 0x20 && wchar < 0xFF;
 }
 
 inline bool isExtendedLatinCharacter(wchar_t wchar)
@@ -348,10 +395,38 @@ inline bool isCyrillicString(std::wstring const& wstr, bool numericOrSpace)
     return true;
 }
 
+inline bool hasCyrillic(std::wstring const& str)
+{
+    for (const auto& elem: str)
+    {
+        if (isCyrillicCharacter(elem))
+            return true;
+    }
+    return false;
+}
+
+inline bool hasChinese(std::wstring const& str)
+{
+    for (const auto& elem : str)
+    {
+        if (isEastAsianCharacter(elem))
+            return true;
+    }
+    return false;
+}
+
 inline bool isEastAsianString(std::wstring const& wstr, bool numericOrSpace)
 {
     for(size_t i = 0; i < wstr.size(); ++i)
         if(!isEastAsianCharacter(wstr[i]) && (!numericOrSpace || !isNumericOrSpace(wstr[i])))
+            return false;
+    return true;
+}
+
+inline bool IsAsciiOnly(std::wstring const& wstr)
+{
+    for (size_t i = 0; i < wstr.size(); ++i)
+        if (!isPrintableExtendedAsciiCharacter(wstr[i]))
             return false;
     return true;
 }
@@ -487,3 +562,21 @@ inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
 }
 
 std::string MoneyToString(uint32 copper);
+
+std::string GetCurrentTimeString();
+
+/* TODO FOR JAMEY: UNCOMMENT WHEN YOU FIX ERRORS
+template <typename T>
+struct reversion_wrapper { T& iterable; };
+
+template <typename T>
+auto begin(reversion_wrapper<T> w) { return std::rbegin(w.iterable); }
+
+template <typename T>
+auto end(reversion_wrapper<T> w) { return std::rend(w.iterable); }
+
+template <typename T>
+reversion_wrapper<T> reverse(T&& iterable) { return { iterable }; }
+*/
+
+void thread_name(const char* name);

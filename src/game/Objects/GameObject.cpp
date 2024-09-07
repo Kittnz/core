@@ -50,6 +50,7 @@
 #include <G3D/Box.h>
 #include <G3D/CoordinateFrame.h>
 #include <G3D/Quat.h>
+#include "SuspiciousStatisticMgr.h"
 
 bool QuaternionData::isUnit() const
 {
@@ -107,7 +108,19 @@ GameObject::~GameObject()
     delete i_AI;
     delete m_model;
 
-    MANGOS_ASSERT(m_dynObjGUIDs.empty());
+    MANGOS_ASSERT(m_spellDynObjects.empty());
+}
+
+bool CanOnlyBeLootedByPlayersOnMapAtSpawn(uint32 entry)
+{
+    switch (entry)
+    {
+        case 2020042: // Favor of Erennius (Solnius - Emerald Sanctum)
+        case 181366: // Four Horseman Chest (Four Horsemen - Naxxramas)
+        case 179703: // Cache of the Firelord (Majordomo Executus - Molten Core)
+            return true;
+    }
+    return false;
 }
 
 void GameObject::AddToWorld()
@@ -129,6 +142,17 @@ void GameObject::AddToWorld()
 
     if (!i_AI)
         AIM_Initialize();
+
+    if (CanOnlyBeLootedByPlayersOnMapAtSpawn(GetEntry()))
+    {
+        m_allowedLooters.clear();
+        Map::PlayerList const& pList = GetMap()->GetPlayers();
+        for (const auto& it : pList)
+        {
+            if (Player* pPlayer = it.getSource())
+                m_allowedLooters.insert(pPlayer->GetObjectGuid());
+        }
+    }
 }
 
 void GameObject::AIM_Initialize()
@@ -224,7 +248,6 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
     SetGoType(GameobjectTypes(goinfo->type));
 
     SetGoAnimProgress(animprogress);
-    SetName(goinfo->name);
 
     if (GetGOInfo()->IsLargeGameObject())
     {
@@ -345,6 +368,22 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                         m_lootState = GO_READY;             // can be successfully open with some chance
                     }
                     return;
+                }
+                case GAMEOBJECT_TYPE_CHEST:
+                {
+                    if (m_goInfo->chest.chestRestockTime)
+                    {
+                        if (m_cooldownTime <= time(nullptr))
+                        {
+                            m_cooldownTime = 0;
+                            m_lootState = GO_READY;
+                            ForceValuesUpdateAtIndex(GAMEOBJECT_DYN_FLAGS);
+                        }
+
+                        return;
+                    }
+                    m_lootState = GO_READY;
+                    break;
                 }
                 default:
                     m_lootState = GO_READY;                 // for other GO is same switched without delay to GO_READY
@@ -556,26 +595,42 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
         }
         case GO_JUST_DEACTIVATED:
         {
-            // if Gameobject should cast spell, then this, but some GOs (type = 10) should be destroyed
-            if (GetGoType() == GAMEOBJECT_TYPE_GOOBER)
+            switch (GetGoType())
             {
-                uint32 spellId = GetGOInfo()->goober.spellId;
-
-                if (spellId)
+                // if Gameobject should cast spell, then this, but some GOs (type = 10) should be destroyed
+                case GAMEOBJECT_TYPE_GOOBER:
                 {
-                    // TODO find out why this is here, because m_UniqueUsers is empty for GAMEOBJECT_TYPE_GOOBER
-                    for (const auto& guid : m_UniqueUsers)
+                    uint32 spellId = GetGOInfo()->goober.spellId;
+
+                    if (spellId)
                     {
-                        if (Player* owner = GetMap()->GetPlayer(guid))
-                            owner->CastSpell(owner, spellId, false, nullptr, nullptr, GetObjectGuid());
+                        // TODO find out why this is here, because m_UniqueUsers is empty for GAMEOBJECT_TYPE_GOOBER
+                        for (const auto& guid : m_UniqueUsers)
+                        {
+                            if (Player* owner = GetMap()->GetPlayer(guid))
+                                owner->CastSpell(owner, spellId, false, nullptr, nullptr, GetObjectGuid());
+                        }
+
+                        ClearAllUsesData();
                     }
 
-                    ClearAllUsesData();
+                    SetGoState(GO_STATE_READY);
+
+                    //any return here in case battleground traps
+                    break;
                 }
-
-                SetGoState(GO_STATE_READY);
-
-                //any return here in case battleground traps
+                case GAMEOBJECT_TYPE_CHEST:
+                {
+                    // consumable confirmed to override chest restock
+                    if (!m_goInfo->chest.consumable && m_goInfo->chest.chestRestockTime)
+                    {
+                        m_cooldownTime = time(nullptr) + m_goInfo->chest.chestRestockTime;
+                        SetLootState(GO_NOT_READY);
+                        ForceValuesUpdateAtIndex(GAMEOBJECT_DYN_FLAGS);
+                        return;
+                    }
+                    break;
+                }
             }
 
             if (GetSpellId() || GetOwnerGuid())
@@ -628,6 +683,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
             // if option not set then object will be saved at grid unload
             if (sWorld.getConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY))
                 SaveRespawnTime();
+
             UpdateObjectVisibility();
             JustDespawnedWaitingRespawn();
             break;
@@ -680,7 +736,7 @@ void GameObject::Refresh()
 
 void GameObject::AddUniqueUse(Player* player)
 {
-    std::unique_lock<std::mutex> guard(m_UniqueUsers_lock);
+    std::unique_lock<std::shared_mutex> guard(m_UniqueUsers_lock);
 
     AddUse();
 
@@ -715,7 +771,7 @@ void GameObject::AddUniqueUse(Player* player)
 
 void GameObject::RemoveUniqueUse(Player* player)
 {
-    const std::lock_guard<std::mutex> guard(m_UniqueUsers_lock);
+    const std::lock_guard<std::shared_mutex> guard(m_UniqueUsers_lock);
 
     auto itr = m_UniqueUsers.find(player->GetObjectGuid());
     if (itr == m_UniqueUsers.end())
@@ -744,7 +800,7 @@ void GameObject::RemoveUniqueUse(Player* player)
 
 void GameObject::FinishRitual()
 {
-    std::unique_lock<std::mutex> guard(m_UniqueUsers_lock);
+    std::unique_lock<std::shared_mutex> guard(m_UniqueUsers_lock);
 
     if (GameObjectInfo const* info = GetGOInfo())
     {
@@ -774,13 +830,13 @@ void GameObject::FinishRitual()
 
 bool GameObject::HasUniqueUser(Player* player)
 {
-    const std::lock_guard<std::mutex> guard(m_UniqueUsers_lock);
+    const std::shared_lock<std::shared_mutex> guard(m_UniqueUsers_lock);
     return m_UniqueUsers.find(player->GetObjectGuid()) != m_UniqueUsers.end();
 }
 
 uint32 GameObject::GetUniqueUseCount()
 {
-    const std::lock_guard<std::mutex> guard(m_UniqueUsers_lock);
+    const std::shared_lock<std::shared_mutex> guard(m_UniqueUsers_lock);
     return m_UniqueUsers.size();
 }
 
@@ -995,11 +1051,6 @@ void GameObject::DeleteFromDB() const
     sWorld.ExecuteUpdate("DELETE FROM gameobject_battleground WHERE guid = '%u'", GetGUIDLow());
 }
 
-GameObjectInfo const *GameObject::GetGOInfo() const
-{
-    return m_goInfo;
-}
-
 /*********************************************************/
 /***                    QUEST SYSTEM                   ***/
 /*********************************************************/
@@ -1130,7 +1181,7 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
     }
 
     // check distance
-    return IsWithinDistInMap(viewPoint, std::max(GetMap()->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f), GetVisibilityModifier()), false);
+    return IsWithinDistInMap(viewPoint, std::max(pDetector->GetVisibilityDistance() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f), GetVisibilityModifier()), false);
 }
 
 void GameObject::Respawn()
@@ -1400,7 +1451,7 @@ void GameObject::Use(Unit* user)
             UseDoorOrButton();
 
             // activate script
-            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user, this);
+            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user->GetObjectGuid(), GetObjectGuid());
             return;
         }
         case GAMEOBJECT_TYPE_BUTTON:                        // 1
@@ -1414,7 +1465,7 @@ void GameObject::Use(Unit* user)
             UseDoorOrButton();
 
             // activate script
-            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user, this);
+            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user->GetObjectGuid(), GetObjectGuid());
 
             TriggerLinkedGameObject(user);
             return;
@@ -1439,7 +1490,21 @@ void GameObject::Use(Unit* user)
             if (user->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user, this);
+            if (GetFactionTemplateId() && !GetGOInfo()->chest.minSuccessOpens && !GetGOInfo()->chest.maxSuccessOpens)
+            {
+                std::list<Unit*> targets;
+                MaNGOS::AnyFriendlyUnitInObjectRangeCheck check(this, 10.0f);
+                MaNGOS::UnitListSearcher<MaNGOS::AnyFriendlyUnitInObjectRangeCheck> searcher(targets, check);
+                Cell::VisitAllObjects(this, searcher, 10.0f);
+                for (Unit* attacker : targets)
+                {
+                    if (!attacker->IsInCombat() && attacker->IsValidAttackTarget(user) &&
+                        attacker->IsWithinLOSInMap(user) && attacker->AI())
+                        attacker->AI()->AttackStart(user);
+                }
+            }
+
+            GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user->GetObjectGuid(), GetObjectGuid());
             TriggerLinkedGameObject(user);
             return;
         }
@@ -1542,10 +1607,10 @@ void GameObject::Use(Unit* user)
                     DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "Goober ScriptStart id %u for GO entry %u (GUID %u).", info->goober.eventId, GetEntry(), GetGUIDLow());
 
                     if (!sScriptMgr.OnProcessEvent(info->goober.eventId, player, this, true))
-                        GetMap()->ScriptsStart(sEventScripts, info->goober.eventId, player, this);
+                        GetMap()->ScriptsStart(sEventScripts, info->goober.eventId, player->GetObjectGuid(), GetObjectGuid());
                 }
                 else
-                    GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user, this);
+                    GetMap()->ScriptsStart(sGameObjectScripts, GetGUIDLow(), user->GetObjectGuid(), GetObjectGuid());
 
                 // possible quest objective for active quests
                 if (info->goober.questId > 0 && sObjectMgr.GetQuestTemplate(info->goober.questId))
@@ -1595,7 +1660,7 @@ void GameObject::Use(Unit* user)
             if (info->camera.eventID)
             {
                 if (!sScriptMgr.OnProcessEvent(info->camera.eventID, player, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->camera.eventID, player, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->camera.eventID, player->GetObjectGuid(), GetObjectGuid());
             }
 
             return;
@@ -1617,6 +1682,8 @@ void GameObject::Use(Unit* user)
                     // 1) skill must be >= base_zone_skill
                     // 2) if skill == base_zone_skill => 5% chance
                     // 3) chance is linear dependence from (base_zone_skill-skill)
+
+                    sSuspiciousStatisticMgr.OnFishingAttempt(player);
 
                     uint32 zone, subzone;
                     GetZoneAndAreaId(zone, subzone);
@@ -1862,7 +1929,7 @@ void GameObject::Use(Unit* user)
                     DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "FlagDrop ScriptStart id %u for GO entry %u (GUID %u).", info->flagdrop.eventID, GetEntry(), GetGUIDLow());
 
                     if (!sScriptMgr.OnProcessEvent(info->flagdrop.eventID, player, this, true))
-                        GetMap()->ScriptsStart(sEventScripts, info->flagdrop.eventID, player, this);
+                        GetMap()->ScriptsStart(sEventScripts, info->flagdrop.eventID, player->GetObjectGuid(), GetObjectGuid());
                 }
 
                 spellId = info->flagdrop.pickupSpell;
@@ -1898,45 +1965,45 @@ void GameObject::Use(Unit* user)
             if (info->capturePoint.winEventID1)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.winEventID1, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.winEventID1, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.winEventID1, user->GetObjectGuid(), GetObjectGuid());
             }
             if (info->capturePoint.winEventID2)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.winEventID2, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.winEventID2, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.winEventID2, user->GetObjectGuid(), GetObjectGuid());
             }
 
             if (info->capturePoint.contestedEventID1)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.contestedEventID1, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.contestedEventID1, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.contestedEventID1, user->GetObjectGuid(), GetObjectGuid());
             }
             if (info->capturePoint.contestedEventID2)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.contestedEventID2, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.contestedEventID2, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.contestedEventID2, user->GetObjectGuid(), GetObjectGuid());
             }
 
             if (info->capturePoint.progressEventID1)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.progressEventID1, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.progressEventID1, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.progressEventID1, user->GetObjectGuid(), GetObjectGuid());
             }
             if (info->capturePoint.progressEventID2)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.progressEventID2, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.progressEventID2, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.progressEventID2, user->GetObjectGuid(), GetObjectGuid());
             }
 
             if (info->capturePoint.neutralEventID1)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.neutralEventID1, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.neutralEventID1, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.neutralEventID1, user->GetObjectGuid(), GetObjectGuid());
             }
             if (info->capturePoint.neutralEventID2)
             {
                 if (!sScriptMgr.OnProcessEvent(info->capturePoint.neutralEventID2, user, this, true))
-                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.neutralEventID2, user, this);
+                    GetMap()->ScriptsStart(sEventScripts, info->capturePoint.neutralEventID2, user->GetObjectGuid(), GetObjectGuid());
             }
 
             // Some has spell, need to process those further.
@@ -2003,7 +2070,7 @@ const char* GameObject::GetNameForLocaleIdx(int32 loc_idx) const
         }
     }
 
-    return GetName();
+    return GameObject::GetName();
 }
 
 void GameObject::UpdateRotationFields(float rotation2 /*=0.0f*/, float rotation3 /*=0.0f*/)
@@ -2146,6 +2213,13 @@ bool GameObject::IsUseRequirementMet() const
                 break;
         }
     }
+    return true;
+}
+
+bool GameObject::IsAllowedLooter(ObjectGuid guid)
+{
+    if (!m_allowedLooters.empty() && m_allowedLooters.find(guid) == m_allowedLooters.end())
+        return false;
     return true;
 }
 
@@ -2335,6 +2409,36 @@ void GameObject::UpdateModelPosition()
         GetMap()->RemoveGameObjectModel(*m_model);
         m_model->Relocate(*this);
         GetMap()->InsertGameObjectModel(*m_model);
+    }
+}
+
+void GameObject::GetLosCheckPosition(float& x, float& y, float& z) const
+{
+    if (GameObjectDisplayInfoAddon const* displayInfo = sGameObjectDisplayInfoAddonStorage.LookupEntry<GameObjectDisplayInfoAddon>(GetDisplayId()))
+    {
+        float scale = GetObjectScale();
+
+        float minX = displayInfo->min_x * scale;
+        float minY = displayInfo->min_y * scale;
+        float minZ = displayInfo->min_z * scale;
+        float maxX = displayInfo->max_x * scale;
+        float maxY = displayInfo->max_y * scale;
+        float maxZ = displayInfo->max_z * scale;
+
+        QuaternionData worldRotation = GetLocalRotation();
+        G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
+
+        auto pos = G3D::CoordinateFrame{ { worldRotationQuat },{ GetPositionX(), GetPositionY(), GetPositionZ() } }
+        .toWorldSpace(G3D::Box{ { minX, minY, minZ },{ maxX, maxY, maxZ } }).center();
+
+        x = pos.x;
+        y = pos.y;
+        z = pos.z;
+    }
+    else
+    {
+        GetPosition(x, y, z);
+        z += 1.0f;
     }
 }
 

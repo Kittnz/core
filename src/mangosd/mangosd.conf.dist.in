@@ -19,6 +19,18 @@ LogsDir = "../logs"
 
 HonorDir = "../honor"
 
+# PDumpDir. Folder to store pdump files.
+
+PDumpDir = "../pdump"
+
+# AutoPDump.MinCharLevel. Minimum level to backup character.
+
+AutoPDump.MinCharLevel = 30
+
+# AutoPDump.DeleteAfterDays. Automatically delete pdumps older than this many days.
+
+AutoPDump.DeleteAfterDays = 60
+
 # HardcoreModeLogFile. HardcoreModeLogFile name.
 
 HardcoreModeLogFile = "hardcore.log"
@@ -28,6 +40,7 @@ HardcoreModeLogFile = "hardcore.log"
 LoginDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_logon"
 WorldDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_world"
 CharacterDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_chars"
+LogsDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_logs"
 
 # DB Auto-updater
 
@@ -46,12 +59,14 @@ AutoCommit.Minutes = 0
 LoginDatabase.Connections = 4
 WorldDatabase.Connections = 1
 CharacterDatabase.Connections = 6
+LogsDatabase.Connections = 2
 
 # Database.WorkerThreads. Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
 
 LoginDatabase.WorkerThreads = 2
 WorldDatabase.WorkerThreads = 1
 CharacterDatabase.WorkerThreads = 4
+LogsDatabase.WorkerThreads = 6
 
 # MaxPingTime. Settings for maximum database-ping interval.
 
@@ -85,6 +100,14 @@ PlayerLimit = 0
 
 PlayerHardLimit = 4000
 
+# LoginVIPQueue. Enable (1) or Disable (0) checks that allow skipping the queue.
+
+LoginVIPQueue = 0
+
+# LoginVIPQueueLevelThreshold. All accounts with characters above or equal to this level will skip the queue.
+
+LoginVIPQueueLevelThreshold = 55
+
 # LoginQueue.GracePeriodSecs. How many seconds after last logout can we login and skip the queue.
 
 LoginQueue.GracePeriodSecs = 300
@@ -104,6 +127,12 @@ SaveRespawnTimeImmediately = 1
 # MaxOverspeedPings. Maximum overspeed ping count before player kick.
 
 MaxOverspeedPings = 15
+
+# AutoRestart.MaxServerUptime. Schedule a restart if server has been up for this many seconds.
+
+AutoRestart.MaxServerUptime = 259200
+AutoRestart.HourMin = 4
+AutoRestart.HourMax = 6
 
 # GridUnload. Unload grids. (If you have lot memory you can disable it to speed up player move to new grids second time)
 
@@ -273,10 +302,6 @@ Anticrash.Options = 24
 
 Anticrash.Rearm.Timer = 60000
 
-# WowPatch. The current patch the server targets for quest, NPC, dungeon and raid availability.
-
-WowPatch = 10
-
 # PvP.AccurateEquipRequirements. Whether to enforce Blizzlike PVP rank requirements to equip PVP gear before patch 1.6.
 
 PvP.AccurateEquipRequirements = 1
@@ -298,6 +323,14 @@ PvP.AccurateRewards = 1
 # PvP.DishonorableKills. Whether to give dishonorable kills to players who kill civilians.
 
 PvP.DishonorableKills = 1
+
+# PvP.OpenWorldHonorMultiplier. Increased honor gained from kills in open world.
+
+PvP.OpenWorldHonorMultiplier = 1.5
+
+# Progression.ContentPhase. Controls availability of raids and events.
+
+Progression.ContentPhase = 3
 
 # Progression.AccuratePetStatistics. Whether to allow Blizzlike pet statistic (damage, speed, resists) progression.
 
@@ -383,6 +416,14 @@ HonorLogFile = "honor.log"
 # HonorLogTimestamp. HonorLogTimestamp with timestamp of server start in name.
 
 HonorLogTimestamp = 0
+
+# RaidLogFile. RaidLogFile name.
+
+RaidLogFile = "raid.log"
+
+# RaidLogTimestamp. RaidLogTimestamp with timestamp of server start in name.
+
+RaidLogTimestamp = 0
 
 # LogFilter. Log filtes.
 
@@ -556,14 +597,14 @@ RealmZone = 1
 
 TimeZoneOffset = 0
 
-# KalimdorTimeOffset. Time offset in hours for Kalimdor to simulate Azeroth being a globe.
-
-KalimdorTimeOffset = 0
-
 # DBC.Locale. DBC Language Settings. 
 # 0 = English; 1 = Korean; 2 = French; 3 = German; 4 = Chinese; 5 = Taiwanese; 6 = Spanish;
 
 DBC.Locale = 255
+
+# LoadLocales. Whether to load the text locale tables.
+
+LoadLocales = 1
 
 # StrictPlayerNames. Limit player name to language specific symbols set, not allow create characters, 
 # and set rename request and disconnect at not allowed symbols name.
@@ -715,29 +756,25 @@ Group.OfflineLeaderDelay = 300
 
 Guild.EventLogRecordsCount = 100
 
-# TimerBar.Fatigue.GMLevel. Disable / Enable fatigue for security level (0 - 4) or higher.
+# MirrorTimer.Fatigue.Max. Fatigue max timer value (in secs)
 
-TimerBar.Fatigue.GMLevel = 4
+MirrorTimer.Fatigue.Max = 0
 
-# TimerBar.Fatigue.Max. Fatigue max timer value.
+# MirrorTimer.Breath.Max. Waterbreathing max timer value (in secs)
 
-TimerBar.Fatigue.Max = 60
+MirrorTimer.Breath.Max = 60
 
-# TimerBar.Breath.GMLevel. Disable / Enable waterbreathing for security level (0 - 4) or higher.
+# MirrorTimer.Environmental.Max. Generic environmental (lava/slime/etc) damage delay max timer value (in secs)
 
-TimerBar.Breath.GMLevel = 4
+MirrorTimer.Environmental.Max = 1
 
-# TimerBar.Breath.Max. Waterbreathing max timer value.
+# EnvironmentalDamage.Min. Generic environmental (lava/slime/etc) damage taken on tick
 
-TimerBar.Breath.Max = 60
+EnvironmentalDamage.Min = 605
 
-# TimerBar.Fire.GMLevel. Disable / Enable lava fire damage for security level (0 - 4) or higher.
+# EnvironmentalDamage.Max. Generic environmental (lava/slime/etc) damage taken on tick
 
-TimerBar.Fire.GMLevel = 4
-
-# TimerBar.Fire.Max. Lava damage delay max timer value.
-
-TimerBar.Fire.Max = 1
+EnvironmentalDamage.Max = 610
 
 # MaxPrimaryTradeSkill. Max count that player can learn the primary trade skill. (Max 10)
 
@@ -751,9 +788,17 @@ MinPetitionSigns = 9
 
 MaxGroupXPDistance = 74
 
+# PasswordChangeRewardItem. Item that will be sent to players when they change password.
+
+PasswordChangeRewardItem = 13342
+
 # MailDeliveryDelay. Mail delivery delay time for item sending.
 
 MailDeliveryDelay = 3600
+
+# MailMaxPerHour. How many mails each account is allowed to send per hour.
+
+MailMaxPerHour = 3
 
 # Mails.COD.ForceTag.MaxLevel
 # Prevent COD scam attempts by adding "COD" prefix to the mail subject.
@@ -822,6 +867,15 @@ AllowTwoSide.AddFriend = 1
 # GM.JoinOppositeFactionChannels. Allow GMs to join both faction channels.
 
 GM.JoinOppositeFactionChannels = 0
+
+
+#FactionBalance.Enable. Enables or disables below config to check for strict faction balance on active players.
+
+FactionBalance.Enable = 0
+
+# MaxFactionImbalance. Maximum difference between active player count per faction before character creation is disabled.
+
+MaxFactionImbalance = 0.1
 
 # Radius for creature to evade after being pulled away from combat start point.
 # If ThreatRadius is less than creature aggro radius then aggro radius will be used.
@@ -1850,6 +1904,18 @@ BattleGround.GroupQueueLimit = 40
 BattleGround.Rate.Reputation.AV = 0.85
 BattleGround.Rate.Reputation.WS = 1.15
 BattleGround.Rate.Reputation.AB = 1.15
+BattleGround.Rate.Reputation.SV = 1.15
+
+# Honor reward rates for battlegrounds
+BattleGround.Rate.Honor.AV = 0.75
+BattleGround.Rate.Honor.WS = 1.25
+BattleGround.Rate.Honor.AB = 1.25
+BattleGround.Rate.Honor.SV = 1.25
+
+# Honor reward rates for battlegrounds
+BattleGround.Rate.Honor.AV = 0.75
+BattleGround.Rate.Honor.WS = 1.25
+BattleGround.Rate.Honor.AB = 1.25
 
 # Alterac.MinPlayersInQueue. Minimum players in queue per faction before starting a match.
 
@@ -1927,6 +1993,10 @@ CharDelete.MinLevel = 10
 # CharDelete.KeepDays. Define the amount of days for which the characters are kept in the database before they will be removed.
 
 CharDelete.KeepDays = 90
+
+# Make a copy of character_inventory table on startup.
+
+BackupCharacterInventory = 1
 
 # BeginnersGuilds. This feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
 
@@ -2006,3 +2076,23 @@ WhisperTargets.DecayTime = 1800
 #        Hyjal Default: 40 (Level)
 
 WhisperTargets.BypassLevel = 40
+
+
+#    Account.ShowWarningAge
+#        Amount of days a warning will be shown to the player upon logging in from the moment the warning was given.
+#        Default: 3
+
+Account.ShowWarningAge = 3
+
+# Suspicious Manager features
+Suspicious.Enable = 1
+Suspicious.Movement.Enable = 1
+Suspicious.Fishing.Enable = 1
+Suspicious.Npckilling.Enable = 1
+
+
+
+# If player reach speed higher then this - it will be reported
+# For reference - walking speed is 8 units per second
+# Please note, that calculation is not precise!
+Suspicious.Movement.MovementSpeedThreshold = 100.0

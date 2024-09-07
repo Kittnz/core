@@ -99,9 +99,19 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/shared
 )
 
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
+
 add_library(framework STATIC
   ${framework_SRCS}
 )
+
+target_link_libraries(framework PUBLIC fmt)
 
 SET_TARGET_PROPERTIES (framework PROPERTIES FOLDER "Game Libs")
 

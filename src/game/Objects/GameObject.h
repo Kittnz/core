@@ -28,6 +28,7 @@
 #include "LootMgr.h"
 #include "Database/DatabaseEnv.h"
 #include "Util.h"
+#include <shared_mutex>
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
 #if defined( __GNUC__ )
@@ -685,7 +686,7 @@ class GameObject : public WorldObject
 
         bool Create(uint32 guidlow, uint32 name_id, Map *map, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 animprogress, GOState go_state);
         void Update(uint32 update_diff, uint32 p_time) override;
-        GameObjectInfo const* GetGOInfo() const;
+        GameObjectInfo const* GetGOInfo() const { return m_goInfo; }
 
         bool IsTransport() const;
 
@@ -695,8 +696,9 @@ class GameObject : public WorldObject
         void UpdateRotationFields(float rotation2 = 0.0f, float rotation3 = 0.0f);
         QuaternionData const GetLocalRotation() const;
 
+        char const* GetName() const final { return GetGOInfo()->name.c_str(); }
         // overwrite WorldObject function for proper name localization
-        const char* GetNameForLocaleIdx(int32 locale_idx) const override;
+        const char* GetNameForLocaleIdx(int32 locale_idx) const final;
 
         void SaveToDB();
         void SaveToDB(uint32 mapid);
@@ -835,6 +837,7 @@ class GameObject : public WorldObject
         // Nostalrius
         bool IsUseRequirementMet() const;
         bool PlayerCanUse(Player* pPlayer);
+        bool IsAllowedLooter(ObjectGuid guid);
         void SetOwnerGroupId(uint32 groupId) { m_playerGroupId = groupId; }
 
         // Gestion des GameObjectAI
@@ -846,7 +849,7 @@ class GameObject : public WorldObject
         void UpdateModel();                                 // updates model in case displayId were changed
         GameObjectModel* m_model;
         void UpdateModelPosition();
-
+        void GetLosCheckPosition(float& x, float& y, float& z) const final;
         float GetStationaryX() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.x; return 0.f; }
         float GetStationaryY() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.y; return 0.f; }
         float GetStationaryZ() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.z; return 0.f; }
@@ -899,7 +902,8 @@ class GameObject : public WorldObject
         // collected only for GAMEOBJECT_TYPE_SUMMONING_RITUAL
         ObjectGuid m_firstUser;                             // first GO user, in most used cases owner, but in some cases no, for example non-summoned multi-use GAMEOBJECT_TYPE_SUMMONING_RITUAL
         GuidsSet m_UniqueUsers;                             // all players who use item, some items activated after specific amount unique uses
-        std::mutex m_UniqueUsers_lock;
+        GuidsSet m_allowedLooters;                          // if not empty only those players are allowed to use the gameobject
+        std::shared_mutex m_UniqueUsers_lock;
         ObjectGuid m_summonTarget;                          // The player who is being summoned
 
         uint64 m_rotation;

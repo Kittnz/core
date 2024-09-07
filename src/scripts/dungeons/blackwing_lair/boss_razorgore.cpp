@@ -126,7 +126,20 @@ struct boss_razorgoreAI : public ScriptedAI
             m_creature->GetThreatManager().modifyThreatPercent(pTarget, -30);
     }
 
-    void Aggro(Unit* /*pWho*/) override
+    void AttackStart(Unit* pVictim) override
+    {
+        CharmInfo* charmInfo = m_creature->GetCharmInfo();
+        if (charmInfo && charmInfo->IsCommandAttack())
+        {
+            charmInfo->SetIsCommandAttack(false);
+            if (m_creature->IsValidAttackTarget(pVictim))
+                m_creature->Attack(pVictim, true);
+        }
+        else
+            ScriptedAI::AttackStart(pVictim);
+    }
+
+    void EnterCombat(Unit* /*pWho*/) override
     {
         if (!m_pInstance)
             return;
@@ -255,7 +268,13 @@ struct boss_razorgoreAI : public ScriptedAI
     {
         if (m_creature->HasUnitState(UNIT_STAT_POSSESSED))
         {
-            ScriptedAI::UpdateAI(uiDiff);
+            if (m_creature->GetDistance(razorgoreRoomCenter) > 80.0f)
+            {
+                m_creature->InterruptSpellsCastedOnMe(true, true);
+                return;
+            }
+
+            DoMeleeAttackIfReady();
             return;
         }
 

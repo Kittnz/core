@@ -174,6 +174,7 @@ class LootStore
         void ReportUnusedIds(LootIdSet const& ids_set) const;
         void ReportNotExistedId(uint32 id) const;
 
+        void AddLoot(uint32 entry, uint32 itemid, float chanceOrQuestChance, int8 group, uint16 conditionId, int32 mincountOrRef, uint8 maxcount);
         bool HaveLootFor(uint32 loot_id) const { return m_LootTemplates.find(loot_id) != m_LootTemplates.end(); }
         bool HaveQuestLootFor(uint32 loot_id) const;
         bool HaveQuestLootForPlayer(uint32 loot_id,Player* player) const;

@@ -116,8 +116,11 @@ struct boss_firemawAI : public ScriptedAI
         else
             m_uiFlameBuffetTimer -= uiDiff;
 
-        if (m_creature->IsAttackReady() && !urand(0, 2))
-            DoCastSpellIfCan(m_creature, SPELL_THRASH);
+        if (m_creature->IsAttackReady() && m_creature->IsNonMeleeSpellCasted(true))
+        {
+            if (urand(0, 100) < 34)
+                DoCastSpellIfCan(m_creature, SPELL_THRASH);
+        }
 
         DoMeleeAttackIfReady();
     }

@@ -79,7 +79,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        uint32 m_respawn_delay_Timer = urand(14*HOUR, 20*HOUR);
+        uint32 m_respawn_delay_Timer = urand(5*HOUR, 6*HOUR);
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&

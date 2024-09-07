@@ -94,7 +94,6 @@ class Weather
         void LogWeatherState(WeatherState state) const;
 
         uint32 m_zone;
-		uint32 m_CopyFromAnotherZone = 0;
         WeatherType m_type;
         float m_grade;
         ShortIntervalTimer m_timer;
@@ -137,7 +136,6 @@ struct WeatherSeasonChances
 
 struct WeatherZoneChances
 {
-	uint32 CopyWeatherFromAnotherZone;
     WeatherSeasonChances data[WEATHER_SEASONS];
 };
 

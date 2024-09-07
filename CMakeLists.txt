@@ -15,6 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
 project(TurtleWoW)
 
 # CMake policies
@@ -38,6 +39,8 @@ option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
+option(USE_ADDRESS_SANITIZER "Enable clang address sanitizer - debug feature that slowing down server, but allow to catch memory corruption" OFF)
+option(ENABLE_PROFILING "(Windows only) Enable Optick integration, which allows to profile CPU and Memory. Also disabling some async code" OFF)
 
 if(UNIX)
   option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
@@ -82,9 +85,30 @@ if(NOT MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 # Giperion: Set Edit and Continue by default for all windows debug builds
-if(MSVC)
+if(MSVC AND NOT USE_ADDRESS_SANITIZER)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
-endif(MSVC)
+endif(MSVC AND NOT USE_ADDRESS_SANITIZER)
+
+# Giperion: Enable address sanitizer if requested
+if(USE_ADDRESS_SANITIZER)
+	if(MSVC)
+		add_compile_options(/fsanitize=address /Zi)
+		add_link_options(/INCREMENTAL:NO) #disable some options required for correct ASan working for MSVC
+	else()
+		add_compile_options(-fsanitize=address)
+		add_link_options(-fsanitize=address)
+	endif(MSVC)
+
+endif()
+
+#Giperion: Profiling part
+if (ENABLE_PROFILING)
+    if(MSVC)
+        set(DEFINITIONS ${DEFINITIONS} TURTLE_PROFILE)
+    else()
+        message("Profiling supported only in Windows")
+    endif()
+endif()
 
 if(WIN32)
   if(MSVC)
@@ -228,6 +252,9 @@ if(WIN32)
   set(OPENSSL_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libssl.lib ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libcrypto.lib)
   set(OPENSSL_DEBUG_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libssl.lib ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libcrypto.lib)
   set(ZLIB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/dep/windows/include/zlib)
+
+  set(OPTICK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/include/optick)
+  set(OPTICK_LIBRARY ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/OptickCore.lib)
 endif()
 
 # *nix-specific packages
@@ -339,10 +366,10 @@ else()
 endif()
 
 if(USE_DISCORD_BOT)
-  message(STATUS "Build Discord Bot    : Yes")
+  message(STATUS "Build Discord Bot     : Yes")
   add_compile_definitions(USING_DISCORD_BOT)
 else()
-  message(STATUS "Build Discord Bot    : No (default)")
+  message(STATUS "Build Discord Bot     : No (default)")
 endif()
 
 
@@ -390,10 +417,8 @@ if(UNIX)
 elseif(WIN32)
   # Disable warnings in Visual Studio 8 and above and add /MP
   if(MSVC AND NOT CMAKE_GENERATOR MATCHES "Visual Studio 7")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /MP")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /wd4996 /wd4355 /wd4244 /wd4267 /MP")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /MP")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /MP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_RELEASE} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /MP /EHsc")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE} /wd4996 /wd4355 /wd4244 /wd4267 /MP /EHsc")
   endif()
 endif()
 
@@ -465,7 +490,7 @@ set(DEFINITIONS
 
 if(WIN32)
   set(DEFINITIONS ${DEFINITIONS} WIN32 _WIN32)
-  set(DEFINITIONS_RELEASE ${DEFINITIONS_RELEASE} _CRT_SECURE_NO_WARNINGS)
+  set(DEFINITIONS ${DEFINITIONS} _CRT_SECURE_NO_WARNINGS)
 else()
   set(DEFINITIONS ${DEFINITIONS} SYSCONFDIR="${CONF_DIR}/")
 endif()
@@ -489,8 +514,10 @@ set_property(DIRECTORY APPEND PROPERTY
 message(STATUS "Build flags (RELEASE) : ${CMAKE_CXX_FLAGS_RELEASE}")
 message(STATUS "Build flags (DEBUG)   : ${CMAKE_CXX_FLAGS_DEBUG}")
 
+
 add_subdirectory(src)
 add_subdirectory(dep)
+
 
 if (USE_EXTRACTORS)
     add_subdirectory(tools)

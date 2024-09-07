@@ -61,33 +61,49 @@ struct GameTele
     std::wstring wnameLow;
 };
 
-typedef std::unordered_map<uint32, GameTele > GameTeleMap;
+typedef robin_hood::unordered_map<uint32, GameTele > GameTeleMap;
 
 struct AreaTriggerTeleport
 {
     std::string message;
     uint8 requiredLevel = 0;
     uint32 requiredCondition = 0;
+    uint8 requiredPhase = 0;
     WorldLocation destination;
 };
 
 struct ShopEntry
 {
-	uint32 Category;
-	uint32 Item;
-	std::string Description;
-	uint32 Price;
-	std::string DescriptionLong;
+    uint32 shopId;
+    uint32 Category;
+    uint32 Item;
+    std::string Description;
+    std::string Description_loc4;
+    uint32 Price;
 };
 
 struct ShopCategory
 {
-	std::string Name;
-	std::string Icon;
+    std::string Name;
+    std::string Name_loc4;
+    std::string Icon;
 };
 
-typedef std::unordered_map<uint32, ShopEntry> ShopEntriesMap;
+typedef robin_hood::unordered_map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
+
+
+struct ShopLogEntry
+{
+    uint32 id;
+    std::string date;
+    uint32 accountId;
+    uint32 charGuid;
+    uint32 itemEntry;
+    uint32 itemPrice;
+    bool refunded;
+    uint32 dateUnix;
+};
 
 struct BattlegroundEntranceTrigger
 {
@@ -141,7 +157,7 @@ struct BroadcastText
     }
 };
 
-typedef std::unordered_map<uint32, BroadcastText> BroadcastTextLocaleMap;
+typedef robin_hood::unordered_map<uint32, BroadcastText> BroadcastTextLocaleMap;
 
 struct SoundEntriesEntry
 {
@@ -172,7 +188,7 @@ struct CreatureSpellsEntry
 
 typedef std::vector<CreatureSpellsEntry> CreatureSpellsList;
 
-typedef std::unordered_map<uint32, CreatureSpellsList> CreatureSpellsMap;
+typedef robin_hood::unordered_map<uint32, CreatureSpellsList> CreatureSpellsMap;
 
 typedef std::map<uint32/*player guid*/,uint32/*instance*/> CellCorpseSet;
 struct CellObjectGuids
@@ -181,8 +197,8 @@ struct CellObjectGuids
     CellGuidSet gameobjects;
     CellCorpseSet corpses;
 };
-typedef std::unordered_map<uint32/*cell_id*/,CellObjectGuids> CellObjectGuidsMap;
-typedef std::unordered_map<uint32/*mapid*/,CellObjectGuidsMap> MapObjectGuids;
+typedef robin_hood::unordered_map<uint32/*cell_id*/,CellObjectGuids> CellObjectGuidsMap;
+typedef robin_hood::unordered_map<uint32/*mapid*/,CellObjectGuidsMap> MapObjectGuids;
 
 // mangos string ranges
 #define MIN_MANGOS_STRING_ID           1                    // 'mangos_string'
@@ -221,7 +237,7 @@ struct TrainerGreetingLocale
     std::vector<std::string> Content;                       // 0 -> default, i -> i-1 locale index
 };
 
-typedef std::unordered_map<uint32,CreatureData> CreatureDataMap;
+typedef robin_hood::unordered_map<uint32,CreatureData> CreatureDataMap;
 typedef CreatureDataMap::value_type CreatureDataPair;
 
 class FindCreatureData
@@ -244,11 +260,12 @@ class FindCreatureData
         float i_spawnedDist;
 };
 
-typedef std::unordered_map<uint32, FactionEntry> FactionsMap;
-typedef std::unordered_map<uint32, FactionTemplateEntry> FactionTemplatesMap;
-typedef std::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
-
-typedef std::unordered_map<uint32,GameObjectData> GameObjectDataMap;
+typedef robin_hood::unordered_map<uint32, FactionEntry> FactionsMap;
+typedef robin_hood::unordered_map<uint32, FactionTemplateEntry> FactionTemplatesMap;
+typedef robin_hood::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
+typedef robin_hood::unordered_map<uint32, ItemPrototype> ItemPrototypeMap;
+typedef robin_hood::unordered_map<uint32, std::unique_ptr<CreatureInfo>> CreatureInfoMap;
+typedef robin_hood::unordered_map<uint32,GameObjectData> GameObjectDataMap;
 typedef GameObjectDataMap::value_type GameObjectDataPair;
 
 // ordered map so we can get max id easily
@@ -274,17 +291,17 @@ class FindGOData
         float i_spawnedDist;
 };
 
-typedef std::unordered_map<uint32,CreatureLocale> CreatureLocaleMap;
-typedef std::unordered_map<uint32,GameObjectLocale> GameObjectLocaleMap;
-typedef std::unordered_map<uint32,ItemLocale> ItemLocaleMap;
-typedef std::unordered_map<uint32,QuestLocale> QuestLocaleMap;
-typedef std::unordered_map<uint32,PageTextLocale> PageTextLocaleMap;
-typedef std::unordered_map<int32,MangosStringLocale> MangosStringLocaleMap;
-typedef std::unordered_map<uint32,QuestGreetingLocale> QuestGreetingLocaleMap;
-typedef std::unordered_map<uint32,GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
-typedef std::unordered_map<uint32,PointOfInterestLocale> PointOfInterestLocaleMap;
-typedef std::unordered_map<uint32,AreaLocale> AreaLocaleMap;
-typedef std::unordered_map<uint32, TrainerGreetingLocale> TrainerGreetingLocaleMap;
+typedef robin_hood::unordered_map<uint32,CreatureLocale> CreatureLocaleMap;
+typedef robin_hood::unordered_map<uint32,GameObjectLocale> GameObjectLocaleMap;
+typedef robin_hood::unordered_map<uint32,ItemLocale> ItemLocaleMap;
+typedef robin_hood::unordered_map<uint32,QuestLocale> QuestLocaleMap;
+typedef robin_hood::unordered_map<uint32,PageTextLocale> PageTextLocaleMap;
+typedef robin_hood::unordered_map<int32,MangosStringLocale> MangosStringLocaleMap;
+typedef robin_hood::unordered_map<uint32,QuestGreetingLocale> QuestGreetingLocaleMap;
+typedef robin_hood::unordered_map<uint32,GossipMenuItemsLocale> GossipMenuItemsLocaleMap;
+typedef robin_hood::unordered_map<uint32,PointOfInterestLocale> PointOfInterestLocaleMap;
+typedef robin_hood::unordered_map<uint32,AreaLocale> AreaLocaleMap;
+typedef robin_hood::unordered_map<uint32, TrainerGreetingLocale> TrainerGreetingLocaleMap;
 
 typedef std::multimap<int32, uint32> ExclusiveQuestGroupsMap;
 typedef std::multimap<uint32, ItemRequiredTarget> ItemRequiredTargetMap;
@@ -333,38 +350,39 @@ struct RepSpilloverTemplate
 
 struct PointOfInterest
 {
-    uint32 entry;
-    float x;
-    float y;
-    uint32 icon;
-    uint32 flags;
-    uint32 data;
+    uint32 entry = 0;
+    float x = 0.0f;
+    float y = 0.0f;
+    uint32 icon = 0;
+    uint32 flags = 0;
+    uint32 data = 0;
     std::string icon_name;
 };
 
 struct GossipMenuItems
 {
-    uint32          menu_id;
-    uint32          id;
-    uint8           option_icon;
+    uint32          menu_id = 0;
+    uint32          id = 0;
+    uint8           option_icon = 0;
     std::string     option_text;
-    uint32          OptionBroadcastTextID;
-    uint32          option_id;
-    uint32          npc_option_npcflag;
-    int32           action_menu_id;
-    uint32          action_poi_id;
-    uint32          action_script_id;
-    bool            box_coded;
+    uint32          option_broadcast_text = 0;
+    uint32          option_id = 0;
+    uint32          npc_option_npcflag = 0;
+    int32           action_menu_id = 0;
+    uint32          action_poi_id = 0;
+    uint32          action_script_id = 0;
+    bool            box_coded = false;
     std::string     box_text;
-    uint32          BoxBroadcastTextID;
-    uint32          conditionId;
+    uint32          box_broadcast_text = 0;
+    uint32          condition_id = 0;
 };
 
 struct GossipMenus
 {
-    uint32          entry;
-    uint32          text_id;
-    uint16          conditionId;
+    uint32          entry = 0;
+    uint32          text_id = 0;
+    uint32          script_id = 0;
+    uint32          condition_id = 0;
 };
 
 struct GuildHouseEntry
@@ -392,28 +410,9 @@ struct GraveYardData
     Team team;
 };
 
-struct CustomGraveyardEntry
-{
-    uint32 graveyard_id;
-    uint32 map_id;
-    uint32 zone_id;
-    uint32 area_id;
-    uint32 max_level;
-    uint32 map_alliance;
-    float x_alliance;
-    float y_alliance;
-    float z_alliance;
-    float orientation_alliance;
-    uint32 map_horde;
-    float x_horde;
-    float y_horde;
-    float z_horde;
-    float orientation_horde;
-};
-
 typedef std::multimap<uint32, GraveYardData> GraveYardMap;
 typedef std::pair<GraveYardMap::const_iterator, GraveYardMap::const_iterator> GraveYardMapBounds;
-typedef std::unordered_map<uint32, float> WorldSafeLocsFacingMap;
+typedef robin_hood::unordered_map<uint32, float> WorldSafeLocsFacingMap;
 
 struct TaxiPathTransition
 {
@@ -428,10 +427,10 @@ typedef std::pair<TaxiPathTransitionsMap::const_iterator, TaxiPathTransitionsMap
 typedef std::vector<std::unique_ptr<TaxiNodesEntry>> TaxiNodesStore;
 
 // NPC gossip text id
-typedef std::unordered_map<uint32, uint32> CacheNpcTextIdMap;
-typedef std::unordered_map<uint32, NpcText> NpcTextMap;
-typedef std::unordered_map<uint32, VendorItemData> CacheVendorItemMap;
-typedef std::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellMap;
+typedef robin_hood::unordered_map<uint32, uint32> CacheNpcTextIdMap;
+typedef robin_hood::unordered_map<uint32, NpcText> NpcTextMap;
+typedef robin_hood::unordered_map<uint32, VendorItemData> CacheVendorItemMap;
+typedef robin_hood::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellMap;
 
 struct CustomCharacterSkinEntry
 {
@@ -528,7 +527,7 @@ typedef std::vector<FactionChangeMountData> FactionChangeMountsData;
 
 bool IsLanguageSkill(uint32 Skill);
 
-typedef std::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyTemplateMap;
+typedef robin_hood::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyTemplateMap;
 
 enum PermVariables
 {
@@ -545,7 +544,7 @@ enum PermVariables
     VAR_PERM_4      = 30007,
 
     DEF_ALIVE_COUNT = 4,        // default alive dragons count for VAR_ALIVE_COUNT
-    DEF_STOP_DELAY  = 20,       // default times event check will not stop the event
+    DEF_STOP_DELAY  = 300,      // default times event check will not stop the event
 
     NPC_YSONDRE     = 14887,
     NPC_LETHON      = 14888,
@@ -621,6 +620,14 @@ public:
 
 class PvPMaintenanceMaker;
 
+struct QuestSpellCastObjective
+{
+    uint32 questId = 0;
+    uint8 idx = 0;
+    int32 playerGuid = 0;
+    uint8 playerClass = 0;
+};
+
 #define SHELL_COIN_BASE_PRICE 20
 #define SHELL_COIN_MAX_COUNT ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)
 #define ITEM_SHELL_COIN 81118
@@ -646,24 +653,27 @@ class ObjectMgr
         bool IsExistingVendorTemplateId(uint32 id) const { return (m_VendorTemplateIdSet.find(id) != m_VendorTemplateIdSet.end()); }
         bool IsExistingGossipMenuId(uint32 id) const { return (m_GossipMenuIdSet.find(id) != m_GossipMenuIdSet.end()); }
 
-        typedef std::unordered_map<uint32, Item*> ItemMap;
+        typedef robin_hood::unordered_map<uint32, Item*> ItemMap;
 
         typedef std::unordered_map<uint32, Group*> GroupMap;
 
-        typedef std::unordered_map<uint32, std::unique_ptr<Quest>> QuestMap;
-        typedef std::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
+        typedef robin_hood::unordered_map<uint32, std::unique_ptr<Quest>> QuestMap;
+        typedef robin_hood::unordered_map<uint32, AreaTriggerEntry> AreaTriggerMap;
         typedef std::map<uint32, AreaTriggerTeleport> AreaTriggerTeleportMap;
-        typedef std::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
-        typedef std::unordered_map<uint32, CustomGraveyardEntry> CustomGraveyardMap;
-        typedef std::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
+        typedef robin_hood::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
+        typedef robin_hood::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
 
-        typedef std::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
-        typedef std::unordered_map<uint32, ReputationOnKillEntry> RepOnKillMap;
-        typedef std::unordered_map<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
+        typedef robin_hood::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
+        typedef robin_hood::unordered_map<uint32, ReputationOnKillEntry> RepOnKillMap;
+        typedef robin_hood::unordered_map<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
 
-        typedef std::unordered_map<uint32, PointOfInterest> PointOfInterestMap;
-        typedef std::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
-        typedef std::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
+        typedef robin_hood::unordered_map<uint32, PointOfInterest> PointOfInterestMap;
+        typedef robin_hood::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
+        typedef robin_hood::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
+
+        void LoadChatChannels();
+        ChatChannelsEntry const* GetChannelEntryFor(uint32 channelId);
+        ChatChannelsEntry const* GetChannelEntryFor(std::string const& name);
 
         static Player* GetPlayer(const char* name) { return ObjectAccessor::FindPlayerByName(name);}
         static Player* GetPlayer(ObjectGuid guid) { return ObjectAccessor::FindPlayer(guid); }
@@ -705,7 +715,6 @@ class ObjectMgr
         GroupMap::iterator GetGroupMapBegin() { return m_GroupMap.begin(); }
         GroupMap::iterator GetGroupMapEnd() { return m_GroupMap.end(); }
 
-        static CreatureInfo const *GetCreatureTemplate( uint32 id );
         CreatureDisplayInfoAddon const* GetCreatureDisplayInfoAddon(uint32 display_id);
         CreatureDisplayInfoAddon const* GetCreatureDisplayInfoRandomGender(uint32 display_id);
 
@@ -715,7 +724,12 @@ class ObjectMgr
             return sCreatureDataAddonStorage.LookupEntry<CreatureDataAddon>(lowguid);
         }
 
-        static ItemPrototype const* GetItemPrototype(uint32 id);
+        ItemPrototype const* GetItemPrototype(uint32 id) const;
+
+        ItemPrototypeMap const& GetItemPrototypeMap() const
+        {
+            return m_itemPrototypesMap;
+        }
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint32 level) const;
 
@@ -742,6 +756,10 @@ class ObjectMgr
         uint8 GetPlayerClassByGUID(ObjectGuid guid) const;
         uint32 GetPlayerAccountIdByGUID(ObjectGuid guid) const;
         uint32 GetPlayerAccountIdByPlayerName(std::string const& name) const;
+
+        void LoadActivePlayersPerFaction();
+        bool IsFactionImbalanced(Team team);
+        void IncreaseActivePlayersCount(Team team) { m_ActivePlayersPerFaction[team]++; }
 
         uint32 GetNearestTaxiNode( float x, float y, float z, uint32 mapid, Team team );
         void GetTaxiPath( uint32 source, uint32 destination, uint32 &path, uint32 &cost);
@@ -798,7 +816,6 @@ class ObjectMgr
         bool AddGraveYardLink(uint32 id, uint32 zone, Team team, bool inDB = true);
         void RemoveGraveYardLink(uint32 id, uint32 zone, Team team, bool inDB = false);
         void LoadGraveyardZones();
-        CustomGraveyardEntry const *GetCustomGraveyard(uint32 player_map, uint32 player_zone, uint32 player_area, uint32 player_level);
         GraveYardData const* FindGraveYardData(uint32 id, uint32 zone) const;
         void LoadWorldSafeLocsFacing();
         float GetWorldSafeLocFacing(uint32 id) const;
@@ -817,7 +834,6 @@ class ObjectMgr
         AreaTriggerTeleport const* GetMapEntranceTrigger(uint32 Map) const;
 
         void LoadAreaTriggers();
-        void LoadCustomGraveyards();
         void LoadCustomCharacterSkins();
 
         AreaTriggerEntry const* GetAreaTrigger(uint32 id) const
@@ -886,6 +902,15 @@ class ObjectMgr
 
         void LoadGroups();
         void LoadQuests();
+        void LoadQuestSpellCastObjectives();
+        std::vector<QuestSpellCastObjective> const* GetQuestCastObjectivesForSpell(uint32 spellId)
+        {
+            auto itr = m_questSpellCastObjectives.find(spellId);
+            if (itr != m_questSpellCastObjectives.end())
+                return &itr->second;
+
+            return nullptr;
+        }
         void LoadQuestRelations()
         {
             LoadGameobjectQuestRelations();
@@ -908,7 +933,21 @@ class ObjectMgr
         void LoadPetSpellData();
         void LoadCreatureLocales();
         void LoadCreatureTemplates();
-        void CheckCreatureTemplates();
+        void LoadCreatureTemplate(uint32 entry);
+        void CheckCreatureTemplate(CreatureInfo* cInfo);
+
+        CreatureInfo const* GetCreatureTemplate(uint32 id) const
+        {
+            auto itr = m_creatureInfoMap.find(id);
+            if (itr != m_creatureInfoMap.end())
+                return itr->second.get();
+
+            return nullptr;
+        }
+        CreatureInfoMap const& GetCreatureInfoMap() const
+        {
+            return m_creatureInfoMap;
+        }
 
         void LoadCreatures(bool reload = false);
         void LoadCreatureAddons();
@@ -932,7 +971,7 @@ class ObjectMgr
         void LoadAreaTemplate();
         void LoadAreaLocales();
         void LoadCartographerAreas();
-		void LoadShop();
+        void LoadShop();
 
         void LoadNPCText();
 
@@ -963,8 +1002,9 @@ class ObjectMgr
 
         void LoadNpcGossips();
 
-        void LoadGossipMenu();
-        void LoadGossipMenuItems();
+        void LoadGossipMenus();
+        void LoadGossipMenu(std::set<uint32>& gossipScriptSet);
+        void LoadGossipMenuItems(std::set<uint32>& gossipScriptSet);
 
         void LoadVendorTemplates();
         void LoadVendors() { LoadVendors("npc_vendor", false); }
@@ -1233,6 +1273,7 @@ class ObjectMgr
         // reserved names
         void LoadReservedPlayersNames();
         bool IsReservedName(std::string const& name) const;
+        void AddReservedName(std::string name);
 
         // name with valid structure and symbols
         static uint8 CheckPlayerName(std::string const& name, bool create = false);
@@ -1303,37 +1344,58 @@ class ObjectMgr
 
         void AddVendorItem(uint32 entry,uint32 item, uint32 maxcount, uint32 incrtime, uint32 itemflags);
         bool RemoveVendorItem(uint32 entry,uint32 item);
-        bool IsVendorItemValid(bool isTemplate, char const* tableName, uint32 vendor_entry, uint32 item, uint32 maxcount, uint32 incrtime, uint32 conditionId, Player* pl = nullptr, std::set<uint32>* skip_vendors = nullptr) const;
+        bool IsVendorItemValid(bool isTemplate, char const* tableName, uint32 vendor_entry, uint32 item, uint32 maxcount, uint32 incrtime, uint32 conditionId, Player* pl = nullptr) const;
 
         int GetOrNewIndexForLocale(LocaleConstant loc);
 
-		ShopCategory const* GetShopCategoryInfo(uint8 category) const
-		{
-			auto iter = m_ShopCategoriesMap.find(category);
-			if (iter == m_ShopCategoriesMap.end())
-				return nullptr;
+        ShopCategory const* GetShopCategoryInfo(uint8 category) const
+        {
+            auto iter = m_ShopCategoriesMap.find(category);
+            if (iter == m_ShopCategoriesMap.end())
+                return nullptr;
 
-			return &iter->second;
-		}
+            return &iter->second;
+        }
 
-		ShopEntry const* GetShopEntryInfo(uint32 id) const
-		{
-			auto iter = m_ShopEntriesMap.find(id);
-			if (iter == m_ShopEntriesMap.end())
-				return nullptr;
+        ShopEntry const* GetShopEntryInfo(uint32 id) const
+        {
+            auto iter = m_ShopEntriesMap.find(id);
+            if (iter == m_ShopEntriesMap.end())
+                return nullptr;
 
-			return &iter->second;
-		}
+            return &iter->second;
+        }
 
-		ShopEntriesMap GetShopEntriesList() const
-		{
-			return m_ShopEntriesMap;
-		}
+        ShopEntriesMap const& GetShopEntriesList() const
+        {
+            return m_ShopEntriesMap;
+        }
 
-		ShopCategoriesMap GetShopCategoriesList() const
-		{
-			return m_ShopCategoriesMap;
-		}
+        ShopCategoriesMap GetShopCategoriesList() const
+        {
+            return m_ShopCategoriesMap;
+        }
+
+        std::vector<ShopLogEntry*>& GetShopLogEntries(uint32 accountId)
+        {
+            return m_shopLogs[accountId];
+        }
+
+        ShopLogEntry* GetShopLogEntry(uint32 shopId)
+        {
+            return m_shopLogsLookup[shopId];
+        }
+
+        void AddShopLogEntry(uint32 shopId, ShopLogEntry* shoplogEntry)
+        {
+            m_shopLogsLookup[shopId] = shoplogEntry;
+        }
+
+        uint32 NextShopLogEntry()
+        {
+            return ++m_maxShopEntry;
+        }
+
 
         ItemRequiredTargetMapBounds GetItemRequiredTargetMapBounds(uint32 uiItemEntry) const
         {
@@ -1409,10 +1471,11 @@ class ObjectMgr
         void LoadPlayerCacheData(uint32 lowGuid = 0);
         PlayerCacheData* GetPlayerDataByGUID(uint32 lowGuid) const;
         PlayerCacheData* GetPlayerDataByName(std::string const& name) const;
-        void GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const;
+        void GetPlayerDataForAccount(uint32 accountId, std::vector<PlayerCacheData*>& data) const;
         PlayerCacheData* InsertPlayerInCache(Player *pPlayer);
         PlayerCacheData* InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 uiGender, uint32 account, std::string const& name, uint32 level, uint32 zoneId, uint8 hardcoreStatus);
         void DeletePlayerFromCache(uint32 lowGuid);
+        void DeletePlayerNameFromCache(std::string const& name);
         void ChangePlayerNameInCache(uint32 lowGuid, std::string const& oldName, std::string const& newName);
         void UpdatePlayerCachedPosition(Player *pPlayer);
         void UpdatePlayerCachedPosition(uint32 lowGuid, uint32 mapId, float posX, float posY, float posZ, float o, bool inFlight);
@@ -1422,8 +1485,8 @@ class ObjectMgr
 
         PlayerCacheDataMap m_playerCacheData;
 
-		// Turtle specific. Should be synchronized with m_playerCacheData, since it using pointers from that map!
-		PlayerCachePerAccountMap m_accountPlayersCacheData;
+        // Turtle specific. Should be synchronized with m_playerCacheData, since it using pointers from that map!
+        PlayerCachePerAccountMap m_accountPlayersCacheData;
 
         std::map<std::string, uint32> m_playerNameToGuid;
 
@@ -1531,6 +1594,8 @@ class ObjectMgr
         void IncreaseShellCoinCount() { if (m_shellCoinCount < SHELL_COIN_MAX_COUNT) m_shellCoinCount++; }
         void DecreaseShellCoinCount() { if (m_shellCoinCount > 0) m_shellCoinCount--; }
 
+        void BackupCharacterInventory();
+
     protected:
 
         // first free id for selected id type
@@ -1558,12 +1623,12 @@ class ObjectMgr
 
         QuestMap            m_QuestTemplatesMap;
 
-        std::unordered_map<uint32, std::string> m_fakeNames;
+        robin_hood::unordered_map<uint32, std::string> m_fakeNames;
 
-        typedef std::unordered_map<uint32, uint32> QuestAreaTriggerMap;
-        typedef std::unordered_map<uint32, std::string> ItemTextMap;
+        typedef robin_hood::unordered_map<uint32, uint32> QuestAreaTriggerMap;
+        typedef robin_hood::unordered_map<uint32, std::string> ItemTextMap;
         // Map quest_id->id of start item
-        typedef std::unordered_map<uint32, uint32> QuestStartingItemMap;
+        typedef robin_hood::unordered_map<uint32, uint32> QuestStartingItemMap;
         typedef std::set<uint32> TavernAreaTriggerSet;
         typedef std::set<uint32> GameObjectForQuestSet;
 
@@ -1572,7 +1637,6 @@ class ObjectMgr
         ItemTextMap         m_ItemTextsMap;
 
         AreaTriggerMap    m_AreaTriggersMap;
-        CustomGraveyardMap    m_CustomGraveyardMap;
         QuestAreaTriggerMap m_QuestAreaTriggerMap;
         TavernAreaTriggerSet m_TavernAreaTriggerSet;
         GameObjectForQuestSet m_GameObjectForQuestSet;
@@ -1618,6 +1682,7 @@ class ObjectMgr
         TaxiNodesStore          m_TaxiNodes;
 
         ItemTransmogrifyTemplateMap     m_itemTransmogs;
+        std::atomic_uint m_transmogId = 0;
 
         int DBCLocaleIndex;
 
@@ -1625,6 +1690,7 @@ class ObjectMgr
         int32 m_shellCoinCount = 0;
 
     private:
+        void LoadCreatureInfo(Field* result);
         void LoadCreatureAddons(SQLStorage& creatureaddons, char const* entryName, char const* comment);
         void LoadQuestRelationsHelper(QuestRelationsMap& map, char const* table);
         void LoadVendors(char const* tableName, bool isTemplates);
@@ -1654,8 +1720,14 @@ class ObjectMgr
         typedef std::vector<uint32> PlayerXPperLevel;       // [level]
         PlayerXPperLevel m_PlayerXPperLevel;
 
-		ShopCategoriesMap m_ShopCategoriesMap;
-		ShopEntriesMap m_ShopEntriesMap;
+        robin_hood::unordered_map<Team, uint32> m_ActivePlayersPerFaction;
+
+        ShopCategoriesMap m_ShopCategoriesMap;
+        ShopEntriesMap m_ShopEntriesMap;
+
+        robin_hood::unordered_map<uint32, std::vector<ShopLogEntry*>> m_shopLogs;
+        robin_hood::unordered_map<uint32, ShopLogEntry*> m_shopLogsLookup;
+        std::atomic_uint32_t m_maxShopEntry = 0;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap m_BaseXPMap;
@@ -1692,6 +1764,8 @@ class ObjectMgr
         FactionTemplatesMap m_FactionTemplatesMap;
 
         SoundEntryMap m_SoundEntriesMap;
+        ItemPrototypeMap m_itemPrototypesMap;
+        CreatureInfoMap m_creatureInfoMap;
         GameObjectInfoMap m_GameObjectInfoMap;
 
         typedef std::vector<std::unique_ptr<SkillLineAbilityEntry>> SkillLineAbiilityStore;
@@ -1702,6 +1776,8 @@ class ObjectMgr
         CacheVendorItemMap m_CacheVendorItemMap;
         CacheTrainerSpellMap m_CacheTrainerTemplateSpellMap;
         CacheTrainerSpellMap m_CacheTrainerSpellMap;
+        robin_hood::unordered_map<uint32, ChatChannelsEntry> m_chatChannelsMap;
+        robin_hood::unordered_map<uint32 /*spell id*/, std::vector<QuestSpellCastObjective>> m_questSpellCastObjectives;
 };
 
 //#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()

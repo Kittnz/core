@@ -41,17 +41,28 @@ class ChannelMgr
         }
         ~ChannelMgr();
 
-        Channel *GetJoinChannel(std::string const& name, bool allowAreaDependantChans = true);
+        Channel *GetOrCreateChannel(std::string const& name, bool allowAreaDependantChans = true);
         Channel *GetChannel(std::string const& name, PlayerPointer p, bool pkt = true);
         void LeftChannel(std::string const& name);
         void CreateDefaultChannels();
         static void AnnounceBothFactionsChannel(std::string const& channelName, ObjectGuid playerGuid, char const* message);
+
+    protected:
+        Team m_team = ALLIANCE;
     private:
         ChannelMap channels;
 };
 
-class AllianceChannelMgr : public ChannelMgr {};
-class HordeChannelMgr    : public ChannelMgr {};
+class AllianceChannelMgr : public ChannelMgr 
+{
+public:
+    AllianceChannelMgr();
+};
+class HordeChannelMgr    : public ChannelMgr 
+{
+public:
+    HordeChannelMgr();
+};
 
 ChannelMgr* channelMgr(Team team);
 

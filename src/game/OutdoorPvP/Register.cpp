@@ -5,6 +5,8 @@ void AddSC_outdoorpvp_si();
 
 void RegisterZoneScripts()
 {
-    AddSC_outdoorpvp_ep();
-    AddSC_outdoorpvp_si();
+    if (sWorld.getConfig(CONFIG_BOOL_OUTDOORPVP_EP_ENABLE))
+        AddSC_outdoorpvp_ep();
+    if (sWorld.getConfig(CONFIG_BOOL_OUTDOORPVP_SI_ENABLE))
+        AddSC_outdoorpvp_si();
 }

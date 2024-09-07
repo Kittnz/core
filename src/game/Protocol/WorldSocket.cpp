@@ -31,6 +31,7 @@
 #include "AddonHandler.h"
 #include "Anticheat/Anticheat.h"
 
+
 #include "Opcodes.h"
 #include "MangosSocketImpl.h"
 
@@ -38,9 +39,12 @@
 
 template class MangosSocket<WorldSession, WorldSocket, AuthCrypt>;
 
+
+
 int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 {
     MANGOS_ASSERT(new_pct);
+
 
     // manage memory ;)
     std::unique_ptr<WorldPacket> aptr(new_pct);
@@ -166,7 +170,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, "
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, UNIX_TIMESTAMP(a.joindate), a.queue_skip, "
 		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
@@ -203,26 +207,34 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     auto const remote_ip = fields[3].GetCppString();
 
     ///- Re-check ip locking (same check as in realmd).
-    if (fields[4].GetUInt8() == 1)  // if ip is locked
-    {
-        if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
-        {
-            packet.Initialize(SMSG_AUTH_RESPONSE, 1);
-            packet << uint8(AUTH_FAILED);
-            SendPacket(packet);
 
-            delete result;
-            BASIC_LOG("WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
-            return -1;
-        }
-    }
+    //This should always be checked regardless of IP locking.
+    //If the last_ip that was just modified by authserver is different than the client sending CMSG_AUTH_SESSION that's never okay.
+
+   /*if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
+    {
+        packet.Initialize(SMSG_AUTH_RESPONSE, 1);
+        packet << uint8(AUTH_FAILED);
+        SendPacket(packet);
+
+        delete result;
+        BASIC_LOG("WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
+        return -1;
+    }*/
 
     id = fields[0].GetUInt32();
     security = sAccountMgr.GetSecurity(id); //fields[1].GetUInt16 ();
-    if (security > SEC_ADMINISTRATOR)                       // prevent invalid security settings in DB
-        security = SEC_ADMINISTRATOR;
+    if (security > SEC_SIGMACHAD)                       // prevent invalid security settings in DB
+        security = SEC_SIGMACHAD;
+
+    if (sAccountMgr.IsTraineeGM(id))
+        security = SEC_DEVELOPER;
+
+    auto str = fields[2].GetString();
 
     K.SetHexStr(fields[2].GetString());
+
+    auto vec = K.AsByteArray();
 
     if (K.AsByteArray().empty())
     {
@@ -240,7 +252,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     uint32 accFlags = fields[11].GetUInt32();
     std::string email = fields[12].GetCppString();
     std::string username = fields[13].GetCppString();
-    bool isBanned = fields[14].GetBool();
+    uint32 joinTimestamp = fields[14].GetUInt32();
+    bool canQueueSkip = fields[15].GetBool();
+    bool isBanned = fields[16].GetBool();
     delete result;
 
     
@@ -321,11 +335,13 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip, m_BinaryAddress), -1);
 
     m_Crypt.SetKey(K.AsByteArray());
     m_Crypt.Init();
 
+    m_Session->SetShouldBackupCharacters(sAccountMgr.UpdateAccountIP(id, GetRemoteAddress()));
+    m_Session->SetJoinTimeStamp(joinTimestamp);
     m_Session->SetUsername(account);
     m_Session->SetEmail(email);
     m_Session->SetGameBuild(BuiltNumberClient);
@@ -333,7 +349,18 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetOS(clientOs);
     m_Session->SetPlatform(clientPlatform);
     m_Session->LoadTutorialsData();
+    m_Session->SetQueueSkip(canQueueSkip);
     m_Session->InitAntiCheatSession(&K);
+
+
+    //TWoW Jamey
+    //Clear out sessionkey once we're done with it. Keep it in memory only.
+    //Ideally sessionkey shouldn't even be in the DB. It's only used for auth to communicate to world.
+    //Exposing it leaves a big security hole as it allows free login.
+    //Should be sent over IPC / MMAP. 
+
+
+    //LoginDatabase.DirectPExecute("UPDATE `account` SET `sessionkey` = '' WHERE `username` = '%s'", safe_account.c_str());
 
     //m_Session->InitWarden(&K);
 

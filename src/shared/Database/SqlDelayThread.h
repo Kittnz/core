@@ -38,13 +38,14 @@ class SqlDelayThread
         SqlQueue m_serialDelayQueue;
         SqlConnection *m_dbConnection;                     ///< Pointer to DB connection
         volatile bool m_running;
+        const char* Name;
 
 
         //process all enqueued requests
         void ProcessRequests();
 
     public:
-        SqlDelayThread(Database* db, SqlConnection* conn);
+        SqlDelayThread(const char* InName, Database* db, SqlConnection* conn);
         ~SqlDelayThread();
 
         ///< Put sql statement to delay queue

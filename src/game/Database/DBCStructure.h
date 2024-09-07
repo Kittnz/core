@@ -90,13 +90,13 @@ struct BankBagSlotPricesEntry
 
 struct ChatChannelsEntry
 {
-    uint32  ChannelID;                                      // 0        m_ID
-    uint32  flags;                                          // 1        m_flags
-                                                            // 2        m_factionGroup
-    char*   pattern[8];                                     // 3-10     m_name_lang
-                                                            // 11 string flags
-    //char*       name[8];                                  // 12-19    m_shortcut_lang
-                                                            // 20 string flag
+    uint32 id;
+    uint32 flags;
+    uint32 factionGroup;
+    std::string name[8];
+    uint32 nameFlags;
+    std::string shortcut[8];
+    uint32 shortcutFlags;
 };
 
 struct ChrClassesEntry
@@ -130,7 +130,7 @@ struct ChrRacesEntry
     uint32      model_f;                                    // 5        m_FemaleDisplayId
                                                             // 6        m_ClientPrefix
                                                             // 7        unused
-    uint32      TeamID;                                     // 8        m_BaseLanguage (7-Alliance 1-Horde)
+    uint32      baseLanguage;                               // 8        m_BaseLanguage (7-Alliance 1-Horde)
     uint32      creatureType;                               // 9        m_creatureType (blizzlike always 7-humanoid)
                                                             // 10       unused, all 836
                                                             // 11       unused, all 1604
@@ -333,6 +333,9 @@ struct FactionTemplateEntry
     uint32      friendFaction[4];                           // 10-13
     //-------------------------------------------------------  end structure
 
+    // assigned by core
+    bool isEnemyOfAnother = false;
+
     // helpers
     bool IsFriendlyTo(FactionTemplateEntry const& entry) const
     {
@@ -456,6 +459,18 @@ struct QuestSortEntry
                                                             // 9 string flags
 };
 
+struct NamesProfanityEntry
+{
+    //uint32    ID;                                         // 0
+    char const* Name;                                       // 1
+};
+
+struct NamesReservedEntry
+{
+    //uint32    ID;                                         // 0
+    char const* Name;                                       // 1
+};
+
 /*struct SkillLineCategoryEntry
 {
     uint32    id;                                           // 0        m_ID
@@ -574,6 +589,26 @@ struct SpellShapeshiftFormEntry
     uint32 flags1;                                          // 11       m_flags
     int32  creatureType;                                    // 12       m_creatureType <=0 humanoid, other normal creature types
     //uint32 unk1;                                          // 13       m_attackIconID
+};
+
+struct SpellVisualEntry
+{
+    uint32 id;
+    uint32 precastKit;
+    uint32 castKit;
+    uint32 impactKit;
+    uint32 stateKit;
+    uint32 channelKit;
+    uint32 hasMissile;
+    uint32 missileModel;
+    uint32 missilePathType;
+    uint32 missileDestinationAttachment;
+    uint32 missileSound;
+    uint32 hasAreaEffect;
+    uint32 areaModel;
+    uint32 areaKit;
+    uint32 animEventSoundID;
+    uint32 flags;
 };
 
 struct SpellDurationEntry

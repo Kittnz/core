@@ -38,6 +38,7 @@
 #include "LFGMgr.h"
 #include "LFGHandler.h"
 #include "Chat.h"
+#include "Logging/DatabaseLogger.hpp"
 
 #include <array>
 
@@ -507,7 +508,7 @@ uint32 Group::RemoveMember(ObjectGuid guid, uint8 removeMethod)
     }
     // if group before remove <= 2 disband it
     else
-        Disband(true);
+        Disband(true, guid);
 
     return m_memberSlots.size();
 }
@@ -526,9 +527,10 @@ void Group::ChangeLeader(ObjectGuid guid)
     SendUpdate();
 }
 
-void Group::Disband(bool hideDestroy)
+void Group::Disband(bool hideDestroy, ObjectGuid initiator)
 {
-    Player *player;
+    Player* player;
+    Player* remainingPlayer = nullptr;
 
     for (const auto& itr : m_memberSlots)
     {
@@ -583,9 +585,15 @@ void Group::Disband(bool hideDestroy)
             }
         }
 
-        _homebindIfInstance(player);
+        // only the person who initiated the disband should be kicked from instance, as he left by choice
+        if (initiator.IsEmpty() || initiator == player->GetObjectGuid())
+            _homebindIfInstance(player);
+        else
+            remainingPlayer = player;
     }
-    RollId.clear();
+
+    for (auto itr = RollId.begin(); itr != RollId.end(); itr = RollId.begin())
+        CountTheRoll(itr);
     m_memberSlots.clear();
 
     RemoveAllInvites();
@@ -596,6 +604,21 @@ void Group::Disband(bool hideDestroy)
         CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId='%u'", m_Id);
         CharacterDatabase.CommitTransaction();
+
+        if (remainingPlayer)
+        {
+            BoundInstancesMap::iterator itr = m_boundInstances.find(remainingPlayer->GetMapId());
+            if (itr != m_boundInstances.end() && !itr->second.perm &&
+                !remainingPlayer->GetBoundInstance(remainingPlayer->GetMapId()))
+            {
+                remainingPlayer->BindToInstance(itr->second.state, itr->second.perm, false);
+                CharacterDatabase.PExecute("DELETE FROM group_instance WHERE leaderGuid = '%u' AND instance = '%u'",
+                    GetLeaderGuid().GetCounter(), itr->second.state->GetInstanceId());
+                itr->second.state->RemoveGroup(this);               // save can become invalid
+                m_boundInstances.erase(itr);
+            }
+        }
+
         ResetInstances(INSTANCE_RESET_GROUP_DISBAND, nullptr);
     }
 
@@ -620,7 +643,7 @@ void Group::CalculateLFGRoles(LFGGroupQueueInfo& data)
         LFG_ROLE_DPS
     };
 
-    std::list<ObjectGuid> processed;
+    std::vector<ObjectGuid> processed;
 
     for (const auto& citr : GetMemberSlots())
     {
@@ -647,7 +670,7 @@ void Group::CalculateLFGRoles(LFGGroupQueueInfo& data)
 }
 
 bool Group::FillPremadeLFG(const ObjectGuid& plrGuid, Classes playerClass, ClassRoles requiredRole, uint32& InitRoles,
-    uint32& DpsCount, std::list<ObjectGuid>& processed)
+    uint32& DpsCount, std::vector<ObjectGuid>& processed)
 {
     // We grant the role unless someone else in the group has higher priority for it
     RolesPriority priority = LFGQueue::getPriority(playerClass, requiredRole);
@@ -800,7 +823,7 @@ void Group::GroupLoot(Creature *creature, Loot *loot)
         if (lootItem.freeforall)
             continue;
 
-        ItemPrototype const *itemProto = ObjectMgr::GetItemPrototype(lootItem.itemid);
+        ItemPrototype const *itemProto = sObjectMgr.GetItemPrototype(lootItem.itemid);
         if (!itemProto)
         {
             DEBUG_LOG("Group::GroupLoot: missing item prototype for item with id: %d", lootItem.itemid);
@@ -823,7 +846,7 @@ void Group::NeedBeforeGreed(Creature *creature, Loot *loot)
         if (lootItem.freeforall)
             continue;
 
-        ItemPrototype const *itemProto = ObjectMgr::GetItemPrototype(lootItem.itemid);
+        ItemPrototype const *itemProto = sObjectMgr.GetItemPrototype(lootItem.itemid);
         if (!itemProto)
         {
             DEBUG_LOG("Group::NeedBeforeGreed: missing item prototype for item with id: %d", lootItem.itemid);
@@ -842,7 +865,7 @@ void Group::MasterLoot(Creature* creature, Loot* loot)
 {
     for (auto& i : loot->items)
     {
-        ItemPrototype const* item = ObjectMgr::GetItemPrototype(i.itemid);
+        ItemPrototype const* item = sObjectMgr.GetItemPrototype(i.itemid);
         if (!item)
             continue;
         if (item->Quality < uint32(m_lootThreshold))
@@ -951,7 +974,7 @@ void Group::StartLootRoll(Creature* lootTarget, LootMethod method, Loot* loot, u
 
     LootItem const& lootItem =  loot->items[itemSlot];
 
-    ItemPrototype const* item = ObjectMgr::GetItemPrototype(lootItem.itemid);
+    ItemPrototype const* item = sObjectMgr.GetItemPrototype(lootItem.itemid);
 
     Roll* r = new Roll(lootTarget->GetObjectGuid(), lootItem);
 
@@ -1063,6 +1086,23 @@ void Group::CountSingleLooterRoll(Roll* roll)
             --roll->getLoot()->unlootedCount;
             sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                 player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+            sDBLogger->LogLoot(
+                {
+                    player->GetGUIDLow(),
+                    player->GetName(),
+                    player->GetSession()->GetAccountId(),
+                    player->GetSession()->GetRemoteAddress(),
+                    LogLoot::SourceType(roll->lootedTargetGUID),
+                    roll->lootedTargetGUID.GetCounter(),
+                    roll->lootedTargetGUID.GetEntry(),
+                    0,
+                    item->itemid,
+                    item->count,
+                    LogLoot::TypeRoll
+                });
+            
+
             if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
                 player->OnReceivedItem(newItem);
         }
@@ -1086,6 +1126,32 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
         delete roll;
         return;
     }
+
+    // Turtle:: Make raid looted items not appear soul bound.
+    const auto CheckSoulboundException = [this](Player* player, const LootItem& lootItem, Item* newitem, Creature* creature)
+    {
+        if (player->GetMap()->IsRaid() && creature && creature->IsWorldBoss())
+        {
+            auto itemProto = newitem->GetProto();
+            if (itemProto)
+            {
+                if (!lootItem.freeforall && itemProto->Stackable <= 1)
+                {
+                    newitem->SetCanTradeWithRaidUntil(sWorld.GetGameTime() + 10 * MINUTE, player->GetMapId());
+                    for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        if (Player* pMember = itr->getSource())
+                        {
+                            if (pMember->GetMapId() == player->GetMapId() && creature->WasPlayerPresentAtDeath(pMember))
+                                newitem->AddPlayerToAllowedTradeList(pMember->GetObjectGuid());
+                        }
+                    }
+                    //force refresh of soulbound-ness since we don't hook into CreateItem anymore.
+                    newitem->SendCreateUpdateToPlayer(player);
+                }
+            }
+        }
+    };
 
     //end of the roll
     if (roll->totalNeed > 0)
@@ -1124,8 +1190,28 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     --roll->getLoot()->unlootedCount;
                     sLog.out(LOG_LOOTS, "%s wins need roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+
+                    sDBLogger->LogLoot(
+                        {
+                            player->GetGUIDLow(),
+                            player->GetName(),
+                            player->GetSession()->GetAccountId(),
+                            player->GetSession()->GetRemoteAddress(),
+                            LogLoot::SourceType(roll->lootedTargetGUID),
+                            roll->lootedTargetGUID.GetCounter(),
+                            roll->lootedTargetGUID.GetEntry(),
+                            0,
+                            item->itemid,
+                            item->count,
+                            LogLoot::TypeRoll
+                        });
+
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
+                    {
+                        CheckSoulboundException(player, *item, newItem, roll->lootedTargetGUID.IsCreature() ? player->GetMap()->GetCreature(roll->lootedTargetGUID) : nullptr);
                         player->OnReceivedItem(newItem);
+                    }
                 }
                 else
                 {
@@ -1175,12 +1261,32 @@ void Group::CountTheRoll(Rolls::iterator& rollI)
                     --roll->getLoot()->unlootedCount;
                     sLog.out(LOG_LOOTS, "%s wins greed roll for %ux%u [loot from %s]",
                              player->GetShortDescription().c_str(), item->count, item->itemid, roll->lootedTargetGUID.GetString().c_str());
+
+                    sDBLogger->LogLoot(
+                        {
+                            player->GetGUIDLow(),
+                            player->GetName(),
+                            player->GetSession()->GetAccountId(),
+                            player->GetSession()->GetRemoteAddress(),
+                            LogLoot::SourceType(roll->lootedTargetGUID),
+                            roll->lootedTargetGUID.GetCounter(),
+                            roll->lootedTargetGUID.GetEntry(),
+                            0,
+                            item->itemid,
+                            item->count,
+                            LogLoot::TypeRoll
+                        });
+
                     if (Item* newItem = player->StoreNewItem(dest, roll->itemid, true, item->randomPropertyId))
+                    {
+                        CheckSoulboundException(player, *item, newItem, roll->lootedTargetGUID.IsCreature() ? player->GetMap()->GetCreature(roll->lootedTargetGUID) : nullptr);
                         player->OnReceivedItem(newItem);
+                    }
                 }
                 else
                 {
                     item->is_blocked = false;
+                    item->lootOwner = maxguid;
                     player->SendEquipError(msg, nullptr, nullptr, roll->itemid);
                 }
             }
@@ -1290,12 +1396,15 @@ void Group::SendUpdate()
         Player *player = sObjectMgr.GetPlayer(citr->guid);
         if (!player || !player->GetSession() || player->GetGroup() != this)
             continue;
+
         // guess size
         WorldPacket data(SMSG_GROUP_LIST, (1 + 1 + 1 + 4 + GetMembersCount() * 20) + 8 + 1 + 8 + 1);
         data << (uint8)m_groupType;                         // group type
         data << (uint8)(citr->group | (citr->assistant ? 0x80 : 0)); // own flags (groupid | (assistant?0x80:0))
 
-        data << uint32(GetMembersCount() - 1);
+        uint32 count = 0;
+        size_t countPos = data.wpos();
+        data << uint32(0);
         for (const auto& itr : m_memberSlots)
         {
             if (citr->guid == itr.guid)
@@ -1305,10 +1414,12 @@ void Group::SendUpdate()
             data << itr.guid;
             data << uint8(GetGroupMemberStatus(sObjectMgr.GetPlayer(itr.guid)));
             data << (uint8)(itr.group | (itr.assistant ? 0x80 : 0));
+            count++;
         }
+        data.put<uint32>(countPos, count);
 
         data << m_leaderGuid;                               // leader guid
-        if (GetMembersCount() - 1)
+        if (count)
         {
             data << uint8(m_lootMethod);                    // loot method
             if (GetLootMethod() == MASTER_LOOT)
@@ -2188,7 +2299,6 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
     if (pGroupGuy->IsAlive())
     {
         pGroupGuy->RewardHonor(pVictim, count);
-        pGroupGuy->RewardExpansionPvPQuest(pVictim);
 
         // World of Warcraft Client Patch 1.10.0 (2006-03-28)
         // - Frostwolf and Stormpike faction will now be gained by killing
@@ -2234,7 +2344,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
                     itr_xp *= 0.5f;
 
                 if (pGroupGuy->HasChallenge(CHALLENGE_WAR_MODE))
-                    itr_xp *= 1.3f;
+                    itr_xp *= 1.2f;
             }
 
             if (pGroupGuy->GetLevel() <= not_gray_member_with_max_level->GetLevel())

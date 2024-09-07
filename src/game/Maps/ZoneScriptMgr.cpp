@@ -98,7 +98,7 @@ void ZoneScriptMgr::HandlePlayerLeaveZone(Player *plr, uint32 zoneid)
     if (!itr->second->HasPlayer(plr))
         return;
 
-    itr->second->OnPlayerLeave(plr);
+    itr->second->OnPlayerLeave(plr, false);
     DEBUG_LOG("Player %u left ZoneScript", plr->GetGUIDLow());
 }
 

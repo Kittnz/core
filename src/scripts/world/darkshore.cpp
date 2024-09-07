@@ -54,18 +54,84 @@ enum KerlonianData
 
     QUEST_SLEEPER_AWAKENED = 5321,
 
-    NPC_LILADRIS = 11219 // attackers entries unknown
+    SPELL_BEAR_FORM = 18309,
+
+    NPC_LILADRIS = 11219,
+    NPC_BLACKWOOD_TOTEMIC = 2169,
+    NPC_BLACKWOOD_URSA = 2170,
+    NPC_DARK_STRAND_EXCAVATOR = 3730,
+    NPC_DARK_STRAND_ADEPT = 3278,
+    NPC_KERLONIAN = 11218,
+    MOVE_POINT_END = 1
+
 };
 
-//TODO: make concept similar as "ringo" -escort. Find a way to run the scripted attacks, _if_ player are choosing road.
+static float waveFirstCoords[3][4] =
+{
+    {NPC_BLACKWOOD_TOTEMIC, 4480.79f, 248.848f, 60.5918f},
+    {NPC_BLACKWOOD_TOTEMIC, 4470.68f, 260.508f, 59.0824f},
+    {NPC_BLACKWOOD_URSA, 4461.42f, 271.358f, 61.7843f}
+};
+
+static float waveLastCoords[3][4] =
+{
+    {NPC_DARK_STRAND_EXCAVATOR, 3582.69f, 186.224f, 5.41665f},
+    {NPC_DARK_STRAND_EXCAVATOR, 3573.69f, 221.664f, 4.68143f},
+    {NPC_DARK_STRAND_ADEPT, 3572.49f, 201.906f, 6.13973f}
+};
+
+static float questEndCoord[3] = { 3238.602051f, 145.415421f, 9.913f };
+
 struct npc_kerlonianAI : public FollowerAI
 {
     npc_kerlonianAI(Creature* pCreature) : FollowerAI(pCreature)
     {
         Reset();
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
     }
 
     uint32 m_uiFallAsleepTimer;
+    bool m_waveFirst;
+    bool m_waveLast;
+    bool m_reached;
+
+    bool GetWaveFirst()
+    {
+        return m_waveFirst;
+    }
+
+    bool GetWaveLast()
+    {
+        return m_waveLast;
+    }
+
+    bool GetReached()
+    {
+        return m_reached;
+    }
+
+    void SetWaveFirst(bool value)
+    {
+        m_waveFirst = value;
+    }
+
+    void SetWaveLast(bool value)
+    {
+        m_waveLast = value;
+    }
+
+    void SetReached(bool value)
+    {
+        m_reached = value;
+    }
+
+    Player* GetLeader()
+    {
+        return GetLeaderForFollower();
+    }
+
 
     void Reset() override
     {
@@ -75,11 +141,14 @@ struct npc_kerlonianAI : public FollowerAI
 
     void JustRespawned() override
     {
+        m_waveFirst = false;
+        m_waveLast = false;
+        m_reached = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         FollowerAI::JustRespawned();
     }
 
-    void MoveInLineOfSight(Unit *pWho) override
+    void MoveInLineOfSight(Unit* pWho) override
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
@@ -93,6 +162,8 @@ struct npc_kerlonianAI : public FollowerAI
                         pPlayer->GroupEventHappens(QUEST_SLEEPER_AWAKENED, m_creature);
 
                     DoScriptText(SAY_KER_END, m_creature);
+
+                    SetReached(true);
                 }
 
                 SetFollowComplete();
@@ -176,6 +247,23 @@ struct npc_kerlonianAI : public FollowerAI
 
         DoMeleeAttackIfReady();
     }
+
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
+    {
+        if (uiType != POINT_MOTION_TYPE)
+            return;
+
+        if (uiPointId == MOVE_POINT_END)
+        {
+            if (Player* pPlayer = GetLeaderForFollower())
+            {
+                if (pPlayer->GetQuestStatus(QUEST_SLEEPER_AWAKENED) == QUEST_STATUS_INCOMPLETE)
+                    pPlayer->GroupEventHappens(QUEST_SLEEPER_AWAKENED, m_creature);
+            }
+
+            SetFollowComplete();
+        }
+    }
 };
 
 CreatureAI* GetAI_npc_kerlonian(Creature* pCreature)
@@ -192,11 +280,87 @@ bool QuestAccept_npc_kerlonian(Player* pPlayer, Creature* pCreature, const Quest
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
             pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             DoScriptText(SAY_KER_START, pCreature, pPlayer);
+            pKerlonianAI->me->RemoveAurasDueToSpell(SPELL_BEAR_FORM);
             pKerlonianAI->StartFollow(pPlayer, FACTION_ESCORT_N_FRIEND_PASSIVE, pQuest);
         }
     }
 
     return true;
+}
+
+/*####
+# npc_triggerQuest5321
+####*/
+
+struct npc_triggerQuest5321AI : public ScriptedAI
+{
+    npc_triggerQuest5321AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+    }
+
+    void Reset() override {}
+
+    void UpdateAI(uint32 const /*uiDiff*/) override 
+    {
+        if (Creature* creature = m_creature->FindNearestCreature(NPC_KERLONIAN, 35.0f))
+        {
+            if (npc_kerlonianAI* pKerlonianAI = dynamic_cast<npc_kerlonianAI*>(creature->AI()))
+            {
+                if (Player* pPlayer = pKerlonianAI->GetLeader())
+                {
+                    if (pPlayer->GetQuestStatus(QUEST_SLEEPER_AWAKENED) != QUEST_STATUS_INCOMPLETE)
+                        return;
+
+                    bool waveFirst = pKerlonianAI->GetWaveFirst();
+                    bool waveLast = pKerlonianAI->GetWaveLast();
+                    bool reached = pKerlonianAI->GetReached();
+                    switch (pPlayer->GetAreaId())
+                    {
+                    case 2077:
+                        if (!waveFirst)
+                        {
+                            DoScriptText(SAY_KER_ALERT_1, creature);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                auto& coord = waveFirstCoords[i];
+                                if (Creature* summon = pPlayer->SummonCreature(coord[0], coord[1], coord[2], coord[3], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
+                                    summon->AI()->AttackStart(pPlayer);
+                            }
+                            pKerlonianAI->SetWaveFirst(true);
+                        }
+                        break;
+                    case 331:
+                        if (!waveLast)
+                        {
+                            DoScriptText(SAY_KER_ALERT_2, creature);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                auto& coord = waveLastCoords[i];
+                                if (Creature* summon = pPlayer->SummonCreature(coord[0], coord[1], coord[2], coord[3], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
+                                    summon->AI()->AttackStart(pPlayer);
+                            }
+                            pKerlonianAI->SetWaveLast(true);
+                        }
+                        break;
+                    case 413:
+                        if (!reached)
+                        {
+                            DoScriptText(SAY_KER_END, creature);
+                            creature->SetWalk(true);
+                            creature->GetMotionMaster()->MovePoint(MOVE_POINT_END, questEndCoord[0], questEndCoord[1], questEndCoord[2], MOVE_PATHFINDING);
+                            pKerlonianAI->SetReached(true);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_triggerQuest5321(Creature* pCreature)
+{
+    return new npc_triggerQuest5321AI(pCreature);
 }
 
 /*####
@@ -502,7 +666,6 @@ enum VolcorData
     SAY_ESCAPE       = 1236,
 
     NPC_BLACKWOOD_SHAMAN = 2171,
-    NPC_BLACKWOOD_URSA   = 2170,
     NPC_GRIMCLAW         = 3695,
 
     SPELL_MOONSTALKER_FORM = 10849,
@@ -1167,6 +1330,18 @@ struct npc_murkdeepAI : public ScriptedAI
             m_bonfireGuid = bonfire->GetObjectGuid();
     }
 
+    void EnterCombat(Unit* pVictim) override
+    {
+        m_creature->SetVisibility(VISIBILITY_ON);
+        ScriptedAI::EnterCombat(pVictim);
+    }
+
+    void EnterEvadeMode() override
+    {
+        ScriptedAI::EnterEvadeMode();
+        m_creature->DespawnOrUnsummon(1);
+    }
+
     void JustSummoned(Creature* pWho) override
     {
         Player* player = GetPlayer();
@@ -1366,6 +1541,11 @@ void AddSC_darkshore()
     newscript->Name = "npc_kerlonian";
     newscript->GetAI = &GetAI_npc_kerlonian;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_kerlonian;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_triggerQuest5321";
+    newscript->GetAI = &GetAI_npc_triggerQuest5321;
     newscript->RegisterSelf();
 
     newscript = new Script;

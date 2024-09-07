@@ -11,6 +11,9 @@
 #include "Chat.h"
 #include "Util.h"
 #include "AddonHandler.h"
+#ifdef USING_DISCORD_BOT
+#include "DiscordBot/Bot.hpp"
+#endif
 
 #include <memory>
 #include <string>
@@ -44,7 +47,9 @@ enum CheatAction
 
 class WorldSession;
 class Player;
+class Guild;
 struct AreaEntry;
+struct MessageBlock;
 
 typedef std::unordered_set<std::string> StringSet;
 
@@ -56,7 +61,7 @@ public:
     virtual void LoadConfig() {}
 
     virtual std::string NormalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
-    virtual bool FilterMessage(std::string const& msg) { return 0; }
+    virtual bool FilterMessage(MessageBlock const& msg) { return 0; }
 
     virtual bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) { return true; }
 
@@ -68,6 +73,7 @@ public:
 
     virtual void BlacklistWord(std::string word) {};
     virtual void WhitelistWord(std::string word) {};
+    virtual void AddRegexBlacklist(std::string) {};
 };
 
 // interface to anticheat session (one for each world session)
@@ -155,6 +161,11 @@ class NullSessionAnticheat : public SessionAnticheatInterface
         // addon checksum verification
         bool ReadAddonInfo(WorldPacket* source, WorldPacket& target) override
         {
+#ifdef USING_DISCORD_BOT
+            std::string Message = string_format("[Fingerprint]: Account ID {}, IP {} reading addoninfo has no sessionAnticheat. Fingerprint will be 0.", _session->GetAccountId(), _session->GetRemoteAddress().c_str());
+            sDiscordBot->SendMessageToChannel(1083954369503973416, Message,
+                DiscordBot::MessagePriority::Requeue);
+#endif
             sAddOnHandler.BuildAddonPacket(source, &target);
             return true;
         }

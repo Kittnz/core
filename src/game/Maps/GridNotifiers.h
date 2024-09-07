@@ -626,6 +626,9 @@ namespace MaNGOS
                 if (goInfo->type != GAMEOBJECT_TYPE_SPELL_FOCUS)
                     return false;
 
+                if (!go->isSpawned())
+                    return false;
+
                 if (goInfo->spellFocus.focusId != i_focusId)
                     return false;
 
@@ -810,7 +813,8 @@ namespace MaNGOS
             //WorldObject const& GetFocusObject() const { return *i_obj; }
             bool operator()(Unit* u) const
             {
-                if (u->IsAlive() && u->IsInCombat() && i_obj->IsFriendlyTo(u) && i_obj->IsWithinDistInMap(u, i_range))
+                if (u->IsAlive() && (i_obj->IsInCombat() == u->IsInCombat()) &&
+                    i_obj->IsFriendlyTo(u) && i_obj->IsWithinDistInMap(u, i_range))
                 {
                     if (i_percent)
                         return 100 - u->GetHealthPercent() > i_hp;
@@ -931,7 +935,7 @@ namespace MaNGOS
             WorldObject const& GetFocusObject() const { return *i_obj; }
             bool operator()(Unit* u)
             {
-                if (i_owner && i_owner->IsPlayer() && u->IsPlayer() && !i_owner->IsPvP() && !i_owner->ToPlayer()->IsInDuelWith(u->ToPlayer()))
+                if (i_owner && !i_owner->CanAttackWithoutEnablingPvP(u))
                     return false;
 
                 if (i_obj->IsWithinDistInMap(u, i_range) && i_funit->IsValidAttackTarget(u) &&
@@ -976,6 +980,9 @@ namespace MaNGOS
                     return false;
 
                 if (!i_obj->IsWithinDistInMap(u, i_range))
+                    return false;
+
+                if (i_originalCaster->IsUnit() && !((Unit const*)i_originalCaster)->CanAttackWithoutEnablingPvP(u))
                     return false;
 
                 return i_originalCaster->IsValidAttackTarget(u);
@@ -1556,16 +1563,16 @@ namespace MaNGOS
 
             bool operator()(Unit* u)
             {
-                if (!m_me->IsHostileTo(u))
-                    return false;
-
-                if (!u->IsVisibleForOrDetect(m_me, m_me, false))
-                    return false;
-
                 if (!u->IsWithinDistInMap(m_me, std::min(m_me->GetAttackDistance(u), m_dist), true, SizeFactor::None))
                     return false;
 
                 if (!u->IsTargetable(true, m_me->IsCharmerOrOwnerPlayerOrPlayerItself()))
+                    return false;
+
+                if (!m_me->IsHostileTo(u))
+                    return false;
+
+                if (!u->IsVisibleForOrDetect(m_me, m_me, false))
                     return false;
 
                 if (m_ignoreCivilians && u->IsCreature() && static_cast<Creature*>(u)->IsCivilian())

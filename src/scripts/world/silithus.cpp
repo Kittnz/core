@@ -147,10 +147,10 @@ enum
 
     SPELL_APPARITION          = 25035,
 
-    GO_TYPE_PIERRE_ERR        = 0,
-    GO_TYPE_PIERRE_INF        = 1,
-    GO_TYPE_PIERRE_MOYENNE    = 2,
-    GO_TYPE_PIERRE_SUP        = 3,
+    GO_TYPE_ERROR              = 0,
+    GO_TYPE_LESSER_WIND_STONE  = 1,
+    GO_TYPE_WIND_STONE         = 2,
+    GO_TYPE_GREATER_WIND_STONE = 3,
 
     // Pierre moyenne
     ITEM_ACCES_PIERRE_MOYENNE = 20422,
@@ -174,20 +174,20 @@ struct Silithus_WindStonesBossData
 };
 static Silithus_WindStonesBossData const windStonesBosses[] =
 {
-    {GO_TYPE_PIERRE_INF,    1,  15209,  20416, 10685 },
-    {GO_TYPE_PIERRE_INF,    2,  15307,  20419, 10691 },
-    {GO_TYPE_PIERRE_INF,    3,  15212,  20418, 10690 },
-    {GO_TYPE_PIERRE_INF,    4,  15211,  20420, 10692 },
+    {GO_TYPE_LESSER_WIND_STONE,    1,  15209,  20416, 10685 },
+    {GO_TYPE_LESSER_WIND_STONE,    2,  15307,  20419, 10691 },
+    {GO_TYPE_LESSER_WIND_STONE,    3,  15212,  20418, 10690 },
+    {GO_TYPE_LESSER_WIND_STONE,    4,  15211,  20420, 10692 },
 
-    {GO_TYPE_PIERRE_MOYENNE,1,  15206,  20432, 10699 },
-    {GO_TYPE_PIERRE_MOYENNE,2,  15208,  20435, 10701 },
-    {GO_TYPE_PIERRE_MOYENNE,3,  15220,  20433, 10700 },
-    {GO_TYPE_PIERRE_MOYENNE,4,  15207,  20436, 10702 },
+    {GO_TYPE_WIND_STONE,           1,  15206,  20432, 10699 },
+    {GO_TYPE_WIND_STONE,           2,  15208,  20435, 10701 },
+    {GO_TYPE_WIND_STONE,           3,  15220,  20433, 10700 },
+    {GO_TYPE_WIND_STONE,           4,  15207,  20436, 10702 },
 
-    {GO_TYPE_PIERRE_SUP,    1,  15203,  20447, 10708 },
-    {GO_TYPE_PIERRE_SUP,    2,  15205,  20449, 10710 },
-    {GO_TYPE_PIERRE_SUP,    3,  15204,  20448, 10709 },
-    {GO_TYPE_PIERRE_SUP,    4,  15305,  20450, 10711 },
+    {GO_TYPE_GREATER_WIND_STONE,   1,  15203,  20447, 10708 },
+    {GO_TYPE_GREATER_WIND_STONE,   2,  15205,  20449, 10710 },
+    {GO_TYPE_GREATER_WIND_STONE,   3,  15204,  20448, 10709 },
+    {GO_TYPE_GREATER_WIND_STONE,   4,  15305,  20450, 10711 },
 };
 
 struct go_pierre_ventsAI: public GameObjectAI
@@ -202,13 +202,13 @@ struct go_pierre_ventsAI: public GameObjectAI
             case 180466:
             case 180539:
             case 180559:
-                return GO_TYPE_PIERRE_SUP;
+                return GO_TYPE_GREATER_WIND_STONE;
             // Pierre MOYENNE
             case 180554:
             case 180534:
             case 180502:
             case 180461:
-                return GO_TYPE_PIERRE_MOYENNE;
+                return GO_TYPE_WIND_STONE;
             // Pierre INF
             case 180456:
             case 180518:
@@ -216,9 +216,9 @@ struct go_pierre_ventsAI: public GameObjectAI
             case 180544:
             case 180549:
             case 180564:
-                return GO_TYPE_PIERRE_INF;
+                return GO_TYPE_LESSER_WIND_STONE;
             default:
-                return GO_TYPE_PIERRE_ERR;
+                return GO_TYPE_ERROR;
         }
     }
     uint32 SelectRandomBoss(uint32 stoneType)
@@ -258,15 +258,15 @@ struct go_pierre_ventsAI: public GameObjectAI
         switch (GetStoneType())
         {
             // Pierre SUP
-            case GO_TYPE_PIERRE_SUP:
+            case GO_TYPE_GREATER_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_ACCES_PIERRE_SUP))
                     playerHasAura = false;
             // Pierre MOYENNE
-            case GO_TYPE_PIERRE_MOYENNE:
+            case GO_TYPE_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_ACCES_PIERRE_MOYENNE))
                     playerHasAura = false;
             // Pierre INF
-            case GO_TYPE_PIERRE_INF:
+            case GO_TYPE_LESSER_WIND_STONE:
                 if (!user->HasItemWithIdEquipped(ITEM_SET_HEAD) ||
                     !user->HasItemWithIdEquipped(ITEM_SET_SHOULDERS) ||
                     !user->HasItemWithIdEquipped(ITEM_SET_CHEST))
@@ -318,13 +318,13 @@ struct go_pierre_ventsAI: public GameObjectAI
         ///- Let's find out which mob we have to summon.
         switch (stoneType)
         {
-            case GO_TYPE_PIERRE_SUP:
+            case GO_TYPE_GREATER_WIND_STONE:
                 textId = 10805;
                 break;
-            case GO_TYPE_PIERRE_MOYENNE:
+            case GO_TYPE_WIND_STONE:
                 textId = 10802;
                 break;
-            case GO_TYPE_PIERRE_INF:
+            case GO_TYPE_LESSER_WIND_STONE:
                 textId = 10686;
                 break;
         }
@@ -357,13 +357,13 @@ struct go_pierre_ventsAI: public GameObjectAI
         {
             switch (stoneType)
             {
-                case GO_TYPE_PIERRE_SUP:
+                case GO_TYPE_GREATER_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_ACCES_PIERRE_SUP);
                 // no break
-                case GO_TYPE_PIERRE_MOYENNE:
+                case GO_TYPE_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_ACCES_PIERRE_MOYENNE);
                 // no break
-                case GO_TYPE_PIERRE_INF:
+                case GO_TYPE_LESSER_WIND_STONE:
                     player->DestroyEquippedItem(ITEM_SET_SHOULDERS);
                     player->DestroyEquippedItem(ITEM_SET_CHEST);
                     player->DestroyEquippedItem(ITEM_SET_HEAD);
@@ -383,14 +383,7 @@ struct go_pierre_ventsAI: public GameObjectAI
 
         ///- Mark stone as used.
         me->UseDoorOrButton();
-        if (stoneType == GO_TYPE_PIERRE_SUP)
-            me->SetRespawnTime(3600);
-        else if (stoneType == GO_TYPE_PIERRE_MOYENNE)
-            me->SetRespawnTime(300);
-        else if (stoneType == GO_TYPE_PIERRE_INF)
-            me->SetRespawnTime(90);
-        else
-            me->SetRespawnTime(me->ComputeRespawnDelay());
+
         return true;
     }
 };
@@ -457,11 +450,9 @@ struct npc_solenorAI : public ScriptedAI
     uint32 m_uiCreepingDoom_Timer;
     uint32 m_uiCastSoulFlame_Timer;
     uint32 m_uiDespawn_Timer;
-    bool m_canUseDreadfulFright;
 
     void Reset() override
     {
-        m_canUseDreadfulFright = false;
         switch (m_creature->GetEntry())
         {
             case NPC_NELSON_THE_NICE:
@@ -531,7 +522,7 @@ struct npc_solenorAI : public ScriptedAI
     void EnterEvadeMode() override
     {
         m_creature->RemoveGuardians();
-
+        m_creature->RemoveAllAuras();
         ScriptedAI::EnterEvadeMode();
     }
 
@@ -605,15 +596,6 @@ struct npc_solenorAI : public ScriptedAI
         }
     }
 
-    static constexpr uint32 m_hunterSlows[] =
-    {
-        5116,  // Concussive Shot
-        13810, // Frost Trap Aura
-        2974,  // Wing Clip (Rank 1)
-        14267, // Wing Clip (Rank 2)
-        14268, // Wing Clip (Rank 3)
-    };
-
     void UpdateAI(const uint32 uiDiff) override
     {
         /** Nelson the Nice */
@@ -666,18 +648,6 @@ struct npc_solenorAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_canUseDreadfulFright)
-        {
-            for (auto spellId : m_hunterSlows)
-            {
-                if (m_creature->HasAura(spellId))
-                {
-                    m_canUseDreadfulFright = true;
-                    break;
-                }
-            }
-        }
-
         if (m_creature->HasAura(SPELL_SOUL_FLAME) && m_creature->HasAura(SPELL_FROST_TRAP))
                 m_creature->RemoveAurasDueToSpell(SPELL_SOUL_FLAME);
 
@@ -692,7 +662,7 @@ struct npc_solenorAI : public ScriptedAI
         else
             m_uiCreepingDoom_Timer -= uiDiff;
 
-        if (m_canUseDreadfulFright)
+        if (m_creature->HasUnitState(UNIT_STAT_ROOT))
         {
             if (m_uiDreadfulFright_Timer < uiDiff)
             {
@@ -1294,22 +1264,9 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
 {
     npc_Emissary_RomankhanAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->SetVisibility(VISIBILITY_OFF);
-
-        OverlordCount = 0;
-        if (Creature* add = pCreature->SummonCreature(15288, -7233.39f, 906.415f, -1.76649f, 1.81259f, TEMPSUMMON_DEAD_DESPAWN, 0))   // Aluntir
-            add->JoinCreatureGroup(pCreature, 0, 0, OPTION_RESPAWN_TOGETHER);
-        if (Creature* add = pCreature->SummonCreature(15286, -7212.16f, 911.711f, -1.76649f, 2.58543f, TEMPSUMMON_DEAD_DESPAWN, 0))   // Xil'xix
-            add->JoinCreatureGroup(pCreature, 0, 0, OPTION_RESPAWN_TOGETHER);
-        if (Creature* add = pCreature->SummonCreature(15290, -7210.3f, 895.014f, -1.76649f, 0.544185f, TEMPSUMMON_DEAD_DESPAWN, 0))   // Arakis
-            add->JoinCreatureGroup(pCreature, 0, 0, OPTION_RESPAWN_TOGETHER);
         Reset();
     }
 
-    int OverlordCount;
     uint32 m_uiWiltTimer;
     uint32 m_uiSchockTimer;
     uint32 m_uiSanityTimer;
@@ -1330,18 +1287,6 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
 
         for (uint64 & guid : PlayerGuids)
             guid = 0;
-    }
-
-    void SummonedCreatureJustDied(Creature* unit) override
-    {
-        ++OverlordCount;
-        if (OverlordCount >= 3)
-        {
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
-            m_creature->SetVisibility(VISIBILITY_ON);
-        }
     }
 
     void Aggro(Unit* pWho) override

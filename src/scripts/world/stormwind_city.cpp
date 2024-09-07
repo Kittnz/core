@@ -144,7 +144,7 @@ float aThugResetPosition[][3] = {
 struct npc_dashel_stonefistAI : public ScriptedAI
 {
     // old town thugs
-    Creature* m_thugs[2];
+    ObjectGuid m_thugs[2];
     // current event phase
     uint32 m_eventPhase;
     // check if an event has been started.
@@ -186,18 +186,17 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 player->GroupEventFailHappens(QUEST_MISSING_DIPLO_PT8);
 
             // remove thugs
-            for (const auto& pThug : m_thugs)
+            for (const auto& guid : m_thugs)
             {
-                if (pThug && pThug->IsAlive())
-                {
-                    static_cast<TemporarySummon*>(pThug)->UnSummon();
-                }
+                if (Creature* pThug = m_creature->GetMap()->GetCreature(guid))
+                    if (pThug->IsAlive())
+                        static_cast<TemporarySummon*>(pThug)->UnSummon();
             }
         }
 
-        // zero init required to prevent crash
-        for (auto& pThug : m_thugs)
-            pThug = nullptr;
+        // clear thug guids
+        for (auto& guid : m_thugs)
+            guid.Clear();
 
         m_questFightStarted = false;
         m_eventPhase = MDQP_NONE;
@@ -232,10 +231,13 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                     pMotionMaster->MoveTargetedHome();
 
                 // check if thugs are alive
-                for (const auto& pThug : m_thugs)
+                for (const auto& guid : m_thugs)
                 {
-                    if (pThug && pThug->IsAlive())
+                    if (Creature* pThug = m_creature->GetMap()->GetCreature(guid))
                     {
+                        if (!pThug->IsAlive())
+                            continue;
+
                         pThug->RemoveAllAuras();
                         pThug->DeleteThreatList();
                         pThug->CombatStop();
@@ -260,10 +262,7 @@ struct npc_dashel_stonefistAI : public ScriptedAI
     {
         switch (m_eventPhase)
         {
-        default: // MDQP_NONE
-            ScriptedAI::UpdateAI(uiDiff);
-            break;
-        case MDQP_SAY1: // Occurs only if thugs are alive
+            case MDQP_SAY1: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -275,16 +274,16 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_SAY2: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_SAY2: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
                     // recheck for safety, thugs can be killed by gm command, etc.
-                    if (m_thugs[0] && m_thugs[0]->IsAlive())
-                    {
-                        DoScriptText(SAY_PROGRESS_4_THU, m_thugs[0]);
-                    }
+                    if (Creature* pThug = m_creature->GetMap()->GetCreature(m_thugs[0]))
+                        if (pThug->IsAlive())
+                            DoScriptText(SAY_PROGRESS_4_THU, pThug);
 
                     // switch phase
                     m_nextPhaseDelayTimer = 1500;
@@ -292,16 +291,16 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_SAY3: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_SAY3: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
                     // recheck for safety, thugs can be killed by gm command, etc.
-                    if (m_thugs[1] && m_thugs[1]->IsAlive())
-                    {
-                        DoScriptText(SAY_PROGRESS_5_THU, m_thugs[1]);
-                    }
+                    if (Creature* pThug = m_creature->GetMap()->GetCreature(m_thugs[1]))
+                        if (pThug->IsAlive())
+                            DoScriptText(SAY_PROGRESS_5_THU, pThug);
 
                     // switch phase
                     m_nextPhaseDelayTimer = 1000;
@@ -309,8 +308,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_THUG_WALK_AWAY_1: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_THUG_WALK_AWAY_1: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -321,8 +321,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_THUG_WALK_AWAY_2: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_THUG_WALK_AWAY_2: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -334,8 +335,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_QUEST_COMPLETE:
+                break;
+            }
+            case MDQP_QUEST_COMPLETE:
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -348,7 +350,11 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
+                break;
+            }
+            default: // MDQP_NONE
+                ScriptedAI::UpdateAI(uiDiff);
+                break;
         }
     }
 
@@ -357,10 +363,13 @@ struct npc_dashel_stonefistAI : public ScriptedAI
         if (thug >= 2)
             return;
 
-        if (m_thugs[thug] && m_thugs[thug]->IsAlive())
+        if (Creature* pThug = m_creature->GetMap()->GetCreature(m_thugs[thug]))
         {
-            m_thugs[thug]->GetMotionMaster()->MovePoint(0, aThugResetPosition[thug][0], aThugResetPosition[thug][1], aThugResetPosition[thug][2], MOVE_WALK_MODE);
-            m_thugs[thug]->ForcedDespawn(3000);
+            if (pThug->IsAlive())
+            {
+                pThug->GetMotionMaster()->MovePoint(0, aThugResetPosition[thug][0], aThugResetPosition[thug][1], aThugResetPosition[thug][2], MOVE_WALK_MODE);
+                pThug->DespawnOrUnsummon(3000);
+            }
         }
     }
 
@@ -383,13 +392,11 @@ struct npc_dashel_stonefistAI : public ScriptedAI
         if (m_dialogStarted || m_questFightStarted)
         {
             // remove thugs
-            for (auto& pThug : m_thugs)
+            for (auto& guid : m_thugs)
             {
-                if (pThug)
-                {
+                if (Creature* pThug = m_creature->GetMap()->GetCreature(guid))
                     static_cast<TemporarySummon*>(pThug)->UnSummon();
-                    pThug = nullptr;
-                }
+                guid.Clear();
             }
         }
     }
@@ -399,19 +406,19 @@ struct npc_dashel_stonefistAI : public ScriptedAI
         // If the thug died for whatever reason, clear the pointer. Otherwise, if
         // combat is extended, the thug may despawn and we'll access a dangling
         // pointer
-        for (auto& pThug : m_thugs)
+        for (auto& guid : m_thugs)
         {
-            if (pThug == creature)
-                pThug = nullptr;
+            if (guid == creature->GetObjectGuid())
+                guid.Clear();
         }
     }
 
     void SummonedCreatureDespawn(Creature* creature) override
     {
-        for (auto& pThug : m_thugs)
+        for (auto& guid : m_thugs)
         {
-            if (pThug == creature)
-                pThug = nullptr;
+            if (guid == creature->GetObjectGuid())
+                guid.Clear();
         }
     }
 };
@@ -436,19 +443,22 @@ bool QuestAccept_npc_dashel_stonefist(Player* pPlayer, Creature* pCreature, cons
             dashelStonefistAI->m_playerGuid = pPlayer->GetObjectGuid();
 
             // spawn thugs and make them focus player.
-            dashelStonefistAI->m_thugs[0] = pCreature->SummonCreature(NPC_OLD_TOWN_THUG, -8676.075195f, 443.744019f, 99.632210f, 3.981758f, TEMPSUMMON_DEAD_DESPAWN);
+            Creature* pThug1 = pCreature->SummonCreature(NPC_OLD_TOWN_THUG, -8676.075195f, 443.744019f, 99.632210f, 3.981758f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000);
 
-            if (!dashelStonefistAI->m_thugs[0] || !dashelStonefistAI->m_thugs[0]->AI())
+            if (!pThug1 || !pThug1->AI())
                 return false;
 
-            dashelStonefistAI->m_thugs[0]->AI()->AttackStart(pPlayer);
-            dashelStonefistAI->m_thugs[0]->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            dashelStonefistAI->m_thugs[0] = pThug1->GetObjectGuid();
+
+            pThug1->AI()->AttackStart(pPlayer);
+            pThug1->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 
             // thug 2
-            if (dashelStonefistAI->m_thugs[1] = pCreature->SummonCreature(NPC_OLD_TOWN_THUG, -8685.416992f, 443.130829f, 99.526917f, 5.759635f, TEMPSUMMON_DEAD_DESPAWN))
+            if (Creature* pThug2 = pCreature->SummonCreature(NPC_OLD_TOWN_THUG, -8685.416992f, 443.130829f, 99.526917f, 5.759635f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
             {
-                dashelStonefistAI->m_thugs[1]->AI()->AttackStart(pPlayer);
-                dashelStonefistAI->m_thugs[1]->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                dashelStonefistAI->m_thugs[1] = pThug2->GetObjectGuid();
+                pThug2->AI()->AttackStart(pPlayer);
+                pThug2->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             }
             // start quest fight.
             dashelStonefistAI->startQuestFight();
@@ -621,34 +631,39 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
         m_uiEventPhase = 0;
     }
 
+    void RespawnInvolvedCreatures()
+    {
+        if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
+        {
+            pGuard1->ForcedDespawn(0);
+            pGuard1->Respawn();
+        }
+        if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
+        {
+            pGuard2->ForcedDespawn(0);
+            pGuard2->Respawn();
+        }
+        if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
+            pPriestress->Respawn();
+    }
+
     void JustDied(Unit* /*pKiller*/) override
     {
         if (m_creature->GetFactionTemplateId() == FACTION_ENEMYY)
             m_creature->SetFactionTemplateId(FACTION_NORMAL_LESCOVAR);
 
-        if (Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon))
-            if (!pMarzon->IsAlive())
-            {
-                if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-                {
-                    pGuard1->ForcedDespawn(0);
-                    pGuard1->Respawn();
-                }
-                if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-                {
-                    pGuard2->ForcedDespawn(0);
-                    pGuard2->Respawn();
-                }
-                if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                    pPriestress->Respawn();
+        Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon);
+        if (!pMarzon || !pMarzon->IsAlive())
+        {
+            RespawnInvolvedCreatures();
 
-                if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
-                {
-                    pTyrion->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-                    if (npc_tyrionAI* ptyrionAI = dynamic_cast<npc_tyrionAI*>(pTyrion->AI()))
-                        ptyrionAI->Reset();
-                }
+            if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
+            {
+                pTyrion->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                if (npc_tyrionAI* ptyrionAI = dynamic_cast<npc_tyrionAI*>(pTyrion->AI()))
+                    ptyrionAI->Reset();
             }
+        }
     }
 
     void SummonedCreatureJustDied(Creature* pSummoned) override
@@ -658,18 +673,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
 
         if (!m_creature->IsAlive())
         {
-            if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-            {
-                pGuard1->ForcedDespawn(0);
-                pGuard1->Respawn();
-            }
-            if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-            {
-                pGuard2->ForcedDespawn(0);
-                pGuard2->Respawn();
-            }
-            if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                pPriestress->Respawn();
+            RespawnInvolvedCreatures();
 
             if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
             {
@@ -696,20 +700,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
         if (pSummoned->GetEntry() != NPC_MARZON_THE_SILENT_BLADE)
             return;
 
-        if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-        {
-            pGuard1->ForcedDespawn(0);
-            pGuard1->Respawn();
-        }
-
-        if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-        {
-            pGuard2->ForcedDespawn(0);
-            pGuard2->Respawn();
-        }
-
-        if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-            pPriestress->Respawn();
+        RespawnInvolvedCreatures();
 
         if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
         {
@@ -755,18 +746,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                 }
                 break;
             case 21:
-                if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-                {
-                    pGuard1->ForcedDespawn(0);
-                    pGuard1->Respawn();
-                }
-                if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-                {
-                    pGuard2->ForcedDespawn(0);
-                    pGuard2->Respawn();
-                }
-                if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                    pPriestress->Respawn();
+                RespawnInvolvedCreatures();
 
                 if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
                 {
@@ -882,6 +862,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                         break;
                     case 13:
                         if (Player* pPlayer = GetPlayerForEscort())
+                        {
                             if (pPlayer->IsDead())
                             {
                                 SetEscortPaused(false);
@@ -889,7 +870,9 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                                 if (Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon))
                                     if (!pMarzon->IsDead() && pMarzon->GetFactionTemplateId() == FACTION_ENEMYY)
                                         pMarzon->SetFactionTemplateId(FACTION_NORMAL_MARZON);
+                                RespawnInvolvedCreatures();
                             }
+                        }
                         if (!m_creature->IsInCombat())
                             SetEscortPaused(false);
                         break;
@@ -936,19 +919,18 @@ struct npc_tyrion_spybotAI : public npc_escortAI
 
     uint32 m_uiEventTimer;
     uint8 m_uiEventPhase;
-    float m_fDefaultScaleSize;
 
     void Reset() override
     {
+        m_creature->SetDisplayId(MODEL_SPYBOT);
+        m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.3f);
 
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
 
-        m_fDefaultScaleSize = 0.30f;
         m_uiEventTimer = 0;
         m_uiEventPhase = 0;
         m_uiGardenGuardsCounter = 0;
-        m_creature->SetDisplayId(MODEL_SPYBOT);
 
         if (Creature* tyrion = GetClosestCreatureWithEntry(m_creature, NPC_TYRION, VISIBLE_RANGE))
         {
@@ -1046,7 +1028,6 @@ struct npc_tyrion_spybotAI : public npc_escortAI
                     pTyrion->SetFacingToObject(m_creature);
                     pTyrion->HandleEmote(EMOTE_STATE_USESTANDING);
                 }
-                m_fDefaultScaleSize = m_creature->GetFloatValue(OBJECT_FIELD_SCALE_X);
                 m_creature->SetDisplayId(MODEL_TYRIANA);
                 m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1.00f);
 
@@ -1144,8 +1125,6 @@ struct npc_tyrion_spybotAI : public npc_escortAI
                                     pGregorEscortAI->m_guidTyrion = m_guidTyrion;
                                     pGregorEscortAI->m_guidPriestress = m_guidPriestress;
                                 }
-                        m_creature->SetDisplayId(MODEL_SPYBOT);
-                        m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, m_fDefaultScaleSize);
                         ++m_uiEventPhase;
                         m_uiEventTimer = 1000;
                         break;
@@ -1215,324 +1194,6 @@ bool QuestAccept_npc_tyrion(Player* pPlayer, Creature* pCreature, const Quest* p
         }
     }
     return true;
-}
-
-struct SpawnLocation
-{
-    float m_fX, m_fY, m_fZ;
-};
-
-// NOTE: Stormwind Keep is explicitly not supposed to receive the buff
-static const SpawnLocation aRallyGeneratorLocs[7] =
-{
-    { -8800.6f, 643.17f, 94.29f },   // Trade District
-    { -8643.5f, 758.10f, 97.28f },   // Cathedral Square
-    { -8523.0f, 848.78f, 106.8f },   // Cathedral of Light
-    { -8951.7f, 865.88f, 104.9f },   // Mage District
-    { -8424.0f, 619.94f, 95.55f },   // Blacksmith District
-    { -8705.6f, 418.51f, 99.35f },   // Old Town
-    { -8734.6f, 1043.2f, 92.15f }    // The Park
-};
-
-enum
-{
-    SPELL_RALLYING_CRY_DRAGONSLAYER = 22888,
-    NPC_RALLY_CRY_GENERATOR_ALLY    = 21002,
-
-    MAX_RALLY_GENERATORS            = 7
-};
-
-/*######
-## npc_major_mattingly
-######*/
-
-enum
-{
-    QUEST_CELEBRATING_GOOD_TIMES        = 7496,
-
-    YELL_ONY_ALLY_REWARD_1              = -1900111,
-    YELL_ONY_ALLY_REWARD_2              = -1900110,
-
-    GO_ONYXIAS_HEAD_ALLY                = 179558,
-
-    ITEM_HEAD_ONY_ALLIANCE              = 18423, //Head of Onyxia
-
-};
-
-struct npc_major_mattinglyAI : public ScriptedAI
-{
-    npc_major_mattinglyAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-    uint32 m_uiTick;
-    uint32 m_uiDialogueTimer;
-    bool m_bRallyingCryEvent;
-    ObjectGuid m_playerGuid;
-
-    void Reset() override
-    {
-        m_uiTick = 0;
-        m_uiDialogueTimer = 2000;
-        m_bRallyingCryEvent = false;
-        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-    }
-
-    void StartRallyEvent(ObjectGuid playerGuid)
-    {
-        m_playerGuid = playerGuid;
-        m_bRallyingCryEvent = true;
-        m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-    }
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_bRallyingCryEvent)
-        {
-            if (m_uiDialogueTimer <= uiDiff)
-            {
-                switch (m_uiTick)
-                {
-                    case 0:
-                        if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
-                        {
-                            m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-                            m_creature->MonsterYellToZone(YELL_ONY_ALLY_REWARD_1, 0, pPlayer);
-                        }
-                        m_uiDialogueTimer = 10000;
-                        break;
-                    case 1:
-                        m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-                        m_creature->MonsterYellToZone(YELL_ONY_ALLY_REWARD_2);
-                        if (GameObject* pGo = m_creature->FindNearestGameObject(GO_ONYXIAS_HEAD_ALLY, 150.0f))
-                        {
-                            if (!pGo->isSpawned())
-                            {
-                                pGo->SetRespawnTime(7200);
-                                pGo->Refresh();
-                            }
-                        }
-                        m_uiDialogueTimer = 7000;
-                        break;
-                    case 2:
-                        m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
-                        for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
-                        {
-                            if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR_ALLY, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
-                                pGenerator->CastSpell(pGenerator, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
-                        }
-                        Reset();
-                        return;
-                }
-                m_uiTick++;
-            }
-            else m_uiDialogueTimer -= uiDiff;
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_major_mattingly(Creature* pCreature)
-{
-    return new npc_major_mattinglyAI(pCreature);
-}
-
-bool QuestRewarded_npc_major_mattingly(Player* pPlayer, Creature* pCreature, Quest const* quest)
-{
-    if (quest->GetQuestId() == QUEST_CELEBRATING_GOOD_TIMES)
-    {
-        if (npc_major_mattinglyAI* pMattingly = dynamic_cast<npc_major_mattinglyAI*>(pCreature->AI()))
-            pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
-    }
-    return true;
-}
-
-
-bool GossipHello_npc_major_mattingly(Player* pPlayer, Creature* pCreature)
-{
-	if (pPlayer->GetQuestRewardStatus(QUEST_CELEBRATING_GOOD_TIMES) && pPlayer->HasItemCount(ITEM_HEAD_ONY_ALLIANCE, 1)) {
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Onyxia. The beast is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-	}
-	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-	return true;
-}
-
-bool GossipSelect_npc_major_mattingly(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
-
-        if (pPlayer->HasItemCount(ITEM_HEAD_ONY_ALLIANCE, 1))
-        {
-            if (npc_major_mattinglyAI* pMattingly = dynamic_cast<npc_major_mattinglyAI*>(pCreature->AI()))
-            {
-                pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
-                pPlayer->DestroyItemCount(ITEM_HEAD_ONY_ALLIANCE, 1, true);
-            }
-        }
-        else
-        {
-            pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
-        }
-
-	}
-	pPlayer->CLOSE_GOSSIP_MENU();
-	return true;
-}
-
-/*######
-## npc_field_marshal_afrasiabi
-######*/
-
-enum
-{
-    QUEST_LORD_OF_BLACKROCK_ALLY = 7782,
-
-    YELL_NEF_REWARD_1_ALLY = -1900104,
-    YELL_NEF_REWARD_2_ALLY = -1900103,
-
-    GO_NEFARIANS_HEAD_ALLY = 179882,
-
-    ITEM_HEAD_NEF_ALLIANCE = 19003, //Head of Nefarian
-};
-
-struct npc_field_marshal_afrasiabiAI : public ScriptedAI
-{
-    npc_field_marshal_afrasiabiAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 m_uiTick;
-    uint32 m_uiDialogueTimer;
-    bool m_bRallyingCryEvent;
-    ObjectGuid m_playerGuid;
-
-    void Reset() override
-    {
-        m_uiTick = 0;
-        m_uiDialogueTimer = 2000;
-        m_bRallyingCryEvent = false;
-        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-    }
-
-    void StartRallyEvent(ObjectGuid playerGuid)
-    {
-        m_playerGuid = playerGuid;
-        m_bRallyingCryEvent = true;
-        m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-    }
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_bRallyingCryEvent)
-        {
-            if (m_uiDialogueTimer <= uiDiff)
-            {
-                switch (m_uiTick)
-                {
-                    case 0:
-                        if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
-                        {
-                            m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-                            m_creature->MonsterYellToZone(YELL_NEF_REWARD_1_ALLY, 0, pPlayer);
-                        }
-                        m_uiDialogueTimer = 10000;
-                        break;
-                    case 1:
-                        if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
-                        {
-                            m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-                            m_creature->MonsterYellToZone(YELL_NEF_REWARD_2_ALLY, 0, pPlayer);
-                        }
-                        if (GameObject* pGo = m_creature->FindNearestGameObject(GO_NEFARIANS_HEAD_ALLY, 150.0f))
-                        {
-                            if (!pGo->isSpawned())
-                            {
-                                pGo->SetRespawnTime(7200);
-                                pGo->Refresh();
-                            }
-                        }
-                        m_uiDialogueTimer = 7000;
-                        break;
-                    case 2:
-                        m_creature->CastSpell(m_creature, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
-                        for (uint8 i = 0; i < MAX_RALLY_GENERATORS; ++i)
-                        {
-                            if (Creature* pGenerator = m_creature->SummonCreature(NPC_RALLY_CRY_GENERATOR_ALLY, aRallyGeneratorLocs[i].m_fX, aRallyGeneratorLocs[i].m_fY, aRallyGeneratorLocs[i].m_fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000))
-                                pGenerator->CastSpell(pGenerator, SPELL_RALLYING_CRY_DRAGONSLAYER, true);
-                        }
-                        Reset();
-                        return;
-                }
-                m_uiTick++;
-            }
-            else m_uiDialogueTimer -= uiDiff;
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_field_marshal_afrasiabi(Creature* pCreature)
-{
-    return new npc_field_marshal_afrasiabiAI(pCreature);
-}
-
-bool QuestRewarded_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature, Quest const* quest)
-{
-    if (quest->GetQuestId() == QUEST_LORD_OF_BLACKROCK_ALLY)
-    {
-        if (npc_field_marshal_afrasiabiAI* pAfrasiabi = dynamic_cast<npc_field_marshal_afrasiabiAI*>(pCreature->AI()))
-            pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
-    }
-    return true;
-}
-
-
-bool GossipHello_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature)
-{
-	if (pPlayer->GetQuestRewardStatus(QUEST_LORD_OF_BLACKROCK_ALLY) && pPlayer->HasItemCount(ITEM_HEAD_NEF_ALLIANCE, 1)) {
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nefarian. The monster is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-	}
-	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-	return true;
-}
-
-bool GossipSelect_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-	if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
-
-		if (pPlayer->HasItemCount(ITEM_HEAD_NEF_ALLIANCE, 1))
-		{
-            if (npc_field_marshal_afrasiabiAI* pAfrasiabi = dynamic_cast<npc_field_marshal_afrasiabiAI*>(pCreature->AI()))
-            {
-                pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
-                pPlayer->DestroyItemCount(ITEM_HEAD_NEF_ALLIANCE, 1, true);
-            }
-		}
-		else
-		{
-			pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
-		}
-
-	}
-	pPlayer->CLOSE_GOSSIP_MENU();
-	return true;
 }
 
 /*######
@@ -1647,22 +1308,6 @@ void AddSC_stormwind_city()
     newscript->GetAI = &GetAI_npc_tyrion;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_tyrion;
     newscript->pGossipHello = &GossipHello_npc_tyrion;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_major_mattingly";
-    newscript->GetAI = &GetAI_npc_major_mattingly;
-    newscript->pQuestRewardedNPC = &QuestRewarded_npc_major_mattingly;
-    newscript->pGossipHello = &GossipHello_npc_major_mattingly;
-    newscript->pGossipSelect = &GossipSelect_npc_major_mattingly;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_field_marshal_afrasiabi";
-    newscript->GetAI = &GetAI_npc_field_marshal_afrasiabi;
-    newscript->pQuestRewardedNPC = &QuestRewarded_npc_field_marshal_afrasiabi;
-    newscript->pGossipHello = &GossipHello_npc_field_marshal_afrasiabi;
-    newscript->pGossipSelect = &GossipSelect_npc_field_marshal_afrasiabi;
     newscript->RegisterSelf();
 
     newscript = new Script;

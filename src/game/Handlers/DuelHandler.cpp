@@ -27,6 +27,7 @@
 #include "UpdateData.h"
 #include "Player.h"
 #include "Chat.h"
+#include "ObjectAccessor.h"
 #include "World.h"
 
 void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
@@ -34,11 +35,11 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     ObjectGuid guid;
     recvPacket >> guid;
 
-    if (!GetPlayer()->m_duel) // Ignore accept from m_duel-sender
+    Player* pl = GetPlayer();
+    if (!pl || !pl->m_duel) // Ignore accept from m_duel-sender
         return;
 
-    Player *pl = GetPlayer();
-    Player *plTarget = pl->m_duel->opponent;
+    Player* plTarget = sObjectAccessor.FindPlayer(pl->m_duel->opponent);
 
     if (sWorld.getConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL))
     {
@@ -82,8 +83,8 @@ void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
     if (pPlayer->m_duel->startTime != 0)
     {
         pPlayer->CombatStopWithPets(true);
-        if (pPlayer->m_duel->opponent)
-            pPlayer->m_duel->opponent->CombatStopWithPets(true);
+        if (Player* pOpponent = sObjectAccessor.FindPlayer(pPlayer->m_duel->opponent))
+            pOpponent->CombatStopWithPets(true);
 
         pPlayer->CastSpell(GetPlayer(), 7267, true);    // beg
         pPlayer->DuelComplete(DUEL_WON);

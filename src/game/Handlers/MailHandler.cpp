@@ -145,6 +145,19 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
+    if (IsSuspicious())
+        return;
+
+    if (sAccountMgr.GetMailCount(GetAccountId()) >= sWorld.getConfig(CONFIG_UINT32_MAIL_MAX_PER_HOUR)
+        && !HasHighLevelCharacter())
+    {
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
+        WorldPacket data;
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, "You have sent too many mails recently. Please try again at a later time.");
+        SendPacket(&data);
+        return;
+    }
+
     WorldSession::AsyncMailSendRequest* req = new WorldSession::AsyncMailSendRequest();
     req->accountId = GetAccountId();
     req->senderGuid = GetMasterPlayer()->GetObjectGuid();
@@ -241,6 +254,19 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         delete req;
         return;
     }
+
+    // try to prevent addon scam https://github.com/EinBaum/WoW-Scams
+    if (req->money && ((req->subject.size() == 1 && req->body.empty()) || (m_lastMailOpenTime + 1 >= sWorld.GetGameTime())))
+    {
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_ENOUGH_MONEY);
+        WorldPacket data;
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, "Sending mail prevented. You might be a victim of a scam addon. Please use a different mail subject!");
+        SendPacket(&data);
+        delete req;
+        return;
+    }
+
+    sAccountMgr.IncreaseMailCount(GetAccountId());
 
     if (req->receiverPtr)
     {
@@ -366,7 +392,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 			}
 		}
 
-        if (!item->CanBeTraded())
+        if (!item->CanBeTraded() || item->IsSoulBound())
         {
             SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
             return;
@@ -384,7 +410,8 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
         (sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
     {
-        SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_CAP_REACHED);
+        GetPlayer()->GetSession()->SendNotification("You cannot use the mailbox yet.");
         return;
     }
 
@@ -438,7 +465,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
             if (GetSecurity() > SEC_PLAYER && sWorld.getConfig(CONFIG_BOOL_GM_LOG_TRADE))
             {
                 sLog.outCommand(GetAccountId(), "GM %s (Account: %u) mail item: %s (Entry: %u Count: %u) to player: %s (Account: %u)",
-                                GetPlayerName(), GetAccountId(), item->GetProto()->Name1, item->GetEntry(), item->GetCount(), req->receiver.GetString().c_str(), rc_account);
+                                GetPlayerName(), GetAccountId(), item->GetProto()->Name1.c_str(), item->GetEntry(), item->GetCount(), req->receiver.GetString().c_str(), rc_account);
             }
 
             loadedPlayer->LogItem(item, LogItemAction::Mailed);
@@ -479,6 +506,13 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         req->COD = 0;
         ProcessAnticheatAction("MailCheck", "Attempt to send COD mail without any item", CHEAT_ACTION_INFO_LOG);
     }
+
+    sLog.out(LOG_MAIL_AH,
+        "HandleSendMailCallback [%s:%u@%s] %s sent a mail (%s:%u (%u) & %u copper) to %s:%u",
+        GetUsername().c_str(), GetAccountId(), GetRemoteAddress().c_str(), GetPlayer()->GetName(), item ? item->GetProto()->Name1.c_str() : "EMPTY", item ? item->GetEntry() : 0,
+        item ? item->GetCount() : 0, req->money, req->receiver.GetString().c_str(), rc_account);
+
+
     // will delete item or place to receiver mail list
     draft
     .SetMoney(req->money)
@@ -734,7 +768,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
                         sender_name = sObjectMgr.GetMangosStringForDBCLocale(LANG_UNKNOWN);
                 }
                 sLog.outCommand(GetAccountId(), "GM %s (Account: %u) receive mail item: %s (Entry: %u Count: %u) and send COD money: %u to player: %s (Account: %u)",
-                                GetPlayerName(), GetAccountId(), it->GetProto()->Name1, it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);
+                                GetPlayerName(), GetAccountId(), it->GetProto()->Name1.c_str(), it->GetEntry(), it->GetCount(), m->COD, sender_name.c_str(), sender_accId);
             }
             else if (!sender)
                 sender_accId = sObjectMgr.GetPlayerAccountIdByGUID(sender_guid);
@@ -760,7 +794,8 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         it->SetState(ITEM_UNCHANGED);                       // need to set this state, otherwise item cannot be removed later, if necessary
         loadedPlayer->MoveItemToInventory(dest, it, true);
 
-        sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item entry %u.", loadedPlayer->GetShortDescription().c_str(), it->GetEntry());
+        sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item (%s) with entry %u.",
+                 loadedPlayer->GetShortDescription().c_str(), it->GetProto()->Name1.c_str(), it->GetEntry());
 
         CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
         loadedPlayer->SaveInventoryAndGoldToDB();
@@ -833,6 +868,7 @@ void WorldSession::HandleGetMailList(WorldPacket& recv_data)
     WorldPacket data(SMSG_MAIL_LIST_RESULT, (200));         // guess size
     data << uint8(0);                                       // mail's count
     time_t cur_time = time(nullptr);
+    m_lastMailOpenTime = cur_time;
 
     for (PlayerMails::iterator itr = pl->GetMailBegin(); itr != pl->GetMailEnd(); ++itr)
     {

@@ -26,7 +26,7 @@
 #include "Database/DatabaseEnv.h"
 #include "ItemEnchantmentMgr.h"
 #include "GuildMgr.h"
-#include "miscelanneous/feature_transmog.h"
+#include "miscellaneous/feature_transmog.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -244,7 +244,7 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
     SetGuidValue(ITEM_FIELD_OWNER, ownerGuid);
     SetGuidValue(ITEM_FIELD_CONTAINED, ObjectGuid());
 
-    ItemPrototype const* itemProto = ObjectMgr::GetItemPrototype(itemid);
+    ItemPrototype const* itemProto = sObjectMgr.GetItemPrototype(itemid);
     if (!itemProto)
         return false;
 
@@ -253,7 +253,7 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
 
     SetUInt32Value(ITEM_FIELD_STACK_COUNT, 1);
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, itemProto->MaxDurability);
-    SetUInt32Value(ITEM_FIELD_DURABILITY, itemProto->MaxDurability);
+    SetUInt32Value(ITEM_FIELD_DURABILITY, (itemProto->ExtraFlags & ITEM_EXTRA_CREATE_BROKEN) ? 0 : itemProto->MaxDurability);
 
     for (int i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
         SetSpellCharges(i, itemProto->Spells[i].SpellCharges);
@@ -266,7 +266,7 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
 		ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
 	}
 
-    itemProto->m_bDiscovered = true;
+    itemProto->Discovered = true;
 
     return true;
 }
@@ -495,19 +495,33 @@ bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint3
             SetSpellCharges(i, atoi(tokens[i]));
 
     SetUInt32Value(ITEM_FIELD_FLAGS, fields[5].GetUInt32());
-    // Remove bind flag for items vs NO_BIND set
-    if (IsSoulBound() && proto->Bonding == NO_BIND)
-    {
-        ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, false);
-        need_save = true;
-    }
 
+    uint32 transmogId = fields[8].GetUInt32();
+
+    if (transmogId)
+    {
+        // All transmogged items should be soulbound
+        if (!IsSoulBound())
+        {
+            ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, true);
+            need_save = true;
+        }
+    }
+    else
+    {
+        // Remove bind flag for items vs NO_BIND set
+        if (IsSoulBound() && proto->Bonding == NO_BIND)
+        {
+            ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED, false);
+            need_save = true;
+        }
+    }
 
     std::string enchants = fields[6].GetString();
     _LoadIntoDataField(enchants, ITEM_FIELD_ENCHANTMENT, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET);
     SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, fields[7].GetInt16());
 
-    SetTransmogrification(fields[8].GetUInt32());
+    SetTransmogrification(transmogId);
 
     uint32 durability = fields[9].GetUInt16();
     SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
@@ -583,7 +597,7 @@ void Item::LoadLootFromDB(Field* fields)
     }
 
     // normal item case
-    ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item_id);
+    ItemPrototype const* proto = sObjectMgr.GetItemPrototype(item_id);
 
     if (!proto)
     {
@@ -618,7 +632,7 @@ void Item::DeleteFromInventoryDB()
 
 ItemPrototype const* Item::GetProto() const
 {
-    return ObjectMgr::GetItemPrototype(GetEntry());
+    return sObjectMgr.GetItemPrototype(GetEntry());
 }
 
 Player* Item::GetOwner()const
@@ -722,7 +736,7 @@ uint32 ItemPrototype::GetProficiencySpell() const
 
 int32 Item::GenerateItemRandomPropertyId(uint32 item_id)
 {
-    ItemPrototype const* itemProto = sItemStorage.LookupEntry<ItemPrototype>(item_id);
+    ItemPrototype const* itemProto = sObjectMgr.GetItemPrototype(item_id);
 
     if (!itemProto)
         return 0;
@@ -861,10 +875,26 @@ bool Item::IsEquipped() const
     return !IsInBag() && m_slot < EQUIPMENT_SLOT_END;
 }
 
+void Item::ResetSoulBoundTradeData()
+{
+    m_tradeAllowedUntil = 0;
+    m_obtainedFromMapId = 0;
+    m_canBeTradedWithPlayers.clear();
+    ForceValuesUpdateAtIndex(ITEM_FIELD_FLAGS);
+    if (Player* owner = GetOwner())
+        SendCreateUpdateToPlayer(owner);
+}
+
+bool Item::CanBeTradedEvenIfSoulBound() const
+{
+    return m_tradeAllowedUntil > sWorld.GetGameTime();
+}
+
 bool Item::CanBeTraded() const
 {
-    if (IsSoulBound())
+    if (IsSoulBound() && !CanBeTradedEvenIfSoulBound())
         return false;
+
     if (IsBag() && (Player::IsBagPos(GetPos()) || !((Bag const*)this)->IsEmpty()))
         return false;
 
@@ -1019,7 +1049,7 @@ Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)
     if (count < 1)
         return nullptr;                                        //don't create item at zero count
 
-    if (ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item))
+    if (ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(item))
     {
         if (count > pProto->GetMaxStackSize())
             count = pProto->GetMaxStackSize();
@@ -1070,7 +1100,7 @@ bool Item::IsBindedNotWith(Player const* player) const
         return true;
 
     // not binded item
-    if (!IsSoulBound())
+    if (!IsSoulBound() || CanBeTradedEvenIfSoulBound())
         return false;
 
     return true;
@@ -1079,7 +1109,8 @@ bool Item::IsBindedNotWith(Player const* player) const
 void Item::AddToClientUpdateList()
 {
     if (Player* pl = GetOwner())
-        pl->GetMap()->AddUpdateObject(this);
+        if (pl->GetSession()->IsConnected() && !pl->GetSession()->PlayerLogout())
+            pl->GetMap()->AddUpdateObject(this);
 }
 
 void Item::RemoveFromClientUpdateList()

@@ -144,11 +144,11 @@ void Player::UpdateArmor()
     {
         auto auraList = GetAurasByType(SPELL_AURA_DUMMY);
 
-        static std::unordered_map<uint32, uint32> armorLookup =
+        static std::unordered_map<uint32, float> armorLookup =
         {
-            {45951, 10},
-            {45952, 20},
-            {45953, 30}
+            {45951, 10.0f},
+            {45952, 20.0f},
+            {45953, 30.0f}
         };
 
         for (const auto& aura : auraList)
@@ -159,7 +159,7 @@ void Player::UpdateArmor()
                 if (shield && shield->GetProto()->Class == ITEM_CLASS_ARMOR &&
                     (shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_SHIELD || shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_BUCKLER))
                 {
-                    dynamic += shield->GetProto()->Armor / 100 * findItr->second;
+                    dynamic += ceilf(shield->GetProto()->Armor / 100.0f * findItr->second);
                 }
             }
         }
@@ -292,7 +292,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                     case FORM_CAT:
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                    case FORM_MOONKIN:
                     {
                         Unit::AuraList const& mDummy = GetAurasByType(SPELL_AURA_DUMMY);
                         for (const auto itr : mDummy)
@@ -317,9 +316,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                         break;
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = GetLevel() * mLevelMult + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
-                        break;
-                    case FORM_MOONKIN:
                         val2 = GetLevel() * mLevelMult + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
                         break;
                     default:
@@ -541,11 +537,9 @@ void Player::UpdateAllCritPercentages()
     float value = GetMeleeCritFromAgility();
 
     SetBaseModValue(CRIT_PERCENTAGE, PCT_MOD, value);
-    SetBaseModValue(OFFHAND_CRIT_PERCENTAGE, PCT_MOD, value);
     SetBaseModValue(RANGED_CRIT_PERCENTAGE, PCT_MOD, value);
 
     UpdateCritPercentage(BASE_ATTACK);
-    UpdateCritPercentage(OFF_ATTACK);
     UpdateCritPercentage(RANGED_ATTACK);
 }
 
@@ -924,7 +918,7 @@ void Pet::UpdateResistances(uint32 school)
 
 void Pet::UpdateArmor()
 {
-    float amount = (GetStat(STAT_AGILITY) * 2.0f);
+    float amount = (GetStat(STAT_AGILITY) * (getPetType() == HUNTER_PET ? 2.0f : 1.0f));
 
     m_auraModifiersGroup[UNIT_MOD_ARMOR][TOTAL_VALUE] += amount;
     Creature::UpdateArmor();

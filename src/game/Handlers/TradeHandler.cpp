@@ -31,6 +31,7 @@
 #include "Spell.h"
 #include "SocialMgr.h"
 #include "Language.h"
+#include "Chat.h"
 
 void WorldSession::SendTradeStatus(TradeStatus status)
 {
@@ -154,15 +155,32 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 {
                     sLog.outCommand(_player->GetSession()->GetAccountId(), "GM %s (Account: %u) trade: %s (Entry: %d Count: %u) to player: %s (Account: %u)",
                                     _player->GetName(), _player->GetSession()->GetAccountId(),
-                                    myItems[i]->GetProto()->Name1, myItems[i]->GetEntry(), myItems[i]->GetCount(),
+                                    myItems[i]->GetProto()->Name1.c_str(), myItems[i]->GetEntry(), myItems[i]->GetCount(),
                                     trader->GetName(), trader->GetSession()->GetAccountId());
                 }
 
                 _player->LogItem(myItems[i], LogItemAction::Traded);
                 trader->LogItem(myItems[i], LogItemAction::TradeReceived);
 
+                // Turtle: dont allow trading raid item anymore
+                if (myItems[i]->IsSoulBound() && myItems[i]->CanBeTradedEvenIfSoulBound())
+                {
+                    myItems[i]->ResetSoulBoundTradeData();
+
+                    WorldPacket data;
+                    auto proto = myItems[i]->GetProto();
+
+                    if (proto && !proto->Name1.empty())
+                    {
+                        WorldPacket data;
+                        std::string announce = _player->GetName() + std::string(" trades item ") +myItems[i]->GetProto()->Name1 + " to " + trader->GetName() + ".";
+                        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                        _player->GetMap()->SendToPlayers(&data);
+                    }
+                }
+
                 // store
-                trader->MoveItemToInventory(traderDst, myItems[i], true, true);
+                myItems[i] = trader->MoveItemToInventory(traderDst, myItems[i], true, true);
             }
 
             if (hisItems[i])
@@ -173,15 +191,31 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                 {
                     sLog.outCommand(trader->GetSession()->GetAccountId(), "GM %s (Account: %u) trade: %s (Entry: %d Count: %u) to player: %s (Account: %u)",
                                     trader->GetName(), trader->GetSession()->GetAccountId(),
-                                    hisItems[i]->GetProto()->Name1, hisItems[i]->GetEntry(), hisItems[i]->GetCount(),
+                                    hisItems[i]->GetProto()->Name1.c_str(), hisItems[i]->GetEntry(), hisItems[i]->GetCount(),
                                     _player->GetName(), _player->GetSession()->GetAccountId());
                 }
 
                 trader->LogItem(hisItems[i], LogItemAction::Traded);
                 _player->LogItem(hisItems[i], LogItemAction::TradeReceived);
 
+                // Turtle: dont allow trading raid item anymore
+                if (hisItems[i]->IsSoulBound() && hisItems[i]->CanBeTradedEvenIfSoulBound())
+                {
+                    hisItems[i]->ResetSoulBoundTradeData();
+
+                    WorldPacket data;
+                    auto proto = hisItems[i]->GetProto();
+
+                    if (proto && !proto->Name1.empty())
+                    {
+                        std::string announce = trader->GetName() + std::string(" trades item ") + hisItems[i]->GetProto()->Name1 + " to " + _player->GetName() + ".";
+                        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, announce.c_str());
+                        _player->GetMap()->SendToPlayers(&data);
+                    }
+                }
+
                 // store
-                _player->MoveItemToInventory(playerDst, hisItems[i], true, true);
+                hisItems[i] = _player->MoveItemToInventory(playerDst, hisItems[i], true, true);
             }
         }
         else
@@ -259,7 +293,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint32>();
 
-    if (IsFingerprintBanned())
+    if (IsFingerprintBanned() || IsSuspicious())
         return;
 
     TradeData* my_trade = _player->m_trade;
@@ -443,6 +477,10 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
             my_trade->SetAccepted(false);
             his_trade->SetAccepted(false);
             his_trade->SetLastModificationTime(time(nullptr));
+            if (my_spell)
+                my_spell->Delete();
+            if (his_spell)
+                his_spell->Delete();
             return;
         }
         else if (!hisCanCompleteTrade)
@@ -454,6 +492,10 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
             my_trade->SetAccepted(false);
             his_trade->SetAccepted(false);
             his_trade->SetLastModificationTime(time(nullptr));
+            if (my_spell)
+                my_spell->Delete();
+            if (his_spell)
+                his_spell->Delete();
             return;
         }
 
@@ -728,6 +770,16 @@ void WorldSession::HandleSetTradeItemOpcode(WorldPacket& recvPacket)
     // check cheating, can't fail with correct client operations
     Item* item = _player->GetItemByPos(bag, slot);
     if (!item || (tradeSlot != TRADE_SLOT_NONTRADED && !item->CanBeTraded()))
+    {
+        SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
+        return;
+    }
+
+    // Turtle: soulbound items can be temporarily traded with people from same raid
+    if (tradeSlot != TRADE_SLOT_NONTRADED && item->IsSoulBound() &&
+        ((_player->GetMapId() != item->GetOriginMapId()) ||
+        (_player->GetGroup() != my_trade->GetTrader()->GetGroup()) ||
+        !item->CanTradeSoulBoundToPlayer(my_trade->GetTrader()->GetObjectGuid())))
     {
         SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
         return;

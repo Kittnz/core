@@ -293,13 +293,13 @@ bool VMapManager2::GetLiquidLevel(uint32 pMapId, float x, float y, float z, uint
 
 std::shared_ptr<WorldModel> VMapManager2::acquireModelInstance(std::string const& basepath, std::string const& filename)
 {
-    std::shared_lock<std::shared_timed_mutex> slock (m_modelsLock);
+    std::shared_lock<std::shared_mutex> slock (m_modelsLock);
     ModelFileMap::iterator model = iLoadedModelFiles.find(filename);
     std::shared_ptr<WorldModel> ret;
     if (model == iLoadedModelFiles.end())
     {
         slock.unlock();
-        std::unique_lock<std::shared_timed_mutex> ulock (m_modelsLock);
+        std::unique_lock<std::shared_mutex> ulock (m_modelsLock);
         model = iLoadedModelFiles.find(filename);
         if (model != iLoadedModelFiles.end())
         {
@@ -318,7 +318,7 @@ std::shared_ptr<WorldModel> VMapManager2::acquireModelInstance(std::string const
         ret = std::shared_ptr<WorldModel>(
                     worldmodel,
                     [this, filename](WorldModel* m){
-                        std::unique_lock<std::shared_timed_mutex> lock(m_modelsLock);
+                        std::unique_lock<std::shared_mutex> lock(m_modelsLock);
                         if (!getUseManagedPtrs())
                             iLoadedModelFiles.erase(filename);
                         delete m;

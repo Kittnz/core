@@ -23,8 +23,8 @@
 #include "Database/SqlOperations.h"
 #include "DatabaseEnv.h"
 
-SqlDelayThread::SqlDelayThread(Database* db, SqlConnection* conn)
-    : m_dbEngine(db), m_dbConnection(conn), m_running(true)
+SqlDelayThread::SqlDelayThread(const char* InName, Database* db, SqlConnection* conn)
+    : m_dbEngine(db), m_dbConnection(conn), m_running(true), Name(InName)
 {
 }
 
@@ -51,6 +51,10 @@ void SqlDelayThread::run()
     mysql_thread_init();
     #endif
 
+    char ThreadName[128];
+    sprintf(ThreadName, "SqlDelay %s", Name);
+
+    thread_name(ThreadName);
     const uint32 loopSleepms = 10;
 
     const uint32 pingEveryLoop = m_dbEngine->GetPingIntervall() / loopSleepms;
@@ -88,14 +92,20 @@ void SqlDelayThread::ProcessRequests()
     SqlOperation* s = nullptr;
     while (m_dbEngine->NextDelayedOperation(s))
     {
-        s->Execute(m_dbConnection);
+        bool result = s->Execute(m_dbConnection);
+        const auto& callback = s->GetCallback();
+        if (callback)
+            (*callback)(result);
         delete s;
     }
 
     // Process any serial operations for this worker
     while (m_serialDelayQueue.next(s))
     {
-        s->Execute(m_dbConnection);
+        bool result = s->Execute(m_dbConnection);
+        const auto& callback = s->GetCallback();
+        if (callback)
+            (*callback)(result);
         delete s;
     }
 }

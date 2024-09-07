@@ -24,6 +24,8 @@
 #include "ModelInstance.h"
 #include "Maps/GridMapDefines.h"
 
+bool gDoNotFilterDeepWater = false;
+
 namespace MMAP
 {
     TerrainBuilder::TerrainBuilder(bool skipLiquid, bool quick) : m_skipLiquid(skipLiquid), m_V9(nullptr), m_V8(nullptr), m_quick(quick), m_mapId(0) { }
@@ -161,7 +163,6 @@ namespace MMAP
             }
 
             // hole data
-            memset(holes, 0, fheader.holesSize);
             fseek(mapFile, fheader.holesOffset, SEEK_SET);
             fread(holes, fheader.holesSize, 1, mapFile);
 
@@ -310,7 +311,8 @@ namespace MMAP
         // now that we have gathered the data, we can figure out which parts to keep:
         // liquid above ground, ground above liquid
         int loopStart, loopEnd, loopInc, tTriCount = 4;
-        bool useTerrain, useLiquid;
+        bool useTerrain = true;
+        bool useLiquid = true;
 
         float* lverts = meshData.liquidVerts.getCArray();
         int* ltris = ltriangles.getCArray();
@@ -350,13 +352,16 @@ namespace MMAP
                     else
                         liquidType = MAP_LIQUID_TYPE_WATER;
 
-                    if (liquidType & MAP_LIQUID_TYPE_DARK_WATER)
+                    if (!gDoNotFilterDeepWater)
                     {
-                        // players should not be here, so logically neither should creatures
-                        useTerrain = false;
-                        useLiquid = false;
+                        if (liquidType & MAP_LIQUID_TYPE_DARK_WATER)
+                        {
+                            // players should not be here, so logically neither should creatures
+                            useTerrain = false;
+                            useLiquid = false;
+                        }
                     }
-                    else if ((liquidType & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN)) != 0)
+                    if ((liquidType & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN)) != 0)
                         liquidType = AREA_WATER;
                     else if (liquidType & MAP_LIQUID_TYPE_MAGMA)
                         liquidType = AREA_MAGMA;
@@ -422,8 +427,8 @@ namespace MMAP
                             maxLLevel = h;
                     }
 
-                    float maxTLevel = INVALID_MAP_LIQ_HEIGHT;
                     float minTLevel = INVALID_MAP_LIQ_HEIGHT_MAX;
+                    float maxTLevel = INVALID_MAP_LIQ_HEIGHT;
                     for (uint32 x = 0; x < 6; x++)
                     {
                         float h = tverts[ttris[x] * 3 + 1];
@@ -753,9 +758,7 @@ namespace MMAP
             /// Check every map vertice
             // x, y * -1
             Vector3 up(0, 0, 1);
-            up.x *= -1.0f;
-            up.y *= -1.0f;
-            up = up * rotation.inverse() / scale;
+
             for (vector<GroupModel>::iterator it = groupModels.begin(); it != groupModels.end(); ++it)
                 for (int t = 0; t < mapVertsCount / 3; ++t)
                 {
@@ -769,7 +772,14 @@ namespace MMAP
                     float outDist = -1.0f;
                     float inDist  = -1.0f;
                     if (it->IsUnderObject(v, up, isM2, &outDist, &inDist)) // inDist < outDist
-                        terrainInsideModelsVerts[t] = inDist;
+                    {
+                        // If terrain is under wmo, mark terrain as unwalkable
+                        // If there are less than 1.5y between terrain and m2 then mark the terrain as unwalkable
+                        if (!isM2 || inDist < 1.5f)
+                        {
+                            terrainInsideModelsVerts[t] = inDist;
+                        }
+                    }
                 }
         }
         /// Correct triangles partially under models
@@ -781,7 +791,7 @@ namespace MMAP
             for (int j = 0; j < 3; ++j)
             {
                 vertIdx[j]     = meshData.solidTris[i*3+j];
-                if (vertIdx[j] < mapVertsCount)
+                if (vertIdx[j] < static_cast<uint32>(mapVertsCount))
                     insideModel[j] = (terrainInsideModelsVerts[vertIdx[j]] >= 0.1f);
                 tri[j]         = Vector3(meshData.solidVerts[3*vertIdx[j]+2], meshData.solidVerts[3*vertIdx[j]], meshData.solidVerts[3*vertIdx[j]+1]);
             }
@@ -1020,7 +1030,7 @@ namespace MMAP
                              &p0[0], &p0[1], &p0[2], &p1[0], &p1[1], &p1[2], &size))
                 continue;
 
-            if (mapID == mid, tileX == tx, tileY == ty)
+            if (mapID == mid && tileX == tx && tileY == ty)
             {
                 meshData.offMeshConnections.append(p0[1]);
                 meshData.offMeshConnections.append(p0[2]);

@@ -50,24 +50,64 @@ void GuildMgr::CleanUpPetitions()
     m_petitionMap.clear();
 }
 
+
+//have to run this once on maint to cleanup remnant items from gbank bug
+void GuildMgr::FixupInfernoBanks()
+{
+    auto result = std::unique_ptr<QueryResult>(CharacterDatabase.Query("SELECT guildid, guid, isInferno, tab, item_template, count FROM guild_bank WHERE `isInferno` > 1"));
+
+    if (result)
+    {
+        do {
+            auto fields = result->Fetch();
+            uint32 guildId = fields[0].GetUInt32();
+            uint32 guid = fields[1].GetUInt32();
+            uint8 isInferno = fields[2].GetUInt8();
+            uint32 tab = fields[3].GetUInt32();
+            uint32 itemEntry = fields[4].GetUInt32();
+            uint32 count = fields[5].GetUInt32();
+
+
+            if (auto guild = GetGuildById(guildId))
+            {
+                if (guild->_Bank)
+                {
+                    Item* item = Item::CreateItem(itemEntry, count);
+                    if (item)
+                    {
+                        guild->_Bank->DepositInternal(tab, item);
+                        CharacterDatabase.PExecute("DELETE FROM `guild_bank` WHERE `guildId` = %u AND `guid` = %u AND `isInferno` = %u", guildId, guid, isInferno);
+                    }
+                }
+            }
+
+        } while (result->NextRow());
+    }
+
+    SaveGuildBanks();
+}
+
 void GuildMgr::AddGuild(Guild* guild)
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::lock_guard<std::shared_mutex> guard(m_guildMutex);
     m_GuildMap[guild->GetId()] = guild;
 
-	guild->_Bank = new GuildBank;
+    guild->_Bank = new GuildBank{ false };
 	guild->_Bank->SetGuild(guild);
+
+    guild->_InfernoBank = new GuildBank{ true };
+    guild->_InfernoBank->SetGuild(guild);
 }
 
 void GuildMgr::RemoveGuild(uint32 guildId)
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::lock_guard<std::shared_mutex> guard(m_guildMutex);
     m_GuildMap.erase(guildId);
 }
 
 Guild* GuildMgr::GetGuildById(uint32 guildId) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     GuildMap::const_iterator itr = m_GuildMap.find(guildId);
     if (itr != m_GuildMap.end())
         return itr->second;
@@ -77,7 +117,7 @@ Guild* GuildMgr::GetGuildById(uint32 guildId) const
 
 Guild* GuildMgr::GetGuildByName(std::string const& name) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     for (const auto& itr : m_GuildMap)
         if (itr.second->GetName() == name)
             return itr.second;
@@ -87,7 +127,7 @@ Guild* GuildMgr::GetGuildByName(std::string const& name) const
 
 Guild* GuildMgr::GetGuildByLeader(ObjectGuid const& guid) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     for (const auto& itr : m_GuildMap)
         if (itr.second->GetLeaderGuid() == guid)
             return itr.second;
@@ -97,7 +137,7 @@ Guild* GuildMgr::GetGuildByLeader(ObjectGuid const& guid) const
 
 std::string GuildMgr::GetGuildNameById(uint32 guildId) const
 {
-    std::lock_guard<std::mutex> guard(m_guildMutex);
+    std::shared_lock<std::shared_mutex> guard(m_guildMutex);
     GuildMap::const_iterator itr = m_GuildMap.find(guildId);
     if (itr != m_GuildMap.end())
         return itr->second->GetName();
@@ -240,13 +280,13 @@ void GuildMgr::CreatePetition(uint32 id, Player* player, const ObjectGuid& chart
     petition->SetTeam(player->GetTeam());
     petition->SaveToDB();
 
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::lock_guard<std::shared_mutex> guard(m_petitionsMutex);
     m_petitionMap[petition->GetId()] = petition;
 }
 
 void GuildMgr::DeletePetition(Petition* petition)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::lock_guard<std::shared_mutex> guard(m_petitionsMutex);
     m_petitionMap.erase(petition->GetId());
 
     petition->Delete();
@@ -259,6 +299,11 @@ void GuildMgr::Update(uint32 diff)
 		SaveGuildBanks();
 	else
 		m_guildBankSaveTimer -= diff;
+
+    for (const auto& [key, guild] : m_GuildMap)
+    {
+        guild->UpdateCaches(diff);
+    }
 }
 
 void GuildMgr::SaveGuildBanks()
@@ -266,8 +311,11 @@ void GuildMgr::SaveGuildBanks()
 	uint32 uSaveStartTime = WorldTimer::getMSTime();
 
 	m_guildBankSaveTimer = GUILD_BANK_SAVE_INTERVAL;
-	for (const auto& itr : m_GuildMap)
-		itr.second->_Bank->SaveToDB();
+    for (const auto& itr : m_GuildMap)
+    {
+        itr.second->_Bank->SaveToDB();
+        itr.second->_InfernoBank->SaveToDB();
+    }
 
 	uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
 
@@ -278,7 +326,7 @@ void GuildMgr::SaveGuildBanks()
 
 Petition* GuildMgr::GetPetitionById(uint32 id)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     PetitionMap::iterator iter = m_petitionMap.find(id);
     if (iter != m_petitionMap.end())
         return iter->second;
@@ -288,7 +336,7 @@ Petition* GuildMgr::GetPetitionById(uint32 id)
 
 Petition* GuildMgr::GetPetitionByCharterGuid(const ObjectGuid& charterGuid)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     for (const auto& iter : m_petitionMap)
     {
         Petition* petition = iter.second;
@@ -301,12 +349,25 @@ Petition* GuildMgr::GetPetitionByCharterGuid(const ObjectGuid& charterGuid)
 
 Petition* GuildMgr::GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid)
 {
-    std::lock_guard<std::mutex> guard(m_petitionsMutex);
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
     for (const auto& iter : m_petitionMap)
     {
         Petition* petition = iter.second;
         if (petition->GetOwnerGuid() == ownerGuid)
             return petition;
+    }
+
+    return nullptr;
+}
+
+PetitionSignature* GuildMgr::GetSignatureForPlayerGuid(const ObjectGuid& guid)
+{
+    std::shared_lock<std::shared_mutex> guard(m_petitionsMutex);
+    for (const auto& iter : m_petitionMap)
+    {
+        Petition* petition = iter.second;
+        if (PetitionSignature* petitionSignature = petition->GetSignatureForPlayerGuid(guid))
+            return petitionSignature;
     }
 
     return nullptr;
@@ -418,6 +479,12 @@ void Petition::AddSignature(PetitionSignature* signature)
     m_signatures.push_back(signature);
 }
 
+void Petition::DeleteSignature(PetitionSignature* signature)
+{
+    m_signatures.remove(signature);
+    delete signature;
+}
+
 bool Petition::AddNewSignature(Player* player)
 {
     if (IsComplete())
@@ -441,4 +508,11 @@ void PetitionSignature::SaveToDB()
 {
     CharacterDatabase.PExecute("INSERT INTO petition_sign (ownerguid, petitionguid, playerguid, player_account) VALUES ('%u', '%u', '%u','%u')",
         m_petition->GetOwnerGuid().GetCounter(), m_petition->GetId(), m_playerGuid.GetCounter(), m_playerAccount);
+}
+
+void PetitionSignature::DeleteFromDB()
+{
+    CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM petition_sign WHERE ownerguid = '%u'", m_playerGuid.GetCounter());
+    CharacterDatabase.CommitTransaction();
 }

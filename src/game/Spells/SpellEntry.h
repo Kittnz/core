@@ -440,6 +440,20 @@ namespace Spells
         return false;
     }
 
+    inline bool IsDamagingAuraEffect(uint32 effectName)
+    {
+        switch (effectName)
+        {
+            case SPELL_AURA_PERIODIC_DAMAGE:
+            case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
+            case SPELL_AURA_PERIODIC_LEECH:
+            case SPELL_AURA_PERIODIC_HEALTH_FUNNEL:
+                return true;
+        }
+
+        return false;
+    }
+
     // Spell deals damage directly and could kill target instantly.
     inline bool IsEffectThatCanCrit(uint32 effectName)
     {
@@ -753,6 +767,15 @@ public:
         return hasAura;
     }
 
+    inline bool HasDamagingAura() const
+    {
+        for (uint32 i : EffectApplyAuraName)
+            if (Spells::IsDamagingAuraEffect(i))
+                return true;
+
+        return false;
+    }
+
     bool IsCustomSpell() const
     {
         return Internal & SPELL_INTERNAL_CUSTOM;
@@ -788,7 +811,7 @@ public:
 
     inline bool IsDeathOnlySpell() const
     {
-        return HasAttribute(SPELL_ATTR_EX3_CAST_ON_DEAD) ||
+        return HasAttribute(SPELL_ATTR_EX3_ONLY_ON_GHOSTS) ||
                (Targets & (TARGET_FLAG_PVP_CORPSE | TARGET_FLAG_UNIT_CORPSE | TARGET_FLAG_CORPSE)) ||
                (Id == 2584);
     }
@@ -809,7 +832,7 @@ public:
 
     inline bool IsDeathPersistentSpell() const
     {
-        return HasAttribute(SPELL_ATTR_EX3_DEATH_PERSISTENT);
+        return HasAttribute(SPELL_ATTR_EX3_ALLOW_AURA_WHILE_DEAD);
     }
 
     inline bool IsNonCombatSpell() const
@@ -916,7 +939,7 @@ public:
 
     inline bool HasRealTimeDuration() const
     {
-        return HasAttribute(SPELL_ATTR_EX4_REAL_TIME_DURATION);
+        return HasAttribute(SPELL_ATTR_EX4_AURA_EXPIRES_OFFLINE);
     }
 
     inline bool HasAuraWithSpellTriggerEffect() const

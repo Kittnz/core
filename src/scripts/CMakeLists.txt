@@ -13,8 +13,6 @@ battlegrounds/battleground_sunnyglade.cpp
 dungeons/black_morass/black_morass.h
 dungeons/black_morass/black_morass_trash.cpp
 dungeons/black_morass/black_morass_trash.hpp
-dungeons/black_morass/boss_chromie.cpp
-dungeons/black_morass/boss_chromie.hpp
 dungeons/black_morass/boss_chronormu.cpp
 dungeons/black_morass/boss_chronormu.hpp
 dungeons/black_morass/boss_gerastrasz.cpp
@@ -25,7 +23,6 @@ dungeons/blackfathom_deeps/instance_blackfathom_deeps.cpp
 dungeons/blackrock_depths/arena_challenge_ai.cpp
 dungeons/blackrock_depths/blackrock_depths.cpp
 dungeons/blackrock_depths/blackrock_depths.h
-dungeons/blackrock_depths/boss_ambassador_flamelash.cpp
 dungeons/blackrock_depths/boss_anubshiah.cpp
 dungeons/blackrock_depths/boss_emperor_dagran_thaurissan.cpp
 dungeons/blackrock_depths/boss_general_angerforge.cpp
@@ -36,7 +33,6 @@ dungeons/blackrock_depths/boss_magmus.cpp
 dungeons/blackrock_depths/boss_tomb_of_seven.cpp
 dungeons/blackrock_depths/instance_blackrock_depths.cpp
 dungeons/blackrock_spire/blackrock_spire.h
-dungeons/blackrock_spire/boss_drakkisath.cpp
 dungeons/blackrock_spire/boss_halycon.cpp
 dungeons/blackrock_spire/boss_highlord_omokk.cpp
 dungeons/blackrock_spire/boss_mother_smolderweb.cpp
@@ -73,6 +69,9 @@ dungeons/dire_maul/dreadsteed_ritual.cpp
 dungeons/dire_maul/instance_dire_maul.cpp
 dungeons/dire_maul/npc_ecorcefer.cpp
 dungeons/dire_maul/npc_pusillin.cpp
+dungeons/emerald_sanctum/emerald_sanctum.h
+dungeons/emerald_sanctum/instance_emerald_sanctum.cpp
+dungeons/emerald_sanctum/boss_solnius.cpp
 dungeons/gnomeregan/boss_thermaplugg.cpp
 dungeons/gnomeregan/gnomeregan.cpp
 dungeons/gnomeregan/gnomeregan.h
@@ -83,13 +82,23 @@ dungeons/hateforge_quarry/boss_hargesh_doomcaller.cpp
 dungeons/hateforge_quarry/boss_hatereaver_annhilator.cpp
 dungeons/hateforge_quarry/hateforge_quarry_trash.cpp
 dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
+dungeons/lower_karazhan_halls/boss_brood_queen_araxxna.cpp
+dungeons/lower_karazhan_halls/boss_blackwald_ii.cpp
+dungeons/lower_karazhan_halls/boss_clawlord_howlfang.cpp
+dungeons/lower_karazhan_halls/boss_grizikil.cpp
+dungeons/lower_karazhan_halls/boss_moroes.cpp
+dungeons/lower_karazhan_halls/instance_lower_karazhan_halls.cpp
+dungeons/lower_karazhan_halls/lower_karazhan_halls.h
 dungeons/crescent_grove/instance_crescent_grove.cpp
+dungeons/gilneas_city/instance_gilneas_city.h
+dungeons/gilneas_city/instance_gilneas_city.cpp
+dungeons/gilneas_city/boss_celia.cpp
+dungeons/gilneas_city/boss_lord_mortimer.cpp
 dungeons/maraudon/boss_celebras_the_cursed.cpp
 dungeons/maraudon/boss_landslide.cpp
 dungeons/maraudon/boss_noxxion.cpp
 dungeons/maraudon/boss_princess_theradras.cpp
 dungeons/maraudon/instance_maraudon.cpp
-dungeons/maraudon/maraudon.cpp
 dungeons/maraudon/maraudon.h
 dungeons/molten_core/boss_baron_geddon.cpp
 dungeons/molten_core/boss_garr.cpp
@@ -272,18 +281,17 @@ events/event_dreadsteed.h
 events/quest_stormwind_rendezvous.cpp
 events/quest_stormwind_rendezvous.h
 
-miscelanneous/areatrigger_scripts.cpp
-miscelanneous/gameobject_scripts.cpp
-miscelanneous/feature_custom_spell_test.cpp
-miscelanneous/feature_gardening.cpp
-miscelanneous/feature_transmog.h
-miscelanneous/ptr.cpp
-miscelanneous/random_scripts_0.cpp
-miscelanneous/random_scripts_1.cpp
-miscelanneous/random_scripts_2.cpp
-miscelanneous/random_scripts_3.cpp
-miscelanneous/custom_teleports.cpp
-miscelanneous/custom_exploration_triggers.cpp
+miscellaneous/areatrigger_scripts.cpp
+miscellaneous/gameobject_scripts.cpp
+miscellaneous/feature_custom_spell_test.cpp
+miscellaneous/feature_gardening.cpp
+miscellaneous/feature_transmog.h
+miscellaneous/ptr.cpp
+miscellaneous/random_scripts_0.cpp
+miscellaneous/random_scripts_1.cpp
+miscellaneous/random_scripts_2.cpp
+miscellaneous/random_scripts_3.cpp
+miscellaneous/custom_exploration_triggers.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp
@@ -297,7 +305,6 @@ world/burning_steppes.cpp
 world/darkshore.cpp
 world/desolace.cpp
 world/dun_morogh.cpp
-world/dun_morogh.h
 world/durotar.cpp
 world/duskwood.cpp
 world/dustwallow_marsh.cpp
@@ -414,6 +421,14 @@ SET_TARGET_PROPERTIES (${LIBRARY_NAME} PROPERTIES FOLDER "Game Libs")
 target_link_libraries(scripts
   game
 )
+
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
 
 #add_dependencies(${LIBRARY_NAME} revision.h)
 

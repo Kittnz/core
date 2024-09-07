@@ -807,6 +807,42 @@ struct instance_blackwing_lair : public ScriptedInstance
         }
     }
 
+    void Update(uint32 diff) override
+    {
+        if (GetData(TYPE_RAZORGORE) != DONE)
+        {
+            // Prevent players from leaving first room before encounter is complete.
+            Map::PlayerList const& playerList = GetMap()->GetPlayers();
+            for (auto const& itr : playerList)
+            {
+                if (Player* pPlayer = itr.getSource())
+                {
+                    if (!pPlayer->IsGameMaster() && !pPlayer->IsBeingTeleported() && (pPlayer->GetDistance(razorgoreRoomCenter) > 100.0f || pPlayer->GetPositionZ() > 420.0f))
+                    {
+                        ChatHandler(pPlayer).SendSysMessage("Cheating detected. Cannot leave boss room before encounter is complete.");
+                        pPlayer->TeleportTo(pPlayer->GetMapId(), razorgoreRoomCenter.x, razorgoreRoomCenter.y, razorgoreRoomCenter.z, razorgoreRoomCenter.o, TELE_TO_NOT_LEAVE_COMBAT);
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Only spawn the other bosses once Razorgore has been defeated.
+            if (!GetData64(DATA_VAELASTRASZ_GUID) && GetData(TYPE_VAELASTRASZ) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_VAELASTRASZ);
+            if (!GetData64(DATA_LASHLAYER_GUID) && GetData(TYPE_LASHLAYER) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_LASHLAYER);
+            if (!GetData64(DATA_FIREMAW_GUID) && GetData(TYPE_FIREMAW) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_FIREMAW);
+            if (!GetData64(DATA_EBONROC_GUID) && GetData(TYPE_EBONROC) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_EBONROC);
+            if (!GetData64(DATA_FLAMEGOR_GUID) && GetData(TYPE_FLAMEGOR) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_FLAMEGOR);
+            if (!GetData64(DATA_CHROMAGGUS_GUID) && GetData(TYPE_CHROMAGGUS) != DONE)
+                GetMap()->LoadCreatureSpawn(DB_GUID_CHROMAGGUS);
+        }
+    }
+
     bool CheckConditionCriteriaMeet(Player const* player, uint32 map_id, WorldObject const* source, uint32 instance_condition_id) const override
     {
         ObjectGuid scepterChampion = m_auiData[DATA_SCEPTER_CHAMPION];

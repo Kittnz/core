@@ -140,7 +140,7 @@ Database::~Database()
     StopServer();
 }
 
-bool Database::Initialize(const char * infoString, int nConns /*= 1*/, int nWorkers)
+bool Database::Initialize(const char* name, const char *infoString, int nConns /*= 1*/, int nWorkers /*= 1*/)
 {
     // Enable logging of SQL commands (usually only GM commands)
     // (See method: PExecuteLog)
@@ -178,7 +178,7 @@ bool Database::Initialize(const char * infoString, int nConns /*= 1*/, int nWork
     }
 
     //create and initialize connection for async requests
-    m_pResultQueue = new SqlResultQueue;
+    m_pResultQueue = new SqlResultQueue(name);
     m_pAsyncConn = CreateConnection();
     if(!m_pAsyncConn->Initialize(infoString))
         return false;
@@ -186,7 +186,7 @@ bool Database::Initialize(const char * infoString, int nConns /*= 1*/, int nWork
     m_numAsyncWorkers = nWorkers;
 
     for (int i = 0; i < nWorkers; ++i)
-        if (!InitDelayThread(infoString))
+        if (!InitDelayThread(name,infoString))
             return false;
 
     return true;
@@ -218,7 +218,7 @@ void Database::StopServer()
 
 }
 
-bool Database::InitDelayThread(std::string const& infoString)
+bool Database::InitDelayThread(const char* Name, std::string const& infoString)
 {
     //New delay thread for delay execute
 
@@ -226,7 +226,7 @@ bool Database::InitDelayThread(std::string const& infoString)
     if(!threadConnection->Initialize(infoString.c_str()))
         return false;
 
-    std::shared_ptr<SqlDelayThread> tbody = std::make_shared<SqlDelayThread>(this, threadConnection);
+    std::shared_ptr<SqlDelayThread> tbody = std::make_shared<SqlDelayThread>(Name, this, threadConnection);
     m_threadsBodies.emplace_back(tbody);
     m_delayThreads.emplace_back([tbody](){
         tbody->run();
@@ -486,7 +486,7 @@ uint32 Database::GetTransactionSerialId()
     return 0;
 }
 
-bool Database::CommitTransaction()
+bool Database::CommitTransaction(std::function<void(bool)>* callback)
 {
     if (!m_pAsyncConn)
     {
@@ -503,12 +503,20 @@ bool Database::CommitTransaction()
     }
 
     //if async execution is not available
-    if(!m_bAllowAsyncTransactions)
-        return CommitTransactionDirect();
+    if (!m_bAllowAsyncTransactions)
+    {
+        bool res = CommitTransactionDirect();
+        if (callback)
+            (*callback)(res);
+        return res;
+    }
 
     //add SqlTransaction to the async queue
     // if serial ID > 0, add to the serial delay queue
     SqlTransaction *trans = m_TransStorage->detach();
+    if (callback)
+        trans->SetCallback(callback);
+
     if (trans->GetSerialId() > 0)
         AddToSerialDelayQueue(trans);
     else
@@ -565,7 +573,7 @@ bool Database::HasAsyncQuery()
 {
     bool hasQuery = !m_delayQueue->empty_unsafe();
 
-    for (int i = 0; i < m_numAsyncWorkers && !hasQuery; ++i)
+    for (uint32 i = 0; i < m_numAsyncWorkers && !hasQuery; ++i)
         hasQuery = m_threadsBodies[i]->HasAsyncQuery();
 
     return hasQuery;

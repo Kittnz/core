@@ -74,6 +74,8 @@ uint32 MasqueradeDialogSteps[] =
 
 enum
 {
+    REGINALD_WINDSOR_END_POINT  = 1,
+    MERCUTIO_END_POINT          = 2,
     QUEST_STORMWIND_RENDEZVOUS = 6402,
     QUEST_THE_GREAT_MASQUERADE = 6403,
 
@@ -167,9 +169,8 @@ struct npc_reginald_windsorAI : ScriptedAI
     uint64 DragsGUIDs[10];
     uint64 playerGUID;
     bool Begin;
-    bool SummonHorse;
-    bool ShooHorse;
     bool BeginQuest;
+    bool unmountReginald;
     bool NeedCheck;
     bool GuardNeed[6];
     bool PhaseFinale;
@@ -196,6 +197,7 @@ struct npc_reginald_windsorAI : ScriptedAI
     void MoveInLineOfSight(Unit* Victim) override;
     void SpellHit(WorldObject* /*pCaster*/, SpellEntry const* pSpellEntry) override;
     void UpdateAI(uint32 const uiDiff) override;
+    void MovementInform(uint32 uiType, uint32 uiPointId) override;
 };
 
 struct npc_squire_roweAI : ScriptedAI
@@ -212,6 +214,15 @@ struct npc_squire_roweAI : ScriptedAI
     void ResetCreature() override;
     void MovementInform(uint32 uiType, uint32 uiPointId) override;
     void UpdateAI(uint32 const uiDiff) override;
+};
+
+struct npc_mercutioAI : ScriptedAI
+{
+    explicit npc_mercutioAI(Creature* pCreature);
+
+    void MovementInform(uint32 uiType, uint32 uiPointId) override;
+
+    void Reset() override {};
 };
 
 #endif

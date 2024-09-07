@@ -602,7 +602,7 @@ void SpellMgr::LoadSpellGroupStackRules()
     } while (result->NextRow());
 }
 
-bool SpellMgr::ListMorePowerfullSpells(uint32 spellId, std::list<uint32>& list) const
+bool SpellMgr::ListMorePowerfulSpells(uint32 spellId, std::vector<uint32>& list) const
 {
     std::vector<uint32> spellGroupIds;
     std::vector<uint32>::iterator spellGroupIdsIt;
@@ -645,7 +645,7 @@ bool SpellMgr::ListMorePowerfullSpells(uint32 spellId, std::list<uint32>& list) 
     return !list.empty();
 }
 
-bool SpellMgr::ListLessPowerfullSpells(uint32 spellId, std::list<uint32>& list) const
+bool SpellMgr::ListLessPowerfulSpells(uint32 spellId, std::vector<uint32>& list) const
 {
     std::vector<uint32> spellGroupIds;
     std::vector<uint32>::iterator spellGroupIdsIt;
@@ -881,16 +881,20 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                             (spellInfo_2->Id == 21992 && spellInfo_1->Id == 27648))
                         return false;
 
+                    // Atiesh aura stacking with Moonkin Aura
+                    if (spellInfo_1->SpellIconID == 46 && spellInfo_2->SpellIconID == 46)
+                        return false;
+
                     // Soulstone Resurrection and Twisting Nether (resurrector)
                     if (spellInfo_1->SpellIconID == 92 && spellInfo_2->SpellIconID == 92 && (
-                                (spellInfo_1->SpellVisual == 99 && spellInfo_2->SpellVisual == 0) ||
-                                (spellInfo_2->SpellVisual == 99 && spellInfo_1->SpellVisual == 0)))
+                       (spellInfo_1->SpellVisual == 99 && spellInfo_2->SpellVisual == 0) ||
+                       (spellInfo_2->SpellVisual == 99 && spellInfo_1->SpellVisual == 0)))
                         return false;
 
                     // Heart of the Wild and (Primal Instinct (Idol of Terror) triggering spell or Agility)
                     if (spellInfo_1->SpellIconID == 240 && spellInfo_2->SpellIconID == 240 && (
-                                (spellInfo_1->SpellVisual == 0 && spellInfo_2->SpellVisual == 78) ||
-                                (spellInfo_2->SpellVisual == 0 && spellInfo_1->SpellVisual == 78)))
+                       (spellInfo_1->SpellVisual == 0 && spellInfo_2->SpellVisual == 78) ||
+                       (spellInfo_2->SpellVisual == 0 && spellInfo_1->SpellVisual == 78)))
                         return false;
 
                     // Personalized Weather (thunder effect should overwrite rainy aura)
@@ -899,12 +903,17 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                     // Brood Affliction: Bronze
                     if ((spellInfo_1->Id == 23170 && spellInfo_2->Id == 23171) ||
-                            (spellInfo_2->Id == 23170 && spellInfo_1->Id == 23171))
+                        (spellInfo_2->Id == 23170 && spellInfo_1->Id == 23171))
                         return false;
 
                     // Regular and Night Elf Ghost
                     if ((spellInfo_1->Id == 8326 && spellInfo_2->Id == 20584) ||
-                            (spellInfo_2->Id == 8326 && spellInfo_1->Id == 20584))
+                        (spellInfo_2->Id == 8326 && spellInfo_1->Id == 20584))
+                        return false;
+
+                    // Allow Lightning Speed to stack with Haste.
+                    if (spellInfo_1->SpellIconID == 30 && spellInfo_2->SpellIconID == 30 && 
+                        spellInfo_1->SpellVisual == 1508 && spellInfo_2->SpellVisual == 1508)
                         return false;
 
                     break;
@@ -1155,6 +1164,27 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             // Bloodlust and Bloodthirst (multi-family check)
             if (spellInfo_1->Id == 2825 && spellInfo_2->SpellIconID == 38 && spellInfo_2->SpellVisual == 0)
                 return false;
+            break;
+        case SPELLFAMILY_POTION:
+
+            // Dreamshard Elixir and Greater Arcane Elixir
+            if (spellInfo_1->Id == 17539 && spellInfo_2->Id == 45427)
+                return false;
+            if (spellInfo_2->Id == 17539 && spellInfo_1->Id == 45427)
+                return false;
+
+            // Greater Nature Protection Potion and Elixir of Greater Nature Power
+            if (spellInfo_1->Id == 17546 && spellInfo_2->Id == 45988)
+                return false;
+            if (spellInfo_2->Id == 17546 && spellInfo_1->Id == 45988)
+                return false;
+
+            // Nature Protection Potion and Elixir of Greater Nature Power
+            if (spellInfo_1->Id == 7254 && spellInfo_2->Id == 45988)
+                return false;
+            if (spellInfo_2->Id == 7254 && spellInfo_1->Id == 45988)
+                return false;
+
             break;
         default:
             break;
@@ -1999,7 +2029,7 @@ void SpellMgr::LoadSpellScriptTarget()
                     sLog.outErrorDb("Table `spell_script_target`: target entry == 0 for not GO target type (%u).", type);
                     continue;
                 }
-                if (const CreatureInfo* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(targetEntry))
+                if (const CreatureInfo* cInfo = sObjectMgr.GetCreatureTemplate(targetEntry))
                 {
                     if (spellId == 30427 && !cInfo->skinning_loot_id)
                     {
@@ -2096,7 +2126,7 @@ bool SpellMgr::IsSpellValid(SpellEntry const* spellInfo, Player* pl, bool msg)
             // craft spell for crafting nonexistent item (break client recipes list show)
             case SPELL_EFFECT_CREATE_ITEM:
             {
-                if (!ObjectMgr::GetItemPrototype(spellInfo->EffectItemType[i]))
+                if (!sObjectMgr.GetItemPrototype(spellInfo->EffectItemType[i]))
                 {
                     if (msg)
                     {
@@ -2134,7 +2164,7 @@ bool SpellMgr::IsSpellValid(SpellEntry const* spellInfo, Player* pl, bool msg)
     {
         for (int j : spellInfo->Reagent)
         {
-            if (j > 0 && !ObjectMgr::GetItemPrototype(j))
+            if (j > 0 && !sObjectMgr.GetItemPrototype(j))
             {
                 if (msg)
                 {
@@ -2356,12 +2386,12 @@ void SpellMgr::LoadSpellAreas()
     } while (result->NextRow());
 }
 
-SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spellInfo, Unit const* caster, Player const* player)
+SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spellInfo, Unit const* caster, Player const* player)
 {
-    // Spell casted only on battleground
-    if ((spellInfo->AttributesEx3 & SPELL_ATTR_EX3_BATTLEGROUND))
-        if (!player || !player->InBattleGround())
-            return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+    // Spell can be casted only in battleground
+    if (spellInfo->HasAttribute(SPELL_ATTR_EX3_ONLY_BATTLEGROUNDS) &&
+       (!player || !player->InBattleGround()))
+        return SPELL_FAILED_ONLY_BATTLEGROUNDS;
 
     uint32 mapId = caster ? caster->GetMapId() : (player ? player->GetMapId() : 0);
 
@@ -2370,6 +2400,40 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
 
 	if (spellInfo->Id == 22564 && player && player->InBattleGround() && player->GetTeamId() != TEAM_ALLIANCE)
 		return SPELL_FAILED_SPELL_UNAVAILABLE;
+
+    // Custom arena spell blacklist.
+    if (player && player->GetMapId() == 26)
+    {
+        if (spellInfo->HasEffect(SPELL_EFFECT_RESURRECT_NEW))
+            return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+
+        switch (spellInfo->Id)
+        {
+            // long cd spells
+            case 633:   // Lay on Hands (rank 1)
+            case 2800:  // Lay on Hands (rank 2)
+            case 10310: // Lay on Hands (rank 3)
+            case 1719:  // Recklessness
+            case 13180: // Gnomish Mind Control Cap
+            case 22641: // Reckless Charge (Goblin Rocket Helmet)
+            // guardian spells
+            case 5666: // Summon Timberling
+            case 6084: // Summon Ghost Saber
+            case 7278: // Summon Harvester Swarm
+            case 9515: // Summon Tracking Hound
+            case 17490: // Summon Skeleton
+            case 18307: // Death by Peasant
+            case 19363: // Summon Mechanical Yeti
+            case 23074: // Arcanite Dragonling
+            case 23075: // Mithril Mechanical Dragonling
+            case 23076: // Mechanical Dragonling
+            case 26067: // Summon Mechanical Greench
+            case 26391: // Tentacle Call
+            case 29305: // Summon Cinder Elemental
+            case 56523: // Decoy Dragonling
+                return SPELL_FAILED_ONLY_BATTLEGROUNDS;
+        }
+    }
 
     switch (spellInfo->Id)
     {
@@ -2405,6 +2469,32 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
                 return SPELL_FAILED_REQUIRES_AREA;
             return mapEntry->IsBattleGround() ? SPELL_CAST_OK : SPELL_FAILED_ONLY_BATTLEGROUNDS; 
             */
+            return SPELL_CAST_OK;
+        }
+        // Disable big mounts in cities.
+        case 46211:
+        case 46212:
+        case 46504:
+        case 46505:
+        case 46506:
+        case 46507:
+        case 46508:
+        case 46509:
+        case 46510:
+        case 46511:
+        case 46512:
+        case 46513:
+        {
+            switch (player->GetCachedAreaId())
+            {
+                case 1497: // Undercity
+                case 1519: // Stormwind City
+                case 1537: // Ironforge
+                case 1637: // Orgrimmar
+                case 1638: // Thunder Bluff
+                case 1657: // Darnassus
+                    return SPELL_FAILED_NO_MOUNTS_ALLOWED;
+            }
             return SPELL_CAST_OK;
         }
     }
@@ -3358,38 +3448,41 @@ void SpellMgr::LoadSpells()
 
     } while (result->NextRow());
 
-    // Load localized texts.
-    //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12                  13                  14                  15                  16                  17                  18                  19                      20                      21                      22                      23                      24
-    result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `nameSubtext_loc1`, `nameSubtext_loc2`, `nameSubtext_loc3`, `nameSubtext_loc4`, `nameSubtext_loc5`, `nameSubtext_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `auraDescription_loc1`, `auraDescription_loc2`, `auraDescription_loc3`, `auraDescription_loc4`, `auraDescription_loc5`, `auraDescription_loc6` FROM `locales_spell`"));
-    if (result)
+    if (sWorld.getConfig(CONFIG_BOOL_LOAD_LOCALES))
     {
-        do
+        // Load localized texts.
+        //                                        0        1            2            3            4            5            6            7                   8                   9                   10                  11                  12                  13                  14                  15                  16                  17                  18                  19                      20                      21                      22                      23                      24
+        result.reset(WorldDatabase.Query("SELECT `entry`, `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `nameSubtext_loc1`, `nameSubtext_loc2`, `nameSubtext_loc3`, `nameSubtext_loc4`, `nameSubtext_loc5`, `nameSubtext_loc6`, `description_loc1`, `description_loc2`, `description_loc3`, `description_loc4`, `description_loc5`, `description_loc6`, `auraDescription_loc1`, `auraDescription_loc2`, `auraDescription_loc3`, `auraDescription_loc4`, `auraDescription_loc5`, `auraDescription_loc6` FROM `locales_spell`"));
+        if (result)
         {
-            fields = result->Fetch();
-            uint32 spellId = fields[0].GetUInt32();
-            if ((spellId > maxEntry) || (!mSpellEntryMap[spellId]))
-                continue;
+            do
+            {
+                fields = result->Fetch();
+                uint32 spellId = fields[0].GetUInt32();
+                if ((spellId > maxEntry) || (!mSpellEntryMap[spellId]))
+                    continue;
 
-            mSpellEntryMap[spellId]->SpellName[1] = fields[1].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[2] = fields[2].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[3] = fields[3].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[4] = fields[4].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[5] = fields[5].GetCppString();
-            mSpellEntryMap[spellId]->SpellName[6] = fields[6].GetCppString();
-            mSpellEntryMap[spellId]->Rank[1] = fields[7].GetCppString();
-            mSpellEntryMap[spellId]->Rank[2] = fields[8].GetCppString();
-            mSpellEntryMap[spellId]->Rank[3] = fields[9].GetCppString();
-            mSpellEntryMap[spellId]->Rank[4] = fields[10].GetCppString();
-            mSpellEntryMap[spellId]->Rank[5] = fields[11].GetCppString();
-            mSpellEntryMap[spellId]->Rank[6] = fields[12].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[1] = fields[1].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[2] = fields[2].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[3] = fields[3].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[4] = fields[4].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[5] = fields[5].GetCppString();
+                mSpellEntryMap[spellId]->SpellName[6] = fields[6].GetCppString();
+                mSpellEntryMap[spellId]->Rank[1] = fields[7].GetCppString();
+                mSpellEntryMap[spellId]->Rank[2] = fields[8].GetCppString();
+                mSpellEntryMap[spellId]->Rank[3] = fields[9].GetCppString();
+                mSpellEntryMap[spellId]->Rank[4] = fields[10].GetCppString();
+                mSpellEntryMap[spellId]->Rank[5] = fields[11].GetCppString();
+                mSpellEntryMap[spellId]->Rank[6] = fields[12].GetCppString();
 
-			mSpellEntryMap[spellId]->ToolTip[1] = fields[19].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[2] = fields[20].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[3] = fields[21].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[4] = fields[22].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[5] = fields[23].GetCppString();
-			mSpellEntryMap[spellId]->ToolTip[6] = fields[24].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[1] = fields[19].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[2] = fields[20].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[3] = fields[21].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[4] = fields[22].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[5] = fields[23].GetCppString();
+                mSpellEntryMap[spellId]->ToolTip[6] = fields[24].GetCppString();
 
-        } while (result->NextRow());
+            } while (result->NextRow());
+        }
     }
 }

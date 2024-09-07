@@ -90,7 +90,7 @@ void MemberSlot::ChangeRank(uint32 newRank)
 //// Guild /////////////////////////////////////////////////
 
 Guild::Guild() : m_Id(0), m_EmblemStyle(0), m_EmblemColor(0), m_BorderStyle(0), m_BorderColor(0), m_BackgroundColor(0), m_accountsNumber(0),
-    m_CreatedYear(0), m_CreatedMonth(0), m_CreatedDay(0), m_GuildEventLogNextGuid(0), _Bank(nullptr)
+    m_CreatedYear(0), m_CreatedMonth(0), m_CreatedDay(0), m_GuildEventLogNextGuid(0), _Bank(nullptr), _InfernoBank(nullptr)
 {
 }
 
@@ -159,8 +159,11 @@ bool Guild::Create(Player* leader, std::string gname)
 
     CreateDefaultGuildRanks(lSession->GetSessionDbLocaleIndex());
 
-	_Bank = new GuildBank;
+    _Bank = new GuildBank{ false };
 	_Bank->SetGuild(this);
+
+    _InfernoBank = new GuildBank{ true };
+    _InfernoBank->SetGuild(this);
 
     return AddMember(m_LeaderGuid, (uint32)GR_GUILDMASTER) == GuildAddStatus::OK;
 }
@@ -200,9 +203,12 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
             return GuildAddStatus::ALREADY_IN_GUILD;
     }
 
-    // remove all player signs from another petitions
-    // this will be prevent attempt joining player to many guilds and corrupt guild data integrity
-    Player::RemovePetitionsAndSigns(plGuid);
+    // When joining a guild, remove this player from any petition that could have previously signed.
+    if (PetitionSignature* signature = sGuildMgr.GetSignatureForPlayerGuid(plGuid))
+    {
+        signature->DeleteFromDB();
+        signature->GetSignaturePetition()->DeleteSignature(signature);
+    }
 
     uint32 lowguid = plGuid.GetCounter();
 
@@ -258,6 +264,7 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         pl->SetInGuild(m_Id);
         pl->SetRank(newmember.RankId);
         pl->SetGuildIdInvited(0);
+        AddToCache(lowguid);
     }
 
     UpdateAccountsNumber();
@@ -495,10 +502,15 @@ void Guild::SetLeader(ObjectGuid guid)
     if (!slot)
         return;
 
-    m_LeaderGuid = guid;
+    SetLeader(slot);
+}
+
+void Guild::SetLeader(MemberSlot* slot)
+{
+    m_LeaderGuid = slot->guid;
     slot->ChangeRank(GR_GUILDMASTER);
 
-    CharacterDatabase.PExecute("UPDATE guild SET leaderguid='%u' WHERE guildid='%u'", guid.GetCounter(), m_Id);
+    CharacterDatabase.PExecute("UPDATE guild SET leaderguid='%u' WHERE guildid='%u'", slot->guid.GetCounter(), m_Id);
 }
 
 /**
@@ -519,40 +531,18 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
     {
         MemberSlot* oldLeader = nullptr;
         MemberSlot* best = nullptr;
-        ObjectGuid newLeaderGUID;
-        for (Guild::MemberList::iterator i = members.begin(); i != members.end(); ++i)
-        {
-            if (i->first == lowguid)
-            {
-                oldLeader = &(i->second);
-                continue;
-            }
-
-            if (!best || best->RankId > i->second.RankId)
-            {
-                best = &(i->second);
-                newLeaderGUID = ObjectGuid(HIGHGUID_PLAYER, i->first);
-            }
-        }
-
-        if (!best)
+        if (!GetSuitableNewLeader(best, oldLeader))
             return true;
 
-        SetLeader(newLeaderGUID);
-
-        // If player not online data in data field will be loaded from guild tabs no need to update it !!
-        if (Player *newLeader = sObjectMgr.GetPlayer(newLeaderGUID))
-            newLeader->SetRank(GR_GUILDMASTER);
+        SetNewLeader(best, oldLeader);
 
         // when leader non-exist (at guild load with deleted leader only) not send broadcasts
         if (oldLeader)
-        {
-            BroadcastEvent(GE_LEADER_CHANGED, oldLeader->Name.c_str(), best->Name.c_str());
             BroadcastEvent(GE_LEFT, guid, oldLeader->Name.c_str());
-        }
     }
 
     members.erase(lowguid);
+    RemoveFromCache(lowguid);
     sGuildMgr.GuildMemberRemoved(lowguid);
 
     Player *player = sObjectMgr.GetPlayer(guid);
@@ -569,6 +559,66 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
         UpdateAccountsNumber();
 
     return members.empty();
+}
+
+void Guild::SetNewLeader(ObjectGuid newLeaderGuid)
+{
+    MemberSlot* newLeaderSlot = GetMemberSlot(newLeaderGuid);
+    MemberSlot* oldLeaderSlot = GetMemberSlot(GetLeaderGuid());
+
+    if (!newLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - New leader slot not found!");
+        return;
+    }
+
+    if (!oldLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - Old leader slot not found!");
+        return;
+    }
+
+    if (newLeaderSlot == oldLeaderSlot)
+    {
+        sLog.outError("Guild::SetNewLeader - Attempt to change leader to same player!");
+        return;
+    }
+
+    SetNewLeader(newLeaderSlot, oldLeaderSlot);
+}
+
+void Guild::SetNewLeader(MemberSlot* newLeaderSlot, MemberSlot* oldLeaderSlot)
+{
+    SetLeader(newLeaderSlot);
+
+    // when leader non-exist (at guild load with deleted leader only) not send broadcasts
+    if (oldLeaderSlot)
+    {
+        oldLeaderSlot->ChangeRank(GR_OFFICER);
+        BroadcastEvent(GE_LEADER_CHANGED, oldLeaderSlot->Name.c_str(), newLeaderSlot->Name.c_str());
+    }
+}
+
+bool Guild::GetSuitableNewLeader(MemberSlot*& newLeaderSlot, MemberSlot*& oldLeaderSlot)
+{
+    newLeaderSlot = nullptr;
+    oldLeaderSlot = nullptr;
+
+    uint32 lowGuid = m_LeaderGuid.GetCounter();
+
+    for (Guild::MemberList::iterator i = members.begin(); i != members.end(); ++i)
+    {
+        if (i->first == lowGuid)
+        {
+            oldLeaderSlot = &(i->second);
+            continue;
+        }
+
+        if (!newLeaderSlot || newLeaderSlot->RankId > i->second.RankId)
+            newLeaderSlot = &(i->second);
+    }
+
+    return newLeaderSlot != nullptr;;
 }
 
 void Guild::BroadcastToGuild(WorldSession *session, std::string const& msg, uint32 language)
@@ -588,15 +638,39 @@ void Guild::BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, msg.c_str(), Language(language), pPlayer->GetChatTag(), pPlayer->GetObjectGuid(), pPlayer->GetName());
 
-    for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+    if (IsMemberCacheEnabled())
     {
-        if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
-            continue;
+        for (auto const& guidLow : m_onlineMemberCache)
+        {
+            auto pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, guidLow));
+            if (!pl)
+                continue;
 
-        MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+            auto memberItr = members.find(guidLow);
+            if (memberItr == members.end())
+                continue;
 
-        if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
-            pl->GetSession()->SendPacket(&data);
+            if (!HasRankRight(memberItr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+            
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
+    }
+    else
+    {
+        for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+        {
+            if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
+                continue;
+
+            MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+
+            if (pl && pl->GetSession() && !pl->GetSession()->PlayerLogout() &&
+                pl->GetSocial() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
+                pl->GetSession()->SendPacket(&data);
+        }
     }
 
     for (const auto& gmGuid : m_GmListeners)
@@ -642,11 +716,25 @@ void Guild::BroadcastToOfficers(WorldSession *session, std::string const& msg, u
 
 void Guild::BroadcastPacket(WorldPacket *packet)
 {
-    for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+    if (IsMemberCacheEnabled())
     {
-        Player *player = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
-        if (player)
-            player->GetSession()->SendPacket(packet);
+        for (auto const& guidLow : m_onlineMemberCache)
+        {
+            auto pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, guidLow));
+            if (!pl)
+                continue;
+
+            pl->GetSession()->SendPacket(packet);
+        }
+    }
+    else
+    {
+        for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
+        {
+            Player* player = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+            if (player)
+                player->GetSession()->SendPacket(packet);
+        }
     }
 
     for (const auto& gmGuid : m_GmListeners)
@@ -702,6 +790,7 @@ void Guild::DelRank()
     CharacterDatabase.PExecute("DELETE FROM guild_rank WHERE rid>='%u' AND guildid='%u'", rank, m_Id);
 
 	_Bank->UpdateMinranks(rank);
+    _InfernoBank->UpdateMinranks(rank);
 
     m_Ranks.pop_back();
 }
@@ -770,13 +859,22 @@ void Guild::Disband()
     CharacterDatabase.PExecute("DELETE FROM guild_bank_money WHERE guildid = '%u'", m_Id);
     CharacterDatabase.CommitTransaction();
 
-	_Bank->DeleteFromDB();
-	delete _Bank;
+    if (_Bank)
+    {
+        _Bank->DeleteFromDB();
+        delete _Bank;
+    }
+
+    if (_InfernoBank)
+    {
+        _InfernoBank->DeleteFromDB();
+        delete _InfernoBank;
+    }
 
     sGuildMgr.RemoveGuild(m_Id);
 }
 
-void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
+WorldPacket Guild::BuildOnlineRosterPacket(bool sendOfficerNote)
 {
     struct TempMemberInfo
     {
@@ -794,6 +892,7 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     totalSize += sizeof(uint32); // m_ranks.size()
     totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
 
+
     for (auto itr = members.begin(); itr != members.end(); ++itr)
     {
         TempMemberInfo info;
@@ -803,16 +902,17 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
 
         if (info.Member && !info.Member->HasGMDisabledSocials())
         {
+            totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
+            totalSize += info.Slot->PublicNote.length();
+            if (sendOfficerNote)
+                totalSize += info.Slot->OfficerNote.length();
+
             onlineMemberCache.emplace_back(info);
             ++onlineMembers;
         }
-
-        totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
-        totalSize += info.Slot->PublicNote.length() + 1 + info.Slot->OfficerNote.length() + 1;
     }
 
     const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
-    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
 
     auto writeMemberData = [inPacketCap, sendOfficerNote](WorldPacket& data, TempMemberInfo const& member) -> bool
     {
@@ -848,7 +948,6 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
         data << uint32(ritr->Rights);
 
-
     //sort the members from highest to lowest rank if over limit.
     if (!inPacketCap)
     {
@@ -872,16 +971,59 @@ void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
     }
 
     data.put<uint32>(countPos, finalCount);
+    return data;
+}
+
+void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
+{
+    //This is for public guilds that are huge.
+    //We will send cached results and only update on world ticks every x ms.
+    const bool sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
+    const bool canSendCache = (sendOfficerNote && m_cachedOfficerRosterPacket) || (!sendOfficerNote && m_cachedRosterPacket);
+
+    if (IsRosterCacheEnabled() && canSendCache)
+    {
+        if (session)
+            session->SendPacket(sendOfficerNote ? m_cachedOfficerRosterPacket.get() :  m_cachedRosterPacket.get());
+        else
+            BroadcastPacket(sendOfficerNote ? m_cachedOfficerRosterPacket.get() : m_cachedRosterPacket.get());
+        return;
+    }
+
+    auto data = BuildOnlineRosterPacket(sendOfficerNote);
 
     if (session)
         session->SendPacket(&data);
     else
         BroadcastPacket(&data);
+
     DEBUG_LOG("WORLD: Sent (SMSG_GUILD_ROSTER) (ONLY FOR ONLINE)");
+}
+
+void Guild::UpdateCaches(uint32 diff)
+{
+    if (!IsMemberCacheEnabled())
+        return;
+
+    //do the timer check in Guild instead of Mgr to allow for dynamic cache expiry in future per guild.
+
+    if (m_cacheTimer < diff)
+    {
+        //refresh cache
+        auto nonOfficerData = BuildOnlineRosterPacket(false);
+        auto officerData = BuildOnlineRosterPacket(true);
+
+        m_cachedOfficerRosterPacket = std::make_unique<WorldPacket>(std::move(officerData));
+        m_cachedRosterPacket = std::make_unique<WorldPacket>(std::move(nonOfficerData));
+        m_cacheTimer = CacheExpiryMs;
+    }
+    else
+        m_cacheTimer -= diff;
 }
 
 void Guild::Roster(WorldSession *session /*= nullptr*/)
 {
+
     struct TempMemberInfo
     {
         ObjectGuid Guid;

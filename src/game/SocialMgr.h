@@ -26,6 +26,8 @@
 #include "Database/DatabaseEnv.h"
 #include "ObjectGuid.h"
 
+#include <shared_mutex>
+
 class SocialMgr;
 class PlayerSocial;
 class Player;
@@ -124,7 +126,7 @@ class PlayerSocial
         MasterPlayer* GetMasterPlayer() const { return m_masterPlayer; }
     private:
         ObjectGuid m_playerGUID;
-        typedef std::map<ObjectGuid, FriendInfo> PlayerSocialMap;
+        typedef robin_hood::unordered_map<ObjectGuid, FriendInfo> PlayerSocialMap;
         PlayerSocialMap m_playerSocialMap;
         MasterPlayer* m_masterPlayer;
 };
@@ -150,7 +152,7 @@ class SocialMgr
         typedef std::map<ObjectGuid, PlayerSocial> SocialMap;
         SocialMap m_socialMap;
 
-        std::mutex _socialMapLock;
+        std::shared_mutex _socialMapLock;
 };
 
 #define sSocialMgr SocialMgr::instance()

@@ -24,6 +24,7 @@
 #include "World.h"
 #include "Util.h"
 #include "DBCStores.h"
+#include "ObjectMgr.h"
 
 INSTANTIATE_SINGLETON_1(AllianceChannelMgr);
 INSTANTIATE_SINGLETON_1(HordeChannelMgr);
@@ -50,7 +51,7 @@ ChannelMgr::~ChannelMgr()
     channels.clear();
 }
 
-Channel *ChannelMgr::GetJoinChannel(std::string const& name, bool allowAreaDependantChans)
+Channel *ChannelMgr::GetOrCreateChannel(std::string const& name, bool allowAreaDependantChans)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -58,10 +59,10 @@ Channel *ChannelMgr::GetJoinChannel(std::string const& name, bool allowAreaDepen
 
     if (channels.find(wname) == channels.end())
     {
-        ChatChannelsEntry const* ch = GetChannelEntryFor(name);
+        ChatChannelsEntry const* ch = sObjectMgr.GetChannelEntryFor(name);
         if (!allowAreaDependantChans && ch && ch->flags & Channel::CHANNEL_DBC_FLAG_ZONE_DEP)
             return nullptr;
-        Channel *nchan = new Channel(name);
+        Channel *nchan = new Channel(name, m_team);
         channels[wname] = nchan;
         return nchan;
     }
@@ -69,7 +70,7 @@ Channel *ChannelMgr::GetJoinChannel(std::string const& name, bool allowAreaDepen
     return channels[wname];
 }
 
-Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool pkt)
+Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool sendPacket)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -79,9 +80,12 @@ Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool p
 
     if (i == channels.end())
     {
-		WorldPacket data;
-		Channel::MakeNotOnPacket(&data, name);
-		p->GetSession()->SendPacket(&data);
+        if (sendPacket)
+        {
+            WorldPacket data;
+            Channel::MakeNotOnPacket(&data, name);
+            p->GetSession()->SendPacket(&data);
+        }
 
         return nullptr;
     }
@@ -111,16 +115,22 @@ void ChannelMgr::LeftChannel(std::string const& name)
 
 void ChannelMgr::CreateDefaultChannels()
 {
-    GetJoinChannel("Warden")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("Anticrash")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("Antiflood")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("ItemsCheck")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("GoldDupe")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("SAC")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("MailsAC")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("BotsDetector")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_DEVELOPER);
-    GetJoinChannel("LowLevelBots")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Warden")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Anticrash")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Antiflood")->SetSecurityLevel(SEC_MODERATOR);
+    GetOrCreateChannel("ItemsCheck")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("GoldDupe")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("SAC")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("MailsAC")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("BotsDetector")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("ChatSpam")->SetSecurityLevel(SEC_MODERATOR);
+    GetOrCreateChannel("LowLevelBots")->SetSecurityLevel(SEC_DEVELOPER);
+    GetOrCreateChannel("Global")->SetSecurityLevel(SEC_MODERATOR);
+    if (sWorld.IsPvPRealm())
+    {
+        GetOrCreateChannel("WorldH")->SetSecurityLevel(SEC_MODERATOR);
+        GetOrCreateChannel("WorldA")->SetSecurityLevel(SEC_MODERATOR);
+    }
 
     for (const auto& channel : channels)
         channel.second->SetAnnounce(false);
@@ -128,9 +138,19 @@ void ChannelMgr::CreateDefaultChannels()
 
 void ChannelMgr::AnnounceBothFactionsChannel(std::string const& channelName, ObjectGuid playerGuid, char const* message)
 {
-    if (Channel* c = channelMgr(HORDE)->GetJoinChannel(channelName))
-        c->Say(playerGuid, message, LANG_UNIVERSAL, true);
+    if (Channel* c = channelMgr(HORDE)->GetOrCreateChannel(channelName))
+        c->AsyncSay(playerGuid, message, LANG_UNIVERSAL, true);
     if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
-        if (Channel* c = channelMgr(ALLIANCE)->GetJoinChannel(channelName))
-            c->Say(playerGuid, message, LANG_UNIVERSAL, true);
+        if (Channel* c = channelMgr(ALLIANCE)->GetOrCreateChannel(channelName))
+            c->AsyncSay(playerGuid, message, LANG_UNIVERSAL, true);
+}
+
+AllianceChannelMgr::AllianceChannelMgr()
+{
+    m_team = ALLIANCE;
+}
+
+HordeChannelMgr::HordeChannelMgr()
+{
+    m_team = HORDE;
 }

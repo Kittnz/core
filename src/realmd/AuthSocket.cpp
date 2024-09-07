@@ -34,6 +34,7 @@
 #include "AuthCodes.h"
 #include "PatchHandler.h"
 #include "Util.h"
+#include "re2/re2.h"
 
 #ifdef USE_SENDGRID
 #include "MailerService.h"
@@ -60,6 +61,31 @@ enum AccountFlags
 #else
 #pragma pack(push,1)
 #endif
+
+
+uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
+{
+	size_t keySize = b32key.length();
+	int bufsize = (keySize + 7) / 8 * 5;
+	std::vector<uint8_t> encoded;
+	encoded.resize(bufsize);
+	uint32 hmacResSize = 20;
+	uint8 hmacRes[20];
+	uint64 timestamp = timeOffset / 30;
+	uint8 challenge[8];
+
+	for (int i = 8; i--; timestamp >>= 8)
+		challenge[i] = timestamp;
+
+	base32_decode((const uint8_t*)b32key.data(), (uint8_t*)encoded.data(), bufsize);
+	HMAC(EVP_sha1(), encoded.data(), bufsize, challenge, 8, hmacRes, &hmacResSize);
+
+	uint32 offset = hmacRes[19] & 0xF;
+	uint32 truncHash = (hmacRes[offset] << 24) | (hmacRes[offset + 1] << 16) | (hmacRes[offset + 2] << 8) | (hmacRes[offset + 3]);
+	truncHash &= 0x7FFFFFFF;
+
+	return truncHash % 1000000;
+}
 
 typedef struct AUTH_LOGON_CHALLENGE_C
 {
@@ -140,6 +166,8 @@ typedef struct AuthHandler
 
 std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B, 0x21, 0x57, 0xFC, 0x37, 0x3F, 0xB3, 0x69, 0xCD, 0xD2, 0xF1 } };
 
+static std::unordered_map<std::string, std::pair<std::string, uint32>> keyCache;
+
 /// Constructor - set the N and g values for SRP6
 AuthSocket::AuthSocket() : promptPin(false), gridSeed(0), _geoUnlockPIN(0), _accountId(0), _lastRealmListRequest(0)
 {
@@ -175,6 +203,34 @@ void AuthSocket::OnAccept()
     BASIC_LOG("Accepting connection from '%s'", get_remote_address().c_str());
 }
 
+bool AuthSocket::ReadProxyHeader()
+{
+    static const re2::RE2 IpPattern = R"(TCP4 (\d+.\d+.\d+.\d+))";
+    std::string proxyString;
+    proxyString.resize(recv_len());
+    recv_soft((char*)&proxyString[0], recv_len());
+    if (memcmp("PROXY ", &proxyString[0], 6) == 0)
+    {
+        auto endIndex = proxyString.find_first_of('\r');
+
+        if (endIndex == std::string::npos || proxyString.size() == endIndex || proxyString[endIndex + 1] != '\n')
+            return false;
+
+        std::string ipString;
+        if (!re2::RE2::PartialMatch(proxyString, IpPattern, &ipString))
+            return false;
+
+        remote_address_ = ipString;
+
+        //we got a fine IP, consume now.
+        // + 2 for the \r and \n
+        recv_skip(endIndex + 2);
+        return true;
+
+    }
+    return false;
+}
+
 /// Read the packet from the client
 void AuthSocket::OnRead()
 {
@@ -194,6 +250,20 @@ void AuthSocket::OnRead()
     uint8 _cmd;
     while (1)
     {
+        if (sConfig.GetBoolDefault("Proxy.PassIp", false))
+        {
+            if (!_proxyIpReceived)
+            {
+                if (recv_len() < 6)
+                    return;
+
+                if (ReadProxyHeader())
+                    _proxyIpReceived = true;
+                else
+                    return;
+            }
+        }
+
         if (!recv_soft((char *)&_cmd, 1))
             return;
 
@@ -341,19 +411,27 @@ bool AuthSocket::_HandleLogonChallenge()
     // Whether to continue handling the logon after prechecks or not
     bool handle_logon{ true };
 
+    // Temporary restrict build 7070 to CH realms!
+
+    if (_build == 7070 && sConfig.GetBoolDefault("Network.CN", false))
+    {
+        pkt << (uint8)WOW_FAIL_VERSION_INVALID;
+        BASIC_LOG("[AuthChallenge] ip '%s' tries to login with forbidden build number!", get_remote_address().c_str());
+
+        handle_logon = false;
+    }
 
     ///- Verify that this IP is not in the ip_banned table
     // No SQL injection possible (paste the IP address as passed by the socket)
     std::string address = get_remote_address();
     LoginDatabase.escape_string(address);
-    QueryResult *result = LoginDatabase.PQuery("SELECT unbandate FROM ip_banned WHERE "
+    std::unique_ptr<QueryResult> result (LoginDatabase.PQuery("SELECT unbandate FROM ip_banned WHERE "
     //    permanent                    still banned
-        "(unbandate = bandate OR unbandate > UNIX_TIMESTAMP()) AND ip = '%s'", address.c_str());
+        "(unbandate = bandate OR unbandate > UNIX_TIMESTAMP()) AND ip = '%s'", address.c_str()));
     if (result)
     {
         pkt << (uint8)WOW_FAIL_DB_BUSY;
         BASIC_LOG("[AuthChallenge] Banned ip '%s' tries to login with account '%s'!", get_remote_address().c_str(), _login.c_str());
-        delete result;
 
         handle_logon = false;
     }
@@ -363,7 +441,7 @@ bool AuthSocket::_HandleLogonChallenge()
     const auto throttleDuration{ 300 };
     if (handle_logon && throttleCount > 0)
     {
-        result = LoginDatabase.PQuery("SELECT COUNT(id) FROM account WHERE last_ip = '%s' AND last_login > NOW() - '%d'", address.c_str(), throttleDuration);
+        result.reset(LoginDatabase.PQuery("SELECT COUNT(id) FROM account WHERE last_ip = '%s' AND last_login > NOW() - '%d'", address.c_str(), throttleDuration));
         if (result)
         {
             const auto connections{ result->Fetch()[0].GetInt32() + 1 }; // Include this connection in the throttle?
@@ -375,8 +453,6 @@ bool AuthSocket::_HandleLogonChallenge()
 
                 handle_logon = false;
             }
-
-            delete result;
         }
     }
 
@@ -384,7 +460,8 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result.reset(LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank,current_realm,active FROM account WHERE username = '%s'",_safelogin.c_str ()));
+
         if (result)
         {
             Field* fields = result->Fetch();
@@ -392,13 +469,14 @@ bool AuthSocket::_HandleLogonChallenge()
             // Prevent login if the user's email address has not been verified
             bool requireVerification = sConfig.GetBoolDefault("ReqEmailVerification", false);
             int32 requireEmailSince = sConfig.GetIntDefault("ReqEmailSince", 0);
+            int32 forcePinAccountRank = sConfig.GetIntDefault("ForcePinAccountRank", 1);
             bool verified = (*result)[7].GetBool();
             
             // Prevent login if the user's join date is bigger than the timestamp in configuration
             if (requireEmailSince > 0)
             {
                 uint32 t = (*result)[10].GetUInt32();
-                requireVerification = requireVerification && (t >= requireEmailSince);
+                requireVerification = requireVerification && (t >= static_cast<uint32>(requireEmailSince));
             }
 
             if (requireVerification && !verified)
@@ -417,7 +495,35 @@ bool AuthSocket::_HandleLogonChallenge()
             _geoUnlockPIN = fields[8].GetUInt32();
             _email = fields[9].GetCppString();
 
+            _joindateStamp = fields[10].GetUInt32();
+
             uint8 securityRank = fields[11].GetUInt8();
+            if (securityRank >= forcePinAccountRank)
+            {
+                if (!(lockFlags & ALWAYS_ENFORCE))
+                    lockFlags = (LockFlag)(uint32(lockFlags) | ALWAYS_ENFORCE);
+
+                if (((lockFlags & TOTP) != TOTP && (lockFlags & FIXED_PIN) != FIXED_PIN))
+                    lockFlags = (LockFlag)(uint32(lockFlags) | FIXED_PIN);
+            }
+
+            uint8 current_realm = fields[12].GetUInt8();
+            uint8 active = fields[13].GetUInt8();
+
+            if (!active)
+            {
+                pkt << (uint8)WOW_FAIL_INCORRECT_PASSWORD;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }
+
+			/* if (current_realm)
+            {
+                pkt << (uint8)WOW_FAIL_ALREADY_ONLINE;
+                send((char const*)pkt.contents(), pkt.size());
+                return true;
+            }*/
+
 
             if (lockFlags & IP_LOCK)
             {
@@ -448,8 +554,8 @@ bool AuthSocket::_HandleLogonChallenge()
             {
                 uint32 account_id = fields[1].GetUInt32();
                 ///- If the account is banned, reject the logon attempt
-                QueryResult *banresult = LoginDatabase.PQuery("SELECT bandate,unbandate FROM account_banned WHERE "
-                    "id = %u AND active = 1 AND (unbandate > UNIX_TIMESTAMP() OR unbandate = bandate) LIMIT 1", account_id);
+                std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT bandate,unbandate FROM account_banned WHERE "
+                    "id = %u AND active = 1 AND (unbandate > UNIX_TIMESTAMP() OR unbandate = bandate) LIMIT 1", account_id));
                 if (banresult)
                 {
                     if((*banresult)[0].GetUInt64() == (*banresult)[1].GetUInt64())
@@ -462,8 +568,6 @@ bool AuthSocket::_HandleLogonChallenge()
                         pkt << (uint8) WOW_FAIL_SUSPENDED;
                         BASIC_LOG("[AuthChallenge] Temporarily banned account '%s' using IP '%s' tries to login!",_login.c_str (), get_remote_address().c_str());
                     }
-
-                    delete banresult;
                 }
                 else
                 {
@@ -512,31 +616,29 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     //force 2FA for staff accounts.
-                    if (securityRank >= SEC_OBSERVER && lockFlags == FIXED_PIN)
+                    if (securityRank >= forcePinAccountRank || lockFlags == FIXED_PIN)
                     {
                         std::string address = get_remote_address();
                         LoginDatabase.escape_string(address);
 
 
-                        auto result = LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+                        result.reset(LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id));
 
                         if (result)
                         {
                             auto fields = result->Fetch();
                             uint64 expiresAt = fields[0].GetUInt64();
-                            if (expiresAt < time(nullptr)) // expired.
+                            if (static_cast<time_t>(expiresAt) < time(nullptr)) // expired.
                             {
                                 LoginDatabase.DirectPExecute("DELETE FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
                                 promptPin = true;
                             }
                             else
                                 promptPin = false;
-                            delete result;
                         }
                         else
                             promptPin = true;
                     }
-
 
                     if (promptPin)
                     {
@@ -568,8 +670,6 @@ bool AuthSocket::_HandleLogonChallenge()
                     _status = STATUS_LOGON_PROOF;
                 }
             }
-
-            delete result;
         }
         else // no account
         {
@@ -617,9 +717,13 @@ bool AuthSocket::_HandleLogonProof()
         char tmp[256];
 
         //snprintf(tmp, 256, "%s/%d%s.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str(), _build, _localizationName.c_str());
-        if (_build == 7050)
+        if (_build >= 7070 && _build < 7100)
         {
-            snprintf(tmp, 256, "%s/hotfix.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+            snprintf(tmp, 256, "%s/twpatch_7100.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+        }
+        else if (_build >= 7050 && _build < 7070 )
+        {
+            snprintf(tmp, 256, "%s/twpatch_7070.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
         }
         else
             snprintf(tmp, 256, "%s/twpatch.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
@@ -874,10 +978,19 @@ bool AuthSocket::_HandleLogonProof()
         const char* K_hex = K.AsHexStr();
         const char* os = reinterpret_cast<char *>(&_os); // no injection as there are only two possible values
         const char* platform = reinterpret_cast<char*>(&_platform); // no injection as there are only two possible values
-        auto result = LoginDatabase.PQuery("UPDATE account SET sessionkey = '%s', last_ip = '%s', last_login = NOW(), locale = '%u', failed_logins = 0, os = '%s', platform = '%s' WHERE username = '%s'",
+        LoginDatabase.DirectPExecute("UPDATE account SET sessionkey = '%s', last_ip = '%s', last_login = NOW(), locale = '%u', failed_logins = 0, os = '%s', platform = '%s' WHERE username = '%s'",
             K_hex, get_remote_address().c_str(), GetLocaleByName(_localizationName), os, platform, _safelogin.c_str() );
-        delete result;
+        
+
+        keyCache[_safelogin] = { K_hex, _accountId };
+
         OPENSSL_free((void*)K_hex);
+
+
+        
+        LoginDatabase.PExecute("INSERT INTO `account_ip_logins` (`account_id`, `account_ip`, `login_count`) VALUES (%u, '%s', 1) ON DUPLICATE KEY UPDATE `login_count` = `login_count` + 1",
+            _accountId, get_remote_address().c_str());
+
 
         ///- Finish SRP6 and send the final result to the client
         sha.Initialize();
@@ -903,7 +1016,8 @@ bool AuthSocket::_HandleLogonProof()
             //Increment number of failed logins by one and if it reaches the limit temporarily ban that account or IP
             LoginDatabase.PExecute("UPDATE account SET failed_logins = failed_logins + 1 WHERE username = '%s'",_safelogin.c_str());
 
-            if(QueryResult *loginfail = LoginDatabase.PQuery("SELECT id, failed_logins FROM account WHERE username = '%s'", _safelogin.c_str()))
+            std::unique_ptr<QueryResult> loginfail(LoginDatabase.PQuery("SELECT id, failed_logins FROM account WHERE username = '%s'", _safelogin.c_str()));
+            if(loginfail)
             {
                 Field* fields = loginfail->Fetch();
                 uint32 failed_logins = fields[1].GetUInt32();
@@ -932,8 +1046,6 @@ bool AuthSocket::_HandleLogonProof()
                             current_ip.c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
                     }
                 }
-
-                delete loginfail;
             }
         }
     }
@@ -982,20 +1094,18 @@ bool AuthSocket::_HandleReconnectChallenge()
     EndianConvert(ch->build);
     _build = ch->build;
 
-    QueryResult *result = LoginDatabase.PQuery ("SELECT sessionkey,id FROM account WHERE username = '%s'", _safelogin.c_str ());
+    auto itr = keyCache.find(_safelogin);
 
     // Stop if the account is not found
-    if (!result)
+    if (itr == keyCache.end())
     {
         sLog.outError("[ERROR] user %s tried to login and we cannot find his session key in the database.", _login.c_str());
         close_connection();
         return false;
     }
 
-    Field* fields = result->Fetch ();
-    K.SetHexStr (fields[0].GetString ());
-    _accountId = fields[1].GetUInt32();
-    delete result;
+    K.SetHexStr (itr->second.first.c_str());
+    _accountId = itr->second.second;
 
     ///- All good, await client's proof
     _status = STATUS_RECON_PROOF;
@@ -1118,12 +1228,11 @@ void AuthSocket::LoadRealmlist(ByteBuffer& pkt)
         uint8 AmountOfCharacters;
 
         // No SQL injection. id of realm is controlled by the database.
-        QueryResult* result = LoginDatabase.PQuery("SELECT `numchars` FROM `realmcharacters` WHERE `realmid` = '%d' AND `acctid`='%u'", i.second.m_ID, _accountId);
+        std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `numchars` FROM `realmcharacters` WHERE `realmid` = '%d' AND `acctid`='%u'", i.second.m_ID, _accountId));
         if (result)
         {
             Field* fields = result->Fetch();
             AmountOfCharacters = fields[0].GetUInt8();
-            delete result;
         }
         else
             AmountOfCharacters = 0;
@@ -1293,30 +1402,6 @@ bool AuthSocket::VerifyPinData(uint32 pin, const PINData& clientData)
     return !memcmp(hash.AsDecStr(), clientHash.AsDecStr(), 20);
 }
 
-uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
-{
-    size_t keySize = b32key.length();
-    int bufsize = (keySize + 7) / 8 * 5;
-    std::vector<uint8_t> encoded;
-    encoded.resize(bufsize);
-    uint32 hmacResSize = 20;
-    uint8 hmacRes[20];
-    uint64 timestamp = timeOffset / 30;
-    uint8 challenge[8];
-
-    for (int i = 8; i--; timestamp >>= 8)
-        challenge[i] = timestamp;
-
-    base32_decode((const uint8_t*)b32key.data(),(uint8_t*)encoded.data(), bufsize);
-    HMAC(EVP_sha1(), encoded.data(), bufsize, challenge, 8, hmacRes, &hmacResSize);
-
-    uint32 offset = hmacRes[19] & 0xF;
-    uint32 truncHash = (hmacRes[offset] << 24) | (hmacRes[offset + 1] << 16) | (hmacRes[offset + 2] << 8) | (hmacRes[offset + 3]);
-    truncHash &= 0x7FFFFFFF;
-
-    return truncHash % 1000000;
-}
-
 bool AuthSocket::ValidateToken(std::string const& secretString, PINData& data)
 {
     time_t now = time(nullptr);
@@ -1344,7 +1429,7 @@ void AuthSocket::InitPatch()
 
 void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
 {
-    QueryResult* result = LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId);
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId));
     if (!result)
         return;
 
@@ -1354,8 +1439,6 @@ void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
         AccountTypes security = AccountTypes(fields[0].GetUInt32());
         _accountDefaultSecurityLevel = security;
     } while (result->NextRow());
-
-    delete result;
 }
 
 bool AuthSocket::GeographicalLockCheck()
@@ -1435,11 +1518,11 @@ bool AuthSocket::GeographicalLockCheck()
 
 bool AuthSocket::VerifyVersion(uint8 const* a, int32 aLength, uint8 const* versionProof, bool isReconnect)
 {
+	if (!sConfig.GetBoolDefault("StrictVersionCheck", false))
+		return true;
+
     if (!((_platform == X86 || _platform == PPC) && (_os == Win || _os == OSX)))
         return false;
-
-    if (!sConfig.GetBoolDefault("StrictVersionCheck", false))
-        return true;
 
     std::array<uint8, 20> zeros = { {} };
     std::array<uint8, 20> const* versionHash = nullptr;

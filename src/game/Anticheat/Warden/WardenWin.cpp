@@ -24,6 +24,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Player.h"
 #include "AccountMgr.h"
+#include "Analysis/AccountAnalyser.hpp"
 
 #include <string>
 #include <vector>
@@ -92,6 +93,8 @@ uint32 WardenWin::GetSharedDataFieldOffset(SharedDataField field)
         return 0x036C;
     case SharedDataField::QpcData:
         return 0x03C6;
+    case SharedDataField::TimeZoneId:
+        return 0x0240;
     default:
         return 0xBEEF;
     }
@@ -105,6 +108,27 @@ uint32 WardenWin::GetSharedDataFieldOffset(SharedDataField field)
         },
 
     };*/
+}
+
+std::string OsVersionToString(OsVersion version)
+{
+    switch (version)
+    {
+    case OsVersion::None:
+        return "None";
+    case OsVersion::WindowsXP:
+        return "WinXP";
+    case OsVersion::Windows7:
+        return "Win7";
+    case OsVersion::Windows8:
+        return "Win8";
+    case OsVersion::WindowsVista:
+        return "Vista";
+    case OsVersion::Windows10AndUp:
+        return "Win10Up";
+    default:
+        return "<Unknown>";
+    }
 }
 
 void WardenWin::SetOSVersion()
@@ -830,6 +854,8 @@ static constexpr uint32 sOfsSharedData = 0x7FFE0000;
 static constexpr uint32 sOfsSharedDataMajorVersion = 0x026C;
 static constexpr uint32 sOfsSharedDataMinorVersion = 0x0270;
 
+static constexpr uint32 sOfsClickToMovePosition = 0xC4D890;
+
 // TODO: Identify drivers for other hypervisors and add detections for them too
 constexpr struct
 {
@@ -1184,6 +1210,7 @@ void WardenWin::ConvertPrintData(std::vector<uint8>& buffer)
     Convert(data.TestResInstruction, buffer, SharedDataField::TestRetInstruction);
     Convert(data.TimeZoneBias, buffer, SharedDataField::TimeZoneBias);
     Convert(data.UnparkedProcessorCount, buffer, SharedDataField::UnparkedProcessorCount);
+    Convert(data.TimeZoneId, buffer, SharedDataField::TimeZoneId);
 
     _triggerPrintSave = true;
 }
@@ -1309,7 +1336,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read warden->SysInfo from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         // borrow this memory temporarily
@@ -1345,7 +1372,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read s_moduleInterface from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         wardenWin->_wardenAddress = buff.read<uint32>();
@@ -1378,7 +1405,7 @@ void WardenWin::LoadScriptedScans()
         if ((val & Required) != Required || !!(val & Prohibited))
         {
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: CWorld::enables expected 0x%lx prohibited 0x%lx received 0x%lx",
-                Required, Prohibited, val);
+                (uint32)Required, (uint32)Prohibited, val);
 
             return true;
         }
@@ -1707,7 +1734,7 @@ void WardenWin::LoadScriptedScans()
             sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read g_theGxDevicePtr from account %u ip %s",
                 wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
 
-            return true;
+            return false;
         }
 
         buff.read(reinterpret_cast<uint8 *>(&wardenWin->_endSceneAddress), sizeof(wardenWin->_endSceneAddress));
@@ -1865,6 +1892,51 @@ void WardenWin::LoadScriptedScans()
 
         return false;
     }, "WinVersionGet", WinAllBuild | InitialLogin | PriorityScan));
+
+    // click to move enabled check
+    sWardenScanMgr.AddWindowsScan(std::make_shared<WindowsScan>(
+        // builder
+        [](const Warden *warden, std::vector<std::string> &, ByteBuffer &scan)
+    {
+        // no need to scan multiple times
+        if (warden->HasUsedClickToMove())
+            return;
+
+        auto const wardenWin = reinterpret_cast<const WardenWin *>(warden);
+
+        scan << static_cast<uint8>(wardenWin->GetModule()->opcodes[READ_MEMORY] ^ wardenWin->GetXor())
+            << static_cast<uint8>(0)
+            << sOfsClickToMovePosition
+            << static_cast<uint8>(sizeof(float) * 3);
+    },
+        // checker
+        [](const Warden *warden, ByteBuffer &buff)
+    {
+        auto const wardenWin = const_cast<WardenWin *>(reinterpret_cast<const WardenWin *>(warden));
+
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read click to move position from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return true;
+        }
+
+        float positionX = buff.read<float>();
+        float positionY = buff.read<float>();
+        float positionZ = buff.read<float>();
+        if (positionX || positionY || positionZ)
+        {
+            wardenWin->SetHasUsedClickToMove();
+            wardenWin->_session->SetHasUsedClickToMove();
+        }
+
+        return false;
+    }, sizeof(uint8) + sizeof(uint8) + sizeof(uint32) + sizeof(uint8),
+       sizeof(uint8) + sizeof(float) + sizeof(float) + sizeof(float),
+        "Click To Move Position", WinAllBuild));
 }
 
 void WardenWin::BuildLuaInit(const std::string &module, bool fastcall, uint32 offset, ByteBuffer &out) const
@@ -2072,12 +2144,45 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress)
+    if (!_sysInfoSaved && _triggerPrintSave)
     {
+        bool hasSysInfo = _sysInfo.lpMaximumApplicationAddress > 0;
+
         auto activeProcCount = 0;
-        for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
-            if (!!(_sysInfo.dwActiveProcessorMask & (1 << i)))
-                ++activeProcCount;
+        if (hasSysInfo)
+        {
+            for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
+                if (!!(_sysInfo.dwActiveProcessorMask & (1 << i)))
+                    ++activeProcCount;
+        }
+        else
+            activeProcCount = _sharedData->UnparkedProcessorCount;
+
+        if (!_sharedData)
+            _sharedData = std::make_unique<SharedDataCompact>();
+
+        auto& sample = _session->_analyser->GetCurrentSample();
+        
+
+        sample.activeCpus = activeProcCount;
+        sample.cpuType = hasSysInfo ? CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision) : "N/A";
+        sample.enclaveMask = _sharedData->EnclaveFeatureMask;
+        sample.mitPolicies = _sharedData->MitigationPolicies;
+        sample.numPhysicalPages = _sharedData->NumberOfPhysicalPages;
+        sample.pageSize = hasSysInfo ? _sysInfo.dwPageSize : 4096;
+        sample.qpcData = _sharedData->QpcData;
+        sample.sharedDataFlags = _sharedData->SharedDataFlags;
+        sample.suiteMask = _sharedData->SuiteMask;
+        sample.timeZoneBias = _sharedData->TimeZoneBias.LowPart;
+        sample.totalCpus = hasSysInfo ? _sysInfo.dwNumberOfProcessors : activeProcCount;
+        sample.unparkedCpuCount = _sharedData->UnparkedProcessorCount;
+        sample.useCpuData = hasSysInfo;
+        sample.useExtendedData = sample.pageSize != 0;
+        sample.timeZoneId = _sharedData->TimeZoneId;
+
+        //by now we should have all current sample data, mix n match.
+        _session->_analyser->Initialize();
+
 
         LoginDatabase.BeginTransaction();
 
@@ -2085,21 +2190,18 @@ void WardenWin::Update()
 
         auto stmt = LoginDatabase.CreateStatement(fingerprintUpdate,
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
-            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData` ) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        if (!_sharedData)
-            _sharedData = std::make_unique<SharedDataCompact>();
+            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData`, `timeZoneId`, `osVersion`, `extendedHash`) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
         stmt.addString(_session->GetRemoteAddress());
         stmt.addUInt32(realmID);
-        stmt.addString(ArchitectureString(_sysInfo.wProcessorArchitecture));
-        stmt.addString(CPUTypeAndRevision(_sysInfo.dwProcessorType, _sysInfo.wProcessorRevision));
+        stmt.addString(hasSysInfo ? ArchitectureString(_sysInfo.wProcessorArchitecture) : "x86");
+        stmt.addString(sample.cpuType);
         stmt.addUInt32(activeProcCount);
-        stmt.addUInt32(_sysInfo.dwNumberOfProcessors);
-        stmt.addUInt32(_sysInfo.dwPageSize);
+        stmt.addUInt32(sample.totalCpus);
+        stmt.addUInt32(sample.pageSize);
         stmt.addUInt32(_sharedData->TimeZoneBias.LowPart);
         stmt.addUInt32(_sharedData->LargePageMinimum);
         stmt.addUInt32(_sharedData->SuiteMask);
@@ -2112,6 +2214,9 @@ void WardenWin::Update()
         stmt.addUInt32(_sharedData->UnparkedProcessorCount);
         stmt.addUInt32(_sharedData->EnclaveFeatureMask);
         stmt.addUInt32(_sharedData->QpcData);
+        stmt.addUInt32(_sharedData->TimeZoneId);
+        stmt.addString(OsVersionToString(_osVersion));
+        stmt.addUInt64(sample.GetHash());
         stmt.Execute();
 
         LoginDatabase.CommitTransaction();

@@ -22,6 +22,8 @@ set (game_SRCS
     Camera.cpp
     Conditions.cpp
     CreatureGroups.cpp
+    DynamicVisibilityMgr.cpp
+    DynamicVisibilityMgr.h
     DailyQuestHandler.cpp
     GameEventMgr.cpp
     GuardMgr.cpp
@@ -36,6 +38,7 @@ set (game_SRCS
     ObjectGuid.cpp
     ObjectMgr.cpp
     ObjectPosSelector.cpp
+    PlayerDump.cpp
     QuestDef.cpp
     ReputationMgr.cpp
     ScriptMgr.cpp
@@ -67,6 +70,7 @@ set (game_SRCS
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
+	Analysis/AccountAnalyser.cpp
     Autoscaling/AutoScaler.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
@@ -94,6 +98,7 @@ set (game_SRCS
     Handlers/AddonHandler.cpp
     Handlers/AuctionHouseHandler.cpp
     Handlers/BattleGroundHandler.cpp
+    Handlers/ChannelBroadcaster.cpp
     Handlers/ChannelHandler.cpp
     Handlers/CharacterHandler.cpp
     Handlers/ChatHandler.cpp
@@ -117,7 +122,13 @@ set (game_SRCS
     Handlers/SpellHandler.cpp
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
+    HttpApi/ControllerRegistrar.cpp
+    HttpApi/TestController.cpp
+    HttpApi/TestController.hpp
+    HttpApi/TransferController.cpp
+    HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
+    Logging/DatabaseLogger.cpp
     Mail/Mail.cpp
     Mail/MassMailMgr.cpp
     MapNodes/AbstractPlayer.cpp
@@ -221,11 +232,13 @@ set (game_SRCS
     ItemEnchantmentMgr.h
     Language.h
     LootMgr.h
+    LoveIsInTheAir.h
     ObjectAccessor.h
     ObjectGridLoader.h
     ObjectGuid.h
     ObjectMgr.h
     ObjectPosSelector.h
+    PlayerDump.h
     QuestDef.h
     ReputationMgr.h
     ScriptedGossip.h
@@ -237,6 +250,7 @@ set (game_SRCS
     Weather.h
     World.h
     WorldSession.h
+	Analysis/AccountAnalyser.hpp
     AI/AggressorAI.h
     AI/CreatureAI.h
     AI/CreatureAIImpl.h
@@ -291,6 +305,7 @@ set (game_SRCS
     Guild/Guild.h
     Guild/GuildMgr.h
     Handlers/AddonHandler.h
+    Handlers/ChannelBroadcaster.h
     Handlers/NPCHandler.h
     Handlers/LFGHandler.h
     LFG/LFGMgr.h
@@ -431,24 +446,13 @@ endif()
 
 if(USE_DISCORD_BOT)
     list(APPEND game_SRCS
-      DiscordBot/Bot.cpp
-      DiscordBot/Bot.hpp
-      DiscordBot/BaseCommandHandler.hpp
-	  DiscordBot/BaseCommandHandler.cpp
+      DiscordBot/CommandRegistrar.cpp
       DiscordBot/GMCommandHandler.cpp
       DiscordBot/GMCommandHandler.hpp
-	  DiscordBot/CommandRegistrar.cpp
-	  DiscordBot/AuthManager.cpp
-	  DiscordBot/AuthManager.hpp
-	  DiscordBot/LoginCommandHandler.cpp
-	  DiscordBot/LoginCommandHandler.hpp
-	  DiscordBot/PlayerCommandHandler.cpp
-	  DiscordBot/PlayerCommandHandler.hpp
-	  DiscordBot/MiscUtil.hpp
-	  DiscordBot/toojpeg.hpp
-	  DiscordBot/toojpeg.cpp
-	  DiscordBot/QrCodeGen.hpp
-	  DiscordBot/QrCodeGen.cpp	 
+      DiscordBot/LoginCommandHandler.cpp
+      DiscordBot/LoginCommandHandler.hpp
+      DiscordBot/PlayerCommandHandler.cpp
+      DiscordBot/PlayerCommandHandler.hpp 
     )
 endif()
 
@@ -477,6 +481,8 @@ if(USE_ANTICHEAT)
       Anticheat/AnticheatChatCommands.h
       Anticheat/AnticheatChatCommandsFunctions.cpp
       Anticheat/AnticheatChatCommandsFunctions.h
+      Anticheat/SuspiciousStatisticMgr.h
+      Anticheat/SuspiciousStatisticMgr.cpp
       Anticheat/Config.cpp
       Anticheat/Config.hpp
       Anticheat/cyclic.hpp
@@ -526,6 +532,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation
   ${CMAKE_SOURCE_DIR}/dep/include
+  ${CMAKE_SOURCE_DIR}/dep/libdeflate
   ${CMAKE_SOURCE_DIR}/src/framework
   ${CMAKE_SOURCE_DIR}/src/framework/Network
   ${CMAKE_SOURCE_DIR}/src/shared
@@ -578,6 +585,10 @@ source_group("DiscordBot"
   REGULAR_EXPRESSION DiscordBot
 )
 
+source_group("HttpApi"
+  REGULAR_EXPRESSION HttpApi
+)
+
 
 add_library(game STATIC
   ${game_SRCS}
@@ -591,8 +602,16 @@ target_link_libraries(game
   Detour
 )
 
+if(WIN32)
+	if (ENABLE_PROFILING)
+		include_directories(
+			${OPTICK_INCLUDE_DIR}
+    )
+	endif()
+endif()
+
 if(USE_DISCORD_BOT)
-    target_link_libraries(game 
+    target_link_libraries(game
 	dpp
   )
   target_compile_definitions(game PUBLIC USING_DISCORD_BOT)

@@ -26,6 +26,7 @@
 #include "HardcodedEvents.h"
 #include "World.h"
 #include "BattleGround.h"
+#include "CreatureGroups.h"
 
 char const* conditionSourceToStr[] =
         {
@@ -107,7 +108,9 @@ uint8 const ConditionTargetsInternal[] =
         CONDITION_REQ_TARGET_WORLDOBJECT, //  54
         CONDITION_REQ_TARGET_GAMEOBJECT,  //  55
         CONDITION_REQ_TARGET_WORLDOBJECT, //  56
-        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  57
+        CONDITION_REQ_SOURCE_CREATURE,    //  57
+        CONDITION_REQ_SOURCE_CREATURE,    //  58
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  59
 };
 
 // Starts from 4th element so that -3 will return first element.
@@ -181,7 +184,10 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_AURA:
         {
-            return target->ToUnit()->HasAura(m_value1, SpellEffectIndex(m_value2));
+            if (m_value2 < EFFECT_INDEX_0)
+                return target->ToUnit()->HasAura(m_value1);
+            else
+                return target->ToUnit()->HasAura(m_value1, SpellEffectIndex(m_value2));
         }
         case CONDITION_ITEM:
         {
@@ -334,17 +340,16 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
 
             return false;
         }
-        case CONDITION_WOW_PATCH:
+        case CONDITION_CONTENT_PHASE:
         {
-            // Always assume Turtle WoW is on patch 1.12 (10) for condition checks.
             switch (m_value2)
             {
                 case 0:
-                    return 10 == m_value1;
+                    return sWorld.GetContentPhase() == m_value1;
                 case 1:
-                    return 10 >= m_value1;
+                    return sWorld.GetContentPhase() >= m_value1;
                 case 2:
-                    return 10 <= m_value1;
+                    return sWorld.GetContentPhase() <= m_value1;
             }
             return false;
         }
@@ -553,7 +558,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         {
             Map* pMap = const_cast<Map*>(map ? map : (source ? source->GetMap() : target->GetMap()));
             if (GameObjectData const* pGameObjectData = sObjectMgr.GetGOData(m_value1))
-                if (GameObject* pGameObject = pMap->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, pGameObjectData->id, m_value1)))
+                if (GameObject* pGameObject = pMap->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, pGameObjectData->id, uint32(m_value1))))
                     return sConditionStorage.LookupEntry<ConditionEntry>(m_value2)->Meets(pGameObject, map, source, conditionSourceType);
             return false;
         }
@@ -588,12 +593,19 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         case CONDITION_LOCAL_TIME:
         {
             time_t rawtime;
-            time(&rawtime);
+
+            if (map)
+                rawtime = map->GetTime();
+            else
+                time(&rawtime);
 
             struct tm* timeinfo;
             timeinfo = localtime(&rawtime);
 
-            return (timeinfo->tm_hour >= m_value1) && (timeinfo->tm_min >= m_value2) && (timeinfo->tm_hour <= m_value3) && (timeinfo->tm_min <= m_value4);
+            return (timeinfo->tm_hour >= m_value1) &&
+                   ((timeinfo->tm_hour > m_value1) || (timeinfo->tm_min >= m_value2)) &&
+                   (timeinfo->tm_hour <= m_value3) &&
+                   ((timeinfo->tm_hour < m_value3) || (timeinfo->tm_min <= m_value4));
         }
         case CONDITION_DISTANCE_TO_POSITION:
         {
@@ -615,6 +627,32 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
                     return (bool)target->ToUnit()->FindNearestFriendlyPlayer(m_value2);
             }
             return false;
+        }
+        case CONDITION_CREATURE_GROUP_MEMBER:
+        {
+            CreatureGroup const* pGroup = source->ToCreature()->GetCreatureGroup();
+            if (!pGroup)
+                return false;
+            return !m_value1 || pGroup->GetOriginalLeaderGuid().GetCounter() == m_value1;
+        }
+        case CONDITION_CREATURE_GROUP_DEAD:
+        {
+            CreatureGroup const* pGroup = static_cast<Creature const*>(source)->GetCreatureGroup();
+            if (!pGroup)
+                return true;
+
+            if (pGroup->GetLeaderGuid() != source->GetObjectGuid())
+                if (Creature* pLeader = source->GetMap()->GetCreature(pGroup->GetLeaderGuid()))
+                    if (pLeader->IsAlive())
+                        return false;
+
+            for (auto const& itr : pGroup->GetMembers())
+                if (itr.first != source->GetObjectGuid())
+                    if (Creature* pMember = source->GetMap()->GetCreature(itr.first))
+                        if (pMember->IsAlive())
+                            return false;
+
+            return true;
         }
         case CONDITION_BG_EVENT_ACTIVE:
         {
@@ -806,7 +844,7 @@ bool ConditionEntry::IsValid()
         case CONDITION_ITEM:
         case CONDITION_ITEM_WITH_BANK:
         {
-            ItemPrototype const* proto = ObjectMgr::GetItemPrototype(m_value1);
+            ItemPrototype const* proto = sObjectMgr.GetItemPrototype(m_value1);
             if (!proto)
             {
                 if (!sObjectMgr.IsExistingItemId(m_value1))
@@ -830,7 +868,7 @@ bool ConditionEntry::IsValid()
         }
         case CONDITION_ITEM_EQUIPPED:
         {
-            ItemPrototype const* proto = ObjectMgr::GetItemPrototype(m_value1);
+            ItemPrototype const* proto = sObjectMgr.GetItemPrototype(m_value1);
             if (!proto)
             {
                 if (!sObjectMgr.IsExistingItemId(m_value1))
@@ -1260,6 +1298,18 @@ bool ConditionEntry::IsValid()
             m_value1 = GetIndexOfUpdateFieldForCurrentBuild(m_value1);
             break;
         }
+        case CONDITION_CREATURE_GROUP_MEMBER:
+        {
+            if (m_value1)
+            {
+                if (!sObjectMgr.IsExistingCreatureGuid(m_value1))
+                {
+                    sLog.outErrorDb("CONDITION_CREATURE_GROUP_MEMBER (entry %u, type %d) uses non-existent guid %u in value1, skipped", m_entry, m_condition, m_value1);
+                    return false;
+                }
+            }
+            break;
+        }
         case CONDITION_NONE:
         case CONDITION_INSTANCE_SCRIPT:
         case CONDITION_ACTIVE_HOLIDAY:
@@ -1277,7 +1327,8 @@ bool ConditionEntry::IsValid()
         case CONDITION_IS_PLAYER:
         case CONDITION_OBJECT_IS_SPAWNED:
         case CONDITION_ESCORT:
-        case CONDITION_WOW_PATCH:
+        case CONDITION_CONTENT_PHASE:
+        case CONDITION_CREATURE_GROUP_DEAD:
             break;
         default:
             sLog.outErrorDb("Condition entry %u has bad type of %d, skipped ", m_entry, m_condition);

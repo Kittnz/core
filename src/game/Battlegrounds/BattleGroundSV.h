@@ -117,12 +117,18 @@ enum BG_SV_Sounds
     BG_SV_SOUND_NODE_ASSAULTED_HORDE = 8174,
 };
 
+enum BG_SV_Spells
+{
+    SV_SPELL_NORTH_TOWER = 45925,
+    SV_SPELL_SOUTH_TOWER = 45926,
+};
+
 enum BG_SV_Locations
 {
-    SV_BASE_HUMAN = 700,
-    SV_BASE_ORC = 701,
-    SV_GRAVEYARD_HUMAN = 702,
-    SV_GRAVEYARD_ORC = 703,
+    SV_BASE_HUMAN = 930,
+    SV_BASE_ORC = 931,
+    SV_GRAVEYARD_HUMAN = 932,
+    SV_GRAVEYARD_ORC = 933,
 };
 
 Position const BG_SV_NodePositions[BG_SV_DYNAMIC_NODES_COUNT] =
@@ -136,12 +142,12 @@ const uint8 BG_SV_CaptureNodesSparkTicks[3] = { 0, 1, 2 };
 
 Position const BG_SV_BuffPositions[6] =
 {
-    {1632.22f, 143.54f, 103.7f, 0.79f},  // tree
-    {1356.95f, -117.16f, 102.5f, 1.19f}, // mine
-    {1240.48f, 178.16f, 66.6f, 3.98f},   // stables
-    {1077.14f, 412.6f, 92.7f, 5.38f},    // well
-    {1324.09f, 578.5f, 104.2f, 3.95f},   // mine 2
-    {1444.28f, 306.99f, 70.9f, 0.23f},   // wind
+    {1632.22f, 143.54f, 104.7f, 0.79f},  // tree
+    {1356.95f, -117.16f, 103.5f, 1.19f}, // mine
+    {1240.48f, 178.16f, 67.6f, 3.98f},   // stables
+    {1077.14f, 412.6f, 93.7f, 5.38f},    // well
+    {1324.09f, 578.5f, 105.2f, 3.95f},   // mine 2
+    {1444.28f, 306.99f, 71.9f, 0.23f},   // wind
 };
 
 Position const BG_SV_HeraldPos = { 1318.8f, 255.87f, 75.6f, 1.68f };
@@ -189,21 +195,21 @@ NPCData const BG_SV_LeaderGuardsPos[2][6] =
 {
     // footman, conjurer, cleric
     {
-        {93001, 1678.05f, 422.08f, 115.0f, 4.66f},
-        {93001, 1669.69f, 422.52f, 115.0f, 4.66f},
-        {93003, 1679.98f, 424.64f, 115.0f, 4.66f},
-        {93003, 1668.3f, 425.0f, 115.0f, 4.66f},
-        {93004, 1676.1f, 424.46f, 115.0f, 4.66f},
-        {93004, 1671.1f, 424.5f, 115.0f, 4.66f}
+        {NPC_HUMAN_FOOTMAN, 1678.05f, 422.08f, 115.0f, 4.66f},
+        {NPC_HUMAN_FOOTMAN, 1669.69f, 422.52f, 115.0f, 4.66f},
+        {NPC_HUMAN_CONJURER, 1679.98f, 424.64f, 115.0f, 4.66f},
+        {NPC_HUMAN_CONJURER, 1668.3f, 425.0f, 115.0f, 4.66f},
+        {NPC_HUMAN_CLERIC, 1676.1f, 424.46f, 115.0f, 4.66f},
+        {NPC_HUMAN_CLERIC, 1671.1f, 424.5f, 115.0f, 4.66f}
     },
     // grunt, warlock, necrolyte
     {
-        {93006, 967.55f, 178.71f, 100.5f, 0.55f},
-        {93006, 970.25f, 172.6f, 100.5f, 0.55f},
-        {93009, 970.45f, 169.9f, 100.5f, 0.55f},
-        {93009, 964.44f, 179.4f, 100.5f, 0.55f},
-        {93008, 965.9f, 177.0f, 100.5f, 0.55f},
-        {93008, 967.8f, 173.0f, 100.5f, 0.55f}
+        {NPC_ORC_GRUNT, 967.55f, 178.71f, 100.5f, 0.55f},
+        {NPC_ORC_GRUNT, 970.25f, 172.6f, 100.5f, 0.55f},
+        {NPC_ORC_WARLOCK, 970.45f, 169.9f, 100.5f, 0.55f},
+        {NPC_ORC_WARLOCK, 964.44f, 179.4f, 100.5f, 0.55f},
+        {NPC_ORC_NECROLYTE, 965.9f, 177.0f, 100.5f, 0.55f},
+        {NPC_ORC_NECROLYTE, 967.8f, 173.0f, 100.5f, 0.55f}
     }
 };
 
@@ -345,13 +351,14 @@ class BattleGroundSV : public BattleGround
 
         Team GetWinningTeam() const override;
 
+        uint32 GetAuraForTower(uint8 node);
         uint32 GetTowerNameId(uint8 node);
         Team GetHeraldControlledTeam();
         uint32 GetTeamSparks(TeamId team) const { return m_resources[team]; }
         void UpdateTeamSparks(TeamId team);
-        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; UpdateTeamSparks(team); }
-        void SetGeneralsActive(bool set) { generalsActive = set; }
-        bool IsGeneralsActive() { return generalsActive; }
+        void AddTeamSparks(TeamId team, uint32 count);
+        void SetGeneralsActive(bool set) { m_generalsActive = set; }
+        bool IsGeneralsActive() { return m_generalsActive; }
         bool SetupSkirmishes();
 
     private:
@@ -362,6 +369,7 @@ class BattleGroundSV : public BattleGround
         /* Creature spawning/despawning */
         void NodeOccupied(uint8 node, Team team);
         void NodeDeOccupied(uint8 node);
+        void ApplyTowerBuffOnTeam(uint32 spellId, Team teamId);
 
         void UpdateNodeWorldState(uint8 node);
 
@@ -371,6 +379,8 @@ class BattleGroundSV : public BattleGround
         uint32 m_NodeTimers[BG_SV_DYNAMIC_NODES_COUNT];
         uint32 m_resources[BG_TEAMS_COUNT];
         uint32 m_lastTick[BG_TEAMS_COUNT];
-        bool generalsActive;
+        bool m_generalsActive;
+        ObjectGuid m_allianceGeneralGuid;
+        ObjectGuid m_hordeGeneralGuid;
 };
 #endif

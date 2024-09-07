@@ -285,6 +285,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
 {
+    uint32 now = WorldTimer::getMSTime();
     ObjectGuid guid;
 
     recv_data >> guid;
@@ -320,6 +321,10 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)
         _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_USE);
         obj->Use(_player);
     }
+    
+    uint32 packetTime = WorldTimer::getMSTimeDiffToNow(now);
+    if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
+        sLog.out(LOG_PERFORMANCE, "Slow packet CMSG_GAMEOBJ_USE with lowGUID %u, entry %u.", obj->GetGUIDLow(), obj->GetEntry());
 }
 
 void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
@@ -338,26 +343,13 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (_player->GetTypeId() == TYPEID_PLAYER)
+    // not have spell in spellbook or spell passive and not casted by client
+    if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
     {
-        // not have spell in spellbook or spell passive and not casted by client
-        if (!_player->HasActiveSpell(spellId) || spellInfo->IsPassiveSpell())
-        {
-            sLog.outError("World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
-            //cheater? kick? ban?
-            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
-            return;
-        }
-    }
-    else if (_player->GetTypeId() == TYPEID_UNIT)
-    {
-        // not have spell in spellbook or spell passive and not casted by client
-        if (!_player->HasSpell(spellId) || spellInfo->IsPassiveSpell())
-        {
-            //cheater? kick? ban?
-            recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
-            return;
-        }
+        sLog.outError("World: Player %u casts spell %u which he shouldn't have", _player->GetGUIDLow(), spellId);
+        //cheater? kick? ban?
+        recvPacket.rpos(recvPacket.wpos());                 // prevent spam at ignore packet
+        return;
     }
 
     // client provided targets
@@ -417,6 +409,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // Nostalrius : Ivina
     spell->SetClientStarted(true);
     spell->prepare(std::move(targets));
+    _player->UpdateSpellActivityTimer();
     ALL_SESSION_SCRIPTS(this, OnSpellCasted(spellId));
 }
 
@@ -462,15 +455,9 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
         if (!_player->IsSelfMover())
         {
             // except own aura spells
-            bool allow = false;
-            for (uint32 k : spellInfo->EffectApplyAuraName)
-            {
-                if (k == SPELL_AURA_MOD_POSSESS || k == SPELL_AURA_MOD_POSSESS_PET)
-                {
-                    allow = true;
-                    break;
-                }
-            }
+            bool allow = spellInfo->HasEffect(SPELL_EFFECT_SUMMON_POSSESSED) ||
+                         spellInfo->HasAura(SPELL_AURA_MOD_POSSESS) ||
+                         spellInfo->HasAura(SPELL_AURA_MOD_POSSESS_PET);
 
             // this also include case when aura not found
             if (!allow)
@@ -491,6 +478,10 @@ void WorldSession::HandleCancelAuraOpcode(WorldPacket& recvPacket)
             break;
         }
     }
+
+    // confirmed you cant remove buffs while mind controlled on wotlk ptr
+    if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED))
+        return;
 
     // channeled spell case (it currently casted then)
     if (spellInfo->IsChanneledSpell())
