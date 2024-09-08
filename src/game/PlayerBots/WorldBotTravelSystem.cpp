@@ -367,8 +367,12 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
 {
     m_currentPath.clear();
     m_currentPathIndex = 0;
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path to specific destination (%.2f, %.2f, %.2f)%s",
-        me->GetName(), x, y, z, isCorpseRun ? " (Corpse Run)" : "");
+
+    std::string taskName = m_taskManager.GetCurrentTaskName();
+    std::string actionType = isCorpseRun ? "Corpse Run" : (taskName != "None" ? taskName : "Unknown Action");
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path for %s to destination (%.2f, %.2f, %.2f)",
+        me->GetName(), actionType.c_str(), x, y, z);
 
     const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
     const TravelNode* endNode = sWorldBotTravelSystem.GetNearestNode(x, y, z, mapId);
@@ -587,7 +591,7 @@ void WorldBotAI::OnPathComplete()
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached its specific destination", me->GetName());
         // Perform any actions specific to reaching a designated destination
     }
-    else
+    else if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
     {
         StartNewPathToNode();
     }

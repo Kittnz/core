@@ -3,6 +3,7 @@
 
 #include "CombatBotBaseAI.h"
 #include "WorldBotTravelSystem.h"
+#include "WorldBotTaskManager.h"
 #include "BattleBotAI.h"
 #include "PartyBotAI.h"
 #include "PlayerBotMgr.h"
@@ -81,7 +82,7 @@ enum WorldBotWsgWaitSpot
     MB_WSG_WAIT_SPOT_SPAWN,
     MB_WSG_WAIT_SPOT_LEFT,
     MB_WSG_WAIT_SPOT_RIGHT
-};  
+};
 
 enum WorldBotTasks
 {
@@ -115,12 +116,14 @@ public:
 
     WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
         : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o),
-        m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false), m_currentNodeId(0), m_currentPathIndex(0), m_isRunningToCorpse(false)
+        m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false), m_currentNodeId(0), m_currentPathIndex(0), m_isRunningToCorpse(false),
+        m_taskManager(this)
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
         m_isSpecificDestinationPath = false;
+        m_taskManager.SetCurrentTask(TASK_ROAM);
     }
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
@@ -242,15 +245,27 @@ public:
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
     // Task System
+    WorldBotTaskManager m_taskManager;
     uint8 currentTaskID = 0;
+
+    // Roam task methods
+    bool CanPerformRoam() const;
+    bool IsRoamingComplete() const;
+    void RegisterRoamTask();
+
+    // Explore task methods
+    bool CanPerformExplore() const;
+    void StartExploring();
+    bool IsExploringComplete() const;
+    void RegisterExploreTask();
+    bool SetExploreDestination();
+
     std::string DestName = "";
     float DestCoordinatesX = 0.0f;
     float DestCoordinatesY = 0.0f;
     float DestCoordinatesZ = 0.0f;
     int8 DestMap = 0;
     bool hasPoiDestination = false;
-    bool TaskDestination();
-    void SetExploreDestination();
 
     //std::vector<WorldBotPath*> vPaths_Grind;
 

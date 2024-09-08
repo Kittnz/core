@@ -2449,11 +2449,10 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
     }
 }
 
-/*
 void PlayerBotMgr::WorldBotLoadAreaPOI()
 {
     sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBot POI] Loading poi's from db...");
-    QueryResult* result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
+    std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `worldbot_areapoi` is empty.");
@@ -2486,8 +2485,6 @@ void PlayerBotMgr::WorldBotLoadAreaPOI()
             myAreaPOI.push_back(poi);
 
         } while (result->NextRow());
-
-        delete result;
     }
 }
-*/
+

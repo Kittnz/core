@@ -32,8 +32,6 @@
 #define GO_WSG_SILVERWING_FLAG 179830
 #define GO_WSG_WARSONG_FLAG 179831
 
-extern std::vector<WorldBotsAreaPOI> myAreaPOI;
-
 static bool IsPhysicalDamageClass(uint8 playerClass)
 {
     switch (playerClass)
@@ -760,7 +758,6 @@ void WorldBotAI::UpdateWaypointMovement()
 
         if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex, m_isSpecificDestinationPath, m_isRunningToCorpse))
         {
-            //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s resuming current path", me->GetName());
             MoveToNextPoint();
             return;
         }
@@ -788,7 +785,8 @@ void WorldBotAI::UpdateWaypointMovement()
         m_isSpecificDestinationPath = false;
     }
 
-    if (!m_isRunningToCorpse && !m_isSpecificDestinationPath)
+    // Check if the current task is TASK_ROAM before starting a new random path
+    if (!m_isRunningToCorpse && !m_isSpecificDestinationPath && m_taskManager.GetCurrentTaskId() == TASK_ROAM)
     {
         StartNewPathToNode();
     }
@@ -978,26 +976,12 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             me->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK);
         }
 
-        // Identify task by name
-        std::string name = me->GetName();
-        if (name.find("bank") != std::string::npos)
-            currentTaskID = TASK_BANKER;
-
-        // Choose a TASK todo
-        if (currentTaskID == TASK_NONE)
-        {
-			currentTaskID = TASK_GRIND;
-		}
-
-        /*uint32 rtask = urand(0, 1);
-        if (rtask == 1)
-            currentTaskID = TASK_ROAM;
-        else
-        currentTaskID = TASK_EXPLORE;*/
-
         uint32 newzone, newarea;
         me->GetZoneAndAreaId(newzone, newarea);
         me->UpdateZone(newzone, newarea);
+
+        RegisterRoamTask();
+        m_taskManager.SetCurrentTask(TASK_ROAM);  // Ensure TASK_ROAM is set as the current task
 
         m_initialized = true;
         return;
@@ -1021,6 +1005,12 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             TeleportResurrect();
             return;
         }
+    }
+
+    // Update Task
+    if (!me->IsInCombat() && !me->IsDead())
+    {
+        m_taskManager.UpdateTasks();
     }
 
     // dual bot
@@ -1466,6 +1456,7 @@ void WorldBotAI::UpdateBattleGroundAI()
     }
 }
 
+/*
 bool WorldBotAI::TaskDestination()
 {
     bool succes = false;
@@ -1523,3 +1514,4 @@ void WorldBotAI::SetExploreDestination()
         }
     }
 }
+*/
