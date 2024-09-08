@@ -758,6 +758,7 @@ void WorldBotAI::UpdateWaypointMovement()
 
         if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex, m_isSpecificDestinationPath, m_isRunningToCorpse))
         {
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s resuming current path", me->GetName());
             MoveToNextPoint();
             return;
         }
@@ -1455,63 +1456,3 @@ void WorldBotAI::UpdateBattleGroundAI()
         }
     }
 }
-
-/*
-bool WorldBotAI::TaskDestination()
-{
-    bool succes = false;
-    if (currentTaskID == TASK_EXPLORE)
-    {
-        if (hasPoiDestination)
-            succes = false;
-        else
-            SetExploreDestination();
-
-        // create position
-        Position const dest_loc = { DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, 0.0f };
-
-        // move to position
-        if (DestMap == 0)
-        {
-            //StartNewPathToPosition(dest_loc, vPaths_Map_Eastern_Kingdoms);
-
-        }
-        else if (DestMap == 1)
-        {
-            //StartNewPathToPosition(dest_loc, vPaths_Map_Kalimdor);
-        }
-
-        hasPoiDestination = true;
-            
-        // debug
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
-
-        succes = true;
-    }
-    return succes;
-}
-
-void WorldBotAI::SetExploreDestination()
-{
-    // get random poi
-    int mapId = me->GetMapId();
-
-    std::random_shuffle(myAreaPOI.begin(), myAreaPOI.end());
-    for (auto& poi : myAreaPOI)
-    {
-        if (poi.map == 0 || poi.map == 1)
-        {
-            if (poi.map == mapId)
-            {
-                DestName = poi.name;
-                DestCoordinatesX = poi.pos_x;
-                DestCoordinatesY = poi.pos_y;
-                DestCoordinatesZ = poi.pos_z;
-                DestMap = poi.map;
-                hasPoiDestination = true;
-                break;
-            }
-        }
-    }
-}
-*/

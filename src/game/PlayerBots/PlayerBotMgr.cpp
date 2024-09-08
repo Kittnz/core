@@ -2487,4 +2487,3 @@ void PlayerBotMgr::WorldBotLoadAreaPOI()
         } while (result->NextRow());
     }
 }
-
