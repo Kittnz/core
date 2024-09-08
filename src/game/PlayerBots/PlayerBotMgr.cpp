@@ -2346,6 +2346,8 @@ bool ChatHandler::HandleWorldBotStatsCommand(char* args)
     PSendSysMessage("Available Horde Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(HORDE));
     PSendSysMessage("Available Alliance Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(ALLIANCE));
 
+    sPlayerBotMgr.PrintImplementedTasks();
+
     return true;
 }
 
@@ -2446,6 +2448,32 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
         // Log total available bots
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotBalancer: Total available bots - Horde: %zu, Alliance: %zu",
             myHordeBots.size(), myAllianceBots.size());
+    }
+}
+
+void PlayerBotMgr::PrintImplementedTasks() const
+{
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "PlayerBotMgr: Implemented tasks:");
+
+    for (const auto& botPair : m_bots)
+    {
+        if (botPair.second->ai)
+        {
+            if (WorldBotAI* worldBotAI = dynamic_cast<WorldBotAI*>(botPair.second->ai.get()))
+            {
+                std::vector<uint8> implementedTasks = worldBotAI->m_taskManager.GetImplementedTaskIds();
+                for (uint8 taskId : implementedTasks)
+                {
+                    const WorldBotTask* task = worldBotAI->m_taskManager.FindTaskById(taskId);
+                    if (task)
+                    {
+                        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "  - %s (ID: %u)", task->name.c_str(), task->id);
+                    }
+                }
+                // We only need to print tasks from one bot, as they should all have the same tasks
+                break;
+            }
+        }
     }
 }
 

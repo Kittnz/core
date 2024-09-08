@@ -589,7 +589,23 @@ void WorldBotAI::OnPathComplete()
     else if (m_isSpecificDestinationPath)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached its specific destination", me->GetName());
-        // Perform any actions specific to reaching a designated destination
+        if (HasReachedExploreDestination())
+        {
+            hasPoiDestination = false;
+            m_taskManager.CompleteCurrentTask();
+
+            // If the new task is TASK_EXPLORE, start a new exploration
+            if (m_taskManager.GetCurrentTaskId() == TASK_EXPLORE)
+            {
+                StartExploring();
+            }
+        }
+        else
+        {
+            // We've reached the end of the path but not the exact destination
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s reached end of path but not exact destination", me->GetName());
+            StartExploring(); // Try to find a new path to the destination
+        }
     }
     else if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
     {

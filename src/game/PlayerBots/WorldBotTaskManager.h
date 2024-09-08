@@ -24,6 +24,7 @@ struct WorldBotTask
     std::function<bool(WorldBotAI*)> canPerform;
     std::function<void(WorldBotAI*)> execute;
     std::function<bool(WorldBotAI*)> isComplete;
+    bool implemented;
 };
 
 class WorldBotTaskManager
@@ -37,13 +38,15 @@ public:
     uint8 GetCurrentTaskId() const { return m_currentTaskId; }
     std::string GetCurrentTaskName() const;
     void SetCurrentTask(uint8 taskId);
+    void CompleteCurrentTask();
+    std::vector<uint8> GetImplementedTaskIds() const;
+    const WorldBotTask* FindTaskById(uint8 taskId) const;
 
 private:
     WorldBotAI* m_bot;
     std::vector<WorldBotTask> m_tasks;
     uint8 m_currentTaskId;
 
-    const WorldBotTask* FindTaskById(uint8 taskId) const;
     WorldBotTask* SelectNextTask();
     void StartTask(WorldBotTask* task);
 };

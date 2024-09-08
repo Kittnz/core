@@ -21,6 +21,7 @@ void WorldBotAI::RegisterRoamTask()
         PRIORITY_LOW,
         [this](WorldBotAI* bot) { return true; },  // CanPerformRoam
         [](WorldBotAI* bot) {},  // No-op start function
-        [](WorldBotAI* bot) { return false; }  // IsRoamingComplete
-        });
+        [](WorldBotAI* bot) { return false; },  // IsRoamingComplete
+        true
+    });
 }

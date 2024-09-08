@@ -247,6 +247,9 @@ public:
     // Task System
     WorldBotTaskManager m_taskManager;
     uint8 currentTaskID = 0;
+    void OnTaskComplete(uint8 completedTaskId);
+    void SetRandomTask();
+    ShortTimeTracker m_randomTaskTimer;
 
     // Roam task methods
     bool CanPerformRoam() const;
@@ -259,6 +262,7 @@ public:
     bool IsExploringComplete() const;
     void RegisterExploreTask();
     bool SetExploreDestination();
+    bool HasReachedExploreDestination() const;
 
     std::string DestName = "";
     float DestCoordinatesX = 0.0f;
@@ -267,6 +271,7 @@ public:
     int8 DestMap = 0;
     bool hasPoiDestination = false;
 
+    // Grind task
     //std::vector<WorldBotPath*> vPaths_Grind;
 
 private:

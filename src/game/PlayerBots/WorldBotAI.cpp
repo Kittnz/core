@@ -943,6 +943,14 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         sWorldBotChat.SendChatMessage(me);
     }
 
+    // Random task picker
+    m_randomTaskTimer.Update(diff);
+    if (m_randomTaskTimer.Passed())
+    {
+        SetRandomTask();
+        m_randomTaskTimer.Reset(5 * MINUTE * IN_MILLISECONDS); // change random task everye 5 min
+    }
+
     if (!me->IsInWorld() || me->IsBeingTeleported())
         return;
 
@@ -1454,5 +1462,47 @@ void WorldBotAI::UpdateBattleGroundAI()
             }
             break;
         }
+    }
+}
+
+void WorldBotAI::SetRandomTask()
+{
+    std::vector<uint8> implementedTasks = m_taskManager.GetImplementedTaskIds();
+    if (implementedTasks.empty())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No implemented tasks available");
+        return;
+    }
+
+    uint8 randomIndex = urand(0, implementedTasks.size() - 1);
+    uint8 randomTaskId = implementedTasks[randomIndex];
+
+    if (m_taskManager.SwitchToTask(randomTaskId))
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Randomly switched to task %s",
+            m_taskManager.GetCurrentTaskName().c_str());
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Failed to switch to random task");
+    }
+}
+
+void WorldBotAI::OnTaskComplete(uint8 completedTaskId)
+{
+    switch (completedTaskId)
+    {
+    case TASK_EXPLORE:
+        hasPoiDestination = false;
+        DestName.clear();
+        DestCoordinatesX = 0.0f;
+        DestCoordinatesY = 0.0f;
+        DestCoordinatesZ = 0.0f;
+        DestMap = 0;
+        ClearPath();
+        break;
+        // Add cases for other tasks as needed
+    default:
+        break;
     }
 }

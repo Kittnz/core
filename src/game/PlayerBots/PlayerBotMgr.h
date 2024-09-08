@@ -141,12 +141,12 @@ class PlayerBotMgr
         bool WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
         bool m_useWorldBotLoader = false;
         void WorldBotBalancer(uint32 diff);
+        void PrintImplementedTasks() const;
         void WorldBotLoadAreaPOI();
 
         ShortTimeTracker m_BotBalanceTimer;
         uint32 GetOnlineBotsCount(Team team) const;
         uint32 GetAvailableBotsCount(Team team) const;
-
 
     protected:
         // How long since last update?

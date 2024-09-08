@@ -15,9 +15,19 @@ bool WorldBotAI::CanPerformExplore() const
 
 void WorldBotAI::StartExploring()
 {
+    // Reset previous exploration state
+    hasPoiDestination = false;
+    DestName.clear();
+    DestCoordinatesX = 0.0f;
+    DestCoordinatesY = 0.0f;
+    DestCoordinatesZ = 0.0f;
+    DestMap = 0;
+    ClearPath();
+
     if (!SetExploreDestination())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to set explore destination", me->GetName());
+        m_taskManager.CompleteCurrentTask();
         return;
     }
 
@@ -30,30 +40,22 @@ void WorldBotAI::StartExploring()
     else
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to start path to explore destination", me->GetName());
-        hasPoiDestination = false;
+        m_taskManager.CompleteCurrentTask();
     }
+}
+
+bool WorldBotAI::HasReachedExploreDestination() const
+{
+    if (!hasPoiDestination)
+        return false;
+
+    float distanceToDestination = me->GetDistance(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+    return distanceToDestination < 5.0f; // Consider it reached if within 5 yards
 }
 
 bool WorldBotAI::IsExploringComplete() const
 {
-    // Exploring is complete if we've reached the destination or got interrupted
-    if (!hasPoiDestination)
-        return true;
-
-    float distanceToDestination = me->GetDistance(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
-    return distanceToDestination < 5.0f; // Consider it complete if within 5 yards
-}
-
-void WorldBotAI::RegisterExploreTask()
-{
-    m_taskManager.RegisterTask({
-        TASK_EXPLORE,
-        "Explore",
-        PRIORITY_MEDIUM,
-        [this](WorldBotAI* bot) { return this->CanPerformExplore(); },
-        [this](WorldBotAI* bot) { this->StartExploring(); },
-        [this](WorldBotAI* bot) { return this->IsExploringComplete(); }
-        });
+    return !hasPoiDestination;
 }
 
 bool WorldBotAI::SetExploreDestination()
@@ -85,4 +87,17 @@ bool WorldBotAI::SetExploreDestination()
     DestMap = chosenPOI.map;
 
     return true;
+}
+
+void WorldBotAI::RegisterExploreTask()
+{
+    m_taskManager.RegisterTask({
+        TASK_EXPLORE,
+        "Explore",
+        PRIORITY_MEDIUM,
+        [this](WorldBotAI* bot) { return this->CanPerformExplore(); },
+        [this](WorldBotAI* bot) { this->StartExploring(); },
+        [this](WorldBotAI* bot) { return this->IsExploringComplete(); },
+        true
+    });
 }
