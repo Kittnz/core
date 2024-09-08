@@ -6,6 +6,8 @@ WorldBotTaskManager::WorldBotTaskManager(WorldBotAI* bot) : m_bot(bot), m_curren
 void WorldBotTaskManager::RegisterTask(const WorldBotTask& task)
 {
     m_tasks.push_back(task);
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Registered task %s (ID: %u, Implemented: %s)",
+        task.name.c_str(), task.id, task.implemented ? "true" : "false");
 }
 
 void WorldBotTaskManager::StartTask(WorldBotTask* task)
@@ -13,7 +15,7 @@ void WorldBotTaskManager::StartTask(WorldBotTask* task)
     if (task)
     {
         m_currentTaskId = task->id;
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTaskManager: Starting task %s", task->name.c_str());
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Starting task %s", task->name.c_str());
         task->execute(m_bot);
     }
     else

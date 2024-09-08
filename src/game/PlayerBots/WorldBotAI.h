@@ -122,8 +122,8 @@ public:
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
+        m_randomTaskTimer.Reset(5 * MINUTE * IN_MILLISECONDS);
         m_isSpecificDestinationPath = false;
-        m_taskManager.SetCurrentTask(TASK_ROAM);
     }
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
@@ -250,6 +250,7 @@ public:
     void OnTaskComplete(uint8 completedTaskId);
     void SetRandomTask();
     ShortTimeTracker m_randomTaskTimer;
+    void InitializeTasks();
 
     // Roam task methods
     bool CanPerformRoam() const;

@@ -156,11 +156,12 @@ void PlayerBotMgr::Load()
     bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
     if (worldBotEnabled)
     {
-        // Load paths
+        // Loaders
         sWorldBotTravelSystem.LoadTravelNodes();
         sWorldBotTravelSystem.LoadTravelNodeLinks();
         sWorldBotTravelSystem.LoadTravelPaths();
         sWorldBotChat.LoadPlayerChat();
+        WorldBotLoadAreaPOI();
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
@@ -168,11 +169,7 @@ void PlayerBotMgr::Load()
         {
             WorldBotLoader();
             WorldBotCreator();
-
         }
-
-        // Load Area POI's
-        //WorldBotLoadAreaPOI();
     }
 }
 
@@ -2479,7 +2476,7 @@ void PlayerBotMgr::PrintImplementedTasks() const
 
 void PlayerBotMgr::WorldBotLoadAreaPOI()
 {
-    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBot POI] Loading poi's from db...");
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, ">> Loading poi's from db..");
     std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
     if (!result)
     {

@@ -371,7 +371,7 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     std::string taskName = m_taskManager.GetCurrentTaskName();
     std::string actionType = isCorpseRun ? "Corpse Run" : (taskName != "None" ? taskName : "Unknown Action");
 
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s starting new path for %s to destination (%.2f, %.2f, %.2f)",
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s starting new path for %s to destination (%.2f, %.2f, %.2f)",
         me->GetName(), actionType.c_str(), x, y, z);
 
     const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
@@ -675,7 +675,7 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
             {
                 if(me->ActivateTaxiPathTo({ tEntry->from, tEntry->to }, nullptr, true))
                 {
-                    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s activated flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s activated flight path from node %u to node %u", me->GetName(), tEntry->from, tEntry->to);
                     return true;
                 }
                 else

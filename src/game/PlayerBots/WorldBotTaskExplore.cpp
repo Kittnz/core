@@ -33,7 +33,7 @@ void WorldBotAI::StartExploring()
 
     if (StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, me->GetMapId(), false))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s started exploring to %s (%.2f, %.2f, %.2f)",
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s started exploring to %s (%.2f, %.2f, %.2f)",
             me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
         hasPoiDestination = true;
     }

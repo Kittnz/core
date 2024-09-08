@@ -330,8 +330,8 @@ bool WorldBotAI::DrinkAndEat()
     if (me->GetVictim())
         return false;
 
-    bool const needToEat = me->GetHealthPercent() < 100.0f && !(me->GetBattleGround() && me->GetBattleGround()->GetStatus() == STATUS_WAIT_JOIN);
-    bool const needToDrink = (me->GetPowerType() == POWER_MANA) && (me->GetPowerPercent(POWER_MANA) < 100.0f);
+    bool const needToEat = me->GetHealthPercent() < 70.0f && !(me->GetBattleGround() && me->GetBattleGround()->GetStatus() == STATUS_WAIT_JOIN);
+    bool const needToDrink = (me->GetPowerType() == POWER_MANA) && (me->GetPowerPercent(POWER_MANA) < 70.0f);
 
     if (!needToEat && !needToDrink)
         return false;
@@ -782,14 +782,37 @@ void WorldBotAI::UpdateWaypointMovement()
     }
     else if (m_isSpecificDestinationPath)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s lost specific destination path and cannot resume", me->GetName());
-        m_isSpecificDestinationPath = false;
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s lost specific destination path, attempting to recalculate", me->GetName());
+        if (StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap, false))
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s successfully recalculated path to %s (%.2f, %.2f, %.2f)",
+                me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to recalculate path to specific destination", me->GetName());
+            m_isSpecificDestinationPath = false;
+            m_taskManager.CompleteCurrentTask();
+        }
     }
 
-    // Check if the current task is TASK_ROAM before starting a new random path
-    if (!m_isRunningToCorpse && !m_isSpecificDestinationPath && m_taskManager.GetCurrentTaskId() == TASK_ROAM)
+    if (!m_isRunningToCorpse && !m_isSpecificDestinationPath)
     {
-        StartNewPathToNode();
+        if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
+        {
+            StartNewPathToNode();
+        }
+        else if (m_taskManager.GetCurrentTaskId() == TASK_EXPLORE)
+        {
+            if (hasPoiDestination)
+            {
+                StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap, false);
+            }
+            else
+            {
+                StartExploring();
+            }
+        }
     }
 }
 
@@ -943,14 +966,6 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         sWorldBotChat.SendChatMessage(me);
     }
 
-    // Random task picker
-    m_randomTaskTimer.Update(diff);
-    if (m_randomTaskTimer.Passed())
-    {
-        SetRandomTask();
-        m_randomTaskTimer.Reset(5 * MINUTE * IN_MILLISECONDS); // change random task everye 5 min
-    }
-
     if (!me->IsInWorld() || me->IsBeingTeleported())
         return;
 
@@ -989,11 +1004,20 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         me->GetZoneAndAreaId(newzone, newarea);
         me->UpdateZone(newzone, newarea);
 
-        RegisterRoamTask();
-        m_taskManager.SetCurrentTask(TASK_ROAM);  // Ensure TASK_ROAM is set as the current task
+        // Task initialization 
+        InitializeTasks();
+        SetRandomTask();
 
         m_initialized = true;
         return;
+    }
+
+    // Random task picker
+    m_randomTaskTimer.Update(diff);
+    if (m_randomTaskTimer.Passed())
+    {
+        SetRandomTask();
+        m_randomTaskTimer.Reset(5 * MINUTE * IN_MILLISECONDS); // change random task everye 5 min
     }
 
     // Reset bot spell data on learning new spells. 
@@ -1254,7 +1278,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
     }
 
-    if (!me->IsInCombat() && me->GetLevel() <= 5)
+    if (!me->IsInCombat()/* && me->GetLevel() <= 5*/)
     {
         if (DrinkAndEat())
         {
@@ -1465,9 +1489,26 @@ void WorldBotAI::UpdateBattleGroundAI()
     }
 }
 
+void WorldBotAI::InitializeTasks()
+{
+    RegisterRoamTask();
+    RegisterExploreTask();
+
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: All tasks registered");
+}
+
 void WorldBotAI::SetRandomTask()
 {
     std::vector<uint8> implementedTasks = m_taskManager.GetImplementedTaskIds();
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: SetRandomTask called. Available tasks: %zu", implementedTasks.size());
+
+    for (uint8 taskId : implementedTasks)
+    {
+        const WorldBotTask* task = m_taskManager.FindTaskById(taskId);
+        if (task)
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Available task - %s (ID: %u)", task->name.c_str(), task->id);
+    }
+
     if (implementedTasks.empty())
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No implemented tasks available");
@@ -1479,7 +1520,7 @@ void WorldBotAI::SetRandomTask()
 
     if (m_taskManager.SwitchToTask(randomTaskId))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Randomly switched to task %s",
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Randomly switched to task %s",
             m_taskManager.GetCurrentTaskName().c_str());
     }
     else
