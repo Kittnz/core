@@ -1046,6 +1046,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         m_taskManager.UpdateTasks();
     }
 
+
     // dual bot
     if (m_isDualBot)
     {
@@ -1410,6 +1411,11 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             }
         }
 
+        if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+        {
+            UpdateGrindingBehavior();
+        }
+
         UpdateWaypointMovement();
         return;
     }
@@ -1493,6 +1499,7 @@ void WorldBotAI::InitializeTasks()
 {
     RegisterRoamTask();
     RegisterExploreTask();
+    RegisterGrindTask();
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: All tasks registered");
 }

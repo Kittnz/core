@@ -2150,7 +2150,7 @@ bool ChatHandler::HandleWorldBotClearPathVisualsCommand(char* args)
 void PlayerBotMgr::WorldBotLoader()
 {
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "[WorldBotLoader] Loading Bots from character db...");
-    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444"); // Mograine // WHERE is_worldbot = 1 and virtual_player_realm = 721682444
+    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation, level FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444"); // Mograine // WHERE is_worldbot = 1 and virtual_player_realm = 721682444
     if (!result)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `character` is empty.");
@@ -2170,6 +2170,7 @@ void PlayerBotMgr::WorldBotLoader()
             float pos_z = fields[7].GetFloat();
             uint32 map = fields[8].GetUInt32();
             float orientation = fields[9].GetFloat();
+            uint8 level = fields[10].GetUInt32();
 
             ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(race);
 
@@ -2212,6 +2213,31 @@ void PlayerBotMgr::WorldBotLoader()
     }
 }
 
+struct LevelRange {
+    uint32 minLevel;
+    uint32 maxLevel;
+    float percentage;
+};
+
+std::vector<LevelRange> ParseLevelRanges(const std::string& configString) {
+    std::vector<LevelRange> ranges;
+    std::istringstream ss(configString);
+    std::string rangeStr;
+
+    while (std::getline(ss, rangeStr, ';')) {
+        std::istringstream rangeStream(rangeStr);
+        LevelRange range;
+        char delimiter;
+
+        if (rangeStream >> range.minLevel >> delimiter >>
+            range.maxLevel >> delimiter >> range.percentage) {
+            ranges.push_back(range);
+        }
+    }
+
+    return ranges;
+}
+
 void PlayerBotMgr::WorldBotCreator()
 {
     uint32 worldBotHordeCount = 0;
@@ -2219,32 +2245,65 @@ void PlayerBotMgr::WorldBotCreator()
     uint32 worldBotHordeMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX);
     uint32 worldBotAllianceMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX);
 
-    std::random_shuffle(myHordeBots.begin(), myHordeBots.end());
-    for (auto b : myHordeBots)
-    {
+    // Parse level ranges from config
+    std::string levelRangesConfig = sWorld.getConfig(CONFIG_STRING_WORLDBOT_LEVEL_RANGES);
+    std::vector<LevelRange> levelRanges = ParseLevelRanges(levelRangesConfig);
+
+    // Normalize percentages if they don't sum to 1
+    float totalPercentage = 0.0f;
+    for (const auto& range : levelRanges) {
+        totalPercentage += range.percentage;
+    }
+    if (std::abs(totalPercentage - 1.0f) > 0.001f) {
+        for (auto& range : levelRanges) {
+            range.percentage /= totalPercentage;
+        }
+    }
+
+    auto selectBotsByLevel = [&](std::vector<WorldBotsCollection>& bots, uint32 maxCount) {
+        std::vector<WorldBotsCollection> selectedBots;
+        for (const auto& range : levelRanges) {
+            uint32 botsInRange = std::count_if(bots.begin(), bots.end(), [&](const WorldBotsCollection& bot) {
+                return bot.level >= range.minLevel && bot.level <= range.maxLevel;
+                });
+            uint32 botsToSelect = std::min(static_cast<uint32>(maxCount * range.percentage), botsInRange);
+
+            std::vector<WorldBotsCollection> rangeBots;
+            std::copy_if(bots.begin(), bots.end(), std::back_inserter(rangeBots), [&](const WorldBotsCollection& bot) {
+                return bot.level >= range.minLevel && bot.level <= range.maxLevel;
+                });
+
+            std::random_shuffle(rangeBots.begin(), rangeBots.end());
+            selectedBots.insert(selectedBots.end(), rangeBots.begin(), rangeBots.begin() + botsToSelect);
+        }
+        return selectedBots;
+        };
+
+    auto hordeBotsToAdd = selectBotsByLevel(myHordeBots, worldBotHordeMax);
+    auto allianceBotsToAdd = selectBotsByLevel(myAllianceBots, worldBotAllianceMax);
+
+    for (const auto& bot : hordeBotsToAdd) {
         if (worldBotHordeCount >= worldBotHordeMax)
             break;
 
-        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map, bot.level);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add horde bot %s with guid: %u account: %u level: %u", bot.name.c_str(), bot.guid, bot.account, bot.level);
         worldBotHordeCount++;
     }
 
-    std::random_shuffle(myAllianceBots.begin(), myAllianceBots.end());
-    for (auto b : myAllianceBots)
-    {
+    for (const auto& bot : allianceBotsToAdd) {
         if (worldBotAllianceCount >= worldBotAllianceMax)
             break;
 
-        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map, bot.level);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add alliance bot %s with guid: %u account: %u level: %u", bot.name.c_str(), bot.guid, bot.account, bot.level);
         worldBotAllianceCount++;
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
-bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
+bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map, uint8 level)
 {
     uint32 accountId = 0;
     auto iter = m_bots.find(guid);
@@ -2270,7 +2329,7 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
 
     try
     {
-        ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+        ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0, level);
     }
     catch (const std::exception& e)
     {

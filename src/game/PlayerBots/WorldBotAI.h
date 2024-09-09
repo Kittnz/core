@@ -88,12 +88,12 @@ enum WorldBotTasks
 {
     TASK_NONE, // No task
     TASK_ROAM, // Follow waypoint path
-    TASK_EXPLORE, // Go to points of interest 
+    TASK_EXPLORE, // Go to points of interest
+    TASK_GRIND, // Goes grinding
     TASK_DUAL, // Is dualer at the gates of a big city
     TASK_TRADE, // Looking to craft or auction house stuff
     TASK_LFG, // Wants to do dungeons for its level range
     TASK_QUEST, // Goes questing
-    TASK_GRIND, // Goes grinding
     TASK_LUCKY_ROLLER, // Lucky Roller - "Missgreen is back in town. Come and try your luck 1-59=lose 60-96=x2 97-99=x3 100=x4 150-3500max good luck and /w me for [inv] :)"
     TASK_BANKER, // Goes to bank
     TASK_PROTECTOR, // Moves to conflicted area's or zones
@@ -272,8 +272,23 @@ public:
     int8 DestMap = 0;
     bool hasPoiDestination = false;
 
-    // Grind task
-    //std::vector<WorldBotPath*> vPaths_Grind;
+    // Grind task methods
+    bool CanPerformGrind() const;
+    void StartGrinding();
+    bool IsGrindingComplete() const;
+    void RegisterGrindTask();
+    bool SetGrindDestination();
+    bool HasReachedGrindDestination() const;
+    void CreatePathFromHotSpots();
+    void UpdateGrindingBehavior();
+    Unit* FindEntryTargetToAttack();
+    std::vector<std::string> SplitString(const std::string& str, char delim);
+
+    std::vector<Position> m_grindHotSpots;
+    uint32 m_grindEntryTarget;
+    uint32 m_grindMaxLevel;
+    size_t m_currentHotSpotIndex;
+    ShortTimeTracker m_grindUpdateTimer;
 
 private:
     ShortTimeTracker m_updateChatTimer;

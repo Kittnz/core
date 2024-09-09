@@ -3011,13 +3011,45 @@ PartyBot.RandomGearLevelDifference = 10
 BattleBot.AutoEquip = 1
 BattleBot.AutoJoin = 0
 
+###################################################################################################################
+# WORLD BOT SETTINGS
+#
+#
+#    WorldBot.Enable
+#
 WorldBot.Enable = 1
+#
+#    WorldBot.UseLoader
+#
 WorldBot.UseLoader = 1
+
+#    WorldBot.UseChat
+#
 WorldBot.UseChat = 1
+
+#    WorldBot.MaxHordeBots 
+#
 WorldBot.MaxHordeBots = 20
+#    WorldBot.MaxAllianceBots 
+#
 WorldBot.MaxAllianceBots = 20
 
+#    ResetEmptyPasswords
+#
 ResetEmptyPasswords = true
+
+#    WorldBot.LevelRanges
+#        Description: Define level ranges and percentages for world bot distribution
+#        Format: MinLevel-MaxLevel:Percentage;MinLevel-MaxLevel:Percentage;...
+#        Example: 1-20:0.3;21-40:0.3;41-59:0.3;60-60:0.1
+#        This example creates 4 level ranges:
+#        - 30% of bots will be levels 1-20
+#        - 30% of bots will be levels 21-40
+#        - 30% of bots will be levels 41-59
+#        - 10% of bots will be level 60
+#        Note: Percentages should sum to 1 (100%). If they don't, they will be normalized.
+
+WorldBot.LevelRanges = 1-20:0.3;21-40:0.3;41-59:0.3;60-60:0.1
 
 ###################################################################################################################
 #    Mail flooding mitigation

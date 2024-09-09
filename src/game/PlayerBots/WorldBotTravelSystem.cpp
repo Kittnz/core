@@ -607,6 +607,32 @@ void WorldBotAI::OnPathComplete()
             StartExploring(); // Try to find a new path to the destination
         }
     }
+    else if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
+    {
+        if (HasReachedGrindDestination())
+        {
+            m_currentHotSpotIndex++;
+            if (m_currentHotSpotIndex < m_grindHotSpots.size())
+            {
+                // Move to the next hot spot
+                StartNewPathToSpecificDestination(m_grindHotSpots[m_currentHotSpotIndex].x,
+                    m_grindHotSpots[m_currentHotSpotIndex].y,
+                    m_grindHotSpots[m_currentHotSpotIndex].z,
+                    me->GetMapId(), false);
+            }
+            else
+            {
+                // All hot spots visited, complete the task
+                m_taskManager.CompleteCurrentTask();
+            }
+        }
+        else
+        {
+            // We've reached the end of the path but not the exact destination
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s reached end of path but not exact grind destination", me->GetName());
+            CreatePathFromHotSpots(); // Create a new path from the current position to the remaining hot spots
+        }
+    }
     else if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
     {
         StartNewPathToNode();
