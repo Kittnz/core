@@ -72,7 +72,7 @@ set (game_SRCS
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
-	Analysis/AccountAnalyser.cpp
+    Analysis/AccountAnalyser.cpp
     Autoscaling/AutoScaler.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
@@ -124,11 +124,6 @@ set (game_SRCS
     Handlers/SpellHandler.cpp
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
-    HttpApi/ControllerRegistrar.cpp
-    HttpApi/TestController.cpp
-    HttpApi/TestController.hpp
-    HttpApi/TransferController.cpp
-    HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
     Logging/DatabaseLogger.hpp
     Logging/DatabaseLogger.cpp
@@ -589,11 +584,6 @@ source_group("Anticheat"
 source_group("DiscordBot"
   REGULAR_EXPRESSION DiscordBot
 )
-
-source_group("HttpApi"
-  REGULAR_EXPRESSION HttpApi
-)
-
 
 add_library(game STATIC
   ${game_SRCS}

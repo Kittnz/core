@@ -800,8 +800,6 @@ class ChatHandler
         bool HandleSuspiciousNotify(char* args);
         bool HandleSuspiciousWhitelist(char* args);
 
-        bool HandleStopApiServerCommand(char* args);
-        bool HandleTranslateCommand(char* args);
         bool HandleToggleInfernoModeCommand(char* args);
 
         bool HandleToggleTrainingCommand(char* args);

@@ -23,7 +23,6 @@ set (shared_SRCS
     Errors.h
     LockedQueue.h
     Log.h
-    httplib.h
     PerfStats.h
     PosixDaemon.h
     revision.h
@@ -93,12 +92,6 @@ set (shared_SRCS
     Database/SqlOperations.cpp
     Database/SqlPreparedStatement.cpp
     Database/SQLStorage.cpp
-    HttpApi/ApiServer.hpp
-    HttpApi/ApiServer.cpp
-    HttpApi/BaseController.cpp
-    HttpApi/BaseController.hpp
-    HttpApi/Authorizers/ApiKeyAuthorizer.hpp
-    HttpApi/Authorizers/BaseAuthorizer.hpp
 )
 
 

@@ -87,7 +87,6 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
-#include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
 #include "Shop/ShopMgr.h"
 #include "ChannelBroadcaster.h"
@@ -105,11 +104,6 @@ namespace DiscordBot
     void RegisterHandlers();
 }
 #endif
-
-namespace HttpApi
-{
-    void RegisterControllers();
-}
 
 #include <filesystem>
 #include <fstream>
@@ -1746,12 +1740,6 @@ void ExportLogs()
     }
 }
 
-void World::StopHttpApiServer()
-{
-    if (_server)
-        _server->Stop();
-}
-
 void CheckEggExploit()
 {
     if (std::filesystem::exists("egglog.txt"))
@@ -1841,14 +1829,7 @@ void LoadPlayerEggLoot();
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    //Have to do it like this to get proper thread handling in the threadpool of the HTTPS api backend to allow querying on any post or get handlers.
-    HttpApi::ApiServer::SetInitThreadCallback([]() { mysql_thread_init(); });
-    HttpApi::ApiServer::SetDestroyThreadCallback([]() { mysql_thread_end(); });
-
-    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
-    HttpApi::RegisterControllers();
-    _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
-///- Initialize the random number generator
+    ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup
@@ -2408,11 +2389,6 @@ void World::DetectDBCLang()
 
     sLog.outString("Using %s DBC locale as default.", localeNames[m_defaultDbcLocale]);
     
-}
-
-void World::ApiServerDeleter::operator()(HttpApi::ApiServer* p)
-{
-    delete p;
 }
 
 void World::ProcessAsyncPackets()

@@ -51,7 +51,6 @@
 #include "PathFinder.h"                                    
 #include "Pet.h"
 #include "Player.h"
-#include "ChatTranslator.hpp"
 #include "PointMovementGenerator.h"
 #include "QuestDef.h"
 #include "ScriptMgr.h"
@@ -15686,23 +15685,6 @@ bool ChatHandler::HandleToggleInfernoModeCommand(char* args)
     PSendSysMessage("Inferno mode is now %s", isInferno ? "OFF" : "ON");
     return true;
 }
-
-
-bool ChatHandler::HandleTranslateCommand(char* args)
-{
-    char* accountStr = ExtractOptNotLastArg(&args);
-
-    auto res = sChatTranslator->Translate("hehe", "ich liebe dich");
-    return true;
-}
-
-bool ChatHandler::HandleStopApiServerCommand(char* args)
-{
-    sWorld.StopHttpApiServer();
-    SendSysMessage("OK. HTTP API server stopped.");
-    return true;
-}
-
 
 bool ChatHandler::HandleToggleTrainingCommand(char* args)
 {

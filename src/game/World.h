@@ -61,11 +61,6 @@ namespace DiscordBot
     class Bot;
 }
 
-namespace HttpApi
-{
-    class ApiServer;
-}
-
 class MovementBroadcaster;
 struct CreatureInfo;
 
@@ -982,8 +977,6 @@ class World
             return lvl > 60 ? 300 + ((lvl - 60) * 75) / 10 : lvl*5;
         }
 
-        void StopHttpApiServer();
-
         void RestoreLostGOs();
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
@@ -1369,14 +1362,6 @@ class World
         bool m_canProcessAsyncPackets;
         void ProcessAsyncPackets();
         std::thread m_shopThread;
-
-        struct ApiServerDeleter
-        {
-            void operator()(HttpApi::ApiServer* p);
-        };
-
-
-        std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter> _server;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;
