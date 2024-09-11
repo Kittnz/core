@@ -9,6 +9,7 @@
 #include <random>
 #include <algorithm>
 #include <type_traits>
+#include <limits>
 #include "SharedDefines.h"
 #include "Platform/Define.h"
 #include "Player.h"
@@ -76,7 +77,10 @@ public:
     std::vector<uint32> GetPathToPosition(float x, float y, float z, uint32 mapId) const;
     uint32 GetNearestNodeId(float x, float y, float z, uint32 mapId) const;
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
-    std::vector<TravelPath> FindPath(uint32 startNodeId, uint32 endNodeId) const;
+    std::vector<TravelPath> FindPath(uint32 startNodeId, uint32 endNodeId, bool isCorpseRun = false) const;
+    float HeuristicCostEstimate(uint32 fromNodeId, uint32 toNodeId) const;
+    float GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool isCorpseRun = false) const;
+    std::vector<TravelPath> ReconstructPath(const std::unordered_map<uint32, uint32>& cameFrom, uint32 current) const;
     uint32 GetRandomNodeId(uint32 mapId, uint32 startNodeId);
 
     const TravelNode* GetNode(uint32 nodeId) const

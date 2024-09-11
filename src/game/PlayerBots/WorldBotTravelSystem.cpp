@@ -213,83 +213,103 @@ std::pair<std::multimap<std::pair<uint32, uint32>, TravelPath>::const_iterator, 
     return m_travelPaths.equal_range(std::make_pair(nodeId, 0));
 }
 
-std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 endNodeId) const
+std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint32 endNodeId, bool isCorpseRun) const
 {
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Finding path from node %u to node %u", startNodeId, endNodeId);
 
-    std::queue<uint32> queue;
+    std::priority_queue<std::pair<float, uint32>, std::vector<std::pair<float, uint32>>, std::greater<std::pair<float, uint32>>> openSet;
     std::unordered_map<uint32, uint32> cameFrom;
-    queue.push(startNodeId);
-    cameFrom[startNodeId] = startNodeId;
+    std::unordered_map<uint32, float> gScore;
+    std::unordered_map<uint32, float> fScore;
 
-    while (!queue.empty())
+    openSet.push(std::make_pair(0.0f, startNodeId));
+    gScore[startNodeId] = 0.0f;
+    fScore[startNodeId] = HeuristicCostEstimate(startNodeId, endNodeId);
+
+    while (!openSet.empty())
     {
-        uint32 current = queue.front();
-        queue.pop();
-
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Examining node %u", current);
+        uint32 current = openSet.top().second;
+        openSet.pop();
 
         if (current == endNodeId)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Reached end node %u", endNodeId);
-            break;
+            return ReconstructPath(cameFrom, current);
         }
 
         const auto& connections = m_nodeConnections.find(current);
         if (connections != m_nodeConnections.end())
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Node %u has %zu connections", current, connections->second.size());
-            for (uint32 next : connections->second)
+            for (uint32 neighbor : connections->second)
             {
-                if (cameFrom.find(next) == cameFrom.end())
+                float tentativeGScore = gScore[current] + GetPathCost(current, neighbor, isCorpseRun);
+
+                if (!gScore.count(neighbor) || tentativeGScore < gScore[neighbor])
                 {
-                    queue.push(next);
-                    cameFrom[next] = current;
-                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Added node %u to queue", next);
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeGScore;
+                    fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endNodeId);
+                    openSet.push(std::make_pair(fScore[neighbor], neighbor));
                 }
             }
         }
-        else
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: No path found from %u to %u", startNodeId, endNodeId);
+    return std::vector<TravelPath>();
+}
+
+float WorldBotTravelSystem::HeuristicCostEstimate(uint32 fromNodeId, uint32 toNodeId) const
+{
+    const TravelNode* fromNode = GetNode(fromNodeId);
+    const TravelNode* toNode = GetNode(toNodeId);
+    if (!fromNode || !toNode)
+        return std::numeric_limits<float>::max();
+
+    return std::sqrt(std::pow(toNode->x - fromNode->x, 2) +
+        std::pow(toNode->y - fromNode->y, 2) +
+        std::pow(toNode->z - fromNode->z, 2));
+}
+
+float WorldBotTravelSystem::GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool isCorpseRun) const
+{
+    auto linkRange = GetNodeLinks(fromNodeId);
+    for (auto it = linkRange.first; it != linkRange.second; ++it)
+    {
+        if (it->second.toNodeId == toNodeId)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Node %u has no connections", current);
+            float cost = it->second.distance + it->second.swimDistance;
+            if (isCorpseRun)
+            {
+                // Adjust cost for corpse runs (e.g., prefer safer routes)
+                cost *= (1.0f - 0.2f * static_cast<float>(it->second.type == static_cast<uint32>(TravelNodePathType::Walk)));
+            }
+            return cost + it->second.extraCost;
         }
     }
+    return std::numeric_limits<float>::max();
+}
+
+std::vector<TravelPath> WorldBotTravelSystem::ReconstructPath(const std::unordered_map<uint32, uint32>& cameFrom, uint32 current) const
+{
+    std::vector<uint32> nodePath;
+    while (cameFrom.find(current) != cameFrom.end())
+    {
+        nodePath.push_back(current);
+        current = cameFrom.at(current);
+    }
+    nodePath.push_back(current);
+    std::reverse(nodePath.begin(), nodePath.end());
 
     std::vector<TravelPath> fullPath;
-    if (cameFrom.find(endNodeId) != cameFrom.end())
+    for (size_t i = 0; i < nodePath.size() - 1; ++i)
     {
-        std::vector<uint32> nodePath;
-        uint32 current = endNodeId;
-        while (current != startNodeId)
+        uint32 fromNodeId = nodePath[i];
+        uint32 toNodeId = nodePath[i + 1];
+        auto pathRange = m_travelPaths.equal_range(std::make_pair(fromNodeId, toNodeId));
+        for (auto it = pathRange.first; it != pathRange.second; ++it)
         {
-            nodePath.push_back(current);
-            current = cameFrom[current];
+            fullPath.push_back(it->second);
         }
-        nodePath.push_back(startNodeId);
-        std::reverse(nodePath.begin(), nodePath.end());
-
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu nodes", startNodeId, endNodeId, nodePath.size());
-
-        // Convert node path to full TravelPath
-        for (size_t i = 0; i < nodePath.size() - 1; ++i)
-        {
-            uint32 fromNodeId = nodePath[i];
-            uint32 toNodeId = nodePath[i + 1];
-            auto pathRange = m_travelPaths.equal_range(std::make_pair(fromNodeId, toNodeId));
-            for (auto it = pathRange.first; it != pathRange.second; ++it)
-            {
-                fullPath.push_back(it->second);
-            }
-        }
-    }
-
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: FindPath from %u to %u found path with %zu points", startNodeId, endNodeId, fullPath.size());
-
-    // Log details of each point in the path
-    for (size_t i = 0; i < fullPath.size(); ++i)
-    {
-        const TravelPath& point = fullPath[i];
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Path point %zu: Node %u to %u, Map %u, Coords (%.2f, %.2f, %.2f)", i, point.nodeId, point.toNodeId, point.mapId, point.x, point.y, point.z);
     }
 
     return fullPath;
@@ -383,70 +403,46 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
         return false;
     }
 
-    if (startNode->id == endNode->id)
-    {
-        // Start and end nodes are the same, create a single-point path
-        TravelPath singlePoint;
-        singlePoint.nodeId = startNode->id;
-        singlePoint.toNodeId = endNode->id;
-        singlePoint.nr = 0;
-        singlePoint.mapId = mapId;
-        singlePoint.x = x;
-        singlePoint.y = y;
-        singlePoint.z = z;
-        m_currentPath.push_back(singlePoint);
-    }
-    else
-    {
-        m_currentPath = sWorldBotTravelSystem.FindPath(startNode->id, endNode->id);
-    }
+    m_currentPath = sWorldBotTravelSystem.FindPath(startNode->id, endNode->id, isCorpseRun);
 
     if (m_currentPath.empty())
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s", me->GetName());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s , teleporting to nearest graveyard.", me->GetName());
+
+        if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(20939))
+            me->AddCooldown(*pSpellEntry, nullptr, false, HOUR * IN_MILLISECONDS); // Trigger 1 Hour Cooldown
+        // Get nearest graveyard.
+        WorldSafeLocsEntry const* ClosestGrave = sObjectMgr.GetClosestGraveYard(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
+        if (!ClosestGrave) //No nearby graveyards (stuck in void?). Send ally to Westfall, Horde to Barrens.
+            ClosestGrave = me->GetTeamId() ? sWorldSafeLocsStore.LookupEntry(10) : sWorldSafeLocsStore.LookupEntry(4);
+        if (ClosestGrave)
+            me->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID), 0);
+
         return false;
     }
 
-    // Find the closest point on the path to the specific destination
-    float shortestDistance = std::numeric_limits<float>::max();
-    size_t closestIndex = 0;
-    for (size_t i = 0; i < m_currentPath.size(); ++i)
+    // Add the final destination point if it's not exactly at a node
+    if (m_currentPath.back().x != x || m_currentPath.back().y != y || m_currentPath.back().z != z)
     {
-        float distance = sWorldBotTravelSystem.GetDistance3D(x, y, z, m_currentPath[i]);
-        if (distance < shortestDistance)
-        {
-            shortestDistance = distance;
-            closestIndex = i;
-        }
+        TravelPath finalPoint;
+        finalPoint.nodeId = endNode->id;
+        finalPoint.toNodeId = 0;
+        finalPoint.nr = m_currentPath.size();
+        finalPoint.mapId = mapId;
+        finalPoint.x = x;
+        finalPoint.y = y;
+        finalPoint.z = z;
+        m_currentPath.push_back(finalPoint);
     }
-
-    // Truncate the path at the closest point
-    m_currentPath.resize(closestIndex + 1);
-
-    // Add the final destination point
-    TravelPath finalPoint;
-    finalPoint.nodeId = m_currentPath.back().toNodeId;
-    finalPoint.toNodeId = 0;
-    finalPoint.nr = m_currentPath.back().nr + 1;
-    finalPoint.mapId = mapId;
-    finalPoint.x = x;
-    finalPoint.y = y;
-    finalPoint.z = z;
-    m_currentPath.push_back(finalPoint);
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: New optimized path created for bot %s with %zu points", me->GetName(), m_currentPath.size());
 
     m_isSpecificDestinationPath = true;
-
-    // Corpse running
     m_isRunningToCorpse = isCorpseRun;
     if (isCorpseRun)
         m_corpseRunTimer.Reset(CORPSE_RUN_TIMEOUT);
 
-    // Start moving to the first point in the path
     MoveToNextPoint();
-
-    // Show the new path
     ShowCurrentPath();
 
     return true;
