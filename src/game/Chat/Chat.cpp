@@ -140,12 +140,13 @@ ChatCommand * ChatHandler::getCommandTable()
     };
     static ChatCommand worldBotCommandTable[] =
     {
-        { "add",          SEC_ADMINISTRATOR,    false, nullptr,                             "Add a new bot", worldBotAddCommandTable },
+        { "add",          SEC_ADMINISTRATOR,    false, nullptr,  "Add a new bot", worldBotAddCommandTable },
         { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,        "", nullptr },
-        { "path show",    SEC_ADMINISTRATOR,       false, &ChatHandler::HandleWorldBotShowCurrentPathCommand,     "", nullptr },
-        { "path show all",SEC_ADMINISTRATOR,       false, &ChatHandler::HandleWorldBotShowAllPathsCommand,        "", nullptr },
-        { "paths clear",  SEC_ADMINISTRATOR,       false, &ChatHandler::HandleWorldBotClearPathVisualsCommand,    "", nullptr },
-        { "stats",        SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleWorldBotStatsCommand,   "", nullptr },
+        { "path show",    SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowCurrentPathCommand,     "", nullptr },
+        { "path show all",SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand,        "", nullptr },
+        { "paths clear",  SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotClearPathVisualsCommand,    "", nullptr },
+        { "stats",        SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotStatsCommand,        "", nullptr },
+        { "info",         SEC_GAMEMASTER,       false, &ChatHandler::HandleWorldBotInfoCommand,          "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand accountSetCommandTable[] =

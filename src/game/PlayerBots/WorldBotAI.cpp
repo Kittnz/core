@@ -798,12 +798,13 @@ void WorldBotAI::UpdateWaypointMovement()
 
     if (!m_isRunningToCorpse && !m_isSpecificDestinationPath)
     {
-        if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
+        uint8 currentTaskId = m_taskManager.GetCurrentTaskId();
+        switch (currentTaskId)
         {
+        case TASK_ROAM:
             StartNewPathToNode();
-        }
-        else if (m_taskManager.GetCurrentTaskId() == TASK_EXPLORE)
-        {
+            break;
+        case TASK_EXPLORE:
             if (hasPoiDestination)
             {
                 StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap, false);
@@ -812,6 +813,13 @@ void WorldBotAI::UpdateWaypointMovement()
             {
                 StartExploring();
             }
+            break;
+        case TASK_GRIND:
+            UpdateGrindingBehavior();
+            break;
+        default:
+            // Handle other tasks or default behavior
+            break;
         }
     }
 }
@@ -1041,11 +1049,10 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     }
 
     // Update Task
-    if (!me->IsInCombat() && !me->IsDead())
+    if (!me->IsInCombat() && !me->IsDead() && !m_isRunningToCorpse)
     {
         m_taskManager.UpdateTasks();
     }
-
 
     // dual bot
     if (m_isDualBot)
@@ -1413,7 +1420,10 @@ void WorldBotAI::UpdateAI(uint32 const diff)
 
         if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
         {
-            UpdateGrindingBehavior();
+            if (!me->IsMoving() && !me->IsTaxiFlying())
+            {
+                UpdateGrindingBehavior();
+            }
         }
 
         UpdateWaypointMovement();
@@ -1499,13 +1509,21 @@ void WorldBotAI::InitializeTasks()
 {
     RegisterRoamTask();
     RegisterExploreTask();
+    //UpdateMaxLevelForGrindProfiles();
     RegisterGrindTask();
+
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: All tasks registered");
 }
 
 void WorldBotAI::SetRandomTask()
 {
+    if (me->IsDead() || m_isRunningToCorpse)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Not setting a new task because the bot is dead or running to its corpse");
+        return;
+    }
+
     std::vector<uint8> implementedTasks = m_taskManager.GetImplementedTaskIds();
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: SetRandomTask called. Available tasks: %zu", implementedTasks.size());
 

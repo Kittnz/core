@@ -3017,39 +3017,59 @@ BattleBot.AutoJoin = 0
 #
 #    WorldBot.Enable
 #
-WorldBot.Enable = 1
-#
 #    WorldBot.UseLoader
 #
-WorldBot.UseLoader = 1
-
 #    WorldBot.UseChat
 #
-WorldBot.UseChat = 1
-
 #    WorldBot.MaxHordeBots 
 #
-WorldBot.MaxHordeBots = 20
 #    WorldBot.MaxAllianceBots 
 #
-WorldBot.MaxAllianceBots = 20
-
 #    ResetEmptyPasswords
 #
+#    WorldBot.LevelRange1.Min
+#    WorldBot.LevelRange1.Max
+#    WorldBot.LevelRange1.Percent
+#    WorldBot.LevelRange2.Min
+#    WorldBot.LevelRange2.Max
+#    WorldBot.LevelRange2.Percent
+#    WorldBot.LevelRange3.Min
+#    WorldBot.LevelRange3.Max
+#    WorldBot.LevelRange3.Percent
+#        Description: Define level ranges and percentages for world bot distribution
+#        Default:    WorldBot.LevelRange1.Min = 1
+#                    WorldBot.LevelRange1.Max = 20
+#                    WorldBot.LevelRange1.Percent = 0.40
+#                    WorldBot.LevelRange2.Min = 21
+#                    WorldBot.LevelRange2.Max = 40
+#                    WorldBot.LevelRange2.Percent = 0.30
+#                    WorldBot.LevelRange2.Min = 41
+#                    WorldBot.LevelRange2.Max = 59
+#                    WorldBot.LevelRange2.Percent = 0.10
+#                    WorldBot.LevelRange3.Min = 60
+#                    WorldBot.LevelRange3.Max = 60
+#                    WorldBot.LevelRange3.Percent = 0.20
+#
+###################################################################################################################
+WorldBot.Enable = 1
+WorldBot.UseLoader = 1
+WorldBot.UseChat = 1
+WorldBot.MaxHordeBots = 50
+WorldBot.MaxAllianceBots = 50
 ResetEmptyPasswords = true
 
-#    WorldBot.LevelRanges
-#        Description: Define level ranges and percentages for world bot distribution
-#        Format: MinLevel-MaxLevel:Percentage;MinLevel-MaxLevel:Percentage;...
-#        Example: 1-20:0.3;21-40:0.3;41-59:0.3;60-60:0.1
-#        This example creates 4 level ranges:
-#        - 30% of bots will be levels 1-20
-#        - 30% of bots will be levels 21-40
-#        - 30% of bots will be levels 41-59
-#        - 10% of bots will be level 60
-#        Note: Percentages should sum to 1 (100%). If they don't, they will be normalized.
-
-WorldBot.LevelRanges = 1-20:0.3;21-40:0.3;41-59:0.3;60-60:0.1
+WorldBot.LevelRange1.Min = 1
+WorldBot.LevelRange1.Max = 20
+WorldBot.LevelRange1.Percent = 0.40
+WorldBot.LevelRange2.Min = 21
+WorldBot.LevelRange2.Max = 40
+WorldBot.LevelRange2.Percent = 0.30
+WorldBot.LevelRange3.Min = 41
+WorldBot.LevelRange3.Max = 59
+WorldBot.LevelRange3.Percent = 0.10
+WorldBot.LevelRange4.Min = 60
+WorldBot.LevelRange4.Max = 60
+WorldBot.LevelRange4.Percent = 0.20
 
 ###################################################################################################################
 #    Mail flooding mitigation

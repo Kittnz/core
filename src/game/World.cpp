@@ -818,10 +818,22 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_WORLDBOT,                   "WorldBot.Enable", true);
     setConfig(CONFIG_BOOL_WORLDBOT_LOADER,            "WorldBot.UseLoader", false);
     setConfig(CONFIG_BOOL_WORLDBOT_USECHAT,           "WorldBot.UseChat", true);
-    setConfig(CONFIG_BOOL_LFG_MATCHMAKING, "LFG.Matchmaking", false);
+    setConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX,       "WorldBot.MaxHordeBots", 50);
+    setConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX,    "WorldBot.MaxAllianceBots", 50);
+    setConfig(CONFIG_BOOL_RESET_EMPTY_PASSWORD_ACCOUNT, "ResetEmptyPasswords", true);
 
-    setConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX,       "WorldBot.MaxHordeBots", 250);
-    setConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX,    "WorldBot.MaxAllianceBots", 250);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_1_MIN, "WorldBot.LevelRange1.Min", 1);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_1_MAX, "WorldBot.LevelRange1.Max", 20);
+    setConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_1_PERCENT, "WorldBot.LevelRange1.Percent", 0.40);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_2_MIN, "WorldBot.LevelRange1.Min", 21);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_2_MAX, "WorldBot.LevelRange1.Max", 40);
+    setConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_2_PERCENT, "WorldBot.LevelRange1.Percent", 0.30);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_3_MIN, "WorldBot.LevelRange1.Min", 41);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_3_MAX, "WorldBot.LevelRange1.Max", 59);
+    setConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_3_PERCENT, "WorldBot.LevelRange1.Percent", 0.10);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_4_MIN, "WorldBot.LevelRange1.Min", 60);
+    setConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_4_MAX, "WorldBot.LevelRange1.Max", 60);
+    setConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_4_PERCENT, "WorldBot.LevelRange1.Percent", 0.20);
 
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
     m_relocation_ai_notify_delay = sConfig.GetIntDefault("Visibility.AIRelocationNotifyDelay", 1000u);
@@ -1241,8 +1253,6 @@ void World::LoadConfigSettings(bool reload)
     m_wardenModuleDirectory = sConfig.GetStringDefault("Warden.ModuleDir", "warden_modules");
 
     setConfig(CONFIG_UINT32_CREATURE_SUMMON_LIMIT, "MaxCreatureSummonLimit", DEFAULT_CREATURE_SUMMON_LIMIT);
-
-    setConfig(CONFIG_BOOL_RESET_EMPTY_PASSWORD_ACCOUNT, "ResetEmptyPasswords", true);
 
     // Smartlog data
     sLog.InitSmartlogEntries(sConfig.GetStringDefault("Smartlog.ExtraEntries", ""));

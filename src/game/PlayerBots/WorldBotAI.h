@@ -256,6 +256,16 @@ public:
     bool CanPerformRoam() const;
     bool IsRoamingComplete() const;
     void RegisterRoamTask();
+    std::string GetCurrentTaskName() const { return m_taskManager.GetCurrentTaskName(); }
+    uint32 GetTimeUntilNextTask() const { return (m_randomTaskTimer.GetExpiry() - WorldTimer::getMSTime()) / IN_MILLISECONDS; }
+    uint8 GetCurrentTaskId() const { return m_taskManager.GetCurrentTaskId(); }
+    Position GetNextGrindSpot() const
+    {
+        if (m_currentHotSpotIndex < m_grindHotSpots.size())
+            return m_grindHotSpots[m_currentHotSpotIndex];
+        return Position();
+    }
+    std::string GetExploreDestinationName() const { return DestName; }
 
     // Explore task methods
     bool CanPerformExplore() const;
@@ -283,6 +293,10 @@ public:
     void UpdateGrindingBehavior();
     Unit* FindEntryTargetToAttack();
     std::vector<std::string> SplitString(const std::string& str, char delim);
+    std::vector<uint32> SplitStringToUint32(const std::string& str, char delim);
+    void MoveToNextGrindSpot();
+    bool IsValidEntryTargetLevel(uint32 entryId);
+    void UpdateMaxLevelForGrindProfiles();
 
     std::vector<Position> m_grindHotSpots;
     uint32 m_grindEntryTarget;

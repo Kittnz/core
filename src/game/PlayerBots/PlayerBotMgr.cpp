@@ -19,6 +19,8 @@
 #include "WorldBotChat.h"
 #include "Language.h"
 #include "Spell.h"
+#include <vector>
+#include <algorithm>
 
 INSTANTIATE_SINGLETON_1(PlayerBotMgr);
 std::vector<WorldBotsCollection> myBots;
@@ -1993,13 +1995,13 @@ bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattle
         return false;
     }
 
-    bool worldBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
+    /*bool worldBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
     if (worldBotLoader)
     {
         SendSysMessage("World bots:  Adding bots is not allowed, use config to add bots from character db.");
         SetSentErrorMessage(true);
         return false;
-    }
+    }*/
 
     Player* pPlayer = m_session->GetPlayer();
     if (!pPlayer)
@@ -2190,6 +2192,7 @@ void PlayerBotMgr::WorldBotLoader()
                 bot.pos_z = pos_z;
                 bot.map = map;
                 bot.orientation = orientation;
+                bot.level = level;
                 myHordeBots.push_back(bot);
             }
 
@@ -2206,36 +2209,12 @@ void PlayerBotMgr::WorldBotLoader()
                 bot.pos_z = pos_z;
                 bot.map = map;
                 bot.orientation = orientation;
+                bot.level = level;
                 myAllianceBots.push_back(bot);
             }
 
         } while (result->NextRow());
     }
-}
-
-struct LevelRange {
-    uint32 minLevel;
-    uint32 maxLevel;
-    float percentage;
-};
-
-std::vector<LevelRange> ParseLevelRanges(const std::string& configString) {
-    std::vector<LevelRange> ranges;
-    std::istringstream ss(configString);
-    std::string rangeStr;
-
-    while (std::getline(ss, rangeStr, ';')) {
-        std::istringstream rangeStream(rangeStr);
-        LevelRange range;
-        char delimiter;
-
-        if (rangeStream >> range.minLevel >> delimiter >>
-            range.maxLevel >> delimiter >> range.percentage) {
-            ranges.push_back(range);
-        }
-    }
-
-    return ranges;
 }
 
 void PlayerBotMgr::WorldBotCreator()
@@ -2245,20 +2224,35 @@ void PlayerBotMgr::WorldBotCreator()
     uint32 worldBotHordeMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX);
     uint32 worldBotAllianceMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX);
 
-    // Parse level ranges from config
-    std::string levelRangesConfig = sWorld.getConfig(CONFIG_STRING_WORLDBOT_LEVEL_RANGES);
-    std::vector<LevelRange> levelRanges = ParseLevelRanges(levelRangesConfig);
+    // Define level ranges and their percentages from config
+    struct LevelRange {
+        uint32 minLevel;
+        uint32 maxLevel;
+        float percentage;
+    };
 
-    // Normalize percentages if they don't sum to 1
-    float totalPercentage = 0.0f;
-    for (const auto& range : levelRanges) {
-        totalPercentage += range.percentage;
-    }
-    if (std::abs(totalPercentage - 1.0f) > 0.001f) {
-        for (auto& range : levelRanges) {
-            range.percentage /= totalPercentage;
+    std::vector<LevelRange> levelRanges = {
+        {
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_1_MIN),
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_1_MAX),
+            sWorld.getConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_1_PERCENT)
+        },
+        {
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_2_MIN),
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_2_MAX),
+            sWorld.getConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_2_PERCENT)
+        },
+        {
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_3_MIN),
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_3_MAX),
+            sWorld.getConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_3_PERCENT)
+        },
+        {
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_4_MIN),
+            sWorld.getConfig(CONFIG_UINT32_WORLDBOT_LEVEL_RANGE_4_MAX),
+            sWorld.getConfig(CONFIG_FLOAT_WORLDBOT_LEVEL_RANGE_4_PERCENT)
         }
-    }
+    };
 
     auto selectBotsByLevel = [&](std::vector<WorldBotsCollection>& bots, uint32 maxCount) {
         std::vector<WorldBotsCollection> selectedBots;
@@ -2286,8 +2280,8 @@ void PlayerBotMgr::WorldBotCreator()
         if (worldBotHordeCount >= worldBotHordeMax)
             break;
 
-        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map, bot.level);
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add horde bot %s with guid: %u account: %u level: %u", bot.name.c_str(), bot.guid, bot.account, bot.level);
+        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add horde bot %s with guid: %u account: %u", bot.name.c_str(), bot.guid, bot.account);
         worldBotHordeCount++;
     }
 
@@ -2295,15 +2289,15 @@ void PlayerBotMgr::WorldBotCreator()
         if (worldBotAllianceCount >= worldBotAllianceMax)
             break;
 
-        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map, bot.level);
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add alliance bot %s with guid: %u account: %u level: %u", bot.name.c_str(), bot.guid, bot.account, bot.level);
+        WorldBotAdd(bot.guid, bot.account, bot.race, bot.class_, bot.pos_x, bot.pos_y, bot.pos_z, bot.orientation, bot.map);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Add alliance bot %s with guid: %u account: %u", bot.name.c_str(), bot.guid, bot.account);
         worldBotAllianceCount++;
     }
 
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
-bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map, uint8 level)
+bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
 {
     uint32 accountId = 0;
     auto iter = m_bots.find(guid);
@@ -2329,7 +2323,7 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
 
     try
     {
-        ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0, level);
+        ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
     }
     catch (const std::exception& e)
     {
@@ -2402,9 +2396,47 @@ bool ChatHandler::HandleWorldBotStatsCommand(char* args)
     PSendSysMessage("Available Horde Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(HORDE));
     PSendSysMessage("Available Alliance Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(ALLIANCE));
 
-    sPlayerBotMgr.PrintImplementedTasks();
+    //sPlayerBotMgr.PrintImplementedTasks();
 
     return true;
+}
+
+bool ChatHandler::HandleWorldBotInfoCommand(char* args)
+{
+    Player* target = GetSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (target->AI())
+    {
+        if (WorldBotAI* worldBotAI = dynamic_cast<WorldBotAI*>(target->AI()))
+        {
+            PSendSysMessage("World Bot Info for %s:", target->GetName());
+            PSendSysMessage("Current Task: %s", worldBotAI->GetCurrentTaskName().c_str());
+            PSendSysMessage("Time until next task: %u seconds", worldBotAI->GetTimeUntilNextTask());
+
+            if (worldBotAI->GetCurrentTaskId() == TASK_GRIND)
+            {
+                Position nextGrindSpot = worldBotAI->GetNextGrindSpot();
+                PSendSysMessage("Next Grind Position: X: %.2f, Y: %.2f, Z: %.2f",
+                    nextGrindSpot.x, nextGrindSpot.y, nextGrindSpot.z);
+            }
+            else if (worldBotAI->GetCurrentTaskId() == TASK_EXPLORE)
+            {
+                PSendSysMessage("Exploration Destination: %s", worldBotAI->GetExploreDestinationName().c_str());
+            }
+
+            return true;
+        }
+    }
+
+    SendSysMessage("Target is not a World Bot.");
+    SetSentErrorMessage(true);
+    return false;
 }
 
 void PlayerBotMgr::WorldBotBalancer(uint32 diff)
