@@ -200,6 +200,7 @@ set (game_SRCS
     PlayerBots/WorldBotTaskRoam.cpp
     PlayerBots/WorldBotTaskExplore.cpp
     PlayerBots/WorldBotTaskGrind.cpp
+    PlayerBots/WorldBotTaskDual.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp

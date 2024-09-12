@@ -304,6 +304,13 @@ public:
     size_t m_currentHotSpotIndex;
     ShortTimeTracker m_grindUpdateTimer;
 
+    // Dual task methods
+    bool CanPerformDual() const;
+    void StartDualing();
+    bool IsDualingComplete() const;
+    void UpdateDualingBehavior();
+    void RegisterDualTask();
+
 private:
     ShortTimeTracker m_updateChatTimer;
 };

@@ -1055,46 +1055,9 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     }
 
     // dual bot
-    if (m_isDualBot)
+    if (m_taskManager.GetCurrentTaskId() == TASK_DUAL)
     {
-        if (m_isDualBotGetReady == true)
-        {
-            ClearPath();
-            if (!me->IsStopped())
-                StopMoving();
-
-            DrinkAndEat();
-
-            if (me->GetHealthPercent() > 90.0f)
-                m_isDualBotReady = true;
-        }
-
-        if (m_isDualBotReady == true && m_isDualBotInProgress == false)
-        {
-            m_isDualBotGetReady = false;
-            m_isDualBotReady = false;
-
-            me->Yell("get ready here i come!", LANG_UNIVERSAL);
-
-            // accept dual
-            WorldPacket data(CMSG_DUEL_ACCEPTED);
-            data << me->GetObjectGuid();
-            me->GetSession()->HandleDuelAcceptedOpcode(data);
-
-            // in progress
-            m_isDualBotInProgress = true;
-
-            // opponent
-            Player* plTarget = me->duel->opponent;
-
-            // move 25 feet away
-            const float distance = me->GetDistance(plTarget);
-            if (distance < 25.0f)
-                me->GetMotionMaster()->MoveDistance(plTarget, frand(5,25));
-
-            // attack target
-            AttackStart(plTarget);
-        }
+        UpdateDualingBehavior();
     }
 
     // party bot
@@ -1511,7 +1474,7 @@ void WorldBotAI::InitializeTasks()
     RegisterExploreTask();
     //UpdateMaxLevelForGrindProfiles();
     RegisterGrindTask();
-
+    RegisterDualTask();
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: All tasks registered");
 }
