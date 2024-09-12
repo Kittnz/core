@@ -25,6 +25,8 @@ struct WorldBotTask
     std::function<void(WorldBotAI*)> execute;
     std::function<bool(WorldBotAI*)> isComplete;
     bool implemented;
+    uint8 minLevel;
+    uint8 maxLevel;
 };
 
 class WorldBotTaskManager

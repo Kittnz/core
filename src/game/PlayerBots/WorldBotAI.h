@@ -117,13 +117,15 @@ public:
     WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
         : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o),
         m_isBattleBot(isBattleBot), m_battlegroundId(bgId), m_showPath(false), m_currentNodeId(0), m_currentPathIndex(0), m_isRunningToCorpse(false),
-        m_taskManager(this)
+        m_taskManager(this), m_isDualBotMovingToLocation(false)
     {
-        m_updateTimer.Reset(2000);
-        m_updateMoveTimer.Reset(1000);
-        m_updateChatTimer.Reset(2000);
+        m_updateTimer.Reset(2 * IN_MILLISECONDS);
+        m_updateMoveTimer.Reset(1 * IN_MILLISECONDS);
+        m_updateChatTimer.Reset(2 * IN_MILLISECONDS);
         m_randomTaskTimer.Reset(5 * MINUTE * IN_MILLISECONDS);
         m_isSpecificDestinationPath = false;
+        m_isDualBotMovingToLocation = false;
+        m_duelYellTimer.Reset(30 * IN_MILLISECONDS);
     }
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
@@ -310,6 +312,9 @@ public:
     bool IsDualingComplete() const;
     void UpdateDualingBehavior();
     void RegisterDualTask();
+    bool m_isDualBotMovingToLocation;
+    void SendDuelRequest(Player* target);
+    ShortTimeTracker m_duelYellTimer;
 
 private:
     ShortTimeTracker m_updateChatTimer;

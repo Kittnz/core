@@ -6,8 +6,8 @@ WorldBotTaskManager::WorldBotTaskManager(WorldBotAI* bot) : m_bot(bot), m_curren
 void WorldBotTaskManager::RegisterTask(const WorldBotTask& task)
 {
     m_tasks.push_back(task);
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Registered task %s (ID: %u, Implemented: %s)",
-        task.name.c_str(), task.id, task.implemented ? "true" : "false");
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Registered task %s (ID: %u, Implemented: %s, Level Range: %u-%u)",
+        task.name.c_str(), task.id, task.implemented ? "true" : "false", task.minLevel, task.maxLevel);
 }
 
 void WorldBotTaskManager::StartTask(WorldBotTask* task)
@@ -107,7 +107,8 @@ WorldBotTask* WorldBotTaskManager::SelectNextTask()
 
     for (auto& task : m_tasks)
     {
-        if (task.canPerform(m_bot))
+        uint8 botLevel = m_bot->me->GetLevel();
+        if (task.canPerform(m_bot) && botLevel >= task.minLevel && botLevel <= task.maxLevel)
         {
             if (!highestPriorityTask || task.priority > highestPriorityTask->priority)
             {

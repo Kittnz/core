@@ -700,18 +700,46 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
         }
         case SMSG_DUEL_REQUESTED:
         {
-            m_isDualBot = true;
+            /*m_isDualBot = true;
             m_isDualBotGetReady = true;
             m_isDualBotReady = false;
-            m_isDualBotInProgress = false;
+            m_isDualBotInProgress = false;*/
             /*uint64 dualFlagGuid = *((uint64*)(*packet).contents());
             uint64 casterGuid = *((uint64*)(*packet).contents());*/
+
+            uint64 dualFlagGuid = *((uint64*)(*packet).contents());
+            uint64 casterGuid = *((uint64*)(*packet).contents());
+
+            if (m_isDualBot && m_isDualBotReady)
+            {
+                // Accept the duel
+                WorldPacket data(CMSG_DUEL_ACCEPTED, 8);
+                data << dualFlagGuid;
+                me->GetSession()->HandleDuelAcceptedOpcode(data);
+
+                m_isDualBotInProgress = true;
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has accepted a duel.", me->GetName());
+            }
+            else
+            {
+                // Decline the duel
+                WorldPacket data(CMSG_DUEL_CANCELLED, 8);
+                data << dualFlagGuid;
+                me->GetSession()->HandleDuelCancelledOpcode(data);
+
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has declined a duel.", me->GetName());
+            }
+            break;
             break;
         }
         case SMSG_DUEL_COMPLETE:
         {
-            m_isDualBot = false;
-            UpdateWaypointMovement();
+            bool won = *((uint8*)(*packet).contents());
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has %s the duel.", me->GetName(), won ? "won" : "lost");
+
+            m_isDualBotInProgress = false;
+            m_isDualBotGetReady = true; // Get ready for the next duel
+            //UpdateWaypointMovement();
             break;
         }
     }

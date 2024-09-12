@@ -7,6 +7,14 @@
 
 bool WorldBotAI::CanPerformGrind() const
 {
+    // Check if the bot's name contains "bank", don't allow them to grind
+    std::string botName = me->GetName();
+    std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
+    if (botName.find("bank") != std::string::npos)
+    {
+        return false;  // Don't allow grinding for bots with "bank" in their name
+    }
+
     // Can grind if not in combat and not already at a destination
     return !me->IsInCombat() && m_grindHotSpots.empty();
 }
@@ -385,6 +393,8 @@ void WorldBotAI::RegisterGrindTask()
         [this](WorldBotAI* bot) { return this->CanPerformGrind(); },
         [this](WorldBotAI* bot) { this->StartGrinding(); },
         [this](WorldBotAI* bot) { return this->IsGrindingComplete(); },
-        true // implemented
+        true, // implemented
+        1,  // Minimum level
+        60   // Maximum level
         });
 }
