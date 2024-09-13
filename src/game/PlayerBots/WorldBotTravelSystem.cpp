@@ -289,6 +289,82 @@ float WorldBotTravelSystem::GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool
     return std::numeric_limits<float>::max();
 }
 
+std::vector<TravelPath> WorldBotTravelSystem::FindPathWithoutFlightPaths(uint32 startNodeId, uint32 endNodeId) const
+{
+    std::priority_queue<std::pair<float, uint32>, std::vector<std::pair<float, uint32>>, std::greater<std::pair<float, uint32>>> openSet;
+    std::unordered_map<uint32, uint32> cameFrom;
+    std::unordered_map<uint32, float> gScore;
+    std::unordered_map<uint32, float> fScore;
+
+    openSet.push(std::make_pair(0.0f, startNodeId));
+    gScore[startNodeId] = 0.0f;
+    fScore[startNodeId] = HeuristicCostEstimate(startNodeId, endNodeId);
+
+    while (!openSet.empty())
+    {
+        uint32 current = openSet.top().second;
+        openSet.pop();
+
+        if (current == endNodeId)
+        {
+            return ReconstructPath(cameFrom, current);
+        }
+
+        const auto& connections = m_nodeConnections.find(current);
+        if (connections != m_nodeConnections.end())
+        {
+            for (uint32 neighbor : connections->second)
+            {
+                // Check if this connection is a flight path
+                if (IsFlightPathLink(current, neighbor))
+                    continue;
+
+                float tentativeGScore = gScore[current] + GetPathCostWithoutFlightPaths(current, neighbor);
+
+                if (!gScore.count(neighbor) || tentativeGScore < gScore[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeGScore;
+                    fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endNodeId);
+                    openSet.push(std::make_pair(fScore[neighbor], neighbor));
+                }
+            }
+        }
+    }
+
+    return std::vector<TravelPath>(); // No path found
+}
+
+float WorldBotTravelSystem::GetPathCostWithoutFlightPaths(uint32 fromNodeId, uint32 toNodeId) const
+{
+    auto linkRange = GetNodeLinks(fromNodeId);
+    for (auto it = linkRange.first; it != linkRange.second; ++it)
+    {
+        if (it->second.toNodeId == toNodeId)
+        {
+            if (it->second.type == static_cast<uint32>(TravelNodePathType::FlightPath))
+                return std::numeric_limits<float>::max(); // Return a very high cost for flight paths
+
+            return it->second.distance + it->second.swimDistance + it->second.extraCost;
+        }
+    }
+    return std::numeric_limits<float>::max();
+}
+
+bool WorldBotTravelSystem::IsFlightPathLink(uint32 fromNodeId, uint32 toNodeId) const
+{
+    auto linkRange = GetNodeLinks(fromNodeId);
+    for (auto it = linkRange.first; it != linkRange.second; ++it)
+    {
+        const TravelNodeLink& link = it->second;
+        if (link.toNodeId == toNodeId && link.type == static_cast<uint32>(TravelNodePathType::FlightPath))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<TravelPath> WorldBotTravelSystem::ReconstructPath(const std::unordered_map<uint32, uint32>& cameFrom, uint32 current) const
 {
     std::vector<uint32> nodePath;
@@ -394,6 +470,10 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s starting new path for %s to destination (%.2f, %.2f, %.2f)",
         me->GetName(), actionType.c_str(), x, y, z);
 
+    float directDistance = me->GetDistance(x, y, z);
+    bool isSameMap = (me->GetMapId() == mapId);
+    bool isCloseEnough = (directDistance < 1000.0f) && isSameMap; // Adjust this threshold as needed
+
     const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
     const TravelNode* endNode = sWorldBotTravelSystem.GetNearestNode(x, y, z, mapId);
 
@@ -403,7 +483,17 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
         return false;
     }
 
-    m_currentPath = sWorldBotTravelSystem.FindPath(startNode->id, endNode->id, isCorpseRun);
+    // Try to find a path without flight paths if the destination is close enough
+    if (isCloseEnough)
+    {
+        m_currentPath = sWorldBotTravelSystem.FindPathWithoutFlightPaths(startNode->id, endNode->id);
+    }
+
+    // If no path found without flight paths or destination is far, use the regular path finding
+    if (m_currentPath.empty())
+    {
+        m_currentPath = sWorldBotTravelSystem.FindPath(startNode->id, endNode->id, isCorpseRun);
+    }
 
     if (m_currentPath.empty())
     {
@@ -722,8 +812,18 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 
         case TravelNodePathType::FlightPath:
         {
-            // no flight paths when corpse running
-            if (m_isRunningToCorpse)
+            if (m_isSpecificDestinationPath)
+            {
+                float distanceToDestination = me->GetDistance(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+                if (distanceToDestination < 500.0f) // Adjust this threshold as needed
+                {
+                    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s skipping flight path as destination is close", me->GetName());
+                    return true; // Skip the flight path and continue to the next node
+                }
+            }
+
+            // no flight paths when corpse running or dead
+            if (m_isRunningToCorpse || me->IsDead())
                 return false;
 
             StopMoving();
