@@ -624,6 +624,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     ASSERT(pCurrChar->GetSession() == this);
     SetPlayer(pCurrChar);
+
     m_antiCheat->NewPlayer();
 
 

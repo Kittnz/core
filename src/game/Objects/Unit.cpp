@@ -6092,6 +6092,19 @@ bool Unit::IsImmuneToSchool(SpellEntry const* spellInfo, uint8 effectMask) const
     return false;
 }
 
+bool Unit::IsTotalImmune() const
+{
+    AuraList const& immune = GetAurasByType(SPELL_AURA_SCHOOL_IMMUNITY);
+
+    uint32 immuneMask = 0;
+    for (const auto itr : immune)
+    {
+        immuneMask |= itr->GetModifier()->m_miscvalue;
+    }
+
+    return (immuneMask == SPELL_SCHOOL_MASK_ALL);
+}
+
 /**
  * Calculates target part of melee damage bonuses,
  * will be called on each tick for periodic damage over time auras
@@ -9817,6 +9830,13 @@ uint8 Unit::GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const
     return targets.size();
 }
 
+void Unit::GetEnemyListInRadiusAround(Unit const* pTarget, float radius, std::list<Unit*>& targets) const
+{
+    MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(pTarget, this, radius);
+    MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
+    Cell::VisitAllObjects(pTarget, searcher, radius);
+}
+
 Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radius /*= ATTACK_DISTANCE*/, bool inFront /*= false*/, bool isValidAttackTarget /*= false*/, bool notPvpEnabling /*= false*/) const
 {
     std::list<Unit*> targets;
@@ -11409,6 +11429,44 @@ bool Unit::HasSpellCategoryCooldown(uint32 cat) const
             return true;
 
     return false;
+}
+
+bool Unit::IsSpellReady(SpellEntry const& spellEntry, ItemPrototype const* itemProto /*= nullptr*/) const
+{
+    uint32 spellCategory = spellEntry.Category;
+
+    // overwrite category by provided category in item prototype during item cast if need
+    if (itemProto)
+    {
+        for (const auto& Spell : itemProto->Spells)
+        {
+            if (Spell.SpellId == spellEntry.Id)
+            {
+                spellCategory = Spell.SpellCategory;
+                break;
+            }
+        }
+    }
+
+    if (GetSpellCooldownMap().find(spellEntry.Id) != GetSpellCooldownMap().end())
+        return false;
+
+    if (spellCategory && this->HasSpellCategoryCooldown(spellCategory))
+        return false;
+
+    //if (spellEntry.PreventionType == SPELL_PREVENTION_TYPE_SILENCE && CheckLockout(spellEntry.GetSpellSchoolMask()))
+    //    return false;
+
+    return true;
+}
+
+bool Unit::IsSpellReady(uint32 spellId, ItemPrototype const* itemProto /*= nullptr*/) const
+{
+    SpellEntry const* spellEntry = sSpellMgr.GetSpellEntry(spellId);
+    if (!spellEntry)
+        return false;
+
+    return IsSpellReady(*spellEntry, itemProto);
 }
 
 void Unit::RemoveAllSpellCooldown()

@@ -28,11 +28,15 @@ struct PlayerBotEntry
     uint8 state; //Online, in queue or offline
     bool isChatBot; // bot des joueurs en discussion via le site.
     bool customBot; // Enabled even if PlayerBot system disabled (AutoTesting system for example)
+    bool requestRemoval;
+    uint32 zoneID;
+    uint32 areaID;
+    WorldLocation loc;
     PlayerBotAI* ai;
 
-    PlayerBotEntry(uint64 guid, uint32 account, uint32 _chance): playerGUID(guid), accountId(account), chance(_chance), state(PB_STATE_OFFLINE), isChatBot(false), customBot(false), ai(nullptr)
+    PlayerBotEntry(uint64 guid, uint32 account, uint32 _chance, uint32 zone, uint32 area = 0): playerGUID(guid), accountId(account), chance(_chance), zoneID(zone), areaID(area), state(PB_STATE_OFFLINE), isChatBot(false), customBot(false), requestRemoval(false), ai(nullptr)
     {}
-    PlayerBotEntry(): playerGUID(0), accountId(0), chance(100.0f), state(PB_STATE_OFFLINE), isChatBot(false), customBot(false), ai(nullptr)
+    PlayerBotEntry(): playerGUID(0), accountId(0), chance(100.0f), zoneID(0), areaID(0), state(PB_STATE_OFFLINE), isChatBot(false), customBot(false), requestRemoval(false), ai(nullptr)
     {}
 };
 
@@ -55,7 +59,6 @@ struct PlayerBotStats
     confMaxOnline(0), confMinOnline(0), confBotsRefresh(0), confUpdateDiff(0) {}
 };
 
-
 class PlayerBotMgr
 {
     public:
@@ -64,6 +67,8 @@ class PlayerBotMgr
 
         void LoadConfig();
         void Load();
+
+        void ShuffleBots();
 
         void Update(uint32 diff);
         bool AddOrRemoveBot();
@@ -75,6 +80,11 @@ class PlayerBotMgr
 
         bool AddRandomBot();
         bool DeleteRandomBot();
+        bool DeleteRandomBotNotActiveZones();
+
+        void AddBattleBot(BattleGroundQueueTypeId queueType, Team botTeam, uint32 botLevel, bool temporary);
+        void DeleteBattleBots();
+        void AddRandomBotForBg(BattleGroundQueueTypeId queueType, Team botTeam, uint32 botLevel);
 
         void DeleteAll();
         void AddAllBots();
@@ -93,6 +103,11 @@ class PlayerBotMgr
         uint32 GenBotAccountId() { return ++_maxAccountId; }
         PlayerBotStats& GetStats(){ return m_stats; }
         void Start() { enable = true; }
+
+        bool IsActiveZone(uint32 zone) { return m_player_in_zones.find(zone) != m_player_in_zones.end(); }
+        bool IsActiveArea(uint32 area) { return m_player_in_areas.find(area) != m_player_in_areas.end(); }
+        bool IsNoPvpZone(uint32 zone) { return std::find(m_no_pvp_zones.begin(), m_no_pvp_zones.end(), zone) != m_no_pvp_zones.end(); }
+
     protected:
         /* Combien de temps depuis la derniere MaJ ?*/
         uint32 m_elapsedTime;
@@ -100,17 +115,31 @@ class PlayerBotMgr
         uint32 m_lastUpdate;
         uint32 totalChance;
         uint32 _maxAccountId;
+        time_t m_lastBattleBotQueueUpdate;
 
+        std::vector <uint32 /*pl guid*/> m_bots_vector;
         std::map<uint32 /*pl guid*/, PlayerBotEntry*> m_bots;
         std::map<uint32 /*account*/, uint32> m_tempBots;
+        std::map<uint32, uint32> m_player_in_zones;
+        std::map<uint32, uint32> m_player_in_areas;
+        std::map<uint32, uint32> m_bot_in_zones;
+        std::map<uint32, uint32> m_bot_in_areas;
         PlayerBotStats m_stats;
+
+        std::vector <uint32> m_no_pvp_zones;
 
         uint32 confMinBots;
         uint32 confMaxBots;
         uint32 confBotsRefresh;
         uint32 confUpdateDiff;
+        uint32 confMaxInZone;
+        uint32 confMaxInArea;
+        uint32 confMinBotsAddOrRemove;
+        uint32 confMaxBotsAddOrRemove;
         bool confDebug;
         bool forceLogoutDelay;
+        bool m_confBattleBotAutoJoin;
+        bool m_confRandomBotAutoJoin;
 
         bool enable;
 };

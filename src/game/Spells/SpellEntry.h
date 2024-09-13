@@ -1100,6 +1100,7 @@ public:
     char* GetIcon(uint32 ID) const;
     uint32 GetCastTimeForBonus(DamageEffectType damagetype) const;
     uint16 GetAuraMaxTicks() const;
+    uint32 GetRank() const;
     WeaponAttackType GetWeaponAttackType() const;
     float CalculateDefaultCoefficient(DamageEffectType const damagetype) const;
     float CalculateCustomCoefficient(WorldObject const* caster, DamageEffectType const damageType, float coeff, Spell* spell, bool donePart) const;

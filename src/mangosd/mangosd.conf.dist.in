@@ -9,19 +9,19 @@ RealmID = 1
 
 # DataDir. Data directory setting.
 
-DataDir = "data"
+DataDir = "../data"
 
 # LogsDir. Logs directory setting. Important: Logs dir must exists, or all logs need to be disabled
 
-LogsDir = "logs"
+LogsDir = "../logs"
 
 # HonorDir. Folder to store HCR files. These are logs of weekly honor calculation.
 
-HonorDir = "honor"
+HonorDir = "../honor"
 
 # PDumpDir. Folder to store pdump files.
 
-PDumpDir = "pdump"
+PDumpDir = "../pdump"
 
 # AutoPDump.MinCharLevel. Minimum level to backup character.
 
@@ -44,7 +44,7 @@ LogsDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_logs"
 
 # DB Auto-updater
 
-Database.AutoUpdate.Enabled = 0
+Database.AutoUpdate.Enabled = 1
 Database.AutoUpdate.Path = "../../sql/"
 Database.AutoUpdate.AuthUpdateName = "unused"
 Database.AutoUpdate.CharUpdateName = "unused"
@@ -78,7 +78,7 @@ WorldServerPort = 8090
 
 # BindIP. This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
 
-BindIP = "0.0.0.0"
+BindIP = "51.89.212.98"
 
 # UseProcessors. Used processors mask for multi-processors system. (Used only at Windows)
 
@@ -171,8 +171,8 @@ PlayerSave.Stats.SaveOnlyOnLogout = 1
 # Enable/Disable to load all terrain data on server startup.
 # Recommended value: 1. Else, can cause crashes if 'MapUpdate.Threads' > 1
 
-Terrain.Preload.Continents = 0
-Terrain.Preload.Instances  = 0
+Terrain.Preload.Continents = 1
+Terrain.Preload.Instances  = 1
 
 # vmap.enableLOS | vmap.enableHeight. Enable/Disable VMaps support for line of sight and height calculation.
 

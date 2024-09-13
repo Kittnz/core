@@ -3494,7 +3494,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
                 return *repRank;
     }
 
-    bool b_IsPossessed = HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED) || target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
+    bool b_IsPossessed = (IsUnit() && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED)) || (target->IsUnit() && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED));
     if (IsUnit() && (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || b_IsPossessed))
     {
         if (target->IsUnit() && (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || b_IsPossessed))
@@ -5790,6 +5790,47 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
 
         return (playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_UNK1)
             || (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_UNK1);
+    }
+
+    return true;
+}
+
+bool WorldObject::IsValidHelpfulTarget(Unit const* target, bool checkAlive) const
+{
+    ASSERT(target);
+
+    // this unit flag prevents casting on friendly or self too
+    if (target == this)
+        return !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE_2) && (!checkAlive || target->IsAlive());
+
+    if (FindMap() != target->FindMap())
+        return false;
+
+    if (!target->IsTargetable(false, false, false, checkAlive))
+        return false;
+
+    if (GetReactionTo(target) < REP_UNFRIENDLY ||
+        target->GetReactionTo(this) < REP_UNFRIENDLY)
+        return false;
+
+    Player const* playerAffectingCaster = GetAffectingPlayer();
+    Player const* playerAffectingTarget = target->GetAffectingPlayer();
+
+    // PvP checks
+    if (playerAffectingCaster && playerAffectingTarget)
+    {
+        // pet and owner
+        if (playerAffectingCaster == playerAffectingTarget)
+            return true;
+
+        // cannot help others in duels
+        if (playerAffectingTarget->m_duel && playerAffectingTarget->m_duel->startTime != 0)
+            return false;
+
+        // group forces friendly relations in ffa pvp
+        if (playerAffectingCaster->IsFFAPvP() && playerAffectingTarget->IsFFAPvP() &&
+            !playerAffectingCaster->IsInSameRaidWith(playerAffectingTarget))
+            return false;
     }
 
     return true;

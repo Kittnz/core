@@ -3,11 +3,15 @@
 #include "DBCStores.h"
 #include "Log.h"
 #include "SocialMgr.h"
+#include "Spell.h"
+#include "SpellAuras.h"
 #include "MotionMaster.h"
 #include "ObjectMgr.h"
 #include "MoveSpline.h"
 #include "PlayerBotMgr.h"
 #include "WorldPacket.h"
+#include "CombatBotBaseAI.h"
+#include "PopulationBotAI.h"
 
 bool PlayerBotAI::OnSessionLoaded(PlayerBotEntry* entry, WorldSession* sess)
 {
@@ -49,7 +53,7 @@ enum
 };
 
 
-bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o)
+bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, Player* pClone)
 {
     ASSERT(botEntry);
     std::string name = sObjectMgr.GeneratePetName(1863); // Succubus name
@@ -314,5 +318,7 @@ PlayerBotAI* CreatePlayerBotAI(std::string ainame)
         return new PopulateAreaBotAI(1, 1568, -4405.87f, 8.13f, HORDE, 150.0f);
     if (ainame == "PlayerBotFleeingAI")
         return new PlayerBotFleeingAI();
+    if (ainame == "PlayerBotWorldPopulationAI")
+        return new PlayerBotWorldPopulationAI();
     return new PlayerBotAI();
 }

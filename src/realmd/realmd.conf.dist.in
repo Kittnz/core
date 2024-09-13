@@ -7,16 +7,16 @@ ConfVersion=2010062001
 
 #   Database connection settings for the realm server.
 
-LoginDatabaseInfo = "127.0.0.1;3306;mangos;mangos;tw_logon"
+LoginDatabaseInfo = ""
 
 #   Logs directory setting.
 
-LogsDir = "logs"
+LogsDir = "../logs/"
 
 #   Folder to serve client patches.
 #   Important: Patches dir must contain mpq files like this: <build><lang>.mpq e.g. 65535enGB.mpq
 
-PatchesDir = "patches"
+PatchesDir = "./patches"
 
 #   Settings for maximum database-ping interval.
 
@@ -29,7 +29,7 @@ RealmServerPort = 3724
 #   Bind Realm Server to IP/hostname.
 #   This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
 
-BindIP = "0.0.0.0"
+BindIP = "51.89.212.98"
 
 #   Realmd daemon PID file.
 
@@ -118,7 +118,7 @@ SendMail = 0
 
 #   Specify the email address to send mail from.
 
-MailFrom = ""
+MailFrom = "no-reply@turtle-wow.org"
 
 #   Whether to validate the certificates of the mail server.
 
@@ -140,10 +140,8 @@ HostAddressOverride = "0.0.0.0"
 
 #   Force 2FA for accounts with rank.
 
-ForcePinAccountRank = 0
+ForcePinAccountRank = 1
 
 #   MaxSessionDuration - Time in seconds after which session will be closed.
 
 MaxSessionDuration = 300
-
-Proxy.PassIp = 0

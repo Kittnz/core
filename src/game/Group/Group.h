@@ -48,6 +48,18 @@ class Unit;
 #define MAX_RAID_SUBGROUPS (MAX_RAID_SIZE / MAX_GROUP_SIZE)
 #define TARGET_ICON_COUNT 8
 
+enum RaidTargetIcon : uint8
+{
+    RAID_TARGET_ICON_STAR = 0,
+    RAID_TARGET_ICON_CIRCLE = 1,
+    RAID_TARGET_ICON_DIAMOND = 2,
+    RAID_TARGET_ICON_TRIANGLE = 3,
+    RAID_TARGET_ICON_MOON = 4,
+    RAID_TARGET_ICON_SQUARE = 5,
+    RAID_TARGET_ICON_CROSS = 6,
+    RAID_TARGET_ICON_SKULL = 7
+};
+
 enum LootMethod
 {
     FREE_FOR_ALL      = 0,
@@ -312,6 +324,7 @@ class Group
         bool IsCrossfaction() const;
         bool UpdateCrossfaction();
 
+        ObjectGuid GetTargetWithIcon(RaidTargetIcon id) const { return m_targetIcons[id]; }
         void SetTargetIcon(uint8 id, ObjectGuid targetGuid);
         void ClearTargetIcon(ObjectGuid targetGuid);
         uint16 InInstance();

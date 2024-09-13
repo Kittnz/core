@@ -1035,6 +1035,7 @@ class WorldObject : public Object
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         bool IsValidAttackTarget(Unit const* target, bool checkAlive = true) const;
+        bool IsValidHelpfulTarget(Unit const* target, bool checkAlive = true) const;
         virtual bool IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const* viewPoint, bool detect, bool inVisibleList = false, bool* alert = nullptr) const { return IsVisibleForInState(pDetector, viewPoint, inVisibleList); }
 
         bool IsControlledByPlayer() const;

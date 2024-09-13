@@ -87,6 +87,7 @@
 #include "re2/re2.h"
 #include "Logging/DatabaseLogger.hpp"
 #include "SuspiciousStatisticMgr.h"
+#include "HttpApi/ApiServer.hpp"
 #include "SocialMgr.h"
 #include "Shop/ShopMgr.h"
 #include "ChannelBroadcaster.h"
@@ -104,6 +105,11 @@ namespace DiscordBot
     void RegisterHandlers();
 }
 #endif
+
+namespace HttpApi
+{
+    void RegisterControllers();
+}
 
 #include <filesystem>
 #include <fstream>
@@ -1260,8 +1266,8 @@ void World::LoadConfigSettingsFromFile(bool reload)
     setConfig(CONFIG_UINT32_MAPUPDATE_MIN_VISIBILITY_DISTANCE, "MapUpdate.MinVisibilityDistance", 0);
     setConfig(CONFIG_BOOL_CONTINENTS_INSTANCIATE, "Continents.Instanciate", false);
     setConfig(CONFIG_UINT32_CONTINENTS_MOTIONUPDATE_THREADS, "Continents.MotionUpdate.Threads", 0);
-    setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_CONTINENTS, "Terrain.Preload.Continents", 1);
-    setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_INSTANCES, "Terrain.Preload.Instances", 1);
+    setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_CONTINENTS, "Terrain.Preload.Continents", 0);
+    setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_INSTANCES, "Terrain.Preload.Instances", 0);
 
     setConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER, "Movement.ExtrapolatePlayerPosition", false);
     setConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PET, "Movement.ExtrapolatePetPosition", true);
@@ -1740,6 +1746,12 @@ void ExportLogs()
     }
 }
 
+void World::StopHttpApiServer()
+{
+    if (_server)
+        _server->Stop();
+}
+
 void CheckEggExploit()
 {
     if (std::filesystem::exists("egglog.txt"))
@@ -1829,7 +1841,14 @@ void LoadPlayerEggLoot();
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    ///- Initialize the random number generator
+    //Have to do it like this to get proper thread handling in the threadpool of the HTTPS api backend to allow querying on any post or get handlers.
+    HttpApi::ApiServer::SetInitThreadCallback([]() { mysql_thread_init(); });
+    HttpApi::ApiServer::SetDestroyThreadCallback([]() { mysql_thread_end(); });
+
+    _server = std::unique_ptr<HttpApi::ApiServer, ApiServerDeleter>(new HttpApi::ApiServer);
+    HttpApi::RegisterControllers();
+    _server->Start(sConfig.GetStringDefault("HttpApi.BindIP", "127.0.0.1"), sConfig.GetIntDefault("HttpApi.BindPort", 50000));
+///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
     ///- Time server startup
@@ -2389,6 +2408,11 @@ void World::DetectDBCLang()
 
     sLog.outString("Using %s DBC locale as default.", localeNames[m_defaultDbcLocale]);
     
+}
+
+void World::ApiServerDeleter::operator()(HttpApi::ApiServer* p)
+{
+    delete p;
 }
 
 void World::ProcessAsyncPackets()

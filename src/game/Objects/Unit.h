@@ -1000,6 +1000,7 @@ class Unit : public WorldObject
         virtual bool IsImmuneToDamage(SpellSchoolMask meleeSchoolMask, SpellEntry const* spellInfo = nullptr) const;
         virtual bool IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const;
         bool IsImmuneToSchool(SpellEntry const* spellInfo, uint8 effectMask) const;
+        bool IsTotalImmune() const;
 
         void ModConfuseSpell(bool apply, ObjectGuid casterGuid, uint32 spellID, MovementModType modType, uint32 time = 0);
         void SetFleeing(bool apply, ObjectGuid casterGuid = ObjectGuid(), uint32 spellID = 0, uint32 time = 0);
@@ -1018,6 +1019,8 @@ class Unit : public WorldObject
             SpellCooldowns::const_iterator itr = m_spellCooldowns.find(spell_id);
             return itr != m_spellCooldowns.end() && itr->second.end > time(nullptr);
         }
+        bool IsSpellReady(SpellEntry const& spellEntry, ItemPrototype const* itemProto = nullptr) const;
+        bool IsSpellReady(uint32 spellId, ItemPrototype const* itemProto = nullptr) const;
         time_t GetSpellCooldownDelay(uint32 spell_id) const
         {
             SpellCooldowns::const_iterator itr = m_spellCooldowns.find(spell_id);
@@ -1272,6 +1275,7 @@ class Unit : public WorldObject
 
         // Script Helpers
         uint8 GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const;
+        void GetEnemyListInRadiusAround(Unit const* pTarget, float radius, std::list<Unit*>& targets) const;
         Unit* SelectNearestTarget(float dist) const;
         Unit* SelectRandomUnfriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inFront = false, bool isValidAttackTarget = false, bool notPvpEnabling = false) const;
         Unit* SelectRandomFriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inCombat = false) const;

@@ -42,6 +42,7 @@
 #include "SocialMgr.h"
 
 #include "PlayerBotMgr.h"
+#include "PlayerBotAI.h"
 #include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "Language.h"
@@ -215,8 +216,13 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     }
 #endif
 
-	if (m_Socket == nullptr)
+    if (m_Socket == nullptr)
+    {
+        if (GetBot() && GetBot()->ai)
+            GetBot()->ai->OnPacketReceived(packet);
+
         return;
+    }
 
     if (m_Socket->SendPacket(*packet) == -1)
         m_Socket->CloseSocket();
@@ -366,6 +372,13 @@ bool WorldSession::Update(PacketFilter& updater)
     {
         if (m_bot != nullptr && m_bot->state == PB_STATE_OFFLINE)
         {
+            /*if (!m_disconnectTimer)
+            {
+                return ForcePlayerLogoutDelay();
+            }
+            else
+                return true;*/
+
             LogoutPlayer(true);
             return false;
         }
@@ -414,7 +427,7 @@ bool WorldSession::Update(PacketFilter& updater)
 
 bool WorldSession::CanProcessPackets() const
 {
-    return ((m_Socket && !m_Socket->IsClosed()) || (_player && sPlayerBotMgr.IsChatBot(_player->GetGUIDLow())));
+    return ((m_Socket && !m_Socket->IsClosed()) || (_player && (m_bot || sPlayerBotMgr.IsChatBot(_player->GetGUIDLow()))));
 }
 
 void WorldSession::ProcessPackets(PacketFilter& updater)
@@ -817,6 +830,8 @@ void WorldSession::KickPlayer()
 {
     if (m_Socket)
         m_Socket->CloseSocket();
+    else if (m_bot)
+        m_bot->requestRemoval = true;
 }
 
 /// Cancel channeling handler

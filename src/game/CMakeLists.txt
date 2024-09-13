@@ -72,7 +72,7 @@ set (game_SRCS
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
-    Analysis/AccountAnalyser.cpp
+	Analysis/AccountAnalyser.cpp
     Autoscaling/AutoScaler.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
@@ -124,6 +124,11 @@ set (game_SRCS
     Handlers/SpellHandler.cpp
     Handlers/TaxiHandler.cpp
     Handlers/TradeHandler.cpp
+    HttpApi/ControllerRegistrar.cpp
+    HttpApi/TestController.cpp
+    HttpApi/TestController.hpp
+    HttpApi/TransferController.cpp
+    HttpApi/TransferController.hpp
     LFG/LFGMgr.cpp
     Logging/DatabaseLogger.hpp
     Logging/DatabaseLogger.cpp
@@ -184,6 +189,11 @@ set (game_SRCS
     OutdoorPvP/Register.cpp
     PacketBroadcast/MovementBroadcaster.cpp
     PacketBroadcast/PlayerBroadcaster.cpp
+    PlayerBots/PartyBotAI.cpp
+    PlayerBots/CombatBotBaseAI.cpp
+    PlayerBots/BattleBotAI.cpp
+    PlayerBots/PopulationBotAI.cpp
+    PlayerBots/BattleBotWaypoints.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
@@ -370,7 +380,7 @@ set (game_SRCS
     Objects/TemporarySummon.h
     Objects/Totem.h
     Objects/Unit.h
-	Objects/UnitDefines.h
+    Objects/UnitDefines.h
     Objects/UpdateData.h
     Objects/UpdateFields.h
     Objects/UpdateMask.h
@@ -378,6 +388,11 @@ set (game_SRCS
     OutdoorPvP/OutdoorPvPSI.h
     PacketBroadcast/MovementBroadcaster.h
     PacketBroadcast/PlayerBroadcaster.h
+    PlayerBots/CombatBotBaseAI.h
+    PlayerBots/PartyBotAI.h
+    PlayerBots/BattleBotAI.h
+    PlayerBots/PopulationBotAI.h
+    PlayerBots/BattleBotWaypoints.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h
@@ -584,6 +599,11 @@ source_group("Anticheat"
 source_group("DiscordBot"
   REGULAR_EXPRESSION DiscordBot
 )
+
+source_group("HttpApi"
+  REGULAR_EXPRESSION HttpApi
+)
+
 
 add_library(game STATIC
   ${game_SRCS}

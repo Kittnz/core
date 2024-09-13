@@ -16319,13 +16319,16 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     m_name = fields[2].GetCppString();
 
-    // check name limitations
-    if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
-            (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr.IsReservedName(m_name)))
+    if (!GetSession()->GetBot())
     {
-        CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'",
-                                   uint32(AT_LOGIN_RENAME), guid.GetCounter());
-        return false;
+        // check name limitations
+        if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
+            (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr.IsReservedName(m_name)))
+        {
+            CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE guid ='%u'",
+                uint32(AT_LOGIN_RENAME), guid.GetCounter());
+            return false;
+        }
     }
 
     // overwrite possible wrong/corrupted guid
@@ -21100,7 +21103,7 @@ uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket
             return 10;
     }
 
-    return GetMinLevelForBattleGroundBracketId(bracketId, bgTypeId) + 10;
+    return GetMinLevelForBattleGroundBracketId(bracketId, bgTypeId) + 9;
 }
 
 BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId) const

@@ -982,6 +982,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "forcejoinchannel", SEC_ADMINISTRATOR, false, &ChatHandler::ForceJoinChannelCommand,          "", nullptr},
         { "toggletrainee",  SEC_DEVELOPER,       false, &ChatHandler::HandleToggleTrainingCommand,      "", nullptr },
         { "toggleinferno",  SEC_DEVELOPER,       false, &ChatHandler::HandleToggleInfernoModeCommand,   "", nullptr },
+        { "translate",      SEC_DEVELOPER,       false, &ChatHandler::HandleTranslateCommand,           "", nullptr },
+        { "stopapi",        SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleStopApiServerCommand,       "", nullptr},
         { "hcchat",         SEC_PLAYER,          false, &ChatHandler::HandleSetHCChatCommand,           "", nullptr },
         { "toggleillusions", SEC_DEVELOPER,      false, &ChatHandler::HandleToggleIllusionsCommand,     "", nullptr},
         { "tmogdelete",     SEC_DEVELOPER,       false, &ChatHandler::HandleDeleteTransmogCollectionCommand, "", nullptr},
@@ -989,7 +991,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "blockegg",       SEC_DEVELOPER,       false, &ChatHandler::HandleBlockEggsCommand,           "", nullptr},
         { "cleaninventory", SEC_DEVELOPER,       false, &ChatHandler::HandleCleanInventoryCommand,      "", nullptr},
         { "showborders",    SEC_DEVELOPER,       false, &ChatHandler::HandleShowBordersCommand,         "", nullptr },
-        { "queststatuses",  SEC_PLAYER,          false, &ChatHandler::HandleQuestStatusesCommand,       "", nullptr},
+        { "queststatuses",  SEC_PLAYER,           false, &ChatHandler::HandleQuestStatusesCommand,       "", nullptr},
         { nullptr,          0,                   false, nullptr,                                        "", nullptr }
     };
 

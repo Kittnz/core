@@ -28,6 +28,9 @@
 #endif
 
 #include "WorldSocketMgr.h"
+
+#include "httplib.h"
+
 #include "Common.h"
 #include "Master.h"
 #include "WorldSocket.h"
