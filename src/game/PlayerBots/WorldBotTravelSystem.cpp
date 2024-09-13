@@ -722,6 +722,10 @@ bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 
         case TravelNodePathType::FlightPath:
         {
+            // no flight paths when corpse running
+            if (m_isRunningToCorpse)
+                return false;
+
             StopMoving();
             ClearPath();
 

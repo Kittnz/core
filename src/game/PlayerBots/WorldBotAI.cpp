@@ -1500,7 +1500,7 @@ void WorldBotAI::InitializeTasks()
 {
     RegisterRoamTask();
     RegisterExploreTask();
-    UpdateMaxLevelForGrindProfiles();
+    //UpdateMaxLevelForGrindProfiles();
     RegisterGrindTask();
     RegisterDualTask();
 
