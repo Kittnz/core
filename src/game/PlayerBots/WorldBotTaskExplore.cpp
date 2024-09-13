@@ -94,7 +94,7 @@ void WorldBotAI::RegisterExploreTask()
     m_taskManager.RegisterTask({
         TASK_EXPLORE,
         "Explore",
-        PRIORITY_MEDIUM,
+        PRIORITY_LOW,
         [this](WorldBotAI* bot) { return this->CanPerformExplore(); },
         [this](WorldBotAI* bot) { this->StartExploring(); },
         [this](WorldBotAI* bot) { return this->IsExploringComplete(); },

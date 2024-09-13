@@ -499,8 +499,6 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s , teleporting to nearest graveyard.", me->GetName());
 
-        if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(20939))
-            me->AddCooldown(*pSpellEntry, nullptr, false, HOUR * IN_MILLISECONDS); // Trigger 1 Hour Cooldown
         // Get nearest graveyard.
         WorldSafeLocsEntry const* ClosestGrave = sObjectMgr.GetClosestGraveYard(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId(), me->GetTeam());
         if (!ClosestGrave) //No nearby graveyards (stuck in void?). Send ally to Westfall, Horde to Barrens.
