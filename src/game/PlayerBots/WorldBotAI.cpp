@@ -718,7 +718,7 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
                 me->GetSession()->HandleDuelAcceptedOpcode(data);
 
                 m_isDualBotInProgress = true;
-                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has accepted a duel.", me->GetName());
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has accepted a duel.", me->GetName());
             }
             else
             {
@@ -727,7 +727,7 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
                 data << dualFlagGuid;
                 me->GetSession()->HandleDuelCancelledOpcode(data);
 
-                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has declined a duel.", me->GetName());
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has declined a duel.", me->GetName());
             }
             break;
             break;
@@ -735,7 +735,7 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
         case SMSG_DUEL_COMPLETE:
         {
             bool won = *((uint8*)(*packet).contents());
-            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s has %s the duel.", me->GetName(), won ? "won" : "lost");
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has %s the duel.", me->GetName(), won ? "won" : "lost");
 
             m_isDualBotInProgress = false;
             m_isDualBotGetReady = true; // Get ready for the next duel
@@ -1500,7 +1500,7 @@ void WorldBotAI::InitializeTasks()
 {
     RegisterRoamTask();
     RegisterExploreTask();
-    //UpdateMaxLevelForGrindProfiles();
+    UpdateMaxLevelForGrindProfiles();
     RegisterGrindTask();
     RegisterDualTask();
 

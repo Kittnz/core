@@ -99,7 +99,7 @@ void WorldBotAI::RegisterExploreTask()
         [this](WorldBotAI* bot) { this->StartExploring(); },
         [this](WorldBotAI* bot) { return this->IsExploringComplete(); },
         true, // implemented
-        60,  // Minimum level
+        50,  // Minimum level
         60   // Maximum level
     });
 }

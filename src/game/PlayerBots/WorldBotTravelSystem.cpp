@@ -418,6 +418,15 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
         if (ClosestGrave)
             me->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID), 0);
 
+        if (isCorpseRun)
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: resurrecting bot %s , we can't find a path to corpse.", me->GetName());
+            me->ResurrectPlayer(0.5f);
+            me->SpawnCorpseBones();
+            me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+            m_isRunningToCorpse = false;
+        }
+
         return false;
     }
 
@@ -566,68 +575,15 @@ void WorldBotAI::OnPathComplete()
 
     if (m_isRunningToCorpse)
     {
-        m_isRunningToCorpse = false;
-        if (me->GetDeathState() == DEAD)
-        {
-            if (me->GetCorpse() && me->IsWithinDistInMap(me->GetCorpse(), INTERACTION_DISTANCE))
-            {
-                me->ResurrectPlayer(0.5f);
-                me->SpawnCorpseBones();
-                me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
-            }
-            else
-            {
-                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s reached end of corpse run path but corpse not found, teleporting to resurrect", me->GetName());
-                TeleportResurrect();
-            }
-        }
+        HandleCorpseRunCompletion();
     }
     else if (m_isSpecificDestinationPath)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached its specific destination", me->GetName());
-        if (HasReachedExploreDestination())
-        {
-            hasPoiDestination = false;
-            m_taskManager.CompleteCurrentTask();
-
-            // If the new task is TASK_EXPLORE, start a new exploration
-            if (m_taskManager.GetCurrentTaskId() == TASK_EXPLORE)
-            {
-                StartExploring();
-            }
-        }
-        else
-        {
-            // We've reached the end of the path but not the exact destination
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s reached end of path but not exact destination", me->GetName());
-            StartExploring(); // Try to find a new path to the destination
-        }
+        HandleSpecificDestinationCompletion();
     }
     else if (m_taskManager.GetCurrentTaskId() == TASK_GRIND)
     {
-        if (HasReachedGrindDestination())
-        {
-            m_currentHotSpotIndex++;
-            if (m_currentHotSpotIndex < m_grindHotSpots.size())
-            {
-                // Move to the next hot spot
-                StartNewPathToSpecificDestination(m_grindHotSpots[m_currentHotSpotIndex].x,
-                    m_grindHotSpots[m_currentHotSpotIndex].y,
-                    m_grindHotSpots[m_currentHotSpotIndex].z,
-                    me->GetMapId(), false);
-            }
-            else
-            {
-                // All hot spots visited, complete the task
-                m_taskManager.CompleteCurrentTask();
-            }
-        }
-        else
-        {
-            // We've reached the end of the path but not the exact destination
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Bot %s reached end of path but not exact grind destination", me->GetName());
-            CreatePathFromHotSpots(); // Create a new path from the current position to the remaining hot spots
-        }
+        HandleGrindTaskCompletion();
     }
     else if (m_taskManager.GetCurrentTaskId() == TASK_ROAM)
     {
@@ -635,6 +591,81 @@ void WorldBotAI::OnPathComplete()
     }
 
     m_isSpecificDestinationPath = false;
+}
+
+void WorldBotAI::HandleCorpseRunCompletion()
+{
+    m_isRunningToCorpse = false;
+    if (me->GetDeathState() == DEAD)
+    {
+        if (me->GetCorpse() && me->IsWithinDistInMap(me->GetCorpse(), INTERACTION_DISTANCE))
+        {
+            me->ResurrectPlayer(0.5f);
+            me->SpawnCorpseBones();
+            me->CastSpell(me, WB_SPELL_HONORLESS_TARGET, true);
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s reached end of corpse run path but corpse not found, teleporting to resurrect", me->GetName());
+            TeleportResurrect();
+        }
+    }
+}
+
+void WorldBotAI::HandleSpecificDestinationCompletion()
+{
+    float distanceToDestination = me->GetDistance(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+    if (distanceToDestination <= 5.0f)  // Consider it reached if within 5 yards
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s reached its specific destination", me->GetName());
+        if (HasReachedExploreDestination())
+        {
+            hasPoiDestination = false;
+            m_taskManager.CompleteCurrentTask();
+
+            if (m_taskManager.GetCurrentTaskId() == TASK_EXPLORE)
+            {
+                StartExploring();
+            }
+        }
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s near destination but not exact. Attempting to get closer.", me->GetName());
+        if (StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap, false))
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s created new path to get closer to destination", me->GetName());
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: %s failed to create new path to destination. Completing task.", me->GetName());
+            m_taskManager.CompleteCurrentTask();
+        }
+    }
+}
+
+void WorldBotAI::HandleGrindTaskCompletion()
+{
+    if (HasReachedGrindDestination())
+    {
+        m_currentHotSpotIndex++;
+        if (m_currentHotSpotIndex < m_grindHotSpots.size())
+        {
+            StartNewPathToSpecificDestination(m_grindHotSpots[m_currentHotSpotIndex].x,
+                m_grindHotSpots[m_currentHotSpotIndex].y,
+                m_grindHotSpots[m_currentHotSpotIndex].z,
+                me->GetMapId(), false);
+        }
+        else
+        {
+            m_taskManager.CompleteCurrentTask();
+        }
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s near grind destination but not exact. Attempting to get closer.", me->GetName());
+        CreatePathFromHotSpots();
+    }
 }
 
 uint32 GetRandomTaxiNode(uint32 mapid, Team team)
@@ -660,6 +691,12 @@ uint32 GetRandomTaxiNode(uint32 mapid, Team team)
 
 bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 {
+    // Only execute if the node is an end node
+    if (m_currentPathIndex >= m_currentPath.size() || m_currentPath[m_currentPathIndex - 1].toNodeId != nodeId)
+    {
+        return true;
+    }
+
     auto linkRange = sWorldBotTravelSystem.GetNodeLinks(nodeId);
     for (auto it = linkRange.first; it != linkRange.second; ++it)
     {

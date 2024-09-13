@@ -222,6 +222,9 @@ public:
     void StartNewPathToNode();
     bool StartNewPathToSpecificDestination(float x, float y, float z, uint32 mapId, bool isCorpseRun);
     void OnPathComplete();
+    void HandleCorpseRunCompletion();
+    void HandleSpecificDestinationCompletion();
+    void HandleGrindTaskCompletion();
 
     // Visual path and nodes
     void ShowCurrentPath();

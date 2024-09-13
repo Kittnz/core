@@ -16,7 +16,7 @@ void WorldBotAI::StartDualing()
     uint32 correctMapId = (me->GetTeam() == ALLIANCE) ? 0 : 1; // 0 for Eastern Kingdoms, 1 for Kalimdor
     if (me->GetMapId() != correctMapId)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Bot %s is on incorrect map. Teleporting to major city.", me->GetName());
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s is on incorrect map. Teleporting to major city.", me->GetName());
         if (me->GetTeam() == ALLIANCE)
         {
             me->TeleportTo(0, -9002.163f, 867.087f, 29.620f, 2.244f, TELE_TO_FORCE_MAP_CHANGE);

@@ -22,6 +22,8 @@ void WorldBotAI::RegisterRoamTask()
         [this](WorldBotAI* bot) { return true; },  // CanPerformRoam
         [](WorldBotAI* bot) {},  // No-op start function
         [](WorldBotAI* bot) { return false; },  // IsRoamingComplete
-        true
+        true,
+        50,  // Minimum level
+        60   // Maximum level
     });
 }

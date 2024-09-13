@@ -8,6 +8,16 @@ void WorldBotTaskManager::RegisterTask(const WorldBotTask& task)
     m_tasks.push_back(task);
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Registered task %s (ID: %u, Implemented: %s, Level Range: %u-%u)",
         task.name.c_str(), task.id, task.implemented ? "true" : "false", task.minLevel, task.maxLevel);
+
+    // Default task
+    if (task.id == TASK_ROAM)
+    {
+        WorldBotTask roamTask = task;
+        roamTask.minLevel = 1;
+        roamTask.maxLevel = 60;
+        m_tasks.push_back(roamTask);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTaskManager: Registered TASK_ROAM for all levels (1-60)");
+    }
 }
 
 void WorldBotTaskManager::StartTask(WorldBotTask* task)
@@ -104,21 +114,76 @@ const WorldBotTask* WorldBotTaskManager::FindTaskById(uint8 taskId) const
 WorldBotTask* WorldBotTaskManager::SelectNextTask()
 {
     WorldBotTask* highestPriorityTask = nullptr;
+    WorldBotTask* roamTask = nullptr;
+    uint8 botLevel = m_bot->me->GetLevel();
+
+    std::ostringstream logStream;
+    logStream << "WorldBotTaskManager: Task selection process for bot level " << static_cast<int>(botLevel) << ":\n";
 
     for (auto& task : m_tasks)
     {
-        uint8 botLevel = m_bot->me->GetLevel();
-        if (task.canPerform(m_bot) && botLevel >= task.minLevel && botLevel <= task.maxLevel)
+        logStream << "  Evaluating task " << task.name << " (ID: " << static_cast<int>(task.id)
+            << ", Priority: " << static_cast<int>(task.priority)
+            << ", Level Range: " << static_cast<int>(task.minLevel) << "-" << static_cast<int>(task.maxLevel) << "):\n";
+
+        if (task.id == TASK_ROAM && task.minLevel <= botLevel && task.maxLevel >= botLevel)
         {
-            if (!highestPriorityTask || task.priority > highestPriorityTask->priority)
-            {
-                highestPriorityTask = &task;
-            }
+            roamTask = &task;
+            logStream << "    - TASK_ROAM found as potential fallback\n";
+        }
+
+        if (botLevel < task.minLevel || botLevel > task.maxLevel)
+        {
+            logStream << "    - Skipped: Bot level out of task's level range\n";
+            continue;
+        }
+
+        if (!task.implemented)
+        {
+            logStream << "    - Skipped: Task not implemented\n";
+            continue;
+        }
+
+        if (!task.canPerform(m_bot))
+        {
+            logStream << "    - Skipped: Task cannot be performed\n";
+            continue;
+        }
+
+        logStream << "    - Task is eligible\n";
+
+        if (!highestPriorityTask || task.priority > highestPriorityTask->priority)
+        {
+            highestPriorityTask = &task;
+            logStream << "    - New highest priority task\n";
+        }
+        else
+        {
+            logStream << "    - Lower priority than current highest\n";
         }
     }
 
-    return highestPriorityTask;
+    if (highestPriorityTask)
+    {
+        logStream << "Selected task " << highestPriorityTask->name
+            << " (Priority: " << static_cast<int>(highestPriorityTask->priority) << ")\n";
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "%s", logStream.str().c_str());
+        return highestPriorityTask;
+    }
+    else if (roamTask)
+    {
+        logStream << "No suitable task found. Defaulting to TASK_ROAM\n";
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "%s", logStream.str().c_str());
+        return roamTask;
+    }
+    else
+    {
+        logStream << "No suitable task found and TASK_ROAM not available\n";
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s", logStream.str().c_str());
+        return nullptr;
+    }
 }
+
 
 void WorldBotTaskManager::CompleteCurrentTask()
 {
