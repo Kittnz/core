@@ -87,9 +87,7 @@ bool WorldBotAI::SetGrindDestination()
         << "AND HotSpots != '' AND HotSpots IS NOT NULL "
         << "AND EntryTarget != '' AND EntryTarget IS NOT NULL "
         << "AND MinLevel <= " << me->GetLevel() << " "
-        << "AND MaxLevel >= " << me->GetLevel() << " "
-        << "ORDER BY ABS(MaxLevel - " << me->GetLevel() << "), RAND() "
-        << "LIMIT 10";
+        << "AND MaxLevel >= " << me->GetLevel();
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query(query.str().c_str()));
     if (!result)
@@ -98,7 +96,9 @@ bool WorldBotAI::SetGrindDestination()
         return false;
     }
 
-    std::vector<std::tuple<uint32, std::string, std::string, uint32, uint32>> validProfiles;
+    float closestDistance = std::numeric_limits<float>::max();
+    std::tuple<uint32, std::string, std::string, uint32, uint32> closestProfile;
+    bool foundValidProfile = false;
 
     do
     {
@@ -110,24 +110,41 @@ bool WorldBotAI::SetGrindDestination()
         uint32 maxLevel = fields[4].GetUInt32();
         uint32 minLevel = fields[5].GetUInt32();
 
-        validProfiles.emplace_back(guid, hotSpots, entryTargetStr, maxLevel, minLevel);
+        // Parse the first hot spot to check distance
+        size_t pos = hotSpots.find(')');
+        if (pos != std::string::npos)
+        {
+            std::string firstHotSpot = hotSpots.substr(1, pos - 1); // Remove parentheses
+            std::vector<std::string> coords = SplitString(firstHotSpot, ',');
+            if (coords.size() == 3)
+            {
+                float x = std::stof(coords[0]);
+                float y = std::stof(coords[1]);
+                float z = std::stof(coords[2]);
+                float distance = me->GetDistance(x, y, z);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestProfile = std::make_tuple(guid, hotSpots, entryTargetStr, maxLevel, minLevel);
+                    foundValidProfile = true;
+                }
+            }
+        }
     } while (result->NextRow());
-    if (validProfiles.empty())
+
+    if (!foundValidProfile)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind profiles with appropriate level found for bot %s (level %u)", me->GetName(), me->GetLevel());
         return false;
     }
 
-    // Randomly select a profile from the valid ones
-    size_t randomIndex = urand(0, validProfiles.size() - 1);
-    auto selectedProfile = validProfiles[randomIndex];
-
-    m_grindEntryTarget = std::get<0>(selectedProfile);
-    m_grindMaxLevel = std::get<3>(selectedProfile);
-    uint32 minLevel = std::get<4>(selectedProfile);
+    m_grindEntryTarget = std::get<0>(closestProfile);
+    m_grindMaxLevel = std::get<3>(closestProfile);
+    uint32 minLevel = std::get<4>(closestProfile);
 
     // Parse hot spots
-    std::string hotSpotsStr = std::get<1>(selectedProfile);
+    std::string hotSpotsStr = std::get<1>(closestProfile);
     std::vector<std::string> coordinates;
 
     // Remove any whitespace from the string
@@ -187,7 +204,7 @@ bool WorldBotAI::SetGrindDestination()
         return false;
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Set grind destination for bot %s (level %u) with MinLevel %u, MaxLevel %u and %zu hot spots",
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Set closest grind destination for bot %s (level %u) with MinLevel %u, MaxLevel %u and %zu hot spots",
         me->GetName(), me->GetLevel(), minLevel, m_grindMaxLevel, m_grindHotSpots.size());
     return true;
 }

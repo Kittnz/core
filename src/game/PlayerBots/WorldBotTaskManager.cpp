@@ -167,13 +167,13 @@ WorldBotTask* WorldBotTaskManager::SelectNextTask()
     {
         logStream << "Selected task " << highestPriorityTask->name
             << " (Priority: " << static_cast<int>(highestPriorityTask->priority) << ")\n";
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "%s", logStream.str().c_str());
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "%s", logStream.str().c_str());
         return highestPriorityTask;
     }
     else if (roamTask)
     {
         logStream << "No suitable task found. Defaulting to TASK_ROAM\n";
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "%s", logStream.str().c_str());
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "%s", logStream.str().c_str());
         return roamTask;
     }
     else
