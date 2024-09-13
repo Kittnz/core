@@ -213,6 +213,7 @@ public:
     bool m_isDualBotReady = false;
     bool m_isDualBotGetReady = false;
     bool m_isDualBotInProgress = false;
+    bool m_inDuelPosition = false;
 
     // Movement System
     void UpdateWaypointMovement();

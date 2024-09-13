@@ -80,6 +80,7 @@ void WorldBotAI::UpdateDualingBehavior()
             sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s has reached the dueling location.", me->GetName());
             m_isDualBotMovingToLocation = false;
             m_isDualBotGetReady = true;
+            m_inDuelPosition = true;  // Set the flag here
         }
         return;
     }

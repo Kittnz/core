@@ -214,3 +214,23 @@ std::vector<uint8> WorldBotTaskManager::GetImplementedTaskIds() const
     }
     return implementedTasks;
 }
+
+void WorldBotAI::OnTaskComplete(uint8 completedTaskId)
+{
+    switch (completedTaskId)
+    {
+    case TASK_EXPLORE:
+        hasPoiDestination = false;
+        DestName.clear();
+        DestCoordinatesX = 0.0f;
+        DestCoordinatesY = 0.0f;
+        DestCoordinatesZ = 0.0f;
+        DestMap = 0;
+        ClearPath();
+        break;
+    case TASK_DUAL:
+        m_inDuelPosition = false;
+    default:
+        break;
+    }
+}

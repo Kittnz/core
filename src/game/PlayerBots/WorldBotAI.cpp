@@ -769,7 +769,7 @@ void WorldBotAI::ShowCurrentPath()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || me->IsTaxiFlying())
+    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || me->IsTaxiFlying() || m_inDuelPosition)
         return;
 
     if (!m_currentPath.empty())
@@ -1545,21 +1545,3 @@ void WorldBotAI::SetRandomTask()
     }
 }
 
-void WorldBotAI::OnTaskComplete(uint8 completedTaskId)
-{
-    switch (completedTaskId)
-    {
-    case TASK_EXPLORE:
-        hasPoiDestination = false;
-        DestName.clear();
-        DestCoordinatesX = 0.0f;
-        DestCoordinatesY = 0.0f;
-        DestCoordinatesZ = 0.0f;
-        DestMap = 0;
-        ClearPath();
-        break;
-        // Add cases for other tasks as needed
-    default:
-        break;
-    }
-}
