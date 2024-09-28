@@ -1,22 +1,19 @@
 #include "WorldBotAI.h"
 #include "WorldBotTravelSystem.h"
 #include "WorldBotTaskManager.h"
+#include "PlayerBotMgr.h"
 #include "Map.h"
 #include "GridSearchers.h"
 #include "Creature.h"
 
 bool WorldBotAI::CanPerformGrind() const
 {
-    // Check if the bot's name contains "bank", don't allow them to grind
     std::string botName = me->GetName();
     std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
-    if (botName.find("bank") != std::string::npos)
-    {
-        return false;  // Don't allow grinding for bots with "bank" in their name
-    }
+    return m_taskManager.IsTaskLevelAppropriate(TASK_GRIND, me->GetLevel()) &&
+        !me->IsInCombat() && m_grindHotSpots.empty() &&
+        botName.find("bank") == std::string::npos;
 
-    // Can grind if not in combat and not already at a destination
-    return !me->IsInCombat() && m_grindHotSpots.empty();
 }
 
 void WorldBotAI::StartGrinding()
@@ -80,41 +77,36 @@ bool WorldBotAI::SetGrindDestination()
         return false; // Return false to indicate we need to try again later
     }
 
-    std::ostringstream query;
-    query << "SELECT Guid, FileName, HotSpots, EntryTarget, MaxLevel, MinLevel FROM worldbot_easy_quest_profiles WHERE "
-        << "QuestType = 'KillAndLoot' AND Faction = '" << (me->GetTeam() == ALLIANCE ? "alliance" : "horde") << "' "
-        << "AND MapId = " << me->GetMapId() << " "
-        << "AND HotSpots != '' AND HotSpots IS NOT NULL "
-        << "AND EntryTarget != '' AND EntryTarget IS NOT NULL "
-        << "AND MinLevel <= " << me->GetLevel() << " "
-        << "AND MaxLevel >= " << me->GetLevel();
+    const std::vector<WorldBotGrindProfile>& profiles = sPlayerBotMgr.GetGrindProfiles();
+    std::vector<const WorldBotGrindProfile*> validProfiles;
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query(query.str().c_str()));
-    if (!result)
+    for (const auto& profile : profiles)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind profiles found for bot %s (level %u). Query: %s", me->GetName(), me->GetLevel(), query.str().c_str());
+        if (profile.faction == (me->GetTeam() == ALLIANCE ? "alliance" : "horde") &&
+            profile.mapId == me->GetMapId() &&
+            profile.minLevel <= me->GetLevel() &&
+            profile.maxLevel >= me->GetLevel())
+        {
+            validProfiles.push_back(&profile);
+        }
+    }
+
+    if (validProfiles.empty())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind profiles found for bot %s (level %u).", me->GetName(), me->GetLevel());
         return false;
     }
 
+    const WorldBotGrindProfile* closestProfile = nullptr;
     float closestDistance = std::numeric_limits<float>::max();
-    std::tuple<uint32, std::string, std::string, uint32, uint32> closestProfile;
-    bool foundValidProfile = false;
 
-    do
+    for (const auto* profile : validProfiles)
     {
-        Field* fields = result->Fetch();
-        uint32 guid = fields[0].GetUInt32();
-        std::string FileName = fields[1].GetCppString();
-        std::string hotSpots = fields[2].GetCppString();
-        std::string entryTargetStr = fields[3].GetCppString();
-        uint32 maxLevel = fields[4].GetUInt32();
-        uint32 minLevel = fields[5].GetUInt32();
-
         // Parse the first hot spot to check distance
-        size_t pos = hotSpots.find(')');
+        size_t pos = profile->hotSpots.find(')');
         if (pos != std::string::npos)
         {
-            std::string firstHotSpot = hotSpots.substr(1, pos - 1); // Remove parentheses
+            std::string firstHotSpot = profile->hotSpots.substr(1, pos - 1); // Remove parentheses
             std::vector<std::string> coords = SplitString(firstHotSpot, ',');
             if (coords.size() == 3)
             {
@@ -126,42 +118,57 @@ bool WorldBotAI::SetGrindDestination()
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
-                    closestProfile = std::make_tuple(guid, hotSpots, entryTargetStr, maxLevel, minLevel);
-                    foundValidProfile = true;
+                    closestProfile = profile;
                 }
             }
         }
-    } while (result->NextRow());
+    }
 
-    if (!foundValidProfile)
+    if (!closestProfile)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid grind profiles with appropriate level found for bot %s (level %u)", me->GetName(), me->GetLevel());
         return false;
     }
 
-    m_grindEntryTarget = std::get<0>(closestProfile);
-    m_grindMaxLevel = std::get<3>(closestProfile);
-    uint32 minLevel = std::get<4>(closestProfile);
+    m_grindEntryTarget = std::stoul(closestProfile->entryTarget);
+    m_grindMaxLevel = closestProfile->maxLevel;
 
     // Parse hot spots
-    std::string hotSpotsStr = std::get<1>(closestProfile);
+    ParseHotSpots(closestProfile->hotSpots);
+
+    if (m_grindHotSpots.empty())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid hot spots found for bot %s", me->GetName());
+        return false;
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Set closest grind destination for bot %s (level %u) with MinLevel %u, MaxLevel %u and %zu hot spots",
+        me->GetName(), me->GetLevel(), closestProfile->minLevel, m_grindMaxLevel, m_grindHotSpots.size());
+    return true;
+}
+
+// Add this helper function to parse hot spots
+void WorldBotAI::ParseHotSpots(const std::string& hotSpotsStr)
+{
+    m_grindHotSpots.clear();
     std::vector<std::string> coordinates;
 
     // Remove any whitespace from the string
-    hotSpotsStr.erase(std::remove_if(hotSpotsStr.begin(), hotSpotsStr.end(), ::isspace), hotSpotsStr.end());
+    std::string cleanStr = hotSpotsStr;
+    cleanStr.erase(std::remove_if(cleanStr.begin(), cleanStr.end(), ::isspace), cleanStr.end());
 
     // Split the string into individual coordinate groups
     size_t start = 0;
-    size_t end = hotSpotsStr.find("),", start);
+    size_t end = cleanStr.find("),", start);
     while (end != std::string::npos)
     {
-        coordinates.push_back(hotSpotsStr.substr(start, end - start + 1));
+        coordinates.push_back(cleanStr.substr(start, end - start + 1));
         start = end + 2;
-        end = hotSpotsStr.find("),", start);
+        end = cleanStr.find("),", start);
     }
-    if (start < hotSpotsStr.length())
+    if (start < cleanStr.length())
     {
-        coordinates.push_back(hotSpotsStr.substr(start));
+        coordinates.push_back(cleanStr.substr(start));
     }
 
     for (const auto& coord : coordinates)
@@ -197,16 +204,6 @@ bool WorldBotAI::SetGrindDestination()
             sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Invalid coordinate format: %s", cleanCoord.c_str());
         }
     }
-
-    if (m_grindHotSpots.empty())
-    {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: No valid hot spots found for bot %s", me->GetName());
-        return false;
-    }
-
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Set closest grind destination for bot %s (level %u) with MinLevel %u, MaxLevel %u and %zu hot spots",
-        me->GetName(), me->GetLevel(), minLevel, m_grindMaxLevel, m_grindHotSpots.size());
-    return true;
 }
 
 bool WorldBotAI::HasReachedGrindDestination() const
@@ -254,6 +251,13 @@ void WorldBotAI::UpdateGrindingBehavior()
         }
     }
 
+    if (ShouldStopGrinding())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: %s stopping grinding task", me->GetName());
+        m_taskManager.CompleteCurrentTask();
+        return;
+    }
+
     if (HasReachedGrindDestination())
     {
         // Look for EntryTarget to attack
@@ -263,7 +267,7 @@ void WorldBotAI::UpdateGrindingBehavior()
             return;
         }
 
-        // Only move to the next spot if we've reached the current one and found no targets
+        // Move to the next spot if no targets found
         MoveToNextGrindSpot();
     }
     else if (!me->IsMoving() && !me->IsTaxiFlying())
@@ -293,14 +297,18 @@ void WorldBotAI::MoveToNextGrindSpot()
     else
     {
         // We're already at this spot, move to the next one
-        m_currentHotSpotIndex++;
-        if (m_currentHotSpotIndex >= m_grindHotSpots.size())
-        {
-            m_currentHotSpotIndex = 0;
-        }
+        m_currentHotSpotIndex = (m_currentHotSpotIndex + 1) % m_grindHotSpots.size();
         const Position& newSpot = m_grindHotSpots[m_currentHotSpotIndex];
         StartNewPathToSpecificDestination(newSpot.x, newSpot.y, newSpot.z, me->GetMapId(), false);
     }
+}
+
+bool WorldBotAI::ShouldStopGrinding() const
+{
+    if (me->GetLevel() > m_grindMaxLevel + 1)
+        return true;
+
+    return false;
 }
 
 Unit* WorldBotAI::FindEntryTargetToAttack()

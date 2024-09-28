@@ -96,6 +96,18 @@ public:
     std::string name;
 };
 
+struct WorldBotGrindProfile {
+    uint32 guid;
+    std::string fileName;
+    std::string hotSpots;
+    std::string entryTarget;
+    uint32 maxLevel;
+    uint32 minLevel;
+    std::string questType;
+    std::string faction;
+    uint32 mapId;
+};
+
 class PlayerBotMgr
 {
     public:
@@ -142,8 +154,9 @@ class PlayerBotMgr
         bool WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
         bool m_useWorldBotLoader = false;
         void WorldBotBalancer(uint32 diff);
-        void PrintImplementedTasks() const;
         void WorldBotLoadAreaPOI();
+        void WorldBotLoadGrindProfiles();
+        const std::vector<WorldBotGrindProfile>& GetGrindProfiles() const { return m_grindProfiles; }
 
         ShortTimeTracker m_BotBalanceTimer;
         uint32 GetOnlineBotsCount(Team team) const;
@@ -170,6 +183,7 @@ class PlayerBotMgr
         bool m_confDebug;
         bool m_confEnableRandomBots;
         bool m_confBattleBotAutoJoin;
+        std::vector<WorldBotGrindProfile> m_grindProfiles;
 
     private:
         ShortTimeTracker m_BalanceTimer;

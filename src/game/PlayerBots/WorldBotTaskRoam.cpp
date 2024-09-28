@@ -3,8 +3,10 @@
 
 bool WorldBotAI::CanPerformRoam() const
 {
-    // Roaming can always be performed
-    return true;
+    std::string botName = me->GetName();
+    std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
+
+    return m_taskManager.IsTaskLevelAppropriate(TASK_ROAM, me->GetLevel()) && botName.find("bank") == std::string::npos;
 }
 
 bool WorldBotAI::IsRoamingComplete() const

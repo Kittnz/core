@@ -215,6 +215,16 @@ std::vector<uint8> WorldBotTaskManager::GetImplementedTaskIds() const
     return implementedTasks;
 }
 
+bool WorldBotTaskManager::IsTaskLevelAppropriate(uint8 taskId, uint8 botLevel) const
+{
+    const WorldBotTask* task = FindTaskById(taskId);
+    if (task)
+    {
+        return botLevel >= task->minLevel && botLevel <= task->maxLevel;
+    }
+    return false;
+}
+
 void WorldBotAI::OnTaskComplete(uint8 completedTaskId)
 {
     switch (completedTaskId)

@@ -43,6 +43,7 @@ public:
     void CompleteCurrentTask();
     std::vector<uint8> GetImplementedTaskIds() const;
     const WorldBotTask* FindTaskById(uint8 taskId) const;
+    bool IsTaskLevelAppropriate(uint8 taskId, uint8 botLevel) const;
 
 private:
     WorldBotAI* m_bot;

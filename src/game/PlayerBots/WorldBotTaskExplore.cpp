@@ -9,8 +9,11 @@ extern std::vector<WorldBotsAreaPOI> myAreaPOI;
 
 bool WorldBotAI::CanPerformExplore() const
 {
-    // Can explore if not in combat and not already at a destination
-    return !me->IsInCombat() && !hasPoiDestination;
+    std::string botName = me->GetName();
+    std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
+
+    return m_taskManager.IsTaskLevelAppropriate(TASK_EXPLORE, me->GetLevel()) &&
+        !me->IsInCombat() && !hasPoiDestination && botName.find("bank") == std::string::npos;
 }
 
 void WorldBotAI::StartExploring()

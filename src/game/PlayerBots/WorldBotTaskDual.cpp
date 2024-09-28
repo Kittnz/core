@@ -5,9 +5,12 @@
 
 bool WorldBotAI::CanPerformDual() const
 {
-    // Add conditions for when a bot can perform a duel
-    // For example, not in combat, not in a battleground, etc.
-    return !me->IsInCombat() && !me->InBattleGround() && !m_isDualBot;
+    std::string botName = me->GetName();
+    std::transform(botName.begin(), botName.end(), botName.begin(), ::tolower);
+
+    return m_taskManager.IsTaskLevelAppropriate(TASK_DUAL, me->GetLevel()) &&
+        !me->IsInCombat() && !me->InBattleGround() && !m_isDualBot && 
+        botName.find("bank") == std::string::npos;
 }
 
 void WorldBotAI::StartDualing()

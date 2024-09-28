@@ -217,6 +217,12 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
 {
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Finding path from node %u to node %u", startNodeId, endNodeId);
 
+    if (!GetNode(startNodeId) || !GetNode(endNodeId))
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: Start node %u or end node %u does not exist", startNodeId, endNodeId);
+        return std::vector<TravelPath>();
+    }
+
     std::priority_queue<std::pair<float, uint32>, std::vector<std::pair<float, uint32>>, std::greater<std::pair<float, uint32>>> openSet;
     std::unordered_map<uint32, uint32> cameFrom;
     std::unordered_map<uint32, float> gScore;
@@ -226,35 +232,75 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
     gScore[startNodeId] = 0.0f;
     fScore[startNodeId] = HeuristicCostEstimate(startNodeId, endNodeId);
 
-    while (!openSet.empty())
+    uint32 iterationCount = 0;
+    const uint32 MAX_ITERATIONS = 10000; // Adjust as needed
+
+    while (!openSet.empty() && iterationCount < MAX_ITERATIONS)
     {
         uint32 current = openSet.top().second;
         openSet.pop();
 
         if (current == endNodeId)
         {
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Path found from %u to %u in %u iterations", startNodeId, endNodeId, iterationCount);
             return ReconstructPath(cameFrom, current);
         }
 
-        const auto& connections = m_nodeConnections.find(current);
-        if (connections != m_nodeConnections.end())
+        auto linkRange = GetNodeLinks(current);
+        if (linkRange.first == linkRange.second)
         {
-            for (uint32 neighbor : connections->second)
-            {
-                float tentativeGScore = gScore[current] + GetPathCost(current, neighbor, isCorpseRun);
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: No links found for node %u", current);
+            continue;
+        }
 
-                if (!gScore.count(neighbor) || tentativeGScore < gScore[neighbor])
-                {
-                    cameFrom[neighbor] = current;
-                    gScore[neighbor] = tentativeGScore;
-                    fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endNodeId);
-                    openSet.push(std::make_pair(fScore[neighbor], neighbor));
-                }
+        for (auto it = linkRange.first; it != linkRange.second; ++it)
+        {
+            const TravelNodeLink& link = it->second;
+            uint32 neighbor = link.toNodeId;
+            TravelNodePathType linkType = static_cast<TravelNodePathType>(link.type);
+
+            // Skip invalid path types
+            if (linkType != TravelNodePathType::Walk && linkType != TravelNodePathType::FlightPath)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Skipping invalid link type %u from node %u to %u",
+                    static_cast<uint32>(linkType), current, neighbor);
+                continue;
+            }
+
+            // Skip FlightPath during corpse runs
+            if (isCorpseRun && linkType == TravelNodePathType::FlightPath)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Skipping FlightPath during corpse run from node %u to %u",
+                    current, neighbor);
+                continue;
+            }
+
+            float tentativeGScore = gScore[current] + GetPathCost(current, neighbor, isCorpseRun);
+
+            if (!gScore.count(neighbor) || tentativeGScore < gScore[neighbor])
+            {
+                cameFrom[neighbor] = current;
+                gScore[neighbor] = tentativeGScore;
+                fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endNodeId);
+                openSet.push(std::make_pair(fScore[neighbor], neighbor));
+
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Added node %u to path (from %u), gScore: %.2f, fScore: %.2f",
+                    neighbor, current, gScore[neighbor], fScore[neighbor]);
             }
         }
+
+        iterationCount++;
     }
 
-    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: No path found from %u to %u", startNodeId, endNodeId);
+    if (iterationCount >= MAX_ITERATIONS)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: Path finding exceeded maximum iterations from %u to %u", startNodeId, endNodeId);
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: No path found from %u to %u after %u iterations", startNodeId, endNodeId, iterationCount);
+    }
+
     return std::vector<TravelPath>();
 }
 
@@ -277,15 +323,46 @@ float WorldBotTravelSystem::GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool
     {
         if (it->second.toNodeId == toNodeId)
         {
-            float cost = it->second.distance + it->second.swimDistance;
+            TravelNodePathType linkType = static_cast<TravelNodePathType>(it->second.type);
+
+            // Only consider Walk and FlightPath
+            if (linkType != TravelNodePathType::Walk && linkType != TravelNodePathType::FlightPath)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Invalid path type %u from node %u to %u",
+                    static_cast<uint32>(linkType), fromNodeId, toNodeId);
+                return std::numeric_limits<float>::max();
+            }
+
+            // Disallow FlightPath during corpse runs
+            if (isCorpseRun && linkType == TravelNodePathType::FlightPath)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: FlightPath not allowed during corpse run from node %u to %u",
+                    fromNodeId, toNodeId);
+                return std::numeric_limits<float>::max();
+            }
+
+            float cost = it->second.distance + it->second.swimDistance + it->second.extraCost;
+
+            if (linkType == TravelNodePathType::FlightPath)
+            {
+                // Add a small cost for flight paths to prefer walking for shorter distances
+                cost += 20.0f;
+            }
+
             if (isCorpseRun)
             {
-                // Adjust cost for corpse runs (e.g., prefer safer routes)
-                cost *= (1.0f - 0.2f * static_cast<float>(it->second.type == static_cast<uint32>(TravelNodePathType::Walk)));
+                // Slightly increase cost for corpse runs to prefer safer routes
+                cost *= 1.2f;
             }
-            return cost + it->second.extraCost;
+
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: Path cost from node %u to %u: %.2f (type: %u, corpse run: %s)",
+                fromNodeId, toNodeId, cost, static_cast<uint32>(linkType), isCorpseRun ? "yes" : "no");
+
+            return cost;
         }
     }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotTravelSystem: No valid link found from node %u to %u", fromNodeId, toNodeId);
     return std::numeric_limits<float>::max();
 }
 
@@ -472,7 +549,7 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
 
     float directDistance = me->GetDistance(x, y, z);
     bool isSameMap = (me->GetMapId() == mapId);
-    bool isCloseEnough = (directDistance < 1000.0f) && isSameMap; // Adjust this threshold as needed
+    bool isCloseEnough = (directDistance < 500.0f) && isSameMap; // Adjust this threshold as needed
 
     const TravelNode* startNode = sWorldBotTravelSystem.GetNearestNode(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetMapId());
     const TravelNode* endNode = sWorldBotTravelSystem.GetNearestNode(x, y, z, mapId);
@@ -497,6 +574,23 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
 
     if (m_currentPath.empty())
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s from node %u to node %u. Attempting direct movement.",
+            me->GetName(), startNode->id, endNode->id);
+
+        // Attempt direct movement to the destination
+        me->GetMotionMaster()->MovePoint(0, x, y, z, MOVE_PATHFINDING);
+
+        m_isSpecificDestinationPath = true;
+        m_isRunningToCorpse = isCorpseRun;
+        if (isCorpseRun)
+            m_corpseRunTimer.Reset(CORPSE_RUN_TIMEOUT);
+
+        return true;
+    }
+
+    // If we still don't find any path..
+    if (m_currentPath.empty())
+    {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBotAI: Unable to find path for bot %s , teleporting to nearest graveyard.", me->GetName());
 
         // Get nearest graveyard.
@@ -515,8 +609,25 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
             m_isRunningToCorpse = false;
         }
 
-        return false;
+        return true;
     }
+
+    // Find the closest point in the path to the destination
+    float closestDistance = std::numeric_limits<float>::max();
+    size_t closestIndex = m_currentPath.size() - 1;
+
+    for (size_t i = 0; i < m_currentPath.size(); ++i)
+    {
+        float distance = sWorldBotTravelSystem.GetDistance3D(x, y, z, m_currentPath[i]);
+        if (distance < closestDistance)
+        {
+            closestDistance = distance;
+            closestIndex = i;
+        }
+    }
+
+    // Truncate the path to the closest point
+    m_currentPath.resize(closestIndex + 1);
 
     // Add the final destination point if it's not exactly at a node
     if (m_currentPath.back().x != x || m_currentPath.back().y != y || m_currentPath.back().z != z)
@@ -545,37 +656,75 @@ bool WorldBotAI::StartNewPathToSpecificDestination(float x, float y, float z, ui
     return true;
 }
 
-bool WorldBotTravelSystem::ResumePath(Player* me, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun)
+bool WorldBotTravelSystem::ResumePath(WorldBotAI* botAI)
 {
-    if (currentPath.empty())
+    Player* me = botAI->me;
+    if (botAI->m_currentPath.empty() && botAI->m_grindHotSpots.empty() && !botAI->hasPoiDestination)
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: No path to resume for bot %s", me->GetName());
         return false; // No path to resume
     }
 
-    // Find the nearest point on the path that is ahead of the current index
     float shortestDistance = std::numeric_limits<float>::max();
-    size_t nearestIndex = currentPathIndex;
+    size_t nearestIndex = botAI->m_currentPathIndex;
     bool foundNearerPoint = false;
 
-    for (size_t i = currentPathIndex; i < currentPath.size(); ++i)
+    // Check if we're on a grinding task
+    if (!botAI->m_grindHotSpots.empty())
     {
-        const TravelPath& pathPoint = currentPath[i];
-        float distance = GetDistance3D(*me, pathPoint);
-        if (distance < shortestDistance)
+        // Find the nearest grind hot spot
+        for (size_t i = 0; i < botAI->m_grindHotSpots.size(); ++i)
         {
-            shortestDistance = distance;
-            nearestIndex = i;
-            foundNearerPoint = true;
+            const Position& hotSpot = botAI->m_grindHotSpots[i];
+            float distance = GetDistance3D(*me, hotSpot);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestIndex = i;
+                foundNearerPoint = true;
+            }
+        }
+
+        // If we found a nearer point, update the current hot spot index
+        if (foundNearerPoint)
+        {
+            botAI->m_currentHotSpotIndex = nearestIndex;
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming grind task at hot spot %zu, distance %.2f",
+                me->GetName(), botAI->m_currentHotSpotIndex, shortestDistance);
+            return true;
+        }
+    }
+    // Check if we're on an explore task
+    else if (botAI->hasPoiDestination)
+    {
+        shortestDistance = GetDistance3D(me, botAI->DestCoordinatesX, botAI->DestCoordinatesY, botAI->DestCoordinatesZ);
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s resuming explore task to destination (%.2f, %.2f, %.2f), distance %.2f",
+            me->GetName(), botAI->DestCoordinatesX, botAI->DestCoordinatesY, botAI->DestCoordinatesZ, shortestDistance);
+        return true;
+    }
+    else if (!botAI->m_currentPath.empty())
+    {
+        // Original path resuming logic
+        for (size_t i = botAI->m_currentPathIndex; i < botAI->m_currentPath.size(); ++i)
+        {
+            const TravelPath& pathPoint = botAI->m_currentPath[i];
+            float distance = GetDistance3D(*me, pathPoint);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestIndex = i;
+                foundNearerPoint = true;
+            }
         }
     }
 
     // Determine the maximum resume distance based on the path type
     float maxResumeDistance;
-    if (isCorpseRun)
+    if (botAI->m_isRunningToCorpse)
     {
         maxResumeDistance = 200.0f;  // Allow a larger distance for corpse runs
     }
-    else if (isSpecificDestinationPath)
+    else if (botAI->m_isSpecificDestinationPath)
     {
         maxResumeDistance = 100.0f;
     }
@@ -586,20 +735,25 @@ bool WorldBotTravelSystem::ResumePath(Player* me, std::vector<TravelPath>& curre
 
     if (shortestDistance > maxResumeDistance)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s", me->GetName(), shortestDistance, maxResumeDistance,
-            isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"));
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: %s too far from path (%.2f > %.2f), cannot resume %s",
+            me->GetName(), shortestDistance, maxResumeDistance,
+            botAI->m_isRunningToCorpse ? "corpse run" : (botAI->m_isSpecificDestinationPath ? "specific path" : "regular path"));
         return false;
     }
 
     // Only update the current index if we found a nearer point ahead on the path
     if (foundNearerPoint)
     {
-        currentPathIndex = nearestIndex;
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s resuming %s at index %zu, distance %.2f", me->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex, shortestDistance);
+        botAI->m_currentPathIndex = nearestIndex;
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s resuming %s at index %zu, distance %.2f",
+            me->GetName(), botAI->m_isRunningToCorpse ? "corpse run" : (botAI->m_isSpecificDestinationPath ? "specific path" : "regular path"),
+            botAI->m_currentPathIndex, shortestDistance);
     }
     else
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s continuing on current %s at index %zu", me->GetName(), isCorpseRun ? "corpse run" : (isSpecificDestinationPath ? "specific path" : "regular path"), currentPathIndex);
+        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotTravelSystem: %s continuing on current %s at index %zu",
+            me->GetName(), botAI->m_isRunningToCorpse ? "corpse run" : (botAI->m_isSpecificDestinationPath ? "specific path" : "regular path"),
+            botAI->m_currentPathIndex);
     }
 
     return true;
@@ -756,6 +910,7 @@ void WorldBotAI::HandleGrindTaskCompletion()
     }
 }
 
+/*
 uint32 GetRandomTaxiNode(uint32 mapid, Team team)
 {
     std::vector<uint32> nodeIds;
@@ -775,7 +930,7 @@ uint32 GetRandomTaxiNode(uint32 mapid, Team team)
     uint32 id = 0;
     id = SelectRandomContainerElement(nodeIds);
     return id;
-}
+}*/
 
 bool WorldBotAI::ExecuteNodeAction(uint32 nodeId)
 {

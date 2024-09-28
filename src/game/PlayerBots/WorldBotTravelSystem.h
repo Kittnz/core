@@ -14,6 +14,8 @@
 #include "Platform/Define.h"
 #include "Player.h"
 
+class WorldBotAI;
+
 enum class TravelNodePathType : uint8
 {
     None = 0,
@@ -98,7 +100,9 @@ public:
         return m_travelNodeLinks.equal_range(nodeId);
     }
 
-    bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun);
+    //bool ResumePath(Player* player, std::vector<TravelPath>& currentPath, size_t& currentPathIndex, bool isSpecificDestinationPath, bool isCorpseRun);
+    bool ResumePath(WorldBotAI* botAI);
+
     const std::map<uint32, TravelNode>& GetAllNodes() const
     {
         return m_travelNodes;
@@ -148,6 +152,15 @@ public:
         float dy = y1 - point.y;
         float dz = z1 - point.z;
         return std::sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    static float GetDistance3D(const Player* player, float x, float y, float z)
+    {
+        float dx = player->GetPositionX() - x;
+        float dy = player->GetPositionY() - y;
+        float dz = player->GetPositionZ() - z;
+        float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
+        return (dist > 0 ? dist : 0);
     }
 
 private:

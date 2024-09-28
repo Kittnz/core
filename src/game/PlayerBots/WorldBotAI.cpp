@@ -784,7 +784,7 @@ void WorldBotAI::UpdateWaypointMovement()
             return;
         }
 
-        if (sWorldBotTravelSystem.ResumePath(me, m_currentPath, m_currentPathIndex, m_isSpecificDestinationPath, m_isRunningToCorpse))
+        if (sWorldBotTravelSystem.ResumePath(this))
         {
             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: %s resuming current path", me->GetName());
             MoveToNextPoint();
@@ -1086,6 +1086,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     if (m_taskManager.GetCurrentTaskId() == TASK_DUAL)
     {
         UpdateDualingBehavior();
+        //return;
     }
 
     // party bot

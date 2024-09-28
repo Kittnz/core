@@ -164,6 +164,7 @@ void PlayerBotMgr::Load()
         sWorldBotTravelSystem.LoadTravelPaths();
         sWorldBotChat.LoadPlayerChat();
         WorldBotLoadAreaPOI();
+        WorldBotLoadGrindProfiles();
 
         // Load db characters
         m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
@@ -2256,19 +2257,28 @@ void PlayerBotMgr::WorldBotCreator()
 
     auto selectBotsByLevel = [&](std::vector<WorldBotsCollection>& bots, uint32 maxCount) {
         std::vector<WorldBotsCollection> selectedBots;
-        for (const auto& range : levelRanges) {
-            uint32 botsInRange = std::count_if(bots.begin(), bots.end(), [&](const WorldBotsCollection& bot) {
-                return bot.level >= range.minLevel && bot.level <= range.maxLevel;
-                });
-            uint32 botsToSelect = std::min(static_cast<uint32>(maxCount * range.percentage), botsInRange);
+        if (maxCount == 1) {
+            // If we only need one bot, select it randomly from all available bots
+            if (!bots.empty()) {
+                uint32 randomIndex = urand(0, bots.size() - 1);
+                selectedBots.push_back(bots[randomIndex]);
+            }
+        }
+        else {
+            for (const auto& range : levelRanges) {
+                uint32 botsInRange = std::count_if(bots.begin(), bots.end(), [&](const WorldBotsCollection& bot) {
+                    return bot.level >= range.minLevel && bot.level <= range.maxLevel;
+                    });
+                uint32 botsToSelect = std::min(static_cast<uint32>(maxCount * range.percentage), botsInRange);
 
-            std::vector<WorldBotsCollection> rangeBots;
-            std::copy_if(bots.begin(), bots.end(), std::back_inserter(rangeBots), [&](const WorldBotsCollection& bot) {
-                return bot.level >= range.minLevel && bot.level <= range.maxLevel;
-                });
+                std::vector<WorldBotsCollection> rangeBots;
+                std::copy_if(bots.begin(), bots.end(), std::back_inserter(rangeBots), [&](const WorldBotsCollection& bot) {
+                    return bot.level >= range.minLevel && bot.level <= range.maxLevel;
+                    });
 
-            std::random_shuffle(rangeBots.begin(), rangeBots.end());
-            selectedBots.insert(selectedBots.end(), rangeBots.begin(), rangeBots.begin() + botsToSelect);
+                std::random_shuffle(rangeBots.begin(), rangeBots.end());
+                selectedBots.insert(selectedBots.end(), rangeBots.begin(), rangeBots.begin() + botsToSelect);
+            }
         }
         return selectedBots;
         };
@@ -2396,8 +2406,6 @@ bool ChatHandler::HandleWorldBotStatsCommand(char* args)
     PSendSysMessage("Available Horde Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(HORDE));
     PSendSysMessage("Available Alliance Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(ALLIANCE));
 
-    //sPlayerBotMgr.PrintImplementedTasks();
-
     return true;
 }
 
@@ -2416,18 +2424,69 @@ bool ChatHandler::HandleWorldBotInfoCommand(char* args)
         if (WorldBotAI* worldBotAI = dynamic_cast<WorldBotAI*>(target->AI()))
         {
             PSendSysMessage("World Bot Info for %s:", target->GetName());
-            PSendSysMessage("Current Task: %s", worldBotAI->GetCurrentTaskName().c_str());
+            PSendSysMessage("Current Task: %s (ID: %u)", worldBotAI->GetCurrentTaskName().c_str(), worldBotAI->GetCurrentTaskId());
             PSendSysMessage("Time until next task: %u seconds", worldBotAI->GetTimeUntilNextTask());
 
-            if (worldBotAI->GetCurrentTaskId() == TASK_GRIND)
+            // Current position
+            PSendSysMessage("Current Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
+                target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetMapId());
+
+            // Path and next node info
+            if (!worldBotAI->m_currentPath.empty())
+            {
+                const TravelPath& destination = worldBotAI->m_currentPath.back();
+                PSendSysMessage("Final Destination: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
+                    destination.x, destination.y, destination.z, destination.mapId);
+                PSendSysMessage("Path Size: %zu, Current Index: %zu",
+                    worldBotAI->m_currentPath.size(), worldBotAI->m_currentPathIndex);
+
+                // Next node information
+                if (worldBotAI->m_currentPathIndex < worldBotAI->m_currentPath.size())
+                {
+                    const TravelPath& nextNode = worldBotAI->m_currentPath[worldBotAI->m_currentPathIndex];
+                    const TravelNode* node = sWorldBotTravelSystem.GetNode(nextNode.nodeId);
+                    if (node)
+                    {
+                        PSendSysMessage("Next Node: %s (ID: %u)", node->name.c_str(), node->id);
+                        PSendSysMessage("Next Node Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
+                            nextNode.x, nextNode.y, nextNode.z, nextNode.mapId);
+                    }
+                    else
+                    {
+                        PSendSysMessage("Next Node: Unknown (ID: %u)", nextNode.nodeId);
+                        PSendSysMessage("Next Node Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
+                            nextNode.x, nextNode.y, nextNode.z, nextNode.mapId);
+                    }
+                }
+                else
+                {
+                    PSendSysMessage("No next node - bot has reached the end of its path.");
+                }
+            }
+            else
+            {
+                PSendSysMessage("No current path set.");
+            }
+
+            // Task-specific info
+            switch (worldBotAI->GetCurrentTaskId())
+            {
+            case TASK_GRIND:
             {
                 Position nextGrindSpot = worldBotAI->GetNextGrindSpot();
                 PSendSysMessage("Next Grind Position: X: %.2f, Y: %.2f, Z: %.2f",
                     nextGrindSpot.x, nextGrindSpot.y, nextGrindSpot.z);
+                PSendSysMessage("Grind Hotspots: %zu", worldBotAI->m_grindHotSpots.size());
+                PSendSysMessage("Current Hotspot Index: %u", worldBotAI->m_currentHotSpotIndex);
+                break;
             }
-            else if (worldBotAI->GetCurrentTaskId() == TASK_EXPLORE)
+            case TASK_EXPLORE:
             {
                 PSendSysMessage("Exploration Destination: %s", worldBotAI->GetExploreDestinationName().c_str());
+                PSendSysMessage("Has POI Destination: %s", worldBotAI->hasPoiDestination ? "Yes" : "No");
+                break;
+            }
+            // Add cases for other tasks as needed
             }
 
             return true;
@@ -2539,32 +2598,6 @@ void PlayerBotMgr::WorldBotBalancer(uint32 diff)
     }
 }
 
-void PlayerBotMgr::PrintImplementedTasks() const
-{
-    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "PlayerBotMgr: Implemented tasks:");
-
-    for (const auto& botPair : m_bots)
-    {
-        if (botPair.second->ai)
-        {
-            if (WorldBotAI* worldBotAI = dynamic_cast<WorldBotAI*>(botPair.second->ai.get()))
-            {
-                std::vector<uint8> implementedTasks = worldBotAI->m_taskManager.GetImplementedTaskIds();
-                for (uint8 taskId : implementedTasks)
-                {
-                    const WorldBotTask* task = worldBotAI->m_taskManager.FindTaskById(taskId);
-                    if (task)
-                    {
-                        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "  - %s (ID: %u)", task->name.c_str(), task->id);
-                    }
-                }
-                // We only need to print tasks from one bot, as they should all have the same tasks
-                break;
-            }
-        }
-    }
-}
-
 void PlayerBotMgr::WorldBotLoadAreaPOI()
 {
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, ">> Loading poi's from db..");
@@ -2602,4 +2635,42 @@ void PlayerBotMgr::WorldBotLoadAreaPOI()
 
         } while (result->NextRow());
     }
+}
+
+void PlayerBotMgr::WorldBotLoadGrindProfiles()
+{
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Loading grind profiles...");
+    m_grindProfiles.clear();
+
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query(
+        "SELECT Guid, FileName, HotSpots, EntryTarget, MaxLevel, MinLevel, QuestType, Faction, MapId "
+        "FROM worldbot_easy_quest_profiles "
+        "WHERE QuestType = 'KillAndLoot' AND HotSpots != '' AND HotSpots IS NOT NULL "
+        "AND EntryTarget != '' AND EntryTarget IS NOT NULL"
+    ));
+
+    if (!result)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "No grind profiles found in the database.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        WorldBotGrindProfile profile;
+        profile.guid = fields[0].GetUInt32();
+        profile.fileName = fields[1].GetCppString();
+        profile.hotSpots = fields[2].GetCppString();
+        profile.entryTarget = fields[3].GetCppString();
+        profile.maxLevel = fields[4].GetUInt32();
+        profile.minLevel = fields[5].GetUInt32();
+        profile.questType = fields[6].GetCppString();
+        profile.faction = fields[7].GetCppString();
+        profile.mapId = fields[8].GetUInt32();
+
+        m_grindProfiles.push_back(profile);
+    } while (result->NextRow());
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Loaded %u grind profiles.", m_grindProfiles.size());
 }

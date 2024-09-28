@@ -296,6 +296,7 @@ public:
     bool SetGrindDestination();
     bool HasReachedGrindDestination() const;
     void CreatePathFromHotSpots();
+    bool ShouldStopGrinding() const;
     void UpdateGrindingBehavior();
     Unit* FindEntryTargetToAttack();
     std::vector<std::string> SplitString(const std::string& str, char delim);
@@ -303,6 +304,7 @@ public:
     void MoveToNextGrindSpot();
     bool IsValidEntryTargetLevel(uint32 entryId);
     void UpdateMaxLevelForGrindProfiles();
+    void ParseHotSpots(const std::string& hotSpotsStr);
 
     std::vector<Position> m_grindHotSpots;
     uint32 m_grindEntryTarget;
