@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "GridSearchers.h"
 #include "Creature.h"
+#include <cmath>
 
 bool WorldBotAI::CanPerformGrind() const
 {

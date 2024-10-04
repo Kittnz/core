@@ -59,6 +59,9 @@ struct TravelPath
     float x, y, z;
 };
 
+
+#define SPELL_UNDYING_SOUL 20939
+
 class WorldBotTravelSystem
 {
 public:
@@ -79,9 +82,10 @@ public:
     std::vector<uint32> GetPathToPosition(float x, float y, float z, uint32 mapId) const;
     uint32 GetNearestNodeId(float x, float y, float z, uint32 mapId) const;
     bool CanReachByWalking(uint32 startNodeId, uint32 endNodeId) const;
-    std::vector<TravelPath> FindPath(uint32 startNodeId, uint32 endNodeId, bool isCorpseRun = false) const;
+    bool AreNodesConnected(uint32 startNodeId, uint32 endNodeId) const;
+    std::vector<TravelPath> FindPath(uint32 startNodeId, uint32 endNodeId, bool isCorpseRun = false, bool allowFlightPaths = true) const;
     float HeuristicCostEstimate(uint32 fromNodeId, uint32 toNodeId) const;
-    float GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool isCorpseRun = false) const;
+    float GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool isCorpseRun = false, bool allowFlightPaths = true) const;
     std::vector<TravelPath> FindPathWithoutFlightPaths(uint32 startNodeId, uint32 endNodeId) const;
     float GetPathCostWithoutFlightPaths(uint32 fromNodeId, uint32 toNodeId) const;
     bool IsFlightPathLink(uint32 fromNodeId, uint32 toNodeId) const;
@@ -113,6 +117,15 @@ public:
     void ShowCurrentPath(Player* me, const std::vector<TravelPath>& currentPath, size_t currentPathIndex, uint32 currentNodeId);
     void ShowAllPathsAndNodes(Player* me);
     void ClearPathVisuals(Player* me);
+    void VisualizeNode(Player* player, const TravelNode* node);
+    void VisualizePath(Player* player, const std::vector<TravelPath>& path);
+    void VisualizeAllNodes(Player* player);
+    void VisualizeAllPaths(Player* player, const std::vector<TravelPath>& paths);
+
+    float GetAveragePathFindingTime() const;
+    uint32 GetTotalPathsFound() const;
+    uint32 GetFailedPathFindings() const;
+    float GetAverageNodeActionsPerSecond() const;
 
     // Primary template for GetDistance3D
     template<class A, class B>
@@ -163,6 +176,14 @@ public:
         return (dist > 0 ? dist : 0);
     }
 
+    static float GetDistance3D(float x1, float y1, float z1, float x2, float y2, float z2)
+    {
+        float dx = x1 - x2;
+        float dy = y1 - y2;
+        float dz = z1 - z2;
+        return std::sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
 private:
     WorldBotTravelSystem(); // Declaration only
     ~WorldBotTravelSystem();
@@ -194,6 +215,13 @@ private:
 
     // Path and Node visuals
     std::map<ObjectGuid, std::vector<ObjectGuid>> m_pathVisuals;
+
+    // Performance tracking
+    mutable uint32 m_totalPathFindingTime;
+    mutable uint32 m_totalPathsFound;
+    mutable uint32 m_failedPathFindings;
+    mutable uint32 m_totalNodeActions;
+    mutable uint32 m_lastNodeActionReset;
 };
 
 // Define a convenient macro

@@ -305,6 +305,9 @@ class ChatHandler
         bool HandleWorldBotRemoveCommand(char* args);
         bool HandleWorldBotShowCurrentPathCommand(char* args);
         bool HandleWorldBotShowAllPathsCommand(char* args);
+        bool HandleWorldBotShowNodeCommand(char* args);
+        bool HandleWorldBotShowPathCommand(char* args);
+        bool HandleWorldBotShowAllNodesCommand(char* args);
         bool HandleWorldBotClearPathVisualsCommand(char* args);
         bool HandleWorldBotStatsCommand(char* args);
         bool HandleWorldBotInfoCommand(char* args);

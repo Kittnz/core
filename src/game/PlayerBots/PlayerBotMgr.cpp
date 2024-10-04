@@ -2137,8 +2137,115 @@ bool ChatHandler::HandleWorldBotShowCurrentPathCommand(char* args)
 
 bool ChatHandler::HandleWorldBotShowAllPathsCommand(char* args)
 {
-    Player* pPlayer = m_session->GetPlayer();
-    sWorldBotTravelSystem.ShowAllPathsAndNodes(pPlayer);
+    Player* player = m_session->GetPlayer();
+    uint32 mapId = player->GetMapId();
+
+    const auto& allNodes = sWorldBotTravelSystem.GetAllNodes();
+    std::vector<TravelPath> allPaths;
+
+    for (const auto& nodePair : allNodes)
+    {
+        if (nodePair.second.mapId == mapId)
+        {
+            auto pathsFromNode = sWorldBotTravelSystem.GetAllPathsFromNode(nodePair.first);
+            for (auto it = pathsFromNode.first; it != pathsFromNode.second; ++it)
+            {
+                allPaths.push_back(it->second);
+            }
+        }
+    }
+
+    PSendSysMessage("Total Paths on current map: %u", allPaths.size());
+
+    // Visualize all paths
+    sWorldBotTravelSystem.VisualizeAllPaths(player, allPaths);
+
+    return true;
+}
+
+bool ChatHandler::HandleWorldBotShowNodeCommand(char* args)
+{
+    uint32 nodeId;
+    if (!ExtractUInt32(&args, nodeId))
+    {
+        SendSysMessage("Usage: .worldbot show_node <nodeId>");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    const TravelNode* node = sWorldBotTravelSystem.GetNode(nodeId);
+    if (!node)
+    {
+        PSendSysMessage("Node with ID %u not found.", nodeId);
+        return false;
+    }
+
+    PSendSysMessage("Node %u: %s", node->id, node->name.c_str());
+    PSendSysMessage("Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u", node->x, node->y, node->z, node->mapId);
+    PSendSysMessage("Linked: %s", node->linked ? "Yes" : "No");
+
+    auto linkRange = sWorldBotTravelSystem.GetNodeLinks(nodeId);
+    for (auto it = linkRange.first; it != linkRange.second; ++it)
+    {
+        const TravelNodeLink& link = it->second;
+        PSendSysMessage("Link to Node %u: Type: %u, Distance: %.2f, Swim Distance: %.2f, Extra Cost: %u",
+            link.toNodeId, link.type, link.distance, link.swimDistance, link.extraCost);
+    }
+
+    // Visualize the node
+    Player* player = m_session->GetPlayer();
+    sWorldBotTravelSystem.VisualizeNode(player, node);
+
+    return true;
+}
+
+bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
+{
+    uint32 fromNodeId, toNodeId;
+    if (!ExtractUInt32(&args, fromNodeId) || !ExtractUInt32(&args, toNodeId))
+    {
+        SendSysMessage("Usage: .worldbot show_path <fromNodeId> <toNodeId>");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::vector<TravelPath> path = sWorldBotTravelSystem.FindPath(fromNodeId, toNodeId);
+    if (path.empty())
+    {
+        PSendSysMessage("No path found between nodes %u and %u.", fromNodeId, toNodeId);
+        return false;
+    }
+
+    PSendSysMessage("Path from Node %u to Node %u:", fromNodeId, toNodeId);
+    for (const auto& pathPoint : path)
+    {
+        PSendSysMessage("Node %u: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
+            pathPoint.nodeId, pathPoint.x, pathPoint.y, pathPoint.z, pathPoint.mapId);
+    }
+
+    // Visualize the path
+    Player* player = m_session->GetPlayer();
+    sWorldBotTravelSystem.VisualizePath(player, path);
+
+    return true;
+}
+
+bool ChatHandler::HandleWorldBotShowAllNodesCommand(char* args)
+{
+    const auto& allNodes = sWorldBotTravelSystem.GetAllNodes();
+    PSendSysMessage("Total Nodes: %u", allNodes.size());
+
+    for (const auto& pair : allNodes)
+    {
+        const TravelNode& node = pair.second;
+        PSendSysMessage("Node %u: %s (X: %.2f, Y: %.2f, Z: %.2f, Map: %u)",
+            node.id, node.name.c_str(), node.x, node.y, node.z, node.mapId);
+    }
+
+    // Visualize all nodes
+    Player* player = m_session->GetPlayer();
+    sWorldBotTravelSystem.VisualizeAllNodes(player);
+
     return true;
 }
 
@@ -2406,6 +2513,13 @@ bool ChatHandler::HandleWorldBotStatsCommand(char* args)
     PSendSysMessage("Available Horde Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(HORDE));
     PSendSysMessage("Available Alliance Bots: %u", sPlayerBotMgr.GetAvailableBotsCount(ALLIANCE));
 
+    // Add performance stats
+    PSendSysMessage("Performance Statistics:");
+    PSendSysMessage("Average Path Finding Time: %.2f ms", sWorldBotTravelSystem.GetAveragePathFindingTime());
+    PSendSysMessage("Total Paths Found: %u", sWorldBotTravelSystem.GetTotalPathsFound());
+    PSendSysMessage("Failed Path Findings: %u", sWorldBotTravelSystem.GetFailedPathFindings());
+    PSendSysMessage("Average Node Actions per Second: %.2f", sWorldBotTravelSystem.GetAverageNodeActionsPerSecond());
+
     return true;
 }
 
@@ -2419,83 +2533,70 @@ bool ChatHandler::HandleWorldBotInfoCommand(char* args)
         return false;
     }
 
-    if (target->AI())
+    WorldBotAI* botAI = static_cast<WorldBotAI*>(target->AI());
+    if (!botAI)
     {
-        if (WorldBotAI* worldBotAI = dynamic_cast<WorldBotAI*>(target->AI()))
-        {
-            PSendSysMessage("World Bot Info for %s:", target->GetName());
-            PSendSysMessage("Current Task: %s (ID: %u)", worldBotAI->GetCurrentTaskName().c_str(), worldBotAI->GetCurrentTaskId());
-            PSendSysMessage("Time until next task: %u seconds", worldBotAI->GetTimeUntilNextTask());
-
-            // Current position
-            PSendSysMessage("Current Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
-                target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetMapId());
-
-            // Path and next node info
-            if (!worldBotAI->m_currentPath.empty())
-            {
-                const TravelPath& destination = worldBotAI->m_currentPath.back();
-                PSendSysMessage("Final Destination: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
-                    destination.x, destination.y, destination.z, destination.mapId);
-                PSendSysMessage("Path Size: %zu, Current Index: %zu",
-                    worldBotAI->m_currentPath.size(), worldBotAI->m_currentPathIndex);
-
-                // Next node information
-                if (worldBotAI->m_currentPathIndex < worldBotAI->m_currentPath.size())
-                {
-                    const TravelPath& nextNode = worldBotAI->m_currentPath[worldBotAI->m_currentPathIndex];
-                    const TravelNode* node = sWorldBotTravelSystem.GetNode(nextNode.nodeId);
-                    if (node)
-                    {
-                        PSendSysMessage("Next Node: %s (ID: %u)", node->name.c_str(), node->id);
-                        PSendSysMessage("Next Node Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
-                            nextNode.x, nextNode.y, nextNode.z, nextNode.mapId);
-                    }
-                    else
-                    {
-                        PSendSysMessage("Next Node: Unknown (ID: %u)", nextNode.nodeId);
-                        PSendSysMessage("Next Node Position: X: %.2f, Y: %.2f, Z: %.2f, Map: %u",
-                            nextNode.x, nextNode.y, nextNode.z, nextNode.mapId);
-                    }
-                }
-                else
-                {
-                    PSendSysMessage("No next node - bot has reached the end of its path.");
-                }
-            }
-            else
-            {
-                PSendSysMessage("No current path set.");
-            }
-
-            // Task-specific info
-            switch (worldBotAI->GetCurrentTaskId())
-            {
-            case TASK_GRIND:
-            {
-                Position nextGrindSpot = worldBotAI->GetNextGrindSpot();
-                PSendSysMessage("Next Grind Position: X: %.2f, Y: %.2f, Z: %.2f",
-                    nextGrindSpot.x, nextGrindSpot.y, nextGrindSpot.z);
-                PSendSysMessage("Grind Hotspots: %zu", worldBotAI->m_grindHotSpots.size());
-                PSendSysMessage("Current Hotspot Index: %u", worldBotAI->m_currentHotSpotIndex);
-                break;
-            }
-            case TASK_EXPLORE:
-            {
-                PSendSysMessage("Exploration Destination: %s", worldBotAI->GetExploreDestinationName().c_str());
-                PSendSysMessage("Has POI Destination: %s", worldBotAI->hasPoiDestination ? "Yes" : "No");
-                break;
-            }
-            // Add cases for other tasks as needed
-            }
-
-            return true;
-        }
+        PSendSysMessage("Failed to retrieve WorldBotAI for the selected bot.");
+        SetSentErrorMessage(true);
+        return false;
     }
 
-    SendSysMessage("Target is not a World Bot.");
-    SetSentErrorMessage(true);
-    return false;
+    PSendSysMessage("WorldBot Info for %s:", target->GetName());
+    PSendSysMessage("Current Task: %s", botAI->GetCurrentTaskName().c_str());
+    PSendSysMessage("Is Running to Corpse: %s", botAI->m_isRunningToCorpse ? "Yes" : "No");
+    PSendSysMessage("Is Specific Destination Path: %s", botAI->m_isSpecificDestinationPath ? "Yes" : "No");
+
+    if (!botAI->m_currentPath.empty())
+    {
+        size_t totalNodes = botAI->m_currentPath.size();
+        size_t remainingNodes = totalNodes - botAI->m_currentPathIndex;
+
+        PSendSysMessage("Current Path Information:");
+        PSendSysMessage("Total Nodes: %zu", totalNodes);
+        PSendSysMessage("Remaining Nodes: %zu", remainingNodes);
+
+        if (botAI->m_currentPathIndex < totalNodes)
+        {
+            const TravelPath& nextNode = botAI->m_currentPath[botAI->m_currentPathIndex];
+            PSendSysMessage("Next Node: %u (%.2f, %.2f, %.2f)",
+                nextNode.nodeId, nextNode.x, nextNode.y, nextNode.z);
+
+            PSendSysMessage("Upcoming Nodes (up to 5):");
+            for (size_t i = botAI->m_currentPathIndex; i < std::min(botAI->m_currentPathIndex + 5, totalNodes); ++i)
+            {
+                const TravelPath& node = botAI->m_currentPath[i];
+                PSendSysMessage("  Node %zu: %u (%.2f, %.2f, %.2f)",
+                    i - botAI->m_currentPathIndex + 1, node.nodeId, node.x, node.y, node.z);
+            }
+        }
+        else
+        {
+            PSendSysMessage("Bot has reached the end of its current path.");
+        }
+    }
+    else
+    {
+        PSendSysMessage("Bot does not have a current path.");
+    }
+
+    if (botAI->m_isSpecificDestinationPath)
+    {
+        PSendSysMessage("Destination: (%.2f, %.2f, %.2f)",
+            botAI->DestCoordinatesX, botAI->DestCoordinatesY, botAI->DestCoordinatesZ);
+    }
+
+    if (!botAI->m_grindHotSpots.empty())
+    {
+        PSendSysMessage("Grind Hotspots:");
+        for (size_t i = 0; i < botAI->m_grindHotSpots.size(); ++i)
+        {
+            const Position& hotSpot = botAI->m_grindHotSpots[i];
+            PSendSysMessage("  Hotspot %zu: (%.2f, %.2f, %.2f)", i + 1, hotSpot.x, hotSpot.y, hotSpot.z);
+        }
+        PSendSysMessage("Current Hotspot Index: %zu", botAI->m_currentHotSpotIndex);
+    }
+
+    return true;
 }
 
 void PlayerBotMgr::WorldBotBalancer(uint32 diff)
