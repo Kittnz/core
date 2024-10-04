@@ -625,7 +625,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     //force 2FA for staff accounts.
-                    if (securityRank >= forcePinAccountRank || lockFlags == FIXED_PIN)
+                    /*if (securityRank >= forcePinAccountRank || lockFlags == FIXED_PIN)
                     {
                         std::string address = get_remote_address();
                         LoginDatabase.escape_string(address);
@@ -647,7 +647,7 @@ bool AuthSocket::_HandleLogonChallenge()
                         }
                         else
                             promptPin = true;
-                    }
+                    }*/
 
                     if (promptPin)
                     {
