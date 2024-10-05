@@ -247,8 +247,8 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotTravelSystem: Finding path from node %u to node %u (Allow flight paths: %s)",
         startNodeId, endNodeId, allowFlightPaths ? "Yes" : "No");
 
-    const TravelNode* startNode = this->GetNode(startNodeId);
-    const TravelNode* endNode = this->GetNode(endNodeId);
+    const TravelNode* startNode = GetNode(startNodeId);
+    const TravelNode* endNode = GetNode(endNodeId);
 
     if (!startNode || !endNode)
     {
@@ -265,7 +265,7 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
     std::unordered_map<uint32, float> fScore;
 
     gScore[startNodeId] = 0.0f;
-    fScore[startNodeId] = this->HeuristicCostEstimate(startNodeId, endNodeId);
+    fScore[startNodeId] = HeuristicCostEstimate(startNodeId, endNodeId);
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Initial state - Start node: %u, End node: %u, Initial f-score: %f",
         startNodeId, endNodeId, fScore[startNodeId]);
@@ -284,10 +284,10 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
         if (current == endNodeId)
         {
             sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Path found from %u to %u in %u iterations", startNodeId, endNodeId, iterationCount);
-            return this->ReconstructPath(cameFrom, current);
+            return ReconstructPath(cameFrom, current);
         }
 
-        auto linkRange = this->GetNodeLinks(current);
+        auto linkRange = GetNodeLinks(current);
         for (auto it = linkRange.first; it != linkRange.second; ++it)
         {
             const TravelNodeLink& link = it->second;
@@ -296,7 +296,7 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
 
             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Considering link from %u to %u of type %u", current, neighbor, static_cast<uint32>(linkType));
 
-            if (linkType != TravelNodePathType::Transport && this->GetNode(neighbor)->mapId != startNode->mapId)
+            if (linkType != TravelNodePathType::Transport && GetNode(neighbor)->mapId != startNode->mapId)
             {
                 sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Skipping link due to different map ID");
                 continue;
@@ -308,13 +308,13 @@ std::vector<TravelPath> WorldBotTravelSystem::FindPath(uint32 startNodeId, uint3
                 continue;
             }
 
-            float tentativeGScore = gScore[current] + this->GetPathCost(current, neighbor, isCorpseRun, allowFlightPaths);
+            float tentativeGScore = gScore[current] + GetPathCost(current, neighbor, isCorpseRun, allowFlightPaths);
 
             if (!gScore.count(neighbor) || tentativeGScore < gScore[neighbor])
             {
                 cameFrom[neighbor] = current;
                 gScore[neighbor] = tentativeGScore;
-                fScore[neighbor] = gScore[neighbor] + this->HeuristicCostEstimate(neighbor, endNodeId);
+                fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endNodeId);
 
                 auto it = std::find_if(openSet.begin(), openSet.end(),
                     [neighbor](const auto& pair) { return pair.second == neighbor; });
@@ -356,7 +356,7 @@ float WorldBotTravelSystem::HeuristicCostEstimate(uint32 fromNodeId, uint32 toNo
 
 float WorldBotTravelSystem::GetPathCost(uint32 fromNodeId, uint32 toNodeId, bool isCorpseRun, bool allowFlightPaths) const
 {
-    auto linkRange = this->GetNodeLinks(fromNodeId);
+    auto linkRange = GetNodeLinks(fromNodeId);
     for (auto it = linkRange.first; it != linkRange.second; ++it)
     {
         if (it->second.toNodeId == toNodeId)
