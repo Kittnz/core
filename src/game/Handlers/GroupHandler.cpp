@@ -343,7 +343,7 @@ void WorldSession::HandleGroupSetLeaderOpcode(WorldPacket & recv_data)
     Player *player = sObjectMgr.GetPlayer(guid);
 
     /** error handling **/
-    if (!player || !group->IsLeader(GetPlayer()->GetObjectGuid()) || player->GetGroup() != group)
+    if (!player || player == GetPlayer() || !group->IsLeader(GetPlayer()->GetObjectGuid()) || player->GetGroup() != group)
         return;
     /********************/
 
