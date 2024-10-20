@@ -1513,7 +1513,20 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
             break;
         }
         case SPELLFAMILY_HUNTER:
+        {
+            switch (auraSpellInfo->Id)
+            {
+            case 5118: // Aspect of the Cheetah
+            case 13159: // Aspect of the Pack
+            {
+                // dont trigger from non damaging spells, amount is 1 for non damaging spells if they hit
+                if (damage <= 1)
+                    return SPELL_AURA_PROC_FAILED;
+                break;
+            }
+            }
             break;
+        }
         case SPELLFAMILY_PALADIN:
         {
             // Judgement of Light and Judgement of Wisdom
