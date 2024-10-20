@@ -2394,11 +2394,15 @@ void World::DetectDBCLang()
 void World::ProcessAsyncPackets()
 {
     thread_name("AsyncPackets");
-    while (!sWorld.IsStopped())
+    while (!IsStopped())
     {
         do
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+            if (IsStopped())
+                return;
+
         } while (!m_canProcessAsyncPackets);
         
         for (auto const& itr : m_sessions)
