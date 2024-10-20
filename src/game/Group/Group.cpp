@@ -142,7 +142,7 @@ bool Group::Create(ObjectGuid guid, const char * name)
         Player::ConvertInstancesToGroup(leader, this, guid);
 
         // store group in database
-        CharacterDatabase.BeginTransaction();
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId ='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId ='%u'", m_Id);
 
@@ -155,13 +155,11 @@ bool Group::Create(ObjectGuid guid, const char * name)
                                    m_targetIcons[4].GetRawValue(), m_targetIcons[5].GetRawValue(),
                                    m_targetIcons[6].GetRawValue(), m_targetIcons[7].GetRawValue(),
                                    isRaidGroup());
+        CharacterDatabase.CommitTransaction();
     }
 
     if (!AddMember(guid, name))
         return false;
-
-    if (!isBGGroup())
-        CharacterDatabase.CommitTransaction();
 
     _updateLeaderFlag();
 
@@ -600,7 +598,7 @@ void Group::Disband(bool hideDestroy, ObjectGuid initiator)
 
     if (!isBGGroup())
     {
-        CharacterDatabase.BeginTransaction();
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId='%u'", m_Id);
         CharacterDatabase.CommitTransaction();
@@ -1562,8 +1560,10 @@ bool Group::_addMember(ObjectGuid guid, const char* name, bool isAssistant, uint
     if (!isBGGroup())
     {
         // insert into group table
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("INSERT INTO group_member(groupId,memberGuid,assistant,subgroup) VALUES('%u','%u','%u','%u')",
                                    m_Id, member.guid.GetCounter(), ((member.assistant == 1) ? 1 : 0), member.group);
+        CharacterDatabase.CommitTransaction();
     }
 
     return true;
@@ -1598,7 +1598,11 @@ bool Group::_removeMember(ObjectGuid guid)
     }
 
     if (!isBGGroup())
+    {
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE memberGuid='%u'", guid.GetCounter());
+        CharacterDatabase.CommitTransaction();
+    }
 
     if (m_leaderGuid == guid)                               // leader was removed
     {
@@ -1668,7 +1672,7 @@ void Group::_setLeader(ObjectGuid guid)
         uint32 leader_lowguid = m_leaderGuid.GetCounter();
 
         // TODO: set a time limit to have this function run rarely cause it can be slow
-        CharacterDatabase.BeginTransaction();
+        CharacterDatabase.BeginTransaction(m_Id);
 
         // update the group's bound instances when changing leaders
 
@@ -1769,8 +1773,10 @@ bool Group::_swapMembersGroup(ObjectGuid guid, ObjectGuid swapGuid)
     // Don't need to change group counters since we are swapping
     if (!isBGGroup())
     {
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("UPDATE group_member SET subgroup='%u' WHERE memberGuid='%u'", slot->group, guid.GetCounter());
         CharacterDatabase.PExecute("UPDATE group_member SET subgroup='%u' WHERE memberGuid='%u'", swapSlot->group, swapGuid.GetCounter());
+        CharacterDatabase.CommitTransaction();
     }
 
     return true;
@@ -1787,7 +1793,11 @@ bool Group::_setMembersGroup(ObjectGuid guid, uint8 group)
     SubGroupCounterIncrease(group);
 
     if (!isBGGroup())
+    {
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("UPDATE group_member SET subgroup='%u' WHERE memberGuid='%u'", group, guid.GetCounter());
+        CharacterDatabase.CommitTransaction();
+    }
 
     return true;
 }
@@ -1800,7 +1810,11 @@ bool Group::_setAssistantFlag(ObjectGuid guid, const bool &state)
 
     slot->assistant = state;
     if (!isBGGroup())
+    {
+        CharacterDatabase.BeginTransaction(m_Id);
         CharacterDatabase.PExecute("UPDATE group_member SET assistant='%u' WHERE memberGuid='%u'", (state) ? 1 : 0, guid.GetCounter());
+        CharacterDatabase.CommitTransaction();
+    }
 
     return true;
 }
@@ -1823,7 +1837,11 @@ bool Group::_setMainTank(ObjectGuid guid)
     m_mainTankGuid = guid;
 
     if (!isBGGroup())
-        CharacterDatabase.PExecute("UPDATE groups SET mainTank='%u' WHERE groupId='%u'", m_mainTankGuid.GetCounter(), m_Id);
+    {
+        CharacterDatabase.BeginTransaction(m_Id);
+        CharacterDatabase.PExecute("UPDATE `groups` SET `main_tank_guid`='%u' WHERE `group_id`='%u'", m_mainTankGuid.GetCounter(), m_Id);
+        CharacterDatabase.CommitTransaction();
+    }
 
     return true;
 }
@@ -1846,8 +1864,11 @@ bool Group::_setMainAssistant(ObjectGuid guid)
     m_mainAssistantGuid = guid;
 
     if (!isBGGroup())
-        CharacterDatabase.PExecute("UPDATE groups SET mainAssistant='%u' WHERE groupId='%u'",
-                                   m_mainAssistantGuid.GetCounter(), m_Id);
+    {
+        CharacterDatabase.BeginTransaction(m_Id);
+        CharacterDatabase.PExecute("UPDATE `groups` SET `main_assistant_guid`='%u' WHERE `group_id`='%u'", m_mainAssistantGuid.GetCounter(), m_Id);
+        CharacterDatabase.CommitTransaction();
+    }
 
     return true;
 }
