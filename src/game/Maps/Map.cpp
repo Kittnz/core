@@ -282,8 +282,7 @@ void Map::DeleteFromWorld(Player* player)
     delete player;
 }
 
-void
-Map::EnsureGridCreated(const GridPair &p)
+void Map::EnsureGridCreated(const GridPair &p)
 {
     if (!getNGrid(p.x_coord, p.y_coord))
     {
@@ -306,8 +305,7 @@ Map::EnsureGridCreated(const GridPair &p)
     }
 }
 
-void
-Map::EnsureGridLoadedAtEnter(const Cell &cell, Player *player)
+void Map::EnsureGridLoadedAtEnter(const Cell &cell, Player *player)
 {
     NGridType *grid;
 
@@ -361,6 +359,18 @@ bool Map::EnsureGridLoaded(const Cell &cell)
     }
 
     return false;
+}
+
+void Map::ForceLoadGridsAroundPosition(float x, float y)
+{
+    if (!IsLoaded(x, y))
+    {
+        CellPair p = MaNGOS::ComputeCellPair(x, y);
+        Cell cell(p);
+        EnsureGridLoadedAtEnter(cell);
+        NULLNotifier notifier = NULLNotifier();
+        Cell::VisitAllObjects(x, y, this, notifier, GetGridActivationDistance(), false);
+    }
 }
 
 void Map::LoadGrid(const Cell& cell, bool no_unload)

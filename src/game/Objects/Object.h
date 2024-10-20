@@ -160,6 +160,13 @@ class Transport;
 class SpellEntry;
 class Spell;
 
+class NULLNotifier
+{
+public:
+    template<class T> void Visit(GridRefManager<T>& m) {}
+    void Visit(CameraMapType&) {}
+};
+
 typedef std::unordered_map<Player *, UpdateData> UpdateDataMapType;
 struct FactionTemplateEntry;
 struct FactionEntry;
