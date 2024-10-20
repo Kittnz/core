@@ -92,6 +92,7 @@ struct instance_scarlet_monastery : ScriptedInstance
     }
 
     uint32 m_auiEncounter[INSTANCE_SM_MAX_ENCOUNTER];
+    std::string m_strInstData;
 
     uint64 m_uiMograineGUID;
     uint64 m_uiWhitemaneGUID;
@@ -238,6 +239,13 @@ struct instance_scarlet_monastery : ScriptedInstance
             }
 
             m_auiEncounter[0] = uiData;
+
+            if (uiData == STAGE_MOGRAINE_DONE)
+            {
+                OUT_SAVE_INST_DATA;
+                SaveToDB();
+                OUT_SAVE_INST_DATA_COMPLETE;
+            }
         }
     }
 
@@ -267,6 +275,29 @@ struct instance_scarlet_monastery : ScriptedInstance
                 return 12383;
         }
         return 12384;
+    }
+
+    void Load(char const* chrIn) override
+    {
+        if (!chrIn)
+        {
+            OUT_LOAD_INST_DATA_FAIL;
+            return;
+        }
+        OUT_LOAD_INST_DATA(chrIn);
+        std::istringstream loadStream(chrIn);
+        loadStream >> m_auiEncounter[0] >> m_auiEncounter[1];
+        for (uint32& i : m_auiEncounter)
+            if (i == IN_PROGRESS)
+                i = NOT_STARTED;
+        OUT_LOAD_INST_DATA_COMPLETE;
+    }
+    char const* Save() override
+    {
+        std::ostringstream saveStream;
+        saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1];
+        m_strInstData = saveStream.str();
+        return m_strInstData.c_str();
     }
 
     void OnCreatureSpellHit(Unit* pCaster, Creature* receiver, const SpellEntry* spell) override
