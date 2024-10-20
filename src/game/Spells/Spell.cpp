@@ -3899,13 +3899,6 @@ void Spell::cancel()
 
 void Spell::cast(bool skipCheck)
 {
-    if (m_spellInfo->Id <= 0 || m_spellInfo->Id > MAX_SPELL_ID)
-        return;
-
-    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(m_spellInfo->Id);
-    if (!spellInfo)
-        return;
-
     SetExecutedCurrently(true);
 
     if (!m_caster->CheckAndIncreaseCastCounter())

@@ -38,8 +38,6 @@
 
 #include <memory>
 
-#define MAX_SPELL_ID 60000
-
 // For Plainsrunning hackfixes:
 
 #define PLAINSRUNNING_SPELL       12566
