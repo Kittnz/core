@@ -401,7 +401,7 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
             crea->SetHomePosition(x, y, z, 0);
             crea->GetMotionMaster()->Clear();
             crea->GetMotionMaster()->Initialize();
-            crea->GetMotionMaster()->MovePoint(1, x, y, z, true);
+            crea->GetMotionMaster()->MovePoint(1, x, y, z, MOVE_PATHFINDING);
         }
     }
     void SummonGuard()
@@ -415,7 +415,7 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
             crea->SetHomePosition(x, y, z, 0);
             crea->GetMotionMaster()->Clear();
             crea->GetMotionMaster()->Initialize();
-            crea->GetMotionMaster()->MovePoint(1, x, y, z, true);
+            crea->GetMotionMaster()->MovePoint(1, x, y, z, MOVE_PATHFINDING);
         }
     }
 
@@ -444,11 +444,11 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
                             crea->SetFacingToObject(me);
                             //get the angle? :(
                             me->GetPosition(x, y, z);
-                            crea->GetMotionMaster()->MovePoint(1, x, y, z, true);
+                            crea->GetMotionMaster()->MovePoint(1, x, y, z, MOVE_PATHFINDING);
                             crea->SetHomePosition(x, y, z, 0);
                             crea->GetMotionMaster()->Clear();
                             crea->GetMotionMaster()->Initialize();
-                            crea->GetMotionMaster()->MovePoint(1, x, y, z, true);
+                            crea->GetMotionMaster()->MovePoint(1, x, y, z, MOVE_PATHFINDING);
                         }
                     }
                     waveTimer = 60000;

@@ -806,7 +806,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                 float fX{}, fY{}, fZ{};
                 me->GetPosition(fX, fY, fZ);
 
-                pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
+                pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, MOVE_PATHFINDING);
                 pFoulweald->SetHomePosition(fX, fY, fZ, 0.f);
 
                 pFoulweald->SetRespawnDelay(900);
@@ -853,7 +853,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                     float fX{}, fY{}, fZ{};
                     me->GetPosition(fX, fY, fZ);
 
-                    pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
+                    pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, MOVE_PATHFINDING);
                     pFoulweald->SetHomePosition(fX, fY, fZ, 0.f);
 
                     pFoulweald->SetRespawnDelay(900);
