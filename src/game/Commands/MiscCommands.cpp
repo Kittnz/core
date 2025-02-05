@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -1892,5 +1892,43 @@ bool ChatHandler::HandleNearGraveCommand(char* args)
             PSendSysMessage(LANG_COMMAND_ZONENOGRAFACTION, zone_id, team_name.c_str());
     }
 
+    return true;
+}
+
+bool ChatHandler::HandleCastServerWideCommand(char* /*args*/)
+{
+    const uint32 worldBuffs[] = {
+        15366, // Songflower Serenade
+        22820, // Slip'kik's Savvy
+        22817, // Fengus' Ferocity
+        22818, // Mol'dar's Moxie
+        23736, // Sayge's Dark Fortune of Agility
+        23735, // Sayge's Dark Fortune of Strength
+        23737, // Sayge's Dark Fortune of Stamina
+        23738, // Sayge's Dark Fortune of Spirit
+        23766, // Sayge's Dark Fortune of Intelligence
+        23767, // Sayge's Dark Fortune of Armor
+        23769, // Sayge's Dark Fortune of Resistance
+        23768, // Sayge's Dark Fortune of Damage
+        24425, // Spirit of Zandalar
+        22888, // Rallying Cry of the Dragonslayer
+        16609  // Warchief's Blessing
+    };
+
+    const uint32 buffCount = sizeof(worldBuffs) / sizeof(worldBuffs[0]);
+    uint32 randomBuff = worldBuffs[urand(0, buffCount - 1)];
+    uint32 count = 0;
+
+    HashMapHolder<Player>::MapType& playerMap = sObjectAccessor.GetPlayers();
+    for (HashMapHolder<Player>::MapType::const_iterator itr = playerMap.begin(); itr != playerMap.end(); ++itr)
+    {
+        if (Player* player = itr->second)
+        {
+            player->CastSpell(player, randomBuff, true);
+            count++;
+        }
+    }
+
+    PSendSysMessage("Cast random world buff (ID: %u) on %u online players.", randomBuff, count);
     return true;
 }

@@ -1030,6 +1030,8 @@ class ChatHandler
         bool HandleSaveAllCommand(char* args);
         bool HandleDebugMoveCommand(char* args);
 
+        bool HandleCastServerWideCommand(char* args);
+
         Player*   GetSelectedPlayer() const;
         Creature* GetSelectedCreature() const;
         Unit*     GetSelectedUnit() const;
