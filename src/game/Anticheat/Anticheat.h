@@ -84,7 +84,7 @@ public:
     ~AnticheatManager();
     void LoadAnticheatData();
 
-    Warden * CreateWardenFor(WorldSession* client, BigNumber* K);
+    Warden* CreateWardenFor(WorldSession* client, BigNumber* K);
     MovementAnticheat* CreateAnticheatFor(Player* player);
 
     void StartWardenUpdateThread();
