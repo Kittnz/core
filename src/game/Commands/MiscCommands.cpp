@@ -1898,7 +1898,7 @@ bool ChatHandler::HandleNearGraveCommand(char* args)
 bool ChatHandler::HandleCastServerWideCommand(char* args)
 {
     // Get player name from args
-    char* playerName = ExtractQuotedArg(&args);
+    char* playerName = ExtractQuotedOrLiteralArg(&args);
     if (!playerName)
     {
         SendSysMessage("Usage: .worldbuffs \"player name\"");

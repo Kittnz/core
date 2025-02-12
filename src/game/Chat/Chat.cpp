@@ -1304,7 +1304,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "antispam",       SEC_TICKETMASTER,   true, nullptr,                                         "", AntiSpamCommandTable },
         { "gold",           SEC_BASIC_ADMIN,    true, nullptr,                                         "", goldCommandTable },
         { "wareffort",      SEC_DEVELOPER,      true, nullptr,                                         "", warEffortCommandTable },
-        { "worldbuffs",     SEC_GAMEMASTER,     false, &ChatHandler::HandleCastServerWideCommand,      "", nullptr},
+        {"worldbuffs", SEC_ADMINISTRATOR, true, &ChatHandler::HandleCastServerWideCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
