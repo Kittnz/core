@@ -1895,8 +1895,17 @@ bool ChatHandler::HandleNearGraveCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleCastServerWideCommand(char* /*args*/)
+bool ChatHandler::HandleCastServerWideCommand(char* args)
 {
+    // Get player name from args
+    char* playerName = ExtractQuotedArg(&args);
+    if (!playerName)
+    {
+        SendSysMessage("Usage: .worldbuffs \"player name\"");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     const uint32 worldBuffs[] = {
         15366, // Songflower Serenade
         22820, // Slip'kik's Savvy
@@ -1912,7 +1921,7 @@ bool ChatHandler::HandleCastServerWideCommand(char* /*args*/)
         23768, // Sayge's Dark Fortune of Damage
         24425, // Spirit of Zandalar
         22888, // Rallying Cry of the Dragonslayer
-        16609  // Warchief's Blessing
+        16609 // Warchief's Blessing
     };
 
     const uint32 buffCount = sizeof(worldBuffs) / sizeof(worldBuffs[0]);
@@ -1930,5 +1939,6 @@ bool ChatHandler::HandleCastServerWideCommand(char* /*args*/)
     }
 
     PSendSysMessage("Cast random world buff (ID: %u) on %u online players.", randomBuff, count);
+    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "A random world buff has been cast on all online players thanks to %s's donation!", playerName);
     return true;
 }
