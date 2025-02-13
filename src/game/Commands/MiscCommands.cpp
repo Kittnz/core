@@ -1906,26 +1906,35 @@ bool ChatHandler::HandleCastServerWideCommand(char* args)
         return false;
     }
 
-    const uint32 worldBuffs[] = {
-        15366, // Songflower Serenade
-        22820, // Slip'kik's Savvy
-        22817, // Fengus' Ferocity
-        22818, // Mol'dar's Moxie
-        23736, // Sayge's Dark Fortune of Agility
-        23735, // Sayge's Dark Fortune of Strength
-        23737, // Sayge's Dark Fortune of Stamina
-        23738, // Sayge's Dark Fortune of Spirit
-        23766, // Sayge's Dark Fortune of Intelligence
-        23767, // Sayge's Dark Fortune of Armor
-        23769, // Sayge's Dark Fortune of Resistance
-        23768, // Sayge's Dark Fortune of Damage
-        24425, // Spirit of Zandalar
-        22888, // Rallying Cry of the Dragonslayer
-        16609 // Warchief's Blessing
+    // Structure to hold buff ID and name
+    struct WorldBuff
+    {
+        uint32 id;
+        const char* name;
+    };
+
+    const WorldBuff worldBuffs[] = {
+            {15366, "Songflower Serenade"},
+            {22820, "Slip'kik's Savvy"},
+            {22817, "Fengus' Ferocity"},
+            {22818, "Mol'dar's Moxie"},
+            {23736, "Sayge's Dark Fortune of Agility"},
+            {23735, "Sayge's Dark Fortune of Strength"},
+            {23737, "Sayge's Dark Fortune of Stamina"},
+            {23738, "Sayge's Dark Fortune of Spirit"},
+            {23766, "Sayge's Dark Fortune of Intelligence"},
+            {23767, "Sayge's Dark Fortune of Armor"},
+            {23769, "Sayge's Dark Fortune of Resistance"},
+            {23768, "Sayge's Dark Fortune of Damage"},
+            {24425, "Spirit of Zandalar"},
+            {22888, "Rallying Cry of the Dragonslayer"},
+            {16609, "Warchief's Blessing"}
     };
 
     const uint32 buffCount = sizeof(worldBuffs) / sizeof(worldBuffs[0]);
-    uint32 randomBuff = worldBuffs[urand(0, buffCount - 1)];
+    uint32 randomIndex = urand(0, buffCount - 1);
+    uint32 randomBuff = worldBuffs[randomIndex].id;
+    const char* buffName = worldBuffs[randomIndex].name;
     uint32 count = 0;
 
     HashMapHolder<Player>::MapType& playerMap = sObjectAccessor.GetPlayers();
@@ -1933,12 +1942,11 @@ bool ChatHandler::HandleCastServerWideCommand(char* args)
     {
         if (Player* player = itr->second)
         {
-            player->CastSpell(player, randomBuff, true);
+            player->AddAura(randomBuff, 0, player);
             count++;
         }
     }
 
-    PSendSysMessage("Cast random world buff (ID: %u) on %u online players.", randomBuff, count);
-    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "A random world buff has been cast on all online players thanks to %s's donation!", playerName);
+    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has been cast on all online players thanks to %s's donation!", buffName, playerName);
     return true;
 }
