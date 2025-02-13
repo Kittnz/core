@@ -1932,6 +1932,9 @@ bool ChatHandler::HandleCastServerWideCommand(char* args)
     }
 
     uint32 mangosStringId = 12000; // "%s has been cast on all online players thanks to %s's donation!"
-    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, mangosStringId, buffName, playerName);
+    sWorld.SendWorldText(mangosStringId, buffName, playerName);
+
+    PSendSysMessage("Cast %s (ID: %u) on %u online players.", buffName, randomBuff, count);
+
     return true;
 }
