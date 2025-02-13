@@ -1898,7 +1898,7 @@ bool ChatHandler::HandleNearGraveCommand(char* args)
 bool ChatHandler::HandleCastServerWideCommand(char* args)
 {
     // Get player name from args
-    char* playerName = ExtractQuotedOrLiteralArg(&args);
+    const char* playerName = ExtractQuotedOrLiteralArg(&args);
     if (!playerName)
     {
         SendSysMessage("Usage: .worldbuffs \"player name\"");
@@ -1913,23 +1913,7 @@ bool ChatHandler::HandleCastServerWideCommand(char* args)
         const char* name;
     };
 
-    const WorldBuff worldBuffs[] = {
-            {15366, "Songflower Serenade"},
-            {22820, "Slip'kik's Savvy"},
-            {22817, "Fengus' Ferocity"},
-            {22818, "Mol'dar's Moxie"},
-            {23736, "Sayge's Dark Fortune of Agility"},
-            {23735, "Sayge's Dark Fortune of Strength"},
-            {23737, "Sayge's Dark Fortune of Stamina"},
-            {23738, "Sayge's Dark Fortune of Spirit"},
-            {23766, "Sayge's Dark Fortune of Intelligence"},
-            {23767, "Sayge's Dark Fortune of Armor"},
-            {23769, "Sayge's Dark Fortune of Resistance"},
-            {23768, "Sayge's Dark Fortune of Damage"},
-            {24425, "Spirit of Zandalar"},
-            {22888, "Rallying Cry of the Dragonslayer"},
-            {16609, "Warchief's Blessing"}
-    };
+    const WorldBuff worldBuffs[] = {{15366, "Songflower Serenade"}, {22820, "Slip'kik's Savvy"}, {22817, "Fengus' Ferocity"}, {22818, "Mol'dar's Moxie"}, {23736, "Sayge's Dark Fortune of Agility"}, {23735, "Sayge's Dark Fortune of Strength"}, {23737, "Sayge's Dark Fortune of Stamina"}, {23738, "Sayge's Dark Fortune of Spirit"}, {23766, "Sayge's Dark Fortune of Intelligence"}, {23767, "Sayge's Dark Fortune of Armor"}, {23769, "Sayge's Dark Fortune of Resistance"}, {23768, "Sayge's Dark Fortune of Damage"}, {24425, "Spirit of Zandalar"}, {22888, "Rallying Cry of the Dragonslayer"}, {16609, "Warchief's Blessing"}};
 
     const uint32 buffCount = sizeof(worldBuffs) / sizeof(worldBuffs[0]);
     uint32 randomIndex = urand(0, buffCount - 1);
@@ -1947,6 +1931,7 @@ bool ChatHandler::HandleCastServerWideCommand(char* args)
         }
     }
 
-    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has been cast on all online players thanks to %s's donation!", buffName, playerName);
+    uint32 mangosStringId = 12000; // "%s has been cast on all online players thanks to %s's donation!"
+    sWorld.SendWorldText(LANG_SYSTEMMESSAGE, mangosStringId, buffName, playerName);
     return true;
 }
