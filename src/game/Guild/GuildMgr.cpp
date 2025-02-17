@@ -251,7 +251,7 @@ void GuildMgr::CreateGuildMasterCharacter(Team team, const std::string& number, 
                                guid, accountId, gmName.c_str(),
                                team == ALLIANCE ? RACE_HUMAN : RACE_ORC, // Race
                                CLASS_WARRIOR, // Class
-                               60, // Level
+                               1, // Level
                                team == ALLIANCE ? 1519 : 1637, // Zone (Stormwind or Orgrimmar)
                                team == ALLIANCE ? 0 : 1, // Map (Eastern Kingdoms or Kalimdor)
                                team == ALLIANCE ? -8833.38f : 1632.54f, // x
