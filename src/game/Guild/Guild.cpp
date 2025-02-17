@@ -173,6 +173,46 @@ bool Guild::Create(Player* leader, std::string gname)
     return AddMember(m_LeaderGuid, (uint32)GR_GUILDMASTER) == GuildAddStatus::OK;
 }
 
+bool Guild::Create(ObjectGuid leaderGuid, std::string gname)
+{
+    if (sGuildMgr.GetGuildByName(gname))
+        return false;
+
+    m_LeaderGuid = leaderGuid;
+    m_Name = gname;
+    GINFO.clear();
+    MOTD = "No message set.";
+    m_Id = sObjectMgr.GenerateGuildId();
+
+    // Creating data
+    time_t now = time(0);
+    tm local = *(localtime(&now));
+    m_CreatedDay = local.tm_mday;
+    m_CreatedMonth = local.tm_mon + 1;
+    m_CreatedYear = local.tm_year + 1900;
+
+    sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "GUILD: creating guild %s to leader: %s", gname.c_str(), m_LeaderGuid.GetString().c_str());
+
+    // gname already assigned to Guild::name, use it to encode string for DB
+    std::string dbGINFO = GINFO;
+    std::string dbMOTD = MOTD;
+    CharacterDatabase.escape_string(gname);
+    CharacterDatabase.escape_string(dbGINFO);
+    CharacterDatabase.escape_string(dbMOTD);
+
+    CharacterDatabase.BeginTransaction();
+    CharacterDatabase.PExecute("DELETE FROM `guild_member` WHERE `guild_id`='%u'", m_Id);
+    CharacterDatabase.PExecute("INSERT INTO `guild` (`guild_id`, `name`, `leader_guid`, `info`, `motd`, `create_date`, `emblem_style`, `emblem_color`, `border_style`, `border_color`, `background_color`) "
+                               "VALUES('%u', '%s', '%u', '%s', '%s', '" UI64FMTD "', '%i', '%i', '%i', '%i', '%i')",
+                               m_Id, gname.c_str(), m_LeaderGuid.GetCounter(), dbGINFO.c_str(), dbMOTD.c_str(), uint64(now), m_EmblemStyle, m_EmblemColor, m_BorderStyle, m_BorderColor, m_BackgroundColor);
+    CharacterDatabase.CommitTransaction();
+
+    // Default guild ranks
+    CreateDefaultGuildRanks(-1);
+
+    return AddMember(m_LeaderGuid, (uint32)GR_GUILDMASTER) == GuildAddStatus::OK;
+}
+
 void Guild::CreateDefaultGuildRanks(int locale_idx)
 {
     CharacterDatabase.PExecute("DELETE FROM `guild_rank` WHERE `guild_id`='%u'", m_Id);

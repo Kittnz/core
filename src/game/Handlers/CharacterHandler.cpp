@@ -338,6 +338,18 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recv_data)
         data << (uint8)CHAR_CREATE_ERROR;
         SendPacket(&data);
     }
+
+    // Add player to starter guild if they are not a GM
+    if (GetSecurity() == SEC_PLAYER && !sGuildMgr.IsStarterGuildMaster(guidLow))
+    {
+        Team playerTeam = Player::TeamForRace(race_);
+        if (Guild* starterGuild = sGuildMgr.GetOrCreateStarterGuild(playerTeam))
+        {
+            ObjectGuid playerGuid = ObjectGuid(HIGHGUID_PLAYER, guidLow);
+            if (starterGuild->AddMember(playerGuid, GR_INITIATE) != GuildAddStatus::OK)
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unable to add new player %s to starter guild.", name.c_str());
+        }
+    }
 }
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket& recv_data)

@@ -209,6 +209,7 @@ class Guild
         ~Guild();
 
         bool Create(Player* leader, std::string gname);
+        bool Create(ObjectGuid leaderGuid, std::string gname);
         bool Create(Petition* petition, Player* leader);
         void CreateDefaultGuildRanks(int locale_idx);
         void Disband();

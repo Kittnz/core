@@ -73,13 +73,25 @@ class GuildMgr
         void DeletePetitionSignaturesByPlayer(ObjectGuid guid, uint32 exceptPetitionId = 0);
 
         void LoadGuilds();
+
+        Guild* GetOrCreateStarterGuild(Team team);
+        std::string GetNextGuildNumber(uint32 currentNumber) const;
+        uint32 CreateOrGetStarterGuildMasterAccount();
+        bool IsStarterGuildMaster(ObjectGuid guid) const;
+
         void LoadPetitions();
+
+
     private:
         void CleanUpPetitions();
         mutable std::shared_timed_mutex m_guildMutex;
         GuildMap m_GuildMap;
         std::shared_timed_mutex m_guid2GuildMutex;
         std::map<uint32, uint32> m_guid2guild;
+
+        Guild* CreateStarterGuild(Team team, const std::string& suffix = "");
+        void CreateGuildMasterCharacter(Team team, const std::string& number, uint32 accountId);
+        uint32 m_starterGuildMasterAccount;
 
         std::shared_timed_mutex m_petitionsMutex;
         PetitionMap m_petitionMap;

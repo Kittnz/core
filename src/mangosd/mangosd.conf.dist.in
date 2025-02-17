@@ -3032,3 +3032,4 @@ DynamicRespawn.AffectLevelBelow         = 0
 DynamicRespawn.PlayersThreshold         = 0
 DynamicRespawn.PlayersMaxLevelDiff      = 0
 
+StarterGuild.Account.Password = "your_secure_password_here"

@@ -26,6 +26,8 @@
 #include "World.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "AccountMgr.h"
+#include "Config/Config.h"
 
 INSTANTIATE_SINGLETON_1(GuildMgr);
 
@@ -163,6 +165,172 @@ void GuildMgr::LoadGuilds()
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Loaded %u guild definitions", count);
+}
+
+std::string GuildMgr::GetNextGuildNumber(uint32 currentNumber) const
+{
+    static const std::vector<std::string> numbers = {
+        "One",    "Two",      "Three",    "Four",    "Five",    "Six",       "Seven",    "Eight",    "Nine",  "Ten", "Eleven",
+        "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"
+        // Add more as needed
+    };
+
+    if (currentNumber >= numbers.size())
+        return std::to_string(currentNumber + 1); // Fallback to numeric if we run out of words
+
+    return numbers[currentNumber];
+}
+
+uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
+{
+    // Check if account already exists
+    std::string username = "startguildmaster";
+    uint32 accountId = sAccountMgr.GetId(username);
+
+    if (!accountId)
+    {
+        // Create new account
+        std::string password = sConfig.GetStringDefault("StarterGuild.Account.Password", "your_secure_password_here");
+        AccountOpResult result = sAccountMgr.CreateAccount(username, password);
+
+        if (result == AOR_OK)
+        {
+            accountId = sAccountMgr.GetId(username);
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Created starter guild master account with id: %u", accountId);
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to create starter guild master account!");
+            return 0;
+        }
+    }
+
+    m_starterGuildMasterAccount = accountId;
+    return accountId;
+}
+
+Guild* GuildMgr::GetOrCreateStarterGuild(Team team)
+{
+    // First try to find an existing starter guild with space
+    for (GuildMap::iterator itr = m_GuildMap.begin(); itr != m_GuildMap.end(); ++itr)
+    {
+        Guild* guild = itr->second;
+        if (guild->GetName().find(team == ALLIANCE ? "Alliance Starter Guild" : "Horde Starter Guild") != std::string::npos)
+        {
+            if (guild->GetMemberSize() < 999)
+                return guild;
+        }
+    }
+
+    // Count existing starter guilds to determine the next number
+    uint32 guildCount = 0;
+    for (GuildMap::iterator itr = m_GuildMap.begin(); itr != m_GuildMap.end(); ++itr)
+    {
+        if (itr->second->GetName().find(team == ALLIANCE ? "Alliance Starter Guild" : "Horde Starter Guild") != std::string::npos)
+            guildCount++;
+    }
+
+    // Create a new guild with the next number
+    return CreateStarterGuild(team, GetNextGuildNumber(guildCount));
+}
+
+void GuildMgr::CreateGuildMasterCharacter(Team team, const std::string& number, uint32 accountId)
+{
+    std::string gmName = (team == ALLIANCE) ? "AllianceGuildMaster" : "HordeGuildMaster";
+    gmName += number;
+
+    // Create character entry in DB first
+    std::unique_ptr<QueryResult> result = CharacterDatabase.Query("SELECT MAX(guid) FROM characters");
+    uint32 guid = result ? result->Fetch()[0].GetUInt32() + 1 : 1;
+
+    CharacterDatabase.BeginTransaction();
+
+    // Create base character
+    CharacterDatabase.PExecute("INSERT INTO characters (guid, account, name, race, class, gender, level, zone, map, position_x, position_y, position_z) "
+                               "VALUES (%u, %u, '%s', %u, %u, 0, %u, %u, %u, %f, %f, %f)",
+                               guid, accountId, gmName.c_str(),
+                               team == ALLIANCE ? RACE_HUMAN : RACE_ORC, // Race
+                               CLASS_WARRIOR, // Class
+                               60, // Level
+                               team == ALLIANCE ? 1519 : 1637, // Zone (Stormwind or Orgrimmar)
+                               team == ALLIANCE ? 0 : 1, // Map (Eastern Kingdoms or Kalimdor)
+                               team == ALLIANCE ? -8833.38f : 1632.54f, // x
+                               team == ALLIANCE ? 628.628f : -4440.77f, // y
+                               team == ALLIANCE ? 94.0066f : 15.4526f // z
+    );
+
+    // Cache the player
+    sObjectMgr.InsertPlayerInCache(guid, // guid
+                                   team == ALLIANCE ? RACE_HUMAN : RACE_ORC, // race
+                                   CLASS_WARRIOR, // class
+                                   0, // gender
+                                   accountId, // account
+                                   gmName, // name
+                                   60, // level
+                                   team == ALLIANCE ? 1519 : 1637 // zoneId
+    );
+
+    CharacterDatabase.CommitTransaction();
+}
+
+bool GuildMgr::IsStarterGuildMaster(ObjectGuid guid) const
+{
+    PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter());
+    if (!data)
+        return false;
+
+    return data->uiAccount == m_starterGuildMasterAccount;
+}
+
+Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
+{
+    // Check if we've reached maximum number of guilds
+    const uint32 MAX_STARTER_GUILDS = 1000;
+    uint32 currentGuildCount = 0;
+
+    for (GuildMap::iterator itr = m_GuildMap.begin(); itr != m_GuildMap.end(); ++itr)
+    {
+        if (itr->second->GetName().find("Starter Guild") != std::string::npos)
+            currentGuildCount++;
+    }
+
+    if (currentGuildCount >= MAX_STARTER_GUILDS)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Maximum number of starter guilds reached!");
+        return nullptr;
+    }
+
+    std::string guildName = (team == ALLIANCE) ? "Alliance Starter Guild" : "Horde Starter Guild";
+    if (!suffix.empty())
+        guildName += " " + suffix;
+
+    // Get or create the starter guild master account
+    uint32 accountId = CreateOrGetStarterGuildMasterAccount();
+    if (!accountId)
+        return nullptr;
+
+    // Create the guild master character
+    CreateGuildMasterCharacter(team, suffix, accountId);
+
+    // Find the newly created character's GUID
+    std::string gmName = (team == ALLIANCE ? "AllianceGuildMaster" : "HordeGuildMaster") + suffix;
+    ObjectGuid gmGuid = sObjectMgr.GetPlayerGuidByName(gmName);
+
+    if (!gmGuid)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to find guild master character!");
+        return nullptr;
+    }
+
+    Guild* guild = new Guild;
+    if (!guild->Create(gmGuid, guildName))
+    {
+        delete guild;
+        return nullptr;
+    }
+
+    AddGuild(guild);
+    return guild;
 }
 
 void GuildMgr::LoadPetitions()
