@@ -426,26 +426,7 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             case SPELLFAMILY_MAGE:
                 break;
             case SPELLFAMILY_WARRIOR:
-            {
-                if (!m_casterUnit)
-                    break;
-
-                // Bloodthirst
-                if (m_spellInfo->SpellIconID == 38 && m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_MORTAL_STRIKE>())
-                {
-                    float attackPower = m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK);
-                    if (unitTarget)
-                        attackPower += m_casterUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS, unitTarget->GetCreatureTypeMask());
-                    damage = damage * attackPower / 100;
-                }
-                // Shield Slam
-                else if (m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_SHIELD_SLAM>())
-                    damage += m_casterUnit->GetShieldBlockValue();
-                // Execute trigger
-                else if (m_spellInfo->Id == 20647)
-                    m_casterUnit->SetPower(POWER_RAGE, 0);
                 break;
-            }
             case SPELLFAMILY_WARLOCK:
             {
                 // Conflagrate - consumes Immolate
@@ -1722,34 +1703,6 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
         }
         case SPELLFAMILY_WARRIOR:
         {
-            // Execute
-            if (m_spellInfo->IsFitToFamilyMask<CF_WARRIOR_EXECUTE>())
-            {
-                if (!unitTarget || !m_casterUnit)
-                    return;
-
-                int32 basePoints0 = damage + dither(m_casterUnit->GetPower(POWER_RAGE) * m_spellInfo->DmgMultiplier[effIdx]);
-                // m_casterUnit->SetPower(POWER_RAGE, 0); // Done in EffectSchoolDMG - spell 20647
-                m_casterUnit->CastCustomSpell(unitTarget, 20647, basePoints0, {}, {}, true, nullptr);
-                return;
-            }
-            if (m_spellInfo->Id == 21977)                   //Warrior's Wrath
-            {
-                if (!unitTarget)
-                    return;
-
-                m_caster->CastSpell(unitTarget, 21887, true); // spell mod
-                return;
-            }
-            if (m_spellInfo->Id == 23424)                   // Ustaag <Nostalrius> : Nefarian Class Call Chaman Corrupted Totems
-            {
-                if (!m_casterUnit)
-                    return;
-
-                uint32 spellId = PickRandomValue(23419, 23420, 23422, 23423);
-                m_casterUnit->CastSpell(m_casterUnit, spellId, true);
-                return;
-            }
             break;
         }
         case SPELLFAMILY_WARLOCK:
