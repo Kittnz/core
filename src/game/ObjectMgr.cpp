@@ -53,7 +53,7 @@
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
 #include "Conditions.h"
-
+#include "RealmZone.h"
 #include <limits>
 
 INSTANTIATE_SINGLETON_1(ObjectMgr);
@@ -121,8 +121,23 @@ T IdGenerator<T>::Generate()
     return m_nextGuid++;
 }
 
+template<typename T>
+void IdGenerator<T>::SetMaxUsedGuid(T val, char const* guidType)
+{
+    if (val == std::numeric_limits<T>::max())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s guids have been exhausted! Aborting startup.", guidType);
+        Log::WaitBeforeContinueIfNeed();
+        exit(1);
+    }
+    m_nextGuid = val + 1;
+}
+
 template uint32 IdGenerator<uint32>::Generate();
 template uint64 IdGenerator<uint64>::Generate();
+
+template void IdGenerator<uint32>::SetMaxUsedGuid(uint32, char const*);
+template void IdGenerator<uint64>::SetMaxUsedGuid(uint64, char const*);
 
 ObjectMgr::ObjectMgr() :
     m_GuildIds("Guild ids"),
@@ -2045,14 +2060,6 @@ void ObjectMgr::LoadCreatureClassLevelStats()
         } while (result->NextRow());
     }
 
-    // placeholder values
-    constexpr float phMeleeDamage = 1.5f;
-    constexpr float phRangedDamage = 1.3f;
-    constexpr float phDamageIncreasePerLevel = 1.2f;
-    constexpr int32 phStat = 20;
-    constexpr float phStatIncreasePerLevel = 0.1f;
-    constexpr int32 phArmorPerLevel = 30;
-
     for (auto unitClass : creatureClasses)
     {
         result = WorldDatabase.PQuery("SELECT MAX(`level_max`) FROM `creature_template` WHERE `unit_class`=%u", unitClass);
@@ -2125,37 +2132,37 @@ void ObjectMgr::LoadCreatureClassLevelStats()
                 if (cls.melee_damage <= 0.0f)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `melee_damage` = %g in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.melee_damage = phMeleeDamage + phMeleeDamage * phDamageIncreasePerLevel * i;
+                    cls.melee_damage = 1;
                 }
 
                 if (cls.ranged_damage <= 0.0f)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `ranged_damage` = %g in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.ranged_damage = phRangedDamage + phRangedDamage * phDamageIncreasePerLevel * i;
+                    cls.ranged_damage = 1;
                 }
 
                 if (cls.attack_power <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `attack_power` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.attack_power = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.attack_power = 1;
                 }
 
                 if (cls.ranged_attack_power <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `ranged_attack_power` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.ranged_attack_power = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.ranged_attack_power = 1;
                 }
 
                 if (cls.health <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `health` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.health = phStat * 2 + phStat * 2 * i;
+                    cls.health = 1;
                 }
 
                 if (cls.base_health <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `base_health` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.base_health = phStat + phStat * i;
+                    cls.base_health = 1;
                 }
 
                 if (cls.mana < 0)
@@ -2173,31 +2180,31 @@ void ObjectMgr::LoadCreatureClassLevelStats()
                 if (cls.strength <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `strength` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.strength = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.strength = 1;
                 }
 
                 if (cls.agility <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `agility` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.agility = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.agility = 1;
                 }
 
                 if (cls.stamina <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `stamina` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.stamina = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.stamina = 1;
                 }
 
                 if (cls.intellect <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `intellect` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.intellect = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.intellect = 1;
                 }
 
                 if (cls.spirit <= 0)
                 {
                     sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Invalid `spirit` = %i in `creature_classlevelstats` for `class`=%u and `level`=%u!", cls.melee_damage, unitClass, level);
-                    cls.spirit = phStat + phStat * phStatIncreasePerLevel * i;
+                    cls.spirit = 1;
                 }
 
                 if (cls.armor < 0)
@@ -2215,62 +2222,35 @@ void ObjectMgr::LoadCreatureClassLevelStats()
             if (!cls.health)
             {
                 sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Missing creature CLS data for `class` = %u and `level` = %u!", unitClass, i+1);
-                cls.melee_damage = phMeleeDamage + phMeleeDamage * phDamageIncreasePerLevel * i;
-                cls.ranged_damage = phRangedDamage + phRangedDamage * phDamageIncreasePerLevel * i;
-                cls.attack_power = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.ranged_attack_power = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.health = phStat * 2 + phStat * 2 * i;
-                cls.base_health = phStat + phStat * i;
-                cls.mana = phStat * 2 + phStat * 2 * i;
-                cls.base_mana = phStat + phStat * i;
-                cls.strength = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.agility = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.stamina = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.intellect = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.spirit = phStat + phStat * phStatIncreasePerLevel * i;
-                cls.armor = phArmorPerLevel * i;
+                Log::WaitBeforeContinueIfNeed();
+                exit(1);
             }
         }
 
         if (currentMaxLevel < requiredMaxLevel)
         {
-            CreatureClassLevelStats& penultimateLevelCls = m_CreatureCLSMap[unitClass][currentMaxLevel - 2];
+            CreatureClassLevelStats& minLevelCls = m_CreatureCLSMap[unitClass][0];
             CreatureClassLevelStats& maxLevelCls = m_CreatureCLSMap[unitClass][currentMaxLevel - 1];
-
-            float const meleeDamageIncreasePerLevel = std::max(1.03f, maxLevelCls.melee_damage / penultimateLevelCls.melee_damage);
-            float const rangedDamageIncreasePerLevel = std::max(1.03f, maxLevelCls.ranged_damage / penultimateLevelCls.ranged_damage);
-            float const attackPowerIncreasePerLevel = std::max(1.03f, float(maxLevelCls.attack_power) / float(penultimateLevelCls.attack_power));
-            float const rangedAttackPowerIncreasePerLevel = std::max(1.03f, float(maxLevelCls.ranged_attack_power) / float(penultimateLevelCls.ranged_attack_power));
-            float const healthIncreasePerLevel = std::max(1.03f, float(maxLevelCls.health) / float(penultimateLevelCls.health));
-            float const baseHealthIncreasePerLevel = std::max(1.03f, float(maxLevelCls.base_health) / float(penultimateLevelCls.base_health));
-            float const manaIncreasePerLevel = std::max(1.03f, float(maxLevelCls.mana) / float(penultimateLevelCls.mana));
-            float const baseManaIncreasePerLevel = std::max(1.03f, float(maxLevelCls.base_mana) / float(penultimateLevelCls.base_mana));
-            float const strengthIncreasePerLevel = std::max(1.03f, float(maxLevelCls.strength) / float(penultimateLevelCls.strength));
-            float const agilityIncreasePerLevel = std::max(1.03f, float(maxLevelCls.agility) / float(penultimateLevelCls.agility));
-            float const staminaIncreasePerLevel = std::max(1.03f, float(maxLevelCls.stamina) / float(penultimateLevelCls.stamina));
-            float const intellectIncreasePerLevel = std::max(1.03f, float(maxLevelCls.intellect) / float(penultimateLevelCls.intellect));
-            float const spiritIncreasePerLevel = std::max(1.03f, float(maxLevelCls.spirit) / float(penultimateLevelCls.spirit));
-            float const armorIncreasePerLevel = std::max(1.03f, float(maxLevelCls.armor) / float(penultimateLevelCls.armor));
 
             for (uint32 i = currentMaxLevel; i < requiredMaxLevel; i++)
             {
                 CreatureClassLevelStats& cls = m_CreatureCLSMap[unitClass][i];
                 if (!cls.health)
                 {
-                    cls.melee_damage = maxLevelCls.melee_damage * std::pow(meleeDamageIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.ranged_damage = maxLevelCls.ranged_damage * std::pow(rangedDamageIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.attack_power = maxLevelCls.attack_power * std::pow(attackPowerIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.ranged_attack_power = maxLevelCls.ranged_attack_power * std::pow(rangedAttackPowerIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.health = maxLevelCls.health * std::pow(healthIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.base_health = maxLevelCls.base_health * std::pow(baseHealthIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.mana = maxLevelCls.mana * std::pow(manaIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.base_mana = maxLevelCls.base_mana * std::pow(baseManaIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.strength = maxLevelCls.strength * std::pow(strengthIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.agility = maxLevelCls.agility * std::pow(agilityIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.stamina = maxLevelCls.stamina * std::pow(staminaIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.intellect = maxLevelCls.intellect * std::pow(intellectIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.spirit = maxLevelCls.spirit * std::pow(spiritIncreasePerLevel, 1 + (i - currentMaxLevel));
-                    cls.armor = maxLevelCls.armor * std::pow(armorIncreasePerLevel, 1 + (i - currentMaxLevel));
+                    cls.melee_damage = InterpolateValueAtIndex(1, minLevelCls.melee_damage, currentMaxLevel, maxLevelCls.melee_damage, i + 1);
+                    cls.ranged_damage = InterpolateValueAtIndex(1, minLevelCls.ranged_damage, currentMaxLevel, maxLevelCls.ranged_damage, i + 1);
+                    cls.attack_power = InterpolateValueAtIndex(1, minLevelCls.attack_power, currentMaxLevel, maxLevelCls.attack_power, i + 1);
+                    cls.ranged_attack_power = InterpolateValueAtIndex(1, minLevelCls.ranged_attack_power, currentMaxLevel, maxLevelCls.ranged_attack_power, i + 1);
+                    cls.health = InterpolateValueAtIndex(1, minLevelCls.health, currentMaxLevel, maxLevelCls.health, i + 1);
+                    cls.base_health = InterpolateValueAtIndex(1, minLevelCls.base_health, currentMaxLevel, maxLevelCls.base_health, i + 1);
+                    cls.mana = InterpolateValueAtIndex(1, minLevelCls.mana, currentMaxLevel, maxLevelCls.mana, i + 1);
+                    cls.base_mana = InterpolateValueAtIndex(1, minLevelCls.base_mana, currentMaxLevel, maxLevelCls.base_mana, i + 1);
+                    cls.strength = InterpolateValueAtIndex(1, minLevelCls.strength, currentMaxLevel, maxLevelCls.strength, i + 1);
+                    cls.agility = InterpolateValueAtIndex(1, minLevelCls.agility, currentMaxLevel, maxLevelCls.agility, i + 1);
+                    cls.stamina = InterpolateValueAtIndex(1, minLevelCls.stamina, currentMaxLevel, maxLevelCls.stamina, i + 1);
+                    cls.intellect = InterpolateValueAtIndex(1, minLevelCls.intellect, currentMaxLevel, maxLevelCls.intellect, i + 1);
+                    cls.spirit = InterpolateValueAtIndex(1, minLevelCls.spirit, currentMaxLevel, maxLevelCls.spirit, i + 1);
+                    cls.armor = InterpolateValueAtIndex(1, std::max(1, minLevelCls.armor), currentMaxLevel, std::max(1, maxLevelCls.armor), i + 1);
                 }
             }
         }
@@ -5348,8 +5328,8 @@ void ObjectMgr::LoadQuests()
                           "`IncompleteEmote`, `CompleteEmote`, `OfferRewardEmote1`, `OfferRewardEmote2`, `OfferRewardEmote3`, `OfferRewardEmote4`,"
     //                      119                       120                       121                       122
                           "`OfferRewardEmoteDelay1`, `OfferRewardEmoteDelay2`, `OfferRewardEmoteDelay3`, `OfferRewardEmoteDelay4`,"
-    //                      123            124               125         126             127      128                  129
-                          "`StartScript`, `CompleteScript`, `MaxLevel`, `RewMailMoney`, `RewXP`, `RequiredCondition`, `BreadcrumbForQuestId` "
+    //                      123            124               125         126             127      128                  129                     130
+                          "`StartScript`, `CompleteScript`, `MaxLevel`, `RewMailMoney`, `RewXP`, `RequiredCondition`, `BreadcrumbForQuestId`, `RewRepSpilloverMask`"
                           " FROM `quest_template` t1 WHERE `patch`=(SELECT max(`patch`) FROM `quest_template` t2 WHERE t1.`entry`=t2.`entry` && `patch` <= %u)", sWorld.GetWowPatch()));
     if (!result)
     {
@@ -5821,11 +5801,20 @@ void ObjectMgr::LoadQuests()
                     qinfo->RewRepFaction[j] = 0;            // quest will not reward this
                 }
             }
-            else if (qinfo->RewRepValue[j] != 0)
+            else
             {
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u has `RewRepFaction%d` = 0 but `RewRepValue%d` = %i.",
-                                qinfo->GetQuestId(), j + 1, j + 1, qinfo->RewRepValue[j]);
-                // no changes, quest ignore this data
+                if (qinfo->RewRepSpilloverMask & (1 << j))
+                {
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u has `RewRepFaction%d` = 0 but `RewRepSpilloverMask` is set for this index.",
+                        qinfo->GetQuestId(), j + 1);
+                    // no changes, quest ignore this data
+                }
+                if (qinfo->RewRepValue[j] != 0)
+                {
+                    sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "Quest %u has `RewRepFaction%d` = 0 but `RewRepValue%d` = %i.",
+                        qinfo->GetQuestId(), j + 1, j + 1, qinfo->RewRepValue[j]);
+                    // no changes, quest ignore this data
+                }
             }
         }
 
@@ -6674,52 +6663,50 @@ public:
         {
             Field* fields = result->Fetch();
 
-            Mail* m = new Mail;
-            m->messageID = fields[0].GetUInt32();
-            m->messageType = fields[1].GetUInt8();
-            m->sender = fields[2].GetUInt32();
-            m->receiverGuid = ObjectGuid(HIGHGUID_PLAYER, fields[3].GetUInt32());
+            Mail m = Mail();
+            m.messageID = fields[0].GetUInt32();
+            m.messageType = fields[1].GetUInt8();
+            m.sender = fields[2].GetUInt32();
+            m.receiverGuid = ObjectGuid(HIGHGUID_PLAYER, fields[3].GetUInt32());
             bool has_items = fields[5].GetBool();
-            m->expire_time = (time_t)fields[6].GetUInt64();
-            m->deliver_time = 0;
-            m->COD = fields[7].GetUInt32();
-            m->checked = fields[8].GetUInt32();
-            m->mailTemplateId = fields[9].GetInt16();
+            m.expire_time = (time_t)fields[6].GetUInt64();
+            m.deliver_time = 0;
+            m.COD = fields[7].GetUInt32();
+            m.checked = fields[8].GetUInt32();
+            m.mailTemplateId = fields[9].GetInt16();
 
-            if (serverUp && sObjectAccessor.FindPlayerNotInWorld(m->receiverGuid))
+            if (serverUp && sObjectAccessor.FindPlayerNotInWorld(m.receiverGuid))
             {
                 // Online player. We wait for him to logout to send the mail back (ie next call)
                 ++skippedCount;
-                delete m;
                 continue;
             }
-            //delete or return mail:
+
+            // delete or return mail:
             if (has_items)
             {
                 SingleMailReturner* returner = new SingleMailReturner();
                 // if it is mail from non-player, or if it's already return mail, it shouldn't be returned, but deleted
-                if (m->messageType != MAIL_NORMAL || (m->checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
+                if (m.messageType != MAIL_NORMAL || (m.checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
                     returner->returnToLowGuid = 0;
                 else
                 {
                     returner->basetime = basetime;
-                    returner->returnToLowGuid = m->sender;
+                    returner->returnToLowGuid = m.sender;
                 }
-                returner->receiverGuid = m->receiverGuid;
-                returner->itemTextId = m->itemTextId;
-                returner->messageID = m->messageID;
-                CharacterDatabase.AsyncPQueryUnsafe(returner, &SingleMailReturner::Callback, "SELECT `item_guid` FROM `mail_items` WHERE `mail_id`='%u'", m->messageID);
-                delete m;
+                returner->receiverGuid = m.receiverGuid;
+                returner->itemTextId = m.itemTextId;
+                returner->messageID = m.messageID;
+                CharacterDatabase.AsyncPQueryUnsafe(returner, &SingleMailReturner::Callback, "SELECT `item_guid` FROM `mail_items` WHERE `mail_id`='%u'", m.messageID);
                 continue;
             }
 
-            if (m->itemTextId)
-                CharacterDatabase.PExecute("DELETE FROM `item_text` WHERE `id` = '%u'", m->itemTextId);
+            if (m.itemTextId)
+                CharacterDatabase.PExecute("DELETE FROM `item_text` WHERE `id` = '%u'", m.itemTextId);
 
             // deletemail = true;
-            // delmails << m->messageID << ", ";
-            CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", m->messageID);
-            delete m;
+            // delmails << m.messageID << ", ";
+            CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", m.messageID);
             
         }
         while (result->NextRow());
@@ -7566,7 +7553,7 @@ void ObjectMgr::PackGroupIds()
         bar.step();
     }
 
-    m_GroupIds.Set(groupId);
+    m_GroupIds.SetMaxUsedGuid(groupId, "Group");
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> Group Ids remapped, next group id is %u", groupId);
@@ -7576,15 +7563,11 @@ void ObjectMgr::SetHighestGuids()
 {
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT MAX(`guid`) FROM `characters`"));
     if (result)
-        m_CharGuids.Set((*result)[0].GetUInt32() + 1);
-
-    result = WorldDatabase.Query("SELECT MAX(`guid`) FROM `creature`");
-    if (result)
-        m_FirstTemporaryCreatureGuid = (*result)[0].GetUInt32() + 1;
+        m_CharGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Character");
 
     result = CharacterDatabase.Query("SELECT MAX(`guid`) FROM `item_instance`");
     if (result)
-        m_ItemGuids.Set((*result)[0].GetUInt32() + 1);
+        m_ItemGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Item");
 
     // Cleanup other tables from nonexistent guids (>=m_hiItemGuid)
     CharacterDatabase.BeginTransaction();
@@ -7593,9 +7576,13 @@ void ObjectMgr::SetHighestGuids()
     CharacterDatabase.PExecute("DELETE FROM `auction` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
     CharacterDatabase.CommitTransaction();
 
+    result = WorldDatabase.Query("SELECT MAX(`guid`) FROM `creature`");
+    if (result)
+        m_FirstTemporaryCreatureGuid = (*result)[0].GetUInt32();
+
     result = WorldDatabase.Query("SELECT MAX(`guid`) FROM `gameobject`");
     if (result)
-        m_FirstTemporaryGameObjectGuid = (*result)[0].GetUInt32() + 1;
+        m_FirstTemporaryGameObjectGuid = (*result)[0].GetUInt32();
 
     result = CharacterDatabase.Query("SELECT `id` FROM `auction`");
     if (result)
@@ -7610,33 +7597,33 @@ void ObjectMgr::SetHighestGuids()
 
     result = CharacterDatabase.Query("SELECT MAX(`id`) FROM `mail`");
     if (result)
-        m_MailIds.Set((*result)[0].GetUInt32() + 1);
+        m_MailIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Mail");
 
     result = CharacterDatabase.Query("SELECT MAX(`id`) FROM `item_text`");
     if (result)
-        m_ItemTextIds.Set((*result)[0].GetUInt32() + 1);
+        m_ItemTextIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Item Text");
 
     result = CharacterDatabase.Query("SELECT MAX(`guid`) FROM `corpse`");
     if (result)
-        m_CorpseGuids.Set((*result)[0].GetUInt32() + 1);
+        m_CorpseGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Corpse");
 
     result = CharacterDatabase.Query("SELECT MAX(`guild_id`) FROM `guild`");
     if (result)
-        m_GuildIds.Set((*result)[0].GetUInt32() + 1);
+        m_GuildIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Guild");
 
     result = CharacterDatabase.Query("SELECT MAX(`group_id`) FROM `groups`");
     if (result)
-        m_GroupIds.Set((*result)[0].GetUInt32() + 1);
+        m_GroupIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Group");
 
     result = CharacterDatabase.Query("SELECT MAX(`petition_guid`) FROM `petition`");
     if (result)
-        m_PetitionIds.Set((*result)[0].GetUInt32() + 1);
+        m_PetitionIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Petition");
 
     // setup reserved ranges for static guids spawn
-    m_StaticCreatureGuids.Set(m_FirstTemporaryCreatureGuid);
+    m_StaticCreatureGuids.SetMaxUsedGuid(m_FirstTemporaryCreatureGuid, "Creature");
     m_FirstTemporaryCreatureGuid += sWorld.getConfig(CONFIG_UINT32_GUID_RESERVE_SIZE_CREATURE);
 
-    m_StaticGameObjectGuids.Set(m_FirstTemporaryGameObjectGuid);
+    m_StaticGameObjectGuids.SetMaxUsedGuid(m_FirstTemporaryGameObjectGuid, "GameObject");
     m_FirstTemporaryGameObjectGuid += sWorld.getConfig(CONFIG_UINT32_GUID_RESERVE_SIZE_GAMEOBJECT);
 }
 
@@ -8175,8 +8162,8 @@ void ObjectMgr::LoadCorpses()
     uint32 count = 0;
     //                                                                            0       1                       2                      3                      4                      5                       6
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `corpse`.`guid`, `player_guid`, `corpse`.`position_x`, `corpse`.`position_y`, `corpse`.`position_z`, `corpse`.`orientation`, `corpse`.`map`, "
-    //                      7       8              9           10        11      12       13      14      15            16            17             18                 19          20
-                          "`time`, `corpse_type`, `instance`, `gender`, `race`, `class`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `equipment_cache`, `guild_id`, `player_flags` FROM `corpse` "
+    //                      7       8                       9           10        11      12       13      14      15            16            17             18                 19          20
+                          "`time`, `corpse_type`, `corpse`.`instance`, `gender`, `race`, `class`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `equipment_cache`, `guild_id`, `player_flags` FROM `corpse` "
                           "JOIN `characters` ON `player_guid` = `characters`.`guid` "
                           "LEFT JOIN `guild_member` ON `player_guid`=`guild_member`.`guid` WHERE `corpse_type` <> 0"));
 
@@ -9478,7 +9465,7 @@ void ObjectMgr::LoadBroadcastTexts()
         {
             if (!sEmotesStore.LookupEntry(bct.emoteId1))
             {
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "BroadcastText (Id: %u) in table `broadcast_text` has emoteId2 %u but emote does not exist.", bct.entry, bct.emoteId1);
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "BroadcastText (Id: %u) in table `broadcast_text` has EmoteId2 %u but emote does not exist.", bct.entry, bct.emoteId1);
                 bct.emoteId1 = 0;
             }
         }
@@ -9487,7 +9474,7 @@ void ObjectMgr::LoadBroadcastTexts()
         {
             if (!sEmotesStore.LookupEntry(bct.emoteId2))
             {
-                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "BroadcastText (Id: %u) in table `broadcast_text` has emoteId3 %u but emote does not exist.", bct.entry, bct.emoteId2);
+                sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "BroadcastText (Id: %u) in table `broadcast_text` has EmoteId3 %u but emote does not exist.", bct.entry, bct.emoteId2);
                 bct.emoteId2 = 0;
             }
         }
@@ -10078,13 +10065,23 @@ GameTele const* ObjectMgr::GetGameTele(std::string const& name) const
     // converting string that we try to find to lower case
     wstrToLower(wname);
 
-    // Alternative first GameTele what contains wnameLow as substring in case no GameTele location found
+    // if no GameTele location is found use the shortest one which contains wnameLow as substring
     GameTele const* alt = nullptr;
+    std::wstring::size_type size = -1;
     for (const auto& itr : m_GameTeleMap)
+    {
         if (itr.second.wnameLow == wname)
             return &itr.second;
-        else if (alt == nullptr && itr.second.wnameLow.find(wname) != std::wstring::npos)
-            alt = &itr.second;
+        else if (itr.second.wnameLow.find(wname) != std::wstring::npos)
+        {
+            std::wstring::size_type newSize = itr.second.wnameLow.size();
+            if (size == -1 || newSize < size)
+            {
+                alt = &itr.second;
+                size = newSize;
+            }
+        }
+    }
 
     return alt;
 }
@@ -11591,7 +11588,7 @@ void ObjectMgr::LoadAreaTemplate()
     sAreaStorage.Load();
 
     for (auto itr = sAreaStorage.begin<AreaEntry>(); itr != sAreaStorage.end<AreaEntry>(); ++itr)
-        if (itr->IsZone() && itr->MapId != 0 && itr->MapId != 1)
+        if (itr->IsZone() && itr->MapId != MAP_EASTERN_KINGDOMS && itr->MapId != MAP_KALIMDOR)
             sAreaFlagByMapId.insert(AreaFlagByMapId::value_type(itr->MapId, itr->ExploreFlag));
 }
 

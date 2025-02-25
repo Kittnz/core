@@ -907,7 +907,7 @@ bool GOHello_go_orbe_domination(Player* pPlayer, GameObject* pGo)
             if (Creature* pCreature = pGo->GetMap()->GetCreature(pInstance->GetData64(DATA_RAZORGORE_GUID)))
             {
                 // Deja CM ?
-                if (pCreature->HasUnitState(UNIT_STAT_POSSESSED))
+                if (pCreature->HasUnitState(UNIT_STATE_POSSESSED))
                     return true;
                 if (pCreature->IsInCombat() && pInstance->GetData64(DATA_EGG) != DONE)
                 {
@@ -1053,11 +1053,11 @@ bool AreaTrigger_at_orb_of_command(Player* pPlayer, AreaTriggerEntry const* pAt)
     if (pAt->id == AT_ORB_OF_COMMAND)
     {
         Corpse *pCorpse = pPlayer->GetCorpse();
-        if (pPlayer->IsDead() && pPlayer->GetQuestRewardStatus(7761) && pCorpse && (pCorpse->GetMapId() == 469))
+        if (pPlayer->IsDead() && pPlayer->GetQuestRewardStatus(7761) && pCorpse && (pCorpse->GetMapId() == MAP_BLACKWING_LAIR))
         {
             pPlayer->ResurrectPlayer(0.5f);
             pPlayer->SpawnCorpseBones();
-            pPlayer->TeleportTo(469, -7672.32f, -1107.05f, 396.651f, 0.785398f);
+            pPlayer->TeleportTo(MAP_BLACKWING_LAIR, -7672.32f, -1107.05f, 396.651f, 0.785398f);
         }
     }
 

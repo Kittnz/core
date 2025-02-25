@@ -266,7 +266,7 @@ struct boss_razorgoreAI : public ScriptedAI
 
     void UpdateAI(uint32 const uiDiff) override
     {
-        if (m_creature->HasUnitState(UNIT_STAT_POSSESSED))
+        if (m_creature->HasUnitState(UNIT_STATE_POSSESSED))
         {
             DoMeleeAttackIfReady();
             return;
@@ -359,7 +359,7 @@ struct boss_razorgoreAI : public ScriptedAI
 
     void GetAIInformation(ChatHandler& handler) override
     {
-        handler.PSendSysMessage("* CombatMovement : %s", IsCombatMovementEnabled() ? "OUI" : "NON");
+        handler.PSendSysMessage("* CombatMovement : %s", IsCombatMovementEnabled() ? "YES" : "NO");
     }
 };
 

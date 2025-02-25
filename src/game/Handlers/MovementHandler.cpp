@@ -92,13 +92,13 @@ void WorldSession::HandleMoveWorldportAckOpcode()
     }
 
     // reset instance validity, except if going to an instance inside an instance
-    if (!GetPlayer()->m_InstanceValid && !mEntry->IsDungeon())
-        GetPlayer()->m_InstanceValid = true;
+    if (!GetPlayer()->m_instanceValid && !mEntry->IsDungeon())
+        GetPlayer()->m_instanceValid = true;
 
     // relocate the player to the teleport destination
     if (!map)
     {
-        if (loc.mapId <= 1)
+        if (loc.mapId <= MAX_CONTINENT_ID)
             GetPlayer()->SetLocationInstanceId(sMapMgr.GetContinentInstanceId(loc.mapId, loc.x, loc.y));
         map = sMapMgr.CreateMap(loc.mapId, GetPlayer());
     }
@@ -341,10 +341,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
     if (pPlayerMover)
     {
         if (IsFallEndOpcode(opcode) && pPlayerMover->IsLaunched())
-        {
             pPlayerMover->SetLaunched(false);
-            pPlayerMover->SetXYSpeed(0.0f);
-        }
 
         pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     }
@@ -355,15 +352,15 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
     // this is here to accommodate 1.14 client behavior
     // it does not interrupt falling when rooted
     // verify that root is applied after having landed
-    if (pMover->HasUnitState(UNIT_STAT_ROOT_ON_LANDING))
+    if (pMover->HasUnitState(UNIT_STATE_ROOT_ON_LANDING))
     {
         if (movementInfo.HasMovementFlag(MOVEFLAG_ROOT) || !pMover->ShouldBeRooted())
-            pMover->ClearUnitState(UNIT_STAT_ROOT_ON_LANDING);
+            pMover->ClearUnitState(UNIT_STATE_ROOT_ON_LANDING);
         else if (!movementInfo.HasMovementFlag(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR))
         {
             sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "WorldSession::HandleMovementOpcodes: Player %s from account id %u has pending root on landing, but sent movement packet with opcode %u not containing root or falling flags!",
                 _player->GetName(), _player->GetSession()->GetAccountId(), opcode);
-            pMover->ClearUnitState(UNIT_STAT_ROOT_ON_LANDING);
+            pMover->ClearUnitState(UNIT_STATE_ROOT_ON_LANDING);
             pMover->SetRootedReal(true);
             KickPlayer();
             return;
@@ -749,14 +746,14 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
         {
             sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "WorldSession::HandleMoveRootAck: Player %s from account id %u sent root apply ack, but continues falling. Using 1.14 client?",
                 _player->GetName(), _player->GetSession()->GetAccountId());
-            pMover->AddUnitState(UNIT_STAT_ROOT_ON_LANDING);
+            pMover->AddUnitState(UNIT_STATE_ROOT_ON_LANDING);
             return;
         }
     }
 
 
     // we need to always clear this on root packet for 1.14
-    pMover->ClearUnitState(UNIT_STAT_ROOT_ON_LANDING);
+    pMover->ClearUnitState(UNIT_STATE_ROOT_ON_LANDING);
 #endif
 
     pMover->SetRootedReal(applyReceived);
@@ -865,9 +862,7 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& recvData)
             return;
 
         if (m_moveRejectTime = _player->GetCheatData()->HandleFlagTests(pPlayerMover, movementInfo, CMSG_MOVE_SPLINE_DONE))
-        {
             return;
-        }
     }
 
     HandleMoverRelocation(pMover, movementInfo);
@@ -917,7 +912,7 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket& recvData)
         {
             if (Pet* pet = _player->GetPet())
             {
-                pet->ClearUnitState(UNIT_STAT_POSSESSED);
+                pet->ClearUnitState(UNIT_STATE_POSSESSED);
                 pet->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
                 // out of range pet dismissed
                 if (!pet->IsWithinDistInMap(_player, pet->GetMap()->GetGridActivationDistance()))
@@ -1161,7 +1156,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
             // Undermap
             if ((pPlayerMover->GetPositionZ() + 100.0f) < hauteur)
                 undermap = true;
-            if (pPlayerMover->GetPositionZ() < 250.0f && pPlayerMover->GetMapId() == 489)
+            if (pPlayerMover->GetPositionZ() < 250.0f && pPlayerMover->GetMapId() == MAP_WARSONG_GULCH)
                 undermap = true;
 
             if (undermap)
@@ -1172,7 +1167,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
             pPlayerMover->SaveNoUndermapPosition(pMover->m_movementInfo.GetPos().x, pMover->m_movementInfo.GetPos().y, pMover->m_movementInfo.GetPos().z + 3.0f, pMover->m_movementInfo.GetPos().o);
         
         // Antiundermap2: teleport to graveyard
-        if (pMover->m_movementInfo.GetPos().z < -500.0f)
+        if (pMover->m_movementInfo.GetPos().z < -500.0f && !pPlayerMover->IsGameMaster())
         {
             // NOTE: this is actually called many times while falling
             // even after the player has been teleported away

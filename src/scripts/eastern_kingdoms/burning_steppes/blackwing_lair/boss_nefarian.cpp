@@ -110,7 +110,7 @@ struct boss_nefarianAI : ScriptedAI
         m_uiTailLashTimer       = 10000;
         m_uiClassCallTimer      = urand(25000, 35000);                            // 25-35 seconds
         m_bPhase3               = false;
-        m_bTransitionDone       = false;
+        m_bTransitionDone       = m_creature->GetMapId() != MAP_BLACKWING_LAIR;
         m_bWarriorStance        = false;
         m_uiTransitionStage     = 0;
         m_uiTransitionTimer     = 100;
@@ -478,7 +478,7 @@ struct npc_corrupted_totemAI : ScriptedAI
 
     void Reset() override
     {
-        m_creature->AddUnitState(UNIT_STAT_ROOT);
+        m_creature->AddUnitState(UNIT_STATE_ROOT);
 
         if (!m_creature->HasAura(SPELL_ROOT_SELF))
             m_creature->AddAura(SPELL_ROOT_SELF);
@@ -621,6 +621,27 @@ CreatureAI* GetAI_npc_corrupted_totem(Creature* pCreature)
     return new npc_corrupted_totemAI(pCreature);
 }
 
+// 23424 - Nefarian Class Call Shaman Corrupted Totems
+struct NefarianCorruptedTotemsScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0)
+        {
+            if (!spell->m_casterUnit)
+                return;
+
+            uint32 spellId = PickRandomValue(23419, 23420, 23422, 23423);
+            spell->m_casterUnit->CastSpell(spell->m_casterUnit, spellId, true);
+        }
+    }
+};
+
+SpellScript* GetScript_NefarianCorruptedTotems(SpellEntry const*)
+{
+    return new NefarianCorruptedTotemsScript();
+}
+
 void AddSC_boss_nefarian()
 {
     Script* pNewScript;
@@ -633,5 +654,10 @@ void AddSC_boss_nefarian()
     pNewScript = new Script;
     pNewScript->Name = "npc_corrupted_totem";
     pNewScript->GetAI = &GetAI_npc_corrupted_totem;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "spell_nefarian_corrupted_totems";
+    pNewScript->GetSpellScript = &GetScript_NefarianCorruptedTotems;
     pNewScript->RegisterSelf();
 }

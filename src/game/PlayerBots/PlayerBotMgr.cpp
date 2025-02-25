@@ -549,7 +549,7 @@ bool PlayerBotMgr::DeleteBot(uint32 playerGUID)
     return DeleteBot(iter);
 }
 
-bool PlayerBotMgr::DeleteBot(std::map<uint32, std::shared_ptr<PlayerBotEntry>>::iterator iter)
+bool PlayerBotMgr::DeleteBot(std::map<uint64, std::shared_ptr<PlayerBotEntry>>::iterator iter)
 {
     if (iter->second->state == PB_STATE_LOADING)
         m_stats.loadingCount--;
@@ -1448,7 +1448,7 @@ bool ChatHandler::HandlePartyBotClearMarksCommand(char* args)
 
 bool HandlePartyBotComeToMeHelper(Player* pBot, Player* pPlayer)
 {
-    if (pBot->AI() && pBot->IsAlive() && pBot->IsInMap(pPlayer) && !pBot->HasUnitState(UNIT_STAT_NO_FREE_MOVE))
+    if (pBot->AI() && pBot->IsAlive() && pBot->IsInMap(pPlayer) && !pBot->HasUnitState(UNIT_STATE_NO_FREE_MOVE))
     {
         if (PartyBotAI* pAI = dynamic_cast<PartyBotAI*>(pBot->AI()))
         {

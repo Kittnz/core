@@ -25,6 +25,7 @@
 #include "Player.h"
 #include "Spell.h"
 #include "SpellAuras.h"
+#include "SpellModifier.h"
 #include "SpellMgr.h"
 #include "Util.h"
 #include "World.h"
@@ -380,6 +381,10 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, Spel
             return SPELL_PROC_TRIGGER_FAILED;
     }
 
+    if (holder->GetAuraScript())
+        if (auto result = holder->GetAuraScript()->OnCheckProc(this, pVictim, holder, procSpell, procFlag, procExtra, attType, isVictim))
+            return result.value();
+
     // Get proc Event Entry
     spellProcEvent = sSpellMgr.GetSpellProcEvent(spellProto->Id);
 
@@ -590,6 +595,11 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
 
+                    // dont trigger from non damaging spells, amount is 1 for non damaging spells if they hit
+                    // tested on classic that rend does not trigger sweeping strikes
+                    if (amount <= 1)
+                        return SPELL_AURA_PROC_FAILED;
+
                     // Prevent chain of triggered spell from same triggered spell
                     if (procSpell && (procSpell->Id == 26654 || procSpell->Id == 12723))
                         return SPELL_AURA_PROC_FAILED;
@@ -656,7 +666,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     //  15 seconds.In addition, retaliatory strikes will not be possible
                     //  while stunned.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-                    if (HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+                    if (HasUnitState(UNIT_STATE_CAN_NOT_REACT))
                         return SPELL_AURA_PROC_FAILED;
 #endif
 
@@ -1420,7 +1430,21 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 a
         case SPELLFAMILY_DRUID:
             break;
         case SPELLFAMILY_HUNTER:
+        {
+            switch (auraSpellInfo->Id)
+            {
+                case 5118: // Aspect of the Cheetah
+                case 13159: // Aspect of the Pack
+                {
+                    // dont trigger from non damaging spells, amount is 1 for non damaging spells if they hit
+                    if (amount <= 1)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    break;
+                }
+            }
             break;
+        }
         case SPELLFAMILY_PALADIN:
         {
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4

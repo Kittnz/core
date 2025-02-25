@@ -452,11 +452,13 @@ struct npc_creeping_doomAI : public ScriptedAI
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
-        Unit* pOwner = m_creature->GetCharmerOrOwner();
-        if (pDoneBy && pOwner)
+        if (pDoneBy)
         {
-            pOwner->AddThreat(pDoneBy);
-            pOwner->SetInCombatWith(pDoneBy);
+            if (Unit* pOwner = m_creature->GetCharmerOrOwner())
+            {
+                pOwner->AddThreat(pDoneBy);
+                pOwner->SetInCombatWith(pDoneBy);
+            }
         }
         ScriptedAI::DamageTaken(pDoneBy, uiDamage);
     }
@@ -466,91 +468,6 @@ CreatureAI* GetAI_npc_creeping_doom(Creature* pCreature)
 {
     return new npc_creeping_doomAI(pCreature);
 }
-
-/*#####
- ## npc_prince_thunderaan
- ######*/
-
-enum
-{
-    SPELL_TENDRILS_OF_AIR           = 23009, // KB
-    SPELL_TEARS_OF_THE_WIND_SEEKER    = 23011
-};
-
-struct npc_prince_thunderaanAI : public ScriptedAI
-{
-    npc_prince_thunderaanAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        engaged = false;
-        emerged = false;
-        Reset();
-    }
-
-    uint32 m_uiTendrilsTimer;
-    uint32 m_uiTearsTimer;
-    bool engaged;
-    bool emerged;
-
-    void Reset() override
-    {
-        m_uiTendrilsTimer   = 8000;
-        m_uiTearsTimer      = 15000;
-    }
-
-    void SpellHitTarget(Unit* pCaster, SpellEntry const* pSpell) override
-    {
-        if (pCaster->GetTypeId() != TYPEID_PLAYER)
-            return;
-
-        if (pSpell->Id == SPELL_TENDRILS_OF_AIR)
-            m_creature->GetThreatManager().modifyThreatPercent(pCaster, -100);
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        if (!engaged)
-        {
-            m_creature->MonsterYell("My power is discombobulatingly devastating! It is ludicrous that these mortals even attempt to enter my realm!", 0);
-            engaged = true;
-        }
-    }
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (!emerged)
-        {
-            m_creature->CastSpell(m_creature, 20568, false);     // Ragnaros Emerge
-            emerged = true;
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (m_uiTendrilsTimer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature, SPELL_TENDRILS_OF_AIR) == CAST_OK) // KB
-                m_uiTendrilsTimer = urand(12000, 20000);
-        }
-        else
-            m_uiTendrilsTimer -= uiDiff;
-
-        if (m_uiTearsTimer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature, SPELL_TEARS_OF_THE_WIND_SEEKER) == CAST_OK)
-                m_uiTearsTimer = urand(8000, 11000);
-        }
-        else
-            m_uiTearsTimer -= uiDiff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_prince_thunderaan(Creature* pCreature)
-{
-    return new npc_prince_thunderaanAI(pCreature);
-}
-
 
 /*#####
  ## npc_colossus
@@ -702,7 +619,6 @@ CreatureAI* GetAI_npc_colossus(Creature* pCreature)
 enum
 {
     GO_GLYPHED_CRYSTAL      = 180514,
-    GO_GLYPHED_CRYSTAL_BIG  = 210342
 };
 
 struct npc_Geologist_LarksbaneAI : public ScriptedAI
@@ -730,11 +646,11 @@ struct npc_Geologist_LarksbaneAI : public ScriptedAI
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL, -6826.51f, 809.082f, 51.8577f, 0.259445f))
+        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL, -6825.29f, 809.125f, 51.8699f, 0.349065f, 0, 0, 0.173648f, 0.984808f))
             lCrystalGUIDs.push_back(pGo->GetGUID());
-        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL, -6827.54f, 806.711f, 51.9809f, 2.2241f))
+        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL, -6822.21f, 808.584f, 51.5885f, 2.77507f, 0, 0, 0.983254f, 0.182238f))
             lCrystalGUIDs.push_back(pGo->GetGUID());
-        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL_BIG, -6825.31f, 805.146f, 51.9435f, -1.255528f))
+        if (GameObject* pGo = m_creature->SummonGameObject(GO_GLYPHED_CRYSTAL, -6823.57f, 811.977f, 51.4426f, 4.41568f, 0, 0, -0.803857f, 0.594823f))
             lCrystalGUIDs.push_back(pGo->GetGUID());
 
         uiCurrAction = 1;
@@ -3060,11 +2976,6 @@ void AddSC_silithus()
     /*########################
     ##      Nostalrius      ##
     ########################*/
-
-    pNewScript = new Script;
-    pNewScript->Name = "npc_prince_thunderaan";
-    pNewScript->GetAI = &GetAI_npc_prince_thunderaan;
-    pNewScript->RegisterSelf();
 
     // AQ WAR
     pNewScript = new Script;
