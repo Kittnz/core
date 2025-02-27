@@ -339,6 +339,8 @@ Player::Player(WorldSession* session) : Unit(),
     m_cameraUpdateTimer = 0;
     m_longSightSpell = 0;
     m_longSightRange = 0.0f;
+
+    m_worldBuffCheckTimer = 0;
 }
 
 Player::~Player()
@@ -1259,6 +1261,18 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         m_regenTimer -= update_diff;
         HandleFoodEmotes(update_diff);
         RegenerateAll();
+
+        if (IsInWorld())
+        {
+            // Prevent player from getting a world buff if its already suspended in character_aura_suspended
+            if (update_diff >= m_worldBuffCheckTimer)
+            {
+                RemoveWorldBuffsIfAlreadySuspended();
+                m_worldBuffCheckTimer = 3 * MINUTE * IN_MILLISECONDS;
+            }
+            else
+                m_worldBuffCheckTimer -= update_diff;
+        }
     }
     else
     {

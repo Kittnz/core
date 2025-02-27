@@ -1991,6 +1991,9 @@ class Player final: public Unit
         void SendMountResult(UnitMountResult result) const;
         void SendDismountResult(UnitDismountResult result) const;
         void UpdateCorpseReclaimDelay();
+
+        // For chronoboon item
+        uint32 m_worldBuffCheckTimer;
     public:
         void ScheduleStandUp();
         bool IsStandUpScheduled() const { return m_isStandUpScheduled; }
