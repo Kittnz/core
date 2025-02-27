@@ -330,6 +330,9 @@ Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
     }
 
     AddGuild(guild);
+
+    guild->SetMOTD("Welcome to the " + guildName + "!");
+
     return guild;
 }
 
