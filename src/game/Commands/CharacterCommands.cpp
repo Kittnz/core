@@ -5897,3 +5897,69 @@ bool ChatHandler::HandleListExploredAreasCommand(char* args)
     }
     return true;
 }
+
+bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    char* playerName = ExtractQuotedOrLiteralArg(&args);
+    if (!playerName)
+    {
+        SendSysMessage("Usage: .learn all_mytaxis_player \"player name\"");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    char* p2 = ExtractLiteralArg(&args);
+
+    uint32 lowguid;
+    ObjectGuid guid;
+    // character name can't start from number
+    if (!ExtractUInt32(&p2, lowguid))
+    {
+        std::string name = ExtractPlayerNameFromLink(&p2);
+        if (name.empty())
+        {
+            SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        guid = sObjectMgr.GetPlayerGuidByName(name);
+        if (!guid)
+        {
+            PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        lowguid = guid.GetCounter();
+    }
+    else
+        guid = ObjectGuid(HIGHGUID_PLAYER, lowguid);
+
+    Player* player = sObjectMgr.GetPlayer(guid);
+    if (player)
+    {
+        for (auto const& itr : sObjectMgr.GetCreatureInfoMap())
+        {
+            if (CreatureInfo const* cInfo = itr.second.get())
+                if (cInfo->npc_flags & UNIT_NPC_FLAG_FLIGHTMASTER)
+                {
+                    FindCreatureData worker(cInfo->entry, player);
+                    sObjectMgr.DoCreatureData(worker);
+                    if (CreatureDataPair const* dataPair = worker.GetResult())
+                        if (CreatureData const* data = &dataPair->second)
+                            if (uint32 taxiNode = sObjectMgr.GetNearestTaxiNode(data->position.x, data->position.y, data->position.z, data->position.mapId, player->GetTeam()))
+                                if (player->GetTaxi().SetTaximaskNode(taxiNode))
+                                {
+                                    WorldPacket msg(SMSG_NEW_TAXI_PATH, 0);
+                                    GetSession()->SendPacket(&msg);
+                                }
+                }
+        }
+        SendSysMessage(LANG_COMMAND_LEARN_TAXIS);
+    }
+    return true;
+}

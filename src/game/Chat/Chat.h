@@ -599,6 +599,7 @@ class ChatHandler
         bool HandleLearnAllMySpellsCommand(char* args);
         bool HandleLearnAllMyTalentsCommand(char* args);
         bool HandleLearnAllMyTaxisCommand(char* args);
+        bool HandleLearnAllMyTaxisPlayerCommand(char* args);
         bool HandleLearnAllTrainerCommand(char* args);
         bool HandleLearnAllItemsCommand(char* args);
 
