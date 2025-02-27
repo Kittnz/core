@@ -184,7 +184,7 @@ std::string GuildMgr::GetNextGuildNumber(uint32 currentNumber) const
 uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
 {
     // Check if account already exists
-    std::string username = "startguildmaster";
+    std::string username = "startergm";
     uint32 accountId = sAccountMgr.GetId(username);
 
     if (!accountId)
@@ -236,7 +236,7 @@ Guild* GuildMgr::GetOrCreateStarterGuild(Team team)
 
 void GuildMgr::CreateGuildMasterCharacter(Team team, const std::string& number, uint32 accountId)
 {
-    std::string gmName = (team == ALLIANCE) ? "AllianceGuildMaster" : "HordeGuildMaster";
+    std::string gmName = (team == ALLIANCE) ? "AllyGM" : "HordeGM";
     gmName += number;
 
     // Create character entry in DB first
@@ -313,7 +313,7 @@ Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
     CreateGuildMasterCharacter(team, suffix, accountId);
 
     // Find the newly created character's GUID
-    std::string gmName = (team == ALLIANCE ? "AllianceGuildMaster" : "HordeGuildMaster") + suffix;
+    std::string gmName = (team == ALLIANCE ? "AllyGM" : "HordeGM") + suffix;
     ObjectGuid gmGuid = sObjectMgr.GetPlayerGuidByName(gmName);
 
     if (!gmGuid)
