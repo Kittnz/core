@@ -232,7 +232,7 @@ void Antispam::processMessages(uint32 diff)
     else
         m_updateTimer -= diff;
 
-    while (m_messageQueue.empty())
+    while (!m_messageQueue.empty())
     {
         MessageBlock messageBlock;
         if (m_messageQueue.try_pop(messageBlock))
