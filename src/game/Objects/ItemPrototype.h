@@ -498,6 +498,7 @@ struct ItemPrototype
     uint32 WrappedGift = 0;
     uint32 ExtraFlags = 0;                                  // see ItemExtraFlags
     uint32 OtherTeamEntry = 0;
+    uint32 ScriptId = 0;
 
     // values assigned by core
     mutable int32 SourceQuestLevel = -1;                    // minimum level of quest that rewards this item

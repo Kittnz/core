@@ -2448,6 +2448,13 @@ class Player final: public Unit
         static uint32 GetRankFromDB(ObjectGuid guid);
         int GetGuildIdInvited() const { return m_guildIdInvited; }
         static void RemovePetitionsAndSigns(ObjectGuid guid, uint32 exceptPetitionId = 0);
+
+        // Xerron Suspend World Buffs Start
+    public:
+        bool SuspendWorldBuffs();
+        bool RestoreSuspendedWorldBuffs();
+        void RemoveWorldBuffsIfAlreadySuspended();
+        // Xerron Suspend World Buffs End
 };
 
 inline Player* Object::ToPlayer()

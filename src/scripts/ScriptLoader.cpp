@@ -246,6 +246,8 @@ void AddSC_warlock_spell_scripts();
 void AddSC_item_spell_scripts();
 void AddSC_special_spell_scripts();
 
+void AddSC_random_scripts_1();
+
 void AddScripts()
 {
     //Nostalrius
@@ -486,4 +488,6 @@ void AddScripts()
     AddSC_warlock_spell_scripts();
     AddSC_item_spell_scripts();
     AddSC_special_spell_scripts();
+
+    AddSC_random_scripts_1();
 }

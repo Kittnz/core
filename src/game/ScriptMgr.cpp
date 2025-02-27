@@ -1753,17 +1753,18 @@ void ScriptMgr::LoadScriptNames()
 
     BarGoLink bar(6);
     uint32 count = 0;
-    char const* tableNames[6] =
+    char const* tableNames[7] =
     {
         "creature_template",
         "gameobject_template",
         "scripted_areatrigger",
         "scripted_event_id",
         "spell_template",
-        "map_template"
+        "map_template",
+        "item_template"
     };
 
-    for (uint32 i = 0; i < 6; ++i)
+    for (uint32 i = 0; i < 7; ++i)
     {
         std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT DISTINCT(script_name) FROM %s WHERE script_name <> ''", tableNames[i]);
         bar.step();
@@ -2035,6 +2036,16 @@ bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
     pPlayer->PlayerTalkClass->ClearMenus();
 
     return pTempScript->pGOHello(pPlayer, pGameObject);
+}
+
+bool ScriptMgr::OnItemUseSpell(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
+{
+    Script* pTempScript = m_scripts[pItem->GetProto()->ScriptId];
+
+    if (!pTempScript || !pTempScript->pItemUseSpell)
+        return false;
+
+    return pTempScript->pItemUseSpell(pPlayer, pItem, targets);
 }
 
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
