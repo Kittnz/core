@@ -5911,33 +5911,14 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
         return false;
     }
 
-    char* p2 = ExtractLiteralArg(&args);
-
-    uint32 lowguid;
-    ObjectGuid guid;
-    // character name can't start from number
-    if (!ExtractUInt32(&p2, lowguid))
+    // Get player GUID directly from name
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(playerName);
+    if (!guid)
     {
-        std::string name = ExtractPlayerNameFromLink(&p2);
-        if (name.empty())
-        {
-            SendSysMessage(LANG_PLAYER_NOT_FOUND);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        guid = sObjectMgr.GetPlayerGuidByName(name);
-        if (!guid)
-        {
-            PSendSysMessage(LANG_PLAYER_NOT_FOUND);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        lowguid = guid.GetCounter();
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
     }
-    else
-        guid = ObjectGuid(HIGHGUID_PLAYER, lowguid);
 
     Player* player = sObjectMgr.GetPlayer(guid);
     if (player)
@@ -5961,5 +5942,6 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
         }
         SendSysMessage(LANG_COMMAND_LEARN_TAXIS);
     }
+
     return true;
 }
