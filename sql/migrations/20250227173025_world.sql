@@ -19,6 +19,8 @@ DELETE FROM `npc_vendor` WHERE  `entry`=10667;
 INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES 
 (10667, 0, 83000, 0, 0, 0, 0);
 
+UPDATE `creature_template` SET `npc_flags`=6 WHERE `entry`=10667;
+
 
 -- End of migration.
 END IF;
