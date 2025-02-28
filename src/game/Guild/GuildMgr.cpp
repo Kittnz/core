@@ -236,7 +236,7 @@ Guild* GuildMgr::GetOrCreateStarterGuild(Team team)
 
 void GuildMgr::CreateGuildMasterCharacter(Team team, const std::string& number, uint32 accountId)
 {
-    std::string gmName = (team == ALLIANCE) ? "AllyGM" : "HordeGM";
+    std::string gmName = (team == ALLIANCE) ? "AGM" : "HGM";
     gmName += number;
 
     // Create character entry in DB first
@@ -313,7 +313,7 @@ Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
     CreateGuildMasterCharacter(team, suffix, accountId);
 
     // Find the newly created character's GUID
-    std::string gmName = (team == ALLIANCE ? "AllyGM" : "HordeGM") + suffix;
+    std::string gmName = (team == ALLIANCE ? "AGM" : "HGM") + suffix;
     ObjectGuid gmGuid = sObjectMgr.GetPlayerGuidByName(gmName);
 
     if (!gmGuid)
