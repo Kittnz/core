@@ -196,6 +196,14 @@ uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
         if (result == AOR_OK)
         {
             accountId = sAccountMgr.GetId(username);
+
+            // Verify that we got a valid account ID
+            if (accountId == 0)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to get valid ID for starter guild master account after creation!");
+                return 0;
+            }
+
             sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Created starter guild master account with id: %u", accountId);
         }
         else
@@ -203,6 +211,13 @@ uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
             sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to create starter guild master account!");
             return 0;
         }
+    }
+
+    // Additional validation to ensure we have a valid account ID
+    if (accountId == 0)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Invalid starter guild master account ID: 0");
+        return 0;
     }
 
     m_starterGuildMasterAccount = accountId;
@@ -284,6 +299,8 @@ bool GuildMgr::IsStarterGuildMaster(ObjectGuid guid) const
 
 Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
 {
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Creating new starter guild for team %s with suffix '%s'", team == ALLIANCE ? "Alliance" : "Horde", suffix.c_str());
+
     // Check if we've reached maximum number of guilds
     const uint32 MAX_STARTER_GUILDS = 1000;
     uint32 currentGuildCount = 0;
@@ -296,7 +313,7 @@ Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
 
     if (currentGuildCount >= MAX_STARTER_GUILDS)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Maximum number of starter guilds reached!");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Maximum number of starter guilds reached (%u)!", MAX_STARTER_GUILDS);
         return nullptr;
     }
 
@@ -304,34 +321,132 @@ Guild* GuildMgr::CreateStarterGuild(Team team, const std::string& suffix)
     if (!suffix.empty())
         guildName += " " + suffix;
 
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Attempting to create guild with name: '%s'", guildName.c_str());
+
     // Get or create the starter guild master account
     uint32 accountId = CreateOrGetStarterGuildMasterAccount();
     if (!accountId)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to obtain valid starter guild master account ID for guild '%s'", guildName.c_str());
         return nullptr;
+    }
 
-    // Create the guild master character
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Using account ID: %u for guild master", accountId);
+
+    // Create the guild master character name
+    std::string gmName = (team == ALLIANCE ? "AGM" : "HGM") + suffix;
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Creating guild master character with name: '%s'", gmName.c_str());
+
+    // Check if character already exists
+    ObjectGuid existingGuid = sObjectMgr.GetPlayerGuidByName(gmName);
+    if (existingGuid)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Guild master character '%s' already exists with GUID %u", gmName.c_str(), existingGuid.GetCounter());
+
+        // Verify account
+        PlayerCacheData const* cacheData = sObjectMgr.GetPlayerDataByGUID(existingGuid.GetCounter());
+        if (cacheData && cacheData->uiAccount == accountId)
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Using existing guild master character '%s' (GUID %u)", gmName.c_str(), existingGuid.GetCounter());
+
+            // Use existing character's GUID
+            // Create the guild
+            Guild* guild = new Guild;
+            if (!guild->Create(existingGuid, guildName))
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to create guild object with existing character! GM: %s (GUID: %u)", gmName.c_str(), existingGuid.GetCounter());
+                delete guild;
+                return nullptr;
+            }
+
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Guild created successfully with ID: %u using existing character", guild->GetId());
+
+            AddGuild(guild);
+            guild->SetMOTD("Welcome to the " + guildName + "!");
+
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Starter guild '%s' (ID: %u) created successfully with existing GM: %s (GUID: %u)", guildName.c_str(), guild->GetId(), gmName.c_str(), existingGuid.GetCounter());
+
+            return guild;
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Existing guild master character '%s' (GUID %u) has incorrect account. Expected %u, got %s", gmName.c_str(), existingGuid.GetCounter(), accountId, cacheData ? std::to_string(cacheData->uiAccount).c_str() : "unknown");
+        }
+    }
+
+    // Create new character
     CreateGuildMasterCharacter(team, suffix, accountId);
 
+    // Wait a short time for caching systems to update
+    //sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Waiting for character cache to update...");
+    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     // Find the newly created character's GUID
-    std::string gmName = (team == ALLIANCE ? "AGM" : "HGM") + suffix;
     ObjectGuid gmGuid = sObjectMgr.GetPlayerGuidByName(gmName);
 
     if (!gmGuid)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to find guild master character!");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to find guild master character with name '%s' after creation!", gmName.c_str());
+
+        // Try direct database lookup as fallback
+        std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT guid FROM characters WHERE name = '%s' AND account = %u", gmName.c_str(), accountId);
+
+        if (result)
+        {
+            uint32 charGuid = (*result)[0].GetUInt32();
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Character found in database with GUID=%u but not in cache, manually creating guid", charGuid);
+            gmGuid = ObjectGuid(HIGHGUID_PLAYER, charGuid);
+
+            // Force update player cache
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Forcing cache update for character '%s' (GUID %u)", gmName.c_str(), charGuid);
+            PlayerCacheData const* data = sObjectMgr.GetPlayerDataByGUID(charGuid);
+            if (!data)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Manually inserting character into cache");
+                sObjectMgr.InsertPlayerInCache(charGuid, // guid
+                                               team == ALLIANCE ? RACE_HUMAN : RACE_ORC, // race
+                                               CLASS_WARRIOR, // class
+                                               0, // gender
+                                               accountId, // account
+                                               gmName, // name
+                                               60, // level
+                                               team == ALLIANCE ? 1519 : 1637 // zoneId
+                );
+            }
+        }
+        else
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Character not found in database. Creation appears to have failed completely.");
+            return nullptr;
+        }
+    }
+
+    if (!gmGuid)
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unable to obtain guild master GUID even after fallback attempts. Aborting guild creation.");
         return nullptr;
     }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Guild master character created/found successfully with GUID: %u", gmGuid.GetCounter());
+
+    // Create the guild
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Creating guild object with name '%s' and GM GUID %u", guildName.c_str(), gmGuid.GetCounter());
 
     Guild* guild = new Guild;
     if (!guild->Create(gmGuid, guildName))
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to create guild object! GM: %s (GUID: %u)", gmName.c_str(), gmGuid.GetCounter());
         delete guild;
         return nullptr;
     }
 
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Guild created successfully with ID: %u", guild->GetId());
+
     AddGuild(guild);
 
     guild->SetMOTD("Welcome to the " + guildName + "!");
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Starter guild '%s' (ID: %u) created successfully with GM: %s (GUID: %u)", guildName.c_str(), guild->GetId(), gmName.c_str(), gmGuid.GetCounter());
 
     return guild;
 }
