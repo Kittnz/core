@@ -183,19 +183,54 @@ std::string GuildMgr::GetNextGuildNumber(uint32 currentNumber) const
 
 uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
 {
-    // Check if account already exists
+    // Define the account name we want to use
     std::string username = "startergm";
-    uint32 accountId = sAccountMgr.GetId(username);
 
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Looking for starter guild master account with name '%s'", username.c_str());
+
+    // Normalize the username first, just like in ExtractAccountId
+    std::string normalizedUsername = username;
+    if (!AccountMgr::normalizeString(normalizedUsername))
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Failed to normalize account name '%s'", username.c_str());
+        return 0;
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Normalized account name: '%s'", normalizedUsername.c_str());
+
+    // Try to find account with normalized name
+    uint32 accountId = sAccountMgr.GetId(normalizedUsername);
+
+    // If account doesn't exist, create it
     if (!accountId)
     {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Account not found, creating new account '%s'", normalizedUsername.c_str());
+
         // Create new account
         std::string password = sConfig.GetStringDefault("StarterGuild.Account.Password", "your_secure_password_here");
-        AccountOpResult result = sAccountMgr.CreateAccount(username, password);
+        AccountOpResult result = sAccountMgr.CreateAccount(normalizedUsername, password);
 
         if (result == AOR_OK)
         {
-            accountId = sAccountMgr.GetId(username);
+            // Try to get the account ID using the normalized name
+            accountId = sAccountMgr.GetId(normalizedUsername);
+
+            // If still not found, try direct database lookup
+            if (!accountId)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Account not found after creation, trying direct database lookup");
+
+                // Wait a moment for the database to process the creation
+                //std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+                std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT id FROM account WHERE LOWER(username) = LOWER('%s')", normalizedUsername.c_str());
+
+                if (result)
+                {
+                    accountId = (*result)[0].GetUInt32();
+                    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Found account via direct database lookup, id: %u", accountId);
+                }
+            }
 
             // Verify that we got a valid account ID
             if (accountId == 0)
@@ -212,6 +247,10 @@ uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
             return 0;
         }
     }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Found existing starter guild master account with id: %u", accountId);
+    }
 
     // Additional validation to ensure we have a valid account ID
     if (accountId == 0)
@@ -219,6 +258,16 @@ uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Invalid starter guild master account ID: 0");
         return 0;
     }
+
+    // Verify account exists by name lookup
+    std::string retrievedName;
+    if (!sAccountMgr.GetName(accountId, retrievedName))
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Cannot verify account %u - GetName failed!", accountId);
+        return 0;
+    }
+
+    sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Verified account ID %u has name '%s'", accountId, retrievedName.c_str());
 
     m_starterGuildMasterAccount = accountId;
     return accountId;
