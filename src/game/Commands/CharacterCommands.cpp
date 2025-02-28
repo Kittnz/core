@@ -5903,8 +5903,10 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
     if (!*args)
         return false;
 
-    char* playerName = ExtractQuotedOrLiteralArg(&args);
-    if (!playerName)
+    std::string charName(args);
+    normalizePlayerName(charName);
+
+    if (charName == "")
     {
         SendSysMessage("Usage: .learn all_mytaxis_player \"player name\"");
         SetSentErrorMessage(true);
@@ -5912,7 +5914,7 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
     }
 
     // Get player GUID directly from name
-    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(playerName);
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(charName);
     if (!guid)
     {
         PSendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -5923,6 +5925,7 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
     Player* player = sObjectMgr.GetPlayer(guid);
     if (player)
     {
+        // Player is online, use the regular method
         for (auto const& itr : sObjectMgr.GetCreatureInfoMap())
         {
             if (CreatureInfo const* cInfo = itr.second.get())
@@ -5941,6 +5944,56 @@ bool ChatHandler::HandleLearnAllMyTaxisPlayerCommand(char* args)
                 }
         }
         SendSysMessage(LANG_COMMAND_LEARN_TAXIS);
+    }
+    else
+    {
+        // Player is offline, we need to update the database directly
+
+        // First, determine the player's team (faction)
+        uint8 playerTeam = TEAM_NONE;
+        std::unique_ptr<QueryResult> teamResult = CharacterDatabase.PQuery("SELECT `race` FROM `characters` WHERE `guid` = %u", guid.GetCounter());
+
+        if (!teamResult)
+        {
+            PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint8 race = (*teamResult)[0].GetUInt8();
+        switch (race)
+        {
+        case RACE_HUMAN:
+        case RACE_DWARF:
+        case RACE_NIGHTELF:
+        case RACE_GNOME:
+            playerTeam = ALLIANCE;
+            break;
+        case RACE_ORC:
+        case RACE_UNDEAD:
+        case RACE_TAUREN:
+        case RACE_TROLL:
+            playerTeam = HORDE;
+            break;
+        }
+
+        if (playerTeam == TEAM_NONE)
+        {
+            PSendSysMessage("Could not determine player's team.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        // Set the complete taxi mask for the player's faction directly in the characters table
+        std::string taxiMaskStr;
+        if (playerTeam == ALLIANCE)
+            taxiMaskStr = "3456411898 2148078928 49991 0 0 0 0 0 ";
+        else // HORDE
+            taxiMaskStr = "561714688 282102432 52408 0 0 0 0 0 ";
+
+        CharacterDatabase.PExecute("UPDATE `characters` SET `known_taxi_mask` = '%s' WHERE `guid` = %u", taxiMaskStr.c_str(), guid.GetCounter());
+
+        PSendSysMessage("Added all flight paths for offline player %s.", charName);
     }
 
     return true;
