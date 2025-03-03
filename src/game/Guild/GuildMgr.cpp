@@ -221,7 +221,7 @@ uint32 GuildMgr::CreateOrGetStarterGuildMasterAccount()
                 sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Account not found after creation, trying direct database lookup");
 
                 // Wait a moment for the database to process the creation
-                //std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
                 std::unique_ptr<QueryResult> result = LoginDatabase.PQuery("SELECT id FROM account WHERE LOWER(username) = LOWER('%s')", normalizedUsername.c_str());
 
