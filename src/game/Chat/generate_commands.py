@@ -165,7 +165,7 @@ def connect_command_hierarchy(commands, command_tables):
             connect_command_hierarchy(children, command_tables)
 
 def generate_command_list(commands):
-    """Generate the hierarchical command list with required account types."""
+    """Generate the hierarchical command list with required account types and console usage."""
     result = []
     
     # Process commands and their subcommands
@@ -190,8 +190,11 @@ def process_command_level(commands, result, level):
         # Add indentation based on level
         indent = "  " * level
         
+        # Add console availability
+        console_status = "Console: Yes" if cmd.allow_console else "Console: No"
+        
         # Add command to result
-        result.append(f"{indent}{full_name} (Requires: {security_name})")
+        result.append(f"{indent}{full_name} (Requires: {security_name}, {console_status})")
         
         # Process subcommands
         if cmd.children:
@@ -254,6 +257,15 @@ def generate_html(command_list):
             background-color: yellow;
             font-weight: bold;
         }
+        
+        /* Console indication styling */
+        .console-yes {
+            color: green;
+        }
+        
+        .console-no {
+            color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -290,18 +302,52 @@ def generate_html(command_list):
                         const before = line.substring(0, index);
                         const matched = line.substring(index, index + searchTerm.length);
                         const after = line.substring(index + searchTerm.length);
-                        newText += `${before}<span class="highlight">${matched}</span>${after}\\n`;
+                        
+                        // Add console status coloring
+                        let coloredLine = `${before}<span class="highlight">${matched}</span>${after}`;
+                        coloredLine = coloredLine.replace(/Console: Yes/g, '<span class="console-yes">Console: Yes</span>');
+                        coloredLine = coloredLine.replace(/Console: No/g, '<span class="console-no">Console: No</span>');
+                        
+                        newText += coloredLine + '\\n';
                     } else {
-                        newText += line + '\\n';
+                        // Just color the console status
+                        let coloredLine = line;
+                        coloredLine = coloredLine.replace(/Console: Yes/g, '<span class="console-yes">Console: Yes</span>');
+                        coloredLine = coloredLine.replace(/Console: No/g, '<span class="console-no">Console: No</span>');
+                        
+                        newText += coloredLine + '\\n';
                     }
                 }
             }
             
             if (searchTerm === '') {
-                document.getElementById('commandText').innerHTML = text;
+                // Color all console statuses even when no search
+                let coloredText = '';
+                for (const line of lines) {
+                    let coloredLine = line;
+                    coloredLine = coloredLine.replace(/Console: Yes/g, '<span class="console-yes">Console: Yes</span>');
+                    coloredLine = coloredLine.replace(/Console: No/g, '<span class="console-no">Console: No</span>');
+                    coloredText += coloredLine + '\\n';
+                }
+                document.getElementById('commandText').innerHTML = coloredText;
             } else {
                 document.getElementById('commandText').innerHTML = newText || 'No matching commands found.';
             }
+        });
+        
+        // Initialize with colored console status on page load
+        window.addEventListener('load', function() {
+            const text = document.getElementById('commandText').innerText;
+            const lines = text.split('\\n');
+            
+            let coloredText = '';
+            for (const line of lines) {
+                let coloredLine = line;
+                coloredLine = coloredLine.replace(/Console: Yes/g, '<span class="console-yes">Console: Yes</span>');
+                coloredLine = coloredLine.replace(/Console: No/g, '<span class="console-no">Console: No</span>');
+                coloredText += coloredLine + '\\n';
+            }
+            document.getElementById('commandText').innerHTML = coloredText;
         });
     </script>
 </body>
