@@ -83,37 +83,66 @@ void LevelRewardMgr::CheckLevelReward(Player* player, uint32 level) const
     if (!rewards || rewards->empty())
         return;
 
-    // Get localized subject and text from the first reward (they should all be the same for a level)
+    // Get localized subject and text
     int32 loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
 
-    const LevelReward& firstReward = rewards->front();
-    char const* subject = sObjectMgr.GetMangosString(firstReward.mailSubjectEntry, loc_idx);
-    char const* text = sObjectMgr.GetMangosString(firstReward.mailTextEntry, loc_idx);
-
-    // Create mail with subject and text
-    MailDraft draft(subject, text);
-
-    // Add all items to the mail
+    // Process each reward separately
     for (const auto& reward : *rewards)
     {
-        // Create item instance
-        Item* item = Item::CreateItem(reward.itemId, reward.itemCount, player->GetObjectGuid().GetCounter());
-        if (item)
+        // Validate the item
+        ItemPrototype const* item_proto = sObjectMgr.GetItemPrototype(reward.itemId);
+        if (!item_proto)
         {
-            // Save the item
-            item->SaveToDB();
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "LevelRewardMgr: Invalid item ID %u for level %u reward.", reward.itemId, level);
+            continue;
+        }
 
-            // Add item to the mail
-            draft.AddItem(item);
+        uint32 itemCount = reward.itemCount;
+        if (itemCount < 1 || (item_proto->MaxCount > 0 && itemCount > uint32(item_proto->MaxCount)))
+        {
+            sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "LevelRewardMgr: Invalid item count %u for item %u in level %u reward.", itemCount, reward.itemId, level);
+            continue;
+        }
 
-            // Log the reward
-            sLog.Player(player->GetSession(), LOG_LEVELUP, LOG_LVL_BASIC, "Character %s:%u received level %u reward (item: %u, count: %u) for having 0 deaths", player->GetName(), player->GetGUIDLow(), level, reward.itemId, reward.itemCount);
+        char const* subject = sObjectMgr.GetMangosString(reward.mailSubjectEntry, loc_idx);
+        char const* text = sObjectMgr.GetMangosString(reward.mailTextEntry, loc_idx);
+
+        // Handle items that might exceed stack size
+        while (itemCount > 0)
+        {
+            // Determine current stack size
+            uint32 currentStackSize = std::min(itemCount, uint32(item_proto->GetMaxStackSize()));
+
+            // Create a new mail draft for each item/stack
+            MailDraft draft(subject, text);
+
+            // Create the item and add it to mail
+            Item* mailItem = Item::CreateItem(reward.itemId, currentStackSize, player->GetObjectGuid().GetCounter());
+            if (mailItem)
+            {
+                mailItem->SaveToDB();
+                draft.AddItem(mailItem);
+
+                // Create mail sender
+                MailSender sender(MAIL_NORMAL, (uint32)0, MAIL_STATIONERY_GM);
+
+                // Send the mail
+                draft.SendMailTo(MailReceiver(player), sender, MAIL_CHECK_MASK_COPIED);
+
+                // Log the reward
+                sLog.Player(player->GetSession(), LOG_LEVELUP, LOG_LVL_BASIC, "Character %s:%u received level %u reward (item: %u, count: %u) for having 0 deaths", player->GetName(), player->GetGUIDLow(), level, reward.itemId, currentStackSize);
+
+                // Decrease remaining count
+                itemCount -= currentStackSize;
+            }
+            else
+            {
+                // Failed to create item, break loop
+                sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "LevelRewardMgr: Failed to create item %u for level %u reward.", reward.itemId, level);
+                break;
+            }
         }
     }
 
-    // Create a proper MailSender
-    MailSender sender(MAIL_NORMAL, (uint32)0, MAIL_STATIONERY_GM);
-
-    // Send mail to player
-    draft.SendMailTo(MailReceiver(player), sender, MAIL_CHECK_MASK_COPIED);
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "LevelRewardMgr: Sent level %u reward mails to player %s (%u).", level, player->GetName(), player->GetGUIDLow());
 }
