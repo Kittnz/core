@@ -1945,6 +1945,7 @@ class Player final: public Unit
         time_t m_loginTime;
         time_t m_lastTick;
         uint32 m_playedTime[MAX_PLAYED_TIME_INDEX];
+        uint32 m_totalDeathCount;
     public:
         WorldSession* GetSession() const { return m_session; }
         void SetSession(WorldSession* s);
@@ -1967,6 +1968,9 @@ class Player final: public Unit
         void AddSkippedUpdateTime(uint32 t) { m_skippedUpdateTime += t; }
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
+
+        void UpdateTotalDeathCount();
+        uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/

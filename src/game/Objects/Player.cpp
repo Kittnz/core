@@ -341,6 +341,7 @@ Player::Player(WorldSession* session) : Unit(),
     m_longSightRange = 0.0f;
 
     m_worldBuffCheckTimer = 0;
+    m_totalDeathCount = 0;
 }
 
 Player::~Player()
@@ -4802,6 +4803,9 @@ void Player::KillPlayer()
 
     // update visibility
     UpdateObjectVisibility();
+
+    // Update total death count
+    UpdateTotalDeathCount();
 }
 
 Corpse* Player::CreateCorpse()
@@ -14682,8 +14686,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     //"honor_rank_points, honor_highest_rank, honor_standing, honor_last_week_hk, honor_last_week_cp, honor_stored_hk, honor_stored_dk,"
     // 48                49     50      51      52      53      54      55      56              57               58       59
     //"watched_faction,  drunk, health, power1, power2, power3, power4, power5, explored_zones, equipment_cache, ammo_id, action_bars,"
-    // 60                61           62
-    //"world_phase_mask, create_time, instance FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
+    // 60                61           62        63  
+    //"world_phase_mask, create_time, instance, total_deaths FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
 
     std::unique_ptr<QueryResult> result = holder->TakeResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
@@ -14837,6 +14841,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     }
 
     _LoadGroup(std::move(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADGROUP)));
+
+    m_totalDeathCount = fields[63].GetUInt32();
 
     m_honorMgr.SetRankPoints(fields[41].GetFloat());
     m_honorMgr.SetHighestRank(fields[42].GetUInt32());
@@ -16455,7 +16461,7 @@ void Player::SaveToDB(bool online, bool force)
                               "`extra_flags`, `stable_slots`, `at_login_flags`, `zone`, `death_expire_time`,"
                               "`honor_rank_points`, `honor_highest_rank`, `honor_standing`, `honor_last_week_hk`, `honor_last_week_cp`, `honor_stored_hk`, `honor_stored_dk`, "
                               "`watched_faction`, `drunk`, `health`, `power1`, `power2`, `power3`, `power4`, `power5`, "
-                              "`explored_zones`, `equipment_cache`, `ammo_id`, `action_bars`, `world_phase_mask`, `create_time`) "
+                              "`explored_zones`, `equipment_cache`, `ammo_id`, `action_bars`, `world_phase_mask`, `create_time`, `total_deaths`) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                                "?, ?, ?, ?, ?, "
@@ -16464,7 +16470,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?, ?, ?)");
+                              "?, ?, ?, ?, ?, ?, ?)");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16594,6 +16600,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(uint32(GetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BARS)));
     uberInsert.addUInt32(GetWorldMask());
     uberInsert.addUInt64(uint64(m_createTime));
+    uberInsert.addUInt32(GetTotalDeathCount());
     uberInsert.Execute();
 
     _SaveBGData();
@@ -22750,6 +22757,11 @@ void Player::ClearTemporaryWarWithFactions()
         }
         m_temporaryAtWarFactions.clear();
     }
+}
+
+void Player::UpdateTotalDeathCount()
+{
+    m_totalDeathCount++;
 }
 
 // Chronoboon
