@@ -220,6 +220,7 @@ set (game_SRCS
     vmap/VMapFactory.cpp
     vmap/VMapManager2.cpp
     vmap/WorldModel.cpp
+    LevelRewardMgr.cpp
     AccountData.h
     AccountMgr.h
     AuraRemovalMgr.h
@@ -450,7 +451,7 @@ set (game_SRCS
     vmap/VMapManager2.h
     vmap/VMapTools.h
     vmap/WorldModel.h
-
+    LevelRewardMgr.h    
 )
 
 if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)

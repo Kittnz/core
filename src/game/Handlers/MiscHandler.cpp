@@ -44,6 +44,7 @@
 #include "Conditions.h"
 #include "Anticheat.h"
 #include "MasterPlayer.h"
+#include "Chat.h"
 
 void WorldSession::HandleRepopRequestOpcode(WorldPacket& /*recv_data*/)
 {
@@ -1020,6 +1021,8 @@ void WorldSession::HandlePlayedTime(WorldPacket& /*recv_data*/)
     data << uint32(_player->GetTotalPlayedTime());
     data << uint32(_player->GetLevelPlayedTime());
     SendPacket(&data);
+
+    ChatHandler(_player).PSendSysMessage("Death counter: %u", _player->GetTotalDeathCount());
 }
 
 void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)

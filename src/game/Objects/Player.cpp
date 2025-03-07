@@ -82,6 +82,7 @@
 #include "GameEventMgr.h"
 #include "world/scourge_invasion.h"
 #include "world/world_event_wareffort.h"
+#include "LevelRewardMgr.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
@@ -3303,6 +3304,9 @@ void Player::GiveLevel(uint32 level)
     // update level to hunter/summon pet
     if (Pet* pet = GetPet())
         pet->SynchronizeLevelWithOwner();
+
+    // Check if we can reward items for level
+    g_levelRewardMgr.CheckLevelReward(this, level);
 }
 
 void Player::UpdateFreeTalentPoints(bool resetIfNeed)

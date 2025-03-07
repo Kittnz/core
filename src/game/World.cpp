@@ -83,6 +83,7 @@
 #include "GuardMgr.h"
 #include "TransportMgr.h"
 #include "RealmZone.h"
+#include "LevelRewardMgr.h"
 #include <chrono>
 
 INSTANTIATE_SINGLETON_1(World);
@@ -1728,6 +1729,9 @@ void World::SetInitialWorldSettings()
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading Taxi path transitions...");
     sObjectMgr.LoadTaxiPathTransitions();
+
+    sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading player level rewards...");
+    g_levelRewardMgr.LoadLevelRewards();
 
     sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Loading GM tickets and surveys...");
     sTicketMgr->Initialize();
