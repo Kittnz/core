@@ -235,7 +235,7 @@ void WorldBotAI::UpdateInCombatAI_Paladin()
     }
 
     if (m_spells.paladin.pBlessingOfFreedom &&
-        (me->HasUnitState(UNIT_STAT_ROOT) || me->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED)) &&
+        (me->HasUnitState(UNIT_STATE_ROOT) || me->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED)) &&
         CanTryToCastSpell(me, m_spells.paladin.pBlessingOfFreedom))
     {
         if (DoCastSpell(me, m_spells.paladin.pBlessingOfFreedom) == SPELL_CAST_OK)
@@ -512,7 +512,7 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
 
         if (pVictim->CanReachWithMeleeAutoAttack(me))
         {
-            if (me->HasUnitState(UNIT_STAT_ROOT))
+            if (me->HasUnitState(UNIT_STATE_ROOT))
             {
                 if (m_spells.hunter.pMongooseBite &&
                     CanTryToCastSpell(pVictim, m_spells.hunter.pMongooseBite))
@@ -538,7 +538,7 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
             }
         }
 
-        if (!me->HasUnitState(UNIT_STAT_ROOT) &&
+        if (!me->HasUnitState(UNIT_STATE_ROOT) &&
             (me->GetCombatDistance(pVictim) < 8.0f) &&
              me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE)
         {
@@ -650,7 +650,7 @@ void WorldBotAI::UpdateInCombatAI_Mage()
             }
 
             if (m_spells.mage.pBlink &&
-                (me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) ||
+                (me->HasUnitState(UNIT_STATE_CAN_NOT_MOVE) ||
                     me->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED)) &&
                 CanTryToCastSpell(me, m_spells.mage.pBlink))
             {
@@ -661,11 +661,11 @@ void WorldBotAI::UpdateInCombatAI_Mage()
                     return;
             }
 
-            if (!me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
+            if (!me->HasUnitState(UNIT_STATE_CAN_NOT_MOVE))
             {
                 if (m_spells.mage.pFrostNova &&
-                    !pVictim->HasUnitState(UNIT_STAT_ROOT) &&
-                    !pVictim->HasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL) &&
+                    !pVictim->HasUnitState(UNIT_STATE_ROOT) &&
+                    !pVictim->HasUnitState(UNIT_STATE_CAN_NOT_REACT_OR_LOST_CONTROL) &&
                     CanTryToCastSpell(me, m_spells.mage.pFrostNova))
                 {
                     DoCastSpell(me, m_spells.mage.pFrostNova);
@@ -1364,7 +1364,7 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
         }
 
         if (pVictim->IsMoving() &&
-            !pVictim->HasUnitState(UNIT_STAT_ROOT) &&
+            !pVictim->HasUnitState(UNIT_STATE_ROOT) &&
             !pVictim->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED))
         {
             if (m_spells.warrior.pHamstring &&
@@ -1411,7 +1411,7 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
 
         if ((me->GetHealthPercent() > 60.0f) && (pVictim->GetHealthPercent() > 40.0f) &&
             (pVictim->GetClass() == CLASS_WARLOCK || pVictim->GetClass() == CLASS_PRIEST) &&
-            !me->HasUnitState(UNIT_STAT_ROOT) &&
+            !me->HasUnitState(UNIT_STATE_ROOT) &&
             !me->IsImmuneToMechanic(MECHANIC_FEAR))
         {
             if (m_spells.warrior.pRecklessness &&
@@ -1576,9 +1576,10 @@ void WorldBotAI::UpdateOutOfCombatAI_Rogue()
             return;
     }
 
-    if (EnterStealthIfNeeded(m_spells.rogue.pStealth) &&
-        !me->HasAura(AURA_WARSONG_FLAG) &&
-        !me->HasAura(AURA_SILVERWING_FLAG) && !me->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY))
+    if (m_spells.rogue.pStealth &&
+        CanTryToCastSpell(me, m_spells.rogue.pStealth) &&
+       !me->HasAura(AURA_WARSONG_FLAG) &&
+       !me->HasAura(AURA_SILVERWING_FLAG))
     {
         if (DoCastSpell(me, m_spells.rogue.pStealth) == SPELL_CAST_OK)
             return;
@@ -1769,7 +1770,7 @@ void WorldBotAI::UpdateInCombatAI_Rogue()
         }
 
         if (m_spells.rogue.pSprint &&
-            !me->HasUnitState(UNIT_STAT_ROOT) &&
+            !me->HasUnitState(UNIT_STATE_ROOT) &&
             !me->CanReachWithMeleeAutoAttack(pVictim) &&
             CanTryToCastSpell(me, m_spells.rogue.pSprint))
         {
@@ -2014,7 +2015,7 @@ void WorldBotAI::UpdateInCombatAI_Druid()
     }
     else
     {
-        if (me->HasUnitState(UNIT_STAT_ROOT) &&
+        if (me->HasUnitState(UNIT_STATE_ROOT) &&
             me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
             me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
     }
@@ -2200,7 +2201,7 @@ void WorldBotAI::UpdateInCombatAI_Druid()
             }
             else if (pVictim->CanReachWithMeleeAutoAttack(me) &&
                 (pVictim->GetVictim() == me) &&
-                !me->HasUnitState(UNIT_STAT_ROOT) &&
+                !me->HasUnitState(UNIT_STATE_ROOT) &&
                 (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE))
             {
                 if (m_spells.druid.pEntanglingRoots &&

@@ -1994,17 +1994,17 @@ bool ChatHandler::HandleBattleBotShowAllPathsCommand(char* args)
 
 bool ChatHandler::HandleWorldBotAddAlteracCommand(char* args)
 {
-    return HandleWorldBotAddCommand(args, MAP_AV, true);
+    return HandleWorldBotAddCommand(args, MAP_ALTERAC_VALLEY, true);
 }
 
 bool ChatHandler::HandleWorldBotAddArathiCommand(char* args)
 {
-    return HandleWorldBotAddCommand(args, MAP_AB, true);
+    return HandleWorldBotAddCommand(args, MAP_ARATHI_BASIN, true);
 }
 
 bool ChatHandler::HandleWorldBotAddWarsongCommand(char* args)
 {
-    return HandleWorldBotAddCommand(args, MAP_WS, true);
+    return HandleWorldBotAddCommand(args, MAP_WARSONG_GULCH, true);
 }
 
 bool ChatHandler::HandleWorldBotAddEasternKingdomsCommand(char* args)
@@ -2080,15 +2080,15 @@ bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattle
         ai = new WorldBotAI(botRace, botClass, 1, 0, 1655.873f, -4413.851f, 16.623f, 2.967f, isBattleBot, 0);
         PSendSysMessage("Added %s world bot", args);
         break;
-    case MAP_WS:
+    case MAP_WARSONG_GULCH:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_WS);
         PSendSysMessage("Added %s world bot and queuing for WS", args);
         break;
-    case MAP_AB:
+    case MAP_ARATHI_BASIN:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AB);
         PSendSysMessage("Added %s world bot and queuing for AB", args);
         break;
-    case MAP_AV:
+    case MAP_ALTERAC_VALLEY:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AV);
         PSendSysMessage("Added %s world bot and queuing for AV", args);
         break;

@@ -153,7 +153,7 @@ std::vector<TravelPath> WorldBotTravelEditor::GeneratePath(Player* player, uint3
     player->NearTeleportTo(startNode->x, startNode->y, startNode->z, player->GetOrientation(), true);
 
     // Create a MoveSplineInit object
-    Movement::MoveSplineInit init(*player);
+    Movement::MoveSplineInit init(*player, "WorldBotTravelEditor::GeneratePath");
     init.MoveTo(endNode->x, endNode->y, endNode->z);
     init.SetWalk(false);
     init.SetVelocity(player->GetSpeed(MOVE_RUN));

@@ -927,7 +927,7 @@ void WorldBotAI::HandleSpecificDestinationCompletion()
     }
 
     // Increment failed attempts if we're currently moving (i.e., a path attempt is in progress)
-    if (!me->HasUnitState(UNIT_STAT_NOT_MOVE))
+    if (!me->HasUnitState(UNIT_STATE_NOT_MOVE))
     {
         m_failedPathAttempts++;
         sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBotAI: Path attempt %u/%u for bot %s",
@@ -949,7 +949,7 @@ void WorldBotAI::HandleSpecificDestinationCompletion()
     }
 
     // Only attempt a new path if we're not currently moving
-    if (me->HasUnitState(UNIT_STAT_NOT_MOVE))
+    if (me->HasUnitState(UNIT_STATE_NOT_MOVE))
     {
         sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBotAI: Bot %s attempting to get closer to destination", me->GetName());
         if (!StartNewPathToSpecificDestination(DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, DestMap, false))

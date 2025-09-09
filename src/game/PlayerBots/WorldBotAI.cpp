@@ -769,7 +769,7 @@ void WorldBotAI::ShowCurrentPath()
 
 void WorldBotAI::UpdateWaypointMovement()
 {
-    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE) || me->IsTaxiFlying() || m_inDuelPosition)
+    if (me->IsMoving() || !me->IsStopped() || me->HasUnitState(UNIT_STATE_CAN_NOT_MOVE) || me->IsTaxiFlying() || m_inDuelPosition)
         return;
 
     if (!m_currentPath.empty())
@@ -1221,12 +1221,12 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
     }
 
-    if (me->HasUnitState(UNIT_STAT_FEIGN_DEATH) && me->HasAuraType(SPELL_AURA_FEIGN_DEATH) &&
+    if (me->HasUnitState(UNIT_STATE_FEIGN_DEATH) && me->HasAuraType(SPELL_AURA_FEIGN_DEATH) &&
         !me->IsInCombat() && (!me->GetPet() || !me->GetPet()->IsInCombat()) &&
         !me->SelectRandomUnfriendlyTarget(nullptr, 20.0f, false, true))
         me->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
-    if (me->HasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL))
+    if (me->HasUnitState(UNIT_STATE_CAN_NOT_REACT_OR_LOST_CONTROL))
         return;
 
     if (me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
@@ -1388,7 +1388,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     }
                     else
                     {
-                        if (!me->HasUnitState(UNIT_STAT_MELEE_ATTACKING) &&
+                        if (!me->HasUnitState(UNIT_STATE_MELEE_ATTACKING) &&
                             (m_role == ROLE_MELEE_DPS || m_role == ROLE_TANK) &&
                             IsValidHostileTarget(pVictim) &&
                             AttackStart(pVictim))
@@ -1450,7 +1450,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
             me->SendMovementPacket(MSG_MOVE_SET_FACING, false);
         }
 
-        if (!me->HasUnitState(UNIT_STAT_MELEE_ATTACKING) &&
+        if (!me->HasUnitState(UNIT_STATE_MELEE_ATTACKING) &&
            (m_role != ROLE_HEALER) &&
             IsValidHostileTarget(pVictim) &&
             AttackStart(pVictim))

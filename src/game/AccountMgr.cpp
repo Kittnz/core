@@ -621,15 +621,9 @@ void AccountMgr::ResetPasswordForEmptyAccountPasswords()
 
             srp.CalculateVerifier(CalculateShaPassHash(username, new_passwd));
 
-            const char* s_hex = srp.GetSalt().AsHexStr();
-            const char* v_hex = srp.GetVerifier().AsHexStr();
-
-            LoginDatabase.PExecute(
-                "UPDATE `account` SET `v`='%s', `s`='%s' WHERE `id`='%u'",
-                v_hex, s_hex, accid);
-
-            OPENSSL_free((void*)s_hex);
-            OPENSSL_free((void*)v_hex);
+            std::string s_hex = srp.GetSalt().AsHexStr();
+            std::string v_hex = srp.GetVerifier().AsHexStr();
+            LoginDatabase.PExecute("UPDATE `account` SET `v`='%s', `s`='%s' WHERE `id`='%u'", v_hex.c_str(), s_hex.c_str(), accid);
         }
         
     } while (result->NextRow());

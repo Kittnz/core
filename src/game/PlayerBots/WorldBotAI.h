@@ -68,15 +68,6 @@ enum WorldBotSpells
     WB_ITEM_BULLET = 2516,
 };
 
-enum WorldBotMapId
-{
-    MAP_EASTERN_KINGDOMS = 0,
-    MAP_KALIMDOR = 1,
-    MAP_AV = 30,
-    MAP_AB = 529,
-    MAP_WS = 489,
-};
-
 enum WorldBotWsgWaitSpot
 {
     MB_WSG_WAIT_SPOT_SPAWN,

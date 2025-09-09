@@ -94,7 +94,7 @@ bool WorldBotAI::SetExploreDestination()
 
 void WorldBotAI::RegisterExploreTask()
 {
-    m_taskManager.RegisterTask({
+    /*m_taskManager.RegisterTask({
         TASK_EXPLORE,
         "Explore",
         PRIORITY_LOW,
@@ -104,5 +104,5 @@ void WorldBotAI::RegisterExploreTask()
         true, // implemented
         50,  // Minimum level
         60   // Maximum level
-    });
+    });*/
 }

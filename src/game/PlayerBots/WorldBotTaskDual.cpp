@@ -126,10 +126,10 @@ void WorldBotAI::UpdateDualingBehavior()
     if (m_isDualBotInProgress)
     {
         // Check if we're in an active duel
-        if (me->duel)
+        if (me->m_duel)
         {
             // Get opponent
-            Player* plTarget = me->duel->opponent;
+            Player* plTarget = me->m_duel->opponent;
 
             // Move away from opponent if too close
             const float distance = me->GetDistance(plTarget);
@@ -151,7 +151,7 @@ void WorldBotAI::UpdateDualingBehavior()
 
 void WorldBotAI::RegisterDualTask()
 {
-    m_taskManager.RegisterTask({
+  /*m_taskManager.RegisterTask({
         TASK_DUAL,
         "Dual",
         PRIORITY_LOW,
@@ -161,5 +161,5 @@ void WorldBotAI::RegisterDualTask()
         true, // implemented
         20,  // Minimum level
         60   // Maximum level
-    });
+    });*/
 }

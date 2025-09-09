@@ -17,7 +17,7 @@ bool WorldBotAI::IsRoamingComplete() const
 
 void WorldBotAI::RegisterRoamTask()
 {
-    m_taskManager.RegisterTask({
+    /*m_taskManager.RegisterTask({
         TASK_ROAM,
         "Roam",
         PRIORITY_LOW,
@@ -27,5 +27,5 @@ void WorldBotAI::RegisterRoamTask()
         true,
         50,  // Minimum level
         60   // Maximum level
-    });
+    });*/
 }
