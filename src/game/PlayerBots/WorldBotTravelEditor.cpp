@@ -216,8 +216,7 @@ bool WorldBotTravelEditor::SaveGeneratedPath(uint32 startNodeId, uint32 endNodeI
             return false;
         }
 
-        CharacterDatabase.PExecute(
-            "INSERT IGNORE INTO ai_playerbot_travelnode (id, name, map_id, x, y, z, linked) VALUES (%u, '%s', %u, %f, %f, %f, %u)", node->id, node->name.c_str(), node->mapId, node->x, node->y, node->z, node->linked );
+        CharacterDatabase.PExecute("INSERT IGNORE INTO ai_playerbot_travelnode (id, name, map_id, x, y, z, linked) VALUES (%u, '%s', %u, %f, %f, %f, %u)", node->id, node->name.c_str(), node->mapId, node->x, node->y, node->z, node->linked );
     }
 
     // Add or update the link in ai_playerbot_travelnode_link

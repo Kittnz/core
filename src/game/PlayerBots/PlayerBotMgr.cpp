@@ -2495,24 +2495,7 @@ void PlayerBotMgr::WorldBotLoader()
             if (!rEntry)
                 break;
 
-            if (rEntry->TeamID == 1) // horde
-            {
-                WorldBotsCollection bot;
-                bot.guid = guid;
-                bot.account = account;
-                bot.name = name;
-                bot.race = race;
-                bot.class_ = class_;
-                bot.pos_x = pos_x;
-                bot.pos_y = pos_y;
-                bot.pos_z = pos_z;
-                bot.map = map;
-                bot.orientation = orientation;
-                bot.level = level;
-                myHordeBots.push_back(bot);
-            }
-
-            if (rEntry->TeamID == 7) // alliance
+            if (rEntry->TeamID == 0) // alliance
             {
                 WorldBotsCollection bot;
                 bot.guid = guid;
@@ -2527,6 +2510,22 @@ void PlayerBotMgr::WorldBotLoader()
                 bot.orientation = orientation;
                 bot.level = level;
                 myAllianceBots.push_back(bot);
+            }
+            else // horde
+            {
+                WorldBotsCollection bot;
+                bot.guid = guid;
+                bot.account = account;
+                bot.name = name;
+                bot.race = race;
+                bot.class_ = class_;
+                bot.pos_x = pos_x;
+                bot.pos_y = pos_y;
+                bot.pos_z = pos_z;
+                bot.map = map;
+                bot.orientation = orientation;
+                bot.level = level;
+                myHordeBots.push_back(bot);
             }
 
         } while (result->NextRow());
@@ -2590,11 +2589,30 @@ void PlayerBotMgr::WorldBotCreator()
         // Normalize percentages if they don't sum to 1.0
         float normalizer = totalPercentage > 0.0f ? 1.0f / totalPercentage : 1.0f;
 
+        // First pass: Calculate ideal distribution
+        std::vector<uint32> targetCounts(levelRanges.size(), 0);
+        uint32 totalAllocated = 0;
+
+        for (size_t i = 0; i < levelRanges.size(); ++i) {
+            float normalizedPercentage = levelRanges[i].percentage * normalizer;
+            uint32 rangeCount = static_cast<uint32>(maxCount * normalizedPercentage);
+            targetCounts[i] = rangeCount;
+            totalAllocated += rangeCount;
+        }
+
+        // Distribute remaining slots due to rounding
+        uint32 remaining = maxCount - totalAllocated;
+        for (uint32 i = 0; i < remaining && i < levelRanges.size(); ++i) {
+            targetCounts[i]++;
+        }
+
         // Process each level range
         uint32 totalSelected = 0;
-        for (const auto& range : levelRanges) {
-            if (totalSelected >= maxCount)
-                break;
+        for (size_t i = 0; i < levelRanges.size(); ++i) {
+            const auto& range = levelRanges[i];
+            
+            if (totalSelected >= maxCount || targetCounts[i] == 0)
+                continue;
 
             // Get bots in current level range
             std::vector<WorldBotsCollection> rangeBots;
@@ -2603,29 +2621,36 @@ void PlayerBotMgr::WorldBotCreator()
                     return bot.level >= range.minLevel && bot.level <= range.maxLevel;
                 });
 
-            if (rangeBots.empty())
+            if (rangeBots.empty()) {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBot: No bots available for level range %u-%u", 
+                    range.minLevel, range.maxLevel);
                 continue;
+            }
 
             // Calculate how many bots to select from this range
-            float normalizedPercentage = range.percentage * normalizer;
-            uint32 rangeCount = std::max(1u, static_cast<uint32>(maxCount * normalizedPercentage));
+            uint32 rangeCount = std::min(targetCounts[i], static_cast<uint32>(rangeBots.size()));
             rangeCount = std::min(rangeCount, maxCount - totalSelected);
-            rangeCount = std::min(rangeCount, static_cast<uint32>(rangeBots.size()));
 
             // Randomly select bots from this range
             std::random_shuffle(rangeBots.begin(), rangeBots.end());
-            for (uint32 i = 0; i < rangeCount; ++i) {
-                selectedBots.push_back(rangeBots[i]);
+            for (uint32 j = 0; j < rangeCount; ++j) {
+                selectedBots.push_back(rangeBots[j]);
                 totalSelected++;
             }
+
+            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBot: Selected %u bots from level range %u-%u (target: %u, available: %u)", 
+                rangeCount, range.minLevel, range.maxLevel, targetCounts[i], static_cast<uint32>(rangeBots.size()));
         }
 
-        // If we still haven't selected enough bots, fill remaining slots randomly
+        // If we still haven't selected enough bots, fill remaining slots randomly from available bots
         if (totalSelected < maxCount) {
             std::vector<WorldBotsCollection> remainingBots;
             std::copy_if(bots.begin(), bots.end(), std::back_inserter(remainingBots),
                 [&](const WorldBotsCollection& bot) {
-                    return std::find(selectedBots.begin(), selectedBots.end(), bot) == selectedBots.end();
+                    return std::find_if(selectedBots.begin(), selectedBots.end(),
+                        [&](const WorldBotsCollection& selected) {
+                            return selected.guid == bot.guid;
+                        }) == selectedBots.end();
                 });
 
             std::random_shuffle(remainingBots.begin(), remainingBots.end());
@@ -2634,19 +2659,41 @@ void PlayerBotMgr::WorldBotCreator()
             for (uint32 i = 0; i < remainingCount; ++i) {
                 selectedBots.push_back(remainingBots[i]);
             }
+
+            if (remainingCount > 0) {
+                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "WorldBot: Added %u additional random bots to fill remaining slots", remainingCount);
+            }
         }
 
-        // Add debug logging
+        // Add debug logging for final distribution
         for (const auto& range : levelRanges) {
             uint32 rangeCount = std::count_if(selectedBots.begin(), selectedBots.end(),
                 [&](const WorldBotsCollection& bot) {
                     return bot.level >= range.minLevel && bot.level <= range.maxLevel;
                 });
-            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Selected %u bots for level range %u-%u (target: %.1f%%)", rangeCount, range.minLevel, range.maxLevel, range.percentage * 100.0f);
+            float actualPercentage = selectedBots.empty() ? 0.0f : (static_cast<float>(rangeCount) / selectedBots.size()) * 100.0f;
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Final selection - %u bots for level range %u-%u (target: %.1f%%, actual: %.1f%%)", 
+                rangeCount, range.minLevel, range.maxLevel, range.percentage * 100.0f, actualPercentage);
         }
 
         return selectedBots;
-        };
+    };
+
+    // Log available bot counts by level range before selection
+    auto logAvailableBots = [&](const std::vector<WorldBotsCollection>& bots, const std::string& faction) {
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "WorldBot: Available %s bots by level range:", faction.c_str());
+        for (const auto& range : levelRanges) {
+            uint32 count = std::count_if(bots.begin(), bots.end(),
+                [&](const WorldBotsCollection& bot) {
+                    return bot.level >= range.minLevel && bot.level <= range.maxLevel;
+                });
+            sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "  Level %u-%u: %u bots available", 
+                range.minLevel, range.maxLevel, count);
+        }
+    };
+
+    logAvailableBots(myHordeBots, "Horde");
+    logAvailableBots(myAllianceBots, "Alliance");
 
     // Select and add Horde bots
     auto hordeBotsToAdd = selectBotsByLevel(myHordeBots, worldBotHordeMax);
@@ -3013,7 +3060,7 @@ void PlayerBotMgr::WorldBotLoadGrindCreatures()
     sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Loading grind creatures...");
     grindCreatures.clear();
 
-    std::unique_ptr<QueryResult> result = WorldDatabase.Query(R"(
+    /* std::unique_ptr<QueryResult> result = WorldDatabase.Query(R"(
         SELECT 
             ct.entry AS creature_id,
             ct.name AS creature_name,
@@ -3065,6 +3112,61 @@ void PlayerBotMgr::WorldBotLoadGrindCreatures()
             )
         ) center_spawn ON center_spawn.id = ct.entry
         WHERE center_spawn.map_id IN (0, 1)
+        ORDER BY ct.level_min;
+    )");*/
+    std::unique_ptr<QueryResult> result = WorldDatabase.Query(R"(
+        SELECT DISTINCT
+            ct.entry AS creature_id,
+            ct.name AS creature_name,
+            ct.level_min AS level,
+            center_spawn.map_id,
+            center_spawn.position_x,
+            center_spawn.position_y,
+            center_spawn.position_z,
+            center_spawn.spawn_count,
+            center_spawn.cluster_radius
+        FROM creature_template ct
+        JOIN (
+            SELECT 
+                cluster_info.id,
+                cluster_info.map_id,
+                cluster_info.center_x as position_x,
+                cluster_info.center_y as position_y,
+                -- Use a fixed Z coordinate or average
+                AVG(c.position_z) as position_z,
+                cluster_info.spawn_count,
+                cluster_info.cluster_radius
+            FROM (
+                SELECT 
+                    c.id,
+                    c.map,
+                    COUNT(*) as spawn_count,
+                    AVG(c.position_x) as center_x,
+                    AVG(c.position_y) as center_y,
+                    AVG(c.position_z) as center_z,
+                    SQRT(
+                        POW(MAX(c.position_x) - MIN(c.position_x), 2) + 
+                        POW(MAX(c.position_y) - MIN(c.position_y), 2)
+                    ) as cluster_radius,
+                    c.map as map_id
+                FROM creature c
+                GROUP BY c.id, c.map
+                HAVING COUNT(*) > 5 
+                AND cluster_radius < 500
+            ) cluster_info
+            JOIN creature c ON c.id = cluster_info.id
+            GROUP BY cluster_info.id, cluster_info.map_id, cluster_info.center_x, 
+                     cluster_info.center_y, cluster_info.spawn_count, cluster_info.cluster_radius
+        ) center_spawn ON center_spawn.id = ct.entry
+        WHERE center_spawn.map_id IN (0, 1)
+            AND ct.level_min BETWEEN 1 AND 60
+            AND ct.rank = 0
+            AND ct.npc_flags = 0
+            AND (ct.npc_flags & 0x02000000) = 0
+            AND (ct.npc_flags & 0x00000002) = 0  
+            AND (ct.npc_flags & 0x00000200) = 0
+            AND ct.type NOT IN (0, 9)
+            AND ct.gossip_menu_id = 0
         ORDER BY ct.level_min;
     )");
 
