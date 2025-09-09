@@ -112,7 +112,7 @@ void WaypointMovementGenerator<Creature>::Reset(Creature &creature)
     if (m_isWandering)
     {
         // prevent a crash at empty waypoint path.
-        if (!i_path || i_path->empty())
+        if (!i_path || i_path->empty() || !m_lastReachedWaypoint)
             return;
 
         const WaypointNode& node = i_path->at(m_lastReachedWaypoint);
@@ -292,7 +292,7 @@ bool WaypointMovementGenerator<Creature>::Update(Creature &creature, uint32 cons
 bool WaypointMovementGenerator<Creature>::GetResetPosition(Creature&, float& x, float& y, float& z)
 {
     // prevent a crash at empty waypoint path.
-    if (!i_path || i_path->empty())
+    if (!i_path || i_path->empty() || !m_lastReachedWaypoint)
         return false;
 
     const WaypointNode& node = i_path->at(m_lastReachedWaypoint);
@@ -360,7 +360,7 @@ void FlightPathMovementGenerator::Finalize(Player & player)
     player.RemoveUnitMovementFlag(MOVEFLAG_FLYING);
 
     player.Unmount();
-    player.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
+    player.RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL | UNIT_FLAG_TAXI_FLIGHT);
     player.TaxiStepFinished(!MovementInProgress());
 
     if (player.GetTaxi().empty())
@@ -393,7 +393,7 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
 {
     player.GetHostileRefManager().setOnlineOfflineState(false);
     player.AddUnitState(UNIT_STATE_TAXI_FLIGHT);
-    player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
+    player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL | UNIT_FLAG_TAXI_FLIGHT);
 
     Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
     uint32 end = GetPathAtMapEnd();

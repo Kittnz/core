@@ -377,11 +377,11 @@ struct boss_ouroAI : public ScriptedAI
                     m_creature->RemoveAurasDueToSpell(SPELL_SUBMERGE_VISUAL);
                     m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                    std::list<Unit*> lGroundRuptureTargets;
+                    std::vector<Unit*> lGroundRuptureTargets;
                     ThreatList const& lThreat = m_creature->GetThreatManager().getThreatList();
                     for (const auto i : lThreat)
                     {
-                        Unit* pUnit = m_creature->GetMap()->GetUnit(i->getUnitGuid());
+                        Unit* pUnit = i->getTarget();
                         if (pUnit && pUnit->GetDistance2d(m_creature) < 20.0f)
                             lGroundRuptureTargets.push_back(pUnit);
                     }
@@ -441,6 +441,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         m_bHasSummoned = false;
 
         DoCastSpellIfCan(m_creature, SPELL_DIRTMOUND_PASSIVE);
+        me->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override
@@ -559,6 +560,7 @@ struct npc_ouro_scarabAI : public ScriptedAI
     void Reset() override
     {
         m_uiDespawnTimer = 45000;
+        me->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit *who) override

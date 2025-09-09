@@ -23,6 +23,7 @@
 #include "Language.h"
 #include "World.h"
 #include "GameEventMgr.h"
+#include "ScriptMgr.h"
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
 
@@ -133,6 +134,30 @@ void OutdoorPvPSI::ResetResourceCount()
     m_hordeDustBags.clear();
 }
 
+enum
+{
+    NPC_ANNOUNCER_HORDE        = 17079,
+    NPC_ANNOUNCER_ALLIANCE     = 17080,
+
+    BCT_SILITHYST_HORDE_25     = 13476,
+    BCT_SILITHYST_HORDE_50     = 13477,
+    BCT_SILITHYST_HORDE_75     = 13478,
+    BCT_SILITHYST_HORDE_100    = 13469,
+    
+    BCT_SILITHYST_ALLIANCE_25  = 13479,
+    BCT_SILITHYST_ALLIANCE_50  = 13480,
+    BCT_SILITHYST_ALLIANCE_75  = 13481,
+    BCT_SILITHYST_ALLIANCE_100 = 13470,
+};
+
+static void DoSilithystYell(Player* pPlayer, uint32 creatureId, uint32 textId)
+{
+    if (Creature* pCreature = pPlayer->FindNearestCreature(creatureId, MAX_VISIBILITY_DISTANCE))
+        DoScriptText(textId, pCreature);
+    else
+        sLog.Out(LOG_SCRIPTS, LOG_LVL_ERROR, "Silithus PvP Event yeller npc %u not found!", creatureId);
+}
+
 bool OutdoorPvPSI::HandleAreaTrigger(Player* plr, uint32 trigger)
 {
     /** If the player doesn't have a silithyst */
@@ -149,6 +174,16 @@ bool OutdoorPvPSI::HandleAreaTrigger(Player* plr, uint32 trigger)
             if (plr->GetTeam() == ALLIANCE)
             {
                 ++ m_Gathered_A;
+
+                if (m_Gathered_A == (m_MaxRessources / 4))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_ALLIANCE, BCT_SILITHYST_ALLIANCE_25);
+                else if (m_Gathered_A == (m_MaxRessources / 2))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_ALLIANCE, BCT_SILITHYST_ALLIANCE_50);
+                else if (m_Gathered_A == (m_MaxRessources - (m_MaxRessources / 4)))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_ALLIANCE, BCT_SILITHYST_ALLIANCE_75);
+                else if (m_Gathered_A == m_MaxRessources)
+                    DoSilithystYell(plr, NPC_ANNOUNCER_ALLIANCE, BCT_SILITHYST_ALLIANCE_100);
+
                 if (m_Gathered_A >= m_MaxRessources)
                 {
                     TeamApplyBuff(TEAM_ALLIANCE, SI_CENARION_FAVOR);
@@ -163,6 +198,7 @@ bool OutdoorPvPSI::HandleAreaTrigger(Player* plr, uint32 trigger)
                 {
                     SpawnDustBags(m_Gathered_A, sAllianceDustBags, m_allianceDustBags);
                 }
+
                 // complete quest
                 plr->KilledMonsterCredit(SI_TURNIN_QUEST_CM_A, ObjectGuid());
             }
@@ -173,6 +209,16 @@ bool OutdoorPvPSI::HandleAreaTrigger(Player* plr, uint32 trigger)
             if (plr->GetTeam() == HORDE)
             {
                 ++ m_Gathered_H;
+
+                if (m_Gathered_H == (m_MaxRessources / 4))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_HORDE, BCT_SILITHYST_HORDE_25);
+                else if (m_Gathered_H == (m_MaxRessources / 2))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_HORDE, BCT_SILITHYST_HORDE_50);
+                else if (m_Gathered_H == (m_MaxRessources - (m_MaxRessources / 4)))
+                    DoSilithystYell(plr, NPC_ANNOUNCER_HORDE, BCT_SILITHYST_HORDE_75);
+                else if (m_Gathered_H == m_MaxRessources)
+                    DoSilithystYell(plr, NPC_ANNOUNCER_HORDE, BCT_SILITHYST_HORDE_100);
+
                 if (m_Gathered_H >= m_MaxRessources)
                 {
                     TeamApplyBuff(TEAM_HORDE, SI_CENARION_FAVOR);
@@ -187,6 +233,7 @@ bool OutdoorPvPSI::HandleAreaTrigger(Player* plr, uint32 trigger)
                 {
                     SpawnDustBags(m_Gathered_H, sHordeDustBags, m_hordeDustBags);
                 }
+
                 // complete quest
                 plr->KilledMonsterCredit(SI_TURNIN_QUEST_CM_H, ObjectGuid());
             }

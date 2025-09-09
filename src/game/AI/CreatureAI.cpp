@@ -20,13 +20,13 @@
  */
 
 #include "CreatureAI.h"
-#include "Spell.h"
 #include "Creature.h"
 #include "DBCStores.h"
 #include "Totem.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
 #include "Group.h"
+#include <unordered_set>
 
 CreatureAI::CreatureAI(Creature* creature) :
     m_creature(creature), m_bUseAiAtControl(false),
@@ -202,16 +202,17 @@ void CreatureAI::ClearTargetIcon()
     if (players.isEmpty())
         return;
 
-    std::set<Group*> instanceGroups;
+    std::unordered_set<Group*> instanceGroups;
 
     // Clear target icon for every unique group in instance
-    for (const auto& player : players)
+    for (auto const& player : players)
     {
         if (Group* pGroup = player.getSource()->GetGroup())
         {
-            if (instanceGroups.find(pGroup) == instanceGroups.end())
+            auto const& result = instanceGroups.insert(pGroup);
+
+            if (result.second)
             {
-                instanceGroups.insert(pGroup);
                 pGroup->ClearTargetIcon(m_creature->GetObjectGuid());
             }
         }

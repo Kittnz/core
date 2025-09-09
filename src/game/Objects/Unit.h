@@ -333,7 +333,7 @@ struct ProcTriggeredData
     uint32 procFlag;
 };
 
-typedef std::list< ProcTriggeredData > ProcTriggeredList;
+typedef std::vector<ProcTriggeredData> ProcTriggeredList;
 
 class Unit : public SpellCaster
 {
@@ -1286,6 +1286,7 @@ class Unit : public SpellCaster
         void SetCharm(Unit* pet);
         void Uncharm();
         void RemoveCharmAuras(AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
+        void RemoveSummonPossessedAuras(AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         ObjectGuid const& GetCharmGuid() const { return GetGuidValue(UNIT_FIELD_CHARM); }
         void SetCharmGuid(ObjectGuid charm) { SetGuidValue(UNIT_FIELD_CHARM, charm); }
 
@@ -1437,7 +1438,7 @@ class Unit : public SpellCaster
         // Serialize access to the movespline to prevent thread race conditions in async
         // move spline updates (one thread updates a spline, while another checks the
         // spline for end point with targeted move gen)
-        std::mutex asyncMovesplineLock;
+        mutable std::mutex asyncMovesplineLock;
 
         void HandleInterruptsOnMovement(bool positionChanged);
         void OnRelocated();

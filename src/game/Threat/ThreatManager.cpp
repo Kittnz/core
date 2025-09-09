@@ -140,8 +140,8 @@ void HostileReference::updateOnlineStatus()
     // target is no player or not gamemaster
     // target is not in flight
     if (isValid() &&
-            ((getTarget()->GetTypeId() != TYPEID_PLAYER || !((Player*)getTarget())->IsGameMaster()) ||
-             !getTarget()->IsTaxiFlying()))
+            (getTarget()->GetTypeId() != TYPEID_PLAYER || !((Player*)getTarget())->IsGameMaster()) &&
+            !getTarget()->IsTaxiFlying())
         online = true;
 
     setAccessibleState(accessible);
@@ -211,7 +211,7 @@ void ThreatContainer::clearReferences()
 }
 
 //============================================================
-// Return the HostileReference of nullptr, if not found
+// Return the HostileReference or nullptr if not found
 HostileReference* ThreatContainer::getReferenceByTarget(Unit* pVictim)
 {
     if (!pVictim)
