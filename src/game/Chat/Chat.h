@@ -321,6 +321,7 @@ class ChatHandler
         bool HandleWorldBotPathEditorDeleteLinkCommand(char* args);
         bool HandleWorldBotPathEditorGeneratePathCommand(char* args);
         bool HandleWorldBotPathEditorCheckPathCommand(char* args);
+        bool HandleGenerateTravelNodesCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);

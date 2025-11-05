@@ -22,6 +22,10 @@ public:
     bool SaveGeneratedPath(uint32 startNodeId, uint32 endNodeId, const std::vector<TravelPath>& path);
     void CheckPath(Player* player);
     void CheckAllTravelPaths();
+    
+    // New generator functions
+    bool GenerateTravelNodes(Player* player, const std::string& args);
+    bool ReloadTravelSystem(Player* player);
 
 private:
     WorldBotTravelEditor() {}

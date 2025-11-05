@@ -34,6 +34,7 @@
 #include "PlayerDump.h"
 #include "CharacterDatabaseCache.h"
 #include "Config/Config.h"
+#include "PlayerBots/TravelDataBuilder.h"
 
 #include <regex>
 
@@ -5876,4 +5877,70 @@ bool ChatHandler::HandleListVisibleGuidsCommand(char* args)
         PSendSysMessage("- %s", guid.GetString().c_str());
 
     return true;
+}
+
+bool ChatHandler::HandleGenerateTravelNodesCommand(char* args)
+{
+    PSendSysMessage("Starting travel node generation...");
+
+    TravelDataBuilder builder;
+
+    // Parse optional arguments
+    bool useGridSampling = false;
+    float gridSize = 150.0f;
+    std::string outputFile = "travel_nodes.sql";
+
+    // Simple argument parsing
+    if (*args)
+    {
+        char* gridArg = ExtractLiteralArg(&args);
+        if (gridArg && strcmp(gridArg, "grid") == 0)
+        {
+            useGridSampling = true;
+            if (*args)
+            {
+                if (!ExtractFloat(&args, gridSize))
+                    gridSize = 150.0f;
+            }
+        }
+
+        if (*args)
+        {
+            char* fileArg = ExtractLiteralArg(&args);
+            if (fileArg)
+                outputFile = fileArg;
+        }
+    }
+
+    // Configure builder
+    if (useGridSampling)
+    {
+        PSendSysMessage("Grid sampling enabled (size: %.1f yards)", gridSize);
+        builder.SetGenerateGridNodes(true, gridSize);
+        builder.SetMapsToGenerate({0, 1}); // Eastern Kingdoms and Kalimdor
+    }
+    else
+    {
+        PSendSysMessage("Grid sampling disabled (basic mode)");
+    }
+
+    PSendSysMessage("Output file: %s", outputFile.c_str());
+    PSendSysMessage("Generating... (this may take several minutes)");
+
+    // Run generation
+    if (builder.BuildCompleteDataset(outputFile))
+    {
+        PSendSysMessage("===========================================");
+        PSendSysMessage("Travel node generation COMPLETE!");
+        PSendSysMessage("Output: %s", outputFile.c_str());
+        PSendSysMessage("Execute this SQL file in your database.");
+        PSendSysMessage("===========================================");
+        return true;
+    }
+    else
+    {
+        PSendSysMessage("Travel node generation FAILED!");
+        PSendSysMessage("Check server console for errors.");
+        return false;
+    }
 }

@@ -160,6 +160,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "stats",        SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotStatsCommand,        "", nullptr },
         { "info",         SEC_ADMINISTRATOR,       false, &ChatHandler::HandleWorldBotInfoCommand,          "", nullptr },
         { "patheditor",   SEC_ADMINISTRATOR,    false, nullptr,  "patheditor", worldBotPathEditorCommandTable },
+        { "generate", SEC_ADMINISTRATOR, false, &ChatHandler::HandleGenerateTravelNodesCommand, "", nullptr},
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand accountSetCommandTable[] =

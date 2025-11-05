@@ -4,6 +4,7 @@
 #include "MoveSpline.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
+#include "TravelDataBuilder.h"
 
 WorldBotTravelEditor* WorldBotTravelEditor::instance()
 {
@@ -497,4 +498,70 @@ void WorldBotTravelEditor::CheckAllTravelPaths()
     }
 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Unique delete statements generated: %zu", uniqueDeleteStatements.size());
+}
+
+bool WorldBotTravelEditor::GenerateTravelNodes(Player* player, const std::string& args)
+{
+    player->GetSession()->SendNotification("Starting travel node generation...");
+    player->GetSession()->SendNotification("This may take several minutes, please wait...");
+    
+    TravelDataBuilder builder;
+    
+    // Parse arguments for options
+    bool generateGrid = args.find("grid") != std::string::npos;
+    
+    if (generateGrid)
+    {
+        builder.SetGenerateGridNodes(true, 100.0f);
+        player->GetSession()->SendNotification("Grid sampling enabled with 100 yard spacing");
+    }
+    
+    // Check for specific maps
+    std::vector<uint32> mapIds;
+    size_t mapPos = args.find("map");
+    if (mapPos != std::string::npos)
+    {
+        std::istringstream iss(args.substr(mapPos + 3));
+        uint32 mapId;
+        while (iss >> mapId)
+        {
+            mapIds.push_back(mapId);
+        }
+        
+        if (!mapIds.empty())
+        {
+            builder.SetMapsToGenerate(mapIds);
+            player->GetSession()->SendNotification("Generating nodes for %u specific maps", static_cast<uint32>(mapIds.size()));
+        }
+    }
+    
+    // Run the generation
+    if (builder.BuildCompleteDataset("travel_nodes_generated.sql"))
+    {
+        player->GetSession()->SendNotification("Travel node generation complete!");
+        player->GetSession()->SendNotification("Output file: travel_nodes_generated.sql");
+        player->GetSession()->SendNotification("Please reload the travel system to use the new data");
+        return true;
+    }
+    else
+    {
+        player->GetSession()->SendNotification("Travel node generation FAILED. Check server logs for details.");
+        return false;
+    }
+}
+
+bool WorldBotTravelEditor::ReloadTravelSystem(Player* player)
+{
+    player->GetSession()->SendNotification("Reloading travel node data...");
+    
+    sWorldBotTravelSystem.LoadTravelNodes();
+    sWorldBotTravelSystem.LoadTravelNodeLinks();
+    sWorldBotTravelSystem.LoadTravelPaths();
+    
+    player->GetSession()->SendNotification("Travel system reloaded successfully");
+    player->GetSession()->SendNotification("Nodes: %u, Links: %u, Paths: %u", 
+                                          static_cast<uint32>(sWorldBotTravelSystem.m_travelNodes.size()),
+                                          static_cast<uint32>(sWorldBotTravelSystem.m_travelNodeLinks.size()),
+                                          static_cast<uint32>(sWorldBotTravelSystem.m_travelPaths.size()));
+    return true;
 }
